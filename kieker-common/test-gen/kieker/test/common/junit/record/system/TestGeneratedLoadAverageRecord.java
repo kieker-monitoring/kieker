@@ -56,8 +56,8 @@ public class TestGeneratedLoadAverageRecord extends AbstractGeneratedKiekerTest 
 			Assert.assertEquals("LoadAverageRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
 			Assert.assertEquals("LoadAverageRecord.oneMinLoadAverage values are not equal.", 
 			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getOneMinLoadAverage(), 0.0000001);
-			Assert.assertEquals("LoadAverageRecord.tenMinLoadAverage values are not equal.", 
-			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getTenMinLoadAverage(), 0.0000001);
+			Assert.assertEquals("LoadAverageRecord.fiveMinLoadAverage values are not equal.", 
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getFiveMinLoadAverage(), 0.0000001);
 			Assert.assertEquals("LoadAverageRecord.fifteenMinLoadAverage values are not equal.", 
 			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getFifteenMinLoadAverage(), 0.0000001);
 			
@@ -113,8 +113,8 @@ public class TestGeneratedLoadAverageRecord extends AbstractGeneratedKiekerTest 
 			Assert.assertEquals("LoadAverageRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
 			Assert.assertEquals("LoadAverageRecord.oneMinLoadAverage values are not equal.", 
 			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getOneMinLoadAverage(), 0.0000001);
-			Assert.assertEquals("LoadAverageRecord.tenMinLoadAverage values are not equal.", 
-			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getTenMinLoadAverage(), 0.0000001);
+			Assert.assertEquals("LoadAverageRecord.fiveMinLoadAverage values are not equal.", 
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getFiveMinLoadAverage(), 0.0000001);
 			Assert.assertEquals("LoadAverageRecord.fifteenMinLoadAverage values are not equal.", 
 			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getFifteenMinLoadAverage(), 0.0000001);
 		}
@@ -134,8 +134,8 @@ public class TestGeneratedLoadAverageRecord extends AbstractGeneratedKiekerTest 
 			Assert.assertEquals("LoadAverageRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
 			Assert.assertEquals("LoadAverageRecord.oneMinLoadAverage values are not equal.", 
 			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getOneMinLoadAverage(), 0.0000001);
-			Assert.assertEquals("LoadAverageRecord.tenMinLoadAverage values are not equal.", 
-			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getTenMinLoadAverage(), 0.0000001);
+			Assert.assertEquals("LoadAverageRecord.fiveMinLoadAverage values are not equal.", 
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getFiveMinLoadAverage(), 0.0000001);
 			Assert.assertEquals("LoadAverageRecord.fifteenMinLoadAverage values are not equal.", 
 			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getFifteenMinLoadAverage(), 0.0000001);
 		}
