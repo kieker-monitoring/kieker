@@ -18,9 +18,9 @@ package kieker.monitoring.core.signaturePattern;
 
 /**
  * This class can be used to create signatures (for example a string containing the whole signature of a method).
- * 
+ *
  * @author Bjoern Weissenfels, Jan Waller
- * 
+ *
  * @since 1.7
  */
 public final class SignatureFactory {
@@ -41,6 +41,11 @@ public final class SignatureFactory {
 	 * Prefix of a memory signature.
 	 */
 	public static final String PATTERN_PREFIX_MEM_SWAP = PATTERN_PREFIX + "MEM_SWAP";
+
+	/**
+	 * Prefix of a load average signature.
+	 */
+	public static final String PATTERN_PREFIX_LOAD_AVERAGE = PATTERN_PREFIX + "LOAD_AVERAGE";
 
 	/**
 	 * Prefix of a JVM memory signature.
@@ -81,7 +86,7 @@ public final class SignatureFactory {
 
 	/**
 	 * Creates a cpu signature with a given cpu id.
-	 * 
+	 *
 	 * @param cpuid
 	 *            The id of the cpu.
 	 * @return
@@ -97,7 +102,7 @@ public final class SignatureFactory {
 
 	/**
 	 * Creates a CPU signature.
-	 * 
+	 *
 	 * @return The signature.
 	 */
 	public static String createCPUSignature() {
@@ -106,7 +111,7 @@ public final class SignatureFactory {
 
 	/**
 	 * Creates a mem swap signature.
-	 * 
+	 *
 	 * @return The signature.
 	 */
 	public static String createMemSwapSignature() {
@@ -114,8 +119,17 @@ public final class SignatureFactory {
 	}
 
 	/**
+	 * Creates a load average signature.
+	 *
+	 * @return The signature.
+	 */
+	public static String createLoadAverageSignature() {
+		return PATTERN_PREFIX_LOAD_AVERAGE;
+	}
+
+	/**
 	 * Creates a JVM Mem signature.
-	 * 
+	 *
 	 * @return The signature.
 	 */
 	public static String createJVMMemSignature() {
@@ -124,7 +138,7 @@ public final class SignatureFactory {
 
 	/**
 	 * Creates a JVM class loading signature.
-	 * 
+	 *
 	 * @return The signature.
 	 */
 	public static String createJVMClassLoadSignature() {
@@ -133,7 +147,7 @@ public final class SignatureFactory {
 
 	/**
 	 * Creates a JVM uptime signature.
-	 * 
+	 *
 	 * @return The signature.
 	 */
 	public static String createJVMUpTimeSignature() {
@@ -142,7 +156,7 @@ public final class SignatureFactory {
 
 	/**
 	 * Creates a JVM threads signature.
-	 * 
+	 *
 	 * @return The signature.
 	 */
 	public static String createJVMThreadsSignature() {
@@ -151,7 +165,7 @@ public final class SignatureFactory {
 
 	/**
 	 * Creates a JVM compilation signature.
-	 * 
+	 *
 	 * @return The signature.
 	 */
 	public static String createJVMCompilationSignature() {
@@ -160,7 +174,7 @@ public final class SignatureFactory {
 
 	/**
 	 * Creates a JVM garbage collector signature.
-	 * 
+	 *
 	 * @return The signature.
 	 */
 	public static String createJVMGarbageCollectorSignature() {
@@ -169,7 +183,7 @@ public final class SignatureFactory {
 
 	/**
 	 * Creates a method signature.
-	 * 
+	 *
 	 * @param modList
 	 *            List of modifiers in the following order:
 	 *            1. public, protected, private, package
@@ -194,7 +208,7 @@ public final class SignatureFactory {
 	 *            Null or empty list, if no exceptions are required.
 	 * @return
 	 *         A signature which has been generated from the inputs.
-	 * 
+	 *
 	 * @throws InvalidPatternException
 	 *             If any of the mandatory parameters is null.
 	 */
