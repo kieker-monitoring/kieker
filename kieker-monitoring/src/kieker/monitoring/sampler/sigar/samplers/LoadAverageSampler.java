@@ -16,19 +16,16 @@
 
 package kieker.monitoring.sampler.sigar.samplers;
 
-import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.SigarException;
 import org.hyperic.sigar.SigarProxy;
 
-import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.record.system.LoadAverageRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
 import kieker.monitoring.timer.ITimeSource;
 
 /**
- * Logs detailed utilization statistics for each CPU in the system, retrieved
- * from {@link CpuPerc}, as {@link CPUUtilizationRecord}s via
+ * Logs load average of the system, retrieved as {@link LoadAverageRecord} via
  * {@link kieker.monitoring.core.controller.IMonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)} .
  *
  * @author Teerat Pitakrat
