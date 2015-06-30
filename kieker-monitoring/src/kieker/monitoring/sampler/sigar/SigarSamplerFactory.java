@@ -24,13 +24,14 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.monitoring.sampler.sigar.samplers.CPUsCombinedPercSampler;
 import kieker.monitoring.sampler.sigar.samplers.CPUsDetailedPercSampler;
+import kieker.monitoring.sampler.sigar.samplers.LoadAverageSampler;
 import kieker.monitoring.sampler.sigar.samplers.MemSwapUsageSampler;
 
 /**
  * Provides factory methods for {@link kieker.monitoring.sampler.sigar.samplers.AbstractSigarSampler}s.
- * 
+ *
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton pattern (Effective Java #3)
@@ -58,7 +59,7 @@ public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton p
 
 	/**
 	 * {@link SigarProxy} instance used by this {@link SigarSamplerFactory}.
-	 * 
+	 *
 	 * @return the sigar
 	 */
 	public final SigarProxy getSigar() {
@@ -87,5 +88,13 @@ public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton p
 	@Override
 	public MemSwapUsageSampler createSensorMemSwapUsage() {
 		return new MemSwapUsageSampler(this.sigar);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public LoadAverageSampler createLoadAverage() {
+		return new LoadAverageSampler(this.sigar);
 	}
 }
