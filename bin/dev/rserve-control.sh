@@ -2,13 +2,21 @@
 
 # Script that either starts or stops Rserve
 
+BINDIR=$(cd "$(dirname "$0")"; pwd)/
+
 case "$1" in
     start)
 	echo -n "Trying to start Rserve..."
-	R CMD BATCH RserveStart.R RserveStart.log --vanilla &
-	#R CMD Rserve.dbg --vanilla > /tmp/rserve.dbg.log &
+	R CMD BATCH "${BINDIR}/RserveStart.R" RserveStart.log --vanilla &
 	RET=$?
-	if [ $RET = 0 ] && (ps ax | grep -i "rserve --vanilla" | grep -qv grep); then
+
+    # Give the process time to start up (as it is started in the background)
+    sleep 0.5
+
+    # Number of processes with rserve --slave
+    RPROC=`ps ax | grep -i "rserve --slave" | grep -v grep | wc -l`
+
+	if ([ $RET = 0 ] && [ $RPROC = 1 ]) then
 		echo "done."
 		exit 0
 	else

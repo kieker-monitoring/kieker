@@ -1,11 +1,12 @@
 apply plugin: 'application'
+apply plugin: 'eclipse'
 
 dependencies {
 	compile fileTree('lib') {
 		include "kieker-*.jar"
 	}
 	runtime fileTree('lib') {
-		include '*'
+		include 'sigar-*.jar'
 	}
 }
 

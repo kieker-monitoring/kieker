@@ -1,4 +1,5 @@
 apply plugin: 'application'
+apply plugin: 'eclipse'
 
 // Simplify the JAR's file name
 archivesBaseName = 'BookstoreApplication'

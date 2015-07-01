@@ -5,6 +5,15 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
+* 1.11 (April 1, 2015)
+- New features (selection)
+  - HTTP PUT/REST API for data bridge
+  - Trace analysis: automatic repair of broken traces
+  - Improved OPAD examples
+- Migrated to Gradle for build automation
+- Bug fixes and improvements to code, performance, tests, 
+  documentation, examples
+
 * 1.10 (October 15, 2014)
 - New features (selection)
   - Instrumentation record language 

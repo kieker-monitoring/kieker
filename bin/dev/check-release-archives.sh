@@ -1,7 +1,10 @@
 #!/bin/bash
 
-KIEKER_VERSION="1.11-SNAPSHOT"
+KIEKER_VERSION="1.12-SNAPSHOT"
 BASE_TMP_DIR="$(dirname $0)/../../build/"
+
+DIST_RELEASE_DIR="build/distributions/"
+DIST_JAR_DIR="build/libs/"
 
 function change_dir {
 	echo "Changing dir to $1 ..."
@@ -111,6 +114,16 @@ function assert_dir_NOT_exists {
 	echo OK
 }
 
+function assert_file_NOT_exists_recursive {
+	echo -n "Asserting '$1' does not exist as file or directory in any of the subdirs ..."
+	NUM_DIRS=$(find -name "$1" | wc -l)
+	if [ ${NUM_DIRS} -gt 0 ]; then 
+	    echo "$1 exists: $(find -name "$1")"
+	    exit 1
+	fi
+	echo OK
+}
+
 function assert_dir_exists {
 	echo -n "Asserting '$1' is a directory ..."
 	if ! test -d "$1"; then
@@ -177,12 +190,22 @@ function assert_files_exist_common {
 	assert_file_exists_regular "README"
 	assert_file_exists_regular "HISTORY"
 	assert_file_exists_regular "LICENSE"
-	assert_file_NOT_exists "build/"
+	assert_file_NOT_exists "build/tmp/"
 	assert_file_NOT_exists "build-eclipse/"
 	assert_file_NOT_exists "tmp/"
 	assert_file_NOT_exists ".git/"
 	assert_file_NOT_exists ".gitignore/"
+
+	assert_file_NOT_exists_recursive "*.log"
 	
+	echo -n "Make sure that no class files included (only exception is inside WEB-INF/classes) ..."
+	NUM_CLASS=$(find -name "*.class" | grep -v "WEB-INF/classes" | wc -l)
+	if [ ${NUM_CLASS} -gt 0 ]; then 
+	    echo ".class files included: $(find -name "*.class" | grep -v "WEB-INF/classes")"
+	    exit 1
+	fi
+	echo OK
+
 	# check if LICENSE file for each jar
 	for jar in $(find lib/ -name "*.jar"); do
 		JAR_BASE=$(echo ${jar} | sed 's/\(.*\)\..*/\1/') # remove file extension
@@ -234,6 +257,9 @@ function assert_files_exist_src {
 	assert_files_exist_common
 	assert_dir_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/"
+	assert_file_NOT_exists_recursive "build"
+	assert_dir_NOT_exists "javadoc"
+
 	assert_file_NOT_exists "META-INF/"
 	
 	assert_file_NOT_exists "kieker-examples/userguide/ch2--manual-instrumentation/lib/*.jar"
@@ -245,13 +271,6 @@ function assert_files_exist_src {
 	assert_file_exists_regular "kieker-examples/JavaEEServletContainerExample/build.gradle"
 	assert_file_exists_regular "kieker-examples/JavaEEServletContainerExample/livedemo-source/"	
 	assert_file_NOT_exists "kieker-examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-*.jar"
-
-	assert_file_exists_regular "kieker-examples/userguide/appendix-JMS/.classpath"
-	assert_file_exists_regular "kieker-examples/userguide/ch2--manual-instrumentation/.classpath"
-	assert_file_exists_regular "kieker-examples/userguide/ch2--bookstore-application/.classpath"
-	assert_file_exists_regular "kieker-examples/userguide/appendix-Sigar/.classpath"
-	assert_file_exists_regular "kieker-examples/userguide/ch5--trace-monitoring-aspectj/.classpath"
-	assert_file_exists_regular "kieker-examples/userguide/ch3-4--custom-components/.classpath"
 
 	assert_file_exists_regular "config/javadoc-header/javadoc.css"
 	assert_file_exists_regular "config/javadoc-header/kieker-javadoc-header.png"
@@ -271,16 +290,22 @@ function assert_files_exist_src {
 function assert_files_exist_bin {
 	assert_files_exist_common
 	assert_file_exists_regular "doc/kieker-"*"_userguide.pdf"
-	assert_dir_exists "dist/"
-	MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj )
+
+	echo -n "Making sure (recursively) that 'build' only exists with build/libs/ ..."
+	if find | grep "/build/" | grep -v "build/libs"; then
+	    exit 1
+	fi
+
+	assert_dir_exists "${DIST_JAR_DIR}"
+	MAIN_JAR=$(ls "${DIST_JAR_DIR}/kieker-"*".jar" | grep -v emf | grep -v aspectj )
 	assert_file_NOT_exists "META-INF/"
 	assert_file_exists_regular ${MAIN_JAR}
-	assert_file_exists_regular "dist/kieker-"*"-aspectj.jar"
-	assert_zip_file_content_exist "dist/kieker-"*"-aspectj.jar" " org/aspectj"
-	assert_zip_file_content_exist "dist/kieker-"*"-aspectj.jar" " aj/"
-	assert_zip_file_content_contains "dist/kieker-"*"-aspectj.jar" "META-INF/MANIFEST.MF" "Premain-Class: org.aspectj.weaver.loadtime.Agent"
-	assert_file_exists_regular "dist/kieker-"*"-emf.jar"
-	assert_zip_file_content_exist "dist/kieker-"*"-emf.jar" " org/eclipse/"
+	assert_file_exists_regular "${DIST_JAR_DIR}/kieker-"*"-aspectj.jar"
+	assert_zip_file_content_exist "${DIST_JAR_DIR}/kieker-"*"-aspectj.jar" " org/aspectj"
+	assert_zip_file_content_exist "${DIST_JAR_DIR}/kieker-"*"-aspectj.jar" " aj/"
+	assert_zip_file_content_contains "${DIST_JAR_DIR}/kieker-"*"-aspectj.jar" "META-INF/MANIFEST.MF" "Premain-Class: org.aspectj.weaver.loadtime.Agent"
+	assert_file_exists_regular "${DIST_JAR_DIR}/kieker-"*"-emf.jar"
+	assert_zip_file_content_exist "${DIST_JAR_DIR}/kieker-"*"-emf.jar" " org/eclipse/"
 	assert_dir_exists "examples/"
 	assert_file_exists_regular "examples/kieker.monitoring.example.properties"
 	assert_file_exists_regular "examples/kieker.monitoring.adaptiveMonitoring.example.conf"
@@ -308,8 +333,15 @@ function assert_files_exist_bin {
 	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar"
 	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar.LICENSE"
 
+	echo "Making sure that for each .project, a '.classpath' and a '.settings/org.eclipse.jdt.core.prefs' exists ..."	
+	for d in $(find -name ".project" -exec dirname {} \;); do 
+	    assert_file_exists_regular $d/.classpath
+	    assert_file_exists_regular $d/.settings/org.eclipse.jdt.core.prefs
+	done
+	echo OK
+
 	assert_file_NOT_exists "lib/static-analysis/"
-	assert_file_NOT_exists "dist/release/"
+	assert_file_NOT_exists "dist/"
 	assert_file_NOT_exists "bin/dev/check-release-archives*" 
 	assert_file_NOT_exists "doc/userguide/"
 	assert_file_NOT_exists "src/"
@@ -368,15 +400,16 @@ function check_src_archive {
 	# now build release from source (including checks and tests)
 	run_gradle distribute
 	# make sure that the expected files are present
-	assert_dir_exists "dist/"
-	assert_file_exists_regular $(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj ) # the core jar
-	assert_file_exists_regular "dist/kieker-"*"-aspectj.jar"
-	assert_file_exists_regular "dist/kieker-"*"-emf.jar"
-	assert_file_NOT_exists "dist/kieker-monitoring-servlet-"*".war"
+	assert_dir_exists "${DIST_JAR_DIR}"
+	assert_dir_exists "${DIST_RELEASE_DIR}"
+	assert_file_exists_regular $(ls "${DIST_JAR_DIR}/kieker-"*".jar" | grep -v emf | grep -v aspectj ) # the core jar
+	assert_file_exists_regular "${DIST_JAR_DIR}/kieker-"*"-aspectj.jar"
+	assert_file_exists_regular "${DIST_JAR_DIR}/kieker-"*"-emf.jar"
+	assert_file_NOT_exists "${DIST_JAR_DIR}/kieker-monitoring-servlet-"*".war"
 
 	# check bytecode version of classes contained in jar
 	echo "Making sure that bytecode version of class in jar is 50.0 (Java 1.6)"
-	MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj)
+	MAIN_JAR=$(ls "${DIST_JAR_DIR}/kieker-"*".jar" | grep -v emf | grep -v aspectj)
 	assert_file_exists_regular ${MAIN_JAR}
 
 	VERSION_CLASS=$(find build -name "Version.class" | grep "kieker-common")
@@ -411,7 +444,7 @@ function check_bin_archive {
 
 	# check bytecode version of classes contained in jar
 	echo -n "Making sure that bytecode version of class in jar is version 50.0 (Java 1.6)"
-	MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj)
+	MAIN_JAR=$(ls "${DIST_JAR_DIR}/kieker-"*".jar" | grep -v emf | grep -v aspectj)
 	assert_file_exists_regular ${MAIN_JAR}
 	VERSION_CLASS_IN_JAR=$(unzip -l	 ${MAIN_JAR} | grep Version.class | awk '{ print $4 }')
 	unzip "${MAIN_JAR}" "${VERSION_CLASS_IN_JAR}"
@@ -517,7 +550,7 @@ BASE_TMP_DIR_ABS=$(pwd)
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-BINZIP=$(ls ../../dist/releases/*-binaries.zip)
+BINZIP=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.zip)
 assert_file_exists_regular ${BINZIP}
 assert_no_duplicate_files_in_archive ${BINZIP} 
 check_bin_archive "${BINZIP}"
@@ -526,7 +559,7 @@ rm -rf ${DIR}
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-BINTGZ=$(ls ../../dist/releases/*-binaries.tar.gz)
+BINTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.tar.gz)
 assert_file_exists_regular ${BINTGZ}
 assert_no_duplicate_files_in_archive ${BINTGZ} 
 check_bin_archive "${BINTGZ}"
@@ -535,7 +568,7 @@ rm -rf ${DIR}
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-SRCZIP=$(ls ../../dist/releases/*-sources.zip)
+SRCZIP=$(ls ../../${DIST_RELEASE_DIR}/*-sources.zip)
 assert_file_exists_regular ${SRCZIP}
 assert_no_duplicate_files_in_archive ${SRCZIP} 
 check_src_archive "${SRCZIP}"
@@ -544,7 +577,7 @@ rm -rf ${DIR}
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-SRCTGZ=$(ls ../../dist/releases/*-sources.tar.gz)
+SRCTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-sources.tar.gz)
 assert_file_exists_regular ${SRCTGZ}
 assert_no_duplicate_files_in_archive ${SRCTGZ} 
 check_src_archive "${SRCTGZ}"

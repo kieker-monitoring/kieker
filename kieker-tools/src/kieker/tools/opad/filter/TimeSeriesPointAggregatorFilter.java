@@ -16,6 +16,10 @@
 
 package kieker.tools.opad.filter;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -33,8 +37,8 @@ import kieker.tools.util.AggregationVariableSet;
 
 /**
  * This Filter aggregates the incoming DoubleTImeSeriesPoints over a configurable period of time.
- * 
- * @author Tom Frotscher
+ *
+ * @author Tom Frotscher, Teerat Pitakrat
  * @since 1.10
  */
 @Plugin(name = "Variate TimeSeriesPoint Aggregator", outputPorts = {
@@ -43,7 +47,8 @@ import kieker.tools.util.AggregationVariableSet;
 		configuration = {
 			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, defaultValue = "MEAN"),
 			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, defaultValue = "1000"),
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, defaultValue = "MILLISECONDS")
+			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, defaultValue = "MILLISECONDS"),
+			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE, defaultValue = "perVariable")
 		})
 public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
@@ -59,6 +64,16 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_METHOD = "aggregationMethod";
 	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_SPAN = "aggregationSpan";
 	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT = "timeUnit";
+	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE = "timeScope";
+
+	/**
+	 * Time scope
+	 *
+	 * PER_VARIABLE: The aggregated value of each variable is processed only when a new input of that variable arrives. This is the default behavior.
+	 * GLOBAL: All variables are processed when any input arrives.
+	 */
+	public static final String CONFIG_PROPERTY_VALUE_AGGREGATION_TIMESCOPE_PER_VARIABLE = "perVariable";
+	public static final String CONFIG_PROPERTY_VALUE_AGGREGATION_TIMESCOPE_GLOBAL = "global";
 
 	/** Saves the variables and the measurements, that are needed to calculate the intervals and the result for the aggregations per application. */
 	private final ConcurrentHashMap<String, AggregationVariableSet> aggregationVariables;
@@ -66,6 +81,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	private final long aggregationSpan; // default from annotation used
 	private final TimeUnit timeunit; // default from annotation used
 	private final AggregationMethod aggregationMethod; // default from annotation used
+	private final boolean aggregationTimescopeGlobal;
 
 	private AggregationWindow recentWindow = new AggregationWindow(0L, 0L);
 
@@ -97,6 +113,14 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 		// Determine aggregation span
 		this.aggregationSpan = this.timeunit.convert(configuration.getIntProperty(CONFIG_PROPERTY_NAME_AGGREGATION_SPAN), configTimeUnit);
+
+		// Determine realtime processing flag
+		final String scope = configuration.getStringProperty(CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE);
+		if (CONFIG_PROPERTY_VALUE_AGGREGATION_TIMESCOPE_GLOBAL.equals(scope)) {
+			this.aggregationTimescopeGlobal = true;
+		} else {
+			this.aggregationTimescopeGlobal = false;
+		}
 	}
 
 	@Override
@@ -106,38 +130,36 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, Long.toString(this.aggregationSpan));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, this.timeunit.name());
 		configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, this.aggregationMethod.name());
+		if (this.aggregationTimescopeGlobal) {
+			configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE, CONFIG_PROPERTY_VALUE_AGGREGATION_TIMESCOPE_GLOBAL);
+		} else {
+			configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE, CONFIG_PROPERTY_VALUE_AGGREGATION_TIMESCOPE_PER_VARIABLE);
+		}
 
 		return configuration;
 	}
 
 	/**
 	 * This method represents the input port for the incoming measurements.
-	 * 
+	 *
 	 * @param input
 	 *            The next incoming measurement
 	 */
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT)
 	public void inputTSPoint(final NamedDoubleTimeSeriesPoint input) {
-		if (this.checkInitialization(input.getName())) {
-			this.processInput(input, input.getTime(), input.getName());
+		final String name = input.getName();
+		this.aggregationVariables.putIfAbsent(name, new AggregationVariableSet());
+
+		if (this.aggregationTimescopeGlobal) {
+			this.processInputGlobalScope(input);
 		} else {
-			// Initialization of the aggregation variables for a new application
-			this.aggregationVariables.put(input.getName(), new AggregationVariableSet());
-			this.processInput(input, input.getTime(), input.getName());
+			this.processInputVariableScope(input);
 		}
 	}
 
-	/**
-	 * Checks if the current application is already known to this filter.
-	 * 
-	 * @param name
-	 *            Application name
-	 */
-	private boolean checkInitialization(final String name) {
-		return this.aggregationVariables.containsKey(name);
-	}
-
-	private void processInput(final NamedDoubleTimeSeriesPoint input, final long currentTime, final String appname) {
+	private synchronized void processInputVariableScope(final NamedDoubleTimeSeriesPoint input) { // NOPMD (AvoidSynchronizedAtMethodLevel)
+		final long currentTime = input.getTime();
+		final String appname = input.getName();
 		final AggregationVariableSet variables = this.aggregationVariables.get(appname);
 		final long startOfTimestampsInterval = this.computeFirstTimestampInInterval(currentTime, variables);
 		final long endOfTimestampsInterval = this.computeLastTimestampInInterval(currentTime, variables);
@@ -167,7 +189,88 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 			variables.getAggregationList().clear();
 		}
 		variables.getAggregationList().add(input);
+	}
 
+	private synchronized void processInputGlobalScope(final NamedDoubleTimeSeriesPoint input) { // NOPMD (AvoidSynchronizedAtMethodLevel)
+		final long inputTimestamp = input.getTime();
+		final AggregationVariableSet inputVariables = this.aggregationVariables.get(input.getName());
+		final long startOfInputTimestampsInterval = this.computeFirstTimestampInInterval(inputTimestamp, inputVariables);
+		final long endOfInputTimestampsInterval = this.computeLastTimestampInInterval(inputTimestamp, inputVariables);
+
+		if (this.recentWindow.getWindowEnd() != endOfInputTimestampsInterval) {
+			this.recentWindow = new AggregationWindow(startOfInputTimestampsInterval, endOfInputTimestampsInterval);
+			super.deliver(OUTPUT_PORT_NAME_AGGREGATION_WINDOW, this.recentWindow);
+		}
+
+		// There is no ConcurrentTreeMap implementation
+		final Map<Long, List<NamedDoubleTimeSeriesPoint>> orderedTsPoints = new TreeMap<Long, List<NamedDoubleTimeSeriesPoint>>(); // NOPMD (UseConcurrentHashMap)
+
+		for (final String appname : this.aggregationVariables.keySet()) {
+			final AggregationVariableSet variables = this.aggregationVariables.get(appname);
+			final long startOfLatestIntervalTimestamp = this.computeFirstTimestampInInterval(inputTimestamp, variables);
+			final long endOfLatestIntervalTimestamp = this.computeLastTimestampInInterval(inputTimestamp, variables);
+			long lastTimestampInCurrentInterval = variables.getLastTimestampInCurrentInterval();
+			if (endOfLatestIntervalTimestamp > lastTimestampInCurrentInterval) {
+				if (variables.getFirstTimestampInCurrentInterval() >= 0) {
+					// Skip if this is the first record
+					lastTimestampInCurrentInterval = variables.getLastTimestampInCurrentInterval();
+					while (lastTimestampInCurrentInterval < inputTimestamp) {
+						final NamedDoubleTimeSeriesPoint newTsPoint = this.calculateAggregationValueOfCurrentInterval(variables, appname);
+						this.addNewTsPoint(orderedTsPoints, newTsPoint);
+						lastTimestampInCurrentInterval = variables.getLastTimestampInCurrentInterval();
+					}
+				} else {
+					// Set interval timestamp if this is the first record
+					variables.setFirstTimestampInCurrentInterval(startOfLatestIntervalTimestamp);
+					variables.setLastTimestampInCurrentInterval(endOfLatestIntervalTimestamp);
+				}
+			}
+		}
+
+		// Ignore input if the timestamp is before the current window
+		if (inputTimestamp >= inputVariables.getFirstTimestampInCurrentInterval()) {
+			inputVariables.getAggregationList().add(input);
+		}
+
+		for (final long timestamp : orderedTsPoints.keySet()) {
+			final List<NamedDoubleTimeSeriesPoint> tsPointList = orderedTsPoints.get(timestamp);
+			for (final NamedDoubleTimeSeriesPoint tsPoint : tsPointList) {
+				super.deliver(OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, tsPoint);
+			}
+		}
+	}
+
+	private NamedDoubleTimeSeriesPoint calculateAggregationValueOfCurrentInterval(final AggregationVariableSet variables, final String name) {
+		final double aggregationValue;
+		final NamedDoubleTimeSeriesPoint tsPoint;
+		final long firstTimestampInCurrentInterval = variables.getFirstTimestampInCurrentInterval();
+		final long lastTimestampInCurrentInterval = variables.getLastTimestampInCurrentInterval();
+		synchronized (this) {
+			final int listSize = variables.getAggregationList().size();
+			if (listSize <= 0) {
+				tsPoint = new NamedDoubleTimeSeriesPoint(lastTimestampInCurrentInterval, Double.NaN, name);
+			} else {
+				final double[] a = new double[listSize];
+				for (int i = 0; i < listSize; i++) {
+					a[i] = variables.getAggregationList().get(i).getValue();
+				}
+				aggregationValue = this.aggregationMethod.getAggregationValue(a);
+				tsPoint = new NamedDoubleTimeSeriesPoint(lastTimestampInCurrentInterval, aggregationValue, name);
+				variables.getAggregationList().clear();
+			}
+			variables.setFirstTimestampInCurrentInterval(firstTimestampInCurrentInterval + this.aggregationSpan);
+			variables.setLastTimestampInCurrentInterval(lastTimestampInCurrentInterval + this.aggregationSpan);
+		}
+		return tsPoint;
+	}
+
+	private void addNewTsPoint(final Map<Long, List<NamedDoubleTimeSeriesPoint>> orderedTsPoints, final NamedDoubleTimeSeriesPoint newTsPoint) {
+		final long newTsPointTimestamp = newTsPoint.getTime();
+		if (!orderedTsPoints.containsKey(newTsPointTimestamp)) {
+			orderedTsPoints.put(newTsPointTimestamp, new ArrayList<NamedDoubleTimeSeriesPoint>());
+		}
+		final List<NamedDoubleTimeSeriesPoint> tsPointList = orderedTsPoints.get(newTsPointTimestamp);
+		tsPointList.add(newTsPoint);
 	}
 
 	private void calculateAndDeliverAggregationValue(final AggregationVariableSet variables) {
@@ -191,9 +294,9 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Returns the first timestamp included in the interval that corresponds to the given timestamp.
-	 * 
+	 *
 	 * @param timestamp
-	 * 
+	 *
 	 * @return The timestamp in question.
 	 */
 	private long computeFirstTimestampInInterval(final long timestamp, final AggregationVariableSet variables) {
@@ -210,7 +313,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Returns the last timestamp included in the interval that corresponds to the given timestamp.
-	 * 
+	 *
 	 * @param timestamp
 	 * @return The timestamp in question.
 	 */

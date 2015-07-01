@@ -26,9 +26,9 @@ import org.apache.cxf.helpers.FileUtils;
 /**
  * This abstract class is the base for all other dynamic JUnit tests within the system. Those are tests which search for example for specific classes in the soure
  * directory.
- *
+ * 
  * @author Nils Christian Ehmke
- *
+ * 
  * @since 1.9
  */
 public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
@@ -40,14 +40,17 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 	private static final String PATTERN_JUNIT_PACKAGE_NAME = ".*junit.*";
 
 	protected Collection<Class<?>> deliverAllAvailableClassesFromSourceDirectory() throws ClassNotFoundException {
-		return AbstractDynamicKiekerTest.transformClassNameToClasses(AbstractDynamicKiekerTest.transformFilesToClassNames(AbstractDynamicKiekerTest.listSourceFiles(
-				DIR_NAME_SOURCES, PATTERN_JAVA_SOURCE_FILES)));
+		final String dirNameSourcesNormalized = super.modulePathToWorkingPath(DIR_NAME_SOURCES);
+
+		return this.transformClassNameToClasses(this.transformFilesToClassNames(this.listSourceFiles(dirNameSourcesNormalized, PATTERN_JAVA_SOURCE_FILES)));
 	}
 
 	protected Collection<Class<?>> deliverAllAvailableClassesFromTestDirectoryInJUnitPackage() throws ClassNotFoundException {
-		return AbstractDynamicKiekerTest.transformClassNameToClasses(AbstractDynamicKiekerTest.transformFilesToClassNames(
+		final String dirNameTestsNormalized = super.modulePathToWorkingPath(DIR_NAME_TESTS);
+
+		return this.transformClassNameToClasses(this.transformFilesToClassNames(
 				AbstractDynamicKiekerTest.filterOutFilesNotMatchingFullQualifiedPathName(PATTERN_JUNIT_PACKAGE_NAME,
-						AbstractDynamicKiekerTest.listSourceFiles(DIR_NAME_TESTS, PATTERN_JAVA_TEST_FILES))));
+						this.listSourceFiles(dirNameTestsNormalized, PATTERN_JAVA_TEST_FILES))));
 	}
 
 	private static Collection<File> filterOutFilesNotMatchingFullQualifiedPathName(final String pattern, final Collection<File> files) {
@@ -62,15 +65,15 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 		return result;
 	}
 
-	private static Collection<File> listSourceFiles(final String directoryName, final String filePattern) {
+	private Collection<File> listSourceFiles(final String directoryName, final String filePattern) {
 		return FileUtils.getFilesRecurse(new File(directoryName), filePattern);
 	}
 
-	private static Collection<String> transformFilesToClassNames(final Collection<File> files) {
+	private Collection<String> transformFilesToClassNames(final Collection<File> files) {
 		final Collection<String> result = new LinkedList<String>();
 
 		for (final File file : files) {
-			final String pathName = file.getPath();
+			final String pathName = this.workingPathToModulePath(file.getPath());
 			String className = pathName.substring(0, pathName.length() - 5).replace(File.separator, ".");
 			final int firstPointPos = className.indexOf('.');
 			className = className.substring(firstPointPos + 1);
@@ -81,7 +84,7 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 		return result;
 	}
 
-	private static Collection<Class<?>> transformClassNameToClasses(final Collection<String> classNames) throws ClassNotFoundException {
+	private Collection<Class<?>> transformClassNameToClasses(final Collection<String> classNames) throws ClassNotFoundException {
 		final Collection<Class<?>> result = new LinkedList<Class<?>>();
 
 		for (final String className : classNames) {

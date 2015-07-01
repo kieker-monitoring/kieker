@@ -85,13 +85,13 @@ the binary release to another directory:
 \setTextListing
 \begin{lstlisting}[caption=Execution under UNIX-like systems]
 $\lstshellprompt{}$ $\textbf{bin/logReplay.sh}$
-  $\textbf{-\,-inputdirs}$ $\distributedTestdataDirDistro$ 
+  $\textbf{-\,-inputdirs}$ $\distributedTestdataReleaseDirDistro$ 
   $\textbf{-\,-keep-logging-timestamps}$ $true$ 
   $\textbf{-\,-realtime}$ $false$
 \end{lstlisting}
 \begin{lstlisting}[caption=Execution under Windows]
 $\lstshellprompt{}$ $\textbf{logReplay.bat}$
-  $\textbf{-\,-inputdirs}$ $\distributedTestdataDirDistroWin$ 
+  $\textbf{-\,-inputdirs}$ $\distributedTestdataReleaseDirDistroWin$ 
   $\textbf{-\,-keep-logging-timestamps}$ $true$ 
   $\textbf{-\,-realtime}$ $false$
 \end{lstlisting}
@@ -149,7 +149,7 @@ graph and convert it to pdf format:
 \setTextListing
 \begin{lstlisting}[caption=Execution under UNIX-like systems]
 $\lstshellprompt{}$ $\textbf{bin/trace-analysis.sh}$
-  $\textbf{-\,-inputdirs}$ $\distributedTestdataDirDistro$ 
+  $\textbf{-\,-inputdirs}$ $\distributedTestdataReleaseDirDistro$ 
   $\textbf{-\,-outputdir}$ . 
   $\textbf{-\,-plot-Deployment-Operation-Dependency-Graph}$
 $\lstshellprompt{}$ $\textbf{dot}$ $\textbf{-T}$ pdf  deploymentOperationDependencyGraph.dot > deploymentOperationDependencyGraph.pdf
@@ -157,7 +157,7 @@ $\lstshellprompt{}$ $\textbf{dot}$ $\textbf{-T}$ pdf  deploymentOperationDepende
 
 \begin{lstlisting}[caption=Execution under Windows]
 $\lstshellprompt{}$ $\textbf{trace-analysis.bat}$
-  $\textbf{-\,-inputdirs}$ $\distributedTestdataDirDistroWin$ 
+  $\textbf{-\,-inputdirs}$ $\distributedTestdataReleaseDirDistroWin$ 
   $\textbf{-\,-outputdir}$ . 
   $\textbf{-\,-plot-Deployment-Operation-Dependency-Graph}$
 $\lstshellprompt{}$ $\textbf{dot}$ $\textbf{-T}$ pdf  deploymentOperationDependencyGraph.dot > deploymentOperationDependencyGraph.pdf

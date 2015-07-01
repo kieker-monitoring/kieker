@@ -244,7 +244,6 @@ configurations.archives.artifacts.with { archives ->
 
 task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-	destinationDir = file('dist')
 	configure allArtifacts
 	configure licence
 	configure aopxml
@@ -256,7 +255,6 @@ task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 
 task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-	destinationDir = file('dist')
 	classifier = 'emf'
 	configure allArtifacts
 	configure licence
@@ -288,7 +286,6 @@ task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 
 task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-	destinationDir = file('dist')
 	classifier = 'aspectj'
 	configure allArtifacts
 	configure licence
@@ -340,18 +337,17 @@ artifacts {
 }
 
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.', 
-		dependsOn: [':distributeBinaryZip', ':distributeSourceZip',':distributeBinaryTar', ':distributeSourceTar'])
+		dependsOn: [':distributeBinaryZip', ':distributeSourceZip',':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
 
 def binaryContent = project.copySpec {
 	from (projectDir) {
 		include 'LICENSE'
 		include 'HISTORY'
-		include 'README'
 		
 		include 'bin/**'
 		include 'lib/**'
 		include 'javadoc/**'
-		include 'dist/*'
+		include 'build/libs/*'
     
 		exclude '**/.gradle/**'
 		exclude 'lib/static-analysis/'
@@ -361,6 +357,7 @@ def binaryContent = project.copySpec {
 		include 'README-bin'
 		rename 'README-bin', 'README' 
 	}
+	exclude '**/*.log'
 	into kiekerPackagenamebase + "-" + kiekerVersion
 }
 
@@ -375,20 +372,27 @@ def manualContent = project.copySpec {
 def exampleContent = project.copySpec {
 	from ('kieker-examples') {
 		include '**'
+		
+		exclude '**/JavaEEServletContainerExample/build.xml'
+		exclude '**/livedemo-source/**'
+		exclude '**/.gradle/**'
+		exclude '**/build/**'
+		exclude '*gradle*'
+		exclude '**/*.log'
 	}
-	from ('examples') {
-		include '**'
-	}
-	exclude '**/JavaEEServletContainerExample/build.xml'
-	exclude '**/livedemo-source/**'
-	exclude '**/.gradle/**'
-	exclude '**/build/**'
-  
+
 	from ('kieker-monitoring/src-resources/META-INF') {
 		include 'kieker.monitoring.default.properties'	
 		rename 'kieker.monitoring.default.properties', 'kieker.monitoring.example.properties'
 	}
 	into kiekerPackagenamebase + "-" + kiekerVersion + "/examples"
+	
+	with {
+		from ('kieker-examples') {
+			include '**/build/libs/**'
+		}
+		includeEmptyDirs = false
+	}
 }
 
 def exampleJavaEEContent = project.copySpec {
@@ -410,13 +414,11 @@ task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandalone
 
 task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
 	classifier = 'binaries'
-	destinationDir = file('dist/releases')
 	with binaryContent, manualContent, exampleContent, exampleJavaEEContent
 }
 
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
 	classifier = 'binaries'
-	destinationDir = file('dist/releases')
 	with binaryContent, manualContent, exampleContent, exampleJavaEEContent
 	
 	compression = Compression.GZIP 
@@ -429,11 +431,19 @@ def sourceContent = project.copySpec {
 		include 'bin/**'
 		include 'src/**'
 		include 'lib/**'
-    
-		exclude 'build/'
+
+        exclude 'README'
+		exclude 'javadoc/**'    
+		exclude 'kieker-examples/analysis/**/.classpath'
+		exclude 'kieker-examples/monitoring/**/.classpath'
+		exclude 'kieker-examples/userguide/**/.classpath'
+		exclude 'kieker-examples/analysis/**/.settings'
+		exclude 'kieker-examples/monitoring/**/.settings'
+		exclude 'kieker-examples/userguide/**/.settings'
+		exclude '**/build/**'
 		exclude 'build-eclipse/'
-		exclude 'dist'
 		exclude '**/.gradle/**'
+		exclude '**/*.log'
 	}
 	from ('kieker-documentation') {
 		include 'README-src'
@@ -448,14 +458,12 @@ task checkReleaseArchives(type: Exec, dependsOn: [distribute]) {
 
 task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
 	description = 'Distributes source archive.'
-	destinationDir = file('dist/releases')
 	classifier = 'sources'
 	with sourceContent
 }
 
 task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
 	description = 'Distributes source archive.'
-	destinationDir = file('dist/releases')
 	classifier = 'sources'
 	with sourceContent
 	

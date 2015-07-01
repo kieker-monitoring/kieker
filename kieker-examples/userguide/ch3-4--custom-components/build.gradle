@@ -1,4 +1,5 @@
 apply plugin: 'application'
+apply plugin: 'eclipse'
 
 dependencies {
 	compile fileTree('lib') {
@@ -11,6 +12,7 @@ archivesBaseName = 'BookstoreApplicationMonitoringAnalysis'
 version = ''
 
 sourceSets.main.java.srcDirs = ['src']
+sourceSets.main.resources.srcDirs = ['src-resources']
 
 mainClassName = 'kieker.examples.userguide.ch3and4bookstore.Starter'
 

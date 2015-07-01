@@ -11,4 +11,4 @@ JAVAARGS="-Dkieker.common.logging.Log=JDK -Djava.util.logging.config.file=${BIND
 MAINCLASSNAME=kieker.tools.KaxViz
 #echo java ${JAVAARGS} -cp "${CLASSPATH}" ${MAINCLASSNAME} "$@"
 
-time java ${JAVAARGS} -cp "${BINDIR}/../lib/*":"${BINDIR}/../dist/*":"${BINDIR}" ${MAINCLASSNAME} "$@"
+time java ${JAVAARGS} -cp "${BINDIR}/../lib/*":"${BINDIR}/../build/libs/*":"${BINDIR}" ${MAINCLASSNAME} "$@"

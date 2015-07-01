@@ -92,3 +92,13 @@ entity ResourceUtilizationRecord {
 	 */
 	double utilization = 0.0
 }
+
+@author 'Teerat Pitakrat' @since '1.12'
+entity LoadAverageRecord {
+	long timestamp = 0
+	string hostname = ""
+	
+	double oneMinLoadAverage = 0
+	double fiveMinLoadAverage = 0
+	double fifteenMinLoadAverage = 0
+}

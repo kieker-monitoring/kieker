@@ -1,9 +1,13 @@
 apply plugin: 'application'
+apply plugin: 'eclipse'
 
 dependencies {
 	compile fileTree('lib') {
-		include "kieker-*-emf.jar"
-		include "commons-logging-*.jar"
+		include "*.jar"
+		// we use the wildcard above because we need to include 
+		// libraries that depend on the actual JMS product used
+		//include "kieker-*-emf.jar"
+		//include "commons-logging-*.jar"
   }
 }
 
@@ -16,7 +20,8 @@ archivesBaseName = 'JMSMonitoringAnalysis'
 version = ''
 	
 sourceSets.main.java.srcDirs = ['src']
-	
+sourceSets.main.resources.srcDirs = ['src-resources']
+
 def monitoringConfiguration = {
   main = 'kieker.examples.userguide.appendixJMS.BookstoreStarter'
   classpath = sourceSets.main.runtimeClasspath
