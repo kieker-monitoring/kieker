@@ -148,8 +148,9 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 						this.blockingQueue.put(monitoringRecord);
 						return true;
 					} catch (final InterruptedException ignore) {
-						LOG.warn("Interupted when adding new monitoring record to queue. Try: " + i);
-						Thread.currentThread().interrupt(); // propagate interrupt
+						if (Thread.interrupted()) { // test and reset thread's interrupted status
+							LOG.warn("Interrupted when adding new monitoring record to queue. Try: " + i);
+						}
 					}
 				}
 				LOG.error("Failed to add new monitoring record to queue (Finally interruped while blocked).");
