@@ -79,7 +79,7 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 
 		final MultivaluedMap<String, String> requestHeader = request.getRequestHeaders();
 		final List<String> requestJerseyHeader = requestHeader.get(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER);
-		if ((requestJerseyHeader == null) || (requestJerseyHeader.size() == 0)) {
+		if ((requestJerseyHeader == null) || (requestJerseyHeader.isEmpty())) {
 			LOG.debug("No monitoring data found in the incoming request header");
 			// LOG.info("Will continue without sending back reponse header");
 			traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
@@ -89,12 +89,14 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 			ess = 0;
 		} else {
 			final String operationExecutionHeader = requestJerseyHeader.get(0);
-			LOG.debug("Received request: " + request.getRequestUri() + "with header = " + requestHeader.toString());
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Received request: " + request.getRequestUri() + "with header = " + requestHeader.toString());
+			}
 			final String[] headerArray = operationExecutionHeader.split(",");
 
 			// Extract session id
 			sessionId = headerArray[1];
-			if (sessionId.equals("null")) {
+			if ("null".equals(sessionId)) {
 				sessionId = OperationExecutionRecord.NO_SESSION_ID;
 			}
 
@@ -168,7 +170,7 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 			return thisJoinPoint.proceed();
 		}
 
-		final String sessionId = null;
+		final String sessionId = "null";
 		final long traceId = CF_REGISTRY.recallThreadLocalTraceId();
 
 		if (traceId == -1) {
@@ -184,14 +186,12 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 		final List<Object> responseHeaderList = new ArrayList<Object>();
 		responseHeaderList.add(Long.toString(traceId) + "," + sessionId + "," + Integer.toString(CF_REGISTRY.recallThreadLocalEOI()));
 		responseHeader.put(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER, responseHeaderList);
-		LOG.debug("Sending response with header = " + responseHeader.toString() + " to the request: " + containerResponse.getContainerRequest().getRequestUri());
-
-		final Object retval;
-		try {
-			retval = thisJoinPoint.proceed();
-		} finally {
-
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Sending response with header = " + responseHeader.toString() + " to the request: " + containerResponse.getContainerRequest().getRequestUri());
 		}
+
+		final Object retval = thisJoinPoint.proceed();
+
 		return retval;
 	}
 
