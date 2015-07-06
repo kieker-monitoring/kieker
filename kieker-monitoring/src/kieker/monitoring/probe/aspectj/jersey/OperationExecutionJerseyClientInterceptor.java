@@ -67,7 +67,9 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 	}
 
 	/**
-	 * Method to intercept outgoing request and incoming response
+	 * Method to intercept outgoing request and incoming response.
+	 *
+	 * @return value of the intercepted method
 	 */
 	@Around("execution(public com.sun.jersey.api.client.ClientResponse com.sun.jersey.client.apache4.ApacheHttpClient4Handler.handle(com.sun.jersey.api.client.ClientRequest))")
 	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)

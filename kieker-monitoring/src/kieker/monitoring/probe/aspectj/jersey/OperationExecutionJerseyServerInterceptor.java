@@ -65,7 +65,9 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 	}
 
 	/**
-	 * Method to intercept incoming request and read the header
+	 * Method to intercept incoming request.
+	 *
+	 * @return value of the intercepted method
 	 */
 	@Around("execution(private void com.sun.jersey.server.impl.application.WebApplicationImpl._handleRequest(com.sun.jersey.server.impl.application.WebApplicationContext, com.sun.jersey.spi.container.ContainerRequest, com.sun.jersey.spi.container.ContainerResponse))")
 	public Object operationHandleRequest(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
@@ -172,7 +174,9 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 	}
 
 	/**
-	 * Method to intercept outgoing response and modify the header
+	 * Method to intercept outgoing response.
+	 *
+	 * @return value of the intercepted method
 	 */
 	@Around("execution(public void com.sun.jersey.spi.container.ContainerResponse.write())")
 	public Object operationWriteResponse(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
