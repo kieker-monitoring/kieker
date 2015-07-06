@@ -49,16 +49,26 @@ import kieker.monitoring.timer.ITimeSource;
 @Aspect
 @DeclarePrecedence("kieker.monitoring.probe.aspectj.operationExecution.*,kieker.monitoring.probe.aspectj.jersey.*")
 public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJProbe {
+	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
+
 	private static final Log LOG = LogFactory.getLog(OperationExecutionJerseyClientInterceptor.class);
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final String VMNAME = CTRLINST.getHostname();
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
-	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
+	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 
-	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
+	/**
+	 * Default constructor.
+	 */
+	public OperationExecutionJerseyClientInterceptor() {
+		// empty default constructor
+	}
 
+	/**
+	 * Method to intercept outgoing request and incoming response
+	 */
 	@Around("execution(public com.sun.jersey.api.client.ClientResponse com.sun.jersey.client.apache4.ApacheHttpClient4Handler.handle(com.sun.jersey.api.client.ClientRequest))")
 	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
 		if (!CTRLINST.isMonitoringEnabled()) {
@@ -71,7 +81,7 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 
 		boolean entrypoint = true;
 		final String hostname = VMNAME;
-		final String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();
+		final String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
 		final int eoi; // this is executionOrderIndex-th execution in this trace
 		final int ess; // this is the height in the dynamic call tree of this execution
 		final int nextESS;
@@ -186,6 +196,7 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 				CF_REGISTRY.unsetThreadLocalTraceId();
 				CF_REGISTRY.unsetThreadLocalEOI();
 				CF_REGISTRY.unsetThreadLocalESS();
+				SESSION_REGISTRY.unsetThreadLocalSessionId();
 			} else {
 				CF_REGISTRY.storeThreadLocalESS(ess); // next operation is ess
 			}
