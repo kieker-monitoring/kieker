@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,12 @@
 package kieker.monitoring.probe.aspectj.jersey;
 
 /**
- * @author tp
+ * @author Teerat Pitakrat
  *
- * @since 1.11
+ * @since 1.12
  */
 public class JerseyHeaderConstants {
 
 	public static final String OPERATION_EXECUTION_JERSEY_HEADER = "OperationExecutionJerseyHeader";
+
 }
