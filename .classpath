@@ -104,5 +104,9 @@
 	<classpathentry kind="lib" path="lib/geronimo-j2ee-management_1.1_spec-1.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/derby-10.11.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/kahadb-5.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/jsr311-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/jersey/jersey-client-1.19.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/jersey/jersey-server-1.19.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/javax.ws.rs-api-2.0.1.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
