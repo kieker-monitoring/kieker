@@ -36,7 +36,7 @@ public final class LoadAverageSampler extends AbstractSigarSampler {
 
 	/**
 	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy} instance used to retrieve the sensor data. Users
-	 * should use the factory method {@link kieker.monitoring.sampler.sigar.SigarSamplerFactory#createLoadAverage()} to acquire an
+	 * should use the factory method {@link kieker.monitoring.sampler.sigar.SigarSamplerFactory#createSensorLoadAverage()} to acquire an
 	 * instance rather than calling this constructor directly.
 	 *
 	 * @param sigar

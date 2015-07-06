@@ -65,5 +65,5 @@ public interface ISigarSamplerFactory {
 	 *
 	 * @since 1.12
 	 */
-	public LoadAverageSampler createLoadAverage();
+	public LoadAverageSampler createSensorLoadAverage();
 }

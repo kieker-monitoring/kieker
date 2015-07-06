@@ -94,7 +94,7 @@ public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton p
 	 * {@inheritDoc}
 	 */
 	@Override
-	public LoadAverageSampler createLoadAverage() {
+	public LoadAverageSampler createSensorLoadAverage() {
 		return new LoadAverageSampler(this.sigar);
 	}
 }
