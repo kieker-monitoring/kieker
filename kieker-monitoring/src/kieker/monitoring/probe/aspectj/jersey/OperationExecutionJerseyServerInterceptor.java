@@ -188,7 +188,6 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 			return thisJoinPoint.proceed();
 		}
 
-		final String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
 		final long traceId = CF_REGISTRY.recallThreadLocalTraceId();
 
 		if (traceId == -1) {
@@ -197,6 +196,7 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 			return thisJoinPoint.proceed();
 		}
 
+		final String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
 		final ContainerResponse containerResponse = (ContainerResponse) thisJoinPoint.getTarget();
 		final MultivaluedMap<String, Object> responseHeader = containerResponse.getHttpHeaders();
 
