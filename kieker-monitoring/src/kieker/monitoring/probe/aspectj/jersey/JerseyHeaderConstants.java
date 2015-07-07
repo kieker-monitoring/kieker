@@ -17,11 +17,13 @@
 package kieker.monitoring.probe.aspectj.jersey;
 
 /**
+ * This interface contains constants for the jersey header.
+ *
  * @author Teerat Pitakrat
  *
  * @since 1.12
  */
-public class JerseyHeaderConstants {
+public interface JerseyHeaderConstants { // NOPMD NOCS (constants interface)
 
 	public static final String OPERATION_EXECUTION_JERSEY_HEADER = "OperationExecutionJerseyHeader";
 

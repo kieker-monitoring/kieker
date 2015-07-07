@@ -47,16 +47,28 @@ import kieker.monitoring.timer.ITimeSource;
 @Aspect
 @DeclarePrecedence("kieker.monitoring.probe.aspectj.jersey.*,kieker.monitoring.probe.aspectj.operationExecution.*")
 public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJProbe {
+	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
+
 	private static final Log LOG = LogFactory.getLog(OperationExecutionJerseyServerInterceptor.class);
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final String VMNAME = CTRLINST.getHostname();
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
-	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
+	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 
-	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
+	/**
+	 * Default constructor.
+	 */
+	public OperationExecutionJerseyServerInterceptor() {
+		// empty default constructor
+	}
 
+	/**
+	 * Method to intercept incoming request.
+	 *
+	 * @return value of the intercepted method
+	 */
 	@Around("execution(private void com.sun.jersey.server.impl.application.WebApplicationImpl._handleRequest(com.sun.jersey.server.impl.application.WebApplicationContext, com.sun.jersey.spi.container.ContainerRequest, com.sun.jersey.spi.container.ContainerResponse))")
 	public Object operationHandleRequest(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
 		if (!CTRLINST.isMonitoringEnabled()) {
@@ -69,7 +81,7 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 
 		boolean entrypoint = true;
 		final String hostname = VMNAME;
-		String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();
+		String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
 		Long traceId = -1L;
 		int eoi; // this is executionOrderIndex-th execution in this trace
 		int ess; // this is the height in the dynamic call tree of this execution
@@ -79,7 +91,7 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 
 		final MultivaluedMap<String, String> requestHeader = request.getRequestHeaders();
 		final List<String> requestJerseyHeader = requestHeader.get(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER);
-		if ((requestJerseyHeader == null) || (requestJerseyHeader.size() == 0)) {
+		if ((requestJerseyHeader == null) || (requestJerseyHeader.isEmpty())) {
 			LOG.debug("No monitoring data found in the incoming request header");
 			// LOG.info("Will continue without sending back reponse header");
 			traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
@@ -89,12 +101,14 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 			ess = 0;
 		} else {
 			final String operationExecutionHeader = requestJerseyHeader.get(0);
-			LOG.debug("Received request: " + request.getRequestUri() + "with header = " + requestHeader.toString());
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Received request: " + request.getRequestUri() + "with header = " + requestHeader.toString());
+			}
 			final String[] headerArray = operationExecutionHeader.split(",");
 
 			// Extract session id
 			sessionId = headerArray[1];
-			if (sessionId.equals("null")) {
+			if ("null".equals(sessionId)) {
 				sessionId = OperationExecutionRecord.NO_SESSION_ID;
 			}
 
@@ -136,6 +150,7 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 			CF_REGISTRY.storeThreadLocalTraceId(traceId);
 			CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with incrementAndRecall
 			CF_REGISTRY.storeThreadLocalESS(ess + 1); // this execution has ESS=ess
+			SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
 		}
 
 		// measure before
@@ -158,8 +173,13 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 		return retval;
 	}
 
+	/**
+	 * Method to intercept outgoing response.
+	 *
+	 * @return value of the intercepted method
+	 */
 	@Around("execution(public void com.sun.jersey.spi.container.ContainerResponse.write())")
-	public Object operationWriteResponse(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
+	public Object operationWriteResponse(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
@@ -168,7 +188,6 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 			return thisJoinPoint.proceed();
 		}
 
-		final String sessionId = null;
 		final long traceId = CF_REGISTRY.recallThreadLocalTraceId();
 
 		if (traceId == -1) {
@@ -177,6 +196,7 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 			return thisJoinPoint.proceed();
 		}
 
+		final String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
 		final ContainerResponse containerResponse = (ContainerResponse) thisJoinPoint.getTarget();
 		final MultivaluedMap<String, Object> responseHeader = containerResponse.getHttpHeaders();
 
@@ -184,14 +204,12 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 		final List<Object> responseHeaderList = new ArrayList<Object>();
 		responseHeaderList.add(Long.toString(traceId) + "," + sessionId + "," + Integer.toString(CF_REGISTRY.recallThreadLocalEOI()));
 		responseHeader.put(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER, responseHeaderList);
-		LOG.debug("Sending response with header = " + responseHeader.toString() + " to the request: " + containerResponse.getContainerRequest().getRequestUri());
-
-		final Object retval;
-		try {
-			retval = thisJoinPoint.proceed();
-		} finally {
-
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Sending response with header = " + responseHeader.toString() + " to the request: " + containerResponse.getContainerRequest().getRequestUri());
 		}
+
+		final Object retval = thisJoinPoint.proceed();
+
 		return retval;
 	}
 

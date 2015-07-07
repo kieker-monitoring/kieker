@@ -49,16 +49,28 @@ import kieker.monitoring.timer.ITimeSource;
 @Aspect
 @DeclarePrecedence("kieker.monitoring.probe.aspectj.operationExecution.*,kieker.monitoring.probe.aspectj.jersey.*")
 public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJProbe {
+	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
+
 	private static final Log LOG = LogFactory.getLog(OperationExecutionJerseyClientInterceptor.class);
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final String VMNAME = CTRLINST.getHostname();
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
-	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
+	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 
-	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
+	/**
+	 * Default constructor.
+	 */
+	public OperationExecutionJerseyClientInterceptor() {
+		// empty default constructor
+	}
 
+	/**
+	 * Method to intercept outgoing request and incoming response.
+	 *
+	 * @return value of the intercepted method
+	 */
 	@Around("execution(public com.sun.jersey.api.client.ClientResponse com.sun.jersey.client.apache4.ApacheHttpClient4Handler.handle(com.sun.jersey.api.client.ClientRequest))")
 	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
 		if (!CTRLINST.isMonitoringEnabled()) {
@@ -71,7 +83,7 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 
 		boolean entrypoint = true;
 		final String hostname = VMNAME;
-		final String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();
+		final String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
 		final int eoi; // this is executionOrderIndex-th execution in this trace
 		final int ess; // this is the height in the dynamic call tree of this execution
 		final int nextESS;
@@ -110,7 +122,9 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 		final List<Object> requestHeaderList = new ArrayList<Object>(4);
 		requestHeaderList.add(Long.toString(traceId) + "," + sessionId + "," + Integer.toString(eoi) + "," + Integer.toString(nextESS));
 		requestHeader.put(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER, requestHeaderList);
-		LOG.debug("Sending request to " + uri.toString() + " with header = " + requestHeader.toString());
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Sending request to " + uri.toString() + " with header = " + requestHeader.toString());
+		}
 
 		// measure before
 		final long tin = TIME.getTime();
@@ -129,13 +143,15 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 				if (responseHeader != null) {
 					final List<String> responseHeaderList = responseHeader.get(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER);
 					if (responseHeaderList != null) {
-						LOG.debug("Received response from " + uri.toString() + " with header = " + responseHeader.toString());
+						if (LOG.isDebugEnabled()) {
+							LOG.debug("Received response from " + uri.toString() + " with header = " + responseHeader.toString());
+						}
 						final String[] responseHeaderArray = responseHeaderList.get(0).split(",");
 
 						// Extract trace id
 						final String retTraceIdStr = responseHeaderArray[0];
 						Long retTraceId = -1L;
-						if (retTraceIdStr != "null") {
+						if (!"null".equals(retTraceIdStr)) {
 							try {
 								retTraceId = Long.parseLong(retTraceIdStr);
 							} catch (final NumberFormatException exc) {
@@ -148,14 +164,14 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 
 						// Extract session id
 						String retSessionId = responseHeaderArray[1];
-						if (retSessionId == "null") {
+						if ("null".equals(retSessionId)) {
 							retSessionId = OperationExecutionRecord.NO_SESSION_ID;
 						}
 
 						// Extract eoi
 						int retEOI = -1;
 						final String retEOIStr = responseHeaderArray[2];
-						if (!retEOIStr.equals("null")) {
+						if (!"null".equals(retEOIStr)) {
 							try {
 								retEOI = Integer.parseInt(retEOIStr);
 								CF_REGISTRY.storeThreadLocalEOI(retEOI);
@@ -165,10 +181,14 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 						}
 
 					} else {
-						LOG.debug("No monitoring data found in the response header from " + uri.toString() + ". Is it instrumented?");
+						if (LOG.isDebugEnabled()) {
+							LOG.debug("No monitoring data found in the response header from " + uri.toString() + ". Is it instrumented?");
+						}
 					}
 				} else {
-					LOG.debug("Response header from " + uri.toString() + " is null. Is it instrumented?");
+					if (LOG.isDebugEnabled()) {
+						LOG.debug("Response header from " + uri.toString() + " is null. Is it instrumented?");
+					}
 				}
 			}
 
@@ -178,6 +198,7 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 				CF_REGISTRY.unsetThreadLocalTraceId();
 				CF_REGISTRY.unsetThreadLocalEOI();
 				CF_REGISTRY.unsetThreadLocalESS();
+				SESSION_REGISTRY.unsetThreadLocalSessionId();
 			} else {
 				CF_REGISTRY.storeThreadLocalESS(ess); // next operation is ess
 			}
