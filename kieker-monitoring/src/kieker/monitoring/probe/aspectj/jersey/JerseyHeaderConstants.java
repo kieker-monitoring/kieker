@@ -17,6 +17,8 @@
 package kieker.monitoring.probe.aspectj.jersey;
 
 /**
+ * This interface contains constants for the jersey header.
+ *
  * @author Teerat Pitakrat
  *
  * @since 1.12
