@@ -39,7 +39,6 @@ import kieker.monitoring.timer.ITimeSource;
 public final class NetworkUtilizationSampler extends AbstractSigarSampler {
 
 	private final ConcurrentHashMap<String, NetworkStatistic> networkStatisticMap = new ConcurrentHashMap<String, NetworkUtilizationSampler.NetworkStatistic>();
-	private final ConcurrentHashMap<String, Boolean> firstObservationFlagMap = new ConcurrentHashMap<String, Boolean>();
 
 	/**
 	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy} instance used to retrieve the sensor data. Users
@@ -67,17 +66,12 @@ public final class NetworkUtilizationSampler extends AbstractSigarSampler {
 
 		for (final String interfaceName : this.sigar.getNetInterfaceList()) {
 
-			if (!this.firstObservationFlagMap.containsKey(interfaceName)) {
-				this.firstObservationFlagMap.put(interfaceName, true);
-			}
-
 			final ITimeSource timesource = monitoringController.getTimeSource();
 			final TimeUnit timeUnit = timesource.getTimeUnit();
 			final NetworkStatistic currentNetworkStatistic = this.getCurrentNetworkStatistic(timesource, interfaceName);
 
-			if (this.firstObservationFlagMap.get(interfaceName)) {
-				this.networkStatisticMap.put(interfaceName, currentNetworkStatistic);
-				this.firstObservationFlagMap.put(interfaceName, false);
+			if (!this.networkStatisticMap.containsKey(interfaceName)) {
+				this.networkStatisticMap.putIfAbsent(interfaceName, currentNetworkStatistic);
 			} else {
 				final NetworkStatistic lastObservedNetworkStatistic = this.networkStatisticMap.get(interfaceName);
 				final long timeDifference = currentNetworkStatistic.getTimestamp() - lastObservedNetworkStatistic.getTimestamp();
