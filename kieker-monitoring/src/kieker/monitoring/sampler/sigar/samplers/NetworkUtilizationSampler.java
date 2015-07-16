@@ -16,7 +16,6 @@
 
 package kieker.monitoring.sampler.sigar.samplers;
 
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -39,8 +38,8 @@ import kieker.monitoring.timer.ITimeSource;
  */
 public final class NetworkUtilizationSampler extends AbstractSigarSampler {
 
-	private final Map<String, NetworkStatistic> networkStatisticMap = new ConcurrentHashMap<String, NetworkUtilizationSampler.NetworkStatistic>();
-	private final Map<String, Boolean> firstObservationFlagMap = new ConcurrentHashMap<String, Boolean>();
+	private final ConcurrentHashMap<String, NetworkStatistic> networkStatisticMap = new ConcurrentHashMap<String, NetworkUtilizationSampler.NetworkStatistic>();
+	private final ConcurrentHashMap<String, Boolean> firstObservationFlagMap = new ConcurrentHashMap<String, Boolean>();
 
 	/**
 	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy} instance used to retrieve the sensor data. Users
@@ -100,20 +99,20 @@ public final class NetworkUtilizationSampler extends AbstractSigarSampler {
 				final long rxOverrunsDifference = currentNetworkStatistic.getRxOverruns() - lastObservedNetworkStatistic.getRxOverruns();
 				final long rxPacketsDifference = currentNetworkStatistic.getRxPackets() - lastObservedNetworkStatistic.getRxPackets();
 
-				final double txBytesPerSecond = txBytesDifference / TimeUnit.SECONDS.convert(timeDifference, timeUnit);
-				final double txCarrierPerSecond = txCarrierDifference / TimeUnit.SECONDS.convert(timeDifference, timeUnit);
-				final double txCollisionsPerSecond = txCollisionsDifference / TimeUnit.SECONDS.convert(timeDifference, timeUnit);
-				final double txDroppedPerSecond = txDroppedDifference / TimeUnit.SECONDS.convert(timeDifference, timeUnit);
-				final double txErrorsPerSecond = txErrorsDifference / TimeUnit.SECONDS.convert(timeDifference, timeUnit);
-				final double txOverrunsPerSecond = txOverrunsDifference / TimeUnit.SECONDS.convert(timeDifference, timeUnit);
-				final double txPacketsPerSecond = txPacketsDifference / TimeUnit.SECONDS.convert(timeDifference, timeUnit);
+				final double txBytesPerSecond = txBytesDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
+				final double txCarrierPerSecond = txCarrierDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
+				final double txCollisionsPerSecond = txCollisionsDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
+				final double txDroppedPerSecond = txDroppedDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
+				final double txErrorsPerSecond = txErrorsDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
+				final double txOverrunsPerSecond = txOverrunsDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
+				final double txPacketsPerSecond = txPacketsDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
 
-				final double rxBytesPerSecond = rxBytesDifference / TimeUnit.SECONDS.convert(timeDifference, timeUnit);
-				final double rxDroppedPerSecond = rxDroppedDifference / TimeUnit.SECONDS.convert(timeDifference, timeUnit);
-				final double rxErrorsPerSecond = rxErrorsDifference / TimeUnit.SECONDS.convert(timeDifference, timeUnit);
-				final double rxFramePerSecond = rxFrameDifference / TimeUnit.SECONDS.convert(timeDifference, timeUnit);
-				final double rxOverrunsPerSecond = rxOverrunsDifference / TimeUnit.SECONDS.convert(timeDifference, timeUnit);
-				final double rxPacketsPerSecond = rxPacketsDifference / TimeUnit.SECONDS.convert(timeDifference, timeUnit);
+				final double rxBytesPerSecond = rxBytesDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
+				final double rxDroppedPerSecond = rxDroppedDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
+				final double rxErrorsPerSecond = rxErrorsDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
+				final double rxFramePerSecond = rxFrameDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
+				final double rxOverrunsPerSecond = rxOverrunsDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
+				final double rxPacketsPerSecond = rxPacketsDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
 
 				final NetworkUtilizationRecord r = new NetworkUtilizationRecord(currentNetworkStatistic.getTimestamp(), monitoringController.getHostname(),
 						interfaceName, currentNetworkStatistic.getSpeed(), txBytesPerSecond, txCarrierPerSecond, txCollisionsPerSecond, txDroppedPerSecond,
@@ -148,7 +147,14 @@ public final class NetworkUtilizationSampler extends AbstractSigarSampler {
 				rxErrors, rxFrame, rxOverruns, rxPackets);
 	}
 
-	private class NetworkStatistic {
+	/**
+	 * An inner class which stores network statistic for each observation.
+	 *
+	 * @author Teerat Pitakrat
+	 *
+	 * @since 1.12
+	 */
+	static class NetworkStatistic {
 		private final long timestamp;
 		private final long speed;
 		private final long txBytes;
