@@ -48,6 +48,11 @@ public final class SignatureFactory {
 	public static final String PATTERN_PREFIX_LOAD_AVERAGE = PATTERN_PREFIX + "LOAD_AVERAGE";
 
 	/**
+	 * Prefix of a network utilization signature.
+	 */
+	public static final String PATTERN_PREFIX_NETWORK_UTILIZATION = PATTERN_PREFIX + "NETWORK_UTILIZATION";
+
+	/**
 	 * Prefix of a JVM memory signature.
 	 */
 	public static final String PATTERN_PREFIX_JVM_MEM = PATTERN_PREFIX + "JVM_MEM";
@@ -125,6 +130,15 @@ public final class SignatureFactory {
 	 */
 	public static String createLoadAverageSignature() {
 		return PATTERN_PREFIX_LOAD_AVERAGE;
+	}
+
+	/**
+	 * Creates a network utilization signature.
+	 *
+	 * @return The signature.
+	 */
+	public static String createNetworkUtilizationSignature() {
+		return PATTERN_PREFIX_NETWORK_UTILIZATION;
 	}
 
 	/**

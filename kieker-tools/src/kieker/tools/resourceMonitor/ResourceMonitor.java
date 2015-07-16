@@ -77,7 +77,8 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 
 	private ISampler[] createSamplers() {
 		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.INSTANCE;
-		return new ISampler[] { sigarFactory.createSensorCPUsDetailedPerc(), sigarFactory.createSensorMemSwapUsage(), sigarFactory.createSensorLoadAverage() };
+		return new ISampler[] { sigarFactory.createSensorCPUsDetailedPerc(), sigarFactory.createSensorMemSwapUsage(), sigarFactory.createSensorLoadAverage(),
+			sigarFactory.createSensorNetworkUtilization() };
 	}
 
 	private void initSensors() {
