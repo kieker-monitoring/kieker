@@ -26,6 +26,7 @@ import kieker.monitoring.sampler.sigar.samplers.CPUsCombinedPercSampler;
 import kieker.monitoring.sampler.sigar.samplers.CPUsDetailedPercSampler;
 import kieker.monitoring.sampler.sigar.samplers.LoadAverageSampler;
 import kieker.monitoring.sampler.sigar.samplers.MemSwapUsageSampler;
+import kieker.monitoring.sampler.sigar.samplers.NetworkUtilizationSampler;
 
 /**
  * Provides factory methods for {@link kieker.monitoring.sampler.sigar.samplers.AbstractSigarSampler}s.
@@ -96,5 +97,13 @@ public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton p
 	@Override
 	public LoadAverageSampler createSensorLoadAverage() {
 		return new LoadAverageSampler(this.sigar);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public NetworkUtilizationSampler createSensorNetworkUtilization() {
+		return new NetworkUtilizationSampler(this.sigar);
 	}
 }

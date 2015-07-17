@@ -102,3 +102,26 @@ entity LoadAverageRecord {
 	double fiveMinLoadAverage = 0
 	double fifteenMinLoadAverage = 0
 }
+
+@author 'Teerat Pitakrat' @since '1.12'
+entity NetworkUtilizationRecord {
+	long timestamp = 0
+	string hostname = ""
+	string interfaceName = ""
+	long speed = 0
+	
+	double txBytesPerSecond = 0
+	double txCarrierPerSecond = 0
+	double txCollisionsPerSecond = 0
+	double txDroppedPerSecond = 0
+	double txErrorsPerSecond = 0
+	double txOverrunsPerSecond = 0
+	double txPacketsPerSecond = 0
+	
+	double rxBytesPerSecond = 0
+	double rxDroppedPerSecond = 0
+	double rxErrorsPerSecond = 0
+	double rxFramePerSecond = 0
+	double rxOverrunsPerSecond = 0
+	double rxPacketsPerSecond = 0
+}

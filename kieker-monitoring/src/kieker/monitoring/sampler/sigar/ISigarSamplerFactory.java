@@ -20,6 +20,7 @@ import kieker.monitoring.sampler.sigar.samplers.CPUsCombinedPercSampler;
 import kieker.monitoring.sampler.sigar.samplers.CPUsDetailedPercSampler;
 import kieker.monitoring.sampler.sigar.samplers.LoadAverageSampler;
 import kieker.monitoring.sampler.sigar.samplers.MemSwapUsageSampler;
+import kieker.monitoring.sampler.sigar.samplers.NetworkUtilizationSampler;
 
 /**
  * Defines the list of methods to be provided by a factory for {@link org.hyperic.sigar.Sigar}-based
@@ -66,4 +67,13 @@ public interface ISigarSamplerFactory {
 	 * @since 1.12
 	 */
 	public LoadAverageSampler createSensorLoadAverage();
+
+	/**
+	 * Creates an instance of {@link NetworkUtilizationSampler}.
+	 *
+	 * @return the created instance.
+	 *
+	 * @since 1.12
+	 */
+	public NetworkUtilizationSampler createSensorNetworkUtilization();
 }
