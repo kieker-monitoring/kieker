@@ -55,14 +55,14 @@ public class TestGeneratedDiskUsageRecord extends AbstractGeneratedKiekerTest {
 			Assert.assertEquals("DiskUsageRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
 			Assert.assertEquals("DiskUsageRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
 			Assert.assertEquals("DiskUsageRecord.deviceName values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getDeviceName());
-			Assert.assertEquals("DiskUsageRecord.queuePerSecond values are not equal.", 
-			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getQueuePerSecond(), 0.0000001);
+			Assert.assertEquals("DiskUsageRecord.queue values are not equal.", 
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getQueue(), 0.0000001);
 			Assert.assertEquals("DiskUsageRecord.readBytesPerSecond values are not equal.", 
 			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getReadBytesPerSecond(), 0.0000001);
 			Assert.assertEquals("DiskUsageRecord.readsPerSecond values are not equal.", 
 			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getReadsPerSecond(), 0.0000001);
-			Assert.assertEquals("DiskUsageRecord.serviceTimePerSecond values are not equal.", 
-			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getServiceTimePerSecond(), 0.0000001);
+			Assert.assertEquals("DiskUsageRecord.serviceTime values are not equal.", 
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getServiceTime(), 0.0000001);
 			Assert.assertEquals("DiskUsageRecord.writeBytesPerSecond values are not equal.", 
 			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getWriteBytesPerSecond(), 0.0000001);
 			Assert.assertEquals("DiskUsageRecord.writesPerSecond values are not equal.", 
@@ -139,14 +139,14 @@ public class TestGeneratedDiskUsageRecord extends AbstractGeneratedKiekerTest {
 			Assert.assertEquals("DiskUsageRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
 			Assert.assertEquals("DiskUsageRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
 			Assert.assertEquals("DiskUsageRecord.deviceName values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getDeviceName());
-			Assert.assertEquals("DiskUsageRecord.queuePerSecond values are not equal.", 
-			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getQueuePerSecond(), 0.0000001);
+			Assert.assertEquals("DiskUsageRecord.queue values are not equal.", 
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getQueue(), 0.0000001);
 			Assert.assertEquals("DiskUsageRecord.readBytesPerSecond values are not equal.", 
 			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getReadBytesPerSecond(), 0.0000001);
 			Assert.assertEquals("DiskUsageRecord.readsPerSecond values are not equal.", 
 			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getReadsPerSecond(), 0.0000001);
-			Assert.assertEquals("DiskUsageRecord.serviceTimePerSecond values are not equal.", 
-			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getServiceTimePerSecond(), 0.0000001);
+			Assert.assertEquals("DiskUsageRecord.serviceTime values are not equal.", 
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getServiceTime(), 0.0000001);
 			Assert.assertEquals("DiskUsageRecord.writeBytesPerSecond values are not equal.", 
 			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getWriteBytesPerSecond(), 0.0000001);
 			Assert.assertEquals("DiskUsageRecord.writesPerSecond values are not equal.", 
@@ -167,14 +167,14 @@ public class TestGeneratedDiskUsageRecord extends AbstractGeneratedKiekerTest {
 			Assert.assertEquals("DiskUsageRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
 			Assert.assertEquals("DiskUsageRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
 			Assert.assertEquals("DiskUsageRecord.deviceName values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getDeviceName());
-			Assert.assertEquals("DiskUsageRecord.queuePerSecond values are not equal.", 
-			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getQueuePerSecond(), 0.0000001);
+			Assert.assertEquals("DiskUsageRecord.queue values are not equal.", 
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getQueue(), 0.0000001);
 			Assert.assertEquals("DiskUsageRecord.readBytesPerSecond values are not equal.", 
 			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getReadBytesPerSecond(), 0.0000001);
 			Assert.assertEquals("DiskUsageRecord.readsPerSecond values are not equal.", 
 			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getReadsPerSecond(), 0.0000001);
-			Assert.assertEquals("DiskUsageRecord.serviceTimePerSecond values are not equal.", 
-			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getServiceTimePerSecond(), 0.0000001);
+			Assert.assertEquals("DiskUsageRecord.serviceTime values are not equal.", 
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getServiceTime(), 0.0000001);
 			Assert.assertEquals("DiskUsageRecord.writeBytesPerSecond values are not equal.", 
 			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getWriteBytesPerSecond(), 0.0000001);
 			Assert.assertEquals("DiskUsageRecord.writesPerSecond values are not equal.", 

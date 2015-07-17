@@ -132,10 +132,10 @@ entity DiskUsageRecord {
 	string hostname = ""
 	string deviceName = ""
 	
-	double queuePerSecond = 0
+	double queue = 0
 	double readBytesPerSecond = 0
 	double readsPerSecond = 0
-	double serviceTimePerSecond = 0
+	double serviceTime = 0
 	double writeBytesPerSecond = 0
 	double writesPerSecond = 0
 }

@@ -36,23 +36,23 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	public static final int SIZE = TYPE_SIZE_LONG // DiskUsageRecord.timestamp
 			 + TYPE_SIZE_STRING // DiskUsageRecord.hostname
 			 + TYPE_SIZE_STRING // DiskUsageRecord.deviceName
-			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.queuePerSecond
+			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.queue
 			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.readBytesPerSecond
 			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.readsPerSecond
-			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.serviceTimePerSecond
+			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.serviceTime
 			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.writeBytesPerSecond
 			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.writesPerSecond
 	;
-	private static final long serialVersionUID = -6425106923120746701L;
+	private static final long serialVersionUID = 4704311455217974575L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // DiskUsageRecord.timestamp
 		String.class, // DiskUsageRecord.hostname
 		String.class, // DiskUsageRecord.deviceName
-		double.class, // DiskUsageRecord.queuePerSecond
+		double.class, // DiskUsageRecord.queue
 		double.class, // DiskUsageRecord.readBytesPerSecond
 		double.class, // DiskUsageRecord.readsPerSecond
-		double.class, // DiskUsageRecord.serviceTimePerSecond
+		double.class, // DiskUsageRecord.serviceTime
 		double.class, // DiskUsageRecord.writeBytesPerSecond
 		double.class, // DiskUsageRecord.writesPerSecond
 	};
@@ -62,20 +62,20 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String DEVICE_NAME = "";
-	public static final double QUEUE_PER_SECOND = 0;
+	public static final double QUEUE = 0;
 	public static final double READ_BYTES_PER_SECOND = 0;
 	public static final double READS_PER_SECOND = 0;
-	public static final double SERVICE_TIME_PER_SECOND = 0;
+	public static final double SERVICE_TIME = 0;
 	public static final double WRITE_BYTES_PER_SECOND = 0;
 	public static final double WRITES_PER_SECOND = 0;
 	/* property declarations */
 	private final long timestamp;
 	private final String hostname;
 	private final String deviceName;
-	private final double queuePerSecond;
+	private final double queue;
 	private final double readBytesPerSecond;
 	private final double readsPerSecond;
-	private final double serviceTimePerSecond;
+	private final double serviceTime;
 	private final double writeBytesPerSecond;
 	private final double writesPerSecond;
 
@@ -88,27 +88,27 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	 *            hostname
 	 * @param deviceName
 	 *            deviceName
-	 * @param queuePerSecond
-	 *            queuePerSecond
+	 * @param queue
+	 *            queue
 	 * @param readBytesPerSecond
 	 *            readBytesPerSecond
 	 * @param readsPerSecond
 	 *            readsPerSecond
-	 * @param serviceTimePerSecond
-	 *            serviceTimePerSecond
+	 * @param serviceTime
+	 *            serviceTime
 	 * @param writeBytesPerSecond
 	 *            writeBytesPerSecond
 	 * @param writesPerSecond
 	 *            writesPerSecond
 	 */
-	public DiskUsageRecord(final long timestamp, final String hostname, final String deviceName, final double queuePerSecond, final double readBytesPerSecond, final double readsPerSecond, final double serviceTimePerSecond, final double writeBytesPerSecond, final double writesPerSecond) {
+	public DiskUsageRecord(final long timestamp, final String hostname, final String deviceName, final double queue, final double readBytesPerSecond, final double readsPerSecond, final double serviceTime, final double writeBytesPerSecond, final double writesPerSecond) {
 		this.timestamp = timestamp;
 		this.hostname = hostname == null?HOSTNAME:hostname;
 		this.deviceName = deviceName == null?DEVICE_NAME:deviceName;
-		this.queuePerSecond = queuePerSecond;
+		this.queue = queue;
 		this.readBytesPerSecond = readBytesPerSecond;
 		this.readsPerSecond = readsPerSecond;
-		this.serviceTimePerSecond = serviceTimePerSecond;
+		this.serviceTime = serviceTime;
 		this.writeBytesPerSecond = writeBytesPerSecond;
 		this.writesPerSecond = writesPerSecond;
 	}
@@ -125,10 +125,10 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		this.timestamp = (Long) values[0];
 		this.hostname = (String) values[1];
 		this.deviceName = (String) values[2];
-		this.queuePerSecond = (Double) values[3];
+		this.queue = (Double) values[3];
 		this.readBytesPerSecond = (Double) values[4];
 		this.readsPerSecond = (Double) values[5];
-		this.serviceTimePerSecond = (Double) values[6];
+		this.serviceTime = (Double) values[6];
 		this.writeBytesPerSecond = (Double) values[7];
 		this.writesPerSecond = (Double) values[8];
 	}
@@ -146,10 +146,10 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		this.timestamp = (Long) values[0];
 		this.hostname = (String) values[1];
 		this.deviceName = (String) values[2];
-		this.queuePerSecond = (Double) values[3];
+		this.queue = (Double) values[3];
 		this.readBytesPerSecond = (Double) values[4];
 		this.readsPerSecond = (Double) values[5];
-		this.serviceTimePerSecond = (Double) values[6];
+		this.serviceTime = (Double) values[6];
 		this.writeBytesPerSecond = (Double) values[7];
 		this.writesPerSecond = (Double) values[8];
 	}
@@ -167,10 +167,10 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		this.timestamp = buffer.getLong();
 		this.hostname = stringRegistry.get(buffer.getInt());
 		this.deviceName = stringRegistry.get(buffer.getInt());
-		this.queuePerSecond = buffer.getDouble();
+		this.queue = buffer.getDouble();
 		this.readBytesPerSecond = buffer.getDouble();
 		this.readsPerSecond = buffer.getDouble();
-		this.serviceTimePerSecond = buffer.getDouble();
+		this.serviceTime = buffer.getDouble();
 		this.writeBytesPerSecond = buffer.getDouble();
 		this.writesPerSecond = buffer.getDouble();
 	}
@@ -184,10 +184,10 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 			this.getTimestamp(),
 			this.getHostname(),
 			this.getDeviceName(),
-			this.getQueuePerSecond(),
+			this.getQueue(),
 			this.getReadBytesPerSecond(),
 			this.getReadsPerSecond(),
-			this.getServiceTimePerSecond(),
+			this.getServiceTime(),
 			this.getWriteBytesPerSecond(),
 			this.getWritesPerSecond()
 		};
@@ -201,10 +201,10 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		buffer.putLong(this.getTimestamp());
 		buffer.putInt(stringRegistry.get(this.getHostname()));
 		buffer.putInt(stringRegistry.get(this.getDeviceName()));
-		buffer.putDouble(this.getQueuePerSecond());
+		buffer.putDouble(this.getQueue());
 		buffer.putDouble(this.getReadBytesPerSecond());
 		buffer.putDouble(this.getReadsPerSecond());
-		buffer.putDouble(this.getServiceTimePerSecond());
+		buffer.putDouble(this.getServiceTime());
 		buffer.putDouble(this.getWriteBytesPerSecond());
 		buffer.putDouble(this.getWritesPerSecond());
 	}
@@ -258,8 +258,8 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		return this.deviceName;
 	}
 	
-	public final double getQueuePerSecond() {
-		return this.queuePerSecond;
+	public final double getQueue() {
+		return this.queue;
 	}
 	
 	public final double getReadBytesPerSecond() {
@@ -270,8 +270,8 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		return this.readsPerSecond;
 	}
 	
-	public final double getServiceTimePerSecond() {
-		return this.serviceTimePerSecond;
+	public final double getServiceTime() {
+		return this.serviceTime;
 	}
 	
 	public final double getWriteBytesPerSecond() {

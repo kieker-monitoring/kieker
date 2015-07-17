@@ -80,22 +80,20 @@ public final class DiskUsageSampler extends AbstractSigarSampler {
 					if (timeDifference <= 0) {
 						throw new IllegalStateException("Timestamp of new observation should be strictly larger than the previous one.");
 					}
-					final double queueDifference = currentDiskUsageStatistic.getQueue() - lastObservedDiskUsageStatistic.getQueue();
+					final double currentQueue = currentDiskUsageStatistic.getQueue();
 					final long readBytesDifference = currentDiskUsageStatistic.getReadBytes() - lastObservedDiskUsageStatistic.getReadBytes();
 					final long readsDifference = currentDiskUsageStatistic.getReads() - lastObservedDiskUsageStatistic.getReads();
-					final double serviceTimeDifference = currentDiskUsageStatistic.getServiceTime() - lastObservedDiskUsageStatistic.getServiceTime();
+					final double currentServiceTime = currentDiskUsageStatistic.getServiceTime();
 					final long writeBytesDifference = currentDiskUsageStatistic.getWriteBytes() - lastObservedDiskUsageStatistic.getWriteBytes();
 					final long writesDifference = currentDiskUsageStatistic.getWrites() - lastObservedDiskUsageStatistic.getWrites();
 
-					final double queuePerSecond = queueDifference / TimeUnit.SECONDS.convert(timeDifference, timeUnit);
 					final double readBytesPerSecond = readBytesDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
 					final double readsPerSecond = readsDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
-					final double serviceTimePerSecond = serviceTimeDifference / TimeUnit.SECONDS.convert(timeDifference, timeUnit);
 					final double writeBytesPerSecond = writeBytesDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
 					final double writesPerSecond = writesDifference / (double) TimeUnit.SECONDS.convert(timeDifference, timeUnit);
 
 					final DiskUsageRecord diskUsageRecord = new DiskUsageRecord(currentDiskUsageStatistic.getTimestamp(), monitoringController.getHostname(),
-							deviceName, queuePerSecond, readBytesPerSecond, readsPerSecond, serviceTimePerSecond, writeBytesPerSecond, writesPerSecond);
+							deviceName, currentQueue, readBytesPerSecond, readsPerSecond, currentServiceTime, writeBytesPerSecond, writesPerSecond);
 					monitoringController.newMonitoringRecord(diskUsageRecord);
 
 					this.diskUsageStatisticMap.put(deviceName, currentDiskUsageStatistic);
