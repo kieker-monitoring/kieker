@@ -24,6 +24,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.monitoring.sampler.sigar.samplers.CPUsCombinedPercSampler;
 import kieker.monitoring.sampler.sigar.samplers.CPUsDetailedPercSampler;
+import kieker.monitoring.sampler.sigar.samplers.DiskUsageSampler;
 import kieker.monitoring.sampler.sigar.samplers.LoadAverageSampler;
 import kieker.monitoring.sampler.sigar.samplers.MemSwapUsageSampler;
 import kieker.monitoring.sampler.sigar.samplers.NetworkUtilizationSampler;
@@ -105,5 +106,13 @@ public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton p
 	@Override
 	public NetworkUtilizationSampler createSensorNetworkUtilization() {
 		return new NetworkUtilizationSampler(this.sigar);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public DiskUsageSampler createSensorDiskUsage() {
+		return new DiskUsageSampler(this.sigar);
 	}
 }

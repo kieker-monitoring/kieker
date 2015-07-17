@@ -53,6 +53,11 @@ public final class SignatureFactory {
 	public static final String PATTERN_PREFIX_NETWORK_UTILIZATION = PATTERN_PREFIX + "NETWORK_UTILIZATION";
 
 	/**
+	 * Prefix of a disk usage signature.
+	 */
+	public static final String PATTERN_PREFIX_DISK_USAGE = PATTERN_PREFIX + "DISK_USAGE";
+
+	/**
 	 * Prefix of a JVM memory signature.
 	 */
 	public static final String PATTERN_PREFIX_JVM_MEM = PATTERN_PREFIX + "JVM_MEM";
@@ -99,10 +104,10 @@ public final class SignatureFactory {
 	 */
 	public static String createCPUSignature(final int cpuid) {
 		return new StringBuilder(8)
-				.append(PATTERN_PREFIX_CPU) // 4
-				.append(COLONS) // 2
-				.append(cpuid) // 2(?)
-				.toString();
+		.append(PATTERN_PREFIX_CPU) // 4
+		.append(COLONS) // 2
+		.append(cpuid) // 2(?)
+		.toString();
 	}
 
 	/**
@@ -139,6 +144,15 @@ public final class SignatureFactory {
 	 */
 	public static String createNetworkUtilizationSignature() {
 		return PATTERN_PREFIX_NETWORK_UTILIZATION;
+	}
+
+	/**
+	 * Creates a disk usage signature.
+	 *
+	 * @return The signature.
+	 */
+	public static String createDiskUsageSignature() {
+		return PATTERN_PREFIX_DISK_USAGE;
 	}
 
 	/**

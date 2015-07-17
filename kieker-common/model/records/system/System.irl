@@ -125,3 +125,17 @@ entity NetworkUtilizationRecord {
 	double rxOverrunsPerSecond = 0
 	double rxPacketsPerSecond = 0
 }
+
+@author 'Teerat Pitakrat' @since '1.12'
+entity DiskUsageRecord {
+	long timestamp = 0
+	string hostname = ""
+	string deviceName = ""
+	
+	double queuePerSecond = 0
+	double readBytesPerSecond = 0
+	double readsPerSecond = 0
+	double serviceTimePerSecond = 0
+	double writeBytesPerSecond = 0
+	double writesPerSecond = 0
+}
