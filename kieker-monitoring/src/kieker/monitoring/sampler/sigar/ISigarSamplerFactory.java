@@ -18,6 +18,7 @@ package kieker.monitoring.sampler.sigar;
 
 import kieker.monitoring.sampler.sigar.samplers.CPUsCombinedPercSampler;
 import kieker.monitoring.sampler.sigar.samplers.CPUsDetailedPercSampler;
+import kieker.monitoring.sampler.sigar.samplers.DiskUsageSampler;
 import kieker.monitoring.sampler.sigar.samplers.LoadAverageSampler;
 import kieker.monitoring.sampler.sigar.samplers.MemSwapUsageSampler;
 import kieker.monitoring.sampler.sigar.samplers.NetworkUtilizationSampler;
@@ -76,4 +77,13 @@ public interface ISigarSamplerFactory {
 	 * @since 1.12
 	 */
 	public NetworkUtilizationSampler createSensorNetworkUtilization();
+
+	/**
+	 * Creates an instance of {@link DiskUsageSampler}.
+	 *
+	 * @return the created instance.
+	 *
+	 * @since 1.12
+	 */
+	public DiskUsageSampler createSensorDiskUsage();
 }
