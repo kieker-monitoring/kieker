@@ -62,23 +62,23 @@
 
 	<!-- End: Integration of Kieker's SessionAndTraceRegistrationFilter -->
 
-	<!-- Begin: Example for kieker.monitoring.probe.servlet.CPUMemUsageServletContextListener  -->
+	<!-- Begin: Example for kieker.monitoring.probe.servlet.SystemResourceUsageServletContextListener  -->
 	<context-param>
-	  <param-name>CPUMemUsageServletContextListener.samplingIntervalSeconds</param-name>
-	  <param-value>1</param-value>
+	  <param-name>SystemResourceUsageServletContextListener.samplingIntervalSeconds</param-name>
+	  <param-value>15</param-value>
 	</context-param>
-	
+  
 	<context-param>
-	  <param-name>CPUMemUsageServletContextListener.initialSamplingDelaySeconds</param-name>
+	  <param-name>SystemResourceUsageServletContextListener.initialSamplingDelaySeconds</param-name>
 	  <param-value>0</param-value>
 	</context-param>
-
+  
 	<listener>
 	  <listener-class>
-	    kieker.monitoring.probe.servlet.CPUMemUsageServletContextListener
+	    kieker.monitoring.probe.servlet.SystemResourceUsageServletContextListener
 	  </listener-class>
 	</listener>
-	<!-- End: Example for kieker.monitoring.probe.servlet.CPUMemUsageServletContextListener -->
+	<!-- End: Example for kieker.monitoring.probe.servlet.SystemResourceUsageServletContextListener -->
 
 	<!-- Begin: Example for additional samplers  -->
 	<context-param>
