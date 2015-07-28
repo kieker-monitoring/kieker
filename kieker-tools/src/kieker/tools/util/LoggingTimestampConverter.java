@@ -36,7 +36,7 @@ public final class LoggingTimestampConverter {
 	// private static final Log log = LogFactory.getLog(LoggingTimestampConverter.class);
 
 	private static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
-	private static final String DATE_FORMAT_PATTERN2 = "EEE, d MMM yyyy HH:mm:ss Z";
+	private static final String DATE_FORMAT_PATTERN2 = "EEE, d MMM yyyy HH:mm:ss.SSS Z";
 
 	/**
 	 * Private constructor to avoid instantiation.
