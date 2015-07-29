@@ -456,7 +456,7 @@ function check_bin_archive {
 	echo "OK"
 
 	# some basic tests with the tools
-	if ! (bin/convertLoggingTimestamp.sh --timestamps 1283156545581511026 1283156546127117246 | grep "Mon, 30 Aug 2010 08:22:25 +0000 (UTC)"); then
+	if ! (bin/convertLoggingTimestamp.sh --timestamps 1283156545581511026 1283156546127117246 | grep "Mon, 30 Aug 2010 08:22:25.581 +0000 (UTC)"); then
 		echo "Unexpected result executinǵ bin/convertLoggingTimestamp.sh"
 		exit 1
 	fi
