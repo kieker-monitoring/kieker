@@ -172,6 +172,21 @@ public interface Log { // NOCS (Name of Interface)
 
 	/**
 	 * <p>
+	 * Is warn logging currently enabled?
+	 * </p>
+	 *
+	 * <p>
+	 * Call this method to prevent having to perform expensive operations (for example, <code>String</code> concatenation) when the log level is more than warn.
+	 * </p>
+	 *
+	 * @return true if warn is enabled in the underlying logger.
+	 *
+	 * @since 1.12
+	 */
+	public boolean isWarnEnabled();
+
+	/**
+	 * <p>
 	 * Log a message with warn log level.
 	 * </p>
 	 *
@@ -237,4 +252,5 @@ public interface Log { // NOCS (Name of Interface)
 	 * @since 1.5
 	 */
 	public void error(String message, Throwable t);
+
 }

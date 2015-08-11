@@ -115,6 +115,11 @@ public final class LogImplCommonsLogging implements Log {
 		}
 	}
 
+	@Override
+	public boolean isWarnEnabled() {
+		return this.log.isWarnEnabled();
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */

@@ -100,6 +100,11 @@ public final class LogImplWebguiLogging implements Log {
 		this.addMessage(message, "[Info]", t);
 	}
 
+	@Override
+	public boolean isWarnEnabled() {
+		return true;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */

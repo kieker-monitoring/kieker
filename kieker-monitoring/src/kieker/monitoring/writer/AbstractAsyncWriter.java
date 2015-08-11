@@ -158,7 +158,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 			case 2: // does nothing if queue is full
 				if (!this.blockingQueue.offer(monitoringRecord)) {
 					final long tmpMissedRecords = this.missedRecords.getAndIncrement();
-					if ((tmpMissedRecords % 1024) == 0) {
+					if (LOG.isWarnEnabled() && ((tmpMissedRecords % 1024) == 0)) {
 						LOG.warn("Queue is full, dropping records. Number of already dropped records: " + tmpMissedRecords);
 					}
 				}

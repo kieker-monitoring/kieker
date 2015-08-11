@@ -93,6 +93,11 @@ public class LogImplSLF4JLogging implements Log {
 		this.log.info(message, t);
 	}
 
+	@Override
+	public boolean isWarnEnabled() {
+		return this.log.isWarnEnabled();
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */

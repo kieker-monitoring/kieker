@@ -113,6 +113,11 @@ public final class LogImplJDK14 implements Log {
 		this.log(java.util.logging.Level.INFO, message, t);
 	}
 
+	@Override
+	public boolean isWarnEnabled() {
+		return this.logger.isLoggable(java.util.logging.Level.WARNING);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
