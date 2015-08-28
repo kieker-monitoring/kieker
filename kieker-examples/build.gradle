@@ -13,6 +13,7 @@ task buildStandaloneExamples(dependsOn: [
 					 'buildStandaloneExamplesUserguideCh5',
 					 'buildStandaloneExamplesUserguideAppendixSigar',
 					 'buildStandaloneExamplesUserguideAppendixJMS', 
+					 'buildStandaloneExamplesUserguideAppendixAMQP',
 					 'buildStandaloneExamplesMonitoringSigar',
 					 'buildStandaloneExamplesMonitoringJVM',
 					 'buildStandaloneExamplesMonitoringSpring',
@@ -51,6 +52,7 @@ task replaceAbsoluteByRelativePathsEclipse << {
 	regexpReplaceInFiles(project.file("monitoring/adaptive-monitoring/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("monitoring/sampler-jvm/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("userguide/appendix-JMS/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("userguide/appendix-AMQP/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("userguide/ch2--manual-instrumentation/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("userguide/ch2--bookstore-application/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("userguide/appendix-Sigar/.classpath"), "path=\".*/lib/", "path=\"lib/")
@@ -126,6 +128,22 @@ task copyLibsStandaloneExamplesUserguideAppendixJMS(type: Copy, dependsOn: [root
 
 task buildStandaloneExamplesUserguideAppendixJMS(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixJMS') {
 	buildFile = 'userguide/appendix-JMS/build.gradle'
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+}
+
+task copyLibsStandaloneExamplesUserguideAppendixAMQP(type: Copy, dependsOn: [rootProject.emfJar]) {
+	from ('../build/libs') {
+		include "kieker-${version}.jar"
+	}
+	from ('../lib') {
+		include "commons-logging-*.jar"
+		include "amqp-client-*.jar"
+	}
+	into 'userguide/appendix-AMQP/lib/'
+}
+
+task buildStandaloneExamplesUserguideAppendixAMQP(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixAMQP') {
+	buildFile = 'userguide/appendix-AMQP/build.gradle'
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
