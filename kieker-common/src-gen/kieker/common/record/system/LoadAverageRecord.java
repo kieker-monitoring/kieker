@@ -53,9 +53,9 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	/* default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
-	public static final double ONE_MIN_LOAD_AVERAGE = 0;
-	public static final double FIVE_MIN_LOAD_AVERAGE = 0;
-	public static final double FIFTEEN_MIN_LOAD_AVERAGE = 0;
+	public static final double ONE_MIN_LOAD_AVERAGE = 0.0;
+	public static final double FIVE_MIN_LOAD_AVERAGE = 0.0;
+	public static final double FIFTEEN_MIN_LOAD_AVERAGE = 0.0;
 	/* property declarations */
 	private final long timestamp;
 	private final String hostname;
@@ -147,6 +147,14 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 			this.getFiveMinLoadAverage(),
 			this.getFifteenMinLoadAverage()
 		};
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+		stringRegistry.get(this.getHostname());
 	}
 
 	/**

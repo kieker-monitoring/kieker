@@ -192,6 +192,16 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+		stringRegistry.get(this.getOperationSignature());
+		stringRegistry.get(this.getSessionId());
+		stringRegistry.get(this.getHostname());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
 		buffer.putInt(stringRegistry.get(this.getSessionId()));
