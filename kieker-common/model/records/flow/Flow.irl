@@ -1,5 +1,7 @@
 package kieker.common.record.flow
 
+import kieker.common.record.flow.trace.TraceMetadata
+
 @author 'Jan Waller' @since '1.5'
 abstract entity AbstractEvent : IEventRecord
 
@@ -58,7 +60,7 @@ template IOperationRecord : IFlowRecord, IOperationSignature, IClassSignature
 
 @author 'Jan Waller' @since '1.6'
 template ITraceRecord : IFlowRecord {
-	long traceId = -1 // fkey TraceMetadata.traceId
+	grouped by TraceMetadata.traceId long traceId = -1
 	int orderIndex = -1
 }
 

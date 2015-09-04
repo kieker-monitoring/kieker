@@ -13,14 +13,14 @@ entity ConstructionEvent extends AbstractTraceEvent {
 	int objectId = 0
 }
 
-// Removed temporarily, as TraceMetadata also provides a non-data property nextOrderId.
-// @author 'Jan Waller'
-// @since '1.5'
-// entity TraceMetadata : IFlowRecord {
-// 	long traceId = 0
-// 	long threadId = 0
-// 	string sessionId = ""
-// 	string hostname = "<nohost>"
-// 	long parentTraceId = 0
-// 	int parentOrderId = 0
-//}
+@author 'Jan Waller'
+@since '1.5'
+entity TraceMetadata : IFlowRecord {
+ 	long traceId = 0
+ 	long threadId = 0
+ 	string sessionId = ""
+ 	string hostname = "<nohost>"
+ 	long parentTraceId = 0
+ 	int parentOrderId = 0
+ 	transient auto-increment long nextOrderId = 0 
+}
