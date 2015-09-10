@@ -48,8 +48,8 @@ import kieker.common.util.registry.Lookup;
 @Plugin(description = "A plugin that reads monitoring records from an AMQP queue", outputPorts = {
 	@OutputPort(name = AMQPReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
 		IMonitoringRecord.class }, description = "Output port of the AMQP reader") }, configuration = {
-			@Property(name = AMQPReader.CONFIG_PROPERTY_URI, defaultValue = "", description = "Server URI of the AMQP server"),
-			@Property(name = AMQPReader.CONFIG_PROPERTY_QUEUENAME, defaultValue = "", description = "AMQP queue name"),
+			@Property(name = AMQPReader.CONFIG_PROPERTY_URI, defaultValue = "amqp://localhost", description = "Server URI of the AMQP server"),
+			@Property(name = AMQPReader.CONFIG_PROPERTY_QUEUENAME, defaultValue = "kieker", description = "AMQP queue name"),
 			@Property(name = AMQPReader.CONFIG_PROPERTY_HEARTBEAT, defaultValue = "60", description = "Heartbeat interval")
 		})
 public final class AMQPReader extends AbstractReaderPlugin {
@@ -74,20 +74,20 @@ public final class AMQPReader extends AbstractReaderPlugin {
 	private final String queueName;
 	private final int heartbeat;
 
-	private final Connection connection;
-	private final Channel channel;
-	private final QueueingConsumer consumer;
+	private volatile Connection connection;
+	private volatile Channel channel;
+	private volatile QueueingConsumer consumer;
 
 	private final ILookup<String> stringRegistry = new Lookup<String>();
 
-	private final Thread registryRecordHandlerThread;
-	private final RegistryRecordHandler registryRecordHandler;
-	private final RegularRecordHandler regularRecordHandler;
+	private volatile Thread registryRecordHandlerThread;
+	private volatile RegistryRecordHandler registryRecordHandler;
+	private volatile RegularRecordHandler regularRecordHandler;
 
-	private final Thread regularRecordHandlerThread;
+	private volatile Thread regularRecordHandlerThread;
 
-	private boolean terminated;
-	private boolean threadsStarted;
+	private volatile boolean terminated;
+	private volatile boolean threadsStarted;
 
 	/**
 	 * Creates a new AMQP reader with the given configuration in the given context.
@@ -96,39 +96,54 @@ public final class AMQPReader extends AbstractReaderPlugin {
 	 *            The configuration for this reader
 	 * @param projectContext
 	 *            The project context for this component
-	 * @throws KeyManagementException
-	 *             If an invalid URI is specified
-	 * @throws NoSuchAlgorithmException
-	 *             If an invalid URI is specified
-	 * @throws IOException
-	 *             If an IO error occurs during connection or channel creation
-	 * @throws TimeoutException
-	 *             If a timeout occurs during connection or channel creation
-	 * @throws URISyntaxException
-	 *             If an invalid URI is specified
 	 */
-	public AMQPReader(final Configuration configuration, final IProjectContext projectContext)
-			throws KeyManagementException, NoSuchAlgorithmException, IOException, TimeoutException, URISyntaxException {
+	public AMQPReader(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
 		this.uri = this.configuration.getStringProperty(CONFIG_PROPERTY_URI);
 		this.queueName = this.configuration.getStringProperty(CONFIG_PROPERTY_QUEUENAME);
 		this.heartbeat = this.configuration.getIntProperty(CONFIG_PROPERTY_HEARTBEAT);
+	}
 
-		this.connection = this.createConnection();
-		this.channel = this.connection.createChannel();
-		this.consumer = new QueueingConsumer(this.channel);
+	@Override
+	public boolean init() {
+		try {
+			this.connection = this.createConnection();
+			this.channel = this.connection.createChannel();
+			this.consumer = new QueueingConsumer(this.channel);
 
-		// Set up record handlers
-		this.registryRecordHandler = new RegistryRecordHandler(this.stringRegistry);
-		this.regularRecordHandler = new RegularRecordHandler(this, this.stringRegistry);
+			// Set up record handlers
+			this.registryRecordHandler = new RegistryRecordHandler(this.stringRegistry);
+			this.regularRecordHandler = new RegularRecordHandler(this, this.stringRegistry);
 
-		// Set up threads
-		this.registryRecordHandlerThread = new Thread(this.registryRecordHandler);
-		this.registryRecordHandlerThread.setDaemon(true);
+			// Set up threads
+			this.registryRecordHandlerThread = new Thread(this.registryRecordHandler);
+			this.registryRecordHandlerThread.setDaemon(true);
 
-		this.regularRecordHandlerThread = new Thread(this.regularRecordHandler);
-		this.regularRecordHandlerThread.setDaemon(true);
+			this.regularRecordHandlerThread = new Thread(this.regularRecordHandler);
+			this.regularRecordHandlerThread.setDaemon(true);
+		} catch (final KeyManagementException e) {
+			this.handleInitializationError(e);
+			return false;
+		} catch (final NoSuchAlgorithmException e) {
+			this.handleInitializationError(e);
+			return false;
+		} catch (final IOException e) {
+			this.handleInitializationError(e);
+			return false;
+		} catch (final TimeoutException e) {
+			this.handleInitializationError(e);
+			return false;
+		} catch (final URISyntaxException e) {
+			this.handleInitializationError(e);
+			return false;
+		}
+
+		return super.init();
+	}
+
+	private void handleInitializationError(final Throwable e) {
+		LOG.error("An error occurred initializing the AMQP reader: " + e);
 	}
 
 	private Connection createConnection() throws IOException, TimeoutException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {
