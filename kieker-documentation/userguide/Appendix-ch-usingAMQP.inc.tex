@@ -11,11 +11,23 @@ The following paragraphs provide step-by-step instructions for the popular AMQP 
 \subsection{Download and Install RabbitMQ}
 Download the RabbitMQ distribution from \url{http://www.rabbitmq.com/download.html} and follow the installation %
 instructions for your OS. Since RabbitMQ requires Erlang, additional software packages may have to be installed %
-on your machine. %
+on your machine.
+\par In order to use RabbitMQ's integrated management UI, you may have to enable the appropriate plugin first. This is %
+done by issuing the following command from the command line. 
+
+\setBashListing
+\begin{lstlisting}[caption=Enable the management UI under UNIX-like systems]
+#\lstshellprompt{}# rabbitmq-plugins enable rabbitmq_management
+\end{lstlisting}
+\begin{lstlisting}[caption=Enable the management UI under Windows]
+#\lstshellprompt{}# rabbitmq-plugins enable rabbitmq_management
+\end{lstlisting}
+
+Once the UI is enabled, you may access it at port 15672 by default. %
 
 \subsection{Configure RabbitMQ}
 Once the RabbitMQ server is installed and started, create a queue for Kieker to use. This can be done easily using %
-RabbitMQ's integrated management UI. We will assume a queue named \parameterValue{kieker} for the remainder of this %
+RabbitMQ's management UI. We will assume a queue named \parameterValue{kieker} for the remainder of this %
 example. Please note the following caveats when configuring the server:
 
 \begin{compactenum}
