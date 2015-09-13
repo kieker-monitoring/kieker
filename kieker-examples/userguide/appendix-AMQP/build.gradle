@@ -39,5 +39,5 @@ def analysisConfiguration = {
 
 task runAnalysisAMQP(type: JavaExec) {
   configure analysisConfiguration
-	args = ['amqp://username:password@127.0.0.1:1234/virtualhost', 'queue1']
+	args = ['amqp://guest:guest@127.0.0.1:5672', 'kieker']
 }
