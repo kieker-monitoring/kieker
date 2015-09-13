@@ -72,6 +72,11 @@ public final class LogImplNone implements Log {
 	@Override
 	public final void info(final String message, final Throwable t) {} // NOPMD (does nothing)
 
+	@Override
+	public boolean isWarnEnabled() {
+		return false;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */

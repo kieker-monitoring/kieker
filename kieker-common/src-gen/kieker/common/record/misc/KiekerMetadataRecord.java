@@ -190,6 +190,17 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+		stringRegistry.get(this.getVersion());
+		stringRegistry.get(this.getControllerName());
+		stringRegistry.get(this.getHostname());
+		stringRegistry.get(this.getTimeUnit());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(stringRegistry.get(this.getVersion()));
 		buffer.putInt(stringRegistry.get(this.getControllerName()));

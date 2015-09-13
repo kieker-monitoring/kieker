@@ -62,12 +62,12 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String DEVICE_NAME = "";
-	public static final double QUEUE = 0;
-	public static final double READ_BYTES_PER_SECOND = 0;
-	public static final double READS_PER_SECOND = 0;
-	public static final double SERVICE_TIME = 0;
-	public static final double WRITE_BYTES_PER_SECOND = 0;
-	public static final double WRITES_PER_SECOND = 0;
+	public static final double QUEUE = 0.0;
+	public static final double READ_BYTES_PER_SECOND = 0.0;
+	public static final double READS_PER_SECOND = 0.0;
+	public static final double SERVICE_TIME = 0.0;
+	public static final double WRITE_BYTES_PER_SECOND = 0.0;
+	public static final double WRITES_PER_SECOND = 0.0;
 	/* property declarations */
 	private final long timestamp;
 	private final String hostname;
@@ -191,6 +191,15 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 			this.getWriteBytesPerSecond(),
 			this.getWritesPerSecond()
 		};
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+		stringRegistry.get(this.getHostname());
+		stringRegistry.get(this.getDeviceName());
 	}
 
 	/**

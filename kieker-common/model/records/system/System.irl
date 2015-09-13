@@ -98,9 +98,9 @@ entity LoadAverageRecord {
 	long timestamp = 0
 	string hostname = ""
 	
-	double oneMinLoadAverage = 0
-	double fiveMinLoadAverage = 0
-	double fifteenMinLoadAverage = 0
+	double oneMinLoadAverage = 0.0
+	double fiveMinLoadAverage = 0.0
+	double fifteenMinLoadAverage = 0.0
 }
 
 @author 'Teerat Pitakrat' @since '1.12'
@@ -110,20 +110,20 @@ entity NetworkUtilizationRecord {
 	string interfaceName = ""
 	long speed = 0
 	
-	double txBytesPerSecond = 0
-	double txCarrierPerSecond = 0
-	double txCollisionsPerSecond = 0
-	double txDroppedPerSecond = 0
-	double txErrorsPerSecond = 0
-	double txOverrunsPerSecond = 0
-	double txPacketsPerSecond = 0
+	double txBytesPerSecond = 0.0
+	double txCarrierPerSecond = 0.0
+	double txCollisionsPerSecond = 0.0
+	double txDroppedPerSecond = 0.0
+	double txErrorsPerSecond = 0.0
+	double txOverrunsPerSecond = 0.0
+	double txPacketsPerSecond = 0.0
 	
-	double rxBytesPerSecond = 0
-	double rxDroppedPerSecond = 0
-	double rxErrorsPerSecond = 0
-	double rxFramePerSecond = 0
-	double rxOverrunsPerSecond = 0
-	double rxPacketsPerSecond = 0
+	double rxBytesPerSecond = 0.0
+	double rxDroppedPerSecond = 0.0
+	double rxErrorsPerSecond = 0.0
+	double rxFramePerSecond = 0.0
+	double rxOverrunsPerSecond = 0.0
+	double rxPacketsPerSecond = 0.0
 }
 
 @author 'Teerat Pitakrat' @since '1.12'
@@ -132,10 +132,10 @@ entity DiskUsageRecord {
 	string hostname = ""
 	string deviceName = ""
 	
-	double queue = 0
-	double readBytesPerSecond = 0
-	double readsPerSecond = 0
-	double serviceTime = 0
-	double writeBytesPerSecond = 0
-	double writesPerSecond = 0
+	double queue = 0.0
+	double readBytesPerSecond = 0.0
+	double readsPerSecond = 0.0
+	double serviceTime = 0.0
+	double writeBytesPerSecond = 0.0
+	double writesPerSecond = 0.0
 }

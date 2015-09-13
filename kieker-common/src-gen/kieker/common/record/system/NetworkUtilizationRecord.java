@@ -79,19 +79,19 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	public static final String HOSTNAME = "";
 	public static final String INTERFACE_NAME = "";
 	public static final long SPEED = 0L;
-	public static final double TX_BYTES_PER_SECOND = 0;
-	public static final double TX_CARRIER_PER_SECOND = 0;
-	public static final double TX_COLLISIONS_PER_SECOND = 0;
-	public static final double TX_DROPPED_PER_SECOND = 0;
-	public static final double TX_ERRORS_PER_SECOND = 0;
-	public static final double TX_OVERRUNS_PER_SECOND = 0;
-	public static final double TX_PACKETS_PER_SECOND = 0;
-	public static final double RX_BYTES_PER_SECOND = 0;
-	public static final double RX_DROPPED_PER_SECOND = 0;
-	public static final double RX_ERRORS_PER_SECOND = 0;
-	public static final double RX_FRAME_PER_SECOND = 0;
-	public static final double RX_OVERRUNS_PER_SECOND = 0;
-	public static final double RX_PACKETS_PER_SECOND = 0;
+	public static final double TX_BYTES_PER_SECOND = 0.0;
+	public static final double TX_CARRIER_PER_SECOND = 0.0;
+	public static final double TX_COLLISIONS_PER_SECOND = 0.0;
+	public static final double TX_DROPPED_PER_SECOND = 0.0;
+	public static final double TX_ERRORS_PER_SECOND = 0.0;
+	public static final double TX_OVERRUNS_PER_SECOND = 0.0;
+	public static final double TX_PACKETS_PER_SECOND = 0.0;
+	public static final double RX_BYTES_PER_SECOND = 0.0;
+	public static final double RX_DROPPED_PER_SECOND = 0.0;
+	public static final double RX_ERRORS_PER_SECOND = 0.0;
+	public static final double RX_FRAME_PER_SECOND = 0.0;
+	public static final double RX_OVERRUNS_PER_SECOND = 0.0;
+	public static final double RX_PACKETS_PER_SECOND = 0.0;
 	/* property declarations */
 	private final long timestamp;
 	private final String hostname;
@@ -279,6 +279,15 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 			this.getRxOverrunsPerSecond(),
 			this.getRxPacketsPerSecond()
 		};
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+		stringRegistry.get(this.getHostname());
+		stringRegistry.get(this.getInterfaceName());
 	}
 
 	/**
