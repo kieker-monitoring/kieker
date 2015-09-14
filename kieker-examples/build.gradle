@@ -1,8 +1,3 @@
-/* 
- * TODOS:
- * 1. Add/extend clean tasks to call example's clean tasks via cleanStandaloneExamples
- */
- 
 defaultTasks 'cleanStandaloneExamples', 'buildStandaloneExamples'
 
 task buildStandaloneExamples(dependsOn: [
@@ -295,9 +290,101 @@ task buildStandaloneExamplesAnalysisOpad(type: GradleBuild, dependsOn: [ 'copyLi
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
-// TODO: Get this working for all examples
-task cleanStandaloneExamples(type: GradleBuild) {
-	description = 'Builds the stand-alone Kieker examples in the subdirectories.'
-	//buildFile = 'userguide/ch2--bookstore-application/build.gradle'
-	//tasks = ['clean']
+task cleanStandaloneExamples(dependsOn: [
+					 'cleanStandaloneExamplesUserguideCh2App', 
+					 'cleanStandaloneExamplesUserguideCh2Instr', 
+					 'cleanStandaloneExamplesUserguideCh34',
+					 'cleanStandaloneExamplesUserguideCh5',
+					 'cleanStandaloneExamplesUserguideAppendixSigar',
+					 'cleanStandaloneExamplesUserguideAppendixJMS', 
+					 'cleanStandaloneExamplesMonitoringSigar',
+					 'cleanStandaloneExamplesMonitoringJVM',
+					 'cleanStandaloneExamplesMonitoringSpring',
+					 'cleanStandaloneExamplesMonitoringManual',
+					 'cleanStandaloneExamplesMonitoringAspectJ',
+					 'cleanStandaloneExamplesMonitoringAdaptive',
+					 'cleanStandaloneExamplesMonitoringTimesource',
+					 'cleanStandaloneExamplesAnalysisKax',
+					 'cleanStandaloneExamplesAnalysisOpad',
+					 'cleanStandaloneExamplesUserguideAppendixJavaEE']) {
+}
+
+task cleanStandaloneExamplesUserguideCh2App(type: GradleBuild) {
+	buildFile = 'userguide/ch2--bookstore-application/build.gradle'
+	tasks = ['clean']
+}
+
+task cleanStandaloneExamplesUserguideCh2Instr(type: GradleBuild) {
+	buildFile = 'userguide/ch2--manual-instrumentation/build.gradle'
+	tasks = ['clean']
+}
+
+task cleanStandaloneExamplesUserguideCh34(type: GradleBuild) {
+	buildFile = 'userguide/ch3-4--custom-components/build.gradle'
+	tasks = ['clean']
+}
+
+task cleanStandaloneExamplesUserguideCh5(type: GradleBuild) {
+	buildFile = 'userguide/ch5--trace-monitoring-aspectj/build.gradle'
+	tasks = ['clean']
+}
+
+task cleanStandaloneExamplesUserguideAppendixSigar(type: GradleBuild) {
+	buildFile = 'userguide/appendix-Sigar/build.gradle'
+	tasks = ['clean']
+}
+
+task cleanStandaloneExamplesUserguideAppendixJMS(type: GradleBuild) {
+	buildFile = 'userguide/appendix-JMS/build.gradle'
+	tasks = ['clean']
+}
+
+task cleanStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild) {
+	buildFile = 'JavaEEServletContainerExample/build.gradle'
+	tasks = ['clean']
+}
+
+task cleanStandaloneExamplesMonitoringSigar(type: GradleBuild) {
+	buildFile = 'monitoring/sampler-sigar/build.gradle'
+	tasks = ['clean']
+}
+
+task cleanStandaloneExamplesMonitoringJVM(type: GradleBuild) {
+	buildFile = 'monitoring/sampler-jvm/build.gradle'
+	tasks = ['clean']
+}
+
+task cleanStandaloneExamplesMonitoringSpring(type: GradleBuild) {
+	buildFile = 'monitoring/probe-spring/build.gradle'
+	tasks = ['clean']
+}
+
+task cleanStandaloneExamplesMonitoringManual(type: GradleBuild) {
+	buildFile = 'monitoring/probe-manual/build.gradle'
+	tasks = ['clean']
+}
+
+task cleanStandaloneExamplesMonitoringAspectJ(type: GradleBuild) {
+	buildFile = 'monitoring/probe-aspectj/build.gradle'
+	tasks = ['clean']
+}
+
+task cleanStandaloneExamplesMonitoringAdaptive(type: GradleBuild) {
+	buildFile = 'monitoring/adaptive-monitoring/build.gradle'
+	tasks = ['clean']
+}
+
+task cleanStandaloneExamplesMonitoringTimesource(type: GradleBuild) {
+	buildFile = 'monitoring/custom-timesource/build.gradle'
+	tasks = ['clean']
+}
+
+task cleanStandaloneExamplesAnalysisKax(type: GradleBuild) {
+	buildFile = 'analysis/kax-files/build.gradle'
+	tasks = ['clean']
+}
+
+task cleanStandaloneExamplesAnalysisOpad(type: GradleBuild) {
+	buildFile = 'analysis/opad-anomaly-detection/build.gradle'
+	tasks = ['clean']
 }
