@@ -272,6 +272,7 @@ task copyLibsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProject.
 		include 'REngine-*.jar'
 		include 'Rserve-*.jar'
 		include 'Rsession-*.jar'
+		include 'opencsv-2.4-SNAPSHOT.jar'
 	}
 	into 'analysis/opad-anomaly-detection/lib/'
 }
