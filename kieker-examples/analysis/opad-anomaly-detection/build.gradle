@@ -31,6 +31,9 @@ jar {
 
 clean{
 	delete fileTree(dir: 'lib', include: '*.jar')
+	delete 'rserve-control.sh'
+	delete 'rserve-control.bat'
+	delete 'RserveStart.R'
 }
 
 task runAnalysis(type: JavaExec) {
