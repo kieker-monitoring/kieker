@@ -364,7 +364,7 @@ def binaryContent = project.copySpec {
 def manualContent = project.copySpec {
 	from ('kieker-documentation/userguide') {
 		include 'kieker-userguide.pdf'
-		rename 'kieker-userguide.pdf', "kieker-${kiekerVersion}_userguide.pdf"
+		rename 'kieker-userguide.pdf', "kieker-${kiekerVersion}-userguide.pdf"
 	}
 	into kiekerPackagenamebase + "-" + kiekerVersion + "/doc"
 }
