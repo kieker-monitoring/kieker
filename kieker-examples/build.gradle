@@ -310,6 +310,8 @@ task cleanStandaloneExamples(dependsOn: [
 					 'cleanStandaloneExamplesUserguideAppendixJavaEE']) {
 }
 
+clean.dependsOn cleanStandaloneExamples
+
 task cleanStandaloneExamplesUserguideCh2App(type: GradleBuild) {
 	buildFile = 'userguide/ch2--bookstore-application/build.gradle'
 	tasks = ['clean']
