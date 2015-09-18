@@ -315,7 +315,8 @@ task cleanStandaloneExamples(dependsOn: [
 					 'cleanStandaloneExamplesUserguideCh34',
 					 'cleanStandaloneExamplesUserguideCh5',
 					 'cleanStandaloneExamplesUserguideAppendixSigar',
-					 'cleanStandaloneExamplesUserguideAppendixJMS', 
+					 'cleanStandaloneExamplesUserguideAppendixJMS',
+					 'cleanStandaloneExamplesUserguideAppendixAMQP',  
 					 'cleanStandaloneExamplesMonitoringSigar',
 					 'cleanStandaloneExamplesMonitoringJVM',
 					 'cleanStandaloneExamplesMonitoringSpring',
@@ -365,6 +366,12 @@ task cleanStandaloneExamplesUserguideAppendixJMS(type: GradleBuild) {
 	buildFile = 'userguide/appendix-JMS/build.gradle'
 	tasks = ['clean']
 	delete fileTree(dir: 'userguide/appendix-JMS/lib', include: '*.jar')
+}
+
+task cleanStandaloneExamplesUserguideAppendixAMQP(type: GradleBuild) {
+	buildFile = 'userguide/appendix-AMQP/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'userguide/appendix-AMQP/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild) {
