@@ -333,79 +333,104 @@ clean.dependsOn cleanStandaloneExamples
 task cleanStandaloneExamplesUserguideCh2App(type: GradleBuild) {
 	buildFile = 'userguide/ch2--bookstore-application/build.gradle'
 	tasks = ['clean']
+	delete fileTree(dir: 'userguide/ch2--bookstore-application/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesUserguideCh2Instr(type: GradleBuild) {
 	buildFile = 'userguide/ch2--manual-instrumentation/build.gradle'
 	tasks = ['clean']
+	delete fileTree(dir: 'userguide/ch2--manual-instrumentation/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesUserguideCh34(type: GradleBuild) {
 	buildFile = 'userguide/ch3-4--custom-components/build.gradle'
 	tasks = ['clean']
+	delete fileTree(dir: 'userguide/ch3-4--custom-components/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesUserguideCh5(type: GradleBuild) {
 	buildFile = 'userguide/ch5--trace-monitoring-aspectj/build.gradle'
 	tasks = ['clean']
+	delete fileTree(dir: 'userguide/ch5--trace-monitoring-aspectj/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesUserguideAppendixSigar(type: GradleBuild) {
 	buildFile = 'userguide/appendix-Sigar/build.gradle'
 	tasks = ['clean']
+	delete fileTree(dir: 'userguide/appendix-Sigar/lib', include: '*.jar')
+	delete fileTree(dir: 'userguide/appendix-Sigar/lib', include: '*sigar*')
 }
 
 task cleanStandaloneExamplesUserguideAppendixJMS(type: GradleBuild) {
 	buildFile = 'userguide/appendix-JMS/build.gradle'
 	tasks = ['clean']
+	delete fileTree(dir: 'userguide/appendix-JMS/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild) {
 	buildFile = 'JavaEEServletContainerExample/build.gradle'
 	tasks = ['clean']
+	delete fileTree(dir: 'JavaEEServletContainerExample/livedemo-source/lib', include: '*kieker*.jar')
+	delete fileTree(dir: 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib', include: '*sigar*')
+	delete fileTree(dir: 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib', include: 'kieker*')
+	delete 'JavaEEServletContainerExample/jetty/webapps/livedemo.war'
 }
 
 task cleanStandaloneExamplesMonitoringSigar(type: GradleBuild) {
 	buildFile = 'monitoring/sampler-sigar/build.gradle'
 	tasks = ['clean']
+	delete fileTree(dir: 'monitoring/sampler-sigar/lib', include: '*.jar')
+	delete fileTree(dir: 'monitoring/sampler-sigar/lib', include: '*sigar*')
 }
 
 task cleanStandaloneExamplesMonitoringJVM(type: GradleBuild) {
 	buildFile = 'monitoring/sampler-jvm/build.gradle'
 	tasks = ['clean']
+	delete fileTree(dir: 'monitoring/sampler-jvm/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesMonitoringSpring(type: GradleBuild) {
 	buildFile = 'monitoring/probe-spring/build.gradle'
 	tasks = ['clean']
+	delete fileTree(dir: 'monitoring/probe-spring/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesMonitoringManual(type: GradleBuild) {
 	buildFile = 'monitoring/probe-manual/build.gradle'
 	tasks = ['clean']
+	delete fileTree(dir: 'monitoring/probe-manual/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesMonitoringAspectJ(type: GradleBuild) {
 	buildFile = 'monitoring/probe-aspectj/build.gradle'
 	tasks = ['clean']
+	delete fileTree(dir: 'monitoring/probe-aspectj/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesMonitoringAdaptive(type: GradleBuild) {
 	buildFile = 'monitoring/adaptive-monitoring/build.gradle'
 	tasks = ['clean']
+	delete fileTree(dir: 'monitoring/adaptive-monitoring/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesMonitoringTimesource(type: GradleBuild) {
 	buildFile = 'monitoring/custom-timesource/build.gradle'
 	tasks = ['clean']
+	delete fileTree(dir: 'monitoring/custom-timesource/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesAnalysisKax(type: GradleBuild) {
 	buildFile = 'analysis/kax-files/build.gradle'
 	tasks = ['clean']
+	delete fileTree(dir: 'analysis/kax-files/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesAnalysisOpad(type: GradleBuild) {
 	buildFile = 'analysis/opad-anomaly-detection/build.gradle'
 	tasks = ['clean']
+	delete fileTree(dir: 'userguide/analysis/opad-anomaly-detection/lib', include: '*.jar')
+	delete 'userguide/analysis/opad-anomaly-detection/rserve-control.sh'
+	delete 'userguide/analysis/opad-anomaly-detection/rserve-control.bat'
+	delete 'userguide/analysis/opad-anomaly-detection/RserveStart.R'
+
 }

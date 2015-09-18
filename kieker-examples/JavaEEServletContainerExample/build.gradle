@@ -24,10 +24,3 @@ task unwar(type: Copy) {
 
 task buildExample(dependsOn: [war, unwar]) << {
 }
-
-clean {
-	delete 'jetty/webapps/livedemo.war'
-	delete fileTree(dir: 'livedemo-source/lib', include: 'kieker-*-emf.jar')
-	delete fileTree(dir: 'jetty/webapps/jpetstore/WEB-INF/lib', include: '*sigar*')
-	delete fileTree(dir: 'jetty/webapps/jpetstore/WEB-INF/lib', include: 'kieker*')
-}
