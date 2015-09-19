@@ -170,11 +170,20 @@ public final class CLIServerMain {
 
 			// reconfigure kieker configuration
 			if (commandLine.hasOption(CMD_PORT)) {
-				configuration.setProperty(JMSEmbeddedConnector.PORT, commandLine.getOptionValue(CMD_PORT));
-				configuration.setProperty(TCPSingleServerConnector.PORT, commandLine.getOptionValue(CMD_PORT));
-				configuration.setProperty(TCPMultiServerConnector.PORT, commandLine.getOptionValue(CMD_PORT));
-				configuration.setProperty(TCPClientConnector.PORT, commandLine.getOptionValue(CMD_PORT));
-				configuration.setProperty(HTTPConnector.PORT, commandLine.getOptionValue(CMD_PORT));
+				if (commandLine.hasOption(CMD_TYPE)) {
+					final String type = commandLine.getOptionValue(CMD_TYPE);
+					if ("jms-embedded".equals(type)) {
+						configuration.setProperty(JMSEmbeddedConnector.PORT, commandLine.getOptionValue(CMD_PORT));
+					} else if ("tcp-single-server".equals(type)) {
+						configuration.setProperty(TCPSingleServerConnector.PORT, commandLine.getOptionValue(CMD_PORT));
+					} else if ("tcp-server".equals(type)) {
+						configuration.setProperty(TCPMultiServerConnector.PORT, commandLine.getOptionValue(CMD_PORT));
+					} else if ("tcp-client".equals(type)) {
+						configuration.setProperty(TCPClientConnector.PORT, commandLine.getOptionValue(CMD_PORT));
+					} else if ("http-rest".equals(type)) {
+						configuration.setProperty(HTTPConnector.PORT, commandLine.getOptionValue(CMD_PORT));
+					}
+				}
 			}
 			if (commandLine.hasOption(CMD_HOST)) {
 				configuration.setProperty(TCPClientConnector.HOSTNAME, commandLine.getOptionValue(CMD_HOST));
@@ -245,6 +254,9 @@ public final class CLIServerMain {
 	 *             if an error occured during connector operations
 	 */
 	private static void runService(final Configuration configuration, final IServiceConnector connector) throws ConnectorDataTransmissionException {
+		// setup service container
+		container = new ServiceContainer(configuration, connector, false);
+
 		if (verbose) {
 			final String updateIntervalParam = commandLine.getOptionValue(CMD_VERBOSE);
 			container.setListenerUpdateInterval((updateIntervalParam != null) ? Long.parseLong(updateIntervalParam) // NOCS
@@ -274,7 +286,6 @@ public final class CLIServerMain {
 		});
 
 		// run the service
-		container = new ServiceContainer(configuration, connector, false);
 		container.run();
 
 		if (stats) {
@@ -457,7 +468,8 @@ public final class CLIServerMain {
 		Option option;
 
 		// Type selection
-		option = new Option(CMD_TYPE, CMD_TYPE_LONG, true, "select the service type: tcp-client, tcp-server, tcp-single-server, jms-client, jms-embedded, http-rest");
+		option = new Option(CMD_TYPE, CMD_TYPE_LONG, true,
+				"select the service type: tcp-client, tcp-server, tcp-single-server, jms-client, jms-embedded, http-rest");
 		option.setArgName("type");
 		option.setRequired(true);
 		options.addOption(option);
