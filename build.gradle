@@ -337,7 +337,7 @@ artifacts {
 }
 
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.', 
-		dependsOn: [':startRServe',':enableRTests',':distributeBinaryZip', ':distributeSourceZip',':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
+		dependsOn: [':distributeBinaryZip', ':distributeSourceZip',':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
 
 def binaryContent = project.copySpec {
 	from (projectDir) {
