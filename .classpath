@@ -33,6 +33,7 @@
 	<classpathentry kind="src" path="kieker-examples/userguide/ch2--manual-instrumentation/src"/>
 	<classpathentry kind="src" path="kieker-examples/userguide/ch3-4--custom-components/src"/>
 	<classpathentry kind="src" path="kieker-examples/userguide/ch5--trace-monitoring-aspectj/src"/>
+	<classpathentry kind="src" path="kieker-examples/analysis/trace-analysis/src"/>
 	<classpathentry kind="lib" path="lib/framework-libs/javax.servlet-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/activemq-core-5.7.0.jar"/>
 	<classpathentry kind="lib" path="lib/aspectjweaver-1.8.2.jar"/>

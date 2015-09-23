@@ -18,6 +18,7 @@ task buildStandaloneExamples(dependsOn: [
 					 'buildStandaloneExamplesMonitoringTimesource',
 					 'buildStandaloneExamplesAnalysisKax',
 					 'buildStandaloneExamplesAnalysisOpad',
+					 'buildStandaloneExamplesAnalysisTraceAnalysis',
 					 'buildStandaloneExamplesUserguideAppendixJavaEE', 
 					 'replaceAbsoluteByRelativePathsEclipse']) {
 }
@@ -37,8 +38,9 @@ task replaceHardCodedVersionNames() << {
 }
 
 task replaceAbsoluteByRelativePathsEclipse << {
-        regexpReplaceInFiles(project.file("analysis/kax-files/.classpath"), "path=\".*/lib/", "path=\"lib/")
+    regexpReplaceInFiles(project.file("analysis/kax-files/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("analysis/opad-anomaly-detection/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("analysis/trace-analysis/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("monitoring/probe-spring/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("monitoring/custom-timesource/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("monitoring/probe-manual/.classpath"), "path=\".*/lib/", "path=\"lib/")
@@ -309,6 +311,19 @@ task buildStandaloneExamplesAnalysisOpad(type: GradleBuild, dependsOn: [ 'copyLi
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
+task copyLibsStandaloneExamplesAnalysisTraceAnalysis(type: Copy, dependsOn: [rootProject.mainJar]) {
+	from ('../build/libs') {
+		include "kieker-${version}.jar"
+	}
+	into 'analysis/trace-analysis/lib/'
+}
+
+task buildStandaloneExamplesAnalysisTraceAnalysis(type: GradleBuild, dependsOn: [ 'copyLibsStandaloneExamplesAnalysisOpad']) {
+	buildFile = 'analysis/trace-analysis/build.gradle'
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+}
+
+
 task cleanStandaloneExamples(dependsOn: [
 					 'cleanStandaloneExamplesUserguideCh2App', 
 					 'cleanStandaloneExamplesUserguideCh2Instr', 
@@ -326,6 +341,7 @@ task cleanStandaloneExamples(dependsOn: [
 					 'cleanStandaloneExamplesMonitoringTimesource',
 					 'cleanStandaloneExamplesAnalysisKax',
 					 'cleanStandaloneExamplesAnalysisOpad',
+					 'cleanStandaloneExamplesAnalysisTraceAnalysis',
 					 'cleanStandaloneExamplesUserguideAppendixJavaEE']) {
 }
 
@@ -440,4 +456,10 @@ task cleanStandaloneExamplesAnalysisOpad(type: GradleBuild) {
 	delete 'userguide/analysis/opad-anomaly-detection/rserve-control.bat'
 	delete 'userguide/analysis/opad-anomaly-detection/RserveStart.R'
 
+}
+
+task cleanStandaloneExamplesAnalysisTraceAnalysis(type: GradleBuild) {
+	buildFile = 'analysis/trace-analysis/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'userguide/analysis/trace-analysis/lib', include: '*.jar')
 }
