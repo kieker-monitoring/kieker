@@ -6,7 +6,22 @@ http://kieker-monitoring.net) contains details on the changes.
 Please refer to the Kieker User Guide for details on using Kieker.
 
 * 1.12 (October 1, 2015)
-TODO
+- New features (selection)
+  - Monitoring of system-level statistics based on the Sigar API:
+    - New probes and corresponding records for network and 
+      disk usage; load average
+    - New servlet filter to start the Sigar-based samplers 
+      (previously only a servlet for CPU, memory/swap)
+    - Standalone tool for resource monitoring
+  - New reader and writer for Advanced Message Queuing Protocol
+    (AMQP)
+  - Probes for collecting distributed traces in REST-based 
+    environments with Jersey.
+  - Example for monitoring traces in distributed applications 
+    based on the RESTful Netflix OSS RSS Reader Recipe,
+    provided via container-based virtualization (Docker).
+- Bug fixes and improvements to code, performance, tests, 
+  documentation, examples
 
 * 1.11 (April 1, 2015)
 - New features (selection)
