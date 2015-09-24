@@ -1,9 +1,0 @@
-$0=kieker.common.record.misc.KiekerMetadataRecord
-$1=kieker.common.record.controlflow.OperationExecutionRecord
-$2=kieker.common.record.system.CPUUtilizationRecord
-$3=kieker.common.record.system.MemSwapUsageRecord
-$4=kieker.common.record.jvm.GCRecord
-$5=kieker.common.record.jvm.ThreadsStatusRecord
-$6=kieker.common.record.jvm.ClassLoadingRecord
-$7=kieker.common.record.jvm.CompilationRecord
-$8=kieker.common.record.jvm.MemoryRecord
