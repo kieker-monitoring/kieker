@@ -387,25 +387,25 @@ method. %
 % \pagebreak
 
 \setJavaCodeListing
-\lstinputlisting[gobble=4,caption=BookstoreAnalysisStarter.java (excerpt from \method{main} method),label=lst:BookstoreAnalysisStarter,firstline=37,firstnumber=36,lastline=56]%
+\lstinputlisting[gobble=4,caption=BookstoreAnalysisStarter.java (excerpt from \method{main} method),label=lst:BookstoreAnalysisStarter,firstline=37,firstnumber=37,lastline=56]%
 {\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/BookstoreAnalysisStarter.java}
 
 % \pagebreak
 
 \noindent The \class{BookstoreAnalysisStarter} follows a simple scheme. Each %
 analysis tool has to create at least one \class{AnalysisController} which can be %
-seen in Listing~\ref{lst:BookstoreAnalysisStarter} in line~37. Then, the plugins, %
+seen in Listing~\ref{lst:BookstoreAnalysisStarter} in line~38. Then, the plugins, %
 which may be readers or filters, are configured, and instantiated. The usage of the  %
 constructor ensures that the component is registered with the analysis instance. %
-Lines~40--42 configure, instantiate, and register the file system monitoring %
+Lines~41--43 configure, instantiate, and register the file system monitoring %
 log reader, which uses the command-line argument value as the input directory. %
 The application expects the %
 output directory from the earlier monitoring run (see Section~\ref{sec:example:monitoring}) %
 as the only argument value, which must be passed manually. %
-Lines~45--48 configure, instantiate, and register the \class{TeeFilter}, %
-which outputs received events to the standard output. Lines~51 and~52 connect %
+Lines~46--49 configure, instantiate, and register the \class{TeeFilter}, %
+which outputs received events to the standard output. Lines~52 and~53 connect %
 the \class{TeeFilter}'s input port to the filesystem reader's output port. %
-The analysis is started by calling its \method{run} method (line~55). %
+The analysis is started by calling its \method{run} method (line~56). %
 
 
 The Listings~\ref{lst:bookstoreAnalysisStarterLinux} and \ref{lst:bookstoreAnalysisStarterWin} %
