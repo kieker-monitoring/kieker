@@ -1,0 +1,23 @@
+opad-anomaly-detection
+
+Prerequisites:
+- R (https://www.r-project.org/) has to be installed an be in the PATH of your operating system
+- The Rserve package has to be installed within R
+  (Start R and install the "Rserve" package by issuing "install.packages("Rserve"))
+
+
+1. Start Rserve with:
+    - Linux: ./rserve-control.sh start
+    - Windows: rserve-control.bat start
+    
+2. Execute the gradle build
+    - Linux: ./gradlew runAnalysis
+    - Windows: gradlew.bat runAnalysis
+    (This can take a few minutes to complete)
+    
+3. The resulting data can be found in output-data/ and the corresponding plots in output-plots/
+
+4. Stop Rserve with:
+    - Linux: ./rserve-control.sh start
+    - Windows: rserve-control.bat start
+    

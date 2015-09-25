@@ -92,7 +92,6 @@ public class TraceAnalysisStarter {
 		//
 		final EventRecordTraceReconstructionFilter eventRecordTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(new Configuration(),
 				analysisController);
-		// analysisController.connect(eventRecordTraceReconstructionFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemModelRepository);
 		analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, eventRecordTraceReconstructionFilter,
 				EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
 

@@ -1,0 +1,6 @@
+kax-files
+
+1. Execute the gradle build:
+     - Linux: ./gradlew runAnalysis
+     - Windows: gradlew.bat runAnalysis
+
