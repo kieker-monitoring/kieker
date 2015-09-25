@@ -41,6 +41,7 @@ public class TraceAnalysisStarter {
 
 	// Depending on the input, you have to change the input path and the reader configuration (commented with ALTERNATIVE)
 	private static final String INPUT_MONITORING_LOG_OER = "./input-data/operation-execution-log/";
+	// ALTERNATIVE
 	// private static final String INPUT_MONITORING_LOG_TE = "./input-data/trace-event-log/";
 
 	public static void main(final String[] args) throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
