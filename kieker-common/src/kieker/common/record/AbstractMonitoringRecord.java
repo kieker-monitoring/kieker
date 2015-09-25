@@ -118,7 +118,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	}
 
 	@Override
-	public final boolean equals(final Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj == null) {
 			return false;
 		} else if (this == obj) {
