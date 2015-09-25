@@ -195,6 +195,19 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final ResourceUtilizationRecord castedRecord = (ResourceUtilizationRecord) record;
+		if (this.timestamp != castedRecord.timestamp) return false;
+		if (!this.hostname.equals(castedRecord.hostname)) return false;
+		if (!this.resourceName.equals(castedRecord.resourceName)) return false;
+		if (this.utilization != castedRecord.utilization) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}

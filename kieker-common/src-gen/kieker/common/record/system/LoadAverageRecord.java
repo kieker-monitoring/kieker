@@ -206,6 +206,20 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final LoadAverageRecord castedRecord = (LoadAverageRecord) record;
+		if (this.timestamp != castedRecord.timestamp) return false;
+		if (!this.hostname.equals(castedRecord.hostname)) return false;
+		if (this.oneMinLoadAverage != castedRecord.oneMinLoadAverage) return false;
+		if (this.fiveMinLoadAverage != castedRecord.fiveMinLoadAverage) return false;
+		if (this.fifteenMinLoadAverage != castedRecord.fifteenMinLoadAverage) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}

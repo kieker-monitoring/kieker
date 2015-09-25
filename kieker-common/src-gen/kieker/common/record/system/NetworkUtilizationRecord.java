@@ -351,6 +351,32 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final NetworkUtilizationRecord castedRecord = (NetworkUtilizationRecord) record;
+		if (this.timestamp != castedRecord.timestamp) return false;
+		if (!this.hostname.equals(castedRecord.hostname)) return false;
+		if (!this.interfaceName.equals(castedRecord.interfaceName)) return false;
+		if (this.speed != castedRecord.speed) return false;
+		if (this.txBytesPerSecond != castedRecord.txBytesPerSecond) return false;
+		if (this.txCarrierPerSecond != castedRecord.txCarrierPerSecond) return false;
+		if (this.txCollisionsPerSecond != castedRecord.txCollisionsPerSecond) return false;
+		if (this.txDroppedPerSecond != castedRecord.txDroppedPerSecond) return false;
+		if (this.txErrorsPerSecond != castedRecord.txErrorsPerSecond) return false;
+		if (this.txOverrunsPerSecond != castedRecord.txOverrunsPerSecond) return false;
+		if (this.txPacketsPerSecond != castedRecord.txPacketsPerSecond) return false;
+		if (this.rxBytesPerSecond != castedRecord.rxBytesPerSecond) return false;
+		if (this.rxDroppedPerSecond != castedRecord.rxDroppedPerSecond) return false;
+		if (this.rxErrorsPerSecond != castedRecord.rxErrorsPerSecond) return false;
+		if (this.rxFramePerSecond != castedRecord.rxFramePerSecond) return false;
+		if (this.rxOverrunsPerSecond != castedRecord.rxOverrunsPerSecond) return false;
+		if (this.rxPacketsPerSecond != castedRecord.rxPacketsPerSecond) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}

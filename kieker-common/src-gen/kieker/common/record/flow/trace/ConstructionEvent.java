@@ -189,6 +189,17 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final ConstructionEvent castedRecord = (ConstructionEvent) record;
+		if (!this.classSignature.equals(castedRecord.classSignature)) return false;
+		if (this.objectId != castedRecord.objectId) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final String getClassSignature() {
 		return this.classSignature;
 	}

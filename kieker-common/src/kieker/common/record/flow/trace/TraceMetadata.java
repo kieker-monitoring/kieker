@@ -27,7 +27,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public class TraceMetadata extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IFlowRecord {
@@ -62,7 +62,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param traceId
 	 *            The trace ID.
 	 * @param threadId
@@ -87,7 +87,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 
 	/**
 	 * Creates a new instance of this class using the given parameter.
-	 * 
+	 *
 	 * @param values
 	 *            The array containing the values for the fields of this class. This should normally be the array resulting in a call to {@link #toArray()}.
 	 */
@@ -103,10 +103,10 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param buffer
 	 *            The bytes for the record.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
@@ -142,7 +142,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -153,7 +153,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -176,6 +176,36 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	@Override
 	public int getSize() {
 		return SIZE;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final TraceMetadata castedRecord = (TraceMetadata) record;
+		if (this.traceId != castedRecord.traceId) {
+			return false;
+		}
+		if (this.threadId != castedRecord.threadId) {
+			return false;
+		}
+		if (!this.sessionId.equals(castedRecord.sessionId)) {
+			return false;
+		}
+		if (!this.hostname.equals(castedRecord.hostname)) {
+			return false;
+		}
+		if (this.parentTraceId != castedRecord.parentTraceId) {
+			return false;
+		}
+		if (this.parentOrderId != castedRecord.parentOrderId) {
+			return false;
+		}
+		if (this.nextOrderId != castedRecord.nextOrderId) {
+			return false;
+		}
+		return super.equalsInternal(castedRecord);
 	}
 
 	public final long getTraceId() {

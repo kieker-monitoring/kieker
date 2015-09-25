@@ -267,6 +267,25 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final CPUUtilizationRecord castedRecord = (CPUUtilizationRecord) record;
+		if (this.timestamp != castedRecord.timestamp) return false;
+		if (!this.hostname.equals(castedRecord.hostname)) return false;
+		if (!this.cpuID.equals(castedRecord.cpuID)) return false;
+		if (this.user != castedRecord.user) return false;
+		if (this.system != castedRecord.system) return false;
+		if (this.wait != castedRecord.wait) return false;
+		if (this.nice != castedRecord.nice) return false;
+		if (this.irq != castedRecord.irq) return false;
+		if (this.totalUtilization != castedRecord.totalUtilization) return false;
+		if (this.idle != castedRecord.idle) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}

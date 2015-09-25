@@ -199,6 +199,18 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final ClassLoadingRecord castedRecord = (ClassLoadingRecord) record;
+		if (this.totalLoadedClassCount != castedRecord.totalLoadedClassCount) return false;
+		if (this.loadedClassCount != castedRecord.loadedClassCount) return false;
+		if (this.unloadedClassCount != castedRecord.unloadedClassCount) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final long getTotalLoadedClassCount() {
 		return this.totalLoadedClassCount;
 	}

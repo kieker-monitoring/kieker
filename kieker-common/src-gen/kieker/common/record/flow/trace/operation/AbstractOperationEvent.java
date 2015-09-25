@@ -114,6 +114,17 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final AbstractOperationEvent castedRecord = (AbstractOperationEvent) record;
+		if (!this.operationSignature.equals(castedRecord.operationSignature)) return false;
+		if (!this.classSignature.equals(castedRecord.classSignature)) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final String getOperationSignature() {
 		return this.operationSignature;
 	}

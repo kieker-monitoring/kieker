@@ -188,6 +188,16 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final ExtendedStorableDetectionResult castedRecord = (ExtendedStorableDetectionResult) record;
+		if (this.anomalyThreshold != castedRecord.anomalyThreshold) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final double getAnomalyThreshold() {
 		return this.anomalyThreshold;
 	}

@@ -192,6 +192,16 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final AfterOperationFailedEvent castedRecord = (AfterOperationFailedEvent) record;
+		if (!this.cause.equals(castedRecord.cause)) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final String getCause() {
 		return this.cause;
 	}

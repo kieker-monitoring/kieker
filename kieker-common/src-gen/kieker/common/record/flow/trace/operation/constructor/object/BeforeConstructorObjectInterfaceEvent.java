@@ -198,6 +198,16 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final BeforeConstructorObjectInterfaceEvent castedRecord = (BeforeConstructorObjectInterfaceEvent) record;
+		if (!this._interface.equals(castedRecord._interface)) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final String getInterface() {
 		return this._interface;
 	}

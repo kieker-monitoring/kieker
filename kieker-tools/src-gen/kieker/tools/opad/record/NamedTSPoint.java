@@ -180,6 +180,18 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final NamedTSPoint castedRecord = (NamedTSPoint) record;
+		if (this.timestamp != castedRecord.timestamp) return false;
+		if (this.value != castedRecord.value) return false;
+		if (!this.name.equals(castedRecord.name)) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}

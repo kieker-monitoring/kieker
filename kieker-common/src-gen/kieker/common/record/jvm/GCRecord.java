@@ -201,6 +201,18 @@ public class GCRecord extends AbstractJVMRecord  {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final GCRecord castedRecord = (GCRecord) record;
+		if (!this.gcName.equals(castedRecord.gcName)) return false;
+		if (this.collectionCount != castedRecord.collectionCount) return false;
+		if (this.collectionTimeMS != castedRecord.collectionTimeMS) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final String getGcName() {
 		return this.gcName;
 	}

@@ -164,4 +164,13 @@ public class SplitEvent extends AbstractTraceEvent  {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final SplitEvent castedRecord = (SplitEvent) record;
+		return super.equalsInternal(castedRecord);
+	}
+
 }

@@ -265,6 +265,24 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final MemoryRecord castedRecord = (MemoryRecord) record;
+		if (this.heapMaxBytes != castedRecord.heapMaxBytes) return false;
+		if (this.heapUsedBytes != castedRecord.heapUsedBytes) return false;
+		if (this.heapCommittedBytes != castedRecord.heapCommittedBytes) return false;
+		if (this.heapInitBytes != castedRecord.heapInitBytes) return false;
+		if (this.nonHeapMaxBytes != castedRecord.nonHeapMaxBytes) return false;
+		if (this.nonHeapUsedBytes != castedRecord.nonHeapUsedBytes) return false;
+		if (this.nonHeapCommittedBytes != castedRecord.nonHeapCommittedBytes) return false;
+		if (this.nonHeapInitBytes != castedRecord.nonHeapInitBytes) return false;
+		if (this.objectPendingFinalizationCount != castedRecord.objectPendingFinalizationCount) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final long getHeapMaxBytes() {
 		return this.heapMaxBytes;
 	}

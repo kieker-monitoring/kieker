@@ -110,6 +110,17 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final AbstractTraceEvent castedRecord = (AbstractTraceEvent) record;
+		if (this.traceId != castedRecord.traceId) return false;
+		if (this.orderIndex != castedRecord.orderIndex) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final long getTraceId() {
 		return this.traceId;
 	}

@@ -255,6 +255,24 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final DiskUsageRecord castedRecord = (DiskUsageRecord) record;
+		if (this.timestamp != castedRecord.timestamp) return false;
+		if (!this.hostname.equals(castedRecord.hostname)) return false;
+		if (!this.deviceName.equals(castedRecord.deviceName)) return false;
+		if (this.queue != castedRecord.queue) return false;
+		if (this.readBytesPerSecond != castedRecord.readBytesPerSecond) return false;
+		if (this.readsPerSecond != castedRecord.readsPerSecond) return false;
+		if (this.serviceTime != castedRecord.serviceTime) return false;
+		if (this.writeBytesPerSecond != castedRecord.writeBytesPerSecond) return false;
+		if (this.writesPerSecond != castedRecord.writesPerSecond) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}

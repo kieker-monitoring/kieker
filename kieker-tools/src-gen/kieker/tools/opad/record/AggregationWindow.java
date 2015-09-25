@@ -167,6 +167,17 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final AggregationWindow castedRecord = (AggregationWindow) record;
+		if (this.windowStart != castedRecord.windowStart) return false;
+		if (this.windowEnd != castedRecord.windowEnd) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final long getWindowStart() {
 		return this.windowStart;
 	}

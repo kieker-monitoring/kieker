@@ -205,6 +205,19 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final CallOperationEvent castedRecord = (CallOperationEvent) record;
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
+		if (!this.calleeOperationSignature.equals(castedRecord.calleeOperationSignature)) return false;
+		if (!this.calleeClassSignature.equals(castedRecord.calleeClassSignature)) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final String getCallerOperationSignature() {
 		return this.getOperationSignature();
 	}

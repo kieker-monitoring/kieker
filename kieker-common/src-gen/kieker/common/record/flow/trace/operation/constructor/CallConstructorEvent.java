@@ -193,4 +193,13 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final CallConstructorEvent castedRecord = (CallConstructorEvent) record;
+		return super.equalsInternal(castedRecord);
+	}
+
 }

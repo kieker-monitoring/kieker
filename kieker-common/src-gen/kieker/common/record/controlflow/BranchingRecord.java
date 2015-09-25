@@ -181,6 +181,18 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final BranchingRecord castedRecord = (BranchingRecord) record;
+		if (this.timestamp != castedRecord.timestamp) return false;
+		if (this.branchID != castedRecord.branchID) return false;
+		if (this.branchingOutcome != castedRecord.branchingOutcome) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}

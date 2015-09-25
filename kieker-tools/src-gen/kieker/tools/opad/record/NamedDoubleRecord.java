@@ -180,6 +180,18 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
+		final NamedDoubleRecord castedRecord = (NamedDoubleRecord) record;
+		if (!this.applicationName.equals(castedRecord.applicationName)) return false;
+		if (this.timestamp != castedRecord.timestamp) return false;
+		if (this.responseTime != castedRecord.responseTime) return false;
+		return super.equalsInternal(castedRecord);
+	}
+
 	public final String getApplicationName() {
 		return this.applicationName;
 	}
