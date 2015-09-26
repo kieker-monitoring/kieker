@@ -33,7 +33,7 @@ import kieker.test.common.junit.util.APIEvaluationFunctions;
  * 
  * @author API Checker
  * 
- * @since 1.11
+ * @since 1.12
  */
 public class TestBeforeOperationEventPropertyOrder extends AbstractKiekerTest {
 

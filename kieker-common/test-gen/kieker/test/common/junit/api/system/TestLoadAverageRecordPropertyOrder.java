@@ -14,14 +14,14 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.common.junit.api.flow.trace.concurrency.monitor;
+package kieker.test.common.junit.api.system;
 
 import java.nio.ByteBuffer;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.common.record.flow.trace.concurrency.monitor.MonitorNotifyEvent;
+import kieker.common.record.system.LoadAverageRecord;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
@@ -29,13 +29,13 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
 /**
- * Test API of {@link kieker.common.record.flow.trace.concurrency.monitor.MonitorNotifyEvent}.
+ * Test API of {@link kieker.common.record.system.LoadAverageRecord}.
  * 
  * @author API Checker
  * 
  * @since 1.12
  */
-public class TestMonitorNotifyEventPropertyOrder extends AbstractKiekerTest {
+public class TestLoadAverageRecordPropertyOrder extends AbstractKiekerTest {
 
 	/**
 	 * All numbers and values must be pairwise unequal. As the string registry also uses integers,
@@ -43,48 +43,52 @@ public class TestMonitorNotifyEventPropertyOrder extends AbstractKiekerTest {
 	 */
 	/** Constant value parameter for timestamp. */
 	private static final long PROPERTY_TIMESTAMP = 2L;
-	/** Constant value parameter for traceId. */
-	private static final long PROPERTY_TRACE_ID = 3L;
-	/** Constant value parameter for orderIndex. */
-	private static final int PROPERTY_ORDER_INDEX = 1001;
-	/** Constant value parameter for lockId. */
-	private static final int PROPERTY_LOCK_ID = 1002;
+	/** Constant value parameter for hostname. */
+	private static final String PROPERTY_HOSTNAME = "<hostname>";
+	/** Constant value parameter for oneMinLoadAverage. */
+	private static final double PROPERTY_ONE_MIN_LOAD_AVERAGE = 2.0;
+	/** Constant value parameter for fiveMinLoadAverage. */
+	private static final double PROPERTY_FIVE_MIN_LOAD_AVERAGE = 3.0;
+	/** Constant value parameter for fifteenMinLoadAverage. */
+	private static final double PROPERTY_FIFTEEN_MIN_LOAD_AVERAGE = 4.0;
 							
 	/**
 	 * Empty constructor.
 	 */
-	public TestMonitorNotifyEventPropertyOrder() {
+	public TestLoadAverageRecordPropertyOrder() {
 		// Empty constructor for test class.
 	}
 
 	/**
-	 * Test property order processing of {@link kieker.common.record.flow.trace.concurrency.monitor.MonitorNotifyEvent} constructors and
+	 * Test property order processing of {@link kieker.common.record.system.LoadAverageRecord} constructors and
 	 * different serialization routines.
 	 */
 	@Test
-	public void testMonitorNotifyEventPropertyOrder() { // NOPMD
+	public void testLoadAverageRecordPropertyOrder() { // NOPMD
 		final IRegistry<String> stringRegistry = this.makeStringRegistry();
 		final Object[] values = {
 			PROPERTY_TIMESTAMP,
-			PROPERTY_TRACE_ID,
-			PROPERTY_ORDER_INDEX,
-			PROPERTY_LOCK_ID,
+			PROPERTY_HOSTNAME,
+			PROPERTY_ONE_MIN_LOAD_AVERAGE,
+			PROPERTY_FIVE_MIN_LOAD_AVERAGE,
+			PROPERTY_FIFTEEN_MIN_LOAD_AVERAGE,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(MonitorNotifyEvent.SIZE, 
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(LoadAverageRecord.SIZE, 
 			this.makeStringRegistry(), values);
 					
-		final MonitorNotifyEvent recordInitParameter = new MonitorNotifyEvent(
+		final LoadAverageRecord recordInitParameter = new LoadAverageRecord(
 			PROPERTY_TIMESTAMP,
-			PROPERTY_TRACE_ID,
-			PROPERTY_ORDER_INDEX,
-			PROPERTY_LOCK_ID
+			PROPERTY_HOSTNAME,
+			PROPERTY_ONE_MIN_LOAD_AVERAGE,
+			PROPERTY_FIVE_MIN_LOAD_AVERAGE,
+			PROPERTY_FIFTEEN_MIN_LOAD_AVERAGE
 		);
-		final MonitorNotifyEvent recordInitBuffer = new MonitorNotifyEvent(inputBuffer, this.makeStringRegistry());
-		final MonitorNotifyEvent recordInitArray = new MonitorNotifyEvent(values);
+		final LoadAverageRecord recordInitBuffer = new LoadAverageRecord(inputBuffer, this.makeStringRegistry());
+		final LoadAverageRecord recordInitArray = new LoadAverageRecord(values);
 		
-		this.assertMonitorNotifyEvent(recordInitParameter);
-		this.assertMonitorNotifyEvent(recordInitBuffer);
-		this.assertMonitorNotifyEvent(recordInitArray);
+		this.assertLoadAverageRecord(recordInitParameter);
+		this.assertLoadAverageRecord(recordInitBuffer);
+		this.assertLoadAverageRecord(recordInitArray);
 
 		// test to array
 		final Object[] valuesParameter = recordInitParameter.toArray();
@@ -95,27 +99,28 @@ public class TestMonitorNotifyEventPropertyOrder extends AbstractKiekerTest {
 		Assert.assertArrayEquals("Result array of record initialized by parameter constructor differs from predefined array.", values, valuesArray);
 
 		// test write to buffer
-		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(MonitorNotifyEvent.SIZE);
+		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(LoadAverageRecord.SIZE);
 		recordInitParameter.writeBytes(outputBufferParameter, stringRegistry);
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
-		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(MonitorNotifyEvent.SIZE);
+		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(LoadAverageRecord.SIZE);
 		recordInitParameter.writeBytes(outputBufferBuffer, stringRegistry);
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
-		final ByteBuffer outputBufferArray = ByteBuffer.allocate(MonitorNotifyEvent.SIZE);
+		final ByteBuffer outputBufferArray = ByteBuffer.allocate(LoadAverageRecord.SIZE);
 		recordInitParameter.writeBytes(outputBufferArray, stringRegistry);
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
 	/**
-	 * Assertions for MonitorNotifyEvent.
+	 * Assertions for LoadAverageRecord.
 	 */
-	private void assertMonitorNotifyEvent(final MonitorNotifyEvent record) {
+	private void assertLoadAverageRecord(final LoadAverageRecord record) {
 		Assert.assertEquals("'timestamp' value assertion failed.", record.getTimestamp(), PROPERTY_TIMESTAMP);
-		Assert.assertEquals("'traceId' value assertion failed.", record.getTraceId(), PROPERTY_TRACE_ID);
-		Assert.assertEquals("'orderIndex' value assertion failed.", record.getOrderIndex(), PROPERTY_ORDER_INDEX);
-		Assert.assertEquals("'lockId' value assertion failed.", record.getLockId(), PROPERTY_LOCK_ID);
+		Assert.assertEquals("'hostname' value assertion failed.", record.getHostname(), PROPERTY_HOSTNAME);
+		Assert.assertEquals("'oneMinLoadAverage' value assertion failed.", record.getOneMinLoadAverage(), PROPERTY_ONE_MIN_LOAD_AVERAGE, 0.1);
+		Assert.assertEquals("'fiveMinLoadAverage' value assertion failed.", record.getFiveMinLoadAverage(), PROPERTY_FIVE_MIN_LOAD_AVERAGE, 0.1);
+		Assert.assertEquals("'fifteenMinLoadAverage' value assertion failed.", record.getFifteenMinLoadAverage(), PROPERTY_FIFTEEN_MIN_LOAD_AVERAGE, 0.1);
 	}
 			
 	/**
@@ -124,6 +129,7 @@ public class TestMonitorNotifyEventPropertyOrder extends AbstractKiekerTest {
 	private IRegistry<String> makeStringRegistry() {
 		final IRegistry<String> stringRegistry = new Registry<String>();
 		// get registers string and returns their ID
+		stringRegistry.get(PROPERTY_HOSTNAME);
 
 		return stringRegistry;
 	}

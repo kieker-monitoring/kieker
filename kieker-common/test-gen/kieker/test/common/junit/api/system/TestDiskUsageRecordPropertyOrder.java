@@ -14,14 +14,14 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.common.junit.api.jvm;
+package kieker.test.common.junit.api.system;
 
 import java.nio.ByteBuffer;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.common.record.jvm.GCRecord;
+import kieker.common.record.system.DiskUsageRecord;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
@@ -29,13 +29,13 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
 /**
- * Test API of {@link kieker.common.record.jvm.GCRecord}.
+ * Test API of {@link kieker.common.record.system.DiskUsageRecord}.
  * 
  * @author API Checker
  * 
  * @since 1.12
  */
-public class TestGCRecordPropertyOrder extends AbstractKiekerTest {
+public class TestDiskUsageRecordPropertyOrder extends AbstractKiekerTest {
 
 	/**
 	 * All numbers and values must be pairwise unequal. As the string registry also uses integers,
@@ -45,54 +45,66 @@ public class TestGCRecordPropertyOrder extends AbstractKiekerTest {
 	private static final long PROPERTY_TIMESTAMP = 2L;
 	/** Constant value parameter for hostname. */
 	private static final String PROPERTY_HOSTNAME = "<hostname>";
-	/** Constant value parameter for vmName. */
-	private static final String PROPERTY_VM_NAME = "<vmName>";
-	/** Constant value parameter for gcName. */
-	private static final String PROPERTY_GC_NAME = "<gcName>";
-	/** Constant value parameter for collectionCount. */
-	private static final long PROPERTY_COLLECTION_COUNT = 3L;
-	/** Constant value parameter for collectionTimeMS. */
-	private static final long PROPERTY_COLLECTION_TIME_M_S = 4L;
+	/** Constant value parameter for deviceName. */
+	private static final String PROPERTY_DEVICE_NAME = "<deviceName>";
+	/** Constant value parameter for queue. */
+	private static final double PROPERTY_QUEUE = 2.0;
+	/** Constant value parameter for readBytesPerSecond. */
+	private static final double PROPERTY_READ_BYTES_PER_SECOND = 3.0;
+	/** Constant value parameter for readsPerSecond. */
+	private static final double PROPERTY_READS_PER_SECOND = 4.0;
+	/** Constant value parameter for serviceTime. */
+	private static final double PROPERTY_SERVICE_TIME = 5.0;
+	/** Constant value parameter for writeBytesPerSecond. */
+	private static final double PROPERTY_WRITE_BYTES_PER_SECOND = 6.0;
+	/** Constant value parameter for writesPerSecond. */
+	private static final double PROPERTY_WRITES_PER_SECOND = 7.0;
 							
 	/**
 	 * Empty constructor.
 	 */
-	public TestGCRecordPropertyOrder() {
+	public TestDiskUsageRecordPropertyOrder() {
 		// Empty constructor for test class.
 	}
 
 	/**
-	 * Test property order processing of {@link kieker.common.record.jvm.GCRecord} constructors and
+	 * Test property order processing of {@link kieker.common.record.system.DiskUsageRecord} constructors and
 	 * different serialization routines.
 	 */
 	@Test
-	public void testGCRecordPropertyOrder() { // NOPMD
+	public void testDiskUsageRecordPropertyOrder() { // NOPMD
 		final IRegistry<String> stringRegistry = this.makeStringRegistry();
 		final Object[] values = {
 			PROPERTY_TIMESTAMP,
 			PROPERTY_HOSTNAME,
-			PROPERTY_VM_NAME,
-			PROPERTY_GC_NAME,
-			PROPERTY_COLLECTION_COUNT,
-			PROPERTY_COLLECTION_TIME_M_S,
+			PROPERTY_DEVICE_NAME,
+			PROPERTY_QUEUE,
+			PROPERTY_READ_BYTES_PER_SECOND,
+			PROPERTY_READS_PER_SECOND,
+			PROPERTY_SERVICE_TIME,
+			PROPERTY_WRITE_BYTES_PER_SECOND,
+			PROPERTY_WRITES_PER_SECOND,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(GCRecord.SIZE, 
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(DiskUsageRecord.SIZE, 
 			this.makeStringRegistry(), values);
 					
-		final GCRecord recordInitParameter = new GCRecord(
+		final DiskUsageRecord recordInitParameter = new DiskUsageRecord(
 			PROPERTY_TIMESTAMP,
 			PROPERTY_HOSTNAME,
-			PROPERTY_VM_NAME,
-			PROPERTY_GC_NAME,
-			PROPERTY_COLLECTION_COUNT,
-			PROPERTY_COLLECTION_TIME_M_S
+			PROPERTY_DEVICE_NAME,
+			PROPERTY_QUEUE,
+			PROPERTY_READ_BYTES_PER_SECOND,
+			PROPERTY_READS_PER_SECOND,
+			PROPERTY_SERVICE_TIME,
+			PROPERTY_WRITE_BYTES_PER_SECOND,
+			PROPERTY_WRITES_PER_SECOND
 		);
-		final GCRecord recordInitBuffer = new GCRecord(inputBuffer, this.makeStringRegistry());
-		final GCRecord recordInitArray = new GCRecord(values);
+		final DiskUsageRecord recordInitBuffer = new DiskUsageRecord(inputBuffer, this.makeStringRegistry());
+		final DiskUsageRecord recordInitArray = new DiskUsageRecord(values);
 		
-		this.assertGCRecord(recordInitParameter);
-		this.assertGCRecord(recordInitBuffer);
-		this.assertGCRecord(recordInitArray);
+		this.assertDiskUsageRecord(recordInitParameter);
+		this.assertDiskUsageRecord(recordInitBuffer);
+		this.assertDiskUsageRecord(recordInitArray);
 
 		// test to array
 		final Object[] valuesParameter = recordInitParameter.toArray();
@@ -103,29 +115,32 @@ public class TestGCRecordPropertyOrder extends AbstractKiekerTest {
 		Assert.assertArrayEquals("Result array of record initialized by parameter constructor differs from predefined array.", values, valuesArray);
 
 		// test write to buffer
-		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(GCRecord.SIZE);
+		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(DiskUsageRecord.SIZE);
 		recordInitParameter.writeBytes(outputBufferParameter, stringRegistry);
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
-		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(GCRecord.SIZE);
+		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(DiskUsageRecord.SIZE);
 		recordInitParameter.writeBytes(outputBufferBuffer, stringRegistry);
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
-		final ByteBuffer outputBufferArray = ByteBuffer.allocate(GCRecord.SIZE);
+		final ByteBuffer outputBufferArray = ByteBuffer.allocate(DiskUsageRecord.SIZE);
 		recordInitParameter.writeBytes(outputBufferArray, stringRegistry);
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
 	/**
-	 * Assertions for GCRecord.
+	 * Assertions for DiskUsageRecord.
 	 */
-	private void assertGCRecord(final GCRecord record) {
+	private void assertDiskUsageRecord(final DiskUsageRecord record) {
 		Assert.assertEquals("'timestamp' value assertion failed.", record.getTimestamp(), PROPERTY_TIMESTAMP);
 		Assert.assertEquals("'hostname' value assertion failed.", record.getHostname(), PROPERTY_HOSTNAME);
-		Assert.assertEquals("'vmName' value assertion failed.", record.getVmName(), PROPERTY_VM_NAME);
-		Assert.assertEquals("'gcName' value assertion failed.", record.getGcName(), PROPERTY_GC_NAME);
-		Assert.assertEquals("'collectionCount' value assertion failed.", record.getCollectionCount(), PROPERTY_COLLECTION_COUNT);
-		Assert.assertEquals("'collectionTimeMS' value assertion failed.", record.getCollectionTimeMS(), PROPERTY_COLLECTION_TIME_M_S);
+		Assert.assertEquals("'deviceName' value assertion failed.", record.getDeviceName(), PROPERTY_DEVICE_NAME);
+		Assert.assertEquals("'queue' value assertion failed.", record.getQueue(), PROPERTY_QUEUE, 0.1);
+		Assert.assertEquals("'readBytesPerSecond' value assertion failed.", record.getReadBytesPerSecond(), PROPERTY_READ_BYTES_PER_SECOND, 0.1);
+		Assert.assertEquals("'readsPerSecond' value assertion failed.", record.getReadsPerSecond(), PROPERTY_READS_PER_SECOND, 0.1);
+		Assert.assertEquals("'serviceTime' value assertion failed.", record.getServiceTime(), PROPERTY_SERVICE_TIME, 0.1);
+		Assert.assertEquals("'writeBytesPerSecond' value assertion failed.", record.getWriteBytesPerSecond(), PROPERTY_WRITE_BYTES_PER_SECOND, 0.1);
+		Assert.assertEquals("'writesPerSecond' value assertion failed.", record.getWritesPerSecond(), PROPERTY_WRITES_PER_SECOND, 0.1);
 	}
 			
 	/**
@@ -135,8 +150,7 @@ public class TestGCRecordPropertyOrder extends AbstractKiekerTest {
 		final IRegistry<String> stringRegistry = new Registry<String>();
 		// get registers string and returns their ID
 		stringRegistry.get(PROPERTY_HOSTNAME);
-		stringRegistry.get(PROPERTY_VM_NAME);
-		stringRegistry.get(PROPERTY_GC_NAME);
+		stringRegistry.get(PROPERTY_DEVICE_NAME);
 
 		return stringRegistry;
 	}
