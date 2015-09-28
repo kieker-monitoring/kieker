@@ -1,7 +1,7 @@
 probe-spring
 
 Description:
-This example shows how to instrument applications using spring.
+This example shows how to instrument spring-based applications.
 
 
 1. Execute the gradle build

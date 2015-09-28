@@ -1,7 +1,7 @@
 trace-analysis
 
 Description:
-This example shows how to do trace analysis on different kinds of inputs.
+This example shows how to obtain message traces using different kinds of inputs.
 
 
 1. Execute the gradle build
