@@ -1,0 +1,9 @@
+probe-spring
+
+Description:
+This example shows how to instrument applications using spring.
+
+
+1. Execute the gradle build
+   - Linux: ./gradlew runMonitoring
+   - Windows: gradlew.bat runMonitoring

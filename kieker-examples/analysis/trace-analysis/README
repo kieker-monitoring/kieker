@@ -1,5 +1,9 @@
 trace-analysis
 
+Description:
+This example shows how to do trace analysis on different kinds of inputs.
+
+
 1. Execute the gradle build
    Linux: ./gradlew runAnalysis
    Windows: gradlew.bat runAnalysis

@@ -1,5 +1,8 @@
 opad-anomaly-detection
 
+Description:
+This example shows how OPAD is used to detect anomalies and plot the data using R.
+
 Prerequisites:
 - R (https://www.r-project.org/) has to be installed an be in the PATH of your operating system
 - The Rserve package has to be installed within R

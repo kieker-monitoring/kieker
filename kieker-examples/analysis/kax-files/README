@@ -1,5 +1,9 @@
 kax-files
 
+Description:
+This example shows how to use kax-Files as source for Kieker filter settings.
+
+
 1. Execute the gradle build:
      - Linux: ./gradlew runAnalysis
      - Windows: gradlew.bat runAnalysis
