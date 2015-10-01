@@ -14,7 +14,7 @@ entity KiekerMetadataRecord {
 	/** Constant to be used if no value available. */
 	const string NO_TIMEUNIT = "NANOSECONDS"
 
-	string version = '1.10'
+	string version = KIEKER_VERSION
 	string controllerName = NO_CONTROLLERNAME
 	string hostname = NO_HOSTNAME
 	int experimentId = 0
