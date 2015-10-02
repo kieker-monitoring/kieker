@@ -45,6 +45,9 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	public static final int TYPE_SIZE_STRING = 4;
 	public static final int TYPE_SIZE_BOOLEAN = 1;
 
+	private static final float VALID_VARIANCE_FLOAT = 0.00001f;
+	private static final double VALID_VARIANCE_DOUBLE = 0.00001d;
+
 	private static final String FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE = "Failed to instantiate new monitoring record of type ";
 	private static final long serialVersionUID = 1L;
 
@@ -67,6 +70,14 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		CACHED_KIEKERRECORDS.put("kieker.common.record.BranchingRecord", kieker.common.record.controlflow.BranchingRecord.class);
 		CACHED_KIEKERRECORDS.put("kieker.monitoring.core.registry.RegistryRecord", kieker.common.record.misc.RegistryRecord.class);
 		CACHED_KIEKERRECORDS.put("kieker.common.record.flow.trace.Trace", kieker.common.record.flow.trace.TraceMetadata.class);
+	}
+
+	protected static boolean isEqual(final double x, final double y) {
+		return Math.abs(x - y) < VALID_VARIANCE_DOUBLE;
+	}
+
+	protected static boolean isEqual(final float x, final float y) {
+		return Math.abs(x - y) < VALID_VARIANCE_FLOAT;
 	}
 
 	@Override

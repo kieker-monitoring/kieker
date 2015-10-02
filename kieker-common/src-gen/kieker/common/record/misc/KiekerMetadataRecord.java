@@ -61,7 +61,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	public static final String NO_TIMESOURCE = "<no-timesource>";
 	public static final String NO_TIMEUNIT = "NANOSECONDS";
 	/* default constants */
-	public static final String VERSION = "1.10";
+	public static final String VERSION = kieker.common.util.Version.getVERSION();
 	public static final String CONTROLLER_NAME = NO_CONTROLLERNAME;
 	public static final String HOSTNAME = NO_HOSTNAME;
 	public static final int EXPERIMENT_ID = 0;

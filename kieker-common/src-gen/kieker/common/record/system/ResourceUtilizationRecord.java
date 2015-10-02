@@ -204,7 +204,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		if (this.timestamp != castedRecord.timestamp) return false;
 		if (!this.hostname.equals(castedRecord.hostname)) return false;
 		if (!this.resourceName.equals(castedRecord.resourceName)) return false;
-		if (this.utilization != castedRecord.utilization) return false;
+		if (isEqual(this.utilization, castedRecord.utilization)) return false;
 		return super.equalsInternal(castedRecord);
 	}
 

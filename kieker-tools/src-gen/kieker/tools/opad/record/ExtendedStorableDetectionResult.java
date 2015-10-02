@@ -194,7 +194,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	@Override
 	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
 		final ExtendedStorableDetectionResult castedRecord = (ExtendedStorableDetectionResult) record;
-		if (this.anomalyThreshold != castedRecord.anomalyThreshold) return false;
+		if (isEqual(this.anomalyThreshold, castedRecord.anomalyThreshold)) return false;
 		return super.equalsInternal(castedRecord);
 	}
 

@@ -209,10 +209,10 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
 		final StorableDetectionResult castedRecord = (StorableDetectionResult) record;
 		if (!this.applicationName.equals(castedRecord.applicationName)) return false;
-		if (this.value != castedRecord.value) return false;
+		if (isEqual(this.value, castedRecord.value)) return false;
 		if (this.timestamp != castedRecord.timestamp) return false;
-		if (this.forecast != castedRecord.forecast) return false;
-		if (this.score != castedRecord.score) return false;
+		if (isEqual(this.forecast, castedRecord.forecast)) return false;
+		if (isEqual(this.score, castedRecord.score)) return false;
 		return super.equalsInternal(castedRecord);
 	}
 
