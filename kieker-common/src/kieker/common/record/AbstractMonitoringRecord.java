@@ -72,12 +72,22 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		CACHED_KIEKERRECORDS.put("kieker.common.record.flow.trace.Trace", kieker.common.record.flow.trace.TraceMetadata.class);
 	}
 
-	protected static boolean isEqual(final double x, final double y) {
-		return Math.abs(x - y) < VALID_VARIANCE_DOUBLE;
+	protected static boolean isNotEqual(final double x, final double y) {
+		final double diff = x - y;
+		if (diff <= 0.0F) {
+			return (diff < (0.0F - VALID_VARIANCE_DOUBLE));
+		} else {
+			return (diff > VALID_VARIANCE_DOUBLE);
+		}
 	}
 
-	protected static boolean isEqual(final float x, final float y) {
-		return Math.abs(x - y) < VALID_VARIANCE_FLOAT;
+	protected static boolean isNotEqual(final float x, final float y) {
+		final double diff = x - y;
+		if (diff <= 0.0F) {
+			return (diff < (0.0F - VALID_VARIANCE_FLOAT));
+		} else {
+			return (diff > VALID_VARIANCE_FLOAT);
+		}
 	}
 
 	@Override

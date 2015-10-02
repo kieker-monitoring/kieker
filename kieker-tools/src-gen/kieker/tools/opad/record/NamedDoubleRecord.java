@@ -188,7 +188,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		final NamedDoubleRecord castedRecord = (NamedDoubleRecord) record;
 		if (!this.applicationName.equals(castedRecord.applicationName)) return false;
 		if (this.timestamp != castedRecord.timestamp) return false;
-		if (isEqual(this.responseTime, castedRecord.responseTime)) return false;
+		if (isNotEqual(this.responseTime, castedRecord.responseTime)) return false;
 		return super.equalsInternal(castedRecord);
 	}
 

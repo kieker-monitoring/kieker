@@ -361,19 +361,19 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		if (!this.hostname.equals(castedRecord.hostname)) return false;
 		if (!this.interfaceName.equals(castedRecord.interfaceName)) return false;
 		if (this.speed != castedRecord.speed) return false;
-		if (isEqual(this.txBytesPerSecond, castedRecord.txBytesPerSecond)) return false;
-		if (isEqual(this.txCarrierPerSecond, castedRecord.txCarrierPerSecond)) return false;
-		if (isEqual(this.txCollisionsPerSecond, castedRecord.txCollisionsPerSecond)) return false;
-		if (isEqual(this.txDroppedPerSecond, castedRecord.txDroppedPerSecond)) return false;
-		if (isEqual(this.txErrorsPerSecond, castedRecord.txErrorsPerSecond)) return false;
-		if (isEqual(this.txOverrunsPerSecond, castedRecord.txOverrunsPerSecond)) return false;
-		if (isEqual(this.txPacketsPerSecond, castedRecord.txPacketsPerSecond)) return false;
-		if (isEqual(this.rxBytesPerSecond, castedRecord.rxBytesPerSecond)) return false;
-		if (isEqual(this.rxDroppedPerSecond, castedRecord.rxDroppedPerSecond)) return false;
-		if (isEqual(this.rxErrorsPerSecond, castedRecord.rxErrorsPerSecond)) return false;
-		if (isEqual(this.rxFramePerSecond, castedRecord.rxFramePerSecond)) return false;
-		if (isEqual(this.rxOverrunsPerSecond, castedRecord.rxOverrunsPerSecond)) return false;
-		if (isEqual(this.rxPacketsPerSecond, castedRecord.rxPacketsPerSecond)) return false;
+		if (isNotEqual(this.txBytesPerSecond, castedRecord.txBytesPerSecond)) return false;
+		if (isNotEqual(this.txCarrierPerSecond, castedRecord.txCarrierPerSecond)) return false;
+		if (isNotEqual(this.txCollisionsPerSecond, castedRecord.txCollisionsPerSecond)) return false;
+		if (isNotEqual(this.txDroppedPerSecond, castedRecord.txDroppedPerSecond)) return false;
+		if (isNotEqual(this.txErrorsPerSecond, castedRecord.txErrorsPerSecond)) return false;
+		if (isNotEqual(this.txOverrunsPerSecond, castedRecord.txOverrunsPerSecond)) return false;
+		if (isNotEqual(this.txPacketsPerSecond, castedRecord.txPacketsPerSecond)) return false;
+		if (isNotEqual(this.rxBytesPerSecond, castedRecord.rxBytesPerSecond)) return false;
+		if (isNotEqual(this.rxDroppedPerSecond, castedRecord.rxDroppedPerSecond)) return false;
+		if (isNotEqual(this.rxErrorsPerSecond, castedRecord.rxErrorsPerSecond)) return false;
+		if (isNotEqual(this.rxFramePerSecond, castedRecord.rxFramePerSecond)) return false;
+		if (isNotEqual(this.rxOverrunsPerSecond, castedRecord.rxOverrunsPerSecond)) return false;
+		if (isNotEqual(this.rxPacketsPerSecond, castedRecord.rxPacketsPerSecond)) return false;
 		return super.equalsInternal(castedRecord);
 	}
 

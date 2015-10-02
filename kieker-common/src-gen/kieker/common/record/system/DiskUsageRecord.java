@@ -264,12 +264,12 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		if (this.timestamp != castedRecord.timestamp) return false;
 		if (!this.hostname.equals(castedRecord.hostname)) return false;
 		if (!this.deviceName.equals(castedRecord.deviceName)) return false;
-		if (isEqual(this.queue, castedRecord.queue)) return false;
-		if (isEqual(this.readBytesPerSecond, castedRecord.readBytesPerSecond)) return false;
-		if (isEqual(this.readsPerSecond, castedRecord.readsPerSecond)) return false;
-		if (isEqual(this.serviceTime, castedRecord.serviceTime)) return false;
-		if (isEqual(this.writeBytesPerSecond, castedRecord.writeBytesPerSecond)) return false;
-		if (isEqual(this.writesPerSecond, castedRecord.writesPerSecond)) return false;
+		if (isNotEqual(this.queue, castedRecord.queue)) return false;
+		if (isNotEqual(this.readBytesPerSecond, castedRecord.readBytesPerSecond)) return false;
+		if (isNotEqual(this.readsPerSecond, castedRecord.readsPerSecond)) return false;
+		if (isNotEqual(this.serviceTime, castedRecord.serviceTime)) return false;
+		if (isNotEqual(this.writeBytesPerSecond, castedRecord.writeBytesPerSecond)) return false;
+		if (isNotEqual(this.writesPerSecond, castedRecord.writesPerSecond)) return false;
 		return super.equalsInternal(castedRecord);
 	}
 

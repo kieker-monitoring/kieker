@@ -276,13 +276,13 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		if (this.timestamp != castedRecord.timestamp) return false;
 		if (!this.hostname.equals(castedRecord.hostname)) return false;
 		if (!this.cpuID.equals(castedRecord.cpuID)) return false;
-		if (isEqual(this.user, castedRecord.user)) return false;
-		if (isEqual(this.system, castedRecord.system)) return false;
-		if (isEqual(this.wait, castedRecord.wait)) return false;
-		if (isEqual(this.nice, castedRecord.nice)) return false;
-		if (isEqual(this.irq, castedRecord.irq)) return false;
-		if (isEqual(this.totalUtilization, castedRecord.totalUtilization)) return false;
-		if (isEqual(this.idle, castedRecord.idle)) return false;
+		if (isNotEqual(this.user, castedRecord.user)) return false;
+		if (isNotEqual(this.system, castedRecord.system)) return false;
+		if (isNotEqual(this.wait, castedRecord.wait)) return false;
+		if (isNotEqual(this.nice, castedRecord.nice)) return false;
+		if (isNotEqual(this.irq, castedRecord.irq)) return false;
+		if (isNotEqual(this.totalUtilization, castedRecord.totalUtilization)) return false;
+		if (isNotEqual(this.idle, castedRecord.idle)) return false;
 		return super.equalsInternal(castedRecord);
 	}
 

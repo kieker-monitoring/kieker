@@ -214,9 +214,9 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		final LoadAverageRecord castedRecord = (LoadAverageRecord) record;
 		if (this.timestamp != castedRecord.timestamp) return false;
 		if (!this.hostname.equals(castedRecord.hostname)) return false;
-		if (isEqual(this.oneMinLoadAverage, castedRecord.oneMinLoadAverage)) return false;
-		if (isEqual(this.fiveMinLoadAverage, castedRecord.fiveMinLoadAverage)) return false;
-		if (isEqual(this.fifteenMinLoadAverage, castedRecord.fifteenMinLoadAverage)) return false;
+		if (isNotEqual(this.oneMinLoadAverage, castedRecord.oneMinLoadAverage)) return false;
+		if (isNotEqual(this.fiveMinLoadAverage, castedRecord.fiveMinLoadAverage)) return false;
+		if (isNotEqual(this.fifteenMinLoadAverage, castedRecord.fifteenMinLoadAverage)) return false;
 		return super.equalsInternal(castedRecord);
 	}
 
