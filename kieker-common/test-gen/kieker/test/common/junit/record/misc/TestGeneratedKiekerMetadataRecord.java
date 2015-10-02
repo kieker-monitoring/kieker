@@ -51,7 +51,7 @@ public class TestGeneratedKiekerMetadataRecord extends AbstractGeneratedKiekerTe
 
 			// check values
 			Assert.assertEquals("KiekerMetadataRecord.version values are not equal.",
-					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.10" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
+					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.12" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
 			Assert.assertEquals("KiekerMetadataRecord.controllerName values are not equal.",
 					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-controller-name>" : STRING_VALUES.get(i % STRING_VALUES.size()),
 					record.getControllerName());
