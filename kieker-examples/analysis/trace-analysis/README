@@ -1,0 +1,14 @@
+trace-analysis
+
+Description:
+This example shows how to obtain message traces using different kinds of inputs.
+
+
+1. Execute the gradle build
+   Linux: ./gradlew runAnalysis
+   Windows: gradlew.bat runAnalysis
+
+
+OPTIONAL:
+You can edit the src/kieker/examples/analysis/traceanalysis/TraceAnalysisStarter.java file
+to choose a different input. This is marked with "ALTERNATIVE" in the source code.

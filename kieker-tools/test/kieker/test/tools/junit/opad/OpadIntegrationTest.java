@@ -34,7 +34,6 @@ import kieker.tools.opad.filter.AnomalyScoreCalculationFilter;
 import kieker.tools.opad.filter.ExtractionFilter;
 import kieker.tools.opad.filter.ForecastingFilter;
 import kieker.tools.opad.filter.TimeSeriesPointAggregatorFilter;
-import kieker.tools.opad.filter.UniteMeasurementPairFilter;
 import kieker.tools.opad.record.NamedDoubleRecord;
 import kieker.tools.opad.record.StorableDetectionResult;
 
@@ -146,12 +145,6 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 		final ForecastingFilter forecasting = new ForecastingFilter(forecastConfiguration, this.controller);
 		// End - ForecastingFilter
 
-		// Start - UniteMeasurementFilter
-		// UniteMeasurementFilter Configuration
-		final Configuration uniteConfiguration = new Configuration();
-		final UniteMeasurementPairFilter uniteFilter = new UniteMeasurementPairFilter(uniteConfiguration, this.controller);
-		// End - UniteMeasurementFilter
-
 		// Start - AnomalyScoreCalculatorFilter
 		final Configuration scoreConfiguration = new Configuration();
 		final AnomalyScoreCalculationFilter scoreCalc = new AnomalyScoreCalculationFilter(scoreConfiguration, this.controller);
@@ -182,17 +175,10 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 		this.controller
 				.connect(aggregationFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, forecasting,
 						ForecastingFilter.INPUT_PORT_NAME_TSPOINT);
-		// Aggregation Filter -> UniteMeasurementPair Input
+
+		// Forecast Output -> AnomalyScoreCalculation Input
 		this.controller
-				.connect(aggregationFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, uniteFilter,
-						UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT);
-		// Forecast Output -> UniteMeasurementPair Forecast Input
-		this.controller
-				.connect(forecasting, ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, uniteFilter,
-						UniteMeasurementPairFilter.INPUT_PORT_NAME_FORECAST);
-		// UniteMeasurementPair -> AnomalyScoreCalculation Input
-		this.controller
-				.connect(uniteFilter, UniteMeasurementPairFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, scoreCalc,
+				.connect(forecasting, ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, scoreCalc,
 						AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR);
 		// ScoreCalculation Output -> AnomalyDetection Input
 		this.controller

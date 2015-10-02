@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.test.tools.junit.bridge;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
@@ -23,9 +24,9 @@ import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.jms.JMSClientConnector;
 
 /**
- * 
+ *
  * @author Reiner Jung
- * 
+ *
  * @since 1.8
  */
 public class TestJMSClientConnector extends AbstractConnectorTest {
@@ -39,10 +40,11 @@ public class TestJMSClientConnector extends AbstractConnectorTest {
 
 	/**
 	 * Test the JMS client connector.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             on lookup failure for the test record
 	 */
+	@Ignore
 	@Test
 	public void testJMSClientConnector() throws ConnectorDataTransmissionException { // NOPMD
 		final Thread messageGenerator = new Thread(new JMSMessageGenerator(ConfigurationParameters.JMS_URI, ConfigurationParameters.JMS_CLIENT_FACTORY_LOOKUP_NAME),

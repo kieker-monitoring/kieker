@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KIEKER_VERSION="1.12-SNAPSHOT"
+KIEKER_VERSION="1.13"
 BASE_TMP_DIR="$(dirname $0)/../../build/"
 
 DIST_RELEASE_DIR="build/distributions/"
@@ -289,7 +289,7 @@ function assert_files_exist_src {
 # Asserts the existence of files in the bin release and some basic checks on the Kieker jars
 function assert_files_exist_bin {
 	assert_files_exist_common
-	assert_file_exists_regular "doc/kieker-"*"_userguide.pdf"
+	assert_file_exists_regular "doc/kieker-"*"-userguide.pdf"
 
 	echo -n "Making sure (recursively) that 'build' only exists with build/libs/ ..."
 	if find | grep "/build/" | grep -v "build/libs"; then

@@ -1,8 +1,3 @@
-/* 
- * TODOS:
- * 1. Add/extend clean tasks to call example's clean tasks via cleanStandaloneExamples
- */
- 
 defaultTasks 'cleanStandaloneExamples', 'buildStandaloneExamples'
 
 task buildStandaloneExamples(dependsOn: [
@@ -13,6 +8,7 @@ task buildStandaloneExamples(dependsOn: [
 					 'buildStandaloneExamplesUserguideCh5',
 					 'buildStandaloneExamplesUserguideAppendixSigar',
 					 'buildStandaloneExamplesUserguideAppendixJMS', 
+					 'buildStandaloneExamplesUserguideAppendixAMQP',
 					 'buildStandaloneExamplesMonitoringSigar',
 					 'buildStandaloneExamplesMonitoringJVM',
 					 'buildStandaloneExamplesMonitoringSpring',
@@ -22,6 +18,7 @@ task buildStandaloneExamples(dependsOn: [
 					 'buildStandaloneExamplesMonitoringTimesource',
 					 'buildStandaloneExamplesAnalysisKax',
 					 'buildStandaloneExamplesAnalysisOpad',
+					 'buildStandaloneExamplesAnalysisTraceAnalysis',
 					 'buildStandaloneExamplesUserguideAppendixJavaEE', 
 					 'replaceAbsoluteByRelativePathsEclipse']) {
 }
@@ -41,8 +38,9 @@ task replaceHardCodedVersionNames() << {
 }
 
 task replaceAbsoluteByRelativePathsEclipse << {
-        regexpReplaceInFiles(project.file("analysis/kax-files/.classpath"), "path=\".*/lib/", "path=\"lib/")
+    regexpReplaceInFiles(project.file("analysis/kax-files/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("analysis/opad-anomaly-detection/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("analysis/trace-analysis/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("monitoring/probe-spring/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("monitoring/custom-timesource/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("monitoring/probe-manual/.classpath"), "path=\".*/lib/", "path=\"lib/")
@@ -51,6 +49,7 @@ task replaceAbsoluteByRelativePathsEclipse << {
 	regexpReplaceInFiles(project.file("monitoring/adaptive-monitoring/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("monitoring/sampler-jvm/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("userguide/appendix-JMS/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("userguide/appendix-AMQP/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("userguide/ch2--manual-instrumentation/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("userguide/ch2--bookstore-application/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("userguide/appendix-Sigar/.classpath"), "path=\".*/lib/", "path=\"lib/")
@@ -126,6 +125,22 @@ task copyLibsStandaloneExamplesUserguideAppendixJMS(type: Copy, dependsOn: [root
 
 task buildStandaloneExamplesUserguideAppendixJMS(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixJMS') {
 	buildFile = 'userguide/appendix-JMS/build.gradle'
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+}
+
+task copyLibsStandaloneExamplesUserguideAppendixAMQP(type: Copy, dependsOn: [rootProject.emfJar]) {
+	from ('../build/libs') {
+		include "kieker-${version}.jar"
+	}
+	from ('../lib') {
+		include "commons-logging-*.jar"
+		include "amqp-client-*.jar"
+	}
+	into 'userguide/appendix-AMQP/lib/'
+}
+
+task buildStandaloneExamplesUserguideAppendixAMQP(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixAMQP') {
+	buildFile = 'userguide/appendix-AMQP/build.gradle'
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
@@ -277,6 +292,7 @@ task copyLibsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProject.
 		include 'REngine-*.jar'
 		include 'Rserve-*.jar'
 		include 'Rsession-*.jar'
+		include 'opencsv-2.4-SNAPSHOT.jar'
 	}
 	into 'analysis/opad-anomaly-detection/lib/'
 }
@@ -295,9 +311,155 @@ task buildStandaloneExamplesAnalysisOpad(type: GradleBuild, dependsOn: [ 'copyLi
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
-// TODO: Get this working for all examples
-task cleanStandaloneExamples(type: GradleBuild) {
-	description = 'Builds the stand-alone Kieker examples in the subdirectories.'
-	//buildFile = 'userguide/ch2--bookstore-application/build.gradle'
-	//tasks = ['clean']
+task copyLibsStandaloneExamplesAnalysisTraceAnalysis(type: Copy, dependsOn: [rootProject.mainJar]) {
+	from ('../build/libs') {
+		include "kieker-${version}.jar"
+	}
+	into 'analysis/trace-analysis/lib/'
+}
+
+task buildStandaloneExamplesAnalysisTraceAnalysis(type: GradleBuild, dependsOn: [ 'copyLibsStandaloneExamplesAnalysisOpad']) {
+	buildFile = 'analysis/trace-analysis/build.gradle'
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+}
+
+
+task cleanStandaloneExamples(dependsOn: [
+					 'cleanStandaloneExamplesUserguideCh2App', 
+					 'cleanStandaloneExamplesUserguideCh2Instr', 
+					 'cleanStandaloneExamplesUserguideCh34',
+					 'cleanStandaloneExamplesUserguideCh5',
+					 'cleanStandaloneExamplesUserguideAppendixSigar',
+					 'cleanStandaloneExamplesUserguideAppendixJMS',
+					 'cleanStandaloneExamplesUserguideAppendixAMQP',  
+					 'cleanStandaloneExamplesMonitoringSigar',
+					 'cleanStandaloneExamplesMonitoringJVM',
+					 'cleanStandaloneExamplesMonitoringSpring',
+					 'cleanStandaloneExamplesMonitoringManual',
+					 'cleanStandaloneExamplesMonitoringAspectJ',
+					 'cleanStandaloneExamplesMonitoringAdaptive',
+					 'cleanStandaloneExamplesMonitoringTimesource',
+					 'cleanStandaloneExamplesAnalysisKax',
+					 'cleanStandaloneExamplesAnalysisOpad',
+					 'cleanStandaloneExamplesAnalysisTraceAnalysis',
+					 'cleanStandaloneExamplesUserguideAppendixJavaEE']) {
+}
+
+clean.dependsOn cleanStandaloneExamples
+
+task cleanStandaloneExamplesUserguideCh2App(type: GradleBuild) {
+	buildFile = 'userguide/ch2--bookstore-application/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'userguide/ch2--bookstore-application/lib', include: '*.jar')
+}
+
+task cleanStandaloneExamplesUserguideCh2Instr(type: GradleBuild) {
+	buildFile = 'userguide/ch2--manual-instrumentation/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'userguide/ch2--manual-instrumentation/lib', include: '*.jar')
+}
+
+task cleanStandaloneExamplesUserguideCh34(type: GradleBuild) {
+	buildFile = 'userguide/ch3-4--custom-components/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'userguide/ch3-4--custom-components/lib', include: '*.jar')
+}
+
+task cleanStandaloneExamplesUserguideCh5(type: GradleBuild) {
+	buildFile = 'userguide/ch5--trace-monitoring-aspectj/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'userguide/ch5--trace-monitoring-aspectj/lib', include: '*.jar')
+}
+
+task cleanStandaloneExamplesUserguideAppendixSigar(type: GradleBuild) {
+	buildFile = 'userguide/appendix-Sigar/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'userguide/appendix-Sigar/lib', include: '*.jar')
+	delete fileTree(dir: 'userguide/appendix-Sigar/lib', include: '*sigar*')
+}
+
+task cleanStandaloneExamplesUserguideAppendixJMS(type: GradleBuild) {
+	buildFile = 'userguide/appendix-JMS/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'userguide/appendix-JMS/lib', include: '*.jar')
+}
+
+task cleanStandaloneExamplesUserguideAppendixAMQP(type: GradleBuild) {
+	buildFile = 'userguide/appendix-AMQP/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'userguide/appendix-AMQP/lib', include: '*.jar')
+}
+
+task cleanStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild) {
+	buildFile = 'JavaEEServletContainerExample/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'JavaEEServletContainerExample/livedemo-source/lib', include: '*kieker*.jar')
+	delete fileTree(dir: 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib', include: '*sigar*')
+	delete fileTree(dir: 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib', include: 'kieker*')
+	delete 'JavaEEServletContainerExample/jetty/webapps/livedemo.war'
+}
+
+task cleanStandaloneExamplesMonitoringSigar(type: GradleBuild) {
+	buildFile = 'monitoring/sampler-sigar/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'monitoring/sampler-sigar/lib', include: '*.jar')
+	delete fileTree(dir: 'monitoring/sampler-sigar/lib', include: '*sigar*')
+}
+
+task cleanStandaloneExamplesMonitoringJVM(type: GradleBuild) {
+	buildFile = 'monitoring/sampler-jvm/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'monitoring/sampler-jvm/lib', include: '*.jar')
+}
+
+task cleanStandaloneExamplesMonitoringSpring(type: GradleBuild) {
+	buildFile = 'monitoring/probe-spring/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'monitoring/probe-spring/lib', include: '*.jar')
+}
+
+task cleanStandaloneExamplesMonitoringManual(type: GradleBuild) {
+	buildFile = 'monitoring/probe-manual/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'monitoring/probe-manual/lib', include: '*.jar')
+}
+
+task cleanStandaloneExamplesMonitoringAspectJ(type: GradleBuild) {
+	buildFile = 'monitoring/probe-aspectj/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'monitoring/probe-aspectj/lib', include: '*.jar')
+}
+
+task cleanStandaloneExamplesMonitoringAdaptive(type: GradleBuild) {
+	buildFile = 'monitoring/adaptive-monitoring/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'monitoring/adaptive-monitoring/lib', include: '*.jar')
+}
+
+task cleanStandaloneExamplesMonitoringTimesource(type: GradleBuild) {
+	buildFile = 'monitoring/custom-timesource/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'monitoring/custom-timesource/lib', include: '*.jar')
+}
+
+task cleanStandaloneExamplesAnalysisKax(type: GradleBuild) {
+	buildFile = 'analysis/kax-files/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'analysis/kax-files/lib', include: '*.jar')
+}
+
+task cleanStandaloneExamplesAnalysisOpad(type: GradleBuild) {
+	buildFile = 'analysis/opad-anomaly-detection/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'userguide/analysis/opad-anomaly-detection/lib', include: '*.jar')
+	delete 'userguide/analysis/opad-anomaly-detection/rserve-control.sh'
+	delete 'userguide/analysis/opad-anomaly-detection/rserve-control.bat'
+	delete 'userguide/analysis/opad-anomaly-detection/RserveStart.R'
+
+}
+
+task cleanStandaloneExamplesAnalysisTraceAnalysis(type: GradleBuild) {
+	buildFile = 'analysis/trace-analysis/build.gradle'
+	tasks = ['clean']
+	delete fileTree(dir: 'userguide/analysis/trace-analysis/lib', include: '*.jar')
 }

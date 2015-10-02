@@ -2,16 +2,16 @@
 \newcommand{\Kieker}{\textsf{Kieker}}
 
 % The current version-string.
-\newcommand{\version}{1.12-SNAPSHOT} % will be set automatically by ant 'release' target 
+\newcommand{\version}{1.13} % will be set automatically by ant 'release' target 
 
 % The single parts of Kieker and some files.
 \newcommand{\KiekerMonitoringPart}{\textsf{Kieker.\-Monitoring}}
 \newcommand{\KiekerAnalysisPart}{\textsf{Kieker.\-Analysis}}
 \newcommand{\KiekerTraceAnalysis}{\textsf{Kieker.Trace\-Analysis}}
 % \newcommand{\analysisJar}{kieker-analysis-\version.jar}
-\newcommand{\mainJar}{kieker-1.12-SNAPSHOT.jar} % will be set automatically by ant 'release' target
-\newcommand{\mainJarEMF}{kieker-1.12-SNAPSHOT-emf.jar} % will be set automatically by ant 'release' target
-\newcommand{\mainJarWeaver}{kieker-1.12-SNAPSHOT-aspectj.jar} % will be set automatically by ant 'release' target
+\newcommand{\mainJar}{kieker-1.13.jar} % will be set automatically by ant 'release' target
+\newcommand{\mainJarEMF}{kieker-1.13-emf.jar} % will be set automatically by ant 'release' target
+\newcommand{\mainJarWeaver}{kieker-1.13-aspectj.jar} % will be set automatically by ant 'release' target
 % \newcommand{\monitoringJar}{kieker-monitoring-\version.jar}
 % \newcommand{\commonJar}{kieker-common-\version.jar}
 % \newcommand{\toolsJar}{kieker-tools-\version.jar}
@@ -74,6 +74,9 @@
 \newcommand{\JMSBookstoreApplicationDirDistro}{\exampleDir/appendix-JMS}
 \newcommand{\JMSBookstoreApplicationReleaseDirDistro}{\exampleReleaseDir/appendix-JMS}
 
+\newcommand{\AMQPBookstoreApplicationDir}{\exampleDirRelativePath/appendix-AMQP}
+\newcommand{\AMQPBookstoreApplicationReleaseDirDistro}{\exampleReleaseDir/appendix-AMQP}
+
 \newcommand{\SigarExampleDir}{\exampleDirRelativePath/appendix-Sigar}
 \newcommand{\SigarExampleDirDistro}{\exampleDir/appendix-Sigar}
 \newcommand{\SigarExampleReleaseDirDistro}{\exampleReleaseDir/appendix-Sigar}
@@ -98,6 +101,8 @@
 \newcommand{\method}[1]{\textit{#1}}
 \newcommand{\dir}[1]{\texttt{#1}}
 \newcommand{\file}[1]{\texttt{#1}}
+\newcommand{\parameterValue}[1]{\texttt{#1}}
+\newcommand{\hostname}[1]{\texttt{#1}}
 
 % This command formats the "new" files within a directory tree to get the users attention.
 \newcommand{\newFilesDirTreeFormat}{\color{blue}}

@@ -1,4 +1,8 @@
-README for the adaptive monitoring example:
+adaptive-monitoring
+
+Description:
+This example shows how to use the adaptive monitoring with configuration during runtime.
+
 
 1. Start the request loop by invoking
    - Windows: gradlew.bat runMonitoring

@@ -2,9 +2,9 @@ This directory contains a pre-compiled Jar file which can be started with
 the 'java' tool using the following commands:
 
 -UNIX-like systems:
- $ java -cp build/libs/BookstoreApplicationMonitoringAnalysis.jar:lib/kieker-1.12-SNAPSHOT-emf.jar -Dkieker.monitoring.configuration=src-resources/META-INF/kieker.monitoring.properties kieker.examples.userguide.ch3and4bookstore.Starter 
+ $ java -cp build/libs/BookstoreApplicationMonitoringAnalysis.jar:lib/kieker-1.13-emf.jar -Dkieker.monitoring.configuration=src-resources/META-INF/kieker.monitoring.properties kieker.examples.userguide.ch3and4bookstore.Starter 
 - Windows:
- $ java -cp build/libs/BookstoreApplicationMonitoringAnalysis.jar;lib\kieker-1.12-SNAPSHOT-emf.jar -Dkieker.monitoring.configuration=src-resources/META-INF/kieker.monitoring.properties kieker.examples.userguide.ch3and4bookstore.Starter
+ $ java -cp build/libs/BookstoreApplicationMonitoringAnalysis.jar;lib\kieker-1.13-emf.jar -Dkieker.monitoring.configuration=src-resources/META-INF/kieker.monitoring.properties kieker.examples.userguide.ch3and4bookstore.Starter
 
 Alternatively, you can compile the sources and start the application using
 'gradle' with the given 'build.gradle' file:

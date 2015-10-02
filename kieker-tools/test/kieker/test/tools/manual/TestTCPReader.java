@@ -31,7 +31,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 // Command-Line:
-// java -javaagent:lib/kieker-1.12-SNAPSHOT-aspectj.jar -Dkieker.monitoring.writer=kieker.monitoring.writer.tcp.TCPWriter
+// java -javaagent:lib/kieker-1.13-aspectj.jar -Dkieker.monitoring.writer=kieker.monitoring.writer.tcp.TCPWriter
 // -Dkieker.monitoring.writer.tcp.TCPWriter.QueueFullBehavior=1 -jar MooBench.jar --recursiondepth 10 --totalthreads 1 --methodtime 0 --output-filename raw.csv
 // --totalcalls 10000000
 /**
