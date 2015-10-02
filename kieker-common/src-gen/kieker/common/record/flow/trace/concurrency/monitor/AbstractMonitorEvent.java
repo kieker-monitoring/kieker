@@ -106,16 +106,6 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final AbstractMonitorEvent castedRecord = (AbstractMonitorEvent) record;
-		if (this.lockId != castedRecord.lockId) return false;
-		return super.equalsInternal(castedRecord);
-	}
-
 	public final int getLockId() {
 		return this.lockId;
 	}

@@ -157,16 +157,6 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final TimestampRecord castedRecord = (TimestampRecord) record;
-		if (this.timestamp != castedRecord.timestamp) return false;
-		return super.equalsInternal(castedRecord);
-	}
-
 	public final long getTimestamp() {
 		return this.timestamp;
 	}

@@ -191,16 +191,6 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final BeforeConstructorObjectEvent castedRecord = (BeforeConstructorObjectEvent) record;
-		if (this.objectId != castedRecord.objectId) return false;
-		return super.equalsInternal(castedRecord);
-	}
-
 	public final int getObjectId() {
 		return this.objectId;
 	}

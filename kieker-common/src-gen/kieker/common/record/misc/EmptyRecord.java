@@ -146,13 +146,4 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final EmptyRecord castedRecord = (EmptyRecord) record;
-		return super.equalsInternal(castedRecord);
-	}
-
 }

@@ -210,19 +210,6 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final ThreadsStatusRecord castedRecord = (ThreadsStatusRecord) record;
-		if (this.threadCount != castedRecord.threadCount) return false;
-		if (this.daemonThreadCount != castedRecord.daemonThreadCount) return false;
-		if (this.peakThreadCount != castedRecord.peakThreadCount) return false;
-		if (this.totalStartedThreadCount != castedRecord.totalStartedThreadCount) return false;
-		return super.equalsInternal(castedRecord);
-	}
-
 	public final long getThreadCount() {
 		return this.threadCount;
 	}

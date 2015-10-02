@@ -170,13 +170,4 @@ public class MonitorNotifyAllEvent extends AbstractMonitorEvent  {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final MonitorNotifyAllEvent castedRecord = (MonitorNotifyAllEvent) record;
-		return super.equalsInternal(castedRecord);
-	}
-
 }

@@ -250,23 +250,6 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final OperationExecutionRecord castedRecord = (OperationExecutionRecord) record;
-		if (!this.operationSignature.equals(castedRecord.operationSignature)) return false;
-		if (!this.sessionId.equals(castedRecord.sessionId)) return false;
-		if (this.traceId != castedRecord.traceId) return false;
-		if (this.tin != castedRecord.tin) return false;
-		if (this.tout != castedRecord.tout) return false;
-		if (!this.hostname.equals(castedRecord.hostname)) return false;
-		if (this.eoi != castedRecord.eoi) return false;
-		if (this.ess != castedRecord.ess) return false;
-		return super.equalsInternal(castedRecord);
-	}
-
 	public final String getOperationSignature() {
 		return this.operationSignature;
 	}

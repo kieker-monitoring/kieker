@@ -190,17 +190,6 @@ public class CompilationRecord extends AbstractJVMRecord  {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final CompilationRecord castedRecord = (CompilationRecord) record;
-		if (!this.jitCompilerName.equals(castedRecord.jitCompilerName)) return false;
-		if (this.totalCompilationTimeMS != castedRecord.totalCompilationTimeMS) return false;
-		return super.equalsInternal(castedRecord);
-	}
-
 	public final String getJitCompilerName() {
 		return this.jitCompilerName;
 	}

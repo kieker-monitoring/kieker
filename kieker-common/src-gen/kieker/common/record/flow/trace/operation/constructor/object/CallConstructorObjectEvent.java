@@ -217,18 +217,6 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final CallConstructorObjectEvent castedRecord = (CallConstructorObjectEvent) record;
-		if (this.objectId != castedRecord.objectId) return false;
-		if (this.getObjectId() != castedRecord.getObjectId()) return false;
-		if (this.calleeObjectId != castedRecord.calleeObjectId) return false;
-		return super.equalsInternal(castedRecord);
-	}
-
 	public final int getObjectId() {
 		return this.objectId;
 	}

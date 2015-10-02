@@ -242,23 +242,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final MemSwapUsageRecord castedRecord = (MemSwapUsageRecord) record;
-		if (this.timestamp != castedRecord.timestamp) return false;
-		if (!this.hostname.equals(castedRecord.hostname)) return false;
-		if (this.memTotal != castedRecord.memTotal) return false;
-		if (this.memUsed != castedRecord.memUsed) return false;
-		if (this.memFree != castedRecord.memFree) return false;
-		if (this.swapTotal != castedRecord.swapTotal) return false;
-		if (this.swapUsed != castedRecord.swapUsed) return false;
-		if (this.swapFree != castedRecord.swapFree) return false;
-		return super.equalsInternal(castedRecord);
-	}
-
 	public final long getTimestamp() {
 		return this.timestamp;
 	}

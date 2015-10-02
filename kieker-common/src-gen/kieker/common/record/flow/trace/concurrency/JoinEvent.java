@@ -176,16 +176,6 @@ public class JoinEvent extends AbstractTraceEvent  {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final JoinEvent castedRecord = (JoinEvent) record;
-		if (this.joinedTraceId != castedRecord.joinedTraceId) return false;
-		return super.equalsInternal(castedRecord);
-	}
-
 	public final long getJoinedTraceId() {
 		return this.joinedTraceId;
 	}

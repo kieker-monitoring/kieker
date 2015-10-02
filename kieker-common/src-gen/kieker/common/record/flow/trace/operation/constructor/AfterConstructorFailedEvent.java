@@ -186,13 +186,4 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final AfterConstructorFailedEvent castedRecord = (AfterConstructorFailedEvent) record;
-		return super.equalsInternal(castedRecord);
-	}
-
 }

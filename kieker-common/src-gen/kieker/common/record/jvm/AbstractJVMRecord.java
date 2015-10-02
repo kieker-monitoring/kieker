@@ -112,18 +112,6 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final AbstractJVMRecord castedRecord = (AbstractJVMRecord) record;
-		if (this.timestamp != castedRecord.timestamp) return false;
-		if (!this.hostname.equals(castedRecord.hostname)) return false;
-		if (!this.vmName.equals(castedRecord.vmName)) return false;
-		return super.equalsInternal(castedRecord);
-	}
-
 	public final long getTimestamp() {
 		return this.timestamp;
 	}

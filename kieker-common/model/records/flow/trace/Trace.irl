@@ -13,6 +13,7 @@ entity ConstructionEvent extends AbstractTraceEvent {
 	int objectId = 0
 }
 
+/** requires realization of auto-increment feature. 
 @author 'Jan Waller'
 @since '1.5'
 entity TraceMetadata : IFlowRecord {
@@ -24,3 +25,4 @@ entity TraceMetadata : IFlowRecord {
  	int parentOrderId = 0
  	transient auto-increment long nextOrderId = 0 
 }
+*/

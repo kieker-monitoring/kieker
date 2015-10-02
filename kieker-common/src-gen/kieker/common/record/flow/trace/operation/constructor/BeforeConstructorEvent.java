@@ -179,13 +179,4 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final BeforeConstructorEvent castedRecord = (BeforeConstructorEvent) record;
-		return super.equalsInternal(castedRecord);
-	}
-
 }

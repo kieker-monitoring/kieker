@@ -198,16 +198,6 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final BeforeOperationObjectInterfaceEvent castedRecord = (BeforeOperationObjectInterfaceEvent) record;
-		if (!this._interface.equals(castedRecord._interface)) return false;
-		return super.equalsInternal(castedRecord);
-	}
-
 	public final String getInterface() {
 		return this._interface;
 	}

@@ -179,13 +179,4 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final AfterConstructorEvent castedRecord = (AfterConstructorEvent) record;
-		return super.equalsInternal(castedRecord);
-	}
-
 }

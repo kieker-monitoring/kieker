@@ -177,16 +177,6 @@ public class UptimeRecord extends AbstractJVMRecord  {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final UptimeRecord castedRecord = (UptimeRecord) record;
-		if (this.uptimeMS != castedRecord.uptimeMS) return false;
-		return super.equalsInternal(castedRecord);
-	}
-
 	public final long getUptimeMS() {
 		return this.uptimeMS;
 	}

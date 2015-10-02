@@ -198,16 +198,6 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final AfterConstructorFailedObjectEvent castedRecord = (AfterConstructorFailedObjectEvent) record;
-		if (this.objectId != castedRecord.objectId) return false;
-		return super.equalsInternal(castedRecord);
-	}
-
 	public final int getObjectId() {
 		return this.objectId;
 	}

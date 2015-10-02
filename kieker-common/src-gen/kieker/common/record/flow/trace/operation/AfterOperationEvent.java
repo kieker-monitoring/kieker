@@ -178,13 +178,4 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final AfterOperationEvent castedRecord = (AfterOperationEvent) record;
-		return super.equalsInternal(castedRecord);
-	}
-
 }

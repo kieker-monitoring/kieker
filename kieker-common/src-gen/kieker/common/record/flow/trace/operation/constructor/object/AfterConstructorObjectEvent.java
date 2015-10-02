@@ -191,16 +191,6 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final AfterConstructorObjectEvent castedRecord = (AfterConstructorObjectEvent) record;
-		if (this.objectId != castedRecord.objectId) return false;
-		return super.equalsInternal(castedRecord);
-	}
-
 	public final int getObjectId() {
 		return this.objectId;
 	}

@@ -100,16 +100,6 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final AbstractEvent castedRecord = (AbstractEvent) record;
-		if (this.timestamp != castedRecord.timestamp) return false;
-		return super.equalsInternal(castedRecord);
-	}
-
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
