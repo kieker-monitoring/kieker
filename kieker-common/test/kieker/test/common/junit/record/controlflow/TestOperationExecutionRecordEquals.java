@@ -25,14 +25,14 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.2
  */
 public class TestOperationExecutionRecordEquals extends AbstractKiekerTest { // NOCS (MissingCtorCheck)
 
 	/**
 	 * Tests the toArray(..) and initFromArray(..) methods of OperationExecutionRecord.
-	 * 
+	 *
 	 * Assert that a record instance r1 equals an instance r2 created by serializing r1 to an array a1 and using a1 to init r2.
 	 * This ignores a set loggingTimestamp!
 	 */
@@ -58,7 +58,7 @@ public class TestOperationExecutionRecordEquals extends AbstractKiekerTest { // 
 
 	/**
 	 * Tests the equals(..) method of OperationExecutionRecord.
-	 * 
+	 *
 	 * Assert that two record instances with equal variables values are equal.
 	 */
 	@Test
@@ -90,7 +90,7 @@ public class TestOperationExecutionRecordEquals extends AbstractKiekerTest { // 
 
 	/**
 	 * Tests the equals(..) method of OperationExecutionRecord.
-	 * 
+	 *
 	 * Assert that two record instances with differing variables values are not equal.
 	 */
 	@Test
@@ -117,6 +117,6 @@ public class TestOperationExecutionRecordEquals extends AbstractKiekerTest { // 
 				3 // ess
 		);
 
-		Assert.assertFalse(r1.equals(r2));
+		Assert.assertNotEquals(r1, r2);
 	}
 }

@@ -169,7 +169,8 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		if (this.loggingTimestamp != castedRecord.loggingTimestamp) {
 			return false;
 		}
-		return true;
+		// return true;
+		return Arrays.equals(record.toArray(), this.toArray());
 	}
 
 	@Override
