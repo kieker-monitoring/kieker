@@ -210,6 +210,27 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final ThreadsStatusRecord castedRecord = (ThreadsStatusRecord) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
+		if (!this.getVmName().equals(castedRecord.getVmName())) return false;
+		if (this.getThreadCount() != castedRecord.getThreadCount()) return false;
+		if (this.getDaemonThreadCount() != castedRecord.getDaemonThreadCount()) return false;
+		if (this.getPeakThreadCount() != castedRecord.getPeakThreadCount()) return false;
+		if (this.getTotalStartedThreadCount() != castedRecord.getTotalStartedThreadCount()) return false;
+		return true;
+	}
+
 	public final long getThreadCount() {
 		return this.threadCount;
 	}

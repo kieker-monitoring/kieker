@@ -170,4 +170,22 @@ public class MonitorExitEvent extends AbstractMonitorEvent  {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final MonitorExitEvent castedRecord = (MonitorExitEvent) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (this.getTraceId() != castedRecord.getTraceId()) return false;
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
+		if (this.getLockId() != castedRecord.getLockId()) return false;
+		return true;
+	}
+
 }

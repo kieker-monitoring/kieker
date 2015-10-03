@@ -210,14 +210,19 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final LoadAverageRecord castedRecord = (LoadAverageRecord) record;
-		if (this.timestamp != castedRecord.timestamp) return false;
-		if (!this.hostname.equals(castedRecord.hostname)) return false;
-		if (isNotEqual(this.oneMinLoadAverage, castedRecord.oneMinLoadAverage)) return false;
-		if (isNotEqual(this.fiveMinLoadAverage, castedRecord.fiveMinLoadAverage)) return false;
-		if (isNotEqual(this.fifteenMinLoadAverage, castedRecord.fifteenMinLoadAverage)) return false;
-		return super.equalsInternal(castedRecord);
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final LoadAverageRecord castedRecord = (LoadAverageRecord) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
+		if (isNotEqual(this.getOneMinLoadAverage(), castedRecord.getOneMinLoadAverage())) return false;
+		if (isNotEqual(this.getFiveMinLoadAverage(), castedRecord.getFiveMinLoadAverage())) return false;
+		if (isNotEqual(this.getFifteenMinLoadAverage(), castedRecord.getFifteenMinLoadAverage())) return false;
+		return true;
 	}
 
 	public final long getTimestamp() {

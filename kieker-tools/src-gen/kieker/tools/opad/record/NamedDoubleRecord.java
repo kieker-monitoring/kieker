@@ -184,12 +184,17 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final NamedDoubleRecord castedRecord = (NamedDoubleRecord) record;
-		if (!this.applicationName.equals(castedRecord.applicationName)) return false;
-		if (this.timestamp != castedRecord.timestamp) return false;
-		if (isNotEqual(this.responseTime, castedRecord.responseTime)) return false;
-		return super.equalsInternal(castedRecord);
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final NamedDoubleRecord castedRecord = (NamedDoubleRecord) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (isNotEqual(this.getResponseTime(), castedRecord.getResponseTime())) return false;
+		return true;
 	}
 
 	public final String getApplicationName() {

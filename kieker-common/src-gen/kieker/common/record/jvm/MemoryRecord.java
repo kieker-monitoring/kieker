@@ -265,6 +265,32 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final MemoryRecord castedRecord = (MemoryRecord) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
+		if (!this.getVmName().equals(castedRecord.getVmName())) return false;
+		if (this.getHeapMaxBytes() != castedRecord.getHeapMaxBytes()) return false;
+		if (this.getHeapUsedBytes() != castedRecord.getHeapUsedBytes()) return false;
+		if (this.getHeapCommittedBytes() != castedRecord.getHeapCommittedBytes()) return false;
+		if (this.getHeapInitBytes() != castedRecord.getHeapInitBytes()) return false;
+		if (this.getNonHeapMaxBytes() != castedRecord.getNonHeapMaxBytes()) return false;
+		if (this.getNonHeapUsedBytes() != castedRecord.getNonHeapUsedBytes()) return false;
+		if (this.getNonHeapCommittedBytes() != castedRecord.getNonHeapCommittedBytes()) return false;
+		if (this.getNonHeapInitBytes() != castedRecord.getNonHeapInitBytes()) return false;
+		if (this.getObjectPendingFinalizationCount() != castedRecord.getObjectPendingFinalizationCount()) return false;
+		return true;
+	}
+
 	public final long getHeapMaxBytes() {
 		return this.heapMaxBytes;
 	}

@@ -199,13 +199,18 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final ResourceUtilizationRecord castedRecord = (ResourceUtilizationRecord) record;
-		if (this.timestamp != castedRecord.timestamp) return false;
-		if (!this.hostname.equals(castedRecord.hostname)) return false;
-		if (!this.resourceName.equals(castedRecord.resourceName)) return false;
-		if (isNotEqual(this.utilization, castedRecord.utilization)) return false;
-		return super.equalsInternal(castedRecord);
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final ResourceUtilizationRecord castedRecord = (ResourceUtilizationRecord) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
+		if (!this.getResourceName().equals(castedRecord.getResourceName())) return false;
+		if (isNotEqual(this.getUtilization(), castedRecord.getUtilization())) return false;
+		return true;
 	}
 
 	public final long getTimestamp() {

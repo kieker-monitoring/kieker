@@ -259,18 +259,23 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final DiskUsageRecord castedRecord = (DiskUsageRecord) record;
-		if (this.timestamp != castedRecord.timestamp) return false;
-		if (!this.hostname.equals(castedRecord.hostname)) return false;
-		if (!this.deviceName.equals(castedRecord.deviceName)) return false;
-		if (isNotEqual(this.queue, castedRecord.queue)) return false;
-		if (isNotEqual(this.readBytesPerSecond, castedRecord.readBytesPerSecond)) return false;
-		if (isNotEqual(this.readsPerSecond, castedRecord.readsPerSecond)) return false;
-		if (isNotEqual(this.serviceTime, castedRecord.serviceTime)) return false;
-		if (isNotEqual(this.writeBytesPerSecond, castedRecord.writeBytesPerSecond)) return false;
-		if (isNotEqual(this.writesPerSecond, castedRecord.writesPerSecond)) return false;
-		return super.equalsInternal(castedRecord);
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final DiskUsageRecord castedRecord = (DiskUsageRecord) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
+		if (!this.getDeviceName().equals(castedRecord.getDeviceName())) return false;
+		if (isNotEqual(this.getQueue(), castedRecord.getQueue())) return false;
+		if (isNotEqual(this.getReadBytesPerSecond(), castedRecord.getReadBytesPerSecond())) return false;
+		if (isNotEqual(this.getReadsPerSecond(), castedRecord.getReadsPerSecond())) return false;
+		if (isNotEqual(this.getServiceTime(), castedRecord.getServiceTime())) return false;
+		if (isNotEqual(this.getWriteBytesPerSecond(), castedRecord.getWriteBytesPerSecond())) return false;
+		if (isNotEqual(this.getWritesPerSecond(), castedRecord.getWritesPerSecond())) return false;
+		return true;
 	}
 
 	public final long getTimestamp() {

@@ -201,6 +201,26 @@ public class GCRecord extends AbstractJVMRecord  {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final GCRecord castedRecord = (GCRecord) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
+		if (!this.getVmName().equals(castedRecord.getVmName())) return false;
+		if (!this.getGcName().equals(castedRecord.getGcName())) return false;
+		if (this.getCollectionCount() != castedRecord.getCollectionCount()) return false;
+		if (this.getCollectionTimeMS() != castedRecord.getCollectionTimeMS()) return false;
+		return true;
+	}
+
 	public final String getGcName() {
 		return this.gcName;
 	}

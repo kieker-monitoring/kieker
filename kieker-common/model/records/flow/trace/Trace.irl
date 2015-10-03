@@ -13,7 +13,7 @@ entity ConstructionEvent extends AbstractTraceEvent {
 	int objectId = 0
 }
 
-/** requires realization of auto-increment feature. 
+/** requires realization of auto-increment feature.
 @author 'Jan Waller'
 @since '1.5'
 entity TraceMetadata : IFlowRecord {

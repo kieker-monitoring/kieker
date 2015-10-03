@@ -355,26 +355,31 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final NetworkUtilizationRecord castedRecord = (NetworkUtilizationRecord) record;
-		if (this.timestamp != castedRecord.timestamp) return false;
-		if (!this.hostname.equals(castedRecord.hostname)) return false;
-		if (!this.interfaceName.equals(castedRecord.interfaceName)) return false;
-		if (this.speed != castedRecord.speed) return false;
-		if (isNotEqual(this.txBytesPerSecond, castedRecord.txBytesPerSecond)) return false;
-		if (isNotEqual(this.txCarrierPerSecond, castedRecord.txCarrierPerSecond)) return false;
-		if (isNotEqual(this.txCollisionsPerSecond, castedRecord.txCollisionsPerSecond)) return false;
-		if (isNotEqual(this.txDroppedPerSecond, castedRecord.txDroppedPerSecond)) return false;
-		if (isNotEqual(this.txErrorsPerSecond, castedRecord.txErrorsPerSecond)) return false;
-		if (isNotEqual(this.txOverrunsPerSecond, castedRecord.txOverrunsPerSecond)) return false;
-		if (isNotEqual(this.txPacketsPerSecond, castedRecord.txPacketsPerSecond)) return false;
-		if (isNotEqual(this.rxBytesPerSecond, castedRecord.rxBytesPerSecond)) return false;
-		if (isNotEqual(this.rxDroppedPerSecond, castedRecord.rxDroppedPerSecond)) return false;
-		if (isNotEqual(this.rxErrorsPerSecond, castedRecord.rxErrorsPerSecond)) return false;
-		if (isNotEqual(this.rxFramePerSecond, castedRecord.rxFramePerSecond)) return false;
-		if (isNotEqual(this.rxOverrunsPerSecond, castedRecord.rxOverrunsPerSecond)) return false;
-		if (isNotEqual(this.rxPacketsPerSecond, castedRecord.rxPacketsPerSecond)) return false;
-		return super.equalsInternal(castedRecord);
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final NetworkUtilizationRecord castedRecord = (NetworkUtilizationRecord) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
+		if (!this.getInterfaceName().equals(castedRecord.getInterfaceName())) return false;
+		if (this.getSpeed() != castedRecord.getSpeed()) return false;
+		if (isNotEqual(this.getTxBytesPerSecond(), castedRecord.getTxBytesPerSecond())) return false;
+		if (isNotEqual(this.getTxCarrierPerSecond(), castedRecord.getTxCarrierPerSecond())) return false;
+		if (isNotEqual(this.getTxCollisionsPerSecond(), castedRecord.getTxCollisionsPerSecond())) return false;
+		if (isNotEqual(this.getTxDroppedPerSecond(), castedRecord.getTxDroppedPerSecond())) return false;
+		if (isNotEqual(this.getTxErrorsPerSecond(), castedRecord.getTxErrorsPerSecond())) return false;
+		if (isNotEqual(this.getTxOverrunsPerSecond(), castedRecord.getTxOverrunsPerSecond())) return false;
+		if (isNotEqual(this.getTxPacketsPerSecond(), castedRecord.getTxPacketsPerSecond())) return false;
+		if (isNotEqual(this.getRxBytesPerSecond(), castedRecord.getRxBytesPerSecond())) return false;
+		if (isNotEqual(this.getRxDroppedPerSecond(), castedRecord.getRxDroppedPerSecond())) return false;
+		if (isNotEqual(this.getRxErrorsPerSecond(), castedRecord.getRxErrorsPerSecond())) return false;
+		if (isNotEqual(this.getRxFramePerSecond(), castedRecord.getRxFramePerSecond())) return false;
+		if (isNotEqual(this.getRxOverrunsPerSecond(), castedRecord.getRxOverrunsPerSecond())) return false;
+		if (isNotEqual(this.getRxPacketsPerSecond(), castedRecord.getRxPacketsPerSecond())) return false;
+		return true;
 	}
 
 	public final long getTimestamp() {

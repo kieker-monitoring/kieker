@@ -184,12 +184,17 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final NamedTSPoint castedRecord = (NamedTSPoint) record;
-		if (this.timestamp != castedRecord.timestamp) return false;
-		if (isNotEqual(this.value, castedRecord.value)) return false;
-		if (!this.name.equals(castedRecord.name)) return false;
-		return super.equalsInternal(castedRecord);
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final NamedTSPoint castedRecord = (NamedTSPoint) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (isNotEqual(this.getValue(), castedRecord.getValue())) return false;
+		if (!this.getName().equals(castedRecord.getName())) return false;
+		return true;
 	}
 
 	public final long getTimestamp() {

@@ -176,6 +176,24 @@ public class JoinEvent extends AbstractTraceEvent  {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final JoinEvent castedRecord = (JoinEvent) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (this.getTraceId() != castedRecord.getTraceId()) return false;
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
+		if (this.getJoinedTraceId() != castedRecord.getJoinedTraceId()) return false;
+		return true;
+	}
+
 	public final long getJoinedTraceId() {
 		return this.joinedTraceId;
 	}

@@ -171,11 +171,16 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final AggregationWindow castedRecord = (AggregationWindow) record;
-		if (this.windowStart != castedRecord.windowStart) return false;
-		if (this.windowEnd != castedRecord.windowEnd) return false;
-		return super.equalsInternal(castedRecord);
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final AggregationWindow castedRecord = (AggregationWindow) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getWindowStart() != castedRecord.getWindowStart()) return false;
+		if (this.getWindowEnd() != castedRecord.getWindowEnd()) return false;
+		return true;
 	}
 
 	public final long getWindowStart() {

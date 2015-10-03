@@ -51,7 +51,7 @@ public class TestGeneratedKiekerMetadataRecord extends AbstractGeneratedKiekerTe
 
 			// check values
 			Assert.assertEquals("KiekerMetadataRecord.version values are not equal.",
-					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.12" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
+					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.13" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
 			Assert.assertEquals("KiekerMetadataRecord.controllerName values are not equal.",
 					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-controller-name>" : STRING_VALUES.get(i % STRING_VALUES.size()),
 					record.getControllerName());
@@ -101,29 +101,21 @@ public class TestGeneratedKiekerMetadataRecord extends AbstractGeneratedKiekerTe
 
 			// check all object values
 			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
-					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.10" : STRING_VALUES.get(i % STRING_VALUES.size()), values[0]
-					);
+					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.13" : STRING_VALUES.get(i % STRING_VALUES.size()), values[0]);
 			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
-					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-controller-name>" : STRING_VALUES.get(i % STRING_VALUES.size()), values[1]
-					);
+					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-controller-name>" : STRING_VALUES.get(i % STRING_VALUES.size()), values[1]);
 			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
-					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-hostname>" : STRING_VALUES.get(i % STRING_VALUES.size()), values[2]
-					);
+					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-hostname>" : STRING_VALUES.get(i % STRING_VALUES.size()), values[2]);
 			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + INT_VALUES.get(i % INT_VALUES.size()),
-					INT_VALUES.get(i % INT_VALUES.size()), values[3]
-					);
+					INT_VALUES.get(i % INT_VALUES.size()), values[3]);
 			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + BOOLEAN_VALUES.get(i % BOOLEAN_VALUES.size()),
-					BOOLEAN_VALUES.get(i % BOOLEAN_VALUES.size()), values[4]
-					);
+					BOOLEAN_VALUES.get(i % BOOLEAN_VALUES.size()), values[4]);
 			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
-					LONG_VALUES.get(i % LONG_VALUES.size()), values[5]
-					);
+					LONG_VALUES.get(i % LONG_VALUES.size()), values[5]);
 			Assert.assertEquals("Array value [6] " + values[6] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
-					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "NANOSECONDS" : STRING_VALUES.get(i % STRING_VALUES.size()), values[6]
-					);
+					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "NANOSECONDS" : STRING_VALUES.get(i % STRING_VALUES.size()), values[6]);
 			Assert.assertEquals("Array value [7] " + values[7] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
-					LONG_VALUES.get(i % LONG_VALUES.size()), values[7]
-					);
+					LONG_VALUES.get(i % LONG_VALUES.size()), values[7]);
 		}
 	}
 
@@ -140,7 +132,7 @@ public class TestGeneratedKiekerMetadataRecord extends AbstractGeneratedKiekerTe
 
 			// check values
 			Assert.assertEquals("KiekerMetadataRecord.version values are not equal.",
-					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.10" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
+					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.13" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
 			Assert.assertEquals("KiekerMetadataRecord.controllerName values are not equal.",
 					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-controller-name>" : STRING_VALUES.get(i % STRING_VALUES.size()),
 					record.getControllerName());
@@ -170,7 +162,7 @@ public class TestGeneratedKiekerMetadataRecord extends AbstractGeneratedKiekerTe
 
 			// check values
 			Assert.assertEquals("KiekerMetadataRecord.version values are not equal.",
-					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.10" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
+					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.13" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
 			Assert.assertEquals("KiekerMetadataRecord.controllerName values are not equal.",
 					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-controller-name>" : STRING_VALUES.get(i % STRING_VALUES.size()),
 					record.getControllerName());
@@ -185,5 +177,33 @@ public class TestGeneratedKiekerMetadataRecord extends AbstractGeneratedKiekerTe
 			Assert.assertEquals("KiekerMetadataRecord.numberOfRecords values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()),
 					record.getNumberOfRecords());
 		}
+	}
+
+	@Test
+	public void testEquality() {
+		int i = 0;
+		final KiekerMetadataRecord oneRecord = new KiekerMetadataRecord(STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), BOOLEAN_VALUES.get(i % BOOLEAN_VALUES.size()),
+				LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
+		i = 0;
+		final KiekerMetadataRecord copiedRecord = new KiekerMetadataRecord(STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), BOOLEAN_VALUES.get(i % BOOLEAN_VALUES.size()),
+				LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
+
+		Assert.assertEquals(oneRecord, copiedRecord);
+	}
+
+	@Test
+	public void testUnequality() {
+		int i = 0;
+		final KiekerMetadataRecord oneRecord = new KiekerMetadataRecord(STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), BOOLEAN_VALUES.get(i % BOOLEAN_VALUES.size()),
+				LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
+		i = 1;
+		final KiekerMetadataRecord anotherRecord = new KiekerMetadataRecord(STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), BOOLEAN_VALUES.get(i % BOOLEAN_VALUES.size()),
+				LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
+
+		Assert.assertNotEquals(oneRecord, anotherRecord);
 	}
 }

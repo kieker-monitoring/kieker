@@ -192,10 +192,20 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final ExtendedStorableDetectionResult castedRecord = (ExtendedStorableDetectionResult) record;
-		if (isNotEqual(this.anomalyThreshold, castedRecord.anomalyThreshold)) return false;
-		return super.equalsInternal(castedRecord);
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final ExtendedStorableDetectionResult castedRecord = (ExtendedStorableDetectionResult) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) return false;
+		if (isNotEqual(this.getValue(), castedRecord.getValue())) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (isNotEqual(this.getForecast(), castedRecord.getForecast())) return false;
+		if (isNotEqual(this.getScore(), castedRecord.getScore())) return false;
+		if (isNotEqual(this.getAnomalyThreshold(), castedRecord.getAnomalyThreshold())) return false;
+		return true;
 	}
 
 	public final double getAnomalyThreshold() {

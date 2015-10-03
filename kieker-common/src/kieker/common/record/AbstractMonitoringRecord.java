@@ -140,37 +140,28 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 
 	/**
 	 * <p>
-	 * Performs a null-check, a this-check, and a class-check.
-	 * Moreover, it invokes {@link #equalsInternal(IMonitoringRecord)} and compares the <code>loggingTimestamp</code>.
+	 * Performs a null-check, a this-check, and a class-check. Moreover, it checks each attribute for equality.
 	 * </p>
 	 *
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final boolean equals(final Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj == null) {
 			return false;
-		} else if (this == obj) {
+		}
+		if (this == obj) {
 			return true;
-		} else if (obj.getClass() != this.getClass()) {
+		}
+		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		return this.equalsInternal((IMonitoringRecord) obj);
-	}
 
-	/**
-	 * Indicates whether some other monitoring record of this type has the same attribute values as this one.
-	 *
-	 * @param record
-	 *            a non-null monitoring record of the same record type as this one
-	 */
-	protected boolean equalsInternal(final IMonitoringRecord record) {
-		final AbstractMonitoringRecord castedRecord = (AbstractMonitoringRecord) record;
-		if (this.loggingTimestamp != castedRecord.loggingTimestamp) {
+		final AbstractMonitoringRecord castedRecord = (AbstractMonitoringRecord) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
 		}
-		// return true;
-		return Arrays.equals(record.toArray(), this.toArray());
+		return Arrays.equals(this.toArray(), castedRecord.toArray());
 	}
 
 	@Override

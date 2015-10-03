@@ -249,6 +249,28 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final KiekerMetadataRecord castedRecord = (KiekerMetadataRecord) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (!this.getVersion().equals(castedRecord.getVersion())) return false;
+		if (!this.getControllerName().equals(castedRecord.getControllerName())) return false;
+		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
+		if (this.getExperimentId() != castedRecord.getExperimentId()) return false;
+		if (this.isDebugMode() != castedRecord.isDebugMode()) return false;
+		if (this.getTimeOffset() != castedRecord.getTimeOffset()) return false;
+		if (!this.getTimeUnit().equals(castedRecord.getTimeUnit())) return false;
+		if (this.getNumberOfRecords() != castedRecord.getNumberOfRecords()) return false;
+		return true;
+	}
+
 	public final String getVersion() {
 		return this.version;
 	}

@@ -271,19 +271,24 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final CPUUtilizationRecord castedRecord = (CPUUtilizationRecord) record;
-		if (this.timestamp != castedRecord.timestamp) return false;
-		if (!this.hostname.equals(castedRecord.hostname)) return false;
-		if (!this.cpuID.equals(castedRecord.cpuID)) return false;
-		if (isNotEqual(this.user, castedRecord.user)) return false;
-		if (isNotEqual(this.system, castedRecord.system)) return false;
-		if (isNotEqual(this.wait, castedRecord.wait)) return false;
-		if (isNotEqual(this.nice, castedRecord.nice)) return false;
-		if (isNotEqual(this.irq, castedRecord.irq)) return false;
-		if (isNotEqual(this.totalUtilization, castedRecord.totalUtilization)) return false;
-		if (isNotEqual(this.idle, castedRecord.idle)) return false;
-		return super.equalsInternal(castedRecord);
+	public boolean equals(Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final CPUUtilizationRecord castedRecord = (CPUUtilizationRecord) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
+		if (!this.getCpuID().equals(castedRecord.getCpuID())) return false;
+		if (isNotEqual(this.getUser(), castedRecord.getUser())) return false;
+		if (isNotEqual(this.getSystem(), castedRecord.getSystem())) return false;
+		if (isNotEqual(this.getWait(), castedRecord.getWait())) return false;
+		if (isNotEqual(this.getNice(), castedRecord.getNice())) return false;
+		if (isNotEqual(this.getIrq(), castedRecord.getIrq())) return false;
+		if (isNotEqual(this.getTotalUtilization(), castedRecord.getTotalUtilization())) return false;
+		if (isNotEqual(this.getIdle(), castedRecord.getIdle())) return false;
+		return true;
 	}
 
 	public final long getTimestamp() {

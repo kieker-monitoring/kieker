@@ -182,30 +182,43 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean equalsInternal(final kieker.common.record.IMonitoringRecord record) {
-		final TraceMetadata castedRecord = (TraceMetadata) record;
-		if (this.traceId != castedRecord.traceId) {
+	public boolean equals(final Object obj) {
+		if (obj == null) {
 			return false;
 		}
-		if (this.threadId != castedRecord.threadId) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		if (!this.sessionId.equals(castedRecord.sessionId)) {
+
+		final TraceMetadata castedRecord = (TraceMetadata) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
 		}
-		if (!this.hostname.equals(castedRecord.hostname)) {
+		if (this.getTraceId() != castedRecord.getTraceId()) {
 			return false;
 		}
-		if (this.parentTraceId != castedRecord.parentTraceId) {
+		if (this.getThreadId() != castedRecord.getThreadId()) {
 			return false;
 		}
-		if (this.parentOrderId != castedRecord.parentOrderId) {
+		if (!this.getSessionId().equals(castedRecord.getSessionId())) {
 			return false;
 		}
-		if (this.nextOrderId != castedRecord.nextOrderId) {
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
 			return false;
 		}
-		return super.equalsInternal(castedRecord);
+		if (this.getParentTraceId() != castedRecord.getParentTraceId()) {
+			return false;
+		}
+		if (this.getParentOrderId() != castedRecord.getParentOrderId()) {
+			return false;
+		}
+		if (this.getNextOrderId() != castedRecord.getNextOrderId()) {
+			return false;
+		}
+		return true;
 	}
 
 	public final long getTraceId() {

@@ -250,6 +250,28 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final OperationExecutionRecord castedRecord = (OperationExecutionRecord) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
+		if (!this.getSessionId().equals(castedRecord.getSessionId())) return false;
+		if (this.getTraceId() != castedRecord.getTraceId()) return false;
+		if (this.getTin() != castedRecord.getTin()) return false;
+		if (this.getTout() != castedRecord.getTout()) return false;
+		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
+		if (this.getEoi() != castedRecord.getEoi()) return false;
+		if (this.getEss() != castedRecord.getEss()) return false;
+		return true;
+	}
+
 	public final String getOperationSignature() {
 		return this.operationSignature;
 	}

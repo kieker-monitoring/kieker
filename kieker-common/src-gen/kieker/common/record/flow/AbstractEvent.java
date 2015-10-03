@@ -100,6 +100,21 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final AbstractEvent castedRecord = (AbstractEvent) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		return true;
+	}
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}

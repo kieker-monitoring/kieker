@@ -242,6 +242,28 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final MemSwapUsageRecord castedRecord = (MemSwapUsageRecord) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
+		if (this.getMemTotal() != castedRecord.getMemTotal()) return false;
+		if (this.getMemUsed() != castedRecord.getMemUsed()) return false;
+		if (this.getMemFree() != castedRecord.getMemFree()) return false;
+		if (this.getSwapTotal() != castedRecord.getSwapTotal()) return false;
+		if (this.getSwapUsed() != castedRecord.getSwapUsed()) return false;
+		if (this.getSwapFree() != castedRecord.getSwapFree()) return false;
+		return true;
+	}
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}

@@ -191,6 +191,26 @@ public class AfterOperationObjectEvent extends AfterOperationEvent implements IO
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
+		final AfterOperationObjectEvent castedRecord = (AfterOperationObjectEvent) obj;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (this.getTraceId() != castedRecord.getTraceId()) return false;
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
+		if (this.getObjectId() != castedRecord.getObjectId()) return false;
+		return true;
+	}
+
 	public final int getObjectId() {
 		return this.objectId;
 	}
