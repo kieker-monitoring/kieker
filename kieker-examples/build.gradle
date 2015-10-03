@@ -318,11 +318,10 @@ task copyLibsStandaloneExamplesAnalysisTraceAnalysis(type: Copy, dependsOn: [roo
 	into 'analysis/trace-analysis/lib/'
 }
 
-task buildStandaloneExamplesAnalysisTraceAnalysis(type: GradleBuild, dependsOn: [ 'copyLibsStandaloneExamplesAnalysisOpad']) {
+task buildStandaloneExamplesAnalysisTraceAnalysis(type: GradleBuild, dependsOn: [ 'copyLibsStandaloneExamplesAnalysisTraceAnalysis']) {
 	buildFile = 'analysis/trace-analysis/build.gradle'
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
-
 
 task cleanStandaloneExamples(dependsOn: [
 					 'cleanStandaloneExamplesUserguideCh2App', 
@@ -461,5 +460,5 @@ task cleanStandaloneExamplesAnalysisOpad(type: GradleBuild) {
 task cleanStandaloneExamplesAnalysisTraceAnalysis(type: GradleBuild) {
 	buildFile = 'analysis/trace-analysis/build.gradle'
 	tasks = ['clean']
-	delete fileTree(dir: 'userguide/analysis/trace-analysis/lib', include: '*.jar')
+	delete fileTree(dir: 'analysis/trace-analysis/lib', include: '*.jar')
 }
