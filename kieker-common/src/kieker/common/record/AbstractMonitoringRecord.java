@@ -74,15 +74,15 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 
 	protected static boolean isNotEqual(final double x, final double y) {
 		final double diff = x - y;
-		if (diff <= 0.0F) {
-			return (diff < (0.0F - VALID_VARIANCE_DOUBLE));
+		if (diff <= 0.0D) {
+			return (diff < (0.0D - VALID_VARIANCE_DOUBLE));
 		} else {
 			return (diff > VALID_VARIANCE_DOUBLE);
 		}
 	}
 
 	protected static boolean isNotEqual(final float x, final float y) {
-		final double diff = x - y;
+		final float diff = x - y;
 		if (diff <= 0.0F) {
 			return (diff < (0.0F - VALID_VARIANCE_FLOAT));
 		} else {
