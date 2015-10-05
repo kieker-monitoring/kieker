@@ -51,7 +51,7 @@ public class TestGeneratedKiekerMetadataRecord extends AbstractGeneratedKiekerTe
 
 			// check values
 			Assert.assertEquals("KiekerMetadataRecord.version values are not equal.",
-					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.13" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
+					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.13-SNAPSHOT" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
 			Assert.assertEquals("KiekerMetadataRecord.controllerName values are not equal.",
 					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-controller-name>" : STRING_VALUES.get(i % STRING_VALUES.size()),
 					record.getControllerName());
@@ -101,7 +101,7 @@ public class TestGeneratedKiekerMetadataRecord extends AbstractGeneratedKiekerTe
 
 			// check all object values
 			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
-					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.13" : STRING_VALUES.get(i % STRING_VALUES.size()), values[0]);
+					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.13-SNAPSHOT" : STRING_VALUES.get(i % STRING_VALUES.size()), values[0]);
 			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
 					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-controller-name>" : STRING_VALUES.get(i % STRING_VALUES.size()), values[1]);
 			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
@@ -132,7 +132,7 @@ public class TestGeneratedKiekerMetadataRecord extends AbstractGeneratedKiekerTe
 
 			// check values
 			Assert.assertEquals("KiekerMetadataRecord.version values are not equal.",
-					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.13" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
+					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.13-SNAPSHOT" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
 			Assert.assertEquals("KiekerMetadataRecord.controllerName values are not equal.",
 					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-controller-name>" : STRING_VALUES.get(i % STRING_VALUES.size()),
 					record.getControllerName());
@@ -162,7 +162,7 @@ public class TestGeneratedKiekerMetadataRecord extends AbstractGeneratedKiekerTe
 
 			// check values
 			Assert.assertEquals("KiekerMetadataRecord.version values are not equal.",
-					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.13" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
+					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.13-SNAPSHOT" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
 			Assert.assertEquals("KiekerMetadataRecord.controllerName values are not equal.",
 					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-controller-name>" : STRING_VALUES.get(i % STRING_VALUES.size()),
 					record.getControllerName());
