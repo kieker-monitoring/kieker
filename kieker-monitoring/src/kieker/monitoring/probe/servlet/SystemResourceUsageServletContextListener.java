@@ -24,45 +24,45 @@ import kieker.monitoring.sampler.sigar.SigarSamplerFactory;
  * <p>
  * Starts and stops the periodic logging of various system resource samplers provided by the {@link SigarSamplerFactory} as the Servlet is initialized and destroyed
  * respectively. <br/>
- * 
+ *
  * The initial delay and the sampling period (both given in seconds) can be configured via context-params in the web.xml file, as shown below.
- * 
+ *
  * Note that the set of included samplers will be extended with new samplers becoming available in the {@link SigarSamplerFactory}.
  * </p>
- * 
+ *
  * <p>
  * The integration and configuration in a web.xml file works as follows:<br/>
- * 
+ *
  * <pre>
  *  {@code
  *  <web-app>
  *  ...
- *  
+ *
  *  <context-param>
  *   <param-name>SystemResourceUsageServletContextListener.samplingIntervalSeconds</param-name>
  *   <param-value>15</param-value>
  *  </context-param>
- *  
+ *
  *  <context-param>
  *   <param-name>SystemResourceUsageServletContextListener.initialSamplingDelaySeconds</param-name>
  *   <param-value>0</param-value>
  *  </context-param>
- *  
+ *
  *  <listener>
  *    <listener-class>
  *     kieker.monitoring.probe.servlet.SystemResourceUsageServletContextListener
  *    </listener-class>
  *  </listener>
- * 
- * ... 
+ *
+ * ...
  * </web-app>}
  * }
  * </pre>
- * 
+ *
  * </p>
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.12
  */
 public class SystemResourceUsageServletContextListener extends AbstractRegularSamplingServletContextListener {
@@ -99,7 +99,7 @@ public class SystemResourceUsageServletContextListener extends AbstractRegularSa
 	protected ISampler[] createSamplers() {
 		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.INSTANCE;
 		return new ISampler[] { sigarFactory.createSensorCPUsDetailedPerc(), sigarFactory.createSensorMemSwapUsage(),
-			sigarFactory.createSensorDiskUsage(), sigarFactory.createSensorLoadAverage(), sigarFactory.createSensorNetworkUtilization() };
+			sigarFactory.createSensorDiskUsage(), sigarFactory.createSensorLoadAverage(), sigarFactory.createSensorNetworkUtilization(), };
 	}
 
 }

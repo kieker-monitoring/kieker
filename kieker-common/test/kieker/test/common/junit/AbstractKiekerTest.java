@@ -29,9 +29,9 @@ import kieker.common.logging.LogImplJUnit;
 
 /**
  * This abstract class is the base for all other JUnit tests within the system.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
@@ -45,10 +45,6 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 		LOG = LogFactory.getLog(AbstractKiekerTest.class);
 	}
 
-	/** This rule makes sure that we can dump the name of the currently executed test on the screen. */
-	@Rule
-	public TestName nameOfCurrentTest = new TestName(); // NOPMD NOCS
-
 	/**
 	 * Workaround to let JUnit tests with relative references to files within the respective
 	 * module execute in settings where they are execute as modules but also in settings
@@ -56,7 +52,7 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 	 * when executing tests is the subdirectory of the respective module, e.g., <i>kieker-common</i>;
 	 * when executing within Eclipse, the working directory is Kieker's project root directory.
 	 * This causes problems when relative paths within the modules are used by the tests.
-	 * 
+	 *
 	 * Note that the path ends with '/'.
 	 */
 	private volatile String testModulePrefix = "./";
@@ -65,9 +61,13 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 	 * True if test executed inside the respective module (e.g., <i>kieker-common</i>),
 	 * which is true for Gradle-based executions; false if the working directory is
 	 * Kieker's root directory (e.g., in Eclipse).
-	 * 
+	 *
 	 */
 	private volatile boolean workingDirectoryIsModuleDirectory;
+
+	/** This rule makes sure that we can dump the name of the currently executed test on the screen. */
+	@Rule
+	public TestName nameOfCurrentTest = new TestName(); // NOPMD NOCS
 
 	/**
 	 * Default constructor.
@@ -118,7 +118,7 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 	/**
 	 * Turns a path relative to the module directory (e.g., kieker-common) into
 	 * a path relative to the working directory.
-	 * 
+	 *
 	 * @param path
 	 *            the path relative to the module directory
 	 * @return the converted path
@@ -132,7 +132,7 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 
 	/**
 	 * Turns a path relative to the working directory into a path relative to the module directory (e.g., kieker-common).
-	 * 
+	 *
 	 * @param path
 	 *            the path relative to the working directory
 	 * @return the converted path
