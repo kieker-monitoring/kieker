@@ -28,6 +28,10 @@ import kieker.common.util.registry.IRegistry;
  */
 public final class TraceMetadataFactory implements IRecordFactory<TraceMetadata> {
 
+	public TraceMetadataFactory() {
+		// empty constructor
+	}
+
 	@Override
 	public TraceMetadata create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
 		return new TraceMetadata(buffer, stringRegistry);

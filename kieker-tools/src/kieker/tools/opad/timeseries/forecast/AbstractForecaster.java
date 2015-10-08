@@ -40,7 +40,7 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 	private final ITimeSeries<T> historyTimeseries;
 	private final int confidenceLevel;
 
-	private boolean warningAlreadyLogged = false;
+	private boolean warningAlreadyLogged;
 
 	public AbstractForecaster(final ITimeSeries<T> historyTimeseries) {
 		this(historyTimeseries, 0);
