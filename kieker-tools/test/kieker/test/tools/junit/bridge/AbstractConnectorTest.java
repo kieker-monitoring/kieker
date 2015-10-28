@@ -42,7 +42,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 
-	private static final Log LOG; // NOPMD
+	protected static final Log LOG; // NOPMD
 
 	private IServiceConnector connector;
 	private int recordCount; // default initialization is 0

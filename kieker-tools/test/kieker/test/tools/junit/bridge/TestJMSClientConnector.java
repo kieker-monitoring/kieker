@@ -61,5 +61,11 @@ public class TestJMSClientConnector extends AbstractConnectorTest {
 		this.initialize();
 		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS, true);
 		this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
+		
+		try {
+			messageGenerator.wait();
+		} catch (InterruptedException e) {
+			LOG.error("Message generator was illegaly interrupted. ", e);
+		}
 	}
 }

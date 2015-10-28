@@ -15,6 +15,8 @@
  ***************************************************************************/
 package kieker.test.tools.junit.bridge;
 
+import static kieker.test.tools.junit.bridge.AbstractConnectorTest.LOG;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -64,5 +66,11 @@ public class TestJMSEmbeddedConnector extends AbstractConnectorTest {
 		messageGenerator.start();
 		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS, true);
 		this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
+		
+		try {
+			messageGenerator.wait();
+		} catch (InterruptedException e) {
+			LOG.error("Message generator was illegaly interrupted. ", e);
+		}
 	}
 }
