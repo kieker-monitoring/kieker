@@ -15,9 +15,6 @@
  ***************************************************************************/
 package kieker.test.tools.junit.bridge;
 
-import static kieker.test.tools.junit.bridge.AbstractConnectorTest.LOG;
-
-import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
@@ -48,7 +45,6 @@ public class TestJMSEmbeddedConnector extends AbstractConnectorTest {
 	 *             on lookup failure for the test record
 	 */
 	@Test
-	@Ignore
 	public void testJMSEmbeddedConnector() throws ConnectorDataTransmissionException { // NOPMD
 		final Thread messageGenerator = new Thread(new JMSMessageGenerator(ConfigurationParameters.JMS_EMBEDDED_URI,
 				ConfigurationParameters.JMS_EMBEDDED_FACTORY_LOOKUP_NAME), "Generator");
@@ -66,10 +62,10 @@ public class TestJMSEmbeddedConnector extends AbstractConnectorTest {
 		messageGenerator.start();
 		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS, true);
 		this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
-		
+
 		try {
 			messageGenerator.wait();
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			LOG.error("Message generator was illegaly interrupted. ", e);
 		}
 	}
