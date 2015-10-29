@@ -64,7 +64,7 @@ public class TestJMSEmbeddedConnector extends AbstractConnectorTest {
 		this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 
 		try {
-			messageGenerator.wait();
+			messageGenerator.join(2000);
 		} catch (final InterruptedException e) {
 			LOG.error("Message generator was illegaly interrupted. ", e);
 		}
