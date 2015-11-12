@@ -7,7 +7,8 @@ LGPL v3 => https://www.gnu.org/licenses/lgpl.html
 
 # javax.annotation / javax.annotation.concurrent / javax.annotation.meta:
 
-
+Unclear whether this is an extract from Oracle/OpenJDK Java classes or 
+from other sources as this JAR was shipped with FindBugs
 
 
 # net.jcip.annotations:
