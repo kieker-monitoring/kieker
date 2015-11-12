@@ -47,6 +47,15 @@ allprojects {
 			}
 		}
 	}
+
+	test {
+		testLogging {
+			showCauses = 'true'
+			exceptionFormat = 'full'
+			showExceptions = 'true'
+			showStandardStreams = 'true'
+		}
+	}
 	
 	configurations {
 		integrationTestCompile.extendsFrom testCompile
