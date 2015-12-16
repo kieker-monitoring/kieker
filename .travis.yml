@@ -1,5 +1,12 @@
 language: java
-jdk: openjdk7
+jdk:
+  - openjdk6
+  - openjdk7
+  - oraclekdk7
+
+branches:
+  only:
+    - master
 
 before_install:
   - gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9
