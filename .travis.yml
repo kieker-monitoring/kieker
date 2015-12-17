@@ -13,7 +13,7 @@ before_install:
   - gpg -a --export E084DAB9 | sudo apt-key add -
   - echo "deb https://cran.uni-muenster.de/bin/linux/ubuntu wily/" | sudo tee -a /etc/apt/sources.list
   - sudo apt-get update -qq
-  - sudo apt-get install r-base r-cran-rserve
+  - sudo apt-get install -y r-base r-base-html r-cran-rserve
 
 gradle:
   - jenkinsBuild
