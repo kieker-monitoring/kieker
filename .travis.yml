@@ -1,25 +1,19 @@
-#sudo: required
+sudo: required
 
-language: java
-jdk:
-  - openjdk6
-  - openjdk7
-  - oraclejdk7
+language: bash
+
+env:
+  - DOCKER_IMAGE_TAG=openjdk6
+  - DOCKER_IMAGE_TAG=openjdk7
 
 branches:
   only:
     - master
     
-#services:
-#  - docker
+services:
+  - docker
 
 before_install:
-  - gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9
-  - gpg -a --export E084DAB9 | sudo apt-key add -
-  - echo "deb http://cran.uni-muenster.de/bin/linux/ubuntu precise/" | sudo tee -a /etc/apt/sources.list
-  - sudo apt-get update -qq
-  - sudo apt-get install -y r-base r-base-html r-cran-rserve
-
-gradle:
-  - jenkinsBuild
-#  - jenkinsNightlyBuild
+  - docker pull kieker/kieker-build:$DOCKER_IMAGE_TAG
+  - docker run -d kieker/kieker-build:$DOCKER_IMAGE_TAG
+  - docker ps -a
