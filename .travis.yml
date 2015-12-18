@@ -3,6 +3,7 @@ sudo: required
 language: bash
 
 env:
+  - KIEKER_GIT="http://build.se.informatik.uni-kiel.de/gitlab/kieker/kieker.git"
   - DOCKER_IMAGE_TAG=openjdk6
   - DOCKER_IMAGE_TAG=openjdk7
 
@@ -15,7 +16,6 @@ services:
 
 before_install:
   - docker pull kieker/kieker-build:$DOCKER_IMAGE_TAG
-  - docker run kieker/kieker-build:$DOCKER_IMAGE_TAG
-  
+
 script:
-  - ./gradlew jenkinsBuild
+  - docker run kieker/kieker-build:$DOCKER_IMAGE_TAG /bin/bash -c "git clone ${KIEKER_GIT} kieker && cd kieker/ && ./gradlew jenkinsBuild"
