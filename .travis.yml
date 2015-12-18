@@ -15,7 +15,10 @@ services:
 
 before_install:
   - docker pull kieker/kieker-build:$DOCKER_IMAGE_TAG
-  - docker run kieker/kieker-build:$DOCKER_IMAGE_TAG /bin/sh -c "cd /opt/kieker; ./gradlew jenkinsBuild;"
+  - docker run kieker/kieker-build:$DOCKER_IMAGE_TAG
   
 script:
-  - ./gradlew jenkinsBuild
+  - git clone ${KIEKER_GIT_REPO} kieker && \
+  - ln -s /opt/kieker/build /opt/share/build && \
+  - cd kieker/ && \
+  - ./gradlew jenkinsBuild | tee /opt/share/kieker-build.log
