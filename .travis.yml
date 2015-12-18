@@ -15,6 +15,7 @@ services:
 
 before_install:
   - docker pull kieker/kieker-build:$DOCKER_IMAGE_TAG
+  - docker run kieker/kieker-build:$DOCKER_IMAGE_TAG
   
 script:
-  - docker run kieker/kieker-build:$DOCKER_IMAGE_TAG
+  - ./gradlew jenkinsBuild
