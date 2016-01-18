@@ -260,6 +260,9 @@ task apidoc(type: Javadoc) {
 	options.version = "false"
 	options.use = "true"
 	options.tags = ["generated", "ordered", "model"]
+	options.encoding = "UTF-8"
+	options.charset = "UTF-8"
+	options.docencoding = "UTF-8"
 }
 
 ext.sharedManifest = manifest {
