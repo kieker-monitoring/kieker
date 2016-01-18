@@ -205,7 +205,7 @@ allprojects {
 					println("Parsing file " + fbFile.name + ".")
 
 					def errors = (new XmlParser()).parse(fbFile)
-					errors.'BugInstance'.each { error ->
+					errors.'BugCollection'.'BugInstance'.each { error ->
 						switch (error.attribute("priority")) {
 							case "2":
 								warningCount++
