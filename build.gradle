@@ -140,7 +140,7 @@ allprojects {
 	}
 
 
-    task verifyCheckstyleThresholds(type: GradleBuild) {
+    task verifyCheckstyleThresholds(type: Task) {
         def checkstyleFileMain = 'build/reports/checkstyle/main.xml'
         def checkstyleFileTest = 'build/reports/checkstyle/test.xml'
 
@@ -156,7 +156,6 @@ allprojects {
                     println("Parsing file " + csFile.name + ".")
 
                     def errors = (new XmlParser()).parse(csFile)
-                    def counter = 0
                     errors.'file'.'error'.each { error ->
                         switch (error.attribute("severity")) {
                             case "warning":
@@ -187,7 +186,109 @@ allprojects {
             }
         }
     }
+    checkstyleMain.mustRunAfter checkstyleTest
     checkstyleMain.finalizedBy verifyCheckstyleThresholds
+
+    task verifyFindbugsThresholds(type: Task) {
+        def findbugsFileMain = 'build/reports/findbugs/main.xml'
+        def findbugsFileTest = 'build/reports/findbugs/test.xml'
+
+        doLast {
+            FileCollection fbFiles = files(findbugsFileMain,findbugsFileTest)
+
+			def errorCount = 0
+			def warningCount = 0
+			def infoCount = 0
+
+			fbFiles.each {File fbFile ->
+				if (fbFile.exists()) {
+					println("Parsing file " + fbFile.name + ".")
+
+					def errors = (new XmlParser()).parse(fbFile)
+					errors.'BugInstance'.each { error ->
+						switch (error.attribute("priority")) {
+							case "2":
+								warningCount++
+								break;
+							case "1":
+								errorCount++
+								break;
+							default:
+								// info
+								infoCount++
+								break;
+						}
+					}
+				}
+			}
+
+            println("Errors: " + errorCount + " (Threshold: " + findbugsErrorThreshold + ")")
+            println("Warnings: " + warningCount + " (Threshold: " + findbugsWarningThreshold + ")")
+            println("Info: " + infoCount)
+
+            if (warningCount > Integer.valueOf(findbugsWarningThreshold)) {
+                throw new GradleException("There were findbugs warnings exceeding the warning threshold! Warnings: " + warningCount + " Threshold: " + findbugsWarningThreshold)
+            }
+
+            if (errorCount > Integer.valueOf(findbugsErrorThreshold)) {
+                throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + errorCount + " Threshold: " + findbugsErrorThreshold)
+            }
+        }
+    }
+    findbugsMain.mustRunAfter findbugsTest
+    findbugsMain.finalizedBy verifyFindbugsThresholds
+
+    task verifyPmdThresholds(type: Task) {
+        def pmdFileMain = 'build/reports/pmd/main.xml'
+        def pmdFileTest = 'build/reports/pmd/test.xml'
+
+        doLast {
+            FileCollection pmdFiles = files(pmdFileMain,pmdFileTest)
+
+            def errorCount = 0
+            def warningCount = 0
+            def infoCount = 0
+
+            pmdFiles.each {File pmdFile ->
+                if (pmdFile.exists()) {
+                    println("Parsing file " + pmdFile.name + ".")
+
+                    def errors = (new XmlParser()).parse(pmdFile)
+                    errors.'file'.'violation'.each { error ->
+                        switch (error.attribute("priority")) {
+                            case "2":
+                                warningCount++
+                                break;
+                            case "1":
+                                errorCount++
+                                break;
+                            default:
+                                // info
+                                infoCount++
+                                break;
+                        }
+                    }
+                }
+            }
+
+            println("Errors: " + errorCount + " (Threshold: " + pmdErrorThreshold + ")")
+            println("Warnings: " + warningCount + " (Threshold: " + pmdWarningThreshold + ")")
+            println("Info: " + infoCount)
+
+            if (warningCount > Integer.valueOf(pmdWarningThreshold)) {
+                throw new GradleException("There were pmd warnings exceeding the warning threshold! Warnings: " + warningCount + " Threshold: " + pmdWarningThreshold)
+            }
+
+            if (errorCount > Integer.valueOf(pmdErrorThreshold)) {
+                throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + errorCount + " Threshold: " + pmdErrorThreshold)
+            }
+        }
+    }
+    pmdMain.mustRunAfter pmdTest
+    pmdMain.finalizedBy verifyPmdThresholds
+
+
+
 }
 
 
