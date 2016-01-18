@@ -138,7 +138,61 @@ allprojects {
 		testCompile resolveLibrary('junit-*.jar')
 		testCompile resolveLibrary('hamcrest-core-*.jar')
 	}
+
+
+    task verifyCheckstyleThresholds(type: GradleBuild) {
+        def checkstyleFileMain = 'build/reports/checkstyle/main.xml'
+        def checkstyleFileTest = 'build/reports/checkstyle/test.xml'
+
+        doLast {
+            FileCollection csFiles = files(checkstyleFileMain,checkstyleFileTest)
+
+            def errorCount = 0
+            def warningCount = 0
+            def infoCount = 0
+
+            csFiles.each {File csFile ->
+                if (csFile.exists()) { // && csFiles.text.contains("<error ")) {
+                    println("Parsing file " + csFile.name + ".")
+
+                    def errors = (new XmlParser()).parse(csFile)
+                    def counter = 0
+                    errors.'file'.'error'.each { error ->
+                        switch (error.attribute("severity")) {
+                            case "warning":
+                                warningCount++
+                                break;
+                            case "error":
+                                errorCount++
+                                break;
+                            default:
+                                // info
+                                infoCount++
+                                break;
+                        }
+                    }
+                }
+            }
+
+            println("Errors: " + errorCount + " (Threshold: " + checkstyleErrorThreshold + ")")
+            println("Warnings: " + warningCount + " (Threshold: " + checkstyleWarningThreshold + ")")
+            println("Info: " + infoCount)
+
+            if (warningCount > Integer.valueOf(checkstyleWarningThreshold)) {
+                throw new GradleException("There were checkstyle warnings exceeding the warning threshold! Warnings: " + warningCount + " Threshold: " + checkstyleWarningThreshold)
+            }
+
+            if (errorCount > Integer.valueOf(checkstyleErrorThreshold)) {
+                throw new GradleException("There were checkstyle errors exceeding the error threshold! Errors: " + errorCount + " Threshold: " + checkstyleErrorThreshold)
+            }
+        }
+    }
+    checkstyleMain.finalizedBy verifyCheckstyleThresholds
 }
+
+
+
+
 
 def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
 		//println "Replacing $searchExp by $replaceExp in $file"
