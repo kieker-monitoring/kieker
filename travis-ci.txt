@@ -1,3 +1,0 @@
-Travis-CI test
-Another one
-One more

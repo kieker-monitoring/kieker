@@ -286,12 +286,7 @@ allprojects {
     }
     pmdMain.mustRunAfter pmdTest
     pmdMain.finalizedBy verifyPmdThresholds
-
-
-
 }
-
-
 
 
 
@@ -361,9 +356,6 @@ task apidoc(type: Javadoc) {
 	options.version = "false"
 	options.use = "true"
 	options.tags = ["generated", "ordered", "model"]
-	options.encoding = "UTF-8"
-    options.charSet = "UTF-8"
-    options.docEncoding = "UTF-8"
 }
 
 ext.sharedManifest = manifest {
