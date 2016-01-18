@@ -20,4 +20,4 @@ before_install:
   - docker pull kieker/kieker-build:$DOCKER_IMAGE_TAG
 
 script:
-  - docker run kieker/kieker-build:$DOCKER_IMAGE_TAG /bin/bash -c "git clone ${KIEKER_GIT} kieker && cd kieker/ && ./gradlew jenkinsBuild"
+  - docker run kieker/kieker-build:$DOCKER_IMAGE_TAG /bin/bash -c "git clone ${KIEKER_GIT} kieker && cd kieker/ && ./gradlew clean build -x test"
