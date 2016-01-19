@@ -21,4 +21,4 @@ before_install:
   - docker pull kieker/kieker-build:$DOCKER_IMAGE_TAG
 
 script:
-  - docker run kieker/kieker-build:$DOCKER_IMAGE_TAG /bin/bash -c "git clone ${KIEKER_GIT} kieker && cd kieker/ && ./gradlew build -x test --recompile-scripts --rerun-tasks"
+  - docker run kieker/kieker-build:$DOCKER_IMAGE_TAG /bin/bash -c "git clone ${KIEKER_GIT} kieker && cd kieker/ && ./gradlew build -x test --recompile-scripts --rerun-tasks -i"
