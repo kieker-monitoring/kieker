@@ -94,7 +94,7 @@ allprojects {
 	}
 
 	apply plugin: 'pmd'
-	pmd { 
+	pmd {
 		ignoreFailures = true
 
 		// Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
@@ -120,6 +120,20 @@ allprojects {
 		excludeFilter = resolveRelativeToParent(dirConfig, 'fb-filter.xml')
 	}
 
+    tasks.withType(FindBugs) {
+        reports {
+            xml.enabled = true
+            html.enabled = false
+        }
+    }
+
+    tasks.withType(Pmd) {
+        reports {
+            xml.enabled = true
+            html.enabled = false
+        }
+    }
+
 	// CS is a little bit weird, when it comes to dependencies. 
 	checkstyleTest.classpath += sourceSets.main.runtimeClasspath
 	checkstyleMain.classpath += configurations.compile
@@ -139,20 +153,29 @@ allprojects {
 		testCompile resolveLibrary('hamcrest-core-*.jar')
 	}
 
+    def reports = 'build/reports'
 
     task verifyCheckstyleThresholds(type: Task) {
-        def checkstyleFileMain = 'build/reports/checkstyle/main.xml'
-        def checkstyleFileTest = 'build/reports/checkstyle/test.xml'
+        def reportsFolder = "$reports/checkstyle"
 
         doLast {
-            FileCollection csFiles = files(checkstyleFileMain,checkstyleFileTest)
+            FileCollection csFiles = files("$reportsFolder/main.xml","$reportsFolder/test.xml")
+            File xslFile = project.file("${rootDir}/${dirLib}/static-analysis/checkstyle-6.0/checkstyle-noframes-sorted.xsl")
 
             def errorCount = 0
             def warningCount = 0
             def infoCount = 0
 
             csFiles.each {File csFile ->
-                if (csFile.exists()) { // && csFiles.text.contains("<error ")) {
+                if (csFile.exists()) {
+
+                    if (xslFile.exists()) {
+                        def htmlFile = file("$csFile" + ".html")
+                        ant.xslt(in: csFile, style: xslFile, out: htmlFile)
+                    } else {
+                        println("Warning: No XSL-File present at ${xslFile}.")
+                    }
+
                     println("Parsing file " + csFile.name + ".")
 
                     def errors = (new XmlParser()).parse(csFile)
@@ -190,11 +213,11 @@ allprojects {
     checkstyleMain.finalizedBy verifyCheckstyleThresholds
 
     task verifyFindbugsThresholds(type: Task) {
-        def findbugsFileMain = 'build/reports/findbugs/main.xml'
-        def findbugsFileTest = 'build/reports/findbugs/test.xml'
+        def reportsFolder = "$reports/findbugs"
 
         doLast {
-            FileCollection fbFiles = files(findbugsFileMain,findbugsFileTest)
+            FileCollection fbFiles = files("$reportsFolder/main.xml","${reportsFolder}/test.xml")
+            File xslFile = project.file("${rootDir}/${dirLib}/static-analysis/findbugs-3.0.1/fancy.xsl")
 
 			def errorCount = 0
 			def warningCount = 0
@@ -202,6 +225,14 @@ allprojects {
 
 			fbFiles.each {File fbFile ->
 				if (fbFile.exists()) {
+
+                    if (xslFile.exists()) {
+                        def htmlFile = file("$fbFile" + ".html")
+                        ant.xslt(in: fbFile, style: xslFile, out: htmlFile)
+                    } else {
+                        println("Warning: No XSL-File present at ${xslFile}.")
+                    }
+
 					println("Parsing file " + fbFile.name + ".")
 
 					def errors = (new XmlParser()).parse(fbFile)
@@ -239,11 +270,11 @@ allprojects {
     findbugsMain.finalizedBy verifyFindbugsThresholds
 
     task verifyPmdThresholds(type: Task) {
-        def pmdFileMain = 'build/reports/pmd/main.xml'
-        def pmdFileTest = 'build/reports/pmd/test.xml'
+        def reportsFolder = '${reports}/pmd'
 
         doLast {
-            FileCollection pmdFiles = files(pmdFileMain,pmdFileTest)
+            FileCollection pmdFiles = files("${reportsFolder}/main.xml","${reportsFolder}/test.xml")
+            File xslFile = project.file("${rootDir}/${dirLib}/static-analysis/pmd-5.0.5/pmd-nicerhtml.xsl")
 
             def errorCount = 0
             def warningCount = 0
@@ -251,6 +282,14 @@ allprojects {
 
             pmdFiles.each {File pmdFile ->
                 if (pmdFile.exists()) {
+
+                    if (xslFile.exists()) {
+                        def htmlFile = file("$pmdFile" + ".html")
+                        ant.xslt(in: pmdFile, style: xslFile, out: htmlFile)
+                    } else {
+                        println("Warning: No XSL-File present at ${xslFile}.")
+                    }
+
                     println("Parsing file " + pmdFile.name + ".")
 
                     def errors = (new XmlParser()).parse(pmdFile)
@@ -287,6 +326,7 @@ allprojects {
     pmdMain.mustRunAfter pmdTest
     pmdMain.finalizedBy verifyPmdThresholds
 }
+
 
 
 
