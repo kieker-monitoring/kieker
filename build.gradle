@@ -165,7 +165,6 @@ allprojects {
             def errorCount = 0
             def warningCount = 0
             def infoCount = 0
-            def sum = 0
 
             csFiles.each { File csFile ->
                 if (csFile.exists()) {
@@ -189,8 +188,6 @@ allprojects {
                 }
             }
 
-            sum = errorCount + warningCount + infoCount
-
             println("Errors: " + errorCount + " (Threshold: " + checkstyleErrorThreshold + ")")
             println("Warnings: " + warningCount + " (Threshold: " + checkstyleWarningThreshold + ")")
             println("Info: " + infoCount)
@@ -201,10 +198,6 @@ allprojects {
 
             if (errorCount > Integer.valueOf(checkstyleErrorThreshold)) {
                 throw new GradleException("There were checkstyle errors exceeding the error threshold! Errors: " + errorCount + " Threshold: " + checkstyleErrorThreshold)
-            }
-
-            if (sum > 0) {
-                println('The summary reports can be found at ' + project.path + '/' + checkstyleReportsFolder + '/{main,test}.html')
             }
         }
     }
@@ -220,7 +213,6 @@ allprojects {
             def errorCount = 0
             def warningCount = 0
             def infoCount = 0
-            def sum = 0
 
             fbFiles.each { File fbFile ->
                 if (fbFile.exists()) {
@@ -244,8 +236,6 @@ allprojects {
                 }
             }
 
-            sum = errorCount + warningCount + infoCount
-
             println("Errors: " + errorCount + " (Threshold: " + findbugsErrorThreshold + ")")
             println("Warnings: " + warningCount + " (Threshold: " + findbugsWarningThreshold + ")")
             println("Info: " + infoCount)
@@ -256,10 +246,6 @@ allprojects {
 
             if (errorCount > Integer.valueOf(findbugsErrorThreshold)) {
                 throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + errorCount + " Threshold: " + findbugsErrorThreshold)
-            }
-
-            if (sum > 0) {
-                println('The summary reports can be found at ' + project.path + '/' + findbugsReportsFolder + '/{main,test}.html')
             }
         }
     }
@@ -275,7 +261,6 @@ allprojects {
             def errorCount = 0
             def warningCount = 0
             def infoCount = 0
-            def sum = 0
 
             pmdFiles.each { File pmdFile ->
                 if (pmdFile.exists()) {
@@ -299,8 +284,6 @@ allprojects {
                 }
             }
 
-            sum = errorCount + warningCount + infoCount
-
             println("Errors: " + errorCount + " (Threshold: " + pmdErrorThreshold + ")")
             println("Warnings: " + warningCount + " (Threshold: " + pmdWarningThreshold + ")")
             println("Info: " + infoCount)
@@ -312,10 +295,6 @@ allprojects {
             if (errorCount > Integer.valueOf(pmdErrorThreshold)) {
                 throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + errorCount + " Threshold: " + pmdErrorThreshold)
             }
-
-            if (sum > 0) {
-                println('The summary reports can be found at ' + project.path + '/' + pmdReportsFolder + '/{main,test}.html')
-            }
         }
     }
 
@@ -324,12 +303,19 @@ allprojects {
         def scautilJar = file("${rootDir}/${dirLib}/static-analysis/scautil.jar")
         args = ["$scautilJar", "${findbugsReportsFolder}/main.xml", "${checkstyleReportsFolder}/main.xml", "${pmdReportsFolder}/main.xml", "${reports}/mainReportSummary.html"]
         main = '-jar'
+        doLast {
+            println('The report summary for \'main\' can be found at ' + project.path + '/' + reports + '/mainReportSummary.html')
+        }
     }
 
     task testHtmlReport(type: JavaExec) {
         def scautilJar = file("${rootDir}/${dirLib}/static-analysis/scautil.jar")
         args = ["$scautilJar", "${findbugsReportsFolder}/test.xml", "${checkstyleReportsFolder}/test.xml", "${pmdReportsFolder}/test.xml", "${reports}/testReportSummary.html"]
         main = '-jar'
+
+        doLast {
+            println('The report summary for \'test\' can be found at ' + project.path + '/' + reports + '/testReportSummary.html')
+        }
     }
 
     /**
