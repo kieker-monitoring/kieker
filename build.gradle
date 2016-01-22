@@ -299,8 +299,10 @@ allprojects {
     }
 
 
+    def javaVersion = JavaVersion.current()
+
     task mainHtmlReport(type: JavaExec) {
-        def scautilJar = file("${rootDir}/${dirLib}/static-analysis/scautil.jar")
+        def scautilJar = file("${rootDir}/${dirLib}/static-analysis/scautil-${javaVersion}.jar")
         args = ["$scautilJar", "${findbugsReportsFolder}/main.xml", "${checkstyleReportsFolder}/main.xml", "${pmdReportsFolder}/main.xml", "${reports}/mainReportSummary.html"]
         main = '-jar'
         doLast {
@@ -309,7 +311,7 @@ allprojects {
     }
 
     task testHtmlReport(type: JavaExec) {
-        def scautilJar = file("${rootDir}/${dirLib}/static-analysis/scautil.jar")
+        def scautilJar = file("${rootDir}/${dirLib}/static-analysis/scautil-${javaVersion}.jar")
         args = ["$scautilJar", "${findbugsReportsFolder}/test.xml", "${checkstyleReportsFolder}/test.xml", "${pmdReportsFolder}/test.xml", "${reports}/testReportSummary.html"]
         main = '-jar'
 
@@ -317,6 +319,9 @@ allprojects {
             println('The report summary for \'test\' can be found at ' + project.path + '/' + reports + '/testReportSummary.html')
         }
     }
+
+    mainHtmlReport.onlyIf { reportingCompatibleJavaVersionPresent() }
+    testHtmlReport.onlyIf { reportingCompatibleJavaVersionPresent() }
 
     /**
      * We order the tasks this way to create summary reports before the build fails due to thresholds.
@@ -364,8 +369,19 @@ task updateLicenseHeaderYear() << {
     }
 }
 
-
 compileJava.dependsOn replaceHardCodedVersionNames
+
+def reportingCompatibleJavaVersionPresent() {
+    switch(JavaVersion.current()) {
+        case JavaVersion.VERSION_1_7:
+            return true;
+        case JavaVersion.VERSION_1_8:
+            return true;
+        default:
+            println("Warning: Your current Java version ${JavaVersion.current()} is not compatible with the report generation tool.")
+            return false;
+    }
+}
 
 def resolveRelativeToParent(String directory, String file) {
     return rootProject.file(directory + '/' + file)
