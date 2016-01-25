@@ -110,9 +110,15 @@ allprojects {
         configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
     }
 
+    def fbVersion
     apply plugin: 'findbugs'
     findbugs {
-        toolVersion = '3.0.1'
+        if(JavaVersion.current() == JavaVersion.VERSION_1_6) {
+            fbVersion = '2.0.3'
+        } else {
+            fbVersion = '3.0.1'
+        }
+        toolVersion = fbVersion
         ignoreFailures = true
         effort = "max"
         reportLevel = "low"
@@ -147,7 +153,8 @@ allprojects {
         cpd resolveLibrary('**/pmd-*/**/*.jar')
         checkstyle resolveLibrary('**/checkstyle-*/**/*.jar')
         checkstyle project(':kieker-checkstyle-extension')
-        findbugs resolveLibrary('**/findbugs-*/lib/*.jar')
+
+        findbugs resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
 
         testCompile resolveLibrary('junit-*.jar')
         testCompile resolveLibrary('hamcrest-core-*.jar')

@@ -9,6 +9,12 @@ env:
   matrix:
     - DOCKER_IMAGE_TAG=openjdk6
     - DOCKER_IMAGE_TAG=openjdk7
+    - DOCKER_IMAGE_TAG=openjdk8
+    - GRADLE_TARGET="build"
+    - GRADLE_TARGET="jenkinsBuild"
+    - GRADLE_TARGET="jenkinsNightlyBuild"
+    - GRADLE_EXCLUDES=""
+    - GRADLE_EXCLUDES="-x test"
 
 branches:
   only:
@@ -21,4 +27,4 @@ before_install:
   - docker pull kieker/kieker-build:$DOCKER_IMAGE_TAG
 
 script:
-  - docker run kieker/kieker-build:$DOCKER_IMAGE_TAG /bin/bash -c "git clone ${KIEKER_GIT} kieker && cd kieker/ && ./gradlew build -x test"
+  - docker run kieker/kieker-build:$DOCKER_IMAGE_TAG /bin/bash -c "git clone ${KIEKER_GIT} kieker && cd kieker/ && ./gradlew ${GRADLE_TARGET} ${GRADLE_EXCLUDES}"
