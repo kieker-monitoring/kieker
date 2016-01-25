@@ -6,10 +6,12 @@ env:
   global:
     #- KIEKER_GIT="http://build.se.informatik.uni-kiel.de/gitlab/kieker/kieker.git"
     - KIEKER_GIT="https://github.com/dn3t-de/kieker.git"
+    - GRADLE_TARGET="build"
+    - GRADLE_EXCLUDES="-x test"
   matrix:
-    - DOCKER_IMAGE_TAG=openjdk6 GRADLE_TARGET="build" GRADLE_EXCLUDES="-x test"
-    - DOCKER_IMAGE_TAG=openjdk7 GRADLE_TARGET="build" GRADLE_EXCLUDES="-x test"
-    - DOCKER_IMAGE_TAG=openjdk8 GRADLE_TARGET="build" GRADLE_EXCLUDES="-x test"
+    - DOCKER_IMAGE_TAG=openjdk6  
+    - DOCKER_IMAGE_TAG=openjdk7
+    - DOCKER_IMAGE_TAG=openjdk8
 
 branches:
   only:
