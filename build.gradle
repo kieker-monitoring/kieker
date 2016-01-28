@@ -113,7 +113,7 @@ allprojects {
     def fbVersion
     apply plugin: 'findbugs'
     findbugs {
-        if(JavaVersion.current() == JavaVersion.VERSION_1_6) {
+        if (JavaVersion.current() == JavaVersion.VERSION_1_6) {
             fbVersion = '2.0.3'
         } else {
             fbVersion = '3.0.1'
@@ -160,151 +160,12 @@ allprojects {
         testCompile resolveLibrary('hamcrest-core-*.jar')
     }
 
+    /**
     def reports = 'build/reports'
 
     def checkstyleReportsFolder = "$reports/checkstyle"
-
-    task verifyCheckstyleThresholds(type: Task) {
-
-        doLast {
-            FileCollection csFiles = files("$checkstyleReportsFolder/main.xml", "$checkstyleReportsFolder/test.xml")
-
-            def errorCount = 0
-            def warningCount = 0
-            def infoCount = 0
-
-            csFiles.each { File csFile ->
-                if (csFile.exists()) {
-                    println("Parsing file " + csFile.name + ".")
-
-                    def errors = (new XmlParser()).parse(csFile)
-                    errors.'file'.'error'.each { error ->
-                        switch (error.attribute("severity")) {
-                            case "error":
-                                errorCount++
-                                break;
-                            case "warning":
-                                warningCount++
-                                break;
-                            default:
-                                // info
-                                infoCount++
-                                break;
-                        }
-                    }
-                }
-            }
-
-            println("Errors: " + errorCount + " (Threshold: " + checkstyleErrorThreshold + ")")
-            println("Warnings: " + warningCount + " (Threshold: " + checkstyleWarningThreshold + ")")
-            println("Info: " + infoCount)
-
-            if (warningCount > Integer.valueOf(checkstyleWarningThreshold)) {
-                throw new GradleException("There were checkstyle warnings exceeding the warning threshold! Warnings: " + warningCount + " Threshold: " + checkstyleWarningThreshold)
-            }
-
-            if (errorCount > Integer.valueOf(checkstyleErrorThreshold)) {
-                throw new GradleException("There were checkstyle errors exceeding the error threshold! Errors: " + errorCount + " Threshold: " + checkstyleErrorThreshold)
-            }
-        }
-    }
-
-
     def findbugsReportsFolder = "$reports/findbugs"
-
-    task verifyFindbugsThresholds(type: Task) {
-
-        doLast {
-            FileCollection fbFiles = files("$findbugsReportsFolder/main.xml", "${findbugsReportsFolder}/test.xml")
-
-            def errorCount = 0
-            def warningCount = 0
-            def infoCount = 0
-
-            fbFiles.each { File fbFile ->
-                if (fbFile.exists()) {
-                    println("Parsing file " + fbFile.name + ".")
-
-                    def errors = (new XmlParser()).parse(fbFile)
-                    errors.'BugInstance'.each { error ->
-                        switch (error.attribute("priority")) {
-                            case "1":
-                                errorCount++
-                                break;
-                            case "2":
-                                warningCount++
-                                break;
-                            default:
-                                // info
-                                infoCount++
-                                break;
-                        }
-                    }
-                }
-            }
-
-            println("Errors: " + errorCount + " (Threshold: " + findbugsErrorThreshold + ")")
-            println("Warnings: " + warningCount + " (Threshold: " + findbugsWarningThreshold + ")")
-            println("Info: " + infoCount)
-
-            if (warningCount > Integer.valueOf(findbugsWarningThreshold)) {
-                throw new GradleException("There were findbugs warnings exceeding the warning threshold! Warnings: " + warningCount + " Threshold: " + findbugsWarningThreshold)
-            }
-
-            if (errorCount > Integer.valueOf(findbugsErrorThreshold)) {
-                throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + errorCount + " Threshold: " + findbugsErrorThreshold)
-            }
-        }
-    }
-
-
     def pmdReportsFolder = "${reports}/pmd"
-
-    task verifyPmdThresholds(type: Task) {
-
-        doLast {
-            FileCollection pmdFiles = files("${pmdReportsFolder}/main.xml", "${pmdReportsFolder}/test.xml")
-
-            def errorCount = 0
-            def warningCount = 0
-            def infoCount = 0
-
-            pmdFiles.each { File pmdFile ->
-                if (pmdFile.exists()) {
-                    println("Parsing file " + pmdFile.name + ".")
-
-                    def errors = (new XmlParser()).parse(pmdFile)
-                    errors.'file'.'violation'.each { error ->
-                        switch (error.attribute("priority")) {
-                            case "1":
-                                errorCount++
-                                break;
-                            case "2":
-                                warningCount++
-                                break;
-                            default:
-                                // info
-                                infoCount++
-                                break;
-                        }
-                    }
-                }
-            }
-
-            println("Errors: " + errorCount + " (Threshold: " + pmdErrorThreshold + ")")
-            println("Warnings: " + warningCount + " (Threshold: " + pmdWarningThreshold + ")")
-            println("Info: " + infoCount)
-
-            if (warningCount > Integer.valueOf(pmdWarningThreshold)) {
-                throw new GradleException("There were pmd warnings exceeding the warning threshold! Warnings: " + warningCount + " Threshold: " + pmdWarningThreshold)
-            }
-
-            if (errorCount > Integer.valueOf(pmdErrorThreshold)) {
-                throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + errorCount + " Threshold: " + pmdErrorThreshold)
-            }
-        }
-    }
-
 
     def javaVersion = JavaVersion.current()
 
@@ -329,32 +190,7 @@ allprojects {
 
     mainHtmlReport.onlyIf { reportingCompatibleJavaVersionPresent() }
     testHtmlReport.onlyIf { reportingCompatibleJavaVersionPresent() }
-
-    /**
-     * We order the tasks this way to create summary reports before the build fails due to thresholds.
      */
-
-    // CS-Main -> FB-Main -> PMD-Main
-    findbugsMain.mustRunAfter checkstyleMain
-    pmdMain.mustRunAfter findbugsMain
-
-    // CS-Test -> FB-Test -> PMD-Test
-    findbugsTest.mustRunAfter checkstyleTest
-    pmdTest.mustRunAfter findbugsTest
-
-    // PMD-Main -> Report-Main
-    pmdMain.finalizedBy mainHtmlReport
-
-    // PMD-Test -> Report-Test
-    pmdTest.finalizedBy testHtmlReport
-
-    // Report-Main + Report-Test -> verify-CS
-    mainHtmlReport.finalizedBy verifyCheckstyleThresholds
-    verifyCheckstyleThresholds.mustRunAfter testHtmlReport
-
-    // verify-CS -> verify-FB -> verify-PMD
-    verifyCheckstyleThresholds.finalizedBy verifyFindbugsThresholds
-    verifyFindbugsThresholds.finalizedBy verifyPmdThresholds
 }
 
 
@@ -379,7 +215,7 @@ task updateLicenseHeaderYear() << {
 compileJava.dependsOn replaceHardCodedVersionNames
 
 def reportingCompatibleJavaVersionPresent() {
-    switch(JavaVersion.current()) {
+    switch (JavaVersion.current()) {
         case JavaVersion.VERSION_1_7:
             return true;
         case JavaVersion.VERSION_1_8:
@@ -419,6 +255,153 @@ def monthMMM() {
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
 def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
+
+
+task checkCheckstyleThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
+    def reportTypes = ['main', 'test']
+    def errors = 0
+    def warnings = 0
+    def infos = 0
+
+    mainSubprojects.each { Project p ->
+        reportTypes.each { String type ->
+            def reportFile = file(p.projectDir.path + '/build/reports/checkstyle/' + type + '.xml')
+            if (reportFile.exists()) {
+                def xmlFile = (new XmlParser()).parse(reportFile)
+                xmlFile.'file'.'error'.each { issue ->
+                    switch (issue.attribute("severity")) {
+                        case "error":
+                            errors++
+                            break;
+                        case "warning":
+                            warnings++
+                            break;
+                        default:
+                            infos++
+                            break;
+                    }
+                }
+                //println(errors + '/' + warnings + '/' + infos + " " + reportFile.path)
+            }
+        }
+    }
+
+    println("Errors: " + errors + " (Threshold: " + checkstyleErrorThreshold + ")")
+    println("Warnings: " + warnings + " (Threshold: " + checkstyleWarningThreshold + ")")
+    println("Info: " + infos)
+
+    if (warnings > Integer.valueOf(checkstyleWarningThreshold)) {
+       throw new GradleException("There were checkstyle warnings exceeding the warning threshold! Warnings: " + warnings + " Threshold: " + checkstyleWarningThreshold)
+    }
+
+    if (errors > Integer.valueOf(checkstyleErrorThreshold)) {
+       throw new GradleException("There were checkstyle errors exceeding the error threshold! Errors: " + errors + " Threshold: " + checkstyleErrorThreshold)
+    }
+}
+
+task checkFindbugsThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
+    def reportTypes = ['main', 'test']
+    def errors = 0
+    def warnings = 0
+    def infos = 0
+
+    mainSubprojects.each { Project p ->
+        reportTypes.each { String type ->
+            def reportFile = file(p.projectDir.path + '/build/reports/findbugs/' + type + '.xml')
+            if (reportFile.exists()) {
+                def xmlFile = (new XmlParser()).parse(reportFile)
+                xmlFile.'FindBugsSummary'.each { issue ->
+                    def prio1Bugs = issue.attribute("priority_1")
+                    def prio2Bugs = issue.attribute("priority_2")
+                    def bugsTotal = issue.attribute("total_bugs")
+                    def prio1BugsInt = 0
+                    def prio2BugsInt = 0
+                    def bugsTotalInt = 0
+
+                    if (prio1Bugs != null) {
+                        prio1BugsInt = Integer.valueOf(prio1Bugs)
+                    }
+
+                    if (prio2Bugs != null) {
+                        prio2BugsInt = Integer.valueOf(prio2Bugs)
+                    }
+
+                    if(bugsTotal != null) {
+                        bugsTotalInt = Integer.valueOf(bugsTotal)
+                    }
+
+                    errors += prio1BugsInt
+                    warnings += prio2BugsInt
+                    infos += bugsTotalInt - (prio1BugsInt + prio2BugsInt)
+
+                    //println(prio1BugsInt + '/' + prio2BugsInt + '/' + bugsTotalInt + " " + reportFile.path)
+                }
+            }
+        }
+    }
+
+    println("Errors: " + errors + " (Threshold: " + findbugsErrorThreshold + ")")
+    println("Warnings: " + warnings + " (Threshold: " + findbugsWarningThreshold + ")")
+    println("Info: " + infos)
+
+    if (warnings > Integer.valueOf(findbugsWarningThreshold)) {
+       throw new GradleException("There were findbugs warnings exceeding the warning threshold! Warnings: " + warnings + " Threshold: " + findbugsWarningThreshold)
+    }
+
+    if (errors > Integer.valueOf(findbugsErrorThreshold)) {
+       throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + errors + " Threshold: " + findbugsErrorThreshold)
+    }
+}
+
+task checkPmdThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
+    def reportTypes = ['main', 'test']
+    def errors = 0
+    def warnings = 0
+    def infos = 0
+
+    mainSubprojects.each { Project p ->
+        reportTypes.each { String type ->
+            def reportFile = file(p.projectDir.path + '/build/reports/pmd/' + type + '.xml')
+            if (reportFile.exists()) {
+                def xmlFile = (new XmlParser()).parse(reportFile)
+                xmlFile.'file'.'violation'.each { issue ->
+                    switch (issue.attribute("priority")) {
+                        case "1":
+                            errors++
+                            break;
+                        case "2":
+                            warnings++
+                            break;
+                        default:
+                            infos++
+                            break;
+                    }
+                }
+                //println(errors + '/' + warnings + '/' + infos + " " + reportFile.path)
+            }
+        }
+    }
+
+    println("Errors: " + errors + " (Threshold: " + pmdErrorThreshold + ")")
+    println("Warnings: " + warnings + " (Threshold: " + pmdWarningThreshold + ")")
+    println("Info: " + infos)
+
+    if (warnings > Integer.valueOf(pmdWarningThreshold)) {
+        throw new GradleException("There were pmd warnings exceeding the warning threshold! Warnings: " + warnings + " Threshold: " + pmdWarningThreshold)
+    }
+
+    if (errors > Integer.valueOf(pmdErrorThreshold)) {
+        throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + errors + " Threshold: " + pmdErrorThreshold)
+    }
+}
+
+task checkThresholds(dependsOn: [checkCheckstyleThresholds, checkFindbugsThresholds, checkPmdThresholds]) << {}
+
+
+
+
+
+
 
 task apidoc(type: Javadoc) {
     description = 'Generate the Javadoc API documentation for the Kieker Framework'
