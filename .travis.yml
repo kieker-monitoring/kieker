@@ -4,7 +4,7 @@ language: bash
 
 env:
   global:
-    #- KIEKER_GIT="http://build.se.informatik.uni-kiel.de/gitlab/kieker/kieker.git"
+   #- KIEKER_GIT="http://build.se.informatik.uni-kiel.de/gitlab/kieker/kieker.git"
     - KIEKER_GIT="https://github.com/dn3t-de/kieker.git"
     - GRADLE_TARGET="build"
     - GRADLE_EXCLUDES="-x test"
