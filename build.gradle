@@ -160,6 +160,7 @@ allprojects {
         testCompile resolveLibrary('hamcrest-core-*.jar')
     }
 
+
     /**
     def reports = 'build/reports'
 
@@ -194,68 +195,8 @@ allprojects {
 }
 
 
-def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
-    //println "Replacing $searchExp by $replaceExp in $file"
-    String contents = file.getText('UTF-8')
-    contents = contents.replaceAll(searchExp, replaceExp)
-    file.write(contents, 'UTF-8')
-}
-
-task replaceHardCodedVersionNames() << {
-    regexpReplaceInFiles(project.file("bin/dev/check-release-archives.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
-}
-
-task updateLicenseHeaderYear() << {
-    FileTree tree = fileTree(dir: '.', include: '**/*.java')
-    tree.each { File file ->
-        regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2015 Kieker Project')
-    }
-}
-
-compileJava.dependsOn replaceHardCodedVersionNames
-
-def reportingCompatibleJavaVersionPresent() {
-    switch (JavaVersion.current()) {
-        case JavaVersion.VERSION_1_7:
-            return true;
-        case JavaVersion.VERSION_1_8:
-            return true;
-        default:
-            println("Warning: Your current Java version ${JavaVersion.current()} is not compatible with the report generation tool.")
-            return false;
-    }
-}
-
-def resolveRelativeToParent(String directory, String file) {
-    return rootProject.file(directory + '/' + file)
-}
-
-def resolveLibrary(String library) {
-    def libraryDir = rootProject.file(dirLib)
-    return fileTree(dir: libraryDir, include: library)
-}
-
-def today() {
-    def date = new Date()
-    def formattedDate = date.format('yyyy-MM-dd')
-    return formattedDate
-}
-
-def year() {
-    def date = new Date()
-    def formattedDate = date.format('yyyy')
-    return formattedDate
-}
-
-def monthMMM() {
-    def date = new Date()
-    def formattedDate = date.format('MMM')
-    return formattedDate
-}
-
 // We have multiple subprojects - but we do not want all of them in our JAR files.
 def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
-
 
 task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
     def reportTypes = ['main', 'test']
@@ -405,6 +346,67 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
     if (pmdErrors > Integer.valueOf(pmdErrorThreshold)) {
         throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + pmdErrors + " Threshold: " + pmdErrorThreshold)
     }
+}
+
+mainSubprojects.tasks.check*.finalizedBy(checkThresholds)
+
+def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
+    //println "Replacing $searchExp by $replaceExp in $file"
+    String contents = file.getText('UTF-8')
+    contents = contents.replaceAll(searchExp, replaceExp)
+    file.write(contents, 'UTF-8')
+}
+
+task replaceHardCodedVersionNames() << {
+    regexpReplaceInFiles(project.file("bin/dev/check-release-archives.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+}
+
+task updateLicenseHeaderYear() << {
+    FileTree tree = fileTree(dir: '.', include: '**/*.java')
+    tree.each { File file ->
+        regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2015 Kieker Project')
+    }
+}
+
+compileJava.dependsOn replaceHardCodedVersionNames
+
+def reportingCompatibleJavaVersionPresent() {
+    switch (JavaVersion.current()) {
+        case JavaVersion.VERSION_1_7:
+            return true;
+        case JavaVersion.VERSION_1_8:
+            return true;
+        default:
+            println("Warning: Your current Java version ${JavaVersion.current()} is not compatible with the report generation tool.")
+            return false;
+    }
+}
+
+def resolveRelativeToParent(String directory, String file) {
+    return rootProject.file(directory + '/' + file)
+}
+
+def resolveLibrary(String library) {
+    def libraryDir = rootProject.file(dirLib)
+    return fileTree(dir: libraryDir, include: library)
+}
+
+def today() {
+    def date = new Date()
+    def formattedDate = date.format('yyyy-MM-dd')
+    return formattedDate
+}
+
+def year() {
+    def date = new Date()
+    def formattedDate = date.format('yyyy')
+    return formattedDate
+}
+
+def monthMMM() {
+    def date = new Date()
+    def formattedDate = date.format('MMM')
+    return formattedDate
 }
 
 
