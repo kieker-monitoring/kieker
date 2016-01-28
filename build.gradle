@@ -256,12 +256,13 @@ def monthMMM() {
 // We have multiple subprojects - but we do not want all of them in our JAR files.
 def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
 
-
-task checkCheckstyleThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
+task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
     def reportTypes = ['main', 'test']
-    def errors = 0
-    def warnings = 0
-    def infos = 0
+
+    // ### Begin Checkstyle report parsing
+    def csErrors = 0
+    def csWarnings = 0
+    def csInfos = 0
 
     mainSubprojects.each { Project p ->
         reportTypes.each { String type ->
@@ -271,39 +272,26 @@ task checkCheckstyleThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
                 xmlFile.'file'.'error'.each { issue ->
                     switch (issue.attribute("severity")) {
                         case "error":
-                            errors++
+                            csErrors++
                             break;
                         case "warning":
-                            warnings++
+                            csWarnings++
                             break;
                         default:
-                            infos++
+                            csInfos++
                             break;
                     }
                 }
-                //println(errors + '/' + warnings + '/' + infos + " " + reportFile.path)
             }
         }
     }
+    // ### End Checkstyle report parsing
 
-    println("Errors: " + errors + " (Threshold: " + checkstyleErrorThreshold + ")")
-    println("Warnings: " + warnings + " (Threshold: " + checkstyleWarningThreshold + ")")
-    println("Info: " + infos)
 
-    if (warnings > Integer.valueOf(checkstyleWarningThreshold)) {
-       throw new GradleException("There were checkstyle warnings exceeding the warning threshold! Warnings: " + warnings + " Threshold: " + checkstyleWarningThreshold)
-    }
-
-    if (errors > Integer.valueOf(checkstyleErrorThreshold)) {
-       throw new GradleException("There were checkstyle errors exceeding the error threshold! Errors: " + errors + " Threshold: " + checkstyleErrorThreshold)
-    }
-}
-
-task checkFindbugsThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
-    def reportTypes = ['main', 'test']
-    def errors = 0
-    def warnings = 0
-    def infos = 0
+    // ### Begin Findbugs report parsing ###
+    def fbErrors = 0
+    def fbWarnings = 0
+    def fbInfos = 0
 
     mainSubprojects.each { Project p ->
         reportTypes.each { String type ->
@@ -326,38 +314,23 @@ task checkFindbugsThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
                         prio2BugsInt = Integer.valueOf(prio2Bugs)
                     }
 
-                    if(bugsTotal != null) {
+                    if (bugsTotal != null) {
                         bugsTotalInt = Integer.valueOf(bugsTotal)
                     }
 
-                    errors += prio1BugsInt
-                    warnings += prio2BugsInt
-                    infos += bugsTotalInt - (prio1BugsInt + prio2BugsInt)
-
-                    //println(prio1BugsInt + '/' + prio2BugsInt + '/' + bugsTotalInt + " " + reportFile.path)
+                    fbErrors += prio1BugsInt
+                    fbWarnings += prio2BugsInt
+                    fbInfos += bugsTotalInt - (prio1BugsInt + prio2BugsInt)
                 }
             }
         }
     }
+    // ### End Findbugs report parsing
 
-    println("Errors: " + errors + " (Threshold: " + findbugsErrorThreshold + ")")
-    println("Warnings: " + warnings + " (Threshold: " + findbugsWarningThreshold + ")")
-    println("Info: " + infos)
-
-    if (warnings > Integer.valueOf(findbugsWarningThreshold)) {
-       throw new GradleException("There were findbugs warnings exceeding the warning threshold! Warnings: " + warnings + " Threshold: " + findbugsWarningThreshold)
-    }
-
-    if (errors > Integer.valueOf(findbugsErrorThreshold)) {
-       throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + errors + " Threshold: " + findbugsErrorThreshold)
-    }
-}
-
-task checkPmdThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
-    def reportTypes = ['main', 'test']
-    def errors = 0
-    def warnings = 0
-    def infos = 0
+    // ### Begin PMD report parsing ###
+    def pmdErrors = 0
+    def pmdWarnings = 0
+    def pmdInfos = 0
 
     mainSubprojects.each { Project p ->
         reportTypes.each { String type ->
@@ -367,36 +340,69 @@ task checkPmdThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
                 xmlFile.'file'.'violation'.each { issue ->
                     switch (issue.attribute("priority")) {
                         case "1":
-                            errors++
+                            pmdErrors++
                             break;
                         case "2":
-                            warnings++
+                            pmdWarnings++
                             break;
                         default:
-                            infos++
+                            pmdInfos++
                             break;
                     }
                 }
-                //println(errors + '/' + warnings + '/' + infos + " " + reportFile.path)
             }
         }
     }
+    // ### End PMD report parsing ###
 
-    println("Errors: " + errors + " (Threshold: " + pmdErrorThreshold + ")")
-    println("Warnings: " + warnings + " (Threshold: " + pmdWarningThreshold + ")")
-    println("Info: " + infos)
+    // ### Print results
+    println("Static analysis results:")
+    println()
+    println(" Checkstyle:")
+    println("  Errors: " + csErrors + " (Threshold: " + checkstyleErrorThreshold + ")")
+    println("  Warnings: " + csWarnings + " (Threshold: " + checkstyleWarningThreshold + ")")
+    println("  Info: " + csInfos)
+    println()
+    println(" Findbugs:")
+    println("  Errors: " + fbErrors + " (Threshold: " + findbugsErrorThreshold + ")")
+    println("  Warnings: " + fbWarnings + " (Threshold: " + findbugsWarningThreshold + ")")
+    println("  Info: " + fbInfos)
+    println()
+    println(" PMD:")
+    println("  Errors: " + pmdErrors + " (Threshold: " + pmdErrorThreshold + ")")
+    println("  Warnings: " + pmdWarnings + " (Threshold: " + pmdWarningThreshold + ")")
+    println("  Info: " + pmdInfos)
 
-    if (warnings > Integer.valueOf(pmdWarningThreshold)) {
-        throw new GradleException("There were pmd warnings exceeding the warning threshold! Warnings: " + warnings + " Threshold: " + pmdWarningThreshold)
+
+    // ### Fail build if Checkstyle thresholds are violated
+    if (csWarnings > Integer.valueOf(checkstyleWarningThreshold)) {
+        throw new GradleException("There were checkstyle warnings exceeding the warning threshold! Warnings: " + csWarnings + " Threshold: " + checkstyleWarningThreshold)
     }
 
-    if (errors > Integer.valueOf(pmdErrorThreshold)) {
-        throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + errors + " Threshold: " + pmdErrorThreshold)
+    if (csErrors > Integer.valueOf(checkstyleErrorThreshold)) {
+        throw new GradleException("There were checkstyle errors exceeding the error threshold! Errors: " + csErrors + " Threshold: " + checkstyleErrorThreshold)
     }
+
+    // ### Fail build if Findbugs thresholds are violated
+    if (fbWarnings > Integer.valueOf(findbugsWarningThreshold)) {
+        throw new GradleException("There were findbugs warnings exceeding the warning threshold! Warnings: " + fbWarnings + " Threshold: " + findbugsWarningThreshold)
+    }
+
+    if (fbErrors > Integer.valueOf(findbugsErrorThreshold)) {
+        throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + fbErrors + " Threshold: " + findbugsErrorThreshold)
+    }
+
+    // ### Fail build if PMD thresholds are violated
+    if (pmdWarnings > Integer.valueOf(pmdWarningThreshold)) {
+        throw new GradleException("There were pmd warnings exceeding the warning threshold! Warnings: " + pmdWarnings + " Threshold: " + pmdWarningThreshold)
+    }
+
+    if (pmdErrors > Integer.valueOf(pmdErrorThreshold)) {
+        throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + pmdErrors + " Threshold: " + pmdErrorThreshold)
+    }
+
+
 }
-
-task checkThresholds(dependsOn: [checkCheckstyleThresholds, checkFindbugsThresholds, checkPmdThresholds]) << {}
-
 
 
 
