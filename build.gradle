@@ -256,10 +256,11 @@ def monthMMM() {
 // We have multiple subprojects - but we do not want all of them in our JAR files.
 def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
 
+
 task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
     def reportTypes = ['main', 'test']
 
-    // ### Begin Checkstyle report parsing
+    // Begin Checkstyle report parsing
     def csErrors = 0
     def csWarnings = 0
     def csInfos = 0
@@ -285,10 +286,10 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
             }
         }
     }
-    // ### End Checkstyle report parsing
+    // End Checkstyle report parsing
 
 
-    // ### Begin Findbugs report parsing ###
+    // Begin Findbugs report parsing
     def fbErrors = 0
     def fbWarnings = 0
     def fbInfos = 0
@@ -325,9 +326,10 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
             }
         }
     }
-    // ### End Findbugs report parsing
+    // End Findbugs report parsing
 
-    // ### Begin PMD report parsing ###
+
+    // Begin PMD report parsing
     def pmdErrors = 0
     def pmdWarnings = 0
     def pmdInfos = 0
@@ -353,9 +355,10 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
             }
         }
     }
-    // ### End PMD report parsing ###
+    // End PMD report parsing
 
-    // ### Print results
+
+    // Print results
     println("Static analysis results:")
     println()
     println(" Checkstyle:")
@@ -374,7 +377,7 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
     println("  Info: " + pmdInfos)
 
 
-    // ### Fail build if Checkstyle thresholds are violated
+    // Fail build if Checkstyle thresholds are violated
     if (csWarnings > Integer.valueOf(checkstyleWarningThreshold)) {
         throw new GradleException("There were checkstyle warnings exceeding the warning threshold! Warnings: " + csWarnings + " Threshold: " + checkstyleWarningThreshold)
     }
@@ -383,7 +386,8 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
         throw new GradleException("There were checkstyle errors exceeding the error threshold! Errors: " + csErrors + " Threshold: " + checkstyleErrorThreshold)
     }
 
-    // ### Fail build if Findbugs thresholds are violated
+
+    // Fail build if Findbugs thresholds are violated
     if (fbWarnings > Integer.valueOf(findbugsWarningThreshold)) {
         throw new GradleException("There were findbugs warnings exceeding the warning threshold! Warnings: " + fbWarnings + " Threshold: " + findbugsWarningThreshold)
     }
@@ -392,7 +396,8 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
         throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + fbErrors + " Threshold: " + findbugsErrorThreshold)
     }
 
-    // ### Fail build if PMD thresholds are violated
+
+    // Fail build if PMD thresholds are violated
     if (pmdWarnings > Integer.valueOf(pmdWarningThreshold)) {
         throw new GradleException("There were pmd warnings exceeding the warning threshold! Warnings: " + pmdWarnings + " Threshold: " + pmdWarningThreshold)
     }
@@ -400,13 +405,7 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
     if (pmdErrors > Integer.valueOf(pmdErrorThreshold)) {
         throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + pmdErrors + " Threshold: " + pmdErrorThreshold)
     }
-
-
 }
-
-
-
-
 
 
 task apidoc(type: Javadoc) {
