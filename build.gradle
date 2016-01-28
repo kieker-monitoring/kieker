@@ -198,6 +198,89 @@ allprojects {
 // We have multiple subprojects - but we do not want all of them in our JAR files.
 def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
 
+def parseCheckstyleReport(File reportFile) {
+    def errors = 0
+    def warnings = 0
+    def infos = 0
+
+    if (reportFile.exists()) {
+        def xmlFile = (new XmlParser()).parse(reportFile)
+        xmlFile.'file'.'error'.each { issue ->
+            switch (issue.attribute("severity")) {
+                case "error":
+                    errors++
+                    break;
+                case "warning":
+                    warnings++
+                    break;
+                default:
+                    infos++
+                    break;
+            }
+        }
+    }
+    return [errors, warnings, infos]
+}
+
+def parseFindbugsReport(File reportFile) {
+    def errors = 0
+    def warnings = 0
+    def infos = 0
+
+    if (reportFile.exists()) {
+        def xmlFile = (new XmlParser()).parse(reportFile)
+        xmlFile.'FindBugsSummary'.each { issue ->
+            def prio1Bugs = issue.attribute("priority_1")
+            def prio2Bugs = issue.attribute("priority_2")
+            def bugsTotal = issue.attribute("total_bugs")
+            def prio1BugsInt = 0
+            def prio2BugsInt = 0
+            def bugsTotalInt = 0
+
+            if (prio1Bugs != null) {
+                prio1BugsInt = Integer.valueOf(prio1Bugs)
+            }
+
+            if (prio2Bugs != null) {
+                prio2BugsInt = Integer.valueOf(prio2Bugs)
+            }
+
+            if (bugsTotal != null) {
+                bugsTotalInt = Integer.valueOf(bugsTotal)
+            }
+
+            errors += prio1BugsInt
+            warnings += prio2BugsInt
+            infos += bugsTotalInt - (prio1BugsInt + prio2BugsInt)
+        }
+    }
+    return [errors, warnings, infos]
+}
+
+def parsePmdReport(File reportFile) {
+    def errors = 0
+    def warnings = 0
+    def infos = 0
+
+    if (reportFile.exists()) {
+        def xmlFile = (new XmlParser()).parse(reportFile)
+        xmlFile.'file'.'violation'.each { issue ->
+            switch (issue.attribute("priority")) {
+                case "1":
+                    errors++
+                    break;
+                case "2":
+                    warnings++
+                    break;
+                default:
+                    infos++
+                    break;
+            }
+        }
+    }
+    return [errors, warnings, infos]
+}
+
 task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
     def reportTypes = ['main', 'test']
 
@@ -209,22 +292,10 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
     mainSubprojects.each { Project p ->
         reportTypes.each { String type ->
             def reportFile = file(p.projectDir.path + '/build/reports/checkstyle/' + type + '.xml')
-            if (reportFile.exists()) {
-                def xmlFile = (new XmlParser()).parse(reportFile)
-                xmlFile.'file'.'error'.each { issue ->
-                    switch (issue.attribute("severity")) {
-                        case "error":
-                            csErrors++
-                            break;
-                        case "warning":
-                            csWarnings++
-                            break;
-                        default:
-                            csInfos++
-                            break;
-                    }
-                }
-            }
+            def reportResults = parseCheckstyleReport(reportFile)
+            csErrors += reportResults[0]
+            csWarnings += reportResults[1]
+            csInfos += reportResults[2]
         }
     }
     // End Checkstyle report parsing
@@ -238,33 +309,10 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
     mainSubprojects.each { Project p ->
         reportTypes.each { String type ->
             def reportFile = file(p.projectDir.path + '/build/reports/findbugs/' + type + '.xml')
-            if (reportFile.exists()) {
-                def xmlFile = (new XmlParser()).parse(reportFile)
-                xmlFile.'FindBugsSummary'.each { issue ->
-                    def prio1Bugs = issue.attribute("priority_1")
-                    def prio2Bugs = issue.attribute("priority_2")
-                    def bugsTotal = issue.attribute("total_bugs")
-                    def prio1BugsInt = 0
-                    def prio2BugsInt = 0
-                    def bugsTotalInt = 0
-
-                    if (prio1Bugs != null) {
-                        prio1BugsInt = Integer.valueOf(prio1Bugs)
-                    }
-
-                    if (prio2Bugs != null) {
-                        prio2BugsInt = Integer.valueOf(prio2Bugs)
-                    }
-
-                    if (bugsTotal != null) {
-                        bugsTotalInt = Integer.valueOf(bugsTotal)
-                    }
-
-                    fbErrors += prio1BugsInt
-                    fbWarnings += prio2BugsInt
-                    fbInfos += bugsTotalInt - (prio1BugsInt + prio2BugsInt)
-                }
-            }
+            def reportResults = parseFindbugsReport(reportFile)
+            fbErrors += reportResults[0]
+            fbWarnings += reportResults[1]
+            fbInfos += reportResults[2]
         }
     }
     // End Findbugs report parsing
@@ -278,22 +326,10 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
     mainSubprojects.each { Project p ->
         reportTypes.each { String type ->
             def reportFile = file(p.projectDir.path + '/build/reports/pmd/' + type + '.xml')
-            if (reportFile.exists()) {
-                def xmlFile = (new XmlParser()).parse(reportFile)
-                xmlFile.'file'.'violation'.each { issue ->
-                    switch (issue.attribute("priority")) {
-                        case "1":
-                            pmdErrors++
-                            break;
-                        case "2":
-                            pmdWarnings++
-                            break;
-                        default:
-                            pmdInfos++
-                            break;
-                    }
-                }
-            }
+            def reportResults = parsePmdReport(reportFile)
+            pmdErrors += reportResults[0]
+            pmdWarnings += reportResults[1]
+            pmdInfos += reportResults[2]
         }
     }
     // End PMD report parsing
@@ -348,6 +384,7 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
     }
 }
 
+// Execute 'checkThresholds' after all check tasks in the subprojects have been executed
 mainSubprojects.tasks.check*.finalizedBy(checkThresholds)
 
 def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
