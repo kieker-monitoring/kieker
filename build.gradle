@@ -265,6 +265,8 @@ def parsePmdReport(File reportFile) {
     if (reportFile.exists()) {
         def xmlFile = (new XmlParser()).parse(reportFile)
         xmlFile.'file'.'violation'.each { issue ->
+            
+            // https://github.com/jenkinsci/pmd-plugin/blob/master/src/main/java/hudson/plugins/pmd/parser/PmdParser.java#L26-L29
             switch (issue.attribute("priority")) {
                 case "1":
                 case "2":
