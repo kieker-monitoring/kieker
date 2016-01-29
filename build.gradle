@@ -267,16 +267,14 @@ def parsePmdReport(File reportFile) {
         xmlFile.'file'.'violation'.each { issue ->
             switch (issue.attribute("priority")) {
                 case "1":
-                    errors++
-                    break;
                 case "2":
                     errors++
                     break;
                 case "3":
-                    warnings++;
-                    break;
                 case "4":
                     warnings++;
+                    break;
+                case "5":
                 default:
                     infos++
                     break;
