@@ -270,8 +270,13 @@ def parsePmdReport(File reportFile) {
                     errors++
                     break;
                 case "2":
-                    warnings++
+                    errors++
                     break;
+                case "3":
+                    warnings++;
+                    break;
+                case "4":
+                    warnings++;
                 default:
                     infos++
                     break;
