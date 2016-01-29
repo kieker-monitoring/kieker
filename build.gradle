@@ -161,7 +161,6 @@ allprojects {
     }
 
 
-    /**
     def reports = 'build/reports'
 
     def checkstyleReportsFolder = "$reports/checkstyle"
@@ -189,9 +188,12 @@ allprojects {
         }
     }
 
+    check.finalizedBy mainHtmlReport
+    mainHtmlReport.finalizedBy testHtmlReport
+
     mainHtmlReport.onlyIf { reportingCompatibleJavaVersionPresent() }
     testHtmlReport.onlyIf { reportingCompatibleJavaVersionPresent() }
-     */
+
 }
 
 
@@ -265,7 +267,7 @@ def parsePmdReport(File reportFile) {
     if (reportFile.exists()) {
         def xmlFile = (new XmlParser()).parse(reportFile)
         xmlFile.'file'.'violation'.each { issue ->
-            
+
             // https://github.com/jenkinsci/pmd-plugin/blob/master/src/main/java/hudson/plugins/pmd/parser/PmdParser.java#L26-L29
             switch (issue.attribute("priority")) {
                 case "1":
@@ -415,7 +417,6 @@ compileJava.dependsOn replaceHardCodedVersionNames
 def reportingCompatibleJavaVersionPresent() {
     switch (JavaVersion.current()) {
         case JavaVersion.VERSION_1_7:
-            return true;
         case JavaVersion.VERSION_1_8:
             return true;
         default:
