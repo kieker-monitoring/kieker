@@ -6,8 +6,10 @@ env:
   global:
     - KIEKER_GIT="https://github.com/kieker-monitoring/kieker.git"
     - GRADLE_TARGET="build"
-    - GRADLE_EXCLUDES=""
     - DOCKER_IMAGE_TAG=openjdk6  
+  matrix:
+    - GRADLE_EXCLUDES=""
+    - GRADLE_EXCLUDES="-x test"
 
 services:
   - docker
