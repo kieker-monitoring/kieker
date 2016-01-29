@@ -13,10 +13,6 @@ env:
     - DOCKER_IMAGE_TAG=openjdk7
     - DOCKER_IMAGE_TAG=openjdk8
 
-branches:
-  only:
-    - master
-    
 services:
   - docker
 
