@@ -19,5 +19,5 @@ before_install:
   - docker pull kieker/kieker-build:$DOCKER_IMAGE_TAG
 
 script:
-  - docker run kieker/kieker-build:$DOCKER_IMAGE_TAG /bin/bash -c "git clone -b ${TRAVIS_BRANCH} ${KIEKER_GIT} kieker && cd kieker/ && if ! [ "$TRAVIS_PULL_REQUEST" = false ]; then git fetch origin pull/${TRAVIS_PULL_REQUEST}/head && git checkout -b travis FETCH_HEAD; fi && ./gradlew ${GRADLE_TARGET} ${GRADLE_EXCLUDES}"
+  - docker run kieker/kieker-build:$DOCKER_IMAGE_TAG /bin/bash -c "git clone ${KIEKER_GIT} kieker && cd kieker/ && if ! [ "$TRAVIS_PULL_REQUEST" = false ]; then git fetch origin pull/${TRAVIS_PULL_REQUEST}/head && git checkout -b travis FETCH_HEAD; fi && ./gradlew ${GRADLE_TARGET} ${GRADLE_EXCLUDES}"
 
