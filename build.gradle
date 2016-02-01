@@ -163,8 +163,8 @@ allprojects {
 
     def reports = 'build/reports'
 
-    def checkstyleReportsFolder = "$reports/checkstyle"
-    def findbugsReportsFolder = "$reports/findbugs"
+    def checkstyleReportsFolder = "${reports}/checkstyle"
+    def findbugsReportsFolder = "${reports}/findbugs"
     def pmdReportsFolder = "${reports}/pmd"
 
     def javaVersion = JavaVersion.current()
@@ -173,6 +173,7 @@ allprojects {
         def scautilJar = file("${rootDir}/${dirLib}/static-analysis/scautil-${javaVersion}.jar")
         args = ["$scautilJar", "${findbugsReportsFolder}/main.xml", "${checkstyleReportsFolder}/main.xml", "${pmdReportsFolder}/main.xml", "${reports}/mainReportSummary.html"]
         main = '-jar'
+
         doLast {
             println('The report summary for \'main\' can be found at ' + project.path + '/' + reports + '/mainReportSummary.html')
         }
@@ -189,7 +190,10 @@ allprojects {
     }
 
     check.finalizedBy mainHtmlReport
+    mainHtmlReport.mustRunAfter check
+
     mainHtmlReport.finalizedBy testHtmlReport
+    testHtmlReport.mustRunAfter mainHtmlReport
 
     mainHtmlReport.onlyIf { reportingCompatibleJavaVersionPresent() }
     testHtmlReport.onlyIf { reportingCompatibleJavaVersionPresent() }
