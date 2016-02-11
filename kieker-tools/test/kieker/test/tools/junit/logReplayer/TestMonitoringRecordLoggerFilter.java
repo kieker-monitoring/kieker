@@ -169,6 +169,9 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 		final File monitoringProperties = this.tmpFolder.newFile();
 		this.createControllerConfiguration(monitoringProperties.getAbsolutePath());
 
+		Assert.assertTrue(this.tmpFolder.getRoot().exists());
+		Assert.assertTrue(monitoringProperties.exists());
+
 		final Configuration recordLoggingFilterConfiguration = new Configuration();
 		recordLoggingFilterConfiguration.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, monitoringProperties.getPath());
 		recordLoggingFilterConfiguration.setProperty(
