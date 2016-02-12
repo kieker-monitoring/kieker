@@ -16,29 +16,6 @@
 
 package kieker.test.tools.junit.logReplayer;
 
-import kieker.analysis.AnalysisController;
-import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
-import kieker.analysis.plugin.reader.AbstractReaderPlugin;
-import kieker.analysis.plugin.reader.filesystem.FSReader;
-import kieker.analysis.plugin.reader.list.ListReader;
-import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.misc.EmptyRecord;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
-import kieker.monitoring.writer.filesystem.AsyncFsWriter;
-import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
-import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.tools.junit.writeRead.filesystem.KiekerLogDirFilter;
-import kieker.tools.logReplayer.filter.MonitoringRecordLoggerFilter;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -47,6 +24,36 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
+import kieker.analysis.AnalysisController;
+import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
+import kieker.analysis.plugin.reader.AbstractReaderPlugin;
+import kieker.analysis.plugin.reader.filesystem.FSReader;
+import kieker.analysis.plugin.reader.list.ListReader;
+
+import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.misc.EmptyRecord;
+
+import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
+import kieker.monitoring.writer.filesystem.AsyncFsWriter;
+
+import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
+import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.junit.writeRead.filesystem.KiekerLogDirFilter;
+
+import kieker.tools.logReplayer.filter.MonitoringRecordLoggerFilter;
+
+
 
 /**
  * Tests the {@link MonitoringRecordLoggerFilter}.
