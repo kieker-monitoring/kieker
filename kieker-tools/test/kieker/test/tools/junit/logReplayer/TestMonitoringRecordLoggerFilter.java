@@ -16,19 +16,6 @@
 
 package kieker.test.tools.junit.logReplayer;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
@@ -44,11 +31,22 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
-import kieker.tools.logReplayer.filter.MonitoringRecordLoggerFilter;
-
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.junit.writeRead.filesystem.KiekerLogDirFilter;
+import kieker.tools.logReplayer.filter.MonitoringRecordLoggerFilter;
+import org.junit.Assert;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Tests the {@link MonitoringRecordLoggerFilter}.
@@ -66,7 +64,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	private static final int DEFAULT_EVENTS_NUMBER = 5; // just a basic test with (potentially) at bit more than a hand full of records
 
 	/** A rule making sure that a temporary folder exists for every test method (which is removed after the test). */
-	@Rule
+	//@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
 	/**
@@ -166,11 +164,10 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 		final ListReader<IMonitoringRecord> reader = new ListReader<IMonitoringRecord>(new Configuration(), analysisController);
 		reader.addAllObjects(eventsToWrite);
 
+		this.tmpFolder.create();
+		Assert.assertTrue(this.tmpFolder.getRoot().exists());
 		final File monitoringProperties = this.tmpFolder.newFile();
 		this.createControllerConfiguration(monitoringProperties.getAbsolutePath());
-
-		Assert.assertTrue(this.tmpFolder.getRoot().exists());
-		Assert.assertTrue(monitoringProperties.exists());
 
 		final Configuration recordLoggingFilterConfiguration = new Configuration();
 		recordLoggingFilterConfiguration.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, monitoringProperties.getPath());
@@ -189,6 +186,8 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 		analysisController.run();
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
 
+		Assert.assertTrue(this.tmpFolder.getRoot().exists());
+		Assert.assertTrue(monitoringProperties.exists());
 		final List<IMonitoringRecord> eventsFromLog = this.readEvents();
 
 		// The following line is an easy way to test the tests (given monitoringRecords includes at least one record). But don't forget to deactivate afterwards.

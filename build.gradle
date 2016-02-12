@@ -49,6 +49,8 @@ allprojects {
 	}
 
 	test {
+		systemProperty "java.io.tmpdir", "${buildDir}"
+
 		testLogging {
 			showCauses = 'true'
 			exceptionFormat = 'full'
@@ -157,7 +159,6 @@ task updateLicenseHeaderYear() << {
 		regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2015 Kieker Project')
 	}
 }
-
 
 compileJava.dependsOn replaceHardCodedVersionNames
 

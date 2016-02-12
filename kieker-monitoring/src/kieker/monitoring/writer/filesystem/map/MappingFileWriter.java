@@ -80,6 +80,8 @@ public final class MappingFileWriter {
 				}
 			} finally {
 				if (pw != null) {
+					// Important (see #1634)
+					pw.flush();
 					pw.close();
 				}
 			}
