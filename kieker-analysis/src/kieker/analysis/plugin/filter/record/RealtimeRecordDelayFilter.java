@@ -198,9 +198,10 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		if (!error) {
 			long shutdownDelaySecondsFromNow = TimeUnit.SECONDS.convert((this.latestSchedulingTime - this.timer.getCurrentTime(this.timeunit)) + this.shutdownDelay,
 					this.timeunit);
-			if (shutdownDelaySecondsFromNow < 3) { // used to be 0 but that turned it to be unnecessarily tights
-				shutdownDelaySecondsFromNow = 3;
+			if (shutdownDelaySecondsFromNow < 0) {
+				shutdownDelaySecondsFromNow = 0;
 			}
+			shutdownDelaySecondsFromNow += 2; // Add a buffer for the timeout. Having exactly the second for the last event is unnecessarily tight.
 			try {
 				this.log.info("Awaiting termination delay of " + shutdownDelaySecondsFromNow + " seconds ...");
 				if (!this.executor.awaitTermination(shutdownDelaySecondsFromNow, TimeUnit.SECONDS)) {
