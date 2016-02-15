@@ -57,6 +57,10 @@ allprojects {
 			showExceptions = 'true'
 			showStandardStreams = 'true'
 		}
+
+		afterTest { desc, result -> 
+		        println "Executed test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+		}
 	}
 	
 	configurations {
