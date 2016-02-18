@@ -47,9 +47,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Tests the {@link kieker.monitoring.probe.spring.executions.OperationExecutionMethodInvocationInterceptor}.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public abstract class AbstractTestSpringMethodInterceptor extends AbstractKiekerTest { // NOPMD (AbstractClassWithoutAbstractMethod)
@@ -77,7 +77,7 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 
 	@Before
 	public void init() throws IOException {
-		this.tmpFolder.create();
+		// this.tmpFolder.create();
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, AsyncFsWriter.class.getName());
 		config.setProperty(AsyncFsWriter.class.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
@@ -93,13 +93,13 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 		this.controlFlowRegistry.unsetThreadLocalEOI();
 		this.controlFlowRegistry.unsetThreadLocalESS();
 		this.controlFlowRegistry.unsetThreadLocalTraceId();
-		this.tmpFolder.delete();
+		// this.tmpFolder.delete();
 	}
 
 	@Test
 	public void testIt() throws Throwable { // NOPMD (JUnitTestsShouldIncludeAssert), assertions in inv.checkEoiEss(); // NOCS
-		final OperationExecutionMethodInvocationInterceptor methodInterceptor =
-				new OperationExecutionMethodInvocationInterceptor(this.monitoringCtrl); // do not log executions
+		final OperationExecutionMethodInvocationInterceptor methodInterceptor = new OperationExecutionMethodInvocationInterceptor(this.monitoringCtrl); // do not log
+																																						// executions
 
 		final Bookstore bookstoreObject = new Bookstore();
 		final Method bookstoreMethod = bookstoreObject.lookupPseudoMethod();
@@ -128,29 +128,25 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 		final List<BasicMethodInvocation> invocations = new ArrayList<BasicMethodInvocation>(4);
 
 		// Note that right before the proceed we expect the ess to be proceeding execution's ess +1!
-		final BasicMethodInvocation invocation11Catalog =
-				new BasicMethodInvocation(// eoi should not increase because no sub call
-						eoiExpectedForOuterInterceptor + 1, eoiExpectedForOuterInterceptor + 2, // eoi/ess before sub calls (right before proceed)
-						eoiExpectedForOuterInterceptor + 1, eoiExpectedForOuterInterceptor + 2, // eoi/ess after sub calls (right after proceed)
-						catalogMethod, methodInterceptor, new MethodInvocation[0]);
+		final BasicMethodInvocation invocation11Catalog = new BasicMethodInvocation(// eoi should not increase because no sub call
+				eoiExpectedForOuterInterceptor + 1, eoiExpectedForOuterInterceptor + 2, // eoi/ess before sub calls (right before proceed)
+				eoiExpectedForOuterInterceptor + 1, eoiExpectedForOuterInterceptor + 2, // eoi/ess after sub calls (right after proceed)
+				catalogMethod, methodInterceptor, new MethodInvocation[0]);
 		invocations.add(invocation11Catalog);
-		final BasicMethodInvocation invocation32Catalog =
-				new BasicMethodInvocation(// eoi should not increase because no sub call
-						eoiExpectedForOuterInterceptor + 3, eoiExpectedForOuterInterceptor + 3, // eoi/ess before sub calls (right before proceed)
-						eoiExpectedForOuterInterceptor + 3, eoiExpectedForOuterInterceptor + 3, // eoi/ess after sub calls (right after proceed)
-						catalogMethod, methodInterceptor, new MethodInvocation[0]);
+		final BasicMethodInvocation invocation32Catalog = new BasicMethodInvocation(// eoi should not increase because no sub call
+				eoiExpectedForOuterInterceptor + 3, eoiExpectedForOuterInterceptor + 3, // eoi/ess before sub calls (right before proceed)
+				eoiExpectedForOuterInterceptor + 3, eoiExpectedForOuterInterceptor + 3, // eoi/ess after sub calls (right after proceed)
+				catalogMethod, methodInterceptor, new MethodInvocation[0]);
 		invocations.add(invocation32Catalog);
-		final BasicMethodInvocation invocation21CRM =
-				new BasicMethodInvocation(// eoi increases due to sub call
-						eoiExpectedForOuterInterceptor + 2, eoiExpectedForOuterInterceptor + 2, // eoi/ess before sub calls (right before proceed)
-						eoiExpectedForOuterInterceptor + 3, eoiExpectedForOuterInterceptor + 2, // eoi/ess after sub calls (right after proceed)
-						crmMethod, methodInterceptor, new MethodInvocation[] { invocation32Catalog });
+		final BasicMethodInvocation invocation21CRM = new BasicMethodInvocation(// eoi increases due to sub call
+				eoiExpectedForOuterInterceptor + 2, eoiExpectedForOuterInterceptor + 2, // eoi/ess before sub calls (right before proceed)
+				eoiExpectedForOuterInterceptor + 3, eoiExpectedForOuterInterceptor + 2, // eoi/ess after sub calls (right after proceed)
+				crmMethod, methodInterceptor, new MethodInvocation[] { invocation32Catalog });
 		invocations.add(invocation21CRM);
-		final BasicMethodInvocation invocation00Bookstore =
-				new BasicMethodInvocation(// eoi increases due to sub calls(right after proceed)
-						eoiExpectedForOuterInterceptor + 0, essExpectedForOuterInterceptor + 1, // eoi/ess before sub calls (right before proceed)
-						eoiExpectedForOuterInterceptor + 3, essExpectedForOuterInterceptor + 1, // eoi/ess after sub calls (right after proceed)
-						bookstoreMethod, methodInterceptor, new MethodInvocation[] { invocation11Catalog, invocation21CRM });
+		final BasicMethodInvocation invocation00Bookstore = new BasicMethodInvocation(// eoi increases due to sub calls(right after proceed)
+				eoiExpectedForOuterInterceptor + 0, essExpectedForOuterInterceptor + 1, // eoi/ess before sub calls (right before proceed)
+				eoiExpectedForOuterInterceptor + 3, essExpectedForOuterInterceptor + 1, // eoi/ess after sub calls (right after proceed)
+				bookstoreMethod, methodInterceptor, new MethodInvocation[] { invocation11Catalog, invocation21CRM });
 		invocations.add(invocation00Bookstore);
 
 		methodInterceptor.invoke(invocation00Bookstore); // we emulate the AOP framework here and execute the Bookstore application
@@ -187,9 +183,9 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 	}
 
 	/**
-	 * 
+	 *
 	 * @author Andre van Hoorn
-	 * 
+	 *
 	 * @since 1.5
 	 */
 	class BasicMethodInvocation implements MethodInvocation {
@@ -294,7 +290,7 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 
 	/**
 	 * @author Andre van Hoorn
-	 * 
+	 *
 	 * @since 1.5
 	 */
 	public abstract static class AbstractPseudoComponent { // NOPMD (AbstractClassWithoutAbstractMethod)
@@ -311,7 +307,7 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 
 	/**
 	 * @author Andre van Hoorn
-	 * 
+	 *
 	 * @since 1.5
 	 */
 	public static final class Bookstore extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
@@ -327,7 +323,7 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 
 	/**
 	 * @author Andre van Hoorn
-	 * 
+	 *
 	 * @since 1.5
 	 */
 	public static final class CRM extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
@@ -343,7 +339,7 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 
 	/**
 	 * @author Andre van Hoorn
-	 * 
+	 *
 	 * @since 1.5
 	 */
 	public static final class Catalog extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")

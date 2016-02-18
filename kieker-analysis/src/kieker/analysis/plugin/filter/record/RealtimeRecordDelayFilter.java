@@ -33,24 +33,20 @@ import kieker.common.record.IMonitoringRecord;
  * (assumed to be in the configured resolution). For example, after initialization, if records with logging timestamps 3000 and 4500 nanos are received, the
  * first record is forwarded immediately; the second will be forwarded 1500 nanos later. The acceleration factor can be used to accelerate/slow down the
  * replay (default 1.0, which means no acceleration/slow down).
- * 
+ *
  * @author Andre van Hoorn, Robert von Massow, Jan Waller
- * 
+ *
  * @since 1.6
  */
-@Plugin(
-		description = "Forwards incoming records with delays computed from the timestamp values",
-		outputPorts = {
-			@OutputPort(name = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class },
-					description = "Outputs the delayed records")
-		},
-		configuration = {
-			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_NUM_WORKERS, defaultValue = "1"),
-			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, defaultValue = "5"),
-			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS, defaultValue = "2"),
-			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_TIMER, defaultValue = "MILLISECONDS"),
-			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR, defaultValue = "1") // CONFIG_PROPERTY_ACCELERATION_FACTOR_DEFAULT
-		})
+@Plugin(description = "Forwards incoming records with delays computed from the timestamp values", outputPorts = {
+	@OutputPort(name = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Outputs the delayed records")
+}, configuration = {
+	@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_NUM_WORKERS, defaultValue = "1"),
+	@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, defaultValue = "5"),
+	@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS, defaultValue = "2"),
+	@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_TIMER, defaultValue = "MILLISECONDS"),
+	@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR, defaultValue = "1") // CONFIG_PROPERTY_ACCELERATION_FACTOR_DEFAULT
+})
 public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 	/** The name of the input port receiving the records. */
@@ -107,7 +103,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -148,7 +144,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 	/**
 	 * This method represents the input port of this filter.
-	 * 
+	 *
 	 * @param monitoringRecord
 	 *            The next monitoring record.
 	 */
@@ -200,11 +196,12 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		this.executor.shutdown();
 
 		if (!error) {
-			long shutdownDelaySecondsFromNow =
-					TimeUnit.SECONDS.convert((this.latestSchedulingTime - this.timer.getCurrentTime(this.timeunit)) + this.shutdownDelay, this.timeunit);
+			long shutdownDelaySecondsFromNow = TimeUnit.SECONDS.convert((this.latestSchedulingTime - this.timer.getCurrentTime(this.timeunit)) + this.shutdownDelay,
+					this.timeunit);
 			if (shutdownDelaySecondsFromNow < 0) {
 				shutdownDelaySecondsFromNow = 0;
 			}
+			shutdownDelaySecondsFromNow += 2; // Add a buffer for the timeout. Having exactly the second for the last event is unnecessarily tight.
 			try {
 				this.log.info("Awaiting termination delay of " + shutdownDelaySecondsFromNow + " seconds ...");
 				if (!this.executor.awaitTermination(shutdownDelaySecondsFromNow, TimeUnit.SECONDS)) {

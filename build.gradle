@@ -15,6 +15,7 @@ allprojects {
     apply plugin: 'java'
 
     version = kiekerVersion
+<<<<<<< HEAD
 
     sourceCompatibility = 1.6
     targetCompatibility = 1.6
@@ -49,6 +50,7 @@ allprojects {
     }
 
     test {
+        systemProperty "java.io.tmpdir", "${buildDir}"
         testLogging {
             showCauses = 'true'
             exceptionFormat = 'full'
