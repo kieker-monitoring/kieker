@@ -49,8 +49,8 @@ allprojects {
 	}
 
 	test {
+		ignoreFailures = false
 		systemProperty "java.io.tmpdir", "${buildDir}"
-		maxHeapSize = "2g"
 
 		testLogging {
 			showCauses = 'true'
@@ -86,10 +86,6 @@ allprojects {
 		classpath = project.sourceSets.integrationTest.runtimeClasspath
 	}
 	check.dependsOn integrationTest
-	
-	test {
-		ignoreFailures = false
-	}
 	
 	apply plugin: 'cpd'
 	tasks.cpd {
@@ -145,6 +141,10 @@ allprojects {
 		testCompile resolveLibrary('junit-*.jar')
 		testCompile resolveLibrary('hamcrest-core-*.jar')
 	}
+}
+
+test {
+  maxHeapSize = "2g"
 }
 
 def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
