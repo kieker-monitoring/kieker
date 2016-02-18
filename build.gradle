@@ -15,7 +15,6 @@ allprojects {
     apply plugin: 'java'
 
     version = kiekerVersion
-<<<<<<< HEAD
 
     sourceCompatibility = 1.6
     targetCompatibility = 1.6
@@ -50,6 +49,7 @@ allprojects {
     }
 
     test {
+        maxHeapSize = "2g"
         systemProperty "java.io.tmpdir", "${buildDir}"
         testLogging {
             showCauses = 'true'
