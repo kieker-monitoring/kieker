@@ -15,10 +15,6 @@ task generateRecords(type: JavaExec) {
 
   classpath = fileTree('../bin/dev') {
     include 'target/de.cau.cs.se.instrumentation.rl.cli-*.jar'
-    include 'lib/org.eclipse.emf.mwe.core_*.jar'
-    include 'lib/org.eclipse.xtext.common.types_*.jar'
-    include 'lib/org.eclipse.emf.mwe.utils_*.jar'
-    include 'lib/org.eclipse.xtext.common.types.ui_*.jar'
   }				
   main = 'de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain'
   args '-r', '..',            // the root directory
@@ -37,10 +33,6 @@ task generateRecordTests(type: JavaExec) {
 
   classpath = fileTree('../bin/dev') {
     include 'target/de.cau.cs.se.instrumentation.rl.cli-*.jar'
-    include 'lib/org.eclipse.emf.mwe.core_*.jar'
-    include 'lib/org.eclipse.xtext.common.types_*.jar'
-    include 'lib/org.eclipse.emf.mwe.utils_*.jar'
-    include 'lib/org.eclipse.xtext.common.types.ui_*.jar'
   }				
   main = 'de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain'
   args '-r', '..',            // the root directory

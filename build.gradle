@@ -88,7 +88,7 @@ allprojects {
 
     test {
         ignoreFailures = false
-	maxHeapSize = "2g"
+	    maxHeapSize = "2g" // Set limit to prevent Travis-CI build to crash
     }
 
     apply plugin: 'cpd'
