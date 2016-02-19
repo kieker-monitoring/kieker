@@ -117,8 +117,13 @@ allprojects {
 	}
 	
 	apply plugin: 'findbugs'
-	findbugs { 
-		toolVersion = '3.0.1'
+	findbugs {
+		if (JavaVersion.current() == JavaVersion.VERSION_1_6) {
+			fbVersion = '2.0.3'
+		} else {
+			fbVersion = '3.0.1'
+		}
+		toolVersion = fbVersion
 		ignoreFailures = true 
 		effort = "max"
 		reportLevel = "low"
