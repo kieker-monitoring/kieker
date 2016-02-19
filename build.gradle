@@ -153,6 +153,10 @@ allprojects {
 	}
 }
 
+test {
+    maxHeapSize = "2g"
+}
+
 def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
 		//println "Replacing $searchExp by $replaceExp in $file"
 		String contents = file.getText('UTF-8')
