@@ -144,7 +144,8 @@ allprojects {
 		cpd resolveLibrary('**/pmd-*/**/*.jar')
 		checkstyle resolveLibrary('**/checkstyle-*/**/*.jar')
 		checkstyle project(':kieker-checkstyle-extension')
-		findbugs resolveLibrary('**/findbugs-*/lib/*.jar')
+
+		findbugs resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
 		
 		testCompile resolveLibrary('junit-*.jar')
 		testCompile resolveLibrary('hamcrest-core-*.jar')
