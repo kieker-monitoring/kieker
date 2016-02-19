@@ -115,7 +115,8 @@ allprojects {
 
 		configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
 	}
-	
+
+	def fbVersion
 	apply plugin: 'findbugs'
 	findbugs {
 		if (JavaVersion.current() == JavaVersion.VERSION_1_6) {
