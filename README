@@ -5,4 +5,4 @@ Detailed information about Kieker is provided at http://kieker-monitoring.net/
 
 Gradle is used as the build tool. A `build.gradle` is provided. Also, the sources can 
 be imported into Eclipse. The developer guide contains additional information 
-on the build environment: http://trac.kieker-monitoring.net/wiki/DevGuide 
+on the build environment: https://kieker-monitoring.atlassian.net/wiki/display/DEV/
