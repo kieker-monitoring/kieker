@@ -4,6 +4,7 @@ language: bash
 
 env:
   global:
+    - MALLOC_ARENA_MAX=2
     - KIEKER_GIT="https://github.com/${TRAVIS_REPO_SLUG}.git"
     - GRADLE_TARGET="build"
     - DOCKER_IMAGE_TAG=openjdk6  
