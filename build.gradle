@@ -405,6 +405,7 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
 // Execute 'checkThresholds' after all check tasks in the subprojects have been executed
 mainSubprojects.tasks.check*.finalizedBy(checkThresholds)
 
+
 def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
     //println "Replacing $searchExp by $replaceExp in $file"
     String contents = file.getText('UTF-8')

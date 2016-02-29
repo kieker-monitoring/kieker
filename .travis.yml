@@ -4,8 +4,10 @@ language: bash
 
 env:
   global:
+    - MALLOC_ARENA_MAX=2
     - KIEKER_GIT="https://github.com/${TRAVIS_REPO_SLUG}.git"
     - GRADLE_TARGET="build"
+    - GRADLE_PROPS="-DMaxHeapSize=2g"
     - DOCKER_IMAGE_TAG=openjdk6  
   matrix:
     - GRADLE_EXCLUDES=""
@@ -18,4 +20,4 @@ before_install:
   - docker pull kieker/kieker-build:$DOCKER_IMAGE_TAG
 
 script:
-  - docker run kieker/kieker-build:$DOCKER_IMAGE_TAG /bin/bash -c "git clone -b ${TRAVIS_BRANCH} ${KIEKER_GIT} kieker && cd kieker/ && if ! [ "$TRAVIS_PULL_REQUEST" = false ]; then git fetch origin pull/${TRAVIS_PULL_REQUEST}/head && git checkout -b travis FETCH_HEAD; fi && ./gradlew -S ${GRADLE_TARGET} ${GRADLE_EXCLUDES}"
+  - docker run kieker/kieker-build:$DOCKER_IMAGE_TAG /bin/bash -c "git clone -b ${TRAVIS_BRANCH} ${KIEKER_GIT} kieker && cd kieker/ && if ! [ "$TRAVIS_PULL_REQUEST" = false ]; then git fetch origin pull/${TRAVIS_PULL_REQUEST}/head && git checkout -b travis FETCH_HEAD; fi && ./gradlew -S ${GRADLE_TARGET} ${GRADLE_EXCLUDES} ${GRADLE_PROPS}"
