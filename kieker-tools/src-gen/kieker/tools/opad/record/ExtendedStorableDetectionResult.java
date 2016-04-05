@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.score
 			 + TYPE_SIZE_DOUBLE // ExtendedStorableDetectionResult.anomalyThreshold
 	;
-	private static final long serialVersionUID = 5201527358214171119L;
+	private static final long serialVersionUID = 3489846495430494003L;
 	
 	public static final Class<?>[] TYPES = {
 		String.class, // StorableDetectionResult.applicationName

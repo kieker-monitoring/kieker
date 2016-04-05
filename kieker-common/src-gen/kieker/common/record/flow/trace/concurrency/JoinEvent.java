@@ -37,7 +37,7 @@ public class JoinEvent extends AbstractTraceEvent  {
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
 			 + TYPE_SIZE_LONG // JoinEvent.joinedTraceId
 	;
-	private static final long serialVersionUID = 8247379140800787016L;
+	private static final long serialVersionUID = -7303666475064047694L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

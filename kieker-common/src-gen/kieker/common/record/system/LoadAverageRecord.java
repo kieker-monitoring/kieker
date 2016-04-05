@@ -39,7 +39,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 			 + TYPE_SIZE_DOUBLE // LoadAverageRecord.fiveMinLoadAverage
 			 + TYPE_SIZE_DOUBLE // LoadAverageRecord.fifteenMinLoadAverage
 	;
-	private static final long serialVersionUID = -4307843499809807106L;
+	private static final long serialVersionUID = -664763923774505966L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // LoadAverageRecord.timestamp

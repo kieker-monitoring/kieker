@@ -31,7 +31,7 @@ import kieker.common.record.flow.ITraceRecord;
  * @since 1.5
  */
 public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {
-		private static final long serialVersionUID = 161681009968355282L;
+		private static final long serialVersionUID = -3022261747819944031L;
 	
 	
 	/* user-defined constants */

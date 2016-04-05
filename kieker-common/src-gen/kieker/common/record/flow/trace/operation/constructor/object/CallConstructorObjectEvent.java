@@ -43,7 +43,7 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 			 + TYPE_SIZE_INT // ICallObjectRecord.calleeObjectId
 	;
-	private static final long serialVersionUID = -3991606008605176780L;
+	private static final long serialVersionUID = -567545225655603051L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

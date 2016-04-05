@@ -51,7 +51,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxOverrunsPerSecond
 			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxPacketsPerSecond
 	;
-	private static final long serialVersionUID = 3706934665472860339L;
+	private static final long serialVersionUID = 7799663712343478641L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // NetworkUtilizationRecord.timestamp

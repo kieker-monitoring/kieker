@@ -43,7 +43,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.writeBytesPerSecond
 			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.writesPerSecond
 	;
-	private static final long serialVersionUID = 4704311455217974575L;
+	private static final long serialVersionUID = 2474236414042988334L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // DiskUsageRecord.timestamp

@@ -41,7 +41,7 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 			 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
 			 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
 	;
-	private static final long serialVersionUID = 3476841214127074670L;
+	private static final long serialVersionUID = 8198255525819006580L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

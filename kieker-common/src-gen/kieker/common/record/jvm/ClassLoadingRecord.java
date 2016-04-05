@@ -39,7 +39,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 			 + TYPE_SIZE_INT // ClassLoadingRecord.loadedClassCount
 			 + TYPE_SIZE_LONG // ClassLoadingRecord.unloadedClassCount
 	;
-	private static final long serialVersionUID = -2006121738839922850L;
+	private static final long serialVersionUID = -5955568375346711225L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp

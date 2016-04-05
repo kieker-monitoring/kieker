@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 			 + TYPE_SIZE_LONG // NamedDoubleRecord.timestamp
 			 + TYPE_SIZE_DOUBLE // NamedDoubleRecord.responseTime
 	;
-	private static final long serialVersionUID = -4019655212544863655L;
+	private static final long serialVersionUID = 3508131536785781597L;
 	
 	public static final Class<?>[] TYPES = {
 		String.class, // NamedDoubleRecord.applicationName

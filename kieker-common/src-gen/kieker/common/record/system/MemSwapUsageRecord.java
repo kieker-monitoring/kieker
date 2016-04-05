@@ -42,7 +42,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapUsed
 			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapFree
 	;
-	private static final long serialVersionUID = 7372856570663572439L;
+	private static final long serialVersionUID = 638480390439299363L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // MemSwapUsageRecord.timestamp

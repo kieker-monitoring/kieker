@@ -42,7 +42,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 			 + TYPE_SIZE_STRING // KiekerMetadataRecord.timeUnit
 			 + TYPE_SIZE_LONG // KiekerMetadataRecord.numberOfRecords
 	;
-	private static final long serialVersionUID = 7506050189318057340L;
+	private static final long serialVersionUID = 8241152536143822747L;
 	
 	public static final Class<?>[] TYPES = {
 		String.class, // KiekerMetadataRecord.version

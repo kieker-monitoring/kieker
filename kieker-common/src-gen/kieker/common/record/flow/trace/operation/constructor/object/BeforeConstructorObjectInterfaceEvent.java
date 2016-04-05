@@ -41,7 +41,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 			 + TYPE_SIZE_STRING // IInterfaceRecord.interface
 	;
-	private static final long serialVersionUID = -1522482789252285454L;
+	private static final long serialVersionUID = -3985311495464960429L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

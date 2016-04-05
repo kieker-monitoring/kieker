@@ -40,7 +40,7 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 			 + TYPE_SIZE_STRING // IExceptionRecord.cause
 	;
-	private static final long serialVersionUID = -2036956513810497138L;
+	private static final long serialVersionUID = -4069763872765597698L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

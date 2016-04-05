@@ -39,7 +39,7 @@ public class GCRecord extends AbstractJVMRecord  {
 			 + TYPE_SIZE_LONG // GCRecord.collectionCount
 			 + TYPE_SIZE_LONG // GCRecord.collectionTimeMS
 	;
-	private static final long serialVersionUID = 6474827601195369151L;
+	private static final long serialVersionUID = -314644197119857213L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp

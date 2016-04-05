@@ -45,7 +45,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 			 + TYPE_SIZE_LONG // MemoryRecord.nonHeapInitBytes
 			 + TYPE_SIZE_INT // MemoryRecord.objectPendingFinalizationCount
 	;
-	private static final long serialVersionUID = 3895659770245456299L;
+	private static final long serialVersionUID = -9025858519361306011L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp

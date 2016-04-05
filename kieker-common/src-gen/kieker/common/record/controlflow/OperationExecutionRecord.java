@@ -42,7 +42,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 			 + TYPE_SIZE_INT // OperationExecutionRecord.eoi
 			 + TYPE_SIZE_INT // OperationExecutionRecord.ess
 	;
-	private static final long serialVersionUID = -4883357436134811919L;
+	private static final long serialVersionUID = -7768272829642950711L;
 	
 	public static final Class<?>[] TYPES = {
 		String.class, // OperationExecutionRecord.operationSignature

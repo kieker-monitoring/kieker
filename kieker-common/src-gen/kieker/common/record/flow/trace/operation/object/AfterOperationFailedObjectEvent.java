@@ -41,7 +41,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 			 + TYPE_SIZE_STRING // IExceptionRecord.cause
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 	;
-	private static final long serialVersionUID = 5675043694442669903L;
+	private static final long serialVersionUID = -5115197861231353414L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

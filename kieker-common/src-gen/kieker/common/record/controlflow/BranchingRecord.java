@@ -37,7 +37,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 			 + TYPE_SIZE_INT // BranchingRecord.branchID
 			 + TYPE_SIZE_INT // BranchingRecord.branchingOutcome
 	;
-	private static final long serialVersionUID = -2795856778019853382L;
+	private static final long serialVersionUID = 3957750090047819946L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // BranchingRecord.timestamp

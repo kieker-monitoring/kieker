@@ -35,7 +35,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // TimestampRecord.timestamp
 	;
-	private static final long serialVersionUID = 8853230651626771232L;
+	private static final long serialVersionUID = -6797766837645151845L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // TimestampRecord.timestamp
