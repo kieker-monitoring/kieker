@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapUsed
 			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapFree
 	;
-	private static final long serialVersionUID = 7372856570663572439L;
+	private static final long serialVersionUID = 638480390439299363L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // MemSwapUsageRecord.timestamp

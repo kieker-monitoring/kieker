@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 	;
-	private static final long serialVersionUID = 1550126459458563411L;
+	private static final long serialVersionUID = 1569131691754173288L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 			 + TYPE_SIZE_STRING // IExceptionRecord.cause
 	;
-	private static final long serialVersionUID = -2036956513810497138L;
+	private static final long serialVersionUID = -4069763872765597698L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

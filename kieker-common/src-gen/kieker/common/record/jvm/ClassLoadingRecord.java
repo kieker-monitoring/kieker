@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 			 + TYPE_SIZE_INT // ClassLoadingRecord.loadedClassCount
 			 + TYPE_SIZE_LONG // ClassLoadingRecord.unloadedClassCount
 	;
-	private static final long serialVersionUID = -2006121738839922850L;
+	private static final long serialVersionUID = -5955568375346711225L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp

@@ -121,13 +121,7 @@ public final class MonitoringController extends AbstractController implements IM
 					public void run() {
 						if (!monitoringController.isMonitoringTerminated()) {
 							// WONTFIX: We should not use a logger in shutdown hooks, logger may already be down! (#26)
-							LOG.info("ShutdownHook notifies controller to initiate shutdown in " + SHUTDOWN_DELAY_MILLIS + " milliseconds");
-							// System.err.println(monitoringController.toString());
-							try {
-								Thread.sleep(SHUTDOWN_DELAY_MILLIS);
-							} catch (final InterruptedException e) {
-								LOG.warn("ShutdownHook was interrupted while waiting");
-							}
+							LOG.info("ShutdownHook notifies controller to initiate shutdown.");
 							monitoringController.terminateMonitoring();
 						}
 					}
@@ -214,6 +208,13 @@ public final class MonitoringController extends AbstractController implements IM
 
 	@Override
 	public final boolean terminateMonitoring() {
+		LOG.info("Controller shutting down in " + SHUTDOWN_DELAY_MILLIS + " milliseconds");
+		// System.err.println(monitoringController.toString());
+		try {
+			Thread.sleep(SHUTDOWN_DELAY_MILLIS);
+		} catch (final InterruptedException e) {
+			LOG.warn("Shutdown was interrupted while waiting");
+		}
 		return this.stateController.terminateMonitoring();
 	}
 

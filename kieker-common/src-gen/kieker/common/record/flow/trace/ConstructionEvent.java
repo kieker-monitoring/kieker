@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 			 + TYPE_SIZE_STRING // ConstructionEvent.classSignature
 			 + TYPE_SIZE_INT // ConstructionEvent.objectId
 	;
-	private static final long serialVersionUID = -3519441499400826996L;
+	private static final long serialVersionUID = 7724747240454611559L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

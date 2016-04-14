@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class SplitEvent extends AbstractTraceEvent  {
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
 	;
-	private static final long serialVersionUID = -2615894047548395769L;
+	private static final long serialVersionUID = 3680330659838545906L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

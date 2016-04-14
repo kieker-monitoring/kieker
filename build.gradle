@@ -49,11 +49,17 @@ allprojects {
 	}
 
 	test {
+		systemProperty "java.io.tmpdir", "${buildDir}"
+
 		testLogging {
 			showCauses = 'true'
 			exceptionFormat = 'full'
 			showExceptions = 'true'
 			showStandardStreams = 'true'
+		}
+
+		afterTest { desc, result -> 
+		        println "Executed test ${desc.name} [${desc.className}] with result: ${result.resultType}"
 		}
 	}
 	
@@ -109,10 +115,16 @@ allprojects {
 
 		configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
 	}
-	
+
+	def fbVersion
 	apply plugin: 'findbugs'
-	findbugs { 
-		toolVersion = '3.0.1'
+	findbugs {
+		if (JavaVersion.current() == JavaVersion.VERSION_1_6) {
+			fbVersion = '2.0.3'
+		} else {
+			fbVersion = '3.0.1'
+		}
+		toolVersion = fbVersion
 		ignoreFailures = true 
 		effort = "max"
 		reportLevel = "low"
@@ -133,12 +145,17 @@ allprojects {
 		cpd resolveLibrary('**/pmd-*/**/*.jar')
 		checkstyle resolveLibrary('**/checkstyle-*/**/*.jar')
 		checkstyle project(':kieker-checkstyle-extension')
-		findbugs resolveLibrary('**/findbugs-*/lib/*.jar')
+
+		findbugs resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
 		
 		testCompile resolveLibrary('junit-*.jar')
 		testCompile resolveLibrary('hamcrest-core-*.jar')
 	}
 }
+
+//test {
+//    maxHeapSize = "2g"
+//}
 
 def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
 		//println "Replacing $searchExp by $replaceExp in $file"
@@ -157,7 +174,6 @@ task updateLicenseHeaderYear() << {
 		regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2015 Kieker Project')
 	}
 }
-
 
 compileJava.dependsOn replaceHardCodedVersionNames
 

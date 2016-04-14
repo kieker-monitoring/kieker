@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.totalUtilization
 			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.idle
 	;
-	private static final long serialVersionUID = 1353686422654272736L;
+	private static final long serialVersionUID = -7851990890838902217L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // CPUUtilizationRecord.timestamp

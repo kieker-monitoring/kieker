@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 	;
-	private static final long serialVersionUID = -7820788362643933781L;
+	private static final long serialVersionUID = 5136385316445836891L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 			 + TYPE_SIZE_STRING // IInterfaceRecord.interface
 	;
-	private static final long serialVersionUID = 8963478598536384777L;
+	private static final long serialVersionUID = -8438691367718487460L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

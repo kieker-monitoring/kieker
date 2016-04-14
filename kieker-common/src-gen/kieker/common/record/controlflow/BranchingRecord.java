@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 			 + TYPE_SIZE_INT // BranchingRecord.branchID
 			 + TYPE_SIZE_INT // BranchingRecord.branchingOutcome
 	;
-	private static final long serialVersionUID = -2795856778019853382L;
+	private static final long serialVersionUID = 3957750090047819946L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // BranchingRecord.timestamp

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // TimestampRecord.timestamp
 	;
-	private static final long serialVersionUID = 8853230651626771232L;
+	private static final long serialVersionUID = -6797766837645151845L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // TimestampRecord.timestamp

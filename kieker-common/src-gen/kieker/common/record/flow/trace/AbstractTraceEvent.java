@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import kieker.common.record.flow.ITraceRecord;
  * @since 1.5
  */
 public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {
-		private static final long serialVersionUID = 161681009968355282L;
+		private static final long serialVersionUID = -3022261747819944031L;
 	
 	
 	/* user-defined constants */

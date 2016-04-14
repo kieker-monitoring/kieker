@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 			 + TYPE_SIZE_STRING // ResourceUtilizationRecord.resourceName
 			 + TYPE_SIZE_DOUBLE // ResourceUtilizationRecord.utilization
 	;
-	private static final long serialVersionUID = 2644828043690936993L;
+	private static final long serialVersionUID = 193790554451565711L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // ResourceUtilizationRecord.timestamp

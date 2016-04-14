@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 	public static final int SIZE = TYPE_SIZE_LONG // AggregationWindow.windowStart
 			 + TYPE_SIZE_LONG // AggregationWindow.windowEnd
 	;
-	private static final long serialVersionUID = 3008527186261564671L;
+	private static final long serialVersionUID = -6015104562956593414L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // AggregationWindow.windowStart

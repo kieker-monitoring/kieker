@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
 			 + TYPE_SIZE_LONG // UptimeRecord.uptimeMS
 	;
-	private static final long serialVersionUID = 1869471516324654958L;
+	private static final long serialVersionUID = 5233115844046765277L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp

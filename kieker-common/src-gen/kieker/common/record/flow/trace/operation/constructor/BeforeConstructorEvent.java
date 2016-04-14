@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 	;
-	private static final long serialVersionUID = 4992296160420366105L;
+	private static final long serialVersionUID = 5792711083403520393L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

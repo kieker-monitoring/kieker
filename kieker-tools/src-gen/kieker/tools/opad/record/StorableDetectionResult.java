@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.forecast
 			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.score
 	;
-	private static final long serialVersionUID = 6603400678579037205L;
+	private static final long serialVersionUID = -758350040827117227L;
 	
 	public static final Class<?>[] TYPES = {
 		String.class, // StorableDetectionResult.applicationName

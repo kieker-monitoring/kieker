@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 			 + TYPE_SIZE_INT // OperationExecutionRecord.eoi
 			 + TYPE_SIZE_INT // OperationExecutionRecord.ess
 	;
-	private static final long serialVersionUID = -4883357436134811919L;
+	private static final long serialVersionUID = -7768272829642950711L;
 	
 	public static final Class<?>[] TYPES = {
 		String.class, // OperationExecutionRecord.operationSignature

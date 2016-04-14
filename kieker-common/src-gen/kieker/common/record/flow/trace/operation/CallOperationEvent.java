@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 			 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
 			 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
 	;
-	private static final long serialVersionUID = -1777034164507512479L;
+	private static final long serialVersionUID = 1340141343488227597L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
