@@ -563,7 +563,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 *            A flag determining whether this plugin has to be shutdown due to an error or not.
 	 */
 	public final void shutdown(final boolean error) {
-		if ((this.state != STATE.READY) && (this.state != STATE.RUNNING) && (this.state != STATE.TERMINATING)) { // we terminate only once
+		if ((this.state != STATE.READY) && (this.state != STATE.RUNNING)) { // we terminate only once
 			return;
 		}
 		if (error) {
