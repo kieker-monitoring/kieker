@@ -16,7 +16,6 @@
 
 package kieker.test.tools.junit.logReplayer;
 
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
@@ -35,31 +35,26 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.analysis.plugin.reader.list.ListReader;
-
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.misc.EmptyRecord;
-
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
+import kieker.tools.logReplayer.filter.MonitoringRecordLoggerFilter;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.junit.writeRead.filesystem.KiekerLogDirFilter;
 
-import kieker.tools.logReplayer.filter.MonitoringRecordLoggerFilter;
-
-
-
 /**
  * Tests the {@link MonitoringRecordLoggerFilter}.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
@@ -71,7 +66,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	private static final int DEFAULT_EVENTS_NUMBER = 5; // just a basic test with (potentially) at bit more than a hand full of records
 
 	/** A rule making sure that a temporary folder exists for every test method (which is removed after the test). */
-	//@Rule
+	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
 	/**
@@ -104,7 +99,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 
 	/**
 	 * Returns a list of {@link IMonitoringRecord}s to be used in this test. Extending classes can override this method to use their own list of records.
-	 * 
+	 *
 	 * @return A list of records.
 	 */
 	protected List<IMonitoringRecord> provideEvents() {
@@ -118,15 +113,6 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 		}
 		someEvents.add(new EmptyRecord());
 		return someEvents;
-	}
-
-	private List<IMonitoringRecord> readEvents() throws AnalysisConfigurationException {
-		final String[] monitoringLogs = this.tmpFolder.getRoot().list(new KiekerLogDirFilter());
-		for (int i = 0; i < monitoringLogs.length; i++) { // transform relative to absolute path
-			monitoringLogs[i] = this.tmpFolder.getRoot().getAbsoluteFile() + File.separator + monitoringLogs[i]; // NOPMD (UseStringBufferForStringAppends)
-		}
-
-		return this.readLog(monitoringLogs);
 	}
 
 	private List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) throws AnalysisConfigurationException {
@@ -158,7 +144,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 
 	/**
 	 * The actual (parameterized) Test.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If something went wrong during the test.
 	 */
@@ -210,5 +196,17 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 			// note that firstLoggingTimestamp is actually -1 for each record in this test
 			Assert.assertTrue("Expected logging timestamps to be untouched by the controller", firstLoggingTimestamp != eventsFromLog.get(0).getLoggingTimestamp());
 		}
+	}
+
+	private List<IMonitoringRecord> readEvents() throws AnalysisConfigurationException {
+		final String[] monitoringLogs = this.tmpFolder.getRoot().list(new KiekerLogDirFilter());
+
+		Assert.assertNotNull(monitoringLogs);
+
+		for (int i = 0; i < monitoringLogs.length; i++) { // transform relative to absolute path
+			monitoringLogs[i] = this.tmpFolder.getRoot().getAbsoluteFile() + File.separator + monitoringLogs[i]; // NOPMD (UseStringBufferForStringAppends)
+		}
+
+		return this.readLog(monitoringLogs);
 	}
 }

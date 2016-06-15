@@ -45,6 +45,10 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 		LOG = LogFactory.getLog(AbstractKiekerTest.class);
 	}
 
+	/** This rule makes sure that we can dump the name of the currently executed test on the screen. */
+	@Rule
+	public TestName nameOfCurrentTest = new TestName(); // NOPMD NOCS
+
 	/**
 	 * Workaround to let JUnit tests with relative references to files within the respective
 	 * module execute in settings where they are execute as modules but also in settings
@@ -64,10 +68,6 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 	 *
 	 */
 	private volatile boolean workingDirectoryIsModuleDirectory;
-
-	/** This rule makes sure that we can dump the name of the currently executed test on the screen. */
-	@Rule
-	public TestName nameOfCurrentTest = new TestName(); // NOPMD NOCS
 
 	/**
 	 * Default constructor.

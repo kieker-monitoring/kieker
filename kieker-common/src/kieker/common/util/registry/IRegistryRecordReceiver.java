@@ -19,11 +19,16 @@ package kieker.common.util.registry;
 import kieker.common.record.misc.RegistryRecord;
 
 /**
- * @author "Christian Wulf"
+ * @author Christian Wulf
  *
  * @since 1.13
  */
 public interface IRegistryRecordReceiver {
 
+	/**
+	 * @param registryRecord
+	 *            the new instantiated registry record
+	 * @since 1.13
+	 */
 	public abstract boolean newRegistryRecord(RegistryRecord registryRecord);
 }
