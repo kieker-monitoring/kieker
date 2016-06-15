@@ -173,6 +173,8 @@ public final class Registry<E> implements IRegistry<E> {
 			}
 			this.eArrayCached = eArray; // volatile write
 		}
+		// FIXME for (String s:registry.getAll()) leads to a ClassCastException (chw 15.06.2016)
+		// since iterable is of type Object, not String
 		return Arrays.copyOf(this.eArrayCached, capacity);
 	}
 
