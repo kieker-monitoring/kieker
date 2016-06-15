@@ -18,8 +18,6 @@ package kieker.common.util.registry;
 
 import java.util.Arrays;
 
-import kieker.common.record.misc.RegistryRecord;
-
 /**
  *
  * @param <E>
@@ -130,7 +128,7 @@ public final class Lookup<E> implements ILookup<E> {
 	 */
 	@Override
 	@Deprecated
-	public void setRecordReceiver(final IMonitoringRecordReceiver<RegistryRecord> recordReceiver) {
+	public void setRecordReceiver(final IRegistryRecordReceiver recordReceiver) {
 		throw new UnsupportedOperationException();
 	}
 

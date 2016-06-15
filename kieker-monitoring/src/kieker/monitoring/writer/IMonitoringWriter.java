@@ -25,7 +25,7 @@ import kieker.monitoring.core.controller.IMonitoringController;
  *
  * @since < 0.9
  */
-public interface IMonitoringWriter extends IMonitoringRecordReceiver<IMonitoringRecord> {
+public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 
 	/**
 	 * {@inheritDoc}

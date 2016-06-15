@@ -24,6 +24,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.KiekerMetadataRecord;
+import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.Version;
 import kieker.common.util.registry.IRegistry;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
@@ -33,7 +34,7 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.3
  */
 public final class MonitoringController extends AbstractController implements IMonitoringController {
@@ -69,10 +70,10 @@ public final class MonitoringController extends AbstractController implements IM
 	// FACTORY
 	/**
 	 * This is a factory method creating a new monitoring controller instance using the given configuration.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for the new controller.
-	 * 
+	 *
 	 * @return A new controller.
 	 */
 	public static final IMonitoringController createInstance(final Configuration configuration) {
@@ -138,7 +139,7 @@ public final class MonitoringController extends AbstractController implements IM
 
 	/**
 	 * Return the version name of this controller instance.
-	 * 
+	 *
 	 * @return the version name
 	 */
 	public static final String getVersion() {
@@ -181,7 +182,7 @@ public final class MonitoringController extends AbstractController implements IM
 
 	/**
 	 * This method sends the meta data (like the controller and host name, the experiment ID, etc.) as a record.
-	 * 
+	 *
 	 * @return true on success; false in case of an error.
 	 */
 	@Override
@@ -196,7 +197,7 @@ public final class MonitoringController extends AbstractController implements IM
 				timesource.getOffset(), // timeOffset
 				timesource.getTimeUnit().name(), // timeUnit
 				this.getNumberOfInserts() // numberOfRecords
-				));
+		));
 	}
 
 	protected SamplingController getSamplingController() {
@@ -271,6 +272,11 @@ public final class MonitoringController extends AbstractController implements IM
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		return this.writerController.newMonitoringRecord(record);
+	}
+
+	@Override
+	public boolean newRegistryRecord(final RegistryRecord registryRecord) {
+		return this.writerController.newMonitoringRecord(registryRecord);
 	}
 
 	@Override
@@ -350,4 +356,5 @@ public final class MonitoringController extends AbstractController implements IM
 	private static final class LazyHolder { // NOCS
 		static final IMonitoringController INSTANCE = MonitoringController.createInstance(ConfigurationFactory.createSingletonConfiguration()); // NOPMD package
 	}
+
 }

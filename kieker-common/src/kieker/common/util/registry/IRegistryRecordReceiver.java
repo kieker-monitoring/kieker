@@ -16,26 +16,14 @@
 
 package kieker.common.util.registry;
 
-import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.misc.RegistryRecord;
 
 /**
+ * @author "Christian Wulf"
  *
- * @author Andre van Hoorn
- *
- * @since 1.5
+ * @since 1.13
  */
-public interface IMonitoringRecordReceiver {
+public interface IRegistryRecordReceiver {
 
-	/**
-	 * Called for each new record.
-	 *
-	 * Notice, that this method should not throw an exception, but indicate an error by the return value false.
-	 *
-	 * @param record
-	 *            the record.
-	 * @return true on success; false in case of an error.
-	 *
-	 * @since 1.5
-	 */
-	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
+	public abstract boolean newRegistryRecord(RegistryRecord registryRecord);
 }

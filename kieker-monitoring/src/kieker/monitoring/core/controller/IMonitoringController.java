@@ -16,9 +16,11 @@
 
 package kieker.monitoring.core.controller;
 
+import kieker.common.util.registry.IRegistryRecordReceiver;
+
 /**
  * @author Jan Waller, Robert von Massow
- * 
+ *
  * @since 1.3
  */
 public interface IMonitoringController extends
@@ -28,14 +30,15 @@ public interface IMonitoringController extends
 		ISamplingController,
 		IStateController,
 		ITimeSourceController,
-		IWriterController {
+		IWriterController,
+		IRegistryRecordReceiver {
 
 	/**
 	 * This method is used to log the status of the controllers to the console.
 	 * It is included in this interface to ensure its publication over JMX.
-	 * 
+	 *
 	 * @return a String representation of the current controller
-	 * 
+	 *
 	 * @since 1.3
 	 */
 	@Override
@@ -45,9 +48,9 @@ public interface IMonitoringController extends
 	 * This method is used to log the status of the controllers to the configured writer.
 	 * The {@link kieker.common.record.misc.KiekerMetadataRecord} record is used.
 	 * This method is automatically executed for the first record sent.
-	 * 
+	 *
 	 * @return true if successful
-	 * 
+	 *
 	 * @since 1.7
 	 */
 	public boolean sendMetadataAsRecord();

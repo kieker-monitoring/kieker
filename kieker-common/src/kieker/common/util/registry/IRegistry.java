@@ -16,8 +16,6 @@
 
 package kieker.common.util.registry;
 
-import kieker.common.record.misc.RegistryRecord;
-
 /**
  * A generic interface to assign unique IDs to objects.
  *
@@ -77,12 +75,10 @@ public interface IRegistry<E> {
 	/**
 	 * Enables logging of newly registered objects.
 	 *
-	 * Must only be called for E == String
-	 *
-	 * @param recordReceiver
-	 *            the IMonitoringRecordReceiver logged to
+	 * @param registryRecordReceiver
+	 *            the IRegistryRecordReceiver logged to
 	 *
 	 * @since 1.5
 	 */
-	public void setRecordReceiver(final IMonitoringRecordReceiver<RegistryRecord> recordReceiver);
+	public void setRecordReceiver(final IRegistryRecordReceiver registryRecordReceiver);
 }
