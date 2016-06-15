@@ -19,6 +19,10 @@ package kieker.common.util.registry;
 import kieker.common.record.IMonitoringRecord;
 
 /**
+ *
+ * @param <T>
+ *            the record type which should be received.
+ *
  * @author Andre van Hoorn
  *
  * @since 1.5
