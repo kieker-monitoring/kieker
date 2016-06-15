@@ -27,7 +27,7 @@ import kieker.common.util.registry.IMonitoringRecordReceiver;
  *
  * @since 1.3
  */
-public interface IWriterController extends IMonitoringRecordReceiver {
+public interface IWriterController extends IMonitoringRecordReceiver<IMonitoringRecord> {
 
 	/**
 	 * <p>

@@ -122,7 +122,7 @@ public final class Registry<E> implements IRegistry<E> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver) {
+	public final void setRecordReceiver(final IMonitoringRecordReceiver<RegistryRecord> recordReceiver) {
 		for (final Segment<E> segment : this.segments) {
 			segment.setRecordReceiver(recordReceiver);
 		}
@@ -134,7 +134,9 @@ public final class Registry<E> implements IRegistry<E> {
 	@Override
 	public final int get(final E value) {
 		final int hash = Registry.hash(value);
-		return this.segments[(hash >>> this.segmentShift) & this.segmentMask].get(value, hash, this.nextId);
+		final int index = (hash >>> this.segmentShift) & this.segmentMask;
+		final Segment<E> segment = this.segments[index];
+		return segment.get(value, hash, this.nextId);
 	}
 
 	/**
@@ -272,7 +274,7 @@ public final class Registry<E> implements IRegistry<E> {
 		/**
 		 * Send messages on new entries to this.
 		 */
-		private transient IMonitoringRecordReceiver recordReceiver;
+		private transient IMonitoringRecordReceiver<RegistryRecord> recordReceiver;
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		protected Segment(final int initialCapacity, final double lf) {
@@ -281,7 +283,7 @@ public final class Registry<E> implements IRegistry<E> {
 			this.count = 0;
 		}
 
-		protected final void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver) {
+		protected final void setRecordReceiver(final IMonitoringRecordReceiver<RegistryRecord> recordReceiver) {
 			this.lock();
 			try {
 				this.recordReceiver = recordReceiver;
