@@ -11,7 +11,7 @@
 	<classpathentry kind="lib" path="../lib/aspectjweaver-1.8.2.jar"/>
 	<classpathentry kind="lib" path="../lib/disl-2.0/disl-server.jar"/>
 	<classpathentry kind="lib" path="../lib/sigar/sigar-1.6.4.jar"/>
-	<classpathentry kind="lib" path="../lib/jctools-core-1.2.1.jar"/>
+	<classpathentry kind="lib" path="../lib/jctools-core-1.2.1.jar" sourcepath="/lib/jctools-core-1.2.1-sources.jar"/>
 	<classpathentry kind="lib" path="../lib/framework-libs/javax.servlet-3.0.jar"/>
 	<classpathentry kind="lib" path="../lib/framework-libs/javax.ws.rs-api-2.0.1.jar"/>
 	<classpathentry kind="lib" path="../lib/framework-libs/jersey/jersey-client-1.19.jar"/>
