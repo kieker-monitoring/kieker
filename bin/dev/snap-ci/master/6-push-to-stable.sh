@@ -4,14 +4,9 @@ WORK_DIR=/tmp/kieker
 
 if [ "${SNAP_BRANCH}" == "master" ]; then
   echo "We are in master - pushing to stable branch."
-  pwd
-  ls -al
-  ls -al ${WORK_DIR}
   cd ${WORK_DIR}
-#  git remote add github https://${KIEKER_USER}:${KIEKER_PASS}@github.com/kieker-monitoring/kieker.git
-#  git checkout stable
-#  git merge master
-#  git push github master:stable
+  git remote add github git@github.com:kieker-monitoring/kieker.git
+  git push github master:stable
 
   STAGE_RESULT=$?
 else
