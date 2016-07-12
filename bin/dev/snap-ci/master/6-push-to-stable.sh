@@ -4,7 +4,9 @@ WORK_DIR=/tmp/kieker
 
 if [ "${SNAP_BRANCH}" == "master" ]; then
   echo "We are in master - pushing to stable branch."
-  snap-shell
+  pwd
+  ls -al
+  ls -al ${WORK_DIR}
   cd ${WORK_DIR}
 #  git remote add github https://${KIEKER_USER}:${KIEKER_PASS}@github.com/kieker-monitoring/kieker.git
 #  git checkout stable
