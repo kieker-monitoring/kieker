@@ -6,6 +6,9 @@ if [ "${SNAP_BRANCH}" == "master" ]; then
   echo "We are in master - pushing to stable branch."
   cd ${WORK_DIR}
 
+  git config user.name "Kieker CI"
+  git config user.email "ci@kieker-monitoring.net"
+
   # Add remote 'github'
   git remote add github git@github.com:kieker-monitoring/kieker.git
  
