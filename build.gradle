@@ -13,7 +13,6 @@ buildscript {
 
 allprojects {
     apply plugin: 'java'
-
     version = kiekerVersion
 
     sourceCompatibility = 1.6

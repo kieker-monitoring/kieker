@@ -27,7 +27,7 @@ import java.util.Map;
  *
  * @since 1.11
  */
-public final class Registry<T> implements IRegistry<T> {
+public class Registry<T> implements IRegistry<T> {
 
 	// TODO: use a HPC implementation with primitive int values
 	// I recommend: http://labs.carrotsearch.com/hppc.html
@@ -47,7 +47,7 @@ public final class Registry<T> implements IRegistry<T> {
 	}
 
 	@Override
-	public final int get(final T element) {
+	public int get(final T element) {
 		return this.registeredEntries.get(element);
 	}
 

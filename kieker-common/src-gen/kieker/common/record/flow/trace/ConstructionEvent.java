@@ -38,7 +38,7 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 			 + TYPE_SIZE_STRING // ConstructionEvent.classSignature
 			 + TYPE_SIZE_INT // ConstructionEvent.objectId
 	;
-	private static final long serialVersionUID = -3519441499400826996L;
+	private static final long serialVersionUID = 7724747240454611559L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

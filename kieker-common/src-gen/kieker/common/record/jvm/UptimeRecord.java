@@ -37,7 +37,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
 			 + TYPE_SIZE_LONG // UptimeRecord.uptimeMS
 	;
-	private static final long serialVersionUID = 1869471516324654958L;
+	private static final long serialVersionUID = 5233115844046765277L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp

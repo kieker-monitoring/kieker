@@ -31,7 +31,7 @@ import kieker.common.util.Version;
  * @since 1.10
  */
 public abstract class AbstractJVMRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-		private static final long serialVersionUID = 3817833790306987100L;
+		private static final long serialVersionUID = -961661872949303914L;
 	
 	
 	/* user-defined constants */

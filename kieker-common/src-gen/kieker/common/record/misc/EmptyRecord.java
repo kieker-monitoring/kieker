@@ -35,7 +35,7 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = 0
 	;
-	private static final long serialVersionUID = 3933678505883033716L;
+	private static final long serialVersionUID = -177095911417362302L;
 	
 	public static final Class<?>[] TYPES = {
 	};

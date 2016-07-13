@@ -40,7 +40,7 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 	;
-	private static final long serialVersionUID = -7768703595634330464L;
+	private static final long serialVersionUID = 7983943598922128229L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

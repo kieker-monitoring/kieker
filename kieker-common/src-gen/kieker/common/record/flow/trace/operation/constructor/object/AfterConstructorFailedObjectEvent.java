@@ -41,7 +41,7 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 			 + TYPE_SIZE_STRING // IExceptionRecord.cause
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 	;
-	private static final long serialVersionUID = 4445720467664395884L;
+	private static final long serialVersionUID = -8160283153301963516L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

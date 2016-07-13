@@ -391,7 +391,7 @@ function check_src_archive {
 
 	# Making sure that no JavaDoc warnings reported by the `javadoc` tool
 	echo -n "Making sure that no JavaDoc warnings (ignoring generated sources) ..."
-	if (gradle apidoc | grep -v "src-gen" | grep "warning -"); then 
+	if (run_gradle apidoc | grep -v "src-gen" | grep "warning -"); then
 	    echo "One or more JavaDoc warnings"
 	    exit 1
 	fi

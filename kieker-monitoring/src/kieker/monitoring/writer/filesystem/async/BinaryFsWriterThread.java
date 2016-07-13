@@ -32,7 +32,7 @@ import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public class BinaryFsWriterThread extends AbstractFsWriterThread {
@@ -46,7 +46,7 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 
 	/**
 	 * Create a new BinaryFsWriterThread.
-	 * 
+	 *
 	 * @param monitoringController
 	 *            the monitoring controller accessed by this thread
 	 * @param writeQueue
@@ -79,10 +79,14 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 	@Override
 	protected void write(final IMonitoringRecord monitoringRecord) throws IOException {
 		final int size = monitoringRecord.getSize() + 4 + 8;
+
+		// FIXME performance issue due to too many object instantiations: ByteBuffer
 		final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
 		buffer.putInt(this.monitoringController.getUniqueIdForString(monitoringRecord.getClass().getName()));
 		buffer.putLong(monitoringRecord.getLoggingTimestamp());
 		monitoringRecord.writeBytes(buffer, this.stringRegistry);
+
+		// FIXME performance issue due to too many object instantiations: byte[]
 		final byte[] bytes = new byte[size];
 		buffer.flip();
 		buffer.get(bytes, 0, size);

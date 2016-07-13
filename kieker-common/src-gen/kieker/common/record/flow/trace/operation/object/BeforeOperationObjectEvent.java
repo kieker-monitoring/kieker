@@ -40,7 +40,7 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 	;
-	private static final long serialVersionUID = 1145086546405959380L;
+	private static final long serialVersionUID = 1420636123206687333L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

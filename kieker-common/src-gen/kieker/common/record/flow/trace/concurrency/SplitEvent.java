@@ -36,7 +36,7 @@ public class SplitEvent extends AbstractTraceEvent  {
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
 	;
-	private static final long serialVersionUID = -2615894047548395769L;
+	private static final long serialVersionUID = 3680330659838545906L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

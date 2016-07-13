@@ -128,7 +128,7 @@ public final class Lookup<E> implements ILookup<E> {
 	 */
 	@Override
 	@Deprecated
-	public void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver) {
+	public void setRecordReceiver(final IRegistryRecordReceiver recordReceiver) {
 		throw new UnsupportedOperationException();
 	}
 

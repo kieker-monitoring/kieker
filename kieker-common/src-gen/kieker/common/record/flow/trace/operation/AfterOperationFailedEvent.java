@@ -40,7 +40,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 			 + TYPE_SIZE_STRING // IExceptionRecord.cause
 	;
-	private static final long serialVersionUID = -7300825614065386027L;
+	private static final long serialVersionUID = -1887200574513819573L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

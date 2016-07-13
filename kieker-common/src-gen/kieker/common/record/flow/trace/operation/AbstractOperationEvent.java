@@ -31,7 +31,7 @@ import kieker.common.record.flow.IOperationRecord;
  * @since 1.5
  */
 public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IOperationRecord {
-		private static final long serialVersionUID = -910233516407209980L;
+		private static final long serialVersionUID = -4876224316055177674L;
 	
 	
 	/* user-defined constants */

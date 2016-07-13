@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 			 + TYPE_SIZE_DOUBLE // NamedTSPoint.value
 			 + TYPE_SIZE_STRING // NamedTSPoint.name
 	;
-	private static final long serialVersionUID = 2928953478026943314L;
+	private static final long serialVersionUID = 4302229080791508406L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // NamedTSPoint.timestamp

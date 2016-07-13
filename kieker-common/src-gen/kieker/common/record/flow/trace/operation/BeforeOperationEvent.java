@@ -38,7 +38,7 @@ public class BeforeOperationEvent extends AbstractOperationEvent  {
 			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 	;
-	private static final long serialVersionUID = -3460876151242334750L;
+	private static final long serialVersionUID = 1370350773084931203L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

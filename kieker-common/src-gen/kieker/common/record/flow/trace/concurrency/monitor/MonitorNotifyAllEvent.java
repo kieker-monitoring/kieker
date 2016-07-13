@@ -37,7 +37,7 @@ public class MonitorNotifyAllEvent extends AbstractMonitorEvent  {
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
 			 + TYPE_SIZE_INT // AbstractMonitorEvent.lockId
 	;
-	private static final long serialVersionUID = 4887169665782029206L;
+	private static final long serialVersionUID = -1304400445515878549L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp

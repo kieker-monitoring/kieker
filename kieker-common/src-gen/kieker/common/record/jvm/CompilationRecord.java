@@ -38,7 +38,7 @@ public class CompilationRecord extends AbstractJVMRecord  {
 			 + TYPE_SIZE_STRING // CompilationRecord.jitCompilerName
 			 + TYPE_SIZE_LONG // CompilationRecord.totalCompilationTimeMS
 	;
-	private static final long serialVersionUID = 3721176153109169920L;
+	private static final long serialVersionUID = 3634137431488075031L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp
