@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 
-WORK_DIR=/tmp/kieker
+./x-variables.sh
 
-sudo docker run -v ${WORK_DIR}:/opt/kieker kieker/kieker-build:openjdk6 /bin/bash -c "cd /opt/kieker; ./gradlew -S distribute -x test -x check"
+sudo docker run -v ${KIEKER_DIR}:/opt/kieker kieker/kieker-build:openjdk6 /bin/bash -c "cd /opt/kieker; ./gradlew -S distribute -x test -x check"
 
-STAGE_RESULT=$?
-
-cd /
-
-exit $STAGE_RESULT
+exit $?

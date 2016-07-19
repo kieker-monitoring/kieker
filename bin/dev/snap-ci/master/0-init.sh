@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-WORK_DIR=/tmp/kieker
+./x-variables.sh
 
-sudo cp -r ${SNAP_WORKING_DIR}/ ${WORK_DIR}/
+TMP_DIR=`mktemp -d`
 
-STAGE_RESULT=$?
+cp -r ${SNAP_WORKING_DIR}/. ${TMP_DIR}
 
-cd /
+mkdir -p ${ARTIFACT_DIR}/
 
-exit $STAGE_RESULT
+mv ${TMP_DIR} ${ARTIFACT_DIR}
+
+exit $?

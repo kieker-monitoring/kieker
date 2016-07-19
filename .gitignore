@@ -31,3 +31,4 @@ plugin.xml
 /build-eclipse/
 /javadoc
 **/.gradle
+/snap-artifacts/
