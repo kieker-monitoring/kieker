@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-./x-variables.sh
+ARTIFACT_DIR="${SNAP_WORKING_DIR}/snap-artifacts"
+KIEKER_DIR="${ARTIFACT_DIR}/kieker"
 
 if [ "${SNAP_BRANCH}" == "master" ]; then
   echo "We are in master - pushing to stable branch."
