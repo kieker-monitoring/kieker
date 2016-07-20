@@ -165,45 +165,6 @@ allprojects {
         testCompile resolveLibrary('junit-*.jar')
         testCompile resolveLibrary('hamcrest-core-*.jar')
     }
-
-
-    def reports = 'build/reports'
-
-    def checkstyleReportsFolder = "${reports}/checkstyle"
-    def findbugsReportsFolder = "${reports}/findbugs"
-    def pmdReportsFolder = "${reports}/pmd"
-
-    def javaVersion = JavaVersion.current()
-
-    task mainHtmlReport(type: JavaExec) {
-        def scautilJar = file("${rootDir}/${dirLib}/static-analysis/scautil-${javaVersion}.jar")
-        args = ["$scautilJar", "${findbugsReportsFolder}/main.xml", "${checkstyleReportsFolder}/main.xml", "${pmdReportsFolder}/main.xml", "${reports}/mainReportSummary.html"]
-        main = '-jar'
-
-        doLast {
-            println('The report summary for \'main\' can be found at ' + project.path + '/' + reports + '/mainReportSummary.html')
-        }
-    }
-
-    task testHtmlReport(type: JavaExec) {
-        def scautilJar = file("${rootDir}/${dirLib}/static-analysis/scautil-${javaVersion}.jar")
-        args = ["$scautilJar", "${findbugsReportsFolder}/test.xml", "${checkstyleReportsFolder}/test.xml", "${pmdReportsFolder}/test.xml", "${reports}/testReportSummary.html"]
-        main = '-jar'
-
-        doLast {
-            println('The report summary for \'test\' can be found at ' + project.path + '/' + reports + '/testReportSummary.html')
-        }
-    }
-
-    check.finalizedBy mainHtmlReport
-    mainHtmlReport.mustRunAfter check
-
-    mainHtmlReport.finalizedBy testHtmlReport
-    testHtmlReport.mustRunAfter mainHtmlReport
-
-    mainHtmlReport.onlyIf { reportingCompatibleJavaVersionPresent() }
-    testHtmlReport.onlyIf { reportingCompatibleJavaVersionPresent() }
-
 }
 
 
@@ -403,6 +364,39 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) << {
 
 // Execute 'checkThresholds' after all check tasks in the subprojects have been executed
 mainSubprojects.tasks.check*.finalizedBy(checkThresholds)
+
+
+
+
+
+task htmlQualityReport(type: JavaExec) {
+
+    def javaVersion = JavaVersion.current()
+    def reportTypes = ['main', 'test']
+
+    mainSubprojects.each { Project p ->
+        reportTypes.each { String type ->
+            def reports = p.projectDir.path + '/build/reports/'
+            def checkstyleReportsFolder = "${reports}/checkstyle"
+            def findbugsReportsFolder = "${reports}/findbugs"
+            def pmdReportsFolder = "${reports}/pmd"
+
+            def scautilJar = file("${rootDir}/${dirLib}/static-analysis/scautil-${javaVersion}.jar")
+
+            args = ["$scautilJar", "${findbugsReportsFolder}/main.xml", "${checkstyleReportsFolder}/main.xml", "${pmdReportsFolder}/main.xml", "${reports}/${type}ReportSummary.html"]
+            main = '-jar'
+
+            doLast {
+                println("The report summary for \'${type}\' can be found at ${reports}/${type}ReportSummary.html")
+            }
+        }
+    }
+}
+mainSubprojects.tasks.check*.finalizedBy(htmlQualityReport)
+htmlQualityReport.onlyIf { reportingCompatibleJavaVersionPresent() }
+
+
+
 
 
 def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
