@@ -31,4 +31,10 @@ plugin.xml
 /build-eclipse/
 /javadoc
 **/.gradle
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+
 /snap-artifacts/
