@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
-WORK_DIR=/tmp/kieker
+ARTIFACT_DIR="${SNAP_WORKING_DIR}/snap-artifacts"
+KIEKER_DIR="${ARTIFACT_DIR}/kieker"
+TMP_DIR=/tmp/kieker
 
-sudo cp -r ${SNAP_WORKING_DIR}/ ${WORK_DIR}/
-
-STAGE_RESULT=$?
-
-cd /
-
-exit $STAGE_RESULT
+cp -r ${SNAP_WORKING_DIR}/. ${TMP_DIR}
+mkdir -p ${ARTIFACT_DIR}/
+mv ${TMP_DIR}/ ${ARTIFACT_DIR}

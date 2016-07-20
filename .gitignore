@@ -36,3 +36,5 @@ plugin.xml
 .idea/
 *.iml
 *.iws
+
+/snap-artifacts/
