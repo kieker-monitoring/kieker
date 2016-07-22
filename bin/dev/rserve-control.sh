@@ -16,7 +16,7 @@ case "$1" in
     # Number of processes with rserve --slave
     RPROC=`ps ax | grep -i "rserve --slave" | grep -v grep | wc -l`
 
-	if ([ $RET = 0 ] && [ $RPROC = 1 ]) then
+	if ([ $RET = 0 ] && [ $RPROC = 1 ]); then
 		echo "done."
 		exit 0
 	else
