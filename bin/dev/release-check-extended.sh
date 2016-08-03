@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# include common variables and functions
+source "$(dirname $0)/release-check-common.sh"
 
 KIEKER_VERSION="1.13-SNAPSHOT"
-BASE_TMP_DIR="$(dirname $0)/../../build/"
-
-DIST_RELEASE_DIR="build/distributions/"
 DIST_JAR_DIR="build/libs/"
 
 function change_dir {
@@ -31,21 +31,48 @@ function run_gradle {
 	fi
 }
 
-# extract archiv and change into directory
-function extract_archive_n_cd {
+# extract archive
+function extract_archive {
 	if [ -z "$1" ]; then
 		echo "No archive provided"
 		exit 1
 	fi
-	
+
 	if echo "$1" | grep "zip"; then
-		unzip -q "$1" 
+		unzip -q "$1"
 	elif echo "$1" | grep "tar.gz"; then
 		tar -xzf "$1"
 	else
 		echo "Archive '$1' is neither zip nor .tar.gz"
 		exit 1
-	fi 
+	fi
+}
+
+# extract archive to a specific location
+function extract_archive_to {
+	if [ -z "$1" ]; then
+		echo "No archive provided"
+		exit 1
+	fi
+
+    # Create destination folder if it does not exist already
+	if ! [ -d "$2" ]; then
+	  mkdir "$2"
+	fi
+
+	if echo "$1" | grep "zip"; then
+		unzip -q "$1" -d "$2"
+	elif echo "$1" | grep "tar.gz"; then
+		tar -xzf "$1" -C "$2"
+	else
+		echo "Archive '$1' is neither zip nor .tar.gz"
+		exit 1
+	fi
+}
+
+# extract archive and change into directory
+function extract_archive_n_cd {
+	extract_archive $1
 
 	change_dir kieker-*
 }
@@ -68,33 +95,6 @@ function print_archive_contents {
 	fi
 }
 
-# lists the files included in an archive without extracting it
-function cat_archive_content {
-	if [ -z "$1" ]; then
-		echo "No archive provided"
-		exit 1
-	fi
-	
-	if echo "$1" | grep "zip"; then
-		unzip -l "$1" | awk '{ print $4 }' |grep -v "^$"
-	elif echo "$1" | grep "tar.gz"; then
-		tar -tzf "$1" |grep -v "^$"
-	else
-		echo "Archive '$1' is neither zip nor .tar.gz"
-		exit 1
-	fi 
-}
-
-function assert_no_duplicate_files_in_archive {
-    echo -n "Making sure that no duplicate files in '$1' ..."
-    (cat_archive_content $1 | sort) > tmp.content.original
-    (cat_archive_content $1 | sort | uniq) > tmp.content.original.uniq
-    if ! diff tmp.content.original tmp.content.original.uniq; then 
-	echo "Archive contains duplicate files."
-	exit 1
-    fi
-    echo OK
-}
 
 function assert_file_NOT_exists {
 	echo -n "Asserting file '$1' does not exist ..."
@@ -419,7 +419,6 @@ function check_src_archive {
 		exit 1
 	fi
 	echo "OK"
-
 }
 
 function check_bin_archive {
@@ -507,42 +506,18 @@ function check_bin_archive {
 	# TODO: test examples ...
 }
 
-function assert_no_common_files_in_archives {
- echo "Making sure that archives have no common files: '$1', '$2' ..."
-
-	if [ -z "$2" ]; then
-		echo "No source archive provided"
-		exit 1
-	fi
-
-	CONTENT1_FN="$(basename $1).txt"
-	CONTENT2_FN="$(basename $2).txt"
-
-	# excluding directories ("/$") and the zip output header ("Name\n---")
-	cat_archive_content $1 | grep -v "/$" | grep -v "^Name" | grep -v "^----" | sort > ${CONTENT1_FN} 
-	cat_archive_content $2 | grep -v "/$" | grep -v "^Name" | grep -v "^----" | sort > ${CONTENT2_FN}
-
-	COMMON_CONTENT_FN="common.txt"
-	comm -1 -2 ${CONTENT1_FN=} ${CONTENT2_FN} > ${COMMON_CONTENT_FN}
-	
-	if ! test -f ${COMMON_CONTENT_FN}; then
-		echo "File ${COMMON_CONTENT_FN} does not exist"
-		exit 1
-	fi
-
-	if test -s ${COMMON_CONTENT_FN}; then
-		echo "The archives have common files:"
-		cat ${COMMON_CONTENT_FN}
-		exit 1
-	fi
-}
-
 ##
-## "main" 
+## "main"
 ##
 
 aspectjversion="$(grep "libAspectjVersion = " gradle.properties | sed s/.*=.//g)"
 
+TMP_ZIP_DIR=zip
+TMP_TGZ_DIR=tgz
+
+#
+## binary releases
+#
 assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"
 BASE_TMP_DIR_ABS=$(pwd)
@@ -550,37 +525,49 @@ BASE_TMP_DIR_ABS=$(pwd)
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
+
 BINZIP=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.zip)
-assert_file_exists_regular ${BINZIP}
-assert_no_duplicate_files_in_archive ${BINZIP} 
-check_bin_archive "${BINZIP}"
-rm -rf ${DIR}
+extract_archive_to ${BINZIP} ${TMP_ZIP_DIR}
 
-change_dir "${BASE_TMP_DIR_ABS}"
-create_subdir_n_cd
-DIR=$(pwd)
 BINTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.tar.gz)
-assert_file_exists_regular ${BINTGZ}
-assert_no_duplicate_files_in_archive ${BINTGZ} 
-check_bin_archive "${BINTGZ}"
+extract_archive_to ${BINTGZ} ${TMP_TGZ_DIR}
+
+diff -r ${TMP_TGZ_DIR} ${TMP_ZIP_DIR}
+DIFF_BIN_RESULT=$?
+
+# cleanup temporary folders we created for the comparison
+rm -rf ${TMP_BINZIP_DIR} ${TMP_GZ_DIR}
+
+if [ ${DIFF_BIN_RESULT} -eq 0 ]; then
+  echo "The content of both binary archives is identical."
+  check_bin_archive "${BINTGZ}"
+else
+  echo "The content of both binary archives is NOT identical."
+  exit 1
+fi
 rm -rf ${DIR}
 
+#
+## source releases
+#
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
+
 SRCZIP=$(ls ../../${DIST_RELEASE_DIR}/*-sources.zip)
-assert_file_exists_regular ${SRCZIP}
-assert_no_duplicate_files_in_archive ${SRCZIP} 
-check_src_archive "${SRCZIP}"
-rm -rf ${DIR}
+extract_archive_to ${SRCZIP} ${TMP_ZIP_DIR}
 
-change_dir "${BASE_TMP_DIR_ABS}"
-create_subdir_n_cd
-DIR=$(pwd)
 SRCTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-sources.tar.gz)
-assert_file_exists_regular ${SRCTGZ}
-assert_no_duplicate_files_in_archive ${SRCTGZ} 
-check_src_archive "${SRCTGZ}"
-rm -rf ${DIR}
+extract_archive_to ${SRCTGZ} ${TMP_TGZ_DIR}
 
-# TOOD: check contents of remaining archives
+diff -r ${TMP_TGZ_DIR} ${TMP_ZIP_DIR}
+DIFF_SRC_RESULT=$?
+
+if [ ${DIFF_SRC_RESULT} -eq 0 ]; then
+  echo "The content of both source archives is identical."
+  check_src_archive "${SRCTGZ}"
+else
+  echo "The content of both source archives is NOT identical."
+  exit 1
+fi
+rm -rf ${DIR}

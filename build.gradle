@@ -407,7 +407,7 @@ def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
 }
 
 task replaceHardCodedVersionNames() << {
-    regexpReplaceInFiles(project.file("bin/dev/check-release-archives.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+    regexpReplaceInFiles(project.file("bin/dev/release-check-extended.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
 }
 
 task updateLicenseHeaderYear() << {
@@ -732,8 +732,12 @@ def sourceContent = project.copySpec {
     into kiekerPackagenamebase + "-" + kiekerVersion
 }
 
-task checkReleaseArchives(type: Exec, dependsOn: [distribute]) {
-    commandLine 'bin/dev/check-release-archives.sh'
+task checkReleaseArchivesShort(type: Exec, dependsOn: [distribute]) {
+    commandLine 'bin/dev/release-check-short.sh'
+}
+
+task checkReleaseArchives(type: Exec, dependsOn: [checkReleaseArchivesShort]) {
+    commandLine 'bin/dev/release-check-extended.sh'
 }
 
 task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
