@@ -407,7 +407,7 @@ def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
 }
 
 task replaceHardCodedVersionNames() << {
-    regexpReplaceInFiles(project.file("bin/dev/release-check-extended.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+    regexpReplaceInFiles(project.file("bin/dev/release-check-short.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
 }
 
 task updateLicenseHeaderYear() << {
