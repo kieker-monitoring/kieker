@@ -631,7 +631,7 @@ def binaryContent = project.copySpec {
 
         exclude '**/.gradle/**'
         exclude 'lib/static-analysis/'
-        exclude 'bin/dev/check-release-archives*'
+        exclude 'bin/dev/release-check*'
     }
     from('kieker-documentation') {
         include 'README-bin'

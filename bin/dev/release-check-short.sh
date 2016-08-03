@@ -255,7 +255,7 @@ function assert_files_exist_bin {
 
 	assert_file_NOT_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/"
-	assert_file_NOT_exists "bin/dev/check-release-archives*"
+	assert_file_NOT_exists "bin/dev/release-check*"
 	assert_file_NOT_exists "doc/userguide/"
 	assert_file_NOT_exists "src/"
 	assert_file_NOT_exists "test/"
