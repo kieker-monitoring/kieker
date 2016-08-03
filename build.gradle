@@ -732,8 +732,12 @@ def sourceContent = project.copySpec {
     into kiekerPackagenamebase + "-" + kiekerVersion
 }
 
-task checkReleaseArchives(type: Exec, dependsOn: [distribute]) {
-    commandLine 'bin/dev/check-release-archives.sh'
+task checkReleaseArchivesShort(type: Exec, dependsOn: [distribute]) {
+    commandLine 'bin/dev/release-check-short.sh'
+}
+
+task checkReleaseArchives(type: Exec, dependsOn: [checkReleaseArchivesShort]) {
+    commandLine 'bin/dev/release-check-extended.sh'
 }
 
 task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
