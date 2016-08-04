@@ -239,8 +239,7 @@ function assert_files_exist_bin {
 	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/.classpath"
 	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/.classpath"
 
-    #TODO
-	assert_file_NOT_regular "examples/JavaEEServletContainerExample/build.gradle"
+	assert_file_exists_regular "examples/JavaEEServletContainerExample/build.gradle"
 	assert_file_NOT_exists "examples/JavaEEServletContainerExample/livedemo-source/"
 	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/kieker.monitoring.properties"
 	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar"
