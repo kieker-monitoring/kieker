@@ -18,6 +18,11 @@ import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.timer.ITimeSource;
 
+/**
+ * @author Teerat Pitakrat, Thomas F. Duellmann
+ *
+ * @since 1.13
+ */
 public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 
 	private static final Log LOG = LogFactory.getLog(RestOutInterceptor.class);
@@ -87,7 +92,7 @@ public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 				final ClientHttpResponse response = (ClientHttpResponse) retval;
 				final HttpHeaders responseHeaders = response.getHeaders();
 				if (responseHeaders != null) {
-					final List<String> responseHeaderList = responseHeaders.get("KiekerTracingInfo");
+					final List<String> responseHeaderList = responseHeaders.get(RestInterceptorConstants.HEADER_FIELD);
 
 					if (responseHeaderList != null) {
 						if (LOG.isDebugEnabled()) {
