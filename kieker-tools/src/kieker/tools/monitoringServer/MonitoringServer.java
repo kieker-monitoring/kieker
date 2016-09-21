@@ -4,12 +4,11 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.TeeFilter;
-import kieker.analysis.plugin.reader.jms.JMSReader;
+import kieker.analysis.plugin.reader.amqp.AMQPReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.writer.AbstractAsyncWriter;
-import kieker.monitoring.writer.filesystem.AsyncFsWriter;
+import kieker.tools.logReplayer.filter.MonitoringRecordLoggerFilter;
 import kieker.tools.resourceMonitor.ResourceMonitor;
 
 public class MonitoringServer {
@@ -18,28 +17,24 @@ public class MonitoringServer {
 
 	public static void main(final String[] args) {
 		final IAnalysisController analysisController = new AnalysisController();
-		final Configuration jmsReaderConfig = new Configuration();
-		jmsReaderConfig.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, "kiekerLogQueue1");
-		jmsReaderConfig.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, "jmsServer");
-		jmsReaderConfig.setProperty(JMSReader.OUTPUT_PORT_NAME_RECORDS, "61616");
-		final JMSReader jmsReader = new JMSReader(jmsReaderConfig, analysisController);
+		final Configuration amqpReaderConfig = new Configuration();
 
+		amqpReaderConfig.setProperty(AMQPReader.CONFIG_PROPERTY_QUEUENAME, "kieker");
+		amqpReaderConfig.setProperty(AMQPReader.CONFIG_PROPERTY_URI, "amqp://guest:guest@192.168.99.100:31111");
+
+		final AMQPReader amqpReader = new AMQPReader(amqpReaderConfig, analysisController);
 		final TeeFilter teeFilter = new TeeFilter(new Configuration(), analysisController);
 
-		final Configuration fsWriterConfig = new Configuration();
-		fsWriterConfig.setProperty(AbstractAsyncWriter.CONFIG_SHUTDOWNDELAY, "1000");
-		final AsyncFsWriter fsWriter = new AsyncFsWriter(fsWriterConfig);
-
+		final MonitoringRecordLoggerFilter mrlf = new MonitoringRecordLoggerFilter(new Configuration(), analysisController);
 
 		try {
-			analysisController.connect(jmsReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
-			//analysisController.connect(teeFilter, TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, fsWriter, AsyncFsWriter.);
+			analysisController.connect(amqpReader, AMQPReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
+			analysisController.connect(teeFilter, TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, mrlf, MonitoringRecordLoggerFilter.INPUT_PORT_NAME_RECORD);
+			analysisController.run();
 		} catch (final IllegalStateException e) {
 			LOG.warn("An exception occurred", e);
 		} catch (final AnalysisConfigurationException e) {
 			LOG.warn("An exception occurred", e);
 		}
-
 	}
-
 }
