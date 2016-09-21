@@ -141,7 +141,16 @@ final class AMQPWriterThread extends AbstractAsyncThread {
 
 		this.connection = this.createConnection();
 		this.channel = this.connection.createChannel();
-		this.channel.queueDeclare(this.queueName, false, false, false, null);
+
+		try {
+			// Check whether the queue with the given name exists already.
+			// If the queue does not exist yet, an IOException is thrown
+			this.channel.queueDeclarePassive(this.queueName);
+
+		} catch (final IOException ieo) {
+			// As the queue does not exist, we try do declare it.
+			this.channel.queueDeclare(this.queueName, false, false, false, null);
+		}
 
 		this.buffer = ByteBuffer.allocate(DEFAULT_BUFFER_SIZE);
 		this.stringRegistry = this.monitoringController.getStringRegistry();
