@@ -108,7 +108,7 @@ public final class AMQPWriter extends AbstractAsyncWriter {
 /**
  * Writer thread for AMQP messages.
  *
- * @author Holger Knoche
+ * @author Holger Knoche, Thomas F. Duellmann
  *
  * @since 1.12
  */
@@ -131,7 +131,7 @@ final class AMQPWriterThread extends AbstractAsyncThread {
 
 	public AMQPWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final String uri, final int heartbeat, final String exchangeName, final String queueName)
-					throws TimeoutException, IOException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {
+			throws TimeoutException, IOException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {
 		super(monitoringController, writeQueue);
 
 		this.uri = uri;
@@ -141,6 +141,7 @@ final class AMQPWriterThread extends AbstractAsyncThread {
 
 		this.connection = this.createConnection();
 		this.channel = this.connection.createChannel();
+		this.channel.queueDeclare(this.queueName, false, false, false, null);
 
 		this.buffer = ByteBuffer.allocate(DEFAULT_BUFFER_SIZE);
 		this.stringRegistry = this.monitoringController.getStringRegistry();
