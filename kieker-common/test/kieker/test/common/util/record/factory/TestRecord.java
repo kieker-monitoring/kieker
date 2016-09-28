@@ -44,6 +44,11 @@ public class TestRecord extends AbstractMonitoringRecord {
 	}
 
 	@Override
+	public void registerStrings(final IRegistry<String> stringRegistry) {
+		// not used in test
+	}
+
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		// not used in test
 	}

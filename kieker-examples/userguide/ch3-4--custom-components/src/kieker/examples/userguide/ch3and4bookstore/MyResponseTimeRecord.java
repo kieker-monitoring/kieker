@@ -75,6 +75,12 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 	}
 
 	@Override
+	public void registerStrings(final IRegistry<String> stringRegistry) {
+		stringRegistry.get(this.getClassName());
+		stringRegistry.get(this.getMethodName());
+	}
+
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(stringRegistry.get(this.getClassName()));
 		buffer.putInt(stringRegistry.get(this.getMethodName()));
@@ -102,4 +108,5 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 	public final long getResponseTimeNanos() {
 		return this.responseTimeNanos;
 	}
+
 }
