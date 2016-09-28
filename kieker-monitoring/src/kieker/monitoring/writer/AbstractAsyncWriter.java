@@ -160,7 +160,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 					final long tmpMissedRecords = this.missedRecords.incrementAndGet();
 					if (LOG.isWarnEnabled() && ((tmpMissedRecords % 1024) == 1)) {
 						// warn upon the first failed element and upon all 1024th one
-						LOG.warn("Queue is full, dropping records. Number of already dropped records: " + tmpMissedRecords);
+						LOG.warn("Queue is full, dropping record. Current number of dropped records: " + tmpMissedRecords);
 					}
 				}
 				return true;
