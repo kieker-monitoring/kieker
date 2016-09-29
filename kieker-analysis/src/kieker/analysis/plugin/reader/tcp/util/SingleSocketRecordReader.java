@@ -61,19 +61,19 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 		final int clazzId = buffer.getInt();
 
 		if (clazzId == -1) {
-			return this.registerRegistryEntry(clazzId, buffer);
+			return this.registerRegistryEntry(buffer);
 		} else {
 			return this.deserializeRecord(clazzId, buffer);
 		}
 	}
 
-	private boolean registerRegistryEntry(final int clazzId, final ByteBuffer buffer) {
+	private boolean registerRegistryEntry(final ByteBuffer buffer) {
 		// identify string identifier and string length
 		if (buffer.remaining() < (INT_BYTES + INT_BYTES)) {
 			return false;
 		}
 
-		final int id = buffer.getInt();
+		final int id = buffer.getInt(); // NOPMD (id must be read before stringLength)
 		final int stringLength = buffer.getInt();
 
 		if (buffer.remaining() < stringLength) {
@@ -89,14 +89,13 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 	}
 
 	private boolean deserializeRecord(final int clazzId, final ByteBuffer buffer) {
-		final String recordClassName = this.readerRegistry.get(clazzId);
-
 		// identify logging timestamp
 		if (buffer.remaining() < LONG_BYTES) {
 			return false;
 		}
-		final long loggingTimestamp = buffer.getLong();
+		final long loggingTimestamp = buffer.getLong(); // NOPMD (timestamp must be read before checking the buffer for record size)
 
+		final String recordClassName = this.readerRegistry.get(clazzId);
 		// identify record data
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
 		if (buffer.remaining() < recordFactory.getRecordSizeInBytes()) {

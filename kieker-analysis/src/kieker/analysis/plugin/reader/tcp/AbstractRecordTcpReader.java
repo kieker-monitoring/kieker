@@ -68,15 +68,15 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 		if (buffer.remaining() < INT_BYTES) {
 			return false;
 		}
-		final int clazzId = buffer.getInt();
-		final String recordClassName = this.stringRegistry.get(clazzId);
+		final int clazzId = buffer.getInt(); // NOPMD (clazzId must be read before reading timestamp)
 
 		// identify logging timestamp
 		if (buffer.remaining() < LONG_BYTES) {
 			return false;
 		}
-		final long loggingTimestamp = buffer.getLong();
+		final long loggingTimestamp = buffer.getLong(); // NOPMD (timestamp must be read before checking the buffer for record size)
 
+		final String recordClassName = this.stringRegistry.get(clazzId);
 		// identify record data
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
 		if (buffer.remaining() < recordFactory.getRecordSizeInBytes()) { // includes the case where size is -1

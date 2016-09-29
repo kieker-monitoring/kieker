@@ -34,7 +34,7 @@ import kieker.common.logging.Log;
 // TODO remove abstract and extract the method onBufferReceived() into an interface
 public abstract class AbstractTcpReader implements Runnable {
 
-	@SuppressWarnings("PMD.LoggerIsNotStaticFinal")
+	@SuppressWarnings({ "PMD.LoggerIsNotStaticFinal", "PMD.ProperLogger" })
 	protected final Log logger;
 
 	private final int port;
