@@ -2,7 +2,6 @@ package kieker.analysis.plugin.reader.tcp.util;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.logging.Log;
@@ -18,7 +17,7 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 
 	private static final int INT_BYTES = AbstractMonitoringRecord.TYPE_SIZE_INT;
 	private static final int LONG_BYTES = AbstractMonitoringRecord.TYPE_SIZE_LONG;
-	private static final Charset ENCODING = StandardCharsets.UTF_8;
+	private static final Charset ENCODING = Charset.forName("UTF-8");
 
 	private final ReaderRegistry<String> readerRegistry = new ReaderRegistry<String>();
 	private final IRegistry<String> stringRegistryWrapper;
