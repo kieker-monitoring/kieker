@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,30 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+package kieker.analysis.plugin.reader.tcp.util;
 
-package kieker.common.util.registry.newversion;
+import kieker.common.record.IMonitoringRecord;
 
 /**
- * @param <T>
- *            the type of elements
+ * Represents a listener which is informed upon a new monitored record.
  *
- * @author Christian Wulf
+ * @author Christian Wulf (chw)
  *
- * @since 1.11
+ * @since 1.13
  */
-public interface ILookup<T> {
+public interface IRecordReceivedListener {
 
 	/**
-	 * @since 1.11
+	 * @since 1.13
 	 */
-	void add(int uniqueId, T element);
+	void onRecordReceived(IMonitoringRecord record);
 
-	/**
-	 * @return the <code>element</code> that is associated with the passed <code>uniqueId</code>
-	 *
-	 * @since 1.11
-	 */
-	T get(int uniqueId);
-
-	// int getSize();
 }
