@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.analysis.plugin.reader.tcp.util;
 
 import java.io.IOException;
@@ -9,16 +24,33 @@ import java.nio.channels.SocketChannel;
 
 import kieker.common.logging.Log;
 
+/**
+ * Represents a TCP reader without any knowledge about Kieker in general and records in particular.
+ *
+ * @author Christian Wulf (chw)
+ *
+ * @since 1.13
+ */
 // TODO remove abstract and extract the method onBufferReceived() into an interface
 public abstract class AbstractTcpReader implements Runnable {
 
-	private final int port;
-	private final int bufferCapacity;
 	@SuppressWarnings("PMD.LoggerIsNotStaticFinal")
 	protected final Log logger;
 
+	private final int port;
+	private final int bufferCapacity;
 	private volatile boolean terminated;
 
+	/**
+	 * Constructs a new TCP reader.
+	 *
+	 * @param port
+	 *            on which to listen for requests
+	 * @param bufferCapacity
+	 *            of the used read buffer
+	 * @param logger
+	 *            for notification to users and developers
+	 */
 	public AbstractTcpReader(final int port, final int bufferCapacity, final Log logger) {
 		super();
 		this.port = port;
@@ -81,12 +113,16 @@ public abstract class AbstractTcpReader implements Runnable {
 	/**
 	 * @param buffer
 	 *            to be read from
-	 * @return <ul>
+	 * @return
+	 *         <ul>
 	 *         <li><code>true</code> when there were enough bytes to perform the read operation
 	 *         <li><code>false</code> otherwise. In this case, the buffer is reset, compacted, and filled with new content.
 	 */
 	protected abstract boolean onBufferReceived(final ByteBuffer buffer);
 
+	/**
+	 * Gracefully terminates this TCP reader.
+	 */
 	public void terminate() {
 		this.terminated = true;
 	}

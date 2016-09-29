@@ -92,8 +92,6 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 				final boolean success = DualSocketTcpReader.this.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 				if (!success) {
 					this.logger.warn("Failed to deliver record: " + record);
-				} else {
-					// logger.debug("SENT: " + record.getClass().getSimpleName() + " -> " + record);
 				}
 			}
 		};
