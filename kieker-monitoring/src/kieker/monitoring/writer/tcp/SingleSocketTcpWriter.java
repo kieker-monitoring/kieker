@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.monitoring.writer.tcp;
 
 import kieker.common.configuration.Configuration;
@@ -70,8 +69,8 @@ public class SingleSocketTcpWriter extends AbstractAsyncWriter {
 			this.worker.consume(monitoringRecord);
 			// this.blockingQueue.add(monitoringRecord);
 			return true;
-		} catch (final Exception e) {
-			LOG.warn("An exception occurred", e);
+		} catch (final Exception e) { // NOPMD (must be caught due to Kieker's bad API)
+			LOG.warn("An exception occurred while consuming a registry record.", e);
 		}
 		return false;
 	}
