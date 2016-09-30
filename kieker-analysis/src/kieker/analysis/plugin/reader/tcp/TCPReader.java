@@ -47,16 +47,12 @@ import kieker.common.util.registry.Lookup;
  *
  * @since 1.8
  */
-@Plugin(description = "A reader which reads records from a TCP port",
-		outputPorts = {
-			@OutputPort(name = TCPReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the TCPReader")
-		},
-		configuration = {
-			@Property(name = TCPReader.CONFIG_PROPERTY_NAME_PORT1, defaultValue = "10133",
-					description = "The first port of the server used for the TCP connection."),
-			@Property(name = TCPReader.CONFIG_PROPERTY_NAME_PORT2, defaultValue = "10134",
-					description = "The second port of the server used for the TCP connection.")
-		})
+@Plugin(description = "A reader which reads records from a TCP port", outputPorts = {
+	@OutputPort(name = TCPReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the TCPReader")
+}, configuration = {
+	@Property(name = TCPReader.CONFIG_PROPERTY_NAME_PORT1, defaultValue = "10133", description = "The first port of the server used for the TCP connection."),
+	@Property(name = TCPReader.CONFIG_PROPERTY_NAME_PORT2, defaultValue = "10134", description = "The second port of the server used for the TCP connection.")
+})
 public final class TCPReader extends AbstractReaderPlugin {
 
 	/** The name of the output port delivering the received records. */
@@ -71,7 +67,8 @@ public final class TCPReader extends AbstractReaderPlugin {
 
 	private volatile Thread readerThread;
 	private volatile TCPStringReader tcpStringReader;
-	private volatile boolean terminated = false; // NOPMD
+	private volatile boolean terminated;
+
 	private final int port1;
 	private final int port2;
 	private final ILookup<String> stringRegistry = new Lookup<String>();
@@ -194,7 +191,7 @@ class TCPStringReader extends Thread {
 
 	private final int port;
 	private final ILookup<String> stringRegistry;
-	private volatile boolean terminated = false; // NOPMD
+	private volatile boolean terminated;
 	private volatile Thread readerThread;
 
 	public TCPStringReader(final int port, final ILookup<String> stringRegistry) {
