@@ -29,6 +29,15 @@ package kieker.common.util.registry;
 public interface IRegistry<E> {
 
 	/**
+	 * Gets the ID of this registry.
+	 *
+	 * @return The registry's ID
+	 *
+	 * @since 1.13
+	 */
+	public long getId();
+
+	/**
 	 * Gets a unique id for an object.
 	 *
 	 * @param value

@@ -29,14 +29,29 @@ import java.util.Arrays;
  */
 public final class Lookup<E> implements ILookup<E> {
 
+	private final long id;
+
 	private transient volatile E[] array;
 
 	/**
 	 * Create a new lookup entry.
 	 */
-	@SuppressWarnings("unchecked")
 	public Lookup() {
+		this(RegistryUtil.generateId());
+	}
+
+	/**
+	 * Creates a new lookup with the given ID.
+	 */
+	@SuppressWarnings("unchecked")
+	public Lookup(final long id) {
+		this.id = id;
 		this.array = (E[]) new Object[0];
+	}
+
+	@Override
+	public long getId() {
+		return this.id;
 	}
 
 	@Override
