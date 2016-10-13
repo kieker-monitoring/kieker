@@ -34,6 +34,11 @@ public class GetValueAdapter<E> implements IRegistry<E> {
 	}
 
 	@Override
+	public long getId() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public int get(final E value) {
 		throw new UnsupportedOperationException();
 	}
