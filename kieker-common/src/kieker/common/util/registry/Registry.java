@@ -125,6 +125,11 @@ public final class Registry<E> implements IRegistry<E> {
 		return h ^ (h >>> 16);
 	}
 
+	@Override
+	public long getId() {
+		return this.id;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -150,7 +155,7 @@ public final class Registry<E> implements IRegistry<E> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final E get(final int id) {
+	public final E get(final int id) { // NOCS Ignore hiding of field ID
 		final int capacity = this.nextId.get();
 		if (id > capacity) {
 			return null;
@@ -458,11 +463,6 @@ public final class Registry<E> implements IRegistry<E> {
 			}
 			this.table = newTable;
 		}
-	}
-
-	@Override
-	public long getId() {
-		return this.id;
 	}
 
 }

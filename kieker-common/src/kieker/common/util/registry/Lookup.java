@@ -42,6 +42,9 @@ public final class Lookup<E> implements ILookup<E> {
 
 	/**
 	 * Creates a new lookup with the given ID.
+	 *
+	 * @param id
+	 *            The ID to use for this lookup
 	 */
 	@SuppressWarnings("unchecked")
 	public Lookup(final long id) {
@@ -114,7 +117,7 @@ public final class Lookup<E> implements ILookup<E> {
 	}
 
 	@Override
-	public boolean set(final E value, final int id) {
+	public boolean set(final E value, final int id) { // NOCS Ignore hiding the ID field
 		synchronized (this) {
 			if (id < this.array.length) {
 				if (null == this.array[id]) {
