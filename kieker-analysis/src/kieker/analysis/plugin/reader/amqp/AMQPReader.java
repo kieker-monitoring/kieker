@@ -21,6 +21,7 @@ import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import com.rabbitmq.client.Channel;
@@ -32,11 +33,9 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
-import kieker.analysis.plugin.reader.AbstractReaderPlugin;
+import kieker.analysis.plugin.reader.AbstractStringRegistryReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.registry.ILookup;
-import kieker.common.util.registry.Lookup;
 
 /**
  * Reader plugin that reads monitoring records from an AMQP queue.
@@ -50,9 +49,11 @@ import kieker.common.util.registry.Lookup;
 		IMonitoringRecord.class }, description = "Output port of the AMQP reader") }, configuration = {
 			@Property(name = AMQPReader.CONFIG_PROPERTY_URI, defaultValue = "amqp://localhost", description = "Server URI of the AMQP server"),
 			@Property(name = AMQPReader.CONFIG_PROPERTY_QUEUENAME, defaultValue = "kieker", description = "AMQP queue name"),
-			@Property(name = AMQPReader.CONFIG_PROPERTY_HEARTBEAT, defaultValue = "60", description = "Heartbeat interval")
-		})
-public final class AMQPReader extends AbstractReaderPlugin {
+			@Property(name = AMQPReader.CONFIG_PROPERTY_HEARTBEAT, defaultValue = "60", description = "Heartbeat interval (in seconds)"),
+			@Property(name = AMQPReader.CONFIG_PROPERTY_CACHE_DURATION, defaultValue = "60", description = "Cache duration (in seconds) for string registries")
+
+})
+public final class AMQPReader extends AbstractStringRegistryReaderPlugin {
 
 	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
@@ -63,6 +64,8 @@ public final class AMQPReader extends AbstractReaderPlugin {
 	public static final String CONFIG_PROPERTY_QUEUENAME = "queueName";
 	/** The name of the configuration property for the heartbeat timeout. */
 	public static final String CONFIG_PROPERTY_HEARTBEAT = "heartbeat";
+	/** The name of the configuration property for the cache duration (in seconds) for string registries. */
+	public static final String CONFIG_PROPERTY_CACHE_DURATION = "cacheDuration";
 
 	/** ID for registry records. */
 	private static final byte REGISTRY_RECORD_ID = (byte) 0xFF;
@@ -73,21 +76,13 @@ public final class AMQPReader extends AbstractReaderPlugin {
 	private final String uri;
 	private final String queueName;
 	private final int heartbeat;
+	private final long cacheDuration;
 
 	private volatile Connection connection;
 	private volatile Channel channel;
 	private volatile QueueingConsumer consumer;
 
-	private final ILookup<String> stringRegistry = new Lookup<String>();
-
-	private volatile Thread registryRecordHandlerThread;
-	private volatile RegistryRecordHandler registryRecordHandler;
-	private volatile RegularRecordHandler regularRecordHandler;
-
-	private volatile Thread regularRecordHandlerThread;
-
 	private volatile boolean terminated;
-	private volatile boolean threadsStarted;
 
 	/**
 	 * Creates a new AMQP reader with the given configuration in the given context.
@@ -98,30 +93,26 @@ public final class AMQPReader extends AbstractReaderPlugin {
 	 *            The project context for this component
 	 */
 	public AMQPReader(final Configuration configuration, final IProjectContext projectContext) {
-		super(configuration, projectContext);
+		super(configuration, projectContext, CONFIG_PROPERTY_CACHE_DURATION, TimeUnit.SECONDS);
 
 		this.uri = this.configuration.getStringProperty(CONFIG_PROPERTY_URI);
 		this.queueName = this.configuration.getStringProperty(CONFIG_PROPERTY_QUEUENAME);
 		this.heartbeat = this.configuration.getIntProperty(CONFIG_PROPERTY_HEARTBEAT);
+		this.cacheDuration = this.configuration.getLongProperty(CONFIG_PROPERTY_CACHE_DURATION);
 	}
 
 	@Override
 	public boolean init() {
+		final boolean superInitSucceeded = super.init();
+
+		if (!superInitSucceeded) {
+			return false;
+		}
+
 		try {
 			this.connection = this.createConnection();
 			this.channel = this.connection.createChannel();
 			this.consumer = new QueueingConsumer(this.channel);
-
-			// Set up record handlers
-			this.registryRecordHandler = new RegistryRecordHandler(this.stringRegistry);
-			this.regularRecordHandler = new RegularRecordHandler(this, this.stringRegistry);
-
-			// Set up threads
-			this.registryRecordHandlerThread = new Thread(this.registryRecordHandler);
-			this.registryRecordHandlerThread.setDaemon(true);
-
-			this.regularRecordHandlerThread = new Thread(this.regularRecordHandler);
-			this.regularRecordHandlerThread.setDaemon(true);
 		} catch (final KeyManagementException e) {
 			this.handleInitializationError(e);
 			return false;
@@ -139,7 +130,7 @@ public final class AMQPReader extends AbstractReaderPlugin {
 			return false;
 		}
 
-		return super.init();
+		return true;
 	}
 
 	private void handleInitializationError(final Throwable e) {
@@ -162,6 +153,7 @@ public final class AMQPReader extends AbstractReaderPlugin {
 		configuration.setProperty(CONFIG_PROPERTY_URI, this.uri);
 		configuration.setProperty(CONFIG_PROPERTY_QUEUENAME, this.queueName);
 		configuration.setProperty(CONFIG_PROPERTY_HEARTBEAT, Integer.toString(this.heartbeat));
+		configuration.setProperty(CONFIG_PROPERTY_CACHE_DURATION, Long.toString(this.cacheDuration));
 
 		return configuration;
 	}
@@ -169,11 +161,7 @@ public final class AMQPReader extends AbstractReaderPlugin {
 	@Override
 	public boolean read() {
 		// Start the worker threads, if necessary
-		if (!this.threadsStarted) {
-			this.registryRecordHandlerThread.start();
-			this.regularRecordHandlerThread.start();
-			this.threadsStarted = true;
-		}
+		this.ensureThreadsStarted();
 
 		try {
 			this.channel.basicConsume(this.queueName, true, this.consumer);
@@ -188,10 +176,10 @@ public final class AMQPReader extends AbstractReaderPlugin {
 				// Dispatch to the appropriate handlers
 				switch (recordType) {
 				case REGISTRY_RECORD_ID:
-					this.registryRecordHandler.enqueueRegistryRecord(buffer);
+					this.handleRegistryRecord(buffer);
 					break;
 				case REGULAR_RECORD_ID:
-					this.regularRecordHandler.enqueueRegularRecord(buffer);
+					this.handleRegularRecord(buffer);
 					break;
 				default:
 					this.log.error(String.format("Unknown record type: %02x", recordType));
@@ -219,6 +207,7 @@ public final class AMQPReader extends AbstractReaderPlugin {
 		}
 	}
 
+	@Override
 	protected void deliverRecord(final IMonitoringRecord monitoringRecord) {
 		this.deliver(OUTPUT_PORT_NAME_RECORDS, monitoringRecord);
 	}

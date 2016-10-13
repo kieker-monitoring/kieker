@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.reader.amqp;
+package kieker.analysis.plugin.reader;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -37,14 +37,14 @@ import kieker.common.util.registry.ILookup;
  */
 public class RegularRecordHandler implements Runnable {
 
-	/** Default queue size for the regular record queue */
+	/** Default queue size for the regular record queue. */
 	private static final int DEFAULT_QUEUE_SIZE = 4096;
 
 	private static final Log LOG = LogFactory.getLog(RegularRecordHandler.class);
 
-	private final ILookup<String> stringRegistry;
+	private final StringRegistryCache stringRegistryCache;
 	private final CachedRecordFactoryCatalog cachedRecordFactoryCatalog = CachedRecordFactoryCatalog.getInstance();
-	private final AMQPReader reader;
+	private final AbstractStringRegistryReaderPlugin reader;
 
 	private final BlockingQueue<ByteBuffer> queue = new ArrayBlockingQueue<ByteBuffer>(DEFAULT_QUEUE_SIZE);
 
@@ -53,12 +53,12 @@ public class RegularRecordHandler implements Runnable {
 	 *
 	 * @param reader
 	 *            The reader to send the instantiated records to
-	 * @param stringRegistry
-	 *            The string registry to use
+	 * @param stringRegistryCache
+	 *            The string registry cache to use
 	 */
-	public RegularRecordHandler(final AMQPReader reader, final ILookup<String> stringRegistry) {
+	public RegularRecordHandler(final AbstractStringRegistryReaderPlugin reader, final StringRegistryCache stringRegistryCache) {
 		this.reader = reader;
-		this.stringRegistry = stringRegistry;
+		this.stringRegistryCache = stringRegistryCache;
 	}
 
 	@Override
@@ -88,14 +88,21 @@ public class RegularRecordHandler implements Runnable {
 		}
 	}
 
+	private ILookup<String> getStringRegistry(final long registryId) {
+		return this.stringRegistryCache.getOrCreateRegistry(registryId);
+	}
+
 	private void readRegularRecord(final ByteBuffer buffer) {
+		final long registryId = buffer.getLong();
 		final int classId = buffer.getInt();
 		final long loggingTimestamp = buffer.getLong();
 
+		final ILookup<String> stringRegistry = this.getStringRegistry(registryId);
+
 		try {
-			final String recordClassName = this.stringRegistry.get(classId);
+			final String recordClassName = stringRegistry.get(classId);
 			final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactoryCatalog.get(recordClassName);
-			final IMonitoringRecord record = recordFactory.create(buffer, this.stringRegistry);
+			final IMonitoringRecord record = recordFactory.create(buffer, stringRegistry);
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			this.reader.deliverRecord(record);
