@@ -157,9 +157,10 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 				return false;
 			case 2: // does nothing if queue is full
 				if (!this.blockingQueue.offer(monitoringRecord)) {
-					final long tmpMissedRecords = this.missedRecords.getAndIncrement();
-					if (LOG.isWarnEnabled() && ((tmpMissedRecords % 1024) == 0)) {
-						LOG.warn("Queue is full, dropping records. Number of already dropped records: " + tmpMissedRecords);
+					final long tmpMissedRecords = this.missedRecords.incrementAndGet();
+					if (LOG.isWarnEnabled() && ((tmpMissedRecords % 1024) == 1)) {
+						// warn upon the first failed element and upon all 1024th one
+						LOG.warn("Queue is full, dropping record. Current number of dropped records: " + tmpMissedRecords);
 					}
 				}
 				return true;
@@ -167,7 +168,8 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 				try {
 					this.blockingQueue.add(monitoringRecord);
 				} catch (final IllegalStateException ex) {
-					LOG.error("Failed to add new monitoring record to queue. Queue is full. Either increase 'QueueSize' or change 'QueueFullBehavior' for the configured writer."); // NOCS
+					LOG.error(
+							"Failed to add new monitoring record to queue. Queue is full. Either increase 'QueueSize' or change 'QueueFullBehavior' for the configured writer."); // NOCS
 					return false;
 				}
 				return true;
@@ -206,7 +208,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		final StringBuilder sb = new StringBuilder(64);
 		sb.append(super.toString());
 		sb.append("\n\tRecords lost: ");
-		sb.append(this.missedRecords.intValue());
+		sb.append(this.missedRecords.get());
 		sb.append("\n\tWriter Threads (");
 		sb.append(this.workers.size());
 		sb.append("): ");

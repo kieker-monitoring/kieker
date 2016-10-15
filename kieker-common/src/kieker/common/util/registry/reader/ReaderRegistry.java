@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,38 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.common.util.registry.newversion;
+package kieker.common.util.registry.reader;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @param <T>
- *            the type of the elements
+ * Represents an unsynchronized registry for read-only purposes. It is used by the readers within the analysis component.
  *
  * @author Christian Wulf
  *
- * @since 1.11
+ * @since 1.13
  */
-public final class Lookup<T> implements ILookup<T> {
+// TODO move to kieker.common.registry.read
+public class ReaderRegistry<E> {
 
-	// TODO: use a HPC implementation with primitive int keys
-	// I recommend: http://labs.carrotsearch.com/hppc.html
-	private final Map<Integer, T> registeredEntries;
+	// TODO replace by a high performance map with primitive key type
+	private final Map<Long, E> registryEntries = new HashMap<Long, E>(); // NOPMD (should be unsynchronized)
 
-	public Lookup() {
-		this.registeredEntries = new HashMap<Integer, T>();
+	/**
+	 * Constructs an unsynchronized reader registry.
+	 */
+	public ReaderRegistry() {
+		super();
 	}
 
-	@Override
-	public void add(final int uniqueId, final T element) {
-		this.registeredEntries.put(uniqueId, element);
+	public E get(final long key) {
+		return this.registryEntries.get(key);
 	}
 
-	@Override
-	public final T get(final int uniqueId) {
-		return this.registeredEntries.get(uniqueId);
+	public void register(final long key, final E value) {
+		this.registryEntries.put(key, value);
 	}
-
 }
