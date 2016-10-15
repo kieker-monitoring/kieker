@@ -4,7 +4,7 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.TeeFilter;
-import kieker.analysis.plugin.reader.amqp.AMQPReader;
+import kieker.analysis.plugin.reader.jms.JMSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -17,18 +17,19 @@ public class MonitoringServer {
 
 	public static void main(final String[] args) {
 		final IAnalysisController analysisController = new AnalysisController();
-		final Configuration amqpReaderConfig = new Configuration();
+		final Configuration jmsReaderConfig = new Configuration();
 
-		amqpReaderConfig.setProperty(AMQPReader.CONFIG_PROPERTY_QUEUENAME, "kieker");
-		amqpReaderConfig.setProperty(AMQPReader.CONFIG_PROPERTY_URI, "amqp://guest:guest@192.168.99.100:31111");
+		jmsReaderConfig.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, "kieker");
+		jmsReaderConfig.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, "tcp://jmsserver:61616");
+		jmsReaderConfig.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, "org.apache.activemq.jndi.ActiveMQInitialContextFactory");
 
-		final AMQPReader amqpReader = new AMQPReader(amqpReaderConfig, analysisController);
+		final JMSReader jmsReader = new JMSReader(jmsReaderConfig, analysisController);
 		final TeeFilter teeFilter = new TeeFilter(new Configuration(), analysisController);
 
 		final MonitoringRecordLoggerFilter mrlf = new MonitoringRecordLoggerFilter(new Configuration(), analysisController);
 
 		try {
-			analysisController.connect(amqpReader, AMQPReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
+			analysisController.connect(jmsReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
 			analysisController.connect(teeFilter, TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, mrlf, MonitoringRecordLoggerFilter.INPUT_PORT_NAME_RECORD);
 			analysisController.run();
 		} catch (final IllegalStateException e) {
