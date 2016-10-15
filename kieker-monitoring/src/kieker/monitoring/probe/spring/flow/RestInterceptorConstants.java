@@ -17,10 +17,17 @@
 package kieker.monitoring.probe.spring.flow;
 
 /**
+ * Constants that are used within the RestInterceptors.
+ *
  * @author Thomas F. Duellmann
  *
  * @since 1.13
  */
-public interface RestInterceptorConstants {
+public class RestInterceptorConstants {
+	// Name of the header fielt that is added in the HTTP requests
 	public static final String HEADER_FIELD = "KiekerTracingInfo";
+
+	private RestInterceptorConstants() {
+		// empty constructor
+	}
 }

@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.monitoring.probe.spring.flow;
 
 import java.io.IOException;
@@ -19,22 +35,27 @@ import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.timer.ITimeSource;
 
 /**
+ * Interceptor for outgoing HTTP requests in spring based on the Jersey interceptor.
+ *
  * @author Teerat Pitakrat, Thomas F. Duellmann
  *
  * @since 1.13
  */
 public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 
-	private static final Log LOG = LogFactory.getLog(RestOutInterceptor.class);
+	public static final String SIGNATURE = "public void " + RestOutInterceptor.class.getName()
+			+ ".intercept(org.springframework.http.HttpRequest, byte[], org.springframework.http.client.ClientHttpRequestExecution)";
 
+	private static final Log LOG = LogFactory.getLog(RestOutInterceptor.class);
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final String VMNAME = CTRLINST.getHostname();
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 
-	public static final String SIGNATURE = "public void " + RestOutInterceptor.class.getName()
-			+ ".intercept(org.springframework.http.HttpRequest, byte[], org.springframework.http.client.ClientHttpRequestExecution)";
+	public RestOutInterceptor() {
+		// empty constructor
+	}
 
 	@Override
 	public ClientHttpResponse intercept(final HttpRequest request, final byte[] body, final ClientHttpRequestExecution execution) throws IOException {
@@ -92,7 +113,7 @@ public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 				final ClientHttpResponse response = (ClientHttpResponse) retval;
 				final HttpHeaders responseHeaders = response.getHeaders();
 				if (responseHeaders != null) {
-					final List<String> responseHeaderList = responseHeaders.get(RestInterceptorConstants.HEADER_FIELD);
+					final List<String> responseHeaderList = responseHeaders.get("KiekerTracingInfo");
 
 					if (responseHeaderList != null) {
 						if (LOG.isDebugEnabled()) {
