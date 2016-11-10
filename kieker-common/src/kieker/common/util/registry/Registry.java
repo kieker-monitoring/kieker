@@ -45,6 +45,11 @@ public final class Registry<E> implements IRegistry<E> {
 	private static final int MAXIMUM_CAPACITY = 1 << 30;
 
 	/**
+	 * ID of this registry.
+	 */
+	private final long id;
+
+	/**
 	 * Mask value for indexing into segments. The upper bits of a key's hash code are used to choose the segment.
 	 */
 	private final int segmentMask;
@@ -74,6 +79,8 @@ public final class Registry<E> implements IRegistry<E> {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Registry() {
+		this.id = RegistryUtil.generateId();
+
 		// Find power-of-two sizes best matching arguments
 		int sshift = 0;
 		int ssize = 1;
@@ -118,6 +125,11 @@ public final class Registry<E> implements IRegistry<E> {
 		return h ^ (h >>> 16);
 	}
 
+	@Override
+	public long getId() {
+		return this.id;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -143,7 +155,7 @@ public final class Registry<E> implements IRegistry<E> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final E get(final int id) {
+	public final E get(final int id) { // NOCS Ignore hiding of field ID
 		final int capacity = this.nextId.get();
 		if (id > capacity) {
 			return null;
@@ -452,4 +464,5 @@ public final class Registry<E> implements IRegistry<E> {
 			this.table = newTable;
 		}
 	}
+
 }
