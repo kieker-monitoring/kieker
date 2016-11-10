@@ -118,6 +118,9 @@ final class AMQPWriterThread extends AbstractAsyncThread {
 
 	private static final int DEFAULT_BUFFER_SIZE = 16384;
 
+	/** Size of the "envelope" data which is prepended before the actual record. */
+	private static final int SIZE_OF_ENVELOPE = 1 + 8;
+
 	private final String uri;
 	private final int heartbeat;
 	private final String exchangeName;
@@ -131,7 +134,7 @@ final class AMQPWriterThread extends AbstractAsyncThread {
 
 	public AMQPWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final String uri, final int heartbeat, final String exchangeName, final String queueName)
-					throws TimeoutException, IOException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {
+			throws TimeoutException, IOException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {
 		super(monitoringController, writeQueue);
 
 		this.uri = uri;
@@ -143,6 +146,7 @@ final class AMQPWriterThread extends AbstractAsyncThread {
 		this.channel = this.connection.createChannel();
 
 		this.buffer = ByteBuffer.allocate(DEFAULT_BUFFER_SIZE);
+
 		this.stringRegistry = this.monitoringController.getStringRegistry();
 	}
 
@@ -161,10 +165,17 @@ final class AMQPWriterThread extends AbstractAsyncThread {
 
 	@Override
 	protected void consume(final IMonitoringRecord monitoringRecord) throws Exception {
+		final IRegistry<String> stringRegistry = this.stringRegistry;
+		final long registryId = stringRegistry.getId();
+
 		if (monitoringRecord instanceof RegistryRecord) {
-			final ByteBuffer localBuffer = ByteBuffer.allocate(monitoringRecord.getSize() + 1);
+			final ByteBuffer localBuffer = ByteBuffer.allocate(monitoringRecord.getSize() + SIZE_OF_ENVELOPE);
+
+			// Prepend envelope data.
 			localBuffer.put(AMQPWriter.REGISTRY_RECORD_ID);
-			monitoringRecord.writeBytes(localBuffer, this.stringRegistry);
+			localBuffer.putLong(registryId);
+
+			monitoringRecord.writeBytes(localBuffer, stringRegistry);
 			localBuffer.flip();
 
 			final byte[] data = localBuffer.array();
@@ -173,10 +184,13 @@ final class AMQPWriterThread extends AbstractAsyncThread {
 			final ByteBuffer localBuffer = this.buffer;
 			localBuffer.clear();
 
+			// Prepend envelope data
 			localBuffer.put(AMQPWriter.REGULAR_RECORD_ID);
+			localBuffer.putLong(registryId);
+
 			localBuffer.putInt(this.monitoringController.getUniqueIdForString(monitoringRecord.getClass().getName()));
 			localBuffer.putLong(monitoringRecord.getLoggingTimestamp());
-			monitoringRecord.writeBytes(localBuffer, this.stringRegistry);
+			monitoringRecord.writeBytes(localBuffer, stringRegistry);
 
 			localBuffer.flip();
 			final int dataSize = localBuffer.limit();

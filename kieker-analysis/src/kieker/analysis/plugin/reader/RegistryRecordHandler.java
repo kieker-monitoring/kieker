@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.reader.amqp;
+package kieker.analysis.plugin.reader;
 
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
@@ -35,22 +35,22 @@ import kieker.common.util.registry.ILookup;
  */
 public class RegistryRecordHandler implements Runnable {
 
-	/** The default queue size for the registry record queue */
+	/** The default queue size for the registry record queue. */
 	private static final int DEFAULT_QUEUE_SIZE = 1024;
 
 	private static final Log LOG = LogFactory.getLog(RegistryRecordHandler.class);
 
-	private final ILookup<String> stringRegistry;
+	private final StringRegistryCache stringRegistryCache;
 	private final BlockingQueue<ByteBuffer> queue = new ArrayBlockingQueue<ByteBuffer>(DEFAULT_QUEUE_SIZE);
 
 	/**
 	 * Creates a new registry record handler for the given registry.
 	 *
-	 * @param stringRegistry
-	 *            The string registry to operate on
+	 * @param stringRegistryCache
+	 *            The string registry cache to operate on
 	 */
-	public RegistryRecordHandler(final ILookup<String> stringRegistry) {
-		this.stringRegistry = stringRegistry;
+	public RegistryRecordHandler(final StringRegistryCache stringRegistryCache) {
+		this.stringRegistryCache = stringRegistryCache;
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class RegistryRecordHandler implements Runnable {
 
 	/**
 	 * Enqueues an unparsed registry record for processing.
-	 * 
+	 *
 	 * @param buffer
 	 *            The unparsed data in an appropriately positioned byte buffer
 	 */
@@ -80,9 +80,16 @@ public class RegistryRecordHandler implements Runnable {
 		}
 	}
 
+	private ILookup<String> getStringRegistry(final long registryId) {
+		return this.stringRegistryCache.getOrCreateRegistry(registryId);
+	}
+
 	private void readRegistryRecord(final ByteBuffer buffer) {
 		try {
-			RegistryRecord.registerRecordInRegistry(buffer, this.stringRegistry);
+			final long registryId = buffer.getLong();
+			final ILookup<String> stringRegistry = this.getStringRegistry(registryId);
+
+			RegistryRecord.registerRecordInRegistry(buffer, stringRegistry);
 		} catch (final BufferUnderflowException e) {
 			LOG.error("Buffer underflow while reading registry record", e);
 		}
