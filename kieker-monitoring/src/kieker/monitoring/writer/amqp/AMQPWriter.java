@@ -165,8 +165,8 @@ final class AMQPWriterThread extends AbstractAsyncThread {
 
 	@Override
 	protected void consume(final IMonitoringRecord monitoringRecord) throws Exception {
-		final IRegistry<String> stringRegistry = this.stringRegistry;
-		final long registryId = stringRegistry.getId();
+		final IRegistry<String> localStringRegistry = this.stringRegistry;
+		final long registryId = localStringRegistry.getId();
 
 		if (monitoringRecord instanceof RegistryRecord) {
 			final ByteBuffer localBuffer = ByteBuffer.allocate(monitoringRecord.getSize() + SIZE_OF_ENVELOPE);
@@ -175,7 +175,7 @@ final class AMQPWriterThread extends AbstractAsyncThread {
 			localBuffer.put(AMQPWriter.REGISTRY_RECORD_ID);
 			localBuffer.putLong(registryId);
 
-			monitoringRecord.writeBytes(localBuffer, stringRegistry);
+			monitoringRecord.writeBytes(localBuffer, localStringRegistry);
 			localBuffer.flip();
 
 			final byte[] data = localBuffer.array();
@@ -190,7 +190,7 @@ final class AMQPWriterThread extends AbstractAsyncThread {
 
 			localBuffer.putInt(this.monitoringController.getUniqueIdForString(monitoringRecord.getClass().getName()));
 			localBuffer.putLong(monitoringRecord.getLoggingTimestamp());
-			monitoringRecord.writeBytes(localBuffer, stringRegistry);
+			monitoringRecord.writeBytes(localBuffer, localStringRegistry);
 
 			localBuffer.flip();
 			final int dataSize = localBuffer.limit();
