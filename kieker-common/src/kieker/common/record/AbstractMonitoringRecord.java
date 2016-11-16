@@ -167,7 +167,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	}
 
 	@Override
-	public final int hashCode() {
+	public int hashCode() {
 		return (31 * Arrays.hashCode(this.toArray())) + (int) (this.loggingTimestamp ^ (this.loggingTimestamp >>> 32));
 	}
 
