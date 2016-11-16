@@ -69,7 +69,7 @@ public class SingleSocketTcpWriter extends AbstractAsyncWriter {
 			this.worker.consume(monitoringRecord);
 			// this.blockingQueue.add(monitoringRecord);
 			return true;
-		} catch (final Exception e) { // NOPMD (must be caught due to Kieker's bad API)
+		} catch (final Exception e) { // NOCS NOPMD (must be caught due to Kieker's bad API)
 			LOG.warn("An exception occurred while consuming a registry record.", e);
 		}
 		return false;
