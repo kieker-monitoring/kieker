@@ -44,6 +44,9 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 	private final BinaryCompressionMethod compressionMethod;
 	private final IRegistry<String> stringRegistry;
 
+	private final byte[] recordBufferArray;
+	private final ByteBuffer recordBuffer;
+	
 	/**
 	 * Create a new BinaryFsWriterThread.
 	 *
@@ -74,23 +77,27 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 		this.fileExtension = compressionMethod.getFileExtension();
 		this.bufferSize = bufferSize;
 		this.stringRegistry = monitoringController.getStringRegistry();
+		
+		this.recordBufferArray = new byte[bufferSize];
+		this.recordBuffer = ByteBuffer.wrap(recordBufferArray);
 	}
-
+	
 	@Override
 	protected void write(final IMonitoringRecord monitoringRecord) throws IOException {
 		final int size = monitoringRecord.getSize() + 4 + 8;
 
-		// FIXME performance issue due to too many object instantiations: ByteBuffer
-		final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
+		// Reset the record buffer
+		final ByteBuffer buffer = this.recordBuffer;
+		buffer.position(0);
+		
+		// Write the data to the buffer
 		buffer.putInt(this.monitoringController.getUniqueIdForString(monitoringRecord.getClass().getName()));
 		buffer.putLong(monitoringRecord.getLoggingTimestamp());
 		monitoringRecord.writeBytes(buffer, this.stringRegistry);
 
-		// FIXME performance issue due to too many object instantiations: byte[]
-		final byte[] bytes = new byte[size];
-		buffer.flip();
-		buffer.get(bytes, 0, size);
-		this.out.write(bytes);
+		// Write the raw bytes to the output
+		final byte[] bytes = this.recordBufferArray;
+		this.out.write(bytes, 0, size);
 	}
 
 	@Override
