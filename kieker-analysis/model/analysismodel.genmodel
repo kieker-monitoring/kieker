@@ -5,7 +5,8 @@
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false"
     operationReflection="true" importOrganizing="true">
   <foreignModel>analysismodel.ecore</foreignModel>
-  <genPackages prefix="Analysismodel" disposableProviderFactory="true" ecorePackage="analysismodel.ecore#/">
+  <genPackages prefix="Analysismodel" basePackage="kieker.analysis.model" disposableProviderFactory="true"
+      ecorePackage="analysismodel.ecore#/">
     <genDataTypes ecoreDataType="analysismodel.ecore#//Instant"/>
     <genDataTypes ecoreDataType="analysismodel.ecore#//Duration"/>
     <nestedGenPackages prefix="Statistics" disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//statistics">
