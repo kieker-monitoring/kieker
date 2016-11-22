@@ -3,6 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="analysismodel" nsURI="platform:/resource/Kieker/model/analysismodel.ecore"
     nsPrefix="analysismodel">
   <eClassifiers xsi:type="ecore:EDataType" name="Instant" instanceClassName="java.time.Instant"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Duration" instanceClassName="java.time.Duration"/>
   <eSubpackages name="statistics" nsURI="http://www.example.org/softwareSystem/statistics"
       nsPrefix="statistics">
     <eClassifiers xsi:type="ecore:EClass" name="Statistics">
@@ -115,6 +116,23 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//deployment/DeployedOperation"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="executionRoot" eType="#//execution/ExecutionRoot"
           eOpposite="#//execution/ExecutionRoot/aggregatedInvocations"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="trace" nsURI="http://www.example.org/trace" nsPrefix="trace">
+    <eClassifiers xsi:type="ecore:EClass" name="TraceRoot">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="traceID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rootOperationCall" eType="#//trace/OperationCall"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OperationCall">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="host" eType="#//deployment/DeploymentContext"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="component" eType="#//deployment/DeployedComponent"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operation" eType="#//deployment/DeployedOperation"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//trace/OperationCall"
+          eOpposite="#//trace/OperationCall/children"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+          eType="#//trace/OperationCall" eOpposite="#//trace/OperationCall/parent"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="executionDuration" eType="#//Duration"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" eType="#//Instant"/>
     </eClassifiers>
   </eSubpackages>
 </ecore:EPackage>
