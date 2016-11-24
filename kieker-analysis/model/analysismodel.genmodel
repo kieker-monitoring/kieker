@@ -5,7 +5,7 @@
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false"
     operationReflection="true" importOrganizing="true">
   <foreignModel>analysismodel.ecore</foreignModel>
-  <genPackages prefix="Analysismodel" basePackage="kieker.analysis.model" disposableProviderFactory="true"
+  <genPackages prefix="Analysismodel" basePackage="kieker.analysisteetime.model" disposableProviderFactory="true"
       ecorePackage="analysismodel.ecore#/">
     <genDataTypes ecoreDataType="analysismodel.ecore#//Instant"/>
     <genDataTypes ecoreDataType="analysismodel.ecore#//Duration"/>
@@ -126,8 +126,15 @@
             ecoreFeature="ecore:EReference analysismodel.ecore#//trace/OperationCall/parent"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//trace/OperationCall/children"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/OperationCall/executionDuration"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/OperationCall/startTime"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/OperationCall/duration"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/OperationCall/start"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/OperationCall/durRatioToParent"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/OperationCall/durRatioToRootParent"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/OperationCall/stackDepth"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/OperationCall/orderIndex"/>
+      </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//trace/FailedOperationCall">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/FailedOperationCall/failedCause"/>
       </genClasses>
     </nestedGenPackages>
   </genPackages>
