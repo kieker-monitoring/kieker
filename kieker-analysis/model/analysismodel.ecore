@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="analysismodel" nsURI="platform:/resource/Kieker/model/analysismodel.ecore"
+    nsPrefix="analysismodel">
+  <eClassifiers xsi:type="ecore:EDataType" name="Instant" instanceClassName="java.time.Instant"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Duration" instanceClassName="java.time.Duration"/>
+  <eSubpackages name="statistics" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/statistics"
+      nsPrefix="statistics">
+    <eClassifiers xsi:type="ecore:EClass" name="Statistics">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="timeSeries" upperBound="-1">
+        <eGenericType eClassifier="#//statistics/TimeSeries">
+          <eTypeArguments/>
+          <eTypeArguments/>
+        </eGenericType>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TimeSeries">
+      <eTypeParameters name="V">
+        <eBounds eClassifier="#//statistics/Value"/>
+      </eTypeParameters>
+      <eTypeParameters name="U">
+        <eBounds eClassifier="#//statistics/Unit">
+          <eTypeArguments eTypeParameter="#//statistics/TimeSeries/V"/>
+        </eBounds>
+      </eTypeParameters>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          changeable="false" iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1">
+        <eGenericType eTypeParameter="#//statistics/TimeSeries/V"/>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Value" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="timestamp" eType="#//Instant"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IntValue" eSuperTypes="#//statistics/Value">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="measurement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LongValue" eSuperTypes="#//statistics/Value">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="measurement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FloatValue" eSuperTypes="#//statistics/Value">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="measurement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DoubleValue" eSuperTypes="#//statistics/Value">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="measurement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Unit" abstract="true" interface="true">
+      <eTypeParameters name="V">
+        <eBounds eClassifier="#//statistics/Value"/>
+      </eTypeParameters>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="PredefinedUnits">
+      <eLiterals name="CPU_UTIL"/>
+      <eLiterals name="RESPONSE_TIME"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="architecture" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/architecture"
+      nsPrefix="architecture">
+    <eClassifiers xsi:type="ecore:EClass" name="ArchitectureRoot">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="componentTypes" upperBound="-1"
+          eType="#//architecture/ComponentType" eOpposite="#//architecture/ComponentType/architectureRoot"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ComponentType">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="packageName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="architectureRoot" eType="#//architecture/ArchitectureRoot"
+          eOpposite="#//architecture/ArchitectureRoot/componentTypes"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="providedOperations" upperBound="-1"
+          eType="#//architecture/OperationType" eOpposite="#//architecture/OperationType/componentType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OperationType">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="returnValueType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="componentType" eType="#//architecture/ComponentType"
+          eOpposite="#//architecture/ComponentType/providedOperations"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="deployment" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/deployment"
+      nsPrefix="deployment">
+    <eClassifiers xsi:type="ecore:EClass" name="DeploymentRoot">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentContexts" upperBound="-1"
+          eType="#//deployment/DeploymentContext" eOpposite="#//deployment/DeploymentContext/deploymentRoot"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeploymentContext">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentRoot" eType="#//deployment/DeploymentRoot"
+          eOpposite="#//deployment/DeploymentRoot/deploymentContexts"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
+          eType="#//deployment/DeployedComponent" eOpposite="#//deployment/DeployedComponent/deploymentContext"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeployedComponent">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="componentType" eType="#//architecture/ComponentType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentContext" eType="#//deployment/DeploymentContext"
+          eOpposite="#//deployment/DeploymentContext/components"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="containedOperations"
+          upperBound="-1" eType="#//deployment/DeployedOperation" eOpposite="#//deployment/DeployedOperation/containedComponent"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="accessedOperations" upperBound="-1"
+          eType="#//deployment/DeployedOperation" eOpposite="#//deployment/DeployedOperation/accesssedComponent"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeployedOperation">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operationType" eType="#//architecture/OperationType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="containedComponent" eType="#//deployment/DeployedComponent"
+          eOpposite="#//deployment/DeployedComponent/containedOperations"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="accesssedComponent" eType="#//deployment/DeployedComponent"
+          eOpposite="#//deployment/DeployedComponent/accessedOperations"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="execution" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/execution"
+      nsPrefix="execution">
+    <eClassifiers xsi:type="ecore:EClass" name="ExecutionRoot">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="aggregatedInvocations"
+          upperBound="-1" eType="#//execution/AggregatedInvocation" eOpposite="#//execution/AggregatedInvocation/executionRoot"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AggregatedInvocation">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//deployment/DeployedOperation"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//deployment/DeployedOperation"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="executionRoot" eType="#//execution/ExecutionRoot"
+          eOpposite="#//execution/ExecutionRoot/aggregatedInvocations"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="trace" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/trace"
+      nsPrefix="trace">
+    <eClassifiers xsi:type="ecore:EClass" name="TraceRoot">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="traceID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rootOperationCall" eType="#//trace/OperationCall"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OperationCall">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="host" eType="#//deployment/DeploymentContext"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="component" eType="#//deployment/DeployedComponent"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operation" eType="#//deployment/DeployedOperation"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//trace/OperationCall"
+          eOpposite="#//trace/OperationCall/children"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+          eType="#//trace/OperationCall" eOpposite="#//trace/OperationCall/parent"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="#//Duration"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="#//Instant"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="durRatioToParent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="durRatioToRootParent"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="stackDepth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="orderIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FailedOperationCall" eSuperTypes="#//trace/OperationCall">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="failedCause" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>
