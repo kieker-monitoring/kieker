@@ -4,7 +4,7 @@
     nsPrefix="analysismodel">
   <eClassifiers xsi:type="ecore:EDataType" name="Instant" instanceClassName="java.time.Instant"/>
   <eClassifiers xsi:type="ecore:EDataType" name="Duration" instanceClassName="java.time.Duration"/>
-  <eSubpackages name="statistics" nsURI="http://www.example.org/softwareSystem/statistics"
+  <eSubpackages name="statistics" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/statistics"
       nsPrefix="statistics">
     <eClassifiers xsi:type="ecore:EClass" name="Statistics">
       <eStructuralFeatures xsi:type="ecore:EReference" name="timeSeries" upperBound="-1">
@@ -55,7 +55,7 @@
       <eLiterals name="RESPONSE_TIME"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="architecture" nsURI="http://www.example.org/softwareSystem/architecture"
+  <eSubpackages name="architecture" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/architecture"
       nsPrefix="architecture">
     <eClassifiers xsi:type="ecore:EClass" name="ArchitectureRoot">
       <eStructuralFeatures xsi:type="ecore:EReference" name="componentTypes" upperBound="-1"
@@ -76,7 +76,7 @@
           eOpposite="#//architecture/ComponentType/providedOperations"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="deployment" nsURI="http://www.example.org/softwareSystem/deployment"
+  <eSubpackages name="deployment" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/deployment"
       nsPrefix="deployment">
     <eClassifiers xsi:type="ecore:EClass" name="DeploymentRoot">
       <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentContexts" upperBound="-1"
@@ -105,7 +105,7 @@
           eOpposite="#//deployment/DeployedComponent/accessedOperations"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="execution" nsURI="http://www.example.org/softwareSystem/execution"
+  <eSubpackages name="execution" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/execution"
       nsPrefix="execution">
     <eClassifiers xsi:type="ecore:EClass" name="ExecutionRoot">
       <eStructuralFeatures xsi:type="ecore:EReference" name="aggregatedInvocations"
@@ -118,7 +118,8 @@
           eOpposite="#//execution/ExecutionRoot/aggregatedInvocations"/>
     </eClassifiers>
   </eSubpackages>
-  <eSubpackages name="trace" nsURI="http://www.example.org/trace" nsPrefix="trace">
+  <eSubpackages name="trace" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/trace"
+      nsPrefix="trace">
     <eClassifiers xsi:type="ecore:EClass" name="TraceRoot">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="traceID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="rootOperationCall" eType="#//trace/OperationCall"/>
