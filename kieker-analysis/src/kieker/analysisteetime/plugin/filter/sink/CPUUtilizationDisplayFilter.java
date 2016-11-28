@@ -30,7 +30,7 @@ import teetime.framework.AbstractConsumerStage;
 /**
  * This is a filter which accepts {@link CPUUtilizationRecord} instances and provides different views (XYPlot or MeterGauge) to visualize them.
  *
- * @author Bjoern Weissenfels, Nils Christian Ehmke, Lars Erik Bluemke
+ * @author Bjoern Weissenfels, Nils Christian Ehmke, Lars Bluemke
  *
  * @since 1.8
  */
