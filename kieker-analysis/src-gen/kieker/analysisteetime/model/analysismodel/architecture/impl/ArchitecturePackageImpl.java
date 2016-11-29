@@ -173,7 +173,7 @@ public class ArchitecturePackageImpl extends EPackageImpl implements Architectur
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getComponentType_PackageName() {
+	public EAttribute getComponentType_Signature() {
 		return (EAttribute)componentTypeEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -182,17 +182,8 @@ public class ArchitecturePackageImpl extends EPackageImpl implements Architectur
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getComponentType_Name() {
-		return (EAttribute)componentTypeEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getComponentType_ArchitectureRoot() {
-		return (EReference)componentTypeEClass.getEStructuralFeatures().get(2);
+		return (EReference)componentTypeEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -201,7 +192,7 @@ public class ArchitecturePackageImpl extends EPackageImpl implements Architectur
 	 * @generated
 	 */
 	public EReference getComponentType_ProvidedOperations() {
-		return (EReference)componentTypeEClass.getEStructuralFeatures().get(3);
+		return (EReference)componentTypeEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -218,7 +209,7 @@ public class ArchitecturePackageImpl extends EPackageImpl implements Architectur
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getOperationType_Name() {
+	public EAttribute getOperationType_Signature() {
 		return (EAttribute)operationTypeEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -227,17 +218,8 @@ public class ArchitecturePackageImpl extends EPackageImpl implements Architectur
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getOperationType_ReturnValueType() {
-		return (EAttribute)operationTypeEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getOperationType_ComponentType() {
-		return (EReference)operationTypeEClass.getEStructuralFeatures().get(2);
+		return (EReference)operationTypeEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -272,14 +254,12 @@ public class ArchitecturePackageImpl extends EPackageImpl implements Architectur
 		createEReference(architectureRootEClass, ARCHITECTURE_ROOT__COMPONENT_TYPES);
 
 		componentTypeEClass = createEClass(COMPONENT_TYPE);
-		createEAttribute(componentTypeEClass, COMPONENT_TYPE__PACKAGE_NAME);
-		createEAttribute(componentTypeEClass, COMPONENT_TYPE__NAME);
+		createEAttribute(componentTypeEClass, COMPONENT_TYPE__SIGNATURE);
 		createEReference(componentTypeEClass, COMPONENT_TYPE__ARCHITECTURE_ROOT);
 		createEReference(componentTypeEClass, COMPONENT_TYPE__PROVIDED_OPERATIONS);
 
 		operationTypeEClass = createEClass(OPERATION_TYPE);
-		createEAttribute(operationTypeEClass, OPERATION_TYPE__NAME);
-		createEAttribute(operationTypeEClass, OPERATION_TYPE__RETURN_VALUE_TYPE);
+		createEAttribute(operationTypeEClass, OPERATION_TYPE__SIGNATURE);
 		createEReference(operationTypeEClass, OPERATION_TYPE__COMPONENT_TYPE);
 	}
 
@@ -314,18 +294,17 @@ public class ArchitecturePackageImpl extends EPackageImpl implements Architectur
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(architectureRootEClass, ArchitectureRoot.class, "ArchitectureRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getArchitectureRoot_ComponentTypes(), this.getComponentType(), this.getComponentType_ArchitectureRoot(), "componentTypes", null, 0, -1, ArchitectureRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getArchitectureRoot_ComponentTypes(), this.getComponentType(), this.getComponentType_ArchitectureRoot(), "componentTypes", null, 0, -1, ArchitectureRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(componentTypeEClass, ComponentType.class, "ComponentType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getComponentType_PackageName(), ecorePackage.getEString(), "packageName", null, 0, 1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getComponentType_Name(), ecorePackage.getEString(), "name", null, 0, 1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getComponentType_ArchitectureRoot(), this.getArchitectureRoot(), this.getArchitectureRoot_ComponentTypes(), "architectureRoot", null, 0, 1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getComponentType_ProvidedOperations(), this.getOperationType(), this.getOperationType_ComponentType(), "providedOperations", null, 0, -1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getComponentType_Signature(), ecorePackage.getEString(), "signature", null, 0, 1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getComponentType_ArchitectureRoot(), this.getArchitectureRoot(), this.getArchitectureRoot_ComponentTypes(), "architectureRoot", null, 0, 1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getComponentType_ProvidedOperations(), this.getOperationType(), this.getOperationType_ComponentType(), "providedOperations", null, 0, -1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		getComponentType_ProvidedOperations().getEKeys().add(this.getOperationType_Signature());
 
 		initEClass(operationTypeEClass, OperationType.class, "OperationType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getOperationType_Name(), ecorePackage.getEString(), "name", null, 0, 1, OperationType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getOperationType_ReturnValueType(), ecorePackage.getEString(), "returnValueType", null, 0, 1, OperationType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOperationType_ComponentType(), this.getComponentType(), this.getComponentType_ProvidedOperations(), "componentType", null, 0, 1, OperationType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOperationType_Signature(), ecorePackage.getEString(), "signature", null, 0, 1, OperationType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOperationType_ComponentType(), this.getComponentType(), this.getComponentType_ProvidedOperations(), "componentType", null, 0, 1, OperationType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //ArchitecturePackageImpl

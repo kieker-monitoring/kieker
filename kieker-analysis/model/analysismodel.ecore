@@ -58,20 +58,20 @@
   <eSubpackages name="architecture" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/architecture"
       nsPrefix="architecture">
     <eClassifiers xsi:type="ecore:EClass" name="ArchitectureRoot">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="componentTypes" upperBound="-1"
-          eType="#//architecture/ComponentType" eOpposite="#//architecture/ComponentType/architectureRoot"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="componentTypes" ordered="false"
+          upperBound="-1" eType="#//architecture/ComponentType" containment="true"
+          eOpposite="#//architecture/ComponentType/architectureRoot"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="ComponentType">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="packageName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="architectureRoot" eType="#//architecture/ArchitectureRoot"
           eOpposite="#//architecture/ArchitectureRoot/componentTypes"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="providedOperations" upperBound="-1"
-          eType="#//architecture/OperationType" eOpposite="#//architecture/OperationType/componentType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="providedOperations" ordered="false"
+          upperBound="-1" eType="#//architecture/OperationType" containment="true"
+          eOpposite="#//architecture/OperationType/componentType" eKeys="#//architecture/OperationType/signature"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="OperationType">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="returnValueType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="componentType" eType="#//architecture/ComponentType"
           eOpposite="#//architecture/ComponentType/providedOperations"/>
     </eClassifiers>
@@ -79,21 +79,24 @@
   <eSubpackages name="deployment" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/deployment"
       nsPrefix="deployment">
     <eClassifiers xsi:type="ecore:EClass" name="DeploymentRoot">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentContexts" upperBound="-1"
-          eType="#//deployment/DeploymentContext" eOpposite="#//deployment/DeploymentContext/deploymentRoot"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentContexts" ordered="false"
+          upperBound="-1" eType="#//deployment/DeploymentContext" containment="true"
+          eOpposite="#//deployment/DeploymentContext/deploymentRoot"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DeploymentContext">
       <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentRoot" eType="#//deployment/DeploymentRoot"
           eOpposite="#//deployment/DeploymentRoot/deploymentContexts"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
-          eType="#//deployment/DeployedComponent" eOpposite="#//deployment/DeployedComponent/deploymentContext"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="components" ordered="false"
+          upperBound="-1" eType="#//deployment/DeployedComponent" containment="true"
+          eOpposite="#//deployment/DeployedComponent/deploymentContext"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DeployedComponent">
       <eStructuralFeatures xsi:type="ecore:EReference" name="componentType" eType="#//architecture/ComponentType"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentContext" eType="#//deployment/DeploymentContext"
           eOpposite="#//deployment/DeploymentContext/components"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="containedOperations"
-          upperBound="-1" eType="#//deployment/DeployedOperation" eOpposite="#//deployment/DeployedOperation/containedComponent"/>
+          ordered="false" upperBound="-1" eType="#//deployment/DeployedOperation"
+          containment="true" eOpposite="#//deployment/DeployedOperation/containedComponent"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="accessedOperations" upperBound="-1"
           eType="#//deployment/DeployedOperation" eOpposite="#//deployment/DeployedOperation/accesssedComponent"/>
     </eClassifiers>
@@ -109,7 +112,8 @@
       nsPrefix="execution">
     <eClassifiers xsi:type="ecore:EClass" name="ExecutionRoot">
       <eStructuralFeatures xsi:type="ecore:EReference" name="aggregatedInvocations"
-          upperBound="-1" eType="#//execution/AggregatedInvocation" eOpposite="#//execution/AggregatedInvocation/executionRoot"/>
+          ordered="false" upperBound="-1" eType="#//execution/AggregatedInvocation"
+          containment="true" eOpposite="#//execution/AggregatedInvocation/executionRoot"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="AggregatedInvocation">
       <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//deployment/DeployedOperation"/>
@@ -122,7 +126,8 @@
       nsPrefix="trace">
     <eClassifiers xsi:type="ecore:EClass" name="TraceRoot">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="traceID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="rootOperationCall" eType="#//trace/OperationCall"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rootOperationCall" ordered="false"
+          eType="#//trace/OperationCall" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="OperationCall">
       <eStructuralFeatures xsi:type="ecore:EReference" name="host" eType="#//deployment/DeploymentContext"/>

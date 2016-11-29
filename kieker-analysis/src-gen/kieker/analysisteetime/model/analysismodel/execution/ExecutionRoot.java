@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface ExecutionRoot extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Aggregated Invocations</b></em>' reference list.
+	 * Returns the value of the '<em><b>Aggregated Invocations</b></em>' containment reference list.
 	 * The list contents are of type {@link kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation}.
 	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation#getExecutionRoot <em>Execution Root</em>}'.
 	 * <!-- begin-user-doc -->
@@ -33,10 +33,10 @@ public interface ExecutionRoot extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Aggregated Invocations</em>' reference list.
+	 * @return the value of the '<em>Aggregated Invocations</em>' containment reference list.
 	 * @see kieker.analysisteetime.model.analysismodel.execution.ExecutionPackage#getExecutionRoot_AggregatedInvocations()
 	 * @see kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation#getExecutionRoot
-	 * @model opposite="executionRoot"
+	 * @model opposite="executionRoot" containment="true" ordered="false"
 	 * @generated
 	 */
 	EList<AggregatedInvocation> getAggregatedInvocations();

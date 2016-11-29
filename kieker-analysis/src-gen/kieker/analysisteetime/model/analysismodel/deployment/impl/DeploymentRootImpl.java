@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -35,7 +35,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class DeploymentRootImpl extends MinimalEObjectImpl.Container implements DeploymentRoot {
 	/**
-	 * The cached value of the '{@link #getDeploymentContexts() <em>Deployment Contexts</em>}' reference list.
+	 * The cached value of the '{@link #getDeploymentContexts() <em>Deployment Contexts</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getDeploymentContexts()
@@ -70,7 +70,7 @@ public class DeploymentRootImpl extends MinimalEObjectImpl.Container implements 
 	 */
 	public EList<DeploymentContext> getDeploymentContexts() {
 		if (deploymentContexts == null) {
-			deploymentContexts = new EObjectWithInverseResolvingEList<DeploymentContext>(DeploymentContext.class, this, DeploymentPackage.DEPLOYMENT_ROOT__DEPLOYMENT_CONTEXTS, DeploymentPackage.DEPLOYMENT_CONTEXT__DEPLOYMENT_ROOT);
+			deploymentContexts = new EObjectContainmentWithInverseEList<DeploymentContext>(DeploymentContext.class, this, DeploymentPackage.DEPLOYMENT_ROOT__DEPLOYMENT_CONTEXTS, DeploymentPackage.DEPLOYMENT_CONTEXT__DEPLOYMENT_ROOT);
 		}
 		return deploymentContexts;
 	}

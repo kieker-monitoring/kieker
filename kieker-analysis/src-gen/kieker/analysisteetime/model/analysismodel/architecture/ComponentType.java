@@ -15,8 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getPackageName <em>Package Name</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getSignature <em>Signature</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getArchitectureRoot <em>Architecture Root</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getProvidedOperations <em>Provided Operations</em>}</li>
  * </ul>
@@ -27,59 +26,33 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface ComponentType extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Package Name</b></em>' attribute.
+	 * Returns the value of the '<em><b>Signature</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Package Name</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Signature</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Package Name</em>' attribute.
-	 * @see #setPackageName(String)
-	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage#getComponentType_PackageName()
+	 * @return the value of the '<em>Signature</em>' attribute.
+	 * @see #setSignature(String)
+	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage#getComponentType_Signature()
 	 * @model
 	 * @generated
 	 */
-	String getPackageName();
+	String getSignature();
 
 	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getPackageName <em>Package Name</em>}' attribute.
+	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getSignature <em>Signature</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Package Name</em>' attribute.
-	 * @see #getPackageName()
+	 * @param value the new value of the '<em>Signature</em>' attribute.
+	 * @see #getSignature()
 	 * @generated
 	 */
-	void setPackageName(String value);
+	void setSignature(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Name</em>' attribute.
-	 * @see #setName(String)
-	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage#getComponentType_Name()
-	 * @model
-	 * @generated
-	 */
-	String getName();
-
-	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getName <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Name</em>' attribute.
-	 * @see #getName()
-	 * @generated
-	 */
-	void setName(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Architecture Root</b></em>' reference.
+	 * Returns the value of the '<em><b>Architecture Root</b></em>' container reference.
 	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot#getComponentTypes <em>Component Types</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -87,27 +60,27 @@ public interface ComponentType extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Architecture Root</em>' reference.
+	 * @return the value of the '<em>Architecture Root</em>' container reference.
 	 * @see #setArchitectureRoot(ArchitectureRoot)
 	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage#getComponentType_ArchitectureRoot()
 	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot#getComponentTypes
-	 * @model opposite="componentTypes"
+	 * @model opposite="componentTypes" transient="false"
 	 * @generated
 	 */
 	ArchitectureRoot getArchitectureRoot();
 
 	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getArchitectureRoot <em>Architecture Root</em>}' reference.
+	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getArchitectureRoot <em>Architecture Root</em>}' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Architecture Root</em>' reference.
+	 * @param value the new value of the '<em>Architecture Root</em>' container reference.
 	 * @see #getArchitectureRoot()
 	 * @generated
 	 */
 	void setArchitectureRoot(ArchitectureRoot value);
 
 	/**
-	 * Returns the value of the '<em><b>Provided Operations</b></em>' reference list.
+	 * Returns the value of the '<em><b>Provided Operations</b></em>' containment reference list.
 	 * The list contents are of type {@link kieker.analysisteetime.model.analysismodel.architecture.OperationType}.
 	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType#getComponentType <em>Component Type</em>}'.
 	 * <!-- begin-user-doc -->
@@ -116,10 +89,10 @@ public interface ComponentType extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Provided Operations</em>' reference list.
+	 * @return the value of the '<em>Provided Operations</em>' containment reference list.
 	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage#getComponentType_ProvidedOperations()
 	 * @see kieker.analysisteetime.model.analysismodel.architecture.OperationType#getComponentType
-	 * @model opposite="componentType"
+	 * @model opposite="componentType" containment="true" keys="signature" ordered="false"
 	 * @generated
 	 */
 	EList<OperationType> getProvidedOperations();

@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -35,7 +35,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class ExecutionRootImpl extends MinimalEObjectImpl.Container implements ExecutionRoot {
 	/**
-	 * The cached value of the '{@link #getAggregatedInvocations() <em>Aggregated Invocations</em>}' reference list.
+	 * The cached value of the '{@link #getAggregatedInvocations() <em>Aggregated Invocations</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getAggregatedInvocations()
@@ -70,7 +70,7 @@ public class ExecutionRootImpl extends MinimalEObjectImpl.Container implements E
 	 */
 	public EList<AggregatedInvocation> getAggregatedInvocations() {
 		if (aggregatedInvocations == null) {
-			aggregatedInvocations = new EObjectWithInverseResolvingEList<AggregatedInvocation>(AggregatedInvocation.class, this, ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS, ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT);
+			aggregatedInvocations = new EObjectContainmentWithInverseEList<AggregatedInvocation>(AggregatedInvocation.class, this, ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS, ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT);
 		}
 		return aggregatedInvocations;
 	}

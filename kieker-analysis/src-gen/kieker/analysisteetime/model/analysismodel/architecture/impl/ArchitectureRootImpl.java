@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -35,7 +35,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class ArchitectureRootImpl extends MinimalEObjectImpl.Container implements ArchitectureRoot {
 	/**
-	 * The cached value of the '{@link #getComponentTypes() <em>Component Types</em>}' reference list.
+	 * The cached value of the '{@link #getComponentTypes() <em>Component Types</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getComponentTypes()
@@ -70,7 +70,7 @@ public class ArchitectureRootImpl extends MinimalEObjectImpl.Container implement
 	 */
 	public EList<ComponentType> getComponentTypes() {
 		if (componentTypes == null) {
-			componentTypes = new EObjectWithInverseResolvingEList<ComponentType>(ComponentType.class, this, ArchitecturePackage.ARCHITECTURE_ROOT__COMPONENT_TYPES, ArchitecturePackage.COMPONENT_TYPE__ARCHITECTURE_ROOT);
+			componentTypes = new EObjectContainmentWithInverseEList<ComponentType>(ComponentType.class, this, ArchitecturePackage.ARCHITECTURE_ROOT__COMPONENT_TYPES, ArchitecturePackage.COMPONENT_TYPE__ARCHITECTURE_ROOT);
 		}
 		return componentTypes;
 	}

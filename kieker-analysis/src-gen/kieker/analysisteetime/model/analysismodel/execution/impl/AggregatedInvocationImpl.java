@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -52,16 +53,6 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	 * @ordered
 	 */
 	protected DeployedOperation target;
-
-	/**
-	 * The cached value of the '{@link #getExecutionRoot() <em>Execution Root</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getExecutionRoot()
-	 * @generated
-	 * @ordered
-	 */
-	protected ExecutionRoot executionRoot;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -164,24 +155,8 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	 * @generated
 	 */
 	public ExecutionRoot getExecutionRoot() {
-		if (executionRoot != null && executionRoot.eIsProxy()) {
-			InternalEObject oldExecutionRoot = (InternalEObject)executionRoot;
-			executionRoot = (ExecutionRoot)eResolveProxy(oldExecutionRoot);
-			if (executionRoot != oldExecutionRoot) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT, oldExecutionRoot, executionRoot));
-			}
-		}
-		return executionRoot;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ExecutionRoot basicGetExecutionRoot() {
-		return executionRoot;
+		if (eContainerFeatureID() != ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT) return null;
+		return (ExecutionRoot)eInternalContainer();
 	}
 
 	/**
@@ -190,12 +165,7 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	 * @generated
 	 */
 	public NotificationChain basicSetExecutionRoot(ExecutionRoot newExecutionRoot, NotificationChain msgs) {
-		ExecutionRoot oldExecutionRoot = executionRoot;
-		executionRoot = newExecutionRoot;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT, oldExecutionRoot, newExecutionRoot);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
+		msgs = eBasicSetContainer((InternalEObject)newExecutionRoot, ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT, msgs);
 		return msgs;
 	}
 
@@ -205,10 +175,12 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	 * @generated
 	 */
 	public void setExecutionRoot(ExecutionRoot newExecutionRoot) {
-		if (newExecutionRoot != executionRoot) {
+		if (newExecutionRoot != eInternalContainer() || (eContainerFeatureID() != ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT && newExecutionRoot != null)) {
+			if (EcoreUtil.isAncestor(this, newExecutionRoot))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
 			NotificationChain msgs = null;
-			if (executionRoot != null)
-				msgs = ((InternalEObject)executionRoot).eInverseRemove(this, ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS, ExecutionRoot.class, msgs);
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
 			if (newExecutionRoot != null)
 				msgs = ((InternalEObject)newExecutionRoot).eInverseAdd(this, ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS, ExecutionRoot.class, msgs);
 			msgs = basicSetExecutionRoot(newExecutionRoot, msgs);
@@ -227,8 +199,8 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT:
-				if (executionRoot != null)
-					msgs = ((InternalEObject)executionRoot).eInverseRemove(this, ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS, ExecutionRoot.class, msgs);
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
 				return basicSetExecutionRoot((ExecutionRoot)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
@@ -254,6 +226,20 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT:
+				return eInternalContainer().eInverseRemove(this, ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS, ExecutionRoot.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case ExecutionPackage.AGGREGATED_INVOCATION__SOURCE:
@@ -263,8 +249,7 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 				if (resolve) return getTarget();
 				return basicGetTarget();
 			case ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT:
-				if (resolve) return getExecutionRoot();
-				return basicGetExecutionRoot();
+				return getExecutionRoot();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -324,7 +309,7 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 			case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
 				return target != null;
 			case ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT:
-				return executionRoot != null;
+				return getExecutionRoot() != null;
 		}
 		return super.eIsSet(featureID);
 	}
