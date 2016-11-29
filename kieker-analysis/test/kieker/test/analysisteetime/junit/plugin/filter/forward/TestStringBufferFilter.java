@@ -34,25 +34,25 @@ import teetime.framework.test.StageTester;
  *
  * @since 1.6
  */
-public class TestStringBufferStage {
+public class TestStringBufferFilter {
 
 	/**
 	 * Default constructor.
 	 */
-	public TestStringBufferStage() {
+	public TestStringBufferFilter() {
 		// default empty constructor
 	}
 
 	@Test
 	public void testRecordsWithStringEqualButNeverSame() {
 		final StringBufferFilter stringBufferFilter = new StringBufferFilter();
-		final List<Object> inputElements = new ArrayList<Object>();
+		final List<IMonitoringRecord> inputElements = new ArrayList<IMonitoringRecord>();
 		final List<Object> outputElements = new ArrayList<Object>();
 
 		long timestamp = 3268936L;
-		final IMonitoringRecord recordIn1 = TestStringBufferStage.createOperationExecutionRecord(timestamp);
+		final IMonitoringRecord recordIn1 = TestStringBufferFilter.createOperationExecutionRecord(timestamp);
 		timestamp++;
-		final IMonitoringRecord recordIn2 = TestStringBufferStage.createOperationExecutionRecord(timestamp);
+		final IMonitoringRecord recordIn2 = TestStringBufferFilter.createOperationExecutionRecord(timestamp);
 		inputElements.add(recordIn1);
 		inputElements.add(recordIn2);
 
@@ -73,7 +73,7 @@ public class TestStringBufferStage {
 	@Test
 	public void testRecordsWithoutStringSame() {
 		final StringBufferFilter stringBufferFilter = new StringBufferFilter();
-		final List<Object> inputElements = new ArrayList<Object>();
+		final List<IMonitoringRecord> inputElements = new ArrayList<IMonitoringRecord>();
 		final List<Object> outputElements = new ArrayList<Object>();
 
 		final IMonitoringRecord recordIn1 = new EmptyRecord();
@@ -124,7 +124,7 @@ public class TestStringBufferStage {
 	@Test
 	public void testStringInRecord() {
 		final StringBufferFilter stringBufferFilter = new StringBufferFilter();
-		final List<Object> inputElements = new ArrayList<Object>();
+		final List<OperationExecutionRecord> inputElements = new ArrayList<OperationExecutionRecord>();
 		final List<Object> outputElements = new ArrayList<Object>();
 
 		final String inString1a = "inString1a";

@@ -25,8 +25,6 @@ import org.junit.Test;
 
 import kieker.analysisteetime.plugin.filter.forward.CountingFilter;
 
-import kieker.test.common.junit.AbstractKiekerTest;
-
 import teetime.framework.test.StageTester;
 
 /**
@@ -36,7 +34,7 @@ import teetime.framework.test.StageTester;
  *
  * @since 1.6
  */
-public class TestCountingFilter extends AbstractKiekerTest {
+public class TestCountingDisplayFilter {
 
 	private CountingFilter countingFilter = null;
 	private List<Object> testElements = null;

@@ -70,7 +70,7 @@ public class TestMonitoringThroughputFilter {
 	@Test
 	public void testNormal() {
 
-		final List<IMonitoringRecord> inputRecords = new ArrayList<IMonitoringRecord>();
+		final List<EmptyRecord> inputRecords = new ArrayList<EmptyRecord>();
 
 		// adding 20 records with timestamps from 10 to 29
 		for (long i = 10; i < 30; i++) {
