@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface DeploymentRoot extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Deployment Contexts</b></em>' reference list.
+	 * Returns the value of the '<em><b>Deployment Contexts</b></em>' containment reference list.
 	 * The list contents are of type {@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext}.
 	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getDeploymentRoot <em>Deployment Root</em>}'.
 	 * <!-- begin-user-doc -->
@@ -33,10 +33,10 @@ public interface DeploymentRoot extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Deployment Contexts</em>' reference list.
+	 * @return the value of the '<em>Deployment Contexts</em>' containment reference list.
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeploymentRoot_DeploymentContexts()
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getDeploymentRoot
-	 * @model opposite="deploymentRoot"
+	 * @model opposite="deploymentRoot" containment="true" ordered="false"
 	 * @generated
 	 */
 	EList<DeploymentContext> getDeploymentContexts();

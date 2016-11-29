@@ -22,7 +22,9 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -53,17 +55,7 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	protected ComponentType componentType;
 
 	/**
-	 * The cached value of the '{@link #getDeploymentContext() <em>Deployment Context</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDeploymentContext()
-	 * @generated
-	 * @ordered
-	 */
-	protected DeploymentContext deploymentContext;
-
-	/**
-	 * The cached value of the '{@link #getContainedOperations() <em>Contained Operations</em>}' reference list.
+	 * The cached value of the '{@link #getContainedOperations() <em>Contained Operations</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getContainedOperations()
@@ -145,24 +137,8 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	public DeploymentContext getDeploymentContext() {
-		if (deploymentContext != null && deploymentContext.eIsProxy()) {
-			InternalEObject oldDeploymentContext = (InternalEObject)deploymentContext;
-			deploymentContext = (DeploymentContext)eResolveProxy(oldDeploymentContext);
-			if (deploymentContext != oldDeploymentContext) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DeploymentPackage.DEPLOYED_COMPONENT__DEPLOYMENT_CONTEXT, oldDeploymentContext, deploymentContext));
-			}
-		}
-		return deploymentContext;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DeploymentContext basicGetDeploymentContext() {
-		return deploymentContext;
+		if (eContainerFeatureID() != DeploymentPackage.DEPLOYED_COMPONENT__DEPLOYMENT_CONTEXT) return null;
+		return (DeploymentContext)eInternalContainer();
 	}
 
 	/**
@@ -171,12 +147,7 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	public NotificationChain basicSetDeploymentContext(DeploymentContext newDeploymentContext, NotificationChain msgs) {
-		DeploymentContext oldDeploymentContext = deploymentContext;
-		deploymentContext = newDeploymentContext;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYED_COMPONENT__DEPLOYMENT_CONTEXT, oldDeploymentContext, newDeploymentContext);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
+		msgs = eBasicSetContainer((InternalEObject)newDeploymentContext, DeploymentPackage.DEPLOYED_COMPONENT__DEPLOYMENT_CONTEXT, msgs);
 		return msgs;
 	}
 
@@ -186,10 +157,12 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	public void setDeploymentContext(DeploymentContext newDeploymentContext) {
-		if (newDeploymentContext != deploymentContext) {
+		if (newDeploymentContext != eInternalContainer() || (eContainerFeatureID() != DeploymentPackage.DEPLOYED_COMPONENT__DEPLOYMENT_CONTEXT && newDeploymentContext != null)) {
+			if (EcoreUtil.isAncestor(this, newDeploymentContext))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
 			NotificationChain msgs = null;
-			if (deploymentContext != null)
-				msgs = ((InternalEObject)deploymentContext).eInverseRemove(this, DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS, DeploymentContext.class, msgs);
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
 			if (newDeploymentContext != null)
 				msgs = ((InternalEObject)newDeploymentContext).eInverseAdd(this, DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS, DeploymentContext.class, msgs);
 			msgs = basicSetDeploymentContext(newDeploymentContext, msgs);
@@ -206,7 +179,7 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 */
 	public EList<DeployedOperation> getContainedOperations() {
 		if (containedOperations == null) {
-			containedOperations = new EObjectWithInverseResolvingEList<DeployedOperation>(DeployedOperation.class, this, DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS, DeploymentPackage.DEPLOYED_OPERATION__CONTAINED_COMPONENT);
+			containedOperations = new EObjectContainmentWithInverseEList<DeployedOperation>(DeployedOperation.class, this, DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS, DeploymentPackage.DEPLOYED_OPERATION__CONTAINED_COMPONENT);
 		}
 		return containedOperations;
 	}
@@ -233,8 +206,8 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case DeploymentPackage.DEPLOYED_COMPONENT__DEPLOYMENT_CONTEXT:
-				if (deploymentContext != null)
-					msgs = ((InternalEObject)deploymentContext).eInverseRemove(this, DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS, DeploymentContext.class, msgs);
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
 				return basicSetDeploymentContext((DeploymentContext)otherEnd, msgs);
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getContainedOperations()).basicAdd(otherEnd, msgs);
@@ -268,14 +241,27 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case DeploymentPackage.DEPLOYED_COMPONENT__DEPLOYMENT_CONTEXT:
+				return eInternalContainer().eInverseRemove(this, DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS, DeploymentContext.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case DeploymentPackage.DEPLOYED_COMPONENT__COMPONENT_TYPE:
 				if (resolve) return getComponentType();
 				return basicGetComponentType();
 			case DeploymentPackage.DEPLOYED_COMPONENT__DEPLOYMENT_CONTEXT:
-				if (resolve) return getDeploymentContext();
-				return basicGetDeploymentContext();
+				return getDeploymentContext();
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
 				return getContainedOperations();
 			case DeploymentPackage.DEPLOYED_COMPONENT__ACCESSED_OPERATIONS:
@@ -346,7 +332,7 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 			case DeploymentPackage.DEPLOYED_COMPONENT__COMPONENT_TYPE:
 				return componentType != null;
 			case DeploymentPackage.DEPLOYED_COMPONENT__DEPLOYMENT_CONTEXT:
-				return deploymentContext != null;
+				return getDeploymentContext() != null;
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
 				return containedOperations != null && !containedOperations.isEmpty();
 			case DeploymentPackage.DEPLOYED_COMPONENT__ACCESSED_OPERATIONS:

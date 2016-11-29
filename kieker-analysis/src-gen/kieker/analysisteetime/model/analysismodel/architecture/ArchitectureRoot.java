@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface ArchitectureRoot extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Component Types</b></em>' reference list.
+	 * Returns the value of the '<em><b>Component Types</b></em>' containment reference list.
 	 * The list contents are of type {@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType}.
 	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getArchitectureRoot <em>Architecture Root</em>}'.
 	 * <!-- begin-user-doc -->
@@ -33,10 +33,10 @@ public interface ArchitectureRoot extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Component Types</em>' reference list.
+	 * @return the value of the '<em>Component Types</em>' containment reference list.
 	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage#getArchitectureRoot_ComponentTypes()
 	 * @see kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getArchitectureRoot
-	 * @model opposite="architectureRoot"
+	 * @model opposite="architectureRoot" containment="true" ordered="false"
 	 * @generated
 	 */
 	EList<ComponentType> getComponentTypes();

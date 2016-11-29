@@ -52,7 +52,7 @@ public interface DeployedOperation extends EObject {
 	void setOperationType(OperationType value);
 
 	/**
-	 * Returns the value of the '<em><b>Contained Component</b></em>' reference.
+	 * Returns the value of the '<em><b>Contained Component</b></em>' container reference.
 	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getContainedOperations <em>Contained Operations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -60,20 +60,20 @@ public interface DeployedOperation extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Contained Component</em>' reference.
+	 * @return the value of the '<em>Contained Component</em>' container reference.
 	 * @see #setContainedComponent(DeployedComponent)
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeployedOperation_ContainedComponent()
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getContainedOperations
-	 * @model opposite="containedOperations"
+	 * @model opposite="containedOperations" transient="false"
 	 * @generated
 	 */
 	DeployedComponent getContainedComponent();
 
 	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getContainedComponent <em>Contained Component</em>}' reference.
+	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getContainedComponent <em>Contained Component</em>}' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Contained Component</em>' reference.
+	 * @param value the new value of the '<em>Contained Component</em>' container reference.
 	 * @see #getContainedComponent()
 	 * @generated
 	 */

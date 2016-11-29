@@ -55,7 +55,7 @@ public interface DeployedComponent extends EObject {
 	void setComponentType(ComponentType value);
 
 	/**
-	 * Returns the value of the '<em><b>Deployment Context</b></em>' reference.
+	 * Returns the value of the '<em><b>Deployment Context</b></em>' container reference.
 	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getComponents <em>Components</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -63,27 +63,27 @@ public interface DeployedComponent extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Deployment Context</em>' reference.
+	 * @return the value of the '<em>Deployment Context</em>' container reference.
 	 * @see #setDeploymentContext(DeploymentContext)
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeployedComponent_DeploymentContext()
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getComponents
-	 * @model opposite="components"
+	 * @model opposite="components" transient="false"
 	 * @generated
 	 */
 	DeploymentContext getDeploymentContext();
 
 	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getDeploymentContext <em>Deployment Context</em>}' reference.
+	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getDeploymentContext <em>Deployment Context</em>}' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Deployment Context</em>' reference.
+	 * @param value the new value of the '<em>Deployment Context</em>' container reference.
 	 * @see #getDeploymentContext()
 	 * @generated
 	 */
 	void setDeploymentContext(DeploymentContext value);
 
 	/**
-	 * Returns the value of the '<em><b>Contained Operations</b></em>' reference list.
+	 * Returns the value of the '<em><b>Contained Operations</b></em>' containment reference list.
 	 * The list contents are of type {@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation}.
 	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getContainedComponent <em>Contained Component</em>}'.
 	 * <!-- begin-user-doc -->
@@ -92,10 +92,10 @@ public interface DeployedComponent extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Contained Operations</em>' reference list.
+	 * @return the value of the '<em>Contained Operations</em>' containment reference list.
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeployedComponent_ContainedOperations()
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getContainedComponent
-	 * @model opposite="containedComponent"
+	 * @model opposite="containedComponent" containment="true" ordered="false"
 	 * @generated
 	 */
 	EList<DeployedOperation> getContainedOperations();

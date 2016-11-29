@@ -66,7 +66,7 @@ public interface ExecutionPackage extends EPackage {
 	int EXECUTION_ROOT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Aggregated Invocations</b></em>' reference list.
+	 * The feature id for the '<em><b>Aggregated Invocations</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -121,7 +121,7 @@ public interface ExecutionPackage extends EPackage {
 	int AGGREGATED_INVOCATION__TARGET = 1;
 
 	/**
-	 * The feature id for the '<em><b>Execution Root</b></em>' reference.
+	 * The feature id for the '<em><b>Execution Root</b></em>' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -159,10 +159,10 @@ public interface ExecutionPackage extends EPackage {
 	EClass getExecutionRoot();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot#getAggregatedInvocations <em>Aggregated Invocations</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot#getAggregatedInvocations <em>Aggregated Invocations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Aggregated Invocations</em>'.
+	 * @return the meta object for the containment reference list '<em>Aggregated Invocations</em>'.
 	 * @see kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot#getAggregatedInvocations()
 	 * @see #getExecutionRoot()
 	 * @generated
@@ -202,10 +202,10 @@ public interface ExecutionPackage extends EPackage {
 	EReference getAggregatedInvocation_Target();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation#getExecutionRoot <em>Execution Root</em>}'.
+	 * Returns the meta object for the container reference '{@link kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation#getExecutionRoot <em>Execution Root</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Execution Root</em>'.
+	 * @return the meta object for the container reference '<em>Execution Root</em>'.
 	 * @see kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation#getExecutionRoot()
 	 * @see #getAggregatedInvocation()
 	 * @generated
@@ -246,7 +246,7 @@ public interface ExecutionPackage extends EPackage {
 		EClass EXECUTION_ROOT = eINSTANCE.getExecutionRoot();
 
 		/**
-		 * The meta object literal for the '<em><b>Aggregated Invocations</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Aggregated Invocations</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -280,7 +280,7 @@ public interface ExecutionPackage extends EPackage {
 		EReference AGGREGATED_INVOCATION__TARGET = eINSTANCE.getAggregatedInvocation_Target();
 
 		/**
-		 * The meta object literal for the '<em><b>Execution Root</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Execution Root</b></em>' container reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

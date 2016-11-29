@@ -13,8 +13,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType#getName <em>Name</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType#getReturnValueType <em>Return Value Type</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType#getSignature <em>Signature</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType#getComponentType <em>Component Type</em>}</li>
  * </ul>
  *
@@ -24,59 +23,33 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface OperationType extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Name</b></em>' attribute.
+	 * Returns the value of the '<em><b>Signature</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Signature</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Name</em>' attribute.
-	 * @see #setName(String)
-	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage#getOperationType_Name()
+	 * @return the value of the '<em>Signature</em>' attribute.
+	 * @see #setSignature(String)
+	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage#getOperationType_Signature()
 	 * @model
 	 * @generated
 	 */
-	String getName();
+	String getSignature();
 
 	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType#getName <em>Name</em>}' attribute.
+	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType#getSignature <em>Signature</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Name</em>' attribute.
-	 * @see #getName()
+	 * @param value the new value of the '<em>Signature</em>' attribute.
+	 * @see #getSignature()
 	 * @generated
 	 */
-	void setName(String value);
+	void setSignature(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Return Value Type</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Return Value Type</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Return Value Type</em>' attribute.
-	 * @see #setReturnValueType(String)
-	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage#getOperationType_ReturnValueType()
-	 * @model
-	 * @generated
-	 */
-	String getReturnValueType();
-
-	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType#getReturnValueType <em>Return Value Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Return Value Type</em>' attribute.
-	 * @see #getReturnValueType()
-	 * @generated
-	 */
-	void setReturnValueType(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Component Type</b></em>' reference.
+	 * Returns the value of the '<em><b>Component Type</b></em>' container reference.
 	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getProvidedOperations <em>Provided Operations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -84,20 +57,20 @@ public interface OperationType extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Component Type</em>' reference.
+	 * @return the value of the '<em>Component Type</em>' container reference.
 	 * @see #setComponentType(ComponentType)
 	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage#getOperationType_ComponentType()
 	 * @see kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getProvidedOperations
-	 * @model opposite="providedOperations"
+	 * @model opposite="providedOperations" transient="false"
 	 * @generated
 	 */
 	ComponentType getComponentType();
 
 	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType#getComponentType <em>Component Type</em>}' reference.
+	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType#getComponentType <em>Component Type</em>}' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Component Type</em>' reference.
+	 * @param value the new value of the '<em>Component Type</em>' container reference.
 	 * @see #getComponentType()
 	 * @generated
 	 */

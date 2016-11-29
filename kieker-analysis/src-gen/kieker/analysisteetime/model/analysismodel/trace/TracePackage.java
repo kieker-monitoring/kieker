@@ -76,7 +76,7 @@ public interface TracePackage extends EPackage {
 	int TRACE_ROOT__TRACE_ID = 0;
 
 	/**
-	 * The feature id for the '<em><b>Root Operation Call</b></em>' reference.
+	 * The feature id for the '<em><b>Root Operation Call</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -388,10 +388,10 @@ public interface TracePackage extends EPackage {
 	EAttribute getTraceRoot_TraceID();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.trace.TraceRoot#getRootOperationCall <em>Root Operation Call</em>}'.
+	 * Returns the meta object for the containment reference '{@link kieker.analysisteetime.model.analysismodel.trace.TraceRoot#getRootOperationCall <em>Root Operation Call</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Root Operation Call</em>'.
+	 * @return the meta object for the containment reference '<em>Root Operation Call</em>'.
 	 * @see kieker.analysisteetime.model.analysismodel.trace.TraceRoot#getRootOperationCall()
 	 * @see #getTraceRoot()
 	 * @generated
@@ -592,7 +592,7 @@ public interface TracePackage extends EPackage {
 		EAttribute TRACE_ROOT__TRACE_ID = eINSTANCE.getTraceRoot_TraceID();
 
 		/**
-		 * The meta object literal for the '<em><b>Root Operation Call</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Root Operation Call</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

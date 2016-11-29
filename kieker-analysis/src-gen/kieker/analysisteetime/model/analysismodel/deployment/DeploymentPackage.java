@@ -66,7 +66,7 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYMENT_ROOT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Deployment Contexts</b></em>' reference list.
+	 * The feature id for the '<em><b>Deployment Contexts</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -103,7 +103,7 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYMENT_CONTEXT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Deployment Root</b></em>' reference.
+	 * The feature id for the '<em><b>Deployment Root</b></em>' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -112,7 +112,7 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYMENT_CONTEXT__DEPLOYMENT_ROOT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Components</b></em>' reference list.
+	 * The feature id for the '<em><b>Components</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -158,7 +158,7 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_COMPONENT__COMPONENT_TYPE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Deployment Context</b></em>' reference.
+	 * The feature id for the '<em><b>Deployment Context</b></em>' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -167,7 +167,7 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_COMPONENT__DEPLOYMENT_CONTEXT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Contained Operations</b></em>' reference list.
+	 * The feature id for the '<em><b>Contained Operations</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -222,7 +222,7 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_OPERATION__OPERATION_TYPE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Contained Component</b></em>' reference.
+	 * The feature id for the '<em><b>Contained Component</b></em>' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -269,10 +269,10 @@ public interface DeploymentPackage extends EPackage {
 	EClass getDeploymentRoot();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot#getDeploymentContexts <em>Deployment Contexts</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot#getDeploymentContexts <em>Deployment Contexts</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Deployment Contexts</em>'.
+	 * @return the meta object for the containment reference list '<em>Deployment Contexts</em>'.
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot#getDeploymentContexts()
 	 * @see #getDeploymentRoot()
 	 * @generated
@@ -290,10 +290,10 @@ public interface DeploymentPackage extends EPackage {
 	EClass getDeploymentContext();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getDeploymentRoot <em>Deployment Root</em>}'.
+	 * Returns the meta object for the container reference '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getDeploymentRoot <em>Deployment Root</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Deployment Root</em>'.
+	 * @return the meta object for the container reference '<em>Deployment Root</em>'.
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getDeploymentRoot()
 	 * @see #getDeploymentContext()
 	 * @generated
@@ -301,10 +301,10 @@ public interface DeploymentPackage extends EPackage {
 	EReference getDeploymentContext_DeploymentRoot();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getComponents <em>Components</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getComponents <em>Components</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Components</em>'.
+	 * @return the meta object for the containment reference list '<em>Components</em>'.
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getComponents()
 	 * @see #getDeploymentContext()
 	 * @generated
@@ -333,10 +333,10 @@ public interface DeploymentPackage extends EPackage {
 	EReference getDeployedComponent_ComponentType();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getDeploymentContext <em>Deployment Context</em>}'.
+	 * Returns the meta object for the container reference '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getDeploymentContext <em>Deployment Context</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Deployment Context</em>'.
+	 * @return the meta object for the container reference '<em>Deployment Context</em>'.
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getDeploymentContext()
 	 * @see #getDeployedComponent()
 	 * @generated
@@ -344,10 +344,10 @@ public interface DeploymentPackage extends EPackage {
 	EReference getDeployedComponent_DeploymentContext();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getContainedOperations <em>Contained Operations</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getContainedOperations <em>Contained Operations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Contained Operations</em>'.
+	 * @return the meta object for the containment reference list '<em>Contained Operations</em>'.
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getContainedOperations()
 	 * @see #getDeployedComponent()
 	 * @generated
@@ -387,10 +387,10 @@ public interface DeploymentPackage extends EPackage {
 	EReference getDeployedOperation_OperationType();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getContainedComponent <em>Contained Component</em>}'.
+	 * Returns the meta object for the container reference '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getContainedComponent <em>Contained Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Contained Component</em>'.
+	 * @return the meta object for the container reference '<em>Contained Component</em>'.
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getContainedComponent()
 	 * @see #getDeployedOperation()
 	 * @generated
@@ -442,7 +442,7 @@ public interface DeploymentPackage extends EPackage {
 		EClass DEPLOYMENT_ROOT = eINSTANCE.getDeploymentRoot();
 
 		/**
-		 * The meta object literal for the '<em><b>Deployment Contexts</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Deployment Contexts</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -460,7 +460,7 @@ public interface DeploymentPackage extends EPackage {
 		EClass DEPLOYMENT_CONTEXT = eINSTANCE.getDeploymentContext();
 
 		/**
-		 * The meta object literal for the '<em><b>Deployment Root</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Deployment Root</b></em>' container reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -468,7 +468,7 @@ public interface DeploymentPackage extends EPackage {
 		EReference DEPLOYMENT_CONTEXT__DEPLOYMENT_ROOT = eINSTANCE.getDeploymentContext_DeploymentRoot();
 
 		/**
-		 * The meta object literal for the '<em><b>Components</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Components</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -494,7 +494,7 @@ public interface DeploymentPackage extends EPackage {
 		EReference DEPLOYED_COMPONENT__COMPONENT_TYPE = eINSTANCE.getDeployedComponent_ComponentType();
 
 		/**
-		 * The meta object literal for the '<em><b>Deployment Context</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Deployment Context</b></em>' container reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -502,7 +502,7 @@ public interface DeploymentPackage extends EPackage {
 		EReference DEPLOYED_COMPONENT__DEPLOYMENT_CONTEXT = eINSTANCE.getDeployedComponent_DeploymentContext();
 
 		/**
-		 * The meta object literal for the '<em><b>Contained Operations</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Contained Operations</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -536,7 +536,7 @@ public interface DeploymentPackage extends EPackage {
 		EReference DEPLOYED_OPERATION__OPERATION_TYPE = eINSTANCE.getDeployedOperation_OperationType();
 
 		/**
-		 * The meta object literal for the '<em><b>Contained Component</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Contained Component</b></em>' container reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -42,16 +43,6 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	 * @ordered
 	 */
 	protected OperationType operationType;
-
-	/**
-	 * The cached value of the '{@link #getContainedComponent() <em>Contained Component</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getContainedComponent()
-	 * @generated
-	 * @ordered
-	 */
-	protected DeployedComponent containedComponent;
 
 	/**
 	 * The cached value of the '{@link #getAccesssedComponent() <em>Accesssed Component</em>}' reference.
@@ -126,24 +117,8 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	public DeployedComponent getContainedComponent() {
-		if (containedComponent != null && containedComponent.eIsProxy()) {
-			InternalEObject oldContainedComponent = (InternalEObject)containedComponent;
-			containedComponent = (DeployedComponent)eResolveProxy(oldContainedComponent);
-			if (containedComponent != oldContainedComponent) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DeploymentPackage.DEPLOYED_OPERATION__CONTAINED_COMPONENT, oldContainedComponent, containedComponent));
-			}
-		}
-		return containedComponent;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DeployedComponent basicGetContainedComponent() {
-		return containedComponent;
+		if (eContainerFeatureID() != DeploymentPackage.DEPLOYED_OPERATION__CONTAINED_COMPONENT) return null;
+		return (DeployedComponent)eInternalContainer();
 	}
 
 	/**
@@ -152,12 +127,7 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	public NotificationChain basicSetContainedComponent(DeployedComponent newContainedComponent, NotificationChain msgs) {
-		DeployedComponent oldContainedComponent = containedComponent;
-		containedComponent = newContainedComponent;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYED_OPERATION__CONTAINED_COMPONENT, oldContainedComponent, newContainedComponent);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
+		msgs = eBasicSetContainer((InternalEObject)newContainedComponent, DeploymentPackage.DEPLOYED_OPERATION__CONTAINED_COMPONENT, msgs);
 		return msgs;
 	}
 
@@ -167,10 +137,12 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	public void setContainedComponent(DeployedComponent newContainedComponent) {
-		if (newContainedComponent != containedComponent) {
+		if (newContainedComponent != eInternalContainer() || (eContainerFeatureID() != DeploymentPackage.DEPLOYED_OPERATION__CONTAINED_COMPONENT && newContainedComponent != null)) {
+			if (EcoreUtil.isAncestor(this, newContainedComponent))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
 			NotificationChain msgs = null;
-			if (containedComponent != null)
-				msgs = ((InternalEObject)containedComponent).eInverseRemove(this, DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS, DeployedComponent.class, msgs);
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
 			if (newContainedComponent != null)
 				msgs = ((InternalEObject)newContainedComponent).eInverseAdd(this, DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS, DeployedComponent.class, msgs);
 			msgs = basicSetContainedComponent(newContainedComponent, msgs);
@@ -249,8 +221,8 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case DeploymentPackage.DEPLOYED_OPERATION__CONTAINED_COMPONENT:
-				if (containedComponent != null)
-					msgs = ((InternalEObject)containedComponent).eInverseRemove(this, DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS, DeployedComponent.class, msgs);
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
 				return basicSetContainedComponent((DeployedComponent)otherEnd, msgs);
 			case DeploymentPackage.DEPLOYED_OPERATION__ACCESSSED_COMPONENT:
 				if (accesssedComponent != null)
@@ -282,14 +254,27 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case DeploymentPackage.DEPLOYED_OPERATION__CONTAINED_COMPONENT:
+				return eInternalContainer().eInverseRemove(this, DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS, DeployedComponent.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case DeploymentPackage.DEPLOYED_OPERATION__OPERATION_TYPE:
 				if (resolve) return getOperationType();
 				return basicGetOperationType();
 			case DeploymentPackage.DEPLOYED_OPERATION__CONTAINED_COMPONENT:
-				if (resolve) return getContainedComponent();
-				return basicGetContainedComponent();
+				return getContainedComponent();
 			case DeploymentPackage.DEPLOYED_OPERATION__ACCESSSED_COMPONENT:
 				if (resolve) return getAccesssedComponent();
 				return basicGetAccesssedComponent();
@@ -350,7 +335,7 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 			case DeploymentPackage.DEPLOYED_OPERATION__OPERATION_TYPE:
 				return operationType != null;
 			case DeploymentPackage.DEPLOYED_OPERATION__CONTAINED_COMPONENT:
-				return containedComponent != null;
+				return getContainedComponent() != null;
 			case DeploymentPackage.DEPLOYED_OPERATION__ACCESSSED_COMPONENT:
 				return accesssedComponent != null;
 		}

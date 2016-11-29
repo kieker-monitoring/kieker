@@ -8,6 +8,7 @@ import kieker.analysisteetime.model.analysismodel.trace.TraceRoot;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -50,7 +51,7 @@ public class TraceRootImpl extends MinimalEObjectImpl.Container implements Trace
 	protected long traceID = TRACE_ID_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getRootOperationCall() <em>Root Operation Call</em>}' reference.
+	 * The cached value of the '{@link #getRootOperationCall() <em>Root Operation Call</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getRootOperationCall()
@@ -105,14 +106,6 @@ public class TraceRootImpl extends MinimalEObjectImpl.Container implements Trace
 	 * @generated
 	 */
 	public OperationCall getRootOperationCall() {
-		if (rootOperationCall != null && rootOperationCall.eIsProxy()) {
-			InternalEObject oldRootOperationCall = (InternalEObject)rootOperationCall;
-			rootOperationCall = (OperationCall)eResolveProxy(oldRootOperationCall);
-			if (rootOperationCall != oldRootOperationCall) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TracePackage.TRACE_ROOT__ROOT_OPERATION_CALL, oldRootOperationCall, rootOperationCall));
-			}
-		}
 		return rootOperationCall;
 	}
 
@@ -121,8 +114,14 @@ public class TraceRootImpl extends MinimalEObjectImpl.Container implements Trace
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public OperationCall basicGetRootOperationCall() {
-		return rootOperationCall;
+	public NotificationChain basicSetRootOperationCall(OperationCall newRootOperationCall, NotificationChain msgs) {
+		OperationCall oldRootOperationCall = rootOperationCall;
+		rootOperationCall = newRootOperationCall;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TracePackage.TRACE_ROOT__ROOT_OPERATION_CALL, oldRootOperationCall, newRootOperationCall);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -131,10 +130,31 @@ public class TraceRootImpl extends MinimalEObjectImpl.Container implements Trace
 	 * @generated
 	 */
 	public void setRootOperationCall(OperationCall newRootOperationCall) {
-		OperationCall oldRootOperationCall = rootOperationCall;
-		rootOperationCall = newRootOperationCall;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.TRACE_ROOT__ROOT_OPERATION_CALL, oldRootOperationCall, rootOperationCall));
+		if (newRootOperationCall != rootOperationCall) {
+			NotificationChain msgs = null;
+			if (rootOperationCall != null)
+				msgs = ((InternalEObject)rootOperationCall).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - TracePackage.TRACE_ROOT__ROOT_OPERATION_CALL, null, msgs);
+			if (newRootOperationCall != null)
+				msgs = ((InternalEObject)newRootOperationCall).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - TracePackage.TRACE_ROOT__ROOT_OPERATION_CALL, null, msgs);
+			msgs = basicSetRootOperationCall(newRootOperationCall, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.TRACE_ROOT__ROOT_OPERATION_CALL, newRootOperationCall, newRootOperationCall));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case TracePackage.TRACE_ROOT__ROOT_OPERATION_CALL:
+				return basicSetRootOperationCall(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -148,8 +168,7 @@ public class TraceRootImpl extends MinimalEObjectImpl.Container implements Trace
 			case TracePackage.TRACE_ROOT__TRACE_ID:
 				return getTraceID();
 			case TracePackage.TRACE_ROOT__ROOT_OPERATION_CALL:
-				if (resolve) return getRootOperationCall();
-				return basicGetRootOperationCall();
+				return getRootOperationCall();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}

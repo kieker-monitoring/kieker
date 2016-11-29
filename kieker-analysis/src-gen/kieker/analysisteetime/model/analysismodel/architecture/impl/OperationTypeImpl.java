@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,8 +24,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.impl.OperationTypeImpl#getName <em>Name</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.impl.OperationTypeImpl#getReturnValueType <em>Return Value Type</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.impl.OperationTypeImpl#getSignature <em>Signature</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.impl.OperationTypeImpl#getComponentType <em>Component Type</em>}</li>
  * </ul>
  *
@@ -32,54 +32,24 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class OperationTypeImpl extends MinimalEObjectImpl.Container implements OperationType {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * The default value of the '{@link #getSignature() <em>Signature</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getName()
+	 * @see #getSignature()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = null;
+	protected static final String SIGNATURE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * The cached value of the '{@link #getSignature() <em>Signature</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getName()
+	 * @see #getSignature()
 	 * @generated
 	 * @ordered
 	 */
-	protected String name = NAME_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getReturnValueType() <em>Return Value Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getReturnValueType()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String RETURN_VALUE_TYPE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getReturnValueType() <em>Return Value Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getReturnValueType()
-	 * @generated
-	 * @ordered
-	 */
-	protected String returnValueType = RETURN_VALUE_TYPE_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getComponentType() <em>Component Type</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getComponentType()
-	 * @generated
-	 * @ordered
-	 */
-	protected ComponentType componentType;
+	protected String signature = SIGNATURE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -105,8 +75,8 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getName() {
-		return name;
+	public String getSignature() {
+		return signature;
 	}
 
 	/**
@@ -114,32 +84,11 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
+	public void setSignature(String newSignature) {
+		String oldSignature = signature;
+		signature = newSignature;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ArchitecturePackage.OPERATION_TYPE__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getReturnValueType() {
-		return returnValueType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setReturnValueType(String newReturnValueType) {
-		String oldReturnValueType = returnValueType;
-		returnValueType = newReturnValueType;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ArchitecturePackage.OPERATION_TYPE__RETURN_VALUE_TYPE, oldReturnValueType, returnValueType));
+			eNotify(new ENotificationImpl(this, Notification.SET, ArchitecturePackage.OPERATION_TYPE__SIGNATURE, oldSignature, signature));
 	}
 
 	/**
@@ -148,24 +97,8 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	 * @generated
 	 */
 	public ComponentType getComponentType() {
-		if (componentType != null && componentType.eIsProxy()) {
-			InternalEObject oldComponentType = (InternalEObject)componentType;
-			componentType = (ComponentType)eResolveProxy(oldComponentType);
-			if (componentType != oldComponentType) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE, oldComponentType, componentType));
-			}
-		}
-		return componentType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ComponentType basicGetComponentType() {
-		return componentType;
+		if (eContainerFeatureID() != ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE) return null;
+		return (ComponentType)eInternalContainer();
 	}
 
 	/**
@@ -174,12 +107,7 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	 * @generated
 	 */
 	public NotificationChain basicSetComponentType(ComponentType newComponentType, NotificationChain msgs) {
-		ComponentType oldComponentType = componentType;
-		componentType = newComponentType;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE, oldComponentType, newComponentType);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
+		msgs = eBasicSetContainer((InternalEObject)newComponentType, ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE, msgs);
 		return msgs;
 	}
 
@@ -189,10 +117,12 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	 * @generated
 	 */
 	public void setComponentType(ComponentType newComponentType) {
-		if (newComponentType != componentType) {
+		if (newComponentType != eInternalContainer() || (eContainerFeatureID() != ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE && newComponentType != null)) {
+			if (EcoreUtil.isAncestor(this, newComponentType))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
 			NotificationChain msgs = null;
-			if (componentType != null)
-				msgs = ((InternalEObject)componentType).eInverseRemove(this, ArchitecturePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS, ComponentType.class, msgs);
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
 			if (newComponentType != null)
 				msgs = ((InternalEObject)newComponentType).eInverseAdd(this, ArchitecturePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS, ComponentType.class, msgs);
 			msgs = basicSetComponentType(newComponentType, msgs);
@@ -211,8 +141,8 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE:
-				if (componentType != null)
-					msgs = ((InternalEObject)componentType).eInverseRemove(this, ArchitecturePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS, ComponentType.class, msgs);
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
 				return basicSetComponentType((ComponentType)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
@@ -238,15 +168,26 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE:
+				return eInternalContainer().eInverseRemove(this, ArchitecturePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS, ComponentType.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ArchitecturePackage.OPERATION_TYPE__NAME:
-				return getName();
-			case ArchitecturePackage.OPERATION_TYPE__RETURN_VALUE_TYPE:
-				return getReturnValueType();
+			case ArchitecturePackage.OPERATION_TYPE__SIGNATURE:
+				return getSignature();
 			case ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE:
-				if (resolve) return getComponentType();
-				return basicGetComponentType();
+				return getComponentType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -259,11 +200,8 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ArchitecturePackage.OPERATION_TYPE__NAME:
-				setName((String)newValue);
-				return;
-			case ArchitecturePackage.OPERATION_TYPE__RETURN_VALUE_TYPE:
-				setReturnValueType((String)newValue);
+			case ArchitecturePackage.OPERATION_TYPE__SIGNATURE:
+				setSignature((String)newValue);
 				return;
 			case ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE:
 				setComponentType((ComponentType)newValue);
@@ -280,11 +218,8 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ArchitecturePackage.OPERATION_TYPE__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case ArchitecturePackage.OPERATION_TYPE__RETURN_VALUE_TYPE:
-				setReturnValueType(RETURN_VALUE_TYPE_EDEFAULT);
+			case ArchitecturePackage.OPERATION_TYPE__SIGNATURE:
+				setSignature(SIGNATURE_EDEFAULT);
 				return;
 			case ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE:
 				setComponentType((ComponentType)null);
@@ -301,12 +236,10 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ArchitecturePackage.OPERATION_TYPE__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case ArchitecturePackage.OPERATION_TYPE__RETURN_VALUE_TYPE:
-				return RETURN_VALUE_TYPE_EDEFAULT == null ? returnValueType != null : !RETURN_VALUE_TYPE_EDEFAULT.equals(returnValueType);
+			case ArchitecturePackage.OPERATION_TYPE__SIGNATURE:
+				return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
 			case ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE:
-				return componentType != null;
+				return getComponentType() != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -321,10 +254,8 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(", returnValueType: ");
-		result.append(returnValueType);
+		result.append(" (signature: ");
+		result.append(signature);
 		result.append(')');
 		return result.toString();
 	}
