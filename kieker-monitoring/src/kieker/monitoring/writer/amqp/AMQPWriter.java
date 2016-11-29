@@ -108,7 +108,7 @@ public final class AMQPWriter extends AbstractAsyncWriter {
 /**
  * Writer thread for AMQP messages.
  *
- * @author Holger Knoche
+ * @author Holger Knoche, Thomas F. Duellmann
  *
  * @since 1.12
  */
@@ -144,6 +144,16 @@ final class AMQPWriterThread extends AbstractAsyncThread {
 
 		this.connection = this.createConnection();
 		this.channel = this.connection.createChannel();
+
+		try {
+			// Check whether the queue with the given name exists already.
+			// If the queue does not exist yet, an IOException is thrown
+			this.channel.queueDeclarePassive(this.queueName);
+
+		} catch (final IOException ieo) {
+			// As the queue does not exist, we try do declare it.
+			this.channel.queueDeclare(this.queueName, false, false, false, null);
+		}
 
 		this.buffer = ByteBuffer.allocate(DEFAULT_BUFFER_SIZE);
 
