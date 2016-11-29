@@ -30,6 +30,8 @@ import org.junit.Test;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysisteetime.plugin.filter.forward.TeeFilter;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 import teetime.framework.test.StageTester;
 
 /**
@@ -39,7 +41,7 @@ import teetime.framework.test.StageTester;
  *
  * @since 1.10
  */
-public class TestTeeFilter {
+public class TestTeeFilter extends AbstractKiekerTest {
 
 	public TestTeeFilter() {
 		// empty default constructor

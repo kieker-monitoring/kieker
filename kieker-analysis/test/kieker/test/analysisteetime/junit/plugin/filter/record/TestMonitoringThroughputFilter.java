@@ -27,6 +27,8 @@ import kieker.analysisteetime.plugin.filter.record.MonitoringThroughputFilter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 import teetime.framework.test.StageTester;
 
 /**
@@ -36,7 +38,7 @@ import teetime.framework.test.StageTester;
  *
  * @since 1.9
  */
-public class TestMonitoringThroughputFilter {
+public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 
 	private MonitoringThroughputFilter monitoringThroughputFilter = null;
 	// List for the count

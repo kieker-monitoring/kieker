@@ -27,6 +27,8 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.misc.EmptyRecord;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 import teetime.framework.test.StageTester;
 
 /**
@@ -34,7 +36,7 @@ import teetime.framework.test.StageTester;
  *
  * @since 1.6
  */
-public class TestStringBufferFilter {
+public class TestStringBufferFilter extends AbstractKiekerTest {
 
 	/**
 	 * Default constructor.
