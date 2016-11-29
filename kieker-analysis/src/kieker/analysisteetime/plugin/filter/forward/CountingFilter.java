@@ -29,7 +29,7 @@ import teetime.framework.AbstractConsumerStage;
  * unchanged objects to the output. The value of the counter can be retrieved by connected to the respective output port using a
  * corresponding method.
  *
- * @author Jan Waller, Nils Christian Ehmke, Lars Erik Bluemke
+ * @author Jan Waller, Nils Christian Ehmke, Lars Bluemke
  *
  * @since 1.4
  */
