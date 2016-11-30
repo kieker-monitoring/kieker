@@ -25,7 +25,6 @@ import kieker.analysisteetime.model.analysismodel.architecture.ArchitectureFacto
 import kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot;
 import kieker.analysisteetime.model.analysismodel.architecture.ComponentType;
 import kieker.analysisteetime.model.analysismodel.architecture.OperationType;
-import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
 /**
  * @author Sören Henning
@@ -44,9 +43,7 @@ public class ArchitectureModelBuilder {
 	}
 
 	// TODO Maybe add a boolean return value
-	public void addRecord(final BeforeOperationEvent record) {
-		final String classSignature = record.getClassSignature();
-		final String operationSignature = record.getOperationSignature();
+	public void addRecord(final String classSignature, final String operationSignature) {
 
 		if (!this.repository.containsKey(classSignature)) {
 			final ComponentType componentType = FACTORY.createComponentType();
