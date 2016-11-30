@@ -18,6 +18,7 @@ package kieker.analysisteetime.modeltests.builder;
 
 import kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot;
 import kieker.analysisteetime.model.analysismodel.architecture.ComponentType;
+import kieker.analysisteetime.model.analysismodel.architecture.OperationType;
 
 /**
  * @author Sören Henning
@@ -46,10 +47,11 @@ public class ModelTester {
 
 		final ArchitectureRoot architectureRoot = architectureModelBuilder.build();
 
-		architectureRoot.toString();
-
 		for (final ComponentType componentType : architectureRoot.getComponentTypes()) {
 			componentType.getSignature();
+			for (final OperationType operationType : componentType.getProvidedOperations()) {
+				operationType.getSignature();
+			}
 		}
 
 	}
