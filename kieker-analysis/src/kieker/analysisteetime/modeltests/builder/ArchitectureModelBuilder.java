@@ -48,14 +48,17 @@ public class ArchitectureModelBuilder {
 		if (!this.repository.containsKey(classSignature)) {
 			final ComponentType componentType = FACTORY.createComponentType();
 			componentType.setSignature(classSignature);
+			componentType.setArchitectureRoot(this.architectureRoot);
 
 			this.repository.put(classSignature, Pair.of(componentType, new HashMap<>()));
 		}
 
 		final Map<String, OperationType> operationTypes = this.repository.get(classSignature).getRight();
+		final ComponentType componentType = this.repository.get(classSignature).getLeft();
 		if (!operationTypes.containsKey(operationSignature)) {
 			final OperationType operationType = FACTORY.createOperationType();
 			operationType.setSignature(operationSignature);
+			operationType.setComponentType(componentType);
 
 			operationTypes.put(operationSignature, operationType);
 		}
