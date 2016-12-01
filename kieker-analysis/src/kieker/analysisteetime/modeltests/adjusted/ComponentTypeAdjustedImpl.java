@@ -17,12 +17,9 @@
 package kieker.analysisteetime.modeltests.adjusted;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EReference;
 
 import kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage;
@@ -40,52 +37,21 @@ public class ComponentTypeAdjustedImpl extends ComponentTypeImpl implements Comp
 
 	public ComponentTypeAdjustedImpl() {
 
-		final Adapter adapter = new AdapterImpl() {
+		final EReference providedOperationsFeature = ArchitecturePackage.eINSTANCE.getComponentType_ProvidedOperations();
 
-			// TODO add this to constructor
-			private final EReference providedOperationsFeature = ArchitecturePackage.eINSTANCE.getComponentType_ProvidedOperations();
+		final Adapter adapter = new ReferenceChangedListener<OperationType>(providedOperationsFeature) {
+
+			// TODO react also on changes of name of operation
 
 			@Override
-			public void notifyChanged(final Notification notification) {
-
-				final Object requiredFeature = this.providedOperationsFeature;
-
-				if (notification.getFeature() == requiredFeature) {
-					switch (notification.getEventType()) {
-					case Notification.ADD:
-						this.notifyOperationTypeAdded((OperationType) notification.getNewValue());
-						break;
-					case Notification.ADD_MANY:
-						// TODO Check casting
-						final List<OperationType> addedOperationTypes = (List<OperationType>) notification.getNewValue();
-						addedOperationTypes.forEach(o -> this.notifyOperationTypeAdded(o));
-						break;
-					case Notification.REMOVE:
-						this.notifyOperationTypeRemoved((OperationType) notification.getOldValue());
-						break;
-					case Notification.REMOVE_MANY:
-						// TODO Check casting
-						final List<OperationType> removedOperationTypes = (List<OperationType>) notification.getOldValue();
-						removedOperationTypes.forEach(o -> this.notifyOperationTypeRemoved(o));
-						break;
-					default:
-						break;
-					}
-				}
-
-				super.notifyChanged(notification);
-			}
-
-			// TODO make abstract
-			protected void notifyOperationTypeRemoved(final OperationType operationType) {
-				// TODO do something
-			}
-
-			// TODO make abstract
 			protected void notifyOperationTypeAdded(final OperationType operationType) {
-				// TODO do something
+				ComponentTypeAdjustedImpl.this.operationTypeRepository.put(operationType.getSignature(), operationType);
 			}
 
+			@Override
+			protected void notifyOperationTypeRemoved(final OperationType operationType) {
+				ComponentTypeAdjustedImpl.this.operationTypeRepository.remove(operationType.getSignature());
+			}
 		};
 
 		this.eAdapters().add(adapter);
