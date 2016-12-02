@@ -3,7 +3,7 @@
 if [ "${SNAP_BRANCH}" == "master" ]; then
   echo "We are in master - executing the extended release archive check."
 
-  sudo docker run -v ${SNAP_WORKING_DIR}:/opt/kieker kieker/kieker-build:openjdk6 /bin/bash -c "cd /opt/kieker; ./gradlew checkReleaseArchives"
+  sudo docker run -v ${SNAP_WORKING_DIR}:/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew checkReleaseArchives"
 
   STAGE_RESULT=$?
 else
