@@ -47,10 +47,10 @@ public final class MonitoringController extends AbstractController implements IM
 	 */
 	private static final long SHUTDOWN_DELAY_MILLIS = 1000;
 
-	private final StateController stateController;
+	private final StateControllerHstr stateController;
 	private final SamplingController samplingController;
 	private final JMXController jmxController;
-	private final WriterController writerController;
+	private final WriterControllerHstr writerController;	// previously: WriterController
 	private final TimeSourceController timeSourceController;
 	private final RegistryController registryController;
 	private final ProbeController probeController;
@@ -58,10 +58,11 @@ public final class MonitoringController extends AbstractController implements IM
 	// private Constructor
 	private MonitoringController(final Configuration configuration) {
 		super(configuration);
-		this.stateController = new StateController(configuration);
+		this.stateController = new StateControllerHstr(configuration);
 		this.samplingController = new SamplingController(configuration);
 		this.jmxController = new JMXController(configuration);
-		this.writerController = new WriterController(configuration);
+		this.writerController = new WriterControllerHstr(configuration);	// previously: WriterController
+		this.stateController.setStateListener(this.writerController);
 		this.timeSourceController = new TimeSourceController(configuration);
 		this.registryController = new RegistryController(configuration);
 		this.probeController = new ProbeController(configuration);
@@ -77,7 +78,15 @@ public final class MonitoringController extends AbstractController implements IM
 	 * @return A new controller.
 	 */
 	public static final IMonitoringController createInstance(final Configuration configuration) {
-		final MonitoringController monitoringController = new MonitoringController(configuration);
+		final MonitoringController monitoringController;
+		// try {
+		monitoringController = new MonitoringController(configuration);
+		// } catch (final IllegalStateException e) {
+		// // WriterControllerHstr throws an IllegalStateException upon an invalid configuration
+		// // TODO all controllers should throw an exception upon an invalid configuration
+		// return new TerminatedMonitoringController(configuration); // NullObject pattern
+		// }
+
 		// Initialize and handle early Termination (once for each Controller!)
 		monitoringController.stateController.setMonitoringController(monitoringController);
 		if (monitoringController.stateController.isTerminated()) {
@@ -112,6 +121,11 @@ public final class MonitoringController extends AbstractController implements IM
 			return monitoringController;
 		}
 
+		// must be called after all sub controllers has been initialized
+		if (monitoringController.isMonitoringEnabled()) {
+			monitoringController.enableMonitoring(); // notifies the listener
+		}
+
 		if (configuration.getBooleanProperty(ConfigurationFactory.USE_SHUTDOWN_HOOK)) {
 			// This ensures that the terminateMonitoring() method is always called before shutting down the JVM. This method ensures that necessary cleanup steps are
 			// finished and no information is lost due to asynchronous writers.
@@ -124,6 +138,8 @@ public final class MonitoringController extends AbstractController implements IM
 							// WONTFIX: We should not use a logger in shutdown hooks, logger may already be down! (#26)
 							LOG.info("ShutdownHook notifies controller to initiate shutdown.");
 							monitoringController.terminateMonitoring();
+							// LOG.info("ShutdownHook has finished."); // does not work anymore
+							// System.out.println("ShutdownHook has finished."); // works!
 						}
 					}
 				});
@@ -197,7 +213,7 @@ public final class MonitoringController extends AbstractController implements IM
 				timesource.getOffset(), // timeOffset
 				timesource.getTimeUnit().name(), // timeUnit
 				this.getNumberOfInserts() // numberOfRecords
-		));
+				));
 	}
 
 	protected SamplingController getSamplingController() {
