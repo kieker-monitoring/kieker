@@ -39,7 +39,7 @@ public class ComponentTypeAdjustedImpl extends ComponentTypeImpl implements Comp
 
 		final EReference providedOperationsFeature = ArchitecturePackage.eINSTANCE.getComponentType_ProvidedOperations();
 
-		final Adapter adapter = new ReferenceChangedListener<OperationType>(providedOperationsFeature) {
+		final Adapter adapter = new EReferenceChangedListener<OperationType>(providedOperationsFeature) {
 
 			// TODO react also on changes of name of operation
 
