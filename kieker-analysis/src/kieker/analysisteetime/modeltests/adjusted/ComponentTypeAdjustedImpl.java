@@ -44,12 +44,12 @@ public class ComponentTypeAdjustedImpl extends ComponentTypeImpl implements Comp
 			// TODO react also on changes of name of operation
 
 			@Override
-			protected void notifyOperationTypeAdded(final OperationType operationType) {
+			protected void notifyElementAdded(final OperationType operationType) {
 				ComponentTypeAdjustedImpl.this.operationTypeRepository.put(operationType.getSignature(), operationType);
 			}
 
 			@Override
-			protected void notifyOperationTypeRemoved(final OperationType operationType) {
+			protected void notifyElementRemoved(final OperationType operationType) {
 				ComponentTypeAdjustedImpl.this.operationTypeRepository.remove(operationType.getSignature());
 			}
 		};

@@ -42,21 +42,21 @@ public abstract class EReferenceChangedListener<T> extends AdapterImpl {
 			switch (notification.getEventType()) {
 			case Notification.ADD:
 				// TODO Check casting
-				this.notifyOperationTypeAdded((T) notification.getNewValue());
+				this.notifyElementAdded((T) notification.getNewValue());
 				break;
 			case Notification.ADD_MANY:
 				// TODO Check casting
 				final List<T> addedOperationTypes = (List<T>) notification.getNewValue();
-				addedOperationTypes.forEach(o -> this.notifyOperationTypeAdded(o));
+				addedOperationTypes.forEach(o -> this.notifyElementAdded(o));
 				break;
 			case Notification.REMOVE:
 				// TODO Check casting
-				this.notifyOperationTypeRemoved((T) notification.getOldValue());
+				this.notifyElementRemoved((T) notification.getOldValue());
 				break;
 			case Notification.REMOVE_MANY:
 				// TODO Check casting
 				final List<T> removedOperationTypes = (List<T>) notification.getOldValue();
-				removedOperationTypes.forEach(o -> this.notifyOperationTypeRemoved(o));
+				removedOperationTypes.forEach(o -> this.notifyElementRemoved(o));
 				break;
 			default:
 				break;
@@ -66,8 +66,8 @@ public abstract class EReferenceChangedListener<T> extends AdapterImpl {
 		super.notifyChanged(notification);
 	}
 
-	protected abstract void notifyOperationTypeAdded(final T operationType);
+	protected abstract void notifyElementAdded(final T element);
 
-	protected abstract void notifyOperationTypeRemoved(final T operationType);
+	protected abstract void notifyElementRemoved(final T element);
 
 }
