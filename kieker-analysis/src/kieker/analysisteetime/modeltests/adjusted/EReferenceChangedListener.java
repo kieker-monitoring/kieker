@@ -31,32 +31,28 @@ public abstract class EReferenceChangedListener<T> extends AdapterImpl {
 
 	private final EReference listenedFeature;
 
-	public EReferenceChangedListener(final EReference listenedFeature) {
+	public EReferenceChangedListener(final EReference listenedFeature, final Class<? extends T> type) {
 		this.listenedFeature = listenedFeature;
 	}
 
 	@Override
-	public void notifyChanged(final Notification notification) {
+	public final void notifyChanged(final Notification notification) {
 
 		if (notification.getFeature() == this.listenedFeature) {
 			switch (notification.getEventType()) {
 			case Notification.ADD:
-				// TODO Check casting
-				this.notifyElementAdded((T) notification.getNewValue());
+				this.notifyElementAddedIntern(notification.getNewValue());
 				break;
 			case Notification.ADD_MANY:
-				// TODO Check casting
-				final List<T> addedOperationTypes = (List<T>) notification.getNewValue();
-				addedOperationTypes.forEach(o -> this.notifyElementAdded(o));
+				final List<?> addedOperationTypes = (List<?>) notification.getNewValue();
+				addedOperationTypes.forEach(o -> this.notifyElementAddedIntern(o));
 				break;
 			case Notification.REMOVE:
-				// TODO Check casting
-				this.notifyElementRemoved((T) notification.getOldValue());
+				this.notifyElementRemovedIntern(notification.getOldValue());
 				break;
 			case Notification.REMOVE_MANY:
-				// TODO Check casting
-				final List<T> removedOperationTypes = (List<T>) notification.getOldValue();
-				removedOperationTypes.forEach(o -> this.notifyElementRemoved(o));
+				final List<?> removedOperationTypes = (List<?>) notification.getOldValue();
+				removedOperationTypes.forEach(o -> this.notifyElementRemovedIntern(o));
 				break;
 			default:
 				break;
@@ -64,6 +60,16 @@ public abstract class EReferenceChangedListener<T> extends AdapterImpl {
 		}
 
 		super.notifyChanged(notification);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void notifyElementAddedIntern(final Object element) {
+		this.notifyElementAdded((T) element);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void notifyElementRemovedIntern(final Object element) {
+		this.notifyElementRemoved((T) element);
 	}
 
 	protected abstract void notifyElementAdded(final T element);
