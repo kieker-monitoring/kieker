@@ -54,6 +54,12 @@ public class ModelTester {
 			}
 		}
 
+		// Now we want to find a component/operation by its name (String)
+		// How to do this?
+		// -> no method available, so we have to iterate an look in every one
+		// -> we could build a "Builder"/"Modifier"/... so we only have to index everything once
+		// -> this leads to a surround data structure, which has to be in sync with the model itself
+
 	}
 
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.modeltests.adjusted;
+package kieker.analysisteetime.modeltooling;
 
 import java.util.Collection;
 import java.util.function.Function;

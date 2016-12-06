@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.EReference;
 import kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage;
 import kieker.analysisteetime.model.analysismodel.architecture.OperationType;
 import kieker.analysisteetime.model.analysismodel.architecture.impl.ComponentTypeImpl;
+import kieker.analysisteetime.modeltooling.EReferenceIndex;
 
 /**
  * @author Sören Henning
