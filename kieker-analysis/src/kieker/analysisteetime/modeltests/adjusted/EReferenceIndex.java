@@ -16,12 +16,13 @@
 
 package kieker.analysisteetime.modeltests.adjusted;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
@@ -41,26 +42,23 @@ public class EReferenceIndex<K, V extends EObject> {
 
 	protected final EReference reference;
 
+	protected final Collection<EAttribute> observedReferenceAttributes;
+
 	protected final Function<V, K> keyCreator;
 
-	/*
-	 * public EReferenceIndex(final EObject object, final EReference reference, final Function<V, K> keyCreator) {
-	 *
-	 * // TODO Bad
-	 * // EList<V> values = (EList<V>) object.eGet(reference);
-	 *
-	 * // this(object, reference, keyCreator, values);
-	 * }
-	 */
-
-	public EReferenceIndex(final EObject object, final EReference reference, final Function<V, K> keyCreator, final List<V> values) {
+	private EReferenceIndex(final EObject object, final EReference reference, final Collection<EAttribute> observedReferenceAttributes,
+			final Function<V, K> keyCreator, final Collection<V> values) {
 		this.object = object;
 		this.reference = reference;
+		this.observedReferenceAttributes = observedReferenceAttributes;
 		this.keyCreator = keyCreator;
 
-		// TODO Temp
-		this.index = HashBiMap.create();
-		// this.index = values.stream().collect(Collectors.toMap(keyCreator, Function.identity()));
+		if ((values == null) || (values.size() == 0)) {
+			this.index = HashBiMap.create();
+		} else {
+			this.index = values.stream().collect(Collectors.toMap(
+					this.keyCreator, Function.identity(), (a, b) -> b, HashBiMap::create));
+		}
 
 		final Adapter changedListener = new ChangedListener();
 		this.object.eAdapters().add(changedListener);
@@ -82,11 +80,10 @@ public class EReferenceIndex<K, V extends EObject> {
 			super(EReferenceIndex.this.reference);
 		}
 
-		// TODO react also on changes of name of operation
 		@Override
 		protected void notifyElementAdded(final V element) {
 			final K key = EReferenceIndex.this.keyCreator.apply(element);
-			EReferenceIndex.this.index.put(key, element); // TODO forcePut?
+			EReferenceIndex.this.index.forcePut(key, element);
 
 			// Add attribute listener
 			element.eAdapters().add(this.elementChangedListener);
@@ -102,21 +99,35 @@ public class EReferenceIndex<K, V extends EObject> {
 		}
 	}
 
-	private class ElementChangedListener extends AdapterImpl {
+	private class ElementChangedListener extends EAttributesChangedListener<V> {
 
-		public ElementChangedListener() {}
-
-		@Override
-		public void notifyChanged(final Notification notification) {
-
-			// TODO Only react on specific event types and features
-
-			final V element = (V) notification.getNotifier();
-			final K key = EReferenceIndex.this.keyCreator.apply(element);
-
-			EReferenceIndex.this.index.forcePut(key, element);
+		public ElementChangedListener() {
+			super(EReferenceIndex.this.observedReferenceAttributes);
 		}
 
+		@Override
+		protected void notifyChanged(final V object) {
+			final K key = EReferenceIndex.this.keyCreator.apply(object);
+			EReferenceIndex.this.index.forcePut(key, object);
+		}
+
+	}
+
+	public static <K, V extends EObject> EReferenceIndex<K, V> createEmpty(final EObject object, final EReference reference,
+			final Collection<EAttribute> observedReferenceAttributes, final Function<V, K> keyCreator) {
+		return new EReferenceIndex<>(object, reference, observedReferenceAttributes, keyCreator, null);
+	}
+
+	public static <K, V extends EObject> EReferenceIndex<K, V> create(final EObject object, final EReference reference,
+			final Collection<EAttribute> observedReferenceAttributes, final Function<V, K> keyCreator) {
+		@SuppressWarnings("unchecked")
+		final EList<V> values = (EList<V>) object.eGet(reference);
+		return new EReferenceIndex<>(object, reference, observedReferenceAttributes, keyCreator, values);
+	}
+
+	public static <K, V extends EObject> EReferenceIndex<K, V> createEmpty(final EObject object, final EReference reference,
+			final Collection<EAttribute> observedReferenceAttributes, final Function<V, K> keyCreator, final Collection<V> values) {
+		return new EReferenceIndex<>(object, reference, observedReferenceAttributes, keyCreator, values);
 	}
 
 }

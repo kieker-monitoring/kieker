@@ -31,7 +31,7 @@ public abstract class EReferenceChangedListener<T> extends AdapterImpl {
 
 	private final EReference listenedFeature;
 
-	public EReferenceChangedListener(final EReference listenedFeature, final Class<? extends T> type) {
+	public EReferenceChangedListener(final EReference listenedFeature) {
 		this.listenedFeature = listenedFeature;
 	}
 
