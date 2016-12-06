@@ -125,7 +125,7 @@ public class EReferenceIndex<K, V extends EObject> {
 		return new EReferenceIndex<>(object, reference, observedReferenceAttributes, keyCreator, values);
 	}
 
-	public static <K, V extends EObject> EReferenceIndex<K, V> createEmpty(final EObject object, final EReference reference,
+	public static <K, V extends EObject> EReferenceIndex<K, V> create(final EObject object, final EReference reference,
 			final Collection<EAttribute> observedReferenceAttributes, final Function<V, K> keyCreator, final Collection<V> values) {
 		return new EReferenceIndex<>(object, reference, observedReferenceAttributes, keyCreator, values);
 	}
