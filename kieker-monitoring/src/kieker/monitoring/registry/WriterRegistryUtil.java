@@ -25,7 +25,7 @@ import java.util.UUID;
  *
  * @since 1.13
  */
-class WriterRegistryUtil {
+final class WriterRegistryUtil {
 
 	private WriterRegistryUtil() { // NOCS
 		// utility class

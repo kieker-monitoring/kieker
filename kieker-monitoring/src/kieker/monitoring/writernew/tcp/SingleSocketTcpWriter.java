@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.nio.channels.WritableByteChannel;
 import java.nio.charset.StandardCharsets;
 
 import kieker.common.configuration.Configuration;
@@ -30,7 +31,6 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
-import kieker.monitoring.registry.IWriterRegistry;
 import kieker.monitoring.registry.RegisterAdapter;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writernew.AbstractMonitoringWriter;
@@ -51,77 +51,78 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
+	private final WritableByteChannel socketChannel;
+	private final ByteBuffer buffer;
 	private final boolean flush;
 
-	private final SocketChannel socketChannel;
-	private final ByteBuffer byteBuffer;
-
-	private final IWriterRegistry<String> writerRegistry;
-	private final RegisterAdapter<String> registerAdapter;
-	private final GetIdAdapter<String> readAdapter;
+	private final WriterRegistry writerRegistry;
+	private final RegisterAdapter<String> registerStringsAdapter;
+	private final GetIdAdapter<String> writeBytesAdapter;
 
 	public SingleSocketTcpWriter(final Configuration configuration) throws IOException {
 		super(configuration);
 		final String hostname = configuration.getStringProperty(CONFIG_HOSTNAME);
 		final int port1 = configuration.getIntProperty(CONFIG_PORT1);
-		// TODO should be check for buffers too small for a single record?
-		final int bufferSize = configuration.getIntProperty(CONFIG_BUFFERSIZE);
-		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
-
-		this.byteBuffer = ByteBuffer.allocateDirect(bufferSize);
 		// buffer size is available by byteBuffer.capacity()
 		this.socketChannel = SocketChannel.open(new InetSocketAddress(hostname, port1));
+		// TODO should we check for buffers too small for a single record?
+		final int bufferSize = this.configuration.getIntProperty(CONFIG_BUFFERSIZE);
+		this.buffer = ByteBuffer.allocateDirect(bufferSize);
+		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
+
 		this.writerRegistry = new WriterRegistry(this);
-		this.registerAdapter = new RegisterAdapter<String>(this.writerRegistry);
-		this.readAdapter = new GetIdAdapter<String>(this.writerRegistry);
+		this.registerStringsAdapter = new RegisterAdapter<String>(this.writerRegistry);
+		this.writeBytesAdapter = new GetIdAdapter<String>(this.writerRegistry);
+	}
+
+	@Override
+	public void onStarting() {
+		// do nothing
 	}
 
 	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		final ByteBuffer buffer = this.byteBuffer;
+		monitoringRecord.registerStrings(this.registerStringsAdapter);
 
-		monitoringRecord.registerStrings(this.registerAdapter);
-
-		if ((4 + 8 + monitoringRecord.getSize()) > buffer.remaining()) {
-			this.flushBuffer(buffer);
+		final ByteBuffer recordBuffer = this.buffer;
+		if ((4 + 8 + monitoringRecord.getSize()) > recordBuffer.remaining()) {
+			this.flushBuffer(recordBuffer);
 		}
 
 		final String recordClassName = monitoringRecord.getClass().getName();
 		this.writerRegistry.register(recordClassName);
 
-		final int recordClassId = this.writerRegistry.getId(recordClassName);
-		final long loggingTimestamp = monitoringRecord.getLoggingTimestamp();
-
-		buffer.putInt(recordClassId);
-		buffer.putLong(loggingTimestamp);
-		monitoringRecord.writeBytes(buffer, this.readAdapter);
+		recordBuffer.putInt(this.writerRegistry.getId(recordClassName));
+		recordBuffer.putLong(monitoringRecord.getLoggingTimestamp());
+		monitoringRecord.writeBytes(recordBuffer, this.writeBytesAdapter);
 		// monitoringRecord.writeToBuffer(buffer, this.writerRegistry);
 
 		if (this.flush) {
-			this.flushBuffer(buffer);
+			this.flushBuffer(recordBuffer);
 		}
 	}
 
 	@Override
 	public void onNewRegistryEntry(final String value, final int id) {
+		final ByteBuffer registryBuffer = this.buffer;
+
 		final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
 		// logging timestamp + class id + RegistryRecord.SIZE + bytes.length
 		final int requiredBufferSize = (2 * AbstractMonitoringRecord.TYPE_SIZE_INT) + RegistryRecord.SIZE + bytes.length;
 
-		final ByteBuffer buffer = this.byteBuffer;
-		if (buffer.remaining() < requiredBufferSize) {
-			this.flushBuffer(buffer);
+		if (registryBuffer.remaining() < requiredBufferSize) {
+			this.flushBuffer(registryBuffer);
 		}
 
-		buffer.putInt(RegistryRecord.CLASS_ID);
-		buffer.putInt(id);
-		buffer.putInt(value.length());
-		buffer.put(bytes);
+		registryBuffer.putInt(RegistryRecord.CLASS_ID);
+		registryBuffer.putInt(id);
+		registryBuffer.putInt(value.length());
+		registryBuffer.put(bytes);
 	}
 
 	@Override
 	public void onTerminating() {
-		this.flushBuffer(this.byteBuffer);
+		this.flushBuffer(this.buffer);
 
 		try {
 			this.socketChannel.close();

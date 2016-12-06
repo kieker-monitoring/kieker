@@ -101,6 +101,11 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 	}
 
 	@Override
+	public void onStarting() {
+		// do nothing
+	}
+
+	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		final ByteBuffer buffer = this.byteBuffer;
 		final int requiredBufferSize = 4 + 8 + monitoringRecord.getSize();

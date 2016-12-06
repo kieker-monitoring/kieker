@@ -1,29 +1,12 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.flow.trace.operation.constructor;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
+import kieker.common.util.registry.IRegistry;
+
 import kieker.common.record.flow.IConstructorRecord;
 
 /**
@@ -32,26 +15,29 @@ import kieker.common.record.flow.IConstructorRecord;
  * @since 1.6
  */
 public class AfterConstructorEvent extends AfterOperationEvent implements IConstructorRecord {
-	/** Descriptive definition of the serialization size of the record. */
-	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-	;
 	private static final long serialVersionUID = 1077036749032691794L;
+
+		/** Descriptive definition of the serialization size of the record. */
+		public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+				 + TYPE_SIZE_LONG // ITraceRecord.traceId
+				 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+				 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
+				 + TYPE_SIZE_STRING // IClassSignature.classSignature
+		;
 	
-	public static final Class<?>[] TYPES = {
-		long.class, // IEventRecord.timestamp
-		long.class, // ITraceRecord.traceId
-		int.class, // ITraceRecord.orderIndex
-		String.class, // IOperationSignature.operationSignature
-		String.class, // IClassSignature.classSignature
-	};
+		public static final Class<?>[] TYPES = {
+			long.class, // IEventRecord.timestamp
+			long.class, // ITraceRecord.traceId
+			int.class, // ITraceRecord.orderIndex
+			String.class, // IOperationSignature.operationSignature
+			String.class, // IClassSignature.classSignature
+		};
 	
-	/* user-defined constants */
-	/* default constants */
-	/* property declarations */
+	/** user-defined constants */
+
+	/** default constants */
+
+	/** property declarations */
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -81,7 +67,7 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 	public AfterConstructorEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -120,7 +106,7 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 			this.getClassSignature()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -129,7 +115,7 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 		stringRegistry.get(this.getOperationSignature());
 		stringRegistry.get(this.getClassSignature());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -141,7 +127,7 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
 		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -149,7 +135,7 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -157,6 +143,7 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -167,7 +154,7 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -178,7 +165,7 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -197,5 +184,5 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
 		return true;
 	}
-
+	
 }

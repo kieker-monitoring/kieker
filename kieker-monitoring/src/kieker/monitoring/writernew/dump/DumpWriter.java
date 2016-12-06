@@ -45,12 +45,17 @@ public class DumpWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
+	public void onStarting() {
+		LOG.info(this.getClass().getName() + " has been started.");
+	}
+
+	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord record) {
 		// consumes the record without further processing
 	}
 
 	@Override
 	public void onTerminating() {
-		LOG.info(this.getClass().getName() + " shutting down");
+		LOG.info(this.getClass().getName() + " has shut down.");
 	}
 }

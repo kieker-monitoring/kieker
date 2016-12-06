@@ -14,49 +14,12 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.core.controller;
-
-import kieker.common.util.registry.IRegistry;
+package kieker.monitoring.writernew.jmx;
 
 /**
  * @author Jan Waller
  * 
- * @since 1.5
+ * @since 1.4
  */
-public interface IRegistryController {
-
-	/**
-	 * Gets a unique id for a string.
-	 * 
-	 * @param string
-	 *            the string
-	 * @return
-	 *         the unique id
-	 * 
-	 * @since 1.5
-	 */
-	public abstract int getUniqueIdForString(final String string);
-
-	/**
-	 * Gets a string for a unique id.
-	 * 
-	 * @param id
-	 *            the unique id
-	 * @return
-	 *         the string
-	 * 
-	 * @since 1.8
-	 */
-	public abstract String getStringForUniqueId(final int id);
-
-	/**
-	 * Gets the used IRegistry<String>.
-	 * 
-	 * @return
-	 *         the registry
-	 * 
-	 * @since 1.8
-	 */
-	public abstract IRegistry<String> getStringRegistry();
-
+public interface KiekerJMXMonitoringLogMBean { // NOCS
 }

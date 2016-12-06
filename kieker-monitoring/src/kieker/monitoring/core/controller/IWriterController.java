@@ -46,13 +46,4 @@ public interface IWriterController extends IMonitoringRecordReceiver {
 	@Override
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 
-	/**
-	 * Shows how many inserts have been performed since last restart of the
-	 * execution environment.
-	 *
-	 * @return long
-	 *
-	 * @since 1.3
-	 */
-	public abstract long getNumberOfInserts();
 }

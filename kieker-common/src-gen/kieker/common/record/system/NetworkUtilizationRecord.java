@@ -1,19 +1,3 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
@@ -23,7 +7,6 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
 
 
 /**
@@ -32,49 +15,51 @@ import kieker.common.util.Version;
  * @since 1.12
  */
 public class NetworkUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	/** Descriptive definition of the serialization size of the record. */
-	public static final int SIZE = TYPE_SIZE_LONG // NetworkUtilizationRecord.timestamp
-			 + TYPE_SIZE_STRING // NetworkUtilizationRecord.hostname
-			 + TYPE_SIZE_STRING // NetworkUtilizationRecord.interfaceName
-			 + TYPE_SIZE_LONG // NetworkUtilizationRecord.speed
-			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txBytesPerSecond
-			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txCarrierPerSecond
-			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txCollisionsPerSecond
-			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txDroppedPerSecond
-			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txErrorsPerSecond
-			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txOverrunsPerSecond
-			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txPacketsPerSecond
-			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxBytesPerSecond
-			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxDroppedPerSecond
-			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxErrorsPerSecond
-			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxFramePerSecond
-			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxOverrunsPerSecond
-			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxPacketsPerSecond
-	;
 	private static final long serialVersionUID = 7799663712343478641L;
+
+		/** Descriptive definition of the serialization size of the record. */
+		public static final int SIZE = TYPE_SIZE_LONG // NetworkUtilizationRecord.timestamp
+				 + TYPE_SIZE_STRING // NetworkUtilizationRecord.hostname
+				 + TYPE_SIZE_STRING // NetworkUtilizationRecord.interfaceName
+				 + TYPE_SIZE_LONG // NetworkUtilizationRecord.speed
+				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txBytesPerSecond
+				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txCarrierPerSecond
+				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txCollisionsPerSecond
+				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txDroppedPerSecond
+				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txErrorsPerSecond
+				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txOverrunsPerSecond
+				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txPacketsPerSecond
+				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxBytesPerSecond
+				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxDroppedPerSecond
+				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxErrorsPerSecond
+				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxFramePerSecond
+				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxOverrunsPerSecond
+				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxPacketsPerSecond
+		;
 	
-	public static final Class<?>[] TYPES = {
-		long.class, // NetworkUtilizationRecord.timestamp
-		String.class, // NetworkUtilizationRecord.hostname
-		String.class, // NetworkUtilizationRecord.interfaceName
-		long.class, // NetworkUtilizationRecord.speed
-		double.class, // NetworkUtilizationRecord.txBytesPerSecond
-		double.class, // NetworkUtilizationRecord.txCarrierPerSecond
-		double.class, // NetworkUtilizationRecord.txCollisionsPerSecond
-		double.class, // NetworkUtilizationRecord.txDroppedPerSecond
-		double.class, // NetworkUtilizationRecord.txErrorsPerSecond
-		double.class, // NetworkUtilizationRecord.txOverrunsPerSecond
-		double.class, // NetworkUtilizationRecord.txPacketsPerSecond
-		double.class, // NetworkUtilizationRecord.rxBytesPerSecond
-		double.class, // NetworkUtilizationRecord.rxDroppedPerSecond
-		double.class, // NetworkUtilizationRecord.rxErrorsPerSecond
-		double.class, // NetworkUtilizationRecord.rxFramePerSecond
-		double.class, // NetworkUtilizationRecord.rxOverrunsPerSecond
-		double.class, // NetworkUtilizationRecord.rxPacketsPerSecond
-	};
+		public static final Class<?>[] TYPES = {
+			long.class, // NetworkUtilizationRecord.timestamp
+			String.class, // NetworkUtilizationRecord.hostname
+			String.class, // NetworkUtilizationRecord.interfaceName
+			long.class, // NetworkUtilizationRecord.speed
+			double.class, // NetworkUtilizationRecord.txBytesPerSecond
+			double.class, // NetworkUtilizationRecord.txCarrierPerSecond
+			double.class, // NetworkUtilizationRecord.txCollisionsPerSecond
+			double.class, // NetworkUtilizationRecord.txDroppedPerSecond
+			double.class, // NetworkUtilizationRecord.txErrorsPerSecond
+			double.class, // NetworkUtilizationRecord.txOverrunsPerSecond
+			double.class, // NetworkUtilizationRecord.txPacketsPerSecond
+			double.class, // NetworkUtilizationRecord.rxBytesPerSecond
+			double.class, // NetworkUtilizationRecord.rxDroppedPerSecond
+			double.class, // NetworkUtilizationRecord.rxErrorsPerSecond
+			double.class, // NetworkUtilizationRecord.rxFramePerSecond
+			double.class, // NetworkUtilizationRecord.rxOverrunsPerSecond
+			double.class, // NetworkUtilizationRecord.rxPacketsPerSecond
+		};
 	
-	/* user-defined constants */
-	/* default constants */
+	/** user-defined constants */
+
+	/** default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String INTERFACE_NAME = "";
@@ -92,7 +77,8 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	public static final double RX_FRAME_PER_SECOND = 0.0;
 	public static final double RX_OVERRUNS_PER_SECOND = 0.0;
 	public static final double RX_PACKETS_PER_SECOND = 0.0;
-	/* property declarations */
+
+	/** property declarations */
 	private final long timestamp;
 	private final String hostname;
 	private final String interfaceName;
@@ -196,7 +182,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		this.rxOverrunsPerSecond = (Double) values[15];
 		this.rxPacketsPerSecond = (Double) values[16];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -280,7 +266,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 			this.getRxPacketsPerSecond()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -289,7 +275,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getInterfaceName());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -313,7 +299,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		buffer.putDouble(this.getRxOverrunsPerSecond());
 		buffer.putDouble(this.getRxPacketsPerSecond());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -321,7 +307,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -329,6 +315,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -339,7 +326,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -350,7 +337,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -381,73 +368,72 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		if (isNotEqual(this.getRxPacketsPerSecond(), castedRecord.getRxPacketsPerSecond())) return false;
 		return true;
 	}
-
+	
 	public final long getTimestamp() {
 		return this.timestamp;
-	}
+	}	
 	
 	public final String getHostname() {
 		return this.hostname;
-	}
+	}	
 	
 	public final String getInterfaceName() {
 		return this.interfaceName;
-	}
+	}	
 	
 	public final long getSpeed() {
 		return this.speed;
-	}
+	}	
 	
 	public final double getTxBytesPerSecond() {
 		return this.txBytesPerSecond;
-	}
+	}	
 	
 	public final double getTxCarrierPerSecond() {
 		return this.txCarrierPerSecond;
-	}
+	}	
 	
 	public final double getTxCollisionsPerSecond() {
 		return this.txCollisionsPerSecond;
-	}
+	}	
 	
 	public final double getTxDroppedPerSecond() {
 		return this.txDroppedPerSecond;
-	}
+	}	
 	
 	public final double getTxErrorsPerSecond() {
 		return this.txErrorsPerSecond;
-	}
+	}	
 	
 	public final double getTxOverrunsPerSecond() {
 		return this.txOverrunsPerSecond;
-	}
+	}	
 	
 	public final double getTxPacketsPerSecond() {
 		return this.txPacketsPerSecond;
-	}
+	}	
 	
 	public final double getRxBytesPerSecond() {
 		return this.rxBytesPerSecond;
-	}
+	}	
 	
 	public final double getRxDroppedPerSecond() {
 		return this.rxDroppedPerSecond;
-	}
+	}	
 	
 	public final double getRxErrorsPerSecond() {
 		return this.rxErrorsPerSecond;
-	}
+	}	
 	
 	public final double getRxFramePerSecond() {
 		return this.rxFramePerSecond;
-	}
+	}	
 	
 	public final double getRxOverrunsPerSecond() {
 		return this.rxOverrunsPerSecond;
-	}
+	}	
 	
 	public final double getRxPacketsPerSecond() {
 		return this.rxPacketsPerSecond;
-	}
-	
+	}	
 }

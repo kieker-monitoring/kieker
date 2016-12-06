@@ -1,19 +1,3 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.controlflow;
 
 import java.nio.BufferOverflowException;
@@ -23,7 +7,6 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
 
 
 /**
@@ -32,37 +15,39 @@ import kieker.common.util.Version;
  * @since 0.91
  */
 public class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	/** Descriptive definition of the serialization size of the record. */
-	public static final int SIZE = TYPE_SIZE_STRING // OperationExecutionRecord.operationSignature
-			 + TYPE_SIZE_STRING // OperationExecutionRecord.sessionId
-			 + TYPE_SIZE_LONG // OperationExecutionRecord.traceId
-			 + TYPE_SIZE_LONG // OperationExecutionRecord.tin
-			 + TYPE_SIZE_LONG // OperationExecutionRecord.tout
-			 + TYPE_SIZE_STRING // OperationExecutionRecord.hostname
-			 + TYPE_SIZE_INT // OperationExecutionRecord.eoi
-			 + TYPE_SIZE_INT // OperationExecutionRecord.ess
-	;
 	private static final long serialVersionUID = -7768272829642950711L;
+
+		/** Descriptive definition of the serialization size of the record. */
+		public static final int SIZE = TYPE_SIZE_STRING // OperationExecutionRecord.operationSignature
+				 + TYPE_SIZE_STRING // OperationExecutionRecord.sessionId
+				 + TYPE_SIZE_LONG // OperationExecutionRecord.traceId
+				 + TYPE_SIZE_LONG // OperationExecutionRecord.tin
+				 + TYPE_SIZE_LONG // OperationExecutionRecord.tout
+				 + TYPE_SIZE_STRING // OperationExecutionRecord.hostname
+				 + TYPE_SIZE_INT // OperationExecutionRecord.eoi
+				 + TYPE_SIZE_INT // OperationExecutionRecord.ess
+		;
 	
-	public static final Class<?>[] TYPES = {
-		String.class, // OperationExecutionRecord.operationSignature
-		String.class, // OperationExecutionRecord.sessionId
-		long.class, // OperationExecutionRecord.traceId
-		long.class, // OperationExecutionRecord.tin
-		long.class, // OperationExecutionRecord.tout
-		String.class, // OperationExecutionRecord.hostname
-		int.class, // OperationExecutionRecord.eoi
-		int.class, // OperationExecutionRecord.ess
-	};
+		public static final Class<?>[] TYPES = {
+			String.class, // OperationExecutionRecord.operationSignature
+			String.class, // OperationExecutionRecord.sessionId
+			long.class, // OperationExecutionRecord.traceId
+			long.class, // OperationExecutionRecord.tin
+			long.class, // OperationExecutionRecord.tout
+			String.class, // OperationExecutionRecord.hostname
+			int.class, // OperationExecutionRecord.eoi
+			int.class, // OperationExecutionRecord.ess
+		};
 	
-	/* user-defined constants */
+	/** user-defined constants */
 	public static final String NO_HOSTNAME = "<default-host>";
 	public static final String NO_SESSION_ID = "<no-session-id>";
 	public static final String NO_OPERATION_SIGNATURE = "noOperation";
 	public static final long NO_TRACE_ID = -1L;
 	public static final long NO_TIMESTAMP = -1L;
 	public static final int NO_EOI_ESS = -1;
-	/* default constants */
+
+	/** default constants */
 	public static final String OPERATION_SIGNATURE = NO_OPERATION_SIGNATURE;
 	public static final String SESSION_ID = NO_SESSION_ID;
 	public static final long TRACE_ID = NO_TRACE_ID;
@@ -71,7 +56,8 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	public static final String HOSTNAME = NO_HOSTNAME;
 	public static final int EOI = NO_EOI_ESS;
 	public static final int ESS = NO_EOI_ESS;
-	/* property declarations */
+
+	/** property declarations */
 	private final String operationSignature;
 	private final String sessionId;
 	private final long traceId;
@@ -130,7 +116,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		this.eoi = (Integer) values[6];
 		this.ess = (Integer) values[7];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -187,7 +173,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 			this.getEss()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -197,7 +183,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		stringRegistry.get(this.getSessionId());
 		stringRegistry.get(this.getHostname());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -212,7 +198,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		buffer.putInt(this.getEoi());
 		buffer.putInt(this.getEss());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -220,7 +206,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -228,6 +214,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -238,7 +225,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -249,7 +236,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -271,37 +258,36 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		if (this.getEss() != castedRecord.getEss()) return false;
 		return true;
 	}
-
+	
 	public final String getOperationSignature() {
 		return this.operationSignature;
-	}
+	}	
 	
 	public final String getSessionId() {
 		return this.sessionId;
-	}
+	}	
 	
 	public final long getTraceId() {
 		return this.traceId;
-	}
+	}	
 	
 	public final long getTin() {
 		return this.tin;
-	}
+	}	
 	
 	public final long getTout() {
 		return this.tout;
-	}
+	}	
 	
 	public final String getHostname() {
 		return this.hostname;
-	}
+	}	
 	
 	public final int getEoi() {
 		return this.eoi;
-	}
+	}	
 	
 	public final int getEss() {
 		return this.ess;
-	}
-	
+	}	
 }

@@ -1,19 +1,3 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
@@ -23,7 +7,6 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
 
 
 /**
@@ -32,35 +15,37 @@ import kieker.common.util.Version;
  * @since 1.3
  */
 public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	/** Descriptive definition of the serialization size of the record. */
-	public static final int SIZE = TYPE_SIZE_LONG // CPUUtilizationRecord.timestamp
-			 + TYPE_SIZE_STRING // CPUUtilizationRecord.hostname
-			 + TYPE_SIZE_STRING // CPUUtilizationRecord.cpuID
-			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.user
-			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.system
-			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.wait
-			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.nice
-			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.irq
-			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.totalUtilization
-			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.idle
-	;
 	private static final long serialVersionUID = -7851990890838902217L;
+
+		/** Descriptive definition of the serialization size of the record. */
+		public static final int SIZE = TYPE_SIZE_LONG // CPUUtilizationRecord.timestamp
+				 + TYPE_SIZE_STRING // CPUUtilizationRecord.hostname
+				 + TYPE_SIZE_STRING // CPUUtilizationRecord.cpuID
+				 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.user
+				 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.system
+				 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.wait
+				 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.nice
+				 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.irq
+				 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.totalUtilization
+				 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.idle
+		;
 	
-	public static final Class<?>[] TYPES = {
-		long.class, // CPUUtilizationRecord.timestamp
-		String.class, // CPUUtilizationRecord.hostname
-		String.class, // CPUUtilizationRecord.cpuID
-		double.class, // CPUUtilizationRecord.user
-		double.class, // CPUUtilizationRecord.system
-		double.class, // CPUUtilizationRecord.wait
-		double.class, // CPUUtilizationRecord.nice
-		double.class, // CPUUtilizationRecord.irq
-		double.class, // CPUUtilizationRecord.totalUtilization
-		double.class, // CPUUtilizationRecord.idle
-	};
+		public static final Class<?>[] TYPES = {
+			long.class, // CPUUtilizationRecord.timestamp
+			String.class, // CPUUtilizationRecord.hostname
+			String.class, // CPUUtilizationRecord.cpuID
+			double.class, // CPUUtilizationRecord.user
+			double.class, // CPUUtilizationRecord.system
+			double.class, // CPUUtilizationRecord.wait
+			double.class, // CPUUtilizationRecord.nice
+			double.class, // CPUUtilizationRecord.irq
+			double.class, // CPUUtilizationRecord.totalUtilization
+			double.class, // CPUUtilizationRecord.idle
+		};
 	
-	/* user-defined constants */
-	/* default constants */
+	/** user-defined constants */
+
+	/** default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String CPU_ID = "";
@@ -71,7 +56,8 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	public static final double IRQ = 0.0;
 	public static final double TOTAL_UTILIZATION = 0.0;
 	public static final double IDLE = 0.0;
-	/* property declarations */
+
+	/** property declarations */
 	private final long timestamp;
 	private final String hostname;
 	private final String cpuID;
@@ -140,7 +126,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		this.totalUtilization = (Double) values[8];
 		this.idle = (Double) values[9];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -203,7 +189,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 			this.getIdle()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -212,7 +198,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getCpuID());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -229,7 +215,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		buffer.putDouble(this.getTotalUtilization());
 		buffer.putDouble(this.getIdle());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -237,7 +223,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -245,6 +231,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -255,7 +242,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -266,7 +253,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -290,45 +277,44 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		if (isNotEqual(this.getIdle(), castedRecord.getIdle())) return false;
 		return true;
 	}
-
+	
 	public final long getTimestamp() {
 		return this.timestamp;
-	}
+	}	
 	
 	public final String getHostname() {
 		return this.hostname;
-	}
+	}	
 	
 	public final String getCpuID() {
 		return this.cpuID;
-	}
+	}	
 	
 	public final double getUser() {
 		return this.user;
-	}
+	}	
 	
 	public final double getSystem() {
 		return this.system;
-	}
+	}	
 	
 	public final double getWait() {
 		return this.wait;
-	}
+	}	
 	
 	public final double getNice() {
 		return this.nice;
-	}
+	}	
 	
 	public final double getIrq() {
 		return this.irq;
-	}
+	}	
 	
 	public final double getTotalUtilization() {
 		return this.totalUtilization;
-	}
+	}	
 	
 	public final double getIdle() {
 		return this.idle;
-	}
-	
+	}	
 }

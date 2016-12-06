@@ -1,19 +1,3 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.flow;
 
 import java.nio.BufferUnderflowException;
@@ -22,7 +6,6 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
 
 import kieker.common.record.flow.IEventRecord;
 
@@ -32,13 +15,15 @@ import kieker.common.record.flow.IEventRecord;
  * @since 1.5
  */
 public abstract class AbstractEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IEventRecord {
-		private static final long serialVersionUID = -8847127127729394312L;
+	private static final long serialVersionUID = -8847127127729394312L;
+
 	
-	
-	/* user-defined constants */
-	/* default constants */
+	/** user-defined constants */
+
+	/** default constants */
 	public static final long TIMESTAMP = 0L;
-	/* property declarations */
+
+	/** property declarations */
 	private final long timestamp;
 
 	/**
@@ -51,7 +36,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		this.timestamp = timestamp;
 	}
 
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -78,6 +63,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		this.timestamp = buffer.getLong();
 	}
 
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -88,7 +74,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -99,7 +85,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -114,9 +100,8 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
 		return true;
 	}
-
+	
 	public final long getTimestamp() {
 		return this.timestamp;
-	}
-	
+	}	
 }

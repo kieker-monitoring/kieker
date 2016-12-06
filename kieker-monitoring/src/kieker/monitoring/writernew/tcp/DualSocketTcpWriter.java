@@ -62,8 +62,8 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 	private final ByteBuffer byteBuffer;
 
 	private final IWriterRegistry<String> writerRegistry;
-	private final RegisterAdapter<String> registerAdapter;
-	private final GetIdAdapter<String> readAdapter;
+	private final RegisterAdapter<String> registerStringsAdapter;
+	private final GetIdAdapter<String> writeBytesAdapter;
 
 	private final ByteBuffer stringRegistryBuffer;
 
@@ -91,21 +91,26 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		this.registryRecordChannel = SocketChannel.open(new InetSocketAddress(hostname, port2));
 
 		this.writerRegistry = new WriterRegistry(this);
-		this.registerAdapter = new RegisterAdapter<String>(this.writerRegistry);
-		this.readAdapter = new GetIdAdapter<String>(this.writerRegistry);
+		this.registerStringsAdapter = new RegisterAdapter<String>(this.writerRegistry);
+		this.writeBytesAdapter = new GetIdAdapter<String>(this.writerRegistry);
 
 		// this.encoder = StandardCharsets.UTF_8.newEncoder();
 	}
 
 	@Override
+	public void onStarting() {
+		// do nothing
+	}
+
+	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+		monitoringRecord.registerStrings(this.registerStringsAdapter);
+
 		final ByteBuffer buffer = this.byteBuffer;
 		final int requiredBufferSize = 4 + 8 + monitoringRecord.getSize();
 		if (requiredBufferSize > buffer.remaining()) {
 			this.flushBuffer(buffer, this.monitoringRecordChannel);
 		}
-
-		monitoringRecord.registerStrings(this.registerAdapter);
 
 		final String recordClassName = monitoringRecord.getClass().getName();
 		this.writerRegistry.register(recordClassName);
@@ -116,7 +121,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		buffer.putInt(recordClassId);
 		buffer.putLong(loggingTimestamp);
 
-		monitoringRecord.writeBytes(buffer, this.readAdapter);
+		monitoringRecord.writeBytes(buffer, this.writeBytesAdapter);
 		// monitoringRecord.writeToBuffer(buffer, this.writerRegistry);
 
 		if (this.flush) {
@@ -143,7 +148,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		buffer.putInt(value.length());
 		buffer.put(bytes);
 
-		// always flush so that on the reader side the records can be reconstructed
+		// always flush so that the stringRegistryBuffer is transmitted before the byteBuffer
 		this.flushBuffer(buffer, this.registryRecordChannel);
 	}
 

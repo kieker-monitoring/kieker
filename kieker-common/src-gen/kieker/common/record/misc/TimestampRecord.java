@@ -1,19 +1,3 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.misc;
 
 import java.nio.BufferOverflowException;
@@ -23,7 +7,6 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
 
 
 /**
@@ -32,19 +15,22 @@ import kieker.common.util.Version;
  * @since 1.5
  */
 public class TimestampRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	/** Descriptive definition of the serialization size of the record. */
-	public static final int SIZE = TYPE_SIZE_LONG // TimestampRecord.timestamp
-	;
 	private static final long serialVersionUID = -6797766837645151845L;
+
+		/** Descriptive definition of the serialization size of the record. */
+		public static final int SIZE = TYPE_SIZE_LONG // TimestampRecord.timestamp
+		;
 	
-	public static final Class<?>[] TYPES = {
-		long.class, // TimestampRecord.timestamp
-	};
+		public static final Class<?>[] TYPES = {
+			long.class, // TimestampRecord.timestamp
+		};
 	
-	/* user-defined constants */
-	/* default constants */
+	/** user-defined constants */
+
+	/** default constants */
 	public static final long TIMESTAMP = 0L;
-	/* property declarations */
+
+	/** property declarations */
 	private final long timestamp;
 
 	/**
@@ -68,7 +54,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.timestamp = (Long) values[0];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -104,14 +90,14 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 			this.getTimestamp()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -119,7 +105,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -127,7 +113,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -135,6 +121,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -145,7 +132,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -156,7 +143,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -171,9 +158,8 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
 		return true;
 	}
-
+	
 	public final long getTimestamp() {
 		return this.timestamp;
-	}
-	
+	}	
 }

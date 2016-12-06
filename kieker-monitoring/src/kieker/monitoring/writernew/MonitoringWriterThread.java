@@ -56,6 +56,8 @@ public class MonitoringWriterThread extends Thread {
 			LOG.debug(this.getClass().getName() + " is running.");
 		}
 
+		this.writer.onStarting();
+
 		try {
 			while (!this.shouldTerminate) {
 				final IMonitoringRecord record = this.writerQueue.take();

@@ -1,29 +1,12 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.flow.trace.operation;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
 import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
+import kieker.common.util.registry.IRegistry;
+
 import kieker.common.record.flow.ICallRecord;
 
 /**
@@ -32,32 +15,35 @@ import kieker.common.record.flow.ICallRecord;
  * @since 1.5
  */
 public class CallOperationEvent extends AbstractOperationEvent implements ICallRecord {
-	/** Descriptive definition of the serialization size of the record. */
-	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
-			 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
-	;
 	private static final long serialVersionUID = 1340141343488227597L;
+
+		/** Descriptive definition of the serialization size of the record. */
+		public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+				 + TYPE_SIZE_LONG // ITraceRecord.traceId
+				 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+				 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
+				 + TYPE_SIZE_STRING // IClassSignature.classSignature
+				 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
+				 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
+		;
 	
-	public static final Class<?>[] TYPES = {
-		long.class, // IEventRecord.timestamp
-		long.class, // ITraceRecord.traceId
-		int.class, // ITraceRecord.orderIndex
-		String.class, // IOperationSignature.operationSignature
-		String.class, // IClassSignature.classSignature
-		String.class, // ICallRecord.calleeOperationSignature
-		String.class, // ICallRecord.calleeClassSignature
-	};
+		public static final Class<?>[] TYPES = {
+			long.class, // IEventRecord.timestamp
+			long.class, // ITraceRecord.traceId
+			int.class, // ITraceRecord.orderIndex
+			String.class, // IOperationSignature.operationSignature
+			String.class, // IClassSignature.classSignature
+			String.class, // ICallRecord.calleeOperationSignature
+			String.class, // ICallRecord.calleeClassSignature
+		};
 	
-	/* user-defined constants */
-	/* default constants */
+	/** user-defined constants */
+
+	/** default constants */
 	public static final String CALLEE_OPERATION_SIGNATURE = "";
 	public static final String CALLEE_CLASS_SIGNATURE = "";
-	/* property declarations */
+
+	/** property declarations */
 	private final String calleeOperationSignature;
 	private final String calleeClassSignature;
 
@@ -97,7 +83,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		this.calleeOperationSignature = (String) values[5];
 		this.calleeClassSignature = (String) values[6];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -142,7 +128,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 			this.getCalleeClassSignature()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -153,7 +139,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		stringRegistry.get(this.getCalleeOperationSignature());
 		stringRegistry.get(this.getCalleeClassSignature());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -167,7 +153,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		buffer.putInt(stringRegistry.get(this.getCalleeOperationSignature()));
 		buffer.putInt(stringRegistry.get(this.getCalleeClassSignature()));
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -175,7 +161,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -183,6 +169,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -193,7 +180,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -204,7 +191,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -225,21 +212,20 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		if (!this.getCalleeClassSignature().equals(castedRecord.getCalleeClassSignature())) return false;
 		return true;
 	}
-
+	
 	public final String getCallerOperationSignature() {
 		return this.getOperationSignature();
-	}
+	}	
 	
 	public final String getCallerClassSignature() {
 		return this.getClassSignature();
-	}
+	}	
 	
 	public final String getCalleeOperationSignature() {
 		return this.calleeOperationSignature;
-	}
+	}	
 	
 	public final String getCalleeClassSignature() {
 		return this.calleeClassSignature;
-	}
-	
+	}	
 }

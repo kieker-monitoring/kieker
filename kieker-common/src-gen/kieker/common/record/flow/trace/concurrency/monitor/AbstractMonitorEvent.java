@@ -1,28 +1,11 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.flow.trace.concurrency.monitor;
 
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.util.registry.IRegistry;
+
 
 /**
  * @author Jan Waller
@@ -30,13 +13,15 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
  * @since 1.8
  */
 public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
-		private static final long serialVersionUID = 8385865083415561635L;
+	private static final long serialVersionUID = 8385865083415561635L;
+
 	
-	
-	/* user-defined constants */
-	/* default constants */
+	/** user-defined constants */
+
+	/** default constants */
 	public static final int LOCK_ID = 0;
-	/* property declarations */
+
+	/** property declarations */
 	private final int lockId;
 
 	/**
@@ -56,7 +41,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 		this.lockId = lockId;
 	}
 
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -84,6 +69,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 		this.lockId = buffer.getInt();
 	}
 
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -94,7 +80,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -105,7 +91,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -123,9 +109,8 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 		if (this.getLockId() != castedRecord.getLockId()) return false;
 		return true;
 	}
-
+	
 	public final int getLockId() {
 		return this.lockId;
-	}
-	
+	}	
 }

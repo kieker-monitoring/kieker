@@ -24,9 +24,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.KiekerMetadataRecord;
-import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.Version;
-import kieker.common.util.registry.IRegistry;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
@@ -47,24 +45,22 @@ public final class MonitoringController extends AbstractController implements IM
 	 */
 	private static final long SHUTDOWN_DELAY_MILLIS = 1000;
 
-	private final StateControllerHstr stateController;
+	private final StateController stateController;
 	private final SamplingController samplingController;
 	private final JMXController jmxController;
-	private final WriterControllerHstr writerController;	// previously: WriterController
+	private final WriterController writerController;
 	private final TimeSourceController timeSourceController;
-	private final RegistryController registryController;
 	private final ProbeController probeController;
 
 	// private Constructor
 	private MonitoringController(final Configuration configuration) {
 		super(configuration);
-		this.stateController = new StateControllerHstr(configuration);
+		this.stateController = new StateController(configuration);
 		this.samplingController = new SamplingController(configuration);
 		this.jmxController = new JMXController(configuration);
-		this.writerController = new WriterControllerHstr(configuration);	// previously: WriterController
+		this.writerController = new WriterController(configuration);
 		this.stateController.setStateListener(this.writerController);
 		this.timeSourceController = new TimeSourceController(configuration);
-		this.registryController = new RegistryController(configuration);
 		this.probeController = new ProbeController(configuration);
 	}
 
@@ -106,10 +102,6 @@ public final class MonitoringController extends AbstractController implements IM
 		}
 		monitoringController.timeSourceController.setMonitoringController(monitoringController);
 		if (monitoringController.timeSourceController.isTerminated()) {
-			monitoringController.terminate();
-		}
-		monitoringController.registryController.setMonitoringController(monitoringController);
-		if (monitoringController.registryController.isTerminated()) {
 			monitoringController.terminate();
 		}
 		monitoringController.probeController.setMonitoringController(monitoringController);
@@ -172,7 +164,6 @@ public final class MonitoringController extends AbstractController implements IM
 		LOG.info("Shutting down Monitoring Controller (" + this.getName() + ")");
 		// this.saveMetadataAsRecord();
 		this.probeController.terminate();
-		this.registryController.terminate();
 		this.timeSourceController.terminate();
 		this.writerController.terminate();
 		this.jmxController.terminate();
@@ -188,7 +179,6 @@ public final class MonitoringController extends AbstractController implements IM
 		sb.append(") ");
 		sb.append(this.stateController.toString());
 		sb.append(this.jmxController.toString());
-		sb.append(this.registryController.toString());
 		sb.append(this.timeSourceController.toString());
 		sb.append(this.probeController.toString());
 		sb.append(this.writerController.toString());
@@ -212,8 +202,8 @@ public final class MonitoringController extends AbstractController implements IM
 				this.isDebug(), // debugMode
 				timesource.getOffset(), // timeOffset
 				timesource.getTimeUnit().name(), // timeUnit
-				this.getNumberOfInserts() // numberOfRecords
-				));
+				0 // number of inserts (0 since not supported anymore)
+		));
 	}
 
 	protected SamplingController getSamplingController() {
@@ -291,16 +281,6 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public boolean newRegistryRecord(final RegistryRecord registryRecord) {
-		return this.writerController.newMonitoringRecord(registryRecord);
-	}
-
-	@Override
-	public final long getNumberOfInserts() {
-		return this.writerController.getNumberOfInserts();
-	}
-
-	@Override
 	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay, final long period, final TimeUnit timeUnit) {
 		return this.samplingController.schedulePeriodicSampler(sampler, initialDelay, period, timeUnit);
 	}
@@ -318,21 +298,6 @@ public final class MonitoringController extends AbstractController implements IM
 	@Override
 	public final String getJMXDomain() {
 		return this.jmxController.getJMXDomain();
-	}
-
-	@Override
-	public final int getUniqueIdForString(final String string) {
-		return this.registryController.getUniqueIdForString(string);
-	}
-
-	@Override
-	public String getStringForUniqueId(final int id) {
-		return this.registryController.getStringForUniqueId(id);
-	}
-
-	@Override
-	public IRegistry<String> getStringRegistry() {
-		return this.registryController.getStringRegistry();
 	}
 
 	@Override

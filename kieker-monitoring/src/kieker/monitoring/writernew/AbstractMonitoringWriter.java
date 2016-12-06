@@ -41,8 +41,18 @@ public abstract class AbstractMonitoringWriter {
 	// return this.queue;
 	// }
 
+	/**
+	 * This event fires when Kieker has been initialized and is ready to monitor.
+	 * It is executed by the {@link MonitoringWriterThread} just before reading the writer queue.
+	 */
+	public abstract void onStarting();
+
 	public abstract void writeMonitoringRecord(IMonitoringRecord record);
 
+	/**
+	 * This event fires when Kieker has been notified to terminate.
+	 * It is executed by the {@link MonitoringWriterThread} just after finishing the writer queue.
+	 */
 	public abstract void onTerminating();
 
 	public AbstractMonitoringWriter(final Configuration configuration) {
@@ -69,4 +79,5 @@ public abstract class AbstractMonitoringWriter {
 		}
 		return sb.toString();
 	}
+
 }

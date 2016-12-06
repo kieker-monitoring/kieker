@@ -28,7 +28,7 @@ import kieker.tools.bridge.connector.IServiceConnector;
 
 /**
  * Container for the Kieker Data Bridge handling the startup and shutdown of Kieker and the service connector.
- * 
+ *
  * @author Reiner Jung
  * @since 1.8
  */
@@ -52,6 +52,8 @@ public class ServiceContainer {
 	private volatile boolean respawn;
 	private volatile long listenerUpdateInterval = DEFAULT_LISTENER_UPDATE_INTERVAL;
 
+	private int numRecordsReceived;
+
 	/**
 	 * @param configuration
 	 *            A configuration object for Kieker monitoring
@@ -68,7 +70,7 @@ public class ServiceContainer {
 
 	/**
 	 * Main loop of the Kieker bridge.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             if deserializeNextRecord exits with a ConnectorDataTransmissionException
 	 */
@@ -80,7 +82,8 @@ public class ServiceContainer {
 			while (this.active) {
 				try {
 					this.kiekerMonitoringController.newMonitoringRecord(this.service.deserializeNextRecord());
-					if ((this.kiekerMonitoringController.getNumberOfInserts() % this.listenerUpdateInterval) == 0) {
+					this.numRecordsReceived++;
+					if ((this.numRecordsReceived % this.listenerUpdateInterval) == 0) {
 						this.updateState(this.listenerUpdateInterval + " records received.");
 					}
 				} catch (final ConnectorEndOfDataException e) {
@@ -97,7 +100,7 @@ public class ServiceContainer {
 	/**
 	 * Safely end bridge loop. This routine should only be called from the shutdown hook thread
 	 * in the main part of a server. In other cases it will result in strange runtime errors.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             An error occurred during data transmission and in this particular case
 	 *             while closing the data transmission.
@@ -111,19 +114,19 @@ public class ServiceContainer {
 
 	/**
 	 * Informs all listeners about record count and an option message. The message may be null.
-	 * 
+	 *
 	 * @param message
 	 *            the message passed to all listeners. May be null.
 	 */
 	private void updateState(final String message) {
 		for (final IServiceListener listener : this.listeners) {
-			listener.handleEvent(this.kiekerMonitoringController.getNumberOfInserts(), message);
+			listener.handleEvent(this.numRecordsReceived, message);
 		}
 	}
 
 	/**
 	 * Add an update state listener.
-	 * 
+	 *
 	 * @param listener
 	 *            an object implementing the IServiceListener interface
 	 */
@@ -133,7 +136,7 @@ public class ServiceContainer {
 
 	/**
 	 * Set the update interval for the listener information. The default is 100 records.
-	 * 
+	 *
 	 * @param listenerUpdateInterval
 	 *            the new update interval in number of records
 	 */
@@ -142,7 +145,7 @@ public class ServiceContainer {
 	}
 
 	public long getRecordCount() {
-		return this.kiekerMonitoringController.getNumberOfInserts();
+		return this.numRecordsReceived;
 	}
 
 	public boolean isRespawn() {
