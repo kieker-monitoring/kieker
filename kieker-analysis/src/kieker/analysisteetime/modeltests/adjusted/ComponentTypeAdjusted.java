@@ -30,6 +30,4 @@ public interface ComponentTypeAdjusted extends ComponentType {
 
 	public boolean containsOperationTypeByName(String name);
 
-	public void addOperationTypeByName(String name);
-
 }

@@ -16,10 +16,9 @@
 
 package kieker.analysisteetime.modeltests.adjusted;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
 
-import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EReference;
 
 import kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage;
@@ -33,44 +32,25 @@ import kieker.analysisteetime.model.analysismodel.architecture.impl.ComponentTyp
  */
 public class ComponentTypeAdjustedImpl extends ComponentTypeImpl implements ComponentTypeAdjusted {
 
-	private final Map<String, OperationType> operationTypeRepository = new HashMap<>();
+	private final EReferenceIndex<String, OperationType> operationTypeIndex;
 
 	public ComponentTypeAdjustedImpl() {
 
 		final EReference providedOperationsFeature = ArchitecturePackage.eINSTANCE.getComponentType_ProvidedOperations();
+		final EAttribute operationsSignatureFeature = ArchitecturePackage.eINSTANCE.getOperationType_Signature();
+		this.operationTypeIndex = EReferenceIndex.createEmpty(this, providedOperationsFeature, Arrays.asList(operationsSignatureFeature),
+				OperationType::getSignature);
 
-		final Adapter adapter = new EReferenceChangedListener<OperationType>(providedOperationsFeature) {
-
-			// TODO react also on changes of name of operation
-
-			@Override
-			protected void notifyElementAdded(final OperationType operationType) {
-				ComponentTypeAdjustedImpl.this.operationTypeRepository.put(operationType.getSignature(), operationType);
-			}
-
-			@Override
-			protected void notifyElementRemoved(final OperationType operationType) {
-				ComponentTypeAdjustedImpl.this.operationTypeRepository.remove(operationType.getSignature());
-			}
-		};
-
-		this.eAdapters().add(adapter);
 	}
 
 	@Override
 	public OperationType getOperationTypeByName(final String name) {
-		return this.operationTypeRepository.get(name);
+		return this.operationTypeIndex.get(name);
 	}
 
 	@Override
 	public boolean containsOperationTypeByName(final String name) {
-		return this.operationTypeRepository.containsKey(name);
-	}
-
-	@Override
-	public void addOperationTypeByName(final String name) {
-		// Currently not supported, not necessarily required
-		throw new UnsupportedOperationException();
+		return this.operationTypeIndex.contains(name);
 	}
 
 }
