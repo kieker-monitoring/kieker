@@ -16,35 +16,51 @@
 
 package kieker.analysisteetime.modeltests.adjusted;
 
-import java.util.Map;
+import java.util.List;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 /**
  * @author Sören Henning
  *
  * @since 1.13
  */
-public class EReferenceIndex<K, V> {
+public class EReferenceIndex<K, V extends EObject> {
 
-	protected Map<K, V> index;
+	protected final BiMap<K, V> index;
 
-	protected final EObject object;
+	private final EObject object;
 
 	protected final EReference reference;
 
 	protected final Function<V, K> keyCreator;
 
-	public EReferenceIndex(final EObject object, final EReference reference, final Function<V, K> keyCreator) {
+	/*
+	 * public EReferenceIndex(final EObject object, final EReference reference, final Function<V, K> keyCreator) {
+	 *
+	 * // TODO Bad
+	 * // EList<V> values = (EList<V>) object.eGet(reference);
+	 *
+	 * // this(object, reference, keyCreator, values);
+	 * }
+	 */
+
+	public EReferenceIndex(final EObject object, final EReference reference, final Function<V, K> keyCreator, final List<V> values) {
 		this.object = object;
 		this.reference = reference;
 		this.keyCreator = keyCreator;
 
-		// TODO Bad
-		// this.object.eGet(this.reference);
+		// TODO Temp
+		this.index = HashBiMap.create();
+		// this.index = values.stream().collect(Collectors.toMap(keyCreator, Function.identity()));
 
 		final Adapter changedListener = new ChangedListener();
 		this.object.eAdapters().add(changedListener);
@@ -58,7 +74,9 @@ public class EReferenceIndex<K, V> {
 		return this.index.get(key);
 	}
 
-	public class ChangedListener extends EReferenceChangedListener<V> {
+	private class ChangedListener extends EReferenceChangedListener<V> {
+
+		private final ElementChangedListener elementChangedListener = new ElementChangedListener();
 
 		public ChangedListener() {
 			super(EReferenceIndex.this.reference);
@@ -68,14 +86,37 @@ public class EReferenceIndex<K, V> {
 		@Override
 		protected void notifyElementAdded(final V element) {
 			final K key = EReferenceIndex.this.keyCreator.apply(element);
-			EReferenceIndex.this.index.put(key, element);
+			EReferenceIndex.this.index.put(key, element); // TODO forcePut?
+
+			// Add attribute listener
+			element.eAdapters().add(this.elementChangedListener);
 		}
 
 		@Override
 		protected void notifyElementRemoved(final V element) {
 			final K key = EReferenceIndex.this.keyCreator.apply(element);
 			EReferenceIndex.this.index.remove(key);
+
+			// Remove attribute listener
+			element.eAdapters().remove(this.elementChangedListener);
 		}
+	}
+
+	private class ElementChangedListener extends AdapterImpl {
+
+		public ElementChangedListener() {}
+
+		@Override
+		public void notifyChanged(final Notification notification) {
+
+			// TODO Only react on specific event types and features
+
+			final V element = (V) notification.getNotifier();
+			final K key = EReferenceIndex.this.keyCreator.apply(element);
+
+			EReferenceIndex.this.index.forcePut(key, element);
+		}
+
 	}
 
 }
