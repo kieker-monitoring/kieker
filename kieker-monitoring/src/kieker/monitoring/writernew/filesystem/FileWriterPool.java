@@ -17,15 +17,12 @@
 package kieker.monitoring.writernew.filesystem;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -54,8 +51,8 @@ public class FileWriterPool {
 	private PrintWriter currentFileWriter;
 	private int sameFilenameCounter;
 
-	public FileWriterPool(final String folder, final String charsetName, final int maxEntriesInFile) {
-		this.folder = Paths.get(folder);
+	public FileWriterPool(final Path folder, final String charsetName, final int maxEntriesInFile) {
+		this.folder = folder;
 		this.charset = Charset.forName(charsetName);
 		this.maxEntriesInFile = maxEntriesInFile;
 		this.numEntriesInCurrentFile = maxEntriesInFile; // triggers file creation
@@ -71,31 +68,33 @@ public class FileWriterPool {
 		if (this.numEntriesInCurrentFile > this.maxEntriesInFile) {
 			this.currentFileWriter.close();
 
-			final Path newfile = this.getNextNewPath();
+			final Path newfile = this.getNextNewPath(this.sameFilenameCounter++);
 			try {
 				// use CREATE_NEW to fail if the file already exists
 				final Writer w = Files.newBufferedWriter(newfile, this.charset, StandardOpenOption.CREATE_NEW);
 				this.currentFileWriter = new PrintWriter(w);
-			} catch (final FileNotFoundException e) {
-				throw new IllegalStateException("This exception should not have been thrown.", e);
-			} catch (final UnsupportedEncodingException e) {
-				throw new IllegalStateException(e);
 			} catch (final IOException e) {
 				throw new IllegalStateException("This exception should not have been thrown.", e);
 			}
+
+			// final Path oldestfile = this.getNextNewPath(this.sameFilenameCounter - maxAmountOfFiles);
+			// Files.delete(oldestfile);
 		}
 
 		return this.currentFileWriter;
 	}
 
-	private Path getNextNewPath() {
+	private Path getNextNewPath(final int counter) {
 		final Date now = new Date();
-		this.sameFilenameCounter++;
 
 		// "%1$s-%2$tY%2$tm%2$td-%2$tH%2$tM%2$tS%2$tL-UTC-%3$03d-%4$s.%5$s"
 		final String filename = String.format(LOCALE, "%s-%s-%s-%03d.%s",
-				FSUtil.FILE_PREFIX, this.dateFormatter.format(now), TIME_ZONE, this.sameFilenameCounter, FSUtil.NORMAL_FILE_EXTENSION);
+				FSUtil.FILE_PREFIX, this.dateFormatter.format(now), TIME_ZONE, counter, FSUtil.NORMAL_FILE_EXTENSION);
 		return this.folder.resolve(filename);
+	}
+
+	public void close() {
+		this.currentFileWriter.close();
 	}
 
 }

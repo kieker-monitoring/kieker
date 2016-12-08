@@ -16,10 +16,20 @@
 
 package kieker.monitoring.writernew.filesystem;
 
+import java.io.File;
 import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.filesystem.FSUtil;
+import kieker.monitoring.registry.IRegistryListener;
+import kieker.monitoring.registry.IWriterRegistry;
+import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writernew.AbstractMonitoringWriter;
 
 /**
@@ -27,47 +37,94 @@ import kieker.monitoring.writernew.AbstractMonitoringWriter;
  *
  * @since 1.13
  */
-public class AsciiFileWriter extends AbstractMonitoringWriter {
+public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
 
 	private static final String PREFIX = AsciiFileWriter.class.getName() + ".";
 	/** The name of the configuration for the custom storage path if the writer is advised not to store in the temporary directory. */
-	public static final String CONFIG_PATH = PREFIX + "customStoragePath";
+	private static final String CONFIG_PATH = PREFIX + "customStoragePath";
 	/** The name of the configuration for the charset name (e.g. "UTF-8") */
-	public static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
+	private static final String CONFIG_CHARSETNAME = PREFIX + "charsetName";
 	/** The name of the configuration determining the maximal number of entries in a file. */
-	public static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
+	private static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
 	/** The name of the configuration determining the maximal size of the files in MiB. */
-	public static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
+	private static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
 	/** The name of the configuration determining the maximal number of log files. */
-	public static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
-	/** The name of the configuration determining whether to store the data in the temporary directory or not. */
-	private static final String CONFIG_TEMP = PREFIX + "storeInJavaIoTmpdir";
+	private static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
 
 	private final FileWriterPool fileWriterPool;
+	private final MappingFileWriter mappingFileWriter;
+
+	private final IWriterRegistry<String> writerRegistry;
 
 	public AsciiFileWriter(final Configuration configuration) {
 		super(configuration);
-		final String folder = configuration.getStringProperty(CONFIG_PATH);
-		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME);
+		final Path folder = this.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH));
+		final String charsetName = configuration.getStringProperty(CONFIG_CHARSETNAME);
 		final int maxEntriesInFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
 		// this.configMaxlogSize = configuration.getIntProperty(CONFIG_MAXLOGSIZE);
 		// this.configMaxLogFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
 		this.fileWriterPool = new FileWriterPool(folder, charsetName, maxEntriesInFile);
+		this.mappingFileWriter = new MappingFileWriter(folder, charsetName);
+
+		this.writerRegistry = new WriterRegistry(this);
+	}
+
+	private Path buildKiekerLogFolder(final String stringProperty) {
+		// Determine directory for files
+		final String ctrlName = super.monitoringController.getHostname() + "-" + super.monitoringController.getName();
+		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
+		date.setTimeZone(TimeZone.getTimeZone("UTC"));
+		final String dateStr = date.format(new java.util.Date()); // NOPMD (Date)
+		final StringBuffer sb = new StringBuffer(this.configPath.length() + FSUtil.FILE_PREFIX.length() + ctrlName.length() + 26);
+		sb.append(this.configPath).append(File.separatorChar).append(FSUtil.FILE_PREFIX).append('-').append(dateStr).append("-UTC-").append(ctrlName)
+				.append(File.separatorChar);
+		final String path = sb.toString();
+		final File f = new File(path);
+		if (!f.mkdir()) {
+			throw new IllegalArgumentException("Failed to create directory '" + path + "'");
+		}
+
+		return null;
 	}
 
 	@Override
-	public void onStarting() {}
+	public void onStarting() {
+		// do nothing
+	}
 
 	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord record) {
+		final String recordClassName = record.getClass().getName();
+		this.writerRegistry.register(recordClassName);
+
 		final PrintWriter fileWriter = this.fileWriterPool.getFileWriter();
 
 		fileWriter.print('$');
-		// ...
+		fileWriter.print(this.writerRegistry.getId(recordClassName));
+		fileWriter.print(';');
+		fileWriter.print(record.getLoggingTimestamp());
+		for (final Object recordField : record.toArray()) {
+			fileWriter.print(';');
+			fileWriter.print(String.valueOf(recordField));
+		}
 		fileWriter.println();
 	}
 
 	@Override
-	public void onTerminating() {}
+	public void onNewRegistryEntry(final String recordClassName, final int id) {
+		final PrintWriter mappingFileWriter = this.mappingFileWriter.getFileWriter();
+
+		mappingFileWriter.print('$');
+		mappingFileWriter.print(id);
+		mappingFileWriter.print('=');
+		mappingFileWriter.print(recordClassName);
+		mappingFileWriter.println();
+	}
+
+	@Override
+	public void onTerminating() {
+		this.fileWriterPool.close();
+		this.mappingFileWriter.close();
+	}
 
 }
