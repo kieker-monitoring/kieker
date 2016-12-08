@@ -16,16 +16,15 @@
 
 package kieker.monitoring.writernew.filesystem;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
@@ -43,26 +42,23 @@ import kieker.common.util.filesystem.FSUtil;
 public class FileWriterPool {
 
 	private static final String TIME_ZONE = "UTC";
-
 	private static final Locale LOCALE = Locale.US;
 
-	private final String folder;
-	private final String charsetName;
+	private final Path folder;
+	private final Charset charset;
 
-	int sameFilenameCounter;
+	private final int maxEntriesInFile;
+	private int numEntriesInCurrentFile;
 
 	private final SimpleDateFormat dateFormatter;
-
-	private final int numEntriesInCurrentFile;
-
-	private int maxEntriesInFile;
-
 	private PrintWriter currentFileWriter;
+	private int sameFilenameCounter;
 
 	public FileWriterPool(final String folder, final String charsetName, final int maxEntriesInFile) {
-		this.folder = folder;
-		this.charsetName = charsetName;
-		this.numEntriesInCurrentFile = this.maxEntriesInFile; // triggers file creation
+		this.folder = Paths.get(folder);
+		this.charset = Charset.forName(charsetName);
+		this.maxEntriesInFile = maxEntriesInFile;
+		this.numEntriesInCurrentFile = maxEntriesInFile; // triggers file creation
 		this.dateFormatter = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", LOCALE);
 		this.dateFormatter.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
 
@@ -70,17 +66,16 @@ public class FileWriterPool {
 	}
 
 	public PrintWriter getFileWriter() {
-		// currentFileWriter.checkError()
-		// new FileOutputStream(null).getChannel().size()
+		this.numEntriesInCurrentFile++;
 
 		if (this.numEntriesInCurrentFile > this.maxEntriesInFile) {
 			this.currentFileWriter.close();
 
-			final File file = this.getNextFreeFile();
+			final Path newfile = this.getNextNewPath();
 			try {
-				final FileChannel fc = FileChannel.open(Paths.get(file.toURI()), StandardOpenOption.CREATE_NEW);
-				final Writer w = Channels.newWriter(fc, this.charsetName);
-				this.currentFileWriter = new PrintWriter(new BufferedWriter(w));
+				// use CREATE_NEW to fail if the file already exists
+				final Writer w = Files.newBufferedWriter(newfile, this.charset, StandardOpenOption.CREATE_NEW);
+				this.currentFileWriter = new PrintWriter(w);
 			} catch (final FileNotFoundException e) {
 				throw new IllegalStateException("This exception should not have been thrown.", e);
 			} catch (final UnsupportedEncodingException e) {
@@ -93,13 +88,14 @@ public class FileWriterPool {
 		return this.currentFileWriter;
 	}
 
-	private File getNextFreeFile() {
+	private Path getNextNewPath() {
 		final Date now = new Date();
+		this.sameFilenameCounter++;
 
 		// "%1$s-%2$tY%2$tm%2$td-%2$tH%2$tM%2$tS%2$tL-UTC-%3$03d-%4$s.%5$s"
 		final String filename = String.format(LOCALE, "%s-%s-%s-%03d.%s",
 				FSUtil.FILE_PREFIX, this.dateFormatter.format(now), TIME_ZONE, this.sameFilenameCounter, FSUtil.NORMAL_FILE_EXTENSION);
-		return new File(this.folder, filename);
+		return this.folder.resolve(filename);
 	}
 
 }

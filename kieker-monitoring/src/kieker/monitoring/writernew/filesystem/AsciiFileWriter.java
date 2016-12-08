@@ -29,11 +29,30 @@ import kieker.monitoring.writernew.AbstractMonitoringWriter;
  */
 public class AsciiFileWriter extends AbstractMonitoringWriter {
 
+	private static final String PREFIX = AsciiFileWriter.class.getName() + ".";
+	/** The name of the configuration for the custom storage path if the writer is advised not to store in the temporary directory. */
+	public static final String CONFIG_PATH = PREFIX + "customStoragePath";
+	/** The name of the configuration for the charset name (e.g. "UTF-8") */
+	public static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
+	/** The name of the configuration determining the maximal number of entries in a file. */
+	public static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
+	/** The name of the configuration determining the maximal size of the files in MiB. */
+	public static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
+	/** The name of the configuration determining the maximal number of log files. */
+	public static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
+	/** The name of the configuration determining whether to store the data in the temporary directory or not. */
+	private static final String CONFIG_TEMP = PREFIX + "storeInJavaIoTmpdir";
+
 	private final FileWriterPool fileWriterPool;
 
 	public AsciiFileWriter(final Configuration configuration) {
 		super(configuration);
-		this.fileWriterPool = new FileWriterPool();
+		final String folder = configuration.getStringProperty(CONFIG_PATH);
+		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME);
+		final int maxEntriesInFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
+		// this.configMaxlogSize = configuration.getIntProperty(CONFIG_MAXLOGSIZE);
+		// this.configMaxLogFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
+		this.fileWriterPool = new FileWriterPool(folder, charsetName, maxEntriesInFile);
 	}
 
 	@Override
