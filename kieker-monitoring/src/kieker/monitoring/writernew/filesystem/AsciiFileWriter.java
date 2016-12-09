@@ -16,9 +16,9 @@
 
 package kieker.monitoring.writernew.filesystem;
 
-import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -27,6 +27,8 @@ import java.util.TimeZone;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.FSUtil;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.registry.IRegistryListener;
 import kieker.monitoring.registry.IWriterRegistry;
 import kieker.monitoring.registry.WriterRegistry;
@@ -69,22 +71,17 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		this.writerRegistry = new WriterRegistry(this);
 	}
 
-	private Path buildKiekerLogFolder(final String stringProperty) {
-		// Determine directory for files
-		final String ctrlName = super.monitoringController.getHostname() + "-" + super.monitoringController.getName();
+	private Path buildKiekerLogFolder(final String configPath) {
 		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		date.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final String dateStr = date.format(new java.util.Date()); // NOPMD (Date)
-		final StringBuffer sb = new StringBuffer(this.configPath.length() + FSUtil.FILE_PREFIX.length() + ctrlName.length() + 26);
-		sb.append(this.configPath).append(File.separatorChar).append(FSUtil.FILE_PREFIX).append('-').append(dateStr).append("-UTC-").append(ctrlName)
-				.append(File.separatorChar);
-		final String path = sb.toString();
-		final File f = new File(path);
-		if (!f.mkdir()) {
-			throw new IllegalArgumentException("Failed to create directory '" + path + "'");
-		}
 
-		return null;
+		final IMonitoringController monitoringController = MonitoringController.getInstance();
+		final String ctrlName = monitoringController.getHostname() + "-" + monitoringController.getName();
+
+		final String filename = String.format("%s-%s-UTC-%s", FSUtil.FILE_PREFIX, dateStr, ctrlName);
+
+		return Paths.get(configPath, filename);
 	}
 
 	@Override
