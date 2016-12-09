@@ -24,6 +24,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import kieker.common.util.filesystem.FSUtil;
+
 /**
  * Encapsulates the writer for Kieker's mapping file.
  *
@@ -33,28 +35,27 @@ import java.nio.file.StandardOpenOption;
  */
 public class MappingFileWriter {
 
-	private final PrintWriter mappingFileWriter;
+	private final PrintWriter printWriter;
 
 	public MappingFileWriter(final Path folder, final String charsetName) {
-		final Path mappingFilename;
-		final Path newMappingFile = folder.resolve(mappingFilename);
+		final Path newMappingFile = folder.resolve(FSUtil.MAP_FILENAME);
 
 		final Charset charset = Charset.forName(charsetName);
 
 		try {
 			final Writer w = Files.newBufferedWriter(newMappingFile, charset, StandardOpenOption.CREATE_NEW);
-			this.mappingFileWriter = new PrintWriter(w);
+			this.printWriter = new PrintWriter(w);
 		} catch (final IOException e) {
 			throw new IllegalStateException("Error on creating Kieker's mapping file.", e);
 		}
 	}
 
 	public PrintWriter getFileWriter() {
-		return this.mappingFileWriter;
+		return this.printWriter;
 	}
 
 	public void close() {
-		this.mappingFileWriter.close();
+		this.printWriter.close();
 	}
 
 }
