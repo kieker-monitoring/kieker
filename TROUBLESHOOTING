@@ -1,0 +1,6 @@
+[import IRegistry not found]
+if you encounter the following problem while building the project
+
+	Could not find class "import kieker.common.util.IRegistry"
+
+then delete the folders src-gen and test-gen at the root level of the Kieker project.
