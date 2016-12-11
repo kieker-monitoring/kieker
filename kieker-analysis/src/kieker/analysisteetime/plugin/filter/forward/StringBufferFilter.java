@@ -36,6 +36,11 @@ public class StringBufferFilter extends AbstractFilter<Object> {
 
 	private final KiekerHashMap kiekerHashMap = new KiekerHashMap();
 
+	/**
+	 * Creates a new instance of this class.
+	 */
+	public StringBufferFilter() {}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void execute(final Object object) {

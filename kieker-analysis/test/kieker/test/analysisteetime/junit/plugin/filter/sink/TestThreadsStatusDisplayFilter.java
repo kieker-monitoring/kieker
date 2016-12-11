@@ -40,8 +40,6 @@ import teetime.framework.test.StageTester;
  */
 public class TestThreadsStatusDisplayFilter extends AbstractKiekerTest {
 
-	private ThreadsStatusDisplayFilter threadsStatusFilter = null;
-
 	private static final int NUMBER_OF_ENTRIES = 3;
 	private static final TimeUnit RECORDS_TIME_UNIT = TimeUnit.MILLISECONDS;
 
@@ -53,14 +51,26 @@ public class TestThreadsStatusDisplayFilter extends AbstractKiekerTest {
 	private static final long PEAK_THREAD_COUNT = 4;
 	private static final long TOTAL_STARTED_THREAD_COUNT = 3;
 
+	private ThreadsStatusDisplayFilter threadsStatusFilter = null;
 	private final ThreadsStatusRecord record = new ThreadsStatusRecord(TIMESTAMP, HOST_NAME, VM_NAME, THREAD_COUNT, DAEMON_THREAD_COUNT, PEAK_THREAD_COUNT,
 			TOTAL_STARTED_THREAD_COUNT);
 
+	/**
+	 * Empty default constructor.
+	 */
+	public TestThreadsStatusDisplayFilter() {}
+
+	/**
+	 * Initializes a new filter before each test.
+	 */
 	@Before
 	public void initializeNewFilter() {
 		this.threadsStatusFilter = new ThreadsStatusDisplayFilter(NUMBER_OF_ENTRIES, RECORDS_TIME_UNIT);
 	}
 
+	/**
+	 * Tests if the xy-plot received the correct values.
+	 */
 	@Test
 	public void xyPlotEntriesShouldBeCorrect() {
 		StageTester.test(this.threadsStatusFilter).and().send(this.record).to(this.threadsStatusFilter.getInputPort()).start();

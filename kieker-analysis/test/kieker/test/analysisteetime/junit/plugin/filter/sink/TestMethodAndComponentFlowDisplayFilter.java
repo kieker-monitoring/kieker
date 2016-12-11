@@ -21,7 +21,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.display.TagCloud;
-import kieker.analysisteetime.plugin.filter.sink.MemSwapUtilizationDisplayFilter;
 import kieker.analysisteetime.plugin.filter.sink.MethodAndComponentFlowDisplayFilter;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
@@ -30,15 +29,13 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import teetime.framework.test.StageTester;
 
 /**
- * Test cases for {@link MemSwapUtilizationDisplayFilter}.
+ * Test cases for {@link MethodAndComponentFlowDisplayFilter}.
  *
  * @author Lars Bluemke
  *
  * @since 1.13
  */
 public class TestMethodAndComponentFlowDisplayFilter extends AbstractKiekerTest {
-
-	private MethodAndComponentFlowDisplayFilter methodAndComponentFlowDisplayFilter = null;
 
 	private static final String OPERATION_SIGNATURE = "public void package.subpackage.Class.method(package.Type)";
 	private static final String SESSION_ID = "test_session";
@@ -49,8 +46,17 @@ public class TestMethodAndComponentFlowDisplayFilter extends AbstractKiekerTest 
 	private static final int EOI = 4;
 	private static final int ESS = 5;
 
+	private MethodAndComponentFlowDisplayFilter methodAndComponentFlowDisplayFilter = null;
 	private final OperationExecutionRecord record = new OperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID, TRACE_ID, TIN, TOUT, HOSTNAME, EOI, ESS);
 
+	/**
+	 * Empty default constructor.
+	 */
+	public TestMethodAndComponentFlowDisplayFilter() {}
+
+	/**
+	 * Initializes a new filter before each test.
+	 */
 	@Before
 	public void initializeNewFilter() {
 		this.methodAndComponentFlowDisplayFilter = new MethodAndComponentFlowDisplayFilter();

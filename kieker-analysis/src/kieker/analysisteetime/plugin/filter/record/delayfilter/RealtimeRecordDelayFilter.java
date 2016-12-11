@@ -23,8 +23,6 @@ import kieker.analysisteetime.plugin.filter.record.delayfilter.components.Realti
 import kieker.analysisteetime.plugin.filter.record.delayfilter.components.RealtimeRecordDelayProducer;
 import kieker.common.record.IMonitoringRecord;
 
-import teetime.framework.AbstractConsumerStage;
-import teetime.framework.AbstractProducerStage;
 import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
@@ -34,8 +32,8 @@ import teetime.framework.OutputPort;
  * (assumed to be in the configured resolution). For example, after initialization, if records with logging timestamps 3000 and 4500 nanos are received, the
  * first record is forwarded immediately; the second will be forwarded 1500 nanos later. The acceleration factor can be used to accelerate/slow down the
  * replay (default 1.0, which means no acceleration/slow down).<br>
- * The implementation with TeeTime consists of two components: At first an {@link AbstractConsumerStage} (declared as passive) which receives incoming records and
- * stores them in a queue. At second an {@link AbstractProducerStage} (always active) which takes the records from the queue and forwards them with the proper delay.
+ * The implementation with TeeTime consists of two components: At first a consumer stage (declared as passive) which receives incoming records and
+ * stores them in a queue. At second a producer stage (always active) which takes the records from the queue and forwards them with the proper delay.
  * <br>
  * <b>Note:</b> We assume that the incoming records are ordered by their timestamps. The stage does not provide an ordering mechanism. Records that are received
  * "too late"
@@ -47,7 +45,7 @@ import teetime.framework.OutputPort;
  */
 public class RealtimeRecordDelayFilter extends CompositeStage {
 
-	private final static Object END_TOKEN = new Object();
+	private static final Object END_TOKEN = new Object();
 
 	private final LinkedBlockingQueue<Object> recordQueue;
 	private final RealtimeRecordDelayConsumer consumer;

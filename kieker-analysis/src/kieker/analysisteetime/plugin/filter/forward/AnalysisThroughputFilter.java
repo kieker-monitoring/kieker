@@ -43,6 +43,11 @@ public class AnalysisThroughputFilter extends AbstractStage {
 
 	private final PlainText plainTextDisplayObject = new PlainText();
 
+	/**
+	 * Creates a new instance of this class.
+	 */
+	public AnalysisThroughputFilter() {}
+
 	@Override
 	protected void execute() {
 		int failt = 0;

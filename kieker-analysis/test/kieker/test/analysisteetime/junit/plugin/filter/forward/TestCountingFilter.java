@@ -41,6 +41,14 @@ public class TestCountingFilter extends AbstractKiekerTest {
 	private CountingFilter countingFilter = null;
 	private List<Object> testElements = null;
 
+	/**
+	 * Empty default constructor
+	 */
+	public TestCountingFilter() {}
+
+	/**
+	 * Initializes a new filter and array of test elements before each test.
+	 */
 	@Before
 	public void initializeNewFilter() {
 		this.countingFilter = new CountingFilter();

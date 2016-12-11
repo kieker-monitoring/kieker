@@ -40,8 +40,6 @@ import teetime.framework.test.StageTester;
  */
 public class TestMemSwapUtilizationDisplayFilter extends AbstractKiekerTest {
 
-	private MemSwapUtilizationDisplayFilter memSwapUtilFilter = null;
-
 	private static final int NUMBER_OF_ENTRIES = 3;
 	private static final TimeUnit RECORDS_TIME_UNIT = TimeUnit.MILLISECONDS;
 
@@ -54,14 +52,26 @@ public class TestMemSwapUtilizationDisplayFilter extends AbstractKiekerTest {
 	private static final long SWAP_USED = 15728640L;
 	private static final long SWAR_FREE = 5242880L;
 
+	private MemSwapUtilizationDisplayFilter memSwapUtilFilter = null;
 	private final MemSwapUsageRecord record = new MemSwapUsageRecord(TIMESTAMP, HOST_NAME, MEM_TOTAL, MEM_USED, MEM_FREE, SWAP_TOTAL, SWAP_USED, SWAR_FREE);
 	private final String id = this.record.getHostname();
 
+	/**
+	 * Empty default constructor.
+	 */
+	public TestMemSwapUtilizationDisplayFilter() {}
+
+	/**
+	 * Initializes a new filter before each test.
+	 */
 	@Before
 	public void initializeNewFilter() {
 		this.memSwapUtilFilter = new MemSwapUtilizationDisplayFilter(NUMBER_OF_ENTRIES, RECORDS_TIME_UNIT);
 	}
 
+	/**
+	 * Tests if the xy-plot received the correct values.
+	 */
 	@Test
 	public void xyPlotEntriesShouldBeCorrect() {
 		StageTester.test(this.memSwapUtilFilter).and().send(this.record).to(this.memSwapUtilFilter.getInputPort()).start();
@@ -92,6 +102,9 @@ public class TestMemSwapUtilizationDisplayFilter extends AbstractKiekerTest {
 
 	}
 
+	/**
+	 * Tests if the mem-pie-chart received the correct values.
+	 */
 	@Test
 	public void memPieChartShouldBeCorrect() {
 		StageTester.test(this.memSwapUtilFilter).and().send(this.record).to(this.memSwapUtilFilter.getInputPort()).start();
@@ -104,6 +117,9 @@ public class TestMemSwapUtilizationDisplayFilter extends AbstractKiekerTest {
 
 	}
 
+	/**
+	 * Tests if the swap-pie-chart received the correct values.
+	 */
 	@Test
 	public void swapPieChartShouldBeCorrect() {
 		StageTester.test(this.memSwapUtilFilter).and().send(this.record).to(this.memSwapUtilFilter.getInputPort()).start();

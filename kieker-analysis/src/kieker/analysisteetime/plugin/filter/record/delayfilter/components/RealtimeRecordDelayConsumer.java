@@ -26,6 +26,8 @@ import teetime.framework.AbstractConsumerStage;
  * Receives records at the input port and stores them in a queue for the {@link RealtimeRecordDelayProducer}.
  *
  * @author Lars Bluemke
+ *
+ * @since 1.13
  */
 public class RealtimeRecordDelayConsumer extends AbstractConsumerStage<IMonitoringRecord> {
 

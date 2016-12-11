@@ -45,6 +45,11 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 	private static final String HOSTNAME = "srv098";
 
 	/**
+	 * Empty default constructor
+	 */
+	public TestTraceIdFilter() {}
+
+	/**
 	 * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,
 	 * assert that a {@link AbstractTraceEvent} object <i>event</i> with traceId not element of
 	 * <i>idsToPass</i> is NOT passed through the filter.

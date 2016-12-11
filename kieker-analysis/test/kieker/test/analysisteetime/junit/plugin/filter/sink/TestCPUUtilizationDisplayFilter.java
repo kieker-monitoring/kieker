@@ -40,8 +40,6 @@ import teetime.framework.test.StageTester;
  */
 public class TestCPUUtilizationDisplayFilter extends AbstractKiekerTest {
 
-	private CPUUtilizationDisplayFilter cpuUtilFilter = null;
-
 	// Constructor arguments for filter
 	private static final int NUMBER_OF_ENTRIES = 3;
 	private static final TimeUnit RECORDS_TIME_UNIT = TimeUnit.MILLISECONDS;
@@ -59,14 +57,26 @@ public class TestCPUUtilizationDisplayFilter extends AbstractKiekerTest {
 	private static final double TOTAL_UTILISATION = 7.0;
 	private static final double IDLE = 8.0;
 
+	private CPUUtilizationDisplayFilter cpuUtilFilter = null;
 	private final CPUUtilizationRecord record = new CPUUtilizationRecord(TIMESTAMP, HOSTNAME, CPU_ID, USER, SYSTEM, WAIT, NICE, IRQ, TOTAL_UTILISATION, IDLE);
 	private final String id = this.record.getHostname() + " - " + this.record.getCpuID();
 
+	/**
+	 * Empty default constructor.
+	 */
+	public TestCPUUtilizationDisplayFilter() {}
+
+	/**
+	 * Initializes a new filter before each test.
+	 */
 	@Before
 	public void initializeNewFilter() {
 		this.cpuUtilFilter = new CPUUtilizationDisplayFilter(NUMBER_OF_ENTRIES, WARNING_INTERVALS, RECORDS_TIME_UNIT);
 	}
 
+	/**
+	 * Tests if the meter gauge received the correct values.
+	 */
 	@Test
 	public void meterGaugeValueShouldBeCorrect() {
 		StageTester.test(this.cpuUtilFilter).and().send(this.record).to(this.cpuUtilFilter.getInputPort()).start();
@@ -74,6 +84,9 @@ public class TestCPUUtilizationDisplayFilter extends AbstractKiekerTest {
 		Assert.assertThat(this.cpuUtilFilter.getMeterGauge().getValue(this.id).doubleValue() / 100, Is.is(TOTAL_UTILISATION));
 	}
 
+	/**
+	 * Tests if the xy-plot received the correct values.
+	 */
 	@Test
 	public void xyPlotEntriesShouldBeCorrect() {
 		StageTester.test(this.cpuUtilFilter).and().send(this.record).to(this.cpuUtilFilter.getInputPort()).start();
