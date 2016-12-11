@@ -28,7 +28,7 @@ import kieker.tools.opad.timeseries.forecast.AbstractRForecaster;
  * 
  * @since 1.10
  * @author Nikolas Herbst <nikolas.herbst@uni-wuerzburg.de>
- *         The naïve forecast considers only the
+ *         The naive forecast considers only the
  *         value of the most recent observation assuming that this
  *         value has the highest probability for the next forecast point.
  * 
