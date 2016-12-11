@@ -40,13 +40,13 @@ import teetime.framework.test.StageTester;
  */
 public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 
-	private MonitoringThroughputFilter monitoringThroughputFilter = null;
+	private MonitoringThroughputFilter monitoringThroughputFilter;
 	// List for the count
-	private List<Long> outputThroughputs = null;
+	private List<Long> outputThroughputs;
 	// List for all relayed records
-	private List<IMonitoringRecord> outputRelayedRecords = null;
+	private List<IMonitoringRecord> outputRelayedRecords;
 	// List for uncounted records
-	private List<IMonitoringRecord> outputUncountedRecords = null;
+	private List<IMonitoringRecord> outputUncountedRecords;
 
 	/**
 	 * Default constructor.

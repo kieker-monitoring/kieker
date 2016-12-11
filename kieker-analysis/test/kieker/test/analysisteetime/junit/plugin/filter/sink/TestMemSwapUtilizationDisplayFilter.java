@@ -52,14 +52,16 @@ public class TestMemSwapUtilizationDisplayFilter extends AbstractKiekerTest {
 	private static final long SWAP_USED = 15728640L;
 	private static final long SWAR_FREE = 5242880L;
 
-	private MemSwapUtilizationDisplayFilter memSwapUtilFilter = null;
+	private MemSwapUtilizationDisplayFilter memSwapUtilFilter;
 	private final MemSwapUsageRecord record = new MemSwapUsageRecord(TIMESTAMP, HOST_NAME, MEM_TOTAL, MEM_USED, MEM_FREE, SWAP_TOTAL, SWAP_USED, SWAR_FREE);
 	private final String id = this.record.getHostname();
 
 	/**
 	 * Empty default constructor.
 	 */
-	public TestMemSwapUtilizationDisplayFilter() {}
+	public TestMemSwapUtilizationDisplayFilter() {
+		// empty default constructor
+	}
 
 	/**
 	 * Initializes a new filter before each test.

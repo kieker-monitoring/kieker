@@ -26,11 +26,10 @@ import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.toolsteetime.logReplayer.filter.MonitoringRecordLoggerFilter;
 
-import teetime.framework.Configuration;
 import teetime.framework.Execution;
 
 /**
- * Replays a monitoring log to a {@link kieker.monitoring.core.controller.IMonitoringController} with a given {@link Configuration}.
+ * Replays a monitoring log to a {@link kieker.monitoring.core.controller.IMonitoringController} with a given teetime configuration.
  * The {@link AbstractLogReplayer} can filter by timestamp and replay in real-time.
  *
  * @author Andre van Hoorn, Lars Bluemke
@@ -48,7 +47,6 @@ public abstract class AbstractLogReplayer {
 	private final long ignoreRecordsAfterTimestamp;
 
 	private final IMonitoringController monitoringController;
-	private final String monitoringConfigurationFile;
 
 	private final boolean realtimeMode;
 	private final TimeUnit realtimeTimeunit;
@@ -85,8 +83,7 @@ public abstract class AbstractLogReplayer {
 		this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
 		this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
 		this.monitoringController = monitoringController;
-		this.monitoringConfigurationFile = monitoringConfigurationFile;
-		if (this.monitoringConfigurationFile == null) {
+		if (monitoringConfigurationFile == null) {
 			LOG.warn("No path to a 'monitoring.properties' passed; default configuration will be used.");
 		}
 	}
@@ -122,11 +119,7 @@ public abstract class AbstractLogReplayer {
 	}
 
 	private boolean isAtLeastOneTimestampGiven() {
-		if ((this.ignoreRecordsBeforeTimestamp > MIN_TIMESTAMP) || (this.ignoreRecordsAfterTimestamp < MAX_TIMESTAMP)) {
-			return true;
-		} else {
-			return false;
-		}
+		return ((this.ignoreRecordsBeforeTimestamp > MIN_TIMESTAMP) || (this.ignoreRecordsAfterTimestamp < MAX_TIMESTAMP));
 	}
 
 	/**

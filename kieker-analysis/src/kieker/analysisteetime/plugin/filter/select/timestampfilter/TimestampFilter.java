@@ -47,19 +47,6 @@ public class TimestampFilter extends CompositeStage {
 
 	private final InputPort<IMonitoringRecord> monitoringRecordsCombinedInputPort;
 
-	private final InstanceOfFilter<IMonitoringRecord, OperationExecutionRecord> instanceOfOperationExecutionRecordFilter;
-	private final InstanceOfFilter<IMonitoringRecord, TraceMetadata> instanceOfTraceMetadataFilter;
-	private final InstanceOfFilter<IMonitoringRecord, IEventRecord> instanceOfIEventFilter;
-	private final InstanceOfFilter<IMonitoringRecord, IMonitoringRecord> instanceOfIMonitoringRecord;
-
-	private final EventRecordTimestampFilter eventRecordTimestampStage;
-	private final OperationExecutionRecordTimestampFilter operationExecutionRecordTimestampStage;
-	private final TraceMetadataTimestampFilter traceMetadataTimestampStage;
-	private final MonitioringRecordTimestampFilter monitoringRecordTimestampStage;
-
-	private final Merger<IMonitoringRecord> recordsWithinTimePeriodMerger;
-	private final Merger<IMonitoringRecord> recordsOutsideTimePeriodMerger;
-
 	private final OutputPort<IMonitoringRecord> recordsWithinTimePeriodOutputPort;
 	private final OutputPort<IMonitoringRecord> recordsOutsideTimePeriodOutputPort;
 
@@ -74,42 +61,46 @@ public class TimestampFilter extends CompositeStage {
 	public TimestampFilter(final long ignoreBeforeTimestamp, final long ignoreAfterTimestamp) {
 
 		// Instantiate internal stages
-		this.instanceOfOperationExecutionRecordFilter = new InstanceOfFilter<IMonitoringRecord, OperationExecutionRecord>(OperationExecutionRecord.class);
-		this.instanceOfTraceMetadataFilter = new InstanceOfFilter<IMonitoringRecord, TraceMetadata>(TraceMetadata.class);
-		this.instanceOfIEventFilter = new InstanceOfFilter<IMonitoringRecord, IEventRecord>(IEventRecord.class);
-		this.instanceOfIMonitoringRecord = new InstanceOfFilter<IMonitoringRecord, IMonitoringRecord>(IMonitoringRecord.class);
+		final InstanceOfFilter<IMonitoringRecord, OperationExecutionRecord> instanceOfOperationExecutionRecordFilter = new InstanceOfFilter<IMonitoringRecord, OperationExecutionRecord>(
+				OperationExecutionRecord.class);
+		final InstanceOfFilter<IMonitoringRecord, TraceMetadata> instanceOfTraceMetadataFilter = new InstanceOfFilter<IMonitoringRecord, TraceMetadata>(
+				TraceMetadata.class);
+		final InstanceOfFilter<IMonitoringRecord, IEventRecord> instanceOfIEventFilter = new InstanceOfFilter<IMonitoringRecord, IEventRecord>(IEventRecord.class);
+		final InstanceOfFilter<IMonitoringRecord, IMonitoringRecord> instanceOfIMonitoringRecord = new InstanceOfFilter<IMonitoringRecord, IMonitoringRecord>(
+				IMonitoringRecord.class);
 
-		this.eventRecordTimestampStage = new EventRecordTimestampFilter(ignoreBeforeTimestamp, ignoreAfterTimestamp);
-		this.operationExecutionRecordTimestampStage = new OperationExecutionRecordTimestampFilter(ignoreBeforeTimestamp, ignoreAfterTimestamp);
-		this.traceMetadataTimestampStage = new TraceMetadataTimestampFilter(ignoreBeforeTimestamp, ignoreAfterTimestamp);
-		this.monitoringRecordTimestampStage = new MonitioringRecordTimestampFilter(ignoreBeforeTimestamp, ignoreAfterTimestamp);
+		final EventRecordTimestampFilter eventRecordTimestampStage = new EventRecordTimestampFilter(ignoreBeforeTimestamp, ignoreAfterTimestamp);
+		final OperationExecutionRecordTimestampFilter operationExecutionRecordTimestampStage = new OperationExecutionRecordTimestampFilter(ignoreBeforeTimestamp,
+				ignoreAfterTimestamp);
+		final TraceMetadataTimestampFilter traceMetadataTimestampStage = new TraceMetadataTimestampFilter(ignoreBeforeTimestamp, ignoreAfterTimestamp);
+		final MonitioringRecordTimestampFilter monitoringRecordTimestampStage = new MonitioringRecordTimestampFilter(ignoreBeforeTimestamp, ignoreAfterTimestamp);
 
-		this.recordsWithinTimePeriodMerger = new Merger<IMonitoringRecord>();
-		this.recordsOutsideTimePeriodMerger = new Merger<IMonitoringRecord>();
+		final Merger<IMonitoringRecord> recordsWithinTimePeriodMerger = new Merger<IMonitoringRecord>();
+		final Merger<IMonitoringRecord> recordsOutsideTimePeriodMerger = new Merger<IMonitoringRecord>();
 
 		// Define input and output ports of composite stage
-		this.monitoringRecordsCombinedInputPort = this.instanceOfOperationExecutionRecordFilter.getInputPort();
-		this.recordsWithinTimePeriodOutputPort = this.recordsWithinTimePeriodMerger.getOutputPort();
-		this.recordsOutsideTimePeriodOutputPort = this.recordsOutsideTimePeriodMerger.getOutputPort();
+		this.monitoringRecordsCombinedInputPort = instanceOfOperationExecutionRecordFilter.getInputPort();
+		this.recordsWithinTimePeriodOutputPort = recordsWithinTimePeriodMerger.getOutputPort();
+		this.recordsOutsideTimePeriodOutputPort = recordsOutsideTimePeriodMerger.getOutputPort();
 
 		// Connect InstanceOfFilters with specific TimestampStages and each other
-		this.connectPorts(this.instanceOfOperationExecutionRecordFilter.getMatchedOutputPort(), this.operationExecutionRecordTimestampStage.getInputPort());
-		this.connectPorts(this.instanceOfOperationExecutionRecordFilter.getMismatchedOutputPort(), this.instanceOfTraceMetadataFilter.getInputPort());
-		this.connectPorts(this.instanceOfTraceMetadataFilter.getMatchedOutputPort(), this.traceMetadataTimestampStage.getInputPort());
-		this.connectPorts(this.instanceOfTraceMetadataFilter.getMismatchedOutputPort(), this.instanceOfIEventFilter.getInputPort());
-		this.connectPorts(this.instanceOfIEventFilter.getMatchedOutputPort(), this.eventRecordTimestampStage.getInputPort());
-		this.connectPorts(this.instanceOfIEventFilter.getMismatchedOutputPort(), this.instanceOfIMonitoringRecord.getInputPort());
-		this.connectPorts(this.instanceOfIMonitoringRecord.getMatchedOutputPort(), this.monitoringRecordTimestampStage.getInputPort());
+		this.connectPorts(instanceOfOperationExecutionRecordFilter.getMatchedOutputPort(), operationExecutionRecordTimestampStage.getInputPort());
+		this.connectPorts(instanceOfOperationExecutionRecordFilter.getMismatchedOutputPort(), instanceOfTraceMetadataFilter.getInputPort());
+		this.connectPorts(instanceOfTraceMetadataFilter.getMatchedOutputPort(), traceMetadataTimestampStage.getInputPort());
+		this.connectPorts(instanceOfTraceMetadataFilter.getMismatchedOutputPort(), instanceOfIEventFilter.getInputPort());
+		this.connectPorts(instanceOfIEventFilter.getMatchedOutputPort(), eventRecordTimestampStage.getInputPort());
+		this.connectPorts(instanceOfIEventFilter.getMismatchedOutputPort(), instanceOfIMonitoringRecord.getInputPort());
+		this.connectPorts(instanceOfIMonitoringRecord.getMatchedOutputPort(), monitoringRecordTimestampStage.getInputPort());
 
 		// Connect specific TimestampStages with Mergers
-		this.connectPorts(this.eventRecordTimestampStage.getRecordWithinTimePeriodOutputPort(), this.recordsWithinTimePeriodMerger.getNewInputPort());
-		this.connectPorts(this.eventRecordTimestampStage.getRecordOutsideTimePeriodOutputPort(), this.recordsOutsideTimePeriodMerger.getNewInputPort());
-		this.connectPorts(this.operationExecutionRecordTimestampStage.getRecordWithinTimePeriodOutputPort(), this.recordsWithinTimePeriodMerger.getNewInputPort());
-		this.connectPorts(this.operationExecutionRecordTimestampStage.getRecordOutsideTimePeriodOutputPort(), this.recordsOutsideTimePeriodMerger.getNewInputPort());
-		this.connectPorts(this.traceMetadataTimestampStage.getRecordWithinTimePeriodOutputPort(), this.recordsWithinTimePeriodMerger.getNewInputPort());
-		this.connectPorts(this.traceMetadataTimestampStage.getRecordOutsideTimePeriodOutputPort(), this.recordsOutsideTimePeriodMerger.getNewInputPort());
-		this.connectPorts(this.monitoringRecordTimestampStage.getRecordWithinTimePeriodOutputPort(), this.recordsWithinTimePeriodMerger.getNewInputPort());
-		this.connectPorts(this.monitoringRecordTimestampStage.getRecordOutsideTimePeriodOutputPort(), this.recordsOutsideTimePeriodMerger.getNewInputPort());
+		this.connectPorts(eventRecordTimestampStage.getRecordWithinTimePeriodOutputPort(), recordsWithinTimePeriodMerger.getNewInputPort());
+		this.connectPorts(eventRecordTimestampStage.getRecordOutsideTimePeriodOutputPort(), recordsOutsideTimePeriodMerger.getNewInputPort());
+		this.connectPorts(operationExecutionRecordTimestampStage.getRecordWithinTimePeriodOutputPort(), recordsWithinTimePeriodMerger.getNewInputPort());
+		this.connectPorts(operationExecutionRecordTimestampStage.getRecordOutsideTimePeriodOutputPort(), recordsOutsideTimePeriodMerger.getNewInputPort());
+		this.connectPorts(traceMetadataTimestampStage.getRecordWithinTimePeriodOutputPort(), recordsWithinTimePeriodMerger.getNewInputPort());
+		this.connectPorts(traceMetadataTimestampStage.getRecordOutsideTimePeriodOutputPort(), recordsOutsideTimePeriodMerger.getNewInputPort());
+		this.connectPorts(monitoringRecordTimestampStage.getRecordWithinTimePeriodOutputPort(), recordsWithinTimePeriodMerger.getNewInputPort());
+		this.connectPorts(monitoringRecordTimestampStage.getRecordOutsideTimePeriodOutputPort(), recordsOutsideTimePeriodMerger.getNewInputPort());
 
 	}
 

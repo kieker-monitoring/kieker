@@ -47,10 +47,6 @@ public class RealtimeRecordDelayFilter extends CompositeStage {
 
 	private static final Object END_TOKEN = new Object();
 
-	private final LinkedBlockingQueue<Object> recordQueue;
-	private final RealtimeRecordDelayConsumer consumer;
-	private final RealtimeRecordDelayProducer producer;
-
 	private final InputPort<IMonitoringRecord> inputPort;
 	private final OutputPort<IMonitoringRecord> outputPort;
 
@@ -65,12 +61,12 @@ public class RealtimeRecordDelayFilter extends CompositeStage {
 	 *            A time bound to configure a warning when a record is forwarded too late.
 	 */
 	public RealtimeRecordDelayFilter(final TimeUnit timeunit, final double accelerationFactor, final long warnOnNegativeSchedTime) {
-		this.recordQueue = new LinkedBlockingQueue<Object>();
-		this.consumer = new RealtimeRecordDelayConsumer(this.recordQueue, END_TOKEN);
-		this.producer = new RealtimeRecordDelayProducer(this.recordQueue, END_TOKEN, timeunit, accelerationFactor, warnOnNegativeSchedTime);
+		final LinkedBlockingQueue<Object> recordQueue = new LinkedBlockingQueue<Object>();
+		final RealtimeRecordDelayConsumer consumer = new RealtimeRecordDelayConsumer(recordQueue, END_TOKEN);
+		final RealtimeRecordDelayProducer producer = new RealtimeRecordDelayProducer(recordQueue, END_TOKEN, timeunit, accelerationFactor, warnOnNegativeSchedTime);
 
-		this.inputPort = this.consumer.getInputPort();
-		this.outputPort = this.producer.getOutputPort();
+		this.inputPort = consumer.getInputPort();
+		this.outputPort = producer.getOutputPort();
 	}
 
 	public InputPort<IMonitoringRecord> getInputPort() {

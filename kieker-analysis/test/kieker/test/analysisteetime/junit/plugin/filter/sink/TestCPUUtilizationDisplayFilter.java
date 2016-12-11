@@ -57,14 +57,16 @@ public class TestCPUUtilizationDisplayFilter extends AbstractKiekerTest {
 	private static final double TOTAL_UTILISATION = 7.0;
 	private static final double IDLE = 8.0;
 
-	private CPUUtilizationDisplayFilter cpuUtilFilter = null;
+	private CPUUtilizationDisplayFilter cpuUtilFilter;
 	private final CPUUtilizationRecord record = new CPUUtilizationRecord(TIMESTAMP, HOSTNAME, CPU_ID, USER, SYSTEM, WAIT, NICE, IRQ, TOTAL_UTILISATION, IDLE);
 	private final String id = this.record.getHostname() + " - " + this.record.getCpuID();
 
 	/**
 	 * Empty default constructor.
 	 */
-	public TestCPUUtilizationDisplayFilter() {}
+	public TestCPUUtilizationDisplayFilter() {
+		// empty default constructor
+	}
 
 	/**
 	 * Initializes a new filter before each test.

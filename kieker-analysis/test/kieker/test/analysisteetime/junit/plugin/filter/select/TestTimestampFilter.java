@@ -67,7 +67,9 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		}
 
 		@Override
-		public void registerStrings(final IRegistry<String> stringRegistry) {}
+		public void registerStrings(final IRegistry<String> stringRegistry) {
+			// not needed for this test}
+		}
 	};
 
 	/**

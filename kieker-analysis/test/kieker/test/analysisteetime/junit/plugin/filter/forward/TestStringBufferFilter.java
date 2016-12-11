@@ -31,7 +31,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 import teetime.framework.test.StageTester;
 
-/**
+/***
+ * 
  * @author Andre van Hoorn, Jan Waller, Lars Bluemke
  *
  * @since 1.6

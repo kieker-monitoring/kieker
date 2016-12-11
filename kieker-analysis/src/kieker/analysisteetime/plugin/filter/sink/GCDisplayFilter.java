@@ -37,8 +37,6 @@ public class GCDisplayFilter extends AbstractConsumerStage<GCRecord> {
 
 	private final XYPlot xyplot;
 
-	private final int numberOfEntries;
-
 	private final TimeUnit recordsTimeUnit;
 
 	/**
@@ -50,11 +48,10 @@ public class GCDisplayFilter extends AbstractConsumerStage<GCRecord> {
 	 *            Time unit to interpret the timestamp of a record passed to the input port
 	 */
 	public GCDisplayFilter(final int numberOfEntries, final TimeUnit recordsTimeUnit) {
-		this.numberOfEntries = numberOfEntries;
 		this.recordsTimeUnit = recordsTimeUnit;
 
 		// Create the display objects
-		this.xyplot = new XYPlot(this.numberOfEntries);
+		this.xyplot = new XYPlot(numberOfEntries);
 	}
 
 	@Override

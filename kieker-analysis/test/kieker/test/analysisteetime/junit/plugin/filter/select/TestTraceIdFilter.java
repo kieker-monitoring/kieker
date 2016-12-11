@@ -47,7 +47,9 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 	/**
 	 * Empty default constructor
 	 */
-	public TestTraceIdFilter() {}
+	public TestTraceIdFilter() {
+		// empty default constructor
+	}
 
 	/**
 	 * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,

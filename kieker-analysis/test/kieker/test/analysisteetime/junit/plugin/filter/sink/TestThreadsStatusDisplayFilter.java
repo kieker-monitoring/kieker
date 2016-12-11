@@ -51,14 +51,16 @@ public class TestThreadsStatusDisplayFilter extends AbstractKiekerTest {
 	private static final long PEAK_THREAD_COUNT = 4;
 	private static final long TOTAL_STARTED_THREAD_COUNT = 3;
 
-	private ThreadsStatusDisplayFilter threadsStatusFilter = null;
+	private ThreadsStatusDisplayFilter threadsStatusFilter;
 	private final ThreadsStatusRecord record = new ThreadsStatusRecord(TIMESTAMP, HOST_NAME, VM_NAME, THREAD_COUNT, DAEMON_THREAD_COUNT, PEAK_THREAD_COUNT,
 			TOTAL_STARTED_THREAD_COUNT);
 
 	/**
 	 * Empty default constructor.
 	 */
-	public TestThreadsStatusDisplayFilter() {}
+	public TestThreadsStatusDisplayFilter() {
+		// empty default constructor
+	}
 
 	/**
 	 * Initializes a new filter before each test.

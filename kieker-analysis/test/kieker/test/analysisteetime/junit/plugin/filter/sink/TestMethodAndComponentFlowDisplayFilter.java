@@ -46,13 +46,15 @@ public class TestMethodAndComponentFlowDisplayFilter extends AbstractKiekerTest 
 	private static final int EOI = 4;
 	private static final int ESS = 5;
 
-	private MethodAndComponentFlowDisplayFilter methodAndComponentFlowDisplayFilter = null;
+	private MethodAndComponentFlowDisplayFilter methodAndComponentFlowDisplayFilter;
 	private final OperationExecutionRecord record = new OperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID, TRACE_ID, TIN, TOUT, HOSTNAME, EOI, ESS);
 
 	/**
 	 * Empty default constructor.
 	 */
-	public TestMethodAndComponentFlowDisplayFilter() {}
+	public TestMethodAndComponentFlowDisplayFilter() {
+		// empty default constructor
+	}
 
 	/**
 	 * Initializes a new filter before each test.

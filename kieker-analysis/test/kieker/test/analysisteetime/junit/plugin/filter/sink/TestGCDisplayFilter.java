@@ -50,13 +50,15 @@ public class TestGCDisplayFilter extends AbstractKiekerTest {
 	private static final long COLLECTION_COUNT = 2;
 	private static final long COLLECTION_TIME_MS = 3;
 
-	private GCDisplayFilter gcDisplayFilter = null;
+	private GCDisplayFilter gcDisplayFilter;
 	private final GCRecord record = new GCRecord(TIMESTAMP, HOST_NAME, VM_NAME, GC_NAME, COLLECTION_COUNT, COLLECTION_TIME_MS);
 
 	/**
 	 * Empty default constructor.
 	 */
-	public TestGCDisplayFilter() {}
+	public TestGCDisplayFilter() {
+		// empty default constructor
+	}
 
 	/**
 	 * Initializes a new filter before each test.

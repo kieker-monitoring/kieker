@@ -38,13 +38,15 @@ import teetime.framework.test.StageTester;
  */
 public class TestCountingFilter extends AbstractKiekerTest {
 
-	private CountingFilter countingFilter = null;
-	private List<Object> testElements = null;
+	private CountingFilter countingFilter;
+	private List<Object> testElements;
 
 	/**
 	 * Empty default constructor
 	 */
-	public TestCountingFilter() {}
+	public TestCountingFilter() {
+		// empty default constructor
+	}
 
 	/**
 	 * Initializes a new filter and array of test elements before each test.

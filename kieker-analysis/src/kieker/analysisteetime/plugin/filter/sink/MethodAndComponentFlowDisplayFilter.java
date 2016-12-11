@@ -41,7 +41,9 @@ public class MethodAndComponentFlowDisplayFilter extends AbstractConsumerStage<O
 	/**
 	 * Creates a new instance of this class.
 	 */
-	public MethodAndComponentFlowDisplayFilter() {}
+	public MethodAndComponentFlowDisplayFilter() {
+		// empty default constructor
+	}
 
 	/**
 	 * This method represents the input port receiving the incoming events.

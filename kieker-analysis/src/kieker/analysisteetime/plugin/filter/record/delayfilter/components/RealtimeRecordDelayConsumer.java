@@ -41,9 +41,7 @@ public class RealtimeRecordDelayConsumer extends AbstractConsumerStage<IMonitori
 
 	@Override
 	protected void execute(final IMonitoringRecord monitoringRecord) {
-		System.out.println("record received by RRDF consumer " + monitoringRecord);
 		this.recordQueue.add(monitoringRecord);
-		System.out.println("record added to delay queue");
 	}
 
 	@Override
