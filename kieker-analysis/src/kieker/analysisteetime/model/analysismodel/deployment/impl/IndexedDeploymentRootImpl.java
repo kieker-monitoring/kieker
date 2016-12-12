@@ -2,6 +2,9 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment.impl;
 
+import java.util.Arrays;
+
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EReference;
 
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
@@ -22,11 +25,8 @@ public class IndexedDeploymentRootImpl extends DeploymentRootImpl implements Ind
 		super();
 
 		final EReference deploymentContextsFeature = DeploymentPackage.eINSTANCE.getDeploymentRoot_DeploymentContexts();
-		// final EReference contextNameFeature = DeploymentPackage.eINSTANCE.getDeploymentContext_
-		// TODO
-		// this.deploymentContextsIndex = EReferenceIndex.createEmpty(this, deploymentContextsFeature, Arrays.asList(deploymentContextsFeature),
-		// DeploymentContext::getName());
-		this.deploymentContextsIndex = null;
+		final EAttribute contextNameFeature = DeploymentPackage.eINSTANCE.getDeploymentContext_Name();
+		this.deploymentContextsIndex = EReferenceIndex.createEmpty(this, deploymentContextsFeature, Arrays.asList(contextNameFeature), c -> c.getName());
 	}
 
 	@Override
