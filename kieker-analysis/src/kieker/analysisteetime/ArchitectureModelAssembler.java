@@ -21,7 +21,7 @@ import kieker.analysisteetime.model.analysismodel.architecture.IndexedArchitectu
 import kieker.analysisteetime.model.analysismodel.architecture.IndexedArchitectureRoot;
 import kieker.analysisteetime.model.analysismodel.architecture.IndexedComponentType;
 import kieker.analysisteetime.model.analysismodel.architecture.OperationType;
-import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.common.record.flow.IOperationRecord;
 
 /**
  * @author Sören Henning
@@ -39,7 +39,7 @@ public class ArchitectureModelAssembler {
 		this.architectureRoot = architectureRoot;
 	}
 
-	public void addRecord(final BeforeOperationEvent record) {
+	public void addRecord(final IOperationRecord record) {
 		final String classSignature = record.getClassSignature();
 		final String operationSignature = record.getOperationSignature();
 
