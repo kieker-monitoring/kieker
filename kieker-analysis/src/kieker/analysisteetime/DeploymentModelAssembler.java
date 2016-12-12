@@ -32,7 +32,6 @@ import kieker.common.record.flow.IOperationRecord;
  *
  * @since 1.13
  */
-// TODO initial
 public class DeploymentModelAssembler {
 
 	private final IndexedDeploymentFactory indexedFactory = IndexedDeploymentFactory.INSTANCE;

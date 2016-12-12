@@ -6,6 +6,11 @@ import kieker.analysisteetime.model.analysismodel.architecture.IndexedArchitectu
 import kieker.analysisteetime.model.analysismodel.architecture.IndexedArchitectureRoot;
 import kieker.analysisteetime.model.analysismodel.architecture.IndexedComponentType;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 public class IndexedArchitectureFactoryImpl implements IndexedArchitectureFactory {
 
 	public IndexedArchitectureFactoryImpl() {}

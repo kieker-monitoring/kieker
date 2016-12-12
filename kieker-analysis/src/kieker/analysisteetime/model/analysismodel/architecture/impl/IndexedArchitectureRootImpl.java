@@ -12,6 +12,11 @@ import kieker.analysisteetime.model.analysismodel.architecture.ComponentType;
 import kieker.analysisteetime.model.analysismodel.architecture.IndexedArchitectureRoot;
 import kieker.analysisteetime.modeltooling.EReferenceIndex;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 public class IndexedArchitectureRootImpl extends ArchitectureRootImpl implements IndexedArchitectureRoot {
 
 	private final EReferenceIndex<String, ComponentType> componentTypeIndex;

@@ -10,6 +10,11 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage;
 import kieker.analysisteetime.model.analysismodel.deployment.IndexedDeploymentRoot;
 import kieker.analysisteetime.modeltooling.EReferenceIndex;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 public class IndexedDeploymentRootImpl extends DeploymentRootImpl implements IndexedDeploymentRoot {
 
 	private final EReferenceIndex<String, DeploymentContext> deploymentContexts;

@@ -12,6 +12,11 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage;
 import kieker.analysisteetime.model.analysismodel.deployment.IndexedDeploymentContext;
 import kieker.analysisteetime.modeltooling.EReferenceIndex;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 public class IndexedDeploymentContextImpl extends DeploymentContextImpl implements IndexedDeploymentContext {
 
 	private final EReferenceIndex<String, DeployedComponent> componentsIndex;

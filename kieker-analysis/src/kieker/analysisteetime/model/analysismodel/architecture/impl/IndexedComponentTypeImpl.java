@@ -12,6 +12,11 @@ import kieker.analysisteetime.model.analysismodel.architecture.IndexedComponentT
 import kieker.analysisteetime.model.analysismodel.architecture.OperationType;
 import kieker.analysisteetime.modeltooling.EReferenceIndex;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 public class IndexedComponentTypeImpl extends ComponentTypeImpl implements IndexedComponentType {
 
 	private final EReferenceIndex<String, OperationType> providedOperationsIndex;
