@@ -59,7 +59,7 @@ public class DeploymentModelAssembler {
 		IndexedDeploymentContext deploymentContext = (IndexedDeploymentContext) this.deploymentRoot.getDeploymentContextByName(hostName);
 		if (deploymentContext == null) {
 			deploymentContext = this.indexedFactory.createDeploymentContext();
-			// TODO set Name
+			deploymentContext.setName(hostName);
 			deploymentContext.setDeploymentRoot(this.deploymentRoot);
 		}
 
