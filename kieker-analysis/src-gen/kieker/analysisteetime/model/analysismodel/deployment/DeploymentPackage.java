@@ -2,6 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -121,13 +122,22 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYMENT_CONTEXT__COMPONENTS = 1;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYMENT_CONTEXT__NAME = 2;
+
+	/**
 	 * The number of structural features of the '<em>Context</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYMENT_CONTEXT_FEATURE_COUNT = 2;
+	int DEPLOYMENT_CONTEXT_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Context</em>' class.
@@ -312,6 +322,17 @@ public interface DeploymentPackage extends EPackage {
 	EReference getDeploymentContext_Components();
 
 	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getName()
+	 * @see #getDeploymentContext()
+	 * @generated
+	 */
+	EAttribute getDeploymentContext_Name();
+
+	/**
 	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent <em>Deployed Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -474,6 +495,14 @@ public interface DeploymentPackage extends EPackage {
 		 * @generated
 		 */
 		EReference DEPLOYMENT_CONTEXT__COMPONENTS = eINSTANCE.getDeploymentContext_Components();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DEPLOYMENT_CONTEXT__NAME = eINSTANCE.getDeploymentContext_Name();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeployedComponentImpl <em>Deployed Component</em>}' class.
