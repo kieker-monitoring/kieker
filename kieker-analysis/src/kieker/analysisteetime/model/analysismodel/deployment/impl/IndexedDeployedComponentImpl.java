@@ -4,7 +4,6 @@ package kieker.analysisteetime.model.analysismodel.deployment.impl;
 
 import java.util.Arrays;
 
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EReference;
 
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
@@ -25,9 +24,7 @@ public class IndexedDeployedComponentImpl extends DeployedComponentImpl implemen
 		super();
 
 		final EReference containedOperationsFeature = DeploymentPackage.eINSTANCE.getDeployedComponent_ContainedOperations();
-		// TODO
-		// final EReference operationTypeFeature = DeploymentPackage.eINSTANCE.getDeployedOperation_OperationType();
-		final EAttribute operationTypeFeature = null;
+		final EReference operationTypeFeature = DeploymentPackage.eINSTANCE.getDeployedOperation_OperationType();
 		this.containedOperationsIndex = EReferenceIndex.createEmpty(this, containedOperationsFeature, Arrays.asList(operationTypeFeature),
 				o -> o.getOperationType().getSignature());
 	}

@@ -2,7 +2,6 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment.impl;
 
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EReference;
 
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
@@ -17,29 +16,27 @@ import kieker.analysisteetime.modeltooling.EReferenceIndex;
  */
 public class IndexedDeploymentRootImpl extends DeploymentRootImpl implements IndexedDeploymentRoot {
 
-	private final EReferenceIndex<String, DeploymentContext> deploymentContexts;
+	private final EReferenceIndex<String, DeploymentContext> deploymentContextsIndex;
 
 	protected IndexedDeploymentRootImpl() {
 		super();
 
 		final EReference deploymentContextsFeature = DeploymentPackage.eINSTANCE.getDeploymentRoot_DeploymentContexts();
+		// final EReference contextNameFeature = DeploymentPackage.eINSTANCE.getDeploymentContext_
 		// TODO
-		// final EAttribute contextNameFeature = DeploymentPackage.eINSTANCE.getDeploymentContext();
-		final EAttribute contextNameFeature = null;
-		// TODO
-		// this.deploymentContexts = EReferenceIndex.createEmpty(this, deploymentContextsFeature, Arrays.asList(deploymentContextsFeature),
+		// this.deploymentContextsIndex = EReferenceIndex.createEmpty(this, deploymentContextsFeature, Arrays.asList(deploymentContextsFeature),
 		// DeploymentContext::getName());
-		this.deploymentContexts = null;
+		this.deploymentContextsIndex = null;
 	}
 
 	@Override
 	public DeploymentContext getDeploymentContextByName(final String name) {
-		return this.deploymentContexts.get(name);
+		return this.deploymentContextsIndex.get(name);
 	}
 
 	@Override
 	public boolean containsDeploymentContextByName(final String name) {
-		return this.deploymentContexts.contains(name);
+		return this.deploymentContextsIndex.contains(name);
 	}
 
 }
