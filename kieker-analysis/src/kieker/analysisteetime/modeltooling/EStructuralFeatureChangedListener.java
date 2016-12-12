@@ -20,18 +20,18 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EStructuralFeature;
 
 /**
  * @author Sören Henning
  *
  * @since 1.13
  */
-public abstract class EAttributesChangedListener<T> extends AdapterImpl {
+public abstract class EStructuralFeatureChangedListener<T> extends AdapterImpl {
 
-	private final Collection<EAttribute> listenedFeatures;
+	private final Collection<EStructuralFeature> listenedFeatures;
 
-	public EAttributesChangedListener(final Collection<EAttribute> listenedFeatures) {
+	public EStructuralFeatureChangedListener(final Collection<EStructuralFeature> listenedFeatures) {
 		this.listenedFeatures = listenedFeatures;
 	}
 

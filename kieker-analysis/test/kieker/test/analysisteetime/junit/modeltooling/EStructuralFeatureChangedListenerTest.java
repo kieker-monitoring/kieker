@@ -21,26 +21,30 @@ import java.time.Instant;
 import java.util.Arrays;
 
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EReference;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.TraceFactory;
 import kieker.analysisteetime.model.analysismodel.trace.TracePackage;
-import kieker.analysisteetime.modeltooling.EAttributesChangedListener;
+import kieker.analysisteetime.modeltooling.EStructuralFeatureChangedListener;
 
 /**
  * @author Sören Henning
  *
  * @since 1.13
  */
-public class EAttributesChangedListenerTest {
+public class EStructuralFeatureChangedListenerTest {
 
 	private final TraceFactory traceFactory = TraceFactory.eINSTANCE;
 	private final TracePackage tracePackage = TracePackage.eINSTANCE;
+	private final DeploymentFactory deploymentFactory = DeploymentFactory.eINSTANCE;
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.modeltooling.EAttributesChangedListener#notifyChanged(org.eclipse.emf.common.notify.Notification)}.
+	 * Test method for {@link kieker.analysisteetime.modeltooling.EStructuralFeatureChangedListener#notifyChanged(org.eclipse.emf.common.notify.Notification)}.
 	 */
 	@Test
 	public void testNoChangedNotification() {
@@ -50,7 +54,7 @@ public class EAttributesChangedListenerTest {
 
 		final WrappedBoolean startValueChanged = new WrappedBoolean(false);
 
-		final EAttributesChangedListener<OperationCall> listener = new EAttributesChangedListener<OperationCall>(Arrays.asList(startAttribute)) {
+		final EStructuralFeatureChangedListener<OperationCall> listener = new EStructuralFeatureChangedListener<OperationCall>(Arrays.asList(startAttribute)) {
 			@Override
 			protected void notifyChanged(final OperationCall object) {
 				startValueChanged.set(true);
@@ -64,17 +68,17 @@ public class EAttributesChangedListenerTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.modeltooling.EAttributesChangedListener#notifyChanged(org.eclipse.emf.common.notify.Notification)}.
+	 * Test method for {@link kieker.analysisteetime.modeltooling.EStructuralFeatureChangedListener#notifyChanged(org.eclipse.emf.common.notify.Notification)}.
 	 */
 	@Test
-	public void testChangedNotification() {
+	public void testAttributeChangedNotification() {
 
 		final OperationCall operationCall = this.traceFactory.createOperationCall();
 		final EAttribute startAttribute = this.tracePackage.getOperationCall_Start();
 
 		final WrappedBoolean startValueChanged = new WrappedBoolean(false);
 
-		final EAttributesChangedListener<OperationCall> listener = new EAttributesChangedListener<OperationCall>(Arrays.asList(startAttribute)) {
+		final EStructuralFeatureChangedListener<OperationCall> listener = new EStructuralFeatureChangedListener<OperationCall>(Arrays.asList(startAttribute)) {
 			@Override
 			protected void notifyChanged(final OperationCall object) {
 				startValueChanged.set(true);
@@ -83,6 +87,31 @@ public class EAttributesChangedListenerTest {
 		operationCall.eAdapters().add(listener);
 
 		operationCall.setStart(Instant.now());
+
+		Assert.assertTrue(startValueChanged.get());
+	}
+
+	/**
+	 * Test method for {@link kieker.analysisteetime.modeltooling.EStructuralFeatureChangedListener#notifyChanged(org.eclipse.emf.common.notify.Notification)}.
+	 */
+	@Test
+	public void testReferenceChangedNotification() {
+
+		final OperationCall operationCall = this.traceFactory.createOperationCall();
+		final EReference componentAttribute = this.tracePackage.getOperationCall_Component();
+
+		final WrappedBoolean startValueChanged = new WrappedBoolean(false);
+
+		final EStructuralFeatureChangedListener<OperationCall> listener = new EStructuralFeatureChangedListener<OperationCall>(Arrays.asList(componentAttribute)) {
+			@Override
+			protected void notifyChanged(final OperationCall object) {
+				startValueChanged.set(true);
+			}
+		};
+		operationCall.eAdapters().add(listener);
+
+		final DeployedComponent component = this.deploymentFactory.createDeployedComponent();
+		operationCall.setComponent(component);
 
 		Assert.assertTrue(startValueChanged.get());
 	}

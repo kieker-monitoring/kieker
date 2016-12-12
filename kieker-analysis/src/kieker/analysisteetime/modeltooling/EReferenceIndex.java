@@ -22,9 +22,9 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -42,11 +42,11 @@ public class EReferenceIndex<K, V extends EObject> {
 
 	protected final EReference reference;
 
-	protected final Collection<EAttribute> observedReferenceAttributes;
+	protected final Collection<EStructuralFeature> observedReferenceAttributes;
 
 	protected final Function<V, K> keyCreator;
 
-	private EReferenceIndex(final EObject object, final EReference reference, final Collection<EAttribute> observedReferenceAttributes,
+	private EReferenceIndex(final EObject object, final EReference reference, final Collection<EStructuralFeature> observedReferenceAttributes,
 			final Function<V, K> keyCreator, final Collection<V> values) {
 		this.object = object;
 		this.reference = reference;
@@ -99,7 +99,7 @@ public class EReferenceIndex<K, V extends EObject> {
 		}
 	}
 
-	private class ElementChangedListener extends EAttributesChangedListener<V> {
+	private class ElementChangedListener extends EStructuralFeatureChangedListener<V> {
 
 		public ElementChangedListener() {
 			super(EReferenceIndex.this.observedReferenceAttributes);
@@ -114,19 +114,19 @@ public class EReferenceIndex<K, V extends EObject> {
 	}
 
 	public static <K, V extends EObject> EReferenceIndex<K, V> createEmpty(final EObject object, final EReference reference,
-			final Collection<EAttribute> observedReferenceAttributes, final Function<V, K> keyCreator) {
+			final Collection<EStructuralFeature> observedReferenceAttributes, final Function<V, K> keyCreator) {
 		return new EReferenceIndex<>(object, reference, observedReferenceAttributes, keyCreator, null);
 	}
 
 	public static <K, V extends EObject> EReferenceIndex<K, V> create(final EObject object, final EReference reference,
-			final Collection<EAttribute> observedReferenceAttributes, final Function<V, K> keyCreator) {
+			final Collection<EStructuralFeature> observedReferenceAttributes, final Function<V, K> keyCreator) {
 		@SuppressWarnings("unchecked")
 		final EList<V> values = (EList<V>) object.eGet(reference);
 		return new EReferenceIndex<>(object, reference, observedReferenceAttributes, keyCreator, values);
 	}
 
 	public static <K, V extends EObject> EReferenceIndex<K, V> create(final EObject object, final EReference reference,
-			final Collection<EAttribute> observedReferenceAttributes, final Function<V, K> keyCreator, final Collection<V> values) {
+			final Collection<EStructuralFeature> observedReferenceAttributes, final Function<V, K> keyCreator, final Collection<V> values) {
 		return new EReferenceIndex<>(object, reference, observedReferenceAttributes, keyCreator, values);
 	}
 
