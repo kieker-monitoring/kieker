@@ -89,6 +89,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="components" ordered="false"
           upperBound="-1" eType="#//deployment/DeployedComponent" containment="true"
           eOpposite="#//deployment/DeployedComponent/deploymentContext"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DeployedComponent">
       <eStructuralFeatures xsi:type="ecore:EReference" name="componentType" eType="#//architecture/ComponentType"/>

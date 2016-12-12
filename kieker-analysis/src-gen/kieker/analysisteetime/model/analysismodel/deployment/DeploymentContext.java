@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getDeploymentRoot <em>Deployment Root</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getComponents <em>Components</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getName <em>Name</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeploymentContext()
@@ -69,5 +70,31 @@ public interface DeploymentContext extends EObject {
 	 * @generated
 	 */
 	EList<DeployedComponent> getComponents();
+
+	/**
+	 * Returns the value of the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Name</em>' attribute.
+	 * @see #setName(String)
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeploymentContext_Name()
+	 * @model
+	 * @generated
+	 */
+	String getName();
+
+	/**
+	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getName <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Name</em>' attribute.
+	 * @see #getName()
+	 * @generated
+	 */
+	void setName(String value);
 
 } // DeploymentContext

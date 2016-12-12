@@ -29,6 +29,7 @@ import kieker.analysisteetime.model.analysismodel.trace.TracePackage;
 
 import kieker.analysisteetime.model.analysismodel.trace.impl.TracePackageImpl;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -198,6 +199,15 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getDeploymentContext_Name() {
+		return (EAttribute)deploymentContextEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getDeployedComponent() {
 		return deployedComponentEClass;
 	}
@@ -308,6 +318,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		deploymentContextEClass = createEClass(DEPLOYMENT_CONTEXT);
 		createEReference(deploymentContextEClass, DEPLOYMENT_CONTEXT__DEPLOYMENT_ROOT);
 		createEReference(deploymentContextEClass, DEPLOYMENT_CONTEXT__COMPONENTS);
+		createEAttribute(deploymentContextEClass, DEPLOYMENT_CONTEXT__NAME);
 
 		deployedComponentEClass = createEClass(DEPLOYED_COMPONENT);
 		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__COMPONENT_TYPE);
@@ -360,6 +371,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEClass(deploymentContextEClass, DeploymentContext.class, "DeploymentContext", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDeploymentContext_DeploymentRoot(), this.getDeploymentRoot(), this.getDeploymentRoot_DeploymentContexts(), "deploymentRoot", null, 0, 1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDeploymentContext_Components(), this.getDeployedComponent(), this.getDeployedComponent_DeploymentContext(), "components", null, 0, -1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEAttribute(getDeploymentContext_Name(), ecorePackage.getEString(), "name", null, 0, 1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deployedComponentEClass, DeployedComponent.class, "DeployedComponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDeployedComponent_ComponentType(), theArchitecturePackage.getComponentType(), null, "componentType", null, 0, 1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

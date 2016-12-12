@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentContextImpl#getDeploymentRoot <em>Deployment Root</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentContextImpl#getComponents <em>Components</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentContextImpl#getName <em>Name</em>}</li>
  * </ul>
  *
  * @generated
@@ -48,6 +49,25 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * @ordered
 	 */
 	protected EList<DeployedComponent> components;
+
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -126,6 +146,27 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYMENT_CONTEXT__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -182,6 +223,8 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 				return getDeploymentRoot();
 			case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
 				return getComponents();
+			case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
+				return getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -202,6 +245,9 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 				getComponents().clear();
 				getComponents().addAll((Collection<? extends DeployedComponent>)newValue);
 				return;
+			case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
+				setName((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -220,6 +266,9 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 			case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
 				getComponents().clear();
 				return;
+			case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
+				setName(NAME_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -236,8 +285,26 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 				return getDeploymentRoot() != null;
 			case DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS:
 				return components != null && !components.isEmpty();
+			case DeploymentPackage.DEPLOYMENT_CONTEXT__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (name: ");
+		result.append(name);
+		result.append(')');
+		return result.toString();
 	}
 
 } //DeploymentContextImpl
