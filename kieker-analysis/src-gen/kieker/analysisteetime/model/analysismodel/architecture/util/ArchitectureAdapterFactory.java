@@ -2,6 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.architecture.util;
 
+import java.util.Map;
 import kieker.analysisteetime.model.analysismodel.architecture.*;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -72,8 +73,16 @@ public class ArchitectureAdapterFactory extends AdapterFactoryImpl {
 				return createArchitectureRootAdapter();
 			}
 			@Override
+			public Adapter caseEStringToComponentTypeMapEntry(Map.Entry<String, ComponentType> object) {
+				return createEStringToComponentTypeMapEntryAdapter();
+			}
+			@Override
 			public Adapter caseComponentType(ComponentType object) {
 				return createComponentTypeAdapter();
+			}
+			@Override
+			public Adapter caseEStringToOperationTypeMapEntry(Map.Entry<String, OperationType> object) {
+				return createEStringToOperationTypeMapEntryAdapter();
 			}
 			@Override
 			public Adapter caseOperationType(OperationType object) {
@@ -114,6 +123,20 @@ public class ArchitectureAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>EString To Component Type Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createEStringToComponentTypeMapEntryAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType <em>Component Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -124,6 +147,20 @@ public class ArchitectureAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createComponentTypeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>EString To Operation Type Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createEStringToOperationTypeMapEntryAdapter() {
 		return null;
 	}
 

@@ -2,17 +2,17 @@
  */
 package kieker.analysisteetime.model.analysismodel.architecture.impl;
 
-import java.util.Collection;
-
+import java.lang.reflect.InvocationTargetException;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage;
@@ -29,7 +29,6 @@ import kieker.analysisteetime.model.analysismodel.architecture.OperationType;
  * </p>
  * <ul>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.impl.ComponentTypeImpl#getSignature <em>Signature</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.impl.ComponentTypeImpl#getArchitectureRoot <em>Architecture Root</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.impl.ComponentTypeImpl#getProvidedOperations <em>Provided Operations</em>}</li>
  * </ul>
  *
@@ -57,14 +56,14 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	protected String signature = SIGNATURE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getProvidedOperations() <em>Provided Operations</em>}' containment reference list.
+	 * The cached value of the '{@link #getProvidedOperations() <em>Provided Operations</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getProvidedOperations()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<OperationType> providedOperations;
+	protected EMap<String, OperationType> providedOperations;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -115,40 +114,15 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	 */
 	@Override
 	public ArchitectureRoot getArchitectureRoot() {
-		if (eContainerFeatureID() != ArchitecturePackage.COMPONENT_TYPE__ARCHITECTURE_ROOT) return null;
-		return (ArchitectureRoot)eInternalContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetArchitectureRoot(ArchitectureRoot newArchitectureRoot, NotificationChain msgs) {
-		msgs = eBasicSetContainer((InternalEObject)newArchitectureRoot, ArchitecturePackage.COMPONENT_TYPE__ARCHITECTURE_ROOT, msgs);
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setArchitectureRoot(ArchitectureRoot newArchitectureRoot) {
-		if (newArchitectureRoot != eInternalContainer() || (eContainerFeatureID() != ArchitecturePackage.COMPONENT_TYPE__ARCHITECTURE_ROOT && newArchitectureRoot != null)) {
-			if (EcoreUtil.isAncestor(this, newArchitectureRoot))
-				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
-			NotificationChain msgs = null;
-			if (eInternalContainer() != null)
-				msgs = eBasicRemoveFromContainer(msgs);
-			if (newArchitectureRoot != null)
-				msgs = ((InternalEObject)newArchitectureRoot).eInverseAdd(this, ArchitecturePackage.ARCHITECTURE_ROOT__COMPONENT_TYPES, ArchitectureRoot.class, msgs);
-			msgs = basicSetArchitectureRoot(newArchitectureRoot, msgs);
-			if (msgs != null) msgs.dispatch();
+		org.eclipse.emf.ecore.EObject container = this.eContainer();
+		if (container != null) {
+			org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
+			if (containerContainer != null) {
+				return (ArchitectureRoot) containerContainer ;
+			}
 		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ArchitecturePackage.COMPONENT_TYPE__ARCHITECTURE_ROOT, newArchitectureRoot, newArchitectureRoot));
+		return null;
+		
 	}
 
 	/**
@@ -157,30 +131,11 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	 * @generated
 	 */
 	@Override
-	public EList<OperationType> getProvidedOperations() {
+	public EMap<String, OperationType> getProvidedOperations() {
 		if (providedOperations == null) {
-			providedOperations = new EObjectContainmentWithInverseEList<OperationType>(OperationType.class, this, ArchitecturePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS, ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE);
+			providedOperations = new EcoreEMap<String,OperationType>(ArchitecturePackage.Literals.ESTRING_TO_OPERATION_TYPE_MAP_ENTRY, EStringToOperationTypeMapEntryImpl.class, this, ArchitecturePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS);
 		}
 		return providedOperations;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case ArchitecturePackage.COMPONENT_TYPE__ARCHITECTURE_ROOT:
-				if (eInternalContainer() != null)
-					msgs = eBasicRemoveFromContainer(msgs);
-				return basicSetArchitectureRoot((ArchitectureRoot)otherEnd, msgs);
-			case ArchitecturePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getProvidedOperations()).basicAdd(otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -191,8 +146,6 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case ArchitecturePackage.COMPONENT_TYPE__ARCHITECTURE_ROOT:
-				return basicSetArchitectureRoot(null, msgs);
 			case ArchitecturePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS:
 				return ((InternalEList<?>)getProvidedOperations()).basicRemove(otherEnd, msgs);
 		}
@@ -205,28 +158,13 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
-		switch (eContainerFeatureID()) {
-			case ArchitecturePackage.COMPONENT_TYPE__ARCHITECTURE_ROOT:
-				return eInternalContainer().eInverseRemove(this, ArchitecturePackage.ARCHITECTURE_ROOT__COMPONENT_TYPES, ArchitectureRoot.class, msgs);
-		}
-		return super.eBasicRemoveFromContainerFeature(msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case ArchitecturePackage.COMPONENT_TYPE__SIGNATURE:
 				return getSignature();
-			case ArchitecturePackage.COMPONENT_TYPE__ARCHITECTURE_ROOT:
-				return getArchitectureRoot();
 			case ArchitecturePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS:
-				return getProvidedOperations();
+				if (coreType) return getProvidedOperations();
+				else return getProvidedOperations().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -243,12 +181,8 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 			case ArchitecturePackage.COMPONENT_TYPE__SIGNATURE:
 				setSignature((String)newValue);
 				return;
-			case ArchitecturePackage.COMPONENT_TYPE__ARCHITECTURE_ROOT:
-				setArchitectureRoot((ArchitectureRoot)newValue);
-				return;
 			case ArchitecturePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS:
-				getProvidedOperations().clear();
-				getProvidedOperations().addAll((Collection<? extends OperationType>)newValue);
+				((EStructuralFeature.Setting)getProvidedOperations()).set(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -264,9 +198,6 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 		switch (featureID) {
 			case ArchitecturePackage.COMPONENT_TYPE__SIGNATURE:
 				setSignature(SIGNATURE_EDEFAULT);
-				return;
-			case ArchitecturePackage.COMPONENT_TYPE__ARCHITECTURE_ROOT:
-				setArchitectureRoot((ArchitectureRoot)null);
 				return;
 			case ArchitecturePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS:
 				getProvidedOperations().clear();
@@ -285,12 +216,24 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 		switch (featureID) {
 			case ArchitecturePackage.COMPONENT_TYPE__SIGNATURE:
 				return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
-			case ArchitecturePackage.COMPONENT_TYPE__ARCHITECTURE_ROOT:
-				return getArchitectureRoot() != null;
 			case ArchitecturePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS:
 				return providedOperations != null && !providedOperations.isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case ArchitecturePackage.COMPONENT_TYPE___GET_ARCHITECTURE_ROOT:
+				return getArchitectureRoot();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

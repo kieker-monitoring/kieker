@@ -2,6 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.architecture.impl;
 
+import java.util.Map;
 import kieker.analysisteetime.model.analysismodel.architecture.*;
 
 import org.eclipse.emf.ecore.EClass;
@@ -57,7 +58,9 @@ public class ArchitectureFactoryImpl extends EFactoryImpl implements Architectur
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case ArchitecturePackage.ARCHITECTURE_ROOT: return createArchitectureRoot();
+			case ArchitecturePackage.ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY: return (EObject)createEStringToComponentTypeMapEntry();
 			case ArchitecturePackage.COMPONENT_TYPE: return createComponentType();
+			case ArchitecturePackage.ESTRING_TO_OPERATION_TYPE_MAP_ENTRY: return (EObject)createEStringToOperationTypeMapEntry();
 			case ArchitecturePackage.OPERATION_TYPE: return createOperationType();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -79,9 +82,29 @@ public class ArchitectureFactoryImpl extends EFactoryImpl implements Architectur
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Map.Entry<String, ComponentType> createEStringToComponentTypeMapEntry() {
+		EStringToComponentTypeMapEntryImpl eStringToComponentTypeMapEntry = new EStringToComponentTypeMapEntryImpl();
+		return eStringToComponentTypeMapEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ComponentType createComponentType() {
 		ComponentTypeImpl componentType = new ComponentTypeImpl();
 		return componentType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<String, OperationType> createEStringToOperationTypeMapEntry() {
+		EStringToOperationTypeMapEntryImpl eStringToOperationTypeMapEntry = new EStringToOperationTypeMapEntryImpl();
+		return eStringToOperationTypeMapEntry;
 	}
 
 	/**

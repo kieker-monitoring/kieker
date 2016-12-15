@@ -2,8 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.architecture;
 
-import org.eclipse.emf.common.util.EList;
-
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -24,21 +23,20 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface ArchitectureRoot extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Component Types</b></em>' containment reference list.
-	 * The list contents are of type {@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType}.
-	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getArchitectureRoot <em>Architecture Root</em>}'.
+	 * Returns the value of the '<em><b>Component Types</b></em>' map.
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType},
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Component Types</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Component Types</em>' containment reference list.
+	 * @return the value of the '<em>Component Types</em>' map.
 	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage#getArchitectureRoot_ComponentTypes()
-	 * @see kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getArchitectureRoot
-	 * @model opposite="architectureRoot" containment="true" ordered="false"
+	 * @model mapType="kieker.analysisteetime.model.analysismodel.architecture.EStringToComponentTypeMapEntry<org.eclipse.emf.ecore.EString, kieker.analysisteetime.model.analysismodel.architecture.ComponentType>" ordered="false"
 	 * @generated
 	 */
-	EList<ComponentType> getComponentTypes();
+	EMap<String, ComponentType> getComponentTypes();
 
 } // ArchitectureRoot

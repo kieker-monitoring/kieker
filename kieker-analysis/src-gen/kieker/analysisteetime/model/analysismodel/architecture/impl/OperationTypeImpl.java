@@ -2,19 +2,16 @@
  */
 package kieker.analysisteetime.model.analysismodel.architecture.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage;
 import kieker.analysisteetime.model.analysismodel.architecture.ComponentType;
 import kieker.analysisteetime.model.analysismodel.architecture.OperationType;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,7 +22,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * </p>
  * <ul>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.impl.OperationTypeImpl#getSignature <em>Signature</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.impl.OperationTypeImpl#getComponentType <em>Component Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -97,83 +93,15 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 	 * @generated
 	 */
 	public ComponentType getComponentType() {
-		if (eContainerFeatureID() != ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE) return null;
-		return (ComponentType)eInternalContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetComponentType(ComponentType newComponentType, NotificationChain msgs) {
-		msgs = eBasicSetContainer((InternalEObject)newComponentType, ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE, msgs);
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setComponentType(ComponentType newComponentType) {
-		if (newComponentType != eInternalContainer() || (eContainerFeatureID() != ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE && newComponentType != null)) {
-			if (EcoreUtil.isAncestor(this, newComponentType))
-				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
-			NotificationChain msgs = null;
-			if (eInternalContainer() != null)
-				msgs = eBasicRemoveFromContainer(msgs);
-			if (newComponentType != null)
-				msgs = ((InternalEObject)newComponentType).eInverseAdd(this, ArchitecturePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS, ComponentType.class, msgs);
-			msgs = basicSetComponentType(newComponentType, msgs);
-			if (msgs != null) msgs.dispatch();
+		org.eclipse.emf.ecore.EObject container = this.eContainer();
+		if (container != null) {
+			org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
+			if (containerContainer != null) {
+				return (ComponentType) containerContainer ;
+			}
 		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE, newComponentType, newComponentType));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE:
-				if (eInternalContainer() != null)
-					msgs = eBasicRemoveFromContainer(msgs);
-				return basicSetComponentType((ComponentType)otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE:
-				return basicSetComponentType(null, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
-		switch (eContainerFeatureID()) {
-			case ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE:
-				return eInternalContainer().eInverseRemove(this, ArchitecturePackage.COMPONENT_TYPE__PROVIDED_OPERATIONS, ComponentType.class, msgs);
-		}
-		return super.eBasicRemoveFromContainerFeature(msgs);
+		return null;
+		
 	}
 
 	/**
@@ -186,8 +114,6 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 		switch (featureID) {
 			case ArchitecturePackage.OPERATION_TYPE__SIGNATURE:
 				return getSignature();
-			case ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE:
-				return getComponentType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -202,9 +128,6 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 		switch (featureID) {
 			case ArchitecturePackage.OPERATION_TYPE__SIGNATURE:
 				setSignature((String)newValue);
-				return;
-			case ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE:
-				setComponentType((ComponentType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -221,9 +144,6 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 			case ArchitecturePackage.OPERATION_TYPE__SIGNATURE:
 				setSignature(SIGNATURE_EDEFAULT);
 				return;
-			case ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE:
-				setComponentType((ComponentType)null);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -238,10 +158,22 @@ public class OperationTypeImpl extends MinimalEObjectImpl.Container implements O
 		switch (featureID) {
 			case ArchitecturePackage.OPERATION_TYPE__SIGNATURE:
 				return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
-			case ArchitecturePackage.OPERATION_TYPE__COMPONENT_TYPE:
-				return getComponentType() != null;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case ArchitecturePackage.OPERATION_TYPE___GET_COMPONENT_TYPE:
+				return getComponentType();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

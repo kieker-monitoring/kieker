@@ -2,22 +2,18 @@
  */
 package kieker.analysisteetime.model.analysismodel.architecture.impl;
 
-import java.util.Collection;
-
 import kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage;
 import kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot;
 import kieker.analysisteetime.model.analysismodel.architecture.ComponentType;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
+import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -35,14 +31,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class ArchitectureRootImpl extends MinimalEObjectImpl.Container implements ArchitectureRoot {
 	/**
-	 * The cached value of the '{@link #getComponentTypes() <em>Component Types</em>}' containment reference list.
+	 * The cached value of the '{@link #getComponentTypes() <em>Component Types</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getComponentTypes()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<ComponentType> componentTypes;
+	protected EMap<String, ComponentType> componentTypes;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -68,26 +64,11 @@ public class ArchitectureRootImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<ComponentType> getComponentTypes() {
+	public EMap<String, ComponentType> getComponentTypes() {
 		if (componentTypes == null) {
-			componentTypes = new EObjectContainmentWithInverseEList<ComponentType>(ComponentType.class, this, ArchitecturePackage.ARCHITECTURE_ROOT__COMPONENT_TYPES, ArchitecturePackage.COMPONENT_TYPE__ARCHITECTURE_ROOT);
+			componentTypes = new EcoreEMap<String,ComponentType>(ArchitecturePackage.Literals.ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY, EStringToComponentTypeMapEntryImpl.class, this, ArchitecturePackage.ARCHITECTURE_ROOT__COMPONENT_TYPES);
 		}
 		return componentTypes;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case ArchitecturePackage.ARCHITECTURE_ROOT__COMPONENT_TYPES:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getComponentTypes()).basicAdd(otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -113,7 +94,8 @@ public class ArchitectureRootImpl extends MinimalEObjectImpl.Container implement
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case ArchitecturePackage.ARCHITECTURE_ROOT__COMPONENT_TYPES:
-				return getComponentTypes();
+				if (coreType) return getComponentTypes();
+				else return getComponentTypes().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -128,8 +110,7 @@ public class ArchitectureRootImpl extends MinimalEObjectImpl.Container implement
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case ArchitecturePackage.ARCHITECTURE_ROOT__COMPONENT_TYPES:
-				getComponentTypes().clear();
-				getComponentTypes().addAll((Collection<? extends ComponentType>)newValue);
+				((EStructuralFeature.Setting)getComponentTypes()).set(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

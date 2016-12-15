@@ -52,17 +52,23 @@
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//architecture/ArchitectureRoot/componentTypes"/>
       </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//architecture/EStringToComponentTypeMapEntry">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//architecture/EStringToComponentTypeMapEntry/key"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//architecture/EStringToComponentTypeMapEntry/value"/>
+      </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//architecture/ComponentType">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//architecture/ComponentType/signature"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//architecture/ComponentType/architectureRoot"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//architecture/ComponentType/providedOperations"/>
+        <genOperations ecoreOperation="analysismodel.ecore#//architecture/ComponentType/getArchitectureRoot"/>
+      </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//architecture/EStringToOperationTypeMapEntry">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//architecture/EStringToOperationTypeMapEntry/key"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//architecture/EStringToOperationTypeMapEntry/value"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//architecture/OperationType">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//architecture/OperationType/signature"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//architecture/OperationType/componentType"/>
+        <genOperations ecoreOperation="analysismodel.ecore#//architecture/OperationType/getComponentType"/>
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Deployment" basePackage="kieker.analysisteetime.model.analysismodel"

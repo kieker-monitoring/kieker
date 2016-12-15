@@ -2,6 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.architecture.impl;
 
+import java.util.Map;
 import kieker.analysisteetime.model.analysismodel.AnalysismodelPackage;
 
 import kieker.analysisteetime.model.analysismodel.architecture.ArchitectureFactory;
@@ -30,6 +31,7 @@ import kieker.analysisteetime.model.analysismodel.trace.impl.TracePackageImpl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -54,7 +56,21 @@ public class ArchitecturePackageImpl extends EPackageImpl implements Architectur
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass eStringToComponentTypeMapEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass componentTypeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass eStringToOperationTypeMapEntryEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -164,6 +180,33 @@ public class ArchitecturePackageImpl extends EPackageImpl implements Architectur
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getEStringToComponentTypeMapEntry() {
+		return eStringToComponentTypeMapEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getEStringToComponentTypeMapEntry_Key() {
+		return (EAttribute)eStringToComponentTypeMapEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getEStringToComponentTypeMapEntry_Value() {
+		return (EReference)eStringToComponentTypeMapEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getComponentType() {
 		return componentTypeEClass;
 	}
@@ -182,7 +225,7 @@ public class ArchitecturePackageImpl extends EPackageImpl implements Architectur
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getComponentType_ArchitectureRoot() {
+	public EReference getComponentType_ProvidedOperations() {
 		return (EReference)componentTypeEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -191,8 +234,35 @@ public class ArchitecturePackageImpl extends EPackageImpl implements Architectur
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getComponentType_ProvidedOperations() {
-		return (EReference)componentTypeEClass.getEStructuralFeatures().get(2);
+	public EOperation getComponentType__GetArchitectureRoot() {
+		return componentTypeEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getEStringToOperationTypeMapEntry() {
+		return eStringToOperationTypeMapEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getEStringToOperationTypeMapEntry_Key() {
+		return (EAttribute)eStringToOperationTypeMapEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getEStringToOperationTypeMapEntry_Value() {
+		return (EReference)eStringToOperationTypeMapEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -218,8 +288,8 @@ public class ArchitecturePackageImpl extends EPackageImpl implements Architectur
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getOperationType_ComponentType() {
-		return (EReference)operationTypeEClass.getEStructuralFeatures().get(1);
+	public EOperation getOperationType__GetComponentType() {
+		return operationTypeEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -253,14 +323,22 @@ public class ArchitecturePackageImpl extends EPackageImpl implements Architectur
 		architectureRootEClass = createEClass(ARCHITECTURE_ROOT);
 		createEReference(architectureRootEClass, ARCHITECTURE_ROOT__COMPONENT_TYPES);
 
+		eStringToComponentTypeMapEntryEClass = createEClass(ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY);
+		createEAttribute(eStringToComponentTypeMapEntryEClass, ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY__KEY);
+		createEReference(eStringToComponentTypeMapEntryEClass, ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY__VALUE);
+
 		componentTypeEClass = createEClass(COMPONENT_TYPE);
 		createEAttribute(componentTypeEClass, COMPONENT_TYPE__SIGNATURE);
-		createEReference(componentTypeEClass, COMPONENT_TYPE__ARCHITECTURE_ROOT);
 		createEReference(componentTypeEClass, COMPONENT_TYPE__PROVIDED_OPERATIONS);
+		createEOperation(componentTypeEClass, COMPONENT_TYPE___GET_ARCHITECTURE_ROOT);
+
+		eStringToOperationTypeMapEntryEClass = createEClass(ESTRING_TO_OPERATION_TYPE_MAP_ENTRY);
+		createEAttribute(eStringToOperationTypeMapEntryEClass, ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__KEY);
+		createEReference(eStringToOperationTypeMapEntryEClass, ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__VALUE);
 
 		operationTypeEClass = createEClass(OPERATION_TYPE);
 		createEAttribute(operationTypeEClass, OPERATION_TYPE__SIGNATURE);
-		createEReference(operationTypeEClass, OPERATION_TYPE__COMPONENT_TYPE);
+		createEOperation(operationTypeEClass, OPERATION_TYPE___GET_COMPONENT_TYPE);
 	}
 
 	/**
@@ -294,17 +372,26 @@ public class ArchitecturePackageImpl extends EPackageImpl implements Architectur
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(architectureRootEClass, ArchitectureRoot.class, "ArchitectureRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getArchitectureRoot_ComponentTypes(), this.getComponentType(), this.getComponentType_ArchitectureRoot(), "componentTypes", null, 0, -1, ArchitectureRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEReference(getArchitectureRoot_ComponentTypes(), this.getEStringToComponentTypeMapEntry(), null, "componentTypes", null, 0, -1, ArchitectureRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+
+		initEClass(eStringToComponentTypeMapEntryEClass, Map.Entry.class, "EStringToComponentTypeMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEStringToComponentTypeMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEStringToComponentTypeMapEntry_Value(), this.getComponentType(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(componentTypeEClass, ComponentType.class, "ComponentType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getComponentType_Signature(), ecorePackage.getEString(), "signature", null, 0, 1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getComponentType_ArchitectureRoot(), this.getArchitectureRoot(), this.getArchitectureRoot_ComponentTypes(), "architectureRoot", null, 0, 1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getComponentType_ProvidedOperations(), this.getOperationType(), this.getOperationType_ComponentType(), "providedOperations", null, 0, -1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
-		getComponentType_ProvidedOperations().getEKeys().add(this.getOperationType_Signature());
+		initEReference(getComponentType_ProvidedOperations(), this.getEStringToOperationTypeMapEntry(), null, "providedOperations", null, 0, -1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+
+		initEOperation(getComponentType__GetArchitectureRoot(), this.getArchitectureRoot(), "getArchitectureRoot", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(eStringToOperationTypeMapEntryEClass, Map.Entry.class, "EStringToOperationTypeMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEStringToOperationTypeMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEStringToOperationTypeMapEntry_Value(), this.getOperationType(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(operationTypeEClass, OperationType.class, "OperationType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getOperationType_Signature(), ecorePackage.getEString(), "signature", null, 0, 1, OperationType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOperationType_ComponentType(), this.getComponentType(), this.getComponentType_ProvidedOperations(), "componentType", null, 0, 1, OperationType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getOperationType__GetComponentType(), this.getComponentType(), "getComponentType", 0, 1, IS_UNIQUE, IS_ORDERED);
 	}
 
 } //ArchitecturePackageImpl

@@ -4,6 +4,7 @@ package kieker.analysisteetime.model.analysismodel.architecture;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -67,7 +68,7 @@ public interface ArchitecturePackage extends EPackage {
 	int ARCHITECTURE_ROOT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Component Types</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Component Types</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -94,6 +95,52 @@ public interface ArchitecturePackage extends EPackage {
 	int ARCHITECTURE_ROOT_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.architecture.impl.EStringToComponentTypeMapEntryImpl <em>EString To Component Type Map Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.analysisteetime.model.analysismodel.architecture.impl.EStringToComponentTypeMapEntryImpl
+	 * @see kieker.analysisteetime.model.analysismodel.architecture.impl.ArchitecturePackageImpl#getEStringToComponentTypeMapEntry()
+	 * @generated
+	 */
+	int ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY = 1;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>EString To Component Type Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>EString To Component Type Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.architecture.impl.ComponentTypeImpl <em>Component Type</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -101,7 +148,7 @@ public interface ArchitecturePackage extends EPackage {
 	 * @see kieker.analysisteetime.model.analysismodel.architecture.impl.ArchitecturePackageImpl#getComponentType()
 	 * @generated
 	 */
-	int COMPONENT_TYPE = 1;
+	int COMPONENT_TYPE = 2;
 
 	/**
 	 * The feature id for the '<em><b>Signature</b></em>' attribute.
@@ -113,22 +160,13 @@ public interface ArchitecturePackage extends EPackage {
 	int COMPONENT_TYPE__SIGNATURE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Architecture Root</b></em>' container reference.
+	 * The feature id for the '<em><b>Provided Operations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT_TYPE__ARCHITECTURE_ROOT = 1;
-
-	/**
-	 * The feature id for the '<em><b>Provided Operations</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMPONENT_TYPE__PROVIDED_OPERATIONS = 2;
+	int COMPONENT_TYPE__PROVIDED_OPERATIONS = 1;
 
 	/**
 	 * The number of structural features of the '<em>Component Type</em>' class.
@@ -137,7 +175,16 @@ public interface ArchitecturePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT_TYPE_FEATURE_COUNT = 3;
+	int COMPONENT_TYPE_FEATURE_COUNT = 2;
+
+	/**
+	 * The operation id for the '<em>Get Architecture Root</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT_TYPE___GET_ARCHITECTURE_ROOT = 0;
 
 	/**
 	 * The number of operations of the '<em>Component Type</em>' class.
@@ -146,7 +193,53 @@ public interface ArchitecturePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT_TYPE_OPERATION_COUNT = 0;
+	int COMPONENT_TYPE_OPERATION_COUNT = 1;
+
+	/**
+	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.architecture.impl.EStringToOperationTypeMapEntryImpl <em>EString To Operation Type Map Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.analysisteetime.model.analysismodel.architecture.impl.EStringToOperationTypeMapEntryImpl
+	 * @see kieker.analysisteetime.model.analysismodel.architecture.impl.ArchitecturePackageImpl#getEStringToOperationTypeMapEntry()
+	 * @generated
+	 */
+	int ESTRING_TO_OPERATION_TYPE_MAP_ENTRY = 3;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>EString To Operation Type Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_OPERATION_TYPE_MAP_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>EString To Operation Type Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_OPERATION_TYPE_MAP_ENTRY_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.architecture.impl.OperationTypeImpl <em>Operation Type</em>}' class.
@@ -156,7 +249,7 @@ public interface ArchitecturePackage extends EPackage {
 	 * @see kieker.analysisteetime.model.analysismodel.architecture.impl.ArchitecturePackageImpl#getOperationType()
 	 * @generated
 	 */
-	int OPERATION_TYPE = 2;
+	int OPERATION_TYPE = 4;
 
 	/**
 	 * The feature id for the '<em><b>Signature</b></em>' attribute.
@@ -168,22 +261,22 @@ public interface ArchitecturePackage extends EPackage {
 	int OPERATION_TYPE__SIGNATURE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Component Type</b></em>' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPERATION_TYPE__COMPONENT_TYPE = 1;
-
-	/**
 	 * The number of structural features of the '<em>Operation Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_TYPE_FEATURE_COUNT = 2;
+	int OPERATION_TYPE_FEATURE_COUNT = 1;
+
+	/**
+	 * The operation id for the '<em>Get Component Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPERATION_TYPE___GET_COMPONENT_TYPE = 0;
 
 	/**
 	 * The number of operations of the '<em>Operation Type</em>' class.
@@ -192,7 +285,7 @@ public interface ArchitecturePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_TYPE_OPERATION_COUNT = 0;
+	int OPERATION_TYPE_OPERATION_COUNT = 1;
 
 
 	/**
@@ -206,15 +299,49 @@ public interface ArchitecturePackage extends EPackage {
 	EClass getArchitectureRoot();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot#getComponentTypes <em>Component Types</em>}'.
+	 * Returns the meta object for the map '{@link kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot#getComponentTypes <em>Component Types</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Component Types</em>'.
+	 * @return the meta object for the map '<em>Component Types</em>'.
 	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot#getComponentTypes()
 	 * @see #getArchitectureRoot()
 	 * @generated
 	 */
 	EReference getArchitectureRoot_ComponentTypes();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Component Type Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>EString To Component Type Map Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString"
+	 *        valueType="kieker.analysisteetime.model.analysismodel.architecture.ComponentType" valueContainment="true"
+	 * @generated
+	 */
+	EClass getEStringToComponentTypeMapEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToComponentTypeMapEntry()
+	 * @generated
+	 */
+	EAttribute getEStringToComponentTypeMapEntry_Key();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToComponentTypeMapEntry()
+	 * @generated
+	 */
+	EReference getEStringToComponentTypeMapEntry_Value();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType <em>Component Type</em>}'.
@@ -238,26 +365,59 @@ public interface ArchitecturePackage extends EPackage {
 	EAttribute getComponentType_Signature();
 
 	/**
-	 * Returns the meta object for the container reference '{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getArchitectureRoot <em>Architecture Root</em>}'.
+	 * Returns the meta object for the map '{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getProvidedOperations <em>Provided Operations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the container reference '<em>Architecture Root</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getArchitectureRoot()
-	 * @see #getComponentType()
-	 * @generated
-	 */
-	EReference getComponentType_ArchitectureRoot();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getProvidedOperations <em>Provided Operations</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Provided Operations</em>'.
+	 * @return the meta object for the map '<em>Provided Operations</em>'.
 	 * @see kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getProvidedOperations()
 	 * @see #getComponentType()
 	 * @generated
 	 */
 	EReference getComponentType_ProvidedOperations();
+
+	/**
+	 * Returns the meta object for the '{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getArchitectureRoot() <em>Get Architecture Root</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Architecture Root</em>' operation.
+	 * @see kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getArchitectureRoot()
+	 * @generated
+	 */
+	EOperation getComponentType__GetArchitectureRoot();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Operation Type Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>EString To Operation Type Map Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString"
+	 *        valueType="kieker.analysisteetime.model.analysismodel.architecture.OperationType" valueContainment="true"
+	 * @generated
+	 */
+	EClass getEStringToOperationTypeMapEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToOperationTypeMapEntry()
+	 * @generated
+	 */
+	EAttribute getEStringToOperationTypeMapEntry_Key();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToOperationTypeMapEntry()
+	 * @generated
+	 */
+	EReference getEStringToOperationTypeMapEntry_Value();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType <em>Operation Type</em>}'.
@@ -281,15 +441,14 @@ public interface ArchitecturePackage extends EPackage {
 	EAttribute getOperationType_Signature();
 
 	/**
-	 * Returns the meta object for the container reference '{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType#getComponentType <em>Component Type</em>}'.
+	 * Returns the meta object for the '{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType#getComponentType() <em>Get Component Type</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the container reference '<em>Component Type</em>'.
+	 * @return the meta object for the '<em>Get Component Type</em>' operation.
 	 * @see kieker.analysisteetime.model.analysismodel.architecture.OperationType#getComponentType()
-	 * @see #getOperationType()
 	 * @generated
 	 */
-	EReference getOperationType_ComponentType();
+	EOperation getOperationType__GetComponentType();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -325,12 +484,38 @@ public interface ArchitecturePackage extends EPackage {
 		EClass ARCHITECTURE_ROOT = eINSTANCE.getArchitectureRoot();
 
 		/**
-		 * The meta object literal for the '<em><b>Component Types</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Component Types</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference ARCHITECTURE_ROOT__COMPONENT_TYPES = eINSTANCE.getArchitectureRoot_ComponentTypes();
+
+		/**
+		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.architecture.impl.EStringToComponentTypeMapEntryImpl <em>EString To Component Type Map Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.analysisteetime.model.analysismodel.architecture.impl.EStringToComponentTypeMapEntryImpl
+		 * @see kieker.analysisteetime.model.analysismodel.architecture.impl.ArchitecturePackageImpl#getEStringToComponentTypeMapEntry()
+		 * @generated
+		 */
+		EClass ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY = eINSTANCE.getEStringToComponentTypeMapEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY__KEY = eINSTANCE.getEStringToComponentTypeMapEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY__VALUE = eINSTANCE.getEStringToComponentTypeMapEntry_Value();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.architecture.impl.ComponentTypeImpl <em>Component Type</em>}' class.
@@ -351,20 +536,46 @@ public interface ArchitecturePackage extends EPackage {
 		EAttribute COMPONENT_TYPE__SIGNATURE = eINSTANCE.getComponentType_Signature();
 
 		/**
-		 * The meta object literal for the '<em><b>Architecture Root</b></em>' container reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference COMPONENT_TYPE__ARCHITECTURE_ROOT = eINSTANCE.getComponentType_ArchitectureRoot();
-
-		/**
-		 * The meta object literal for the '<em><b>Provided Operations</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Provided Operations</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference COMPONENT_TYPE__PROVIDED_OPERATIONS = eINSTANCE.getComponentType_ProvidedOperations();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Architecture Root</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation COMPONENT_TYPE___GET_ARCHITECTURE_ROOT = eINSTANCE.getComponentType__GetArchitectureRoot();
+
+		/**
+		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.architecture.impl.EStringToOperationTypeMapEntryImpl <em>EString To Operation Type Map Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.analysisteetime.model.analysismodel.architecture.impl.EStringToOperationTypeMapEntryImpl
+		 * @see kieker.analysisteetime.model.analysismodel.architecture.impl.ArchitecturePackageImpl#getEStringToOperationTypeMapEntry()
+		 * @generated
+		 */
+		EClass ESTRING_TO_OPERATION_TYPE_MAP_ENTRY = eINSTANCE.getEStringToOperationTypeMapEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__KEY = eINSTANCE.getEStringToOperationTypeMapEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__VALUE = eINSTANCE.getEStringToOperationTypeMapEntry_Value();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.architecture.impl.OperationTypeImpl <em>Operation Type</em>}' class.
@@ -385,12 +596,12 @@ public interface ArchitecturePackage extends EPackage {
 		EAttribute OPERATION_TYPE__SIGNATURE = eINSTANCE.getOperationType_Signature();
 
 		/**
-		 * The meta object literal for the '<em><b>Component Type</b></em>' container reference feature.
+		 * The meta object literal for the '<em><b>Get Component Type</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference OPERATION_TYPE__COMPONENT_TYPE = eINSTANCE.getOperationType_ComponentType();
+		EOperation OPERATION_TYPE___GET_COMPONENT_TYPE = eINSTANCE.getOperationType__GetComponentType();
 
 	}
 

@@ -14,7 +14,6 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType#getSignature <em>Signature</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType#getComponentType <em>Component Type</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage#getOperationType()
@@ -49,31 +48,16 @@ public interface OperationType extends EObject {
 	void setSignature(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Component Type</b></em>' container reference.
-	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getProvidedOperations <em>Provided Operations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Component Type</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Component Type</em>' container reference.
-	 * @see #setComponentType(ComponentType)
-	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage#getOperationType_ComponentType()
-	 * @see kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getProvidedOperations
-	 * @model opposite="providedOperations" transient="false"
+	 * @model kind="operation"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.emf.ecore.EObject container = this.eContainer();\r\nif (container != null) {\r\n\torg.eclipse.emf.ecore.EObject containerContainer = container.eContainer();\r\n\tif (containerContainer != null) {\r\n\t\treturn (ComponentType) containerContainer ;\r\n\t}\r\n}\r\nreturn null;\r\n'"
 	 * @generated
 	 */
 	ComponentType getComponentType();
-
-	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType#getComponentType <em>Component Type</em>}' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Component Type</em>' container reference.
-	 * @see #getComponentType()
-	 * @generated
-	 */
-	void setComponentType(ComponentType value);
 
 } // OperationType

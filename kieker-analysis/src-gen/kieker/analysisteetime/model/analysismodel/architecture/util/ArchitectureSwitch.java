@@ -2,6 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.architecture.util;
 
+import java.util.Map;
 import kieker.analysisteetime.model.analysismodel.architecture.*;
 
 import org.eclipse.emf.ecore.EObject;
@@ -72,9 +73,21 @@ public class ArchitectureSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ArchitecturePackage.ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, ComponentType> eStringToComponentTypeMapEntry = (Map.Entry<String, ComponentType>)theEObject;
+				T result = caseEStringToComponentTypeMapEntry(eStringToComponentTypeMapEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case ArchitecturePackage.COMPONENT_TYPE: {
 				ComponentType componentType = (ComponentType)theEObject;
 				T result = caseComponentType(componentType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ArchitecturePackage.ESTRING_TO_OPERATION_TYPE_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, OperationType> eStringToOperationTypeMapEntry = (Map.Entry<String, OperationType>)theEObject;
+				T result = caseEStringToOperationTypeMapEntry(eStringToOperationTypeMapEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -104,6 +117,21 @@ public class ArchitectureSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>EString To Component Type Map Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EString To Component Type Map Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEStringToComponentTypeMapEntry(Map.Entry<String, ComponentType> object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Component Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -115,6 +143,21 @@ public class ArchitectureSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseComponentType(ComponentType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>EString To Operation Type Map Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EString To Operation Type Map Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEStringToOperationTypeMapEntry(Map.Entry<String, OperationType> object) {
 		return null;
 	}
 

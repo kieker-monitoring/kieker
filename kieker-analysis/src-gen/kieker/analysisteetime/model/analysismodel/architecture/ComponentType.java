@@ -2,8 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.architecture;
 
-import org.eclipse.emf.common.util.EList;
-
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -16,7 +15,6 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getSignature <em>Signature</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getArchitectureRoot <em>Architecture Root</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getProvidedOperations <em>Provided Operations</em>}</li>
  * </ul>
  *
@@ -52,49 +50,33 @@ public interface ComponentType extends EObject {
 	void setSignature(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Architecture Root</b></em>' container reference.
-	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot#getComponentTypes <em>Component Types</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Architecture Root</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Architecture Root</em>' container reference.
-	 * @see #setArchitectureRoot(ArchitectureRoot)
-	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage#getComponentType_ArchitectureRoot()
-	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot#getComponentTypes
-	 * @model opposite="componentTypes" transient="false"
+	 * @model kind="operation"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.emf.ecore.EObject container = this.eContainer();\r\nif (container != null) {\r\n\torg.eclipse.emf.ecore.EObject containerContainer = container.eContainer();\r\n\tif (containerContainer != null) {\r\n\t\treturn (ArchitectureRoot) containerContainer ;\r\n\t}\r\n}\r\nreturn null;\r\n'"
 	 * @generated
 	 */
 	ArchitectureRoot getArchitectureRoot();
 
 	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.architecture.ComponentType#getArchitectureRoot <em>Architecture Root</em>}' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Architecture Root</em>' container reference.
-	 * @see #getArchitectureRoot()
-	 * @generated
-	 */
-	void setArchitectureRoot(ArchitectureRoot value);
-
-	/**
-	 * Returns the value of the '<em><b>Provided Operations</b></em>' containment reference list.
-	 * The list contents are of type {@link kieker.analysisteetime.model.analysismodel.architecture.OperationType}.
-	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.architecture.OperationType#getComponentType <em>Component Type</em>}'.
+	 * Returns the value of the '<em><b>Provided Operations</b></em>' map.
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link kieker.analysisteetime.model.analysismodel.architecture.OperationType},
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Provided Operations</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Provided Operations</em>' containment reference list.
+	 * @return the value of the '<em>Provided Operations</em>' map.
 	 * @see kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage#getComponentType_ProvidedOperations()
-	 * @see kieker.analysisteetime.model.analysismodel.architecture.OperationType#getComponentType
-	 * @model opposite="componentType" containment="true" keys="signature" ordered="false"
+	 * @model mapType="kieker.analysisteetime.model.analysismodel.architecture.EStringToOperationTypeMapEntry<org.eclipse.emf.ecore.EString, kieker.analysisteetime.model.analysismodel.architecture.OperationType>" ordered="false"
 	 * @generated
 	 */
-	EList<OperationType> getProvidedOperations();
+	EMap<String, OperationType> getProvidedOperations();
 
 } // ComponentType
