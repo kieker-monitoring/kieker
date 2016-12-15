@@ -79,6 +79,7 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//deployment/DeploymentContext/name"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeploymentContext/components"/>
+        <genOperations ecoreOperation="analysismodel.ecore#//deployment/DeploymentContext/getDeploymentRoot"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//deployment/EStringToDeployedComponentMapEntry">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//deployment/EStringToDeployedComponentMapEntry/key"/>
