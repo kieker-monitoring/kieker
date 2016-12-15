@@ -2,8 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment;
 
-import org.eclipse.emf.common.util.EList;
-
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -15,9 +14,8 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getDeploymentRoot <em>Deployment Root</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getComponents <em>Components</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getComponents <em>Components</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeploymentContext()
@@ -26,50 +24,21 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface DeploymentContext extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Deployment Root</b></em>' container reference.
-	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot#getDeploymentContexts <em>Deployment Contexts</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Deployment Root</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Deployment Root</em>' container reference.
-	 * @see #setDeploymentRoot(DeploymentRoot)
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeploymentContext_DeploymentRoot()
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot#getDeploymentContexts
-	 * @model opposite="deploymentContexts" transient="false"
-	 * @generated
-	 */
-	DeploymentRoot getDeploymentRoot();
-
-	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getDeploymentRoot <em>Deployment Root</em>}' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Deployment Root</em>' container reference.
-	 * @see #getDeploymentRoot()
-	 * @generated
-	 */
-	void setDeploymentRoot(DeploymentRoot value);
-
-	/**
-	 * Returns the value of the '<em><b>Components</b></em>' containment reference list.
-	 * The list contents are of type {@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent}.
-	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getDeploymentContext <em>Deployment Context</em>}'.
+	 * Returns the value of the '<em><b>Components</b></em>' map.
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation},
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Components</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Components</em>' containment reference list.
+	 * @return the value of the '<em>Components</em>' map.
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeploymentContext_Components()
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getDeploymentContext
-	 * @model opposite="deploymentContext" containment="true" ordered="false"
+	 * @model mapType="kieker.analysisteetime.model.analysismodel.deployment.EStringToDeployedOperationMapEntry<org.eclipse.emf.ecore.EString, kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation>" ordered="false"
 	 * @generated
 	 */
-	EList<DeployedComponent> getComponents();
+	EMap<String, DeployedOperation> getComponents();
 
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.

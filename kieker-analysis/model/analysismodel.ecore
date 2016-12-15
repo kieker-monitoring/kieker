@@ -80,33 +80,41 @@
       nsPrefix="deployment">
     <eClassifiers xsi:type="ecore:EClass" name="DeploymentRoot">
       <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentContexts" ordered="false"
-          upperBound="-1" eType="#//deployment/DeploymentContext" containment="true"
-          eOpposite="#//deployment/DeploymentContext/deploymentRoot"/>
+          upperBound="-1" eType="#//deployment/EStringToDeploymentContextMapEntry"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EStringToDeploymentContextMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//deployment/DeploymentContext"
+          containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DeploymentContext">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentRoot" eType="#//deployment/DeploymentRoot"
-          eOpposite="#//deployment/DeploymentRoot/deploymentContexts"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="components" ordered="false"
-          upperBound="-1" eType="#//deployment/DeployedComponent" containment="true"
-          eOpposite="#//deployment/DeployedComponent/deploymentContext"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="components" ordered="false"
+          upperBound="-1" eType="#//deployment/EStringToDeployedOperationMapEntry"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EStringToDeployedComponentMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//deployment/DeployedComponent"
+          containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DeployedComponent">
       <eStructuralFeatures xsi:type="ecore:EReference" name="componentType" eType="#//architecture/ComponentType"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentContext" eType="#//deployment/DeploymentContext"
-          eOpposite="#//deployment/DeploymentContext/components"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="containedOperations"
-          ordered="false" upperBound="-1" eType="#//deployment/DeployedOperation"
-          containment="true" eOpposite="#//deployment/DeployedOperation/containedComponent"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="accessedOperations" upperBound="-1"
-          eType="#//deployment/DeployedOperation" eOpposite="#//deployment/DeployedOperation/accesssedComponent"/>
+          ordered="false" upperBound="-1" eType="#//deployment/EStringToDeployedOperationMapEntry"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EStringToDeployedOperationMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//deployment/DeployedOperation"
+          containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DeployedOperation">
       <eStructuralFeatures xsi:type="ecore:EReference" name="operationType" eType="#//architecture/OperationType"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="containedComponent" eType="#//deployment/DeployedComponent"
-          eOpposite="#//deployment/DeployedComponent/containedOperations"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="accesssedComponent" eType="#//deployment/DeployedComponent"
-          eOpposite="#//deployment/DeployedComponent/accessedOperations"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="execution" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/execution"

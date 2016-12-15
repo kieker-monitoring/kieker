@@ -16,8 +16,6 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getOperationType <em>Operation Type</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getContainedComponent <em>Contained Component</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getAccesssedComponent <em>Accesssed Component</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeployedOperation()
@@ -50,61 +48,5 @@ public interface DeployedOperation extends EObject {
 	 * @generated
 	 */
 	void setOperationType(OperationType value);
-
-	/**
-	 * Returns the value of the '<em><b>Contained Component</b></em>' container reference.
-	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getContainedOperations <em>Contained Operations</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Contained Component</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Contained Component</em>' container reference.
-	 * @see #setContainedComponent(DeployedComponent)
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeployedOperation_ContainedComponent()
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getContainedOperations
-	 * @model opposite="containedOperations" transient="false"
-	 * @generated
-	 */
-	DeployedComponent getContainedComponent();
-
-	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getContainedComponent <em>Contained Component</em>}' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Contained Component</em>' container reference.
-	 * @see #getContainedComponent()
-	 * @generated
-	 */
-	void setContainedComponent(DeployedComponent value);
-
-	/**
-	 * Returns the value of the '<em><b>Accesssed Component</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAccessedOperations <em>Accessed Operations</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Accesssed Component</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Accesssed Component</em>' reference.
-	 * @see #setAccesssedComponent(DeployedComponent)
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeployedOperation_AccesssedComponent()
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAccessedOperations
-	 * @model opposite="accessedOperations"
-	 * @generated
-	 */
-	DeployedComponent getAccesssedComponent();
-
-	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getAccesssedComponent <em>Accesssed Component</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Accesssed Component</em>' reference.
-	 * @see #getAccesssedComponent()
-	 * @generated
-	 */
-	void setAccesssedComponent(DeployedComponent value);
 
 } // DeployedOperation

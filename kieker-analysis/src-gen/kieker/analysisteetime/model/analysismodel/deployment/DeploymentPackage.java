@@ -67,7 +67,7 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYMENT_ROOT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Deployment Contexts</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Deployment Contexts</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -94,6 +94,52 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYMENT_ROOT_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeploymentContextMapEntryImpl <em>EString To Deployment Context Map Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeploymentContextMapEntryImpl
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl#getEStringToDeploymentContextMapEntry()
+	 * @generated
+	 */
+	int ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY = 1;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>EString To Deployment Context Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>EString To Deployment Context Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentContextImpl <em>Context</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -101,25 +147,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl#getDeploymentContext()
 	 * @generated
 	 */
-	int DEPLOYMENT_CONTEXT = 1;
-
-	/**
-	 * The feature id for the '<em><b>Deployment Root</b></em>' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DEPLOYMENT_CONTEXT__DEPLOYMENT_ROOT = 0;
-
-	/**
-	 * The feature id for the '<em><b>Components</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DEPLOYMENT_CONTEXT__COMPONENTS = 1;
+	int DEPLOYMENT_CONTEXT = 2;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -128,7 +156,16 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYMENT_CONTEXT__NAME = 2;
+	int DEPLOYMENT_CONTEXT__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Components</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYMENT_CONTEXT__COMPONENTS = 1;
 
 	/**
 	 * The number of structural features of the '<em>Context</em>' class.
@@ -137,7 +174,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYMENT_CONTEXT_FEATURE_COUNT = 3;
+	int DEPLOYMENT_CONTEXT_FEATURE_COUNT = 2;
 
 	/**
 	 * The number of operations of the '<em>Context</em>' class.
@@ -149,6 +186,52 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYMENT_CONTEXT_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedComponentMapEntryImpl <em>EString To Deployed Component Map Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedComponentMapEntryImpl
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl#getEStringToDeployedComponentMapEntry()
+	 * @generated
+	 */
+	int ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY = 3;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>EString To Deployed Component Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>EString To Deployed Component Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeployedComponentImpl <em>Deployed Component</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -156,7 +239,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl#getDeployedComponent()
 	 * @generated
 	 */
-	int DEPLOYED_COMPONENT = 2;
+	int DEPLOYED_COMPONENT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Component Type</b></em>' reference.
@@ -168,31 +251,13 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_COMPONENT__COMPONENT_TYPE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Deployment Context</b></em>' container reference.
+	 * The feature id for the '<em><b>Contained Operations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_COMPONENT__DEPLOYMENT_CONTEXT = 1;
-
-	/**
-	 * The feature id for the '<em><b>Contained Operations</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DEPLOYED_COMPONENT__CONTAINED_OPERATIONS = 2;
-
-	/**
-	 * The feature id for the '<em><b>Accessed Operations</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DEPLOYED_COMPONENT__ACCESSED_OPERATIONS = 3;
+	int DEPLOYED_COMPONENT__CONTAINED_OPERATIONS = 1;
 
 	/**
 	 * The number of structural features of the '<em>Deployed Component</em>' class.
@@ -201,7 +266,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_COMPONENT_FEATURE_COUNT = 4;
+	int DEPLOYED_COMPONENT_FEATURE_COUNT = 2;
 
 	/**
 	 * The number of operations of the '<em>Deployed Component</em>' class.
@@ -213,6 +278,52 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_COMPONENT_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedOperationMapEntryImpl <em>EString To Deployed Operation Map Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedOperationMapEntryImpl
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl#getEStringToDeployedOperationMapEntry()
+	 * @generated
+	 */
+	int ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY = 5;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>EString To Deployed Operation Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>EString To Deployed Operation Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeployedOperationImpl <em>Deployed Operation</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -220,7 +331,7 @@ public interface DeploymentPackage extends EPackage {
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl#getDeployedOperation()
 	 * @generated
 	 */
-	int DEPLOYED_OPERATION = 3;
+	int DEPLOYED_OPERATION = 6;
 
 	/**
 	 * The feature id for the '<em><b>Operation Type</b></em>' reference.
@@ -232,31 +343,13 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_OPERATION__OPERATION_TYPE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Contained Component</b></em>' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DEPLOYED_OPERATION__CONTAINED_COMPONENT = 1;
-
-	/**
-	 * The feature id for the '<em><b>Accesssed Component</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DEPLOYED_OPERATION__ACCESSSED_COMPONENT = 2;
-
-	/**
 	 * The number of structural features of the '<em>Deployed Operation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_OPERATION_FEATURE_COUNT = 3;
+	int DEPLOYED_OPERATION_FEATURE_COUNT = 1;
 
 	/**
 	 * The number of operations of the '<em>Deployed Operation</em>' class.
@@ -279,15 +372,49 @@ public interface DeploymentPackage extends EPackage {
 	EClass getDeploymentRoot();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot#getDeploymentContexts <em>Deployment Contexts</em>}'.
+	 * Returns the meta object for the map '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot#getDeploymentContexts <em>Deployment Contexts</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Deployment Contexts</em>'.
+	 * @return the meta object for the map '<em>Deployment Contexts</em>'.
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot#getDeploymentContexts()
 	 * @see #getDeploymentRoot()
 	 * @generated
 	 */
 	EReference getDeploymentRoot_DeploymentContexts();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Deployment Context Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>EString To Deployment Context Map Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString"
+	 *        valueType="kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext" valueContainment="true"
+	 * @generated
+	 */
+	EClass getEStringToDeploymentContextMapEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToDeploymentContextMapEntry()
+	 * @generated
+	 */
+	EAttribute getEStringToDeploymentContextMapEntry_Key();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToDeploymentContextMapEntry()
+	 * @generated
+	 */
+	EReference getEStringToDeploymentContextMapEntry_Value();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext <em>Context</em>}'.
@@ -300,26 +427,49 @@ public interface DeploymentPackage extends EPackage {
 	EClass getDeploymentContext();
 
 	/**
-	 * Returns the meta object for the container reference '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getDeploymentRoot <em>Deployment Root</em>}'.
+	 * Returns the meta object for the map '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getComponents <em>Components</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the container reference '<em>Deployment Root</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getDeploymentRoot()
-	 * @see #getDeploymentContext()
-	 * @generated
-	 */
-	EReference getDeploymentContext_DeploymentRoot();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getComponents <em>Components</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Components</em>'.
+	 * @return the meta object for the map '<em>Components</em>'.
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getComponents()
 	 * @see #getDeploymentContext()
 	 * @generated
 	 */
 	EReference getDeploymentContext_Components();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Deployed Component Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>EString To Deployed Component Map Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString"
+	 *        valueType="kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent" valueContainment="true"
+	 * @generated
+	 */
+	EClass getEStringToDeployedComponentMapEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToDeployedComponentMapEntry()
+	 * @generated
+	 */
+	EAttribute getEStringToDeployedComponentMapEntry_Key();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToDeployedComponentMapEntry()
+	 * @generated
+	 */
+	EReference getEStringToDeployedComponentMapEntry_Value();
 
 	/**
 	 * Returns the meta object for the attribute '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getName <em>Name</em>}'.
@@ -354,21 +504,10 @@ public interface DeploymentPackage extends EPackage {
 	EReference getDeployedComponent_ComponentType();
 
 	/**
-	 * Returns the meta object for the container reference '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getDeploymentContext <em>Deployment Context</em>}'.
+	 * Returns the meta object for the map '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getContainedOperations <em>Contained Operations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the container reference '<em>Deployment Context</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getDeploymentContext()
-	 * @see #getDeployedComponent()
-	 * @generated
-	 */
-	EReference getDeployedComponent_DeploymentContext();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getContainedOperations <em>Contained Operations</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Contained Operations</em>'.
+	 * @return the meta object for the map '<em>Contained Operations</em>'.
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getContainedOperations()
 	 * @see #getDeployedComponent()
 	 * @generated
@@ -376,15 +515,38 @@ public interface DeploymentPackage extends EPackage {
 	EReference getDeployedComponent_ContainedOperations();
 
 	/**
-	 * Returns the meta object for the reference list '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAccessedOperations <em>Accessed Operations</em>}'.
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Deployed Operation Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Accessed Operations</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAccessedOperations()
-	 * @see #getDeployedComponent()
+	 * @return the meta object for class '<em>EString To Deployed Operation Map Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString"
+	 *        valueType="kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation" valueContainment="true"
 	 * @generated
 	 */
-	EReference getDeployedComponent_AccessedOperations();
+	EClass getEStringToDeployedOperationMapEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToDeployedOperationMapEntry()
+	 * @generated
+	 */
+	EAttribute getEStringToDeployedOperationMapEntry_Key();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getEStringToDeployedOperationMapEntry()
+	 * @generated
+	 */
+	EReference getEStringToDeployedOperationMapEntry_Value();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation <em>Deployed Operation</em>}'.
@@ -406,28 +568,6 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getDeployedOperation_OperationType();
-
-	/**
-	 * Returns the meta object for the container reference '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getContainedComponent <em>Contained Component</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the container reference '<em>Contained Component</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getContainedComponent()
-	 * @see #getDeployedOperation()
-	 * @generated
-	 */
-	EReference getDeployedOperation_ContainedComponent();
-
-	/**
-	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getAccesssedComponent <em>Accesssed Component</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Accesssed Component</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getAccesssedComponent()
-	 * @see #getDeployedOperation()
-	 * @generated
-	 */
-	EReference getDeployedOperation_AccesssedComponent();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -463,12 +603,38 @@ public interface DeploymentPackage extends EPackage {
 		EClass DEPLOYMENT_ROOT = eINSTANCE.getDeploymentRoot();
 
 		/**
-		 * The meta object literal for the '<em><b>Deployment Contexts</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Deployment Contexts</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference DEPLOYMENT_ROOT__DEPLOYMENT_CONTEXTS = eINSTANCE.getDeploymentRoot_DeploymentContexts();
+
+		/**
+		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeploymentContextMapEntryImpl <em>EString To Deployment Context Map Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeploymentContextMapEntryImpl
+		 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl#getEStringToDeploymentContextMapEntry()
+		 * @generated
+		 */
+		EClass ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY = eINSTANCE.getEStringToDeploymentContextMapEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY__KEY = eINSTANCE.getEStringToDeploymentContextMapEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY__VALUE = eINSTANCE.getEStringToDeploymentContextMapEntry_Value();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentContextImpl <em>Context</em>}' class.
@@ -481,20 +647,38 @@ public interface DeploymentPackage extends EPackage {
 		EClass DEPLOYMENT_CONTEXT = eINSTANCE.getDeploymentContext();
 
 		/**
-		 * The meta object literal for the '<em><b>Deployment Root</b></em>' container reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference DEPLOYMENT_CONTEXT__DEPLOYMENT_ROOT = eINSTANCE.getDeploymentContext_DeploymentRoot();
-
-		/**
-		 * The meta object literal for the '<em><b>Components</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Components</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference DEPLOYMENT_CONTEXT__COMPONENTS = eINSTANCE.getDeploymentContext_Components();
+
+		/**
+		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedComponentMapEntryImpl <em>EString To Deployed Component Map Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedComponentMapEntryImpl
+		 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl#getEStringToDeployedComponentMapEntry()
+		 * @generated
+		 */
+		EClass ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY = eINSTANCE.getEStringToDeployedComponentMapEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__KEY = eINSTANCE.getEStringToDeployedComponentMapEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE = eINSTANCE.getEStringToDeployedComponentMapEntry_Value();
 
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
@@ -523,15 +707,7 @@ public interface DeploymentPackage extends EPackage {
 		EReference DEPLOYED_COMPONENT__COMPONENT_TYPE = eINSTANCE.getDeployedComponent_ComponentType();
 
 		/**
-		 * The meta object literal for the '<em><b>Deployment Context</b></em>' container reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference DEPLOYED_COMPONENT__DEPLOYMENT_CONTEXT = eINSTANCE.getDeployedComponent_DeploymentContext();
-
-		/**
-		 * The meta object literal for the '<em><b>Contained Operations</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Contained Operations</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -539,12 +715,30 @@ public interface DeploymentPackage extends EPackage {
 		EReference DEPLOYED_COMPONENT__CONTAINED_OPERATIONS = eINSTANCE.getDeployedComponent_ContainedOperations();
 
 		/**
-		 * The meta object literal for the '<em><b>Accessed Operations</b></em>' reference list feature.
+		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedOperationMapEntryImpl <em>EString To Deployed Operation Map Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedOperationMapEntryImpl
+		 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl#getEStringToDeployedOperationMapEntry()
+		 * @generated
+		 */
+		EClass ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY = eINSTANCE.getEStringToDeployedOperationMapEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference DEPLOYED_COMPONENT__ACCESSED_OPERATIONS = eINSTANCE.getDeployedComponent_AccessedOperations();
+		EAttribute ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY__KEY = eINSTANCE.getEStringToDeployedOperationMapEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY__VALUE = eINSTANCE.getEStringToDeployedOperationMapEntry_Value();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeployedOperationImpl <em>Deployed Operation</em>}' class.
@@ -563,22 +757,6 @@ public interface DeploymentPackage extends EPackage {
 		 * @generated
 		 */
 		EReference DEPLOYED_OPERATION__OPERATION_TYPE = eINSTANCE.getDeployedOperation_OperationType();
-
-		/**
-		 * The meta object literal for the '<em><b>Contained Component</b></em>' container reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference DEPLOYED_OPERATION__CONTAINED_COMPONENT = eINSTANCE.getDeployedOperation_ContainedComponent();
-
-		/**
-		 * The meta object literal for the '<em><b>Accesssed Component</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference DEPLOYED_OPERATION__ACCESSSED_COMPONENT = eINSTANCE.getDeployedOperation_AccesssedComponent();
 
 	}
 
