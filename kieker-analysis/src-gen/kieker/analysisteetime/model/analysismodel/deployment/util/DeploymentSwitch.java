@@ -2,6 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment.util;
 
+import java.util.Map;
 import kieker.analysisteetime.model.analysismodel.deployment.*;
 
 import org.eclipse.emf.ecore.EObject;
@@ -72,15 +73,33 @@ public class DeploymentSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case DeploymentPackage.ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, DeploymentContext> eStringToDeploymentContextMapEntry = (Map.Entry<String, DeploymentContext>)theEObject;
+				T result = caseEStringToDeploymentContextMapEntry(eStringToDeploymentContextMapEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case DeploymentPackage.DEPLOYMENT_CONTEXT: {
 				DeploymentContext deploymentContext = (DeploymentContext)theEObject;
 				T result = caseDeploymentContext(deploymentContext);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, DeployedComponent> eStringToDeployedComponentMapEntry = (Map.Entry<String, DeployedComponent>)theEObject;
+				T result = caseEStringToDeployedComponentMapEntry(eStringToDeployedComponentMapEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case DeploymentPackage.DEPLOYED_COMPONENT: {
 				DeployedComponent deployedComponent = (DeployedComponent)theEObject;
 				T result = caseDeployedComponent(deployedComponent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case DeploymentPackage.ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, DeployedOperation> eStringToDeployedOperationMapEntry = (Map.Entry<String, DeployedOperation>)theEObject;
+				T result = caseEStringToDeployedOperationMapEntry(eStringToDeployedOperationMapEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -110,6 +129,21 @@ public class DeploymentSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>EString To Deployment Context Map Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EString To Deployment Context Map Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEStringToDeploymentContextMapEntry(Map.Entry<String, DeploymentContext> object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Context</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -125,6 +159,21 @@ public class DeploymentSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>EString To Deployed Component Map Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EString To Deployed Component Map Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEStringToDeployedComponentMapEntry(Map.Entry<String, DeployedComponent> object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Deployed Component</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -136,6 +185,21 @@ public class DeploymentSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseDeployedComponent(DeployedComponent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>EString To Deployed Operation Map Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EString To Deployed Operation Map Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEStringToDeployedOperationMapEntry(Map.Entry<String, DeployedOperation> object) {
 		return null;
 	}
 

@@ -2,22 +2,18 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment.impl;
 
-import java.util.Collection;
-
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
+import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -35,14 +31,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class DeploymentRootImpl extends MinimalEObjectImpl.Container implements DeploymentRoot {
 	/**
-	 * The cached value of the '{@link #getDeploymentContexts() <em>Deployment Contexts</em>}' containment reference list.
+	 * The cached value of the '{@link #getDeploymentContexts() <em>Deployment Contexts</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getDeploymentContexts()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<DeploymentContext> deploymentContexts;
+	protected EMap<String, DeploymentContext> deploymentContexts;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -68,26 +64,11 @@ public class DeploymentRootImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<DeploymentContext> getDeploymentContexts() {
+	public EMap<String, DeploymentContext> getDeploymentContexts() {
 		if (deploymentContexts == null) {
-			deploymentContexts = new EObjectContainmentWithInverseEList<DeploymentContext>(DeploymentContext.class, this, DeploymentPackage.DEPLOYMENT_ROOT__DEPLOYMENT_CONTEXTS, DeploymentPackage.DEPLOYMENT_CONTEXT__DEPLOYMENT_ROOT);
+			deploymentContexts = new EcoreEMap<String,DeploymentContext>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY, EStringToDeploymentContextMapEntryImpl.class, this, DeploymentPackage.DEPLOYMENT_ROOT__DEPLOYMENT_CONTEXTS);
 		}
 		return deploymentContexts;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case DeploymentPackage.DEPLOYMENT_ROOT__DEPLOYMENT_CONTEXTS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getDeploymentContexts()).basicAdd(otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -113,7 +94,8 @@ public class DeploymentRootImpl extends MinimalEObjectImpl.Container implements 
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case DeploymentPackage.DEPLOYMENT_ROOT__DEPLOYMENT_CONTEXTS:
-				return getDeploymentContexts();
+				if (coreType) return getDeploymentContexts();
+				else return getDeploymentContexts().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -128,8 +110,7 @@ public class DeploymentRootImpl extends MinimalEObjectImpl.Container implements 
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case DeploymentPackage.DEPLOYMENT_ROOT__DEPLOYMENT_CONTEXTS:
-				getDeploymentContexts().clear();
-				getDeploymentContexts().addAll((Collection<? extends DeploymentContext>)newValue);
+				((EStructuralFeature.Setting)getDeploymentContexts()).set(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

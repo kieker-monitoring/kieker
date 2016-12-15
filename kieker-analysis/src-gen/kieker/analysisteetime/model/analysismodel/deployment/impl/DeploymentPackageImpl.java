@@ -2,6 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment.impl;
 
+import java.util.Map;
 import kieker.analysisteetime.model.analysismodel.AnalysismodelPackage;
 
 import kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage;
@@ -55,6 +56,13 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass eStringToDeploymentContextMapEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass deploymentContextEClass = null;
 
 	/**
@@ -62,7 +70,21 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass eStringToDeployedComponentMapEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass deployedComponentEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass eStringToDeployedOperationMapEntryEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -172,8 +194,8 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getDeploymentContext() {
-		return deploymentContextEClass;
+	public EClass getEStringToDeploymentContextMapEntry() {
+		return eStringToDeploymentContextMapEntryEClass;
 	}
 
 	/**
@@ -181,8 +203,26 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getDeploymentContext_DeploymentRoot() {
-		return (EReference)deploymentContextEClass.getEStructuralFeatures().get(0);
+	public EAttribute getEStringToDeploymentContextMapEntry_Key() {
+		return (EAttribute)eStringToDeploymentContextMapEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getEStringToDeploymentContextMapEntry_Value() {
+		return (EReference)eStringToDeploymentContextMapEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getDeploymentContext() {
+		return deploymentContextEClass;
 	}
 
 	/**
@@ -199,8 +239,35 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getEStringToDeployedComponentMapEntry() {
+		return eStringToDeployedComponentMapEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getEStringToDeployedComponentMapEntry_Key() {
+		return (EAttribute)eStringToDeployedComponentMapEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getEStringToDeployedComponentMapEntry_Value() {
+		return (EReference)eStringToDeployedComponentMapEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getDeploymentContext_Name() {
-		return (EAttribute)deploymentContextEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)deploymentContextEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -226,7 +293,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getDeployedComponent_DeploymentContext() {
+	public EReference getDeployedComponent_ContainedOperations() {
 		return (EReference)deployedComponentEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -235,8 +302,8 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getDeployedComponent_ContainedOperations() {
-		return (EReference)deployedComponentEClass.getEStructuralFeatures().get(2);
+	public EClass getEStringToDeployedOperationMapEntry() {
+		return eStringToDeployedOperationMapEntryEClass;
 	}
 
 	/**
@@ -244,8 +311,17 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getDeployedComponent_AccessedOperations() {
-		return (EReference)deployedComponentEClass.getEStructuralFeatures().get(3);
+	public EAttribute getEStringToDeployedOperationMapEntry_Key() {
+		return (EAttribute)eStringToDeployedOperationMapEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getEStringToDeployedOperationMapEntry_Value() {
+		return (EReference)eStringToDeployedOperationMapEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -264,24 +340,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 */
 	public EReference getDeployedOperation_OperationType() {
 		return (EReference)deployedOperationEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getDeployedOperation_ContainedComponent() {
-		return (EReference)deployedOperationEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getDeployedOperation_AccesssedComponent() {
-		return (EReference)deployedOperationEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -315,21 +373,28 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		deploymentRootEClass = createEClass(DEPLOYMENT_ROOT);
 		createEReference(deploymentRootEClass, DEPLOYMENT_ROOT__DEPLOYMENT_CONTEXTS);
 
+		eStringToDeploymentContextMapEntryEClass = createEClass(ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY);
+		createEAttribute(eStringToDeploymentContextMapEntryEClass, ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY__KEY);
+		createEReference(eStringToDeploymentContextMapEntryEClass, ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY__VALUE);
+
 		deploymentContextEClass = createEClass(DEPLOYMENT_CONTEXT);
-		createEReference(deploymentContextEClass, DEPLOYMENT_CONTEXT__DEPLOYMENT_ROOT);
-		createEReference(deploymentContextEClass, DEPLOYMENT_CONTEXT__COMPONENTS);
 		createEAttribute(deploymentContextEClass, DEPLOYMENT_CONTEXT__NAME);
+		createEReference(deploymentContextEClass, DEPLOYMENT_CONTEXT__COMPONENTS);
+
+		eStringToDeployedComponentMapEntryEClass = createEClass(ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY);
+		createEAttribute(eStringToDeployedComponentMapEntryEClass, ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__KEY);
+		createEReference(eStringToDeployedComponentMapEntryEClass, ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE);
 
 		deployedComponentEClass = createEClass(DEPLOYED_COMPONENT);
 		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__COMPONENT_TYPE);
-		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__DEPLOYMENT_CONTEXT);
 		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__CONTAINED_OPERATIONS);
-		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__ACCESSED_OPERATIONS);
+
+		eStringToDeployedOperationMapEntryEClass = createEClass(ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY);
+		createEAttribute(eStringToDeployedOperationMapEntryEClass, ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY__KEY);
+		createEReference(eStringToDeployedOperationMapEntryEClass, ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY__VALUE);
 
 		deployedOperationEClass = createEClass(DEPLOYED_OPERATION);
 		createEReference(deployedOperationEClass, DEPLOYED_OPERATION__OPERATION_TYPE);
-		createEReference(deployedOperationEClass, DEPLOYED_OPERATION__CONTAINED_COMPONENT);
-		createEReference(deployedOperationEClass, DEPLOYED_OPERATION__ACCESSSED_COMPONENT);
 	}
 
 	/**
@@ -366,23 +431,30 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(deploymentRootEClass, DeploymentRoot.class, "DeploymentRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDeploymentRoot_DeploymentContexts(), this.getDeploymentContext(), this.getDeploymentContext_DeploymentRoot(), "deploymentContexts", null, 0, -1, DeploymentRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEReference(getDeploymentRoot_DeploymentContexts(), this.getEStringToDeploymentContextMapEntry(), null, "deploymentContexts", null, 0, -1, DeploymentRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+
+		initEClass(eStringToDeploymentContextMapEntryEClass, Map.Entry.class, "EStringToDeploymentContextMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEStringToDeploymentContextMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEStringToDeploymentContextMapEntry_Value(), this.getDeploymentContext(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deploymentContextEClass, DeploymentContext.class, "DeploymentContext", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDeploymentContext_DeploymentRoot(), this.getDeploymentRoot(), this.getDeploymentRoot_DeploymentContexts(), "deploymentRoot", null, 0, 1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDeploymentContext_Components(), this.getDeployedComponent(), this.getDeployedComponent_DeploymentContext(), "components", null, 0, -1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 		initEAttribute(getDeploymentContext_Name(), ecorePackage.getEString(), "name", null, 0, 1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDeploymentContext_Components(), this.getEStringToDeployedOperationMapEntry(), null, "components", null, 0, -1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+
+		initEClass(eStringToDeployedComponentMapEntryEClass, Map.Entry.class, "EStringToDeployedComponentMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEStringToDeployedComponentMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEStringToDeployedComponentMapEntry_Value(), this.getDeployedComponent(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deployedComponentEClass, DeployedComponent.class, "DeployedComponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDeployedComponent_ComponentType(), theArchitecturePackage.getComponentType(), null, "componentType", null, 0, 1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDeployedComponent_DeploymentContext(), this.getDeploymentContext(), this.getDeploymentContext_Components(), "deploymentContext", null, 0, 1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDeployedComponent_ContainedOperations(), this.getDeployedOperation(), this.getDeployedOperation_ContainedComponent(), "containedOperations", null, 0, -1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
-		initEReference(getDeployedComponent_AccessedOperations(), this.getDeployedOperation(), this.getDeployedOperation_AccesssedComponent(), "accessedOperations", null, 0, -1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDeployedComponent_ContainedOperations(), this.getEStringToDeployedOperationMapEntry(), null, "containedOperations", null, 0, -1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+
+		initEClass(eStringToDeployedOperationMapEntryEClass, Map.Entry.class, "EStringToDeployedOperationMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEStringToDeployedOperationMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEStringToDeployedOperationMapEntry_Value(), this.getDeployedOperation(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deployedOperationEClass, DeployedOperation.class, "DeployedOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDeployedOperation_OperationType(), theArchitecturePackage.getOperationType(), null, "operationType", null, 0, 1, DeployedOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDeployedOperation_ContainedComponent(), this.getDeployedComponent(), this.getDeployedComponent_ContainedOperations(), "containedComponent", null, 0, 1, DeployedOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDeployedOperation_AccesssedComponent(), this.getDeployedComponent(), this.getDeployedComponent_AccessedOperations(), "accesssedComponent", null, 0, 1, DeployedOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //DeploymentPackageImpl

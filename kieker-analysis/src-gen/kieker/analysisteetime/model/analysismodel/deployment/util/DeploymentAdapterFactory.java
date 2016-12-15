@@ -2,6 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment.util;
 
+import java.util.Map;
 import kieker.analysisteetime.model.analysismodel.deployment.*;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -72,12 +73,24 @@ public class DeploymentAdapterFactory extends AdapterFactoryImpl {
 				return createDeploymentRootAdapter();
 			}
 			@Override
+			public Adapter caseEStringToDeploymentContextMapEntry(Map.Entry<String, DeploymentContext> object) {
+				return createEStringToDeploymentContextMapEntryAdapter();
+			}
+			@Override
 			public Adapter caseDeploymentContext(DeploymentContext object) {
 				return createDeploymentContextAdapter();
 			}
 			@Override
+			public Adapter caseEStringToDeployedComponentMapEntry(Map.Entry<String, DeployedComponent> object) {
+				return createEStringToDeployedComponentMapEntryAdapter();
+			}
+			@Override
 			public Adapter caseDeployedComponent(DeployedComponent object) {
 				return createDeployedComponentAdapter();
+			}
+			@Override
+			public Adapter caseEStringToDeployedOperationMapEntry(Map.Entry<String, DeployedOperation> object) {
+				return createEStringToDeployedOperationMapEntryAdapter();
 			}
 			@Override
 			public Adapter caseDeployedOperation(DeployedOperation object) {
@@ -118,6 +131,20 @@ public class DeploymentAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>EString To Deployment Context Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createEStringToDeploymentContextMapEntryAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext <em>Context</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -132,6 +159,20 @@ public class DeploymentAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>EString To Deployed Component Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createEStringToDeployedComponentMapEntryAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent <em>Deployed Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -142,6 +183,20 @@ public class DeploymentAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createDeployedComponentAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>EString To Deployed Operation Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createEStringToDeployedOperationMapEntryAdapter() {
 		return null;
 	}
 

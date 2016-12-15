@@ -2,6 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment.impl;
 
+import java.util.Map;
 import kieker.analysisteetime.model.analysismodel.deployment.*;
 
 import org.eclipse.emf.ecore.EClass;
@@ -57,8 +58,11 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case DeploymentPackage.DEPLOYMENT_ROOT: return createDeploymentRoot();
+			case DeploymentPackage.ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY: return (EObject)createEStringToDeploymentContextMapEntry();
 			case DeploymentPackage.DEPLOYMENT_CONTEXT: return createDeploymentContext();
+			case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY: return (EObject)createEStringToDeployedComponentMapEntry();
 			case DeploymentPackage.DEPLOYED_COMPONENT: return createDeployedComponent();
+			case DeploymentPackage.ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY: return (EObject)createEStringToDeployedOperationMapEntry();
 			case DeploymentPackage.DEPLOYED_OPERATION: return createDeployedOperation();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -80,6 +84,16 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Map.Entry<String, DeploymentContext> createEStringToDeploymentContextMapEntry() {
+		EStringToDeploymentContextMapEntryImpl eStringToDeploymentContextMapEntry = new EStringToDeploymentContextMapEntryImpl();
+		return eStringToDeploymentContextMapEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public DeploymentContext createDeploymentContext() {
 		DeploymentContextImpl deploymentContext = new DeploymentContextImpl();
 		return deploymentContext;
@@ -90,9 +104,29 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Map.Entry<String, DeployedComponent> createEStringToDeployedComponentMapEntry() {
+		EStringToDeployedComponentMapEntryImpl eStringToDeployedComponentMapEntry = new EStringToDeployedComponentMapEntryImpl();
+		return eStringToDeployedComponentMapEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public DeployedComponent createDeployedComponent() {
 		DeployedComponentImpl deployedComponent = new DeployedComponentImpl();
 		return deployedComponent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<String, DeployedOperation> createEStringToDeployedOperationMapEntry() {
+		EStringToDeployedOperationMapEntryImpl eStringToDeployedOperationMapEntry = new EStringToDeployedOperationMapEntryImpl();
+		return eStringToDeployedOperationMapEntry;
 	}
 
 	/**
