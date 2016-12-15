@@ -67,4 +67,13 @@ public interface DeployedComponent extends EObject {
 	 */
 	EMap<String, DeployedOperation> getContainedOperations();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.emf.ecore.EObject container = this.eContainer();\r\nif (container != null) {\r\n\torg.eclipse.emf.ecore.EObject containerContainer = container.eContainer();\r\n\tif (containerContainer != null) {\r\n\t\treturn (DeploymentContext) containerContainer ;\r\n\t}\r\n}\r\nreturn null;\r\n'"
+	 * @generated
+	 */
+	DeploymentContext getDeploymentContext();
+
 } // DeployedComponent

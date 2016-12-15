@@ -279,13 +279,22 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_COMPONENT_FEATURE_COUNT = 2;
 
 	/**
+	 * The operation id for the '<em>Get Deployment Context</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_COMPONENT___GET_DEPLOYMENT_CONTEXT = 0;
+
+	/**
 	 * The number of operations of the '<em>Deployed Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_COMPONENT_OPERATION_COUNT = 0;
+	int DEPLOYED_COMPONENT_OPERATION_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedOperationMapEntryImpl <em>EString To Deployed Operation Map Entry</em>}' class.
@@ -362,13 +371,22 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_OPERATION_FEATURE_COUNT = 1;
 
 	/**
+	 * The operation id for the '<em>Get Component</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYED_OPERATION___GET_COMPONENT = 0;
+
+	/**
 	 * The number of operations of the '<em>Deployed Operation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_OPERATION_OPERATION_COUNT = 0;
+	int DEPLOYED_OPERATION_OPERATION_COUNT = 1;
 
 
 	/**
@@ -535,6 +553,16 @@ public interface DeploymentPackage extends EPackage {
 	EReference getDeployedComponent_ContainedOperations();
 
 	/**
+	 * Returns the meta object for the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getDeploymentContext() <em>Get Deployment Context</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Deployment Context</em>' operation.
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getDeploymentContext()
+	 * @generated
+	 */
+	EOperation getDeployedComponent__GetDeploymentContext();
+
+	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Deployed Operation Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -588,6 +616,16 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getDeployedOperation_OperationType();
+
+	/**
+	 * Returns the meta object for the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getComponent() <em>Get Component</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Component</em>' operation.
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getComponent()
+	 * @generated
+	 */
+	EOperation getDeployedOperation__GetComponent();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -743,6 +781,14 @@ public interface DeploymentPackage extends EPackage {
 		EReference DEPLOYED_COMPONENT__CONTAINED_OPERATIONS = eINSTANCE.getDeployedComponent_ContainedOperations();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Deployment Context</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation DEPLOYED_COMPONENT___GET_DEPLOYMENT_CONTEXT = eINSTANCE.getDeployedComponent__GetDeploymentContext();
+
+		/**
 		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedOperationMapEntryImpl <em>EString To Deployed Operation Map Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -785,6 +831,14 @@ public interface DeploymentPackage extends EPackage {
 		 * @generated
 		 */
 		EReference DEPLOYED_OPERATION__OPERATION_TYPE = eINSTANCE.getDeployedOperation_OperationType();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Component</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation DEPLOYED_OPERATION___GET_COMPONENT = eINSTANCE.getDeployedOperation__GetComponent();
 
 	}
 

@@ -2,11 +2,14 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import kieker.analysisteetime.model.analysismodel.architecture.OperationType;
+import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -99,6 +102,23 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public DeployedComponent getComponent() {
+		org.eclipse.emf.ecore.EObject container = this.eContainer();
+		if (container != null) {
+			org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
+			if (containerContainer != null) {
+				return (DeployedComponent) containerContainer ;
+			}
+		}
+		return null;
+		
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -151,6 +171,20 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 				return operationType != null;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case DeploymentPackage.DEPLOYED_OPERATION___GET_COMPONENT:
+				return getComponent();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } //DeployedOperationImpl

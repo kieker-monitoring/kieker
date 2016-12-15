@@ -2,14 +2,17 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import kieker.analysisteetime.model.analysismodel.architecture.ComponentType;
 
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -129,6 +132,23 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public DeploymentContext getDeploymentContext() {
+		org.eclipse.emf.ecore.EObject container = this.eContainer();
+		if (container != null) {
+			org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
+			if (containerContainer != null) {
+				return (DeploymentContext) containerContainer ;
+			}
+		}
+		return null;
+		
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -207,6 +227,20 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 				return containedOperations != null && !containedOperations.isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case DeploymentPackage.DEPLOYED_COMPONENT___GET_DEPLOYMENT_CONTEXT:
+				return getDeploymentContext();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 } //DeployedComponentImpl
