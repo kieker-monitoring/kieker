@@ -2,7 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment.impl;
 
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
+import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage;
 import org.eclipse.emf.common.notify.Notification;
@@ -59,7 +59,7 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<String, DeployedOperation> components;
+	protected EMap<String, DeployedComponent> components;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -85,9 +85,9 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EMap<String, DeployedOperation> getComponents() {
+	public EMap<String, DeployedComponent> getComponents() {
 		if (components == null) {
-			components = new EcoreEMap<String,DeployedOperation>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY, EStringToDeployedOperationMapEntryImpl.class, this, DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS);
+			components = new EcoreEMap<String,DeployedComponent>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY, EStringToDeployedComponentMapEntryImpl.class, this, DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS);
 		}
 		return components;
 	}
