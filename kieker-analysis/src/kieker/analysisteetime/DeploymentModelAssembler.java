@@ -16,15 +16,15 @@
 
 package kieker.analysisteetime;
 
+import kieker.analysisteetime.model.analysismodel.architecture.ComponentType;
 import kieker.analysisteetime.model.analysismodel.architecture.IndexedArchitectureRoot;
 import kieker.analysisteetime.model.analysismodel.architecture.IndexedComponentType;
 import kieker.analysisteetime.model.analysismodel.architecture.OperationType;
+import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
-import kieker.analysisteetime.model.analysismodel.deployment.IndexedDeployedComponent;
-import kieker.analysisteetime.model.analysismodel.deployment.IndexedDeploymentContext;
-import kieker.analysisteetime.model.analysismodel.deployment.IndexedDeploymentFactory;
-import kieker.analysisteetime.model.analysismodel.deployment.IndexedDeploymentRoot;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
 import kieker.common.record.flow.IOperationRecord;
 
 /**
@@ -34,13 +34,12 @@ import kieker.common.record.flow.IOperationRecord;
  */
 public class DeploymentModelAssembler {
 
-	private final IndexedDeploymentFactory indexedFactory = IndexedDeploymentFactory.INSTANCE;
 	private final DeploymentFactory factory = DeploymentFactory.eINSTANCE;
 
 	private final IndexedArchitectureRoot architectureRoot;
-	private final IndexedDeploymentRoot deploymentRoot;
+	private final DeploymentRoot deploymentRoot;
 
-	public DeploymentModelAssembler(final IndexedArchitectureRoot architectureRoot, final IndexedDeploymentRoot deploymentRoot) {
+	public DeploymentModelAssembler(final IndexedArchitectureRoot architectureRoot, final DeploymentRoot deploymentRoot) {
 		this.architectureRoot = architectureRoot;
 		this.deploymentRoot = deploymentRoot;
 	}
@@ -55,28 +54,32 @@ public class DeploymentModelAssembler {
 
 	public void addRecord(final String hostName, final String componentSignature, final String operationSignature) {
 
-		// TODO ugly cast
-		IndexedDeploymentContext deploymentContext = (IndexedDeploymentContext) this.deploymentRoot.getDeploymentContextByName(hostName);
+		final String deploymentContextKey = hostName;
+		DeploymentContext deploymentContext = this.deploymentRoot.getDeploymentContexts().get(deploymentContextKey);
 		if (deploymentContext == null) {
-			deploymentContext = this.indexedFactory.createDeploymentContext();
+			deploymentContext = this.factory.createDeploymentContext();
 			deploymentContext.setName(hostName);
-			deploymentContext.setDeploymentRoot(this.deploymentRoot);
+			this.deploymentRoot.getDeploymentContexts().put(deploymentContextKey, deploymentContext);
+			// Old version:
+			// deploymentContext.setDeploymentRoot(this.deploymentRoot);
 		}
 
-		// TODO ugly cast
-		IndexedDeployedComponent component = (IndexedDeployedComponent) deploymentContext.getDeployedComponentByName(componentSignature);
+		final String componentKey = componentSignature;
+		DeployedComponent component = deploymentContext.getComponents().get(componentKey);
 		if (component == null) {
-			component = this.indexedFactory.createDeployedComponent();
-			component.setDeploymentContext(deploymentContext);
-			// TODO ugly cast
-			final IndexedComponentType componentType = (IndexedComponentType) this.architectureRoot.getComponentTypeByName(componentSignature);
+			component = this.factory.createDeployedComponent();
+			deploymentContext.getComponents().put(componentKey, component);
+			// Old version
+			// component.setDeploymentContext(deploymentContext);
+			final ComponentType componentType = this.architectureRoot.getComponentTypeByName(componentSignature);
 			component.setComponentType(componentType);
 		}
 
-		DeployedOperation operation = component.getDeployedOperationByName(operationSignature);
+		final String operationKey = operationSignature;
+		DeployedOperation operation = component.getContainedOperations().get(operationKey);
 		if (operation == null) {
 			operation = this.factory.createDeployedOperation();
-			operation.setContainedComponent(component);
+			component.getContainedOperations().put(operationKey, operation);
 			// TODO ugly cast
 			final IndexedComponentType componentType = (IndexedComponentType) component.getComponentType();
 			final OperationType operationType = componentType.getOperationTypeByName(operationSignature);
