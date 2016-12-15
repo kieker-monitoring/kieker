@@ -2,20 +2,24 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment.impl;
 
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage;
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
+
+import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
 
 /**
  * <!-- begin-user-doc -->
@@ -85,6 +89,7 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EMap<String, DeployedOperation> getComponents() {
 		if (components == null) {
 			components = new EcoreEMap<String,DeployedOperation>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY, EStringToDeployedOperationMapEntryImpl.class, this, DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS);
@@ -97,6 +102,25 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public DeploymentRoot getDeploymentRoot() {
+		org.eclipse.emf.ecore.EObject container = this.eContainer();
+		if (container != null) {
+			org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
+			if (containerContainer != null) {
+				return (DeploymentRoot) containerContainer ;
+			}
+		}
+		return null;
+		
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -106,6 +130,7 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -203,6 +228,20 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case DeploymentPackage.DEPLOYMENT_CONTEXT___GET_DEPLOYMENT_ROOT:
+				return getDeploymentRoot();
+		}
+		return super.eInvoke(operationID, arguments);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
@@ -213,4 +252,4 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 		return result.toString();
 	}
 
-} //DeploymentContextImpl
+} // DeploymentContextImpl

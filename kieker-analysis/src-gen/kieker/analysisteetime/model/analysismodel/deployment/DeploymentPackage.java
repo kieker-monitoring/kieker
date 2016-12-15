@@ -4,6 +4,7 @@ package kieker.analysisteetime.model.analysismodel.deployment;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -177,13 +178,22 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYMENT_CONTEXT_FEATURE_COUNT = 2;
 
 	/**
+	 * The operation id for the '<em>Get Deployment Root</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPLOYMENT_CONTEXT___GET_DEPLOYMENT_ROOT = 0;
+
+	/**
 	 * The number of operations of the '<em>Context</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYMENT_CONTEXT_OPERATION_COUNT = 0;
+	int DEPLOYMENT_CONTEXT_OPERATION_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedComponentMapEntryImpl <em>EString To Deployed Component Map Entry</em>}' class.
@@ -438,6 +448,16 @@ public interface DeploymentPackage extends EPackage {
 	EReference getDeploymentContext_Components();
 
 	/**
+	 * Returns the meta object for the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getDeploymentRoot() <em>Get Deployment Root</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Deployment Root</em>' operation.
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getDeploymentRoot()
+	 * @generated
+	 */
+	EOperation getDeploymentContext__GetDeploymentRoot();
+
+	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Deployed Component Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -653,6 +673,14 @@ public interface DeploymentPackage extends EPackage {
 		 * @generated
 		 */
 		EReference DEPLOYMENT_CONTEXT__COMPONENTS = eINSTANCE.getDeploymentContext_Components();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Deployment Root</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation DEPLOYMENT_CONTEXT___GET_DEPLOYMENT_ROOT = eINSTANCE.getDeploymentContext__GetDeploymentRoot();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedComponentMapEntryImpl <em>EString To Deployed Component Map Entry</em>}' class.

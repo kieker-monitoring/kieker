@@ -32,6 +32,7 @@ import kieker.analysisteetime.model.analysismodel.trace.impl.TracePackageImpl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -239,6 +240,15 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getDeploymentContext__GetDeploymentRoot() {
+		return deploymentContextEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getEStringToDeployedComponentMapEntry() {
 		return eStringToDeployedComponentMapEntryEClass;
 	}
@@ -380,6 +390,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		deploymentContextEClass = createEClass(DEPLOYMENT_CONTEXT);
 		createEAttribute(deploymentContextEClass, DEPLOYMENT_CONTEXT__NAME);
 		createEReference(deploymentContextEClass, DEPLOYMENT_CONTEXT__COMPONENTS);
+		createEOperation(deploymentContextEClass, DEPLOYMENT_CONTEXT___GET_DEPLOYMENT_ROOT);
 
 		eStringToDeployedComponentMapEntryEClass = createEClass(ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY);
 		createEAttribute(eStringToDeployedComponentMapEntryEClass, ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__KEY);
@@ -440,6 +451,8 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEClass(deploymentContextEClass, DeploymentContext.class, "DeploymentContext", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDeploymentContext_Name(), ecorePackage.getEString(), "name", null, 0, 1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDeploymentContext_Components(), this.getEStringToDeployedOperationMapEntry(), null, "components", null, 0, -1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+
+		initEOperation(getDeploymentContext__GetDeploymentRoot(), this.getDeploymentRoot(), "getDeploymentRoot", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(eStringToDeployedComponentMapEntryEClass, Map.Entry.class, "EStringToDeployedComponentMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEStringToDeployedComponentMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
