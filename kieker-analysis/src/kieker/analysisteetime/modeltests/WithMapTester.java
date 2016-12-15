@@ -16,6 +16,8 @@
 
 package kieker.analysisteetime.modeltests;
 
+import org.eclipse.emf.ecore.EObject;
+
 import kieker.analysisteetime.model.analysismodel.architecture.ArchitectureFactory;
 import kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot;
 import kieker.analysisteetime.model.analysismodel.architecture.ComponentType;
@@ -55,7 +57,15 @@ public class WithMapTester {
 
 		final DeployedComponent deployedComponent = deploymentFactory.createDeployedComponent();
 		deployedComponent.setComponentType(componentType);
-		deploymentContext.getComponents().put("identifier", deployedComponent);
+		deploymentContext.getComponents().put("org.software.component", deployedComponent);
+
+		if (deploymentContext.getComponents().containsKey("org.software.component")) {
+			final DeployedComponent component = deploymentContext.getComponents().get("org.software.component");
+			final EObject container = component.eContainer();
+			final EObject containerContainer = component.eContainer().eContainer();
+			// final DeploymentContext
+			containerContainer.eClass();
+		}
 
 	}
 
