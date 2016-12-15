@@ -26,7 +26,7 @@ public interface DeploymentContext extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Components</b></em>' map.
 	 * The key is of type {@link java.lang.String},
-	 * and the value is of type {@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation},
+	 * and the value is of type {@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent},
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Components</em>' reference list isn't clear,
@@ -35,10 +35,10 @@ public interface DeploymentContext extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Components</em>' map.
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeploymentContext_Components()
-	 * @model mapType="kieker.analysisteetime.model.analysismodel.deployment.EStringToDeployedOperationMapEntry<org.eclipse.emf.ecore.EString, kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation>" ordered="false"
+	 * @model mapType="kieker.analysisteetime.model.analysismodel.deployment.EStringToDeployedComponentMapEntry<org.eclipse.emf.ecore.EString, kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent>" ordered="false"
 	 * @generated
 	 */
-	EMap<String, DeployedOperation> getComponents();
+	EMap<String, DeployedComponent> getComponents();
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -97,7 +97,7 @@
       </eOperations>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="components" ordered="false"
-          upperBound="-1" eType="#//deployment/EStringToDeployedOperationMapEntry"
+          upperBound="-1" eType="#//deployment/EStringToDeployedComponentMapEntry"
           containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="EStringToDeployedComponentMapEntry"

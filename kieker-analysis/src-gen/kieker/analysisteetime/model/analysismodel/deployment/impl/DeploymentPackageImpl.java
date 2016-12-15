@@ -450,7 +450,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 
 		initEClass(deploymentContextEClass, DeploymentContext.class, "DeploymentContext", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDeploymentContext_Name(), ecorePackage.getEString(), "name", null, 0, 1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDeploymentContext_Components(), this.getEStringToDeployedOperationMapEntry(), null, "components", null, 0, -1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEReference(getDeploymentContext_Components(), this.getEStringToDeployedComponentMapEntry(), null, "components", null, 0, -1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEOperation(getDeploymentContext__GetDeploymentRoot(), this.getDeploymentRoot(), "getDeploymentRoot", 0, 1, IS_UNIQUE, IS_ORDERED);
 
