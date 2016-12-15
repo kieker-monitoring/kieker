@@ -55,7 +55,7 @@ public class WithMapTester {
 
 		final DeployedComponent deployedComponent = deploymentFactory.createDeployedComponent();
 		deployedComponent.setComponentType(componentType);
-		// deploymentContext.getComponents().put("identifier", deployedComponent);
+		deploymentContext.getComponents().put("identifier", deployedComponent);
 
 	}
 
