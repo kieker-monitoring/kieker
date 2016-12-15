@@ -16,6 +16,9 @@
 
 package kieker.analysisteetime;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot;
 import kieker.analysisteetime.model.analysismodel.architecture.ComponentType;
 import kieker.analysisteetime.model.analysismodel.architecture.OperationType;
@@ -24,7 +27,7 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
-import kieker.common.record.flow.IOperationRecord;
+import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
 /**
  * @author Sören Henning
@@ -35,6 +38,8 @@ public class DeploymentModelAssembler {
 
 	private final DeploymentFactory factory = DeploymentFactory.eINSTANCE;
 
+	private final Map<Long, TraceRepositoryEntry> traceRepository = new HashMap<>();
+
 	private final ArchitectureRoot architectureRoot;
 	private final DeploymentRoot deploymentRoot;
 
@@ -43,8 +48,8 @@ public class DeploymentModelAssembler {
 		this.deploymentRoot = deploymentRoot;
 	}
 
-	public void addRecord(final IOperationRecord record) {
-		final String hostName = ""; // TODO
+	public void addRecord(final BeforeOperationEvent record) {
+		final String hostName = this.traceRepository.get(record.getTraceId()).hostname;
 		final String classSignature = record.getClassSignature();
 		final String operationSignature = record.getOperationSignature();
 
@@ -84,6 +89,11 @@ public class DeploymentModelAssembler {
 			operation.setOperationType(operationType);
 		}
 
+	}
+
+	private static class TraceRepositoryEntry {
+		protected int size;
+		protected String hostname;
 	}
 
 }
