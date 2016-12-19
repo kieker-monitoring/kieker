@@ -16,16 +16,18 @@
 
 package kieker.analysisteetime;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot;
 import kieker.analysisteetime.model.analysismodel.architecture.ComponentType;
-import kieker.analysisteetime.model.analysismodel.architecture.IndexedArchitectureRoot;
-import kieker.analysisteetime.model.analysismodel.architecture.IndexedComponentType;
 import kieker.analysisteetime.model.analysismodel.architecture.OperationType;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
-import kieker.common.record.flow.IOperationRecord;
+import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
 /**
  * @author Sören Henning
@@ -36,16 +38,18 @@ public class DeploymentModelAssembler {
 
 	private final DeploymentFactory factory = DeploymentFactory.eINSTANCE;
 
-	private final IndexedArchitectureRoot architectureRoot;
+	private final Map<Long, TraceRepositoryEntry> traceRepository = new HashMap<>();
+
+	private final ArchitectureRoot architectureRoot;
 	private final DeploymentRoot deploymentRoot;
 
-	public DeploymentModelAssembler(final IndexedArchitectureRoot architectureRoot, final DeploymentRoot deploymentRoot) {
+	public DeploymentModelAssembler(final ArchitectureRoot architectureRoot, final DeploymentRoot deploymentRoot) {
 		this.architectureRoot = architectureRoot;
 		this.deploymentRoot = deploymentRoot;
 	}
 
-	public void addRecord(final IOperationRecord record) {
-		final String hostName = ""; // TODO
+	public void addRecord(final BeforeOperationEvent record) {
+		final String hostName = this.traceRepository.get(record.getTraceId()).hostname;
 		final String classSignature = record.getClassSignature();
 		final String operationSignature = record.getOperationSignature();
 
@@ -60,8 +64,6 @@ public class DeploymentModelAssembler {
 			deploymentContext = this.factory.createDeploymentContext();
 			deploymentContext.setName(hostName);
 			this.deploymentRoot.getDeploymentContexts().put(deploymentContextKey, deploymentContext);
-			// Old version:
-			// deploymentContext.setDeploymentRoot(this.deploymentRoot);
 		}
 
 		final String componentKey = componentSignature;
@@ -69,9 +71,9 @@ public class DeploymentModelAssembler {
 		if (component == null) {
 			component = this.factory.createDeployedComponent();
 			deploymentContext.getComponents().put(componentKey, component);
-			// Old version
-			// component.setDeploymentContext(deploymentContext);
-			final ComponentType componentType = this.architectureRoot.getComponentTypeByName(componentSignature);
+
+			final String componentTypeKey = componentSignature;
+			final ComponentType componentType = this.architectureRoot.getComponentTypes().get(componentTypeKey);
 			component.setComponentType(componentType);
 		}
 
@@ -80,12 +82,18 @@ public class DeploymentModelAssembler {
 		if (operation == null) {
 			operation = this.factory.createDeployedOperation();
 			component.getContainedOperations().put(operationKey, operation);
-			// TODO ugly cast
-			final IndexedComponentType componentType = (IndexedComponentType) component.getComponentType();
-			final OperationType operationType = componentType.getOperationTypeByName(operationSignature);
+
+			final ComponentType componentType = component.getComponentType();
+			final String operationTypeKey = operationSignature;
+			final OperationType operationType = componentType.getProvidedOperations().get(operationTypeKey);
 			operation.setOperationType(operationType);
 		}
 
+	}
+
+	private static class TraceRepositoryEntry {
+		protected int size;
+		protected String hostname;
 	}
 
 }

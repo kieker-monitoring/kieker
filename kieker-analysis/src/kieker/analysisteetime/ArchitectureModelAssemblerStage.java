@@ -16,7 +16,7 @@
 
 package kieker.analysisteetime;
 
-import kieker.analysisteetime.model.analysismodel.architecture.IndexedArchitectureRoot;
+import kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
@@ -31,7 +31,7 @@ public class ArchitectureModelAssemblerStage extends AbstractFilter<IFlowRecord>
 
 	private final ArchitectureModelAssembler assembler;
 
-	public ArchitectureModelAssemblerStage(final IndexedArchitectureRoot architectureRoot) {
+	public ArchitectureModelAssemblerStage(final ArchitectureRoot architectureRoot) {
 		this.assembler = new ArchitectureModelAssembler(architectureRoot);
 	}
 

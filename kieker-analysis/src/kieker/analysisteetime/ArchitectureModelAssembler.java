@@ -17,9 +17,8 @@
 package kieker.analysisteetime;
 
 import kieker.analysisteetime.model.analysismodel.architecture.ArchitectureFactory;
-import kieker.analysisteetime.model.analysismodel.architecture.IndexedArchitectureFactory;
-import kieker.analysisteetime.model.analysismodel.architecture.IndexedArchitectureRoot;
-import kieker.analysisteetime.model.analysismodel.architecture.IndexedComponentType;
+import kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot;
+import kieker.analysisteetime.model.analysismodel.architecture.ComponentType;
 import kieker.analysisteetime.model.analysismodel.architecture.OperationType;
 import kieker.common.record.flow.IOperationRecord;
 
@@ -30,12 +29,11 @@ import kieker.common.record.flow.IOperationRecord;
  */
 public class ArchitectureModelAssembler {
 
-	private final IndexedArchitectureFactory indexedFactory = IndexedArchitectureFactory.INSTANCE;
 	private final ArchitectureFactory factory = ArchitectureFactory.eINSTANCE;
 
-	private final IndexedArchitectureRoot architectureRoot;
+	private final ArchitectureRoot architectureRoot;
 
-	public ArchitectureModelAssembler(final IndexedArchitectureRoot architectureRoot) {
+	public ArchitectureModelAssembler(final ArchitectureRoot architectureRoot) {
 		this.architectureRoot = architectureRoot;
 	}
 
@@ -48,19 +46,20 @@ public class ArchitectureModelAssembler {
 
 	public void addRecord(final String componentSignature, final String operationSignature) {
 
-		// TODO ugly cast
-		IndexedComponentType componentType = (IndexedComponentType) this.architectureRoot.getComponentTypeByName(componentSignature);
+		final String componentTypeKey = componentSignature;
+		ComponentType componentType = this.architectureRoot.getComponentTypes().get(componentTypeKey);
 		if (componentType == null) {
-			componentType = this.indexedFactory.createIndexedComponentType();
+			componentType = this.factory.createComponentType();
 			componentType.setSignature(componentSignature);
-			componentType.setArchitectureRoot(this.architectureRoot);
+			this.architectureRoot.getComponentTypes().put(componentTypeKey, componentType);
 		}
 
-		OperationType operationType = componentType.getOperationTypeByName(operationSignature);
+		final String operationTypeKey = operationSignature;
+		OperationType operationType = componentType.getProvidedOperations().get(operationSignature);
 		if (operationType == null) {
 			operationType = this.factory.createOperationType();
 			operationType.setSignature(operationSignature);
-			operationType.setComponentType(componentType);
+			componentType.getProvidedOperations().put(operationTypeKey, operationType);
 		}
 
 	}

@@ -43,13 +43,13 @@ public class WithMapTester {
 		final ArchitectureRoot architectureRoot = factory.createArchitectureRoot();
 		final ComponentType componentType = factory.createComponentType();
 		componentType.setSignature("org.software.component");
-		componentType.setArchitectureRoot(architectureRoot);
+		architectureRoot.getComponentTypes().put("org.software.component", componentType);
 		final OperationType operationType1 = factory.createOperationType();
 		operationType1.setSignature("public void doSomething()");
-		operationType1.setComponentType(componentType);
+		componentType.getProvidedOperations().put("public void doSomething()", operationType1);
 		final OperationType operationType2 = factory.createOperationType();
 		operationType2.setSignature("public String createSomeString()");
-		operationType2.setComponentType(componentType);
+		componentType.getProvidedOperations().put("public String createSomeString()", operationType2);
 
 		final DeploymentFactory deploymentFactory = DeploymentFactory.eINSTANCE;
 		final DeploymentContext deploymentContext = deploymentFactory.createDeploymentContext();
@@ -63,7 +63,7 @@ public class WithMapTester {
 			final DeployedComponent component = deploymentContext.getComponents().get("org.software.component");
 			final EObject container = component.eContainer();
 			final EObject containerContainer = component.eContainer().eContainer();
-			// final DeploymentContext
+			final DeploymentContext context = component.getDeploymentContext();
 			containerContainer.eClass();
 		}
 
