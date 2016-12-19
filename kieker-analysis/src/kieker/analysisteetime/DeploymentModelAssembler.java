@@ -19,9 +19,9 @@ package kieker.analysisteetime;
 import java.util.HashMap;
 import java.util.Map;
 
-import kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot;
-import kieker.analysisteetime.model.analysismodel.architecture.ComponentType;
-import kieker.analysisteetime.model.analysismodel.architecture.OperationType;
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent;
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation;
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
@@ -40,11 +40,11 @@ public class DeploymentModelAssembler {
 
 	private final Map<Long, TraceRepositoryEntry> traceRepository = new HashMap<>();
 
-	private final ArchitectureRoot architectureRoot;
+	private final AssemblyRoot assemblyRoot;
 	private final DeploymentRoot deploymentRoot;
 
-	public DeploymentModelAssembler(final ArchitectureRoot architectureRoot, final DeploymentRoot deploymentRoot) {
-		this.architectureRoot = architectureRoot;
+	public DeploymentModelAssembler(final AssemblyRoot assemblyRoot, final DeploymentRoot deploymentRoot) {
+		this.assemblyRoot = assemblyRoot;
 		this.deploymentRoot = deploymentRoot;
 	}
 
@@ -73,8 +73,8 @@ public class DeploymentModelAssembler {
 			deploymentContext.getComponents().put(componentKey, component);
 
 			final String componentTypeKey = componentSignature;
-			final ComponentType componentType = this.architectureRoot.getComponentTypes().get(componentTypeKey);
-			component.setComponentType(componentType);
+			final AssemblyComponent assemblyComponent = this.assemblyRoot.getAssemblyComponents().get(componentTypeKey);
+			// component.setComponentType(assemblyComponent);TraceRepositoryEntry //TODO
 		}
 
 		final String operationKey = operationSignature;
@@ -83,10 +83,11 @@ public class DeploymentModelAssembler {
 			operation = this.factory.createDeployedOperation();
 			component.getContainedOperations().put(operationKey, operation);
 
-			final ComponentType componentType = component.getComponentType();
+			final AssemblyComponent assemblyComponent = null; // TODO
+			// final AssemblyComponent componentType = component.getComponentType(); //TODO
 			final String operationTypeKey = operationSignature;
-			final OperationType operationType = componentType.getProvidedOperations().get(operationTypeKey);
-			operation.setOperationType(operationType);
+			final AssemblyOperation assemblyOperation = assemblyComponent.getAssemblyOperations().get(operationTypeKey);
+			// operation.setOperationType(assemblyOperation); //TODO
 		}
 
 	}

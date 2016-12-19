@@ -16,10 +16,10 @@
 
 package kieker.analysisteetime;
 
-import kieker.analysisteetime.model.analysismodel.architecture.ArchitectureFactory;
-import kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot;
-import kieker.analysisteetime.model.analysismodel.architecture.ComponentType;
-import kieker.analysisteetime.model.analysismodel.architecture.OperationType;
+import kieker.analysisteetime.model.analysismodel.type.ComponentType;
+import kieker.analysisteetime.model.analysismodel.type.OperationType;
+import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
+import kieker.analysisteetime.model.analysismodel.type.TypeRoot;
 import kieker.common.record.flow.IOperationRecord;
 
 /**
@@ -29,12 +29,12 @@ import kieker.common.record.flow.IOperationRecord;
  */
 public class ArchitectureModelAssembler {
 
-	private final ArchitectureFactory factory = ArchitectureFactory.eINSTANCE;
+	private final TypeFactory factory = TypeFactory.eINSTANCE;
 
-	private final ArchitectureRoot architectureRoot;
+	private final TypeRoot typeRoot;
 
-	public ArchitectureModelAssembler(final ArchitectureRoot architectureRoot) {
-		this.architectureRoot = architectureRoot;
+	public ArchitectureModelAssembler(final TypeRoot typeRoot) {
+		this.typeRoot = typeRoot;
 	}
 
 	public void addRecord(final IOperationRecord record) {
@@ -47,11 +47,11 @@ public class ArchitectureModelAssembler {
 	public void addRecord(final String componentSignature, final String operationSignature) {
 
 		final String componentTypeKey = componentSignature;
-		ComponentType componentType = this.architectureRoot.getComponentTypes().get(componentTypeKey);
+		ComponentType componentType = this.typeRoot.getComponentTypes().get(componentTypeKey);
 		if (componentType == null) {
 			componentType = this.factory.createComponentType();
 			componentType.setSignature(componentSignature);
-			this.architectureRoot.getComponentTypes().put(componentTypeKey, componentType);
+			this.typeRoot.getComponentTypes().put(componentTypeKey, componentType);
 		}
 
 		final String operationTypeKey = operationSignature;
