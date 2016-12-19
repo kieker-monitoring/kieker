@@ -2,6 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.assembly;
 
+import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EObject;
@@ -17,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getSignature <em>Signature</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getAssemblyOperations <em>Assembly Operations</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getComponentType <em>Component Type</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage#getAssemblyComponent()
@@ -66,6 +68,32 @@ public interface AssemblyComponent extends EObject {
 	 * @generated
 	 */
 	EMap<String, AssemblyOperation> getAssemblyOperations();
+
+	/**
+	 * Returns the value of the '<em><b>Component Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Component Type</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Component Type</em>' reference.
+	 * @see #setComponentType(ComponentType)
+	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage#getAssemblyComponent_ComponentType()
+	 * @model
+	 * @generated
+	 */
+	ComponentType getComponentType();
+
+	/**
+	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getComponentType <em>Component Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Component Type</em>' reference.
+	 * @see #getComponentType()
+	 * @generated
+	 */
+	void setComponentType(ComponentType value);
 
 	/**
 	 * <!-- begin-user-doc -->

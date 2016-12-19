@@ -252,13 +252,13 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_COMPONENT = 4;
 
 	/**
-	 * The feature id for the '<em><b>Component Type</b></em>' reference.
+	 * The feature id for the '<em><b>Assembly Operation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_COMPONENT__COMPONENT_TYPE = 0;
+	int DEPLOYED_COMPONENT__ASSEMBLY_OPERATION = 0;
 
 	/**
 	 * The feature id for the '<em><b>Contained Operations</b></em>' map.
@@ -353,13 +353,13 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_OPERATION = 6;
 
 	/**
-	 * The feature id for the '<em><b>Operation Type</b></em>' reference.
+	 * The feature id for the '<em><b>Assembly Operation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_OPERATION__OPERATION_TYPE = 0;
+	int DEPLOYED_OPERATION__ASSEMBLY_OPERATION = 0;
 
 	/**
 	 * The number of structural features of the '<em>Deployed Operation</em>' class.
@@ -531,15 +531,15 @@ public interface DeploymentPackage extends EPackage {
 	EClass getDeployedComponent();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getComponentType <em>Component Type</em>}'.
+	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAssemblyOperation <em>Assembly Operation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Component Type</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getComponentType()
+	 * @return the meta object for the reference '<em>Assembly Operation</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAssemblyOperation()
 	 * @see #getDeployedComponent()
 	 * @generated
 	 */
-	EReference getDeployedComponent_ComponentType();
+	EReference getDeployedComponent_AssemblyOperation();
 
 	/**
 	 * Returns the meta object for the map '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getContainedOperations <em>Contained Operations</em>}'.
@@ -607,15 +607,15 @@ public interface DeploymentPackage extends EPackage {
 	EClass getDeployedOperation();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getOperationType <em>Operation Type</em>}'.
+	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getAssemblyOperation <em>Assembly Operation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Operation Type</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getOperationType()
+	 * @return the meta object for the reference '<em>Assembly Operation</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getAssemblyOperation()
 	 * @see #getDeployedOperation()
 	 * @generated
 	 */
-	EReference getDeployedOperation_OperationType();
+	EReference getDeployedOperation_AssemblyOperation();
 
 	/**
 	 * Returns the meta object for the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getComponent() <em>Get Component</em>}' operation.
@@ -765,12 +765,12 @@ public interface DeploymentPackage extends EPackage {
 		EClass DEPLOYED_COMPONENT = eINSTANCE.getDeployedComponent();
 
 		/**
-		 * The meta object literal for the '<em><b>Component Type</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Assembly Operation</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference DEPLOYED_COMPONENT__COMPONENT_TYPE = eINSTANCE.getDeployedComponent_ComponentType();
+		EReference DEPLOYED_COMPONENT__ASSEMBLY_OPERATION = eINSTANCE.getDeployedComponent_AssemblyOperation();
 
 		/**
 		 * The meta object literal for the '<em><b>Contained Operations</b></em>' map feature.
@@ -825,12 +825,12 @@ public interface DeploymentPackage extends EPackage {
 		EClass DEPLOYED_OPERATION = eINSTANCE.getDeployedOperation();
 
 		/**
-		 * The meta object literal for the '<em><b>Operation Type</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Assembly Operation</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference DEPLOYED_OPERATION__OPERATION_TYPE = eINSTANCE.getDeployedOperation_OperationType();
+		EReference DEPLOYED_OPERATION__ASSEMBLY_OPERATION = eINSTANCE.getDeployedOperation_AssemblyOperation();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Component</b></em>' operation.

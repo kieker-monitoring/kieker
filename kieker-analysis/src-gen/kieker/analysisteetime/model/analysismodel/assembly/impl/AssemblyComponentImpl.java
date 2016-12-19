@@ -9,6 +9,7 @@ import kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot;
 
+import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -35,6 +36,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyComponentImpl#getSignature <em>Signature</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyComponentImpl#getAssemblyOperations <em>Assembly Operations</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyComponentImpl#getComponentType <em>Component Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -69,6 +71,16 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * @ordered
 	 */
 	protected EMap<String, AssemblyOperation> assemblyOperations;
+
+	/**
+	 * The cached value of the '{@link #getComponentType() <em>Component Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getComponentType()
+	 * @generated
+	 * @ordered
+	 */
+	protected ComponentType componentType;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -127,6 +139,44 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ComponentType getComponentType() {
+		if (componentType != null && componentType.eIsProxy()) {
+			InternalEObject oldComponentType = (InternalEObject)componentType;
+			componentType = (ComponentType)eResolveProxy(oldComponentType);
+			if (componentType != oldComponentType) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AssemblyPackage.ASSEMBLY_COMPONENT__COMPONENT_TYPE, oldComponentType, componentType));
+			}
+		}
+		return componentType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ComponentType basicGetComponentType() {
+		return componentType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setComponentType(ComponentType newComponentType) {
+		ComponentType oldComponentType = componentType;
+		componentType = newComponentType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_COMPONENT__COMPONENT_TYPE, oldComponentType, componentType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public AssemblyRoot getAssemblyRoot() {
 		org.eclipse.emf.ecore.EObject container = this.eContainer();
 		if (container != null) {
@@ -166,6 +216,9 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
 				if (coreType) return getAssemblyOperations();
 				else return getAssemblyOperations().map();
+			case AssemblyPackage.ASSEMBLY_COMPONENT__COMPONENT_TYPE:
+				if (resolve) return getComponentType();
+				return basicGetComponentType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -183,6 +236,9 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 				return;
 			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
 				((EStructuralFeature.Setting)getAssemblyOperations()).set(newValue);
+				return;
+			case AssemblyPackage.ASSEMBLY_COMPONENT__COMPONENT_TYPE:
+				setComponentType((ComponentType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -202,6 +258,9 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
 				getAssemblyOperations().clear();
 				return;
+			case AssemblyPackage.ASSEMBLY_COMPONENT__COMPONENT_TYPE:
+				setComponentType((ComponentType)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -218,6 +277,8 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 				return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
 			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
 				return assemblyOperations != null && !assemblyOperations.isEmpty();
+			case AssemblyPackage.ASSEMBLY_COMPONENT__COMPONENT_TYPE:
+				return componentType != null;
 		}
 		return super.eIsSet(featureID);
 	}

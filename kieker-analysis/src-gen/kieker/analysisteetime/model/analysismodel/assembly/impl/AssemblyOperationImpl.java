@@ -8,12 +8,14 @@ import kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage;
 
+import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
@@ -26,6 +28,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * </p>
  * <ul>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyOperationImpl#getSignature <em>Signature</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyOperationImpl#getOperationType <em>Operation Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -50,6 +53,16 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	 * @ordered
 	 */
 	protected String signature = SIGNATURE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getOperationType() <em>Operation Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOperationType()
+	 * @generated
+	 * @ordered
+	 */
+	protected OperationType operationType;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -96,6 +109,44 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public OperationType getOperationType() {
+		if (operationType != null && operationType.eIsProxy()) {
+			InternalEObject oldOperationType = (InternalEObject)operationType;
+			operationType = (OperationType)eResolveProxy(oldOperationType);
+			if (operationType != oldOperationType) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE, oldOperationType, operationType));
+			}
+		}
+		return operationType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OperationType basicGetOperationType() {
+		return operationType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOperationType(OperationType newOperationType) {
+		OperationType oldOperationType = operationType;
+		operationType = newOperationType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE, oldOperationType, operationType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public AssemblyComponent getAssemblyComponent() {
 		org.eclipse.emf.ecore.EObject container = this.eContainer();
 		if (container != null) {
@@ -118,6 +169,9 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 		switch (featureID) {
 			case AssemblyPackage.ASSEMBLY_OPERATION__SIGNATURE:
 				return getSignature();
+			case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
+				if (resolve) return getOperationType();
+				return basicGetOperationType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -132,6 +186,9 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 		switch (featureID) {
 			case AssemblyPackage.ASSEMBLY_OPERATION__SIGNATURE:
 				setSignature((String)newValue);
+				return;
+			case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
+				setOperationType((OperationType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -148,6 +205,9 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 			case AssemblyPackage.ASSEMBLY_OPERATION__SIGNATURE:
 				setSignature(SIGNATURE_EDEFAULT);
 				return;
+			case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
+				setOperationType((OperationType)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -162,6 +222,8 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 		switch (featureID) {
 			case AssemblyPackage.ASSEMBLY_OPERATION__SIGNATURE:
 				return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
+			case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
+				return operationType != null;
 		}
 		return super.eIsSet(featureID);
 	}

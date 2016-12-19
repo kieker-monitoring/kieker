@@ -3,12 +3,11 @@
 package kieker.analysisteetime.model.analysismodel.deployment.impl;
 
 import java.lang.reflect.InvocationTargetException;
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage;
-
-import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -30,7 +29,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeployedComponentImpl#getComponentType <em>Component Type</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeployedComponentImpl#getAssemblyOperation <em>Assembly Operation</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeployedComponentImpl#getContainedOperations <em>Contained Operations</em>}</li>
  * </ul>
  *
@@ -38,14 +37,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class DeployedComponentImpl extends MinimalEObjectImpl.Container implements DeployedComponent {
 	/**
-	 * The cached value of the '{@link #getComponentType() <em>Component Type</em>}' reference.
+	 * The cached value of the '{@link #getAssemblyOperation() <em>Assembly Operation</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getComponentType()
+	 * @see #getAssemblyOperation()
 	 * @generated
 	 * @ordered
 	 */
-	protected ComponentType componentType;
+	protected AssemblyComponent assemblyOperation;
 
 	/**
 	 * The cached value of the '{@link #getContainedOperations() <em>Contained Operations</em>}' map.
@@ -81,16 +80,16 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ComponentType getComponentType() {
-		if (componentType != null && componentType.eIsProxy()) {
-			InternalEObject oldComponentType = (InternalEObject)componentType;
-			componentType = (ComponentType)eResolveProxy(oldComponentType);
-			if (componentType != oldComponentType) {
+	public AssemblyComponent getAssemblyOperation() {
+		if (assemblyOperation != null && assemblyOperation.eIsProxy()) {
+			InternalEObject oldAssemblyOperation = (InternalEObject)assemblyOperation;
+			assemblyOperation = (AssemblyComponent)eResolveProxy(oldAssemblyOperation);
+			if (assemblyOperation != oldAssemblyOperation) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DeploymentPackage.DEPLOYED_COMPONENT__COMPONENT_TYPE, oldComponentType, componentType));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_OPERATION, oldAssemblyOperation, assemblyOperation));
 			}
 		}
-		return componentType;
+		return assemblyOperation;
 	}
 
 	/**
@@ -98,8 +97,8 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ComponentType basicGetComponentType() {
-		return componentType;
+	public AssemblyComponent basicGetAssemblyOperation() {
+		return assemblyOperation;
 	}
 
 	/**
@@ -107,11 +106,11 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setComponentType(ComponentType newComponentType) {
-		ComponentType oldComponentType = componentType;
-		componentType = newComponentType;
+	public void setAssemblyOperation(AssemblyComponent newAssemblyOperation) {
+		AssemblyComponent oldAssemblyOperation = assemblyOperation;
+		assemblyOperation = newAssemblyOperation;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYED_COMPONENT__COMPONENT_TYPE, oldComponentType, componentType));
+			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_OPERATION, oldAssemblyOperation, assemblyOperation));
 	}
 
 	/**
@@ -165,9 +164,9 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_COMPONENT__COMPONENT_TYPE:
-				if (resolve) return getComponentType();
-				return basicGetComponentType();
+			case DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_OPERATION:
+				if (resolve) return getAssemblyOperation();
+				return basicGetAssemblyOperation();
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
 				if (coreType) return getContainedOperations();
 				else return getContainedOperations().map();
@@ -184,8 +183,8 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_COMPONENT__COMPONENT_TYPE:
-				setComponentType((ComponentType)newValue);
+			case DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_OPERATION:
+				setAssemblyOperation((AssemblyComponent)newValue);
 				return;
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
 				((EStructuralFeature.Setting)getContainedOperations()).set(newValue);
@@ -202,8 +201,8 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_COMPONENT__COMPONENT_TYPE:
-				setComponentType((ComponentType)null);
+			case DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_OPERATION:
+				setAssemblyOperation((AssemblyComponent)null);
 				return;
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
 				getContainedOperations().clear();
@@ -220,8 +219,8 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_COMPONENT__COMPONENT_TYPE:
-				return componentType != null;
+			case DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_OPERATION:
+				return assemblyOperation != null;
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
 				return containedOperations != null && !containedOperations.isEmpty();
 		}

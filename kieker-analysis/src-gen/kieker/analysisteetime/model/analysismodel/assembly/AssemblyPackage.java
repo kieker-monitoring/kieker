@@ -169,13 +169,22 @@ public interface AssemblyPackage extends EPackage {
 	int ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS = 1;
 
 	/**
+	 * The feature id for the '<em><b>Component Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSEMBLY_COMPONENT__COMPONENT_TYPE = 2;
+
+	/**
 	 * The number of structural features of the '<em>Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASSEMBLY_COMPONENT_FEATURE_COUNT = 2;
+	int ASSEMBLY_COMPONENT_FEATURE_COUNT = 3;
 
 	/**
 	 * The operation id for the '<em>Get Assembly Root</em>' operation.
@@ -261,13 +270,22 @@ public interface AssemblyPackage extends EPackage {
 	int ASSEMBLY_OPERATION__SIGNATURE = 0;
 
 	/**
+	 * The feature id for the '<em><b>Operation Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSEMBLY_OPERATION__OPERATION_TYPE = 1;
+
+	/**
 	 * The number of structural features of the '<em>Operation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASSEMBLY_OPERATION_FEATURE_COUNT = 1;
+	int ASSEMBLY_OPERATION_FEATURE_COUNT = 2;
 
 	/**
 	 * The operation id for the '<em>Get Assembly Component</em>' operation.
@@ -376,6 +394,17 @@ public interface AssemblyPackage extends EPackage {
 	EReference getAssemblyComponent_AssemblyOperations();
 
 	/**
+	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getComponentType <em>Component Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Component Type</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getComponentType()
+	 * @see #getAssemblyComponent()
+	 * @generated
+	 */
+	EReference getAssemblyComponent_ComponentType();
+
+	/**
 	 * Returns the meta object for the '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getAssemblyRoot() <em>Get Assembly Root</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -439,6 +468,17 @@ public interface AssemblyPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getAssemblyOperation_Signature();
+
+	/**
+	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation#getOperationType <em>Operation Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Operation Type</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation#getOperationType()
+	 * @see #getAssemblyOperation()
+	 * @generated
+	 */
+	EReference getAssemblyOperation_OperationType();
 
 	/**
 	 * Returns the meta object for the '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation#getAssemblyComponent() <em>Get Assembly Component</em>}' operation.
@@ -544,6 +584,14 @@ public interface AssemblyPackage extends EPackage {
 		EReference ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS = eINSTANCE.getAssemblyComponent_AssemblyOperations();
 
 		/**
+		 * The meta object literal for the '<em><b>Component Type</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ASSEMBLY_COMPONENT__COMPONENT_TYPE = eINSTANCE.getAssemblyComponent_ComponentType();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Assembly Root</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -594,6 +642,14 @@ public interface AssemblyPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ASSEMBLY_OPERATION__SIGNATURE = eINSTANCE.getAssemblyOperation_Signature();
+
+		/**
+		 * The meta object literal for the '<em><b>Operation Type</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ASSEMBLY_OPERATION__OPERATION_TYPE = eINSTANCE.getAssemblyOperation_OperationType();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Assembly Component</b></em>' operation.

@@ -296,7 +296,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getDeployedComponent_ComponentType() {
+	public EReference getDeployedComponent_AssemblyOperation() {
 		return (EReference)deployedComponentEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -359,7 +359,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getDeployedOperation_OperationType() {
+	public EReference getDeployedOperation_AssemblyOperation() {
 		return (EReference)deployedOperationEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -417,7 +417,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		createEReference(eStringToDeployedComponentMapEntryEClass, ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE);
 
 		deployedComponentEClass = createEClass(DEPLOYED_COMPONENT);
-		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__COMPONENT_TYPE);
+		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__ASSEMBLY_OPERATION);
 		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__CONTAINED_OPERATIONS);
 		createEOperation(deployedComponentEClass, DEPLOYED_COMPONENT___GET_DEPLOYMENT_CONTEXT);
 
@@ -426,7 +426,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		createEReference(eStringToDeployedOperationMapEntryEClass, ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY__VALUE);
 
 		deployedOperationEClass = createEClass(DEPLOYED_OPERATION);
-		createEReference(deployedOperationEClass, DEPLOYED_OPERATION__OPERATION_TYPE);
+		createEReference(deployedOperationEClass, DEPLOYED_OPERATION__ASSEMBLY_OPERATION);
 		createEOperation(deployedOperationEClass, DEPLOYED_OPERATION___GET_COMPONENT);
 	}
 
@@ -454,7 +454,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		TypePackage theTypePackage = (TypePackage)EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI);
+		AssemblyPackage theAssemblyPackage = (AssemblyPackage)EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -481,7 +481,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEReference(getEStringToDeployedComponentMapEntry_Value(), this.getDeployedComponent(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deployedComponentEClass, DeployedComponent.class, "DeployedComponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDeployedComponent_ComponentType(), theTypePackage.getComponentType(), null, "componentType", null, 0, 1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDeployedComponent_AssemblyOperation(), theAssemblyPackage.getAssemblyComponent(), null, "assemblyOperation", null, 0, 1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDeployedComponent_ContainedOperations(), this.getEStringToDeployedOperationMapEntry(), null, "containedOperations", null, 0, -1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEOperation(getDeployedComponent__GetDeploymentContext(), this.getDeploymentContext(), "getDeploymentContext", 0, 1, IS_UNIQUE, IS_ORDERED);
@@ -491,7 +491,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEReference(getEStringToDeployedOperationMapEntry_Value(), this.getDeployedOperation(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deployedOperationEClass, DeployedOperation.class, "DeployedOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDeployedOperation_OperationType(), theTypePackage.getOperationType(), null, "operationType", null, 0, 1, DeployedOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDeployedOperation_AssemblyOperation(), theAssemblyPackage.getAssemblyOperation(), null, "assemblyOperation", null, 0, 1, DeployedOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getDeployedOperation__GetComponent(), this.getDeployedComponent(), "getComponent", 0, 1, IS_UNIQUE, IS_ORDERED);
 	}

@@ -2,6 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.assembly;
 
+import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -14,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation#getSignature <em>Signature</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation#getOperationType <em>Operation Type</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage#getAssemblyOperation()
@@ -46,6 +48,32 @@ public interface AssemblyOperation extends EObject {
 	 * @generated
 	 */
 	void setSignature(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Operation Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Operation Type</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Operation Type</em>' reference.
+	 * @see #setOperationType(OperationType)
+	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage#getAssemblyOperation_OperationType()
+	 * @model
+	 * @generated
+	 */
+	OperationType getOperationType();
+
+	/**
+	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation#getOperationType <em>Operation Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Operation Type</em>' reference.
+	 * @see #getOperationType()
+	 * @generated
+	 */
+	void setOperationType(OperationType value);
 
 	/**
 	 * <!-- begin-user-doc -->

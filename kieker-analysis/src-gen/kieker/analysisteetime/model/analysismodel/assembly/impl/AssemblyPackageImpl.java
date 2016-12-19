@@ -242,6 +242,15 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getAssemblyComponent_ComponentType() {
+		return (EReference)assemblyComponentEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getAssemblyComponent__GetAssemblyRoot() {
 		return assemblyComponentEClass.getEOperations().get(0);
 	}
@@ -296,6 +305,15 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getAssemblyOperation_OperationType() {
+		return (EReference)assemblyOperationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getAssemblyOperation__GetAssemblyComponent() {
 		return assemblyOperationEClass.getEOperations().get(0);
 	}
@@ -338,6 +356,7 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 		assemblyComponentEClass = createEClass(ASSEMBLY_COMPONENT);
 		createEAttribute(assemblyComponentEClass, ASSEMBLY_COMPONENT__SIGNATURE);
 		createEReference(assemblyComponentEClass, ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS);
+		createEReference(assemblyComponentEClass, ASSEMBLY_COMPONENT__COMPONENT_TYPE);
 		createEOperation(assemblyComponentEClass, ASSEMBLY_COMPONENT___GET_ASSEMBLY_ROOT);
 
 		eStringToAssemblyOperationMapEntryEClass = createEClass(ESTRING_TO_ASSEMBLY_OPERATION_MAP_ENTRY);
@@ -346,6 +365,7 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 
 		assemblyOperationEClass = createEClass(ASSEMBLY_OPERATION);
 		createEAttribute(assemblyOperationEClass, ASSEMBLY_OPERATION__SIGNATURE);
+		createEReference(assemblyOperationEClass, ASSEMBLY_OPERATION__OPERATION_TYPE);
 		createEOperation(assemblyOperationEClass, ASSEMBLY_OPERATION___GET_ASSEMBLY_COMPONENT);
 	}
 
@@ -372,6 +392,9 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 		setNsPrefix(eNS_PREFIX);
 		setNsURI(eNS_URI);
 
+		// Obtain other dependent packages
+		TypePackage theTypePackage = (TypePackage)EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI);
+
 		// Create type parameters
 
 		// Set bounds for type parameters
@@ -389,6 +412,7 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 		initEClass(assemblyComponentEClass, AssemblyComponent.class, "AssemblyComponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAssemblyComponent_Signature(), ecorePackage.getEString(), "signature", null, 0, 1, AssemblyComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAssemblyComponent_AssemblyOperations(), this.getEStringToAssemblyOperationMapEntry(), null, "assemblyOperations", null, 0, -1, AssemblyComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEReference(getAssemblyComponent_ComponentType(), theTypePackage.getComponentType(), null, "componentType", null, 0, 1, AssemblyComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getAssemblyComponent__GetAssemblyRoot(), this.getAssemblyRoot(), "getAssemblyRoot", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -398,6 +422,7 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 
 		initEClass(assemblyOperationEClass, AssemblyOperation.class, "AssemblyOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAssemblyOperation_Signature(), ecorePackage.getEString(), "signature", null, 0, 1, AssemblyOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAssemblyOperation_OperationType(), theTypePackage.getOperationType(), null, "operationType", null, 0, 1, AssemblyOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getAssemblyOperation__GetAssemblyComponent(), this.getAssemblyComponent(), "getAssemblyComponent", 0, 1, IS_UNIQUE, IS_ORDERED);
 	}

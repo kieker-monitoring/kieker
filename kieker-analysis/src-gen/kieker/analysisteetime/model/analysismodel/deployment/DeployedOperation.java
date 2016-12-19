@@ -2,7 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment;
 
-import kieker.analysisteetime.model.analysismodel.type.OperationType;
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -14,7 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getOperationType <em>Operation Type</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getAssemblyOperation <em>Assembly Operation</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeployedOperation()
@@ -23,30 +23,30 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface DeployedOperation extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Operation Type</b></em>' reference.
+	 * Returns the value of the '<em><b>Assembly Operation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Operation Type</em>' reference isn't clear,
+	 * If the meaning of the '<em>Assembly Operation</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Operation Type</em>' reference.
-	 * @see #setOperationType(OperationType)
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeployedOperation_OperationType()
+	 * @return the value of the '<em>Assembly Operation</em>' reference.
+	 * @see #setAssemblyOperation(AssemblyOperation)
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeployedOperation_AssemblyOperation()
 	 * @model
 	 * @generated
 	 */
-	OperationType getOperationType();
+	AssemblyOperation getAssemblyOperation();
 
 	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getOperationType <em>Operation Type</em>}' reference.
+	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getAssemblyOperation <em>Assembly Operation</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Operation Type</em>' reference.
-	 * @see #getOperationType()
+	 * @param value the new value of the '<em>Assembly Operation</em>' reference.
+	 * @see #getAssemblyOperation()
 	 * @generated
 	 */
-	void setOperationType(OperationType value);
+	void setAssemblyOperation(AssemblyOperation value);
 
 	/**
 	 * <!-- begin-user-doc -->
