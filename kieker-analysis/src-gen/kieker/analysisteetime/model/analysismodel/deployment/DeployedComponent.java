@@ -2,6 +2,7 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment;
 
+import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
 
@@ -32,12 +33,12 @@ public interface DeployedComponent extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Component Type</em>' reference.
-	 * @see #setComponentType(kieker.analysisteetime.model.analysismodel.type.ComponentType)
+	 * @see #setComponentType(ComponentType)
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeployedComponent_ComponentType()
 	 * @model
 	 * @generated
 	 */
-	kieker.analysisteetime.model.analysismodel.type.ComponentType getComponentType();
+	ComponentType getComponentType();
 
 	/**
 	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getComponentType <em>Component Type</em>}' reference.
@@ -47,7 +48,7 @@ public interface DeployedComponent extends EObject {
 	 * @see #getComponentType()
 	 * @generated
 	 */
-	void setComponentType(kieker.analysisteetime.model.analysismodel.type.ComponentType value);
+	void setComponentType(ComponentType value);
 
 	/**
 	 * Returns the value of the '<em><b>Contained Operations</b></em>' map.

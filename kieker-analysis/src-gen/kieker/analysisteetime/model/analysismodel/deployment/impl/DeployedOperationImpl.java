@@ -7,6 +7,7 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage;
 
+import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -37,7 +38,7 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 * @ordered
 	 */
-	protected kieker.analysisteetime.model.analysismodel.type.OperationType operationType;
+	protected OperationType operationType;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -63,10 +64,10 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public kieker.analysisteetime.model.analysismodel.type.OperationType getOperationType() {
+	public OperationType getOperationType() {
 		if (operationType != null && operationType.eIsProxy()) {
 			InternalEObject oldOperationType = (InternalEObject)operationType;
-			operationType = (kieker.analysisteetime.model.analysismodel.type.OperationType)eResolveProxy(oldOperationType);
+			operationType = (OperationType)eResolveProxy(oldOperationType);
 			if (operationType != oldOperationType) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DeploymentPackage.DEPLOYED_OPERATION__OPERATION_TYPE, oldOperationType, operationType));
@@ -80,7 +81,7 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public kieker.analysisteetime.model.analysismodel.type.OperationType basicGetOperationType() {
+	public OperationType basicGetOperationType() {
 		return operationType;
 	}
 
@@ -89,8 +90,8 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setOperationType(kieker.analysisteetime.model.analysismodel.type.OperationType newOperationType) {
-		kieker.analysisteetime.model.analysismodel.type.OperationType oldOperationType = operationType;
+	public void setOperationType(OperationType newOperationType) {
+		OperationType oldOperationType = operationType;
 		operationType = newOperationType;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYED_OPERATION__OPERATION_TYPE, oldOperationType, operationType));
@@ -137,7 +138,7 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case DeploymentPackage.DEPLOYED_OPERATION__OPERATION_TYPE:
-				setOperationType((kieker.analysisteetime.model.analysismodel.type.OperationType)newValue);
+				setOperationType((OperationType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -152,7 +153,7 @@ public class DeployedOperationImpl extends MinimalEObjectImpl.Container implemen
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case DeploymentPackage.DEPLOYED_OPERATION__OPERATION_TYPE:
-				setOperationType((kieker.analysisteetime.model.analysismodel.type.OperationType)null);
+				setOperationType((OperationType)null);
 				return;
 		}
 		super.eUnset(featureID);
