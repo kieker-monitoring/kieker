@@ -81,6 +81,8 @@
       <genClasses ecoreClass="analysismodel.ecore#//assembly/AssemblyComponent">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/AssemblyComponent/signature"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyComponent/assemblyOperations"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyComponent/componentType"/>
         <genOperations ecoreOperation="analysismodel.ecore#//assembly/AssemblyComponent/getAssemblyRoot"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//assembly/EStringToAssemblyOperationMapEntry">
@@ -89,6 +91,8 @@
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//assembly/AssemblyOperation">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/AssemblyOperation/signature"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyOperation/operationType"/>
         <genOperations ecoreOperation="analysismodel.ecore#//assembly/AssemblyOperation/getAssemblyComponent"/>
       </genClasses>
     </nestedGenPackages>
@@ -114,7 +118,7 @@
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//deployment/DeployedComponent">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedComponent/componentType"/>
+            ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedComponent/assemblyOperation"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedComponent/containedOperations"/>
         <genOperations ecoreOperation="analysismodel.ecore#//deployment/DeployedComponent/getDeploymentContext"/>
@@ -125,7 +129,7 @@
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//deployment/DeployedOperation">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedOperation/operationType"/>
+            ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedOperation/assemblyOperation"/>
         <genOperations ecoreOperation="analysismodel.ecore#//deployment/DeployedOperation/getComponent"/>
       </genClasses>
     </nestedGenPackages>
