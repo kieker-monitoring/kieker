@@ -55,8 +55,7 @@ public class MonitoringThroughputFilter extends AbstractConsumerStage<IMonitorin
 		final long interval = timestamp / this.intervalSize;
 
 		if (interval < this.currentInterval) { // do not count records earlier than the current interval
-
-				this.uncountedRecordsOutputPort.send(record);
+			this.uncountedRecordsOutputPort.send(record);
 		} else {
 			if (interval > this.currentInterval) { // we enter a new interval
 				if (this.currentInterval != -1) { // close all previous intervals if not the first interval
