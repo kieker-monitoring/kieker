@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime;
+package kieker.analysisteetime.trace.reconstruction;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.TraceRoot;
 import kieker.common.record.flow.IFlowRecord;
@@ -33,8 +34,6 @@ import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
-import teetime.stage.basic.AbstractTransformation;
-
 /**
  * Reconstruct traces based on the incoming instances of {@code IFlowRecord}. Currently only {@link TraceMetadata}, {@link BeforeOperationEvent} and
  * {@link AfterOperationEvent}
@@ -42,14 +41,16 @@ import teetime.stage.basic.AbstractTransformation;
  *
  * @author Nils Christian Ehmke, Sören Henning
  */
-final class TraceReconstructor extends AbstractTransformation<IFlowRecord, TraceRoot> {
+final class TraceReconstructor {
 
+	private final DeploymentRoot deploymentRoot;
 	private final Map<Long, TraceBuffer> traceBuffers = new HashMap<>();
 	private final List<TraceBuffer> faultyTraceBuffers = new ArrayList<>();
 	private final boolean activateAdditionalLogChecks;
 	private int danglingRecords;
 
-	public TraceReconstructor(final boolean activateAdditionalLogChecks) {
+	public TraceReconstructor(final DeploymentRoot deploymentRoot, final boolean activateAdditionalLogChecks) {
+		this.deploymentRoot = deploymentRoot;
 		this.activateAdditionalLogChecks = activateAdditionalLogChecks;
 	}
 
@@ -61,7 +62,6 @@ final class TraceReconstructor extends AbstractTransformation<IFlowRecord, Trace
 		return this.danglingRecords - this.faultyTraceBuffers.size();
 	}
 
-	@Override
 	protected void execute(final IFlowRecord input) {
 		if (input instanceof TraceMetadata) {
 			this.handleMetadataRecord((TraceMetadata) input);
@@ -86,7 +86,7 @@ final class TraceReconstructor extends AbstractTransformation<IFlowRecord, Trace
 			if (traceBuffer.isTraceComplete()) {
 				final TraceRoot trace = traceBuffer.reconstructTrace();
 				this.traceBuffers.remove(traceID);
-				super.getOutputPort().send(trace);
+				// super.getOutputPort().send(trace); //TODO
 			}
 		} else {
 			this.danglingRecords++;
