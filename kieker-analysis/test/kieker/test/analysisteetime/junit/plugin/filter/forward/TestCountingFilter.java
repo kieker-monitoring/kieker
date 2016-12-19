@@ -30,7 +30,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import teetime.framework.test.StageTester;
 
 /**
- * This test is for the class {@link CountingDisplayFilter}.
+ * This test is for the class {@link CountingFilter}.
  *
  * @author Nils Christian Ehmke, Jan Waller, Lars Bluemke
  *
