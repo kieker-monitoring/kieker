@@ -56,6 +56,7 @@ public class AnalysisThroughputFilter extends AbstractStage {
 
 		final IMonitoringRecord record = this.recordsInputPort.receive();
 		if (record != null) {
+
 			this.numPassedElements++;
 		} else {
 			failt++;
@@ -63,6 +64,7 @@ public class AnalysisThroughputFilter extends AbstractStage {
 
 		final Long timestampInNs = this.timestampsInputPort.receive();
 		if (timestampInNs != null) {
+
 			final long duration = timestampInNs - this.lastTimestampInNs;
 			final StringBuilder sb = new StringBuilder(256);
 			sb.append(this.numPassedElements);

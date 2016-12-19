@@ -101,7 +101,6 @@ public class TimestampFilter extends CompositeStage {
 		this.connectPorts(traceMetadataTimestampStage.getRecordOutsideTimePeriodOutputPort(), recordsOutsideTimePeriodMerger.getNewInputPort());
 		this.connectPorts(monitoringRecordTimestampStage.getRecordWithinTimePeriodOutputPort(), recordsWithinTimePeriodMerger.getNewInputPort());
 		this.connectPorts(monitoringRecordTimestampStage.getRecordOutsideTimePeriodOutputPort(), recordsOutsideTimePeriodMerger.getNewInputPort());
-
 	}
 
 	/**

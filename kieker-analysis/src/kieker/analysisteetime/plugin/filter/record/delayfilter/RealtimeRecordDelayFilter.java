@@ -61,7 +61,8 @@ public class RealtimeRecordDelayFilter extends CompositeStage {
 	 *            A time bound to configure a warning when a record is forwarded too late.
 	 */
 	public RealtimeRecordDelayFilter(final TimeUnit timeunit, final double accelerationFactor, final long warnOnNegativeSchedTime) {
-		final LinkedBlockingQueue<Object> recordQueue = new LinkedBlockingQueue<Object>();
+		
+    final LinkedBlockingQueue<Object> recordQueue = new LinkedBlockingQueue<Object>();
 		final RealtimeRecordDelayConsumer consumer = new RealtimeRecordDelayConsumer(recordQueue, END_TOKEN);
 		final RealtimeRecordDelayProducer producer = new RealtimeRecordDelayProducer(recordQueue, END_TOKEN, timeunit, accelerationFactor, warnOnNegativeSchedTime);
 
