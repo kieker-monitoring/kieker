@@ -16,7 +16,7 @@
 
 package kieker.analysisteetime;
 
-import kieker.analysisteetime.model.analysismodel.architecture.ArchitectureRoot;
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
@@ -32,8 +32,8 @@ public class DeploymentModelAssemblerStage extends AbstractFilter<IFlowRecord> {
 
 	private final DeploymentModelAssembler assembler;
 
-	public DeploymentModelAssemblerStage(final ArchitectureRoot architectureRoot, final DeploymentRoot deploymentRoot) {
-		this.assembler = new DeploymentModelAssembler(architectureRoot, deploymentRoot);
+	public DeploymentModelAssemblerStage(final AssemblyRoot assemblyRoot, final DeploymentRoot deploymentRoot) {
+		this.assembler = new DeploymentModelAssembler(assemblyRoot, deploymentRoot);
 	}
 
 	@Override
