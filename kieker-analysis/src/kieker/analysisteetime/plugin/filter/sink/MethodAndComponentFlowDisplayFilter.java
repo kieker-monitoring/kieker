@@ -18,7 +18,6 @@ package kieker.analysisteetime.plugin.filter.sink;
 
 import kieker.analysis.display.TagCloud;
 import kieker.analysis.display.annotation.Display;
-import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.signature.ClassOperationSignaturePair;
 
@@ -31,7 +30,6 @@ import teetime.framework.AbstractConsumerStage;
  *
  * @since 1.8
  */
-@Plugin
 public class MethodAndComponentFlowDisplayFilter extends AbstractConsumerStage<OperationExecutionRecord> {
 
 	/** The name of the input port accepting incoming events. */
@@ -43,7 +41,9 @@ public class MethodAndComponentFlowDisplayFilter extends AbstractConsumerStage<O
 	/**
 	 * Creates a new instance of this class.
 	 */
-	public MethodAndComponentFlowDisplayFilter() {}
+	public MethodAndComponentFlowDisplayFilter() {
+		// empty default constructor
+	}
 
 	/**
 	 * This method represents the input port receiving the incoming events.

@@ -28,6 +28,8 @@ import teetime.framework.AbstractProducerStage;
  * is always declared as active.
  *
  * @author Andre van Hoorn, Robert von Massow, Jan Waller, Lars Bluemke
+ *
+ * @since 1.13
  */
 public class RealtimeRecordDelayProducer extends AbstractProducerStage<IMonitoringRecord> {
 
@@ -58,8 +60,8 @@ public class RealtimeRecordDelayProducer extends AbstractProducerStage<IMonitori
 	 * @param warnOnNegativeSchedTime
 	 *            A time bound to configure a warning when a record is forwarded too late.
 	 */
-	public RealtimeRecordDelayProducer(final LinkedBlockingQueue<Object> recordQueue, final Object endToken, final TimeUnit timeunit, double accelerationFactor,
-			final long warnOnNegativeSchedTime) {
+	public RealtimeRecordDelayProducer(final LinkedBlockingQueue<Object> recordQueue, final Object endToken, final TimeUnit timeunit,
+		final double accelerationFactor, final long warnOnNegativeSchedTime) {
 
 		this.recordQueue = recordQueue;
 		this.endToken = endToken;
@@ -76,9 +78,10 @@ public class RealtimeRecordDelayProducer extends AbstractProducerStage<IMonitori
 
 		if (accelerationFactor <= 0.0) {
 			this.logger.warn("Acceleration factor must be > 0. Using default: " + ACCELERATION_FACTOR_DEFAULT);
-			accelerationFactor = 1;
+			this.accelerationFactor = 1;
+		} else {
+			this.accelerationFactor = accelerationFactor;
 		}
-		this.accelerationFactor = accelerationFactor;
 
 		this.warnOnNegativeSchedTime = warnOnNegativeSchedTime;
 	}
@@ -89,7 +92,7 @@ public class RealtimeRecordDelayProducer extends AbstractProducerStage<IMonitori
 			final Object element = this.recordQueue.take();
 
 			if (element == this.endToken) {
-				this.terminate();
+				this.terminateStage();
 			} else if (element instanceof IMonitoringRecord) {
 				final IMonitoringRecord monitoringRecord = (IMonitoringRecord) element;
 

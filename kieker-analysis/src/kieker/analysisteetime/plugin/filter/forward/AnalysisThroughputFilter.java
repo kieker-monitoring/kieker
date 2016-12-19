@@ -43,13 +43,20 @@ public class AnalysisThroughputFilter extends AbstractStage {
 
 	private final PlainText plainTextDisplayObject = new PlainText();
 
+	/**
+	 * Default constructor.
+	 */
+	public AnalysisThroughputFilter() {
+		// empty default constructor
+	}
+
 	@Override
 	protected void execute() {
 		int failt = 0;
 
 		final IMonitoringRecord record = this.recordsInputPort.receive();
 		if (record != null) {
-			System.out.println("record received " + record.toString());
+
 			this.numPassedElements++;
 		} else {
 			failt++;
@@ -57,7 +64,6 @@ public class AnalysisThroughputFilter extends AbstractStage {
 
 		final Long timestampInNs = this.timestampsInputPort.receive();
 		if (timestampInNs != null) {
-			System.out.println("timestamp received " + timestampInNs);
 
 			final long duration = timestampInNs - this.lastTimestampInNs;
 			final StringBuilder sb = new StringBuilder(256);

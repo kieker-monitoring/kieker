@@ -42,18 +42,10 @@ import teetime.stage.basic.merger.Merger;
  */
 public class TraceIdFilter extends CompositeStage {
 
-	private InputPort<IMonitoringRecord> monitoringRecordsCombinedInputPort;
+	private final InputPort<IMonitoringRecord> monitoringRecordsCombinedInputPort;
 
-	private OutputPort<IMonitoringRecord> matchingTraceIdOutputPort;
-	private OutputPort<IMonitoringRecord> mismatchingTraceIdOutputPort;
-
-	private final MultipleInstanceOfFilter<IMonitoringRecord> instanceOfFilter;
-	private final TraceMetadataTraceIdFilter traceMetadataFilter;
-	private final TraceEventTraceIdFilter traceEventFilter;
-	private final OperationExecutionTraceIdFilter operationExecutionFilter;
-
-	private final Merger<IMonitoringRecord> matchingMerger;
-	private final Merger<IMonitoringRecord> mismatchingMerger;
+	private final OutputPort<IMonitoringRecord> matchingTraceIdOutputPort;
+	private final OutputPort<IMonitoringRecord> mismatchingTraceIdOutputPort;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -65,35 +57,30 @@ public class TraceIdFilter extends CompositeStage {
 	 */
 	public TraceIdFilter(final boolean acceptAllTraces, final Long[] selectedTraceIds) {
 		// Initializing the internal filters
-		this.instanceOfFilter = new MultipleInstanceOfFilter<IMonitoringRecord>();
-		this.traceMetadataFilter = new TraceMetadataTraceIdFilter(acceptAllTraces, selectedTraceIds);
-		this.traceEventFilter = new TraceEventTraceIdFilter(acceptAllTraces, selectedTraceIds);
-		this.operationExecutionFilter = new OperationExecutionTraceIdFilter(acceptAllTraces, selectedTraceIds);
+		final MultipleInstanceOfFilter<IMonitoringRecord> instanceOfFilter = new MultipleInstanceOfFilter<IMonitoringRecord>();
+		final TraceMetadataTraceIdFilter traceMetadataFilter = new TraceMetadataTraceIdFilter(acceptAllTraces, selectedTraceIds);
+		final TraceEventTraceIdFilter traceEventFilter = new TraceEventTraceIdFilter(acceptAllTraces, selectedTraceIds);
+		final OperationExecutionTraceIdFilter operationExecutionFilter = new OperationExecutionTraceIdFilter(acceptAllTraces, selectedTraceIds);
 
-		this.matchingMerger = new Merger<IMonitoringRecord>();
-		this.mismatchingMerger = new Merger<IMonitoringRecord>();
+		final Merger<IMonitoringRecord> matchingMerger = new Merger<IMonitoringRecord>();
+		final Merger<IMonitoringRecord> mismatchingMerger = new Merger<IMonitoringRecord>();
 
-		this.monitoringRecordsCombinedInputPort = this.instanceOfFilter.getInputPort();
-		this.matchingTraceIdOutputPort = this.matchingMerger.getOutputPort();
-		this.mismatchingTraceIdOutputPort = this.mismatchingMerger.getOutputPort();
+		this.monitoringRecordsCombinedInputPort = instanceOfFilter.getInputPort();
+		this.matchingTraceIdOutputPort = matchingMerger.getOutputPort();
+		this.mismatchingTraceIdOutputPort = mismatchingMerger.getOutputPort();
 
 		// Connecting the internal filters
-		this.monitoringRecordsCombinedInputPort = this.instanceOfFilter.getInputPort();
+		this.connectPorts(instanceOfFilter.getOutputPortForType(TraceMetadata.class), traceMetadataFilter.getInputPort());
+		this.connectPorts(instanceOfFilter.getOutputPortForType(AbstractTraceEvent.class), traceEventFilter.getInputPort());
+		this.connectPorts(instanceOfFilter.getOutputPortForType(OperationExecutionRecord.class), operationExecutionFilter.getInputPort());
 
-		this.connectPorts(this.instanceOfFilter.getOutputPortForType(TraceMetadata.class), this.traceMetadataFilter.getInputPort());
-		this.connectPorts(this.instanceOfFilter.getOutputPortForType(AbstractTraceEvent.class), this.traceEventFilter.getInputPort());
-		this.connectPorts(this.instanceOfFilter.getOutputPortForType(OperationExecutionRecord.class), this.operationExecutionFilter.getInputPort());
+		this.connectPorts(traceMetadataFilter.getMatchingTraceIdOutputPort(), matchingMerger.getNewInputPort());
+		this.connectPorts(traceEventFilter.getMatchingTraceIdOutputPort(), matchingMerger.getNewInputPort());
+		this.connectPorts(operationExecutionFilter.getMatchingTraceIdOutputPort(), matchingMerger.getNewInputPort());
 
-		this.connectPorts(this.traceMetadataFilter.getMatchingTraceIdOutputPort(), this.matchingMerger.getNewInputPort());
-		this.connectPorts(this.traceEventFilter.getMatchingTraceIdOutputPort(), this.matchingMerger.getNewInputPort());
-		this.connectPorts(this.operationExecutionFilter.getMatchingTraceIdOutputPort(), this.matchingMerger.getNewInputPort());
-
-		this.connectPorts(this.traceMetadataFilter.getMismatchingTraceIdOutputPort(), this.mismatchingMerger.getNewInputPort());
-		this.connectPorts(this.traceEventFilter.getMismatchingTraceIdOutputPort(), this.mismatchingMerger.getNewInputPort());
-		this.connectPorts(this.operationExecutionFilter.getMismatchingTraceIdOutputPort(), this.mismatchingMerger.getNewInputPort());
-
-		this.matchingTraceIdOutputPort = this.matchingMerger.getOutputPort();
-		this.mismatchingTraceIdOutputPort = this.mismatchingMerger.getOutputPort();
+		this.connectPorts(traceMetadataFilter.getMismatchingTraceIdOutputPort(), mismatchingMerger.getNewInputPort());
+		this.connectPorts(traceEventFilter.getMismatchingTraceIdOutputPort(), mismatchingMerger.getNewInputPort());
+		this.connectPorts(operationExecutionFilter.getMismatchingTraceIdOutputPort(), mismatchingMerger.getNewInputPort());
 	}
 
 	public InputPort<IMonitoringRecord> getMonitoringRecordsCombinedInputPort() {

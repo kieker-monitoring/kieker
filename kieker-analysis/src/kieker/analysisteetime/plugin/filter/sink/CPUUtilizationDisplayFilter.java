@@ -46,7 +46,6 @@ public class CPUUtilizationDisplayFilter extends AbstractConsumerStage<CPUUtiliz
 	private final MeterGauge meterGauge;
 	private final XYPlot xyplot;
 
-	private final int numberOfEntries;
 	private final Number[] warningIntervals;
 	private final TimeUnit recordsTimeUnit;
 
@@ -61,13 +60,12 @@ public class CPUUtilizationDisplayFilter extends AbstractConsumerStage<CPUUtiliz
 	 *            Time unit to interpret the timestamp of a record passed to the input port
 	 */
 	public CPUUtilizationDisplayFilter(final int numberOfEntries, final Number[] warningIntervals, final TimeUnit recordsTimeUnit) {
-		this.numberOfEntries = numberOfEntries;
 		this.warningIntervals = warningIntervals.clone();
 		this.recordsTimeUnit = recordsTimeUnit;
 
 		// Create the display objects
 		this.meterGauge = new MeterGauge();
-		this.xyplot = new XYPlot(this.numberOfEntries);
+		this.xyplot = new XYPlot(numberOfEntries);
 	}
 
 	@Override

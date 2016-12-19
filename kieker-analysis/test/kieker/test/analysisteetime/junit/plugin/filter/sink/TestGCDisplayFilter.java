@@ -40,8 +40,6 @@ import teetime.framework.test.StageTester;
  */
 public class TestGCDisplayFilter extends AbstractKiekerTest {
 
-	private GCDisplayFilter gcDisplayFilter = null;
-
 	private static final int NUMBER_OF_ENTRIES = 3;
 	private static final TimeUnit RECORDS_TIME_UNIT = TimeUnit.MILLISECONDS;
 
@@ -52,13 +50,27 @@ public class TestGCDisplayFilter extends AbstractKiekerTest {
 	private static final long COLLECTION_COUNT = 2;
 	private static final long COLLECTION_TIME_MS = 3;
 
+	private GCDisplayFilter gcDisplayFilter;
 	private final GCRecord record = new GCRecord(TIMESTAMP, HOST_NAME, VM_NAME, GC_NAME, COLLECTION_COUNT, COLLECTION_TIME_MS);
 
+	/**
+	 * Empty default constructor.
+	 */
+	public TestGCDisplayFilter() {
+		// empty default constructor
+	}
+
+	/**
+	 * Initializes a new filter before each test.
+	 */
 	@Before
 	public void initializeNewFilter() {
 		this.gcDisplayFilter = new GCDisplayFilter(NUMBER_OF_ENTRIES, RECORDS_TIME_UNIT);
 	}
 
+	/**
+	 * Tests if the xy-plot received the correct values.
+	 */
 	@Test
 	public void xyPlotEntriesShouldBeCorrect() {
 		StageTester.test(this.gcDisplayFilter).and().send(this.record).to(this.gcDisplayFilter.getInputPort()).start();
