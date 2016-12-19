@@ -2,8 +2,6 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment;
 
-import kieker.analysisteetime.model.analysismodel.architecture.OperationType;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -32,12 +30,12 @@ public interface DeployedOperation extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Operation Type</em>' reference.
-	 * @see #setOperationType(OperationType)
+	 * @see #setOperationType(kieker.analysisteetime.model.analysismodel.type.OperationType)
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeployedOperation_OperationType()
 	 * @model
 	 * @generated
 	 */
-	OperationType getOperationType();
+	kieker.analysisteetime.model.analysismodel.type.OperationType getOperationType();
 
 	/**
 	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation#getOperationType <em>Operation Type</em>}' reference.
@@ -47,7 +45,7 @@ public interface DeployedOperation extends EObject {
 	 * @see #getOperationType()
 	 * @generated
 	 */
-	void setOperationType(OperationType value);
+	void setOperationType(kieker.analysisteetime.model.analysismodel.type.OperationType value);
 
 	/**
 	 * <!-- begin-user-doc -->

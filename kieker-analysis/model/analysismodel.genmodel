@@ -46,29 +46,50 @@
         <genTypeParameters ecoreTypeParameter="analysismodel.ecore#//statistics/Unit/V"/>
       </genClasses>
     </nestedGenPackages>
-    <nestedGenPackages prefix="Architecture" basePackage="kieker.analysisteetime.model.analysismodel"
-        disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//architecture">
-      <genClasses ecoreClass="analysismodel.ecore#//architecture/ArchitectureRoot">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//architecture/ArchitectureRoot/componentTypes"/>
+    <nestedGenPackages prefix="Type" basePackage="kieker.analysisteetime.model.analysismodel"
+        disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//type">
+      <genClasses ecoreClass="analysismodel.ecore#//type/TypeRoot">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//type/TypeRoot/componentTypes"/>
       </genClasses>
-      <genClasses ecoreClass="analysismodel.ecore#//architecture/EStringToComponentTypeMapEntry">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//architecture/EStringToComponentTypeMapEntry/key"/>
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//architecture/EStringToComponentTypeMapEntry/value"/>
+      <genClasses ecoreClass="analysismodel.ecore#//type/EStringToComponentTypeMapEntry">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/EStringToComponentTypeMapEntry/key"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//type/EStringToComponentTypeMapEntry/value"/>
       </genClasses>
-      <genClasses ecoreClass="analysismodel.ecore#//architecture/ComponentType">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//architecture/ComponentType/signature"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//architecture/ComponentType/providedOperations"/>
-        <genOperations ecoreOperation="analysismodel.ecore#//architecture/ComponentType/getArchitectureRoot"/>
+      <genClasses ecoreClass="analysismodel.ecore#//type/ComponentType">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/ComponentType/signature"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//type/ComponentType/providedOperations"/>
+        <genOperations ecoreOperation="analysismodel.ecore#//type/ComponentType/getTypeRoot"/>
       </genClasses>
-      <genClasses ecoreClass="analysismodel.ecore#//architecture/EStringToOperationTypeMapEntry">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//architecture/EStringToOperationTypeMapEntry/key"/>
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//architecture/EStringToOperationTypeMapEntry/value"/>
+      <genClasses ecoreClass="analysismodel.ecore#//type/EStringToOperationTypeMapEntry">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/EStringToOperationTypeMapEntry/key"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//type/EStringToOperationTypeMapEntry/value"/>
       </genClasses>
-      <genClasses ecoreClass="analysismodel.ecore#//architecture/OperationType">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//architecture/OperationType/signature"/>
-        <genOperations ecoreOperation="analysismodel.ecore#//architecture/OperationType/getComponentType"/>
+      <genClasses ecoreClass="analysismodel.ecore#//type/OperationType">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/OperationType/signature"/>
+        <genOperations ecoreOperation="analysismodel.ecore#//type/OperationType/getComponentType"/>
+      </genClasses>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Assembly" basePackage="kieker.analysisteetime.model.analysismodel"
+        disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//assembly">
+      <genClasses ecoreClass="analysismodel.ecore#//assembly/AssemblyRoot">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyRoot/assemblyComponents"/>
+      </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//assembly/EStringToAssemblyComponentMapEntry">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/EStringToAssemblyComponentMapEntry/key"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/EStringToAssemblyComponentMapEntry/value"/>
+      </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//assembly/AssemblyComponent">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/AssemblyComponent/signature"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyComponent/assemblyOperations"/>
+        <genOperations ecoreOperation="analysismodel.ecore#//assembly/AssemblyComponent/getAssemblyRoot"/>
+      </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//assembly/EStringToAssemblyOperationMapEntry">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/EStringToAssemblyOperationMapEntry/key"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/EStringToAssemblyOperationMapEntry/value"/>
+      </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//assembly/AssemblyOperation">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/AssemblyOperation/signature"/>
+        <genOperations ecoreOperation="analysismodel.ecore#//assembly/AssemblyOperation/getAssemblyComponent"/>
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Deployment" basePackage="kieker.analysisteetime.model.analysismodel"

@@ -3,8 +3,6 @@
 package kieker.analysisteetime.model.analysismodel.deployment.impl;
 
 import java.lang.reflect.InvocationTargetException;
-import kieker.analysisteetime.model.analysismodel.architecture.ComponentType;
-
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
@@ -46,7 +44,7 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 * @ordered
 	 */
-	protected ComponentType componentType;
+	protected kieker.analysisteetime.model.analysismodel.type.ComponentType componentType;
 
 	/**
 	 * The cached value of the '{@link #getContainedOperations() <em>Contained Operations</em>}' map.
@@ -82,10 +80,10 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ComponentType getComponentType() {
+	public kieker.analysisteetime.model.analysismodel.type.ComponentType getComponentType() {
 		if (componentType != null && componentType.eIsProxy()) {
 			InternalEObject oldComponentType = (InternalEObject)componentType;
-			componentType = (ComponentType)eResolveProxy(oldComponentType);
+			componentType = (kieker.analysisteetime.model.analysismodel.type.ComponentType)eResolveProxy(oldComponentType);
 			if (componentType != oldComponentType) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DeploymentPackage.DEPLOYED_COMPONENT__COMPONENT_TYPE, oldComponentType, componentType));
@@ -99,7 +97,7 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ComponentType basicGetComponentType() {
+	public kieker.analysisteetime.model.analysismodel.type.ComponentType basicGetComponentType() {
 		return componentType;
 	}
 
@@ -108,8 +106,8 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setComponentType(ComponentType newComponentType) {
-		ComponentType oldComponentType = componentType;
+	public void setComponentType(kieker.analysisteetime.model.analysismodel.type.ComponentType newComponentType) {
+		kieker.analysisteetime.model.analysismodel.type.ComponentType oldComponentType = componentType;
 		componentType = newComponentType;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYED_COMPONENT__COMPONENT_TYPE, oldComponentType, componentType));
@@ -186,7 +184,7 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case DeploymentPackage.DEPLOYED_COMPONENT__COMPONENT_TYPE:
-				setComponentType((ComponentType)newValue);
+				setComponentType((kieker.analysisteetime.model.analysismodel.type.ComponentType)newValue);
 				return;
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
 				((EStructuralFeature.Setting)getContainedOperations()).set(newValue);
@@ -204,7 +202,7 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case DeploymentPackage.DEPLOYED_COMPONENT__COMPONENT_TYPE:
-				setComponentType((ComponentType)null);
+				setComponentType((kieker.analysisteetime.model.analysismodel.type.ComponentType)null);
 				return;
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
 				getContainedOperations().clear();

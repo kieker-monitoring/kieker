@@ -7,11 +7,8 @@ import java.time.Instant;
 
 import kieker.analysisteetime.model.analysismodel.AnalysismodelFactory;
 import kieker.analysisteetime.model.analysismodel.AnalysismodelPackage;
-
-import kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage;
-
-import kieker.analysisteetime.model.analysismodel.architecture.impl.ArchitecturePackageImpl;
-
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage;
+import kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyPackageImpl;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage;
 
 import kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl;
@@ -28,6 +25,8 @@ import kieker.analysisteetime.model.analysismodel.trace.TracePackage;
 
 import kieker.analysisteetime.model.analysismodel.trace.impl.TracePackageImpl;
 
+import kieker.analysisteetime.model.analysismodel.type.TypePackage;
+import kieker.analysisteetime.model.analysismodel.type.impl.TypePackageImpl;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -102,7 +101,8 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 
 		// Obtain or create and register interdependencies
 		StatisticsPackageImpl theStatisticsPackage = (StatisticsPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI) instanceof StatisticsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI) : StatisticsPackage.eINSTANCE);
-		ArchitecturePackageImpl theArchitecturePackage = (ArchitecturePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ArchitecturePackage.eNS_URI) instanceof ArchitecturePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ArchitecturePackage.eNS_URI) : ArchitecturePackage.eINSTANCE);
+		TypePackageImpl theTypePackage = (TypePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI) instanceof TypePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI) : TypePackage.eINSTANCE);
+		AssemblyPackageImpl theAssemblyPackage = (AssemblyPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI) instanceof AssemblyPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI) : AssemblyPackage.eINSTANCE);
 		DeploymentPackageImpl theDeploymentPackage = (DeploymentPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI) instanceof DeploymentPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI) : DeploymentPackage.eINSTANCE);
 		ExecutionPackageImpl theExecutionPackage = (ExecutionPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI) instanceof ExecutionPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI) : ExecutionPackage.eINSTANCE);
 		TracePackageImpl theTracePackage = (TracePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI) instanceof TracePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI) : TracePackage.eINSTANCE);
@@ -110,7 +110,8 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		// Create package meta-data objects
 		theAnalysismodelPackage.createPackageContents();
 		theStatisticsPackage.createPackageContents();
-		theArchitecturePackage.createPackageContents();
+		theTypePackage.createPackageContents();
+		theAssemblyPackage.createPackageContents();
 		theDeploymentPackage.createPackageContents();
 		theExecutionPackage.createPackageContents();
 		theTracePackage.createPackageContents();
@@ -118,7 +119,8 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		// Initialize created meta-data
 		theAnalysismodelPackage.initializePackageContents();
 		theStatisticsPackage.initializePackageContents();
-		theArchitecturePackage.initializePackageContents();
+		theTypePackage.initializePackageContents();
+		theAssemblyPackage.initializePackageContents();
 		theDeploymentPackage.initializePackageContents();
 		theExecutionPackage.initializePackageContents();
 		theTracePackage.initializePackageContents();
@@ -207,14 +209,16 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 
 		// Obtain other dependent packages
 		StatisticsPackage theStatisticsPackage = (StatisticsPackage)EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI);
-		ArchitecturePackage theArchitecturePackage = (ArchitecturePackage)EPackage.Registry.INSTANCE.getEPackage(ArchitecturePackage.eNS_URI);
+		TypePackage theTypePackage = (TypePackage)EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI);
+		AssemblyPackage theAssemblyPackage = (AssemblyPackage)EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI);
 		DeploymentPackage theDeploymentPackage = (DeploymentPackage)EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI);
 		ExecutionPackage theExecutionPackage = (ExecutionPackage)EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI);
 		TracePackage theTracePackage = (TracePackage)EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI);
 
 		// Add subpackages
 		getESubpackages().add(theStatisticsPackage);
-		getESubpackages().add(theArchitecturePackage);
+		getESubpackages().add(theTypePackage);
+		getESubpackages().add(theAssemblyPackage);
 		getESubpackages().add(theDeploymentPackage);
 		getESubpackages().add(theExecutionPackage);
 		getESubpackages().add(theTracePackage);

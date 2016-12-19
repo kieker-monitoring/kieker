@@ -3,11 +3,8 @@
 package kieker.analysisteetime.model.analysismodel.execution.impl;
 
 import kieker.analysisteetime.model.analysismodel.AnalysismodelPackage;
-
-import kieker.analysisteetime.model.analysismodel.architecture.ArchitecturePackage;
-
-import kieker.analysisteetime.model.analysismodel.architecture.impl.ArchitecturePackageImpl;
-
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage;
+import kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyPackageImpl;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage;
 
 import kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl;
@@ -27,6 +24,8 @@ import kieker.analysisteetime.model.analysismodel.trace.TracePackage;
 
 import kieker.analysisteetime.model.analysismodel.trace.impl.TracePackageImpl;
 
+import kieker.analysisteetime.model.analysismodel.type.TypePackage;
+import kieker.analysisteetime.model.analysismodel.type.impl.TypePackageImpl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -103,7 +102,8 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		// Obtain or create and register interdependencies
 		AnalysismodelPackageImpl theAnalysismodelPackage = (AnalysismodelPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI) instanceof AnalysismodelPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI) : AnalysismodelPackage.eINSTANCE);
 		StatisticsPackageImpl theStatisticsPackage = (StatisticsPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI) instanceof StatisticsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI) : StatisticsPackage.eINSTANCE);
-		ArchitecturePackageImpl theArchitecturePackage = (ArchitecturePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ArchitecturePackage.eNS_URI) instanceof ArchitecturePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ArchitecturePackage.eNS_URI) : ArchitecturePackage.eINSTANCE);
+		TypePackageImpl theTypePackage = (TypePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI) instanceof TypePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI) : TypePackage.eINSTANCE);
+		AssemblyPackageImpl theAssemblyPackage = (AssemblyPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI) instanceof AssemblyPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI) : AssemblyPackage.eINSTANCE);
 		DeploymentPackageImpl theDeploymentPackage = (DeploymentPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI) instanceof DeploymentPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI) : DeploymentPackage.eINSTANCE);
 		TracePackageImpl theTracePackage = (TracePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI) instanceof TracePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI) : TracePackage.eINSTANCE);
 
@@ -111,7 +111,8 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		theExecutionPackage.createPackageContents();
 		theAnalysismodelPackage.createPackageContents();
 		theStatisticsPackage.createPackageContents();
-		theArchitecturePackage.createPackageContents();
+		theTypePackage.createPackageContents();
+		theAssemblyPackage.createPackageContents();
 		theDeploymentPackage.createPackageContents();
 		theTracePackage.createPackageContents();
 
@@ -119,7 +120,8 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		theExecutionPackage.initializePackageContents();
 		theAnalysismodelPackage.initializePackageContents();
 		theStatisticsPackage.initializePackageContents();
-		theArchitecturePackage.initializePackageContents();
+		theTypePackage.initializePackageContents();
+		theAssemblyPackage.initializePackageContents();
 		theDeploymentPackage.initializePackageContents();
 		theTracePackage.initializePackageContents();
 
