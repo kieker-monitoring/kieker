@@ -16,9 +16,6 @@
 
 package kieker.analysisteetime;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot;
@@ -41,7 +38,7 @@ public class DeploymentModelAssembler {
 
 	private final DeploymentFactory factory = DeploymentFactory.eINSTANCE;
 
-	private final Map<Long, TraceRepositoryEntry> traceRepository = new HashMap<>();
+	private final HostnameRepository hostnameRepository = new HostnameRepository();
 
 	private final AssemblyRoot assemblyRoot;
 	private final DeploymentRoot deploymentRoot;
@@ -54,30 +51,25 @@ public class DeploymentModelAssembler {
 	public void handleMetadataRecord(final TraceMetadata metadata) {
 		final String hostname = metadata.getHostname();
 		final long traceId = metadata.getTraceId();
-		this.traceRepository.put(traceId, new TraceRepositoryEntry(hostname));
+		this.hostnameRepository.addEntry(traceId, hostname);
 	}
 
 	public void handleBeforeOperationEvent(final BeforeOperationEvent event) {
-		this.traceRepository.get(event.getTraceId()).size++;
+		this.hostnameRepository.inc(event.getTraceId());
 
 		this.addRecord(event);
 	}
 
 	public void handleAfterOperationEvent(final AfterOperationEvent event) {
-		final long traceId = event.getTraceId();
-		final TraceRepositoryEntry entry = this.traceRepository.get(traceId);
-		entry.size--;
-		if (entry.size == 0) {
-			this.traceRepository.remove(traceId);
-		}
+		this.hostnameRepository.dec(event.getTraceId());
 	}
 
 	private void addRecord(final AbstractOperationEvent record) {
-		final String hostName = this.traceRepository.get(record.getTraceId()).hostname;
+		final String hostname = this.hostnameRepository.getHostname(record.getTraceId());
 		final String classSignature = record.getClassSignature();
 		final String operationSignature = record.getOperationSignature();
 
-		this.addRecord(hostName, classSignature, operationSignature);
+		this.addRecord(hostname, classSignature, operationSignature);
 	}
 
 	public void addRecord(final String hostname, final String componentSignature, final String operationSignature) {
@@ -124,15 +116,6 @@ public class DeploymentModelAssembler {
 			operation.setAssemblyOperation(assemblyOperation);
 		}
 		return operation;
-	}
-
-	protected static class TraceRepositoryEntry {
-		protected int size = 0;
-		protected String hostname;
-
-		public TraceRepositoryEntry(final String hostname) {
-			this.hostname = hostname;
-		}
 	}
 
 }
