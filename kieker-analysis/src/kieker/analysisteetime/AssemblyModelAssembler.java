@@ -50,7 +50,11 @@ public class AssemblyModelAssembler {
 	}
 
 	public void addRecord(final String componentSignature, final String operationSignature) {
+		final AssemblyComponent component = this.addAssemblyComponent(componentSignature);
+		this.addAssemblyOperation(component, operationSignature);
+	}
 
+	private AssemblyComponent addAssemblyComponent(final String componentSignature) {
 		final String componentKey = componentSignature;
 		AssemblyComponent component = this.assemblyRoot.getAssemblyComponents().get(componentKey);
 		if (component == null) {
@@ -61,7 +65,10 @@ public class AssemblyModelAssembler {
 			final ComponentType componentType = this.typeRoot.getComponentTypes().get(componentTypeKey);
 			component.setComponentType(componentType);
 		}
+		return component;
+	}
 
+	private AssemblyOperation addAssemblyOperation(final AssemblyComponent component, final String operationSignature) {
 		final String operationKey = operationSignature;
 		AssemblyOperation operation = component.getAssemblyOperations().get(operationKey);
 		if (operation == null) {
@@ -73,7 +80,7 @@ public class AssemblyModelAssembler {
 			final OperationType operationType = componentType.getProvidedOperations().get(operationTypeKey);
 			operation.setOperationType(operationType);
 		}
-
+		return operation;
 	}
 
 }

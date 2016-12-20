@@ -45,7 +45,11 @@ public class ArchitectureModelAssembler {
 	}
 
 	public void addRecord(final String componentSignature, final String operationSignature) {
+		final ComponentType componentType = this.addComponentType(componentSignature);
+		this.addOperationType(componentType, operationSignature);
+	}
 
+	private ComponentType addComponentType(final String componentSignature) {
 		final String componentTypeKey = componentSignature;
 		ComponentType componentType = this.typeRoot.getComponentTypes().get(componentTypeKey);
 		if (componentType == null) {
@@ -53,7 +57,10 @@ public class ArchitectureModelAssembler {
 			componentType.setSignature(componentSignature);
 			this.typeRoot.getComponentTypes().put(componentTypeKey, componentType);
 		}
+		return componentType;
+	}
 
+	private OperationType addOperationType(final ComponentType componentType, final String operationSignature) {
 		final String operationTypeKey = operationSignature;
 		OperationType operationType = componentType.getProvidedOperations().get(operationSignature);
 		if (operationType == null) {
@@ -61,7 +68,7 @@ public class ArchitectureModelAssembler {
 			operationType.setSignature(operationSignature);
 			componentType.getProvidedOperations().put(operationTypeKey, operationType);
 		}
-
+		return operationType;
 	}
 
 }

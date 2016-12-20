@@ -56,16 +56,24 @@ public class DeploymentModelAssembler {
 		this.addRecord(hostName, classSignature, operationSignature);
 	}
 
-	public void addRecord(final String hostName, final String componentSignature, final String operationSignature) {
+	public void addRecord(final String hostname, final String componentSignature, final String operationSignature) {
+		final DeploymentContext deploymentContext = this.addDeploymentContext(hostname);
+		final DeployedComponent component = this.addDeployedComponent(deploymentContext, componentSignature);
+		this.addDeployedOperation(component, operationSignature);
+	}
 
-		final String deploymentContextKey = hostName;
+	private DeploymentContext addDeploymentContext(final String hostname) {
+		final String deploymentContextKey = hostname;
 		DeploymentContext deploymentContext = this.deploymentRoot.getDeploymentContexts().get(deploymentContextKey);
 		if (deploymentContext == null) {
 			deploymentContext = this.factory.createDeploymentContext();
-			deploymentContext.setName(hostName);
+			deploymentContext.setName(hostname);
 			this.deploymentRoot.getDeploymentContexts().put(deploymentContextKey, deploymentContext);
 		}
+		return deploymentContext;
+	}
 
+	private DeployedComponent addDeployedComponent(final DeploymentContext deploymentContext, final String componentSignature) {
 		final String componentKey = componentSignature;
 		DeployedComponent component = deploymentContext.getComponents().get(componentKey);
 		if (component == null) {
@@ -76,7 +84,10 @@ public class DeploymentModelAssembler {
 			final AssemblyComponent assemblyComponent = this.assemblyRoot.getAssemblyComponents().get(componentTypeKey);
 			component.setAssemblyOperation(assemblyComponent);
 		}
+		return component;
+	}
 
+	private DeployedOperation addDeployedOperation(final DeployedComponent component, final String operationSignature) {
 		final String operationKey = operationSignature;
 		DeployedOperation operation = component.getContainedOperations().get(operationKey);
 		if (operation == null) {
@@ -88,7 +99,7 @@ public class DeploymentModelAssembler {
 			final AssemblyOperation assemblyOperation = assemblyComponent.getAssemblyOperations().get(operationTypeKey);
 			operation.setAssemblyOperation(assemblyOperation);
 		}
-
+		return operation;
 	}
 
 	private static class TraceRepositoryEntry {
