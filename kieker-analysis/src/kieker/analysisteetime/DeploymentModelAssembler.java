@@ -27,6 +27,9 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
+import kieker.common.record.flow.trace.TraceMetadata;
+import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
+import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
 /**
@@ -48,7 +51,28 @@ public class DeploymentModelAssembler {
 		this.deploymentRoot = deploymentRoot;
 	}
 
-	public void addRecord(final BeforeOperationEvent record) {
+	public void handleMetadataRecord(final TraceMetadata metadata) {
+		final String hostname = metadata.getHostname();
+		final long traceId = metadata.getTraceId();
+		this.traceRepository.put(traceId, new TraceRepositoryEntry(hostname));
+	}
+
+	public void handleBeforeOperationEvent(final BeforeOperationEvent event) {
+		this.traceRepository.get(event.getTraceId()).size++;
+
+		this.addRecord(event);
+	}
+
+	public void handleAfterOperationEvent(final AfterOperationEvent event) {
+		final long traceId = event.getTraceId();
+		final TraceRepositoryEntry entry = this.traceRepository.get(traceId);
+		entry.size--;
+		if (entry.size == 0) {
+			this.traceRepository.remove(traceId);
+		}
+	}
+
+	private void addRecord(final AbstractOperationEvent record) {
 		final String hostName = this.traceRepository.get(record.getTraceId()).hostname;
 		final String classSignature = record.getClassSignature();
 		final String operationSignature = record.getOperationSignature();
@@ -102,9 +126,13 @@ public class DeploymentModelAssembler {
 		return operation;
 	}
 
-	private static class TraceRepositoryEntry {
-		protected int size;
+	protected static class TraceRepositoryEntry {
+		protected int size = 0;
 		protected String hostname;
+
+		public TraceRepositoryEntry(final String hostname) {
+			this.hostname = hostname;
+		}
 	}
 
 }

@@ -19,6 +19,8 @@ package kieker.analysisteetime;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
 import kieker.common.record.flow.IFlowRecord;
+import kieker.common.record.flow.trace.TraceMetadata;
+import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
 import teetime.stage.basic.AbstractFilter;
@@ -38,8 +40,12 @@ public class DeploymentModelAssemblerStage extends AbstractFilter<IFlowRecord> {
 
 	@Override
 	protected void execute(final IFlowRecord record) {
-		if (record instanceof BeforeOperationEvent) {
-			this.assembler.addRecord((BeforeOperationEvent) record);
+		if (record instanceof TraceMetadata) {
+			this.assembler.handleMetadataRecord((TraceMetadata) record);
+		} else if (record instanceof BeforeOperationEvent) {
+			this.assembler.handleBeforeOperationEvent((BeforeOperationEvent) record);
+		} else if (record instanceof AfterOperationEvent) {
+			this.assembler.handleAfterOperationEvent((AfterOperationEvent) record);
 		}
 	}
 
