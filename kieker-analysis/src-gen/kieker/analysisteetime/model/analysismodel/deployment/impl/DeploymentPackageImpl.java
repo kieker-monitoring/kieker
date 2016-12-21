@@ -296,7 +296,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getDeployedComponent_AssemblyOperation() {
+	public EReference getDeployedComponent_AssemblyComponent() {
 		return (EReference)deployedComponentEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -417,7 +417,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		createEReference(eStringToDeployedComponentMapEntryEClass, ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE);
 
 		deployedComponentEClass = createEClass(DEPLOYED_COMPONENT);
-		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__ASSEMBLY_OPERATION);
+		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT);
 		createEReference(deployedComponentEClass, DEPLOYED_COMPONENT__CONTAINED_OPERATIONS);
 		createEOperation(deployedComponentEClass, DEPLOYED_COMPONENT___GET_DEPLOYMENT_CONTEXT);
 
@@ -481,7 +481,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEReference(getEStringToDeployedComponentMapEntry_Value(), this.getDeployedComponent(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deployedComponentEClass, DeployedComponent.class, "DeployedComponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDeployedComponent_AssemblyOperation(), theAssemblyPackage.getAssemblyComponent(), null, "assemblyOperation", null, 0, 1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDeployedComponent_AssemblyComponent(), theAssemblyPackage.getAssemblyComponent(), null, "assemblyComponent", null, 0, 1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDeployedComponent_ContainedOperations(), this.getEStringToDeployedOperationMapEntry(), null, "containedOperations", null, 0, -1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEOperation(getDeployedComponent__GetDeploymentContext(), this.getDeploymentContext(), "getDeploymentContext", 0, 1, IS_UNIQUE, IS_ORDERED);

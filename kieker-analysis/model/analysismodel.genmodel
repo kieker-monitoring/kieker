@@ -118,7 +118,7 @@
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//deployment/DeployedComponent">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedComponent/assemblyOperation"/>
+            ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedComponent/assemblyComponent"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeployedComponent/containedOperations"/>
         <genOperations ecoreOperation="analysismodel.ecore#//deployment/DeployedComponent/getDeploymentContext"/>
@@ -156,10 +156,6 @@
             ecoreFeature="ecore:EReference analysismodel.ecore#//trace/TraceRoot/rootOperationCall"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//trace/OperationCall">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//trace/OperationCall/host"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//trace/OperationCall/component"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//trace/OperationCall/operation"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"

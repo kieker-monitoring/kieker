@@ -29,7 +29,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeployedComponentImpl#getAssemblyOperation <em>Assembly Operation</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeployedComponentImpl#getAssemblyComponent <em>Assembly Component</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeployedComponentImpl#getContainedOperations <em>Contained Operations</em>}</li>
  * </ul>
  *
@@ -37,14 +37,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class DeployedComponentImpl extends MinimalEObjectImpl.Container implements DeployedComponent {
 	/**
-	 * The cached value of the '{@link #getAssemblyOperation() <em>Assembly Operation</em>}' reference.
+	 * The cached value of the '{@link #getAssemblyComponent() <em>Assembly Component</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAssemblyOperation()
+	 * @see #getAssemblyComponent()
 	 * @generated
 	 * @ordered
 	 */
-	protected AssemblyComponent assemblyOperation;
+	protected AssemblyComponent assemblyComponent;
 
 	/**
 	 * The cached value of the '{@link #getContainedOperations() <em>Contained Operations</em>}' map.
@@ -80,16 +80,16 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AssemblyComponent getAssemblyOperation() {
-		if (assemblyOperation != null && assemblyOperation.eIsProxy()) {
-			InternalEObject oldAssemblyOperation = (InternalEObject)assemblyOperation;
-			assemblyOperation = (AssemblyComponent)eResolveProxy(oldAssemblyOperation);
-			if (assemblyOperation != oldAssemblyOperation) {
+	public AssemblyComponent getAssemblyComponent() {
+		if (assemblyComponent != null && assemblyComponent.eIsProxy()) {
+			InternalEObject oldAssemblyComponent = (InternalEObject)assemblyComponent;
+			assemblyComponent = (AssemblyComponent)eResolveProxy(oldAssemblyComponent);
+			if (assemblyComponent != oldAssemblyComponent) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_OPERATION, oldAssemblyOperation, assemblyOperation));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT, oldAssemblyComponent, assemblyComponent));
 			}
 		}
-		return assemblyOperation;
+		return assemblyComponent;
 	}
 
 	/**
@@ -97,8 +97,8 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AssemblyComponent basicGetAssemblyOperation() {
-		return assemblyOperation;
+	public AssemblyComponent basicGetAssemblyComponent() {
+		return assemblyComponent;
 	}
 
 	/**
@@ -106,11 +106,11 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setAssemblyOperation(AssemblyComponent newAssemblyOperation) {
-		AssemblyComponent oldAssemblyOperation = assemblyOperation;
-		assemblyOperation = newAssemblyOperation;
+	public void setAssemblyComponent(AssemblyComponent newAssemblyComponent) {
+		AssemblyComponent oldAssemblyComponent = assemblyComponent;
+		assemblyComponent = newAssemblyComponent;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_OPERATION, oldAssemblyOperation, assemblyOperation));
+			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT, oldAssemblyComponent, assemblyComponent));
 	}
 
 	/**
@@ -164,9 +164,9 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_OPERATION:
-				if (resolve) return getAssemblyOperation();
-				return basicGetAssemblyOperation();
+			case DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT:
+				if (resolve) return getAssemblyComponent();
+				return basicGetAssemblyComponent();
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
 				if (coreType) return getContainedOperations();
 				else return getContainedOperations().map();
@@ -183,8 +183,8 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_OPERATION:
-				setAssemblyOperation((AssemblyComponent)newValue);
+			case DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT:
+				setAssemblyComponent((AssemblyComponent)newValue);
 				return;
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
 				((EStructuralFeature.Setting)getContainedOperations()).set(newValue);
@@ -201,8 +201,8 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_OPERATION:
-				setAssemblyOperation((AssemblyComponent)null);
+			case DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT:
+				setAssemblyComponent((AssemblyComponent)null);
 				return;
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
 				getContainedOperations().clear();
@@ -219,8 +219,8 @@ public class DeployedComponentImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_OPERATION:
-				return assemblyOperation != null;
+			case DeploymentPackage.DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT:
+				return assemblyComponent != null;
 			case DeploymentPackage.DEPLOYED_COMPONENT__CONTAINED_OPERATIONS:
 				return containedOperations != null && !containedOperations.isEmpty();
 		}

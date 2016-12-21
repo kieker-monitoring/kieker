@@ -113,31 +113,13 @@ public interface TracePackage extends EPackage {
 	int OPERATION_CALL = 1;
 
 	/**
-	 * The feature id for the '<em><b>Host</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPERATION_CALL__HOST = 0;
-
-	/**
-	 * The feature id for the '<em><b>Component</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPERATION_CALL__COMPONENT = 1;
-
-	/**
 	 * The feature id for the '<em><b>Operation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_CALL__OPERATION = 2;
+	int OPERATION_CALL__OPERATION = 0;
 
 	/**
 	 * The feature id for the '<em><b>Parent</b></em>' reference.
@@ -146,7 +128,7 @@ public interface TracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_CALL__PARENT = 3;
+	int OPERATION_CALL__PARENT = 1;
 
 	/**
 	 * The feature id for the '<em><b>Children</b></em>' reference list.
@@ -155,7 +137,7 @@ public interface TracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_CALL__CHILDREN = 4;
+	int OPERATION_CALL__CHILDREN = 2;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -164,7 +146,7 @@ public interface TracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_CALL__DURATION = 5;
+	int OPERATION_CALL__DURATION = 3;
 
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' attribute.
@@ -173,7 +155,7 @@ public interface TracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_CALL__START = 6;
+	int OPERATION_CALL__START = 4;
 
 	/**
 	 * The feature id for the '<em><b>Dur Ratio To Parent</b></em>' attribute.
@@ -182,7 +164,7 @@ public interface TracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_CALL__DUR_RATIO_TO_PARENT = 7;
+	int OPERATION_CALL__DUR_RATIO_TO_PARENT = 5;
 
 	/**
 	 * The feature id for the '<em><b>Dur Ratio To Root Parent</b></em>' attribute.
@@ -191,7 +173,7 @@ public interface TracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_CALL__DUR_RATIO_TO_ROOT_PARENT = 8;
+	int OPERATION_CALL__DUR_RATIO_TO_ROOT_PARENT = 6;
 
 	/**
 	 * The feature id for the '<em><b>Stack Depth</b></em>' attribute.
@@ -200,7 +182,7 @@ public interface TracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_CALL__STACK_DEPTH = 9;
+	int OPERATION_CALL__STACK_DEPTH = 7;
 
 	/**
 	 * The feature id for the '<em><b>Order Index</b></em>' attribute.
@@ -209,7 +191,7 @@ public interface TracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_CALL__ORDER_INDEX = 10;
+	int OPERATION_CALL__ORDER_INDEX = 8;
 
 	/**
 	 * The feature id for the '<em><b>Failed</b></em>' attribute.
@@ -218,7 +200,7 @@ public interface TracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_CALL__FAILED = 11;
+	int OPERATION_CALL__FAILED = 9;
 
 	/**
 	 * The feature id for the '<em><b>Failed Cause</b></em>' attribute.
@@ -227,7 +209,7 @@ public interface TracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_CALL__FAILED_CAUSE = 12;
+	int OPERATION_CALL__FAILED_CAUSE = 10;
 
 	/**
 	 * The number of structural features of the '<em>Operation Call</em>' class.
@@ -236,7 +218,7 @@ public interface TracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_CALL_FEATURE_COUNT = 13;
+	int OPERATION_CALL_FEATURE_COUNT = 11;
 
 	/**
 	 * The number of operations of the '<em>Operation Call</em>' class.
@@ -288,28 +270,6 @@ public interface TracePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getOperationCall();
-
-	/**
-	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#getHost <em>Host</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Host</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.trace.OperationCall#getHost()
-	 * @see #getOperationCall()
-	 * @generated
-	 */
-	EReference getOperationCall_Host();
-
-	/**
-	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#getComponent <em>Component</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Component</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.trace.OperationCall#getComponent()
-	 * @see #getOperationCall()
-	 * @generated
-	 */
-	EReference getOperationCall_Component();
 
 	/**
 	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#getOperation <em>Operation</em>}'.
@@ -490,22 +450,6 @@ public interface TracePackage extends EPackage {
 		 * @generated
 		 */
 		EClass OPERATION_CALL = eINSTANCE.getOperationCall();
-
-		/**
-		 * The meta object literal for the '<em><b>Host</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPERATION_CALL__HOST = eINSTANCE.getOperationCall_Host();
-
-		/**
-		 * The meta object literal for the '<em><b>Component</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference OPERATION_CALL__COMPONENT = eINSTANCE.getOperationCall_Component();
 
 		/**
 		 * The meta object literal for the '<em><b>Operation</b></em>' reference feature.

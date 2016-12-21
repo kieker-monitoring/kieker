@@ -175,7 +175,7 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getOperationCall_Host() {
+	public EReference getOperationCall_Operation() {
 		return (EReference)operationCallEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -184,7 +184,7 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getOperationCall_Component() {
+	public EReference getOperationCall_Parent() {
 		return (EReference)operationCallEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -193,7 +193,7 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getOperationCall_Operation() {
+	public EReference getOperationCall_Children() {
 		return (EReference)operationCallEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -202,26 +202,8 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getOperationCall_Parent() {
-		return (EReference)operationCallEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getOperationCall_Children() {
-		return (EReference)operationCallEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getOperationCall_Duration() {
-		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -230,7 +212,7 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * @generated
 	 */
 	public EAttribute getOperationCall_Start() {
-		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(6);
+		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -239,7 +221,7 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * @generated
 	 */
 	public EAttribute getOperationCall_DurRatioToParent() {
-		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(7);
+		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -248,7 +230,7 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * @generated
 	 */
 	public EAttribute getOperationCall_DurRatioToRootParent() {
-		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(8);
+		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -257,7 +239,7 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * @generated
 	 */
 	public EAttribute getOperationCall_StackDepth() {
-		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(9);
+		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -266,7 +248,7 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * @generated
 	 */
 	public EAttribute getOperationCall_OrderIndex() {
-		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(10);
+		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -275,7 +257,7 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * @generated
 	 */
 	public EAttribute getOperationCall_Failed() {
-		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(11);
+		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -284,7 +266,7 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * @generated
 	 */
 	public EAttribute getOperationCall_FailedCause() {
-		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(12);
+		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -320,8 +302,6 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 		createEReference(traceRootEClass, TRACE_ROOT__ROOT_OPERATION_CALL);
 
 		operationCallEClass = createEClass(OPERATION_CALL);
-		createEReference(operationCallEClass, OPERATION_CALL__HOST);
-		createEReference(operationCallEClass, OPERATION_CALL__COMPONENT);
 		createEReference(operationCallEClass, OPERATION_CALL__OPERATION);
 		createEReference(operationCallEClass, OPERATION_CALL__PARENT);
 		createEReference(operationCallEClass, OPERATION_CALL__CHILDREN);
@@ -374,8 +354,6 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 		initEReference(getTraceRoot_RootOperationCall(), this.getOperationCall(), null, "rootOperationCall", null, 0, 1, TraceRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(operationCallEClass, OperationCall.class, "OperationCall", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getOperationCall_Host(), theDeploymentPackage.getDeploymentContext(), null, "host", null, 0, 1, OperationCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getOperationCall_Component(), theDeploymentPackage.getDeployedComponent(), null, "component", null, 0, 1, OperationCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOperationCall_Operation(), theDeploymentPackage.getDeployedOperation(), null, "operation", null, 0, 1, OperationCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOperationCall_Parent(), this.getOperationCall(), this.getOperationCall_Children(), "parent", null, 0, 1, OperationCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOperationCall_Children(), this.getOperationCall(), this.getOperationCall_Parent(), "children", null, 0, -1, OperationCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

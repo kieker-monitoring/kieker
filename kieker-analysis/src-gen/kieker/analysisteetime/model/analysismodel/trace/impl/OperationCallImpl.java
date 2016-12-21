@@ -6,11 +6,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 import java.util.Collection;
-
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
-
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.TracePackage;
 
@@ -36,8 +32,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.impl.OperationCallImpl#getHost <em>Host</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.impl.OperationCallImpl#getComponent <em>Component</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.impl.OperationCallImpl#getOperation <em>Operation</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.impl.OperationCallImpl#getParent <em>Parent</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.impl.OperationCallImpl#getChildren <em>Children</em>}</li>
@@ -54,26 +48,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * @generated
  */
 public class OperationCallImpl extends MinimalEObjectImpl.Container implements OperationCall {
-	/**
-	 * The cached value of the '{@link #getHost() <em>Host</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getHost()
-	 * @generated
-	 * @ordered
-	 */
-	protected DeploymentContext host;
-
-	/**
-	 * The cached value of the '{@link #getComponent() <em>Component</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getComponent()
-	 * @generated
-	 * @ordered
-	 */
-	protected DeployedComponent component;
-
 	/**
 	 * The cached value of the '{@link #getOperation() <em>Operation</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -281,82 +255,6 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	@Override
 	protected EClass eStaticClass() {
 		return TracePackage.Literals.OPERATION_CALL;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DeploymentContext getHost() {
-		if (host != null && host.eIsProxy()) {
-			InternalEObject oldHost = (InternalEObject)host;
-			host = (DeploymentContext)eResolveProxy(oldHost);
-			if (host != oldHost) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TracePackage.OPERATION_CALL__HOST, oldHost, host));
-			}
-		}
-		return host;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DeploymentContext basicGetHost() {
-		return host;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setHost(DeploymentContext newHost) {
-		DeploymentContext oldHost = host;
-		host = newHost;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__HOST, oldHost, host));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DeployedComponent getComponent() {
-		if (component != null && component.eIsProxy()) {
-			InternalEObject oldComponent = (InternalEObject)component;
-			component = (DeployedComponent)eResolveProxy(oldComponent);
-			if (component != oldComponent) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TracePackage.OPERATION_CALL__COMPONENT, oldComponent, component));
-			}
-		}
-		return component;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DeployedComponent basicGetComponent() {
-		return component;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setComponent(DeployedComponent newComponent) {
-		DeployedComponent oldComponent = component;
-		component = newComponent;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__COMPONENT, oldComponent, component));
 	}
 
 	/**
@@ -680,12 +578,6 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case TracePackage.OPERATION_CALL__HOST:
-				if (resolve) return getHost();
-				return basicGetHost();
-			case TracePackage.OPERATION_CALL__COMPONENT:
-				if (resolve) return getComponent();
-				return basicGetComponent();
 			case TracePackage.OPERATION_CALL__OPERATION:
 				if (resolve) return getOperation();
 				return basicGetOperation();
@@ -723,12 +615,6 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case TracePackage.OPERATION_CALL__HOST:
-				setHost((DeploymentContext)newValue);
-				return;
-			case TracePackage.OPERATION_CALL__COMPONENT:
-				setComponent((DeployedComponent)newValue);
-				return;
 			case TracePackage.OPERATION_CALL__OPERATION:
 				setOperation((DeployedOperation)newValue);
 				return;
@@ -775,12 +661,6 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case TracePackage.OPERATION_CALL__HOST:
-				setHost((DeploymentContext)null);
-				return;
-			case TracePackage.OPERATION_CALL__COMPONENT:
-				setComponent((DeployedComponent)null);
-				return;
 			case TracePackage.OPERATION_CALL__OPERATION:
 				setOperation((DeployedOperation)null);
 				return;
@@ -826,10 +706,6 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case TracePackage.OPERATION_CALL__HOST:
-				return host != null;
-			case TracePackage.OPERATION_CALL__COMPONENT:
-				return component != null;
 			case TracePackage.OPERATION_CALL__OPERATION:
 				return operation != null;
 			case TracePackage.OPERATION_CALL__PARENT:

@@ -252,13 +252,13 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYED_COMPONENT = 4;
 
 	/**
-	 * The feature id for the '<em><b>Assembly Operation</b></em>' reference.
+	 * The feature id for the '<em><b>Assembly Component</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYED_COMPONENT__ASSEMBLY_OPERATION = 0;
+	int DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT = 0;
 
 	/**
 	 * The feature id for the '<em><b>Contained Operations</b></em>' map.
@@ -531,15 +531,15 @@ public interface DeploymentPackage extends EPackage {
 	EClass getDeployedComponent();
 
 	/**
-	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAssemblyOperation <em>Assembly Operation</em>}'.
+	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAssemblyComponent <em>Assembly Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Assembly Operation</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAssemblyOperation()
+	 * @return the meta object for the reference '<em>Assembly Component</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAssemblyComponent()
 	 * @see #getDeployedComponent()
 	 * @generated
 	 */
-	EReference getDeployedComponent_AssemblyOperation();
+	EReference getDeployedComponent_AssemblyComponent();
 
 	/**
 	 * Returns the meta object for the map '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getContainedOperations <em>Contained Operations</em>}'.
@@ -765,12 +765,12 @@ public interface DeploymentPackage extends EPackage {
 		EClass DEPLOYED_COMPONENT = eINSTANCE.getDeployedComponent();
 
 		/**
-		 * The meta object literal for the '<em><b>Assembly Operation</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Assembly Component</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference DEPLOYED_COMPONENT__ASSEMBLY_OPERATION = eINSTANCE.getDeployedComponent_AssemblyOperation();
+		EReference DEPLOYED_COMPONENT__ASSEMBLY_COMPONENT = eINSTANCE.getDeployedComponent_AssemblyComponent();
 
 		/**
 		 * The meta object literal for the '<em><b>Contained Operations</b></em>' map feature.

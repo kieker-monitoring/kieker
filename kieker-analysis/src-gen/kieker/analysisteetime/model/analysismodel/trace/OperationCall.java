@@ -4,11 +4,7 @@ package kieker.analysisteetime.model.analysismodel.trace;
 
 import java.time.Duration;
 import java.time.Instant;
-
-import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
-
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -22,8 +18,6 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#getHost <em>Host</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#getComponent <em>Component</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#getOperation <em>Operation</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#getParent <em>Parent</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#getChildren <em>Children</em>}</li>
@@ -42,58 +36,6 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface OperationCall extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Host</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Host</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Host</em>' reference.
-	 * @see #setHost(DeploymentContext)
-	 * @see kieker.analysisteetime.model.analysismodel.trace.TracePackage#getOperationCall_Host()
-	 * @model
-	 * @generated
-	 */
-	DeploymentContext getHost();
-
-	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#getHost <em>Host</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Host</em>' reference.
-	 * @see #getHost()
-	 * @generated
-	 */
-	void setHost(DeploymentContext value);
-
-	/**
-	 * Returns the value of the '<em><b>Component</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Component</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Component</em>' reference.
-	 * @see #setComponent(DeployedComponent)
-	 * @see kieker.analysisteetime.model.analysismodel.trace.TracePackage#getOperationCall_Component()
-	 * @model
-	 * @generated
-	 */
-	DeployedComponent getComponent();
-
-	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#getComponent <em>Component</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Component</em>' reference.
-	 * @see #getComponent()
-	 * @generated
-	 */
-	void setComponent(DeployedComponent value);
-
 	/**
 	 * Returns the value of the '<em><b>Operation</b></em>' reference.
 	 * <!-- begin-user-doc -->

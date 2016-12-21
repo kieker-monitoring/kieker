@@ -165,7 +165,7 @@
           <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (DeploymentContext) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
         </eAnnotations>
       </eOperations>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyOperation" eType="#//assembly/AssemblyComponent"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyComponent" eType="#//assembly/AssemblyComponent"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="containedOperations"
           ordered="false" upperBound="-1" eType="#//deployment/EStringToDeployedOperationMapEntry"
           containment="true"/>
@@ -207,8 +207,6 @@
           eType="#//trace/OperationCall" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="OperationCall">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="host" eType="#//deployment/DeploymentContext"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="component" eType="#//deployment/DeployedComponent"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="operation" eType="#//deployment/DeployedOperation"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//trace/OperationCall"
           eOpposite="#//trace/OperationCall/children"/>

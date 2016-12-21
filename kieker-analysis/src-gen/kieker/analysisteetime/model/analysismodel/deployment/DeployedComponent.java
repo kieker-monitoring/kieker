@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAssemblyOperation <em>Assembly Operation</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAssemblyComponent <em>Assembly Component</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getContainedOperations <em>Contained Operations</em>}</li>
  * </ul>
  *
@@ -25,30 +25,30 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface DeployedComponent extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Assembly Operation</b></em>' reference.
+	 * Returns the value of the '<em><b>Assembly Component</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Assembly Operation</em>' reference isn't clear,
+	 * If the meaning of the '<em>Assembly Component</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Assembly Operation</em>' reference.
-	 * @see #setAssemblyOperation(AssemblyComponent)
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeployedComponent_AssemblyOperation()
+	 * @return the value of the '<em>Assembly Component</em>' reference.
+	 * @see #setAssemblyComponent(AssemblyComponent)
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeployedComponent_AssemblyComponent()
 	 * @model
 	 * @generated
 	 */
-	AssemblyComponent getAssemblyOperation();
+	AssemblyComponent getAssemblyComponent();
 
 	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAssemblyOperation <em>Assembly Operation</em>}' reference.
+	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAssemblyComponent <em>Assembly Component</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Assembly Operation</em>' reference.
-	 * @see #getAssemblyOperation()
+	 * @param value the new value of the '<em>Assembly Component</em>' reference.
+	 * @see #getAssemblyComponent()
 	 * @generated
 	 */
-	void setAssemblyOperation(AssemblyComponent value);
+	void setAssemblyComponent(AssemblyComponent value);
 
 	/**
 	 * Returns the value of the '<em><b>Contained Operations</b></em>' map.
