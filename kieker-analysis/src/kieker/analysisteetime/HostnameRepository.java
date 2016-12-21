@@ -52,14 +52,19 @@ public class HostnameRepository {
 
 	public void dec(final long traceId) {
 		final Entry entry = this.repository.get(traceId);
-		entry.size++;
+		entry.size--;
 		if (entry.size <= 0) {
 			this.repository.remove(traceId);
 		}
 	}
 
 	public String getHostname(final long traceId) {
-		return this.repository.get(traceId).hostname;
+		final Entry entry = this.repository.get(traceId);
+		if (entry == null) {
+			return null;
+		} else {
+			return entry.hostname;
+		}
 	}
 
 	private static class Entry {
