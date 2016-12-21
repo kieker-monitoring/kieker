@@ -18,8 +18,6 @@ import kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl;
 import kieker.analysisteetime.model.analysismodel.statistics.StatisticsPackage;
 
 import kieker.analysisteetime.model.analysismodel.statistics.impl.StatisticsPackageImpl;
-
-import kieker.analysisteetime.model.analysismodel.trace.FailedOperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.TraceFactory;
 import kieker.analysisteetime.model.analysismodel.trace.TracePackage;
@@ -54,13 +52,6 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * @generated
 	 */
 	private EClass operationCallEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass failedOperationCallEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -283,8 +274,8 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getFailedOperationCall() {
-		return failedOperationCallEClass;
+	public EAttribute getOperationCall_Failed() {
+		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -292,8 +283,8 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getFailedOperationCall_FailedCause() {
-		return (EAttribute)failedOperationCallEClass.getEStructuralFeatures().get(0);
+	public EAttribute getOperationCall_FailedCause() {
+		return (EAttribute)operationCallEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -340,9 +331,8 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 		createEAttribute(operationCallEClass, OPERATION_CALL__DUR_RATIO_TO_ROOT_PARENT);
 		createEAttribute(operationCallEClass, OPERATION_CALL__STACK_DEPTH);
 		createEAttribute(operationCallEClass, OPERATION_CALL__ORDER_INDEX);
-
-		failedOperationCallEClass = createEClass(FAILED_OPERATION_CALL);
-		createEAttribute(failedOperationCallEClass, FAILED_OPERATION_CALL__FAILED_CAUSE);
+		createEAttribute(operationCallEClass, OPERATION_CALL__FAILED);
+		createEAttribute(operationCallEClass, OPERATION_CALL__FAILED_CAUSE);
 	}
 
 	/**
@@ -377,7 +367,6 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		failedOperationCallEClass.getESuperTypes().add(this.getOperationCall());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(traceRootEClass, TraceRoot.class, "TraceRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -396,9 +385,8 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 		initEAttribute(getOperationCall_DurRatioToRootParent(), ecorePackage.getEFloat(), "durRatioToRootParent", null, 0, 1, OperationCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getOperationCall_StackDepth(), ecorePackage.getEInt(), "stackDepth", null, 0, 1, OperationCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getOperationCall_OrderIndex(), ecorePackage.getEInt(), "orderIndex", null, 0, 1, OperationCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(failedOperationCallEClass, FailedOperationCall.class, "FailedOperationCall", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getFailedOperationCall_FailedCause(), ecorePackage.getEString(), "failedCause", null, 0, 1, FailedOperationCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOperationCall_Failed(), ecorePackage.getEBoolean(), "failed", "false", 0, 1, OperationCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOperationCall_FailedCause(), ecorePackage.getEString(), "failedCause", null, 0, 1, OperationCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //TracePackageImpl

@@ -78,13 +78,6 @@ public class TraceSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case TracePackage.FAILED_OPERATION_CALL: {
-				FailedOperationCall failedOperationCall = (FailedOperationCall)theEObject;
-				T result = caseFailedOperationCall(failedOperationCall);
-				if (result == null) result = caseOperationCall(failedOperationCall);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -116,21 +109,6 @@ public class TraceSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseOperationCall(OperationCall object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Failed Operation Call</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Failed Operation Call</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseFailedOperationCall(FailedOperationCall object) {
 		return null;
 	}
 

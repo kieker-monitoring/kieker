@@ -221,8 +221,8 @@
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="stackDepth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="orderIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="FailedOperationCall" eSuperTypes="#//trace/OperationCall">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="failed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="failedCause" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
   </eSubpackages>

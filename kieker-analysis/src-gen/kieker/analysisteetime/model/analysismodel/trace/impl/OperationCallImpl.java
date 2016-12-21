@@ -47,6 +47,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.impl.OperationCallImpl#getDurRatioToRootParent <em>Dur Ratio To Root Parent</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.impl.OperationCallImpl#getStackDepth <em>Stack Depth</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.impl.OperationCallImpl#getOrderIndex <em>Order Index</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.impl.OperationCallImpl#isFailed <em>Failed</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.impl.OperationCallImpl#getFailedCause <em>Failed Cause</em>}</li>
  * </ul>
  *
  * @generated
@@ -221,6 +223,46 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * @ordered
 	 */
 	protected int orderIndex = ORDER_INDEX_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isFailed() <em>Failed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isFailed()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean FAILED_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isFailed() <em>Failed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isFailed()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean failed = FAILED_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getFailedCause() <em>Failed Cause</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFailedCause()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String FAILED_CAUSE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getFailedCause() <em>Failed Cause</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFailedCause()
+	 * @generated
+	 * @ordered
+	 */
+	protected String failedCause = FAILED_CAUSE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -558,6 +600,48 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isFailed() {
+		return failed;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFailed(boolean newFailed) {
+		boolean oldFailed = failed;
+		failed = newFailed;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__FAILED, oldFailed, failed));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getFailedCause() {
+		return failedCause;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFailedCause(String newFailedCause) {
+		String oldFailedCause = failedCause;
+		failedCause = newFailedCause;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.OPERATION_CALL__FAILED_CAUSE, oldFailedCause, failedCause));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -622,6 +706,10 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 				return getStackDepth();
 			case TracePackage.OPERATION_CALL__ORDER_INDEX:
 				return getOrderIndex();
+			case TracePackage.OPERATION_CALL__FAILED:
+				return isFailed();
+			case TracePackage.OPERATION_CALL__FAILED_CAUSE:
+				return getFailedCause();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -669,6 +757,12 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 			case TracePackage.OPERATION_CALL__ORDER_INDEX:
 				setOrderIndex((Integer)newValue);
 				return;
+			case TracePackage.OPERATION_CALL__FAILED:
+				setFailed((Boolean)newValue);
+				return;
+			case TracePackage.OPERATION_CALL__FAILED_CAUSE:
+				setFailedCause((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -714,6 +808,12 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 			case TracePackage.OPERATION_CALL__ORDER_INDEX:
 				setOrderIndex(ORDER_INDEX_EDEFAULT);
 				return;
+			case TracePackage.OPERATION_CALL__FAILED:
+				setFailed(FAILED_EDEFAULT);
+				return;
+			case TracePackage.OPERATION_CALL__FAILED_CAUSE:
+				setFailedCause(FAILED_CAUSE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -748,6 +848,10 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 				return stackDepth != STACK_DEPTH_EDEFAULT;
 			case TracePackage.OPERATION_CALL__ORDER_INDEX:
 				return orderIndex != ORDER_INDEX_EDEFAULT;
+			case TracePackage.OPERATION_CALL__FAILED:
+				return failed != FAILED_EDEFAULT;
+			case TracePackage.OPERATION_CALL__FAILED_CAUSE:
+				return FAILED_CAUSE_EDEFAULT == null ? failedCause != null : !FAILED_CAUSE_EDEFAULT.equals(failedCause);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -774,6 +878,10 @@ public class OperationCallImpl extends MinimalEObjectImpl.Container implements O
 		result.append(stackDepth);
 		result.append(", orderIndex: ");
 		result.append(orderIndex);
+		result.append(", failed: ");
+		result.append(failed);
+		result.append(", failedCause: ");
+		result.append(failedCause);
 		result.append(')');
 		return result.toString();
 	}

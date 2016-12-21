@@ -76,10 +76,6 @@ public class TraceAdapterFactory extends AdapterFactoryImpl {
 				return createOperationCallAdapter();
 			}
 			@Override
-			public Adapter caseFailedOperationCall(FailedOperationCall object) {
-				return createFailedOperationCallAdapter();
-			}
-			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -124,20 +120,6 @@ public class TraceAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createOperationCallAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link kieker.analysisteetime.model.analysismodel.trace.FailedOperationCall <em>Failed Operation Call</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see kieker.analysisteetime.model.analysismodel.trace.FailedOperationCall
-	 * @generated
-	 */
-	public Adapter createFailedOperationCallAdapter() {
 		return null;
 	}
 

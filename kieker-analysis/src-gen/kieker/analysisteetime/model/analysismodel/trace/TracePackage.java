@@ -212,13 +212,31 @@ public interface TracePackage extends EPackage {
 	int OPERATION_CALL__ORDER_INDEX = 10;
 
 	/**
+	 * The feature id for the '<em><b>Failed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPERATION_CALL__FAILED = 11;
+
+	/**
+	 * The feature id for the '<em><b>Failed Cause</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPERATION_CALL__FAILED_CAUSE = 12;
+
+	/**
 	 * The number of structural features of the '<em>Operation Call</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_CALL_FEATURE_COUNT = 11;
+	int OPERATION_CALL_FEATURE_COUNT = 13;
 
 	/**
 	 * The number of operations of the '<em>Operation Call</em>' class.
@@ -228,143 +246,6 @@ public interface TracePackage extends EPackage {
 	 * @ordered
 	 */
 	int OPERATION_CALL_OPERATION_COUNT = 0;
-
-	/**
-	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.trace.impl.FailedOperationCallImpl <em>Failed Operation Call</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see kieker.analysisteetime.model.analysismodel.trace.impl.FailedOperationCallImpl
-	 * @see kieker.analysisteetime.model.analysismodel.trace.impl.TracePackageImpl#getFailedOperationCall()
-	 * @generated
-	 */
-	int FAILED_OPERATION_CALL = 2;
-
-	/**
-	 * The feature id for the '<em><b>Host</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FAILED_OPERATION_CALL__HOST = OPERATION_CALL__HOST;
-
-	/**
-	 * The feature id for the '<em><b>Component</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FAILED_OPERATION_CALL__COMPONENT = OPERATION_CALL__COMPONENT;
-
-	/**
-	 * The feature id for the '<em><b>Operation</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FAILED_OPERATION_CALL__OPERATION = OPERATION_CALL__OPERATION;
-
-	/**
-	 * The feature id for the '<em><b>Parent</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FAILED_OPERATION_CALL__PARENT = OPERATION_CALL__PARENT;
-
-	/**
-	 * The feature id for the '<em><b>Children</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FAILED_OPERATION_CALL__CHILDREN = OPERATION_CALL__CHILDREN;
-
-	/**
-	 * The feature id for the '<em><b>Duration</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FAILED_OPERATION_CALL__DURATION = OPERATION_CALL__DURATION;
-
-	/**
-	 * The feature id for the '<em><b>Start</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FAILED_OPERATION_CALL__START = OPERATION_CALL__START;
-
-	/**
-	 * The feature id for the '<em><b>Dur Ratio To Parent</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FAILED_OPERATION_CALL__DUR_RATIO_TO_PARENT = OPERATION_CALL__DUR_RATIO_TO_PARENT;
-
-	/**
-	 * The feature id for the '<em><b>Dur Ratio To Root Parent</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FAILED_OPERATION_CALL__DUR_RATIO_TO_ROOT_PARENT = OPERATION_CALL__DUR_RATIO_TO_ROOT_PARENT;
-
-	/**
-	 * The feature id for the '<em><b>Stack Depth</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FAILED_OPERATION_CALL__STACK_DEPTH = OPERATION_CALL__STACK_DEPTH;
-
-	/**
-	 * The feature id for the '<em><b>Order Index</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FAILED_OPERATION_CALL__ORDER_INDEX = OPERATION_CALL__ORDER_INDEX;
-
-	/**
-	 * The feature id for the '<em><b>Failed Cause</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FAILED_OPERATION_CALL__FAILED_CAUSE = OPERATION_CALL_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Failed Operation Call</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FAILED_OPERATION_CALL_FEATURE_COUNT = OPERATION_CALL_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of operations of the '<em>Failed Operation Call</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FAILED_OPERATION_CALL_OPERATION_COUNT = OPERATION_CALL_OPERATION_COUNT + 0;
-
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.trace.TraceRoot <em>Root</em>}'.
@@ -530,25 +411,26 @@ public interface TracePackage extends EPackage {
 	EAttribute getOperationCall_OrderIndex();
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.trace.FailedOperationCall <em>Failed Operation Call</em>}'.
+	 * Returns the meta object for the attribute '{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#isFailed <em>Failed</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Failed Operation Call</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.trace.FailedOperationCall
+	 * @return the meta object for the attribute '<em>Failed</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.trace.OperationCall#isFailed()
+	 * @see #getOperationCall()
 	 * @generated
 	 */
-	EClass getFailedOperationCall();
+	EAttribute getOperationCall_Failed();
 
 	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysisteetime.model.analysismodel.trace.FailedOperationCall#getFailedCause <em>Failed Cause</em>}'.
+	 * Returns the meta object for the attribute '{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#getFailedCause <em>Failed Cause</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Failed Cause</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.trace.FailedOperationCall#getFailedCause()
-	 * @see #getFailedOperationCall()
+	 * @see kieker.analysisteetime.model.analysismodel.trace.OperationCall#getFailedCause()
+	 * @see #getOperationCall()
 	 * @generated
 	 */
-	EAttribute getFailedOperationCall_FailedCause();
+	EAttribute getOperationCall_FailedCause();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -698,14 +580,12 @@ public interface TracePackage extends EPackage {
 		EAttribute OPERATION_CALL__ORDER_INDEX = eINSTANCE.getOperationCall_OrderIndex();
 
 		/**
-		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.trace.impl.FailedOperationCallImpl <em>Failed Operation Call</em>}' class.
+		 * The meta object literal for the '<em><b>Failed</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysisteetime.model.analysismodel.trace.impl.FailedOperationCallImpl
-		 * @see kieker.analysisteetime.model.analysismodel.trace.impl.TracePackageImpl#getFailedOperationCall()
 		 * @generated
 		 */
-		EClass FAILED_OPERATION_CALL = eINSTANCE.getFailedOperationCall();
+		EAttribute OPERATION_CALL__FAILED = eINSTANCE.getOperationCall_Failed();
 
 		/**
 		 * The meta object literal for the '<em><b>Failed Cause</b></em>' attribute feature.
@@ -713,7 +593,7 @@ public interface TracePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute FAILED_OPERATION_CALL__FAILED_CAUSE = eINSTANCE.getFailedOperationCall_FailedCause();
+		EAttribute OPERATION_CALL__FAILED_CAUSE = eINSTANCE.getOperationCall_FailedCause();
 
 	}
 

@@ -58,7 +58,6 @@ public class TraceFactoryImpl extends EFactoryImpl implements TraceFactory {
 		switch (eClass.getClassifierID()) {
 			case TracePackage.TRACE_ROOT: return createTraceRoot();
 			case TracePackage.OPERATION_CALL: return createOperationCall();
-			case TracePackage.FAILED_OPERATION_CALL: return createFailedOperationCall();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -82,16 +81,6 @@ public class TraceFactoryImpl extends EFactoryImpl implements TraceFactory {
 	public OperationCall createOperationCall() {
 		OperationCallImpl operationCall = new OperationCallImpl();
 		return operationCall;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FailedOperationCall createFailedOperationCall() {
-		FailedOperationCallImpl failedOperationCall = new FailedOperationCallImpl();
-		return failedOperationCall;
 	}
 
 	/**

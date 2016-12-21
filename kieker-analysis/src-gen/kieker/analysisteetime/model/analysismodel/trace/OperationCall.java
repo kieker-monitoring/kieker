@@ -33,6 +33,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#getDurRatioToRootParent <em>Dur Ratio To Root Parent</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#getStackDepth <em>Stack Depth</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#getOrderIndex <em>Order Index</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#isFailed <em>Failed</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#getFailedCause <em>Failed Cause</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.trace.TracePackage#getOperationCall()
@@ -319,5 +321,58 @@ public interface OperationCall extends EObject {
 	 * @generated
 	 */
 	void setOrderIndex(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Failed</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Failed</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Failed</em>' attribute.
+	 * @see #setFailed(boolean)
+	 * @see kieker.analysisteetime.model.analysismodel.trace.TracePackage#getOperationCall_Failed()
+	 * @model default="false"
+	 * @generated
+	 */
+	boolean isFailed();
+
+	/**
+	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#isFailed <em>Failed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Failed</em>' attribute.
+	 * @see #isFailed()
+	 * @generated
+	 */
+	void setFailed(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Failed Cause</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Failed Cause</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Failed Cause</em>' attribute.
+	 * @see #setFailedCause(String)
+	 * @see kieker.analysisteetime.model.analysismodel.trace.TracePackage#getOperationCall_FailedCause()
+	 * @model
+	 * @generated
+	 */
+	String getFailedCause();
+
+	/**
+	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall#getFailedCause <em>Failed Cause</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Failed Cause</em>' attribute.
+	 * @see #getFailedCause()
+	 * @generated
+	 */
+	void setFailedCause(String value);
 
 } // OperationCall

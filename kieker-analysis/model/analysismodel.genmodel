@@ -172,9 +172,8 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/OperationCall/durRatioToRootParent"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/OperationCall/stackDepth"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/OperationCall/orderIndex"/>
-      </genClasses>
-      <genClasses ecoreClass="analysismodel.ecore#//trace/FailedOperationCall">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/FailedOperationCall/failedCause"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/OperationCall/failed"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/OperationCall/failedCause"/>
       </genClasses>
     </nestedGenPackages>
   </genPackages>
