@@ -17,9 +17,13 @@
 package kieker.analysisteetime.trace.reconstruction;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Deque;
 import java.util.LinkedList;
 
+import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
+import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.TraceFactory;
@@ -54,9 +58,22 @@ public class TraceReconstructionBuffer {
 		this.stack.push(record);
 
 		final OperationCall newCall = this.factory.createOperationCall();
-		// TODO Set attributes
-		// final OperationCall newCall = new OperationCall(this.hostname, record.getClassSignature(), record.getOperationSignature(), record.getOrderIndex(),
-		// this.traceID, record.getLoggingTimestamp());
+
+		// TODO Calculate Start
+		final long epochMilli = 0; // TODO Temp
+		final long nanosOffset = 0; // TODO Temp
+		newCall.setStart(Instant.ofEpochMilli(epochMilli).plusNanos(nanosOffset));
+
+		// TODO Retrieve Deployed Operation
+		final DeploymentContext context = this.deploymentRoot.getDeploymentContexts().get(this.traceMetadata.getHostname());
+		final DeployedComponent component = context.getComponents().get(record.getClassSignature());
+		final DeployedOperation operation = component.getContainedOperations().get(record.getOperationSignature());
+		newCall.setOperation(operation);
+
+		// TODO Set OrderIndex and Stack Depth
+		newCall.setOrderIndex(record.getOrderIndex());
+		newCall.setStackDepth(this.stack.size() - 1);
+
 		if (this.root == null) {
 			this.root = newCall;
 		} else {
@@ -73,8 +90,8 @@ public class TraceReconstructionBuffer {
 
 		if (record instanceof AfterOperationFailedEvent) {
 			final String failedCause = ((AfterOperationFailedEvent) record).getCause();
-			// TODO
-			// this.header.setFailedCause(((AfterOperationFailedEvent) record).getCause());
+			this.current.setFailed(true);
+			this.current.setFailedCause(failedCause);
 		}
 
 		this.current = this.current.getParent();
