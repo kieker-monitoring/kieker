@@ -89,9 +89,14 @@ public class RealtimeRecordDelayProducer extends AbstractProducerStage<IMonitori
 	@Override
 	protected void execute() {
 		try {
+			// System.out.println("RRDF producer waiting for records");
 			final Object element = this.recordQueue.take();
+			if (element instanceof IMonitoringRecord) {
+				// System.out.println("RRDF producer took " + ((IMonitoringRecord) element).getLoggingTimestamp() + " from the queue");
+			}
 
 			if (element == this.endToken) {
+				// System.out.println("RRDF producer terminating");
 				this.terminateStage();
 			} else if (element instanceof IMonitoringRecord) {
 				final IMonitoringRecord monitoringRecord = (IMonitoringRecord) element;
@@ -102,6 +107,11 @@ public class RealtimeRecordDelayProducer extends AbstractProducerStage<IMonitori
 					this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp();
 					this.startTime = currentTime;
 				}
+
+				// System.out.println("timestamp " + monitoringRecord.getLoggingTimestamp());
+				// System.out.println("first timestamp " + this.firstLoggingTimestamp);
+				// System.out.println("current time " + currentTime);
+				// System.out.println("start time " + this.startTime);
 
 				// Compute scheduling time (without acceleration)
 				long schedTimeFromNow = (monitoringRecord.getLoggingTimestamp() - this.firstLoggingTimestamp) // relative to 1st record
@@ -116,14 +126,24 @@ public class RealtimeRecordDelayProducer extends AbstractProducerStage<IMonitori
 					schedTimeFromNow = 0; // i.e., schedule immediately
 				}
 
-				Thread.sleep(schedTimeFromNow);
+				// System.out.println("RRDF producer going to sleep for " + TimeUnit.MILLISECONDS.convert(schedTimeFromNow, this.timeunit));
+				Thread.sleep(TimeUnit.MILLISECONDS.convert(schedTimeFromNow, this.timeunit));
+				// System.out.println("RRDF producer woke up");
 				this.outputPort.send(monitoringRecord);
+				System.out.println("RRDF producer sent record " + monitoringRecord);
+
 			}
 
 		} catch (final InterruptedException e) {
 			this.logger.warn("Interrupted while waiting for next record.");
 		}
 
+	}
+
+	@Override
+	public void onTerminating() throws Exception { // NOPMD
+		System.out.println("RRDF producer terminating");
+		super.onTerminating();
 	}
 
 	/**
