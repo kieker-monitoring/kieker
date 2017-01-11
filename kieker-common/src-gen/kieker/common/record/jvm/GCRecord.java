@@ -1,29 +1,12 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
 import kieker.common.record.jvm.AbstractJVMRecord;
+import kieker.common.util.registry.IRegistry;
+
 
 /**
  * @author Nils Christian Ehmke
@@ -31,29 +14,32 @@ import kieker.common.record.jvm.AbstractJVMRecord;
  * @since 1.10
  */
 public class GCRecord extends AbstractJVMRecord  {
-	/** Descriptive definition of the serialization size of the record. */
-	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
-			 + TYPE_SIZE_STRING // GCRecord.gcName
-			 + TYPE_SIZE_LONG // GCRecord.collectionCount
-			 + TYPE_SIZE_LONG // GCRecord.collectionTimeMS
-	;
 	private static final long serialVersionUID = -314644197119857213L;
+
+		/** Descriptive definition of the serialization size of the record. */
+		public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
+				 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
+				 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
+				 + TYPE_SIZE_STRING // GCRecord.gcName
+				 + TYPE_SIZE_LONG // GCRecord.collectionCount
+				 + TYPE_SIZE_LONG // GCRecord.collectionTimeMS
+		;
 	
-	public static final Class<?>[] TYPES = {
-		long.class, // AbstractJVMRecord.timestamp
-		String.class, // AbstractJVMRecord.hostname
-		String.class, // AbstractJVMRecord.vmName
-		String.class, // GCRecord.gcName
-		long.class, // GCRecord.collectionCount
-		long.class, // GCRecord.collectionTimeMS
-	};
+		public static final Class<?>[] TYPES = {
+			long.class, // AbstractJVMRecord.timestamp
+			String.class, // AbstractJVMRecord.hostname
+			String.class, // AbstractJVMRecord.vmName
+			String.class, // GCRecord.gcName
+			long.class, // GCRecord.collectionCount
+			long.class, // GCRecord.collectionTimeMS
+		};
 	
-	/* user-defined constants */
-	/* default constants */
+	/** user-defined constants */
+
+	/** default constants */
 	public static final String GC_NAME = "";
-	/* property declarations */
+
+	/** property declarations */
 	private final String gcName;
 	private final long collectionCount;
 	private final long collectionTimeMS;
@@ -94,7 +80,7 @@ public class GCRecord extends AbstractJVMRecord  {
 		this.collectionCount = (Long) values[4];
 		this.collectionTimeMS = (Long) values[5];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -140,7 +126,7 @@ public class GCRecord extends AbstractJVMRecord  {
 			this.getCollectionTimeMS()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -150,7 +136,7 @@ public class GCRecord extends AbstractJVMRecord  {
 		stringRegistry.get(this.getVmName());
 		stringRegistry.get(this.getGcName());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -163,7 +149,7 @@ public class GCRecord extends AbstractJVMRecord  {
 		buffer.putLong(this.getCollectionCount());
 		buffer.putLong(this.getCollectionTimeMS());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -171,7 +157,7 @@ public class GCRecord extends AbstractJVMRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -179,6 +165,7 @@ public class GCRecord extends AbstractJVMRecord  {
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -189,7 +176,7 @@ public class GCRecord extends AbstractJVMRecord  {
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -200,7 +187,7 @@ public class GCRecord extends AbstractJVMRecord  {
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -220,17 +207,16 @@ public class GCRecord extends AbstractJVMRecord  {
 		if (this.getCollectionTimeMS() != castedRecord.getCollectionTimeMS()) return false;
 		return true;
 	}
-
+	
 	public final String getGcName() {
 		return this.gcName;
-	}
+	}	
 	
 	public final long getCollectionCount() {
 		return this.collectionCount;
-	}
+	}	
 	
 	public final long getCollectionTimeMS() {
 		return this.collectionTimeMS;
-	}
-	
+	}	
 }

@@ -1,29 +1,12 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
 import kieker.common.record.jvm.AbstractJVMRecord;
+import kieker.common.util.registry.IRegistry;
+
 
 /**
  * @author Nils Christian Ehmke
@@ -31,40 +14,43 @@ import kieker.common.record.jvm.AbstractJVMRecord;
  * @since 1.10
  */
 public class MemoryRecord extends AbstractJVMRecord  {
-	/** Descriptive definition of the serialization size of the record. */
-	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
-			 + TYPE_SIZE_LONG // MemoryRecord.heapMaxBytes
-			 + TYPE_SIZE_LONG // MemoryRecord.heapUsedBytes
-			 + TYPE_SIZE_LONG // MemoryRecord.heapCommittedBytes
-			 + TYPE_SIZE_LONG // MemoryRecord.heapInitBytes
-			 + TYPE_SIZE_LONG // MemoryRecord.nonHeapMaxBytes
-			 + TYPE_SIZE_LONG // MemoryRecord.nonHeapUsedBytes
-			 + TYPE_SIZE_LONG // MemoryRecord.nonHeapCommittedBytes
-			 + TYPE_SIZE_LONG // MemoryRecord.nonHeapInitBytes
-			 + TYPE_SIZE_INT // MemoryRecord.objectPendingFinalizationCount
-	;
 	private static final long serialVersionUID = -9025858519361306011L;
+
+		/** Descriptive definition of the serialization size of the record. */
+		public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
+				 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
+				 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
+				 + TYPE_SIZE_LONG // MemoryRecord.heapMaxBytes
+				 + TYPE_SIZE_LONG // MemoryRecord.heapUsedBytes
+				 + TYPE_SIZE_LONG // MemoryRecord.heapCommittedBytes
+				 + TYPE_SIZE_LONG // MemoryRecord.heapInitBytes
+				 + TYPE_SIZE_LONG // MemoryRecord.nonHeapMaxBytes
+				 + TYPE_SIZE_LONG // MemoryRecord.nonHeapUsedBytes
+				 + TYPE_SIZE_LONG // MemoryRecord.nonHeapCommittedBytes
+				 + TYPE_SIZE_LONG // MemoryRecord.nonHeapInitBytes
+				 + TYPE_SIZE_INT // MemoryRecord.objectPendingFinalizationCount
+		;
 	
-	public static final Class<?>[] TYPES = {
-		long.class, // AbstractJVMRecord.timestamp
-		String.class, // AbstractJVMRecord.hostname
-		String.class, // AbstractJVMRecord.vmName
-		long.class, // MemoryRecord.heapMaxBytes
-		long.class, // MemoryRecord.heapUsedBytes
-		long.class, // MemoryRecord.heapCommittedBytes
-		long.class, // MemoryRecord.heapInitBytes
-		long.class, // MemoryRecord.nonHeapMaxBytes
-		long.class, // MemoryRecord.nonHeapUsedBytes
-		long.class, // MemoryRecord.nonHeapCommittedBytes
-		long.class, // MemoryRecord.nonHeapInitBytes
-		int.class, // MemoryRecord.objectPendingFinalizationCount
-	};
+		public static final Class<?>[] TYPES = {
+			long.class, // AbstractJVMRecord.timestamp
+			String.class, // AbstractJVMRecord.hostname
+			String.class, // AbstractJVMRecord.vmName
+			long.class, // MemoryRecord.heapMaxBytes
+			long.class, // MemoryRecord.heapUsedBytes
+			long.class, // MemoryRecord.heapCommittedBytes
+			long.class, // MemoryRecord.heapInitBytes
+			long.class, // MemoryRecord.nonHeapMaxBytes
+			long.class, // MemoryRecord.nonHeapUsedBytes
+			long.class, // MemoryRecord.nonHeapCommittedBytes
+			long.class, // MemoryRecord.nonHeapInitBytes
+			int.class, // MemoryRecord.objectPendingFinalizationCount
+		};
 	
-	/* user-defined constants */
-	/* default constants */
-	/* property declarations */
+	/** user-defined constants */
+
+	/** default constants */
+
+	/** property declarations */
 	private final long heapMaxBytes;
 	private final long heapUsedBytes;
 	private final long heapCommittedBytes;
@@ -135,7 +121,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		this.nonHeapInitBytes = (Long) values[10];
 		this.objectPendingFinalizationCount = (Integer) values[11];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -199,7 +185,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 			this.getObjectPendingFinalizationCount()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -208,7 +194,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getVmName());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -227,7 +213,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		buffer.putLong(this.getNonHeapInitBytes());
 		buffer.putInt(this.getObjectPendingFinalizationCount());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -235,7 +221,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -243,6 +229,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -253,7 +240,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -264,7 +251,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -290,41 +277,40 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		if (this.getObjectPendingFinalizationCount() != castedRecord.getObjectPendingFinalizationCount()) return false;
 		return true;
 	}
-
+	
 	public final long getHeapMaxBytes() {
 		return this.heapMaxBytes;
-	}
+	}	
 	
 	public final long getHeapUsedBytes() {
 		return this.heapUsedBytes;
-	}
+	}	
 	
 	public final long getHeapCommittedBytes() {
 		return this.heapCommittedBytes;
-	}
+	}	
 	
 	public final long getHeapInitBytes() {
 		return this.heapInitBytes;
-	}
+	}	
 	
 	public final long getNonHeapMaxBytes() {
 		return this.nonHeapMaxBytes;
-	}
+	}	
 	
 	public final long getNonHeapUsedBytes() {
 		return this.nonHeapUsedBytes;
-	}
+	}	
 	
 	public final long getNonHeapCommittedBytes() {
 		return this.nonHeapCommittedBytes;
-	}
+	}	
 	
 	public final long getNonHeapInitBytes() {
 		return this.nonHeapInitBytes;
-	}
+	}	
 	
 	public final int getObjectPendingFinalizationCount() {
 		return this.objectPendingFinalizationCount;
-	}
-	
+	}	
 }

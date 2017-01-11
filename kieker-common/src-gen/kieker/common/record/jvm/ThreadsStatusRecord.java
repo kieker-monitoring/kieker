@@ -1,29 +1,12 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
 import kieker.common.record.jvm.AbstractJVMRecord;
+import kieker.common.util.registry.IRegistry;
+
 
 /**
  * @author Nils Christian Ehmke
@@ -31,30 +14,33 @@ import kieker.common.record.jvm.AbstractJVMRecord;
  * @since 1.10
  */
 public class ThreadsStatusRecord extends AbstractJVMRecord  {
-	/** Descriptive definition of the serialization size of the record. */
-	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
-			 + TYPE_SIZE_LONG // ThreadsStatusRecord.threadCount
-			 + TYPE_SIZE_LONG // ThreadsStatusRecord.daemonThreadCount
-			 + TYPE_SIZE_LONG // ThreadsStatusRecord.peakThreadCount
-			 + TYPE_SIZE_LONG // ThreadsStatusRecord.totalStartedThreadCount
-	;
 	private static final long serialVersionUID = -9176980438135391329L;
+
+		/** Descriptive definition of the serialization size of the record. */
+		public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
+				 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
+				 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
+				 + TYPE_SIZE_LONG // ThreadsStatusRecord.threadCount
+				 + TYPE_SIZE_LONG // ThreadsStatusRecord.daemonThreadCount
+				 + TYPE_SIZE_LONG // ThreadsStatusRecord.peakThreadCount
+				 + TYPE_SIZE_LONG // ThreadsStatusRecord.totalStartedThreadCount
+		;
 	
-	public static final Class<?>[] TYPES = {
-		long.class, // AbstractJVMRecord.timestamp
-		String.class, // AbstractJVMRecord.hostname
-		String.class, // AbstractJVMRecord.vmName
-		long.class, // ThreadsStatusRecord.threadCount
-		long.class, // ThreadsStatusRecord.daemonThreadCount
-		long.class, // ThreadsStatusRecord.peakThreadCount
-		long.class, // ThreadsStatusRecord.totalStartedThreadCount
-	};
+		public static final Class<?>[] TYPES = {
+			long.class, // AbstractJVMRecord.timestamp
+			String.class, // AbstractJVMRecord.hostname
+			String.class, // AbstractJVMRecord.vmName
+			long.class, // ThreadsStatusRecord.threadCount
+			long.class, // ThreadsStatusRecord.daemonThreadCount
+			long.class, // ThreadsStatusRecord.peakThreadCount
+			long.class, // ThreadsStatusRecord.totalStartedThreadCount
+		};
 	
-	/* user-defined constants */
-	/* default constants */
-	/* property declarations */
+	/** user-defined constants */
+
+	/** default constants */
+
+	/** property declarations */
 	private final long threadCount;
 	private final long daemonThreadCount;
 	private final long peakThreadCount;
@@ -100,7 +86,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		this.peakThreadCount = (Long) values[5];
 		this.totalStartedThreadCount = (Long) values[6];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -149,7 +135,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 			this.getTotalStartedThreadCount()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -158,7 +144,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getVmName());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -172,7 +158,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		buffer.putLong(this.getPeakThreadCount());
 		buffer.putLong(this.getTotalStartedThreadCount());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -180,7 +166,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -188,6 +174,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -198,7 +185,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -209,7 +196,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -230,21 +217,20 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		if (this.getTotalStartedThreadCount() != castedRecord.getTotalStartedThreadCount()) return false;
 		return true;
 	}
-
+	
 	public final long getThreadCount() {
 		return this.threadCount;
-	}
+	}	
 	
 	public final long getDaemonThreadCount() {
 		return this.daemonThreadCount;
-	}
+	}	
 	
 	public final long getPeakThreadCount() {
 		return this.peakThreadCount;
-	}
+	}	
 	
 	public final long getTotalStartedThreadCount() {
 		return this.totalStartedThreadCount;
-	}
-	
+	}	
 }
