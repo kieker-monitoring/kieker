@@ -16,6 +16,8 @@
 
 package kieker.analysisteetime;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
@@ -48,14 +50,17 @@ public class ExecutionModelAssembler {
 	}
 
 	protected void addExecution(final DeployedOperation source, final DeployedOperation target) {
+
+		final Pair<DeployedOperation, DeployedOperation> key = Pair.of(source, target);
+		if (!this.executionRoot.getAggregatedInvocations().contains(key)) {
+			final AggregatedInvocation invocation = this.factory.createAggregatedInvocation();
+			invocation.setSource(source);
+			invocation.setTarget(target);
+
+			this.executionRoot.getAggregatedInvocations().put(key, invocation);
+		}
+
 		// TODO
-		// this.executionRoot.getAggregatedInvocations().contains(null);
-
-		final AggregatedInvocation invocation = this.factory.createAggregatedInvocation();
-		invocation.setSource(source);
-		invocation.setTarget(target);
-
-		this.executionRoot.getAggregatedInvocations().add(invocation);
 
 	}
 
