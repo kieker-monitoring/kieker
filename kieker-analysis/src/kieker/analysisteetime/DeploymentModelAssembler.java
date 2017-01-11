@@ -98,7 +98,7 @@ public class DeploymentModelAssembler {
 
 			final String componentTypeKey = componentSignature;
 			final AssemblyComponent assemblyComponent = this.assemblyRoot.getAssemblyComponents().get(componentTypeKey);
-			component.setAssemblyOperation(assemblyComponent);
+			component.setAssemblyComponent(assemblyComponent);
 		}
 		return component;
 	}
@@ -110,7 +110,7 @@ public class DeploymentModelAssembler {
 			operation = this.factory.createDeployedOperation();
 			component.getContainedOperations().put(operationKey, operation);
 
-			final AssemblyComponent assemblyComponent = component.getAssemblyOperation();
+			final AssemblyComponent assemblyComponent = component.getAssemblyComponent();
 			final String operationTypeKey = operationSignature;
 			final AssemblyOperation assemblyOperation = assemblyComponent.getAssemblyOperations().get(operationTypeKey);
 			operation.setAssemblyOperation(assemblyOperation);
