@@ -2,8 +2,9 @@
  */
 package kieker.analysisteetime.model.analysismodel.execution;
 
-import org.eclipse.emf.common.util.EList;
-
+import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
+import org.apache.commons.lang3.tuple.Pair;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -24,21 +25,20 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface ExecutionRoot extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Aggregated Invocations</b></em>' containment reference list.
-	 * The list contents are of type {@link kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation}.
-	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation#getExecutionRoot <em>Execution Root</em>}'.
+	 * Returns the value of the '<em><b>Aggregated Invocations</b></em>' map.
+	 * The key is of type {@link org.apache.commons.lang3.tuple.Pair<kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation, kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation>},
+	 * and the value is of type {@link kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation},
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Aggregated Invocations</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Aggregated Invocations</em>' containment reference list.
+	 * @return the value of the '<em>Aggregated Invocations</em>' map.
 	 * @see kieker.analysisteetime.model.analysismodel.execution.ExecutionPackage#getExecutionRoot_AggregatedInvocations()
-	 * @see kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation#getExecutionRoot
-	 * @model opposite="executionRoot" containment="true" ordered="false"
+	 * @model mapType="kieker.analysisteetime.model.analysismodel.execution.DeployedOperationsPairToAggregatedInvocationMapEntry<kieker.analysisteetime.model.analysismodel.Pair<kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation, kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation>, kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation>" ordered="false"
 	 * @generated
 	 */
-	EList<AggregatedInvocation> getAggregatedInvocations();
+	EMap<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation> getAggregatedInvocations();
 
 } // ExecutionRoot

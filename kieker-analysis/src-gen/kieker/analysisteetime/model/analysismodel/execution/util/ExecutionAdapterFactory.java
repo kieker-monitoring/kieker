@@ -2,8 +2,11 @@
  */
 package kieker.analysisteetime.model.analysismodel.execution.util;
 
+import java.util.Map;
+import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.*;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
@@ -72,6 +75,10 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 				return createExecutionRootAdapter();
 			}
 			@Override
+			public Adapter caseDeployedOperationsPairToAggregatedInvocationMapEntry(Map.Entry<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation> object) {
+				return createDeployedOperationsPairToAggregatedInvocationMapEntryAdapter();
+			}
+			@Override
 			public Adapter caseAggregatedInvocation(AggregatedInvocation object) {
 				return createAggregatedInvocationAdapter();
 			}
@@ -106,6 +113,20 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createExecutionRootAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Deployed Operations Pair To Aggregated Invocation Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createDeployedOperationsPairToAggregatedInvocationMapEntryAdapter() {
 		return null;
 	}
 

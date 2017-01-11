@@ -2,22 +2,20 @@
  */
 package kieker.analysisteetime.model.analysismodel.execution.impl;
 
-import java.util.Collection;
-
+import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionPackage;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
+import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -35,14 +33,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class ExecutionRootImpl extends MinimalEObjectImpl.Container implements ExecutionRoot {
 	/**
-	 * The cached value of the '{@link #getAggregatedInvocations() <em>Aggregated Invocations</em>}' containment reference list.
+	 * The cached value of the '{@link #getAggregatedInvocations() <em>Aggregated Invocations</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getAggregatedInvocations()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<AggregatedInvocation> aggregatedInvocations;
+	protected EMap<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -68,26 +66,11 @@ public class ExecutionRootImpl extends MinimalEObjectImpl.Container implements E
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<AggregatedInvocation> getAggregatedInvocations() {
+	public EMap<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation> getAggregatedInvocations() {
 		if (aggregatedInvocations == null) {
-			aggregatedInvocations = new EObjectContainmentWithInverseEList<AggregatedInvocation>(AggregatedInvocation.class, this, ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS, ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT);
+			aggregatedInvocations = new EcoreEMap<Pair<DeployedOperation, DeployedOperation>,AggregatedInvocation>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY, DeployedOperationsPairToAggregatedInvocationMapEntryImpl.class, this, ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS);
 		}
 		return aggregatedInvocations;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getAggregatedInvocations()).basicAdd(otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -113,7 +96,8 @@ public class ExecutionRootImpl extends MinimalEObjectImpl.Container implements E
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS:
-				return getAggregatedInvocations();
+				if (coreType) return getAggregatedInvocations();
+				else return getAggregatedInvocations().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -128,8 +112,7 @@ public class ExecutionRootImpl extends MinimalEObjectImpl.Container implements E
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS:
-				getAggregatedInvocations().clear();
-				getAggregatedInvocations().addAll((Collection<? extends AggregatedInvocation>)newValue);
+				((EStructuralFeature.Setting)getAggregatedInvocations()).set(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

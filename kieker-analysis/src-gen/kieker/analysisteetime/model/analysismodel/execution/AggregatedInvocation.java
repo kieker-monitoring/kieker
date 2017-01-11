@@ -17,7 +17,6 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation#getSource <em>Source</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation#getTarget <em>Target</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation#getExecutionRoot <em>Execution Root</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.execution.ExecutionPackage#getAggregatedInvocation()
@@ -76,33 +75,5 @@ public interface AggregatedInvocation extends EObject {
 	 * @generated
 	 */
 	void setTarget(DeployedOperation value);
-
-	/**
-	 * Returns the value of the '<em><b>Execution Root</b></em>' container reference.
-	 * It is bidirectional and its opposite is '{@link kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot#getAggregatedInvocations <em>Aggregated Invocations</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Execution Root</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Execution Root</em>' container reference.
-	 * @see #setExecutionRoot(ExecutionRoot)
-	 * @see kieker.analysisteetime.model.analysismodel.execution.ExecutionPackage#getAggregatedInvocation_ExecutionRoot()
-	 * @see kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot#getAggregatedInvocations
-	 * @model opposite="aggregatedInvocations" transient="false"
-	 * @generated
-	 */
-	ExecutionRoot getExecutionRoot();
-
-	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation#getExecutionRoot <em>Execution Root</em>}' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Execution Root</em>' container reference.
-	 * @see #getExecutionRoot()
-	 * @generated
-	 */
-	void setExecutionRoot(ExecutionRoot value);
 
 } // AggregatedInvocation

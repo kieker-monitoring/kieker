@@ -2,8 +2,11 @@
  */
 package kieker.analysisteetime.model.analysismodel.execution.util;
 
+import java.util.Map;
+import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.*;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -72,6 +75,12 @@ public class ExecutionSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation> deployedOperationsPairToAggregatedInvocationMapEntry = (Map.Entry<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation>)theEObject;
+				T result = caseDeployedOperationsPairToAggregatedInvocationMapEntry(deployedOperationsPairToAggregatedInvocationMapEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case ExecutionPackage.AGGREGATED_INVOCATION: {
 				AggregatedInvocation aggregatedInvocation = (AggregatedInvocation)theEObject;
 				T result = caseAggregatedInvocation(aggregatedInvocation);
@@ -94,6 +103,21 @@ public class ExecutionSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseExecutionRoot(ExecutionRoot object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Deployed Operations Pair To Aggregated Invocation Map Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Deployed Operations Pair To Aggregated Invocation Map Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDeployedOperationsPairToAggregatedInvocationMapEntry(Map.Entry<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation> object) {
 		return null;
 	}
 

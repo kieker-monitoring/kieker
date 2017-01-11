@@ -76,6 +76,17 @@ public interface AnalysismodelPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '<em>Pair</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.apache.commons.lang3.tuple.Pair
+	 * @see kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl#getPair()
+	 * @generated
+	 */
+	int PAIR = 2;
+
+
+	/**
 	 * Returns the meta object for data type '{@link java.time.Instant <em>Instant</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -96,6 +107,17 @@ public interface AnalysismodelPackage extends EPackage {
 	 * @generated
 	 */
 	EDataType getDuration();
+
+	/**
+	 * Returns the meta object for data type '{@link org.apache.commons.lang3.tuple.Pair <em>Pair</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Pair</em>'.
+	 * @see org.apache.commons.lang3.tuple.Pair
+	 * @model instanceClass="org.apache.commons.lang3.tuple.Pair" typeParameters="L R"
+	 * @generated
+	 */
+	EDataType getPair();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -139,6 +161,16 @@ public interface AnalysismodelPackage extends EPackage {
 		 * @generated
 		 */
 		EDataType DURATION = eINSTANCE.getDuration();
+
+		/**
+		 * The meta object literal for the '<em>Pair</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.apache.commons.lang3.tuple.Pair
+		 * @see kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl#getPair()
+		 * @generated
+		 */
+		EDataType PAIR = eINSTANCE.getPair();
 
 	}
 

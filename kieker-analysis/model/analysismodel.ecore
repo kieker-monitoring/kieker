@@ -4,6 +4,10 @@
     nsPrefix="analysismodel">
   <eClassifiers xsi:type="ecore:EDataType" name="Instant" instanceClassName="java.time.Instant"/>
   <eClassifiers xsi:type="ecore:EDataType" name="Duration" instanceClassName="java.time.Duration"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Pair" instanceClassName="org.apache.commons.lang3.tuple.Pair">
+    <eTypeParameters name="L"/>
+    <eTypeParameters name="R"/>
+  </eClassifiers>
   <eSubpackages name="statistics" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/statistics"
       nsPrefix="statistics">
     <eClassifiers xsi:type="ecore:EClass" name="Statistics">
@@ -189,14 +193,23 @@
       nsPrefix="execution">
     <eClassifiers xsi:type="ecore:EClass" name="ExecutionRoot">
       <eStructuralFeatures xsi:type="ecore:EReference" name="aggregatedInvocations"
-          ordered="false" upperBound="-1" eType="#//execution/AggregatedInvocation"
-          containment="true" eOpposite="#//execution/AggregatedInvocation/executionRoot"/>
+          ordered="false" upperBound="-1" eType="#//execution/DeployedOperationsPairToAggregatedInvocationMapEntry"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeployedOperationsPairToAggregatedInvocationMapEntry"
+        instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key">
+        <eGenericType eClassifier="#//Pair">
+          <eTypeArguments eClassifier="#//deployment/DeployedOperation"/>
+          <eTypeArguments eClassifier="#//deployment/DeployedOperation"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//execution/AggregatedInvocation"
+          containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="AggregatedInvocation">
       <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//deployment/DeployedOperation"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//deployment/DeployedOperation"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="executionRoot" eType="#//execution/ExecutionRoot"
-          eOpposite="#//execution/ExecutionRoot/aggregatedInvocations"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="trace" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/trace"

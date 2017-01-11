@@ -9,6 +9,10 @@
       ecorePackage="analysismodel.ecore#/">
     <genDataTypes ecoreDataType="analysismodel.ecore#//Instant"/>
     <genDataTypes ecoreDataType="analysismodel.ecore#//Duration"/>
+    <genDataTypes ecoreDataType="analysismodel.ecore#//Pair">
+      <genTypeParameters ecoreTypeParameter="analysismodel.ecore#//Pair/L"/>
+      <genTypeParameters ecoreTypeParameter="analysismodel.ecore#//Pair/R"/>
+    </genDataTypes>
     <nestedGenPackages prefix="Statistics" basePackage="kieker.analysisteetime.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//statistics">
       <genEnums typeSafeEnumCompatible="false" ecoreEnum="analysismodel.ecore#//statistics/PredefinedUnits">
@@ -139,13 +143,15 @@
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//execution/ExecutionRoot/aggregatedInvocations"/>
       </genClasses>
+      <genClasses ecoreClass="analysismodel.ecore#//execution/DeployedOperationsPairToAggregatedInvocationMapEntry">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//execution/DeployedOperationsPairToAggregatedInvocationMapEntry/key"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//execution/DeployedOperationsPairToAggregatedInvocationMapEntry/value"/>
+      </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//execution/AggregatedInvocation">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//execution/AggregatedInvocation/source"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//execution/AggregatedInvocation/target"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//execution/AggregatedInvocation/executionRoot"/>
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Trace" basePackage="kieker.analysisteetime.model.analysismodel"

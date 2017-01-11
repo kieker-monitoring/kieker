@@ -6,17 +6,12 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionPackage;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot;
-
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,7 +23,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * <ul>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.execution.impl.AggregatedInvocationImpl#getSource <em>Source</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.execution.impl.AggregatedInvocationImpl#getTarget <em>Target</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.execution.impl.AggregatedInvocationImpl#getExecutionRoot <em>Execution Root</em>}</li>
  * </ul>
  *
  * @generated
@@ -154,91 +148,6 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ExecutionRoot getExecutionRoot() {
-		if (eContainerFeatureID() != ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT) return null;
-		return (ExecutionRoot)eInternalContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetExecutionRoot(ExecutionRoot newExecutionRoot, NotificationChain msgs) {
-		msgs = eBasicSetContainer((InternalEObject)newExecutionRoot, ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT, msgs);
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setExecutionRoot(ExecutionRoot newExecutionRoot) {
-		if (newExecutionRoot != eInternalContainer() || (eContainerFeatureID() != ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT && newExecutionRoot != null)) {
-			if (EcoreUtil.isAncestor(this, newExecutionRoot))
-				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
-			NotificationChain msgs = null;
-			if (eInternalContainer() != null)
-				msgs = eBasicRemoveFromContainer(msgs);
-			if (newExecutionRoot != null)
-				msgs = ((InternalEObject)newExecutionRoot).eInverseAdd(this, ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS, ExecutionRoot.class, msgs);
-			msgs = basicSetExecutionRoot(newExecutionRoot, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT, newExecutionRoot, newExecutionRoot));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT:
-				if (eInternalContainer() != null)
-					msgs = eBasicRemoveFromContainer(msgs);
-				return basicSetExecutionRoot((ExecutionRoot)otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT:
-				return basicSetExecutionRoot(null, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
-		switch (eContainerFeatureID()) {
-			case ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT:
-				return eInternalContainer().eInverseRemove(this, ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS, ExecutionRoot.class, msgs);
-		}
-		return super.eBasicRemoveFromContainerFeature(msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -248,8 +157,6 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 			case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
 				if (resolve) return getTarget();
 				return basicGetTarget();
-			case ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT:
-				return getExecutionRoot();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -267,9 +174,6 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 				return;
 			case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
 				setTarget((DeployedOperation)newValue);
-				return;
-			case ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT:
-				setExecutionRoot((ExecutionRoot)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -289,9 +193,6 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 			case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
 				setTarget((DeployedOperation)null);
 				return;
-			case ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT:
-				setExecutionRoot((ExecutionRoot)null);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -308,8 +209,6 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 				return source != null;
 			case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
 				return target != null;
-			case ExecutionPackage.AGGREGATED_INVOCATION__EXECUTION_ROOT:
-				return getExecutionRoot() != null;
 		}
 		return super.eIsSet(featureID);
 	}

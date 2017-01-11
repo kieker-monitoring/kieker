@@ -2,8 +2,11 @@
  */
 package kieker.analysisteetime.model.analysismodel.execution.impl;
 
+import java.util.Map;
+import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.*;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -57,6 +60,7 @@ public class ExecutionFactoryImpl extends EFactoryImpl implements ExecutionFacto
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case ExecutionPackage.EXECUTION_ROOT: return createExecutionRoot();
+			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY: return (EObject)createDeployedOperationsPairToAggregatedInvocationMapEntry();
 			case ExecutionPackage.AGGREGATED_INVOCATION: return createAggregatedInvocation();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -71,6 +75,16 @@ public class ExecutionFactoryImpl extends EFactoryImpl implements ExecutionFacto
 	public ExecutionRoot createExecutionRoot() {
 		ExecutionRootImpl executionRoot = new ExecutionRootImpl();
 		return executionRoot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation> createDeployedOperationsPairToAggregatedInvocationMapEntry() {
+		DeployedOperationsPairToAggregatedInvocationMapEntryImpl deployedOperationsPairToAggregatedInvocationMapEntry = new DeployedOperationsPairToAggregatedInvocationMapEntryImpl();
+		return deployedOperationsPairToAggregatedInvocationMapEntry;
 	}
 
 	/**
