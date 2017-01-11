@@ -30,6 +30,7 @@ import kieker.analysisteetime.model.analysismodel.type.impl.TypePackageImpl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EGenericType;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -221,6 +222,15 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getAggregatedInvocation__GetExecutionRoot() {
+		return aggregatedInvocationEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ExecutionFactory getExecutionFactory() {
 		return (ExecutionFactory)getEFactoryInstance();
 	}
@@ -254,6 +264,7 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		aggregatedInvocationEClass = createEClass(AGGREGATED_INVOCATION);
 		createEReference(aggregatedInvocationEClass, AGGREGATED_INVOCATION__SOURCE);
 		createEReference(aggregatedInvocationEClass, AGGREGATED_INVOCATION__TARGET);
+		createEOperation(aggregatedInvocationEClass, AGGREGATED_INVOCATION___GET_EXECUTION_ROOT);
 	}
 
 	/**
@@ -305,6 +316,8 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		initEClass(aggregatedInvocationEClass, AggregatedInvocation.class, "AggregatedInvocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAggregatedInvocation_Source(), theDeploymentPackage.getDeployedOperation(), null, "source", null, 0, 1, AggregatedInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAggregatedInvocation_Target(), theDeploymentPackage.getDeployedOperation(), null, "target", null, 0, 1, AggregatedInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getAggregatedInvocation__GetExecutionRoot(), this.getExecutionRoot(), "getExecutionRoot", 0, 1, IS_UNIQUE, IS_ORDERED);
 	}
 
 } //ExecutionPackageImpl

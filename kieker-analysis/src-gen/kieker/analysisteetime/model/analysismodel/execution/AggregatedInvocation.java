@@ -76,4 +76,13 @@ public interface AggregatedInvocation extends EObject {
 	 */
 	void setTarget(DeployedOperation value);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.emf.ecore.EObject container = this.eContainer();\r\nif (container != null) {\r\n\torg.eclipse.emf.ecore.EObject containerContainer = container.eContainer();\r\n\tif (containerContainer != null) {\r\n\t\treturn (ExecutionRoot) containerContainer ;\r\n\t}\r\n}\r\nreturn null;\r\n'"
+	 * @generated
+	 */
+	ExecutionRoot getExecutionRoot();
+
 } // AggregatedInvocation

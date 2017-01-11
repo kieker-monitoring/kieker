@@ -152,6 +152,7 @@
             ecoreFeature="ecore:EReference analysismodel.ecore#//execution/AggregatedInvocation/source"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//execution/AggregatedInvocation/target"/>
+        <genOperations ecoreOperation="analysismodel.ecore#//execution/AggregatedInvocation/getExecutionRoot"/>
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Trace" basePackage="kieker.analysisteetime.model.analysismodel"

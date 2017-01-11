@@ -4,6 +4,7 @@ package kieker.analysisteetime.model.analysismodel.execution;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -177,13 +178,22 @@ public interface ExecutionPackage extends EPackage {
 	int AGGREGATED_INVOCATION_FEATURE_COUNT = 2;
 
 	/**
+	 * The operation id for the '<em>Get Execution Root</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AGGREGATED_INVOCATION___GET_EXECUTION_ROOT = 0;
+
+	/**
 	 * The number of operations of the '<em>Aggregated Invocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AGGREGATED_INVOCATION_OPERATION_COUNT = 0;
+	int AGGREGATED_INVOCATION_OPERATION_COUNT = 1;
 
 
 	/**
@@ -272,6 +282,16 @@ public interface ExecutionPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getAggregatedInvocation_Target();
+
+	/**
+	 * Returns the meta object for the '{@link kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation#getExecutionRoot() <em>Get Execution Root</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Execution Root</em>' operation.
+	 * @see kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation#getExecutionRoot()
+	 * @generated
+	 */
+	EOperation getAggregatedInvocation__GetExecutionRoot();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -365,6 +385,14 @@ public interface ExecutionPackage extends EPackage {
 		 * @generated
 		 */
 		EReference AGGREGATED_INVOCATION__TARGET = eINSTANCE.getAggregatedInvocation_Target();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Execution Root</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation AGGREGATED_INVOCATION___GET_EXECUTION_ROOT = eINSTANCE.getAggregatedInvocation__GetExecutionRoot();
 
 	}
 
