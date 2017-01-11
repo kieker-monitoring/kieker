@@ -24,12 +24,6 @@ public class RealtimeRecordDelayFilterTestConfiguration extends Configuration {
 
 		/////////////// CONFIGURATION AS INTENDED ///////////////////////////////////
 
-		/*
-		 * Problems with this config:
-		 * - AnalysisThroughputFilter does not terminate!
-		 */
-		throughputStage.declareActive();
-
 		this.connectPorts(recordProducer.getOutputPort(), preDelayCounter.getInputPort());
 		this.connectPorts(preDelayCounter.getOutputPort(), delayFilter.getInputPort());
 		this.connectPorts(delayFilter.getOutputPort(), postDelayCounter.getInputPort());
@@ -37,15 +31,6 @@ public class RealtimeRecordDelayFilterTestConfiguration extends Configuration {
 		this.connectPorts(throughputStage.getRecordsOutputPort(), recordCollectorSink.getInputPort());
 		this.connectPorts(clock.getOutputPort(), throughputStage.getTimestampsInputPort());
 		this.connectPorts(throughputStage.getRecordsCountOutputPort(), throughputCollectorSink.getInputPort());
-
-		/*
-		 * See also the alternative AnalysisThroughputFilter2!
-		 * Differences to AnalysisThroughputFilter
-		 * - Just triggered with incoming records not checking the ports all the time
-		 *
-		 * AnalysisThroughputFilter2 does not terminate either! See test of AnalysisThroughputFilter2
-		 * at kieker.plugin.filter.forward...
-		 */
 
 		/////////////// MORE CONFIGS FOR DEBUGGING: /////////////////////////////
 

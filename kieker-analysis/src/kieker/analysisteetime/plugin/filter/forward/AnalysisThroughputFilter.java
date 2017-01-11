@@ -24,8 +24,6 @@ import kieker.common.record.IMonitoringRecord;
 import teetime.framework.AbstractStage;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
-import teetime.framework.signal.ISignal;
-import teetime.framework.signal.TerminatingSignal;
 
 /**
  * An instance of this class computes the throughput in terms of the number of objects received per time unit.
@@ -57,22 +55,16 @@ public class AnalysisThroughputFilter extends AbstractStage {
 	protected void execute() {
 		int failt = 0;
 
-		// System.out.println("ATF Receiving on records input port");
 		final IMonitoringRecord record = this.recordsInputPort.receive();
 		if (record != null) {
 			this.numPassedElements++;
 			this.recordsOutputPort.send(record);
-			System.out.println("ATF Record received " + record);
 		} else {
 			failt++;
-			// System.out.println("ATF Null received, failt: " + failt);
 		}
 
-		// System.out.println("ATF Receiving on timestamps input port");
 		final Long timestampInNs = this.timestampsInputPort.receive();
 		if (timestampInNs != null) {
-			System.out.println("ATF timestamp received " + timestampInNs + ", received " + this.numPassedElements + " elements in this interval.");
-
 			final long duration = timestampInNs - this.lastTimestampInNs;
 			final StringBuilder sb = new StringBuilder(256);
 			sb.append(this.numPassedElements);
@@ -81,18 +73,20 @@ public class AnalysisThroughputFilter extends AbstractStage {
 			sb.append(' ');
 			sb.append(TimeUnit.NANOSECONDS.toString());
 			this.plainTextDisplayObject.setText(sb.toString());
-
+			System.out.println(this.plainTextDisplayObject.getText());
 			this.recordsCountOutputPort.send(this.numPassedElements);
-
 			this.resetTimestamp(timestampInNs);
+
+			// Manually terminate the stage when the records input port received a termination signal.
+			if (this.recordsInputPort.isClosed()) {
+				this.terminateStage();
+			}
 		} else {
 			failt++;
-			// System.out.println("ATF no timestamp received, failt: " + failt);
 		}
 
 		// Enable TeeTime to suspend the stage for some time when no input is received.
 		if (failt == 2) {
-			// System.out.println("ATF suspended");
 			this.returnNoElement();
 		}
 	}
@@ -101,15 +95,6 @@ public class AnalysisThroughputFilter extends AbstractStage {
 	public void onStarting() throws Exception { // NOPMD
 		super.onStarting();
 		this.resetTimestamp(System.nanoTime());
-	}
-
-	@Override
-	public void onSignal(final ISignal signal, final InputPort<?> inputPort) {
-		super.onSignal(signal, inputPort);
-		if (signal instanceof TerminatingSignal) {
-			System.out.println("I GOT A TERMINATION SIGNAL " + signal);
-			this.terminateStage();
-		}
 	}
 
 	private void resetTimestamp(final Long timestampInNs) {

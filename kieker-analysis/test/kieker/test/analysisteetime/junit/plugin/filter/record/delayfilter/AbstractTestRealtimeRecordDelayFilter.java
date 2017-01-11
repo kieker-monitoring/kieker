@@ -117,7 +117,6 @@ public abstract class AbstractTestRealtimeRecordDelayFilter {
 		this.clock.setIntervalDelayInMs(5000);
 		this.throughputStage = new AnalysisThroughputFilter();
 		this.throughputStage.declareActive();
-		// this.throughputFilter = new AnalysisThroughputFilter(TEST_TIME_UNIT);
 		this.postDelayCounter = new Counter<IMonitoringRecord>();
 		this.recordCollectorSink = new CollectorSink<IMonitoringRecord>();
 		this.throughputCollectorSink = new CollectorSink<Long>();
@@ -125,7 +124,6 @@ public abstract class AbstractTestRealtimeRecordDelayFilter {
 		this.testConfiguration = new RealtimeRecordDelayFilterTestConfiguration(this.recordProducer, this.preDelayCounter, this.delayFilter, this.clock,
 				this.throughputStage,
 				this.postDelayCounter, this.recordCollectorSink, this.throughputCollectorSink);
-
 	}
 
 	private final void checkTiming() throws InterruptedException {
@@ -134,7 +132,7 @@ public abstract class AbstractTestRealtimeRecordDelayFilter {
 		for (int i = 0; i < actualArray.length; i++) {
 			actualArray[i] = throughput.get(i);
 		}
-		Assert.assertArrayEquals("Unexpected throughput", actualArray, this.expectedThroughputListOffsetSecondsInterval5Secs);
+		Assert.assertArrayEquals("Unexpected throughput", this.expectedThroughputListOffsetSecondsInterval5Secs, actualArray);
 	}
 
 	private final void checkRelayedRecords() {
