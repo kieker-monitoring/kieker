@@ -38,6 +38,7 @@ public class AnalysisThroughputFilter extends AbstractStage {
 
 	private final InputPort<IMonitoringRecord> recordsInputPort = this.createInputPort();
 	private final InputPort<Long> timestampsInputPort = this.createInputPort();
+	private final OutputPort<IMonitoringRecord> recordsOutputPort = this.createOutputPort();
 	private final OutputPort<Long> recordsCountOutputPort = this.createOutputPort();
 
 	private long numPassedElements;
@@ -60,6 +61,7 @@ public class AnalysisThroughputFilter extends AbstractStage {
 		final IMonitoringRecord record = this.recordsInputPort.receive();
 		if (record != null) {
 			this.numPassedElements++;
+			this.recordsOutputPort.send(record);
 			System.out.println("ATF Record received " + record);
 		} else {
 			failt++;
@@ -69,7 +71,7 @@ public class AnalysisThroughputFilter extends AbstractStage {
 		// System.out.println("ATF Receiving on timestamps input port");
 		final Long timestampInNs = this.timestampsInputPort.receive();
 		if (timestampInNs != null) {
-			System.out.println("ATF timestamp received " + timestampInNs + " sending passed elements " + this.numPassedElements);
+			System.out.println("ATF timestamp received " + timestampInNs + ", received " + this.numPassedElements + " elements in this interval.");
 
 			final long duration = timestampInNs - this.lastTimestampInNs;
 			final StringBuilder sb = new StringBuilder(256);
@@ -121,6 +123,10 @@ public class AnalysisThroughputFilter extends AbstractStage {
 
 	public InputPort<Long> getTimestampsInputPort() {
 		return this.timestampsInputPort;
+	}
+
+	public OutputPort<IMonitoringRecord> getRecordsOutputPort() {
+		return this.recordsOutputPort;
 	}
 
 	public OutputPort<Long> getRecordsCountOutputPort() {

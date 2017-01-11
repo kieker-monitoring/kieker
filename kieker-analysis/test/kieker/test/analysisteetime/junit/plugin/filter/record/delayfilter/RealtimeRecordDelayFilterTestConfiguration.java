@@ -8,13 +8,9 @@ import teetime.framework.Configuration;
 import teetime.stage.Clock;
 import teetime.stage.CollectorSink;
 import teetime.stage.Counter;
-import teetime.stage.ElementThroughputMeasuringStage;
 import teetime.stage.InitialElementProducer;
-import teetime.stage.basic.distributor.Distributor;
 
 public class RealtimeRecordDelayFilterTestConfiguration extends Configuration {
-
-	ElementThroughputMeasuringStage<IMonitoringRecord> dfsfds;
 
 	public RealtimeRecordDelayFilterTestConfiguration(
 			final InitialElementProducer<IMonitoringRecord> recordProducer,
@@ -28,20 +24,30 @@ public class RealtimeRecordDelayFilterTestConfiguration extends Configuration {
 
 		/////////////// CONFIGURATION AS INTENDED ///////////////////////////////////
 
-		// Connect ports of test configuration
-		final Distributor<IMonitoringRecord> distributor = new Distributor<IMonitoringRecord>();
+		/*
+		 * Problems with this config:
+		 * - AnalysisThroughputFilter does not terminate!
+		 */
 		throughputStage.declareActive();
 
-		// this.connectPorts(recordProducer.getOutputPort(), preDelayCounter.getInputPort());
-		// this.connectPorts(preDelayCounter.getOutputPort(), delayFilter.getInputPort());
-		// this.connectPorts(delayFilter.getOutputPort(), postDelayCounter.getInputPort());
-		// this.connectPorts(postDelayCounter.getOutputPort(), distributor.getInputPort());
-		// this.connectPorts(distributor.getNewOutputPort(), recordCollectorSink.getInputPort());
-		// this.connectPorts(distributor.getNewOutputPort(), throughputStage.getRecordsInputPort());
-		// this.connectPorts(clock.getOutputPort(), throughputStage.getTimestampsInputPort());
-		// this.connectPorts(throughputStage.getRecordsCountOutputPort(), throughputCollectorSink.getInputPort());
+		this.connectPorts(recordProducer.getOutputPort(), preDelayCounter.getInputPort());
+		this.connectPorts(preDelayCounter.getOutputPort(), delayFilter.getInputPort());
+		this.connectPorts(delayFilter.getOutputPort(), postDelayCounter.getInputPort());
+		this.connectPorts(postDelayCounter.getOutputPort(), throughputStage.getRecordsInputPort());
+		this.connectPorts(throughputStage.getRecordsOutputPort(), recordCollectorSink.getInputPort());
+		this.connectPorts(clock.getOutputPort(), throughputStage.getTimestampsInputPort());
+		this.connectPorts(throughputStage.getRecordsCountOutputPort(), throughputCollectorSink.getInputPort());
 
-		/////////////// SEVERAL CONFIGS FOR DEBUGGING: /////////////////////////////
+		/*
+		 * See also the alternative AnalysisThroughputFilter2!
+		 * Differences to AnalysisThroughputFilter
+		 * - Just triggered with incoming records not checking the ports all the time
+		 *
+		 * AnalysisThroughputFilter2 does not terminate either! See test of AnalysisThroughputFilter2
+		 * at kieker.plugin.filter.forward...
+		 */
+
+		/////////////// MORE CONFIGS FOR DEBUGGING: /////////////////////////////
 
 		// test without RRDF - doesn't terminate
 		// this.connectPorts(recordProducer.getOutputPort(), throughputStage.getRecordsInputPort());
