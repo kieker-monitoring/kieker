@@ -36,11 +36,13 @@ import kieker.monitoring.writer.collector.ChunkingCollector;
 import kieker.monitoring.writer.serializer.StringSerializer;
 
 /**
+ * Basic tests for the chunking record collector.
+ *
  * @author holger
  *
  * @since 1.13
  */
-public class TestChunkCollector {
+public class TestChunkingCollector {
 
 	/**
 	 * Tests both writing of chunks due to size (a full chunk can be written) and to time (records remain unwritten for some time).
@@ -67,7 +69,7 @@ public class TestChunkCollector {
 
 		// Retrieve written data from the data storage
 		final byte[] data = TestRawDataStorage.getInstance().getData(testId);
-		final List<String> lines = TestChunkCollector.linesFromData(data);
+		final List<String> lines = TestChunkingCollector.linesFromData(data);
 
 		// Count the number of lines (= records) written
 		final int numberOfLines = lines.size();

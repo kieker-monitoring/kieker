@@ -23,6 +23,8 @@ import kieker.common.configuration.Configuration;
 import kieker.monitoring.writer.raw.IRawDataWriter;
 
 /**
+ * Raw data writer for test purposes, which writes to the test data storage.
+ *
  * @author Holger Knoche
  *
  * @since 1.13
@@ -31,7 +33,7 @@ public class TestRawDataWriter implements IRawDataWriter {
 
 	private static final String PREFIX = TestRawDataWriter.class.getName() + ".";
 
-	/**	*/
+	/** Configuration property for the test ID */
 	public static final String CONFIG_TEST_ID = PREFIX + "testId"; // NOCS (afterPREFIX)
 
 	private final String testId;
@@ -51,7 +53,7 @@ public class TestRawDataWriter implements IRawDataWriter {
 		try {
 			this.dataStorage.appendData(this.testId, dataArray);
 		} catch (final IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
