@@ -87,22 +87,16 @@ public class BinarySerializerTest {
 
 		final IMonitoringController controller = this.createController(testId, taskRunInterval, deferredWriteDelay);
 
-		int uncompressedSize = 0;
 		for (int recordIndex = 0; recordIndex < recordCount; recordIndex++) {
 			final OperationExecutionRecord record = new OperationExecutionRecord("operation()", "SESS-ID", 0, recordIndex, recordIndex, "hostname", recordIndex, 1);
 			controller.newMonitoringRecord(record);
-
-			uncompressedSize += (record.toString().length() + 1);
 		}
-		System.out.println(uncompressedSize);
 
 		// Terminate monitoring
 		controller.terminateMonitoring();
 
 		// Retrieve written data from the data storage
 		final byte[] data = TestRawDataStorage.getInstance().getData(testId);
-
-		System.out.println(data.length);
 
 		// Check some basic numbers, since full decoding is not yet supported
 		final ByteBuffer dataBuffer = ByteBuffer.wrap(data);
