@@ -131,13 +131,14 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	@Override
 	protected void init() throws Exception {
 		this.scheduledExecutor.scheduleAtFixedRate(this.writerTask, 0, this.taskRunInterval, TimeUnit.MILLISECONDS);
+		this.writerTask.init();
 	}
 
 	@Override
 	public void terminate() {
 		// Terminate scheduled execution and write remaining chunks, if any
 		this.scheduledExecutor.shutdown();
-		this.writerTask.flush();
+		this.writerTask.terminate();
 	}
 
 	private boolean enqueueRecord(final IMonitoringRecord record) {
@@ -213,6 +214,15 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 				this.writeChunk(queue, numberOfPendingRecords);
 				this.updateNextWriteTime(currentTime);
 			}
+		}
+
+		public void init() throws Exception {
+			this.serializer.init();
+			this.writer.init();
+		}
+
+		public void terminate() {
+			this.flush();
 		}
 
 		@SuppressWarnings("synthetic-access")

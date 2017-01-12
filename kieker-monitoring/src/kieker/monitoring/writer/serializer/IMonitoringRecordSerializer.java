@@ -44,4 +44,15 @@ public interface IMonitoringRecordSerializer {
 	 */
 	public int serializeRecords(Collection<IMonitoringRecord> records, ByteBuffer buffer);
 
+	/**
+	 * Implementing classes should indicate an initialization error by throwing an {@link Exception}.
+	 */
+	public void init() throws Exception;
+
+	/**
+	 * Called by the collector to announce a shutdown of monitoring.
+	 * Serializers should return as soon as it is safe to terminate Kieker.
+	 */
+	public void terminate();
+
 }

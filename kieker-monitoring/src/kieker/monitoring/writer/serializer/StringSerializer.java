@@ -68,4 +68,14 @@ public class StringSerializer implements IMonitoringRecordSerializer {
 		return StringSerializer.stringToBytes(stringBuffer.toString());
 	}
 
+	@Override
+	public void init() throws Exception {
+		// Nothing to do
+	}
+
+	@Override
+	public void terminate() {
+		// Nothing to do
+	}
+
 }

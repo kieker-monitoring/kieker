@@ -27,7 +27,7 @@ public interface IRawDataWriter {
 
 	/**
 	 * Writes raw data contained in the given byte buffer.
-	 * 
+	 *
 	 * @param data
 	 *            The buffer containing the data
 	 * @param offset
@@ -36,5 +36,16 @@ public interface IRawDataWriter {
 	 *            The length of the data to write
 	 */
 	public void writeData(ByteBuffer data, int offset, int length);
+
+	/**
+	 * Implementing classes should indicate an initialization error by throwing an {@link Exception}.
+	 */
+	public void init() throws Exception;
+
+	/**
+	 * Called by the collector to announce a shutdown of monitoring.
+	 * Writers should return as soon as it is safe to terminate Kieker.
+	 */
+	public void terminate();
 
 }

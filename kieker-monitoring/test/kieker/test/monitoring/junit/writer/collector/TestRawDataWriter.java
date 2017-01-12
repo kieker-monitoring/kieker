@@ -57,4 +57,14 @@ public class TestRawDataWriter implements IRawDataWriter {
 		}
 	}
 
+	@Override
+	public void init() throws Exception {
+		// Nothing to do
+	}
+
+	@Override
+	public void terminate() {
+		// Nothing to do
+	}
+
 }
