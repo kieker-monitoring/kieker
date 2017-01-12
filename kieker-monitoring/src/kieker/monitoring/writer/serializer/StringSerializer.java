@@ -27,10 +27,16 @@ import kieker.common.record.IMonitoringRecord;
  *
  * @since 1.13
  */
-public class StringSerializer implements IMonitoringRecordSerializer {
+public class StringSerializer extends AbstractMonitoringRecordSerializer {
 
+	/**
+	 * Creates a new serializer using the given configuration.
+	 *
+	 * @param configuration
+	 *            The configuration to use
+	 */
 	public StringSerializer(final Configuration configuration) {
-		// Do nothing
+		super(configuration);
 	}
 
 	private static byte[] stringToBytes(final String input) {
