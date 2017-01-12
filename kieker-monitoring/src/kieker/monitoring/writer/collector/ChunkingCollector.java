@@ -93,7 +93,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	public static final String CONFIG_OUTPUT_BUFFER_SIZE = PREFIX + "outputBufferSize"; // NOCS (afterPREFIX)
 
 	/** The name of the configuration property for the writer task interval. */
-	public static final String TASK_RUN_INTERVAL = PREFIX + "taskRunInterval"; // NOCS (afterPREFIX)
+	public static final String CONFIG_TASK_RUN_INTERVAL = PREFIX + "taskRunInterval"; // NOCS (afterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(ChunkingCollector.class);
 
@@ -108,7 +108,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 
 		// Initialize the queue and the executor service
 		final int queueSize = configuration.getIntProperty(CONFIG_QUEUE_SIZE, DEFAULT_QUEUE_SIZE);
-		this.taskRunInterval = configuration.getIntProperty(TASK_RUN_INTERVAL, DEFAULT_TASK_RUN_INTERVAL);
+		this.taskRunInterval = configuration.getIntProperty(CONFIG_TASK_RUN_INTERVAL, DEFAULT_TASK_RUN_INTERVAL);
 
 		this.recordQueue = new ArrayBlockingQueue<IMonitoringRecord>(queueSize);
 		this.scheduledExecutor = Executors.newScheduledThreadPool(NUMBER_OF_WORKERS);
