@@ -74,6 +74,14 @@ public class BinarySerializer extends AbstractContainerFormatSerializer {
 		final int offsetBefore = buffer.position();
 
 		for (final IMonitoringRecord record : records) {
+			// Since writeBytes does not contain the type name and the logging timestamp,
+			// these two fields must be serialized separately
+			final String typeName = record.getClass().getName();
+			final int typeNameId = stringRegistry.get(typeName);
+
+			buffer.putInt(typeNameId);
+			buffer.putLong(record.getLoggingTimestamp());
+
 			record.writeBytes(buffer, stringRegistry);
 		}
 

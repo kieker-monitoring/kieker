@@ -23,6 +23,8 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
 /**
+ * String serializer for monitoring records based on the record's toString method.
+ *
  * @author Holger Knoche
  *
  * @since 1.13
@@ -39,8 +41,8 @@ public class StringSerializer extends AbstractMonitoringRecordSerializer {
 		super(configuration);
 	}
 
-	private static byte[] stringToBytes(final String input) {
-		return input.getBytes();
+	private static byte[] stringBuilderToBytes(final StringBuilder builder) {
+		return builder.toString().getBytes();
 	}
 
 	@Override
@@ -52,7 +54,18 @@ public class StringSerializer extends AbstractMonitoringRecordSerializer {
 	}
 
 	private byte[] serializeRecord(final IMonitoringRecord record) {
-		return StringSerializer.stringToBytes(record.toString() + "\n");
+		return StringSerializer.stringBuilderToBytes(this.appendSingleRecord(record, new StringBuilder()));
+	}
+
+	private StringBuilder appendSingleRecord(final IMonitoringRecord record, final StringBuilder builder) {
+		builder.append(record.getClass().getName());
+		builder.append(';');
+		builder.append(record.getLoggingTimestamp());
+		builder.append(';');
+		builder.append(record.toString());
+		builder.append('\n');
+
+		return builder;
 	}
 
 	@Override
@@ -64,14 +77,13 @@ public class StringSerializer extends AbstractMonitoringRecordSerializer {
 	}
 
 	private byte[] serializeRecords(final Collection<IMonitoringRecord> records) {
-		final StringBuffer stringBuffer = new StringBuffer();
+		final StringBuilder builder = new StringBuilder();
 
 		for (final IMonitoringRecord record : records) {
-			stringBuffer.append(record.toString());
-			stringBuffer.append('\n');
+			this.appendSingleRecord(record, builder);
 		}
 
-		return StringSerializer.stringToBytes(stringBuffer.toString());
+		return StringSerializer.stringBuilderToBytes(builder);
 	}
 
 	@Override

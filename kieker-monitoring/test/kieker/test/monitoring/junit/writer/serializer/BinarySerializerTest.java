@@ -19,6 +19,8 @@ package kieker.test.monitoring.junit.writer.serializer;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import javax.xml.bind.DatatypeConverter;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -75,7 +77,9 @@ public class BinarySerializerTest {
 		final int numberOfStrings = VariableLengthEncoding.decodeInt(dataBuffer);
 
 		// Check the size of the string table
-		Assert.assertEquals(7, numberOfStrings);
+		Assert.assertEquals(9, numberOfStrings);
+
+		System.out.println(DatatypeConverter.printBase64Binary(data));
 	}
 
 	@Test
@@ -110,7 +114,7 @@ public class BinarySerializerTest {
 		final int numberOfStrings = VariableLengthEncoding.decodeInt(dataBuffer);
 
 		// Check the size of the string table
-		Assert.assertEquals(7, numberOfStrings);
+		Assert.assertEquals(9, numberOfStrings);
 	}
 
 	private IMonitoringController createController(final String testId, final int taskRunInterval, final int deferredWriteDelay) {
