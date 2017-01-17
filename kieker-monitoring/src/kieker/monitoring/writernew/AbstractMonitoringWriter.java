@@ -29,17 +29,10 @@ import kieker.common.record.IMonitoringRecord;
  */
 public abstract class AbstractMonitoringWriter {
 
+	/**
+	 * The writer's configuration
+	 */
 	protected final Configuration configuration;
-
-	// private final BlockingQueue<IMonitoringRecord> queue;
-	//
-	// public AbstractMonitoringWriter(final BlockingQueue<IMonitoringRecord> queue) {
-	// this.queue = queue;
-	// }
-	//
-	// protected BlockingQueue<IMonitoringRecord> getQueue() {
-	// return this.queue;
-	// }
 
 	/**
 	 * This event fires when Kieker has been initialized and is ready to monitor.
@@ -59,12 +52,17 @@ public abstract class AbstractMonitoringWriter {
 		this.configuration = configuration;
 	}
 
+	/**
+	 * Returns a textual representation of the writer's configuration.
+	 *
+	 * @return a textual representation of the writer's configuration
+	 */
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder(128);
-		sb.append("Writer: '");
-		sb.append(this.getClass().getName());
-		sb.append("'\n\tConfiguration:");
+		final StringBuilder sb = new StringBuilder(128)
+				.append("Writer: '")
+				.append(this.getClass().getName())
+				.append("'\n\tConfiguration:");
 		final Set<String> keys = this.configuration.stringPropertyNames();
 		if (keys.isEmpty()) {
 			sb.append("\n\t\tNo Configuration");
