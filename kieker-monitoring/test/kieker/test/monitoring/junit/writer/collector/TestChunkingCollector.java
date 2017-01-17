@@ -17,13 +17,13 @@
 package kieker.test.monitoring.junit.writer.collector;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.LockSupport;
 
-import org.apache.activemq.util.ByteArrayInputStream;
 import org.junit.Assert;
 import org.junit.Test;
 
