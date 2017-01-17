@@ -27,8 +27,7 @@ import java.util.TimeZone;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.registry.IRegistryListener;
 import kieker.monitoring.registry.IWriterRegistry;
 import kieker.monitoring.registry.WriterRegistry;
@@ -43,45 +42,44 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 
 	private static final String PREFIX = AsciiFileWriter.class.getName() + ".";
 	/** The name of the configuration for the custom storage path if the writer is advised not to store in the temporary directory. */
-	private static final String CONFIG_PATH = PREFIX + "customStoragePath";
+	static final String CONFIG_PATH = PREFIX + "customStoragePath";
 	/** The name of the configuration for the charset name (e.g. "UTF-8") */
-	private static final String CONFIG_CHARSETNAME = PREFIX + "charsetName";
+	static final String CONFIG_CHARSETNAME = PREFIX + "charsetName";
 	/** The name of the configuration determining the maximal number of entries in a file. */
-	private static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
-	/** The name of the configuration determining the maximal size of the files in MiB. */
-	private static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
-	/** The name of the configuration determining the maximal number of log files. */
-	private static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
+	static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
+	// /** The name of the configuration determining the maximal size of the files in MiB. */
+	// static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
+	// /** The name of the configuration determining the maximal number of log files. */
+	// static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
 
+	private final Path logFolder;
 	private final FileWriterPool fileWriterPool;
 	private final MappingFileWriter mappingFileWriter;
-
 	private final IWriterRegistry<String> writerRegistry;
 
 	public AsciiFileWriter(final Configuration configuration) {
 		super(configuration);
-		final Path folder = this.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH));
-		final String charsetName = configuration.getStringProperty(CONFIG_CHARSETNAME);
+		this.logFolder = this.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH));
+		final String charsetName = configuration.getStringProperty(CONFIG_CHARSETNAME, "UTF-8");
 		final int maxEntriesInFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
-		// this.configMaxlogSize = configuration.getIntProperty(CONFIG_MAXLOGSIZE);
-		// this.configMaxLogFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
-		this.fileWriterPool = new FileWriterPool(folder, charsetName, maxEntriesInFile);
-		this.mappingFileWriter = new MappingFileWriter(folder, charsetName);
+		// final int maxLogFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
+		this.fileWriterPool = new FileWriterPool(this.logFolder, charsetName, maxEntriesInFile);
+		this.mappingFileWriter = new MappingFileWriter(this.logFolder, charsetName);
 
 		this.writerRegistry = new WriterRegistry(this);
 	}
 
-	private Path buildKiekerLogFolder(final String configPath) {
+	private Path buildKiekerLogFolder(final String customStoragePath) {
 		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		date.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final String dateStr = date.format(new java.util.Date()); // NOPMD (Date)
+		final String currentDateStr = date.format(new java.util.Date()); // NOPMD (Date)
 
-		final IMonitoringController monitoringController = MonitoringController.getInstance();
-		final String ctrlName = monitoringController.getHostname() + "-" + monitoringController.getName();
+		final String hostName = this.configuration.getStringProperty(ConfigurationFactory.HOST_NAME);
+		final String controllerName = this.configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME);
 
-		final String filename = String.format("%s-%s-UTC-%s", FSUtil.FILE_PREFIX, dateStr, ctrlName);
+		final String filename = String.format("%s-%s-UTC-%s-%s", FSUtil.FILE_PREFIX, currentDateStr, hostName, controllerName);
 
-		return Paths.get(configPath, filename);
+		return Paths.get(customStoragePath, filename);
 	}
 
 	@Override
@@ -122,6 +120,10 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	public void onTerminating() {
 		this.fileWriterPool.close();
 		this.mappingFileWriter.close();
+	}
+
+	public Path getLogFolder() {
+		return this.logFolder;
 	}
 
 }

@@ -43,6 +43,7 @@ public class MappingFileWriter {
 		final Charset charset = Charset.forName(charsetName);
 
 		try {
+			Files.createDirectories(folder);
 			final Writer w = Files.newBufferedWriter(newMappingFile, charset, StandardOpenOption.CREATE_NEW);
 			this.printWriter = new PrintWriter(w);
 		} catch (final IOException e) {

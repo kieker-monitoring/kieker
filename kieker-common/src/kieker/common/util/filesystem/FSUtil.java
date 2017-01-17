@@ -18,7 +18,7 @@ package kieker.common.util.filesystem;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.7
  */
 public final class FSUtil { // NOCS NOPMD (constants interface)
@@ -47,10 +47,10 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 
 	/**
 	 * Encodes the given line (replaces {@code \\} with {@code \\\\}, {@code \r} with {@code \\r} and {@code \n} with {@code \\n}).
-	 * 
+	 *
 	 * @param str
 	 *            The string to encode.
-	 * 
+	 *
 	 * @return The modified string.
 	 */
 	public static final String encodeNewline(final String str) {
@@ -84,10 +84,10 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 
 	/**
 	 * Decodes the given line (replaces {@code \\\\} with {@code \\}, {@code \\r} with {@code \r} and {@code \\n} with {@code \n}).
-	 * 
+	 *
 	 * @param str
 	 *            The string to decode.
-	 * 
+	 *
 	 * @return The modified string.
 	 */
 	public static final String decodeNewline(final String str) {

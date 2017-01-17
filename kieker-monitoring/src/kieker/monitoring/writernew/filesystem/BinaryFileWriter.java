@@ -48,18 +48,22 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 	private static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
 	/** The name of the configuration determining the maximal number of log files. */
 	private static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
+	/** The name of the configuration key for the charset name of the mapping file */
+	private static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
 
-	private final BinaryFileWriterPool fileWriterPool;
+	// private final BinaryFileWriterPool fileWriterPool;
 	private final MappingFileWriter mappingFileWriter;
 	private final WriterRegistry writerRegistry;
 
 	public BinaryFileWriter(final Configuration configuration) {
 		super(configuration);
 		final Path folder = this.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH));
-		final int maxEntriesInFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
+		// final int maxEntriesInFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
 		// this.configMaxlogSize = configuration.getIntProperty(CONFIG_MAXLOGSIZE);
 		// this.configMaxLogFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
-		this.fileWriterPool = new BinaryFileWriterPool(folder, maxEntriesInFile);
+		// this.fileWriterPool = new BinaryFileWriterPool(folder, maxEntriesInFile);
+
+		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME, "UTF-8");
 		this.mappingFileWriter = new MappingFileWriter(folder, charsetName);
 
 		this.writerRegistry = new WriterRegistry(this);

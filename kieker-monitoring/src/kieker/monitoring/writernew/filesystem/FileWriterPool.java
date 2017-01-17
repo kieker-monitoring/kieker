@@ -46,6 +46,8 @@ public class FileWriterPool {
 
 	private final int maxEntriesInFile;
 	private int numEntriesInCurrentFile;
+	// private final int maxAmountOfFiles;
+	// private int currentAmountOfFiles;
 
 	private final SimpleDateFormat dateFormatter;
 	private PrintWriter currentFileWriter;
@@ -56,6 +58,8 @@ public class FileWriterPool {
 		this.charset = Charset.forName(charsetName);
 		this.maxEntriesInFile = maxEntriesInFile;
 		this.numEntriesInCurrentFile = maxEntriesInFile; // triggers file creation
+		// this.maxAmountOfFiles = maxAmountOfFiles;
+
 		this.dateFormatter = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", LOCALE);
 		this.dateFormatter.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
 
@@ -70,6 +74,7 @@ public class FileWriterPool {
 
 			final Path newfile = this.getNextNewPath(this.sameFilenameCounter++);
 			try {
+				Files.createDirectories(this.folder);
 				// use CREATE_NEW to fail if the file already exists
 				final Writer w = Files.newBufferedWriter(newfile, this.charset, StandardOpenOption.CREATE_NEW);
 				this.currentFileWriter = new PrintWriter(w);
@@ -77,7 +82,9 @@ public class FileWriterPool {
 				throw new IllegalStateException("This exception should not have been thrown.", e);
 			}
 
-			// final Path oldestfile = this.getNextNewPath(this.sameFilenameCounter - maxAmountOfFiles);
+			this.numEntriesInCurrentFile = 1;
+
+			// currentAmountOfFiles++;
 			// Files.delete(oldestfile);
 		}
 
@@ -88,7 +95,7 @@ public class FileWriterPool {
 		final Date now = new Date();
 
 		// "%1$s-%2$tY%2$tm%2$td-%2$tH%2$tM%2$tS%2$tL-UTC-%3$03d-%4$s.%5$s"
-		final String filename = String.format(LOCALE, "%s-%s-%s-%03d.%s",
+		final String filename = String.format(LOCALE, "%s-%s-%s-%03d%s",
 				FSUtil.FILE_PREFIX, this.dateFormatter.format(now), TIME_ZONE, counter, FSUtil.NORMAL_FILE_EXTENSION);
 		return this.folder.resolve(filename);
 	}
