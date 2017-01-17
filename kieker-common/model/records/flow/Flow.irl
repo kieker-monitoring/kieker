@@ -60,8 +60,7 @@ template IOperationRecord : IFlowRecord, IOperationSignature, IClassSignature
 
 @author 'Jan Waller' @since '1.6'
 template ITraceRecord : IFlowRecord {
-	long traceId = -1
-	//grouped by TraceMetadata.traceId long traceId = -1
+	grouped by TraceMetadata.traceId traceId = -1
 	int orderIndex = -1
 }
 
