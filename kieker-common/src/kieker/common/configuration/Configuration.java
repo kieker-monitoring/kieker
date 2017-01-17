@@ -67,8 +67,23 @@ public final class Configuration extends Properties {
 	 * @return A string with the value of the given property or null, if the property does not exist.
 	 */
 	public final String getStringProperty(final String key) {
+		return this.getStringProperty(key, "");
+	}
+
+	/**
+	 * Reads the given property from the configuration and interprets it as a string. If no value
+	 * exists for this property, the given default value is returned.
+	 *
+	 * @param key
+	 *            The key of the property.
+	 * @param defaultValue
+	 *            The default value for this property.
+	 *
+	 * @return A string with the value of the given property or null, if the property does not exist.
+	 */
+	public final String getStringProperty(final String key, final String defaultValue) {
 		final String s = super.getProperty(key);
-		return (s == null) ? "" : s.trim(); // NOCS
+		return (s == null) ? defaultValue : s.trim(); // NOCS
 	}
 
 	/**
