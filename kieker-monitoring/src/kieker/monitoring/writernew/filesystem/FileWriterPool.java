@@ -16,8 +16,11 @@
 
 package kieker.monitoring.writernew.filesystem;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
@@ -28,6 +31,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import kieker.common.util.filesystem.FSUtil;
 
@@ -52,18 +57,22 @@ public class FileWriterPool {
 	private final SimpleDateFormat dateFormatter;
 	private PrintWriter currentFileWriter;
 	private int sameFilenameCounter;
+	private final boolean shouldCompress;
+	private final String fileExtensionWithDot;
 
-	public FileWriterPool(final Path folder, final String charsetName, final int maxEntriesInFile) {
+	public FileWriterPool(final Path folder, final String charsetName, final int maxEntriesInFile, final boolean shouldCompress) {
 		this.folder = folder;
 		this.charset = Charset.forName(charsetName);
 		this.maxEntriesInFile = maxEntriesInFile;
 		this.numEntriesInCurrentFile = maxEntriesInFile; // triggers file creation
+		this.shouldCompress = shouldCompress;
 		// this.maxAmountOfFiles = maxAmountOfFiles;
 
 		this.dateFormatter = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", LOCALE);
 		this.dateFormatter.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
 
 		this.currentFileWriter = new PrintWriter(new ByteArrayOutputStream()); // NullObject design pattern
+		this.fileExtensionWithDot = (shouldCompress) ? FSUtil.ZIP_FILE_EXTENSION : FSUtil.NORMAL_FILE_EXTENSION;
 	}
 
 	public PrintWriter getFileWriter() {
@@ -72,12 +81,24 @@ public class FileWriterPool {
 		if (this.numEntriesInCurrentFile > this.maxEntriesInFile) {
 			this.currentFileWriter.close();
 
-			final Path newfile = this.getNextNewPath(this.sameFilenameCounter++);
+			final String newFileName = this.getNextFileName(this.sameFilenameCounter++);
+			final Path newFile = this.folder.resolve(newFileName + this.fileExtensionWithDot);
 			try {
 				Files.createDirectories(this.folder);
+
 				// use CREATE_NEW to fail if the file already exists
-				final Writer w = Files.newBufferedWriter(newfile, this.charset, StandardOpenOption.CREATE_NEW);
-				this.currentFileWriter = new PrintWriter(w);
+				OutputStream outputStream = Files.newOutputStream(newFile, StandardOpenOption.CREATE_NEW);
+				outputStream = new BufferedOutputStream(outputStream);
+
+				if (this.shouldCompress) {
+					final ZipOutputStream compressedOutputStream = new ZipOutputStream(outputStream, this.charset);
+					final ZipEntry newZipEntry = new ZipEntry(newFileName + FSUtil.NORMAL_FILE_EXTENSION);
+					compressedOutputStream.putNextEntry(newZipEntry);
+					outputStream = compressedOutputStream;
+				}
+
+				final Writer writer = new OutputStreamWriter(outputStream, this.charset);
+				this.currentFileWriter = new PrintWriter(writer);
 			} catch (final IOException e) {
 				throw new IllegalStateException("This exception should not have been thrown.", e);
 			}
@@ -91,13 +112,13 @@ public class FileWriterPool {
 		return this.currentFileWriter;
 	}
 
-	private Path getNextNewPath(final int counter) {
+	private String getNextFileName(final int counter) {
 		final Date now = new Date();
 
 		// "%1$s-%2$tY%2$tm%2$td-%2$tH%2$tM%2$tS%2$tL-UTC-%3$03d-%4$s.%5$s"
-		final String filename = String.format(LOCALE, "%s-%s-%s-%03d%s",
-				FSUtil.FILE_PREFIX, this.dateFormatter.format(now), TIME_ZONE, counter, FSUtil.NORMAL_FILE_EXTENSION);
-		return this.folder.resolve(filename);
+		final String filename = String.format(LOCALE, "%s-%s-%s-%03d",
+				FSUtil.FILE_PREFIX, this.dateFormatter.format(now), TIME_ZONE, counter);
+		return filename;
 	}
 
 	public void close() {

@@ -31,6 +31,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.filesystem.DatFileNameFilter;
 import kieker.common.util.filesystem.MapFileNameFilter;
+import kieker.common.util.filesystem.ZipFileNameFilter;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 
 /**
@@ -55,6 +56,7 @@ public class AsciiFileWriterTest {
 		configuration.setProperty(ConfigurationFactory.CONTROLLER_NAME, "testControllerName");
 		configuration.setProperty(AsciiFileWriter.CONFIG_CHARSETNAME, "UTF-8");
 		configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "1");
+		configuration.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, "false");
 		configuration.setProperty(AsciiFileWriter.CONFIG_PATH, AsciiFileWriterTest.TEMP_FOLDER.toString());
 
 		// test execution
@@ -72,6 +74,7 @@ public class AsciiFileWriterTest {
 		configuration.setProperty(ConfigurationFactory.CONTROLLER_NAME, "testControllerName");
 		configuration.setProperty(AsciiFileWriter.CONFIG_CHARSETNAME, "UTF-8");
 		configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "1");
+		configuration.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, "false");
 		configuration.setProperty(AsciiFileWriter.CONFIG_PATH, AsciiFileWriterTest.TEMP_FOLDER.toString());
 
 		// test execution
@@ -100,6 +103,7 @@ public class AsciiFileWriterTest {
 		configuration.setProperty(ConfigurationFactory.CONTROLLER_NAME, "testControllerName");
 		configuration.setProperty(AsciiFileWriter.CONFIG_CHARSETNAME, "UTF-8");
 		configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
+		configuration.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, "false");
 		configuration.setProperty(AsciiFileWriter.CONFIG_PATH, AsciiFileWriterTest.TEMP_FOLDER.toString());
 
 		// test execution
@@ -118,6 +122,39 @@ public class AsciiFileWriterTest {
 		Assert.assertThat(mapFiles.length, CoreMatchers.is(1));
 
 		final File[] recordFiles = storePath.listFiles(DatFileNameFilter.INSTANCE);
+		Assert.assertTrue(recordFiles[0].exists());
+		Assert.assertTrue(recordFiles[1].exists());
+		Assert.assertThat(recordFiles.length, CoreMatchers.is(2));
+	}
+
+	@Test
+	public void shouldCreateMultipleCompressedRecordFiles() {
+		// test preparation
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(ConfigurationFactory.HOST_NAME, "testHostName");
+		configuration.setProperty(ConfigurationFactory.CONTROLLER_NAME, "testControllerName");
+		configuration.setProperty(AsciiFileWriter.CONFIG_CHARSETNAME, "UTF-8");
+		configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
+		configuration.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, "true");
+		configuration.setProperty(AsciiFileWriter.CONFIG_PATH, AsciiFileWriterTest.TEMP_FOLDER.toString());
+
+		// test execution
+		final AsciiFileWriter writer = new AsciiFileWriter(configuration);
+		writer.onStarting();
+		final int numRecords = 3;
+		for (int i = 0; i < numRecords; i++) {
+			writer.writeMonitoringRecord(new EmptyRecord());
+		}
+		writer.onTerminating();
+
+		// test assertion
+		final File storePath = writer.getLogFolder().toFile();
+
+		final File[] mapFiles = storePath.listFiles(MapFileNameFilter.INSTANCE);
+		Assert.assertTrue(mapFiles[0].exists());
+		Assert.assertThat(mapFiles.length, CoreMatchers.is(1));
+
+		final File[] recordFiles = storePath.listFiles(ZipFileNameFilter.INSTANCE);
 		Assert.assertTrue(recordFiles[0].exists());
 		Assert.assertTrue(recordFiles[1].exists());
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(2));

@@ -47,6 +47,8 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	static final String CONFIG_CHARSETNAME = PREFIX + "charsetName";
 	/** The name of the configuration determining the maximal number of entries in a file. */
 	static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
+	/** The name of the configuration key determining to enable/disable compression of the record log files */
+	static final String CONFIG_SHOULD_COMPRESS = PREFIX + "shouldCompress";
 	// /** The name of the configuration determining the maximal size of the files in MiB. */
 	// static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
 	// /** The name of the configuration determining the maximal number of log files. */
@@ -62,8 +64,9 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		this.logFolder = this.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH));
 		final String charsetName = configuration.getStringProperty(CONFIG_CHARSETNAME, "UTF-8");
 		final int maxEntriesInFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
+		final boolean shouldCompress = configuration.getBooleanProperty(CONFIG_SHOULD_COMPRESS);
 		// final int maxLogFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
-		this.fileWriterPool = new FileWriterPool(this.logFolder, charsetName, maxEntriesInFile);
+		this.fileWriterPool = new FileWriterPool(this.logFolder, charsetName, maxEntriesInFile, shouldCompress);
 		this.mappingFileWriter = new MappingFileWriter(this.logFolder, charsetName);
 
 		this.writerRegistry = new WriterRegistry(this);
