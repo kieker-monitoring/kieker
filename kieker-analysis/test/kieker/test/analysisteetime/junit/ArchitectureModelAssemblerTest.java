@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysisteetime.ArchitectureModelAssembler;
+import kieker.analysisteetime.TypeModelAssembler;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 import kieker.analysisteetime.model.analysismodel.type.TypeRoot;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
@@ -51,12 +51,12 @@ public class ArchitectureModelAssemblerTest {
 	private final TypeFactory factory = TypeFactory.eINSTANCE;
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.ArchitectureModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
+	 * Test method for {@link kieker.analysisteetime.TypeModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
 	 */
 	@Test
 	public void testComponentsExistsAfterAddRecordFromRecord() {
 		final TypeRoot typeRoot = this.factory.createTypeRoot();
-		final ArchitectureModelAssembler architectureModelAssembler = new ArchitectureModelAssembler(typeRoot);
+		final TypeModelAssembler architectureModelAssembler = new TypeModelAssembler(typeRoot);
 
 		architectureModelAssembler.addRecord(this.beforeOperationEvent1);
 		architectureModelAssembler.addRecord(this.beforeOperationEvent2);
@@ -72,12 +72,12 @@ public class ArchitectureModelAssemblerTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.ArchitectureModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
+	 * Test method for {@link kieker.analysisteetime.TypeModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
 	 */
 	@Test
 	public void testComponentKeysExistsAfterAddRecordFromRecord() {
 		final TypeRoot typeRoot = this.factory.createTypeRoot();
-		final ArchitectureModelAssembler architectureModelAssembler = new ArchitectureModelAssembler(typeRoot);
+		final TypeModelAssembler architectureModelAssembler = new TypeModelAssembler(typeRoot);
 
 		architectureModelAssembler.addRecord(this.beforeOperationEvent1);
 		architectureModelAssembler.addRecord(this.beforeOperationEvent2);
@@ -92,12 +92,12 @@ public class ArchitectureModelAssemblerTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.ArchitectureModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
+	 * Test method for {@link kieker.analysisteetime.TypeModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
 	 */
 	@Test
 	public void testOperationExistsAfterAddRecordFromRecord() {
 		final TypeRoot typeRoot = this.factory.createTypeRoot();
-		final ArchitectureModelAssembler architectureModelAssembler = new ArchitectureModelAssembler(typeRoot);
+		final TypeModelAssembler architectureModelAssembler = new TypeModelAssembler(typeRoot);
 
 		architectureModelAssembler.addRecord(this.beforeOperationEvent1);
 		architectureModelAssembler.addRecord(this.beforeOperationEvent2);
@@ -113,12 +113,12 @@ public class ArchitectureModelAssemblerTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.ArchitectureModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
+	 * Test method for {@link kieker.analysisteetime.TypeModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
 	 */
 	@Test
 	public void testOperationKeysExistsAfterAddRecordFromRecord() {
 		final TypeRoot typeRoot = this.factory.createTypeRoot();
-		final ArchitectureModelAssembler architectureModelAssembler = new ArchitectureModelAssembler(typeRoot);
+		final TypeModelAssembler architectureModelAssembler = new TypeModelAssembler(typeRoot);
 
 		architectureModelAssembler.addRecord(this.beforeOperationEvent1);
 		architectureModelAssembler.addRecord(this.beforeOperationEvent2);
@@ -133,12 +133,12 @@ public class ArchitectureModelAssemblerTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.ArchitectureModelAssembler#addRecord(java.lang.String, java.lang.String)}.
+	 * Test method for {@link kieker.analysisteetime.TypeModelAssembler#addRecord(java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public void testOperationExistsAfterAddRecordFromString() {
 		final TypeRoot typeRoot = this.factory.createTypeRoot();
-		final ArchitectureModelAssembler architectureModelAssembler = new ArchitectureModelAssembler(typeRoot);
+		final TypeModelAssembler architectureModelAssembler = new TypeModelAssembler(typeRoot);
 
 		architectureModelAssembler.addRecord(EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_1);
 		architectureModelAssembler.addRecord(EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_2);

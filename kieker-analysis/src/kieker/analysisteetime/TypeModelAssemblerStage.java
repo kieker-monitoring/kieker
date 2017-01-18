@@ -27,12 +27,12 @@ import teetime.stage.basic.AbstractFilter;
  *
  * @since 1.13
  */
-public class ArchitectureModelAssemblerStage extends AbstractFilter<IFlowRecord> {
+public class TypeModelAssemblerStage extends AbstractFilter<IFlowRecord> {
 
-	private final ArchitectureModelAssembler assembler;
+	private final TypeModelAssembler assembler;
 
-	public ArchitectureModelAssemblerStage(final TypeRoot typeRoot) {
-		this.assembler = new ArchitectureModelAssembler(typeRoot);
+	public TypeModelAssemblerStage(final TypeRoot typeRoot) {
+		this.assembler = new TypeModelAssembler(typeRoot);
 	}
 
 	@Override

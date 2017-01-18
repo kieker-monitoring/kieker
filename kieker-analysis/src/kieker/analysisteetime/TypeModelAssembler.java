@@ -27,13 +27,13 @@ import kieker.common.record.flow.IOperationRecord;
  *
  * @since 1.13
  */
-public class ArchitectureModelAssembler {
+public class TypeModelAssembler {
 
 	private final TypeFactory factory = TypeFactory.eINSTANCE;
 
 	private final TypeRoot typeRoot;
 
-	public ArchitectureModelAssembler(final TypeRoot typeRoot) {
+	public TypeModelAssembler(final TypeRoot typeRoot) {
 		this.typeRoot = typeRoot;
 	}
 
