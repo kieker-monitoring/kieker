@@ -16,10 +16,13 @@
 
 package kieker.analysisteetime.trace.reconstruction;
 
+import java.util.Optional;
+
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
 import kieker.analysisteetime.model.analysismodel.trace.TraceRoot;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
+import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
@@ -40,11 +43,19 @@ final class TraceReconstructorStage extends AbstractTransformation<IFlowRecord, 
 		this.traceReconstructor = new TraceReconstructor(deploymentRoot, activateAdditionalLogChecks);
 	}
 
-	// TODO Statistics methods temporary removed
-
 	@Override
-	protected void execute(final IFlowRecord input) {
-		this.traceReconstructor.execute(input);
+	protected void execute(final IFlowRecord record) {
+		if (record instanceof TraceMetadata) {
+			this.traceReconstructor.handleMetadataRecord((TraceMetadata) record);
+		} else if (record instanceof BeforeOperationEvent) {
+			this.traceReconstructor.handleBeforeOperationEventRecord((BeforeOperationEvent) record);
+		} else if (record instanceof AbstractOperationEvent) {
+			final Optional<TraceRoot> trace = this.traceReconstructor.handleAfterOperationEventRecord((AfterOperationEvent) record);
+			// trace.ifPresent(this.outputPort::send);
+			if (trace.isPresent()) {
+				this.outputPort.send(trace.get());
+			}
+		}
 	}
 
 }

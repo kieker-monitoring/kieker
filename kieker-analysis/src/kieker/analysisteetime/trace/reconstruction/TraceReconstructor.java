@@ -20,12 +20,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
 import kieker.analysisteetime.model.analysismodel.trace.TraceRoot;
-import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
-import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
@@ -57,39 +56,39 @@ final class TraceReconstructor {
 		return this.danglingRecords - this.faultyTraceBuffers.size();
 	}
 
-	protected void execute(final IFlowRecord input) {
-		if (input instanceof TraceMetadata) {
-			this.handleMetadataRecord((TraceMetadata) input);
-		} else if (input instanceof AbstractOperationEvent) {
-			this.handleOperationEventRecord((AbstractOperationEvent) input);
-		}
-	}
-
-	private void handleMetadataRecord(final TraceMetadata record) {
+	public void handleMetadataRecord(final TraceMetadata record) {
 		final long traceID = record.getTraceId();
 		final TraceReconstructionBuffer newTraceBuffer = new TraceReconstructionBuffer(this.deploymentRoot, record);
 
 		this.traceBuffers.put(traceID, newTraceBuffer);
 	}
 
-	private void handleOperationEventRecord(final AbstractOperationEvent input) {
-		final long traceID = input.getTraceId();
+	public void handleBeforeOperationEventRecord(final BeforeOperationEvent event) {
+		final long traceID = event.getTraceId();
 		final TraceReconstructionBuffer traceBuffer = this.traceBuffers.get(traceID);
 
 		if (traceBuffer != null) {
-			if (input instanceof BeforeOperationEvent) {
-				traceBuffer.handleBeforeOperationEventRecord((BeforeOperationEvent) input);
-			} else if (input instanceof AfterOperationEvent) {
-				traceBuffer.handleAfterOperationEventRecord((AfterOperationEvent) input);
-			}
+			traceBuffer.handleBeforeOperationEventRecord(event);
+		} else {
+			this.danglingRecords++;
+		}
+	}
+
+	public Optional<TraceRoot> handleAfterOperationEventRecord(final AfterOperationEvent event) {
+		final long traceID = event.getTraceId();
+		final TraceReconstructionBuffer traceBuffer = this.traceBuffers.get(traceID);
+
+		if (traceBuffer != null) {
+			traceBuffer.handleAfterOperationEventRecord(event);
 			if (traceBuffer.isTraceComplete()) {
 				final TraceRoot trace = traceBuffer.reconstructTrace();
 				this.traceBuffers.remove(traceID);
-				// super.getOutputPort().send(trace); //TODO
+				return Optional.of(trace);
 			}
 		} else {
 			this.danglingRecords++;
 		}
+		return Optional.empty();
 	}
 
 }
