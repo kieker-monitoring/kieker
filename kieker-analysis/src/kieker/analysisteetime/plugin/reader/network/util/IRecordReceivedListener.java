@@ -1,4 +1,4 @@
-package teetime.stage.io.network.util;
+package kieker.analysisteetime.plugin.reader.network.util;
 
 import kieker.common.record.IMonitoringRecord;
 

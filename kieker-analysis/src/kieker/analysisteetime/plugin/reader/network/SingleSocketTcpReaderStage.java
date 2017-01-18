@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package teetime.stage.io.network;
+package kieker.analysisteetime.plugin.reader.network;
 
+import kieker.analysisteetime.plugin.reader.network.util.IRecordReceivedListener;
+import kieker.analysisteetime.plugin.reader.network.util.SingleSocketRecordReader;
 import kieker.common.record.IMonitoringRecord;
 
 import teetime.framework.AbstractProducerStage;
-import teetime.stage.io.network.util.IRecordReceivedListener;
-import teetime.stage.io.network.util.SingleSocketRecordReader;
 import teetime.util.io.network.AbstractTcpReader;
 
 /**
