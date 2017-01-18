@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package teetime.stage.io.filesystem.format.binary;
+package kieker.analysisteetime.plugin.reader.filesystem.format.binary;
 
 import java.io.File;
 
@@ -21,10 +21,10 @@ import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 import teetime.framework.AbstractStage;
-import teetime.stage.className.ClassNameRegistryCreationFilter;
-import teetime.stage.className.ClassNameRegistryRepository;
-import teetime.stage.io.filesystem.format.binary.file.BinaryFile2RecordFilter;
 
+import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryCreationFilter;
+import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryRepository;
+import kieker.analysisteetime.plugin.reader.filesystem.format.binary.file.BinaryFile2RecordFilter;
 import kieker.common.record.IMonitoringRecord;
 
 public class DirWithBin2RecordFilter extends CompositeStage {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package teetime.stage.io.filesystem.format.binary.file;
+package kieker.analysisteetime.plugin.reader.filesystem.format.binary.file;
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -21,8 +21,8 @@ import java.io.IOException;
 
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
-import teetime.stage.className.ClassNameRegistryRepository;
 
+import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryRepository;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.BinaryCompressionMethod;

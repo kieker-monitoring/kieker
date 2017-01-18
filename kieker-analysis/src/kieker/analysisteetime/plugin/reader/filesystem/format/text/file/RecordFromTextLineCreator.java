@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package teetime.stage.io.filesystem.format.text.file;
+package kieker.analysisteetime.plugin.reader.filesystem.format.text.file;
 
 import java.io.File;
 
+import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistry;
+import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryRepository;
 import kieker.common.exception.IllegalRecordFormatException;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.exception.UnknownRecordTypeException;
@@ -24,8 +26,6 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
-import teetime.stage.className.ClassNameRegistry;
-import teetime.stage.className.ClassNameRegistryRepository;
 import teetime.stage.util.MappingException;
 
 /**

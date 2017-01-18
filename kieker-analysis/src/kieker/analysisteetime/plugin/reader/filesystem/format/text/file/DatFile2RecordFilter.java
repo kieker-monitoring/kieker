@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package teetime.stage.io.filesystem.format.text.file;
+package kieker.analysisteetime.plugin.reader.filesystem.format.text.file;
 
 import java.io.File;
 
@@ -21,9 +21,9 @@ import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 import teetime.framework.AbstractStage;
-import teetime.stage.className.ClassNameRegistryRepository;
 import teetime.stage.io.File2TextLinesFilter;
 
+import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryRepository;
 import kieker.common.record.IMonitoringRecord;
 
 /**

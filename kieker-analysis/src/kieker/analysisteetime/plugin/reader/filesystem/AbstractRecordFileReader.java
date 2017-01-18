@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package teetime.stage.io.filesystem;
+package kieker.analysisteetime.plugin.reader.filesystem;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistry;
+import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryRepository;
+import kieker.analysisteetime.plugin.reader.filesystem.className.MappingFileParser;
+
 import teetime.framework.AbstractConsumerStage;
-import teetime.stage.className.ClassNameRegistry;
-import teetime.stage.className.ClassNameRegistryRepository;
-import teetime.stage.className.MappingFileParser;
 
 public abstract class AbstractRecordFileReader extends AbstractConsumerStage<File> {
 

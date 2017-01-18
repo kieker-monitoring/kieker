@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package teetime.stage.io.filesystem;
+package kieker.analysisteetime.plugin.reader.filesystem;
 
 import java.io.File;
 
@@ -23,12 +23,12 @@ import teetime.framework.OutputPort;
 import teetime.framework.AbstractStage;
 import teetime.stage.FileExtensionSwitch;
 import teetime.stage.basic.merger.Merger;
-import teetime.stage.className.ClassNameRegistryCreationFilter;
-import teetime.stage.className.ClassNameRegistryRepository;
 import teetime.stage.io.Directory2FilesFilter;
-import teetime.stage.io.filesystem.format.binary.file.BinaryFile2RecordFilter;
-import teetime.stage.io.filesystem.format.text.file.DatFile2RecordFilter;
 
+import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryCreationFilter;
+import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryRepository;
+import kieker.analysisteetime.plugin.reader.filesystem.format.binary.file.BinaryFile2RecordFilter;
+import kieker.analysisteetime.plugin.reader.filesystem.format.text.file.DatFile2RecordFilter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.common.util.filesystem.FSUtil;

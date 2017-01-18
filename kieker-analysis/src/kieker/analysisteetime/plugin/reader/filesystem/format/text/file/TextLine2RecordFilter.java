@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package teetime.stage.io.filesystem.format.text.file;
+package kieker.analysisteetime.plugin.reader.filesystem.format.text.file;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
-import teetime.stage.className.ClassNameRegistryRepository;
 import teetime.stage.util.MappingException;
 import teetime.stage.util.TextLineContainer;
 
+import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryRepository;
 import kieker.common.exception.IllegalRecordFormatException;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.exception.UnknownRecordTypeException;
