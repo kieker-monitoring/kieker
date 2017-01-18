@@ -25,6 +25,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
@@ -40,11 +42,13 @@ import kieker.monitoring.writernew.AbstractMonitoringWriter;
  */
 public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
 
+	private static final Log LOG = LogFactory.getLog(AsciiFileWriter.class);
+
 	private static final String PREFIX = AsciiFileWriter.class.getName() + ".";
 	/** The name of the configuration for the custom storage path if the writer is advised not to store in the temporary directory. */
 	static final String CONFIG_PATH = PREFIX + "customStoragePath";
 	/** The name of the configuration for the charset name (e.g. "UTF-8") */
-	static final String CONFIG_CHARSETNAME = PREFIX + "charsetName";
+	static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
 	/** The name of the configuration determining the maximal number of entries in a file. */
 	static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
 	/** The name of the configuration key determining to enable/disable compression of the record log files */
@@ -62,11 +66,11 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	public AsciiFileWriter(final Configuration configuration) {
 		super(configuration);
 		this.logFolder = this.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH));
-		final String charsetName = configuration.getStringProperty(CONFIG_CHARSETNAME, "UTF-8");
+		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME, "UTF-8");
 		final int maxEntriesInFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
 		final boolean shouldCompress = configuration.getBooleanProperty(CONFIG_SHOULD_COMPRESS);
 		// final int maxLogFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
-		this.fileWriterPool = new FileWriterPool(this.logFolder, charsetName, maxEntriesInFile, shouldCompress);
+		this.fileWriterPool = new FileWriterPool(LOG, this.logFolder, charsetName, maxEntriesInFile, shouldCompress);
 		this.mappingFileWriter = new MappingFileWriter(this.logFolder, charsetName);
 
 		this.writerRegistry = new WriterRegistry(this);
@@ -101,6 +105,7 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		fileWriter.print(this.writerRegistry.getId(recordClassName));
 		fileWriter.print(';');
 		fileWriter.print(record.getLoggingTimestamp());
+		// IMPROVE performance: provide and use a method Record.writeBytes(CharBuffer, ..) instead
 		for (final Object recordField : record.toArray()) {
 			fileWriter.print(';');
 			fileWriter.print(String.valueOf(recordField));

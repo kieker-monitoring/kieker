@@ -37,6 +37,10 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 	public static final String NORMAL_FILE_EXTENSION = ".dat";
 	/** The extension of Kieker's zipped record files. */
 	public static final String ZIP_FILE_EXTENSION = ".zip";
+	/** The extension of Kieker's gzipped record files. */
+	public static final String GZIP_FILE_EXTENSION = ".gz";
+	/** The extension of Kieker's binary record files. */
+	public static final String BINARY_FILE_EXTENSION = ".bin";
 
 	/** The encoding usually used within Kieker. */
 	public static final String ENCODING = "UTF-8";

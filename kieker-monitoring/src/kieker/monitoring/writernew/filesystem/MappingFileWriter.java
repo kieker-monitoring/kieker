@@ -33,7 +33,7 @@ import kieker.common.util.filesystem.FSUtil;
  *
  * @since 1.13
  */
-public class MappingFileWriter {
+class MappingFileWriter {
 
 	private final PrintWriter printWriter;
 
@@ -44,7 +44,7 @@ public class MappingFileWriter {
 
 		try {
 			Files.createDirectories(folder);
-			final Writer w = Files.newBufferedWriter(newMappingFile, charset, StandardOpenOption.CREATE_NEW);
+			final Writer w = Files.newBufferedWriter(newMappingFile, charset, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
 			this.printWriter = new PrintWriter(w);
 		} catch (final IOException e) {
 			throw new IllegalStateException("Error on creating Kieker's mapping file.", e);

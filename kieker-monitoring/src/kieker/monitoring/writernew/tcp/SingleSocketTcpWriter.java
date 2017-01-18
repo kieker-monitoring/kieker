@@ -34,6 +34,7 @@ import kieker.monitoring.registry.IRegistryListener;
 import kieker.monitoring.registry.RegisterAdapter;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writernew.AbstractMonitoringWriter;
+import kieker.monitoring.writernew.WriterUtil;
 
 /**
  * @author Christian Wulf
@@ -86,7 +87,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 		final ByteBuffer recordBuffer = this.buffer;
 		if ((4 + 8 + monitoringRecord.getSize()) > recordBuffer.remaining()) {
-			this.flushBuffer(recordBuffer);
+			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOG);
 		}
 
 		final String recordClassName = monitoringRecord.getClass().getName();
@@ -98,7 +99,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		// monitoringRecord.writeToBuffer(buffer, this.writerRegistry);
 
 		if (this.flush) {
-			this.flushBuffer(recordBuffer);
+			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOG);
 		}
 	}
 
@@ -111,7 +112,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		final int requiredBufferSize = (2 * AbstractMonitoringRecord.TYPE_SIZE_INT) + RegistryRecord.SIZE + bytes.length;
 
 		if (registryBuffer.remaining() < requiredBufferSize) {
-			this.flushBuffer(registryBuffer);
+			WriterUtil.flushBuffer(registryBuffer, this.socketChannel, LOG);
 		}
 
 		registryBuffer.putInt(RegistryRecord.CLASS_ID);
@@ -122,29 +123,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 	@Override
 	public void onTerminating() {
-		this.flushBuffer(this.buffer);
-
-		try {
-			this.socketChannel.close();
-		} catch (final IOException e) {
-			LOG.warn("Error closing the connection", e);
-		}
-	}
-
-	private void flushBuffer(final ByteBuffer buffer) {
-		buffer.flip();
-		try {
-			while (buffer.hasRemaining()) {
-				this.socketChannel.write(buffer);
-			}
-			buffer.clear();
-		} catch (final IOException e) {
-			LOG.error("Error in writing the record", e);
-			try {
-				this.socketChannel.close();
-			} catch (final IOException e1) {
-				LOG.warn("Error closing the connection", e1);
-			}
-		}
+		WriterUtil.flushBuffer(this.buffer, this.socketChannel, LOG);
+		WriterUtil.close(this.socketChannel, LOG);
 	}
 }

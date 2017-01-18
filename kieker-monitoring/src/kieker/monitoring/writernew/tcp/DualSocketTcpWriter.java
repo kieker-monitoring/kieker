@@ -33,6 +33,7 @@ import kieker.monitoring.registry.IWriterRegistry;
 import kieker.monitoring.registry.RegisterAdapter;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writernew.AbstractMonitoringWriter;
+import kieker.monitoring.writernew.WriterUtil;
 
 /**
  * @author "Christian Wulf"
@@ -109,7 +110,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		final ByteBuffer buffer = this.byteBuffer;
 		final int requiredBufferSize = 4 + 8 + monitoringRecord.getSize();
 		if (requiredBufferSize > buffer.remaining()) {
-			this.flushBuffer(buffer, this.monitoringRecordChannel);
+			WriterUtil.flushBuffer(buffer, this.monitoringRecordChannel, LOG);
 		}
 
 		final String recordClassName = monitoringRecord.getClass().getName();
@@ -125,7 +126,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		// monitoringRecord.writeToBuffer(buffer, this.writerRegistry);
 
 		if (this.flush) {
-			this.flushBuffer(buffer, this.monitoringRecordChannel);
+			WriterUtil.flushBuffer(buffer, this.monitoringRecordChannel, LOG);
 		}
 	}
 
@@ -149,41 +150,15 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		buffer.put(bytes);
 
 		// always flush so that the stringRegistryBuffer is transmitted before the byteBuffer
-		this.flushBuffer(buffer, this.registryRecordChannel);
+		WriterUtil.flushBuffer(buffer, this.registryRecordChannel, LOG);
 	}
 
 	@Override
 	public void onTerminating() {
-		this.flushBuffer(this.byteBuffer, this.monitoringRecordChannel);
-		this.flushBuffer(this.byteBuffer, this.registryRecordChannel);
+		WriterUtil.flushBuffer(this.byteBuffer, this.monitoringRecordChannel, LOG);
+		WriterUtil.flushBuffer(this.byteBuffer, this.registryRecordChannel, LOG);
 
-		this.closeChannel(this.monitoringRecordChannel);
-		this.closeChannel(this.registryRecordChannel);
-	}
-
-	private void flushBuffer(final ByteBuffer buffer, final SocketChannel socketChannel) {
-		buffer.flip();
-		try {
-			while (buffer.hasRemaining()) {
-				socketChannel.write(buffer);
-			}
-			buffer.clear();
-		} catch (final IOException e) {
-			LOG.error("Error in writing the record", e);
-			this.closeChannel(socketChannel);
-		}
-	}
-
-	private void closeChannel(final SocketChannel socketChannel) {
-		try {
-			socketChannel.close();
-		} catch (final IOException e) {
-			LOG.warn("Error in closing the connection.", e);
-		}
-	}
-
-	@Override
-	public String toString() {
-		return super.toString();
+		WriterUtil.close(this.monitoringRecordChannel, LOG);
+		WriterUtil.close(this.registryRecordChannel, LOG);
 	}
 }

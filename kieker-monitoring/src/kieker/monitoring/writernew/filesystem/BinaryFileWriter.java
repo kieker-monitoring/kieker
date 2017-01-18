@@ -16,6 +16,9 @@
 
 package kieker.monitoring.writernew.filesystem;
 
+import java.io.PrintWriter;
+import java.nio.ByteBuffer;
+import java.nio.channels.WritableByteChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
@@ -24,13 +27,17 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
+import kieker.monitoring.registry.RegisterAdapter;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writernew.AbstractMonitoringWriter;
+import kieker.monitoring.writernew.WriterUtil;
 
 /**
  * @author Jan Waller, Christian Wulf
@@ -39,47 +46,67 @@ import kieker.monitoring.writernew.AbstractMonitoringWriter;
  */
 public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
 
+	private static final Log LOG = LogFactory.getLog(BinaryFileWriter.class);
+
 	private static final String PREFIX = BinaryFileWriter.class.getName() + ".";
 	/** The name of the configuration for the custom storage path if the writer is advised not to store in the temporary directory. */
-	private static final String CONFIG_PATH = PREFIX + "customStoragePath";
+	static final String CONFIG_PATH = PREFIX + "customStoragePath";
 	/** The name of the configuration determining the maximal number of entries in a file. */
-	private static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
-	/** The name of the configuration determining the maximal size of the files in MiB. */
-	private static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
-	/** The name of the configuration determining the maximal number of log files. */
-	private static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
+	static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
+	// /** The name of the configuration determining the maximal size of the files in MiB. */
+	// private static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
+	// /** The name of the configuration determining the maximal number of log files. */
+	// private static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
 	/** The name of the configuration key for the charset name of the mapping file */
-	private static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
+	static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
+	/** The name of the configuration key determining to enable/disable compression of the record log files */
+	static final String CONFIG_SHOULD_COMPRESS = PREFIX + "shouldCompress";
+	/** The name of the configuration key determining the buffer size of the output file stream */
+	static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize";
+	/** The name of the configuration key determining to always flush the output file stream after writing each record */
+	static final String CONFIG_FLUSH = PREFIX + "flush";
 
-	// private final BinaryFileWriterPool fileWriterPool;
+	private final ByteBuffer buffer;
 	private final MappingFileWriter mappingFileWriter;
+	private final BinaryFileWriterPool fileWriterPool;
 	private final WriterRegistry writerRegistry;
+	private final RegisterAdapter<String> registerStringsAdapter;
+	private final GetIdAdapter<String> writeBytesAdapter;
+	private final boolean flush;
+	private final Path logFolder;
 
 	public BinaryFileWriter(final Configuration configuration) {
 		super(configuration);
-		final Path folder = this.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH));
-		// final int maxEntriesInFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
+		this.logFolder = this.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH));
+		final int maxEntriesInFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
+		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME, "UTF-8");
+		// TODO should we check for buffers too small for a single record?
+		final int bufferSize = this.configuration.getIntProperty(CONFIG_BUFFERSIZE);
+		final boolean shouldCompress = configuration.getBooleanProperty(CONFIG_SHOULD_COMPRESS);
+		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
 		// this.configMaxlogSize = configuration.getIntProperty(CONFIG_MAXLOGSIZE);
 		// this.configMaxLogFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
-		// this.fileWriterPool = new BinaryFileWriterPool(folder, maxEntriesInFile);
 
-		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME, "UTF-8");
-		this.mappingFileWriter = new MappingFileWriter(folder, charsetName);
+		this.buffer = ByteBuffer.allocateDirect(bufferSize);
+		this.mappingFileWriter = new MappingFileWriter(this.logFolder, charsetName);
+		this.fileWriterPool = new BinaryFileWriterPool(LOG, this.logFolder, maxEntriesInFile, shouldCompress);
 
 		this.writerRegistry = new WriterRegistry(this);
+		this.registerStringsAdapter = new RegisterAdapter<String>(this.writerRegistry);
+		this.writeBytesAdapter = new GetIdAdapter<String>(this.writerRegistry);
 	}
 
-	private Path buildKiekerLogFolder(final String configPath) {
+	private Path buildKiekerLogFolder(final String customStoragePath) {
 		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		date.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final String dateStr = date.format(new java.util.Date()); // NOPMD (Date)
+		final String currentDateStr = date.format(new java.util.Date()); // NOPMD (Date)
 
-		final IMonitoringController monitoringController = MonitoringController.getInstance();
-		final String ctrlName = monitoringController.getHostname() + "-" + monitoringController.getName();
+		final String hostName = this.configuration.getStringProperty(ConfigurationFactory.HOST_NAME);
+		final String controllerName = this.configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME);
 
-		final String filename = String.format("%s-%s-UTC-%s", FSUtil.FILE_PREFIX, dateStr, ctrlName);
+		final String filename = String.format("%s-%s-UTC-%s-%s", FSUtil.FILE_PREFIX, currentDateStr, hostName, controllerName);
 
-		return Paths.get(configPath, filename);
+		return Paths.get(customStoragePath, filename);
 	}
 
 	@Override
@@ -88,18 +115,46 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 	}
 
 	@Override
-	public void writeMonitoringRecord(final IMonitoringRecord record) {
+	public void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+		final WritableByteChannel channel = this.fileWriterPool.getFileWriter(this.buffer);
 
+		monitoringRecord.registerStrings(this.registerStringsAdapter);
+
+		final ByteBuffer recordBuffer = this.buffer;
+		if ((4 + 8 + monitoringRecord.getSize()) > recordBuffer.remaining()) {
+			WriterUtil.flushBuffer(recordBuffer, channel, LOG);
+		}
+
+		final String recordClassName = monitoringRecord.getClass().getName();
+		this.writerRegistry.register(recordClassName);
+
+		recordBuffer.putInt(this.writerRegistry.getId(recordClassName));
+		recordBuffer.putLong(monitoringRecord.getLoggingTimestamp());
+		monitoringRecord.writeBytes(recordBuffer, this.writeBytesAdapter);
+
+		if (this.flush) {
+			WriterUtil.flushBuffer(recordBuffer, channel, LOG);
+		}
 	}
 
 	@Override
-	public void onNewRegistryEntry(final String value, final int id) {
+	public void onNewRegistryEntry(final String recordClassName, final int id) {
+		final PrintWriter mappingFileWriter = this.mappingFileWriter.getFileWriter();
 
+		mappingFileWriter.print('$');
+		mappingFileWriter.print(id);
+		mappingFileWriter.print('=');
+		mappingFileWriter.print(recordClassName);
+		mappingFileWriter.println();
 	}
 
 	@Override
 	public void onTerminating() {
-
+		this.fileWriterPool.close(this.buffer);
+		this.mappingFileWriter.close();
 	}
 
+	public Path getLogFolder() {
+		return this.logFolder;
+	}
 }
