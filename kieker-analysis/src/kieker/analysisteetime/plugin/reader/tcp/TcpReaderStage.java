@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kieker.analysisteetime.plugin.reader.network;
+package kieker.analysisteetime.plugin.reader.tcp;
 
 import java.nio.ByteBuffer;
 
 import teetime.framework.AbstractProducerStage;
 import teetime.util.io.network.AbstractTcpReader;
 
-import kieker.analysisteetime.plugin.reader.network.util.AbstractRecordTcpReader;
+import kieker.analysisteetime.plugin.reader.tcp.util.AbstractRecordTcpReader;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.registry.ILookup;

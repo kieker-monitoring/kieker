@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kieker.analysisteetime.plugin.reader.network;
+package kieker.analysisteetime.plugin.reader.tcp;
 
-import kieker.analysisteetime.plugin.reader.network.util.IRecordReceivedListener;
-import kieker.analysisteetime.plugin.reader.network.util.SingleSocketRecordReader;
+import kieker.analysisteetime.plugin.reader.tcp.util.IRecordReceivedListener;
+import kieker.analysisteetime.plugin.reader.tcp.util.SingleSocketRecordReader;
 import kieker.common.record.IMonitoringRecord;
 
 import teetime.framework.AbstractProducerStage;
