@@ -94,6 +94,11 @@
 		<Class name="kieker.test.analysis.junit.plugin.filter.forward.TestStringBufferFilter" />
 		<Bug pattern="DM_STRING_CTOR" />
 	</Match>
+	
+	<Match>
+		<Class name="kieker.test.analysisteetime.junit.plugin.filter.forward.TestStringBufferFilter" />
+		<Bug pattern="DM_STRING_CTOR" />
+	</Match>
 
 	<Match>
 		<Class name="kieker.tools.traceAnalysis.repository.DescriptionRepository" />
@@ -204,6 +209,12 @@
 
 	<Match>
 		<Class name="kieker.analysis.plugin.reader.jms.JMSReader" />
+		<Method name="read" params="" returns="boolean" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.analysisteetime.plugin.reader.jms.JMSReaderLogic" />
 		<Method name="read" params="" returns="boolean" />
 		<Bug pattern="REC_CATCH_EXCEPTION" />
 	</Match>

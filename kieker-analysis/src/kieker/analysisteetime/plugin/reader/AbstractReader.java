@@ -40,7 +40,7 @@ public abstract class AbstractReader extends AbstractProducerStage<IMonitoringRe
 	/** Terminates the reader logic by returning from read method. */
 	public void terminate(final boolean error) {
 		this.readerLogic.terminate(error);
-		this.terminate();
+		this.terminateStage();
 	}
 
 	/** Called from reader logic to send the read records to the output port */

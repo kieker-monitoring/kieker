@@ -25,20 +25,32 @@ import org.junit.Test;
 
 import kieker.analysisteetime.plugin.filter.forward.CountingFilter;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 import teetime.framework.test.StageTester;
 
 /**
- * This test is for the class {@link CountingDisplayFilter}.
+ * This test is for the class {@link CountingFilter}.
  *
  * @author Nils Christian Ehmke, Jan Waller, Lars Bluemke
  *
  * @since 1.6
  */
-public class TestCountingDisplayFilter {
+public class TestCountingFilter extends AbstractKiekerTest {
 
-	private CountingFilter countingFilter = null;
-	private List<Object> testElements = null;
+	private CountingFilter countingFilter;
+	private List<Object> testElements;
 
+	/**
+	 * Empty default constructor
+	 */
+	public TestCountingFilter() {
+		// empty default constructor
+	}
+
+	/**
+	 * Initializes a new filter and array of test elements before each test.
+	 */
 	@Before
 	public void initializeNewFilter() {
 		this.countingFilter = new CountingFilter();

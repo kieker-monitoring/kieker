@@ -52,6 +52,8 @@ public class TeeFilter extends AbstractFilter<Object> {
 	 * <b>STDOUT</b> = standard output<br>
 	 * <b>STDERR</b> = standard error output<br>
 	 * <b>NULL</b> = filter doesn't print anything
+	 *
+	 * @since 1.13
 	 */
 	public enum TeeFilterStreamType {
 		STDLOG, STDOUT, STDERR, NULL

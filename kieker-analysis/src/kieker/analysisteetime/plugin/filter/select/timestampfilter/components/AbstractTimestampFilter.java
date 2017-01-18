@@ -16,19 +16,16 @@
 
 package kieker.analysisteetime.plugin.filter.select.timestampfilter.components;
 
-import kieker.common.record.IMonitoringRecord;
-
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
-import teetime.stage.InstanceOfFilter;
 
 /**
- * Allows to filter {@link IMonitoringRecord} objects based on their given timestamps.
+ * Allows to filter monitoring records objects based on their given timestamps.
  *
  * If the received record is within the defined timestamps, the object is delivered unmodified to the nameWithinPeriodOutputPort otherwise to the
  * nameOutsidePeriodOutputPort.
  *
- * In a concrete P&F architecture this stage should be used behind TeeTime's {@link InstanceOfFilter} to forward records to either
+ * In a concrete P&F architecture this stage should be used behind TeeTime's InstanceOfFilter to forward records to either
  * {@link TraceMetadataTimestampFilter}, {@link OperationExecutionRecordTimestampFilter} or {@link MonitioringRecordTimestampFilter}.
  *
  * @author Andre van Hoorn, Jan Waller, Lars Bluemke
@@ -40,11 +37,11 @@ import teetime.stage.InstanceOfFilter;
  */
 public abstract class AbstractTimestampFilter<T> extends AbstractConsumerStage<T> {
 
-	private final long ignoreBeforeTimestamp;
-	private final long ignoreAfterTimestamp;
-
 	protected final OutputPort<T> recordWithinTimePeriodOutputPort = this.createOutputPort();
 	protected final OutputPort<T> recordOutsideTimePeriodOutputPort = this.createOutputPort();
+
+	private final long ignoreBeforeTimestamp;
+	private final long ignoreAfterTimestamp;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.

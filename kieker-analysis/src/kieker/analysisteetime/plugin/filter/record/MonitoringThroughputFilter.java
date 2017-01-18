@@ -31,8 +31,8 @@ import teetime.framework.OutputPort;
 public class MonitoringThroughputFilter extends AbstractConsumerStage<IMonitoringRecord> {
 	private final long intervalSize;
 
-	private volatile long currentInterval = -1;
-	private volatile long recordsInInterval;
+	private long currentInterval = -1;
+	private long recordsInInterval;
 
 	private final OutputPort<IMonitoringRecord> uncountedRecordsOutputPort = this.createOutputPort();
 	private final OutputPort<Long> throughputOutputPort = this.createOutputPort();
@@ -53,23 +53,23 @@ public class MonitoringThroughputFilter extends AbstractConsumerStage<IMonitorin
 		// we assume a more or less linear order of incoming records
 		final long timestamp = record.getLoggingTimestamp();
 		final long interval = timestamp / this.intervalSize;
-		synchronized (this) {
-			if (interval < this.currentInterval) { // do not count records earlier than the current interval
-				this.uncountedRecordsOutputPort.send(record);
-			} else {
-				if (interval > this.currentInterval) { // we enter a new interval
-					if (this.currentInterval != -1) { // close all previous intervals if not the first interval
-						this.throughputOutputPort.send(this.recordsInInterval);
-						for (long i = this.currentInterval + 1; i < interval; i++) {
-							this.throughputOutputPort.send(0L);
-						}
+
+		if (interval < this.currentInterval) { // do not count records earlier than the current interval
+			this.uncountedRecordsOutputPort.send(record);
+		} else {
+			if (interval > this.currentInterval) { // we enter a new interval
+				if (this.currentInterval != -1) { // close all previous intervals if not the first interval
+					this.throughputOutputPort.send(this.recordsInInterval);
+					for (long i = this.currentInterval + 1; i < interval; i++) {
+						this.throughputOutputPort.send(0L);
 					}
-					this.currentInterval = interval;
-					this.recordsInInterval = 0;
 				}
-				this.recordsInInterval = this.recordsInInterval + 1;
+				this.currentInterval = interval;
+				this.recordsInInterval = 0;
 			}
+			this.recordsInInterval = this.recordsInInterval + 1;
 		}
+
 		this.relayedRecordsOutputPort.send(record);
 	}
 

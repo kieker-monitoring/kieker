@@ -26,6 +26,7 @@ import teetime.framework.AbstractConsumerStage;
  * Receives records at the input port and stores them in a queue for the {@link RealtimeRecordDelayProducer}.
  *
  * @author Lars Bluemke
+ * @since 1.13
  */
 public class RealtimeRecordDelayConsumer extends AbstractConsumerStage<IMonitoringRecord> {
 
@@ -39,9 +40,7 @@ public class RealtimeRecordDelayConsumer extends AbstractConsumerStage<IMonitori
 
 	@Override
 	protected void execute(final IMonitoringRecord monitoringRecord) {
-		System.out.println("record received by RRDF consumer " + monitoringRecord);
 		this.recordQueue.add(monitoringRecord);
-		System.out.println("record added to delay queue");
 	}
 
 	@Override
