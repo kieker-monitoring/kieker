@@ -30,12 +30,12 @@ import teetime.stage.InstanceOfFilter;
  */
 public class ExampleConfiguration extends Configuration {
 
-	public ExampleConfiguration(final File importDirectory) {
+	private final TypeRoot typeRoot = TypeFactory.eINSTANCE.createTypeRoot();
+	private final AssemblyRoot assemblyRoot = AssemblyFactory.eINSTANCE.createAssemblyRoot();
+	private final DeploymentRoot deploymentRoot = DeploymentFactory.eINSTANCE.createDeploymentRoot();
+	private final ExecutionRoot executionRoot = ExecutionFactory.eINSTANCE.createExecutionRoot();
 
-		final TypeRoot typeRoot = TypeFactory.eINSTANCE.createTypeRoot();
-		final AssemblyRoot assemblyRoot = AssemblyFactory.eINSTANCE.createAssemblyRoot();
-		final DeploymentRoot deploymentRoot = DeploymentFactory.eINSTANCE.createDeploymentRoot();
-		final ExecutionRoot executionRoot = ExecutionFactory.eINSTANCE.createExecutionRoot();
+	public ExampleConfiguration(final File importDirectory) {
 
 		// TODO Model creation should be available as composite stage
 
@@ -44,12 +44,12 @@ public class ExampleConfiguration extends Configuration {
 		// TODO consider if KiekerMetadataRecord has to be processed
 		// final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final InstanceOfFilter<IMonitoringRecord, IFlowRecord> instanceOfFilter = new InstanceOfFilter<>(IFlowRecord.class);
-		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(typeRoot);
-		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(typeRoot, assemblyRoot);
-		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(assemblyRoot, deploymentRoot);
-		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(deploymentRoot, false); // TODO second parameter
+		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(this.typeRoot);
+		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(this.typeRoot, this.assemblyRoot);
+		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(this.assemblyRoot, this.deploymentRoot);
+		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentRoot, false); // TODO second parameter
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
-		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(executionRoot);
+		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(this.executionRoot);
 
 		// Connect the stages
 		super.connectPorts(reader.getOutputPort(), instanceOfFilter.getInputPort());
@@ -60,6 +60,10 @@ public class ExampleConfiguration extends Configuration {
 		super.connectPorts(traceReconstructor.getOutputPort(), traceStatisticsDecorator.getInputPort());
 		super.connectPorts(traceStatisticsDecorator.getOutputPort(), executionModelAssembler.getInputPort());
 
+	}
+
+	public DeploymentRoot getDeploymentRoot() {
+		return this.deploymentRoot;
 	}
 
 }
