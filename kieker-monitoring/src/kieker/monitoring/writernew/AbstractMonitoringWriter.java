@@ -68,11 +68,13 @@ public abstract class AbstractMonitoringWriter {
 			sb.append("\n\t\tNo Configuration");
 		} else {
 			for (final String property : keys) {
-				sb.append("\n\t\t");
-				sb.append(property);
-				sb.append("='");
-				sb.append(this.configuration.getStringProperty(property));
-				sb.append('\'');
+				if (property.startsWith(this.getClass().getName())) {
+					sb.append("\n\t\t");
+					sb.append(property);
+					sb.append("='");
+					sb.append(this.configuration.getStringProperty(property));
+					sb.append('\'');
+				}
 			}
 		}
 		return sb.toString();

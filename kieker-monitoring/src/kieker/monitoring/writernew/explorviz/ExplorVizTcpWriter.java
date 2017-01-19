@@ -40,7 +40,6 @@ import kieker.monitoring.registry.IRegistryListener;
 import kieker.monitoring.registry.IWriterRegistry;
 import kieker.monitoring.registry.RegisterAdapter;
 import kieker.monitoring.registry.WriterRegistry;
-import kieker.monitoring.writer.explorviz.ExplorVizExportWriter;
 import kieker.monitoring.writernew.AbstractMonitoringWriter;
 
 /**
@@ -52,7 +51,7 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 
 	private static final Log LOG = LogFactory.getLog(ExplorVizTcpWriter.class);
 
-	private static final String PREFIX = ExplorVizExportWriter.class.getName() + ".";
+	private static final String PREFIX = ExplorVizTcpWriter.class.getName() + ".";
 	public static final String CONFIG_HOSTNAME = PREFIX + "hostname"; // NOCS (afterPREFIX)
 	public static final String CONFIG_PORT = PREFIX + "port"; // NOCS (afterPREFIX)
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)

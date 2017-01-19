@@ -46,7 +46,7 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 
 	private static final String PREFIX = AsciiFileWriter.class.getName() + ".";
 	/** The name of the configuration for the custom storage path if the writer is advised not to store in the temporary directory. */
-	static final String CONFIG_PATH = PREFIX + "customStoragePath";
+	public static final String CONFIG_PATH = PREFIX + "customStoragePath";
 	/** The name of the configuration for the charset name (e.g. "UTF-8") */
 	static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
 	/** The name of the configuration determining the maximal number of entries in a file. */
@@ -55,11 +55,11 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	static final String CONFIG_SHOULD_COMPRESS = PREFIX + "shouldCompress";
 	// /** The name of the configuration determining the maximal size of the files in MiB. */
 	// static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
-	// /** The name of the configuration determining the maximal number of log files. */
-	// static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
+	/** The name of the configuration determining the maximal number of log files. */
+	static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
 
 	private final Path logFolder;
-	private final FileWriterPool fileWriterPool;
+	private final AsciiFileWriterPool fileWriterPool;
 	private final MappingFileWriter mappingFileWriter;
 	private final IWriterRegistry<String> writerRegistry;
 
@@ -69,8 +69,10 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME, "UTF-8");
 		final int maxEntriesInFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
 		final boolean shouldCompress = configuration.getBooleanProperty(CONFIG_SHOULD_COMPRESS);
-		// final int maxLogFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
-		this.fileWriterPool = new FileWriterPool(LOG, this.logFolder, charsetName, maxEntriesInFile, shouldCompress);
+		int maxAmountOfFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
+		maxAmountOfFiles = (maxAmountOfFiles <= 0) ? Integer.MAX_VALUE : maxAmountOfFiles;
+
+		this.fileWriterPool = new AsciiFileWriterPool(LOG, this.logFolder, charsetName, maxEntriesInFile, shouldCompress, maxAmountOfFiles);
 		this.mappingFileWriter = new MappingFileWriter(this.logFolder, charsetName);
 
 		this.writerRegistry = new WriterRegistry(this);

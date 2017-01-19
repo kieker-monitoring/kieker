@@ -40,8 +40,7 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.spring.executions.OperationExecutionMethodInvocationInterceptor;
-import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
-import kieker.monitoring.writer.filesystem.AsyncFsWriter;
+import kieker.monitoring.writernew.filesystem.AsciiFileWriter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -79,8 +78,8 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 	public void init() throws IOException {
 		// this.tmpFolder.create();
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, AsyncFsWriter.class.getName());
-		config.setProperty(AsyncFsWriter.class.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
+		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
+		config.setProperty(AsciiFileWriter.class.getName() + "." + AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
 		this.monitoringCtrl = MonitoringController.createInstance(config);
 
 		this.controlFlowRegistry.unsetThreadLocalEOI();

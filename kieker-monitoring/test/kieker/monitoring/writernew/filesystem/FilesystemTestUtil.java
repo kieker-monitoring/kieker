@@ -14,12 +14,26 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.writer.jmx;
+package kieker.monitoring.writernew.filesystem;
+
+import kieker.common.record.misc.EmptyRecord;
+import kieker.monitoring.writernew.AbstractMonitoringWriter;
 
 /**
- * @author Jan Waller
- * 
- * @since 1.4
+ * @author Christian Wulf
+ *
+ * @since 1.13
  */
-public interface KiekerJMXMonitoringLogMBean { // NOCS
+final class FilesystemTestUtil {
+
+	private FilesystemTestUtil() {
+		// utility class
+	}
+
+	public static void writeMonitoringRecords(final AbstractMonitoringWriter writer, final int numRecords) {
+		for (int i = 0; i < numRecords; i++) {
+			writer.writeMonitoringRecord(new EmptyRecord());
+		}
+	}
+
 }

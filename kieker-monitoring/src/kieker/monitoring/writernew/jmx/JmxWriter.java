@@ -26,7 +26,6 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writer.jmx.KiekerJMXMonitoringLog;
 import kieker.monitoring.writernew.AbstractMonitoringWriter;
 
 /**

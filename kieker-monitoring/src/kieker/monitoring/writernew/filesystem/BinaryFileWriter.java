@@ -55,8 +55,8 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 	static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
 	// /** The name of the configuration determining the maximal size of the files in MiB. */
 	// private static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
-	// /** The name of the configuration determining the maximal number of log files. */
-	// private static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
+	/** The name of the configuration determining the maximal number of log files. */
+	static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
 	/** The name of the configuration key for the charset name of the mapping file */
 	static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
 	/** The name of the configuration key determining to enable/disable compression of the record log files */
@@ -84,12 +84,12 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 		final int bufferSize = this.configuration.getIntProperty(CONFIG_BUFFERSIZE);
 		final boolean shouldCompress = configuration.getBooleanProperty(CONFIG_SHOULD_COMPRESS);
 		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
-		// this.configMaxlogSize = configuration.getIntProperty(CONFIG_MAXLOGSIZE);
-		// this.configMaxLogFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
+		int maxAmountOfFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
+		maxAmountOfFiles = (maxAmountOfFiles <= 0) ? Integer.MAX_VALUE : maxAmountOfFiles;
 
 		this.buffer = ByteBuffer.allocateDirect(bufferSize);
 		this.mappingFileWriter = new MappingFileWriter(this.logFolder, charsetName);
-		this.fileWriterPool = new BinaryFileWriterPool(LOG, this.logFolder, maxEntriesInFile, shouldCompress);
+		this.fileWriterPool = new BinaryFileWriterPool(LOG, this.logFolder, maxEntriesInFile, shouldCompress, maxAmountOfFiles);
 
 		this.writerRegistry = new WriterRegistry(this);
 		this.registerStringsAdapter = new RegisterAdapter<String>(this.writerRegistry);
