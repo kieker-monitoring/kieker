@@ -34,6 +34,10 @@ public class DeserializerStringRegistry implements IRegistry<String> {
 
 	private final List<String> values;
 
+	/**
+	 * Creates a new deserializer string registry.
+	 * @param values The values to use
+	 */
 	public DeserializerStringRegistry(final List<String> values) {
 		this.values = ImmutableList.copyOf(values);
 	}

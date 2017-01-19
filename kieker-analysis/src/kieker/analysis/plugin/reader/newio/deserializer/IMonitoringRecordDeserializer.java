@@ -40,16 +40,23 @@ public interface IMonitoringRecordDeserializer {
 	 * @return The deserialized records
 	 * @throws InvalidFormatException
 	 *             If an invalid data format is detected
+	 * @since 1.13
 	 */
 	public List<IMonitoringRecord> deserializeRecords(ByteBuffer buffer, int dataSize) throws InvalidFormatException;
 
 	/**
 	 * Lifecycle event, is called before data is read.
+	 * 
+	 * @throws Exception
+	 *             If the initialization fails
+	 * @since 1.13
 	 */
 	public void init() throws Exception;
 
 	/**
 	 * Lifecycle event, is called when the analysis terminates.
+	 * 
+	 * @since 1.13
 	 */
 	public void terminate();
 

@@ -27,10 +27,24 @@ public class InvalidFormatException extends RuntimeException {
 
 	private static final long serialVersionUID = 8559393355991197765L;
 
+	/**
+	 * Creates a new instance using the given data.
+	 * 
+	 * @param message
+	 *            The message for this exception
+	 */
 	public InvalidFormatException(final String message) {
 		super(message);
 	}
 
+	/**
+	 * Creates a new instance using the given data.
+	 * 
+	 * @param message
+	 *            The message for this exception
+	 * @param cause
+	 *            The cause of the exception
+	 */
 	public InvalidFormatException(final String message, final Throwable cause) {
 		super(message, cause);
 	}

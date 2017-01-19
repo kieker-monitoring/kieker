@@ -43,8 +43,10 @@ import kieker.common.record.IMonitoringRecord;
 				@OutputPort(name = KafkaReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {IMonitoringRecord.class}, description = "Output port of the Kafka reader")
 		},
 		configuration = {
-				@Property(name = KafkaReader.CONFIG_PROPERTY_TOPIC_NAME, defaultValue = "kiekerRecords", description = "Name of the Kafka topic to read the records from"),
-				@Property(name = KafkaReader.CONFIG_PROPERTY_BOOTSTRAP_SERVERS, defaultValue = "localhost:9092", description = "Bootstrap servers for the Kafka cluster"),
+				@Property(name = KafkaReader.CONFIG_PROPERTY_TOPIC_NAME, defaultValue = "kiekerRecords",
+						description = "Name of the Kafka topic to read the records from"),
+				@Property(name = KafkaReader.CONFIG_PROPERTY_BOOTSTRAP_SERVERS, defaultValue = "localhost:9092",
+						description = "Bootstrap servers for the Kafka cluster"),
 				@Property(name = KafkaReader.CONFIG_PROPERTY_GROUP_ID, defaultValue = "kieker", description = "Group ID for the Kafka consumer group"),
 				@Property(name = KafkaReader.CONFIG_PROPERTY_AUTO_COMMIT, defaultValue = "true", description = "Auto-commit the current position?"),
 				@Property(name = KafkaReader.CONFIG_PROPERTY_AUTO_COMMIT_INTERVAL_MS, defaultValue = "1000", description = "Auto commit interval in milliseconds"),
@@ -56,6 +58,8 @@ public class KafkaReader extends AbstractRawDataReader {
 	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
+	/** The name of the configuration property for the deserializer */
+	public static final String CONFIG_PROPERTY_DESERIALIZER = "deserializer";
 	/** The name of the configuration property for the topic name. */ 
 	public static final String CONFIG_PROPERTY_TOPIC_NAME = "topicName";
 	/** The name of the configuration property for the bootstrap servers. */
@@ -80,8 +84,13 @@ public class KafkaReader extends AbstractRawDataReader {
 	
 	private volatile boolean terminated = false;
 	
-	public KafkaReader(final Configuration configuration, final IProjectContext projectContext, final String deserializerClassName) {
-		super(configuration, projectContext, deserializerClassName);
+	/**
+	 * Creates a new Kafka reader using the givend data.
+	 * @param configuration The configuration to use
+	 * @param projectContext The project context the plugin runs in
+	 */
+	public KafkaReader(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext, configuration.getStringProperty(CONFIG_PROPERTY_DESERIALIZER));
 		
 		this.topicName = configuration.getStringProperty(CONFIG_PROPERTY_TOPIC_NAME);
 		this.bootstrapServers = configuration.getStringProperty(CONFIG_PROPERTY_BOOTSTRAP_SERVERS);
@@ -93,7 +102,7 @@ public class KafkaReader extends AbstractRawDataReader {
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		Configuration configuration = new Configuration();
+		final Configuration configuration = new Configuration();
 		
 		configuration.setProperty(CONFIG_PROPERTY_TOPIC_NAME, this.topicName);
 		configuration.setProperty(CONFIG_PROPERTY_BOOTSTRAP_SERVERS, this.bootstrapServers);
@@ -107,13 +116,13 @@ public class KafkaReader extends AbstractRawDataReader {
 	
 	@Override
 	public boolean init() {
-		boolean superInitSuccessful = super.init();
+		final boolean superInitSuccessful = super.init();
 		
-		if(!superInitSuccessful) {
+		if (!superInitSuccessful) {
 			return false;
 		}
 		
-		Properties properties = new Properties();
+		final Properties properties = new Properties();
 		
 		properties.put("bootstrap.servers", this.bootstrapServers);
 		properties.put("group.id", this.groupId);
@@ -134,7 +143,7 @@ public class KafkaReader extends AbstractRawDataReader {
 		this.consumer.subscribe(Arrays.asList(this.topicName));
 
 		try {
-			while(!this.terminated) {
+			while (!this.terminated) {
 				ConsumerRecords<String, byte[]> records = this.consumer.poll(100);
 				
 				this.processRecords(records);
@@ -147,15 +156,11 @@ public class KafkaReader extends AbstractRawDataReader {
 	}
 	
 	private void processRecords(final ConsumerRecords<String, byte[]> records) {
-		try {
-			for (ConsumerRecord<String, byte[]> record : records) {
-				byte[] data = record.value();
-				this.decodeAndDeliverRecords(data, OUTPUT_PORT_NAME_RECORDS);
-			}
-		} catch (Throwable e) {
-			e.printStackTrace();
+		for (ConsumerRecord<String, byte[]> record : records) {
+			final byte[] data = record.value();
+			this.decodeAndDeliverRecords(data, OUTPUT_PORT_NAME_RECORDS);
 		}
-	}
+	} 
 
 	@Override
 	public void terminate(final boolean error) {

@@ -68,12 +68,16 @@ public abstract class AbstractContainerFormatDeserializer extends AbstractMonito
 	 * Decodes the records from the container's payload.
 	 *
 	 * @param buffer
-	 *            The buffer to decode the data from. It is positioned at the first byte of the payload
+	 *            The buffer to decode the data from. It is positioned at the
+	 *            first byte of the payload
 	 * @param dataSize
 	 *            The size of the payload data in bytes
 	 * @return The decoded records
+	 * @throws InvalidFormatException
+	 *             When an invalid data format is encountered
 	 */
-	protected abstract List<IMonitoringRecord> decodeRecords(ByteBuffer buffer, int dataSize) throws InvalidFormatException;
+	protected abstract List<IMonitoringRecord> decodeRecords(ByteBuffer buffer, int dataSize)
+			throws InvalidFormatException;
 
 	protected abstract int getFormatIdentifier();
 

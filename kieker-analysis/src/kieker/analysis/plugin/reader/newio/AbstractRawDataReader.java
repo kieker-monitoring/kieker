@@ -39,6 +39,12 @@ public abstract class AbstractRawDataReader extends AbstractReaderPlugin {
 
 	private final IMonitoringRecordDeserializer deserializer;
 
+	/**
+	 * Creates a new reader using the given data.
+	 * @param configuration The configuration to use
+	 * @param projectContext The project context the reader runs in
+	 * @param deserializerClassName The class name of the deserializer to use
+	 */
 	public AbstractRawDataReader(final Configuration configuration, final IProjectContext projectContext, final String deserializerClassName) {
 		super(configuration, projectContext);
 
@@ -51,12 +57,12 @@ public abstract class AbstractRawDataReader extends AbstractReaderPlugin {
 
 		// TODO Externalize instance creation into a factory
 		Class<? extends IMonitoringRecordDeserializer> deserializerClass;
-		IMonitoringRecordDeserializer deserializer = null;
+		IMonitoringRecordDeserializer localDeserializer = null;
 
 		try {
 			deserializerClass = (Class<? extends IMonitoringRecordDeserializer>) Class.forName(deserializerClassName);
 			final Constructor<? extends IMonitoringRecordDeserializer> constructor = deserializerClass.getConstructor(Configuration.class, IProjectContext.class);
-			deserializer = constructor.newInstance(configuration, projectContext);
+			localDeserializer = constructor.newInstance(configuration, projectContext);
 		} catch (final ClassNotFoundException e) {
 			LOG.error("The deserializer class '" + deserializerClassName + "' was not found.");
 		} catch (final NoSuchMethodException e) {
@@ -71,7 +77,7 @@ public abstract class AbstractRawDataReader extends AbstractReaderPlugin {
 			this.logInstantiationFailed(deserializerClassName, e);
 		}
 
-		return deserializer;
+		return localDeserializer;
 	}
 
 	private void logInstantiationFailed(final String className, final Throwable e) {
@@ -92,11 +98,13 @@ public abstract class AbstractRawDataReader extends AbstractReaderPlugin {
 	}
 
 	/**
-	 * Decodes the given raw data using the configured deserializer and delivers them to the
-	 * given output port.
+	 * Decodes the given raw data using the configured deserializer and delivers
+	 * them to the given output port.
 	 *
 	 * @param rawData
 	 *            The raw data to decode
+	 * @param dataSize
+	 *            The size of the data to decode
 	 * @param outputPortName
 	 *            The output port name to send the decoded records to
 	 */
