@@ -1,4 +1,4 @@
-package kieker.test.analysisteetime.junit.plugin.reader.tcp;
+package kieker.analysisteetime.plugin.reader.tcp;
 
 import java.util.ArrayList;
 import java.util.List;
