@@ -31,7 +31,7 @@ import teetime.stage.basic.AbstractFilter;
  *
  * @author Nils Christian Ehmke, Sören Henning
  */
-public final class TraceStatisticsDecorator extends AbstractFilter<TraceRoot> {
+public final class TraceStatisticsDecoratorStage extends AbstractFilter<TraceRoot> {
 
 	private final TraceTraverser traverser = new TraceTraverser();
 	private final OperationCallVisitor durRatioToParentCalculator = new DurRatioToParentCalculator();

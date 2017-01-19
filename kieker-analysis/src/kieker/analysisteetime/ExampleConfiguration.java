@@ -15,6 +15,7 @@ import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 import kieker.analysisteetime.model.analysismodel.type.TypeRoot;
 import kieker.analysisteetime.recordreading.ReadingComposite;
 import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
+import kieker.analysisteetime.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
 
@@ -47,6 +48,7 @@ public class ExampleConfiguration extends Configuration {
 		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(typeRoot, assemblyRoot);
 		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(assemblyRoot, deploymentRoot);
 		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(deploymentRoot, false); // TODO second parameter
+		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
 		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(executionRoot);
 
 		// Connect the stages
@@ -55,7 +57,8 @@ public class ExampleConfiguration extends Configuration {
 		super.connectPorts(typeModelAssembler.getOutputPort(), assemblyModelAssembler.getInputPort());
 		super.connectPorts(assemblyModelAssembler.getOutputPort(), deploymentModelAssembler.getInputPort());
 		super.connectPorts(deploymentModelAssembler.getOutputPort(), traceReconstructor.getInputPort());
-		super.connectPorts(traceReconstructor.getOutputPort(), executionModelAssembler.getInputPort());
+		super.connectPorts(traceReconstructor.getOutputPort(), traceStatisticsDecorator.getInputPort());
+		super.connectPorts(traceStatisticsDecorator.getOutputPort(), executionModelAssembler.getInputPort());
 
 	}
 
