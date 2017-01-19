@@ -37,6 +37,7 @@ public class ExecutionModelAssemblerStage extends AbstractFilter<TraceRoot> {
 	@Override
 	protected void execute(final TraceRoot trace) {
 		this.assembler.addTrace(trace);
+		this.outputPort.send(trace);
 	}
 
 }

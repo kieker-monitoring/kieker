@@ -47,6 +47,7 @@ public class DeploymentModelAssemblerStage extends AbstractFilter<IFlowRecord> {
 		} else if (record instanceof AfterOperationEvent) {
 			this.assembler.handleAfterOperationEvent((AfterOperationEvent) record);
 		}
+		this.outputPort.send(record);
 	}
 
 }

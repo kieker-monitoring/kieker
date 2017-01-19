@@ -41,6 +41,7 @@ public class AssemblyModelAssemblerStage extends AbstractFilter<IFlowRecord> {
 		if (record instanceof BeforeOperationEvent) {
 			this.assembler.addRecord((BeforeOperationEvent) record);
 		}
+		this.outputPort.send(record);
 	}
 
 }
