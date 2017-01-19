@@ -33,7 +33,7 @@ public abstract class AbstractMonitoringRecordSerializer implements IMonitoringR
 	 * @param configuration
 	 *            The configuration to use
 	 */
-	public AbstractMonitoringRecordSerializer(final Configuration configuration) {
+	public AbstractMonitoringRecordSerializer(final Configuration configuration) { // NOPMD
 		// Empty constructor template
 	}
 

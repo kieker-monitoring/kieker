@@ -27,7 +27,11 @@ import kieker.common.configuration.Configuration;
  */
 public abstract class AbstractRawDataWriter implements IRawDataWriter {
 
-	public AbstractRawDataWriter(final Configuration configuration) {
+	/**
+	 * Creates a new instance using the given configuration
+	 * @param configuration The configuration to use
+	 */
+	public AbstractRawDataWriter(final Configuration configuration) { // NOPMD
 		// Constructor template
 	}
 

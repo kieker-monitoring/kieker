@@ -64,8 +64,22 @@ public abstract class AbstractContainerFormatSerializer extends AbstractMonitori
 		return bytesInPayload + HEADER_SIZE;
 	}
 
+	/**
+	 * Write the given records to the given byte buffer.
+	 * 
+	 * @param records
+	 *            The records to write
+	 * @param buffer
+	 *            The buffer to write to
+	 * @return The size of the written data in bytes
+	 */
 	protected abstract int writeRecords(final Collection<IMonitoringRecord> records, final ByteBuffer buffer);
 
+	/**
+	 * Returns the format identifier for the contained data format.
+	 * 
+	 * @return see above
+	 */
 	protected abstract int getFormatIdentifier();
 
 }

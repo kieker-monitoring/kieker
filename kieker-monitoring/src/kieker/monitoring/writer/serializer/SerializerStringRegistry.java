@@ -36,9 +36,13 @@ import kieker.common.util.registry.IRegistryRecordReceiver;
  */
 class SerializerStringRegistry implements IRegistry<String> {
 
-	private final Map<String, Integer> valueToIdMap = new HashMap<String, Integer>();
+	private final Map<String, Integer> valueToIdMap = new HashMap<String, Integer>(); // NOPMD
 	private final List<String> values = new ArrayList<String>();
 
+	SerializerStringRegistry() {
+		// Nothing to do
+	}
+	
 	@Override
 	public long getId() {
 		throw new UnsupportedOperationException();

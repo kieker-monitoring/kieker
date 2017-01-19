@@ -17,6 +17,7 @@
 package kieker.monitoring.writer.serializer;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.Collection;
 
 import kieker.common.configuration.Configuration;
@@ -31,6 +32,8 @@ import kieker.common.record.IMonitoringRecord;
  */
 public class StringSerializer extends AbstractMonitoringRecordSerializer {
 
+	private static final Charset CHARSET = Charset.forName("UTF-8");
+	
 	/**
 	 * Creates a new serializer using the given configuration.
 	 *
@@ -42,7 +45,7 @@ public class StringSerializer extends AbstractMonitoringRecordSerializer {
 	}
 
 	private static byte[] stringBuilderToBytes(final StringBuilder builder) {
-		return builder.toString().getBytes();
+		return builder.toString().getBytes(CHARSET);
 	}
 
 	@Override

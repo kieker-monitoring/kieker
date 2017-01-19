@@ -17,6 +17,7 @@
 package kieker.monitoring.writer.serializer;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,6 +38,12 @@ public class BinarySerializer extends AbstractContainerFormatSerializer {
 	/** Format identifier. Reads "DFLT" in ASCII encoding. */
 	public static final int FORMAT_IDENTIFIER = 0x44464C54;
 
+	/** Encoding to use for Strings. */
+	private static final String ENCODING_NAME = "UTF-8";
+	
+	/** Charset to use for Strings. */
+	private static final Charset CHARSET = Charset.forName(ENCODING_NAME);
+	
 	/**
 	 * Creates a new serializer using the given configuration.
 	 *
@@ -98,7 +105,7 @@ public class BinarySerializer extends AbstractContainerFormatSerializer {
 		VariableLengthEncoding.encodeInt(allStrings.size(), buffer);
 
 		for (final String string : allStrings) {
-			final byte[] stringBytes = string.getBytes();
+			final byte[] stringBytes = string.getBytes(CHARSET);
 			final int length = stringBytes.length;
 
 			// We assume that the strings are usually short, and therefore use

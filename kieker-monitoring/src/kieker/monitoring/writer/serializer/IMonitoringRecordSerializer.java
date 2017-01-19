@@ -33,25 +33,42 @@ public interface IMonitoringRecordSerializer {
 	/**
 	 * Serializes a single record into the given byte buffer.
 	 *
+	 * @param record
+	 *            The record to serialize
+	 * @param buffer
+	 *            The buffer to write to
 	 * @return The number of bytes written to the buffer
+	 * @since 1.13
 	 */
 	public int serializeRecord(IMonitoringRecord record, ByteBuffer buffer);
 
 	/**
 	 * Serializes multiple monitoring records into the given byte buffer.
 	 *
+	 * @param records
+	 *            The records to serialize
+	 * @param buffer
+	 *            The buffer to write to
 	 * @return The number of bytes written to the buffer
+	 * @since 1.13
 	 */
 	public int serializeRecords(Collection<IMonitoringRecord> records, ByteBuffer buffer);
 
 	/**
-	 * Implementing classes should indicate an initialization error by throwing an {@link Exception}.
+	 * Implementing classes should indicate an initialization error by throwing
+	 * an {@link Exception}.
+	 * 
+	 * @throws Exception
+	 *             If the initialization fails
+	 * @since 1.13
 	 */
 	public void init() throws Exception;
 
 	/**
-	 * Called by the collector to announce a shutdown of monitoring.
-	 * Serializers should return as soon as it is safe to terminate Kieker.
+	 * Called by the collector to announce a shutdown of monitoring. Serializers
+	 * should return as soon as it is safe to terminate Kieker.
+	 * 
+	 * @since 1.13
 	 */
 	public void terminate();
 

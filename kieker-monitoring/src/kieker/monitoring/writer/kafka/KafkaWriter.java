@@ -36,18 +36,18 @@ public class KafkaWriter extends AbstractRawDataWriter {
 	
 	private static final String PREFIX = KafkaWriter.class.getName() + ".";
 	
-	/** The name of the configuration property for the topic name. */
-	public static final String CONFIG_PROPERTY_TOPIC_NAME = PREFIX + "topicName";
-	/** The name of the configuration property for the bootstrap servers. */
-	public static final String CONFIG_PROPERTY_BOOTSTRAP_SERVERS = PREFIX + "bootstrapServers";
 	/** The name of the configuration property for the acks parameter. */
 	public static final String CONFIG_PROPERTY_ACKS = PREFIX + "acks";
 	/** The name of the configuration property for the batch size. */
 	public static final String CONFIG_PROPERTY_BATCH_SIZE = PREFIX + "batchSize";
-	/** The name of the configuration property for the linger interval. */
-	public static final String CONFIG_PROPERTY_LINGER_MS = PREFIX + "lingerMs";
+	/** The name of the configuration property for the bootstrap servers. */
+	public static final String CONFIG_PROPERTY_BOOTSTRAP_SERVERS = PREFIX + "bootstrapServers";	
 	/** The name of the configuration property for the buffer memory size. */
 	public static final String CONFIG_PROPERTY_BUFFER_MEMORY = PREFIX + "bufferMemory";
+	/** The name of the configuration property for the linger interval. */
+	public static final String CONFIG_PROPERTY_LINGER_MS = PREFIX + "lingerMs";
+	/** The name of the configuration property for the topic name. */
+	public static final String CONFIG_PROPERTY_TOPIC_NAME = PREFIX + "topicName";
 	
 	private static final String DEFAULT_ACKS = "all";
 	private static final int DEFAULT_BATCH_SIZE = 16384;
@@ -63,6 +63,10 @@ public class KafkaWriter extends AbstractRawDataWriter {
 	
 	private Producer<String, byte[]> producer;
 	
+	/**
+	 * Creates a new Kafka writer using the given configuration.
+	 * @param configuration The configuration to use
+	 */
 	public KafkaWriter(final Configuration configuration) {
 		super(configuration);
 		
@@ -76,7 +80,7 @@ public class KafkaWriter extends AbstractRawDataWriter {
 
 	@Override
 	public void init() throws Exception {
-		Properties properties = new Properties();
+		final Properties properties = new Properties();
 		
 		properties.put("bootstrap.servers", this.bootstrapServers);
 		properties.put("acks", this.acknowledges);
@@ -100,10 +104,10 @@ public class KafkaWriter extends AbstractRawDataWriter {
 	@Override
 	public void writeData(final ByteBuffer buffer, final int offset, final int length) {
 		buffer.position(offset);
-		byte[] rawData = new byte[length];
+		final byte[] rawData = new byte[length];
 		buffer.get(rawData);
 		
-		ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(this.topicName, rawData);
+		final ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(this.topicName, rawData);
 		this.producer.send(record);
 	}
 
