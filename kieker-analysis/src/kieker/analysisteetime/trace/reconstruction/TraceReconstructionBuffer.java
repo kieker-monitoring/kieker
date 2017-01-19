@@ -44,6 +44,7 @@ public class TraceReconstructionBuffer {
 	private final TraceFactory factory = TraceFactory.eINSTANCE;
 	private final DeploymentRoot deploymentRoot;
 	private final TraceMetadata traceMetadata;
+	private final Instant traceStart;
 
 	private final Deque<BeforeOperationEvent> stack = new LinkedList<>();
 	private OperationCall root;
@@ -52,6 +53,10 @@ public class TraceReconstructionBuffer {
 	public TraceReconstructionBuffer(final DeploymentRoot deploymentRoot, final TraceMetadata traceMetadata) {
 		this.deploymentRoot = deploymentRoot;
 		this.traceMetadata = traceMetadata;
+		// TODO Temp Get from TraceMetadata
+		// final long epochMilli = 0;
+		// this.traceStart = Instant.ofEpochMilli(epochMilli);
+		this.traceStart = Instant.now();
 	}
 
 	public void handleBeforeOperationEventRecord(final BeforeOperationEvent record) {
@@ -60,9 +65,8 @@ public class TraceReconstructionBuffer {
 		final OperationCall newCall = this.factory.createOperationCall();
 
 		// TODO Calculate Start
-		final long epochMilli = 0; // TODO Temp
-		final long nanosOffset = 0; // TODO Temp
-		newCall.setStart(Instant.ofEpochMilli(epochMilli).plusNanos(nanosOffset));
+		final long nanosOffset = this.traceMetadata.getLoggingTimestamp() - record.getTimestamp();
+		newCall.setStart(this.traceStart.plusNanos(nanosOffset));
 
 		// TODO Retrieve Deployed Operation
 		final DeploymentContext context = this.deploymentRoot.getDeploymentContexts().get(this.traceMetadata.getHostname());
