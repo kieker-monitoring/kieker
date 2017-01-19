@@ -35,7 +35,7 @@ import teetime.stage.basic.AbstractTransformation;
  *
  * @author Nils Christian Ehmke, Sören Henning
  */
-final class TraceReconstructorStage extends AbstractTransformation<IFlowRecord, TraceRoot> {
+public class TraceReconstructorStage extends AbstractTransformation<IFlowRecord, TraceRoot> {
 
 	private final TraceReconstructor traceReconstructor;
 
