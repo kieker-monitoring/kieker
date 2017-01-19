@@ -151,22 +151,13 @@ public interface AssemblyPackage extends EPackage {
 	int ASSEMBLY_COMPONENT = 2;
 
 	/**
-	 * The feature id for the '<em><b>Signature</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASSEMBLY_COMPONENT__SIGNATURE = 0;
-
-	/**
 	 * The feature id for the '<em><b>Assembly Operations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS = 1;
+	int ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS = 0;
 
 	/**
 	 * The feature id for the '<em><b>Component Type</b></em>' reference.
@@ -175,7 +166,7 @@ public interface AssemblyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ASSEMBLY_COMPONENT__COMPONENT_TYPE = 2;
+	int ASSEMBLY_COMPONENT__COMPONENT_TYPE = 1;
 
 	/**
 	 * The number of structural features of the '<em>Component</em>' class.
@@ -184,7 +175,7 @@ public interface AssemblyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ASSEMBLY_COMPONENT_FEATURE_COUNT = 3;
+	int ASSEMBLY_COMPONENT_FEATURE_COUNT = 2;
 
 	/**
 	 * The operation id for the '<em>Get Assembly Root</em>' operation.
@@ -261,22 +252,13 @@ public interface AssemblyPackage extends EPackage {
 	int ASSEMBLY_OPERATION = 4;
 
 	/**
-	 * The feature id for the '<em><b>Signature</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASSEMBLY_OPERATION__SIGNATURE = 0;
-
-	/**
 	 * The feature id for the '<em><b>Operation Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASSEMBLY_OPERATION__OPERATION_TYPE = 1;
+	int ASSEMBLY_OPERATION__OPERATION_TYPE = 0;
 
 	/**
 	 * The number of structural features of the '<em>Operation</em>' class.
@@ -285,7 +267,7 @@ public interface AssemblyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ASSEMBLY_OPERATION_FEATURE_COUNT = 2;
+	int ASSEMBLY_OPERATION_FEATURE_COUNT = 1;
 
 	/**
 	 * The operation id for the '<em>Get Assembly Component</em>' operation.
@@ -372,17 +354,6 @@ public interface AssemblyPackage extends EPackage {
 	EClass getAssemblyComponent();
 
 	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getSignature <em>Signature</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Signature</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getSignature()
-	 * @see #getAssemblyComponent()
-	 * @generated
-	 */
-	EAttribute getAssemblyComponent_Signature();
-
-	/**
 	 * Returns the meta object for the map '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getAssemblyOperations <em>Assembly Operations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -457,17 +428,6 @@ public interface AssemblyPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getAssemblyOperation();
-
-	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation#getSignature <em>Signature</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Signature</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation#getSignature()
-	 * @see #getAssemblyOperation()
-	 * @generated
-	 */
-	EAttribute getAssemblyOperation_Signature();
 
 	/**
 	 * Returns the meta object for the reference '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation#getOperationType <em>Operation Type</em>}'.
@@ -568,14 +528,6 @@ public interface AssemblyPackage extends EPackage {
 		EClass ASSEMBLY_COMPONENT = eINSTANCE.getAssemblyComponent();
 
 		/**
-		 * The meta object literal for the '<em><b>Signature</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ASSEMBLY_COMPONENT__SIGNATURE = eINSTANCE.getAssemblyComponent_Signature();
-
-		/**
 		 * The meta object literal for the '<em><b>Assembly Operations</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -634,14 +586,6 @@ public interface AssemblyPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ASSEMBLY_OPERATION = eINSTANCE.getAssemblyOperation();
-
-		/**
-		 * The meta object literal for the '<em><b>Signature</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ASSEMBLY_OPERATION__SIGNATURE = eINSTANCE.getAssemblyOperation_Signature();
 
 		/**
 		 * The meta object literal for the '<em><b>Operation Type</b></em>' reference feature.

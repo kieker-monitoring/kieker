@@ -34,7 +34,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyComponentImpl#getSignature <em>Signature</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyComponentImpl#getAssemblyOperations <em>Assembly Operations</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyComponentImpl#getComponentType <em>Component Type</em>}</li>
  * </ul>
@@ -42,26 +41,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * @generated
  */
 public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implements AssemblyComponent {
-	/**
-	 * The default value of the '{@link #getSignature() <em>Signature</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSignature()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String SIGNATURE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getSignature() <em>Signature</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSignature()
-	 * @generated
-	 * @ordered
-	 */
-	protected String signature = SIGNATURE_EDEFAULT;
-
 	/**
 	 * The cached value of the '{@link #getAssemblyOperations() <em>Assembly Operations</em>}' map.
 	 * <!-- begin-user-doc -->
@@ -99,27 +78,6 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	protected EClass eStaticClass() {
 		return AssemblyPackage.Literals.ASSEMBLY_COMPONENT;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getSignature() {
-		return signature;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setSignature(String newSignature) {
-		String oldSignature = signature;
-		signature = newSignature;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_COMPONENT__SIGNATURE, oldSignature, signature));
 	}
 
 	/**
@@ -211,8 +169,6 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_COMPONENT__SIGNATURE:
-				return getSignature();
 			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
 				if (coreType) return getAssemblyOperations();
 				else return getAssemblyOperations().map();
@@ -231,9 +187,6 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_COMPONENT__SIGNATURE:
-				setSignature((String)newValue);
-				return;
 			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
 				((EStructuralFeature.Setting)getAssemblyOperations()).set(newValue);
 				return;
@@ -252,9 +205,6 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_COMPONENT__SIGNATURE:
-				setSignature(SIGNATURE_EDEFAULT);
-				return;
 			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
 				getAssemblyOperations().clear();
 				return;
@@ -273,8 +223,6 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_COMPONENT__SIGNATURE:
-				return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
 			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
 				return assemblyOperations != null && !assemblyOperations.isEmpty();
 			case AssemblyPackage.ASSEMBLY_COMPONENT__COMPONENT_TYPE:
@@ -295,22 +243,6 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 				return getAssemblyRoot();
 		}
 		return super.eInvoke(operationID, arguments);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (signature: ");
-		result.append(signature);
-		result.append(')');
-		return result.toString();
 	}
 
 } //AssemblyComponentImpl

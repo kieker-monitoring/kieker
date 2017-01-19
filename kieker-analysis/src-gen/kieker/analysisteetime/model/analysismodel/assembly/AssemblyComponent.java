@@ -16,7 +16,6 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getSignature <em>Signature</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getAssemblyOperations <em>Assembly Operations</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getComponentType <em>Component Type</em>}</li>
  * </ul>
@@ -26,32 +25,6 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface AssemblyComponent extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Signature</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Signature</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Signature</em>' attribute.
-	 * @see #setSignature(String)
-	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage#getAssemblyComponent_Signature()
-	 * @model
-	 * @generated
-	 */
-	String getSignature();
-
-	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getSignature <em>Signature</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Signature</em>' attribute.
-	 * @see #getSignature()
-	 * @generated
-	 */
-	void setSignature(String value);
-
 	/**
 	 * Returns the value of the '<em><b>Assembly Operations</b></em>' map.
 	 * The key is of type {@link java.lang.String},
