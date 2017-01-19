@@ -83,7 +83,6 @@
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/EStringToAssemblyComponentMapEntry/value"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//assembly/AssemblyComponent">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/AssemblyComponent/signature"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyComponent/assemblyOperations"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyComponent/componentType"/>
@@ -94,7 +93,6 @@
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/EStringToAssemblyOperationMapEntry/value"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//assembly/AssemblyOperation">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/AssemblyOperation/signature"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyOperation/operationType"/>
         <genOperations ecoreOperation="analysismodel.ecore#//assembly/AssemblyOperation/getAssemblyComponent"/>

@@ -27,33 +27,12 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyOperationImpl#getSignature <em>Signature</em>}</li>
  *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyOperationImpl#getOperationType <em>Operation Type</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implements AssemblyOperation {
-	/**
-	 * The default value of the '{@link #getSignature() <em>Signature</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSignature()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String SIGNATURE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getSignature() <em>Signature</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSignature()
-	 * @generated
-	 * @ordered
-	 */
-	protected String signature = SIGNATURE_EDEFAULT;
-
 	/**
 	 * The cached value of the '{@link #getOperationType() <em>Operation Type</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -81,27 +60,6 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	protected EClass eStaticClass() {
 		return AssemblyPackage.Literals.ASSEMBLY_OPERATION;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getSignature() {
-		return signature;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setSignature(String newSignature) {
-		String oldSignature = signature;
-		signature = newSignature;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AssemblyPackage.ASSEMBLY_OPERATION__SIGNATURE, oldSignature, signature));
 	}
 
 	/**
@@ -167,8 +125,6 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_OPERATION__SIGNATURE:
-				return getSignature();
 			case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
 				if (resolve) return getOperationType();
 				return basicGetOperationType();
@@ -184,9 +140,6 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_OPERATION__SIGNATURE:
-				setSignature((String)newValue);
-				return;
 			case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
 				setOperationType((OperationType)newValue);
 				return;
@@ -202,9 +155,6 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_OPERATION__SIGNATURE:
-				setSignature(SIGNATURE_EDEFAULT);
-				return;
 			case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
 				setOperationType((OperationType)null);
 				return;
@@ -220,8 +170,6 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_OPERATION__SIGNATURE:
-				return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
 			case AssemblyPackage.ASSEMBLY_OPERATION__OPERATION_TYPE:
 				return operationType != null;
 		}
@@ -240,22 +188,6 @@ public class AssemblyOperationImpl extends MinimalEObjectImpl.Container implemen
 				return getAssemblyComponent();
 		}
 		return super.eInvoke(operationID, arguments);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (signature: ");
-		result.append(signature);
-		result.append(')');
-		return result.toString();
 	}
 
 } //AssemblyOperationImpl
