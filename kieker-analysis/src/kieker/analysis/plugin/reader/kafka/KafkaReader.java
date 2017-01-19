@@ -82,7 +82,7 @@ public class KafkaReader extends AbstractRawDataReader {
 	
 	private KafkaConsumer<String, byte[]> consumer;
 	
-	private volatile boolean terminated = false;
+	private volatile boolean terminated = false; // NOPMD
 	
 	/**
 	 * Creates a new Kafka reader using the givend data.
@@ -144,7 +144,7 @@ public class KafkaReader extends AbstractRawDataReader {
 
 		try {
 			while (!this.terminated) {
-				ConsumerRecords<String, byte[]> records = this.consumer.poll(100);
+				final ConsumerRecords<String, byte[]> records = this.consumer.poll(100);
 				
 				this.processRecords(records);
 			}
@@ -156,7 +156,7 @@ public class KafkaReader extends AbstractRawDataReader {
 	}
 	
 	private void processRecords(final ConsumerRecords<String, byte[]> records) {
-		for (ConsumerRecord<String, byte[]> record : records) {
+		for (final ConsumerRecord<String, byte[]> record : records) {
 			final byte[] data = record.value();
 			this.decodeAndDeliverRecords(data, OUTPUT_PORT_NAME_RECORDS);
 		}

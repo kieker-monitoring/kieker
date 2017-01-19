@@ -17,6 +17,7 @@
 package kieker.analysis.plugin.reader.newio.deserializer;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,12 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 	/** Format identifier. Reads "DFLT" in ASCII encoding. */
 	public static final int FORMAT_IDENTIFIER = 0x44464C54;
 
+	/** Encoding to use for Strings. */
+	private static final String ENCODING_NAME = "UTF-8";
+
+	/** Charset for the encoding. */
+	private static final Charset CHARSET = Charset.forName(ENCODING_NAME);
+	
 	private final CachedRecordFactoryCatalog cachedRecordFactoryCatalog = CachedRecordFactoryCatalog.getInstance();
 
 	/**
@@ -85,7 +92,7 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 			final byte[] entryDataBytes = new byte[entryLength];
 			buffer.get(entryDataBytes);
 
-			final String entryData = new String(entryDataBytes);
+			final String entryData = new String(entryDataBytes, CHARSET);
 			values.add(entryData);
 		}
 
