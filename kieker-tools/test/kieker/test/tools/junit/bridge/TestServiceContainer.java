@@ -25,8 +25,7 @@ import org.junit.rules.TemporaryFolder;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
-import kieker.monitoring.writer.filesystem.AsyncFsWriter;
+import kieker.monitoring.writernew.filesystem.AsciiFileWriter;
 import kieker.tools.bridge.ServiceContainer;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 
@@ -34,9 +33,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Test the {@link ServiceContainer} for the proper use of the {@link kieker.tools.bridge.connector.IServiceConnector} interface.
- * 
+ *
  * @author Pascale Brandt, Reiner Jung
- * 
+ *
  * @since 1.8
  */
 public class TestServiceContainer extends AbstractKiekerTest {
@@ -54,7 +53,7 @@ public class TestServiceContainer extends AbstractKiekerTest {
 
 	/**
 	 * Test the {@link kieker.tools.bridge.connector.IServiceConnector} interface.
-	 * 
+	 *
 	 * @throws IOException
 	 *             if an IO error occurs
 	 * @throws ConnectorDataTransmissionException
@@ -68,20 +67,19 @@ public class TestServiceContainer extends AbstractKiekerTest {
 		 * next steps stays in CLIServerMain//
 		 * First element is a default configuration like in CLIServerMain(),
 		 * the second part starts a new record which is written in the TestServiceConnector class.
-		 * 
+		 *
 		 */
 
 		final File path = this.tmpFolder.getRoot();
 
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 
-		final String writer = AsyncFsWriter.class.getName();
-		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXENTRIESINFILE, "1");
+		configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "1");
 		// The maximal size of the log file must be greater than the expected number of log entries to ensure, that the framework allows to write more records, which
 		// we then can detect as failures. Otherwise writing more than expected records would be hindered by the framework itself.
-		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXLOGFILES, String.valueOf(ConfigurationParameters.SEND_NUMBER_OF_RECORDS * 2));
-		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXLOGSIZE, "-1");
-		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_PATH, path.getCanonicalPath());
+		configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, String.valueOf(ConfigurationParameters.SEND_NUMBER_OF_RECORDS * 2));
+		configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGSIZE, "-1");
+		configuration.setProperty(AsciiFileWriter.CONFIG_PATH, path.getCanonicalPath());
 
 		// Create the service container and deploy the TestServiceConnector.
 		final ServiceContainer serviceContainer = new ServiceContainer(configuration,

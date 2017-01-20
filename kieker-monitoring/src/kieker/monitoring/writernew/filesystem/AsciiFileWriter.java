@@ -52,13 +52,13 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	/** The name of the configuration for the charset name (e.g. "UTF-8") */
 	static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
 	/** The name of the configuration determining the maximal number of entries in a file. */
-	static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
+	public static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
 	/** The name of the configuration key determining to enable/disable compression of the record log files */
 	static final String CONFIG_SHOULD_COMPRESS = PREFIX + "shouldCompress";
 	/** The name of the configuration determining the maximal size of the files in MiB. */
-	static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
+	public static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
 	/** The name of the configuration determining the maximal number of log files. */
-	static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
+	public static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
 
 	private final Path logFolder;
 	private final AsciiFileWriterPool fileWriterPool;
