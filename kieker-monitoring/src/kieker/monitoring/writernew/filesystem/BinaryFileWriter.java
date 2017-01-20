@@ -16,6 +16,7 @@
 
 package kieker.monitoring.writernew.filesystem;
 
+import java.io.FilenameFilter;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
@@ -31,6 +32,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.FSUtil;
+import kieker.common.util.filesystem.FileExtensionFilter;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
@@ -44,7 +46,7 @@ import kieker.monitoring.writernew.WriterUtil;
  *
  * @since 1.9
  */
-public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
+public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegistryListener<String>, IFileWriter {
 
 	private static final Log LOG = LogFactory.getLog(BinaryFileWriter.class);
 
@@ -154,7 +156,13 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 		this.mappingFileWriter.close();
 	}
 
+	@Override
 	public Path getLogFolder() {
 		return this.logFolder;
+	}
+
+	@Override
+	public FilenameFilter getFileNameFilter() {
+		return FileExtensionFilter.BIN;
 	}
 }

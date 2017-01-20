@@ -16,38 +16,17 @@
 
 package kieker.monitoring.writernew.filesystem;
 
-import java.io.File;
-
-import kieker.common.record.misc.EmptyRecord;
-import kieker.monitoring.writernew.AbstractMonitoringWriter;
+import java.io.FilenameFilter;
+import java.nio.file.Path;
 
 /**
  * @author Christian Wulf
  *
  * @since 1.13
  */
-final class FilesystemTestUtil {
+interface IFileWriter {
 
-	private FilesystemTestUtil() {
-		// utility class
-	}
+	FilenameFilter getFileNameFilter();
 
-	public static void writeMonitoringRecords(final AbstractMonitoringWriter writer, final int numRecords) {
-		for (int i = 0; i < numRecords; i++) {
-			writer.writeMonitoringRecord(new EmptyRecord());
-		}
-	}
-
-	public static <W extends AbstractMonitoringWriter & IFileWriter> File[] executeMaxLogFilesTest(final int numRecordsToWrite, final W writer) {
-		writer.onStarting();
-		FilesystemTestUtil.writeMonitoringRecords(writer, numRecordsToWrite);
-		writer.onTerminating();
-
-		// test assertion
-		final File storePath = writer.getLogFolder().toFile();
-
-		final File[] recordFiles = storePath.listFiles(writer.getFileNameFilter());
-		return recordFiles;
-	}
-
+	Path getLogFolder();
 }

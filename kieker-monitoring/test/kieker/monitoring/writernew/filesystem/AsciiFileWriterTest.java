@@ -160,8 +160,13 @@ public class AsciiFileWriterTest {
 			for (int j = 0; j < numRecordsToWriteValues.length; j++) {
 				final int numRecordsToWrite = numRecordsToWriteValues[j];
 
+				// test preparation
+				this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
+				this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, String.valueOf(maxLogFiles));
+				final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
+
 				// test execution
-				final File[] recordFiles = this.executeMaxLogFilesTest(maxLogFiles, numRecordsToWrite);
+				final File[] recordFiles = FilesystemTestUtil.executeMaxLogFilesTest(numRecordsToWrite, writer);
 
 				// test assertion
 				final String reasonMessage = "Passed arguments: maxLogFiles=" + maxLogFiles + ", numRecordsToWrite=" + numRecordsToWrite;
@@ -169,22 +174,6 @@ public class AsciiFileWriterTest {
 				Assert.assertThat(reasonMessage, recordFiles.length, CoreMatchers.is(expectedNumRecordFiles));
 			}
 		}
-	}
-
-	private File[] executeMaxLogFilesTest(final int maxLogFiles, final int numRecordsToWrite) {
-		// test preparation
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, String.valueOf(maxLogFiles));
-
-		// test execution
-		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
-		writer.onStarting();
-		FilesystemTestUtil.writeMonitoringRecords(writer, numRecordsToWrite);
-		writer.onTerminating();
-
-		// test assertion
-		final File storePath = writer.getLogFolder().toFile();
-
-		return storePath.listFiles(FileExtensionFilter.DAT);
 	}
 
 }

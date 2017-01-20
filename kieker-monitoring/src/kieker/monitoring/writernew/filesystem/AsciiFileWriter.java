@@ -16,6 +16,7 @@
 
 package kieker.monitoring.writernew.filesystem;
 
+import java.io.FilenameFilter;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,6 +30,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.FSUtil;
+import kieker.common.util.filesystem.FileExtensionFilter;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.registry.IRegistryListener;
 import kieker.monitoring.registry.IWriterRegistry;
@@ -40,7 +42,7 @@ import kieker.monitoring.writernew.AbstractMonitoringWriter;
  *
  * @since < 0.9
  */
-public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
+public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegistryListener<String>, IFileWriter {
 
 	private static final Log LOG = LogFactory.getLog(AsciiFileWriter.class);
 
@@ -132,8 +134,14 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		this.mappingFileWriter.close();
 	}
 
+	@Override
 	public Path getLogFolder() {
 		return this.logFolder;
+	}
+
+	@Override
+	public FilenameFilter getFileNameFilter() {
+		return FileExtensionFilter.DAT;
 	}
 
 }

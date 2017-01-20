@@ -148,8 +148,6 @@ public class BinaryFileWriterTest {
 
 	@Test
 	public final void testMaxLogFiles() {
-		// test preparation
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
 		final int[] maxLogFilesValues = { -1, 0, 1, 2 };
 		final int[] numRecordsToWriteValues = { 0, 1, 2, 3, 10 };
 		final int[][] expectedNumRecordFilesValues = { { 0, 1, 1, 2, 5, }, { 0, 1, 1, 2, 5 }, { 0, 1, 1, 1, 1 }, { 0, 1, 1, 2, 2 } };
@@ -160,8 +158,13 @@ public class BinaryFileWriterTest {
 			for (int j = 0; j < numRecordsToWriteValues.length; j++) {
 				final int numRecordsToWrite = numRecordsToWriteValues[j];
 
+				// test preparation
+				this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXENTRIESINFILE, "2");
+				this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXLOGFILES, String.valueOf(maxLogFiles));
+				final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
+
 				// test execution
-				final File[] recordFiles = this.executeMaxLogFilesTest(maxLogFiles, numRecordsToWrite);
+				final File[] recordFiles = FilesystemTestUtil.executeMaxLogFilesTest(numRecordsToWrite, writer);
 
 				// test assertion
 				final String reasonMessage = "Passed arguments: maxLogFiles=" + maxLogFiles + ", numRecordsToWrite=" + numRecordsToWrite;
@@ -171,19 +174,4 @@ public class BinaryFileWriterTest {
 		}
 	}
 
-	private File[] executeMaxLogFilesTest(final int maxLogFiles, final int numRecordsToWrite) {
-		// test preparation
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, String.valueOf(maxLogFiles));
-
-		// test execution
-		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
-		writer.onStarting();
-		FilesystemTestUtil.writeMonitoringRecords(writer, numRecordsToWrite);
-		writer.onTerminating();
-
-		// test assertion
-		final File storePath = writer.getLogFolder().toFile();
-
-		return storePath.listFiles(FileExtensionFilter.BIN);
-	}
 }
