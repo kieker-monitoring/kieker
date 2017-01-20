@@ -181,8 +181,8 @@ public class AsciiFileWriterTest {
 
 	@Test
 	public void testMaxLogSize() throws Exception {
-		// size = $ + compressed record class name + ; + record.toString
-		final int recordSizeInBytes = 1 + 4 + 1 + new EmptyRecord().toString().length(); // 14=6+8
+		// size = $ + compressed record class name (=0) + ; + record.toString + newLine (\n or \n\r)
+		final int recordSizeInBytes = 1 + 1 + 1 + new EmptyRecord().toString().length() + System.lineSeparator().length(); // 7=3+2+1/2
 
 		// semantics of the tuple: (maxMegaBytesPerFile, megaBytesToWrite, expectedNumRecordFiles)
 		final int[][] testInputTuples = {

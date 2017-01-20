@@ -16,7 +16,7 @@
 
 package kieker.monitoring.writernew.filesystem;
 
-import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -47,17 +47,19 @@ public class AsciiFileWriterPool extends AbstractWriterPool {
 	// private final int maxAmountOfFiles;
 	// private int currentAmountOfFiles;
 
-	private PrintWriter currentFileWriter;
 	private final boolean shouldCompress;
 	private final String fileExtensionWithDot;
 	private final int maxAmountOfFiles;
-	private final int maxBytesPerFile;
+	private final long maxBytesPerFile;
+
+	private PrintWriter currentFileWriter;
+	private MeasuringWriter currentMeasuringWriter;
 
 	public AsciiFileWriterPool(final Log writerLog, final Path folder, final String charsetName, final int maxEntriesInFile, final boolean shouldCompress,
 			final int maxAmountOfFiles, final int maxMegaBytesPerFile) {
 		super(writerLog, folder);
 		this.maxAmountOfFiles = maxAmountOfFiles;
-		this.maxBytesPerFile = maxMegaBytesPerFile * 1024 * 1024; // conversion from MB to Bytes
+		this.maxBytesPerFile = maxMegaBytesPerFile * 1024L * 1024L; // conversion from MB to Bytes
 		this.charset = Charset.forName(charsetName);
 		this.maxEntriesInFile = maxEntriesInFile;
 		this.numEntriesInCurrentFile = maxEntriesInFile; // triggers file creation
@@ -72,13 +74,15 @@ public class AsciiFileWriterPool extends AbstractWriterPool {
 	public PrintWriter getFileWriter() {
 		this.numEntriesInCurrentFile++;
 
-		if (this.numEntriesInCurrentFile > this.maxEntriesInFile) {
+		// (buffer overflow aware comparison) means: numEntriesInCurrentFile > maxEntriesInFile
+		if ((this.numEntriesInCurrentFile - this.maxEntriesInFile) > 0) {
 			this.onThresholdExceeded();
 		}
 
-		// if (this.currentChannel.getBytesWritten() > this.maxBytesPerFile) {
-		// this.onThresholdExceeded();
-		// }
+		// IMPROVE correctness: replace the property maxBytesPerFile by maxCharactersPerFile
+		if (this.currentMeasuringWriter.getCharactersWritten() > this.maxBytesPerFile) {
+			this.onThresholdExceeded();
+		}
 
 		if (this.logFiles.size() > this.maxAmountOfFiles) {
 			this.onMaxLogFilesExceeded();
@@ -106,9 +110,10 @@ public class AsciiFileWriterPool extends AbstractWriterPool {
 
 			// this.currentFileWriter = Channels.newChannel(outputStream);
 
-			outputStream = new BufferedOutputStream(outputStream);
-			final Writer writer = new OutputStreamWriter(outputStream, this.charset);
-			this.currentFileWriter = new PrintWriter(writer);
+			Writer writer = new OutputStreamWriter(outputStream, this.charset);
+			writer = new BufferedWriter(writer);
+			this.currentMeasuringWriter = new MeasuringWriter(writer);
+			this.currentFileWriter = new PrintWriter(this.currentMeasuringWriter);
 		} catch (final IOException e) {
 			throw new IllegalStateException("This exception should not have been thrown.", e);
 		}
