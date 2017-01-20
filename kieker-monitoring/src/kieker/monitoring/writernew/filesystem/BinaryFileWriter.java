@@ -19,7 +19,6 @@ package kieker.monitoring.writernew.filesystem;
 import java.io.FilenameFilter;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
-import java.nio.channels.WritableByteChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
@@ -39,7 +38,6 @@ import kieker.monitoring.registry.IRegistryListener;
 import kieker.monitoring.registry.RegisterAdapter;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writernew.AbstractMonitoringWriter;
-import kieker.monitoring.writernew.WriterUtil;
 
 /**
  * @author Jan Waller, Christian Wulf
@@ -55,8 +53,8 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 	static final String CONFIG_PATH = PREFIX + "customStoragePath";
 	/** The name of the configuration determining the maximal number of entries in a file. */
 	static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
-	// /** The name of the configuration determining the maximal size of the files in MiB. */
-	// private static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
+	/** The name of the configuration determining the maximal size of the files in MiB. */
+	static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
 	/** The name of the configuration determining the maximal number of log files. */
 	static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
 	/** The name of the configuration key for the charset name of the mapping file */
@@ -80,18 +78,23 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 	public BinaryFileWriter(final Configuration configuration) {
 		super(configuration);
 		this.logFolder = this.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH));
-		final int maxEntriesInFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
+		int maxEntriesPerFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
+		int maxMegaBytesPerFile = configuration.getIntProperty(CONFIG_MAXLOGSIZE);
+		int maxAmountOfFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
+
+		maxEntriesPerFile = (maxEntriesPerFile <= 0) ? Integer.MAX_VALUE : maxEntriesPerFile;
+		maxMegaBytesPerFile = (maxMegaBytesPerFile <= 0) ? Integer.MAX_VALUE : maxMegaBytesPerFile;
+		maxAmountOfFiles = (maxAmountOfFiles <= 0) ? Integer.MAX_VALUE : maxAmountOfFiles;
+
 		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME, "UTF-8");
 		// TODO should we check for buffers too small for a single record?
 		final int bufferSize = this.configuration.getIntProperty(CONFIG_BUFFERSIZE);
 		final boolean shouldCompress = configuration.getBooleanProperty(CONFIG_SHOULD_COMPRESS);
 		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
-		int maxAmountOfFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
-		maxAmountOfFiles = (maxAmountOfFiles <= 0) ? Integer.MAX_VALUE : maxAmountOfFiles;
 
 		this.buffer = ByteBuffer.allocateDirect(bufferSize);
 		this.mappingFileWriter = new MappingFileWriter(this.logFolder, charsetName);
-		this.fileWriterPool = new BinaryFileWriterPool(LOG, this.logFolder, maxEntriesInFile, shouldCompress, maxAmountOfFiles);
+		this.fileWriterPool = new BinaryFileWriterPool(LOG, this.logFolder, maxEntriesPerFile, shouldCompress, maxAmountOfFiles, maxMegaBytesPerFile);
 
 		this.writerRegistry = new WriterRegistry(this);
 		this.registerStringsAdapter = new RegisterAdapter<String>(this.writerRegistry);
@@ -118,13 +121,13 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 
 	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		final WritableByteChannel channel = this.fileWriterPool.getFileWriter(this.buffer);
+		final PooledFileChannel channel = this.fileWriterPool.getFileWriter(this.buffer);
 
 		monitoringRecord.registerStrings(this.registerStringsAdapter);
 
 		final ByteBuffer recordBuffer = this.buffer;
 		if ((4 + 8 + monitoringRecord.getSize()) > recordBuffer.remaining()) {
-			WriterUtil.flushBuffer(recordBuffer, channel, LOG);
+			channel.flush(recordBuffer, LOG);
 		}
 
 		final String recordClassName = monitoringRecord.getClass().getName();
@@ -135,7 +138,7 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 		monitoringRecord.writeBytes(recordBuffer, this.writeBytesAdapter);
 
 		if (this.flush) {
-			WriterUtil.flushBuffer(recordBuffer, channel, LOG);
+			channel.flush(recordBuffer, LOG);
 		}
 	}
 

@@ -55,8 +55,8 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
 	/** The name of the configuration key determining to enable/disable compression of the record log files */
 	static final String CONFIG_SHOULD_COMPRESS = PREFIX + "shouldCompress";
-	// /** The name of the configuration determining the maximal size of the files in MiB. */
-	// static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
+	/** The name of the configuration determining the maximal size of the files in MiB. */
+	static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
 	/** The name of the configuration determining the maximal number of log files. */
 	static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
 
@@ -68,13 +68,19 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	public AsciiFileWriter(final Configuration configuration) {
 		super(configuration);
 		this.logFolder = this.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH));
-		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME, "UTF-8");
-		final int maxEntriesInFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
-		final boolean shouldCompress = configuration.getBooleanProperty(CONFIG_SHOULD_COMPRESS);
+
+		int maxEntriesPerFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
+		int maxMegaBytesPerFile = configuration.getIntProperty(CONFIG_MAXLOGSIZE);
 		int maxAmountOfFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
+
+		maxEntriesPerFile = (maxEntriesPerFile <= 0) ? Integer.MAX_VALUE : maxEntriesPerFile;
+		maxMegaBytesPerFile = (maxMegaBytesPerFile <= 0) ? Integer.MAX_VALUE : maxMegaBytesPerFile;
 		maxAmountOfFiles = (maxAmountOfFiles <= 0) ? Integer.MAX_VALUE : maxAmountOfFiles;
 
-		this.fileWriterPool = new AsciiFileWriterPool(LOG, this.logFolder, charsetName, maxEntriesInFile, shouldCompress, maxAmountOfFiles);
+		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME, "UTF-8");
+		final boolean shouldCompress = configuration.getBooleanProperty(CONFIG_SHOULD_COMPRESS);
+
+		this.fileWriterPool = new AsciiFileWriterPool(LOG, this.logFolder, charsetName, maxEntriesPerFile, shouldCompress, maxAmountOfFiles, maxMegaBytesPerFile);
 		this.mappingFileWriter = new MappingFileWriter(this.logFolder, charsetName);
 
 		this.writerRegistry = new WriterRegistry(this);

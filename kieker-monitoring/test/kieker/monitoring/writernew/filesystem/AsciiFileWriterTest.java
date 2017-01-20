@@ -29,6 +29,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.filesystem.FileExtensionFilter;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 
@@ -56,6 +57,7 @@ public class AsciiFileWriterTest {
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_CHARSET_NAME, "UTF-8");
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, String.valueOf(Integer.MAX_VALUE));
+		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGSIZE, String.valueOf(Integer.MAX_VALUE));
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_PATH, AsciiFileWriterTest.TEMP_FOLDER.toString());
 	}
 
@@ -166,13 +168,48 @@ public class AsciiFileWriterTest {
 				final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
 
 				// test execution
-				final File[] recordFiles = FilesystemTestUtil.executeMaxLogFilesTest(numRecordsToWrite, writer);
+				final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer);
 
 				// test assertion
 				final String reasonMessage = "Passed arguments: maxLogFiles=" + maxLogFiles + ", numRecordsToWrite=" + numRecordsToWrite;
+				final File[] recordFiles = storePath.listFiles(writer.getFileNameFilter());
 				final int expectedNumRecordFiles = expectedNumRecordFilesValues[i][j];
 				Assert.assertThat(reasonMessage, recordFiles.length, CoreMatchers.is(expectedNumRecordFiles));
 			}
+		}
+	}
+
+	@Test
+	public void testMaxLogSize() throws Exception {
+		// size = $ + compressed record class name + ; + record.toString
+		final int recordSizeInBytes = 1 + 4 + 1 + new EmptyRecord().toString().length(); // 14=6+8
+
+		// semantics of the tuple: (maxMegaBytesPerFile, megaBytesToWrite, expectedNumRecordFiles)
+		final int[][] testInputTuples = {
+			{ -1, 0, 0 }, { -1, 1, 1 },
+			{ 0, 0, 0 }, { 0, 1, 1 },
+			{ 1, 0, 0 }, { 1, 1, 1 }, { 1, 2, 2 }, { 1, 3, 2 },
+		};
+
+		for (final int[] testInputTuple : testInputTuples) {
+			final int maxMegaBytesPerFile = testInputTuple[0];
+			final int megaBytesToWrite = testInputTuple[1];
+			final int expectedNumRecordFiles = testInputTuple[2];
+
+			// test preparation
+			final int numRecordsToWrite = (1024 * 1024 * megaBytesToWrite) / recordSizeInBytes;
+			this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "-1");
+			this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGSIZE, String.valueOf(maxMegaBytesPerFile));
+			this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, "2");
+			final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
+
+			// test execution
+			final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer);
+
+			// test assertion
+			final String reasonMessage = "Passed arguments: maxMegaBytesPerFile=" + maxMegaBytesPerFile + ", megaBytesToWrite=" + megaBytesToWrite;
+			final File[] recordFiles = storePath.listFiles(writer.getFileNameFilter());
+			Assert.assertThat(reasonMessage, recordFiles.length, CoreMatchers.is(expectedNumRecordFiles));
 		}
 	}
 

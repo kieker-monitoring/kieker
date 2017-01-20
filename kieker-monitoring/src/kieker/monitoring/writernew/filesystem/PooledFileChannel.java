@@ -16,34 +16,41 @@
 
 package kieker.monitoring.writernew.filesystem;
 
-import java.io.File;
+import java.nio.ByteBuffer;
+import java.nio.channels.WritableByteChannel;
 
-import kieker.common.record.misc.EmptyRecord;
-import kieker.monitoring.writernew.AbstractMonitoringWriter;
+import kieker.common.logging.Log;
+import kieker.monitoring.writernew.WriterUtil;
 
 /**
  * @author Christian Wulf
  *
  * @since 1.13
  */
-final class FilesystemTestUtil {
+class PooledFileChannel {
 
-	private FilesystemTestUtil() {
-		// utility class
+	private final WritableByteChannel channel;
+
+	private long bytesWritten;
+
+	public PooledFileChannel(final WritableByteChannel channel) {
+		super();
+		this.channel = channel;
 	}
 
-	public static void writeMonitoringRecords(final AbstractMonitoringWriter writer, final int numRecords) {
-		for (int i = 0; i < numRecords; i++) {
-			writer.writeMonitoringRecord(new EmptyRecord());
-		}
+	public long getBytesWritten() {
+		return this.bytesWritten;
 	}
 
-	public static <W extends AbstractMonitoringWriter & IFileWriter> File executeFileWriterTest(final int numRecordsToWrite, final W writer) {
-		writer.onStarting();
-		FilesystemTestUtil.writeMonitoringRecords(writer, numRecordsToWrite);
-		writer.onTerminating();
-
-		return writer.getLogFolder().toFile();
+	public void flush(final ByteBuffer buffer, final Log log) {
+		this.bytesWritten += WriterUtil.flushBuffer(buffer, this.channel, log);
 	}
 
+	/**
+	 * Flushes the buffer and closes the channel afterwards.
+	 */
+	public void close(final ByteBuffer buffer, final Log log) {
+		this.bytesWritten += WriterUtil.flushBuffer(buffer, this.channel, log);
+		WriterUtil.close(this.channel, log);
+	}
 }

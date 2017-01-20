@@ -20,6 +20,8 @@ import java.io.FilenameFilter;
 import java.nio.file.Path;
 
 /**
+ * Only used within tests (hence, declared package-private).
+ *
  * @author Christian Wulf
  *
  * @since 1.13

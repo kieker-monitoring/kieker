@@ -51,11 +51,13 @@ public class AsciiFileWriterPool extends AbstractWriterPool {
 	private final boolean shouldCompress;
 	private final String fileExtensionWithDot;
 	private final int maxAmountOfFiles;
+	private final int maxBytesPerFile;
 
 	public AsciiFileWriterPool(final Log writerLog, final Path folder, final String charsetName, final int maxEntriesInFile, final boolean shouldCompress,
-			final int maxAmountOfFiles) {
+			final int maxAmountOfFiles, final int maxMegaBytesPerFile) {
 		super(writerLog, folder);
 		this.maxAmountOfFiles = maxAmountOfFiles;
+		this.maxBytesPerFile = maxMegaBytesPerFile * 1024 * 1024; // conversion from MB to Bytes
 		this.charset = Charset.forName(charsetName);
 		this.maxEntriesInFile = maxEntriesInFile;
 		this.numEntriesInCurrentFile = maxEntriesInFile; // triggers file creation
@@ -71,8 +73,12 @@ public class AsciiFileWriterPool extends AbstractWriterPool {
 		this.numEntriesInCurrentFile++;
 
 		if (this.numEntriesInCurrentFile > this.maxEntriesInFile) {
-			this.onMaxEntriesInFileExceeded();
+			this.onThresholdExceeded();
 		}
+
+		// if (this.currentChannel.getBytesWritten() > this.maxBytesPerFile) {
+		// this.onThresholdExceeded();
+		// }
 
 		if (this.logFiles.size() > this.maxAmountOfFiles) {
 			this.onMaxLogFilesExceeded();
@@ -81,7 +87,7 @@ public class AsciiFileWriterPool extends AbstractWriterPool {
 		return this.currentFileWriter;
 	}
 
-	private void onMaxEntriesInFileExceeded() {
+	private void onThresholdExceeded() {
 		WriterUtil.close(this.currentFileWriter, this.writerLog);
 
 		final Path newFile = this.getNextFileName(this.fileExtensionWithDot);

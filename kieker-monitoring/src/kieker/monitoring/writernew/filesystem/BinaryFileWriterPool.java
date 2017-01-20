@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
-import java.nio.channels.WritableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -29,7 +28,6 @@ import java.util.zip.GZIPOutputStream;
 
 import kieker.common.logging.Log;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.writernew.WriterUtil;
 
 /**
  * @author Christian Wulf (chw)
@@ -38,43 +36,51 @@ import kieker.monitoring.writernew.WriterUtil;
  */
 public class BinaryFileWriterPool extends AbstractWriterPool {
 
-	private final int maxEntriesInFile;
+	private final int maxEntriesPerFile;
 	private int numEntriesInCurrentFile;
 	// private int currentAmountOfFiles;
+	private final long maxBytesPerFile;
+
 	private final boolean shouldCompress;
 	private final String fileExtensionWithDot;
 	private final int maxAmountOfFiles;
 
-	private WritableByteChannel currentWritableChannel;
+	private PooledFileChannel currentChannel;
 
-	public BinaryFileWriterPool(final Log writerLog, final Path folder, final int maxEntriesInFile, final boolean shouldCompress, final int maxAmountOfFiles) {
+	public BinaryFileWriterPool(final Log writerLog, final Path folder, final int maxEntriesPerFile, final boolean shouldCompress, final int maxAmountOfFiles,
+			final int maxMegaBytesPerFile) {
 		super(writerLog, folder);
-		this.maxEntriesInFile = maxEntriesInFile;
-		this.numEntriesInCurrentFile = maxEntriesInFile; // triggers file creation
+		this.maxEntriesPerFile = maxEntriesPerFile;
+		this.numEntriesInCurrentFile = maxEntriesPerFile; // triggers file creation
 		this.shouldCompress = shouldCompress;
 		this.maxAmountOfFiles = maxAmountOfFiles;
+		this.maxBytesPerFile = maxMegaBytesPerFile * 1024L * 1024L; // conversion from MB to Bytes
 
-		this.currentWritableChannel = Channels.newChannel(new ByteArrayOutputStream()); // NullObject design pattern
+		this.currentChannel = new PooledFileChannel(Channels.newChannel(new ByteArrayOutputStream())); // NullObject design pattern
 		this.fileExtensionWithDot = (shouldCompress) ? FSUtil.GZIP_FILE_EXTENSION : FSUtil.BINARY_FILE_EXTENSION;
 	}
 
-	public WritableByteChannel getFileWriter(final ByteBuffer buffer) {
+	public PooledFileChannel getFileWriter(final ByteBuffer buffer) {
 		this.numEntriesInCurrentFile++;
 
-		if (this.numEntriesInCurrentFile > this.maxEntriesInFile) {
-			this.onMaxEntriesInFileExceeded(buffer);
+		// (buffer overflow aware comparison) means: numEntriesInCurrentFile > maxEntriesPerFile
+		if ((this.numEntriesInCurrentFile - this.maxEntriesPerFile) > 0) {
+			this.onThresholdExceeded(buffer);
+		}
+
+		if (this.currentChannel.getBytesWritten() > this.maxBytesPerFile) {
+			this.onThresholdExceeded(buffer);
 		}
 
 		if (this.logFiles.size() > this.maxAmountOfFiles) {
 			this.onMaxLogFilesExceeded();
 		}
 
-		return this.currentWritableChannel;
+		return this.currentChannel;
 	}
 
-	private void onMaxEntriesInFileExceeded(final ByteBuffer buffer) {
-		WriterUtil.flushBuffer(buffer, this.currentWritableChannel, this.writerLog);
-		WriterUtil.close(this.currentWritableChannel, this.writerLog);
+	private void onThresholdExceeded(final ByteBuffer buffer) {
+		this.currentChannel.close(buffer, this.writerLog);
 
 		final Path newFile = this.getNextFileName(this.fileExtensionWithDot);
 		try {
@@ -90,7 +96,7 @@ public class BinaryFileWriterPool extends AbstractWriterPool {
 				outputStream = compressedOutputStream;
 			}
 
-			this.currentWritableChannel = Channels.newChannel(outputStream);
+			this.currentChannel = new PooledFileChannel(Channels.newChannel(outputStream));
 		} catch (final IOException e) {
 			throw new IllegalStateException("This exception should not have been thrown.", e);
 		}
@@ -99,8 +105,7 @@ public class BinaryFileWriterPool extends AbstractWriterPool {
 	}
 
 	public void close(final ByteBuffer buffer) {
-		WriterUtil.flushBuffer(buffer, this.currentWritableChannel, this.writerLog);
-		WriterUtil.close(this.currentWritableChannel, this.writerLog);
+		this.currentChannel.close(buffer, this.writerLog);
 	}
 
 }

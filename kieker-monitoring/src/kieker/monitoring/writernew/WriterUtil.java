@@ -34,17 +34,24 @@ public final class WriterUtil {
 		// utility class
 	}
 
-	public static void flushBuffer(final ByteBuffer buffer, final WritableByteChannel writableChannel, final Log log) {
+	/**
+	 * @return the number of bytes written from the buffer to the channel
+	 */
+	public static long flushBuffer(final ByteBuffer buffer, final WritableByteChannel writableChannel, final Log log) {
+		long bytesWritten = 0;
+
 		buffer.flip();
 		try {
 			while (buffer.hasRemaining()) {
-				writableChannel.write(buffer);
+				bytesWritten += writableChannel.write(buffer);
 			}
 			buffer.clear();
 		} catch (final IOException e) {
-			log.error("Error in writing to the channel.", e);
+			log.error("Caught exception while writing to the channel.", e);
 			WriterUtil.close(writableChannel, log);
 		}
+
+		return bytesWritten;
 	}
 
 	public static void close(final Closeable closeable, final Log log) {
