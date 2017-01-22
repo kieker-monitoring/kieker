@@ -51,7 +51,6 @@ public abstract class AbstractLogReplayer {
 	private final boolean realtimeMode;
 	private final TimeUnit realtimeTimeunit;
 	private final double realtimeAccelerationFactor;
-	private final long realtimeWarnNegativeSchedTime;
 
 	/**
 	 * @param monitoringController
@@ -65,21 +64,22 @@ public abstract class AbstractLogReplayer {
 	 * @param realtimeAccelerationFactor
 	 *            Determines whether to accelerate (value > 1.0) or slow down (<1.0) the replay in realtime mode by the given factor.
 	 *            Choose a value of 1.0 for "real" realtime mode (i.e., no acceleration/slow down)
-	 * @param realtimeWarnNegativeSchedTime
-	 *            A time bound to configure a warning when a record is forwarded too late in realtime mode.
 	 * @param ignoreRecordsBeforeTimestamp
 	 *            The lower limit for the time stamps of the records.
 	 * @param ignoreRecordsAfterTimestamp
 	 *            The upper limit for the time stamps of the records.
 	 */
-	public AbstractLogReplayer(final IMonitoringController monitoringController, final String monitoringConfigurationFile, final boolean realtimeMode,
+	public AbstractLogReplayer(
+			final IMonitoringController monitoringController,
+			final String monitoringConfigurationFile,
+			final boolean realtimeMode,
 			final TimeUnit realtimeTimeunit,
-			final double realtimeAccelerationFactor, final long realtimeWarnNegativeSchedTime, final long ignoreRecordsBeforeTimestamp,
+			final double realtimeAccelerationFactor,
+			final long ignoreRecordsBeforeTimestamp,
 			final long ignoreRecordsAfterTimestamp) {
 		this.realtimeMode = realtimeMode;
 		this.realtimeTimeunit = realtimeTimeunit;
 		this.realtimeAccelerationFactor = realtimeAccelerationFactor; // ignored if realtimeMode == false
-		this.realtimeWarnNegativeSchedTime = realtimeWarnNegativeSchedTime; // ignored if realtimeMode == false
 		this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
 		this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
 		this.monitoringController = monitoringController;
@@ -102,13 +102,11 @@ public abstract class AbstractLogReplayer {
 			final TimestampFilter timestampFilter = new TimestampFilter(this.ignoreRecordsBeforeTimestamp, this.ignoreRecordsAfterTimestamp);
 			configuration = new LogReplayerConfiguration(reader, timestampFilter, recordLogger);
 		} else if (!this.isAtLeastOneTimestampGiven() && this.realtimeMode) {
-			final RealtimeRecordDelayFilter realtimeRecordDelayFilter = new RealtimeRecordDelayFilter(this.realtimeTimeunit, this.realtimeAccelerationFactor,
-					this.realtimeWarnNegativeSchedTime);
+			final RealtimeRecordDelayFilter realtimeRecordDelayFilter = new RealtimeRecordDelayFilter(this.realtimeTimeunit, this.realtimeAccelerationFactor);
 			configuration = new LogReplayerConfiguration(reader, realtimeRecordDelayFilter, recordLogger);
 		} else if (this.isAtLeastOneTimestampGiven() && this.realtimeMode) {
 			final TimestampFilter timestampFilter = new TimestampFilter(this.ignoreRecordsBeforeTimestamp, this.ignoreRecordsAfterTimestamp);
-			final RealtimeRecordDelayFilter realtimeRecordDelayFilter = new RealtimeRecordDelayFilter(this.realtimeTimeunit, this.realtimeAccelerationFactor,
-					this.realtimeWarnNegativeSchedTime);
+			final RealtimeRecordDelayFilter realtimeRecordDelayFilter = new RealtimeRecordDelayFilter(this.realtimeTimeunit, this.realtimeAccelerationFactor);
 			configuration = new LogReplayerConfiguration(reader, timestampFilter, realtimeRecordDelayFilter, recordLogger);
 		} else {
 			configuration = new LogReplayerConfiguration(reader, recordLogger);

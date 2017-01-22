@@ -49,8 +49,6 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	 * @param realtimeAccelerationFactor
 	 *            Determines whether to accelerate (value > 1.0) or slow down (<1.0) the replay in realtime mode by the given factor.
 	 *            Choose a value of 1.0 for "real" realtime mode (i.e., no acceleration/slow down)
-	 * @param realtimeWarnNegativeSchedTime
-	 *            A time bound to configure a warning when a record is forwarded too late in realtime mode.
 	 * @param ignoreRecordsBeforeTimestamp
 	 *            The lower limit for the time stamps of the records.
 	 * @param ignoreRecordsAfterTimestamp
@@ -66,10 +64,9 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	 */
 	public JMSLogReplayer(final IMonitoringController monitoringController, final String monitoringConfigurationFile, final boolean realtimeMode,
 			final TimeUnit realtimeTimeunit,
-			final double realtimeAccelerationFactor, final long realtimeWarnNegativeSchedTime, final long ignoreRecordsBeforeTimestamp,
+			final double realtimeAccelerationFactor, final long ignoreRecordsBeforeTimestamp,
 			final long ignoreRecordsAfterTimestamp, final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
-		super(monitoringController, monitoringConfigurationFile, realtimeMode, realtimeTimeunit, realtimeAccelerationFactor, realtimeWarnNegativeSchedTime,
-				ignoreRecordsBeforeTimestamp,
+		super(monitoringController, monitoringConfigurationFile, realtimeMode, realtimeTimeunit, realtimeAccelerationFactor, ignoreRecordsBeforeTimestamp,
 				ignoreRecordsAfterTimestamp);
 		this.jmsProviderUrl = jmsProviderUrl;
 		this.jmsDestination = jmsDestination;
