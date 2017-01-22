@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.modeltooling;
+package kieker.analysisteetime.util.emf;
 
 import java.util.Collection;
 import java.util.function.Function;
