@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.util.stage;
+package kieker.analysisteetime.util.stage;
 
 import java.util.function.Predicate;
 

@@ -1,4 +1,4 @@
-package kieker.analysis.util.stage;
+package kieker.analysisteetime.util.stage;
 
 import java.util.LinkedList;
 import java.util.Queue;

@@ -5,9 +5,9 @@ import java.util.function.Function;
 
 import org.graphdrawing.graphml.GraphmlType;
 
-import kieker.analysis.util.stage.FunctionStage;
-import kieker.analysis.util.stage.JAXBMarshalStage;
 import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.stage.FunctionStage;
+import kieker.analysisteetime.util.stage.JAXBMarshalStage;
 
 import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
