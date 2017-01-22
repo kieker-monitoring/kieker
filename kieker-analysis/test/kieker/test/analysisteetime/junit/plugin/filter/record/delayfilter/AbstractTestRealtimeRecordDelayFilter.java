@@ -29,6 +29,8 @@ import kieker.analysisteetime.plugin.filter.record.delayfilter.RealtimeRecordDel
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 import teetime.framework.Configuration;
 import teetime.framework.Execution;
 import teetime.stage.Clock;
@@ -43,27 +45,26 @@ import teetime.stage.InitialElementProducer;
  *
  * @since 1.6
  */
-public abstract class AbstractTestRealtimeRecordDelayFilter {
+public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiekerTest {
+
 	private static final long START_TIME_SECONDS = 246561L;
 	private final long[] eventTimeOffsetsSeconds;
-	// intervals of length INTERVAL_SIZE_NANOS relative to start time
 	private final long[] expectedThroughputListOffsetSecondsInterval5Secs;
 
 	private final double accelerationFactor;
 
-	/** List of all {@link EmptyRecord}s to be read by the {@link #simpleListReader}. */
 	private final List<IMonitoringRecord> inputRecords = new ArrayList<IMonitoringRecord>();
 
-	private InitialElementProducer<IMonitoringRecord> recordProducer = null;
-	private Counter<IMonitoringRecord> preDelayCounter = null;
-	private RealtimeRecordDelayFilter delayFilter = null;
-	private Clock clock = null;
-	private AnalysisThroughputFilter throughputStage = null;
-	private Counter<IMonitoringRecord> postDelayCounter = null;
-	private CollectorSink<IMonitoringRecord> recordCollectorSink = null;
-	private CollectorSink<Long> throughputCollectorSink = null;
+	private InitialElementProducer<IMonitoringRecord> recordProducer;
+	private Counter<IMonitoringRecord> preDelayCounter;
+	private RealtimeRecordDelayFilter delayFilter;
+	private Counter<IMonitoringRecord> postDelayCounter;
+	private CollectorSink<IMonitoringRecord> recordCollectorSink;
+	private AnalysisThroughputFilter throughputStage;
+	private Clock clock;
+	private CollectorSink<Long> throughputCollectorSink;
 
-	private RealtimeRecordDelayFilterTestConfiguration testConfiguration = null;
+	private RealtimeRecordDelayFilterConfig testConfig;
 
 	/**
 	 *
@@ -81,37 +82,25 @@ public abstract class AbstractTestRealtimeRecordDelayFilter {
 		this.accelerationFactor = accelerationFactor;
 	}
 
-	public List<EmptyRecord> createRecordListFromOffsetList(final long[] eventTimeOffsetsSeconds) {
-		long currentTimeSeconds;
-		final List<EmptyRecord> inputRecords = new ArrayList<EmptyRecord>();
-
-		for (final long eventDelaySeconds : eventTimeOffsetsSeconds) {
-			currentTimeSeconds = START_TIME_SECONDS + eventDelaySeconds;
-			final EmptyRecord r = new EmptyRecord();
-			r.setLoggingTimestamp(TimeUnit.NANOSECONDS.convert(currentTimeSeconds, TimeUnit.SECONDS));
-			inputRecords.add(r);
-		}
-
-		return inputRecords;
-	}
-
+	/**
+	 * Initializes records, filters and the configuration for this test.
+	 */
 	@Before
 	public void initializeTestConfiguration() {
-		// Create a list of records from the given list of time stamps.
-		long currentTimeSeconds;
 
+		// Create a list of records from the given list of time stamps
+		long currentTimeSeconds;
 		for (final long eventDelaySeconds : this.eventTimeOffsetsSeconds) {
 			currentTimeSeconds = START_TIME_SECONDS + eventDelaySeconds;
 			final EmptyRecord r = new EmptyRecord();
 			r.setLoggingTimestamp(TimeUnit.NANOSECONDS.convert(currentTimeSeconds, TimeUnit.SECONDS));
-			System.out.println("Initialisation - Recordtime = " + r.getLoggingTimestamp());
 			this.inputRecords.add(r);
 		}
 
 		// Initialize stages and test configuration
 		this.recordProducer = new InitialElementProducer<IMonitoringRecord>(this.inputRecords);
 		this.preDelayCounter = new Counter<IMonitoringRecord>();
-		this.delayFilter = new RealtimeRecordDelayFilter(TimeUnit.NANOSECONDS, this.accelerationFactor, 2L);
+		this.delayFilter = new RealtimeRecordDelayFilter(TimeUnit.NANOSECONDS, this.accelerationFactor);
 		this.clock = new Clock();
 		this.clock.setInitialDelayInMs(5000);
 		this.clock.setIntervalDelayInMs(5000);
@@ -121,12 +110,12 @@ public abstract class AbstractTestRealtimeRecordDelayFilter {
 		this.recordCollectorSink = new CollectorSink<IMonitoringRecord>();
 		this.throughputCollectorSink = new CollectorSink<Long>();
 
-		this.testConfiguration = new RealtimeRecordDelayFilterTestConfiguration(this.recordProducer, this.preDelayCounter, this.delayFilter, this.clock,
+		this.testConfig = new RealtimeRecordDelayFilterConfig(this.recordProducer, this.preDelayCounter, this.delayFilter, this.clock,
 				this.throughputStage,
 				this.postDelayCounter, this.recordCollectorSink, this.throughputCollectorSink);
 	}
 
-	private final void checkTiming() throws InterruptedException {
+	private final void checkTiming() {
 		final List<Long> throughput = this.throughputCollectorSink.getElements();
 		final long[] actualArray = new long[throughput.size()];
 		for (int i = 0; i < actualArray.length; i++) {
@@ -140,22 +129,58 @@ public abstract class AbstractTestRealtimeRecordDelayFilter {
 		Assert.assertEquals(this.inputRecords, relayedEvents);
 	}
 
+	/**
+	 * Tests if the records are delayed correctly by checking if the expected numbers of records arrive the expected time interval.
+	 */
 	@Test
-	public void testNormal() throws InterruptedException {
+	public void testNormal() {
 		Assert.assertEquals(0, this.recordCollectorSink.getElements().size());
 
-		new Execution<Configuration>(this.testConfiguration).executeBlocking();
+		new Execution<Configuration>(this.testConfig).executeBlocking();
 
 		// Make sure that all events have been provided to the delay filter (otherwise the test make no sense)
-		Assert.assertEquals("Test invalid: Unexpected number of events provided TO the delay filter", this.inputRecords.size(),
+		Assert.assertEquals("Test invalid: Unexpected number of events provided TO the delay filter",
+				this.inputRecords.size(),
 				this.preDelayCounter.getNumElementsPassed());
 
 		// Make sure that all events have been passed through the delay filter
-		Assert.assertEquals("Unexpected number of events relayed by the delay filter", this.inputRecords.size(), this.postDelayCounter.getNumElementsPassed());
+		Assert.assertEquals("Unexpected number of events relayed by the delay filter",
+				this.inputRecords.size(),
+				this.postDelayCounter.getNumElementsPassed());
 
+		// Make sure the records arrived in the expected intervals
 		this.checkTiming();
 
 		// Make sure that exactly the right objects have been passed
 		this.checkRelayedRecords();
+	}
+
+	/**
+	 * Test configuration for the {@link RealtimeRecordDelayFilter}.
+	 *
+	 * @author Lars Bluemke
+	 *
+	 * @since 1.13
+	 */
+	private static class RealtimeRecordDelayFilterConfig extends Configuration {
+
+		public RealtimeRecordDelayFilterConfig(
+				final InitialElementProducer<IMonitoringRecord> recordProducer,
+				final Counter<IMonitoringRecord> preDelayCounter,
+				final RealtimeRecordDelayFilter delayFilter,
+				final Clock clock,
+				final AnalysisThroughputFilter throughputStage,
+				final Counter<IMonitoringRecord> postDelayCounter,
+				final CollectorSink<IMonitoringRecord> recordCollectorSink,
+				final CollectorSink<Long> throughputCollectorSink) {
+
+			this.connectPorts(recordProducer.getOutputPort(), preDelayCounter.getInputPort());
+			this.connectPorts(preDelayCounter.getOutputPort(), delayFilter.getInputPort());
+			this.connectPorts(delayFilter.getOutputPort(), postDelayCounter.getInputPort());
+			this.connectPorts(postDelayCounter.getOutputPort(), throughputStage.getRecordsInputPort());
+			this.connectPorts(throughputStage.getRecordsOutputPort(), recordCollectorSink.getInputPort());
+			this.connectPorts(clock.getOutputPort(), throughputStage.getTimestampsInputPort());
+			this.connectPorts(throughputStage.getRecordsCountOutputPort(), throughputCollectorSink.getInputPort());
+		}
 	}
 }

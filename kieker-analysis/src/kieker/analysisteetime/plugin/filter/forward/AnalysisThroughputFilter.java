@@ -73,7 +73,6 @@ public class AnalysisThroughputFilter extends AbstractStage {
 			sb.append(' ');
 			sb.append(TimeUnit.NANOSECONDS.toString());
 			this.plainTextDisplayObject.setText(sb.toString());
-			System.out.println(this.plainTextDisplayObject.getText());
 			this.recordsCountOutputPort.send(this.numPassedElements);
 			this.resetTimestamp(timestampInNs);
 
