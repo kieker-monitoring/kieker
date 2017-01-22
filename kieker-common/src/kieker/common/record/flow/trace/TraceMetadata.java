@@ -190,46 +190,45 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		return SIZE;
 	}
 
+	@Override
+	public int hashCode() {
+		// Make explicit that equals is compatible with the super hash code implementation.
+		// Fixes CS and PMD issues.
+		return super.hashCode();
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (obj == this) {
-			return true;
-		}
-		if (obj.getClass() != this.getClass()) {
+		if (!(obj instanceof TraceMetadata)) {
 			return false;
 		}
 
-		final TraceMetadata castedRecord = (TraceMetadata) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+		return this.equals((TraceMetadata) obj);
+	}
+
+	public boolean equals(final TraceMetadata other) {
+		if (other == null) {
 			return false;
 		}
-		if (this.getTraceId() != castedRecord.getTraceId()) {
+		if (other == this) {
+			return true;
+		}
+
+		if ((this.getLoggingTimestamp() != other.getLoggingTimestamp()) ||
+				(this.getTraceId() != other.getTraceId()) ||
+				(this.getThreadId() != other.getThreadId()) ||
+				(this.getParentTraceId() != other.getParentTraceId()) ||
+				(this.getParentOrderId() != other.getParentOrderId()) ||
+				(this.getNextOrderId() != other.getNextOrderId()) ||
+				!this.getSessionId().equals(other.getSessionId()) ||
+				!this.getHostname().equals(other.getHostname())) {
+
 			return false;
 		}
-		if (this.getThreadId() != castedRecord.getThreadId()) {
-			return false;
-		}
-		if (!this.getSessionId().equals(castedRecord.getSessionId())) {
-			return false;
-		}
-		if (!this.getHostname().equals(castedRecord.getHostname())) {
-			return false;
-		}
-		if (this.getParentTraceId() != castedRecord.getParentTraceId()) {
-			return false;
-		}
-		if (this.getParentOrderId() != castedRecord.getParentOrderId()) {
-			return false;
-		}
-		if (this.getNextOrderId() != castedRecord.getNextOrderId()) {
-			return false;
-		}
+
 		return true;
 	}
 

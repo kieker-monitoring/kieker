@@ -25,7 +25,7 @@ import java.util.UUID;
  *
  * @since 1.13
  */
-class RegistryUtil { // NOCS No constructor, only static methods
+class RegistryUtil { // NOCS NOPMD No constructor, only static methods
 
 	/**
 	 * Generates a random ID to use for a registry.
