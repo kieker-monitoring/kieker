@@ -26,6 +26,7 @@ import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.toolsteetime.logReplayer.filter.MonitoringRecordLoggerFilter;
 
+import teetime.framework.Configuration;
 import teetime.framework.Execution;
 
 /**
@@ -126,4 +127,37 @@ public abstract class AbstractLogReplayer {
 	 * @return The reader which can be used to read the monitoring log.
 	 */
 	protected abstract AbstractReader createReader();
+
+	/**
+	 * Provides different predefined configurations for the {@link AbstractLogReplayer}.
+	 *
+	 * @author Lars Bluemke
+	 *
+	 * @since 1.13
+	 */
+	private static class LogReplayerConfiguration extends Configuration {
+
+		public LogReplayerConfiguration(final AbstractReader reader, final MonitoringRecordLoggerFilter recordLogger) {
+			this.connectPorts(reader.getOutputPort(), recordLogger.getInputPort());
+		}
+
+		public LogReplayerConfiguration(final AbstractReader reader, final TimestampFilter timestampFilter, final MonitoringRecordLoggerFilter recordLogger) {
+			this.connectPorts(reader.getOutputPort(), timestampFilter.getMonitoringRecordsCombinedInputPort());
+			this.connectPorts(timestampFilter.getRecordsWithinTimePeriodOutputPort(), recordLogger.getInputPort());
+		}
+
+		public LogReplayerConfiguration(final AbstractReader reader, final RealtimeRecordDelayFilter realtimeRecordDelayFilter,
+				final MonitoringRecordLoggerFilter recordLogger) {
+			this.connectPorts(reader.getOutputPort(), realtimeRecordDelayFilter.getInputPort());
+			this.connectPorts(realtimeRecordDelayFilter.getOutputPort(), recordLogger.getInputPort());
+		}
+
+		public LogReplayerConfiguration(final AbstractReader reader, final TimestampFilter timestampFilter,
+				final RealtimeRecordDelayFilter realtimeRecordDelayFilter,
+				final MonitoringRecordLoggerFilter recordLogger) {
+			this.connectPorts(reader.getOutputPort(), timestampFilter.getMonitoringRecordsCombinedInputPort());
+			this.connectPorts(timestampFilter.getRecordsWithinTimePeriodOutputPort(), realtimeRecordDelayFilter.getInputPort());
+			this.connectPorts(realtimeRecordDelayFilter.getOutputPort(), recordLogger.getInputPort());
+		}
+	}
 }
