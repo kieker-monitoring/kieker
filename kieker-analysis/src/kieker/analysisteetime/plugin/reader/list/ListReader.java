@@ -68,6 +68,7 @@ public class ListReader<T> extends AbstractProducerStage<T> {
 		for (final T obj : this.objects) {
 			this.outputPort.send(obj);
 		}
+		this.terminateStage();
 	}
 
 }
