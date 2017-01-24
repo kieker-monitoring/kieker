@@ -23,7 +23,6 @@ import kieker.analysisteetime.plugin.filter.select.timestampfilter.TimestampFilt
 import kieker.analysisteetime.plugin.reader.AbstractReader;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.toolsteetime.logReplayer.filter.MonitoringRecordLoggerFilter;
 
 import teetime.framework.Configuration;
@@ -47,15 +46,14 @@ public abstract class AbstractLogReplayer {
 	private final long ignoreRecordsBeforeTimestamp;
 	private final long ignoreRecordsAfterTimestamp;
 
-	private final IMonitoringController monitoringController;
+	private final String monitoringConfigurationFile;
 
 	private final boolean realtimeMode;
 	private final TimeUnit realtimeTimeunit;
 	private final double realtimeAccelerationFactor;
+	private final boolean keepOriginalLoggingTimestamps;
 
 	/**
-	 * @param monitoringController
-	 *            The {@link IMonitoringController}.
 	 * @param monitoringConfigurationFile
 	 *            The name of the {@code monitoring.properties} file.
 	 * @param realtimeMode
@@ -65,25 +63,28 @@ public abstract class AbstractLogReplayer {
 	 * @param realtimeAccelerationFactor
 	 *            Determines whether to accelerate (value > 1.0) or slow down (<1.0) the replay in realtime mode by the given factor.
 	 *            Choose a value of 1.0 for "real" realtime mode (i.e., no acceleration/slow down)
+	 * @param keepOriginalLoggingTimestamps
+	 *            Determines whether the original logging timestamps will be used of whether the timestamps will be modified.
 	 * @param ignoreRecordsBeforeTimestamp
 	 *            The lower limit for the time stamps of the records.
 	 * @param ignoreRecordsAfterTimestamp
 	 *            The upper limit for the time stamps of the records.
 	 */
 	public AbstractLogReplayer(
-			final IMonitoringController monitoringController,
 			final String monitoringConfigurationFile,
 			final boolean realtimeMode,
 			final TimeUnit realtimeTimeunit,
 			final double realtimeAccelerationFactor,
+			final boolean keepOriginalLoggingTimestamps,
 			final long ignoreRecordsBeforeTimestamp,
 			final long ignoreRecordsAfterTimestamp) {
 		this.realtimeMode = realtimeMode;
 		this.realtimeTimeunit = realtimeTimeunit;
 		this.realtimeAccelerationFactor = realtimeAccelerationFactor; // ignored if realtimeMode == false
+		this.keepOriginalLoggingTimestamps = keepOriginalLoggingTimestamps;
 		this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
 		this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
-		this.monitoringController = monitoringController;
+		this.monitoringConfigurationFile = monitoringConfigurationFile;
 		if (monitoringConfigurationFile == null) {
 			LOG.warn("No path to a 'monitoring.properties' passed; default configuration will be used.");
 		}
@@ -97,7 +98,7 @@ public abstract class AbstractLogReplayer {
 
 		final AbstractReader reader = this.createReader();
 
-		final MonitoringRecordLoggerFilter recordLogger = new MonitoringRecordLoggerFilter(this.monitoringController);
+		final MonitoringRecordLoggerFilter recordLogger = new MonitoringRecordLoggerFilter(this.monitoringConfigurationFile, !this.keepOriginalLoggingTimestamps);
 
 		if (this.isAtLeastOneTimestampGiven() && !this.realtimeMode) {
 			final TimestampFilter timestampFilter = new TimestampFilter(this.ignoreRecordsBeforeTimestamp, this.ignoreRecordsAfterTimestamp);

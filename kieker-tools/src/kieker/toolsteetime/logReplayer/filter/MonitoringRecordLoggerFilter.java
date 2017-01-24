@@ -16,8 +16,11 @@
 
 package kieker.toolsteetime.logReplayer.filter;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
 
 import teetime.stage.basic.AbstractFilter;
 
@@ -31,6 +34,8 @@ import teetime.stage.basic.AbstractFilter;
  */
 public class MonitoringRecordLoggerFilter extends AbstractFilter<IMonitoringRecord> {
 
+	public static final String CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN = "monitoringPropertiesFilename";
+
 	/**
 	 * The {@link IMonitoringController} the received records are passed to.
 	 */
@@ -39,11 +44,33 @@ public class MonitoringRecordLoggerFilter extends AbstractFilter<IMonitoringReco
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param monitoringController
-	 *            The monitoring controller from the monitoring component.
+	 * @param configuration
+	 *            The configuration for this component.
+	 *
+	 * @since 1.7
 	 */
-	public MonitoringRecordLoggerFilter(final IMonitoringController monitoringController) {
-		this.monitoringController = monitoringController;
+	public MonitoringRecordLoggerFilter(final String monitoringConfigurationFile, final boolean keepOriginalLoggingTimestamps) {
+		// Initialize a "traditional" Configuration for initializing a monitoring controller later
+		final Configuration configuration = new Configuration();
+		if (monitoringConfigurationFile != null) {
+			configuration.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, monitoringConfigurationFile);
+		}
+		configuration.setProperty(
+				ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP,
+				Boolean.toString(!keepOriginalLoggingTimestamps));
+
+		final Configuration controllerConfiguration;
+		final String monitoringPropertiesFn = configuration.getPathProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN);
+		if (monitoringPropertiesFn.length() > 0) {
+			controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(monitoringPropertiesFn);
+		} else {
+			this.logger.info("No path to a 'monitoring.properties' file passed; using default configuration");
+			controllerConfiguration = ConfigurationFactory.createDefaultConfiguration();
+		}
+		// flatten submitted properties
+		final Configuration flatConfiguration = configuration.flatten();
+		flatConfiguration.setDefaultConfiguration(controllerConfiguration);
+		this.monitoringController = MonitoringController.createInstance(flatConfiguration);
 	}
 
 	/**

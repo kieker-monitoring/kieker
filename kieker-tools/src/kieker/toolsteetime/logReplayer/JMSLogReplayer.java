@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit;
 
 import kieker.analysisteetime.plugin.reader.AbstractReader;
 import kieker.analysisteetime.plugin.reader.jms.JMSReader;
-import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
  * An implementation of the {@link AbstractLogReplayer}, using the {@link JMSReader} to replay {@link kieker.common.record.IMonitoringRecord}s from a JMS queue.
@@ -38,8 +37,6 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	/**
 	 * Creates a new JMS log replayer.
 	 *
-	 * @param monitoringController
-	 *            The {@link IMonitoringController}.
 	 * @param monitoringConfigurationFile
 	 *            The name of the {@code monitoring.properties} file.
 	 * @param realtimeMode
@@ -49,6 +46,8 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	 * @param realtimeAccelerationFactor
 	 *            Determines whether to accelerate (value > 1.0) or slow down (<1.0) the replay in realtime mode by the given factor.
 	 *            Choose a value of 1.0 for "real" realtime mode (i.e., no acceleration/slow down)
+	 * @param keepOriginalLoggingTimestamps
+	 *            Determines whether the original logging timestamps will be used of whether the timestamps will be modified.
 	 * @param ignoreRecordsBeforeTimestamp
 	 *            The lower limit for the time stamps of the records.
 	 * @param ignoreRecordsAfterTimestamp
@@ -62,12 +61,13 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	 * @param monitoringConfigurationFile
 	 *            The path of the monitoring.properties file.
 	 */
-	public JMSLogReplayer(final IMonitoringController monitoringController, final String monitoringConfigurationFile, final boolean realtimeMode,
-			final TimeUnit realtimeTimeunit,
-			final double realtimeAccelerationFactor, final long ignoreRecordsBeforeTimestamp,
+	public JMSLogReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final TimeUnit realtimeTimeunit,
+			final double realtimeAccelerationFactor, final boolean keepOriginalLoggingTimestamps, final long ignoreRecordsBeforeTimestamp,
 			final long ignoreRecordsAfterTimestamp, final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
-		super(monitoringController, monitoringConfigurationFile, realtimeMode, realtimeTimeunit, realtimeAccelerationFactor, ignoreRecordsBeforeTimestamp,
+
+		super(monitoringConfigurationFile, realtimeMode, realtimeTimeunit, realtimeAccelerationFactor, keepOriginalLoggingTimestamps, ignoreRecordsBeforeTimestamp,
 				ignoreRecordsAfterTimestamp);
+
 		this.jmsProviderUrl = jmsProviderUrl;
 		this.jmsDestination = jmsDestination;
 		this.jmsFactoryLookupName = jmsFactoryLookupName;
