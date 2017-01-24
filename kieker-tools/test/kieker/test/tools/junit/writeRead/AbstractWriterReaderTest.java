@@ -33,7 +33,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
@@ -45,7 +45,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * @param numRecordsWritten
-	 * 
+	 *
 	 * @return An {@link IMonitoringController} initialized with the respective FS Writer.
 	 */
 	protected abstract IMonitoringController createController(final int numRecordsWritten) throws Exception;
@@ -53,10 +53,10 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	/**
 	 * Checks if the given {@link IMonitoringController} is in the expected state after having passed
 	 * the records to the controller.
-	 * 
+	 *
 	 * @param monitoringController
 	 *            The monitoring controller in question.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If something went wrong during the check.
 	 */
@@ -65,10 +65,10 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	/**
 	 * Checks if the given {@link IMonitoringController} is in the expected state before having passed
 	 * the records to the controller.
-	 * 
+	 *
 	 * @param monitoringController
 	 *            The monitoring controller in question.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If something went wrong during the check.
 	 */
@@ -76,7 +76,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * Check if the given set of records is as expected.
-	 * 
+	 *
 	 * @param eventsPassedToController
 	 *            The events which have been passed to the controller.
 	 * @param eventFromMonitoringLog
@@ -88,7 +88,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * Returns a list of {@link IMonitoringRecord}s to be used in this test. Extending classes can override this method to use their own list of records.
-	 * 
+	 *
 	 * @return A list of records.
 	 */
 	protected List<IMonitoringRecord> provideEvents() {
@@ -105,9 +105,9 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * Returns the list of records read from the previously written monitoring log.
-	 * 
+	 *
 	 * @return The list of records.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If something went wrong during the reading.
 	 */
@@ -115,7 +115,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * Provides implementing classes to do something before reading the log, e.g., manipulating it.
-	 * 
+	 *
 	 * @throws IOException
 	 *             If something went wrong during the manipulation of the log.
 	 */
@@ -123,7 +123,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * The actual Test. Note that this should be the only {@link Test} in this class.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If something went wrong during the test.
 	 */
@@ -148,7 +148,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 			// need to terminate explicitly, because otherwise, the monitoring log directory cannot be removed
 			ctrl.terminateMonitoring();
 		}
-
+final explorviz test does final not terminate
 		this.doBeforeReading();
 
 		final List<IMonitoringRecord> monitoringRecords = this.readEvents();

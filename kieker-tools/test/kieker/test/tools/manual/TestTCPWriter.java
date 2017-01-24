@@ -21,7 +21,7 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writer.AbstractAsyncWriter;
+import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.writernew.tcp.TCPWriter;
 
 /**
@@ -38,7 +38,7 @@ public final class TestTCPWriter {
 	public static void main(final String[] args) {
 		final Configuration monitoringConfig = ConfigurationFactory.createDefaultConfiguration();
 		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, TCPWriter.class.getName());
-		monitoringConfig.setProperty(TCPWriter.class.getName() + "." + AbstractAsyncWriter.CONFIG_BEHAVIOR, "1");
+		monitoringConfig.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
 		final IMonitoringController ctrl = MonitoringController.createInstance(monitoringConfig);
 
 		while (true) {

@@ -129,7 +129,7 @@ public abstract class AbstractController {
 				final Configuration classConfiguration = new ReadOnlyConfiguration(configuration);
 				createdClass = (C) constructor.newInstance(classConfiguration);
 			} else {
-				LOG.error("Class '" + classname + "' has to implement '" + c.getSimpleName() + "'");
+				LOG.error("Class '" + classname + "' has to extend/implement '" + c.getSimpleName() + "'");
 			}
 		} catch (final ClassNotFoundException e) {
 			LOG.error(c.getSimpleName() + ": Class '" + classname + "' not found", e);

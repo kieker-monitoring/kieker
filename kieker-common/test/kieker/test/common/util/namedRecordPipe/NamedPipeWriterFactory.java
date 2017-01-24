@@ -18,14 +18,13 @@ package kieker.test.common.util.namedRecordPipe;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.IPipeWriter;
 import kieker.common.namedRecordPipe.Pipe;
-import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.writernew.namedRecordPipe.PipeWriter;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 public final class NamedPipeWriterFactory {
@@ -38,7 +37,7 @@ public final class NamedPipeWriterFactory {
 	 * This method should be used in tests to generate unique names for {@link kieker.monitoring.core.configuration.Configuration}s with
 	 * {@link kieker.monitoring.writer.namedRecordPipe.PipeWriter}s and {@link java.io.PipedReader}s
 	 * in order to avoid naming conflicts.
-	 * 
+	 *
 	 * @return a unique name
 	 */
 	public static final String createPipeName() {
@@ -48,20 +47,21 @@ public final class NamedPipeWriterFactory {
 	/**
 	 * Creates an {@link kieker.common.namedRecordPipe.IPipeWriter} that writes records
 	 * to a {@link Pipe} with the given name.
-	 * 
+	 *
 	 * @param pipeName
 	 *            The name of the pipe to use.
 	 * @return the {@link kieker.common.namedRecordPipe.IPipeWriter}
 	 */
 	public static final IPipeWriter createAndRegisterNamedPipeRecordWriter(final String pipeName) {
-		final Pipe namedPipe = Broker.INSTANCE.acquirePipe(pipeName);
-		final IPipeWriter writer = new IPipeWriter() {
-
-			@Override
-			public boolean newMonitoringRecord(final IMonitoringRecord record) {
-				return namedPipe.writeMonitoringRecord(record);
-			}
-		};
-		return writer;
+		// final Pipe namedPipe = Broker.INSTANCE.acquirePipe(pipeName);
+		// final IPipeWriter writer = new IPipeWriter() {
+		//
+		// @Override
+		// public void writeMonitoringRecord(final IMonitoringRecord record) {
+		// namedPipe.writeMonitoringRecord(record);
+		// }
+		//
+		// };
+		return new PipeWriter(pipeName);
 	}
 }

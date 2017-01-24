@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.writer;
+package kieker.monitoring.writernew.print;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -25,12 +25,13 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.writernew.AbstractMonitoringWriter;
 
 /**
  * A writer that prints incoming records to the specified PrintStream.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public class PrintStreamWriter extends AbstractMonitoringWriter {
@@ -49,7 +50,7 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 
 	/**
 	 * Creates a new instance of this writer.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration which will be used to initialize this writer.
 	 */
@@ -59,31 +60,27 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	public void init() throws FileNotFoundException, UnsupportedEncodingException {
-
+	public void onStarting() {
 		if (CONFIG_STREAM_STDOUT.equals(this.configPrintStreamName)) {
 			this.printStream = System.out;
 		} else if (CONFIG_STREAM_STDERR.equals(this.configPrintStreamName)) {
 			this.printStream = System.err;
 		} else {
-			this.printStream = new PrintStream(new FileOutputStream(this.configPrintStreamName), false, ENCODING);
+			try {
+				this.printStream = new PrintStream(new FileOutputStream(this.configPrintStreamName), false, ENCODING);
+			} catch (UnsupportedEncodingException | FileNotFoundException e) {
+				LOG.warn("An exception occurred", e);
+			}
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord record) {
+	public void writeMonitoringRecord(final IMonitoringRecord record) {
 		this.printStream.println(record.getClass().getSimpleName() + ": " + record.toString());
-		return true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void terminate() {
+	public void onTerminating() {
 		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();
 		}

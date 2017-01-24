@@ -33,9 +33,9 @@ import kieker.test.common.util.namedRecordPipe.NamedPipeWriterFactory;
 
 /**
  * A simple test for the class <code>PipeReader</code>.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.4
  */
 public class TestPipeReader extends AbstractKiekerTest { // NOCS (MissingCtorCheck)
@@ -68,7 +68,7 @@ public class TestPipeReader extends AbstractKiekerTest { // NOCS (MissingCtorChe
 		// Send 7 dummy records
 		final int numRecordsToSend = 7;
 		for (int i = 0; i < numRecordsToSend; i++) {
-			writer.newMonitoringRecord(new EmptyRecord());
+			writer.writeMonitoringRecord(new EmptyRecord());
 		}
 
 		analysisThread.terminate();

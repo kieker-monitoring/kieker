@@ -44,9 +44,9 @@ import kieker.test.monitoring.util.NamedListWriter;
 
 /**
  * Tests the {@link AbstractLogReplayer}.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 public class TestLogReplayer extends AbstractKiekerTest {
@@ -60,7 +60,7 @@ public class TestLogReplayer extends AbstractKiekerTest {
 	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
 
 	/**
-	 * Creastes a new instance of this class.
+	 * Creates a new instance of this class.
 	 */
 	public TestLogReplayer() {
 		// Adding arbitrary records
@@ -79,7 +79,7 @@ public class TestLogReplayer extends AbstractKiekerTest {
 
 	/**
 	 * Performs an initial test setup.
-	 * 
+	 *
 	 * @throws IOException
 	 *             If the setup failed.
 	 */
@@ -125,7 +125,7 @@ public class TestLogReplayer extends AbstractKiekerTest {
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 class ListReplayer extends AbstractLogReplayer { // NOPMD

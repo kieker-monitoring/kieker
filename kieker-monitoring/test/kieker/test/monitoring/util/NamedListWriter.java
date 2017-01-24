@@ -25,11 +25,11 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.writer.AbstractMonitoringWriter;
+import kieker.monitoring.writernew.AbstractMonitoringWriter;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 public class NamedListWriter extends AbstractMonitoringWriter {
@@ -41,13 +41,13 @@ public class NamedListWriter extends AbstractMonitoringWriter {
 
 	private static final Log LOG = LogFactory.getLog(NamedListWriter.class);
 
-	private static final Map<String, List<IMonitoringRecord>> NAMED_LISTS = new HashMap<String, List<IMonitoringRecord>>(); // NOPMD (synchronized)
+	private static final Map<String, List<IMonitoringRecord>> NAMED_LISTS = new HashMap<String, List<IMonitoringRecord>>();
 
 	private final List<IMonitoringRecord> myNamedList;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration used to configure this component.
 	 */
@@ -62,34 +62,11 @@ public class NamedListWriter extends AbstractMonitoringWriter {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord record) {
-		synchronized (this.myNamedList) {
-			return this.myNamedList.add(record);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void terminate() {
-		// no need to do anything
-	}
-
-	@Override
-	protected void init() throws Exception {
-		// no need to do anything
-	}
-
-	/**
 	 * Returns the list with the given name, which is newly created in case it doesn't exist, yet.
-	 * 
+	 *
 	 * @param name
 	 *            The name to search for.
-	 * 
+	 *
 	 * @return Either the corresponding list if the name exists or a new list otherwise.
 	 */
 	public static final List<IMonitoringRecord> createNamedList(final String name) {
@@ -105,15 +82,30 @@ public class NamedListWriter extends AbstractMonitoringWriter {
 
 	/**
 	 * Returns the list with the given name or null in case no list with this name exists.
-	 * 
+	 *
 	 * @param name
 	 *            The name to search for.
-	 * 
+	 *
 	 * @return Either the corresponding list if the name exists or null otherwise.
 	 */
 	public static final List<IMonitoringRecord> getNamedList(final String name) {
 		synchronized (NAMED_LISTS) {
 			return NAMED_LISTS.get(name);
 		}
+	}
+
+	@Override
+	public void onStarting() {
+		// do nothing
+	}
+
+	@Override
+	public void writeMonitoringRecord(final IMonitoringRecord record) {
+		this.myNamedList.add(record);
+	}
+
+	@Override
+	public void onTerminating() {
+		// do nothing
 	}
 }

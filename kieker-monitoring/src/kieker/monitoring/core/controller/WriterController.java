@@ -94,7 +94,6 @@ public final class WriterController extends AbstractController implements IWrite
 		LOG.info("Using writer queue: " + queueFqn);
 
 		final Queue<IMonitoringRecord> queue = this.newQueue(queueFqn, this.queueCapacity);
-		// final Queue<IMonitoringRecord> queue = new MpscArrayQueue<IMonitoringRecord>(this.queueCapacity);
 		if (queue instanceof BlockingQueue) {
 			this.writerQueue = (BlockingQueue<IMonitoringRecord>) queue;
 		} else {

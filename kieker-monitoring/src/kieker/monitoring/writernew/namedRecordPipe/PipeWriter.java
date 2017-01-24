@@ -14,19 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.writer.namedRecordPipe;
+package kieker.monitoring.writernew.namedRecordPipe;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.IPipeWriter;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.writer.AbstractMonitoringWriter;
+import kieker.monitoring.writernew.AbstractMonitoringWriter;
 
 /**
- * 
+ *
  * @author Andre van Hoorn, Jan Waller, Robert von Massow
- * 
+ *
  * @since 1.3
  */
 public final class PipeWriter extends AbstractMonitoringWriter implements IPipeWriter {
@@ -38,7 +38,7 @@ public final class PipeWriter extends AbstractMonitoringWriter implements IPipeW
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration used to initialize the pipe writer.
 	 */
@@ -52,21 +52,11 @@ public final class PipeWriter extends AbstractMonitoringWriter implements IPipeW
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Creates a new instance using an empty configuration.
 	 */
-	@Override
-	public final void terminate() {
-		if (this.pipe != null) {
-			this.pipe.close();
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		return this.pipe.writeMonitoringRecord(monitoringRecord);
+	public PipeWriter(final String pipeName) {
+		super(new Configuration());
+		this.pipe = Broker.INSTANCE.acquirePipe(pipeName);
 	}
 
 	@Override
@@ -79,11 +69,20 @@ public final class PipeWriter extends AbstractMonitoringWriter implements IPipeW
 		return sb.toString();
 	}
 
-	/**
-	 * Initializes the pipe writer (at the moment there is nothing to do in here).
-	 */
 	@Override
-	protected void init() {
+	public void onStarting() {
 		// nothing to do
+	}
+
+	@Override
+	public void writeMonitoringRecord(final IMonitoringRecord record) {
+		this.pipe.writeMonitoringRecord(record);
+	}
+
+	@Override
+	public void onTerminating() {
+		if (this.pipe != null) {
+			this.pipe.close();
+		}
 	}
 }
