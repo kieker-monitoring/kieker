@@ -140,6 +140,9 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 		if (kiekerRecord instanceof BeforeOperationEvent) {
 			final BeforeOperationEvent kiekerBefore = (BeforeOperationEvent) kiekerRecord;
 
+			this.writerRegistry.register(kiekerBefore.getOperationSignature());
+			this.writerRegistry.register(kiekerBefore.getClassSignature());
+
 			final int opSigId = this.writerRegistry.getId(kiekerBefore.getOperationSignature());
 			final int classSigId = this.writerRegistry.getId(kiekerBefore.getClassSignature());
 			final int interfaceId = this.writerRegistry.getId(EMPTY_STRING);
@@ -164,6 +167,8 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 			// }
 		} else if (kiekerRecord instanceof AfterOperationFailedEvent) {
 			final AfterOperationFailedEvent kiekerAfterFailed = (AfterOperationFailedEvent) kiekerRecord;
+			this.writerRegistry.register(kiekerAfterFailed.getCause());
+
 			buffer.put(AFTER_FAILED_OPERATION_CLAZZ_ID);
 			buffer.putLong(kiekerAfterFailed.getTimestamp());
 			buffer.putLong(kiekerAfterFailed.getTraceId());
@@ -177,6 +182,11 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 			buffer.putInt(kiekerAfter.getOrderIndex());
 		} else if (kiekerRecord instanceof HostApplicationMetaData) {
 			final HostApplicationMetaData record = (HostApplicationMetaData) kiekerRecord;
+			this.writerRegistry.register(record.getSystemName());
+			this.writerRegistry.register(record.getIpAddress());
+			this.writerRegistry.register(record.getHostName());
+			this.writerRegistry.register(record.getApplicationName());
+
 			buffer.put(HOST_APPLICATION_META_DATA_CLAZZ_ID);
 			buffer.putInt(this.writerRegistry.getId(record.getSystemName()));
 			buffer.putInt(this.writerRegistry.getId(record.getIpAddress()));

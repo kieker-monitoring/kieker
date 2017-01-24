@@ -22,11 +22,11 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.AbstractAsyncWriter;
-import kieker.monitoring.writer.tcp.TCPWriter;
+import kieker.monitoring.writernew.tcp.TCPWriter;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.8
  */
 public final class TestTCPWriter {

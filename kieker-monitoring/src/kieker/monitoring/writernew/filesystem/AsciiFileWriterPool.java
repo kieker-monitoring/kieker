@@ -55,6 +55,8 @@ public class AsciiFileWriterPool extends AbstractWriterPool {
 	private PrintWriter currentFileWriter;
 	private MeasuringWriter currentMeasuringWriter;
 
+	private int currentFileNumber;
+
 	public AsciiFileWriterPool(final Log writerLog, final Path folder, final String charsetName, final int maxEntriesInFile, final boolean shouldCompress,
 			final int maxAmountOfFiles, final int maxMegaBytesPerFile) {
 		super(writerLog, folder);
@@ -94,7 +96,9 @@ public class AsciiFileWriterPool extends AbstractWriterPool {
 	private void onThresholdExceeded() {
 		WriterUtil.close(this.currentFileWriter, this.writerLog);
 
-		final Path newFile = this.getNextFileName(this.fileExtensionWithDot);
+		this.currentFileNumber++;
+
+		final Path newFile = this.getNextFileName(this.currentFileNumber, this.fileExtensionWithDot);
 		try {
 			Files.createDirectories(this.folder);
 

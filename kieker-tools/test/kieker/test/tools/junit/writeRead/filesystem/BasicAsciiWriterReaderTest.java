@@ -17,31 +17,31 @@
 package kieker.test.tools.junit.writeRead.filesystem;
 
 import kieker.common.configuration.Configuration;
-import kieker.monitoring.writer.IMonitoringWriter;
-import kieker.monitoring.writer.filesystem.AsyncFsWriter;
+import kieker.monitoring.writernew.AbstractMonitoringWriter;
+import kieker.monitoring.writernew.filesystem.AsciiFileWriter;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
-public class BasicAsyncFSWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
+public class BasicAsciiWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
 	private static final boolean FLUSH = true;
 
 	@Override
-	protected Class<? extends IMonitoringWriter> getTestedWriterClazz() {
-		return AsyncFsWriter.class;
+	protected Class<? extends AbstractMonitoringWriter> getTestedWriterClazz() {
+		return AsciiFileWriter.class;
 	}
 
 	@Override
 	protected boolean terminateBeforeLogInspection() {
-		return !BasicAsyncFSWriterReaderTest.FLUSH;
+		return !BasicAsciiWriterReaderTest.FLUSH;
 	}
 
 	@Override
 	protected void refineWriterConfiguration(final Configuration config, final int numRecordsWritten) {
-		config.setProperty(AsyncFsWriter.CONFIG_FLUSH, Boolean.toString(BasicAsyncFSWriterReaderTest.FLUSH));
+		config.setProperty(AsciiFileWriter.CONFIG_FLUSH, Boolean.toString(BasicAsciiWriterReaderTest.FLUSH));
 	}
 
 	@Override

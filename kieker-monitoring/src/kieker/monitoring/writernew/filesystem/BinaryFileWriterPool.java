@@ -46,6 +46,7 @@ public class BinaryFileWriterPool extends AbstractWriterPool {
 	private final int maxAmountOfFiles;
 
 	private PooledFileChannel currentChannel;
+	private int currentFileNumber;
 
 	public BinaryFileWriterPool(final Log writerLog, final Path folder, final int maxEntriesPerFile, final boolean shouldCompress, final int maxAmountOfFiles,
 			final int maxMegaBytesPerFile) {
@@ -81,11 +82,12 @@ public class BinaryFileWriterPool extends AbstractWriterPool {
 
 	private void onThresholdExceeded(final ByteBuffer buffer) {
 		this.currentChannel.close(buffer, this.writerLog);
+		// we expect this.folder to exist
 
-		final Path newFile = this.getNextFileName(this.fileExtensionWithDot);
+		this.currentFileNumber++;
+
+		final Path newFile = this.getNextFileName(this.currentFileNumber, this.fileExtensionWithDot);
 		try {
-			Files.createDirectories(this.folder);
-
 			// use CREATE_NEW to fail if the file already exists
 			OutputStream outputStream = Files.newOutputStream(newFile, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
 

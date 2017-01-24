@@ -34,15 +34,15 @@ import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writer.explorviz.ExplorVizExportWriter;
+import kieker.monitoring.writernew.explorviz.ExplorVizTcpWriter;
 
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
  * Simple test to ensure that ExplorViz is receiving all sent records from the Kieker ExplorVizExportWriter correctly.
- * 
+ *
  * @author Micky Singh Multani
- * 
+ *
  * @since 1.11
  */
 public class BasicExplorVizExportWriterTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
@@ -69,8 +69,8 @@ public class BasicExplorVizExportWriterTest extends AbstractWriterReaderTest { /
 		Thread.sleep(1000);
 
 		final Configuration monitoringConfig = ConfigurationFactory.createDefaultConfiguration();
-		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, ExplorVizExportWriter.class.getName());
-		monitoringConfig.setProperty(ExplorVizExportWriter.CONFIG_PORT, BasicExplorVizExportWriterTest.PORT);
+		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, ExplorVizTcpWriter.class.getName());
+		monitoringConfig.setProperty(ExplorVizTcpWriter.CONFIG_PORT, BasicExplorVizExportWriterTest.PORT);
 		return MonitoringController.createInstance(monitoringConfig);
 	}
 
@@ -101,7 +101,7 @@ public class BasicExplorVizExportWriterTest extends AbstractWriterReaderTest { /
 						(sentRecord.getTimestamp() + ", " + sentRecord.getTraceId() + ", " + sentRecord.getOrderIndex()
 								+ ", " + sentRecord.getCause()),
 						(receivedRecord.getTimestamp() + ", " + receivedRecord.getTraceId() + ", " + receivedRecord.getOrderIndex() + ", "
-						+ receivedRecord.getCause()));
+								+ receivedRecord.getCause()));
 
 			} else if (eventFromMonitoringLog.get(i) instanceof CustomAfterOperationEvent) {
 				final AfterOperationEvent sentRecord = (AfterOperationEvent) eventsPassedToController.get(i);

@@ -42,9 +42,9 @@ import kieker.common.util.filesystem.FSUtil;
 
 /**
  * Reads the contents of a single file system log directory and passes the records to the registered receiver of type {@link IMonitoringRecordReceiver}.
- * 
+ *
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.2
  */
 final class FSDirectoryReader implements Runnable {
@@ -64,7 +64,7 @@ final class FSDirectoryReader implements Runnable {
 
 	/**
 	 * Creates a new instance of this class.
-	 * 
+	 *
 	 * @param inputDir
 	 *            The File object for the input directory.
 	 * @param recordReceiver
@@ -166,6 +166,9 @@ final class FSDirectoryReader implements Runnable {
 				if (line.length() == 0) {
 					continue; // ignore empty lines
 				}
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Read line: " + line);
+				}
 				final int split = line.indexOf('=');
 				if (split == -1) {
 					LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath()
@@ -202,7 +205,7 @@ final class FSDirectoryReader implements Runnable {
 
 	/**
 	 * Reads the records contained in the given normal file and passes them to the registered {@link #recordReceiver}.
-	 * 
+	 *
 	 * @param inputFile
 	 *            The input file which should be processed.
 	 */
@@ -293,7 +296,7 @@ final class FSDirectoryReader implements Runnable {
 
 	/**
 	 * Reads the records contained in the given binary file and passes them to the registered {@link #recordReceiver}.
-	 * 
+	 *
 	 * @param inputFile
 	 *            The input file which should be processed.
 	 * @param compressionMethod

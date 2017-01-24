@@ -27,7 +27,6 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
-import kieker.common.util.filesystem.FSUtil;
 
 /**
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
@@ -37,11 +36,12 @@ import kieker.common.util.filesystem.FSUtil;
  * @since 0.95a
  */
 @Plugin(description = "A file system reader which reads records from multiple directories", outputPorts = {
-	@OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader") }, configuration = {
-		@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".", description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
-		@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false", description = "Ignore unknown records? Aborts if encountered and value is false.")
-	})
-public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
+	@OutputPort(name = FSReaderNew.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
+		IMonitoringRecord.class }, description = "Output Port of the FSReader") }, configuration = {
+			@Property(name = FSReaderNew.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".", description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
+			@Property(name = FSReaderNew.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false", description = "Ignore unknown records? Aborts if encountered and value is false.")
+		})
+public class FSReaderNew extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
 	/** The name of the output port delivering the record read by this plugin. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
@@ -69,7 +69,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	 * @param projectContext
 	 *            The project context for this component.
 	 */
-	public FSReader(final Configuration configuration, final IProjectContext projectContext) {
+	public FSReaderNew(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
 		this.inputDirs = this.configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_INPUTDIRS);
@@ -81,7 +81,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			}
 		}
 		if (nDirs == 0) {
-			this.log.warn("The list of input dirs passed to the " + FSReader.class.getSimpleName() + " is empty");
+			this.log.warn("The list of input dirs passed to the " + FSReaderNew.class.getSimpleName() + " is empty");
 			nDirs = 1;
 		}
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(nDirs);
@@ -111,8 +111,6 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			final Thread readerThread;
 			if (inputDir.isDirectory()) {
 				readerThread = new Thread(new FSDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes));
-			} else if (inputDir.isFile() && inputDirFn.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
-				readerThread = new Thread(new FSZipReader(inputDir, this, this.ignoreUnknownRecordTypes));
 			} else {
 				this.log.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
 				notInitializesReaders++;

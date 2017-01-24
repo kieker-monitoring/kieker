@@ -17,8 +17,10 @@
 package kieker.monitoring.writernew.filesystem;
 
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
@@ -78,6 +80,13 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 	public BinaryFileWriter(final Configuration configuration) {
 		super(configuration);
 		this.logFolder = this.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH));
+
+		try {
+			Files.createDirectories(this.logFolder);
+		} catch (final IOException e) {
+			throw new IllegalStateException("Error on creating Kieker's log directory.", e);
+		}
+
 		int maxEntriesPerFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
 		int maxMegaBytesPerFile = configuration.getIntProperty(CONFIG_MAXLOGSIZE);
 		int maxAmountOfFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
@@ -102,9 +111,10 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 	}
 
 	private Path buildKiekerLogFolder(final String customStoragePath) {
-		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
+		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmss", Locale.US);
 		date.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final String currentDateStr = date.format(new java.util.Date()); // NOPMD (Date)
+		String currentDateStr = date.format(new java.util.Date()); // NOPMD (Date)
+		currentDateStr += "-" + System.nanoTime(); // 'SSS' in SimpleDateFormat is not accurate enough for fast unit tests
 
 		final String hostName = this.configuration.getStringProperty(ConfigurationFactory.HOST_NAME);
 		final String controllerName = this.configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME);

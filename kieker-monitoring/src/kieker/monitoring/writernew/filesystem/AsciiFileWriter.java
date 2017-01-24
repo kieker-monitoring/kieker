@@ -17,7 +17,9 @@
 package kieker.monitoring.writernew.filesystem;
 
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
@@ -50,24 +52,33 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	/** The name of the configuration for the custom storage path if the writer is advised not to store in the temporary directory. */
 	public static final String CONFIG_PATH = PREFIX + "customStoragePath";
 	/** The name of the configuration for the charset name (e.g. "UTF-8") */
-	static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
+	/* default */ static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
 	/** The name of the configuration determining the maximal number of entries in a file. */
 	public static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
 	/** The name of the configuration key determining to enable/disable compression of the record log files */
-	static final String CONFIG_SHOULD_COMPRESS = PREFIX + "shouldCompress";
+	/* default */ static final String CONFIG_SHOULD_COMPRESS = PREFIX + "shouldCompress";
 	/** The name of the configuration determining the maximal size of the files in MiB. */
 	public static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
 	/** The name of the configuration determining the maximal number of log files. */
 	public static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
+	/** The name of the configuration determining whether to flush upon each incoming record. */
+	public static final String CONFIG_FLUSH = PREFIX + "flush";
 
 	private final Path logFolder;
 	private final AsciiFileWriterPool fileWriterPool;
 	private final MappingFileWriter mappingFileWriter;
 	private final IWriterRegistry<String> writerRegistry;
+	private final boolean flush;
 
 	public AsciiFileWriter(final Configuration configuration) {
 		super(configuration);
 		this.logFolder = this.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH));
+
+		try {
+			Files.createDirectories(this.logFolder);
+		} catch (final IOException e) {
+			throw new IllegalStateException("Error on creating Kieker's log directory.", e);
+		}
 
 		int maxEntriesPerFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
 		int maxMegaBytesPerFile = configuration.getIntProperty(CONFIG_MAXLOGSIZE);
@@ -80,8 +91,10 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME, "UTF-8");
 		final boolean shouldCompress = configuration.getBooleanProperty(CONFIG_SHOULD_COMPRESS);
 
-		this.fileWriterPool = new AsciiFileWriterPool(LOG, this.logFolder, charsetName, maxEntriesPerFile, shouldCompress, maxAmountOfFiles, maxMegaBytesPerFile);
+		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
+
 		this.mappingFileWriter = new MappingFileWriter(this.logFolder, charsetName);
+		this.fileWriterPool = new AsciiFileWriterPool(LOG, this.logFolder, charsetName, maxEntriesPerFile, shouldCompress, maxAmountOfFiles, maxMegaBytesPerFile);
 
 		this.writerRegistry = new WriterRegistry(this);
 	}
@@ -121,6 +134,10 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 			fileWriter.print(String.valueOf(recordField));
 		}
 		fileWriter.println();
+
+		if (this.flush) {
+			fileWriter.flush();
+		}
 	}
 
 	@Override
@@ -132,6 +149,10 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		mappingFileWriter.print('=');
 		mappingFileWriter.print(recordClassName);
 		mappingFileWriter.println();
+
+		if (this.flush) {
+			mappingFileWriter.flush();
+		}
 	}
 
 	@Override

@@ -38,12 +38,11 @@ class MappingFileWriter {
 	private final PrintWriter printWriter;
 
 	public MappingFileWriter(final Path folder, final String charsetName) {
+		// we expect "folder" to exist
 		final Path newMappingFile = folder.resolve(FSUtil.MAP_FILENAME);
-
 		final Charset charset = Charset.forName(charsetName);
 
 		try {
-			Files.createDirectories(folder);
 			final Writer w = Files.newBufferedWriter(newMappingFile, charset, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
 			this.printWriter = new PrintWriter(w);
 		} catch (final IOException e) {

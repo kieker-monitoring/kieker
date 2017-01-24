@@ -61,8 +61,7 @@ abstract class AbstractWriterPool {
 		}
 	}
 
-	public Path getNextFileName(final String fileExtensionWithDot) {
-		final int counter = this.logFiles.size();
+	public Path getNextFileName(final int counter, final String fileExtensionWithDot) {
 		final Date now = new Date();
 
 		// "%1$s-%2$tY%2$tm%2$td-%2$tH%2$tM%2$tS%2$tL-UTC-%3$03d-%4$s.%5$s"

@@ -32,13 +32,13 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writer.jms.AsyncJMSWriter;
+import kieker.monitoring.writernew.jms.JmsWriter;
 
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 public class BasicJMSWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
@@ -51,9 +51,9 @@ public class BasicJMSWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 		final AnalysisController analysisController = new AnalysisController();
 
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, AsyncJMSWriter.class.getName());
-		config.setProperty(AsyncJMSWriter.CONFIG_CONTEXTFACTORYTYPE, FakeInitialContextFactory.class.getName());
-		config.setProperty(AsyncJMSWriter.CONFIG_FACTORYLOOKUPNAME, "ConnectionFactory");
+		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, JmsWriter.class.getName());
+		config.setProperty(JmsWriter.CONFIG_CONTEXTFACTORYTYPE, FakeInitialContextFactory.class.getName());
+		config.setProperty(JmsWriter.CONFIG_FACTORYLOOKUPNAME, "ConnectionFactory");
 		final IMonitoringController ctrl = MonitoringController.createInstance(config);
 		Thread.sleep(1000);
 		final Configuration jmsReaderConfig = new Configuration();
