@@ -19,7 +19,8 @@ package kieker.analysisteetime.plugin.reader.list;
 import java.util.ArrayList;
 import java.util.List;
 
-import teetime.framework.AbstractProducerStage;
+import kieker.analysisteetime.plugin.reader.AbstractReader;
+import kieker.common.record.IMonitoringRecord;
 
 /**
  * Helper class that reads records added using the methods {@link #addAllObjects(List)} or {@link #addObject(Object)}.
@@ -32,9 +33,10 @@ import teetime.framework.AbstractProducerStage;
  *
  * @since 1.6
  */
-public class ListReader<T> extends AbstractProducerStage<T> {
+// TODO: Define a clear architecture: A superclass for all readers or an interface. Or neither and adapt abstract classes that need a super type for readers!
+public class ListReader extends AbstractReader {
 
-	private final List<T> objects = new ArrayList<T>();
+	private final List<IMonitoringRecord> objects = new ArrayList<IMonitoringRecord>();
 
 	/**
 	 * Empty default constructor.
@@ -49,7 +51,7 @@ public class ListReader<T> extends AbstractProducerStage<T> {
 	 * @param records
 	 *            The records to be added.
 	 */
-	public void addAllObjects(final List<T> records) {
+	public void addAllObjects(final List<IMonitoringRecord> records) {
 		this.objects.addAll(records);
 	}
 
@@ -59,15 +61,16 @@ public class ListReader<T> extends AbstractProducerStage<T> {
 	 * @param object
 	 *            The object to be added.
 	 */
-	public void addObject(final T object) {
+	public void addObject(final IMonitoringRecord object) {
 		this.objects.add(object);
 	}
 
 	@Override
 	protected void execute() {
-		for (final T obj : this.objects) {
+		for (final IMonitoringRecord obj : this.objects) {
 			this.outputPort.send(obj);
 		}
+		this.terminateStage();
 	}
 
 }
