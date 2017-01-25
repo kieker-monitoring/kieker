@@ -142,7 +142,6 @@ public class BasicExplorVizExportWriterTest extends AbstractWriterReaderTest { /
 
 	@Override
 	protected List<IMonitoringRecord> provideEvents() {
-
 		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
 		final Object[] testValues1 = { 22L, 11L, 101, "BeOpEv", "BeforeOperationEvent" };
 		final Object[] testValues2 = { 6L, 8L, 120, "AfOpEv", "AfterOperationEvent" };
@@ -151,12 +150,10 @@ public class BasicExplorVizExportWriterTest extends AbstractWriterReaderTest { /
 		final BeforeOperationEvent testBeforeOperationEvent = new BeforeOperationEvent(testValues1);
 		final AfterOperationEvent testAfterOperationEvent = new AfterOperationEvent(testValues2);
 		final AfterOperationFailedEvent testAfterOperationFailedEvent = new AfterOperationFailedEvent(testValues3);
-		final RegistryRecord testRegistryRecord = new RegistryRecord(10, "testRegistry");
 
 		someEvents.add(testBeforeOperationEvent);
 		someEvents.add(testAfterOperationEvent);
 		someEvents.add(testAfterOperationFailedEvent);
-		someEvents.add(testRegistryRecord);
 
 		return someEvents;
 	}
