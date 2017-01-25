@@ -39,13 +39,15 @@ public class MonitoringRecordLoggerFilter extends AbstractFilter<IMonitoringReco
 	/**
 	 * The {@link IMonitoringController} the received records are passed to.
 	 */
-	private final IMonitoringController monitoringController;
+	private IMonitoringController monitoringController;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param configuration
-	 *            The configuration for this component.
+	 * @param monitoringConfigurationFile
+	 *            The name of the {@code monitoring.properties} file.
+	 * @param keepOriginalLoggingTimestamps
+	 *            Determines whether the original logging timestamps will be used of whether the timestamps will be modified.
 	 *
 	 * @since 1.7
 	 */
@@ -54,23 +56,20 @@ public class MonitoringRecordLoggerFilter extends AbstractFilter<IMonitoringReco
 		final Configuration configuration = new Configuration();
 		if (monitoringConfigurationFile != null) {
 			configuration.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, monitoringConfigurationFile);
-		}
-		configuration.setProperty(
-				ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP,
-				Boolean.toString(!keepOriginalLoggingTimestamps));
+			configuration.setProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(!keepOriginalLoggingTimestamps));
 
-		final Configuration controllerConfiguration;
-		final String monitoringPropertiesFn = configuration.getPathProperty(CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN);
-		if (monitoringPropertiesFn.length() > 0) {
-			controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(monitoringPropertiesFn);
-		} else {
-			this.logger.info("No path to a 'monitoring.properties' file passed; using default configuration");
-			controllerConfiguration = ConfigurationFactory.createDefaultConfiguration();
+			final Configuration controllerConfiguration;
+			if (monitoringConfigurationFile.length() > 0) {
+				controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(monitoringConfigurationFile);
+			} else {
+				this.logger.info("No path to a 'monitoring.properties' file passed; using default configuration");
+				controllerConfiguration = ConfigurationFactory.createDefaultConfiguration();
+			}
+			// flatten submitted properties
+			final Configuration flatConfiguration = configuration.flatten();
+			flatConfiguration.setDefaultConfiguration(controllerConfiguration);
+			this.monitoringController = MonitoringController.createInstance(flatConfiguration);
 		}
-		// flatten submitted properties
-		final Configuration flatConfiguration = configuration.flatten();
-		flatConfiguration.setDefaultConfiguration(controllerConfiguration);
-		this.monitoringController = MonitoringController.createInstance(flatConfiguration);
 	}
 
 	/**
