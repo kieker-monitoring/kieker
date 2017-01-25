@@ -21,4 +21,9 @@ interface IMonitoringRecordReceiver {
 	 * @since 1.2
 	 */
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
+
+	/**
+	 * @since 2.0
+	 */
+	void newEndOfFileRecord();
 }

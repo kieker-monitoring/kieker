@@ -142,7 +142,7 @@ public class AsciiFileWriterTest {
 		Assert.assertTrue(mapFiles[0].exists());
 		Assert.assertThat(mapFiles.length, CoreMatchers.is(1));
 
-		final File[] recordFiles = storePath.listFiles(FileExtensionFilter.GZIP);
+		final File[] recordFiles = storePath.listFiles(FileExtensionFilter.ZIP);
 		Assert.assertThat(recordFiles[0].length(), CoreMatchers.is(CoreMatchers.not(0L)));
 		Assert.assertThat(recordFiles[1].length(), CoreMatchers.is(CoreMatchers.not(0L)));
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(2));

@@ -52,7 +52,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES = "ignoreUnknownRecordTypes";
 
 	/** This dummy record can be send to the reader's record queue to mark the end of the current file. */
-	public static final IMonitoringRecord EOF = new EmptyRecord();
+	private static final IMonitoringRecord EOF = new EmptyRecord();
 
 	private final boolean ignoreUnknownRecordTypes;
 
@@ -174,5 +174,10 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.toString(this.ignoreUnknownRecordTypes));
 		return configuration;
+	}
+
+	@Override
+	public void newEndOfFileRecord() {
+		this.newMonitoringRecord(EOF);
 	}
 }

@@ -24,7 +24,8 @@ import java.nio.channels.Channels;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import kieker.common.logging.Log;
 import kieker.common.util.filesystem.FSUtil;
@@ -34,7 +35,7 @@ import kieker.common.util.filesystem.FSUtil;
  *
  * @since 1.13
  */
-public class BinaryFileWriterPool extends AbstractWriterPool {
+class BinaryFileWriterPool extends AbstractWriterPool {
 
 	private final int maxEntriesPerFile;
 	private int numEntriesInCurrentFile;
@@ -58,7 +59,7 @@ public class BinaryFileWriterPool extends AbstractWriterPool {
 		this.maxBytesPerFile = maxMegaBytesPerFile * 1024L * 1024L; // conversion from MB to Bytes
 
 		this.currentChannel = new PooledFileChannel(Channels.newChannel(new ByteArrayOutputStream())); // NullObject design pattern
-		this.fileExtensionWithDot = (shouldCompress) ? FSUtil.GZIP_FILE_EXTENSION : FSUtil.BINARY_FILE_EXTENSION;
+		this.fileExtensionWithDot = (shouldCompress) ? FSUtil.ZIP_FILE_EXTENSION : FSUtil.BINARY_FILE_EXTENSION;
 	}
 
 	public PooledFileChannel getFileWriter(final ByteBuffer buffer) {
@@ -92,9 +93,10 @@ public class BinaryFileWriterPool extends AbstractWriterPool {
 			OutputStream outputStream = Files.newOutputStream(newFile, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
 
 			if (this.shouldCompress) {
-				final GZIPOutputStream compressedOutputStream = new GZIPOutputStream(outputStream);
-				// final ZipEntry newZipEntry = new ZipEntry(newFileName + FSUtil.NORMAL_FILE_EXTENSION);
-				// compressedOutputStream.putNextEntry(newZipEntry);
+				// final GZIPOutputStream compressedOutputStream = new GZIPOutputStream(outputStream);
+				final ZipOutputStream compressedOutputStream = new ZipOutputStream(outputStream);
+				final ZipEntry newZipEntry = new ZipEntry(newFile.toString() + FSUtil.NORMAL_FILE_EXTENSION);
+				compressedOutputStream.putNextEntry(newZipEntry);
 				outputStream = compressedOutputStream;
 			}
 

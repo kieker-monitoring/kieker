@@ -41,6 +41,9 @@ public class FileExtensionFilter implements FilenameFilter {
 
 	@Override
 	public boolean accept(final File dir, final String name) {
+		if (!name.startsWith(FSUtil.FILE_PREFIX)) {
+			return false;
+		}
 		return name.endsWith(this.fileExtension);
 	}
 

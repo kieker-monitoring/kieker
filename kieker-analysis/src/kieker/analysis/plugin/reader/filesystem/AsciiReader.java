@@ -36,12 +36,12 @@ import kieker.common.record.misc.EmptyRecord;
  * @since 0.95a
  */
 @Plugin(description = "A file system reader which reads records from multiple directories", outputPorts = {
-	@OutputPort(name = FSReaderNew.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
+	@OutputPort(name = AsciiReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
 		IMonitoringRecord.class }, description = "Output Port of the FSReader") }, configuration = {
-			@Property(name = FSReaderNew.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".", description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
-			@Property(name = FSReaderNew.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false", description = "Ignore unknown records? Aborts if encountered and value is false.")
+			@Property(name = AsciiReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".", description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
+			@Property(name = AsciiReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false", description = "Ignore unknown records? Aborts if encountered and value is false.")
 		})
-public class FSReaderNew extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
+public class AsciiReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
 	/** The name of the output port delivering the record read by this plugin. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
@@ -50,9 +50,11 @@ public class FSReaderNew extends AbstractReaderPlugin implements IMonitoringReco
 	public static final String CONFIG_PROPERTY_NAME_INPUTDIRS = "inputDirs";
 	/** The name of the configuration determining whether the reader ignores unknown record types or not. */
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES = "ignoreUnknownRecordTypes";
+	/** The name of the configuration determining whether to decompress the Kieker log files. */
+	public static final String CONFIG_SHOULD_DECOMPRESS = "shouldDecompress";
 
 	/** This dummy record can be send to the reader's record queue to mark the end of the current file. */
-	public static final IMonitoringRecord EOF = new EmptyRecord();
+	private static final IMonitoringRecord EOF = new EmptyRecord();
 
 	private final boolean ignoreUnknownRecordTypes;
 
@@ -60,6 +62,8 @@ public class FSReaderNew extends AbstractReaderPlugin implements IMonitoringReco
 	private final PriorityQueue<IMonitoringRecord> recordQueue;
 
 	private volatile boolean running = true;
+
+	private final boolean shouldDecompress;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -69,7 +73,7 @@ public class FSReaderNew extends AbstractReaderPlugin implements IMonitoringReco
 	 * @param projectContext
 	 *            The project context for this component.
 	 */
-	public FSReaderNew(final Configuration configuration, final IProjectContext projectContext) {
+	public AsciiReader(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
 		this.inputDirs = this.configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_INPUTDIRS);
@@ -81,11 +85,13 @@ public class FSReaderNew extends AbstractReaderPlugin implements IMonitoringReco
 			}
 		}
 		if (nDirs == 0) {
-			this.log.warn("The list of input dirs passed to the " + FSReaderNew.class.getSimpleName() + " is empty");
+			this.log.warn("The list of input dirs passed to the " + AsciiReader.class.getSimpleName() + " is empty");
 			nDirs = 1;
 		}
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(nDirs);
 		this.ignoreUnknownRecordTypes = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES);
+
+		this.shouldDecompress = this.configuration.getBooleanProperty(CONFIG_SHOULD_DECOMPRESS);
 	}
 
 	/**
@@ -110,7 +116,7 @@ public class FSReaderNew extends AbstractReaderPlugin implements IMonitoringReco
 
 			final Thread readerThread;
 			if (inputDir.isDirectory()) {
-				readerThread = new Thread(new FSDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes));
+				readerThread = new Thread(new AsciiDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes, this.shouldDecompress));
 			} else {
 				this.log.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
 				notInitializesReaders++;
@@ -172,5 +178,10 @@ public class FSReaderNew extends AbstractReaderPlugin implements IMonitoringReco
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.toString(this.ignoreUnknownRecordTypes));
 		return configuration;
+	}
+
+	@Override
+	public void newEndOfFileRecord() {
+		this.newMonitoringRecord(EOF);
 	}
 }

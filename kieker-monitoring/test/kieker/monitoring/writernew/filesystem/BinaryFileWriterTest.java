@@ -130,7 +130,7 @@ public class BinaryFileWriterTest {
 		Assert.assertTrue(mapFiles[0].exists());
 		Assert.assertThat(mapFiles.length, CoreMatchers.is(1));
 
-		final File[] recordFiles = storePath.listFiles(FileExtensionFilter.GZIP);
+		final File[] recordFiles = storePath.listFiles(FileExtensionFilter.ZIP);
 		Assert.assertTrue(recordFiles[0].exists());
 		Assert.assertTrue(recordFiles[1].exists());
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(2));

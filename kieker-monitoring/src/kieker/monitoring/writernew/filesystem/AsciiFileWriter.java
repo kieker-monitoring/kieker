@@ -56,7 +56,7 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	/** The name of the configuration determining the maximal number of entries in a file. */
 	public static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
 	/** The name of the configuration key determining to enable/disable compression of the record log files */
-	/* default */ static final String CONFIG_SHOULD_COMPRESS = PREFIX + "shouldCompress";
+	public static final String CONFIG_SHOULD_COMPRESS = PREFIX + "shouldCompress";
 	/** The name of the configuration determining the maximal size of the files in MiB. */
 	public static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
 	/** The name of the configuration determining the maximal number of log files. */

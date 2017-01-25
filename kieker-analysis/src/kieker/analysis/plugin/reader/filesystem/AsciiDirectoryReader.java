@@ -17,12 +17,10 @@
 package kieker.analysis.plugin.reader.filesystem;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.EOFException;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -30,6 +28,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipInputStream;
 
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
@@ -37,8 +36,8 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.common.util.filesystem.FSUtil;
+import kieker.common.util.filesystem.FileExtensionFilter;
 
 /**
  * Reads the contents of a single file system log directory and passes the records to the registered receiver of type {@link IMonitoringRecordReceiver}.
@@ -47,8 +46,8 @@ import kieker.common.util.filesystem.FSUtil;
  *
  * @since 1.2
  */
-final class FSDirectoryReader implements Runnable {
-	private static final Log LOG = LogFactory.getLog(FSDirectoryReader.class);
+class AsciiDirectoryReader implements Runnable {
+	private static final Log LOG = LogFactory.getLog(AsciiDirectoryReader.class);
 
 	String filePrefix = FSUtil.FILE_PREFIX; // NOPMD NOCS (package visible for inner class)
 
@@ -56,11 +55,12 @@ final class FSDirectoryReader implements Runnable {
 
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
-	private boolean terminated;
-
 	private final boolean ignoreUnknownRecordTypes;
+	private final boolean shouldDecompress;
+
 	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
 	private final Set<String> unknownTypesObserved = new HashSet<String>();
+	private boolean terminated;
 
 	/**
 	 * Creates a new instance of this class.
@@ -71,15 +71,18 @@ final class FSDirectoryReader implements Runnable {
 	 *            The receiver handling the records.
 	 * @param ignoreUnknownRecordTypes
 	 *            select only records of this type; null selects all
+	 * @param shouldDecompress
+	 *            <code>true</code> if each log file is compressed, otherwise <code>false</code>
 	 */
-	public FSDirectoryReader(final File inputDir, final IMonitoringRecordReceiver recordReceiver,
-			final boolean ignoreUnknownRecordTypes) {
+	public AsciiDirectoryReader(final File inputDir, final IMonitoringRecordReceiver recordReceiver,
+			final boolean ignoreUnknownRecordTypes, final boolean shouldDecompress) {
 		if ((inputDir == null) || !inputDir.isDirectory()) {
 			throw new IllegalArgumentException("Invalid or empty inputDir");
 		}
 		this.inputDir = inputDir;
 		this.recordReceiver = recordReceiver;
 		this.ignoreUnknownRecordTypes = ignoreUnknownRecordTypes;
+		this.shouldDecompress = shouldDecompress;
 	}
 
 	/**
@@ -88,21 +91,15 @@ final class FSDirectoryReader implements Runnable {
 	@Override
 	public final void run() {
 		this.readMappingFile(); // must be the first line to set filePrefix!
-		final File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
 
-			@Override
-			public boolean accept(final File pathname) {
-				final String name = pathname.getName();
-				return pathname.isFile()
-						&& name.startsWith(FSDirectoryReader.this.filePrefix)
-						&& (name.endsWith(FSUtil.NORMAL_FILE_EXTENSION) || BinaryCompressionMethod.hasValidFileExtension(name));
-			}
-		});
+		final FileExtensionFilter fileExtensionFilter = (this.shouldDecompress) ? FileExtensionFilter.ZIP : FileExtensionFilter.DAT;
+
+		final File[] inputFiles = this.inputDir.listFiles(fileExtensionFilter);
 		if (inputFiles == null) {
 			LOG.error("Directory '" + this.inputDir + "' does not exist or an I/O error occured.");
 		} else if (inputFiles.length == 0) {
 			// level 'warn' for this case, because this is not unusual for large monitoring logs including a number of directories
-			LOG.warn("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with a valid file extension.");
+			LOG.warn("Directory '" + this.inputDir + "' contains no Kieker log files.");
 		} else { // everything ok, we process the files
 			Arrays.sort(inputFiles, new Comparator<File>() {
 
@@ -111,29 +108,14 @@ final class FSDirectoryReader implements Runnable {
 					return f1.compareTo(f2); // simplified (we expect no dirs!)
 				}
 			});
-			boolean ignoreUnknownRecordTypesWarningAlreadyShown = false;
 			for (final File inputFile : inputFiles) {
 				if (this.terminated) {
 					LOG.info("Shutting down DirectoryReader.");
 					break;
 				}
+
 				LOG.info("< Loading " + inputFile.getAbsolutePath());
-				if (inputFile.getName().endsWith(FSUtil.NORMAL_FILE_EXTENSION)) {
-					this.processNormalInputFile(inputFile);
-				} else {
-					if (this.ignoreUnknownRecordTypes && ignoreUnknownRecordTypesWarningAlreadyShown) {
-						ignoreUnknownRecordTypesWarningAlreadyShown = true;
-						LOG.warn("The property '" + FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES
-								+ "' is not supported for binary files. But trying to read '" + inputFile + "'");
-					}
-					try {
-						final BinaryCompressionMethod method = BinaryCompressionMethod.getByFileExtension(inputFile.getName());
-						this.processBinaryInputFile(inputFile, method);
-					} catch (final IllegalArgumentException ex) {
-						LOG.warn("Unknown file extension for file " + inputFile);
-						continue;
-					}
-				}
+				this.processNormalInputFile(inputFile);
 			}
 		}
 		this.recordReceiver.newEndOfFileRecord();
@@ -213,7 +195,14 @@ final class FSDirectoryReader implements Runnable {
 		boolean abortDueToUnknownRecordType = false;
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), FSUtil.ENCODING));
+			InputStream fileInputStream = new FileInputStream(inputFile);
+			if (this.shouldDecompress) {
+				@SuppressWarnings("resource")
+				final ZipInputStream zipInputStream = new ZipInputStream(fileInputStream);
+				zipInputStream.getNextEntry();
+				fileInputStream = zipInputStream;
+			}
+			in = new BufferedReader(new InputStreamReader(fileInputStream, FSUtil.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				line = line.trim();
@@ -294,89 +283,4 @@ final class FSDirectoryReader implements Runnable {
 		}
 	}
 
-	/**
-	 * Reads the records contained in the given binary file and passes them to the registered {@link #recordReceiver}.
-	 *
-	 * @param inputFile
-	 *            The input file which should be processed.
-	 * @param compressionMethod
-	 *            Whether the input file is compressed.
-	 */
-	private final void processBinaryInputFile(final File inputFile, final BinaryCompressionMethod method) {
-		DataInputStream in = null;
-		try {
-			in = method.getDataInputStream(inputFile, 1024 * 1024); // 1 MiB buffer
-			while (true) {
-				final Integer id;
-				try {
-					id = in.readInt();
-				} catch (final EOFException eof) {
-					break; // we are finished
-				}
-				final String classname = this.stringRegistry.get(id);
-				if (classname == null) {
-					LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
-					break; // we can't easily recover on errors
-				}
-
-				final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(classname);
-				final Class<?>[] typeArray = AbstractMonitoringRecord.typesForClass(clazz);
-
-				// read record
-				final long loggingTimestamp = in.readLong(); // NOPMD (must be read here!)
-				final Object[] objectArray = new Object[typeArray.length];
-				int idx = -1;
-				for (final Class<?> type : typeArray) {
-					idx++;
-					if (type == String.class) {
-						final Integer strId = in.readInt();
-						final String str = this.stringRegistry.get(strId);
-						if (str == null) {
-							LOG.error("No String mapping found for id " + strId.toString());
-							objectArray[idx] = "";
-						} else {
-							objectArray[idx] = str;
-						}
-					} else if ((type == int.class) || (type == Integer.class)) {
-						objectArray[idx] = in.readInt();
-					} else if ((type == long.class) || (type == Long.class)) {
-						objectArray[idx] = in.readLong();
-					} else if ((type == float.class) || (type == Float.class)) {
-						objectArray[idx] = in.readFloat();
-					} else if ((type == double.class) || (type == Double.class)) {
-						objectArray[idx] = in.readDouble();
-					} else if ((type == byte.class) || (type == Byte.class)) {
-						objectArray[idx] = in.readByte();
-					} else if ((type == short.class) || (type == Short.class)) { // NOPMD (short)
-						objectArray[idx] = in.readShort();
-					} else if ((type == boolean.class) || (type == Boolean.class)) {
-						objectArray[idx] = in.readBoolean();
-					} else {
-						if (in.readByte() != 0) {
-							LOG.error("Unexpected value for unsupported type: " + clazz.getName());
-							return; // breaking error (break would not terminate the correct loop)
-						}
-						LOG.warn("Unsupported type: " + clazz.getName());
-						objectArray[idx] = null;
-					}
-				}
-				final IMonitoringRecord record = AbstractMonitoringRecord.createFromArray(clazz, objectArray);
-				record.setLoggingTimestamp(loggingTimestamp);
-				if (!this.recordReceiver.newMonitoringRecord(record)) {
-					this.terminated = true;
-					break; // we got the signal to stop processing
-				}
-			}
-		} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
-			LOG.error("Error reading " + inputFile, ex);
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (final IOException ex) {
-					LOG.error("Exception while closing input stream for processing input file", ex);
-				}
-			}
-		}
-	}
 }

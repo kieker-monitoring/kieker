@@ -27,7 +27,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import kieker.common.logging.Log;
 import kieker.common.util.filesystem.FSUtil;
@@ -38,7 +39,7 @@ import kieker.monitoring.writernew.WriterUtil;
  *
  * @since 1.13
  */
-public class AsciiFileWriterPool extends AbstractWriterPool {
+class AsciiFileWriterPool extends AbstractWriterPool {
 
 	private final Charset charset;
 
@@ -70,7 +71,7 @@ public class AsciiFileWriterPool extends AbstractWriterPool {
 		// this.currentFileWriter = Channels.newChannel(new ByteArrayOutputStream()); // NullObject design pattern
 		// final CharBuffer charBuffer = this.buffer.asCharBuffer();
 		this.currentFileWriter = new PrintWriter(new ByteArrayOutputStream()); // NullObject design pattern
-		this.fileExtensionWithDot = (shouldCompress) ? FSUtil.GZIP_FILE_EXTENSION : FSUtil.NORMAL_FILE_EXTENSION;
+		this.fileExtensionWithDot = (shouldCompress) ? FSUtil.ZIP_FILE_EXTENSION : FSUtil.NORMAL_FILE_EXTENSION;
 	}
 
 	public PrintWriter getFileWriter() {
@@ -106,9 +107,10 @@ public class AsciiFileWriterPool extends AbstractWriterPool {
 			OutputStream outputStream = Files.newOutputStream(newFile, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
 
 			if (this.shouldCompress) {
-				final GZIPOutputStream compressedOutputStream = new GZIPOutputStream(outputStream);
-				// final ZipEntry newZipEntry = new ZipEntry(newFileName + FSUtil.NORMAL_FILE_EXTENSION);
-				// compressedOutputStream.putNextEntry(newZipEntry);
+				// final GZIPOutputStream compressedOutputStream = new GZIPOutputStream(outputStream);
+				final ZipOutputStream compressedOutputStream = new ZipOutputStream(outputStream);
+				final ZipEntry newZipEntry = new ZipEntry(newFile.toString() + FSUtil.NORMAL_FILE_EXTENSION);
+				compressedOutputStream.putNextEntry(newZipEntry);
 				outputStream = compressedOutputStream;
 			}
 
