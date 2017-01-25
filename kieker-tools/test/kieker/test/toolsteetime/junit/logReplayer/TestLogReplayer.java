@@ -30,7 +30,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import kieker.analysisteetime.plugin.reader.AbstractReader;
 import kieker.analysisteetime.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
@@ -41,6 +40,8 @@ import kieker.tools.logReplayer.AbstractLogReplayer;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.NamedListWriter;
+
+import teetime.framework.AbstractProducerStage;
 
 /**
  * Tests the {@link AbstractLogReplayer}.
@@ -130,7 +131,6 @@ public class TestLogReplayer extends AbstractKiekerTest {
  *
  * @since 1.6
  */
-// TODO: Uses a modified version of the ListReader which extends AbstractReader although this might not be needed!
 class ListReplayer extends kieker.toolsteetime.logReplayer.AbstractLogReplayer { // NOPMD
 	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
 
@@ -145,8 +145,8 @@ class ListReplayer extends kieker.toolsteetime.logReplayer.AbstractLogReplayer {
 	}
 
 	@Override
-	protected AbstractReader createReader() {
-		final ListReader listReader = new ListReader();
+	protected AbstractProducerStage<IMonitoringRecord> createReader() {
+		final ListReader<IMonitoringRecord> listReader = new ListReader<IMonitoringRecord>();
 		listReader.addAllObjects(this.replayList);
 		return listReader;
 	}

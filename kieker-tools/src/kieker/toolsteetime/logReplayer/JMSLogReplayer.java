@@ -18,8 +18,10 @@ package kieker.toolsteetime.logReplayer;
 
 import java.util.concurrent.TimeUnit;
 
-import kieker.analysisteetime.plugin.reader.AbstractReader;
 import kieker.analysisteetime.plugin.reader.jms.JMSReader;
+import kieker.common.record.IMonitoringRecord;
+
+import teetime.framework.AbstractProducerStage;
 
 /**
  * An implementation of the {@link AbstractLogReplayer}, using the {@link JMSReader} to replay {@link kieker.common.record.IMonitoringRecord}s from a JMS queue.
@@ -58,8 +60,6 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	 *            = for instance "queue1"
 	 * @param jmsFactoryLookupName
 	 *            = for instance "org.exolab.jms.jndi.InitialContextFactory" (OpenJMS)
-	 * @param monitoringConfigurationFile
-	 *            The path of the monitoring.properties file.
 	 */
 	public JMSLogReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final TimeUnit realtimeTimeunit,
 			final double realtimeAccelerationFactor, final boolean keepOriginalLoggingTimestamps, final long ignoreRecordsBeforeTimestamp,
@@ -77,7 +77,7 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected AbstractReader createReader() {
+	protected AbstractProducerStage<IMonitoringRecord> createReader() {
 		return new JMSReader(this.jmsProviderUrl, this.jmsDestination, this.jmsFactoryLookupName);
 	}
 

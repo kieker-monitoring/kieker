@@ -20,11 +20,12 @@ import java.util.concurrent.TimeUnit;
 
 import kieker.analysisteetime.plugin.filter.record.delayfilter.RealtimeRecordDelayFilter;
 import kieker.analysisteetime.plugin.filter.select.timestampfilter.TimestampFilter;
-import kieker.analysisteetime.plugin.reader.AbstractReader;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.IMonitoringRecord;
 import kieker.toolsteetime.logReplayer.filter.MonitoringRecordLoggerFilter;
 
+import teetime.framework.AbstractProducerStage;
 import teetime.framework.Configuration;
 import teetime.framework.Execution;
 
@@ -96,7 +97,7 @@ public abstract class AbstractLogReplayer {
 	public void replay() {
 		LogReplayerConfiguration configuration;
 
-		final AbstractReader reader = this.createReader();
+		final AbstractProducerStage<IMonitoringRecord> reader = this.createReader();
 
 		final MonitoringRecordLoggerFilter recordLogger = new MonitoringRecordLoggerFilter(this.monitoringConfigurationFile, !this.keepOriginalLoggingTimestamps);
 
@@ -127,7 +128,7 @@ public abstract class AbstractLogReplayer {
 	 *
 	 * @return The reader which can be used to read the monitoring log.
 	 */
-	protected abstract AbstractReader createReader();
+	protected abstract AbstractProducerStage<IMonitoringRecord> createReader();
 
 	/**
 	 * Provides different predefined configurations for the {@link AbstractLogReplayer}.
@@ -138,22 +139,23 @@ public abstract class AbstractLogReplayer {
 	 */
 	private static class LogReplayerConfiguration extends Configuration {
 
-		public LogReplayerConfiguration(final AbstractReader reader, final MonitoringRecordLoggerFilter recordLogger) {
+		public LogReplayerConfiguration(final AbstractProducerStage<IMonitoringRecord> reader, final MonitoringRecordLoggerFilter recordLogger) {
 			this.connectPorts(reader.getOutputPort(), recordLogger.getInputPort());
 		}
 
-		public LogReplayerConfiguration(final AbstractReader reader, final TimestampFilter timestampFilter, final MonitoringRecordLoggerFilter recordLogger) {
+		public LogReplayerConfiguration(final AbstractProducerStage<IMonitoringRecord> reader, final TimestampFilter timestampFilter,
+				final MonitoringRecordLoggerFilter recordLogger) {
 			this.connectPorts(reader.getOutputPort(), timestampFilter.getMonitoringRecordsCombinedInputPort());
 			this.connectPorts(timestampFilter.getRecordsWithinTimePeriodOutputPort(), recordLogger.getInputPort());
 		}
 
-		public LogReplayerConfiguration(final AbstractReader reader, final RealtimeRecordDelayFilter realtimeRecordDelayFilter,
+		public LogReplayerConfiguration(final AbstractProducerStage<IMonitoringRecord> reader, final RealtimeRecordDelayFilter realtimeRecordDelayFilter,
 				final MonitoringRecordLoggerFilter recordLogger) {
 			this.connectPorts(reader.getOutputPort(), realtimeRecordDelayFilter.getInputPort());
 			this.connectPorts(realtimeRecordDelayFilter.getOutputPort(), recordLogger.getInputPort());
 		}
 
-		public LogReplayerConfiguration(final AbstractReader reader, final TimestampFilter timestampFilter,
+		public LogReplayerConfiguration(final AbstractProducerStage<IMonitoringRecord> reader, final TimestampFilter timestampFilter,
 				final RealtimeRecordDelayFilter realtimeRecordDelayFilter,
 				final MonitoringRecordLoggerFilter recordLogger) {
 			this.connectPorts(reader.getOutputPort(), timestampFilter.getMonitoringRecordsCombinedInputPort());
