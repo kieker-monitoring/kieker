@@ -48,7 +48,10 @@ public class GraphTransformerVisitor extends OperationCallVisitor {
 	}
 
 	private Vertex addVertex(final OperationCall operationCall) {
-		final Vertex vertex = this.graph.addVertex(operationCall.hashCode()); // TODO hashCode
+		// FIXME Using the hashCode() method here is a bad idea,
+		// since it can lead collisions. We need an absolute unique identifier
+		// which could be the object itself or an identifier field.
+		final Vertex vertex = this.graph.addVertex(operationCall.hashCode());
 
 		// TODO Perform the mapping
 
