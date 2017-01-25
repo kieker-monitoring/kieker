@@ -62,6 +62,8 @@
       <genClasses ecoreClass="analysismodel.ecore#//type/ComponentType">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/ComponentType/signature"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//type/ComponentType/providedOperations"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/ComponentType/name"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/ComponentType/package"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//type/EStringToOperationTypeMapEntry">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/EStringToOperationTypeMapEntry/key"/>
@@ -69,6 +71,10 @@
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//type/OperationType">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/OperationType/signature"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/OperationType/name"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/OperationType/returnType"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/OperationType/modifiers"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/OperationType/parameterTypes"/>
         <genOperations ecoreOperation="analysismodel.ecore#//type/OperationType/getComponentType"/>
       </genClasses>
     </nestedGenPackages>

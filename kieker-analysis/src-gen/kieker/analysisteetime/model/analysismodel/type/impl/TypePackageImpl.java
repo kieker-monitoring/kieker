@@ -241,6 +241,24 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getComponentType_Name() {
+		return (EAttribute)componentTypeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getComponentType_Package() {
+		return (EAttribute)componentTypeEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getEStringToOperationTypeMapEntry() {
 		return eStringToOperationTypeMapEntryEClass;
 	}
@@ -279,6 +297,42 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 	 */
 	public EAttribute getOperationType_Signature() {
 		return (EAttribute)operationTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getOperationType_Name() {
+		return (EAttribute)operationTypeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getOperationType_ReturnType() {
+		return (EAttribute)operationTypeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getOperationType_Modifiers() {
+		return (EAttribute)operationTypeEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getOperationType_ParameterTypes() {
+		return (EAttribute)operationTypeEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -328,6 +382,8 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 		componentTypeEClass = createEClass(COMPONENT_TYPE);
 		createEAttribute(componentTypeEClass, COMPONENT_TYPE__SIGNATURE);
 		createEReference(componentTypeEClass, COMPONENT_TYPE__PROVIDED_OPERATIONS);
+		createEAttribute(componentTypeEClass, COMPONENT_TYPE__NAME);
+		createEAttribute(componentTypeEClass, COMPONENT_TYPE__PACKAGE);
 
 		eStringToOperationTypeMapEntryEClass = createEClass(ESTRING_TO_OPERATION_TYPE_MAP_ENTRY);
 		createEAttribute(eStringToOperationTypeMapEntryEClass, ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__KEY);
@@ -335,6 +391,10 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 
 		operationTypeEClass = createEClass(OPERATION_TYPE);
 		createEAttribute(operationTypeEClass, OPERATION_TYPE__SIGNATURE);
+		createEAttribute(operationTypeEClass, OPERATION_TYPE__NAME);
+		createEAttribute(operationTypeEClass, OPERATION_TYPE__RETURN_TYPE);
+		createEAttribute(operationTypeEClass, OPERATION_TYPE__MODIFIERS);
+		createEAttribute(operationTypeEClass, OPERATION_TYPE__PARAMETER_TYPES);
 		createEOperation(operationTypeEClass, OPERATION_TYPE___GET_COMPONENT_TYPE);
 	}
 
@@ -378,6 +438,8 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 		initEClass(componentTypeEClass, ComponentType.class, "ComponentType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getComponentType_Signature(), ecorePackage.getEString(), "signature", null, 0, 1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getComponentType_ProvidedOperations(), this.getEStringToOperationTypeMapEntry(), null, "providedOperations", null, 0, -1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEAttribute(getComponentType_Name(), ecorePackage.getEString(), "name", null, 0, 1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getComponentType_Package(), ecorePackage.getEString(), "package", null, 0, 1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(eStringToOperationTypeMapEntryEClass, Map.Entry.class, "EStringToOperationTypeMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEStringToOperationTypeMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -385,6 +447,10 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 
 		initEClass(operationTypeEClass, OperationType.class, "OperationType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getOperationType_Signature(), ecorePackage.getEString(), "signature", null, 0, 1, OperationType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOperationType_Name(), ecorePackage.getEString(), "name", null, 0, 1, OperationType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOperationType_ReturnType(), ecorePackage.getEString(), "returnType", null, 0, 1, OperationType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOperationType_Modifiers(), ecorePackage.getEString(), "modifiers", null, 0, -1, OperationType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOperationType_ParameterTypes(), ecorePackage.getEString(), "parameterTypes", null, 0, -1, OperationType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getOperationType__GetComponentType(), this.getComponentType(), "getComponentType", 0, 1, IS_UNIQUE, IS_ORDERED);
 	}

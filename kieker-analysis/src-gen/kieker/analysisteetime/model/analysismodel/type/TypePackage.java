@@ -169,13 +169,31 @@ public interface TypePackage extends EPackage {
 	int COMPONENT_TYPE__PROVIDED_OPERATIONS = 1;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT_TYPE__NAME = 2;
+
+	/**
+	 * The feature id for the '<em><b>Package</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT_TYPE__PACKAGE = 3;
+
+	/**
 	 * The number of structural features of the '<em>Component Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT_TYPE_FEATURE_COUNT = 2;
+	int COMPONENT_TYPE_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Component Type</em>' class.
@@ -252,13 +270,49 @@ public interface TypePackage extends EPackage {
 	int OPERATION_TYPE__SIGNATURE = 0;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPERATION_TYPE__NAME = 1;
+
+	/**
+	 * The feature id for the '<em><b>Return Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPERATION_TYPE__RETURN_TYPE = 2;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPERATION_TYPE__MODIFIERS = 3;
+
+	/**
+	 * The feature id for the '<em><b>Parameter Types</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPERATION_TYPE__PARAMETER_TYPES = 4;
+
+	/**
 	 * The number of structural features of the '<em>Operation Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION_TYPE_FEATURE_COUNT = 1;
+	int OPERATION_TYPE_FEATURE_COUNT = 5;
 
 	/**
 	 * The operation id for the '<em>Get Component Type</em>' operation.
@@ -367,6 +421,28 @@ public interface TypePackage extends EPackage {
 	EReference getComponentType_ProvidedOperations();
 
 	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysisteetime.model.analysismodel.type.ComponentType#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.type.ComponentType#getName()
+	 * @see #getComponentType()
+	 * @generated
+	 */
+	EAttribute getComponentType_Name();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysisteetime.model.analysismodel.type.ComponentType#getPackage <em>Package</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Package</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.type.ComponentType#getPackage()
+	 * @see #getComponentType()
+	 * @generated
+	 */
+	EAttribute getComponentType_Package();
+
+	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Operation Type Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -420,6 +496,50 @@ public interface TypePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getOperationType_Signature();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysisteetime.model.analysismodel.type.OperationType#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.type.OperationType#getName()
+	 * @see #getOperationType()
+	 * @generated
+	 */
+	EAttribute getOperationType_Name();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysisteetime.model.analysismodel.type.OperationType#getReturnType <em>Return Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Return Type</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.type.OperationType#getReturnType()
+	 * @see #getOperationType()
+	 * @generated
+	 */
+	EAttribute getOperationType_ReturnType();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link kieker.analysisteetime.model.analysismodel.type.OperationType#getModifiers <em>Modifiers</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Modifiers</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.type.OperationType#getModifiers()
+	 * @see #getOperationType()
+	 * @generated
+	 */
+	EAttribute getOperationType_Modifiers();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link kieker.analysisteetime.model.analysismodel.type.OperationType#getParameterTypes <em>Parameter Types</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Parameter Types</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.type.OperationType#getParameterTypes()
+	 * @see #getOperationType()
+	 * @generated
+	 */
+	EAttribute getOperationType_ParameterTypes();
 
 	/**
 	 * Returns the meta object for the '{@link kieker.analysisteetime.model.analysismodel.type.OperationType#getComponentType() <em>Get Component Type</em>}' operation.
@@ -525,6 +645,22 @@ public interface TypePackage extends EPackage {
 		EReference COMPONENT_TYPE__PROVIDED_OPERATIONS = eINSTANCE.getComponentType_ProvidedOperations();
 
 		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute COMPONENT_TYPE__NAME = eINSTANCE.getComponentType_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Package</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute COMPONENT_TYPE__PACKAGE = eINSTANCE.getComponentType_Package();
+
+		/**
 		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.type.impl.EStringToOperationTypeMapEntryImpl <em>EString To Operation Type Map Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -567,6 +703,38 @@ public interface TypePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute OPERATION_TYPE__SIGNATURE = eINSTANCE.getOperationType_Signature();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPERATION_TYPE__NAME = eINSTANCE.getOperationType_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Return Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPERATION_TYPE__RETURN_TYPE = eINSTANCE.getOperationType_ReturnType();
+
+		/**
+		 * The meta object literal for the '<em><b>Modifiers</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPERATION_TYPE__MODIFIERS = eINSTANCE.getOperationType_Modifiers();
+
+		/**
+		 * The meta object literal for the '<em><b>Parameter Types</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPERATION_TYPE__PARAMETER_TYPES = eINSTANCE.getOperationType_ParameterTypes();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Component Type</b></em>' operation.
