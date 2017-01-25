@@ -31,15 +31,15 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
+import kieker.monitoring.writernew.namedRecordPipe.PipeWriter;
 
 /**
  * Provides factory methods for {@link MonitoringController}s configured to write to a {@link Pipe} and a convenient collector facility to access the records
  * received in a {@link List}. Note that, in contrast to the similar class {@link NamedPipeFactory}, doesn't use the {@link PipeWriter} directly, but uses an *
  * {@link IMonitoringController}. Also, the {@link kieker.analysis.plugin.reader.namedRecordPipe.PipeReader} is used.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.4
  */
 public final class NamedPipeFactory {
@@ -52,7 +52,7 @@ public final class NamedPipeFactory {
 	/**
 	 * This method should be used in tests to generate unique names for {@link Configuration}s with {@link PipeWriter}s and {@link java.io.PipedReader}s
 	 * in order to avoid naming conflicts.
-	 * 
+	 *
 	 * @return a unique name
 	 */
 	public static String createPipeName() {
@@ -62,7 +62,7 @@ public final class NamedPipeFactory {
 	/**
 	 * Creates a new {@link IMonitoringController} instance with the writer
 	 * being a {@link PipeWriter} with the given name.
-	 * 
+	 *
 	 * @param pipeName
 	 *            The name of the pipe to use.
 	 * @return the created IMonitoringController instance
@@ -75,7 +75,7 @@ public final class NamedPipeFactory {
 	 * Creates a new {@link IMonitoringController} instance with the writer
 	 * being a {@link PipeWriter} with the given name. Additional configuration
 	 * properties can be passed.
-	 * 
+	 *
 	 * @param pipeName
 	 *            The name of the pipe to use.
 	 * @param additionalProperties
@@ -100,7 +100,7 @@ public final class NamedPipeFactory {
 
 	/**
 	 * Creates an {@link kieker.monitoring.writer.IMonitoringWriter} that collects records from a {@link Pipe} and collects these in the returned {@link List}.
-	 * 
+	 *
 	 * @param pipeName
 	 *            The name of the pipe to use.
 	 * @return a list which contains the collected records

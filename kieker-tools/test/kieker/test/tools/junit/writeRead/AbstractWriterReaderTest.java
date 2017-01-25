@@ -148,7 +148,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 			// need to terminate explicitly, because otherwise, the monitoring log directory cannot be removed
 			ctrl.terminateMonitoring();
 		}
-final explorviz test does final not terminate
+
 		this.doBeforeReading();
 
 		final List<IMonitoringRecord> monitoringRecords = this.readEvents();

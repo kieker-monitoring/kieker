@@ -18,7 +18,6 @@ package kieker.monitoring.writernew.namedRecordPipe;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.namedRecordPipe.Broker;
-import kieker.common.namedRecordPipe.IPipeWriter;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writernew.AbstractMonitoringWriter;
@@ -29,7 +28,7 @@ import kieker.monitoring.writernew.AbstractMonitoringWriter;
  *
  * @since 1.3
  */
-public final class PipeWriter extends AbstractMonitoringWriter implements IPipeWriter {
+public final class PipeWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = PipeWriter.class.getName() + ".";
 	public static final String CONFIG_PIPENAME = PREFIX + "pipeName"; // NOCS (afterPREFIX)
 	// private static final Log LOG = LogFactory.getLog(PipeWriter.class);

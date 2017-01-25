@@ -18,7 +18,6 @@ package kieker.test.common.util.namedRecordPipe;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.common.namedRecordPipe.IPipeWriter;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.monitoring.writernew.namedRecordPipe.PipeWriter;
 
@@ -45,23 +44,14 @@ public final class NamedPipeWriterFactory {
 	}
 
 	/**
-	 * Creates an {@link kieker.common.namedRecordPipe.IPipeWriter} that writes records
+	 * Creates a new {@link PipeWriter} that writes records
 	 * to a {@link Pipe} with the given name.
 	 *
 	 * @param pipeName
 	 *            The name of the pipe to use.
-	 * @return the {@link kieker.common.namedRecordPipe.IPipeWriter}
+	 * @return a new {@link PipeWriter}
 	 */
-	public static final IPipeWriter createAndRegisterNamedPipeRecordWriter(final String pipeName) {
-		// final Pipe namedPipe = Broker.INSTANCE.acquirePipe(pipeName);
-		// final IPipeWriter writer = new IPipeWriter() {
-		//
-		// @Override
-		// public void writeMonitoringRecord(final IMonitoringRecord record) {
-		// namedPipe.writeMonitoringRecord(record);
-		// }
-		//
-		// };
+	public static final PipeWriter createAndRegisterNamedPipeRecordWriter(final String pipeName) {
 		return new PipeWriter(pipeName);
 	}
 }

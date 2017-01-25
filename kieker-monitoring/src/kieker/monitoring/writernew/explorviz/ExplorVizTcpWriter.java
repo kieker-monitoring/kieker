@@ -127,12 +127,12 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 
 		final ByteBuffer buffer = this.byteBuffer;
 		if (recordSize > buffer.remaining()) {
-			this.send(this.byteBuffer);
+			this.send(buffer);
 		}
 		this.convertKiekerToExplorViz(buffer, record);
 
 		if (this.flush) {
-			this.send(this.byteBuffer);
+			this.send(buffer);
 		}
 	}
 

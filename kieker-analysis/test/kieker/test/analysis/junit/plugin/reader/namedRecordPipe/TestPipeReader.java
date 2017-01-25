@@ -25,8 +25,8 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.namedRecordPipe.IPipeWriter;
 import kieker.common.record.misc.EmptyRecord;
+import kieker.monitoring.writernew.namedRecordPipe.PipeWriter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.util.namedRecordPipe.NamedPipeWriterFactory;
@@ -59,7 +59,7 @@ public class TestPipeReader extends AbstractKiekerTest { // NOCS (MissingCtorChe
 		final CountingFilter countingFilter = new CountingFilter(countinConfiguration, analysis);
 
 		// the writer
-		final IPipeWriter writer = NamedPipeWriterFactory.createAndRegisterNamedPipeRecordWriter(pipeName);
+		final PipeWriter writer = NamedPipeWriterFactory.createAndRegisterNamedPipeRecordWriter(pipeName);
 
 		analysis.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME_RECORDS, countingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
