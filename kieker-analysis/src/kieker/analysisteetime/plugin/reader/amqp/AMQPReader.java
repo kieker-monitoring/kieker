@@ -16,8 +16,10 @@
 
 package kieker.analysisteetime.plugin.reader.amqp;
 
-import kieker.analysisteetime.plugin.reader.AbstractReader;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.IMonitoringRecord;
+
+import teetime.framework.AbstractProducerStage;
 
 /**
  * Reader stage that reads monitoring records from an AMQP queue.
@@ -26,7 +28,9 @@ import kieker.common.logging.LogFactory;
  *
  * @since 1.12
  */
-public class AMQPReader extends AbstractReader {
+public class AMQPReader extends AbstractProducerStage<IMonitoringRecord> {
+
+	private final AMQPReaderLogic readerLogic;
 
 	/**
 	 * Creates a new AMQP reader.
@@ -40,6 +44,30 @@ public class AMQPReader extends AbstractReader {
 	 */
 	public AMQPReader(final String uri, final String queueName, final int heartbeat) {
 		this.readerLogic = new AMQPReaderLogic(uri, queueName, heartbeat, LogFactory.getLog(AMQPReader.class), this);
+	}
+
+	@Override
+	protected void execute() {
+		this.readerLogic.read();
+	}
+
+	/**
+	 * Terminates the reader logic by returning from read method and terminates the execution of the stage.
+	 */
+	@Override
+	public void terminateStage() {
+		this.readerLogic.terminate();
+		super.terminateStage();
+	}
+
+	/**
+	 * Called from reader logic to send the read records to the output port.
+	 *
+	 * @param monitoringRecord
+	 *            The record to deliver.
+	 */
+	public void deliverRecord(final IMonitoringRecord monitoringRecord) {
+		this.outputPort.send(monitoringRecord);
 	}
 
 }

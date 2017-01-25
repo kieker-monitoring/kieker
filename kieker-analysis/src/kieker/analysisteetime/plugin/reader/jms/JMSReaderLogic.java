@@ -34,7 +34,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 
-import kieker.analysisteetime.plugin.reader.IReaderLogic;
 import kieker.common.logging.Log;
 import kieker.common.record.IMonitoringRecord;
 
@@ -45,7 +44,7 @@ import kieker.common.record.IMonitoringRecord;
  *
  * @since 0.95a
  */
-public final class JMSReaderLogic implements IReaderLogic {
+public final class JMSReaderLogic {
 
 	private final String jmsProviderUrl;
 	private final String jmsDestination;
@@ -94,11 +93,17 @@ public final class JMSReaderLogic implements IReaderLogic {
 	}
 
 	/**
-	 * A call to this method is a blocking call.
+	 * Starts the reader. This method is intended to be a blocking operation,
+	 * i.e., it is assumed that reading has finished before this method returns.
+	 * The method should indicate an error by the return value false.
 	 *
-	 * @return true if the method succeeds, false otherwise.
+	 * In asynchronous scenarios, the {@link #terminate(boolean)} method can be used
+	 * to initiate the termination of this method.
+	 *
+	 * @return true if reading was successful; false if an error occurred
+	 *
+	 * @since 1.2
 	 */
-	@Override
 	public boolean read() {
 		boolean retVal = true;
 		Connection connection = null;
@@ -174,10 +179,9 @@ public final class JMSReaderLogic implements IReaderLogic {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Terminates the reader logic by returning from read method.
 	 */
-	@Override
-	public void terminate(final boolean error) {
+	public void terminate() {
 		this.log.info("Shutdown of JMSReader requested.");
 		this.unblock();
 	}

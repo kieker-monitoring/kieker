@@ -16,8 +16,10 @@
 
 package kieker.analysisteetime.plugin.reader.jms;
 
-import kieker.analysisteetime.plugin.reader.AbstractReader;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.IMonitoringRecord;
+
+import teetime.framework.AbstractProducerStage;
 
 /**
  * Reads monitoring records from a (remote or local) JMS queue by using the
@@ -28,7 +30,9 @@ import kieker.common.logging.LogFactory;
  *
  * @since 0.95a
  */
-public class JMSReader extends AbstractReader {
+public class JMSReader extends AbstractProducerStage<IMonitoringRecord> {
+
+	private final JMSReaderLogic readerLogic;
 
 	/**
 	 * Creates a new JMSReader.
@@ -47,4 +51,27 @@ public class JMSReader extends AbstractReader {
 		this.readerLogic = new JMSReaderLogic(jmsProviderUrl, jmsDestination, jmsFactoryLookupName, LogFactory.getLog(JMSReader.class), this);
 	}
 
+	@Override
+	protected void execute() {
+		this.readerLogic.read();
+	}
+
+	/**
+	 * Terminates the reader logic by returning from read method and terminates the execution of the stage.
+	 */
+	@Override
+	public void terminateStage() {
+		this.readerLogic.terminate();
+		super.terminateStage();
+	}
+
+	/**
+	 * Called from reader logic to send the read records to the output port.
+	 *
+	 * @param monitoringRecord
+	 *            The record to deliver.
+	 */
+	public void deliverRecord(final IMonitoringRecord monitoringRecord) {
+		this.outputPort.send(monitoringRecord);
+	}
 }
