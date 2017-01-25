@@ -68,13 +68,11 @@ public class TraceReconstructionBuffer {
 		final long nanosOffset = this.traceMetadata.getLoggingTimestamp() - record.getTimestamp();
 		newCall.setStart(this.traceStart.plusNanos(nanosOffset));
 
-		// TODO Retrieve Deployed Operation
 		final DeploymentContext context = this.deploymentModel.getDeploymentContexts().get(this.traceMetadata.getHostname());
 		final DeployedComponent component = context.getComponents().get(record.getClassSignature());
 		final DeployedOperation operation = component.getContainedOperations().get(record.getOperationSignature());
 		newCall.setOperation(operation);
 
-		// TODO Set OrderIndex and Stack Depth
 		newCall.setOrderIndex(record.getOrderIndex());
 		newCall.setStackDepth(this.stack.size() - 1);
 
@@ -115,7 +113,6 @@ public class TraceReconstructionBuffer {
 		final Trace trace = this.factory.createTrace();
 		trace.setRootOperationCall(this.root);
 		trace.setTraceID(this.traceMetadata.getTraceId());
-		// TODO Maybe further attributes
 		return trace;
 	}
 
