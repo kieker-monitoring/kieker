@@ -3,35 +3,40 @@
 package kieker.analysisteetime.model.analysismodel.execution.impl;
 
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
+
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
+import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionPackage;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot;
 
 import org.apache.commons.lang3.tuple.Pair;
+
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EMap;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Root</b></em>'.
+ * An implementation of the model object '<em><b>Model</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionRootImpl#getAggregatedInvocations <em>Aggregated Invocations</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionModelImpl#getAggregatedInvocations <em>Aggregated Invocations</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ExecutionRootImpl extends MinimalEObjectImpl.Container implements ExecutionRoot {
+public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements ExecutionModel {
 	/**
 	 * The cached value of the '{@link #getAggregatedInvocations() <em>Aggregated Invocations</em>}' map.
 	 * <!-- begin-user-doc -->
@@ -47,7 +52,7 @@ public class ExecutionRootImpl extends MinimalEObjectImpl.Container implements E
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ExecutionRootImpl() {
+	protected ExecutionModelImpl() {
 		super();
 	}
 
@@ -58,7 +63,7 @@ public class ExecutionRootImpl extends MinimalEObjectImpl.Container implements E
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ExecutionPackage.Literals.EXECUTION_ROOT;
+		return ExecutionPackage.Literals.EXECUTION_MODEL;
 	}
 
 	/**
@@ -68,7 +73,7 @@ public class ExecutionRootImpl extends MinimalEObjectImpl.Container implements E
 	 */
 	public EMap<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation> getAggregatedInvocations() {
 		if (aggregatedInvocations == null) {
-			aggregatedInvocations = new EcoreEMap<Pair<DeployedOperation, DeployedOperation>,AggregatedInvocation>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY, DeployedOperationsPairToAggregatedInvocationMapEntryImpl.class, this, ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS);
+			aggregatedInvocations = new EcoreEMap<Pair<DeployedOperation, DeployedOperation>,AggregatedInvocation>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY, DeployedOperationsPairToAggregatedInvocationMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS);
 		}
 		return aggregatedInvocations;
 	}
@@ -81,7 +86,7 @@ public class ExecutionRootImpl extends MinimalEObjectImpl.Container implements E
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS:
+			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
 				return ((InternalEList<?>)getAggregatedInvocations()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -95,7 +100,7 @@ public class ExecutionRootImpl extends MinimalEObjectImpl.Container implements E
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS:
+			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
 				if (coreType) return getAggregatedInvocations();
 				else return getAggregatedInvocations().map();
 		}
@@ -107,11 +112,10 @@ public class ExecutionRootImpl extends MinimalEObjectImpl.Container implements E
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS:
+			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
 				((EStructuralFeature.Setting)getAggregatedInvocations()).set(newValue);
 				return;
 		}
@@ -126,7 +130,7 @@ public class ExecutionRootImpl extends MinimalEObjectImpl.Container implements E
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS:
+			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
 				getAggregatedInvocations().clear();
 				return;
 		}
@@ -141,10 +145,10 @@ public class ExecutionRootImpl extends MinimalEObjectImpl.Container implements E
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ExecutionPackage.EXECUTION_ROOT__AGGREGATED_INVOCATIONS:
+			case ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS:
 				return aggregatedInvocations != null && !aggregatedInvocations.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //ExecutionRootImpl
+} //ExecutionModelImpl

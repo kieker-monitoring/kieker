@@ -52,8 +52,8 @@
     </nestedGenPackages>
     <nestedGenPackages prefix="Type" basePackage="kieker.analysisteetime.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//type">
-      <genClasses ecoreClass="analysismodel.ecore#//type/TypeRoot">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//type/TypeRoot/componentTypes"/>
+      <genClasses ecoreClass="analysismodel.ecore#//type/TypeModel">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//type/TypeModel/componentTypes"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//type/EStringToComponentTypeMapEntry">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/EStringToComponentTypeMapEntry/key"/>
@@ -62,7 +62,6 @@
       <genClasses ecoreClass="analysismodel.ecore#//type/ComponentType">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/ComponentType/signature"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//type/ComponentType/providedOperations"/>
-        <genOperations ecoreOperation="analysismodel.ecore#//type/ComponentType/getTypeRoot"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//type/EStringToOperationTypeMapEntry">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//type/EStringToOperationTypeMapEntry/key"/>
@@ -75,8 +74,8 @@
     </nestedGenPackages>
     <nestedGenPackages prefix="Assembly" basePackage="kieker.analysisteetime.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//assembly">
-      <genClasses ecoreClass="analysismodel.ecore#//assembly/AssemblyRoot">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyRoot/assemblyComponents"/>
+      <genClasses ecoreClass="analysismodel.ecore#//assembly/AssemblyModel">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyModel/assemblyComponents"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//assembly/EStringToAssemblyComponentMapEntry">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/EStringToAssemblyComponentMapEntry/key"/>
@@ -86,7 +85,6 @@
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyComponent/assemblyOperations"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//assembly/AssemblyComponent/componentType"/>
-        <genOperations ecoreOperation="analysismodel.ecore#//assembly/AssemblyComponent/getAssemblyRoot"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//assembly/EStringToAssemblyOperationMapEntry">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//assembly/EStringToAssemblyOperationMapEntry/key"/>
@@ -100,9 +98,8 @@
     </nestedGenPackages>
     <nestedGenPackages prefix="Deployment" basePackage="kieker.analysisteetime.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//deployment">
-      <genClasses ecoreClass="analysismodel.ecore#//deployment/DeploymentRoot">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeploymentRoot/deploymentContexts"/>
+      <genClasses ecoreClass="analysismodel.ecore#//deployment/DeploymentModel">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeploymentModel/deploymentContexts"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//deployment/EStringToDeploymentContextMapEntry">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//deployment/EStringToDeploymentContextMapEntry/key"/>
@@ -112,7 +109,6 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//deployment/DeploymentContext/name"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//deployment/DeploymentContext/components"/>
-        <genOperations ecoreOperation="analysismodel.ecore#//deployment/DeploymentContext/getDeploymentRoot"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//deployment/EStringToDeployedComponentMapEntry">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//deployment/EStringToDeployedComponentMapEntry/key"/>
@@ -137,9 +133,8 @@
     </nestedGenPackages>
     <nestedGenPackages prefix="Execution" basePackage="kieker.analysisteetime.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//execution">
-      <genClasses ecoreClass="analysismodel.ecore#//execution/ExecutionRoot">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//execution/ExecutionRoot/aggregatedInvocations"/>
+      <genClasses ecoreClass="analysismodel.ecore#//execution/ExecutionModel">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//execution/ExecutionModel/aggregatedInvocations"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//execution/DeployedOperationsPairToAggregatedInvocationMapEntry">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//execution/DeployedOperationsPairToAggregatedInvocationMapEntry/key"/>
@@ -150,15 +145,13 @@
             ecoreFeature="ecore:EReference analysismodel.ecore#//execution/AggregatedInvocation/source"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference analysismodel.ecore#//execution/AggregatedInvocation/target"/>
-        <genOperations ecoreOperation="analysismodel.ecore#//execution/AggregatedInvocation/getExecutionRoot"/>
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Trace" basePackage="kieker.analysisteetime.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//trace">
-      <genClasses ecoreClass="analysismodel.ecore#//trace/TraceRoot">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/TraceRoot/traceID"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference analysismodel.ecore#//trace/TraceRoot/rootOperationCall"/>
+      <genClasses ecoreClass="analysismodel.ecore#//trace/Trace">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analysismodel.ecore#//trace/Trace/traceID"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analysismodel.ecore#//trace/Trace/rootOperationCall"/>
       </genClasses>
       <genClasses ecoreClass="analysismodel.ecore#//trace/OperationCall">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"

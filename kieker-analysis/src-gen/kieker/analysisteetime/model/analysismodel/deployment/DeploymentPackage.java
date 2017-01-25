@@ -58,14 +58,14 @@ public interface DeploymentPackage extends EPackage {
 	DeploymentPackage eINSTANCE = kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentRootImpl <em>Root</em>}' class.
+	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentModelImpl <em>Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentRootImpl
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl#getDeploymentRoot()
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentModelImpl
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl#getDeploymentModel()
 	 * @generated
 	 */
-	int DEPLOYMENT_ROOT = 0;
+	int DEPLOYMENT_MODEL = 0;
 
 	/**
 	 * The feature id for the '<em><b>Deployment Contexts</b></em>' map.
@@ -74,25 +74,25 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYMENT_ROOT__DEPLOYMENT_CONTEXTS = 0;
+	int DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS = 0;
 
 	/**
-	 * The number of structural features of the '<em>Root</em>' class.
+	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYMENT_ROOT_FEATURE_COUNT = 1;
+	int DEPLOYMENT_MODEL_FEATURE_COUNT = 1;
 
 	/**
-	 * The number of operations of the '<em>Root</em>' class.
+	 * The number of operations of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYMENT_ROOT_OPERATION_COUNT = 0;
+	int DEPLOYMENT_MODEL_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeploymentContextMapEntryImpl <em>EString To Deployment Context Map Entry</em>}' class.
@@ -178,22 +178,13 @@ public interface DeploymentPackage extends EPackage {
 	int DEPLOYMENT_CONTEXT_FEATURE_COUNT = 2;
 
 	/**
-	 * The operation id for the '<em>Get Deployment Root</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DEPLOYMENT_CONTEXT___GET_DEPLOYMENT_ROOT = 0;
-
-	/**
 	 * The number of operations of the '<em>Context</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEPLOYMENT_CONTEXT_OPERATION_COUNT = 1;
+	int DEPLOYMENT_CONTEXT_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedComponentMapEntryImpl <em>EString To Deployed Component Map Entry</em>}' class.
@@ -390,25 +381,25 @@ public interface DeploymentPackage extends EPackage {
 
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot <em>Root</em>}'.
+	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Root</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot
+	 * @return the meta object for class '<em>Model</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel
 	 * @generated
 	 */
-	EClass getDeploymentRoot();
+	EClass getDeploymentModel();
 
 	/**
-	 * Returns the meta object for the map '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot#getDeploymentContexts <em>Deployment Contexts</em>}'.
+	 * Returns the meta object for the map '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel#getDeploymentContexts <em>Deployment Contexts</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the map '<em>Deployment Contexts</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot#getDeploymentContexts()
-	 * @see #getDeploymentRoot()
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel#getDeploymentContexts()
+	 * @see #getDeploymentModel()
 	 * @generated
 	 */
-	EReference getDeploymentRoot_DeploymentContexts();
+	EReference getDeploymentModel_DeploymentContexts();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Deployment Context Map Entry</em>}'.
@@ -464,16 +455,6 @@ public interface DeploymentPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getDeploymentContext_Components();
-
-	/**
-	 * Returns the meta object for the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getDeploymentRoot() <em>Get Deployment Root</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Deployment Root</em>' operation.
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getDeploymentRoot()
-	 * @generated
-	 */
-	EOperation getDeploymentContext__GetDeploymentRoot();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Deployed Component Map Entry</em>}'.
@@ -651,14 +632,14 @@ public interface DeploymentPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentRootImpl <em>Root</em>}' class.
+		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentModelImpl <em>Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentRootImpl
-		 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl#getDeploymentRoot()
+		 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentModelImpl
+		 * @see kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl#getDeploymentModel()
 		 * @generated
 		 */
-		EClass DEPLOYMENT_ROOT = eINSTANCE.getDeploymentRoot();
+		EClass DEPLOYMENT_MODEL = eINSTANCE.getDeploymentModel();
 
 		/**
 		 * The meta object literal for the '<em><b>Deployment Contexts</b></em>' map feature.
@@ -666,7 +647,7 @@ public interface DeploymentPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference DEPLOYMENT_ROOT__DEPLOYMENT_CONTEXTS = eINSTANCE.getDeploymentRoot_DeploymentContexts();
+		EReference DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS = eINSTANCE.getDeploymentModel_DeploymentContexts();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeploymentContextMapEntryImpl <em>EString To Deployment Context Map Entry</em>}' class.
@@ -711,14 +692,6 @@ public interface DeploymentPackage extends EPackage {
 		 * @generated
 		 */
 		EReference DEPLOYMENT_CONTEXT__COMPONENTS = eINSTANCE.getDeploymentContext_Components();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Deployment Root</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation DEPLOYMENT_CONTEXT___GET_DEPLOYMENT_ROOT = eINSTANCE.getDeploymentContext__GetDeploymentRoot();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedComponentMapEntryImpl <em>EString To Deployed Component Map Entry</em>}' class.

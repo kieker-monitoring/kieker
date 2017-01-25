@@ -12,9 +12,8 @@ import kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPack
 
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
+import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionPackage;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot;
-
 import kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl;
 
 import kieker.analysisteetime.model.analysismodel.statistics.StatisticsPackage;
@@ -30,7 +29,6 @@ import kieker.analysisteetime.model.analysismodel.type.impl.TypePackageImpl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EGenericType;
-import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -48,7 +46,7 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass executionRootEClass = null;
+	private EClass executionModelEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -150,8 +148,8 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getExecutionRoot() {
-		return executionRootEClass;
+	public EClass getExecutionModel() {
+		return executionModelEClass;
 	}
 
 	/**
@@ -159,8 +157,8 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getExecutionRoot_AggregatedInvocations() {
-		return (EReference)executionRootEClass.getEStructuralFeatures().get(0);
+	public EReference getExecutionModel_AggregatedInvocations() {
+		return (EReference)executionModelEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -222,15 +220,6 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getAggregatedInvocation__GetExecutionRoot() {
-		return aggregatedInvocationEClass.getEOperations().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public ExecutionFactory getExecutionFactory() {
 		return (ExecutionFactory)getEFactoryInstance();
 	}
@@ -254,8 +243,8 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		isCreated = true;
 
 		// Create classes and their features
-		executionRootEClass = createEClass(EXECUTION_ROOT);
-		createEReference(executionRootEClass, EXECUTION_ROOT__AGGREGATED_INVOCATIONS);
+		executionModelEClass = createEClass(EXECUTION_MODEL);
+		createEReference(executionModelEClass, EXECUTION_MODEL__AGGREGATED_INVOCATIONS);
 
 		deployedOperationsPairToAggregatedInvocationMapEntryEClass = createEClass(DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY);
 		createEAttribute(deployedOperationsPairToAggregatedInvocationMapEntryEClass, DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY__KEY);
@@ -264,7 +253,6 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		aggregatedInvocationEClass = createEClass(AGGREGATED_INVOCATION);
 		createEReference(aggregatedInvocationEClass, AGGREGATED_INVOCATION__SOURCE);
 		createEReference(aggregatedInvocationEClass, AGGREGATED_INVOCATION__TARGET);
-		createEOperation(aggregatedInvocationEClass, AGGREGATED_INVOCATION___GET_EXECUTION_ROOT);
 	}
 
 	/**
@@ -301,8 +289,8 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		// Add supertypes to classes
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(executionRootEClass, ExecutionRoot.class, "ExecutionRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getExecutionRoot_AggregatedInvocations(), this.getDeployedOperationsPairToAggregatedInvocationMapEntry(), null, "aggregatedInvocations", null, 0, -1, ExecutionRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEClass(executionModelEClass, ExecutionModel.class, "ExecutionModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getExecutionModel_AggregatedInvocations(), this.getDeployedOperationsPairToAggregatedInvocationMapEntry(), null, "aggregatedInvocations", null, 0, -1, ExecutionModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(deployedOperationsPairToAggregatedInvocationMapEntryEClass, Map.Entry.class, "DeployedOperationsPairToAggregatedInvocationMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		EGenericType g1 = createEGenericType(theAnalysismodelPackage.getPair());
@@ -316,8 +304,6 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		initEClass(aggregatedInvocationEClass, AggregatedInvocation.class, "AggregatedInvocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAggregatedInvocation_Source(), theDeploymentPackage.getDeployedOperation(), null, "source", null, 0, 1, AggregatedInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAggregatedInvocation_Target(), theDeploymentPackage.getDeployedOperation(), null, "target", null, 0, 1, AggregatedInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEOperation(getAggregatedInvocation__GetExecutionRoot(), this.getExecutionRoot(), "getExecutionRoot", 0, 1, IS_UNIQUE, IS_ORDERED);
 	}
 
 } //ExecutionPackageImpl

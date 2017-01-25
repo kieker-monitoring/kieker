@@ -8,21 +8,21 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Root</b></em>'.
+ * A representation of the model object '<em><b>Model</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot#getAssemblyComponents <em>Assembly Components</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel#getAssemblyComponents <em>Assembly Components</em>}</li>
  * </ul>
  *
- * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage#getAssemblyRoot()
+ * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage#getAssemblyModel()
  * @model
  * @generated
  */
-public interface AssemblyRoot extends EObject {
+public interface AssemblyModel extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Assembly Components</b></em>' map.
 	 * The key is of type {@link java.lang.String},
@@ -34,10 +34,10 @@ public interface AssemblyRoot extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Assembly Components</em>' map.
-	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage#getAssemblyRoot_AssemblyComponents()
+	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage#getAssemblyModel_AssemblyComponents()
 	 * @model mapType="kieker.analysisteetime.model.analysismodel.assembly.EStringToAssemblyComponentMapEntry<org.eclipse.emf.ecore.EString, kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent>" ordered="false"
 	 * @generated
 	 */
 	EMap<String, AssemblyComponent> getAssemblyComponents();
 
-} // AssemblyRoot
+} // AssemblyModel

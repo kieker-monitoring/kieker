@@ -70,8 +70,8 @@ public class TypeAdapterFactory extends AdapterFactoryImpl {
 	protected TypeSwitch<Adapter> modelSwitch =
 		new TypeSwitch<Adapter>() {
 			@Override
-			public Adapter caseTypeRoot(TypeRoot object) {
-				return createTypeRootAdapter();
+			public Adapter caseTypeModel(TypeModel object) {
+				return createTypeModelAdapter();
 			}
 			@Override
 			public Adapter caseEStringToComponentTypeMapEntry(Map.Entry<String, ComponentType> object) {
@@ -110,16 +110,16 @@ public class TypeAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.analysisteetime.model.analysismodel.type.TypeRoot <em>Root</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.analysisteetime.model.analysismodel.type.TypeModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.analysisteetime.model.analysismodel.type.TypeRoot
+	 * @see kieker.analysisteetime.model.analysismodel.type.TypeModel
 	 * @generated
 	 */
-	public Adapter createTypeRootAdapter() {
+	public Adapter createTypeModelAdapter() {
 		return null;
 	}
 

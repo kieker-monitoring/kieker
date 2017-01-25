@@ -68,9 +68,9 @@ public class AssemblySwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case AssemblyPackage.ASSEMBLY_ROOT: {
-				AssemblyRoot assemblyRoot = (AssemblyRoot)theEObject;
-				T result = caseAssemblyRoot(assemblyRoot);
+			case AssemblyPackage.ASSEMBLY_MODEL: {
+				AssemblyModel assemblyModel = (AssemblyModel)theEObject;
+				T result = caseAssemblyModel(assemblyModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -103,17 +103,17 @@ public class AssemblySwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Root</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Root</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Model</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAssemblyRoot(AssemblyRoot object) {
+	public T caseAssemblyModel(AssemblyModel object) {
 		return null;
 	}
 

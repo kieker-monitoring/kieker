@@ -31,9 +31,8 @@ import kieker.analysisteetime.model.analysismodel.trace.impl.TracePackageImpl;
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
+import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.analysisteetime.model.analysismodel.type.TypePackage;
-import kieker.analysisteetime.model.analysismodel.type.TypeRoot;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EOperation;
@@ -54,7 +53,7 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass typeRootEClass = null;
+	private EClass typeModelEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -170,8 +169,8 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getTypeRoot() {
-		return typeRootEClass;
+	public EClass getTypeModel() {
+		return typeModelEClass;
 	}
 
 	/**
@@ -179,8 +178,8 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getTypeRoot_ComponentTypes() {
-		return (EReference)typeRootEClass.getEStructuralFeatures().get(0);
+	public EReference getTypeModel_ComponentTypes() {
+		return (EReference)typeModelEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -235,15 +234,6 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 	 */
 	public EReference getComponentType_ProvidedOperations() {
 		return (EReference)componentTypeEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getComponentType__GetTypeRoot() {
-		return componentTypeEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -328,8 +318,8 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 		isCreated = true;
 
 		// Create classes and their features
-		typeRootEClass = createEClass(TYPE_ROOT);
-		createEReference(typeRootEClass, TYPE_ROOT__COMPONENT_TYPES);
+		typeModelEClass = createEClass(TYPE_MODEL);
+		createEReference(typeModelEClass, TYPE_MODEL__COMPONENT_TYPES);
 
 		eStringToComponentTypeMapEntryEClass = createEClass(ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY);
 		createEAttribute(eStringToComponentTypeMapEntryEClass, ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY__KEY);
@@ -338,7 +328,6 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 		componentTypeEClass = createEClass(COMPONENT_TYPE);
 		createEAttribute(componentTypeEClass, COMPONENT_TYPE__SIGNATURE);
 		createEReference(componentTypeEClass, COMPONENT_TYPE__PROVIDED_OPERATIONS);
-		createEOperation(componentTypeEClass, COMPONENT_TYPE___GET_TYPE_ROOT);
 
 		eStringToOperationTypeMapEntryEClass = createEClass(ESTRING_TO_OPERATION_TYPE_MAP_ENTRY);
 		createEAttribute(eStringToOperationTypeMapEntryEClass, ESTRING_TO_OPERATION_TYPE_MAP_ENTRY__KEY);
@@ -379,8 +368,8 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 		// Add supertypes to classes
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(typeRootEClass, TypeRoot.class, "TypeRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getTypeRoot_ComponentTypes(), this.getEStringToComponentTypeMapEntry(), null, "componentTypes", null, 0, -1, TypeRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEClass(typeModelEClass, TypeModel.class, "TypeModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getTypeModel_ComponentTypes(), this.getEStringToComponentTypeMapEntry(), null, "componentTypes", null, 0, -1, TypeModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(eStringToComponentTypeMapEntryEClass, Map.Entry.class, "EStringToComponentTypeMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEStringToComponentTypeMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -389,8 +378,6 @@ public class TypePackageImpl extends EPackageImpl implements TypePackage {
 		initEClass(componentTypeEClass, ComponentType.class, "ComponentType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getComponentType_Signature(), ecorePackage.getEString(), "signature", null, 0, 1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getComponentType_ProvidedOperations(), this.getEStringToOperationTypeMapEntry(), null, "providedOperations", null, 0, -1, ComponentType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
-
-		initEOperation(getComponentType__GetTypeRoot(), this.getTypeRoot(), "getTypeRoot", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(eStringToOperationTypeMapEntryEClass, Map.Entry.class, "EStringToOperationTypeMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEStringToOperationTypeMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -22,13 +22,13 @@ public interface TypeFactory extends EFactory {
 	TypeFactory eINSTANCE = kieker.analysisteetime.model.analysismodel.type.impl.TypeFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Root</em>'.
+	 * Returns a new object of class '<em>Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Root</em>'.
+	 * @return a new object of class '<em>Model</em>'.
 	 * @generated
 	 */
-	TypeRoot createTypeRoot();
+	TypeModel createTypeModel();
 
 	/**
 	 * Returns a new object of class '<em>Component Type</em>'.

@@ -69,8 +69,8 @@ public class DeploymentAdapterFactory extends AdapterFactoryImpl {
 	protected DeploymentSwitch<Adapter> modelSwitch =
 		new DeploymentSwitch<Adapter>() {
 			@Override
-			public Adapter caseDeploymentRoot(DeploymentRoot object) {
-				return createDeploymentRootAdapter();
+			public Adapter caseDeploymentModel(DeploymentModel object) {
+				return createDeploymentModelAdapter();
 			}
 			@Override
 			public Adapter caseEStringToDeploymentContextMapEntry(Map.Entry<String, DeploymentContext> object) {
@@ -117,16 +117,16 @@ public class DeploymentAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot <em>Root</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot
+	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel
 	 * @generated
 	 */
-	public Adapter createDeploymentRootAdapter() {
+	public Adapter createDeploymentModelAdapter() {
 		return null;
 	}
 

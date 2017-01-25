@@ -68,9 +68,9 @@ public class TypeSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case TypePackage.TYPE_ROOT: {
-				TypeRoot typeRoot = (TypeRoot)theEObject;
-				T result = caseTypeRoot(typeRoot);
+			case TypePackage.TYPE_MODEL: {
+				TypeModel typeModel = (TypeModel)theEObject;
+				T result = caseTypeModel(typeModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -103,17 +103,17 @@ public class TypeSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Root</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Root</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Model</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseTypeRoot(TypeRoot object) {
+	public T caseTypeModel(TypeModel object) {
 		return null;
 	}
 

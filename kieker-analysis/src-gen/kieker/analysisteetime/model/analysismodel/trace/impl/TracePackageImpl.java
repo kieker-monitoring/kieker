@@ -19,10 +19,9 @@ import kieker.analysisteetime.model.analysismodel.statistics.StatisticsPackage;
 
 import kieker.analysisteetime.model.analysismodel.statistics.impl.StatisticsPackageImpl;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.analysisteetime.model.analysismodel.trace.TraceFactory;
 import kieker.analysisteetime.model.analysismodel.trace.TracePackage;
-import kieker.analysisteetime.model.analysismodel.trace.TraceRoot;
-
 import kieker.analysisteetime.model.analysismodel.type.TypePackage;
 import kieker.analysisteetime.model.analysismodel.type.impl.TypePackageImpl;
 import org.eclipse.emf.ecore.EAttribute;
@@ -44,7 +43,7 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass traceRootEClass = null;
+	private EClass traceEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -139,8 +138,8 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getTraceRoot() {
-		return traceRootEClass;
+	public EClass getTrace() {
+		return traceEClass;
 	}
 
 	/**
@@ -148,8 +147,8 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getTraceRoot_TraceID() {
-		return (EAttribute)traceRootEClass.getEStructuralFeatures().get(0);
+	public EAttribute getTrace_TraceID() {
+		return (EAttribute)traceEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -157,8 +156,8 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getTraceRoot_RootOperationCall() {
-		return (EReference)traceRootEClass.getEStructuralFeatures().get(1);
+	public EReference getTrace_RootOperationCall() {
+		return (EReference)traceEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -297,9 +296,9 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 		isCreated = true;
 
 		// Create classes and their features
-		traceRootEClass = createEClass(TRACE_ROOT);
-		createEAttribute(traceRootEClass, TRACE_ROOT__TRACE_ID);
-		createEReference(traceRootEClass, TRACE_ROOT__ROOT_OPERATION_CALL);
+		traceEClass = createEClass(TRACE);
+		createEAttribute(traceEClass, TRACE__TRACE_ID);
+		createEReference(traceEClass, TRACE__ROOT_OPERATION_CALL);
 
 		operationCallEClass = createEClass(OPERATION_CALL);
 		createEReference(operationCallEClass, OPERATION_CALL__OPERATION);
@@ -349,9 +348,9 @@ public class TracePackageImpl extends EPackageImpl implements TracePackage {
 		// Add supertypes to classes
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(traceRootEClass, TraceRoot.class, "TraceRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getTraceRoot_TraceID(), ecorePackage.getELong(), "traceID", null, 0, 1, TraceRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTraceRoot_RootOperationCall(), this.getOperationCall(), null, "rootOperationCall", null, 0, 1, TraceRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEClass(traceEClass, Trace.class, "Trace", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getTrace_TraceID(), ecorePackage.getELong(), "traceID", null, 0, 1, Trace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTrace_RootOperationCall(), this.getOperationCall(), null, "rootOperationCall", null, 0, 1, Trace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(operationCallEClass, OperationCall.class, "OperationCall", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getOperationCall_Operation(), theDeploymentPackage.getDeployedOperation(), null, "operation", null, 0, 1, OperationCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -22,13 +22,13 @@ public interface TraceFactory extends EFactory {
 	TraceFactory eINSTANCE = kieker.analysisteetime.model.analysismodel.trace.impl.TraceFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Root</em>'.
+	 * Returns a new object of class '<em>Trace</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Root</em>'.
+	 * @return a new object of class '<em>Trace</em>'.
 	 * @generated
 	 */
-	TraceRoot createTraceRoot();
+	Trace createTrace();
 
 	/**
 	 * Returns a new object of class '<em>Operation Call</em>'.

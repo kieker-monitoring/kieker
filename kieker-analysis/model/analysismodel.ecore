@@ -61,7 +61,7 @@
   </eSubpackages>
   <eSubpackages name="type" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/type"
       nsPrefix="type">
-    <eClassifiers xsi:type="ecore:EClass" name="TypeRoot">
+    <eClassifiers xsi:type="ecore:EClass" name="TypeModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="componentTypes" ordered="false"
           upperBound="-1" eType="#//type/EStringToComponentTypeMapEntry" containment="true"/>
     </eClassifiers>
@@ -71,11 +71,6 @@
           containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="ComponentType">
-      <eOperations name="getTypeRoot" eType="#//type/TypeRoot">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (TypeRoot) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
-        </eAnnotations>
-      </eOperations>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="providedOperations" ordered="false"
           upperBound="-1" eType="#//type/EStringToOperationTypeMapEntry" containment="true"/>
@@ -96,7 +91,7 @@
   </eSubpackages>
   <eSubpackages name="assembly" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/assembly"
       nsPrefix="assembly">
-    <eClassifiers xsi:type="ecore:EClass" name="AssemblyRoot">
+    <eClassifiers xsi:type="ecore:EClass" name="AssemblyModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyComponents" ordered="false"
           upperBound="-1" eType="#//assembly/EStringToAssemblyComponentMapEntry" containment="true"/>
     </eClassifiers>
@@ -107,11 +102,6 @@
           containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="AssemblyComponent">
-      <eOperations name="getAssemblyRoot" eType="#//assembly/AssemblyRoot">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (AssemblyRoot) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
-        </eAnnotations>
-      </eOperations>
       <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyOperations" ordered="false"
           upperBound="-1" eType="#//assembly/EStringToAssemblyOperationMapEntry" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="componentType" eType="#//type/ComponentType"/>
@@ -133,7 +123,7 @@
   </eSubpackages>
   <eSubpackages name="deployment" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/deployment"
       nsPrefix="deployment">
-    <eClassifiers xsi:type="ecore:EClass" name="DeploymentRoot">
+    <eClassifiers xsi:type="ecore:EClass" name="DeploymentModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentContexts" ordered="false"
           upperBound="-1" eType="#//deployment/EStringToDeploymentContextMapEntry"
           containment="true"/>
@@ -145,11 +135,6 @@
           containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DeploymentContext">
-      <eOperations name="getDeploymentRoot" eType="#//deployment/DeploymentRoot">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (DeploymentRoot) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
-        </eAnnotations>
-      </eOperations>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="components" ordered="false"
           upperBound="-1" eType="#//deployment/EStringToDeployedComponentMapEntry"
@@ -189,7 +174,7 @@
   </eSubpackages>
   <eSubpackages name="execution" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/execution"
       nsPrefix="execution">
-    <eClassifiers xsi:type="ecore:EClass" name="ExecutionRoot">
+    <eClassifiers xsi:type="ecore:EClass" name="ExecutionModel">
       <eStructuralFeatures xsi:type="ecore:EReference" name="aggregatedInvocations"
           ordered="false" upperBound="-1" eType="#//execution/DeployedOperationsPairToAggregatedInvocationMapEntry"
           containment="true"/>
@@ -206,21 +191,13 @@
           containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="AggregatedInvocation">
-      <eOperations name="getExecutionRoot" eType="#//execution/ExecutionRoot">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (DeploymentRoot) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
-          </eAnnotations>
-          <details key="body" value="org.eclipse.emf.ecore.EObject container = this.eContainer();&#xD;&#xA;if (container != null) {&#xD;&#xA;&#x9;org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();&#xD;&#xA;&#x9;if (containerContainer != null) {&#xD;&#xA;&#x9;&#x9;return (ExecutionRoot) containerContainer ;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;&#xD;&#xA;"/>
-        </eAnnotations>
-      </eOperations>
       <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//deployment/DeployedOperation"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//deployment/DeployedOperation"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="trace" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/trace"
       nsPrefix="trace">
-    <eClassifiers xsi:type="ecore:EClass" name="TraceRoot">
+    <eClassifiers xsi:type="ecore:EClass" name="Trace">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="traceID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="rootOperationCall" ordered="false"
           eType="#//trace/OperationCall" containment="true"/>

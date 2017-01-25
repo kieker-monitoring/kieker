@@ -1,10 +1,10 @@
 /**
  */
-package kieker.analysisteetime.model.analysismodel.type.impl;
+package kieker.analysisteetime.model.analysismodel.assembly.impl;
 
-import kieker.analysisteetime.model.analysismodel.type.ComponentType;
-import kieker.analysisteetime.model.analysismodel.type.TypePackage;
-import kieker.analysisteetime.model.analysismodel.type.TypeRoot;
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent;
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -21,34 +21,34 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Root</b></em>'.
+ * An implementation of the model object '<em><b>Model</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.type.impl.TypeRootImpl#getComponentTypes <em>Component Types</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyModelImpl#getAssemblyComponents <em>Assembly Components</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class TypeRootImpl extends MinimalEObjectImpl.Container implements TypeRoot {
+public class AssemblyModelImpl extends MinimalEObjectImpl.Container implements AssemblyModel {
 	/**
-	 * The cached value of the '{@link #getComponentTypes() <em>Component Types</em>}' map.
+	 * The cached value of the '{@link #getAssemblyComponents() <em>Assembly Components</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getComponentTypes()
+	 * @see #getAssemblyComponents()
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<String, ComponentType> componentTypes;
+	protected EMap<String, AssemblyComponent> assemblyComponents;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected TypeRootImpl() {
+	protected AssemblyModelImpl() {
 		super();
 	}
 
@@ -59,7 +59,7 @@ public class TypeRootImpl extends MinimalEObjectImpl.Container implements TypeRo
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return TypePackage.Literals.TYPE_ROOT;
+		return AssemblyPackage.Literals.ASSEMBLY_MODEL;
 	}
 
 	/**
@@ -67,11 +67,11 @@ public class TypeRootImpl extends MinimalEObjectImpl.Container implements TypeRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EMap<String, ComponentType> getComponentTypes() {
-		if (componentTypes == null) {
-			componentTypes = new EcoreEMap<String,ComponentType>(TypePackage.Literals.ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY, EStringToComponentTypeMapEntryImpl.class, this, TypePackage.TYPE_ROOT__COMPONENT_TYPES);
+	public EMap<String, AssemblyComponent> getAssemblyComponents() {
+		if (assemblyComponents == null) {
+			assemblyComponents = new EcoreEMap<String,AssemblyComponent>(AssemblyPackage.Literals.ESTRING_TO_ASSEMBLY_COMPONENT_MAP_ENTRY, EStringToAssemblyComponentMapEntryImpl.class, this, AssemblyPackage.ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS);
 		}
-		return componentTypes;
+		return assemblyComponents;
 	}
 
 	/**
@@ -82,8 +82,8 @@ public class TypeRootImpl extends MinimalEObjectImpl.Container implements TypeRo
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case TypePackage.TYPE_ROOT__COMPONENT_TYPES:
-				return ((InternalEList<?>)getComponentTypes()).basicRemove(otherEnd, msgs);
+			case AssemblyPackage.ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS:
+				return ((InternalEList<?>)getAssemblyComponents()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -96,9 +96,9 @@ public class TypeRootImpl extends MinimalEObjectImpl.Container implements TypeRo
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case TypePackage.TYPE_ROOT__COMPONENT_TYPES:
-				if (coreType) return getComponentTypes();
-				else return getComponentTypes().map();
+			case AssemblyPackage.ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS:
+				if (coreType) return getAssemblyComponents();
+				else return getAssemblyComponents().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -111,8 +111,8 @@ public class TypeRootImpl extends MinimalEObjectImpl.Container implements TypeRo
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case TypePackage.TYPE_ROOT__COMPONENT_TYPES:
-				((EStructuralFeature.Setting)getComponentTypes()).set(newValue);
+			case AssemblyPackage.ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS:
+				((EStructuralFeature.Setting)getAssemblyComponents()).set(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -126,8 +126,8 @@ public class TypeRootImpl extends MinimalEObjectImpl.Container implements TypeRo
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case TypePackage.TYPE_ROOT__COMPONENT_TYPES:
-				getComponentTypes().clear();
+			case AssemblyPackage.ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS:
+				getAssemblyComponents().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -141,10 +141,10 @@ public class TypeRootImpl extends MinimalEObjectImpl.Container implements TypeRo
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case TypePackage.TYPE_ROOT__COMPONENT_TYPES:
-				return componentTypes != null && !componentTypes.isEmpty();
+			case AssemblyPackage.ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS:
+				return assemblyComponents != null && !assemblyComponents.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //TypeRootImpl
+} //AssemblyModelImpl

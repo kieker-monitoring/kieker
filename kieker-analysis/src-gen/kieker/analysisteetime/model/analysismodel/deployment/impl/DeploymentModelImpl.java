@@ -1,10 +1,10 @@
 /**
  */
-package kieker.analysisteetime.model.analysismodel.assembly.impl;
+package kieker.analysisteetime.model.analysismodel.deployment.impl;
 
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -21,34 +21,34 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Root</b></em>'.
+ * An implementation of the model object '<em><b>Model</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyRootImpl#getAssemblyComponents <em>Assembly Components</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentModelImpl#getDeploymentContexts <em>Deployment Contexts</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class AssemblyRootImpl extends MinimalEObjectImpl.Container implements AssemblyRoot {
+public class DeploymentModelImpl extends MinimalEObjectImpl.Container implements DeploymentModel {
 	/**
-	 * The cached value of the '{@link #getAssemblyComponents() <em>Assembly Components</em>}' map.
+	 * The cached value of the '{@link #getDeploymentContexts() <em>Deployment Contexts</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAssemblyComponents()
+	 * @see #getDeploymentContexts()
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<String, AssemblyComponent> assemblyComponents;
+	protected EMap<String, DeploymentContext> deploymentContexts;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected AssemblyRootImpl() {
+	protected DeploymentModelImpl() {
 		super();
 	}
 
@@ -59,7 +59,7 @@ public class AssemblyRootImpl extends MinimalEObjectImpl.Container implements As
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return AssemblyPackage.Literals.ASSEMBLY_ROOT;
+		return DeploymentPackage.Literals.DEPLOYMENT_MODEL;
 	}
 
 	/**
@@ -67,11 +67,11 @@ public class AssemblyRootImpl extends MinimalEObjectImpl.Container implements As
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EMap<String, AssemblyComponent> getAssemblyComponents() {
-		if (assemblyComponents == null) {
-			assemblyComponents = new EcoreEMap<String,AssemblyComponent>(AssemblyPackage.Literals.ESTRING_TO_ASSEMBLY_COMPONENT_MAP_ENTRY, EStringToAssemblyComponentMapEntryImpl.class, this, AssemblyPackage.ASSEMBLY_ROOT__ASSEMBLY_COMPONENTS);
+	public EMap<String, DeploymentContext> getDeploymentContexts() {
+		if (deploymentContexts == null) {
+			deploymentContexts = new EcoreEMap<String,DeploymentContext>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY, EStringToDeploymentContextMapEntryImpl.class, this, DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS);
 		}
-		return assemblyComponents;
+		return deploymentContexts;
 	}
 
 	/**
@@ -82,8 +82,8 @@ public class AssemblyRootImpl extends MinimalEObjectImpl.Container implements As
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_ROOT__ASSEMBLY_COMPONENTS:
-				return ((InternalEList<?>)getAssemblyComponents()).basicRemove(otherEnd, msgs);
+			case DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS:
+				return ((InternalEList<?>)getDeploymentContexts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -96,9 +96,9 @@ public class AssemblyRootImpl extends MinimalEObjectImpl.Container implements As
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_ROOT__ASSEMBLY_COMPONENTS:
-				if (coreType) return getAssemblyComponents();
-				else return getAssemblyComponents().map();
+			case DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS:
+				if (coreType) return getDeploymentContexts();
+				else return getDeploymentContexts().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -111,8 +111,8 @@ public class AssemblyRootImpl extends MinimalEObjectImpl.Container implements As
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_ROOT__ASSEMBLY_COMPONENTS:
-				((EStructuralFeature.Setting)getAssemblyComponents()).set(newValue);
+			case DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS:
+				((EStructuralFeature.Setting)getDeploymentContexts()).set(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -126,8 +126,8 @@ public class AssemblyRootImpl extends MinimalEObjectImpl.Container implements As
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_ROOT__ASSEMBLY_COMPONENTS:
-				getAssemblyComponents().clear();
+			case DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS:
+				getDeploymentContexts().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -141,10 +141,10 @@ public class AssemblyRootImpl extends MinimalEObjectImpl.Container implements As
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_ROOT__ASSEMBLY_COMPONENTS:
-				return assemblyComponents != null && !assemblyComponents.isEmpty();
+			case DeploymentPackage.DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS:
+				return deploymentContexts != null && !deploymentContexts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //AssemblyRootImpl
+} //DeploymentModelImpl
