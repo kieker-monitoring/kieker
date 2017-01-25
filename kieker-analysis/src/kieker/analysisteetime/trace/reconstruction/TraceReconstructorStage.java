@@ -18,8 +18,8 @@ package kieker.analysisteetime.trace.reconstruction;
 
 import java.util.Optional;
 
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
-import kieker.analysisteetime.model.analysismodel.trace.TraceRoot;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
+import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
@@ -35,12 +35,12 @@ import teetime.stage.basic.AbstractTransformation;
  *
  * @author Nils Christian Ehmke, Sören Henning
  */
-public class TraceReconstructorStage extends AbstractTransformation<IFlowRecord, TraceRoot> {
+public class TraceReconstructorStage extends AbstractTransformation<IFlowRecord, Trace> {
 
 	private final TraceReconstructor traceReconstructor;
 
-	public TraceReconstructorStage(final DeploymentRoot deploymentRoot, final boolean activateAdditionalLogChecks) {
-		this.traceReconstructor = new TraceReconstructor(deploymentRoot, activateAdditionalLogChecks);
+	public TraceReconstructorStage(final DeploymentModel deploymentModel, final boolean activateAdditionalLogChecks) {
+		this.traceReconstructor = new TraceReconstructor(deploymentModel, activateAdditionalLogChecks);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class TraceReconstructorStage extends AbstractTransformation<IFlowRecord,
 		} else if (record instanceof BeforeOperationEvent) {
 			this.traceReconstructor.handleBeforeOperationEventRecord((BeforeOperationEvent) record);
 		} else if (record instanceof AbstractOperationEvent) {
-			final Optional<TraceRoot> trace = this.traceReconstructor.handleAfterOperationEventRecord((AfterOperationEvent) record);
+			final Optional<Trace> trace = this.traceReconstructor.handleAfterOperationEventRecord((AfterOperationEvent) record);
 			// trace.ifPresent(this.outputPort::send);
 			if (trace.isPresent()) {
 				this.outputPort.send(trace.get());

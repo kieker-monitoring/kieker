@@ -6,13 +6,13 @@ package kieker.analysisteetime;
 import java.io.File;
 
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot;
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot;
+import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
-import kieker.analysisteetime.model.analysismodel.type.TypeRoot;
+import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.analysisteetime.recordreading.ReadingComposite;
 import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
 import kieker.analysisteetime.trace.reconstruction.TraceStatisticsDecoratorStage;
@@ -30,10 +30,10 @@ import teetime.stage.InstanceOfFilter;
  */
 public class ExampleConfiguration extends Configuration {
 
-	private final TypeRoot typeRoot = TypeFactory.eINSTANCE.createTypeRoot();
-	private final AssemblyRoot assemblyRoot = AssemblyFactory.eINSTANCE.createAssemblyRoot();
-	private final DeploymentRoot deploymentRoot = DeploymentFactory.eINSTANCE.createDeploymentRoot();
-	private final ExecutionRoot executionRoot = ExecutionFactory.eINSTANCE.createExecutionRoot();
+	private final TypeModel typeModel = TypeFactory.eINSTANCE.createTypeModel();
+	private final AssemblyModel assemblyModel = AssemblyFactory.eINSTANCE.createAssemblyModel();
+	private final DeploymentModel deploymentModel = DeploymentFactory.eINSTANCE.createDeploymentModel();
+	private final ExecutionModel executionModel = ExecutionFactory.eINSTANCE.createExecutionModel();
 
 	public ExampleConfiguration(final File importDirectory) {
 
@@ -44,12 +44,12 @@ public class ExampleConfiguration extends Configuration {
 		// TODO consider if KiekerMetadataRecord has to be processed
 		// final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final InstanceOfFilter<IMonitoringRecord, IFlowRecord> instanceOfFilter = new InstanceOfFilter<>(IFlowRecord.class);
-		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(this.typeRoot);
-		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(this.typeRoot, this.assemblyRoot);
-		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(this.assemblyRoot, this.deploymentRoot);
-		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentRoot, false); // TODO second parameter
+		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(this.typeModel);
+		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(this.typeModel, this.assemblyModel);
+		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(this.assemblyModel, this.deploymentModel);
+		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, false); // TODO second parameter
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
-		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(this.executionRoot);
+		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(this.executionModel);
 
 		// Connect the stages
 		super.connectPorts(reader.getOutputPort(), instanceOfFilter.getInputPort());
@@ -62,8 +62,8 @@ public class ExampleConfiguration extends Configuration {
 
 	}
 
-	public DeploymentRoot getDeploymentRoot() {
-		return this.deploymentRoot;
+	public DeploymentModel getDeploymentModel() {
+		return this.deploymentModel;
 	}
 
 }

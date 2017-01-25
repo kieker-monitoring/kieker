@@ -18,11 +18,11 @@ package kieker.analysisteetime;
 
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot;
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
-import kieker.analysisteetime.model.analysismodel.type.TypeRoot;
+import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
 /**
@@ -34,12 +34,12 @@ public class AssemblyModelAssembler {
 
 	private final AssemblyFactory factory = AssemblyFactory.eINSTANCE;
 
-	private final TypeRoot typeRoot;
-	private final AssemblyRoot assemblyRoot;
+	private final TypeModel typeModel;
+	private final AssemblyModel assemblyModel;
 
-	public AssemblyModelAssembler(final TypeRoot typeRoot, final AssemblyRoot assemblyRoot) {
-		this.typeRoot = typeRoot;
-		this.assemblyRoot = assemblyRoot;
+	public AssemblyModelAssembler(final TypeModel typeModel, final AssemblyModel assemblyModel) {
+		this.typeModel = typeModel;
+		this.assemblyModel = assemblyModel;
 	}
 
 	public void addRecord(final BeforeOperationEvent record) {
@@ -56,13 +56,13 @@ public class AssemblyModelAssembler {
 
 	private AssemblyComponent addAssemblyComponent(final String componentSignature) {
 		final String componentKey = componentSignature;
-		AssemblyComponent component = this.assemblyRoot.getAssemblyComponents().get(componentKey);
+		AssemblyComponent component = this.assemblyModel.getAssemblyComponents().get(componentKey);
 		if (component == null) {
 			component = this.factory.createAssemblyComponent();
-			this.assemblyRoot.getAssemblyComponents().put(componentKey, component);
+			this.assemblyModel.getAssemblyComponents().put(componentKey, component);
 
 			final String componentTypeKey = componentSignature;
-			final ComponentType componentType = this.typeRoot.getComponentTypes().get(componentTypeKey);
+			final ComponentType componentType = this.typeModel.getComponentTypes().get(componentTypeKey);
 			component.setComponentType(componentType);
 		}
 		return component;

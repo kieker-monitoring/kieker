@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
-import kieker.analysisteetime.model.analysismodel.trace.TraceRoot;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
+import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
@@ -37,14 +37,14 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
  */
 final class TraceReconstructor {
 
-	private final DeploymentRoot deploymentRoot;
+	private final DeploymentModel deploymentModel;
 	private final Map<Long, TraceReconstructionBuffer> traceBuffers = new HashMap<>();
 	private final List<TraceReconstructionBuffer> faultyTraceBuffers = new ArrayList<>();
 	private final boolean activateAdditionalLogChecks;
 	private int danglingRecords;
 
-	public TraceReconstructor(final DeploymentRoot deploymentRoot, final boolean activateAdditionalLogChecks) {
-		this.deploymentRoot = deploymentRoot;
+	public TraceReconstructor(final DeploymentModel deploymentRoot, final boolean activateAdditionalLogChecks) {
+		this.deploymentModel = deploymentRoot;
 		this.activateAdditionalLogChecks = activateAdditionalLogChecks;
 	}
 
@@ -58,7 +58,7 @@ final class TraceReconstructor {
 
 	public void handleMetadataRecord(final TraceMetadata record) {
 		final long traceID = record.getTraceId();
-		final TraceReconstructionBuffer newTraceBuffer = new TraceReconstructionBuffer(this.deploymentRoot, record);
+		final TraceReconstructionBuffer newTraceBuffer = new TraceReconstructionBuffer(this.deploymentModel, record);
 
 		this.traceBuffers.put(traceID, newTraceBuffer);
 	}
@@ -74,14 +74,14 @@ final class TraceReconstructor {
 		}
 	}
 
-	public Optional<TraceRoot> handleAfterOperationEventRecord(final AfterOperationEvent event) {
+	public Optional<Trace> handleAfterOperationEventRecord(final AfterOperationEvent event) {
 		final long traceID = event.getTraceId();
 		final TraceReconstructionBuffer traceBuffer = this.traceBuffers.get(traceID);
 
 		if (traceBuffer != null) {
 			traceBuffer.handleAfterOperationEventRecord(event);
 			if (traceBuffer.isTraceComplete()) {
-				final TraceRoot trace = traceBuffer.reconstructTrace();
+				final Trace trace = traceBuffer.reconstructTrace();
 				this.traceBuffers.remove(traceID);
 				return Optional.of(trace);
 			}

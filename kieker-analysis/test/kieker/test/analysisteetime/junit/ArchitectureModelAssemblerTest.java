@@ -27,7 +27,7 @@ import org.junit.Test;
 
 import kieker.analysisteetime.TypeModelAssembler;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
-import kieker.analysisteetime.model.analysismodel.type.TypeRoot;
+import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
 /**
@@ -55,14 +55,14 @@ public class ArchitectureModelAssemblerTest {
 	 */
 	@Test
 	public void testComponentsExistsAfterAddRecordFromRecord() {
-		final TypeRoot typeRoot = this.factory.createTypeRoot();
-		final TypeModelAssembler architectureModelAssembler = new TypeModelAssembler(typeRoot);
+		final TypeModel typeModel = this.factory.createTypeModel();
+		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel);
 
-		architectureModelAssembler.addRecord(this.beforeOperationEvent1);
-		architectureModelAssembler.addRecord(this.beforeOperationEvent2);
-		architectureModelAssembler.addRecord(this.beforeOperationEvent3);
+		typeModelAssembler.addRecord(this.beforeOperationEvent1);
+		typeModelAssembler.addRecord(this.beforeOperationEvent2);
+		typeModelAssembler.addRecord(this.beforeOperationEvent3);
 
-		final List<String> actualList = typeRoot.getComponentTypes().values().stream().map(c -> c.getSignature()).collect(Collectors.toList());
+		final List<String> actualList = typeModel.getComponentTypes().values().stream().map(c -> c.getSignature()).collect(Collectors.toList());
 		final List<String> expectedList = Arrays.asList(EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_CLASS_SIGNATURE_2);
 		Collections.sort(actualList);
 		Collections.sort(expectedList);
@@ -76,14 +76,14 @@ public class ArchitectureModelAssemblerTest {
 	 */
 	@Test
 	public void testComponentKeysExistsAfterAddRecordFromRecord() {
-		final TypeRoot typeRoot = this.factory.createTypeRoot();
-		final TypeModelAssembler architectureModelAssembler = new TypeModelAssembler(typeRoot);
+		final TypeModel typeModel = this.factory.createTypeModel();
+		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel);
 
-		architectureModelAssembler.addRecord(this.beforeOperationEvent1);
-		architectureModelAssembler.addRecord(this.beforeOperationEvent2);
-		architectureModelAssembler.addRecord(this.beforeOperationEvent3);
+		typeModelAssembler.addRecord(this.beforeOperationEvent1);
+		typeModelAssembler.addRecord(this.beforeOperationEvent2);
+		typeModelAssembler.addRecord(this.beforeOperationEvent3);
 
-		final List<String> actualList = new ArrayList<>(typeRoot.getComponentTypes().keySet());
+		final List<String> actualList = new ArrayList<>(typeModel.getComponentTypes().keySet());
 		final List<String> expectedList = Arrays.asList(EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_CLASS_SIGNATURE_2);
 		Collections.sort(actualList);
 		Collections.sort(expectedList);
@@ -96,14 +96,14 @@ public class ArchitectureModelAssemblerTest {
 	 */
 	@Test
 	public void testOperationExistsAfterAddRecordFromRecord() {
-		final TypeRoot typeRoot = this.factory.createTypeRoot();
-		final TypeModelAssembler architectureModelAssembler = new TypeModelAssembler(typeRoot);
+		final TypeModel typeModel = this.factory.createTypeModel();
+		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel);
 
-		architectureModelAssembler.addRecord(this.beforeOperationEvent1);
-		architectureModelAssembler.addRecord(this.beforeOperationEvent2);
-		architectureModelAssembler.addRecord(this.beforeOperationEvent3);
+		typeModelAssembler.addRecord(this.beforeOperationEvent1);
+		typeModelAssembler.addRecord(this.beforeOperationEvent2);
+		typeModelAssembler.addRecord(this.beforeOperationEvent3);
 
-		final List<String> actualList = typeRoot.getComponentTypes().get(EXAMPLE_CLASS_SIGNATURE_1).getProvidedOperations().values().stream()
+		final List<String> actualList = typeModel.getComponentTypes().get(EXAMPLE_CLASS_SIGNATURE_1).getProvidedOperations().values().stream()
 				.map(c -> c.getSignature()).collect(Collectors.toList());
 		final List<String> expectedList = Arrays.asList(EXAMPLE_OPERATION_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_2);
 		Collections.sort(actualList);
@@ -117,14 +117,14 @@ public class ArchitectureModelAssemblerTest {
 	 */
 	@Test
 	public void testOperationKeysExistsAfterAddRecordFromRecord() {
-		final TypeRoot typeRoot = this.factory.createTypeRoot();
-		final TypeModelAssembler architectureModelAssembler = new TypeModelAssembler(typeRoot);
+		final TypeModel typeModel = this.factory.createTypeModel();
+		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel);
 
-		architectureModelAssembler.addRecord(this.beforeOperationEvent1);
-		architectureModelAssembler.addRecord(this.beforeOperationEvent2);
-		architectureModelAssembler.addRecord(this.beforeOperationEvent3);
+		typeModelAssembler.addRecord(this.beforeOperationEvent1);
+		typeModelAssembler.addRecord(this.beforeOperationEvent2);
+		typeModelAssembler.addRecord(this.beforeOperationEvent3);
 
-		final List<String> actualList = new ArrayList<>(typeRoot.getComponentTypes().get(EXAMPLE_CLASS_SIGNATURE_1).getProvidedOperations().keySet());
+		final List<String> actualList = new ArrayList<>(typeModel.getComponentTypes().get(EXAMPLE_CLASS_SIGNATURE_1).getProvidedOperations().keySet());
 		final List<String> expectedList = Arrays.asList(EXAMPLE_OPERATION_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_2);
 		Collections.sort(actualList);
 		Collections.sort(expectedList);
@@ -137,14 +137,14 @@ public class ArchitectureModelAssemblerTest {
 	 */
 	@Test
 	public void testOperationExistsAfterAddRecordFromString() {
-		final TypeRoot typeRoot = this.factory.createTypeRoot();
-		final TypeModelAssembler architectureModelAssembler = new TypeModelAssembler(typeRoot);
+		final TypeModel typeModel = this.factory.createTypeModel();
+		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel);
 
-		architectureModelAssembler.addRecord(EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_1);
-		architectureModelAssembler.addRecord(EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_2);
-		architectureModelAssembler.addRecord(EXAMPLE_CLASS_SIGNATURE_2, EXAMPLE_OPERATION_SIGNATURE_3);
+		typeModelAssembler.addRecord(EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_1);
+		typeModelAssembler.addRecord(EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_2);
+		typeModelAssembler.addRecord(EXAMPLE_CLASS_SIGNATURE_2, EXAMPLE_OPERATION_SIGNATURE_3);
 
-		final List<String> actualList = typeRoot.getComponentTypes().get(EXAMPLE_CLASS_SIGNATURE_1).getProvidedOperations().values().stream()
+		final List<String> actualList = typeModel.getComponentTypes().get(EXAMPLE_CLASS_SIGNATURE_1).getProvidedOperations().values().stream()
 				.map(c -> c.getSignature()).collect(Collectors.toList());
 		final List<String> expectedList = Arrays.asList(EXAMPLE_OPERATION_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_2);
 		Collections.sort(actualList);

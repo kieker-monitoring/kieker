@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
-import kieker.analysisteetime.model.analysismodel.trace.TraceRoot;
+import kieker.analysisteetime.model.analysismodel.trace.Trace;
 
 public class TraceTraverser {
 
@@ -12,12 +12,12 @@ public class TraceTraverser {
 
 	public TraceTraverser() {}
 
-	public void traverse(final TraceRoot trace, final OperationCallVisitor visitor) {
+	public void traverse(final Trace trace, final OperationCallVisitor visitor) {
 		final Collection<OperationCallVisitor> visitors = Collections.singleton(visitor);
 		this.handleOperationCallsRecursively(trace.getRootOperationCall(), visitors);
 	}
 
-	public void traverse(final TraceRoot trace, final Collection<OperationCallVisitor> visitors) {
+	public void traverse(final Trace trace, final Collection<OperationCallVisitor> visitors) {
 		this.handleOperationCallsRecursively(trace.getRootOperationCall(), visitors);
 	}
 

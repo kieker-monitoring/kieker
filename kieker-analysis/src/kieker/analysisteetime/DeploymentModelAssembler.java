@@ -17,13 +17,13 @@
 package kieker.analysisteetime;
 
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent;
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
@@ -40,12 +40,12 @@ public class DeploymentModelAssembler {
 
 	private final HostnameRepository hostnameRepository = new HostnameRepository();
 
-	private final AssemblyRoot assemblyRoot;
-	private final DeploymentRoot deploymentRoot;
+	private final AssemblyModel assemblyModel;
+	private final DeploymentModel deploymentModel;
 
-	public DeploymentModelAssembler(final AssemblyRoot assemblyRoot, final DeploymentRoot deploymentRoot) {
-		this.assemblyRoot = assemblyRoot;
-		this.deploymentRoot = deploymentRoot;
+	public DeploymentModelAssembler(final AssemblyModel assemblyModel, final DeploymentModel deploymentModel) {
+		this.assemblyModel = assemblyModel;
+		this.deploymentModel = deploymentModel;
 	}
 
 	public void handleMetadataRecord(final TraceMetadata metadata) {
@@ -80,11 +80,11 @@ public class DeploymentModelAssembler {
 
 	private DeploymentContext addDeploymentContext(final String hostname) {
 		final String deploymentContextKey = hostname;
-		DeploymentContext deploymentContext = this.deploymentRoot.getDeploymentContexts().get(deploymentContextKey);
+		DeploymentContext deploymentContext = this.deploymentModel.getDeploymentContexts().get(deploymentContextKey);
 		if (deploymentContext == null) {
 			deploymentContext = this.factory.createDeploymentContext();
 			deploymentContext.setName(hostname);
-			this.deploymentRoot.getDeploymentContexts().put(deploymentContextKey, deploymentContext);
+			this.deploymentModel.getDeploymentContexts().put(deploymentContextKey, deploymentContext);
 		}
 		return deploymentContext;
 	}
@@ -97,7 +97,7 @@ public class DeploymentModelAssembler {
 			deploymentContext.getComponents().put(componentKey, component);
 
 			final String componentTypeKey = componentSignature;
-			final AssemblyComponent assemblyComponent = this.assemblyRoot.getAssemblyComponents().get(componentTypeKey);
+			final AssemblyComponent assemblyComponent = this.assemblyModel.getAssemblyComponents().get(componentTypeKey);
 			component.setAssemblyComponent(assemblyComponent);
 		}
 		return component;

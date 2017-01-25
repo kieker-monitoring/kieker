@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
 
 import teetime.framework.Execution;
 
@@ -29,10 +29,10 @@ public final class ExampleConfigExecution {
 		analysis.executeBlocking();
 
 		try {
-			final DeploymentRoot deploymentRoot = configuration.getDeploymentRoot();
+			final DeploymentModel deploymentModel = configuration.getDeploymentModel();
 			final DeploymentModelPrinter deploymentModelPrinter = new DeploymentModelPrinter(new PrintStream(new File("output.txt")));
 			// final DeploymentModelPrinter deploymentModelPrinter = new DeploymentModelPrinter(System.out);
-			deploymentModelPrinter.print(deploymentRoot);
+			deploymentModelPrinter.print(deploymentModel);
 		} catch (final FileNotFoundException e) {
 			// Just for testing
 		}

@@ -9,11 +9,11 @@ import kieker.analysisteetime.AssemblyModelAssemblerStage;
 import kieker.analysisteetime.DeploymentModelAssemblerStage;
 import kieker.analysisteetime.TypeModelAssemblerStage;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot;
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
-import kieker.analysisteetime.model.analysismodel.type.TypeRoot;
+import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.analysisteetime.recordreading.ReadingComposite;
 import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
 import kieker.common.record.IMonitoringRecord;
@@ -32,19 +32,19 @@ public class HotspotDetectionConfiguration extends Configuration {
 
 	public HotspotDetectionConfiguration(final File importDirectory) {
 
-		final TypeRoot typeRoot = TypeFactory.eINSTANCE.createTypeRoot();
-		final AssemblyRoot assemblyRoot = AssemblyFactory.eINSTANCE.createAssemblyRoot();
-		final DeploymentRoot deploymentRoot = DeploymentFactory.eINSTANCE.createDeploymentRoot();
+		final TypeModel typeModel = TypeFactory.eINSTANCE.createTypeModel();
+		final AssemblyModel assemblyModel = AssemblyFactory.eINSTANCE.createAssemblyModel();
+		final DeploymentModel deploymentModel = DeploymentFactory.eINSTANCE.createDeploymentModel();
 
 		// Create the stages
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
 		// TODO consider if KiekerMetadataRecord has to be processed
 		// final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final InstanceOfFilter<IMonitoringRecord, IFlowRecord> instanceOfFilter = new InstanceOfFilter<>(IFlowRecord.class);
-		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(typeRoot);
-		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(typeRoot, assemblyRoot);
-		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(assemblyRoot, deploymentRoot);
-		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(deploymentRoot, false); // TODO second parameter
+		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(typeModel);
+		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(typeModel, assemblyModel);
+		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(assemblyModel, deploymentModel);
+		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(deploymentModel, false); // TODO second parameter
 		final HotspotDetectionStage hotspotDetector = new HotspotDetectionStage();
 
 		// Connect the stages

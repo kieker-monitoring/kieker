@@ -19,7 +19,7 @@ package kieker.analysisteetime;
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
-import kieker.analysisteetime.model.analysismodel.type.TypeRoot;
+import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.common.record.flow.IOperationRecord;
 
 /**
@@ -31,10 +31,10 @@ public class TypeModelAssembler {
 
 	private final TypeFactory factory = TypeFactory.eINSTANCE;
 
-	private final TypeRoot typeRoot;
+	private final TypeModel typeModel;
 
-	public TypeModelAssembler(final TypeRoot typeRoot) {
-		this.typeRoot = typeRoot;
+	public TypeModelAssembler(final TypeModel typeModel) {
+		this.typeModel = typeModel;
 	}
 
 	public void addRecord(final IOperationRecord record) {
@@ -51,11 +51,11 @@ public class TypeModelAssembler {
 
 	private ComponentType addComponentType(final String componentSignature) {
 		final String componentTypeKey = componentSignature;
-		ComponentType componentType = this.typeRoot.getComponentTypes().get(componentTypeKey);
+		ComponentType componentType = this.typeModel.getComponentTypes().get(componentTypeKey);
 		if (componentType == null) {
 			componentType = this.factory.createComponentType();
 			componentType.setSignature(componentSignature);
-			this.typeRoot.getComponentTypes().put(componentTypeKey, componentType);
+			this.typeModel.getComponentTypes().put(componentTypeKey, componentType);
 		}
 		return componentType;
 	}

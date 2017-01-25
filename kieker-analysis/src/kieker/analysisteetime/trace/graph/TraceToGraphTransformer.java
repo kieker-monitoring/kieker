@@ -16,7 +16,7 @@
 
 package kieker.analysisteetime.trace.graph;
 
-import kieker.analysisteetime.model.analysismodel.trace.TraceRoot;
+import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.analysisteetime.trace.traversal.OperationCallVisitor;
 import kieker.analysisteetime.trace.traversal.TraceTraverser;
 import kieker.analysisteetime.util.graph.Graph;
@@ -29,13 +29,11 @@ import kieker.analysisteetime.util.graph.impl.GraphImpl;
  */
 public class TraceToGraphTransformer {
 
+	// TODO integrate GraphTransformerVisitor in this?
+
 	private final TraceTraverser traceTraverser = new TraceTraverser();
 
-	public TraceToGraphTransformer() {
-
-	}
-
-	public Graph transform(final TraceRoot trace) {
+	public Graph transform(final Trace trace) {
 		final Graph graph = new GraphImpl();
 		final OperationCallVisitor visitor = new GraphTransformerVisitor(graph);
 		this.traceTraverser.traverse(trace, visitor);

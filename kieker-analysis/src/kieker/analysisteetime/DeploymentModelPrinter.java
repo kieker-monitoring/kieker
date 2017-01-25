@@ -21,7 +21,7 @@ import java.io.PrintStream;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
 
 /**
  * @author Sören
@@ -38,8 +38,8 @@ public class DeploymentModelPrinter {
 		this.printStream = printStream;
 	}
 
-	public void print(final DeploymentRoot root) {
-		for (final DeploymentContext deploymentContext : root.getDeploymentContexts().values()) {
+	public void print(final DeploymentModel model) {
+		for (final DeploymentContext deploymentContext : model.getDeploymentContexts().values()) {
 			this.printDeploymentContext(deploymentContext);
 			for (final DeployedComponent component : deploymentContext.getComponents().values()) {
 				this.printComponent(component);

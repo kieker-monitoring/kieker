@@ -16,7 +16,7 @@
 
 package kieker.analysisteetime.trace.graph;
 
-import kieker.analysisteetime.model.analysismodel.trace.TraceRoot;
+import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.analysisteetime.util.graph.Graph;
 
 import teetime.stage.basic.AbstractTransformation;
@@ -26,12 +26,12 @@ import teetime.stage.basic.AbstractTransformation;
  *
  * @since 1.13
  */
-public class TraceToGraphTransformerStage extends AbstractTransformation<TraceRoot, Graph> {
+public class TraceToGraphTransformerStage extends AbstractTransformation<Trace, Graph> {
 
 	private final TraceToGraphTransformer transformer = new TraceToGraphTransformer();
 
 	@Override
-	protected void execute(final TraceRoot trace) {
+	protected void execute(final Trace trace) {
 		final Graph graph = this.transformer.transform(trace);
 		this.getOutputPort().send(graph);
 	}

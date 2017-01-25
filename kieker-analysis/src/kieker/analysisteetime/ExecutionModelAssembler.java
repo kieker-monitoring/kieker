@@ -21,9 +21,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot;
+import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
-import kieker.analysisteetime.model.analysismodel.trace.TraceRoot;
+import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.analysisteetime.trace.traversal.OperationCallVisitor;
 import kieker.analysisteetime.trace.traversal.TraceTraverser;
 
@@ -39,25 +39,25 @@ public class ExecutionModelAssembler {
 	private final TraceTraverser traceTraverser = new TraceTraverser();
 	private final OperationCallInserter operationCallInserter = new OperationCallInserter();
 
-	private final ExecutionRoot executionRoot;
+	private final ExecutionModel executionModel;
 
-	public ExecutionModelAssembler(final ExecutionRoot executionRoot) {
-		this.executionRoot = executionRoot;
+	public ExecutionModelAssembler(final ExecutionModel executionModel) {
+		this.executionModel = executionModel;
 	}
 
-	public void addTrace(final TraceRoot trace) {
+	public void addTrace(final Trace trace) {
 		this.traceTraverser.traverse(trace, this.operationCallInserter);
 	}
 
 	protected void addExecution(final DeployedOperation source, final DeployedOperation target) {
 
 		final Pair<DeployedOperation, DeployedOperation> key = Pair.of(source, target);
-		if (!this.executionRoot.getAggregatedInvocations().contains(key)) {
+		if (!this.executionModel.getAggregatedInvocations().contains(key)) {
 			final AggregatedInvocation invocation = this.factory.createAggregatedInvocation();
 			invocation.setSource(source);
 			invocation.setTarget(target);
 
-			this.executionRoot.getAggregatedInvocations().put(key, invocation);
+			this.executionModel.getAggregatedInvocations().put(key, invocation);
 		}
 
 		// TODO

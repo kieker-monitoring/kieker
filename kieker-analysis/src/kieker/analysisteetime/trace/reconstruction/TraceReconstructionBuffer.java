@@ -24,10 +24,10 @@ import java.util.LinkedList;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.analysisteetime.model.analysismodel.trace.TraceFactory;
-import kieker.analysisteetime.model.analysismodel.trace.TraceRoot;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
@@ -42,7 +42,7 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 public class TraceReconstructionBuffer {
 
 	private final TraceFactory factory = TraceFactory.eINSTANCE;
-	private final DeploymentRoot deploymentRoot;
+	private final DeploymentModel deploymentModel;
 	private final TraceMetadata traceMetadata;
 	private final Instant traceStart;
 
@@ -50,8 +50,8 @@ public class TraceReconstructionBuffer {
 	private OperationCall root;
 	private OperationCall current;
 
-	public TraceReconstructionBuffer(final DeploymentRoot deploymentRoot, final TraceMetadata traceMetadata) {
-		this.deploymentRoot = deploymentRoot;
+	public TraceReconstructionBuffer(final DeploymentModel deploymentModel, final TraceMetadata traceMetadata) {
+		this.deploymentModel = deploymentModel;
 		this.traceMetadata = traceMetadata;
 		// TODO Temp Get from TraceMetadata
 		// final long epochMilli = 0;
@@ -69,7 +69,7 @@ public class TraceReconstructionBuffer {
 		newCall.setStart(this.traceStart.plusNanos(nanosOffset));
 
 		// TODO Retrieve Deployed Operation
-		final DeploymentContext context = this.deploymentRoot.getDeploymentContexts().get(this.traceMetadata.getHostname());
+		final DeploymentContext context = this.deploymentModel.getDeploymentContexts().get(this.traceMetadata.getHostname());
 		final DeployedComponent component = context.getComponents().get(record.getClassSignature());
 		final DeployedOperation operation = component.getContainedOperations().get(record.getOperationSignature());
 		newCall.setOperation(operation);
@@ -111,12 +111,12 @@ public class TraceReconstructionBuffer {
 		 */
 	}
 
-	public TraceRoot reconstructTrace() {
-		final TraceRoot traceRoot = this.factory.createTraceRoot();
-		traceRoot.setRootOperationCall(this.root);
-		traceRoot.setTraceID(this.traceMetadata.getTraceId());
+	public Trace reconstructTrace() {
+		final Trace trace = this.factory.createTrace();
+		trace.setRootOperationCall(this.root);
+		trace.setTraceID(this.traceMetadata.getTraceId());
 		// TODO Maybe further attributes
-		return traceRoot;
+		return trace;
 	}
 
 	public boolean isTraceComplete() {
