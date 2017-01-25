@@ -4,7 +4,6 @@ package kieker.analysisteetime.model.analysismodel.execution;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -58,14 +57,14 @@ public interface ExecutionPackage extends EPackage {
 	ExecutionPackage eINSTANCE = kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionPackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionRootImpl <em>Root</em>}' class.
+	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionModelImpl <em>Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionRootImpl
-	 * @see kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionPackageImpl#getExecutionRoot()
+	 * @see kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionModelImpl
+	 * @see kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionPackageImpl#getExecutionModel()
 	 * @generated
 	 */
-	int EXECUTION_ROOT = 0;
+	int EXECUTION_MODEL = 0;
 
 	/**
 	 * The feature id for the '<em><b>Aggregated Invocations</b></em>' map.
@@ -74,25 +73,25 @@ public interface ExecutionPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EXECUTION_ROOT__AGGREGATED_INVOCATIONS = 0;
+	int EXECUTION_MODEL__AGGREGATED_INVOCATIONS = 0;
 
 	/**
-	 * The number of structural features of the '<em>Root</em>' class.
+	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXECUTION_ROOT_FEATURE_COUNT = 1;
+	int EXECUTION_MODEL_FEATURE_COUNT = 1;
 
 	/**
-	 * The number of operations of the '<em>Root</em>' class.
+	 * The number of operations of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXECUTION_ROOT_OPERATION_COUNT = 0;
+	int EXECUTION_MODEL_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.execution.impl.DeployedOperationsPairToAggregatedInvocationMapEntryImpl <em>Deployed Operations Pair To Aggregated Invocation Map Entry</em>}' class.
@@ -178,44 +177,35 @@ public interface ExecutionPackage extends EPackage {
 	int AGGREGATED_INVOCATION_FEATURE_COUNT = 2;
 
 	/**
-	 * The operation id for the '<em>Get Execution Root</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int AGGREGATED_INVOCATION___GET_EXECUTION_ROOT = 0;
-
-	/**
 	 * The number of operations of the '<em>Aggregated Invocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AGGREGATED_INVOCATION_OPERATION_COUNT = 1;
+	int AGGREGATED_INVOCATION_OPERATION_COUNT = 0;
 
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot <em>Root</em>}'.
+	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.execution.ExecutionModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Root</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot
+	 * @return the meta object for class '<em>Model</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.execution.ExecutionModel
 	 * @generated
 	 */
-	EClass getExecutionRoot();
+	EClass getExecutionModel();
 
 	/**
-	 * Returns the meta object for the map '{@link kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot#getAggregatedInvocations <em>Aggregated Invocations</em>}'.
+	 * Returns the meta object for the map '{@link kieker.analysisteetime.model.analysismodel.execution.ExecutionModel#getAggregatedInvocations <em>Aggregated Invocations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the map '<em>Aggregated Invocations</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot#getAggregatedInvocations()
-	 * @see #getExecutionRoot()
+	 * @see kieker.analysisteetime.model.analysismodel.execution.ExecutionModel#getAggregatedInvocations()
+	 * @see #getExecutionModel()
 	 * @generated
 	 */
-	EReference getExecutionRoot_AggregatedInvocations();
+	EReference getExecutionModel_AggregatedInvocations();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Deployed Operations Pair To Aggregated Invocation Map Entry</em>}'.
@@ -284,16 +274,6 @@ public interface ExecutionPackage extends EPackage {
 	EReference getAggregatedInvocation_Target();
 
 	/**
-	 * Returns the meta object for the '{@link kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation#getExecutionRoot() <em>Get Execution Root</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Execution Root</em>' operation.
-	 * @see kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation#getExecutionRoot()
-	 * @generated
-	 */
-	EOperation getAggregatedInvocation__GetExecutionRoot();
-
-	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -317,14 +297,14 @@ public interface ExecutionPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionRootImpl <em>Root</em>}' class.
+		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionModelImpl <em>Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionRootImpl
-		 * @see kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionPackageImpl#getExecutionRoot()
+		 * @see kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionModelImpl
+		 * @see kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionPackageImpl#getExecutionModel()
 		 * @generated
 		 */
-		EClass EXECUTION_ROOT = eINSTANCE.getExecutionRoot();
+		EClass EXECUTION_MODEL = eINSTANCE.getExecutionModel();
 
 		/**
 		 * The meta object literal for the '<em><b>Aggregated Invocations</b></em>' map feature.
@@ -332,7 +312,7 @@ public interface ExecutionPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference EXECUTION_ROOT__AGGREGATED_INVOCATIONS = eINSTANCE.getExecutionRoot_AggregatedInvocations();
+		EReference EXECUTION_MODEL__AGGREGATED_INVOCATIONS = eINSTANCE.getExecutionModel_AggregatedInvocations();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.execution.impl.DeployedOperationsPairToAggregatedInvocationMapEntryImpl <em>Deployed Operations Pair To Aggregated Invocation Map Entry</em>}' class.
@@ -385,14 +365,6 @@ public interface ExecutionPackage extends EPackage {
 		 * @generated
 		 */
 		EReference AGGREGATED_INVOCATION__TARGET = eINSTANCE.getAggregatedInvocation_Target();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Execution Root</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation AGGREGATED_INVOCATION___GET_EXECUTION_ROOT = eINSTANCE.getAggregatedInvocation__GetExecutionRoot();
 
 	}
 

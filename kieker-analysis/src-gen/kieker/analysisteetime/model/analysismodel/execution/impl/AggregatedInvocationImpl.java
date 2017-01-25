@@ -2,14 +2,11 @@
  */
 package kieker.analysisteetime.model.analysismodel.execution.impl;
 
-import java.lang.reflect.InvocationTargetException;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionPackage;
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -151,23 +148,6 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ExecutionRoot getExecutionRoot() {
-		org.eclipse.emf.ecore.EObject container = this.eContainer();
-		if (container != null) {
-			org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
-			if (containerContainer != null) {
-				return (ExecutionRoot) containerContainer ;
-			}
-		}
-		return null;
-		
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -231,20 +211,6 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 				return target != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
-		switch (operationID) {
-			case ExecutionPackage.AGGREGATED_INVOCATION___GET_EXECUTION_ROOT:
-				return getExecutionRoot();
-		}
-		return super.eInvoke(operationID, arguments);
 	}
 
 } //AggregatedInvocationImpl

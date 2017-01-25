@@ -68,8 +68,8 @@ public class TraceAdapterFactory extends AdapterFactoryImpl {
 	protected TraceSwitch<Adapter> modelSwitch =
 		new TraceSwitch<Adapter>() {
 			@Override
-			public Adapter caseTraceRoot(TraceRoot object) {
-				return createTraceRootAdapter();
+			public Adapter caseTrace(Trace object) {
+				return createTraceAdapter();
 			}
 			@Override
 			public Adapter caseOperationCall(OperationCall object) {
@@ -96,16 +96,16 @@ public class TraceAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.analysisteetime.model.analysismodel.trace.TraceRoot <em>Root</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.analysisteetime.model.analysismodel.trace.Trace <em>Trace</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.analysisteetime.model.analysismodel.trace.TraceRoot
+	 * @see kieker.analysisteetime.model.analysismodel.trace.Trace
 	 * @generated
 	 */
-	public Adapter createTraceRootAdapter() {
+	public Adapter createTraceAdapter() {
 		return null;
 	}
 

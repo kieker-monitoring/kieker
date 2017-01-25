@@ -57,14 +57,14 @@ public interface TracePackage extends EPackage {
 	TracePackage eINSTANCE = kieker.analysisteetime.model.analysismodel.trace.impl.TracePackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.trace.impl.TraceRootImpl <em>Root</em>}' class.
+	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.trace.impl.TraceImpl <em>Trace</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysisteetime.model.analysismodel.trace.impl.TraceRootImpl
-	 * @see kieker.analysisteetime.model.analysismodel.trace.impl.TracePackageImpl#getTraceRoot()
+	 * @see kieker.analysisteetime.model.analysismodel.trace.impl.TraceImpl
+	 * @see kieker.analysisteetime.model.analysismodel.trace.impl.TracePackageImpl#getTrace()
 	 * @generated
 	 */
-	int TRACE_ROOT = 0;
+	int TRACE = 0;
 
 	/**
 	 * The feature id for the '<em><b>Trace ID</b></em>' attribute.
@@ -73,7 +73,7 @@ public interface TracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRACE_ROOT__TRACE_ID = 0;
+	int TRACE__TRACE_ID = 0;
 
 	/**
 	 * The feature id for the '<em><b>Root Operation Call</b></em>' containment reference.
@@ -82,25 +82,25 @@ public interface TracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRACE_ROOT__ROOT_OPERATION_CALL = 1;
+	int TRACE__ROOT_OPERATION_CALL = 1;
 
 	/**
-	 * The number of structural features of the '<em>Root</em>' class.
+	 * The number of structural features of the '<em>Trace</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRACE_ROOT_FEATURE_COUNT = 2;
+	int TRACE_FEATURE_COUNT = 2;
 
 	/**
-	 * The number of operations of the '<em>Root</em>' class.
+	 * The number of operations of the '<em>Trace</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRACE_ROOT_OPERATION_COUNT = 0;
+	int TRACE_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.trace.impl.OperationCallImpl <em>Operation Call</em>}' class.
@@ -230,36 +230,36 @@ public interface TracePackage extends EPackage {
 	int OPERATION_CALL_OPERATION_COUNT = 0;
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.trace.TraceRoot <em>Root</em>}'.
+	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.trace.Trace <em>Trace</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Root</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.trace.TraceRoot
+	 * @return the meta object for class '<em>Trace</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.trace.Trace
 	 * @generated
 	 */
-	EClass getTraceRoot();
+	EClass getTrace();
 
 	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysisteetime.model.analysismodel.trace.TraceRoot#getTraceID <em>Trace ID</em>}'.
+	 * Returns the meta object for the attribute '{@link kieker.analysisteetime.model.analysismodel.trace.Trace#getTraceID <em>Trace ID</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Trace ID</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.trace.TraceRoot#getTraceID()
-	 * @see #getTraceRoot()
+	 * @see kieker.analysisteetime.model.analysismodel.trace.Trace#getTraceID()
+	 * @see #getTrace()
 	 * @generated
 	 */
-	EAttribute getTraceRoot_TraceID();
+	EAttribute getTrace_TraceID();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link kieker.analysisteetime.model.analysismodel.trace.TraceRoot#getRootOperationCall <em>Root Operation Call</em>}'.
+	 * Returns the meta object for the containment reference '{@link kieker.analysisteetime.model.analysismodel.trace.Trace#getRootOperationCall <em>Root Operation Call</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Root Operation Call</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.trace.TraceRoot#getRootOperationCall()
-	 * @see #getTraceRoot()
+	 * @see kieker.analysisteetime.model.analysismodel.trace.Trace#getRootOperationCall()
+	 * @see #getTrace()
 	 * @generated
 	 */
-	EReference getTraceRoot_RootOperationCall();
+	EReference getTrace_RootOperationCall();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.trace.OperationCall <em>Operation Call</em>}'.
@@ -416,14 +416,14 @@ public interface TracePackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.trace.impl.TraceRootImpl <em>Root</em>}' class.
+		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.trace.impl.TraceImpl <em>Trace</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysisteetime.model.analysismodel.trace.impl.TraceRootImpl
-		 * @see kieker.analysisteetime.model.analysismodel.trace.impl.TracePackageImpl#getTraceRoot()
+		 * @see kieker.analysisteetime.model.analysismodel.trace.impl.TraceImpl
+		 * @see kieker.analysisteetime.model.analysismodel.trace.impl.TracePackageImpl#getTrace()
 		 * @generated
 		 */
-		EClass TRACE_ROOT = eINSTANCE.getTraceRoot();
+		EClass TRACE = eINSTANCE.getTrace();
 
 		/**
 		 * The meta object literal for the '<em><b>Trace ID</b></em>' attribute feature.
@@ -431,7 +431,7 @@ public interface TracePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute TRACE_ROOT__TRACE_ID = eINSTANCE.getTraceRoot_TraceID();
+		EAttribute TRACE__TRACE_ID = eINSTANCE.getTrace_TraceID();
 
 		/**
 		 * The meta object literal for the '<em><b>Root Operation Call</b></em>' containment reference feature.
@@ -439,7 +439,7 @@ public interface TracePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference TRACE_ROOT__ROOT_OPERATION_CALL = eINSTANCE.getTraceRoot_RootOperationCall();
+		EReference TRACE__ROOT_OPERATION_CALL = eINSTANCE.getTrace_RootOperationCall();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.trace.impl.OperationCallImpl <em>Operation Call</em>}' class.

@@ -22,13 +22,13 @@ public interface DeploymentFactory extends EFactory {
 	DeploymentFactory eINSTANCE = kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Root</em>'.
+	 * Returns a new object of class '<em>Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Root</em>'.
+	 * @return a new object of class '<em>Model</em>'.
 	 * @generated
 	 */
-	DeploymentRoot createDeploymentRoot();
+	DeploymentModel createDeploymentModel();
 
 	/**
 	 * Returns a new object of class '<em>Context</em>'.

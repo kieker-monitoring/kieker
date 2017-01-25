@@ -59,7 +59,7 @@ public class ExecutionFactoryImpl extends EFactoryImpl implements ExecutionFacto
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case ExecutionPackage.EXECUTION_ROOT: return createExecutionRoot();
+			case ExecutionPackage.EXECUTION_MODEL: return createExecutionModel();
 			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY: return (EObject)createDeployedOperationsPairToAggregatedInvocationMapEntry();
 			case ExecutionPackage.AGGREGATED_INVOCATION: return createAggregatedInvocation();
 			default:
@@ -72,9 +72,9 @@ public class ExecutionFactoryImpl extends EFactoryImpl implements ExecutionFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ExecutionRoot createExecutionRoot() {
-		ExecutionRootImpl executionRoot = new ExecutionRootImpl();
-		return executionRoot;
+	public ExecutionModel createExecutionModel() {
+		ExecutionModelImpl executionModel = new ExecutionModelImpl();
+		return executionModel;
 	}
 
 	/**

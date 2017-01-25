@@ -58,14 +58,14 @@ public interface TypePackage extends EPackage {
 	TypePackage eINSTANCE = kieker.analysisteetime.model.analysismodel.type.impl.TypePackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.type.impl.TypeRootImpl <em>Root</em>}' class.
+	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.type.impl.TypeModelImpl <em>Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysisteetime.model.analysismodel.type.impl.TypeRootImpl
-	 * @see kieker.analysisteetime.model.analysismodel.type.impl.TypePackageImpl#getTypeRoot()
+	 * @see kieker.analysisteetime.model.analysismodel.type.impl.TypeModelImpl
+	 * @see kieker.analysisteetime.model.analysismodel.type.impl.TypePackageImpl#getTypeModel()
 	 * @generated
 	 */
-	int TYPE_ROOT = 0;
+	int TYPE_MODEL = 0;
 
 	/**
 	 * The feature id for the '<em><b>Component Types</b></em>' map.
@@ -74,25 +74,25 @@ public interface TypePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TYPE_ROOT__COMPONENT_TYPES = 0;
+	int TYPE_MODEL__COMPONENT_TYPES = 0;
 
 	/**
-	 * The number of structural features of the '<em>Root</em>' class.
+	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TYPE_ROOT_FEATURE_COUNT = 1;
+	int TYPE_MODEL_FEATURE_COUNT = 1;
 
 	/**
-	 * The number of operations of the '<em>Root</em>' class.
+	 * The number of operations of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TYPE_ROOT_OPERATION_COUNT = 0;
+	int TYPE_MODEL_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.type.impl.EStringToComponentTypeMapEntryImpl <em>EString To Component Type Map Entry</em>}' class.
@@ -178,22 +178,13 @@ public interface TypePackage extends EPackage {
 	int COMPONENT_TYPE_FEATURE_COUNT = 2;
 
 	/**
-	 * The operation id for the '<em>Get Type Root</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMPONENT_TYPE___GET_TYPE_ROOT = 0;
-
-	/**
 	 * The number of operations of the '<em>Component Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPONENT_TYPE_OPERATION_COUNT = 1;
+	int COMPONENT_TYPE_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.type.impl.EStringToOperationTypeMapEntryImpl <em>EString To Operation Type Map Entry</em>}' class.
@@ -289,25 +280,25 @@ public interface TypePackage extends EPackage {
 
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.type.TypeRoot <em>Root</em>}'.
+	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.type.TypeModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Root</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.type.TypeRoot
+	 * @return the meta object for class '<em>Model</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.type.TypeModel
 	 * @generated
 	 */
-	EClass getTypeRoot();
+	EClass getTypeModel();
 
 	/**
-	 * Returns the meta object for the map '{@link kieker.analysisteetime.model.analysismodel.type.TypeRoot#getComponentTypes <em>Component Types</em>}'.
+	 * Returns the meta object for the map '{@link kieker.analysisteetime.model.analysismodel.type.TypeModel#getComponentTypes <em>Component Types</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the map '<em>Component Types</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.type.TypeRoot#getComponentTypes()
-	 * @see #getTypeRoot()
+	 * @see kieker.analysisteetime.model.analysismodel.type.TypeModel#getComponentTypes()
+	 * @see #getTypeModel()
 	 * @generated
 	 */
-	EReference getTypeRoot_ComponentTypes();
+	EReference getTypeModel_ComponentTypes();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Component Type Map Entry</em>}'.
@@ -374,16 +365,6 @@ public interface TypePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getComponentType_ProvidedOperations();
-
-	/**
-	 * Returns the meta object for the '{@link kieker.analysisteetime.model.analysismodel.type.ComponentType#getTypeRoot() <em>Get Type Root</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Type Root</em>' operation.
-	 * @see kieker.analysisteetime.model.analysismodel.type.ComponentType#getTypeRoot()
-	 * @generated
-	 */
-	EOperation getComponentType__GetTypeRoot();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Operation Type Map Entry</em>}'.
@@ -474,14 +455,14 @@ public interface TypePackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.type.impl.TypeRootImpl <em>Root</em>}' class.
+		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.type.impl.TypeModelImpl <em>Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysisteetime.model.analysismodel.type.impl.TypeRootImpl
-		 * @see kieker.analysisteetime.model.analysismodel.type.impl.TypePackageImpl#getTypeRoot()
+		 * @see kieker.analysisteetime.model.analysismodel.type.impl.TypeModelImpl
+		 * @see kieker.analysisteetime.model.analysismodel.type.impl.TypePackageImpl#getTypeModel()
 		 * @generated
 		 */
-		EClass TYPE_ROOT = eINSTANCE.getTypeRoot();
+		EClass TYPE_MODEL = eINSTANCE.getTypeModel();
 
 		/**
 		 * The meta object literal for the '<em><b>Component Types</b></em>' map feature.
@@ -489,7 +470,7 @@ public interface TypePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference TYPE_ROOT__COMPONENT_TYPES = eINSTANCE.getTypeRoot_ComponentTypes();
+		EReference TYPE_MODEL__COMPONENT_TYPES = eINSTANCE.getTypeModel_ComponentTypes();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.type.impl.EStringToComponentTypeMapEntryImpl <em>EString To Component Type Map Entry</em>}' class.
@@ -542,14 +523,6 @@ public interface TypePackage extends EPackage {
 		 * @generated
 		 */
 		EReference COMPONENT_TYPE__PROVIDED_OPERATIONS = eINSTANCE.getComponentType_ProvidedOperations();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Type Root</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation COMPONENT_TYPE___GET_TYPE_ROOT = eINSTANCE.getComponentType__GetTypeRoot();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.type.impl.EStringToOperationTypeMapEntryImpl <em>EString To Operation Type Map Entry</em>}' class.

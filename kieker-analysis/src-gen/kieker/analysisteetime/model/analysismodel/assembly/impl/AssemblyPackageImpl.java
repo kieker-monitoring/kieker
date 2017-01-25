@@ -8,10 +8,9 @@ import kieker.analysisteetime.model.analysismodel.AnalysismodelPackage;
 
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot;
-
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage;
 
 import kieker.analysisteetime.model.analysismodel.deployment.impl.DeploymentPackageImpl;
@@ -54,7 +53,7 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass assemblyRootEClass = null;
+	private EClass assemblyModelEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -170,8 +169,8 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getAssemblyRoot() {
-		return assemblyRootEClass;
+	public EClass getAssemblyModel() {
+		return assemblyModelEClass;
 	}
 
 	/**
@@ -179,8 +178,8 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAssemblyRoot_AssemblyComponents() {
-		return (EReference)assemblyRootEClass.getEStructuralFeatures().get(0);
+	public EReference getAssemblyModel_AssemblyComponents() {
+		return (EReference)assemblyModelEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -235,15 +234,6 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 	 */
 	public EReference getAssemblyComponent_ComponentType() {
 		return (EReference)assemblyComponentEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getAssemblyComponent__GetAssemblyRoot() {
-		return assemblyComponentEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -328,8 +318,8 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 		isCreated = true;
 
 		// Create classes and their features
-		assemblyRootEClass = createEClass(ASSEMBLY_ROOT);
-		createEReference(assemblyRootEClass, ASSEMBLY_ROOT__ASSEMBLY_COMPONENTS);
+		assemblyModelEClass = createEClass(ASSEMBLY_MODEL);
+		createEReference(assemblyModelEClass, ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS);
 
 		eStringToAssemblyComponentMapEntryEClass = createEClass(ESTRING_TO_ASSEMBLY_COMPONENT_MAP_ENTRY);
 		createEAttribute(eStringToAssemblyComponentMapEntryEClass, ESTRING_TO_ASSEMBLY_COMPONENT_MAP_ENTRY__KEY);
@@ -338,7 +328,6 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 		assemblyComponentEClass = createEClass(ASSEMBLY_COMPONENT);
 		createEReference(assemblyComponentEClass, ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS);
 		createEReference(assemblyComponentEClass, ASSEMBLY_COMPONENT__COMPONENT_TYPE);
-		createEOperation(assemblyComponentEClass, ASSEMBLY_COMPONENT___GET_ASSEMBLY_ROOT);
 
 		eStringToAssemblyOperationMapEntryEClass = createEClass(ESTRING_TO_ASSEMBLY_OPERATION_MAP_ENTRY);
 		createEAttribute(eStringToAssemblyOperationMapEntryEClass, ESTRING_TO_ASSEMBLY_OPERATION_MAP_ENTRY__KEY);
@@ -382,8 +371,8 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 		// Add supertypes to classes
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(assemblyRootEClass, AssemblyRoot.class, "AssemblyRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAssemblyRoot_AssemblyComponents(), this.getEStringToAssemblyComponentMapEntry(), null, "assemblyComponents", null, 0, -1, AssemblyRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEClass(assemblyModelEClass, AssemblyModel.class, "AssemblyModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAssemblyModel_AssemblyComponents(), this.getEStringToAssemblyComponentMapEntry(), null, "assemblyComponents", null, 0, -1, AssemblyModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(eStringToAssemblyComponentMapEntryEClass, Map.Entry.class, "EStringToAssemblyComponentMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEStringToAssemblyComponentMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -392,8 +381,6 @@ public class AssemblyPackageImpl extends EPackageImpl implements AssemblyPackage
 		initEClass(assemblyComponentEClass, AssemblyComponent.class, "AssemblyComponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAssemblyComponent_AssemblyOperations(), this.getEStringToAssemblyOperationMapEntry(), null, "assemblyOperations", null, 0, -1, AssemblyComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 		initEReference(getAssemblyComponent_ComponentType(), theTypePackage.getComponentType(), null, "componentType", null, 0, 1, AssemblyComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEOperation(getAssemblyComponent__GetAssemblyRoot(), this.getAssemblyRoot(), "getAssemblyRoot", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(eStringToAssemblyOperationMapEntryEClass, Map.Entry.class, "EStringToAssemblyOperationMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEStringToAssemblyOperationMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

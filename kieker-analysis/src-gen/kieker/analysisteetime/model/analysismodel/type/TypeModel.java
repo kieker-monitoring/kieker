@@ -8,21 +8,21 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Root</b></em>'.
+ * A representation of the model object '<em><b>Model</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.type.TypeRoot#getComponentTypes <em>Component Types</em>}</li>
+ *   <li>{@link kieker.analysisteetime.model.analysismodel.type.TypeModel#getComponentTypes <em>Component Types</em>}</li>
  * </ul>
  *
- * @see kieker.analysisteetime.model.analysismodel.type.TypePackage#getTypeRoot()
+ * @see kieker.analysisteetime.model.analysismodel.type.TypePackage#getTypeModel()
  * @model
  * @generated
  */
-public interface TypeRoot extends EObject {
+public interface TypeModel extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Component Types</b></em>' map.
 	 * The key is of type {@link java.lang.String},
@@ -34,10 +34,10 @@ public interface TypeRoot extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Component Types</em>' map.
-	 * @see kieker.analysisteetime.model.analysismodel.type.TypePackage#getTypeRoot_ComponentTypes()
+	 * @see kieker.analysisteetime.model.analysismodel.type.TypePackage#getTypeModel_ComponentTypes()
 	 * @model mapType="kieker.analysisteetime.model.analysismodel.type.EStringToComponentTypeMapEntry<org.eclipse.emf.ecore.EString, kieker.analysisteetime.model.analysismodel.type.ComponentType>" ordered="false"
 	 * @generated
 	 */
 	EMap<String, ComponentType> getComponentTypes();
 
-} // TypeRoot
+} // TypeModel

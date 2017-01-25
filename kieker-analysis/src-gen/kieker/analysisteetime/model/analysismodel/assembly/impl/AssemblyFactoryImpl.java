@@ -58,7 +58,7 @@ public class AssemblyFactoryImpl extends EFactoryImpl implements AssemblyFactory
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case AssemblyPackage.ASSEMBLY_ROOT: return createAssemblyRoot();
+			case AssemblyPackage.ASSEMBLY_MODEL: return createAssemblyModel();
 			case AssemblyPackage.ESTRING_TO_ASSEMBLY_COMPONENT_MAP_ENTRY: return (EObject)createEStringToAssemblyComponentMapEntry();
 			case AssemblyPackage.ASSEMBLY_COMPONENT: return createAssemblyComponent();
 			case AssemblyPackage.ESTRING_TO_ASSEMBLY_OPERATION_MAP_ENTRY: return (EObject)createEStringToAssemblyOperationMapEntry();
@@ -73,9 +73,9 @@ public class AssemblyFactoryImpl extends EFactoryImpl implements AssemblyFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AssemblyRoot createAssemblyRoot() {
-		AssemblyRootImpl assemblyRoot = new AssemblyRootImpl();
-		return assemblyRoot;
+	public AssemblyModel createAssemblyModel() {
+		AssemblyModelImpl assemblyModel = new AssemblyModelImpl();
+		return assemblyModel;
 	}
 
 	/**

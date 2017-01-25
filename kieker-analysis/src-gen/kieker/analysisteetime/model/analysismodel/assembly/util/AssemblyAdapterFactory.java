@@ -70,8 +70,8 @@ public class AssemblyAdapterFactory extends AdapterFactoryImpl {
 	protected AssemblySwitch<Adapter> modelSwitch =
 		new AssemblySwitch<Adapter>() {
 			@Override
-			public Adapter caseAssemblyRoot(AssemblyRoot object) {
-				return createAssemblyRootAdapter();
+			public Adapter caseAssemblyModel(AssemblyModel object) {
+				return createAssemblyModelAdapter();
 			}
 			@Override
 			public Adapter caseEStringToAssemblyComponentMapEntry(Map.Entry<String, AssemblyComponent> object) {
@@ -110,16 +110,16 @@ public class AssemblyAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot <em>Root</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot
+	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel
 	 * @generated
 	 */
-	public Adapter createAssemblyRootAdapter() {
+	public Adapter createAssemblyModelAdapter() {
 		return null;
 	}
 

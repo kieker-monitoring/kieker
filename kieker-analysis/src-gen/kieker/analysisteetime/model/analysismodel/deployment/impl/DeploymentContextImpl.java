@@ -2,14 +2,11 @@
  */
 package kieker.analysisteetime.model.analysismodel.deployment.impl;
 
-import java.lang.reflect.InvocationTargetException;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -93,23 +90,6 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 			components = new EcoreEMap<String,DeployedComponent>(DeploymentPackage.Literals.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY, EStringToDeployedComponentMapEntryImpl.class, this, DeploymentPackage.DEPLOYMENT_CONTEXT__COMPONENTS);
 		}
 		return components;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DeploymentRoot getDeploymentRoot() {
-		org.eclipse.emf.ecore.EObject container = this.eContainer();
-		if (container != null) {
-			org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
-			if (containerContainer != null) {
-				return (DeploymentRoot) containerContainer ;
-			}
-		}
-		return null;
-		
 	}
 
 	/**
@@ -215,20 +195,6 @@ public class DeploymentContextImpl extends MinimalEObjectImpl.Container implemen
 				return components != null && !components.isEmpty();
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
-		switch (operationID) {
-			case DeploymentPackage.DEPLOYMENT_CONTEXT___GET_DEPLOYMENT_ROOT:
-				return getDeploymentRoot();
-		}
-		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

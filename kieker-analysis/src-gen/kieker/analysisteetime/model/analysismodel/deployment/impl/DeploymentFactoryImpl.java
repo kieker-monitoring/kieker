@@ -57,7 +57,7 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case DeploymentPackage.DEPLOYMENT_ROOT: return createDeploymentRoot();
+			case DeploymentPackage.DEPLOYMENT_MODEL: return createDeploymentModel();
 			case DeploymentPackage.ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY: return (EObject)createEStringToDeploymentContextMapEntry();
 			case DeploymentPackage.DEPLOYMENT_CONTEXT: return createDeploymentContext();
 			case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY: return (EObject)createEStringToDeployedComponentMapEntry();
@@ -74,9 +74,9 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DeploymentRoot createDeploymentRoot() {
-		DeploymentRootImpl deploymentRoot = new DeploymentRootImpl();
-		return deploymentRoot;
+	public DeploymentModel createDeploymentModel() {
+		DeploymentModelImpl deploymentModel = new DeploymentModelImpl();
+		return deploymentModel;
 	}
 
 	/**

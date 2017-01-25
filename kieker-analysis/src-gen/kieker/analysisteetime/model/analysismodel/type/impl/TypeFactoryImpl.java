@@ -58,7 +58,7 @@ public class TypeFactoryImpl extends EFactoryImpl implements TypeFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case TypePackage.TYPE_ROOT: return createTypeRoot();
+			case TypePackage.TYPE_MODEL: return createTypeModel();
 			case TypePackage.ESTRING_TO_COMPONENT_TYPE_MAP_ENTRY: return (EObject)createEStringToComponentTypeMapEntry();
 			case TypePackage.COMPONENT_TYPE: return createComponentType();
 			case TypePackage.ESTRING_TO_OPERATION_TYPE_MAP_ENTRY: return (EObject)createEStringToOperationTypeMapEntry();
@@ -73,9 +73,9 @@ public class TypeFactoryImpl extends EFactoryImpl implements TypeFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public TypeRoot createTypeRoot() {
-		TypeRootImpl typeRoot = new TypeRootImpl();
-		return typeRoot;
+	public TypeModel createTypeModel() {
+		TypeModelImpl typeModel = new TypeModelImpl();
+		return typeModel;
 	}
 
 	/**

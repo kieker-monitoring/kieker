@@ -22,13 +22,13 @@ public interface ExecutionFactory extends EFactory {
 	ExecutionFactory eINSTANCE = kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Root</em>'.
+	 * Returns a new object of class '<em>Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Root</em>'.
+	 * @return a new object of class '<em>Model</em>'.
 	 * @generated
 	 */
-	ExecutionRoot createExecutionRoot();
+	ExecutionModel createExecutionModel();
 
 	/**
 	 * Returns a new object of class '<em>Aggregated Invocation</em>'.

@@ -69,9 +69,9 @@ public class ExecutionSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case ExecutionPackage.EXECUTION_ROOT: {
-				ExecutionRoot executionRoot = (ExecutionRoot)theEObject;
-				T result = caseExecutionRoot(executionRoot);
+			case ExecutionPackage.EXECUTION_MODEL: {
+				ExecutionModel executionModel = (ExecutionModel)theEObject;
+				T result = caseExecutionModel(executionModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -92,17 +92,17 @@ public class ExecutionSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Root</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Root</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Model</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseExecutionRoot(ExecutionRoot object) {
+	public T caseExecutionModel(ExecutionModel object) {
 		return null;
 	}
 

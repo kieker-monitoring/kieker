@@ -2,17 +2,11 @@
  */
 package kieker.analysisteetime.model.analysismodel.type.impl;
 
-import java.lang.reflect.InvocationTargetException;
-
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import kieker.analysisteetime.model.analysismodel.type.TypePackage;
-import kieker.analysisteetime.model.analysismodel.type.TypeRoot;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EClass;
@@ -127,23 +121,6 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public TypeRoot getTypeRoot() {
-		org.eclipse.emf.ecore.EObject container = this.eContainer();
-		if (container != null) {
-			org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
-			if (containerContainer != null) {
-				return (TypeRoot) containerContainer ;
-			}
-		}
-		return null;
-		
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -220,20 +197,6 @@ public class ComponentTypeImpl extends MinimalEObjectImpl.Container implements C
 				return providedOperations != null && !providedOperations.isEmpty();
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
-		switch (operationID) {
-			case TypePackage.COMPONENT_TYPE___GET_TYPE_ROOT:
-				return getTypeRoot();
-		}
-		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

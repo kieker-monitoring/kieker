@@ -71,8 +71,8 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 	protected ExecutionSwitch<Adapter> modelSwitch =
 		new ExecutionSwitch<Adapter>() {
 			@Override
-			public Adapter caseExecutionRoot(ExecutionRoot object) {
-				return createExecutionRootAdapter();
+			public Adapter caseExecutionModel(ExecutionModel object) {
+				return createExecutionModelAdapter();
 			}
 			@Override
 			public Adapter caseDeployedOperationsPairToAggregatedInvocationMapEntry(Map.Entry<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation> object) {
@@ -103,16 +103,16 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot <em>Root</em>}'.
+	 * Creates a new adapter for an object of class '{@link kieker.analysisteetime.model.analysismodel.execution.ExecutionModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see kieker.analysisteetime.model.analysismodel.execution.ExecutionRoot
+	 * @see kieker.analysisteetime.model.analysismodel.execution.ExecutionModel
 	 * @generated
 	 */
-	public Adapter createExecutionRootAdapter() {
+	public Adapter createExecutionModelAdapter() {
 		return null;
 	}
 

@@ -2,18 +2,12 @@
  */
 package kieker.analysisteetime.model.analysismodel.assembly.impl;
 
-import java.lang.reflect.InvocationTargetException;
-
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage;
-import kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot;
-
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EClass;
@@ -135,23 +129,6 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AssemblyRoot getAssemblyRoot() {
-		org.eclipse.emf.ecore.EObject container = this.eContainer();
-		if (container != null) {
-			org.eclipse.emf.ecore.EObject containerContainer = container.eContainer();
-			if (containerContainer != null) {
-				return (AssemblyRoot) containerContainer ;
-			}
-		}
-		return null;
-		
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -229,20 +206,6 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 				return componentType != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
-		switch (operationID) {
-			case AssemblyPackage.ASSEMBLY_COMPONENT___GET_ASSEMBLY_ROOT:
-				return getAssemblyRoot();
-		}
-		return super.eInvoke(operationID, arguments);
 	}
 
 } //AssemblyComponentImpl

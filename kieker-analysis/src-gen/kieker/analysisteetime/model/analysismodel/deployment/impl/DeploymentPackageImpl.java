@@ -10,9 +10,8 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage;
-import kieker.analysisteetime.model.analysismodel.deployment.DeploymentRoot;
-
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionPackage;
 
 import kieker.analysisteetime.model.analysismodel.execution.impl.ExecutionPackageImpl;
@@ -49,7 +48,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass deploymentRootEClass = null;
+	private EClass deploymentModelEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -179,8 +178,8 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getDeploymentRoot() {
-		return deploymentRootEClass;
+	public EClass getDeploymentModel() {
+		return deploymentModelEClass;
 	}
 
 	/**
@@ -188,8 +187,8 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getDeploymentRoot_DeploymentContexts() {
-		return (EReference)deploymentRootEClass.getEStructuralFeatures().get(0);
+	public EReference getDeploymentModel_DeploymentContexts() {
+		return (EReference)deploymentModelEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -235,15 +234,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 */
 	public EReference getDeploymentContext_Components() {
 		return (EReference)deploymentContextEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getDeploymentContext__GetDeploymentRoot() {
-		return deploymentContextEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -400,8 +390,8 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		isCreated = true;
 
 		// Create classes and their features
-		deploymentRootEClass = createEClass(DEPLOYMENT_ROOT);
-		createEReference(deploymentRootEClass, DEPLOYMENT_ROOT__DEPLOYMENT_CONTEXTS);
+		deploymentModelEClass = createEClass(DEPLOYMENT_MODEL);
+		createEReference(deploymentModelEClass, DEPLOYMENT_MODEL__DEPLOYMENT_CONTEXTS);
 
 		eStringToDeploymentContextMapEntryEClass = createEClass(ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY);
 		createEAttribute(eStringToDeploymentContextMapEntryEClass, ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY__KEY);
@@ -410,7 +400,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		deploymentContextEClass = createEClass(DEPLOYMENT_CONTEXT);
 		createEAttribute(deploymentContextEClass, DEPLOYMENT_CONTEXT__NAME);
 		createEReference(deploymentContextEClass, DEPLOYMENT_CONTEXT__COMPONENTS);
-		createEOperation(deploymentContextEClass, DEPLOYMENT_CONTEXT___GET_DEPLOYMENT_ROOT);
 
 		eStringToDeployedComponentMapEntryEClass = createEClass(ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY);
 		createEAttribute(eStringToDeployedComponentMapEntryEClass, ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__KEY);
@@ -463,8 +452,8 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		// Add supertypes to classes
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(deploymentRootEClass, DeploymentRoot.class, "DeploymentRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDeploymentRoot_DeploymentContexts(), this.getEStringToDeploymentContextMapEntry(), null, "deploymentContexts", null, 0, -1, DeploymentRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEClass(deploymentModelEClass, DeploymentModel.class, "DeploymentModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getDeploymentModel_DeploymentContexts(), this.getEStringToDeploymentContextMapEntry(), null, "deploymentContexts", null, 0, -1, DeploymentModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(eStringToDeploymentContextMapEntryEClass, Map.Entry.class, "EStringToDeploymentContextMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEStringToDeploymentContextMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -473,8 +462,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		initEClass(deploymentContextEClass, DeploymentContext.class, "DeploymentContext", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDeploymentContext_Name(), ecorePackage.getEString(), "name", null, 0, 1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDeploymentContext_Components(), this.getEStringToDeployedComponentMapEntry(), null, "components", null, 0, -1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
-
-		initEOperation(getDeploymentContext__GetDeploymentRoot(), this.getDeploymentRoot(), "getDeploymentRoot", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(eStringToDeployedComponentMapEntryEClass, Map.Entry.class, "EStringToDeployedComponentMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEStringToDeployedComponentMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

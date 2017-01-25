@@ -22,13 +22,13 @@ public interface AssemblyFactory extends EFactory {
 	AssemblyFactory eINSTANCE = kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Root</em>'.
+	 * Returns a new object of class '<em>Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Root</em>'.
+	 * @return a new object of class '<em>Model</em>'.
 	 * @generated
 	 */
-	AssemblyRoot createAssemblyRoot();
+	AssemblyModel createAssemblyModel();
 
 	/**
 	 * Returns a new object of class '<em>Component</em>'.

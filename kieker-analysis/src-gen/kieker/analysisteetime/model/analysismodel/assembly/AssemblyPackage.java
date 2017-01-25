@@ -58,14 +58,14 @@ public interface AssemblyPackage extends EPackage {
 	AssemblyPackage eINSTANCE = kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyPackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyRootImpl <em>Root</em>}' class.
+	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyModelImpl <em>Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyRootImpl
-	 * @see kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyPackageImpl#getAssemblyRoot()
+	 * @see kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyModelImpl
+	 * @see kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyPackageImpl#getAssemblyModel()
 	 * @generated
 	 */
-	int ASSEMBLY_ROOT = 0;
+	int ASSEMBLY_MODEL = 0;
 
 	/**
 	 * The feature id for the '<em><b>Assembly Components</b></em>' map.
@@ -74,25 +74,25 @@ public interface AssemblyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ASSEMBLY_ROOT__ASSEMBLY_COMPONENTS = 0;
+	int ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS = 0;
 
 	/**
-	 * The number of structural features of the '<em>Root</em>' class.
+	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASSEMBLY_ROOT_FEATURE_COUNT = 1;
+	int ASSEMBLY_MODEL_FEATURE_COUNT = 1;
 
 	/**
-	 * The number of operations of the '<em>Root</em>' class.
+	 * The number of operations of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASSEMBLY_ROOT_OPERATION_COUNT = 0;
+	int ASSEMBLY_MODEL_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.assembly.impl.EStringToAssemblyComponentMapEntryImpl <em>EString To Assembly Component Map Entry</em>}' class.
@@ -178,22 +178,13 @@ public interface AssemblyPackage extends EPackage {
 	int ASSEMBLY_COMPONENT_FEATURE_COUNT = 2;
 
 	/**
-	 * The operation id for the '<em>Get Assembly Root</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASSEMBLY_COMPONENT___GET_ASSEMBLY_ROOT = 0;
-
-	/**
 	 * The number of operations of the '<em>Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ASSEMBLY_COMPONENT_OPERATION_COUNT = 1;
+	int ASSEMBLY_COMPONENT_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysisteetime.model.analysismodel.assembly.impl.EStringToAssemblyOperationMapEntryImpl <em>EString To Assembly Operation Map Entry</em>}' class.
@@ -289,25 +280,25 @@ public interface AssemblyPackage extends EPackage {
 
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot <em>Root</em>}'.
+	 * Returns the meta object for class '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Root</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot
+	 * @return the meta object for class '<em>Model</em>'.
+	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel
 	 * @generated
 	 */
-	EClass getAssemblyRoot();
+	EClass getAssemblyModel();
 
 	/**
-	 * Returns the meta object for the map '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot#getAssemblyComponents <em>Assembly Components</em>}'.
+	 * Returns the meta object for the map '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel#getAssemblyComponents <em>Assembly Components</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the map '<em>Assembly Components</em>'.
-	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyRoot#getAssemblyComponents()
-	 * @see #getAssemblyRoot()
+	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel#getAssemblyComponents()
+	 * @see #getAssemblyModel()
 	 * @generated
 	 */
-	EReference getAssemblyRoot_AssemblyComponents();
+	EReference getAssemblyModel_AssemblyComponents();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Assembly Component Map Entry</em>}'.
@@ -374,16 +365,6 @@ public interface AssemblyPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getAssemblyComponent_ComponentType();
-
-	/**
-	 * Returns the meta object for the '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getAssemblyRoot() <em>Get Assembly Root</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Assembly Root</em>' operation.
-	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getAssemblyRoot()
-	 * @generated
-	 */
-	EOperation getAssemblyComponent__GetAssemblyRoot();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Assembly Operation Map Entry</em>}'.
@@ -474,14 +455,14 @@ public interface AssemblyPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyRootImpl <em>Root</em>}' class.
+		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyModelImpl <em>Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyRootImpl
-		 * @see kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyPackageImpl#getAssemblyRoot()
+		 * @see kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyModelImpl
+		 * @see kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyPackageImpl#getAssemblyModel()
 		 * @generated
 		 */
-		EClass ASSEMBLY_ROOT = eINSTANCE.getAssemblyRoot();
+		EClass ASSEMBLY_MODEL = eINSTANCE.getAssemblyModel();
 
 		/**
 		 * The meta object literal for the '<em><b>Assembly Components</b></em>' map feature.
@@ -489,7 +470,7 @@ public interface AssemblyPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ASSEMBLY_ROOT__ASSEMBLY_COMPONENTS = eINSTANCE.getAssemblyRoot_AssemblyComponents();
+		EReference ASSEMBLY_MODEL__ASSEMBLY_COMPONENTS = eINSTANCE.getAssemblyModel_AssemblyComponents();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.assembly.impl.EStringToAssemblyComponentMapEntryImpl <em>EString To Assembly Component Map Entry</em>}' class.
@@ -542,14 +523,6 @@ public interface AssemblyPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ASSEMBLY_COMPONENT__COMPONENT_TYPE = eINSTANCE.getAssemblyComponent_ComponentType();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Assembly Root</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation ASSEMBLY_COMPONENT___GET_ASSEMBLY_ROOT = eINSTANCE.getAssemblyComponent__GetAssemblyRoot();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysisteetime.model.analysismodel.assembly.impl.EStringToAssemblyOperationMapEntryImpl <em>EString To Assembly Operation Map Entry</em>}' class.
