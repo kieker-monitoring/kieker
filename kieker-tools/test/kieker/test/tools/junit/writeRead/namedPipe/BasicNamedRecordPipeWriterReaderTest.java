@@ -60,7 +60,7 @@ public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTe
 	}
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) {
+	protected MonitoringController createController(final int numRecordsWritten) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PipeWriter.class.getName());
 		config.setProperty(PipeWriter.CONFIG_PIPENAME, BasicNamedRecordPipeWriterReaderTest.PIPE_NAME);

@@ -27,6 +27,8 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.controller.WaitableController;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -36,7 +38,10 @@ import kieker.test.common.junit.AbstractKiekerTest;
  *
  * @since 1.5
  */
+@Deprecated
 public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
+
+	private static final int TIMEOUT_IN_MS = 0;
 
 	// parameters for the default list of events to use in the test
 	private static final String DEFAULT_EVENTS_SESSION_ID = "Mn51D97t0";
@@ -46,9 +51,9 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	/**
 	 * @param numRecordsWritten
 	 *
-	 * @return An {@link IMonitoringController} initialized with the respective FS Writer.
+	 * @return A {@link MonitoringController} initialized with the respective FS Writer.
 	 */
-	protected abstract IMonitoringController createController(final int numRecordsWritten) throws Exception;
+	protected abstract MonitoringController createController(final int numRecordsWritten) throws Exception;
 
 	/**
 	 * Checks if the given {@link IMonitoringController} is in the expected state after having passed
@@ -132,7 +137,8 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 		final List<IMonitoringRecord> someEvents = this.provideEvents();
 
 		// Write batch of records:
-		final IMonitoringController ctrl = this.createController(someEvents.size());
+		final MonitoringController monCtrl = this.createController(someEvents.size());
+		final WaitableController ctrl = new WaitableController(monCtrl);
 
 		this.checkControllerStateBeforeRecordsPassedToController(ctrl);
 
@@ -147,6 +153,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 		if (this.terminateBeforeLogInspection()) {
 			// need to terminate explicitly, because otherwise, the monitoring log directory cannot be removed
 			ctrl.terminateMonitoring();
+			ctrl.waitForTermination(TIMEOUT_IN_MS);
 		}
 
 		this.doBeforeReading();
@@ -161,6 +168,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 		if (!this.terminateBeforeLogInspection()) {
 			// need to terminate explicitly, because otherwise, the monitoring log directory cannot be removed
 			ctrl.terminateMonitoring();
+			ctrl.waitForTermination(TIMEOUT_IN_MS);
 		}
 	}
 }

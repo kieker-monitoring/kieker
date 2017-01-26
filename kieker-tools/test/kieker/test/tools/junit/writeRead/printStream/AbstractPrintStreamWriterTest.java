@@ -48,7 +48,7 @@ public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReader
 	protected abstract String provideStreamName();
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) {
+	protected MonitoringController createController(final int numRecordsWritten) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PrintStreamWriter.class.getName());
 		config.setProperty(PrintStreamWriter.STREAM, this.provideStreamName());

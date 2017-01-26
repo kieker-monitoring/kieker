@@ -46,7 +46,7 @@ public class BasicJMSWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	private volatile ListCollectionFilter<IMonitoringRecord> sinkFilter = null; // NOPMD (init for findbugs)
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
+	protected MonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
 			InterruptedException {
 		final AnalysisController analysisController = new AnalysisController();
 
@@ -54,7 +54,7 @@ public class BasicJMSWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, JmsWriter.class.getName());
 		config.setProperty(JmsWriter.CONFIG_CONTEXTFACTORYTYPE, FakeInitialContextFactory.class.getName());
 		config.setProperty(JmsWriter.CONFIG_FACTORYLOOKUPNAME, "ConnectionFactory");
-		final IMonitoringController ctrl = MonitoringController.createInstance(config);
+		final MonitoringController ctrl = MonitoringController.createInstance(config);
 		Thread.sleep(1000);
 		final Configuration jmsReaderConfig = new Configuration();
 		jmsReaderConfig.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, FakeInitialContextFactory.class.getName());

@@ -16,137 +16,93 @@
 
 package kieker.test.tools.junit.writeRead.filesystem;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
-import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.AsciiReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.controller.WaitableController;
 import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.writernew.filesystem.AsciiFileWriter;
 
-import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
+import kieker.test.tools.junit.writeRead.TestAnalysis;
+import kieker.test.tools.junit.writeRead.TestDataRepository;
+import kieker.test.tools.junit.writeRead.TestProbe;
 
 /**
  * @author Christian Wulf
  *
  * @since 1.13
  */
-public class AsciiWriterReaderTest extends AbstractWriterReaderTest {
+public class AsciiWriterReaderTest {
 
-	private static final boolean FLUSH = true;
+	private static final TestDataRepository TEST_DATA_REPOSITORY = new TestDataRepository();
+	private static final int TIMEOUT_IN_MS = 0;
 
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
-	private final boolean shouldDecompress = false;
+	@Test
+	public void testUncompressedAsciiCommunication() throws Exception {
+		this.testAsciiCommunication(false);
+	}
 
-	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) throws Exception {
+	@Test
+	public void testCompressedAsciiCommunication() throws Exception {
+		this.testAsciiCommunication(true);
+	}
+
+	private void testAsciiCommunication(final boolean shouldDecompress) throws IOException, Exception, InterruptedException, AnalysisConfigurationException {
+		// 1. define records to be triggered by the test probe
+		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestRecords();
+
+		// 2. define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
-
-		config.setProperty(WriterController.RECORD_QUEUE_SIZE, Integer.toString(numRecordsWritten * 4));
-		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "0");
-
+		config.setProperty(WriterController.RECORD_QUEUE_SIZE, "128");
+		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
 		config.setProperty(AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
-		config.setProperty(AsciiFileWriter.CONFIG_FLUSH, Boolean.toString(FLUSH));
-		config.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, Boolean.toString(this.shouldDecompress));
+		config.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, Boolean.toString(shouldDecompress));
+		final MonitoringController monCtrl = MonitoringController.createInstance(config);
+		final WaitableController monitoringController = new WaitableController(monCtrl);
 
-		return MonitoringController.createInstance(config);
-	}
-
-	@Override
-	protected void checkControllerStateBeforeRecordsPassedToController(final IMonitoringController monitoringController) throws Exception {
-		Assert.assertTrue(monitoringController.isMonitoringEnabled());
-	}
-
-	@Override
-	protected void checkControllerStateAfterRecordsPassedToController(final IMonitoringController monitoringController) throws Exception {
-		Assert.assertTrue("Expected monitoring controller to be enabled", monitoringController.isMonitoringEnabled());
-	}
-
-	@Override
-	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventFromMonitoringLog) throws Exception {
-		Assert.assertEquals("Unexpected set of records", eventsPassedToController, eventFromMonitoringLog);
-	}
-
-	@Override
-	protected boolean terminateBeforeLogInspection() {
-		return !AsciiWriterReaderTest.FLUSH;
-	}
-
-	@Override
-	protected List<IMonitoringRecord> readEvents() throws Exception {
-		final String[] monitoringLogs = this.tmpFolder.getRoot().list(new KiekerLogDirFilter());
-		for (int i = 0; i < monitoringLogs.length; i++) { // transform relative to absolute path
-			monitoringLogs[i] = this.tmpFolder.getRoot().getAbsoluteFile() + File.separator + monitoringLogs[i]; // NOPMD (UseStringBufferForStringAppends)
-		}
-
-		return this.readLog(monitoringLogs);
-	}
-
-	/**
-	 * This method can be used to read monitoring records from the given directories.
-	 *
-	 * @param monitoringLogDirs
-	 *            The directories containing the monitoring logs.
-	 * @return A list containing all monitoring records.
-	 *
-	 * @throws AnalysisConfigurationException
-	 *             If something went wrong during the reading.
-	 */
-	protected List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) throws AnalysisConfigurationException {
-		final AnalysisController analysisController = new AnalysisController();
+		// 3. define analysis config
+		final String[] monitoringLogDirs = TEST_DATA_REPOSITORY.getAbsoluteMonitoringLogDirNames(this.tmpFolder.getRoot());
 
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(AsciiReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
 		readerConfiguration.setProperty(AsciiReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
-		readerConfiguration.setProperty(AsciiReader.CONFIG_SHOULD_DECOMPRESS, String.valueOf(this.shouldDecompress));
+		readerConfiguration.setProperty(AsciiReader.CONFIG_SHOULD_DECOMPRESS, Boolean.toString(shouldDecompress));
 
-		final AbstractReaderPlugin reader = new AsciiReader(readerConfiguration, analysisController);
-		final ListCollectionFilter<IMonitoringRecord> sinkPlugin = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
+		final TestAnalysis analysis = new TestAnalysis(readerConfiguration, AsciiReader.class);
 
-		analysisController.connect(reader, AsciiReader.OUTPUT_PORT_NAME_RECORDS, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
-		analysisController.run();
+		// 4. trigger records
+		final TestProbe testProbe = new TestProbe(monitoringController);
+		Assert.assertTrue(monitoringController.isMonitoringEnabled());
+		testProbe.triggerRecords(records);
+		Assert.assertTrue(monitoringController.isMonitoringEnabled());
 
-		return sinkPlugin.getList();
+		// 5. terminate monitoring
+		monitoringController.terminateMonitoring();
+
+		// 6. wait for termination
+		monitoringController.waitForTermination(TIMEOUT_IN_MS);
+		analysis.startAndWaitForTermination();
+
+		// 7. read actual records
+		final List<IMonitoringRecord> analyzedRecords = analysis.getList();
+
+		// 8. compare actual and expected records
+		Assert.assertThat(analyzedRecords, CoreMatchers.is(CoreMatchers.equalTo(records)));
 	}
-
-	@Override
-	protected void doBeforeReading() throws IOException {
-		super.doBeforeReading();
-		try {
-			// workaround: sleep to give the writer time to write out all records before the reader tries to read it.
-			// better: wait for the monitoring controller and its sub controllers to terminate.
-			Thread.sleep(1000);
-		} catch (final InterruptedException e) {
-			// do nothing
-		}
-	}
-
-	// @Test
-	// public void testPlainCommunication() throws Exception {
-	// this.shouldDecompress = false;
-	// this.testSimpleLog();
-	// }
-	//
-	// @Test
-	// public void testCompressedCommunication() throws Exception {
-	// this.shouldDecompress = true;
-	// this.testSimpleLog();
-	// }
 }

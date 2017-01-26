@@ -49,7 +49,7 @@ public class SingleSocketTcpWriterReaderTest extends AbstractWriterReaderTest { 
 	private volatile AnalysisControllerThread analysisThread = null; // NOPMD (init for findbugs)
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
+	protected MonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
 			InterruptedException {
 		this.analysisController = new AnalysisController();
 

@@ -56,7 +56,7 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	private volatile ListCollectionFilter<IMonitoringRecord> sinkFilter = null; // NOPMD (init for findbugs)
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
+	protected MonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
 			InterruptedException {
 		final AnalysisController analysisController = new AnalysisController();
 
@@ -72,7 +72,7 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, JmxWriter.class.getName());
 		config.setProperty(JmxWriter.CONFIG_DOMAIN, "");
 		config.setProperty(JmxWriter.CONFIG_LOGNAME, BasicJMXWriterReaderTest.LOGNAME);
-		final IMonitoringController ctrl = MonitoringController.createInstance(config);
+		final MonitoringController ctrl = MonitoringController.createInstance(config);
 		Thread.sleep(1000);
 		final Configuration jmxReaderConfig = new Configuration();
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_DOMAIN, BasicJMXWriterReaderTest.DOMAIN);

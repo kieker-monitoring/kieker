@@ -52,7 +52,7 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 
 	private static final String PREFIX = BinaryFileWriter.class.getName() + ".";
 	/** The name of the configuration for the custom storage path if the writer is advised not to store in the temporary directory. */
-	static final String CONFIG_PATH = PREFIX + "customStoragePath";
+	public static final String CONFIG_PATH = PREFIX + "customStoragePath";
 	/** The name of the configuration determining the maximal number of entries in a file. */
 	static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
 	/** The name of the configuration determining the maximal size of the files in MiB. */
@@ -62,7 +62,7 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 	/** The name of the configuration key for the charset name of the mapping file */
 	static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
 	/** The name of the configuration key determining to enable/disable compression of the record log files */
-	static final String CONFIG_SHOULD_COMPRESS = PREFIX + "shouldCompress";
+	public static final String CONFIG_SHOULD_COMPRESS = PREFIX + "shouldCompress";
 	/** The name of the configuration key determining the buffer size of the output file stream */
 	static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize";
 	/** The name of the configuration key determining to always flush the output file stream after writing each record */
