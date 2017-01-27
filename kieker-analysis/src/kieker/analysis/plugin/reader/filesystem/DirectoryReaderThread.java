@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.logging.Log;
 import kieker.common.util.filesystem.FileExtensionFilter;
 
@@ -68,7 +69,12 @@ abstract class DirectoryReaderThread extends Thread {
 				}
 
 				this.LOG.info("< Loading " + inputFile.getAbsolutePath());
-				this.processNormalInputFile(inputFile);
+
+				try {
+					this.processNormalInputFile(inputFile);
+				} catch (final RecordInstantiationException e) {
+					break;
+				}
 			}
 		}
 

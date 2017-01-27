@@ -109,6 +109,7 @@ public class ByteBufferDeserializer {
 			this.recordReceiver.newMonitoringRecord(record);
 		} catch (final RecordInstantiationException ex) {
 			this.logger.error("Failed to create: " + recordClassName, ex);
+			throw ex; // we cannot continue reading the buffer because we do not know at which position to continue
 		}
 
 		return true;
