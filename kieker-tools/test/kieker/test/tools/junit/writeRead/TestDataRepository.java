@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.controlflow.BranchingRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
@@ -44,6 +45,20 @@ public class TestDataRepository {
 
 	public TestDataRepository() {
 		super();
+	}
+
+	public List<IMonitoringRecord> newTestUnknownRecords() {
+		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
+		final EmptyRecord EVENT0_KNOWN_TYPE = new EmptyRecord();
+		final BranchingRecord EVENT1_UNKNOWN_TYPE = new BranchingRecord(-1, -1, -1);
+		final EmptyRecord EVENT2_KNOWN_TYPE = new EmptyRecord();
+		final BranchingRecord EVENT3_UNKNOWN_TYPE = new BranchingRecord(-1, -1, -1);
+
+		someEvents.add(EVENT0_KNOWN_TYPE);
+		someEvents.add(EVENT1_UNKNOWN_TYPE);
+		someEvents.add(EVENT2_KNOWN_TYPE);
+		someEvents.add(EVENT3_UNKNOWN_TYPE);
+		return someEvents;
 	}
 
 	public List<IMonitoringRecord> newTestEventRecords() {

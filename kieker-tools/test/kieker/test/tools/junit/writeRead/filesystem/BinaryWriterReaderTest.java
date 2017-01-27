@@ -73,6 +73,8 @@ public class BinaryWriterReaderTest {
 		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
 		config.setProperty(BinaryFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
 		config.setProperty(BinaryFileWriter.CONFIG_SHOULD_COMPRESS, Boolean.toString(shouldDecompress));
+		final MonitoringController monCtrl = MonitoringController.createInstance(config);
+		final WaitableController monitoringController = new WaitableController(monCtrl);
 
 		// 3. define analysis config
 		final String[] monitoringLogDirs = TEST_DATA_REPOSITORY.getAbsoluteMonitoringLogDirNames(this.tmpFolder.getRoot());
@@ -81,10 +83,6 @@ public class BinaryWriterReaderTest {
 		readerConfiguration.setProperty(BinaryLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
 		readerConfiguration.setProperty(BinaryLogReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
 		readerConfiguration.setProperty(BinaryLogReader.CONFIG_SHOULD_DECOMPRESS, Boolean.toString(shouldDecompress));
-
-		// declare controllers
-		final MonitoringController monCtrl = MonitoringController.createInstance(config);
-		final WaitableController monitoringController = new WaitableController(monCtrl);
 		final TestAnalysis analysis = new TestAnalysis(readerConfiguration, BinaryLogReader.class);
 
 		// 4. trigger records

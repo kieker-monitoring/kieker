@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writeRead.filesystem;
+package kieker.test.tools.junit.writeRead.filesystem.unknownTypes;
 
 import java.io.File;
 import java.io.FilenameFilter;
