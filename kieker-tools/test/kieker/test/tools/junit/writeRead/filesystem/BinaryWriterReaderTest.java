@@ -26,14 +26,14 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.plugin.reader.filesystem.AsciiLogReader;
+import kieker.analysis.plugin.reader.filesystem.BinaryLogReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WaitableController;
 import kieker.monitoring.core.controller.WriterController;
-import kieker.monitoring.writernew.filesystem.AsciiFileWriter;
+import kieker.monitoring.writernew.filesystem.BinaryFileWriter;
 
 import kieker.test.tools.junit.writeRead.TestAnalysis;
 import kieker.test.tools.junit.writeRead.TestDataRepository;
@@ -44,7 +44,7 @@ import kieker.test.tools.junit.writeRead.TestProbe;
  *
  * @since 1.13
  */
-public class AsciiWriterReaderTest {
+public class BinaryWriterReaderTest {
 
 	private static final TestDataRepository TEST_DATA_REPOSITORY = new TestDataRepository();
 	private static final int TIMEOUT_IN_MS = 0;
@@ -53,12 +53,12 @@ public class AsciiWriterReaderTest {
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
 	@Test
-	public void testUncompressedAsciiCommunication() throws Exception {
+	public void testUncompressedBinaryCommunication() throws Exception {
 		this.testAsciiCommunication(false);
 	}
 
 	@Test
-	public void testCompressedAsciiCommunication() throws Exception {
+	public void testCompressedBinaryCommunication() throws Exception {
 		this.testAsciiCommunication(true);
 	}
 
@@ -68,24 +68,24 @@ public class AsciiWriterReaderTest {
 
 		// 2. define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
+		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, BinaryFileWriter.class.getName());
 		config.setProperty(WriterController.RECORD_QUEUE_SIZE, "128");
 		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
-		config.setProperty(AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
-		config.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, Boolean.toString(shouldDecompress));
+		config.setProperty(BinaryFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
+		config.setProperty(BinaryFileWriter.CONFIG_SHOULD_COMPRESS, Boolean.toString(shouldDecompress));
 
 		// 3. define analysis config
 		final String[] monitoringLogDirs = TEST_DATA_REPOSITORY.getAbsoluteMonitoringLogDirNames(this.tmpFolder.getRoot());
 
 		final Configuration readerConfiguration = new Configuration();
-		readerConfiguration.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
-		readerConfiguration.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
-		readerConfiguration.setProperty(AsciiLogReader.CONFIG_SHOULD_DECOMPRESS, Boolean.toString(shouldDecompress));
+		readerConfiguration.setProperty(BinaryLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
+		readerConfiguration.setProperty(BinaryLogReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
+		readerConfiguration.setProperty(BinaryLogReader.CONFIG_SHOULD_DECOMPRESS, Boolean.toString(shouldDecompress));
 
 		// declare controllers
 		final MonitoringController monCtrl = MonitoringController.createInstance(config);
 		final WaitableController monitoringController = new WaitableController(monCtrl);
-		final TestAnalysis analysis = new TestAnalysis(readerConfiguration, AsciiLogReader.class);
+		final TestAnalysis analysis = new TestAnalysis(readerConfiguration, BinaryLogReader.class);
 
 		// 4. trigger records
 		final TestProbe testProbe = new TestProbe(monitoringController);

@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipInputStream;
 
+import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;

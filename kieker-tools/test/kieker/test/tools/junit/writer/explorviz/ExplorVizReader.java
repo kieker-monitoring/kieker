@@ -81,11 +81,6 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 			if (this.log.isDebugEnabled()) {
 				this.log.debug("Listening on port " + this.port);
 			}
-			try {
-				Thread.sleep(2000);
-			} catch (final InterruptedException e) {
-				LOG.warn("An exception occurred", e);
-			}
 			final SocketChannel socketChannel = serversocket.accept();
 			final ByteBuffer buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
 

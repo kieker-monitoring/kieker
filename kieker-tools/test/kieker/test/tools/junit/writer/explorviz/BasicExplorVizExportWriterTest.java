@@ -16,15 +16,11 @@
 
 package kieker.test.tools.junit.writer.explorviz;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Test;
 
-import kieker.analysis.AnalysisController;
-import kieker.analysis.AnalysisControllerThread;
-import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
@@ -32,65 +28,69 @@ import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.controller.WaitableController;
 import kieker.monitoring.writernew.explorviz.ExplorVizTcpWriter;
 
-import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
+import kieker.test.tools.junit.writeRead.TestAnalysis;
+import kieker.test.tools.junit.writeRead.TestDataRepository;
+import kieker.test.tools.junit.writeRead.TestProbe;
 
 /**
  * Simple test to ensure that ExplorViz is receiving all sent records from the Kieker ExplorVizExportWriter correctly.
  *
- * @author Micky Singh Multani
+ * @author Micky Singh Multani, Christian Wulf
  *
  * @since 1.11
  */
-public class BasicExplorVizExportWriterTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
+public class BasicExplorVizExportWriterTest {
 
 	private static final String PORT = "10555";
 
-	private volatile ListCollectionFilter<IMonitoringRecord> sinkFilter = null; // NOPMD (init for findbugs)
-	private volatile AnalysisController analysisController = null; // NOPMD (init for findbugs)
-	private volatile AnalysisControllerThread analysisThread = null; // NOPMD (init for findbugs)
+	private static final TestDataRepository TEST_DATA_REPOSITORY = new TestDataRepository();
+	private static final int TIMEOUT_IN_MS = 0;
 
-	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
-			InterruptedException {
-		this.analysisController = new AnalysisController();
+	@Test
+	public void testExplorvizCommunication() throws Exception {
+		// define records to be triggered by the test probe
+		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestEventRecords();
 
-		final Configuration readerConfig = new Configuration();
-		readerConfig.setProperty(ExplorVizReader.CONFIG_PROPERTY_NAME_PORT, BasicExplorVizExportWriterTest.PORT);
-		final ExplorVizReader explorvizReader = new ExplorVizReader(readerConfig, this.analysisController);
-		this.sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), this.analysisController);
-		this.analysisController.connect(explorvizReader, ExplorVizReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
-		this.analysisThread = new AnalysisControllerThread(this.analysisController);
-		this.analysisThread.start();
+		// define monitoring config
+		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
+		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, ExplorVizTcpWriter.class.getName());
+		config.setProperty(ExplorVizTcpWriter.CONFIG_PORT, BasicExplorVizExportWriterTest.PORT);
 
-		Thread.sleep(1000);
+		// define analysis config
+		final Configuration readerConfiguration = new Configuration();
+		readerConfiguration.setProperty(ExplorVizReader.CONFIG_PROPERTY_NAME_PORT, BasicExplorVizExportWriterTest.PORT);
 
-		final Configuration monitoringConfig = ConfigurationFactory.createDefaultConfiguration();
-		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, ExplorVizTcpWriter.class.getName());
-		monitoringConfig.setProperty(ExplorVizTcpWriter.CONFIG_PORT, BasicExplorVizExportWriterTest.PORT);
-		return MonitoringController.createInstance(monitoringConfig);
-	}
+		// declare controllers and start the analysis before monitoring
+		final TestAnalysis analysis = new TestAnalysis(readerConfiguration, ExplorVizReader.class);
+		analysis.startInNewThread();
+		final MonitoringController monCtrl = MonitoringController.createInstance(config);
+		final WaitableController monitoringController = new WaitableController(monCtrl);
 
-	@Override
-	protected void checkControllerStateAfterRecordsPassedToController(final IMonitoringController monitoringController) throws Exception {
+		// trigger records
+		final TestProbe testProbe = new TestProbe(monitoringController);
 		Assert.assertTrue(monitoringController.isMonitoringEnabled());
+		testProbe.triggerRecords(records);
+		Assert.assertTrue(monitoringController.isMonitoringEnabled());
+
+		// terminate monitoring
 		monitoringController.terminateMonitoring();
-		this.analysisThread.awaitTermination();
-		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
+
+		// wait for termination
+		monitoringController.waitForTermination(TIMEOUT_IN_MS);
+		analysis.waitForTermination(TIMEOUT_IN_MS);
+
+		// read actual records
+		final List<IMonitoringRecord> analyzedRecords = analysis.getList();
+
+		// compare actual and expected records
+		this.inspectRecords(analyzedRecords, records);
 	}
 
-	@Override
-	protected void checkControllerStateBeforeRecordsPassedToController(final IMonitoringController monitoringController) throws Exception {
-		Assert.assertTrue(monitoringController.isMonitoringEnabled());
-		Assert.assertEquals(AnalysisController.STATE.RUNNING, this.analysisController.getState());
-	}
-
-	@Override
-	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventFromMonitoringLog) throws Exception {
-
+	private void inspectRecords(final List<IMonitoringRecord> eventFromMonitoringLog, final List<IMonitoringRecord> eventsPassedToController) throws Exception {
 		for (int i = 0; i < eventsPassedToController.size(); i++) {
 
 			if (eventFromMonitoringLog.get(i) instanceof CustomAfterOperationFailedEvent) {
@@ -128,34 +128,6 @@ public class BasicExplorVizExportWriterTest extends AbstractWriterReaderTest { /
 						(sentRecord.getId() + ", " + sentRecord.getString()), (receivedRecord.getId() + ", " + receivedRecord.getString()));
 			}
 		}
-	}
-
-	@Override
-	protected boolean terminateBeforeLogInspection() {
-		return false;
-	}
-
-	@Override
-	protected List<IMonitoringRecord> readEvents() throws AnalysisConfigurationException {
-		return this.sinkFilter.getList();
-	}
-
-	@Override
-	protected List<IMonitoringRecord> provideEvents() {
-		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
-		final Object[] testValues1 = { 22L, 11L, 101, "BeOpEv", "BeforeOperationEvent" };
-		final Object[] testValues2 = { 6L, 8L, 120, "AfOpEv", "AfterOperationEvent" };
-		final Object[] testValues3 = { 10L, 12L, 150, "AfOpFaEv", "AfterOperationFailedEvent", "cause" };
-
-		final BeforeOperationEvent testBeforeOperationEvent = new BeforeOperationEvent(testValues1);
-		final AfterOperationEvent testAfterOperationEvent = new AfterOperationEvent(testValues2);
-		final AfterOperationFailedEvent testAfterOperationFailedEvent = new AfterOperationFailedEvent(testValues3);
-
-		someEvents.add(testBeforeOperationEvent);
-		someEvents.add(testAfterOperationEvent);
-		someEvents.add(testAfterOperationFailedEvent);
-
-		return someEvents;
 	}
 
 }

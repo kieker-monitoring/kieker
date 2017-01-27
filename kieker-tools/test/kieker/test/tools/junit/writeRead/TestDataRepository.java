@@ -23,6 +23,9 @@ import java.util.List;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.flow.trace.operation.AfterOperationEvent;
+import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
+import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.EmptyRecord;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
@@ -41,6 +44,23 @@ public class TestDataRepository {
 
 	public TestDataRepository() {
 		super();
+	}
+
+	public List<IMonitoringRecord> newTestEventRecords() {
+		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
+		final Object[] testValues1 = { 22L, 11L, 101, "BeOpEv", "BeforeOperationEvent" };
+		final Object[] testValues2 = { 6L, 8L, 120, "AfOpEv", "AfterOperationEvent" };
+		final Object[] testValues3 = { 10L, 12L, 150, "AfOpFaEv", "AfterOperationFailedEvent", "cause" };
+
+		final BeforeOperationEvent testBeforeOperationEvent = new BeforeOperationEvent(testValues1);
+		final AfterOperationEvent testAfterOperationEvent = new AfterOperationEvent(testValues2);
+		final AfterOperationFailedEvent testAfterOperationFailedEvent = new AfterOperationFailedEvent(testValues3);
+
+		someEvents.add(testBeforeOperationEvent);
+		someEvents.add(testAfterOperationEvent);
+		someEvents.add(testAfterOperationFailedEvent);
+
+		return someEvents;
 	}
 
 	public List<IMonitoringRecord> newTestRecords() {

@@ -91,6 +91,7 @@ class BinaryFileWriterPool extends AbstractWriterPool {
 		try {
 			// use CREATE_NEW to fail if the file already exists
 			OutputStream outputStream = Files.newOutputStream(newFile, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+			// stream is not buffered, since the byte buffer itself is the buffer
 
 			if (this.shouldCompress) {
 				// final GZIPOutputStream compressedOutputStream = new GZIPOutputStream(outputStream);

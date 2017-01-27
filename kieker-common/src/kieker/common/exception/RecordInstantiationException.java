@@ -16,7 +16,11 @@
 
 package kieker.common.exception;
 
+import kieker.common.record.factory.old.RecordFactoryWrapper;
+
 /**
+ * Only thrown by the {@link RecordFactoryWrapper}.
+ *
  * @author Christian Wulf
  *
  * @since 1.10

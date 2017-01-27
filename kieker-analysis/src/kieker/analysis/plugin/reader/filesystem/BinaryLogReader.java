@@ -17,6 +17,8 @@
 package kieker.analysis.plugin.reader.filesystem;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PriorityQueue;
 
 import kieker.analysis.IProjectContext;
@@ -24,6 +26,7 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
+import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
@@ -36,12 +39,11 @@ import kieker.common.record.misc.EmptyRecord;
  * @since 0.95a
  */
 @Plugin(description = "A file system reader which reads records from multiple directories", outputPorts = {
-	@OutputPort(name = AsciiReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Output Port of the FSReader") }, configuration = {
-			@Property(name = AsciiReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".", description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
-			@Property(name = AsciiReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false", description = "Ignore unknown records? Aborts if encountered and value is false.")
+	@OutputPort(name = BinaryLogReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
+		IMonitoringRecord.class }, description = "Output Port of the reader") }, configuration = {
+			@Property(name = BinaryLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".", description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
 		})
-public class AsciiReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
+public class BinaryLogReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
 	/** The name of the output port delivering the record read by this plugin. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
@@ -56,14 +58,12 @@ public class AsciiReader extends AbstractReaderPlugin implements IMonitoringReco
 	/** This dummy record can be send to the reader's record queue to mark the end of the current file. */
 	private static final IMonitoringRecord EOF = new EmptyRecord();
 
-	private final boolean ignoreUnknownRecordTypes;
-
 	private final String[] inputDirs;
 	private final PriorityQueue<IMonitoringRecord> recordQueue;
 
-	private volatile boolean running = true;
-
 	private final boolean shouldDecompress;
+
+	private final List<DirectoryReaderThread> readerThreads = new ArrayList<>();
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -73,7 +73,7 @@ public class AsciiReader extends AbstractReaderPlugin implements IMonitoringReco
 	 * @param projectContext
 	 *            The project context for this component.
 	 */
-	public AsciiReader(final Configuration configuration, final IProjectContext projectContext) {
+	public BinaryLogReader(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
 		this.inputDirs = this.configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_INPUTDIRS);
@@ -85,11 +85,10 @@ public class AsciiReader extends AbstractReaderPlugin implements IMonitoringReco
 			}
 		}
 		if (nDirs == 0) {
-			this.log.warn("The list of input dirs passed to the " + AsciiReader.class.getSimpleName() + " is empty");
+			this.log.warn("The list of input dirs passed to the " + BinaryLogReader.class.getSimpleName() + " is empty");
 			nDirs = 1;
 		}
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(nDirs);
-		this.ignoreUnknownRecordTypes = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES);
 
 		this.shouldDecompress = this.configuration.getBooleanProperty(CONFIG_SHOULD_DECOMPRESS);
 	}
@@ -100,7 +99,9 @@ public class AsciiReader extends AbstractReaderPlugin implements IMonitoringReco
 	@Override
 	public void terminate(final boolean error) {
 		this.log.info("Shutting down reader.");
-		this.running = false;
+		for (final DirectoryReaderThread readerThread : this.readerThreads) {
+			readerThread.terminate();
+		}
 	}
 
 	/**
@@ -114,16 +115,16 @@ public class AsciiReader extends AbstractReaderPlugin implements IMonitoringReco
 			// Make sure that white spaces in paths are handled correctly
 			final File inputDir = new File(inputDirFn);
 
-			final Thread readerThread;
 			if (inputDir.isDirectory()) {
-				readerThread = new Thread(new AsciiDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes, this.shouldDecompress));
+				final DirectoryReaderThread readerThread = new BinaryDirectoryReader(inputDir, this, this.shouldDecompress);
+				readerThread.setDaemon(true);
+				this.readerThreads.add(readerThread);
+				readerThread.start();
 			} else {
 				this.log.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
 				notInitializesReaders++;
 				continue;
 			}
-			readerThread.setDaemon(true);
-			readerThread.start();
 		}
 		// consume incoming records
 		int readingReaders = this.inputDirs.length - notInitializesReaders;
@@ -166,7 +167,7 @@ public class AsciiReader extends AbstractReaderPlugin implements IMonitoringReco
 				// ignore InterruptedException
 			}
 		}
-		return this.running;
+		return true;
 	}
 
 	/**
@@ -176,7 +177,6 @@ public class AsciiReader extends AbstractReaderPlugin implements IMonitoringReco
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.toString(this.ignoreUnknownRecordTypes));
 		return configuration;
 	}
 

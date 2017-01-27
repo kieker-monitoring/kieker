@@ -18,6 +18,7 @@ package kieker.analysis.plugin.reader.tcp.util;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
+import kieker.analysis.plugin.reader.util.IRecordReceivedListener;
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.logging.Log;
 import kieker.common.record.AbstractMonitoringRecord;

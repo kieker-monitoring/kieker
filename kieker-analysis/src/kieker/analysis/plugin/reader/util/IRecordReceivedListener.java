@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.plugin.reader.tcp.util;
+package kieker.analysis.plugin.reader.util;
 
 import kieker.common.record.IMonitoringRecord;
 

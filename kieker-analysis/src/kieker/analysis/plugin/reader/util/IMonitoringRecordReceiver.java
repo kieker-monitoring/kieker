@@ -1,5 +1,6 @@
-package kieker.analysis.plugin.reader.filesystem;
+package kieker.analysis.plugin.reader.util;
 
+import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -9,7 +10,7 @@ import kieker.common.record.IMonitoringRecord;
  *
  * @since 1.2
  */
-interface IMonitoringRecordReceiver {
+public interface IMonitoringRecordReceiver {
 
 	/**
 	 * This method is called for each new record by each ReaderThread.

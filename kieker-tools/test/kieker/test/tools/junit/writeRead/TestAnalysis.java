@@ -36,6 +36,7 @@ public class TestAnalysis {
 
 	private final AnalysisController analysisController;
 	private final ListCollectionFilter<IMonitoringRecord> sinkPlugin;
+	private final Thread thread;
 
 	public TestAnalysis(final Configuration configuration, final Class<? extends AbstractReaderPlugin> readerClass) throws Exception {
 		this.analysisController = new AnalysisController();
@@ -45,6 +46,18 @@ public class TestAnalysis {
 		this.sinkPlugin = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), this.analysisController);
 
 		this.analysisController.connect(reader, outputPortName, this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
+
+		this.thread = new Thread() {
+			@SuppressWarnings("synthetic-access")
+			@Override
+			public void run() {
+				try {
+					TestAnalysis.this.analysisController.run();
+				} catch (IllegalStateException | AnalysisConfigurationException e) {
+					throw new IllegalStateException("Should never happen", e);
+				}
+			}
+		};
 	}
 
 	private AbstractReaderPlugin newReader(final Class<? extends AbstractReaderPlugin> readerClass, final Object... args) throws Exception {
@@ -52,8 +65,16 @@ public class TestAnalysis {
 		return constructor.newInstance(args);
 	}
 
+	public void startInNewThread() {
+		this.thread.start();
+	}
+
 	public void startAndWaitForTermination() throws IllegalStateException, AnalysisConfigurationException {
 		this.analysisController.run();
+	}
+
+	public void waitForTermination(final long timeoutInMs) throws InterruptedException {
+		this.thread.join(timeoutInMs);
 	}
 
 	public List<IMonitoringRecord> getList() {
