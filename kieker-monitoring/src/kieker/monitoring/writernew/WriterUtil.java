@@ -30,7 +30,7 @@ import kieker.common.logging.Log;
  */
 public final class WriterUtil {
 
-	public WriterUtil() {
+	private WriterUtil() {
 		// utility class
 	}
 

@@ -21,6 +21,7 @@ import java.util.concurrent.BlockingQueue;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.misc.EmptyRecord;
 
 /**
  * @author Christian Wulf
@@ -31,7 +32,8 @@ public class MonitoringWriterThread extends Thread {
 
 	private static final Log LOG = LogFactory.getLog(MonitoringWriterThread.class);
 
-	private volatile boolean shouldTerminate;
+	private static final IMonitoringRecord END_OF_MONITORING_RECORD = new EmptyRecord();
+
 	private final BlockingQueue<IMonitoringRecord> writerQueue;
 	private final AbstractMonitoringWriter writer;
 
@@ -59,21 +61,11 @@ public class MonitoringWriterThread extends Thread {
 		this.writer.onStarting();
 
 		try {
-			while (!this.shouldTerminate) {
-				final IMonitoringRecord record = this.writerQueue.take();
+			IMonitoringRecord record = this.writerQueue.take();
+			while (record != END_OF_MONITORING_RECORD) { // NOPMD (compare references by == not by equals())
 				this.writer.writeMonitoringRecord(record);
-				// this.numWrittenRecords++;
-				// if ((this.numWrittenRecords % 1000) == 0) {
-				// System.out.println(this.getClass().getCanonicalName() + ": numWrittenRecords = " + this.numWrittenRecords);
-				// }
+				record = this.writerQueue.take();
 			}
-
-			// shouldTerminate=true: write out all possibly remaining records from the queue
-			IMonitoringRecord record;
-			while ((record = this.writerQueue.poll()) != null) {
-				this.writer.writeMonitoringRecord(record);
-			}
-
 		} catch (final InterruptedException e) {
 			if (LOG.isDebugEnabled()) {
 				LOG.debug(this.getClass().getName() + " was interrupted.", e);
@@ -89,8 +81,10 @@ public class MonitoringWriterThread extends Thread {
 	}
 
 	public void terminate() {
-		this.shouldTerminate = true;
-		this.interrupt();
+		// Do not call interrupt() to indicate thread termination.
+		// It interrupts writes to (socket) channels.
+		// Instead, we use a unique end-of-monitoring token to indicate that the thread shoudl terminate itself.
+		this.writerQueue.add(END_OF_MONITORING_RECORD);
 	}
 
 }

@@ -86,6 +86,7 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 
 		this.byteBuffer = ByteBuffer.allocateDirect(this.bufferSize);
 		this.socketChannel = SocketChannel.open(new InetSocketAddress(this.hostname, this.port));
+		LOG.info("Initialized socket channel for writing to " + this.hostname + ":" + this.port);
 
 		this.writerRegistry = new WriterRegistry(this);
 		this.writerRegistry.register(EMPTY_STRING);

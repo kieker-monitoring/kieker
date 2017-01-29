@@ -32,9 +32,9 @@ import kieker.test.tools.util.StringUtils;
  *
  * @since 1.13
  */
-class FileContentUtil {
+final class FileContentUtil {
 
-	public FileContentUtil() {
+	private FileContentUtil() {
 		// utility class
 	}
 
@@ -51,14 +51,14 @@ class FileContentUtil {
 	 * @throws IOException
 	 *             If something during the file accesses went wrong.
 	 */
-	public void replaceStringInMapFiles(final String[] dirs, final String findString, final String replaceByString) throws IOException {
+	public static void replaceStringInMapFiles(final String[] dirs, final String findString, final String replaceByString) throws IOException {
 		for (final String curLogDir : dirs) {
 			final String[] mapFilesInDir = new File(curLogDir).list(new KiekerMapFileFilter());
 			Assert.assertEquals("Unexpected number of map files", 1, mapFilesInDir.length);
 
 			final String curMapFile = curLogDir + File.separator + mapFilesInDir[0];
 
-			this.searchReplaceInFile(curMapFile, findString, replaceByString);
+			FileContentUtil.searchReplaceInFile(curMapFile, findString, replaceByString);
 		}
 
 	}
@@ -76,7 +76,7 @@ class FileContentUtil {
 	 * @throws IOException
 	 *             If something during the file access went wrong.
 	 */
-	private void searchReplaceInFile(final String filename, final String findString, final String replaceByString) throws IOException {
+	private static void searchReplaceInFile(final String filename, final String findString, final String replaceByString) throws IOException {
 		final String mapFileContent = StringUtils.readOutputFileAsString(new File(filename));
 		final String manipulatedContent = mapFileContent.replaceAll(findString, replaceByString);
 		PrintStream printStream = null;

@@ -60,19 +60,19 @@ public final class NamedPipeFactory {
 	}
 
 	/**
-	 * Creates a new {@link IMonitoringController} instance with the writer
+	 * Creates a new {@link MonitoringController} instance with the writer
 	 * being a {@link PipeWriter} with the given name.
 	 *
 	 * @param pipeName
 	 *            The name of the pipe to use.
 	 * @return the created IMonitoringController instance
 	 */
-	public static IMonitoringController createMonitoringControllerWithNamedPipe(final String pipeName) {
+	public static MonitoringController createMonitoringControllerWithNamedPipe(final String pipeName) {
 		return NamedPipeFactory.createMonitoringControllerWithNamedPipe(pipeName, null);
 	}
 
 	/**
-	 * Creates a new {@link IMonitoringController} instance with the writer
+	 * Creates a new {@link MonitoringController} instance with the writer
 	 * being a {@link PipeWriter} with the given name. Additional configuration
 	 * properties can be passed.
 	 *
@@ -82,7 +82,7 @@ public final class NamedPipeFactory {
 	 *            additional configuration properties; null is allowed
 	 * @return the created IMonitoringController instance
 	 */
-	public static IMonitoringController createMonitoringControllerWithNamedPipe(final String pipeName, final Properties additionalProperties) {
+	public static MonitoringController createMonitoringControllerWithNamedPipe(final String pipeName, final Properties additionalProperties) {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 		configuration.setProperty(ConfigurationFactory.METADATA, "false");
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PipeWriter.class.getName());
@@ -117,7 +117,7 @@ public final class NamedPipeFactory {
 
 			@Override
 			public void notifyPipeClosed() {
-				// nothing to do
+				// do nothing
 			}
 		});
 		return receivedRecords;

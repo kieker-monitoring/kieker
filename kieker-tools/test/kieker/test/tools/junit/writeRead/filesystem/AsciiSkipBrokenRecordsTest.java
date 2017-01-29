@@ -64,7 +64,7 @@ public class AsciiSkipBrokenRecordsTest {
 
 	@After
 	public void after() {
-		LogImplJUnit.disableThrowable(MonitoringRecordException.class);
+		LogImplJUnit.reset();
 	}
 
 	@Test
@@ -128,7 +128,7 @@ public class AsciiSkipBrokenRecordsTest {
 		// valid type that does not match the type. We want to make sure that only these records
 		// are ignored, but the readers processes the remaining part of the file.
 		final String classnameToManipulate = records.get(1).getClass().getName();
-		new FileContentUtil().replaceStringInMapFiles(monitoringLogDirs, classnameToManipulate, OperationExecutionRecord.class.getName());
+		FileContentUtil.replaceStringInMapFiles(monitoringLogDirs, classnameToManipulate, OperationExecutionRecord.class.getName());
 		// 6b. wait for termination: analysis
 		analysis.startAndWaitForTermination();
 

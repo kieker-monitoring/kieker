@@ -30,8 +30,8 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.controller.WaitableController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.cxf.OperationExecutionSOAPRequestInInterceptor;
@@ -46,9 +46,9 @@ import kieker.test.monitoring.junit.probe.cxf.executions.bookstore.IBookstore;
 import kieker.test.monitoring.util.NamedListWriter;
 
 /**
- * 
+ *
  * @author Andre van Hoorn, Marius Loewe
- * 
+ *
  * @since 1.6
  */
 public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKiekerTest {
@@ -75,10 +75,10 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 
 	private final JaxWsServerFactoryBean srvFactory = new JaxWsServerFactoryBean();
 
-	private volatile IMonitoringController clientMonitoringController;
-	private volatile IMonitoringController serverMonitoringController;
+	private MonitoringController clientMonitoringController;
+	private MonitoringController serverMonitoringController;
 
-	private volatile IBookstore client;
+	private IBookstore client;
 
 	@Before
 	public void prepare() throws Exception {
@@ -91,18 +91,18 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 		this.clientMonitoringController = this.createMonitoringController(CLIENT_HOSTNAME);
 		this.serverMonitoringController = this.createMonitoringController(SERVER_HOSTNAME);
 		this.startServer();
-		this.createClient();
+		this.client = this.createClient();
 	}
 
 	/**
 	 * Workaround to have unique port numbers among the CXF tests. A mechanism having a static integer increment by each instance did work under Eclipse, but not
 	 * when executed by ant.
-	 * 
+	 *
 	 * @return A port digit.
 	 */
 	protected abstract int getPortDigit();
 
-	private IMonitoringController createMonitoringController(final String hostname) {
+	private MonitoringController createMonitoringController(final String hostname) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.METADATA, "false");
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
@@ -125,7 +125,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 		this.srvFactory.create();
 	}
 
-	private void createClient() {
+	private IBookstore createClient() {
 		final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
 		// On the client-side, we only intercept outgoing requests and incoming responses.
 		factory.getOutInterceptors().add(new OperationExecutionSOAPRequestOutInterceptor(this.clientMonitoringController));
@@ -133,7 +133,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 
 		factory.setServiceClass(IBookstore.class);
 		factory.setAddress(this.serviceAddress);
-		this.client = (IBookstore) factory.create();
+		return (IBookstore) factory.create();
 	}
 
 	/**
@@ -148,18 +148,23 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 
 	/**
 	 * Gives implementing classes the possibility to inspect the records written by the probes.
-	 * 
+	 *
 	 * @param records
 	 *            The list of written records.
 	 */
 	protected abstract void checkRecordList(List<IMonitoringRecord> records);
 
 	@Test
-	public final void testIt() {
+	public final void testIt() throws InterruptedException {
 		this.beforeRequest();
 		final String retVal = this.client.searchBook("any"); // we could use the return value
 		Assert.assertEquals("Unexpected return value", "any", retVal);
 		this.afterRequest();
+
+		this.clientMonitoringController.terminateMonitoring();
+		new WaitableController(this.clientMonitoringController).waitForTermination(5000);
+		this.serverMonitoringController.terminateMonitoring();
+		new WaitableController(this.serverMonitoringController).waitForTermination(5000);
 
 		this.checkRecordList(this.recordListFilledByListWriter);
 	}

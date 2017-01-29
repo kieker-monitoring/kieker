@@ -17,6 +17,7 @@
 package kieker.test.monitoring.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +74,7 @@ public class NamedListWriter extends AbstractMonitoringWriter {
 		synchronized (NAMED_LISTS) {
 			List<IMonitoringRecord> list = NAMED_LISTS.get(name);
 			if (list == null) {
-				list = new ArrayList<IMonitoringRecord>();
+				list = Collections.synchronizedList(new ArrayList<IMonitoringRecord>());
 				NAMED_LISTS.put(name, list);
 			}
 			return list;

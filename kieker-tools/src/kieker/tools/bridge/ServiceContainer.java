@@ -20,8 +20,8 @@ import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.common.configuration.Configuration;
-import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.controller.WaitableController;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.IServiceConnector;
@@ -46,7 +46,7 @@ public class ServiceContainer {
 	protected volatile boolean active;
 
 	private final Collection<IServiceListener> listeners = new CopyOnWriteArrayList<IServiceListener>();
-	private final IMonitoringController kiekerMonitoringController;
+	private final MonitoringController kiekerMonitoringController;
 	private final IServiceConnector service;
 
 	private volatile boolean respawn;
@@ -150,5 +150,9 @@ public class ServiceContainer {
 
 	public boolean isRespawn() {
 		return this.respawn;
+	}
+
+	public void waitForTermination(final long timeoutInMs) throws InterruptedException {
+		new WaitableController(this.kiekerMonitoringController).waitForTermination(timeoutInMs);
 	}
 }

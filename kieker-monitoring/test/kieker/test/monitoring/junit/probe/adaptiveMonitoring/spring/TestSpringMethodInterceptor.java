@@ -26,9 +26,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import kieker.common.record.IMonitoringRecord;
@@ -50,12 +48,8 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	private static final String HOSTNAME = "SRV-W4W7E9pN";
 	private static final String CTRLNAME = "MonitoringController-TestSpringMethodInterceptor";
 
-	/** A rule making sure that a temporary folder exists for every test method (which is removed after the test). */
-	@Rule
-	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
-
-	private volatile FileSystemXmlApplicationContext ctx;
-	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
+	private FileSystemXmlApplicationContext ctx;
+	private List<IMonitoringRecord> recordListFilledByListWriter;
 
 	/**
 	 * Default constructor.
@@ -66,15 +60,14 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 
 	@Before
 	public void startServer() throws IOException {
-		this.tmpFolder.create();
 		final String listName = NamedListWriter.FALLBACK_LIST_NAME;
 		this.recordListFilledByListWriter = NamedListWriter.createNamedList(listName);
 		System.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
 		System.setProperty(ConfigurationFactory.METADATA, "false");
+		System.setProperty(ConfigurationFactory.HOST_NAME, HOSTNAME);
 		System.setProperty(ConfigurationFactory.CONTROLLER_NAME, CTRLNAME);
 		System.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		// Doesn't work because property not starting with kieker.monitoring: System.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
-		System.setProperty(ConfigurationFactory.HOST_NAME, HOSTNAME);
 
 		// start the server
 		final URL configURL = TestSpringMethodInterceptor.class.getResource("/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml");
@@ -138,10 +131,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 
 	@After
 	public void cleanup() {
-		if (this.ctx != null) {
-			this.ctx.close();
-		}
-		this.tmpFolder.delete();
+		this.ctx.close();
 		System.clearProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED);
 		System.clearProperty(ConfigurationFactory.METADATA);
 		System.clearProperty(ConfigurationFactory.CONTROLLER_NAME);

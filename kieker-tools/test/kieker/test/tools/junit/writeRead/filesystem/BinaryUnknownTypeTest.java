@@ -65,7 +65,7 @@ public class BinaryUnknownTypeTest {
 
 	@After
 	public void after() {
-		LogImplJUnit.disableThrowable(MonitoringRecordException.class);
+		LogImplJUnit.reset();
 	}
 
 	@Test
@@ -124,7 +124,7 @@ public class BinaryUnknownTypeTest {
 		monitoringController.waitForTermination(TIMEOUT_IN_MS);
 
 		final String classnameToManipulate = records.get(1).getClass().getName();
-		new FileContentUtil().replaceStringInMapFiles(monitoringLogDirs, classnameToManipulate, classnameToManipulate + "XYZ");
+		FileContentUtil.replaceStringInMapFiles(monitoringLogDirs, classnameToManipulate, classnameToManipulate + "XYZ");
 		// 6b. wait for termination: analysis
 		analysis.startAndWaitForTermination();
 

@@ -22,19 +22,12 @@ import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.filesystem.FSUtil;
 import kieker.common.util.filesystem.FileExtensionFilter;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
 import kieker.monitoring.registry.RegisterAdapter;
@@ -79,7 +72,7 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 
 	public BinaryFileWriter(final Configuration configuration) {
 		super(configuration);
-		this.logFolder = this.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH));
+		this.logFolder = KiekerLogFolder.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH), configuration);
 
 		try {
 			Files.createDirectories(this.logFolder);
@@ -108,20 +101,6 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 		this.writerRegistry = new WriterRegistry(this);
 		this.registerStringsAdapter = new RegisterAdapter<String>(this.writerRegistry);
 		this.writeBytesAdapter = new GetIdAdapter<String>(this.writerRegistry);
-	}
-
-	private Path buildKiekerLogFolder(final String customStoragePath) {
-		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmss", Locale.US);
-		date.setTimeZone(TimeZone.getTimeZone("UTC"));
-		String currentDateStr = date.format(new java.util.Date()); // NOPMD (Date)
-		currentDateStr += "-" + System.nanoTime(); // 'SSS' in SimpleDateFormat is not accurate enough for fast unit tests
-
-		final String hostName = this.configuration.getStringProperty(ConfigurationFactory.HOST_NAME);
-		final String controllerName = this.configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME);
-
-		final String filename = String.format("%s-%s-UTC-%s-%s", FSUtil.FILE_PREFIX, currentDateStr, hostName, controllerName);
-
-		return Paths.get(customStoragePath, filename);
 	}
 
 	@Override

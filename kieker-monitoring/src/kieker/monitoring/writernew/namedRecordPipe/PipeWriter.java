@@ -80,8 +80,6 @@ public final class PipeWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public void onTerminating() {
-		if (this.pipe != null) {
-			this.pipe.close();
-		}
+		this.pipe.close();
 	}
 }

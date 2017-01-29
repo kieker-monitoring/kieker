@@ -58,9 +58,10 @@ public class TestServiceContainer extends AbstractKiekerTest {
 	 *             if an IO error occurs
 	 * @throws ConnectorDataTransmissionException
 	 *             if an exception occurs in ServiceContainer or the TestServiceConnector
+	 * @throws InterruptedException
 	 */
 	@Test
-	public void testServiceConnectorInterface() throws IOException, ConnectorDataTransmissionException {
+	public void testServiceConnectorInterface() throws IOException, ConnectorDataTransmissionException, InterruptedException {
 
 		/**
 		 * 1st parameter: Configuration is in CLIServerMain
@@ -87,6 +88,7 @@ public class TestServiceContainer extends AbstractKiekerTest {
 
 		// Run the service
 		serviceContainer.run();
+		serviceContainer.waitForTermination(5000);
 
 		// Check number of written records.
 		// logDirs should contain one Kieker records folders.

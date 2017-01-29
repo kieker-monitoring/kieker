@@ -90,12 +90,14 @@ public class BasicExplorVizExportWriterTest {
 		this.inspectRecords(analyzedRecords, records);
 	}
 
-	private void inspectRecords(final List<IMonitoringRecord> eventFromMonitoringLog, final List<IMonitoringRecord> eventsPassedToController) throws Exception {
+	private void inspectRecords(final List<IMonitoringRecord> eventsFromMonitoringLog, final List<IMonitoringRecord> eventsPassedToController) throws Exception {
 		for (int i = 0; i < eventsPassedToController.size(); i++) {
+			final IMonitoringRecord eventPassedToController = eventsPassedToController.get(i);
+			final IMonitoringRecord eventFromLog = eventsFromMonitoringLog.get(i);
 
-			if (eventFromMonitoringLog.get(i) instanceof CustomAfterOperationFailedEvent) {
-				final AfterOperationFailedEvent sentRecord = (AfterOperationFailedEvent) eventsPassedToController.get(i);
-				final CustomAfterOperationFailedEvent receivedRecord = (CustomAfterOperationFailedEvent) eventFromMonitoringLog.get(i);
+			if (eventFromLog instanceof CustomAfterOperationFailedEvent) {
+				final AfterOperationFailedEvent sentRecord = (AfterOperationFailedEvent) eventPassedToController;
+				final CustomAfterOperationFailedEvent receivedRecord = (CustomAfterOperationFailedEvent) eventFromLog;
 				Assert.assertEquals(
 						"Unexpected set of records - sent record does not match received record",
 						(sentRecord.getTimestamp() + ", " + sentRecord.getTraceId() + ", " + sentRecord.getOrderIndex()
@@ -103,16 +105,16 @@ public class BasicExplorVizExportWriterTest {
 						(receivedRecord.getTimestamp() + ", " + receivedRecord.getTraceId() + ", " + receivedRecord.getOrderIndex() + ", "
 								+ receivedRecord.getCause()));
 
-			} else if (eventFromMonitoringLog.get(i) instanceof CustomAfterOperationEvent) {
-				final AfterOperationEvent sentRecord = (AfterOperationEvent) eventsPassedToController.get(i);
-				final CustomAfterOperationEvent receivedRecord = (CustomAfterOperationEvent) eventFromMonitoringLog.get(i);
+			} else if (eventFromLog instanceof CustomAfterOperationEvent) {
+				final AfterOperationEvent sentRecord = (AfterOperationEvent) eventPassedToController;
+				final CustomAfterOperationEvent receivedRecord = (CustomAfterOperationEvent) eventFromLog;
 				Assert.assertEquals("Unexpected set of records - sent record does not match received record",
 						(sentRecord.getTimestamp() + ", " + sentRecord.getTraceId() + ", " + sentRecord.getOrderIndex()),
 						(receivedRecord.getTimestamp() + ", " + receivedRecord.getTraceId() + ", " + receivedRecord.getOrderIndex()));
 
-			} else if (eventFromMonitoringLog.get(i) instanceof BeforeOperationEvent) {
-				final BeforeOperationEvent sentRecord = (BeforeOperationEvent) eventsPassedToController.get(i);
-				final BeforeOperationEvent receivedRecord = (BeforeOperationEvent) eventFromMonitoringLog.get(i);
+			} else if (eventFromLog instanceof BeforeOperationEvent) {
+				final BeforeOperationEvent sentRecord = (BeforeOperationEvent) eventPassedToController;
+				final BeforeOperationEvent receivedRecord = (BeforeOperationEvent) eventFromLog;
 				Assert.assertEquals(
 						"Unexpected set of records - sent record does not match received record",
 						(sentRecord.getTimestamp() + ", " + sentRecord.getTraceId() + ", " + sentRecord.getOrderIndex()
@@ -120,9 +122,9 @@ public class BasicExplorVizExportWriterTest {
 						(receivedRecord.getTimestamp() + ", " + receivedRecord.getTraceId() + ", " + receivedRecord.getOrderIndex() + ", "
 								+ receivedRecord.getOperationSignature() + ", " + receivedRecord.getClassSignature()));
 
-			} else if (eventFromMonitoringLog.get(i) instanceof RegistryRecord) {
-				final RegistryRecord sentRecord = (RegistryRecord) eventsPassedToController.get(i);
-				final RegistryRecord receivedRecord = (RegistryRecord) eventFromMonitoringLog.get(i);
+			} else if (eventFromLog instanceof RegistryRecord) {
+				final RegistryRecord sentRecord = (RegistryRecord) eventPassedToController;
+				final RegistryRecord receivedRecord = (RegistryRecord) eventFromLog;
 				Assert.assertEquals(
 						"Unexpected set of records - sent record does not match received record",
 						(sentRecord.getId() + ", " + sentRecord.getString()), (receivedRecord.getId() + ", " + receivedRecord.getString()));

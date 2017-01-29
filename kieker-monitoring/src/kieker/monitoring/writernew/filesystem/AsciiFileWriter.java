@@ -21,19 +21,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.filesystem.FSUtil;
 import kieker.common.util.filesystem.FileExtensionFilter;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.registry.IRegistryListener;
 import kieker.monitoring.registry.IWriterRegistry;
 import kieker.monitoring.registry.WriterRegistry;
@@ -72,7 +65,7 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 
 	public AsciiFileWriter(final Configuration configuration) {
 		super(configuration);
-		this.logFolder = this.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH));
+		this.logFolder = KiekerLogFolder.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH), configuration);
 
 		try {
 			Files.createDirectories(this.logFolder);
@@ -97,19 +90,6 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		this.fileWriterPool = new AsciiFileWriterPool(LOG, this.logFolder, charsetName, maxEntriesPerFile, shouldCompress, maxAmountOfFiles, maxMegaBytesPerFile);
 
 		this.writerRegistry = new WriterRegistry(this);
-	}
-
-	private Path buildKiekerLogFolder(final String customStoragePath) {
-		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
-		date.setTimeZone(TimeZone.getTimeZone("UTC"));
-		final String currentDateStr = date.format(new java.util.Date()); // NOPMD (Date)
-
-		final String hostName = this.configuration.getStringProperty(ConfigurationFactory.HOST_NAME);
-		final String controllerName = this.configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME);
-
-		final String filename = String.format("%s-%s-UTC-%s-%s", FSUtil.FILE_PREFIX, currentDateStr, hostName, controllerName);
-
-		return Paths.get(customStoragePath, filename);
 	}
 
 	@Override

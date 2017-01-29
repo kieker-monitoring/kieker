@@ -87,6 +87,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	public void testIt() throws IOException {
 		Assume.assumeTrue(CTRLNAME.equals(MonitoringController.getInstance().getName()));
 		Assert.assertNotNull(this.ctx);
+
 		for (int i = 0; i < 5; i++) {
 			final URL url = new URL("http://localhost:9293/bookstore/search/any/");
 			BufferedReader in = null;
