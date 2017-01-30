@@ -24,7 +24,6 @@ import org.junit.Test;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.controller.WaitableController;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.NamedPipeFactory;
@@ -54,7 +53,7 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends Abs
 		Assert.assertTrue("Failed to enable monitoring", monitoringController.enableMonitoring());
 		monitoringController.newMonitoringRecord(new EmptyRecord());
 		monitoringController.terminateMonitoring();
-		new WaitableController(monitoringController).waitForTermination(5000);
+		monitoringController.waitForTermination(5000);
 
 		Assert.assertEquals("Unexpected number of records received", 1, receivedRecords.size());
 	}
@@ -76,14 +75,14 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends Abs
 		Assert.assertTrue("Failed to disable monitoring", monitoringController.disableMonitoring());
 		monitoringController.newMonitoringRecord(new EmptyRecord());
 		monitoringController.terminateMonitoring();
-		new WaitableController(monitoringController).waitForTermination(5000);
+		monitoringController.waitForTermination(5000);
 
 		Assert.assertEquals("Unexpected number of records received", 0, receivedRecords.size());
 	}
 
 	/**
 	 * Test if records are not passed to the writer when monitoring is terminated.
-	 * 
+	 *
 	 * @throws InterruptedException
 	 */
 	@Test
@@ -96,7 +95,7 @@ public class TestMonitoringControllerRecordsPassedInMonitoringStates extends Abs
 		final List<IMonitoringRecord> receivedRecords = NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
 
 		monitoringController.terminateMonitoring();
-		new WaitableController(monitoringController).waitForTermination(5000);
+		monitoringController.waitForTermination(5000);
 		monitoringController.newMonitoringRecord(new EmptyRecord());
 		Assert.assertEquals("Unexpected number of records received", 0, receivedRecords.size());
 	}

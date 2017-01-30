@@ -24,7 +24,7 @@ public class MonitoringWriterThreadTest {
 		// System.out.println("current dir: " + MonitoringWriterThreadTest.class.getResource("/").getFile());
 	}
 
-	@Test(timeout = 1000)
+	@Test(timeout = 10000)
 	public void testTermination() throws Exception {
 		final Configuration configuration = new Configuration();
 		final AbstractMonitoringWriter writer = new DumpWriter(configuration);
@@ -44,7 +44,7 @@ public class MonitoringWriterThreadTest {
 		thread.join();
 	}
 
-	@Test(timeout = 1000)
+	@Test(timeout = 10000)
 	public void testBlocking() throws Exception {
 		final Configuration configuration = new Configuration();
 		final AbstractMonitoringWriter writer = new DumpWriter(configuration);

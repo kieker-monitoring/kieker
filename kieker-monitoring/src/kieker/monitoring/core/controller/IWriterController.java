@@ -46,4 +46,18 @@ public interface IWriterController extends IMonitoringRecordReceiver {
 	@Override
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 
+	/**
+	 * Waits for the termination of the monitoring controller. The termination must be previously triggered by {@link MonitoringController#terminateMonitoring()}.
+	 *
+	 * @param timeoutInMs
+	 *            timeout in milliseconds to wait (a timeout of 0 means to wait forever)
+	 *
+	 * @throws InterruptedException
+	 *             if the calling thread was interrupted while waiting for the termination
+	 *
+	 * @author Christian Wulf
+	 *
+	 */
+	void waitForTermination(long timeoutInMs) throws InterruptedException;
+
 }

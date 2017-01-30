@@ -36,9 +36,9 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.controller.WaitableController;
 import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.writernew.filesystem.AsciiFileWriter;
+
 import kieker.test.tools.junit.writeRead.TestAnalysis;
 import kieker.test.tools.junit.writeRead.TestDataRepository;
 import kieker.test.tools.junit.writeRead.TestProbe;
@@ -99,8 +99,7 @@ public class AsciiSkipBrokenRecordsTest {
 		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
 		config.setProperty(AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
 		config.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, "false");
-		final MonitoringController monCtrl = MonitoringController.createInstance(config);
-		final WaitableController monitoringController = new WaitableController(monCtrl);
+		final MonitoringController monitoringController = MonitoringController.createInstance(config);
 
 		// 3. define analysis config
 		final String[] monitoringLogDirs = TEST_DATA_REPOSITORY.getAbsoluteMonitoringLogDirNames(this.tmpFolder.getRoot());

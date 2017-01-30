@@ -287,6 +287,11 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
+	public void waitForTermination(final long timeoutInMs) throws InterruptedException {
+		this.writerController.waitForTermination(timeoutInMs);
+	}
+
+	@Override
 	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay, final long period, final TimeUnit timeUnit) {
 		return this.samplingController.schedulePeriodicSampler(sampler, initialDelay, period, timeUnit);
 	}
@@ -342,26 +347,6 @@ public final class MonitoringController extends AbstractController implements IM
 	 */
 	private static final class LazyHolder { // NOCS
 		static final IMonitoringController INSTANCE = MonitoringController.createInstance(ConfigurationFactory.createSingletonConfiguration()); // NOPMD package
-	}
-
-	/**
-	 * Waits for the termination of the monitoring controller.
-	 *
-	 * <br>
-	 * This method should only be used in tests. Waiting for termination in a shutdown hook or in {@link #terminate()} could prevent the JVM or the OS to shutdown
-	 * upon a deadlock.
-	 *
-	 * @param timeoutInMs
-	 *            timeout in milliseconds to wait (a timeout of 0 means to wait forever)
-	 *
-	 * @throws InterruptedException
-	 *             if the calling thread was interrupted while waiting for the termination
-	 *
-	 * @since 2.0
-	 * @author Christian Wulf
-	 */
-	/* default */ void waitForTermination(final long timeoutInMs) throws InterruptedException {// NOPMD (default to be used by tests only)
-		this.writerController.waitForTermination(timeoutInMs);
 	}
 
 }

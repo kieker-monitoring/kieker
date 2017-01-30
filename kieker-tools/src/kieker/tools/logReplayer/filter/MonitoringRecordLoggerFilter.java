@@ -98,6 +98,13 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	@Override
 	public void terminate(final boolean error) {
 		this.monitoringController.terminateMonitoring();
+		try {
+			// we expect a waiting time of 10-100 ms.
+			// So, a timeout of 10,000 ms should be high enough.
+			this.monitoringController.waitForTermination(10000);
+		} catch (final InterruptedException e) {
+			LOG.warn("An exception occurred while waiting for the monitoring to terminate.", e);
+		}
 	}
 
 	/**
@@ -124,7 +131,7 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	// /**
 	// * Used in tests only.
 	// */
-	// public MonitoringController getMonitoringController() {
+	// /* default */ MonitoringController getMonitoringController() { // NOPMD (default for tests)
 	// return this.monitoringController;
 	// }
 }

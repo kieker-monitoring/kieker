@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -85,7 +84,6 @@ public class TestLogReplayer extends AbstractKiekerTest {
 	 */
 	@Before
 	public void init() throws IOException {
-		this.tmpFolder.create();
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.METADATA, "false");
 		final String listName = NamedListWriter.FALLBACK_LIST_NAME;
@@ -115,11 +113,6 @@ public class TestLogReplayer extends AbstractKiekerTest {
 		Assert.assertTrue(replayer.replay());
 
 		Assert.assertEquals("Unexpected list replayed", this.replayList, this.recordListFilledByListWriter);
-	}
-
-	@After
-	public void cleanup() {
-		this.tmpFolder.delete();
 	}
 }
 

@@ -28,7 +28,6 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.controller.WaitableController;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -138,22 +137,21 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 		// Write batch of records:
 		final MonitoringController monCtrl = this.createController(someEvents.size());
-		final WaitableController ctrl = new WaitableController(monCtrl);
 
-		this.checkControllerStateBeforeRecordsPassedToController(ctrl);
+		this.checkControllerStateBeforeRecordsPassedToController(monCtrl);
 
 		for (final IMonitoringRecord record : someEvents) {
-			ctrl.newMonitoringRecord(record);
+			monCtrl.newMonitoringRecord(record);
 		}
 
 		Thread.sleep(1000); // wait a second to give the FS writer the chance to write the monitoring log.
 
-		this.checkControllerStateAfterRecordsPassedToController(ctrl);
+		this.checkControllerStateAfterRecordsPassedToController(monCtrl);
 
 		if (this.terminateBeforeLogInspection()) {
 			// need to terminate explicitly, because otherwise, the monitoring log directory cannot be removed
-			ctrl.terminateMonitoring();
-			ctrl.waitForTermination(TIMEOUT_IN_MS);
+			monCtrl.terminateMonitoring();
+			monCtrl.waitForTermination(TIMEOUT_IN_MS);
 		}
 
 		this.doBeforeReading();
@@ -167,8 +165,8 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 		if (!this.terminateBeforeLogInspection()) {
 			// need to terminate explicitly, because otherwise, the monitoring log directory cannot be removed
-			ctrl.terminateMonitoring();
-			ctrl.waitForTermination(TIMEOUT_IN_MS);
+			monCtrl.terminateMonitoring();
+			monCtrl.waitForTermination(TIMEOUT_IN_MS);
 		}
 	}
 }

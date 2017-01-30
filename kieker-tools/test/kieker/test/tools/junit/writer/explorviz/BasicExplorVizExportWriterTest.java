@@ -29,7 +29,6 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.controller.WaitableController;
 import kieker.monitoring.writernew.explorviz.ExplorVizTcpWriter;
 
 import kieker.test.tools.junit.writeRead.TestAnalysis;
@@ -67,8 +66,7 @@ public class BasicExplorVizExportWriterTest {
 		// declare controllers and start the analysis before monitoring
 		final TestAnalysis analysis = new TestAnalysis(readerConfiguration, ExplorVizReader.class);
 		analysis.startInNewThread();
-		final MonitoringController monCtrl = MonitoringController.createInstance(config);
-		final WaitableController monitoringController = new WaitableController(monCtrl);
+		final MonitoringController monitoringController = MonitoringController.createInstance(config);
 
 		// trigger records
 		final TestProbe testProbe = new TestProbe(monitoringController);

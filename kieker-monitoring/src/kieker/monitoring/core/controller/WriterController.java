@@ -284,14 +284,8 @@ public final class WriterController extends AbstractController implements IWrite
 		}
 	}
 
-	/**
-	 * @param timeoutInMs
-	 *            timeout in milliseconds to wait (a timeout of 0 means to wait forever)
-	 *
-	 * @throws InterruptedException
-	 *             if the calling thread was interrupted while waiting for the termination
-	 */
-	/* default */ void waitForTermination(final long timeoutInMs) throws InterruptedException { // NOPMD (default to be used by tests only)
+	@Override
+	public void waitForTermination(final long timeoutInMs) throws InterruptedException {
 		if (this.monitoringWriterThread != null) {
 			this.monitoringWriterThread.join(timeoutInMs);
 		}

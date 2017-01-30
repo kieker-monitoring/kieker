@@ -95,6 +95,13 @@ public class ServiceContainer {
 		} while (this.respawn);
 
 		this.kiekerMonitoringController.terminateMonitoring();
+		try {
+			// we expect a waiting time of 10-100 ms.
+			// So, a timeout of 10,000 ms should be high enough.
+			this.kiekerMonitoringController.waitForTermination(10000);
+		} catch (final InterruptedException e) {
+			throw new IllegalStateException("Exception occured while waiting for the monitoring to terminate.", e);
+		}
 	}
 
 	/**
@@ -152,10 +159,10 @@ public class ServiceContainer {
 		return this.respawn;
 	}
 
-	/**
-	 * Used in tests only.
-	 */
-	/* default */ MonitoringController getKiekerMonitoringController() {
-		return kiekerMonitoringController;
-	}
+	// /**
+	// * Used in tests only.
+	// */
+	// /* default */ MonitoringController getKiekerMonitoringController() {
+	// return this.kiekerMonitoringController;
+	// }
 }

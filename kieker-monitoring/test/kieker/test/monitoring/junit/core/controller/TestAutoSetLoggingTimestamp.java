@@ -27,7 +27,6 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.controller.WaitableController;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.NamedPipeFactory;
@@ -73,7 +72,7 @@ public class TestAutoSetLoggingTimestamp extends AbstractKiekerTest { // NOCS //
 		final List<IMonitoringRecord> receivedRecords = NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
 		monitoringController.newMonitoringRecord(new EmptyRecord());
 		monitoringController.terminateMonitoring();
-		new WaitableController(monitoringController).waitForTermination(5000);
+		monitoringController.waitForTermination(5000);
 
 		Assert.assertEquals("Test invalid: exactly one record should have been received", 1, receivedRecords.size());
 

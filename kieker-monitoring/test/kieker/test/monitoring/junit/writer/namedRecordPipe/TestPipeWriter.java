@@ -24,7 +24,6 @@ import org.junit.Test;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.controller.WaitableController;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.NamedPipeFactory;
@@ -40,7 +39,7 @@ public class TestPipeWriter extends AbstractKiekerTest { // NOCS
 	 * Tests whether the {@link kieker.monitoring.writer.namedRecordPipe.PipeWriter} correctly passes received {@link IMonitoringRecord}s to the
 	 * {@link kieker.common.namedRecordPipe.Broker} (which then passes these
 	 * to an {@link kieker.common.namedRecordPipe.IPipeReader}).
-	 * 
+	 *
 	 * @throws InterruptedException
 	 */
 	@Test
@@ -59,7 +58,7 @@ public class TestPipeWriter extends AbstractKiekerTest { // NOCS
 		}
 
 		monitoringController.terminateMonitoring();
-		new WaitableController(monitoringController).waitForTermination(5000);
+		monitoringController.waitForTermination(5000);
 
 		// Make sure that numRecordsToSend where written.
 		Assert.assertEquals("Unexpected number of records received", numRecordsToSend, receivedRecords.size());

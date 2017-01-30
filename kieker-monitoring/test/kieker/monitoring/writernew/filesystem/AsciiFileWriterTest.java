@@ -17,16 +17,14 @@
 package kieker.monitoring.writernew.filesystem;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
@@ -40,14 +38,10 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
  */
 public class AsciiFileWriterTest {
 
-	private static final Path TEMP_FOLDER = Paths.get("tmp").toAbsolutePath();
+	@Rule
+	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS recommends that this is private. JUnit test wants this public.
 
 	private Configuration configuration;
-
-	@BeforeClass
-	public static void beforeClass() throws IOException {
-		Files.createDirectories(TEMP_FOLDER);
-	}
 
 	@Before
 	public void before() {
@@ -58,7 +52,7 @@ public class AsciiFileWriterTest {
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, String.valueOf(Integer.MAX_VALUE));
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGSIZE, String.valueOf(Integer.MAX_VALUE));
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_PATH, AsciiFileWriterTest.TEMP_FOLDER.toString());
+		this.configuration.setProperty(AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
 	}
 
 	@Test

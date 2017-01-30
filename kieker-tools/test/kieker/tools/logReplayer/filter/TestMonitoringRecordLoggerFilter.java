@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.logReplayer;
+package kieker.tools.logReplayer.filter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,7 +24,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hamcrest.CoreMatchers;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -43,7 +46,6 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.writernew.filesystem.AsciiFileWriter;
-import kieker.tools.logReplayer.filter.MonitoringRecordLoggerFilter;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -73,6 +75,16 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	 */
 	public TestMonitoringRecordLoggerFilter() {
 		// empty default constructor
+	}
+
+	@Before
+	public void before() throws IOException {
+		this.tmpFolder.create();
+	}
+
+	@After
+	public void after() {
+		this.tmpFolder.delete();
 	}
 
 	private void createControllerConfiguration(final String monitoringPropertiesFn) throws IOException {
@@ -114,49 +126,52 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 		return someEvents;
 	}
 
-	private List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) throws AnalysisConfigurationException {
-		final AnalysisController analysisController = new AnalysisController();
-		final Configuration readerConfiguration = new Configuration();
-		readerConfiguration.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
-		readerConfiguration.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
-		final AbstractReaderPlugin reader = new AsciiLogReader(readerConfiguration, analysisController);
-		final ListCollectionFilter<IMonitoringRecord> sinkPlugin = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
-
-		analysisController.connect(reader, AsciiLogReader.OUTPUT_PORT_NAME_RECORDS, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
-		analysisController.run();
-		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
-
-		return sinkPlugin.getList();
-	}
-
 	@Test
 	public void testControllerKeepsLoggingTimestamp() throws Exception {
-		Assert.assertTrue(true); // just to get rid of strange PMD behavior
-		this.testIt(true); // includes Assert(s)
+		final List<IMonitoringRecord> eventsToWrite = this.provideEvents();
+		// The following line is an easy way to test the tests (given monitoringRecords includes at least one record). But don't forget to deactivate afterwards.
+		// eventsToWrite.remove(eventsToWrite.size() - 1);
+
+		final List<IMonitoringRecord> eventsFromRecordLoggerFilter = this.testIt(eventsToWrite, true); // includes Assert(s)
+		Assert.assertEquals("Unexpected set of records relayed by filter", eventsToWrite, eventsFromRecordLoggerFilter);
+
+		final List<IMonitoringRecord> eventsFromLog = this.readEvents();
+		Assert.assertEquals("Unexpected set of records in monitoring log", eventsToWrite, eventsFromLog);
+
+		Assert.assertThat(eventsFromLog.get(0).getLoggingTimestamp(), CoreMatchers.is(eventsToWrite.get(0).getLoggingTimestamp()));
 	}
 
 	@Test
 	public void testControllerSetsLoggingTimestamp() throws Exception {
-		Assert.assertTrue(true); // just to get rid of strange PMD behavior
-		this.testIt(false); // includes Assert(s)
+		final List<IMonitoringRecord> eventsToWrite = this.provideEvents();
+		// The following line is an easy way to test the tests (given monitoringRecords includes at least one record). But don't forget to deactivate afterwards.
+		// eventsToWrite.remove(eventsToWrite.size() - 1);
+
+		final List<IMonitoringRecord> eventsFromRecordLoggerFilter = this.testIt(eventsToWrite, false); // includes Assert(s)
+		Assert.assertEquals("Unexpected set of records relayed by filter", eventsToWrite, eventsFromRecordLoggerFilter);
+
+		final List<IMonitoringRecord> eventsFromLog = this.readEvents();
+		Assert.assertEquals("Unexpected set of records in monitoring log", eventsToWrite, eventsFromLog);
+
+		Assert.assertThat(eventsFromLog.get(0).getLoggingTimestamp(), CoreMatchers.is(eventsToWrite.get(0).getLoggingTimestamp()));
 	}
 
 	/**
 	 * The actual (parameterized) Test.
 	 *
+	 * @param eventsToWrite
+	 *
+	 * @return
+	 *
 	 * @throws Exception
 	 *             If something went wrong during the test.
 	 */
-	private void testIt(final boolean keepLoggingTimestamps) throws Exception { // NOPMD (JUnitTestsShouldIncludeAssert)
-		final List<IMonitoringRecord> eventsToWrite = this.provideEvents();
-		final long firstLoggingTimestamp = eventsToWrite.get(0).getLoggingTimestamp();
-
+	private List<IMonitoringRecord> testIt(final List<IMonitoringRecord> eventsToWrite, final boolean keepLoggingTimestamps) throws Exception {
 		final AnalysisController analysisController = new AnalysisController();
 
 		final ListReader<IMonitoringRecord> reader = new ListReader<IMonitoringRecord>(new Configuration(), analysisController);
 		reader.addAllObjects(eventsToWrite);
 
-		this.tmpFolder.create();
 		Assert.assertTrue(this.tmpFolder.getRoot().exists());
 		final File monitoringProperties = this.tmpFolder.newFile();
 		this.createControllerConfiguration(monitoringProperties.getAbsolutePath());
@@ -172,32 +187,27 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 
 		final ListCollectionFilter<IMonitoringRecord> simpleSinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
 
-		analysisController.connect(loggerFilter, MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, simpleSinkFilter,
-				ListCollectionFilter.INPUT_PORT_NAME);
+		analysisController.connect(
+				loggerFilter, MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
+				simpleSinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
 
 		analysisController.run();
+
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
 
 		Assert.assertTrue(this.tmpFolder.getRoot().exists());
 		Assert.assertTrue(monitoringProperties.exists());
-		final List<IMonitoringRecord> eventsFromLog = this.readEvents();
-
-		// The following line is an easy way to test the tests (given monitoringRecords includes at least one record). But don't forget to deactivate afterwards.
-		// eventsToWrite.remove(eventsToWrite.size() - 1);
-
-		Assert.assertEquals("Unexpected set of records in monitoring log", eventsToWrite, eventsFromLog);
-
-		Assert.assertEquals("Unexpected set of records relayed by filter", eventsToWrite, simpleSinkFilter.getList());
-
-		if (keepLoggingTimestamps) {
-			Assert.assertEquals("Expected logging timestamps to be untouched by the controller", firstLoggingTimestamp, eventsFromLog.get(0).getLoggingTimestamp());
-		} else {
-			// note that firstLoggingTimestamp is actually -1 for each record in this test
-			Assert.assertTrue("Expected logging timestamps to be untouched by the controller", firstLoggingTimestamp != eventsFromLog.get(0).getLoggingTimestamp());
-		}
+		return simpleSinkFilter.getList();
 	}
 
 	private List<IMonitoringRecord> readEvents() throws AnalysisConfigurationException {
+
+		try {
+			Thread.sleep(500);
+		} catch (final InterruptedException e) {
+			LOG.warn("An exception occurred", e);
+		}
+
 		final String[] monitoringLogs = this.tmpFolder.getRoot().list(new KiekerLogDirFilter());
 
 		Assert.assertNotNull(monitoringLogs);
@@ -207,5 +217,20 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 		}
 
 		return this.readLog(monitoringLogs);
+	}
+
+	private List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) throws AnalysisConfigurationException {
+		final AnalysisController analysisController = new AnalysisController();
+		final Configuration readerConfiguration = new Configuration();
+		readerConfiguration.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
+		readerConfiguration.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
+		final AbstractReaderPlugin reader = new AsciiLogReader(readerConfiguration, analysisController);
+		final ListCollectionFilter<IMonitoringRecord> sinkPlugin = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
+
+		analysisController.connect(reader, AsciiLogReader.OUTPUT_PORT_NAME_RECORDS, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
+		analysisController.run();
+		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
+
+		return sinkPlugin.getList();
 	}
 }

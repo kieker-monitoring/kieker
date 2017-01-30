@@ -31,7 +31,6 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.controller.WaitableController;
 import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.writernew.filesystem.BinaryFileWriter;
 
@@ -73,8 +72,7 @@ public class BinaryWriterReaderTest {
 		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
 		config.setProperty(BinaryFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
 		config.setProperty(BinaryFileWriter.CONFIG_SHOULD_COMPRESS, Boolean.toString(shouldDecompress));
-		final MonitoringController monCtrl = MonitoringController.createInstance(config);
-		final WaitableController monitoringController = new WaitableController(monCtrl);
+		final MonitoringController monitoringController = MonitoringController.createInstance(config);
 
 		// 3. define analysis config
 		final String[] monitoringLogDirs = TEST_DATA_REPOSITORY.getAbsoluteMonitoringLogDirNames(this.tmpFolder.getRoot());

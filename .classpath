@@ -43,7 +43,7 @@
 	<classpathentry kind="lib" path="lib/commons-math3-3.3.jar"/>
 	<classpathentry kind="lib" path="lib/disl-2.0/disl-server.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/cxf/asm-3.3.1.jar"/>
-	<classpathentry kind="lib" path="lib/framework-libs/cxf/cxf-2.6.15.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/cxf/cxf-2.6.15.jar" sourcepath="C:/Users/chw/.m2/repository/org/apache/cxf/cxf-bundle/2.6.15/cxf-bundle-2.6.15-sources.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/spring/aopalliance-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-beans-3.2.8.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-context-3.2.8.RELEASE.jar" sourcepath="C:/Users/chw/.m2/repository/org/springframework/spring-context/3.2.8.RELEASE/spring-context-3.2.8.RELEASE-sources.jar"/>

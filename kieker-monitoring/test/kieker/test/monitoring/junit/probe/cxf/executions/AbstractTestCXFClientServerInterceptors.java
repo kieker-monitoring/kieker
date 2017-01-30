@@ -18,6 +18,7 @@ package kieker.test.monitoring.junit.probe.cxf.executions;
 
 import java.util.List;
 
+import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.junit.After;
@@ -31,7 +32,6 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.controller.WaitableController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.cxf.OperationExecutionSOAPRequestInInterceptor;
@@ -73,12 +73,11 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	private volatile String listName;
 	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
 
-	private final JaxWsServerFactoryBean srvFactory = new JaxWsServerFactoryBean();
-
 	private MonitoringController clientMonitoringController;
 	private MonitoringController serverMonitoringController;
 
 	private IBookstore client;
+	private Server server;
 
 	@Before
 	public void prepare() throws Exception {
@@ -90,7 +89,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 		this.unsetKiekerThreadLocalData();
 		this.clientMonitoringController = this.createMonitoringController(CLIENT_HOSTNAME);
 		this.serverMonitoringController = this.createMonitoringController(SERVER_HOSTNAME);
-		this.startServer();
+		this.server = this.startServer();
 		this.client = this.createClient();
 	}
 
@@ -111,18 +110,18 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 		return MonitoringController.createInstance(config);
 	}
 
-	private void startServer() {
+	private Server startServer() {
 		LOG.info("XX: " + this.serviceAddress);
 
-		final BookstoreImpl implementor = new BookstoreImpl();
-		this.srvFactory.setServiceClass(IBookstore.class);
-		this.srvFactory.setAddress(this.serviceAddress);
-		this.srvFactory.setServiceBean(implementor);
+		final JaxWsServerFactoryBean srvFactory = new JaxWsServerFactoryBean();
+		srvFactory.setServiceClass(IBookstore.class);
+		srvFactory.setAddress(this.serviceAddress);
+		srvFactory.setServiceBean(new BookstoreImpl());
 
 		// On the server-side, we only intercept incoming requests and outgoing responses.
-		this.srvFactory.getInInterceptors().add(new OperationExecutionSOAPRequestInInterceptor(this.serverMonitoringController));
-		this.srvFactory.getOutInterceptors().add(new OperationExecutionSOAPResponseOutInterceptor(this.serverMonitoringController));
-		this.srvFactory.create();
+		srvFactory.getInInterceptors().add(new OperationExecutionSOAPRequestInInterceptor(this.serverMonitoringController));
+		srvFactory.getOutInterceptors().add(new OperationExecutionSOAPResponseOutInterceptor(this.serverMonitoringController));
+		return srvFactory.create();
 	}
 
 	private IBookstore createClient() {
@@ -162,9 +161,9 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 		this.afterRequest();
 
 		this.clientMonitoringController.terminateMonitoring();
-		new WaitableController(this.clientMonitoringController).waitForTermination(5000);
+		this.clientMonitoringController.waitForTermination(5000);
 		this.serverMonitoringController.terminateMonitoring();
-		new WaitableController(this.serverMonitoringController).waitForTermination(5000);
+		this.serverMonitoringController.waitForTermination(5000);
 
 		this.checkRecordList(this.recordListFilledByListWriter);
 	}
@@ -172,7 +171,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	@After
 	public void cleanup() {
 		this.unsetKiekerThreadLocalData();
-		this.srvFactory.destroy();
+		this.server.destroy();
 	}
 
 	private void unsetKiekerThreadLocalData() {

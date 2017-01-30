@@ -27,7 +27,6 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.controller.WaitableController;
 import kieker.monitoring.core.sampler.ISampler;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -120,7 +119,7 @@ public abstract class AbstractJVMSamplerTest extends AbstractKiekerTest {
 				numEventsAfterMonitoringReEnabled > 0);
 
 		this.monitoringController.terminateMonitoring();
-		new WaitableController(this.monitoringController).waitForTermination(5000);
+		this.monitoringController.waitForTermination(5000);
 	}
 
 	private MonitoringController createMonitoringController() {
