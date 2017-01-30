@@ -18,16 +18,16 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final String HOSTNAME = "";
 	public static final String VM_NAME = "";
-
+	
 	/** property declarations */
 	private final long timestamp;
 	private final String hostname;
 	private final String vmName;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

@@ -17,34 +17,34 @@ import kieker.common.util.registry.IRegistry;
 public class HostApplicationMetaData extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	private static final long serialVersionUID = 7989655300501494980L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_STRING // HostApplicationMetaData.systemName
-				 + TYPE_SIZE_STRING // HostApplicationMetaData.ipAddress
-				 + TYPE_SIZE_STRING // HostApplicationMetaData.hostName
-				 + TYPE_SIZE_STRING // HostApplicationMetaData.applicationName
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_STRING // HostApplicationMetaData.systemName
+			 + TYPE_SIZE_STRING // HostApplicationMetaData.ipAddress
+			 + TYPE_SIZE_STRING // HostApplicationMetaData.hostName
+			 + TYPE_SIZE_STRING // HostApplicationMetaData.applicationName
+	;
 	
-		public static final Class<?>[] TYPES = {
-			String.class, // HostApplicationMetaData.systemName
-			String.class, // HostApplicationMetaData.ipAddress
-			String.class, // HostApplicationMetaData.hostName
-			String.class, // HostApplicationMetaData.applicationName
-		};
+	public static final Class<?>[] TYPES = {
+		String.class, // HostApplicationMetaData.systemName
+		String.class, // HostApplicationMetaData.ipAddress
+		String.class, // HostApplicationMetaData.hostName
+		String.class, // HostApplicationMetaData.applicationName
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final String SYSTEM_NAME = "";
 	public static final String IP_ADDRESS = "";
 	public static final String HOST_NAME = "";
 	public static final String APPLICATION_NAME = "";
-
+	
 	/** property declarations */
 	private final String systemName;
 	private final String ipAddress;
 	private final String hostName;
 	private final String applicationName;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

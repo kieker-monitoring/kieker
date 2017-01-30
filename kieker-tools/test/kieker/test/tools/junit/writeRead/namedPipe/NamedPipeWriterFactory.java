@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.common.util.namedRecordPipe;
+package kieker.test.tools.junit.writeRead.namedPipe;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -26,7 +26,7 @@ import kieker.monitoring.writernew.namedRecordPipe.PipeWriter;
  *
  * @since 1.6
  */
-public final class NamedPipeWriterFactory {
+final class NamedPipeWriterFactory {
 	private static final AtomicInteger NEXT_PIPE_ID = new AtomicInteger(0);
 	private static final String PIPE_NAME_PREFIX = "pipeName_" + NamedPipeWriterFactory.class.getName() + "_";
 

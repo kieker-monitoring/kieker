@@ -17,32 +17,32 @@ import kieker.common.record.flow.IConstructorRecord;
 public class CallConstructorEvent extends CallOperationEvent implements IConstructorRecord {
 	private static final long serialVersionUID = 8198255525819006580L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-				 + TYPE_SIZE_LONG // ITraceRecord.traceId
-				 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-				 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-				 + TYPE_SIZE_STRING // IClassSignature.classSignature
-				 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
-				 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			 + TYPE_SIZE_STRING // IClassSignature.classSignature
+			 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
+			 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // IEventRecord.timestamp
-			long.class, // ITraceRecord.traceId
-			int.class, // ITraceRecord.orderIndex
-			String.class, // IOperationSignature.operationSignature
-			String.class, // IClassSignature.classSignature
-			String.class, // ICallRecord.calleeOperationSignature
-			String.class, // ICallRecord.calleeClassSignature
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
+		String.class, // IOperationSignature.operationSignature
+		String.class, // IClassSignature.classSignature
+		String.class, // ICallRecord.calleeOperationSignature
+		String.class, // ICallRecord.calleeClassSignature
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
-
+	
 	/** property declarations */
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

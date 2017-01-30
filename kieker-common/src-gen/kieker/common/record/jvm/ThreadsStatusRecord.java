@@ -16,36 +16,36 @@ import kieker.common.util.registry.IRegistry;
 public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	private static final long serialVersionUID = -9176980438135391329L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
-				 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
-				 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
-				 + TYPE_SIZE_LONG // ThreadsStatusRecord.threadCount
-				 + TYPE_SIZE_LONG // ThreadsStatusRecord.daemonThreadCount
-				 + TYPE_SIZE_LONG // ThreadsStatusRecord.peakThreadCount
-				 + TYPE_SIZE_LONG // ThreadsStatusRecord.totalStartedThreadCount
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
+			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
+			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
+			 + TYPE_SIZE_LONG // ThreadsStatusRecord.threadCount
+			 + TYPE_SIZE_LONG // ThreadsStatusRecord.daemonThreadCount
+			 + TYPE_SIZE_LONG // ThreadsStatusRecord.peakThreadCount
+			 + TYPE_SIZE_LONG // ThreadsStatusRecord.totalStartedThreadCount
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // AbstractJVMRecord.timestamp
-			String.class, // AbstractJVMRecord.hostname
-			String.class, // AbstractJVMRecord.vmName
-			long.class, // ThreadsStatusRecord.threadCount
-			long.class, // ThreadsStatusRecord.daemonThreadCount
-			long.class, // ThreadsStatusRecord.peakThreadCount
-			long.class, // ThreadsStatusRecord.totalStartedThreadCount
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // AbstractJVMRecord.timestamp
+		String.class, // AbstractJVMRecord.hostname
+		String.class, // AbstractJVMRecord.vmName
+		long.class, // ThreadsStatusRecord.threadCount
+		long.class, // ThreadsStatusRecord.daemonThreadCount
+		long.class, // ThreadsStatusRecord.peakThreadCount
+		long.class, // ThreadsStatusRecord.totalStartedThreadCount
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
-
+	
 	/** property declarations */
 	private final long threadCount;
 	private final long daemonThreadCount;
 	private final long peakThreadCount;
 	private final long totalStartedThreadCount;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

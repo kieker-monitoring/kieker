@@ -17,30 +17,30 @@ import kieker.common.util.registry.IRegistry;
 public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	private static final long serialVersionUID = 638480390439299363L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // MemSwapUsageRecord.timestamp
-				 + TYPE_SIZE_STRING // MemSwapUsageRecord.hostname
-				 + TYPE_SIZE_LONG // MemSwapUsageRecord.memTotal
-				 + TYPE_SIZE_LONG // MemSwapUsageRecord.memUsed
-				 + TYPE_SIZE_LONG // MemSwapUsageRecord.memFree
-				 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapTotal
-				 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapUsed
-				 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapFree
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // MemSwapUsageRecord.timestamp
+			 + TYPE_SIZE_STRING // MemSwapUsageRecord.hostname
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memTotal
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memUsed
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memFree
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapTotal
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapUsed
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapFree
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // MemSwapUsageRecord.timestamp
-			String.class, // MemSwapUsageRecord.hostname
-			long.class, // MemSwapUsageRecord.memTotal
-			long.class, // MemSwapUsageRecord.memUsed
-			long.class, // MemSwapUsageRecord.memFree
-			long.class, // MemSwapUsageRecord.swapTotal
-			long.class, // MemSwapUsageRecord.swapUsed
-			long.class, // MemSwapUsageRecord.swapFree
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // MemSwapUsageRecord.timestamp
+		String.class, // MemSwapUsageRecord.hostname
+		long.class, // MemSwapUsageRecord.memTotal
+		long.class, // MemSwapUsageRecord.memUsed
+		long.class, // MemSwapUsageRecord.memFree
+		long.class, // MemSwapUsageRecord.swapTotal
+		long.class, // MemSwapUsageRecord.swapUsed
+		long.class, // MemSwapUsageRecord.swapFree
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -50,7 +50,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public static final long SWAP_TOTAL = 0L;
 	public static final long SWAP_USED = 0L;
 	public static final long SWAP_FREE = 0L;
-
+	
 	/** property declarations */
 	private final long timestamp;
 	private final String hostname;
@@ -60,7 +60,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	private final long swapTotal;
 	private final long swapUsed;
 	private final long swapFree;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

@@ -17,19 +17,19 @@ import kieker.common.util.registry.IRegistry;
 public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	private static final long serialVersionUID = -177095911417362302L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = 0
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = 0
+	;
 	
-		public static final Class<?>[] TYPES = {
-		};
+	public static final Class<?>[] TYPES = {
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
-
+	
 	/** property declarations */
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

@@ -6,7 +6,6 @@ dependencies {
 	compile resolveLibrary('disl-2.0/disl-server.jar')
 	compile resolveLibrary('javax.jms-*.jar')
 	compile resolveLibrary('jctools-core-1.2.1.jar')
-	//compile resolveLibrary('disruptor-3.3.4.jar')	// is used in future for a new writer based on a ring buffer
 	compile resolveLibrary('sigar/sigar-*.jar')
 	
 	compile resolveLibrary('framework-libs/cxf/cxf-*.jar')

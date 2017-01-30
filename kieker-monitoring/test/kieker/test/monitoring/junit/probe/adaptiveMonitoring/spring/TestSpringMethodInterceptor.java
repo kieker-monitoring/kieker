@@ -16,15 +16,14 @@
 
 package kieker.test.monitoring.junit.probe.adaptiveMonitoring.spring;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -33,6 +32,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.probe.spring.executions.jetty.UrlUtil;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.NamedListWriter;
@@ -47,6 +47,16 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 
 	private static final String HOSTNAME = "SRV-W4W7E9pN";
 	private static final String CTRLNAME = "MonitoringController-TestSpringMethodInterceptor";
+	private static final int TIMEOUT_IN_MS = 1000;
+	private static final URL BOOKSTORE_SEARCH_ANY_URL;
+
+	static {
+		try {
+			BOOKSTORE_SEARCH_ANY_URL = new URL("http://localhost:9293/bookstore/search/any/");
+		} catch (final MalformedURLException e) {
+			throw new IllegalStateException("Should not happen because the URL is valid.");
+		}
+	}
 
 	private FileSystemXmlApplicationContext ctx;
 	private List<IMonitoringRecord> recordListFilledByListWriter;
@@ -73,15 +83,16 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		final URL configURL = TestSpringMethodInterceptor.class.getResource("/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml");
 		this.ctx = new FileSystemXmlApplicationContext(configURL.toExternalForm());
 
-		// Note that the Spring interceptor is configure in
+		// Note that the Spring interceptor is configured in
 		// test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/WEB-INF/spring/servlet-context.xml to only instrument
 		// Bookstore.searchBook and Catalog.getBook
+		// this.ctx.getBean(Bookstore.class).searchBook();
 	}
 
 	@Test
-	public void testIt() throws IOException {
+	public void testIt() throws IOException, InterruptedException {
 		final IMonitoringController monitoringController = MonitoringController.getInstance();
-		Assume.assumeTrue(CTRLNAME.equals(monitoringController.getName()));
+		Assert.assertThat(monitoringController.getName(), CoreMatchers.is(CTRLNAME));
 		Assert.assertNotNull(this.ctx);
 
 		final String getBookPattern = "public kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Book "
@@ -89,49 +100,31 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		final String searchBookPattern = "public kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Book "
 				+ "kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Bookstore.searchBook(java.lang.String)";
 
-		Assert.assertEquals("Unexpected size of records. Should be 0, found " + this.recordListFilledByListWriter.size(), 0,
-				this.recordListFilledByListWriter.size());
-		this.search();
-		Assert.assertEquals("Unexpected size of records. Should be 3, found " + this.recordListFilledByListWriter.size(), 3,
-				this.recordListFilledByListWriter.size());
+		NamedListWriter.awaitListSize(this.recordListFilledByListWriter, 0, TIMEOUT_IN_MS);
+
+		UrlUtil.ping(BOOKSTORE_SEARCH_ANY_URL);
+		NamedListWriter.awaitListSize(this.recordListFilledByListWriter, 3, TIMEOUT_IN_MS);
 
 		monitoringController.deactivateProbe(getBookPattern);
-		this.search();
-		Assert.assertEquals("Unexpected size of records. Should be 4, found " + this.recordListFilledByListWriter.size(), 4,
-				this.recordListFilledByListWriter.size());
+		UrlUtil.ping(BOOKSTORE_SEARCH_ANY_URL);
+		NamedListWriter.awaitListSize(this.recordListFilledByListWriter, 4, TIMEOUT_IN_MS);
 
 		monitoringController.deactivateProbe(searchBookPattern);
-		this.search();
-		Assert.assertEquals("Unexpected size of records. Should be 4, found " + this.recordListFilledByListWriter.size(), 4,
-				this.recordListFilledByListWriter.size());
+		UrlUtil.ping(BOOKSTORE_SEARCH_ANY_URL);
+		NamedListWriter.awaitListSize(this.recordListFilledByListWriter, 4, TIMEOUT_IN_MS);
 
 		monitoringController.activateProbe(getBookPattern);
-		this.search();
-		Assert.assertEquals("Unexpected size of records. Should be 6, found " + this.recordListFilledByListWriter.size(), 6,
-				this.recordListFilledByListWriter.size());
+		UrlUtil.ping(BOOKSTORE_SEARCH_ANY_URL);
+		NamedListWriter.awaitListSize(this.recordListFilledByListWriter, 6, TIMEOUT_IN_MS);
 
 		monitoringController.activateProbe(searchBookPattern);
-		this.search();
-		Assert.assertEquals("Unexpected size of records. Should be 9, found " + this.recordListFilledByListWriter.size(), 9,
-				this.recordListFilledByListWriter.size());
-	}
-
-	private void search() throws IOException {
-		final URL url = new URL("http://localhost:9293/bookstore/search/any/");
-		BufferedReader in = null;
-		try {
-			in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-			// final String result = in.readLine(); // the result is currently an empty string.
-		} finally {
-			if (null != in) {
-				in.close();
-			}
-		}
+		UrlUtil.ping(BOOKSTORE_SEARCH_ANY_URL);
+		NamedListWriter.awaitListSize(this.recordListFilledByListWriter, 9, TIMEOUT_IN_MS);
 	}
 
 	@After
 	public void cleanup() {
-		this.ctx.close();
+		this.ctx.destroy();
 		System.clearProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED);
 		System.clearProperty(ConfigurationFactory.METADATA);
 		System.clearProperty(ConfigurationFactory.CONTROLLER_NAME);

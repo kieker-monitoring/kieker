@@ -16,9 +16,8 @@
 
 package kieker.test.monitoring.junit.probe.spring.executions.jetty;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
@@ -26,15 +25,14 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.probe.spring.executions.jetty.UrlUtil;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Bookstore;
@@ -51,13 +49,18 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 
 	private static final String HOSTNAME = "SRV-W4W7E9pN";
 	private static final String CTRLNAME = "MonitoringController-TestSpringMethodInterceptor";
+	private static final URL BOOKSTORE_SEARCH_ANY_URL;
 
-	/** A rule making sure that a temporary folder exists for every test method (which is removed after the test). */
-	@Rule
-	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
+	static {
+		try {
+			BOOKSTORE_SEARCH_ANY_URL = new URL("http://localhost:9293/bookstore/search/any/");
+		} catch (final MalformedURLException e) {
+			throw new IllegalStateException("Should not happen because the URL is valid.");
+		}
+	}
 
-	private volatile FileSystemXmlApplicationContext ctx;
-	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
+	private FileSystemXmlApplicationContext ctx;
+	private List<IMonitoringRecord> recordListFilledByListWriter;
 
 	public TestSpringMethodInterceptor() {
 		// empty default constructor
@@ -65,7 +68,6 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 
 	@Before
 	public void startServer() throws IOException {
-		this.tmpFolder.create();
 		final String listName = NamedListWriter.FALLBACK_LIST_NAME;
 		this.recordListFilledByListWriter = NamedListWriter.createNamedList(listName);
 		System.setProperty(ConfigurationFactory.METADATA, "false");
@@ -78,7 +80,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		final URL configURL = TestSpringMethodInterceptor.class.getResource("/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml");
 		this.ctx = new FileSystemXmlApplicationContext(configURL.toExternalForm());
 
-		// Note that the Spring interceptor is configure in
+		// Note that the Spring interceptor is configured in
 		// test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/WEB-INF/spring/servlet-context.xml to only instrument
 		// Bookstore.searchBook and Catalog.getBook
 	}
@@ -89,16 +91,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		Assert.assertNotNull(this.ctx);
 
 		for (int i = 0; i < 5; i++) {
-			final URL url = new URL("http://localhost:9293/bookstore/search/any/");
-			BufferedReader in = null;
-			try {
-				in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-				// final String result = in.readLine(); // the result is currently an empty string.
-			} finally {
-				if (null != in) {
-					in.close();
-				}
-			}
+			UrlUtil.ping(BOOKSTORE_SEARCH_ANY_URL);
 		}
 
 		this.checkRecordList(this.recordListFilledByListWriter);
@@ -142,10 +135,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 
 	@After
 	public void cleanup() {
-		if (this.ctx != null) {
-			this.ctx.destroy();
-		}
-		this.tmpFolder.delete();
+		this.ctx.destroy();
 		System.clearProperty(ConfigurationFactory.METADATA);
 		System.clearProperty(ConfigurationFactory.CONTROLLER_NAME);
 		System.clearProperty(ConfigurationFactory.WRITER_CLASSNAME);

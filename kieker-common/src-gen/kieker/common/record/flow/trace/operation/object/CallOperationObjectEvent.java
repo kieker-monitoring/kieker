@@ -17,40 +17,40 @@ import kieker.common.record.flow.ICallObjectRecord;
 public class CallOperationObjectEvent extends CallOperationEvent implements ICallObjectRecord {
 	private static final long serialVersionUID = 357965549135860700L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-				 + TYPE_SIZE_LONG // ITraceRecord.traceId
-				 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-				 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-				 + TYPE_SIZE_STRING // IClassSignature.classSignature
-				 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
-				 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
-				 + TYPE_SIZE_INT // IObjectRecord.objectId
-				 + TYPE_SIZE_INT // ICallObjectRecord.calleeObjectId
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			 + TYPE_SIZE_STRING // IClassSignature.classSignature
+			 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
+			 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
+			 + TYPE_SIZE_INT // IObjectRecord.objectId
+			 + TYPE_SIZE_INT // ICallObjectRecord.calleeObjectId
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // IEventRecord.timestamp
-			long.class, // ITraceRecord.traceId
-			int.class, // ITraceRecord.orderIndex
-			String.class, // IOperationSignature.operationSignature
-			String.class, // IClassSignature.classSignature
-			String.class, // ICallRecord.calleeOperationSignature
-			String.class, // ICallRecord.calleeClassSignature
-			int.class, // IObjectRecord.objectId
-			int.class, // ICallObjectRecord.calleeObjectId
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
+		String.class, // IOperationSignature.operationSignature
+		String.class, // IClassSignature.classSignature
+		String.class, // ICallRecord.calleeOperationSignature
+		String.class, // ICallRecord.calleeClassSignature
+		int.class, // IObjectRecord.objectId
+		int.class, // ICallObjectRecord.calleeObjectId
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final int OBJECT_ID = 0;
 	public static final int CALLEE_OBJECT_ID = 0;
-
+	
 	/** property declarations */
 	private final int objectId;
 	private final int calleeObjectId;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

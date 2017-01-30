@@ -16,24 +16,24 @@ import kieker.common.util.registry.IRegistry;
 public class SplitEvent extends AbstractTraceEvent  {
 	private static final long serialVersionUID = 3680330659838545906L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-				 + TYPE_SIZE_LONG // ITraceRecord.traceId
-				 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // IEventRecord.timestamp
-			long.class, // ITraceRecord.traceId
-			int.class, // ITraceRecord.orderIndex
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
-
+	
 	/** property declarations */
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

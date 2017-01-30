@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.analysis.junit.plugin.reader.namedRecordPipe;
+package kieker.test.tools.junit.writeRead.namedPipe;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,9 +27,7 @@ import kieker.analysis.plugin.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.writernew.namedRecordPipe.PipeWriter;
-
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.util.namedRecordPipe.NamedPipeWriterFactory;
 
 /**
  * A simple test for the class <code>PipeReader</code>.

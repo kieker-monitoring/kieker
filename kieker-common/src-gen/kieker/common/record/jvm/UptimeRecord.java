@@ -16,27 +16,27 @@ import kieker.common.util.registry.IRegistry;
 public class UptimeRecord extends AbstractJVMRecord  {
 	private static final long serialVersionUID = 5233115844046765277L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
-				 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
-				 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
-				 + TYPE_SIZE_LONG // UptimeRecord.uptimeMS
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
+			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
+			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
+			 + TYPE_SIZE_LONG // UptimeRecord.uptimeMS
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // AbstractJVMRecord.timestamp
-			String.class, // AbstractJVMRecord.hostname
-			String.class, // AbstractJVMRecord.vmName
-			long.class, // UptimeRecord.uptimeMS
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // AbstractJVMRecord.timestamp
+		String.class, // AbstractJVMRecord.hostname
+		String.class, // AbstractJVMRecord.vmName
+		long.class, // UptimeRecord.uptimeMS
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
-
+	
 	/** property declarations */
 	private final long uptimeMS;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

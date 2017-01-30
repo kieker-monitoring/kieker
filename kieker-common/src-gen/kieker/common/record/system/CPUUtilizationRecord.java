@@ -17,34 +17,34 @@ import kieker.common.util.registry.IRegistry;
 public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	private static final long serialVersionUID = -7851990890838902217L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // CPUUtilizationRecord.timestamp
-				 + TYPE_SIZE_STRING // CPUUtilizationRecord.hostname
-				 + TYPE_SIZE_STRING // CPUUtilizationRecord.cpuID
-				 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.user
-				 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.system
-				 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.wait
-				 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.nice
-				 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.irq
-				 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.totalUtilization
-				 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.idle
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // CPUUtilizationRecord.timestamp
+			 + TYPE_SIZE_STRING // CPUUtilizationRecord.hostname
+			 + TYPE_SIZE_STRING // CPUUtilizationRecord.cpuID
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.user
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.system
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.wait
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.nice
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.irq
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.totalUtilization
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.idle
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // CPUUtilizationRecord.timestamp
-			String.class, // CPUUtilizationRecord.hostname
-			String.class, // CPUUtilizationRecord.cpuID
-			double.class, // CPUUtilizationRecord.user
-			double.class, // CPUUtilizationRecord.system
-			double.class, // CPUUtilizationRecord.wait
-			double.class, // CPUUtilizationRecord.nice
-			double.class, // CPUUtilizationRecord.irq
-			double.class, // CPUUtilizationRecord.totalUtilization
-			double.class, // CPUUtilizationRecord.idle
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // CPUUtilizationRecord.timestamp
+		String.class, // CPUUtilizationRecord.hostname
+		String.class, // CPUUtilizationRecord.cpuID
+		double.class, // CPUUtilizationRecord.user
+		double.class, // CPUUtilizationRecord.system
+		double.class, // CPUUtilizationRecord.wait
+		double.class, // CPUUtilizationRecord.nice
+		double.class, // CPUUtilizationRecord.irq
+		double.class, // CPUUtilizationRecord.totalUtilization
+		double.class, // CPUUtilizationRecord.idle
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -56,7 +56,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	public static final double IRQ = 0.0;
 	public static final double TOTAL_UTILIZATION = 0.0;
 	public static final double IDLE = 0.0;
-
+	
 	/** property declarations */
 	private final long timestamp;
 	private final String hostname;
@@ -68,7 +68,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	private final double irq;
 	private final double totalUtilization;
 	private final double idle;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

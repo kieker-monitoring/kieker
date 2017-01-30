@@ -16,33 +16,33 @@ import kieker.common.util.registry.IRegistry;
 public class ClassLoadingRecord extends AbstractJVMRecord  {
 	private static final long serialVersionUID = -5955568375346711225L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
-				 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
-				 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
-				 + TYPE_SIZE_LONG // ClassLoadingRecord.totalLoadedClassCount
-				 + TYPE_SIZE_INT // ClassLoadingRecord.loadedClassCount
-				 + TYPE_SIZE_LONG // ClassLoadingRecord.unloadedClassCount
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
+			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
+			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
+			 + TYPE_SIZE_LONG // ClassLoadingRecord.totalLoadedClassCount
+			 + TYPE_SIZE_INT // ClassLoadingRecord.loadedClassCount
+			 + TYPE_SIZE_LONG // ClassLoadingRecord.unloadedClassCount
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // AbstractJVMRecord.timestamp
-			String.class, // AbstractJVMRecord.hostname
-			String.class, // AbstractJVMRecord.vmName
-			long.class, // ClassLoadingRecord.totalLoadedClassCount
-			int.class, // ClassLoadingRecord.loadedClassCount
-			long.class, // ClassLoadingRecord.unloadedClassCount
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // AbstractJVMRecord.timestamp
+		String.class, // AbstractJVMRecord.hostname
+		String.class, // AbstractJVMRecord.vmName
+		long.class, // ClassLoadingRecord.totalLoadedClassCount
+		int.class, // ClassLoadingRecord.loadedClassCount
+		long.class, // ClassLoadingRecord.unloadedClassCount
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
-
+	
 	/** property declarations */
 	private final long totalLoadedClassCount;
 	private final int loadedClassCount;
 	private final long unloadedClassCount;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

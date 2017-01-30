@@ -16,40 +16,40 @@ import kieker.common.util.registry.IRegistry;
 public class MemoryRecord extends AbstractJVMRecord  {
 	private static final long serialVersionUID = -9025858519361306011L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
-				 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
-				 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
-				 + TYPE_SIZE_LONG // MemoryRecord.heapMaxBytes
-				 + TYPE_SIZE_LONG // MemoryRecord.heapUsedBytes
-				 + TYPE_SIZE_LONG // MemoryRecord.heapCommittedBytes
-				 + TYPE_SIZE_LONG // MemoryRecord.heapInitBytes
-				 + TYPE_SIZE_LONG // MemoryRecord.nonHeapMaxBytes
-				 + TYPE_SIZE_LONG // MemoryRecord.nonHeapUsedBytes
-				 + TYPE_SIZE_LONG // MemoryRecord.nonHeapCommittedBytes
-				 + TYPE_SIZE_LONG // MemoryRecord.nonHeapInitBytes
-				 + TYPE_SIZE_INT // MemoryRecord.objectPendingFinalizationCount
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
+			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
+			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
+			 + TYPE_SIZE_LONG // MemoryRecord.heapMaxBytes
+			 + TYPE_SIZE_LONG // MemoryRecord.heapUsedBytes
+			 + TYPE_SIZE_LONG // MemoryRecord.heapCommittedBytes
+			 + TYPE_SIZE_LONG // MemoryRecord.heapInitBytes
+			 + TYPE_SIZE_LONG // MemoryRecord.nonHeapMaxBytes
+			 + TYPE_SIZE_LONG // MemoryRecord.nonHeapUsedBytes
+			 + TYPE_SIZE_LONG // MemoryRecord.nonHeapCommittedBytes
+			 + TYPE_SIZE_LONG // MemoryRecord.nonHeapInitBytes
+			 + TYPE_SIZE_INT // MemoryRecord.objectPendingFinalizationCount
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // AbstractJVMRecord.timestamp
-			String.class, // AbstractJVMRecord.hostname
-			String.class, // AbstractJVMRecord.vmName
-			long.class, // MemoryRecord.heapMaxBytes
-			long.class, // MemoryRecord.heapUsedBytes
-			long.class, // MemoryRecord.heapCommittedBytes
-			long.class, // MemoryRecord.heapInitBytes
-			long.class, // MemoryRecord.nonHeapMaxBytes
-			long.class, // MemoryRecord.nonHeapUsedBytes
-			long.class, // MemoryRecord.nonHeapCommittedBytes
-			long.class, // MemoryRecord.nonHeapInitBytes
-			int.class, // MemoryRecord.objectPendingFinalizationCount
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // AbstractJVMRecord.timestamp
+		String.class, // AbstractJVMRecord.hostname
+		String.class, // AbstractJVMRecord.vmName
+		long.class, // MemoryRecord.heapMaxBytes
+		long.class, // MemoryRecord.heapUsedBytes
+		long.class, // MemoryRecord.heapCommittedBytes
+		long.class, // MemoryRecord.heapInitBytes
+		long.class, // MemoryRecord.nonHeapMaxBytes
+		long.class, // MemoryRecord.nonHeapUsedBytes
+		long.class, // MemoryRecord.nonHeapCommittedBytes
+		long.class, // MemoryRecord.nonHeapInitBytes
+		int.class, // MemoryRecord.objectPendingFinalizationCount
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
-
+	
 	/** property declarations */
 	private final long heapMaxBytes;
 	private final long heapUsedBytes;
@@ -60,7 +60,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	private final long nonHeapCommittedBytes;
 	private final long nonHeapInitBytes;
 	private final int objectPendingFinalizationCount;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

@@ -16,34 +16,34 @@ import kieker.common.util.registry.IRegistry;
 public class GCRecord extends AbstractJVMRecord  {
 	private static final long serialVersionUID = -314644197119857213L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
-				 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
-				 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
-				 + TYPE_SIZE_STRING // GCRecord.gcName
-				 + TYPE_SIZE_LONG // GCRecord.collectionCount
-				 + TYPE_SIZE_LONG // GCRecord.collectionTimeMS
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
+			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
+			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
+			 + TYPE_SIZE_STRING // GCRecord.gcName
+			 + TYPE_SIZE_LONG // GCRecord.collectionCount
+			 + TYPE_SIZE_LONG // GCRecord.collectionTimeMS
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // AbstractJVMRecord.timestamp
-			String.class, // AbstractJVMRecord.hostname
-			String.class, // AbstractJVMRecord.vmName
-			String.class, // GCRecord.gcName
-			long.class, // GCRecord.collectionCount
-			long.class, // GCRecord.collectionTimeMS
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // AbstractJVMRecord.timestamp
+		String.class, // AbstractJVMRecord.hostname
+		String.class, // AbstractJVMRecord.vmName
+		String.class, // GCRecord.gcName
+		long.class, // GCRecord.collectionCount
+		long.class, // GCRecord.collectionTimeMS
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final String GC_NAME = "";
-
+	
 	/** property declarations */
 	private final String gcName;
 	private final long collectionCount;
 	private final long collectionTimeMS;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

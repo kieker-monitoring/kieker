@@ -19,13 +19,13 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final long TIMESTAMP = 0L;
-
+	
 	/** property declarations */
 	private final long timestamp;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

@@ -17,34 +17,34 @@ import kieker.common.record.flow.IInterfaceRecord;
 public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObjectEvent implements IInterfaceRecord {
 	private static final long serialVersionUID = -3985311495464960429L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-				 + TYPE_SIZE_LONG // ITraceRecord.traceId
-				 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-				 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-				 + TYPE_SIZE_STRING // IClassSignature.classSignature
-				 + TYPE_SIZE_INT // IObjectRecord.objectId
-				 + TYPE_SIZE_STRING // IInterfaceRecord.interface
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			 + TYPE_SIZE_STRING // IClassSignature.classSignature
+			 + TYPE_SIZE_INT // IObjectRecord.objectId
+			 + TYPE_SIZE_STRING // IInterfaceRecord.interface
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // IEventRecord.timestamp
-			long.class, // ITraceRecord.traceId
-			int.class, // ITraceRecord.orderIndex
-			String.class, // IOperationSignature.operationSignature
-			String.class, // IClassSignature.classSignature
-			int.class, // IObjectRecord.objectId
-			String.class, // IInterfaceRecord.interface
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
+		String.class, // IOperationSignature.operationSignature
+		String.class, // IClassSignature.classSignature
+		int.class, // IObjectRecord.objectId
+		String.class, // IInterfaceRecord.interface
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final String INTERFACE = "";
-
+	
 	/** property declarations */
 	private final String _interface;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

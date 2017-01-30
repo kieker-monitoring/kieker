@@ -17,34 +17,34 @@ import kieker.common.util.registry.IRegistry;
 public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	private static final long serialVersionUID = 8241152536143822747L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_STRING // KiekerMetadataRecord.version
-				 + TYPE_SIZE_STRING // KiekerMetadataRecord.controllerName
-				 + TYPE_SIZE_STRING // KiekerMetadataRecord.hostname
-				 + TYPE_SIZE_INT // KiekerMetadataRecord.experimentId
-				 + TYPE_SIZE_BOOLEAN // KiekerMetadataRecord.debugMode
-				 + TYPE_SIZE_LONG // KiekerMetadataRecord.timeOffset
-				 + TYPE_SIZE_STRING // KiekerMetadataRecord.timeUnit
-				 + TYPE_SIZE_LONG // KiekerMetadataRecord.numberOfRecords
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_STRING // KiekerMetadataRecord.version
+			 + TYPE_SIZE_STRING // KiekerMetadataRecord.controllerName
+			 + TYPE_SIZE_STRING // KiekerMetadataRecord.hostname
+			 + TYPE_SIZE_INT // KiekerMetadataRecord.experimentId
+			 + TYPE_SIZE_BOOLEAN // KiekerMetadataRecord.debugMode
+			 + TYPE_SIZE_LONG // KiekerMetadataRecord.timeOffset
+			 + TYPE_SIZE_STRING // KiekerMetadataRecord.timeUnit
+			 + TYPE_SIZE_LONG // KiekerMetadataRecord.numberOfRecords
+	;
 	
-		public static final Class<?>[] TYPES = {
-			String.class, // KiekerMetadataRecord.version
-			String.class, // KiekerMetadataRecord.controllerName
-			String.class, // KiekerMetadataRecord.hostname
-			int.class, // KiekerMetadataRecord.experimentId
-			boolean.class, // KiekerMetadataRecord.debugMode
-			long.class, // KiekerMetadataRecord.timeOffset
-			String.class, // KiekerMetadataRecord.timeUnit
-			long.class, // KiekerMetadataRecord.numberOfRecords
-		};
+	public static final Class<?>[] TYPES = {
+		String.class, // KiekerMetadataRecord.version
+		String.class, // KiekerMetadataRecord.controllerName
+		String.class, // KiekerMetadataRecord.hostname
+		int.class, // KiekerMetadataRecord.experimentId
+		boolean.class, // KiekerMetadataRecord.debugMode
+		long.class, // KiekerMetadataRecord.timeOffset
+		String.class, // KiekerMetadataRecord.timeUnit
+		long.class, // KiekerMetadataRecord.numberOfRecords
+	};
 	
 	/** user-defined constants */
 	public static final String NO_CONTROLLERNAME = "<no-controller-name>";
 	public static final String NO_HOSTNAME = "<no-hostname>";
 	public static final String NO_TIMESOURCE = "<no-timesource>";
 	public static final String NO_TIMEUNIT = "NANOSECONDS";
-
+	
 	/** default constants */
 	public static final String VERSION = kieker.common.util.Version.getVERSION();
 	public static final String CONTROLLER_NAME = NO_CONTROLLERNAME;
@@ -54,7 +54,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	public static final long TIME_OFFSET = 0L;
 	public static final String TIME_UNIT = NO_TIMEUNIT;
 	public static final long NUMBER_OF_RECORDS = 0L;
-
+	
 	/** property declarations */
 	private final String version;
 	private final String controllerName;
@@ -64,7 +64,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	private final long timeOffset;
 	private final String timeUnit;
 	private final long numberOfRecords;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

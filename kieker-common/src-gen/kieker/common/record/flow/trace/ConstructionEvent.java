@@ -16,32 +16,32 @@ import kieker.common.util.registry.IRegistry;
 public class ConstructionEvent extends AbstractTraceEvent  {
 	private static final long serialVersionUID = 7724747240454611559L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-				 + TYPE_SIZE_LONG // ITraceRecord.traceId
-				 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-				 + TYPE_SIZE_STRING // ConstructionEvent.classSignature
-				 + TYPE_SIZE_INT // ConstructionEvent.objectId
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // ConstructionEvent.classSignature
+			 + TYPE_SIZE_INT // ConstructionEvent.objectId
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // IEventRecord.timestamp
-			long.class, // ITraceRecord.traceId
-			int.class, // ITraceRecord.orderIndex
-			String.class, // ConstructionEvent.classSignature
-			int.class, // ConstructionEvent.objectId
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
+		String.class, // ConstructionEvent.classSignature
+		int.class, // ConstructionEvent.objectId
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final String CLASS_SIGNATURE = "";
 	public static final int OBJECT_ID = 0;
-
+	
 	/** property declarations */
 	private final String classSignature;
 	private final int objectId;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

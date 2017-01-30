@@ -16,31 +16,31 @@ import kieker.common.util.registry.IRegistry;
 public class CompilationRecord extends AbstractJVMRecord  {
 	private static final long serialVersionUID = 3634137431488075031L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
-				 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
-				 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
-				 + TYPE_SIZE_STRING // CompilationRecord.jitCompilerName
-				 + TYPE_SIZE_LONG // CompilationRecord.totalCompilationTimeMS
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
+			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
+			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
+			 + TYPE_SIZE_STRING // CompilationRecord.jitCompilerName
+			 + TYPE_SIZE_LONG // CompilationRecord.totalCompilationTimeMS
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // AbstractJVMRecord.timestamp
-			String.class, // AbstractJVMRecord.hostname
-			String.class, // AbstractJVMRecord.vmName
-			String.class, // CompilationRecord.jitCompilerName
-			long.class, // CompilationRecord.totalCompilationTimeMS
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // AbstractJVMRecord.timestamp
+		String.class, // AbstractJVMRecord.hostname
+		String.class, // AbstractJVMRecord.vmName
+		String.class, // CompilationRecord.jitCompilerName
+		long.class, // CompilationRecord.totalCompilationTimeMS
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final String JIT_COMPILER_NAME = "";
-
+	
 	/** property declarations */
 	private final String jitCompilerName;
 	private final long totalCompilationTimeMS;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

@@ -95,6 +95,26 @@ public class NamedListWriter extends AbstractMonitoringWriter {
 		}
 	}
 
+	/**
+	 * Waits for the given <code>list</code> to reach the given <code>listSize</code>.<br>
+	 * <i>(The implementation uses busy-waiting with an inter-pause time of 10 ms.)</i>
+	 *
+	 * @throws AssertionError
+	 *             if the timeout has been reached or exceeded
+	 */
+	public static void awaitListSize(final List<?> list, final int listSize, final int timeoutInMs) throws InterruptedException {
+		final int interPauseInMs = 10;
+
+		int currentWaitingTimeInMs = 0;
+		while ((list.size() != listSize)) {
+			Thread.sleep(interPauseInMs);
+			currentWaitingTimeInMs += interPauseInMs;
+			if (currentWaitingTimeInMs >= timeoutInMs) {
+				throw new AssertionError("Timeout exceeded.");
+			}
+		}
+	}
+
 	@Override
 	public void onStarting() {
 		// do nothing

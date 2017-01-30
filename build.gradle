@@ -15,8 +15,8 @@ allprojects {
     apply plugin: 'java'
     version = kiekerVersion
 
-    sourceCompatibility = 1.6
-    targetCompatibility = 1.6
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
 
     sourceSets {
         main {
@@ -162,6 +162,7 @@ allprojects {
 
         findbugs resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
 
+		// moved to common to let Eclipse compile each module separately
         testCompile resolveLibrary('junit-*.jar')
         testCompile resolveLibrary('hamcrest-core-*.jar')
     }

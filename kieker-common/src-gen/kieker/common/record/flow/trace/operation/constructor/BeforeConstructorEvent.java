@@ -17,28 +17,28 @@ import kieker.common.record.flow.IConstructorRecord;
 public class BeforeConstructorEvent extends BeforeOperationEvent implements IConstructorRecord {
 	private static final long serialVersionUID = 5792711083403520393L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-				 + TYPE_SIZE_LONG // ITraceRecord.traceId
-				 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-				 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-				 + TYPE_SIZE_STRING // IClassSignature.classSignature
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			 + TYPE_SIZE_STRING // IClassSignature.classSignature
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // IEventRecord.timestamp
-			long.class, // ITraceRecord.traceId
-			int.class, // ITraceRecord.orderIndex
-			String.class, // IOperationSignature.operationSignature
-			String.class, // IClassSignature.classSignature
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
+		String.class, // IOperationSignature.operationSignature
+		String.class, // IClassSignature.classSignature
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
-
+	
 	/** property declarations */
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

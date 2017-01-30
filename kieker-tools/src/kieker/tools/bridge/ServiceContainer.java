@@ -21,7 +21,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.controller.WaitableController;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.IServiceConnector;
@@ -35,8 +34,8 @@ import kieker.tools.bridge.connector.IServiceConnector;
 public class ServiceContainer {
 
 	/**
-	 * Update interval for the process listener. The process listener is
-	 * mainly used in verbose mode or in UI applications utilizing a ServiceContainer.
+	 * Update interval for the process listener. The process listener is mainly used in verbose mode or in UI
+	 * applications utilizing a ServiceContainer.
 	 */
 	public static final long DEFAULT_LISTENER_UPDATE_INTERVAL = 100L;
 
@@ -60,7 +59,8 @@ public class ServiceContainer {
 	 * @param service
 	 *            A service component to handle incoming data
 	 * @param respawn
-	 *            Respawn the connector if it fails (this construct is debatable it should be handled by the connector itself)
+	 *            Respawn the connector if it fails (this construct is debatable it should be handled by the connector
+	 *            itself)
 	 */
 	public ServiceContainer(final Configuration configuration, final IServiceConnector service, final boolean respawn) {
 		this.kiekerMonitoringController = MonitoringController.createInstance(configuration);
@@ -98,12 +98,12 @@ public class ServiceContainer {
 	}
 
 	/**
-	 * Safely end bridge loop. This routine should only be called from the shutdown hook thread
-	 * in the main part of a server. In other cases it will result in strange runtime errors.
+	 * Safely end bridge loop. This routine should only be called from the shutdown hook thread in the main part of a
+	 * server. In other cases it will result in strange runtime errors.
 	 *
 	 * @throws ConnectorDataTransmissionException
-	 *             An error occurred during data transmission and in this particular case
-	 *             while closing the data transmission.
+	 *             An error occurred during data transmission and in this particular case while closing the data
+	 *             transmission.
 	 */
 	public void shutdown() throws ConnectorDataTransmissionException {
 		this.active = false;
@@ -152,7 +152,10 @@ public class ServiceContainer {
 		return this.respawn;
 	}
 
-	public void waitForTermination(final long timeoutInMs) throws InterruptedException {
-		new WaitableController(this.kiekerMonitoringController).waitForTermination(timeoutInMs);
+	/**
+	 * Used in tests only.
+	 */
+	/* default */ MonitoringController getKiekerMonitoringController() {
+		return kiekerMonitoringController;
 	}
 }

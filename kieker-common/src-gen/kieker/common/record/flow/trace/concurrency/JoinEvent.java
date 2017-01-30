@@ -16,28 +16,28 @@ import kieker.common.util.registry.IRegistry;
 public class JoinEvent extends AbstractTraceEvent  {
 	private static final long serialVersionUID = -7303666475064047694L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-				 + TYPE_SIZE_LONG // ITraceRecord.traceId
-				 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-				 + TYPE_SIZE_LONG // JoinEvent.joinedTraceId
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_LONG // JoinEvent.joinedTraceId
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // IEventRecord.timestamp
-			long.class, // ITraceRecord.traceId
-			int.class, // ITraceRecord.orderIndex
-			long.class, // JoinEvent.joinedTraceId
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
+		long.class, // JoinEvent.joinedTraceId
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final long JOINED_TRACE_ID = 0L;
-
+	
 	/** property declarations */
 	private final long joinedTraceId;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

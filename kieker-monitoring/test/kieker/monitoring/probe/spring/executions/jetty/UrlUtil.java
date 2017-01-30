@@ -14,29 +14,34 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.namedRecordPipe;
+package kieker.monitoring.probe.spring.executions.jetty;
 
-import kieker.common.record.IMonitoringRecord;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
 
 /**
- * This is a simple interface for a writer that works on a pipe.
+ * @author Christian Wulf
  *
- * @author Andre van Hoorn, Christian Wulf
- *
- * @since 1.5
- *
- * @deprecated since 2.0. Use {@link PipeWriter} instead.
+ * @since 1.13
  */
-@Deprecated
-public interface IPipeWriter {
+public final class UrlUtil {
 
-	/**
-	 * Called for each new record.
-	 *
-	 * @param record
-	 *            the record.
-	 *
-	 * @since 1.5
-	 */
-	public void writeMonitoringRecord(final IMonitoringRecord record);
+	private UrlUtil() {
+		// utility class
+	}
+
+	public static void ping(final URL url) throws UnsupportedEncodingException, IOException {
+		BufferedReader in = null;
+		try {
+			in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+			// final String result = in.readLine(); // the result is currently an empty string.
+		} finally {
+			if (null != in) {
+				in.close();
+			}
+		}
+	}
 }

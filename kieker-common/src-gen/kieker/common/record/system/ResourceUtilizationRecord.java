@@ -17,34 +17,34 @@ import kieker.common.util.registry.IRegistry;
 public class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	private static final long serialVersionUID = 193790554451565711L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // ResourceUtilizationRecord.timestamp
-				 + TYPE_SIZE_STRING // ResourceUtilizationRecord.hostname
-				 + TYPE_SIZE_STRING // ResourceUtilizationRecord.resourceName
-				 + TYPE_SIZE_DOUBLE // ResourceUtilizationRecord.utilization
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // ResourceUtilizationRecord.timestamp
+			 + TYPE_SIZE_STRING // ResourceUtilizationRecord.hostname
+			 + TYPE_SIZE_STRING // ResourceUtilizationRecord.resourceName
+			 + TYPE_SIZE_DOUBLE // ResourceUtilizationRecord.utilization
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // ResourceUtilizationRecord.timestamp
-			String.class, // ResourceUtilizationRecord.hostname
-			String.class, // ResourceUtilizationRecord.resourceName
-			double.class, // ResourceUtilizationRecord.utilization
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // ResourceUtilizationRecord.timestamp
+		String.class, // ResourceUtilizationRecord.hostname
+		String.class, // ResourceUtilizationRecord.resourceName
+		double.class, // ResourceUtilizationRecord.utilization
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String RESOURCE_NAME = "";
 	public static final double UTILIZATION = 0.0;
-
+	
 	/** property declarations */
 	private final long timestamp;
 	private final String hostname;
 	private final String resourceName;
 	private final double utilization;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

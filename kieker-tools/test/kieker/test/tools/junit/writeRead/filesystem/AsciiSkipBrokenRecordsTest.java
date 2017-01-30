@@ -39,7 +39,6 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WaitableController;
 import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.writernew.filesystem.AsciiFileWriter;
-
 import kieker.test.tools.junit.writeRead.TestAnalysis;
 import kieker.test.tools.junit.writeRead.TestDataRepository;
 import kieker.test.tools.junit.writeRead.TestProbe;

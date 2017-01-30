@@ -17,30 +17,30 @@ import kieker.common.util.registry.IRegistry;
 public class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	private static final long serialVersionUID = 3957750090047819946L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // BranchingRecord.timestamp
-				 + TYPE_SIZE_INT // BranchingRecord.branchID
-				 + TYPE_SIZE_INT // BranchingRecord.branchingOutcome
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // BranchingRecord.timestamp
+			 + TYPE_SIZE_INT // BranchingRecord.branchID
+			 + TYPE_SIZE_INT // BranchingRecord.branchingOutcome
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // BranchingRecord.timestamp
-			int.class, // BranchingRecord.branchID
-			int.class, // BranchingRecord.branchingOutcome
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // BranchingRecord.timestamp
+		int.class, // BranchingRecord.branchID
+		int.class, // BranchingRecord.branchingOutcome
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final int BRANCH_ID = 0;
 	public static final int BRANCHING_OUTCOME = 0;
-
+	
 	/** property declarations */
 	private final long timestamp;
 	private final int branchID;
 	private final int branchingOutcome;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

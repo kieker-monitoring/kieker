@@ -17,27 +17,27 @@ import kieker.common.util.registry.IRegistry;
 public class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	private static final long serialVersionUID = -7768272829642950711L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_STRING // OperationExecutionRecord.operationSignature
-				 + TYPE_SIZE_STRING // OperationExecutionRecord.sessionId
-				 + TYPE_SIZE_LONG // OperationExecutionRecord.traceId
-				 + TYPE_SIZE_LONG // OperationExecutionRecord.tin
-				 + TYPE_SIZE_LONG // OperationExecutionRecord.tout
-				 + TYPE_SIZE_STRING // OperationExecutionRecord.hostname
-				 + TYPE_SIZE_INT // OperationExecutionRecord.eoi
-				 + TYPE_SIZE_INT // OperationExecutionRecord.ess
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_STRING // OperationExecutionRecord.operationSignature
+			 + TYPE_SIZE_STRING // OperationExecutionRecord.sessionId
+			 + TYPE_SIZE_LONG // OperationExecutionRecord.traceId
+			 + TYPE_SIZE_LONG // OperationExecutionRecord.tin
+			 + TYPE_SIZE_LONG // OperationExecutionRecord.tout
+			 + TYPE_SIZE_STRING // OperationExecutionRecord.hostname
+			 + TYPE_SIZE_INT // OperationExecutionRecord.eoi
+			 + TYPE_SIZE_INT // OperationExecutionRecord.ess
+	;
 	
-		public static final Class<?>[] TYPES = {
-			String.class, // OperationExecutionRecord.operationSignature
-			String.class, // OperationExecutionRecord.sessionId
-			long.class, // OperationExecutionRecord.traceId
-			long.class, // OperationExecutionRecord.tin
-			long.class, // OperationExecutionRecord.tout
-			String.class, // OperationExecutionRecord.hostname
-			int.class, // OperationExecutionRecord.eoi
-			int.class, // OperationExecutionRecord.ess
-		};
+	public static final Class<?>[] TYPES = {
+		String.class, // OperationExecutionRecord.operationSignature
+		String.class, // OperationExecutionRecord.sessionId
+		long.class, // OperationExecutionRecord.traceId
+		long.class, // OperationExecutionRecord.tin
+		long.class, // OperationExecutionRecord.tout
+		String.class, // OperationExecutionRecord.hostname
+		int.class, // OperationExecutionRecord.eoi
+		int.class, // OperationExecutionRecord.ess
+	};
 	
 	/** user-defined constants */
 	public static final String NO_HOSTNAME = "<default-host>";
@@ -46,7 +46,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	public static final long NO_TRACE_ID = -1L;
 	public static final long NO_TIMESTAMP = -1L;
 	public static final int NO_EOI_ESS = -1;
-
+	
 	/** default constants */
 	public static final String OPERATION_SIGNATURE = NO_OPERATION_SIGNATURE;
 	public static final String SESSION_ID = NO_SESSION_ID;
@@ -56,7 +56,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	public static final String HOSTNAME = NO_HOSTNAME;
 	public static final int EOI = NO_EOI_ESS;
 	public static final int ESS = NO_EOI_ESS;
-
+	
 	/** property declarations */
 	private final String operationSignature;
 	private final String sessionId;
@@ -66,7 +66,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	private final String hostname;
 	private final int eoi;
 	private final int ess;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

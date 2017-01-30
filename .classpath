@@ -46,7 +46,7 @@
 	<classpathentry kind="lib" path="lib/framework-libs/cxf/cxf-2.6.15.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/spring/aopalliance-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-beans-3.2.8.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-context-3.2.8.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-context-3.2.8.RELEASE.jar" sourcepath="C:/Users/chw/.m2/repository/org/springframework/spring-context/3.2.8.RELEASE/spring-context-3.2.8.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-core-3.2.8.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-web-3.2.8.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/javax.jms-1.1.jar"/>

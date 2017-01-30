@@ -17,22 +17,22 @@ import kieker.common.util.registry.IRegistry;
 public class TimestampRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	private static final long serialVersionUID = -6797766837645151845L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // TimestampRecord.timestamp
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // TimestampRecord.timestamp
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // TimestampRecord.timestamp
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // TimestampRecord.timestamp
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final long TIMESTAMP = 0L;
-
+	
 	/** property declarations */
 	private final long timestamp;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

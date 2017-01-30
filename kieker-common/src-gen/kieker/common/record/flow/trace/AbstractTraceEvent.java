@@ -18,15 +18,15 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
-
+	
 	/** property declarations */
 	private final long traceId;
 	private final int orderIndex;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

@@ -17,32 +17,32 @@ import kieker.common.util.registry.IRegistry;
 public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	private static final long serialVersionUID = 2474236414042988334L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // DiskUsageRecord.timestamp
-				 + TYPE_SIZE_STRING // DiskUsageRecord.hostname
-				 + TYPE_SIZE_STRING // DiskUsageRecord.deviceName
-				 + TYPE_SIZE_DOUBLE // DiskUsageRecord.queue
-				 + TYPE_SIZE_DOUBLE // DiskUsageRecord.readBytesPerSecond
-				 + TYPE_SIZE_DOUBLE // DiskUsageRecord.readsPerSecond
-				 + TYPE_SIZE_DOUBLE // DiskUsageRecord.serviceTime
-				 + TYPE_SIZE_DOUBLE // DiskUsageRecord.writeBytesPerSecond
-				 + TYPE_SIZE_DOUBLE // DiskUsageRecord.writesPerSecond
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // DiskUsageRecord.timestamp
+			 + TYPE_SIZE_STRING // DiskUsageRecord.hostname
+			 + TYPE_SIZE_STRING // DiskUsageRecord.deviceName
+			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.queue
+			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.readBytesPerSecond
+			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.readsPerSecond
+			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.serviceTime
+			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.writeBytesPerSecond
+			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.writesPerSecond
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // DiskUsageRecord.timestamp
-			String.class, // DiskUsageRecord.hostname
-			String.class, // DiskUsageRecord.deviceName
-			double.class, // DiskUsageRecord.queue
-			double.class, // DiskUsageRecord.readBytesPerSecond
-			double.class, // DiskUsageRecord.readsPerSecond
-			double.class, // DiskUsageRecord.serviceTime
-			double.class, // DiskUsageRecord.writeBytesPerSecond
-			double.class, // DiskUsageRecord.writesPerSecond
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // DiskUsageRecord.timestamp
+		String.class, // DiskUsageRecord.hostname
+		String.class, // DiskUsageRecord.deviceName
+		double.class, // DiskUsageRecord.queue
+		double.class, // DiskUsageRecord.readBytesPerSecond
+		double.class, // DiskUsageRecord.readsPerSecond
+		double.class, // DiskUsageRecord.serviceTime
+		double.class, // DiskUsageRecord.writeBytesPerSecond
+		double.class, // DiskUsageRecord.writesPerSecond
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -53,7 +53,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	public static final double SERVICE_TIME = 0.0;
 	public static final double WRITE_BYTES_PER_SECOND = 0.0;
 	public static final double WRITES_PER_SECOND = 0.0;
-
+	
 	/** property declarations */
 	private final long timestamp;
 	private final String hostname;
@@ -64,7 +64,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	private final double serviceTime;
 	private final double writeBytesPerSecond;
 	private final double writesPerSecond;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

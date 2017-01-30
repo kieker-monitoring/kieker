@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.test.tools.junit.bridge;
+package kieker.tools.bridge;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,11 +25,12 @@ import org.junit.rules.TemporaryFolder;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.controller.WaitableController;
 import kieker.monitoring.writernew.filesystem.AsciiFileWriter;
-import kieker.tools.bridge.ServiceContainer;
-import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
-
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.junit.bridge.ConfigurationParameters;
+import kieker.test.tools.junit.bridge.ServiceConnectorStub;
+import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 
 /**
  * Test the {@link ServiceContainer} for the proper use of the {@link kieker.tools.bridge.connector.IServiceConnector} interface.
@@ -88,7 +89,7 @@ public class TestServiceContainer extends AbstractKiekerTest {
 
 		// Run the service
 		serviceContainer.run();
-		serviceContainer.waitForTermination(5000);
+		new WaitableController(serviceContainer.getKiekerMonitoringController()).waitForTermination(5000);
 
 		// Check number of written records.
 		// logDirs should contain one Kieker records folders.

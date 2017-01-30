@@ -18,15 +18,15 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final String OPERATION_SIGNATURE = "";
 	public static final String CLASS_SIGNATURE = "";
-
+	
 	/** property declarations */
 	private final String operationSignature;
 	private final String classSignature;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

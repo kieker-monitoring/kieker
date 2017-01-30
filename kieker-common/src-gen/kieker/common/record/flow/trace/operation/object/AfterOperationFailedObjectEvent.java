@@ -17,34 +17,34 @@ import kieker.common.record.flow.IObjectRecord;
 public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent implements IObjectRecord {
 	private static final long serialVersionUID = -5115197861231353414L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-				 + TYPE_SIZE_LONG // ITraceRecord.traceId
-				 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-				 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-				 + TYPE_SIZE_STRING // IClassSignature.classSignature
-				 + TYPE_SIZE_STRING // IExceptionRecord.cause
-				 + TYPE_SIZE_INT // IObjectRecord.objectId
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			 + TYPE_SIZE_STRING // IClassSignature.classSignature
+			 + TYPE_SIZE_STRING // IExceptionRecord.cause
+			 + TYPE_SIZE_INT // IObjectRecord.objectId
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // IEventRecord.timestamp
-			long.class, // ITraceRecord.traceId
-			int.class, // ITraceRecord.orderIndex
-			String.class, // IOperationSignature.operationSignature
-			String.class, // IClassSignature.classSignature
-			String.class, // IExceptionRecord.cause
-			int.class, // IObjectRecord.objectId
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
+		String.class, // IOperationSignature.operationSignature
+		String.class, // IClassSignature.classSignature
+		String.class, // IExceptionRecord.cause
+		int.class, // IObjectRecord.objectId
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final int OBJECT_ID = 0;
-
+	
 	/** property declarations */
 	private final int objectId;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

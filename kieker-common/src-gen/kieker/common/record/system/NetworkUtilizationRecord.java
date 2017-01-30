@@ -17,48 +17,48 @@ import kieker.common.util.registry.IRegistry;
 public class NetworkUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	private static final long serialVersionUID = 7799663712343478641L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // NetworkUtilizationRecord.timestamp
-				 + TYPE_SIZE_STRING // NetworkUtilizationRecord.hostname
-				 + TYPE_SIZE_STRING // NetworkUtilizationRecord.interfaceName
-				 + TYPE_SIZE_LONG // NetworkUtilizationRecord.speed
-				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txBytesPerSecond
-				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txCarrierPerSecond
-				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txCollisionsPerSecond
-				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txDroppedPerSecond
-				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txErrorsPerSecond
-				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txOverrunsPerSecond
-				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txPacketsPerSecond
-				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxBytesPerSecond
-				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxDroppedPerSecond
-				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxErrorsPerSecond
-				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxFramePerSecond
-				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxOverrunsPerSecond
-				 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxPacketsPerSecond
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // NetworkUtilizationRecord.timestamp
+			 + TYPE_SIZE_STRING // NetworkUtilizationRecord.hostname
+			 + TYPE_SIZE_STRING // NetworkUtilizationRecord.interfaceName
+			 + TYPE_SIZE_LONG // NetworkUtilizationRecord.speed
+			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txBytesPerSecond
+			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txCarrierPerSecond
+			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txCollisionsPerSecond
+			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txDroppedPerSecond
+			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txErrorsPerSecond
+			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txOverrunsPerSecond
+			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.txPacketsPerSecond
+			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxBytesPerSecond
+			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxDroppedPerSecond
+			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxErrorsPerSecond
+			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxFramePerSecond
+			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxOverrunsPerSecond
+			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxPacketsPerSecond
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // NetworkUtilizationRecord.timestamp
-			String.class, // NetworkUtilizationRecord.hostname
-			String.class, // NetworkUtilizationRecord.interfaceName
-			long.class, // NetworkUtilizationRecord.speed
-			double.class, // NetworkUtilizationRecord.txBytesPerSecond
-			double.class, // NetworkUtilizationRecord.txCarrierPerSecond
-			double.class, // NetworkUtilizationRecord.txCollisionsPerSecond
-			double.class, // NetworkUtilizationRecord.txDroppedPerSecond
-			double.class, // NetworkUtilizationRecord.txErrorsPerSecond
-			double.class, // NetworkUtilizationRecord.txOverrunsPerSecond
-			double.class, // NetworkUtilizationRecord.txPacketsPerSecond
-			double.class, // NetworkUtilizationRecord.rxBytesPerSecond
-			double.class, // NetworkUtilizationRecord.rxDroppedPerSecond
-			double.class, // NetworkUtilizationRecord.rxErrorsPerSecond
-			double.class, // NetworkUtilizationRecord.rxFramePerSecond
-			double.class, // NetworkUtilizationRecord.rxOverrunsPerSecond
-			double.class, // NetworkUtilizationRecord.rxPacketsPerSecond
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // NetworkUtilizationRecord.timestamp
+		String.class, // NetworkUtilizationRecord.hostname
+		String.class, // NetworkUtilizationRecord.interfaceName
+		long.class, // NetworkUtilizationRecord.speed
+		double.class, // NetworkUtilizationRecord.txBytesPerSecond
+		double.class, // NetworkUtilizationRecord.txCarrierPerSecond
+		double.class, // NetworkUtilizationRecord.txCollisionsPerSecond
+		double.class, // NetworkUtilizationRecord.txDroppedPerSecond
+		double.class, // NetworkUtilizationRecord.txErrorsPerSecond
+		double.class, // NetworkUtilizationRecord.txOverrunsPerSecond
+		double.class, // NetworkUtilizationRecord.txPacketsPerSecond
+		double.class, // NetworkUtilizationRecord.rxBytesPerSecond
+		double.class, // NetworkUtilizationRecord.rxDroppedPerSecond
+		double.class, // NetworkUtilizationRecord.rxErrorsPerSecond
+		double.class, // NetworkUtilizationRecord.rxFramePerSecond
+		double.class, // NetworkUtilizationRecord.rxOverrunsPerSecond
+		double.class, // NetworkUtilizationRecord.rxPacketsPerSecond
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -77,7 +77,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	public static final double RX_FRAME_PER_SECOND = 0.0;
 	public static final double RX_OVERRUNS_PER_SECOND = 0.0;
 	public static final double RX_PACKETS_PER_SECOND = 0.0;
-
+	
 	/** property declarations */
 	private final long timestamp;
 	private final String hostname;
@@ -96,7 +96,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	private final double rxFramePerSecond;
 	private final double rxOverrunsPerSecond;
 	private final double rxPacketsPerSecond;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

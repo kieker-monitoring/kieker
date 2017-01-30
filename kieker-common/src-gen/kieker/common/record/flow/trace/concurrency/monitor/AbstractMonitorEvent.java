@@ -17,13 +17,13 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final int LOCK_ID = 0;
-
+	
 	/** property declarations */
 	private final int lockId;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 

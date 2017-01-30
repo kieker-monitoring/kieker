@@ -17,38 +17,38 @@ import kieker.common.util.registry.IRegistry;
 public class LoadAverageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	private static final long serialVersionUID = -664763923774505966L;
 
-		/** Descriptive definition of the serialization size of the record. */
-		public static final int SIZE = TYPE_SIZE_LONG // LoadAverageRecord.timestamp
-				 + TYPE_SIZE_STRING // LoadAverageRecord.hostname
-				 + TYPE_SIZE_DOUBLE // LoadAverageRecord.oneMinLoadAverage
-				 + TYPE_SIZE_DOUBLE // LoadAverageRecord.fiveMinLoadAverage
-				 + TYPE_SIZE_DOUBLE // LoadAverageRecord.fifteenMinLoadAverage
-		;
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // LoadAverageRecord.timestamp
+			 + TYPE_SIZE_STRING // LoadAverageRecord.hostname
+			 + TYPE_SIZE_DOUBLE // LoadAverageRecord.oneMinLoadAverage
+			 + TYPE_SIZE_DOUBLE // LoadAverageRecord.fiveMinLoadAverage
+			 + TYPE_SIZE_DOUBLE // LoadAverageRecord.fifteenMinLoadAverage
+	;
 	
-		public static final Class<?>[] TYPES = {
-			long.class, // LoadAverageRecord.timestamp
-			String.class, // LoadAverageRecord.hostname
-			double.class, // LoadAverageRecord.oneMinLoadAverage
-			double.class, // LoadAverageRecord.fiveMinLoadAverage
-			double.class, // LoadAverageRecord.fifteenMinLoadAverage
-		};
+	public static final Class<?>[] TYPES = {
+		long.class, // LoadAverageRecord.timestamp
+		String.class, // LoadAverageRecord.hostname
+		double.class, // LoadAverageRecord.oneMinLoadAverage
+		double.class, // LoadAverageRecord.fiveMinLoadAverage
+		double.class, // LoadAverageRecord.fifteenMinLoadAverage
+	};
 	
 	/** user-defined constants */
-
+	
 	/** default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final double ONE_MIN_LOAD_AVERAGE = 0.0;
 	public static final double FIVE_MIN_LOAD_AVERAGE = 0.0;
 	public static final double FIFTEEN_MIN_LOAD_AVERAGE = 0.0;
-
+	
 	/** property declarations */
 	private final long timestamp;
 	private final String hostname;
 	private final double oneMinLoadAverage;
 	private final double fiveMinLoadAverage;
 	private final double fifteenMinLoadAverage;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
