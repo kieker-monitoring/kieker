@@ -27,7 +27,7 @@ import kieker.common.logging.LogFactory;
  *
  * @since 1.13
  */
-public class BlockOnFailedInsertBehavior<E> extends InsertBehavior<E> {
+public class BlockOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 
 	private static final Log LOG = LogFactory.getLog(BlockOnFailedInsertBehavior.class);
 

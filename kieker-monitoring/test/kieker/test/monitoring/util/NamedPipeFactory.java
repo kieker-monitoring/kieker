@@ -29,14 +29,13 @@ import kieker.common.namedRecordPipe.IPipeReader;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writernew.namedRecordPipe.PipeWriter;
 
 /**
  * Provides factory methods for {@link MonitoringController}s configured to write to a {@link Pipe} and a convenient collector facility to access the records
  * received in a {@link List}. Note that, in contrast to the similar class {@link NamedPipeFactory}, doesn't use the {@link PipeWriter} directly, but uses an *
- * {@link IMonitoringController}. Also, the {@link kieker.analysis.plugin.reader.namedRecordPipe.PipeReader} is used.
+ * {@link MonitoringController}. Also, the {@link kieker.analysis.plugin.reader.namedRecordPipe.PipeReader} is used.
  *
  * @author Andre van Hoorn
  *

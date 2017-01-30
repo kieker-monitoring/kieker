@@ -29,7 +29,7 @@ import kieker.common.logging.LogFactory;
  * @param <E>
  *            the type of the element which should be inserted into the queue.
  */
-public class TerminateOnFailedInsertBehavior<E> extends InsertBehavior<E> {
+public class TerminateOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 
 	private static final Log LOG = LogFactory.getLog(TerminateOnFailedInsertBehavior.class);
 

@@ -27,6 +27,8 @@ public interface IStateListener {
 	 * Triggers if the monitoring is guaranteed to be enabled, but has not yet been published to other threads.
 	 *
 	 * This method is provided especially to guarantee that the meta data record is sent before any other record.
+	 *
+	 * @since 1.13
 	 */
 	void beforeEnableMonitoring();
 

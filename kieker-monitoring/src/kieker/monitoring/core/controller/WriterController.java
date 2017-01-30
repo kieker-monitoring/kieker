@@ -42,15 +42,15 @@ import kieker.monitoring.writernew.MonitoringWriterThread;
  */
 public final class WriterController extends AbstractController implements IWriterController, IStateListener {
 
-	private static final Log LOG = LogFactory.getLog(WriterController.class);
-
 	public static final String PREFIX = WriterController.class.getName() + ".";
 	/** The name of the configuration determining the size of the queue of this writer. */
 	public static final String RECORD_QUEUE_SIZE = "RecordQueueSize";
 	/** The name of the configuration determining the insert behavior to the queue of the writer. */
 	public static final String RECORD_QUEUE_INSERT_BEHAVIOR = "RecordQueueInsertBehavior";
-	/** The fully qualified name of the queue to be used for the records */
+	/** The fully qualified name of the queue to be used for the records. */
 	public static final String RECORD_QUEUE_FQN = "RecordQueueFQN";
+
+	private static final Log LOG = LogFactory.getLog(WriterController.class);
 
 	// private static final String QUEUE_FQN = "QueueFullyQualifiedName";
 
@@ -171,20 +171,20 @@ public final class WriterController extends AbstractController implements IWrite
 	/**
 	 * @param queueFqn
 	 *            the fully qualified queue name
-	 * @param queueCapacity
+	 * @param capacity
 	 *            the (initial) capacity of the queue
 	 * @return a new instance of the queue indicated by its <code>queueFQN</code>. Such instance is created by invoking
 	 *         the constructor with a single parameter of type <code>int</code>.
 	 */
 	@SuppressWarnings("unchecked")
-	private Queue<IMonitoringRecord> newQueue(final String queueFqn, final int queueCapacity) {
+	private Queue<IMonitoringRecord> newQueue(final String queueFqn, final int capacity) {
 		try {
 			final Class<?> clazz = Class.forName(queueFqn);
 			@SuppressWarnings("rawtypes")
 			final Class<? extends Queue> queueClass = clazz.asSubclass(Queue.class);
 			@SuppressWarnings("rawtypes")
 			final Constructor<? extends Queue> constructor = queueClass.getConstructor(int.class);
-			return constructor.newInstance(queueCapacity);
+			return constructor.newInstance(capacity);
 		} catch (final ClassNotFoundException e) {
 			LOG.warn("An exception occurred", e);
 		} catch (final NoSuchMethodException e) {
@@ -256,7 +256,6 @@ public final class WriterController extends AbstractController implements IWrite
 	 */
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
-		// try {
 		final IMonitoringController monitoringController = super.monitoringController;
 		if (!monitoringController.isMonitoringEnabled()) { // enabled and not terminated
 			return false;
@@ -264,9 +263,6 @@ public final class WriterController extends AbstractController implements IWrite
 		if (this.autoSetLoggingTimestamp) {
 			record.setLoggingTimestamp(monitoringController.getTimeSource().getTime());
 		}
-		// if ((0L == this.numberOfInserts.getAndIncrement()) && this.logMetadataRecord) {
-		// this.monitoringController.sendMetadataAsRecord();
-		// }
 
 		final boolean recordSent = this.insertBehavior.insert(record);
 		if (!recordSent) {

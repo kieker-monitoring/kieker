@@ -19,7 +19,6 @@ package kieker.monitoring.probe.spring.executions.jetty;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
 /**
@@ -33,7 +32,7 @@ public final class UrlUtil {
 		// utility class
 	}
 
-	public static void ping(final URL url) throws UnsupportedEncodingException, IOException {
+	public static void ping(final URL url) throws IOException {
 		BufferedReader in = null;
 		try {
 			in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));

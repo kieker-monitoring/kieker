@@ -43,6 +43,10 @@ public class AsciiFileWriterTest {
 
 	private Configuration configuration;
 
+	public AsciiFileWriterTest() {
+		super();
+	}
+
 	@Before
 	public void before() {
 		this.configuration = new Configuration();

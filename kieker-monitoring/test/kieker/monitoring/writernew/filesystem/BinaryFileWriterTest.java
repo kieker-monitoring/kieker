@@ -43,6 +43,10 @@ public class BinaryFileWriterTest {
 
 	private Configuration configuration;
 
+	public BinaryFileWriterTest() {
+		super();
+	}
+
 	@Before
 	public void before() {
 		this.configuration = new Configuration();
