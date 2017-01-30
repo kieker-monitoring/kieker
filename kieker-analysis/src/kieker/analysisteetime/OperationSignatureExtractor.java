@@ -16,29 +16,15 @@
 
 package kieker.analysisteetime;
 
-import java.util.Arrays;
-
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
-import kieker.common.util.signature.ClassOperationSignaturePair;
-import kieker.common.util.signature.Signature;
 
 /**
  * @author Sören Henning
  *
  * @since 1.13
  */
-public class JavaOperationSignatureExtractor implements OperationSignatureExtractor {
+public interface OperationSignatureExtractor {
 
-	@Override
-	public void extract(final OperationType operationType) {
-		// TODO migrate directly
-		final ClassOperationSignaturePair classSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(operationType.getSignature());
-		final Signature signature = classSignaturePair.getSignature();
-
-		operationType.setName(signature.getName());
-		operationType.getModifiers().addAll(Arrays.asList(signature.getModifier()));
-		operationType.setReturnType(signature.getReturnType());
-		operationType.getParameterTypes().addAll(Arrays.asList(signature.getParamTypeList()));
-	}
+	public void extract(final OperationType operationType);
 
 }
