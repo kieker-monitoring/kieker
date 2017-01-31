@@ -28,7 +28,9 @@ package kieker.monitoring.registry;
 public interface IRegistryListener<T> {
 
 	/**
-	 *  @since 1.13
+	 * This event is fired after a new registry entry was registered.
+	 *
+	 * @since 1.13
 	 */
 	void onNewRegistryEntry(T value, int id);
 

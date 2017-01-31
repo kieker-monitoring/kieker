@@ -41,7 +41,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *
  * @since 1.13
  */
-class AsciiFileWriterPool extends AbstractWriterPool {
+class AsciiFileWriterPool extends WriterPool {
 
 	private final Charset charset;
 

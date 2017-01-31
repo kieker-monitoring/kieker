@@ -51,11 +51,6 @@ public final class WriterController extends AbstractController implements IWrite
 	public static final String RECORD_QUEUE_FQN = "RecordQueueFQN";
 
 	private static final Log LOG = LogFactory.getLog(WriterController.class);
-
-	// private static final String QUEUE_FQN = "QueueFullyQualifiedName";
-
-	/** the total number of monitoring records received. */
-	// private final AtomicLong numberOfInserts = new AtomicLong(0);
 	/** Monitoring Writer. */
 	private AbstractMonitoringWriter monitoringWriter;
 	/** Whether or not the {@link IMonitoringRecord#setLoggingTimestamp(long)} is automatically set. */
@@ -97,7 +92,7 @@ public final class WriterController extends AbstractController implements IWrite
 		if (queue instanceof BlockingQueue) {
 			this.writerQueue = (BlockingQueue<IMonitoringRecord>) queue;
 		} else {
-			this.writerQueue = new BlockingQueueAdapter(queue);
+			this.writerQueue = new BlockingQueueAdapter(queue); // TODO use PCBlockingQueue instead
 		}
 
 		final String writerClassName = configuration.getStringProperty(ConfigurationFactory.WRITER_CLASSNAME);
@@ -113,8 +108,10 @@ public final class WriterController extends AbstractController implements IWrite
 
 		int recordQueueInsertBehavior = configuration.getIntProperty(PREFIX + RECORD_QUEUE_INSERT_BEHAVIOR);
 		if ((recordQueueInsertBehavior < 0) || (recordQueueInsertBehavior > 4)) {
-			LOG.warn("Unknown value '" + recordQueueInsertBehavior + "' for " + PREFIX + RECORD_QUEUE_INSERT_BEHAVIOR
-					+ "; using default value 0");
+			if (LOG.isWarnEnabled()) {
+				LOG.warn("Unknown value '" + recordQueueInsertBehavior + "' for " + PREFIX + RECORD_QUEUE_INSERT_BEHAVIOR
+						+ "; using default value 0");
+			}
 			recordQueueInsertBehavior = 0;
 		}
 

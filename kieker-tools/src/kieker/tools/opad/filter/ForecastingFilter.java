@@ -47,16 +47,15 @@ import kieker.tools.opad.timeseries.forecast.IForecaster;
  *
  */
 @Plugin(name = "Forecast Filter", outputPorts = {
-		@OutputPort(eventTypes = { IForecastResult.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
-		@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT),
-		@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_MEASURED) },
-		configuration = {
+	@OutputPort(eventTypes = { IForecastResult.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
+	@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT),
+	@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_MEASURED) }, configuration = {
 		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_TIME, defaultValue = "1000"),
 		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_UNIT, defaultValue = "MILLISECONDS"),
 		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, defaultValue = "MEAN", updateable = true),
 		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY, defaultValue = "60"),
 		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_FC_CONFIDENCE, defaultValue = "0")
-})
+	})
 public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_TSPOINT = "tspoint";
@@ -92,7 +91,7 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 		super(configuration, projectContext);
 		this.applicationForecastingWindow = new ConcurrentHashMap<String, ITimeSeries<Double>>();
 		this.previousFCPair = new ConcurrentHashMap<String, ForecastMeasurementPair>();
-		this.setCurrentConfiguration(configuration, false);
+		this.setFieldsByConfiguration(configuration, false);
 	}
 
 	@Override
@@ -108,6 +107,10 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 	@Override
 	public void setCurrentConfiguration(final Configuration config, final boolean update) {
+		this.setFieldsByConfiguration(config, update);
+	}
+
+	private void setFieldsByConfiguration(final Configuration config, final boolean update) {
 		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_NAME_DELTA_TIME)) {
 			this.deltat = new AtomicLong(config.getLongProperty(CONFIG_PROPERTY_NAME_DELTA_TIME));
 		}

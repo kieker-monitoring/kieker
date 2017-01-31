@@ -50,8 +50,6 @@ import kieker.common.util.filesystem.FileExtensionFilter;
 class AsciiDirectoryReader implements Runnable {
 	private static final Log LOG = LogFactory.getLog(AsciiDirectoryReader.class);
 
-	String filePrefix = FSUtil.FILE_PREFIX; // NOPMD NOCS (package visible for inner class)
-
 	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>(); // NOPMD (no synchronization needed)
 
 	private final IMonitoringRecordReceiver recordReceiver;
@@ -133,7 +131,6 @@ class AsciiDirectoryReader implements Runnable {
 			if (mappingFile.exists()) {
 				LOG.info("Directory '" + this.inputDir + "' contains no file '" + FSUtil.MAP_FILENAME + "'. Found '" + FSUtil.LEGACY_MAP_FILENAME
 						+ "' ... switching to legacy mode");
-				this.filePrefix = FSUtil.LEGACY_FILE_PREFIX;
 			} else {
 				// no {kieker|tpmon}.map exists. This is valid for very old monitoring logs. Hence, only dump a log.warn
 				LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'");

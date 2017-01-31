@@ -67,7 +67,7 @@ public class SingleSocketTcpWriterReaderTest extends AbstractWriterReaderTest { 
 
 		final Configuration monitoringConfig = ConfigurationFactory.createDefaultConfiguration();
 		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, SingleSocketTcpWriter.class.getName());
-		monitoringConfig.setProperty(SingleSocketTcpWriter.CONFIG_PORT1, SingleSocketTcpWriterReaderTest.PORT1);
+		monitoringConfig.setProperty(SingleSocketTcpWriter.CONFIG_PORT, SingleSocketTcpWriterReaderTest.PORT1);
 		return MonitoringController.createInstance(monitoringConfig);
 	}
 

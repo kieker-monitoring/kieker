@@ -34,10 +34,10 @@ import kieker.common.util.filesystem.FSUtil;
  *
  * @since 1.13
  */
-abstract class AbstractWriterPool {
+class WriterPool {
 
-	protected static final String TIME_ZONE = "UTC";
-	protected static final Locale LOCALE = Locale.US;
+	private static final String TIME_ZONE = "UTC";
+	private static final Locale LOCALE = Locale.US;
 
 	protected final List<Path> logFiles = new ArrayList<>();
 	protected final Log writerLog;
@@ -45,7 +45,7 @@ abstract class AbstractWriterPool {
 
 	private final SimpleDateFormat dateFormatter;
 
-	public AbstractWriterPool(final Log writerLog, final Path folder) {
+	protected WriterPool(final Log writerLog, final Path folder) {
 		this.writerLog = writerLog;
 		this.folder = folder;
 		this.dateFormatter = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", LOCALE);

@@ -179,16 +179,16 @@ public final class MonitoringController extends AbstractController implements IM
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder(2048);
-		sb.append("Current State of kieker.monitoring (");
-		sb.append(MonitoringController.getVersion());
-		sb.append(") ");
-		sb.append(this.stateController.toString());
-		sb.append(this.jmxController.toString());
-		sb.append(this.timeSourceController.toString());
-		sb.append(this.probeController.toString());
-		sb.append(this.writerController.toString());
-		sb.append(this.samplingController.toString());
+		final StringBuilder sb = new StringBuilder(2048)
+				.append("Current State of kieker.monitoring (")
+				.append(MonitoringController.getVersion())
+				.append(") ")
+				.append(this.stateController.toString())
+				.append(this.jmxController.toString())
+				.append(this.timeSourceController.toString())
+				.append(this.probeController.toString())
+				.append(this.writerController.toString())
+				.append(this.samplingController.toString());
 		return sb.toString();
 	}
 

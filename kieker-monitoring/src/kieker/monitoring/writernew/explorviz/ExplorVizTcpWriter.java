@@ -52,9 +52,13 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 	private static final Log LOG = LogFactory.getLog(ExplorVizTcpWriter.class);
 
 	private static final String PREFIX = ExplorVizTcpWriter.class.getName() + ".";
+	/** configuration key for the hostname */
 	public static final String CONFIG_HOSTNAME = PREFIX + "hostname"; // NOCS (afterPREFIX)
+	/** configuration key for the port */
 	public static final String CONFIG_PORT = PREFIX + "port"; // NOCS (afterPREFIX)
+	/** configuration key for the size of the {@link #byteBuffer} */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
+	/** configuration key for {@link #flush} */
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
 	private static final byte HOST_APPLICATION_META_DATA_CLAZZ_ID = 0;
@@ -65,28 +69,29 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 
 	private static final String EMPTY_STRING = "";
 
-	private final String hostname;
-	private final int port;
-	private final int bufferSize;
+	/** <code>true</code> if the {@link #byteBuffer} should be flushed upon each new incoming monitoring record */
 	private final boolean flush;
-
-	private final WritableByteChannel socketChannel;
+	/** the buffer used for buffering monitoring and registry records */
 	private final ByteBuffer byteBuffer;
-
+	/** the channel used to write out monitoring and registry records */
+	private final WritableByteChannel socketChannel;
+	/** the registry used to compress string fields in monitoring records */
 	private final IWriterRegistry<String> writerRegistry;
+	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.registerStrings(..)} */
 	private final RegisterAdapter<String> registerStringsAdapter;
 
 	public ExplorVizTcpWriter(final Configuration configuration) throws IOException {
 		super(configuration);
-		this.hostname = configuration.getStringProperty(CONFIG_HOSTNAME);
-		this.port = configuration.getIntProperty(CONFIG_PORT);
+		final String hostname = configuration.getStringProperty(CONFIG_HOSTNAME);
+		final int port = configuration.getIntProperty(CONFIG_PORT);
 		// should we check for buffers too small for a single record?
-		this.bufferSize = configuration.getIntProperty(CONFIG_BUFFERSIZE);
+		final int bufferSize = configuration.getIntProperty(CONFIG_BUFFERSIZE);
 		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
 
-		this.byteBuffer = ByteBuffer.allocateDirect(this.bufferSize);
-		this.socketChannel = SocketChannel.open(new InetSocketAddress(this.hostname, this.port));
-		LOG.info("Initialized socket channel for writing to " + this.hostname + ":" + this.port);
+		this.byteBuffer = ByteBuffer.allocateDirect(bufferSize);
+		this.socketChannel = SocketChannel.open(new InetSocketAddress(hostname, port));
+
+		LOG.info("Initialized socket channel for writing to " + hostname + ":" + port);
 
 		this.writerRegistry = new WriterRegistry(this);
 		this.writerRegistry.register(EMPTY_STRING);

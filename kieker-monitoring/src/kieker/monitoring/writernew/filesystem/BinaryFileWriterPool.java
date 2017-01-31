@@ -35,7 +35,7 @@ import kieker.common.util.filesystem.FSUtil;
  *
  * @since 1.13
  */
-class BinaryFileWriterPool extends AbstractWriterPool {
+class BinaryFileWriterPool extends WriterPool {
 
 	private final int maxEntriesPerFile;
 	private int numEntriesInCurrentFile;

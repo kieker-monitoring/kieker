@@ -185,7 +185,7 @@ public class BlockingQueueAdapter implements BlockingQueue<IMonitoringRecord> {
 	@Override
 	public IMonitoringRecord take() throws InterruptedException {
 		IMonitoringRecord e;
-		while ((e = this.poll()) == null) {
+		while ((e = this.poll()) == null) { // NOPMD
 			Thread.sleep(1);
 		}
 		return e;

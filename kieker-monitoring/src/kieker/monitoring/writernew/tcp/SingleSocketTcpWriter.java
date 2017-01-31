@@ -31,6 +31,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
+import kieker.monitoring.registry.IWriterRegistry;
 import kieker.monitoring.registry.RegisterAdapter;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writernew.AbstractMonitoringWriter;
@@ -43,29 +44,40 @@ import kieker.monitoring.writernew.WriterUtil;
  */
 public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
 
+	/** the logger for this class */
 	private static final Log LOG = LogFactory.getLog(SingleSocketTcpWriter.class);
-
+	/** prefix for all configuration keys */
 	private static final String PREFIX = SingleSocketTcpWriter.class.getName() + ".";
 
+	/** configuration key for the hostname */
 	public static final String CONFIG_HOSTNAME = PREFIX + "hostname"; // NOCS (afterPREFIX)
-	public static final String CONFIG_PORT1 = PREFIX + "port1"; // NOCS (afterPREFIX)
+	/** configuration key for the port */
+	public static final String CONFIG_PORT = PREFIX + "port"; // NOCS (afterPREFIX)
+	/** configuration key for the size of the {@link #buffer} */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
+	/** configuration key for {@link #flush} */
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
+	/** the channel which writes out monitoring and registry records */
 	private final WritableByteChannel socketChannel;
+	/** the buffer used for buffering monitoring and registry records */
 	private final ByteBuffer buffer;
+	/** <code>true</code> if the {@link #buffer} should be flushed upon each new incoming monitoring record */
 	private final boolean flush;
 
-	private final WriterRegistry writerRegistry;
+	/** the registry used to compress string fields in monitoring records */
+	private final IWriterRegistry<String> writerRegistry;
+	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.registerStrings(..)} */
 	private final RegisterAdapter<String> registerStringsAdapter;
+	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.writeBytes(..)} */
 	private final GetIdAdapter<String> writeBytesAdapter;
 
 	public SingleSocketTcpWriter(final Configuration configuration) throws IOException {
 		super(configuration);
 		final String hostname = configuration.getStringProperty(CONFIG_HOSTNAME);
-		final int port1 = configuration.getIntProperty(CONFIG_PORT1);
+		final int port = configuration.getIntProperty(CONFIG_PORT);
 		// buffer size is available by byteBuffer.capacity()
-		this.socketChannel = SocketChannel.open(new InetSocketAddress(hostname, port1));
+		this.socketChannel = SocketChannel.open(new InetSocketAddress(hostname, port));
 		// TODO should we check for buffers too small for a single record?
 		final int bufferSize = this.configuration.getIntProperty(CONFIG_BUFFERSIZE);
 		this.buffer = ByteBuffer.allocateDirect(bufferSize);

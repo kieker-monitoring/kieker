@@ -42,39 +42,50 @@ import kieker.monitoring.writernew.WriterUtil;
  */
 public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
 
+	/** default size for the monitoring buffer */
 	private static final int DEFAULT_STRING_REGISTRY_BUFFER_SIZE = 1024;
-
+	/** the logger for this class */
 	private static final Log LOG = LogFactory.getLog(DualSocketTcpWriter.class);
-
+	/** prefix for all configuration keys */
 	private static final String PREFIX = DualSocketTcpWriter.class.getName() + ".";
 
+	/** configuration key for the hostname */
 	public static final String CONFIG_HOSTNAME = PREFIX + "hostname"; // NOCS (afterPREFIX)
+	/** configuration key for the monitoring port */
 	public static final String CONFIG_PORT1 = PREFIX + "port1"; // NOCS (afterPREFIX)
+	/** configuration key for the registry port */
 	public static final String CONFIG_PORT2 = PREFIX + "port2"; // NOCS (afterPREFIX)
+	/** configuration key for the size of the {@link #byteBuffer} */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
+	/** configuration key for {@link #flush} */
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
-
+	/** configuration key for the size of the {@link #stringRegistryBuffer} */
 	private static final String CONFIG_STRING_REGISTRY_BUFFERSIZE = PREFIX + "StringRegistryBufferSize"; // NOCS (afterPREFIX)
 
+	/** <code>true</code> if the {@link #byteBuffer} should be flushed upon each new incoming monitoring record */
 	private final boolean flush;
 
+	/** the channel which writes out monitoring records */
 	private final SocketChannel monitoringRecordChannel;
+	/** the channel which writes out registry records */
 	private final SocketChannel registryRecordChannel;
+	/** the buffer used for buffering monitoring records */
 	private final ByteBuffer byteBuffer;
-
-	private final IWriterRegistry<String> writerRegistry;
-	private final RegisterAdapter<String> registerStringsAdapter;
-	private final GetIdAdapter<String> writeBytesAdapter;
-
+	/** the buffer used for buffering registry records */
 	private final ByteBuffer stringRegistryBuffer;
 
-	// private final CharsetEncoder encoder;
+	/** the registry used to compress string fields in monitoring records */
+	private final IWriterRegistry<String> writerRegistry;
+	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.registerStrings(..)} */
+	private final RegisterAdapter<String> registerStringsAdapter;
+	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.writeBytes(..)} */
+	private final GetIdAdapter<String> writeBytesAdapter;
 
 	public DualSocketTcpWriter(final Configuration configuration) throws IOException {
 		super(configuration);
 		final String hostname = configuration.getStringProperty(CONFIG_HOSTNAME);
-		final int port1 = configuration.getIntProperty(CONFIG_PORT1);
-		final int port2 = configuration.getIntProperty(CONFIG_PORT2);
+		final int monitoringPort = configuration.getIntProperty(CONFIG_PORT1);
+		final int registryPort = configuration.getIntProperty(CONFIG_PORT2);
 		// TODO should be check for buffers too small for a single record?
 		final int bufferSize = configuration.getIntProperty(CONFIG_BUFFERSIZE);
 		int stringRegistryBufferSize = configuration.getIntProperty(CONFIG_STRING_REGISTRY_BUFFERSIZE);
@@ -88,8 +99,8 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		this.byteBuffer = ByteBuffer.allocateDirect(bufferSize);
 		this.stringRegistryBuffer = ByteBuffer.allocateDirect(stringRegistryBufferSize);
 		// buffer size is available by byteBuffer.capacity()
-		this.monitoringRecordChannel = SocketChannel.open(new InetSocketAddress(hostname, port1));
-		this.registryRecordChannel = SocketChannel.open(new InetSocketAddress(hostname, port2));
+		this.monitoringRecordChannel = SocketChannel.open(new InetSocketAddress(hostname, monitoringPort));
+		this.registryRecordChannel = SocketChannel.open(new InetSocketAddress(hostname, registryPort));
 
 		this.writerRegistry = new WriterRegistry(this);
 		this.registerStringsAdapter = new RegisterAdapter<String>(this.writerRegistry);
