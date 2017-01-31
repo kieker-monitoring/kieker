@@ -24,7 +24,7 @@ import java.util.Queue;
  *
  * @since 1.13
  */
-public interface TakeStrategy<E> {
+public interface TakeStrategy<E> { // NOCS //NOPMD
 
 	/**
 	 * @since 1.13

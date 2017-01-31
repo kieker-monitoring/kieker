@@ -28,7 +28,13 @@ import java.nio.file.Path;
  */
 interface IFileWriter {
 
+	/**
+	 * @since 1.13
+	 */
 	FilenameFilter getFileNameFilter();
 
+	/**
+	 * @since 1.13
+	 */
 	Path getLogFolder();
 }

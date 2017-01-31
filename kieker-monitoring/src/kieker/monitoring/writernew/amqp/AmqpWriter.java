@@ -49,12 +49,12 @@ import kieker.monitoring.writernew.AbstractMonitoringWriter;
  */
 public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
 
-	private static final Log LOG = LogFactory.getLog(AmqpWriter.class);
-
 	/** ID for registry records. */
 	public static final byte REGISTRY_RECORD_ID = (byte) 0xFF;
 	/** ID for regular records. */
 	public static final byte REGULAR_RECORD_ID = (byte) 0x01;
+
+	private static final Log LOG = LogFactory.getLog(AmqpWriter.class);
 	/** The default size for the buffer used to serialize records */
 	private static final int DEFAULT_BUFFER_SIZE = 16384;
 	/** Size of the "envelope" data which is prepended before the actual record. */

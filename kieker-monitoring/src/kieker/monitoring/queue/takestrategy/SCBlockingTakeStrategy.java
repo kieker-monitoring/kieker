@@ -38,6 +38,10 @@ public final class SCBlockingTakeStrategy<E> implements TakeStrategy<E> {
 	@SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
 	public volatile int storeFence = 0; // NOCS // NOPMD
 
+	public SCBlockingTakeStrategy() {
+		super();
+	}
+
 	@Override
 	public void signal() {
 		// Make sure the offer is visible before unpark

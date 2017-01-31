@@ -26,7 +26,7 @@ package kieker.monitoring.registry;
  *
  * @since 1.13
  */
-public interface IWriterRegistry<E> {
+public interface IWriterRegistry<E> { // NOCS //NOPMD
 
 	/**
 	 * Gets the ID of this registry.
@@ -41,12 +41,16 @@ public interface IWriterRegistry<E> {
 	 * @param value
 	 *            a registered value
 	 * @return unique id
+	 *
+	 * @since 1.13
 	 */
 	public int getId(E value);
 
 	/**
 	 * @param value
 	 *            to be registered
+	 *
+	 * @since 1.13
 	 */
 	public void register(E value);
 }

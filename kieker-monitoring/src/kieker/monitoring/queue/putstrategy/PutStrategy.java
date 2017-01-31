@@ -24,7 +24,7 @@ import java.util.Queue;
  *
  * @since 1.13
  */
-public interface PutStrategy<E> {
+public interface PutStrategy<E> { // NOCS //NOPMD
 
 	/**
 	 * @since 1.13

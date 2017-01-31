@@ -40,7 +40,7 @@ public class RegisterAdapter<E> implements IRegistry<E> {
 
 	@Override
 	public long getId() {
-		return writerRegistry.getId();
+		return this.writerRegistry.getId();
 	}
 
 	@Override

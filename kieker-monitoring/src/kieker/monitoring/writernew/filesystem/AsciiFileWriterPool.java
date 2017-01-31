@@ -74,7 +74,7 @@ class AsciiFileWriterPool extends AbstractWriterPool {
 		// this.currentFileWriter = Channels.newChannel(new ByteArrayOutputStream()); // NullObject design pattern
 		// final CharBuffer charBuffer = this.buffer.asCharBuffer();
 		this.currentFileWriter = new PrintWriter(new ByteArrayOutputStream()); // NullObject design pattern
-		this.fileExtensionWithDot = (shouldCompress) ? FSUtil.ZIP_FILE_EXTENSION : FSUtil.NORMAL_FILE_EXTENSION;
+		this.fileExtensionWithDot = (shouldCompress) ? FSUtil.ZIP_FILE_EXTENSION : FSUtil.NORMAL_FILE_EXTENSION; // NOCS
 	}
 
 	public PrintWriter getFileWriter() {

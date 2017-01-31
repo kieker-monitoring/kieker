@@ -38,6 +38,10 @@ public class SPBlockingPutStrategy<E> implements PutStrategy<E> {
 	@SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
 	public volatile int storeFence = 0; // NOCS // NOPMD
 
+	public SPBlockingPutStrategy() {
+		super();
+	}
+
 	@Override
 	public void signal() {
 		// Make sure the offer is visible before unpark

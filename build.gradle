@@ -161,6 +161,9 @@ allprojects {
         checkstyle project(':kieker-checkstyle-extension')
 
         findbugs resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
+        
+        // compile-time dependency due to the annotation SuppressFBWarnings()
+        compile resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
 
 		// moved to common to let Eclipse compile each module separately
         testCompile resolveLibrary('junit-*.jar')

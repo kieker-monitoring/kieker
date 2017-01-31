@@ -88,10 +88,12 @@ public class AsciiFileWriterTest {
 		final File storePath = writer.getLogFolder().toFile();
 
 		final File[] mapFiles = storePath.listFiles(FileExtensionFilter.MAP);
+		Assert.assertNotNull(mapFiles);
 		Assert.assertTrue(mapFiles[0].exists());
 		Assert.assertThat(mapFiles.length, CoreMatchers.is(1));
 
 		final File[] recordFiles = storePath.listFiles(FileExtensionFilter.DAT);
+		Assert.assertNotNull(recordFiles);
 		Assert.assertTrue(recordFiles[0].exists());
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(1));
 	}
@@ -112,10 +114,12 @@ public class AsciiFileWriterTest {
 		final File storePath = writer.getLogFolder().toFile();
 
 		final File[] mapFiles = storePath.listFiles(FileExtensionFilter.MAP);
+		Assert.assertNotNull(mapFiles);
 		Assert.assertTrue(mapFiles[0].exists());
 		Assert.assertThat(mapFiles.length, CoreMatchers.is(1));
 
 		final File[] recordFiles = storePath.listFiles(FileExtensionFilter.DAT);
+		Assert.assertNotNull(recordFiles);
 		Assert.assertTrue(recordFiles[0].exists());
 		Assert.assertTrue(recordFiles[1].exists());
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(2));
@@ -137,10 +141,12 @@ public class AsciiFileWriterTest {
 		final File storePath = writer.getLogFolder().toFile();
 
 		final File[] mapFiles = storePath.listFiles(FileExtensionFilter.MAP);
+		Assert.assertNotNull(mapFiles);
 		Assert.assertTrue(mapFiles[0].exists());
 		Assert.assertThat(mapFiles.length, CoreMatchers.is(1));
 
 		final File[] recordFiles = storePath.listFiles(FileExtensionFilter.ZIP);
+		Assert.assertNotNull(recordFiles);
 		Assert.assertThat(recordFiles[0].length(), CoreMatchers.is(CoreMatchers.not(0L)));
 		Assert.assertThat(recordFiles[1].length(), CoreMatchers.is(CoreMatchers.not(0L)));
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(2));
@@ -159,6 +165,7 @@ public class AsciiFileWriterTest {
 
 			for (int j = 0; j < numRecordsToWriteValues.length; j++) {
 				final int numRecordsToWrite = numRecordsToWriteValues[j];
+				final int expectedNumRecordFiles = expectedNumRecordFilesValues[i][j];
 
 				// test preparation
 				this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
@@ -171,7 +178,7 @@ public class AsciiFileWriterTest {
 				// test assertion
 				final String reasonMessage = "Passed arguments: maxLogFiles=" + maxLogFiles + ", numRecordsToWrite=" + numRecordsToWrite;
 				final File[] recordFiles = storePath.listFiles(writer.getFileNameFilter());
-				final int expectedNumRecordFiles = expectedNumRecordFilesValues[i][j];
+				Assert.assertNotNull(recordFiles);
 				Assert.assertThat(reasonMessage, recordFiles.length, CoreMatchers.is(expectedNumRecordFiles));
 			}
 		}
@@ -207,6 +214,7 @@ public class AsciiFileWriterTest {
 			// test assertion
 			final String reasonMessage = "Passed arguments: maxMegaBytesPerFile=" + maxMegaBytesPerFile + ", megaBytesToWrite=" + megaBytesToWrite;
 			final File[] recordFiles = storePath.listFiles(writer.getFileNameFilter());
+			Assert.assertNotNull(recordFiles);
 			Assert.assertThat(reasonMessage, recordFiles.length, CoreMatchers.is(expectedNumRecordFiles));
 		}
 	}

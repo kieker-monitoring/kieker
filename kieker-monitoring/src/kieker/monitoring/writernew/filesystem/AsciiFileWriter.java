@@ -39,13 +39,11 @@ import kieker.monitoring.writernew.AbstractMonitoringWriter;
  */
 public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegistryListener<String>, IFileWriter {
 
-	private static final Log LOG = LogFactory.getLog(AsciiFileWriter.class);
-
-	private static final String PREFIX = AsciiFileWriter.class.getName() + ".";
+	public static final String PREFIX = AsciiFileWriter.class.getName() + ".";
 	/** The name of the configuration for the custom storage path if the writer is advised not to store in the temporary directory. */
 	public static final String CONFIG_PATH = PREFIX + "customStoragePath";
 	/** The name of the configuration for the charset name (e.g. "UTF-8") */
-	/* default */ static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
+	public static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
 	/** The name of the configuration determining the maximal number of entries in a file. */
 	public static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
 	/** The name of the configuration key determining to enable/disable compression of the record log files */
@@ -56,6 +54,8 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	public static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
 	/** The name of the configuration determining whether to flush upon each incoming record. */
 	public static final String CONFIG_FLUSH = PREFIX + "flush";
+
+	private static final Log LOG = LogFactory.getLog(AsciiFileWriter.class);
 
 	private final Path logFolder;
 	private final AsciiFileWriterPool fileWriterPool;
@@ -77,9 +77,9 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		int maxMegaBytesPerFile = configuration.getIntProperty(CONFIG_MAXLOGSIZE);
 		int maxAmountOfFiles = configuration.getIntProperty(CONFIG_MAXLOGFILES);
 
-		maxEntriesPerFile = (maxEntriesPerFile <= 0) ? Integer.MAX_VALUE : maxEntriesPerFile;
-		maxMegaBytesPerFile = (maxMegaBytesPerFile <= 0) ? Integer.MAX_VALUE : maxMegaBytesPerFile;
-		maxAmountOfFiles = (maxAmountOfFiles <= 0) ? Integer.MAX_VALUE : maxAmountOfFiles;
+		maxEntriesPerFile = (maxEntriesPerFile <= 0) ? Integer.MAX_VALUE : maxEntriesPerFile; // NOCS
+		maxMegaBytesPerFile = (maxMegaBytesPerFile <= 0) ? Integer.MAX_VALUE : maxMegaBytesPerFile; // NOCS
+		maxAmountOfFiles = (maxAmountOfFiles <= 0) ? Integer.MAX_VALUE : maxAmountOfFiles; // NOCS
 
 		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME, "UTF-8");
 		final boolean shouldCompress = configuration.getBooleanProperty(CONFIG_SHOULD_COMPRESS);
@@ -122,16 +122,16 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 
 	@Override
 	public void onNewRegistryEntry(final String recordClassName, final int id) {
-		final PrintWriter mappingFileWriter = this.mappingFileWriter.getFileWriter();
+		final PrintWriter mappingPrintWriter = this.mappingFileWriter.getFileWriter();
 
-		mappingFileWriter.print('$');
-		mappingFileWriter.print(id);
-		mappingFileWriter.print('=');
-		mappingFileWriter.print(recordClassName);
-		mappingFileWriter.println();
+		mappingPrintWriter.print('$');
+		mappingPrintWriter.print(id);
+		mappingPrintWriter.print('=');
+		mappingPrintWriter.print(recordClassName);
+		mappingPrintWriter.println();
 
 		if (this.flush) {
-			mappingFileWriter.flush();
+			mappingPrintWriter.flush();
 		}
 	}
 

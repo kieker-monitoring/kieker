@@ -20,6 +20,10 @@ import java.util.Queue;
 
 public class YieldPutStrategy<E> implements PutStrategy<E> {
 
+	public YieldPutStrategy() {
+		super();
+	}
+
 	@Override
 	public void backoffOffer(final Queue<E> q, final E e) {
 		while (!q.offer(e)) {

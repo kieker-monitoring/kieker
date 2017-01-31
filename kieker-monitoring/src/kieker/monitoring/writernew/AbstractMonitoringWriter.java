@@ -34,12 +34,19 @@ public abstract class AbstractMonitoringWriter {
 	 */
 	protected final Configuration configuration;
 
+	public AbstractMonitoringWriter(final Configuration configuration) {
+		this.configuration = configuration;
+	}
+
 	/**
 	 * This event fires when Kieker has been initialized and is ready to monitor.
 	 * It is executed by the {@link MonitoringWriterThread} just before reading the writer queue.
 	 */
 	public abstract void onStarting();
 
+	/**
+	 * This event fires when Kieker has received a new record.
+	 */
 	public abstract void writeMonitoringRecord(IMonitoringRecord record);
 
 	/**
@@ -47,10 +54,6 @@ public abstract class AbstractMonitoringWriter {
 	 * It is executed by the {@link MonitoringWriterThread} just after finishing the writer queue.
 	 */
 	public abstract void onTerminating();
-
-	public AbstractMonitoringWriter(final Configuration configuration) {
-		this.configuration = configuration;
-	}
 
 	/**
 	 * Returns a textual representation of the writer's configuration.

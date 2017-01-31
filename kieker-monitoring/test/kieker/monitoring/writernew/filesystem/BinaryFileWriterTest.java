@@ -84,10 +84,12 @@ public class BinaryFileWriterTest {
 
 		// test assertion
 		final File[] mapFiles = storePath.listFiles(FileExtensionFilter.MAP);
+		Assert.assertNotNull(mapFiles);
 		Assert.assertTrue(mapFiles[0].exists());
 		Assert.assertThat(mapFiles.length, CoreMatchers.is(1));
 
 		final File[] recordFiles = storePath.listFiles(FileExtensionFilter.BIN);
+		Assert.assertNotNull(recordFiles);
 		Assert.assertTrue(recordFiles[0].exists());
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(1));
 	}
@@ -104,10 +106,12 @@ public class BinaryFileWriterTest {
 
 		// test assertion
 		final File[] mapFiles = storePath.listFiles(FileExtensionFilter.MAP);
+		Assert.assertNotNull(mapFiles);
 		Assert.assertTrue(mapFiles[0].exists());
 		Assert.assertThat(mapFiles.length, CoreMatchers.is(1));
 
 		final File[] recordFiles = storePath.listFiles(FileExtensionFilter.BIN);
+		Assert.assertNotNull(recordFiles);
 		Assert.assertTrue(recordFiles[0].exists());
 		Assert.assertTrue(recordFiles[1].exists());
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(2));
@@ -125,10 +129,12 @@ public class BinaryFileWriterTest {
 
 		// test assertion
 		final File[] mapFiles = storePath.listFiles(FileExtensionFilter.MAP);
+		Assert.assertNotNull(mapFiles);
 		Assert.assertTrue(mapFiles[0].exists());
 		Assert.assertThat(mapFiles.length, CoreMatchers.is(1));
 
 		final File[] recordFiles = storePath.listFiles(FileExtensionFilter.ZIP);
+		Assert.assertNotNull(recordFiles);
 		Assert.assertTrue(recordFiles[0].exists());
 		Assert.assertTrue(recordFiles[1].exists());
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(2));
@@ -145,6 +151,7 @@ public class BinaryFileWriterTest {
 
 			for (int j = 0; j < numRecordsToWriteValues.length; j++) {
 				final int numRecordsToWrite = numRecordsToWriteValues[j];
+				final int expectedNumRecordFiles = expectedNumRecordFilesValues[i][j];
 
 				// test preparation
 				this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXENTRIESINFILE, "2");
@@ -158,7 +165,7 @@ public class BinaryFileWriterTest {
 				// test assertion
 				final String reasonMessage = "Passed arguments: maxLogFiles=" + maxLogFiles + ", numRecordsToWrite=" + numRecordsToWrite;
 				final File[] recordFiles = storePath.listFiles(writer.getFileNameFilter());
-				final int expectedNumRecordFiles = expectedNumRecordFilesValues[i][j];
+				Assert.assertNotNull(recordFiles);
 				Assert.assertThat(reasonMessage, recordFiles.length, CoreMatchers.is(expectedNumRecordFiles));
 			}
 		}
@@ -193,6 +200,7 @@ public class BinaryFileWriterTest {
 			// test assertion
 			final String reasonMessage = "Passed arguments: maxMegaBytesPerFile=" + maxMegaBytesPerFile + ", megaBytesToWrite=" + megaBytesToWrite;
 			final File[] recordFiles = storePath.listFiles(writer.getFileNameFilter());
+			Assert.assertNotNull(recordFiles);
 			Assert.assertThat(reasonMessage, recordFiles.length, CoreMatchers.is(expectedNumRecordFiles));
 		}
 	}

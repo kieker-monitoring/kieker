@@ -38,6 +38,8 @@ import kieker.monitoring.writernew.AbstractMonitoringWriter;
  * @author "Christian Wulf"
  *
  * @deprecated 1.13. Use {@link DualSocketTcpWriter} instead.
+ *
+ * @since unknown
  */
 @Deprecated
 public class TCPWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
@@ -54,8 +56,7 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
-	private static final String CONFIG_STRING_REGISTRY_BUFFERSIZE = PREFIX + "StringRegistryBufferSize"; // NOCS
-	// (afterPREFIX)
+	private static final String CONFIG_STRING_REGISTRY_BUFFERSIZE = PREFIX + "StringRegistryBufferSize"; // NOCS (afterPREFIX)
 
 	private final boolean flush;
 

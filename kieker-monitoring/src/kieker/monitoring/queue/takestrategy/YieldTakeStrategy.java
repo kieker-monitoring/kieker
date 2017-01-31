@@ -26,6 +26,10 @@ import java.util.Queue;
  */
 public final class YieldTakeStrategy<E> implements TakeStrategy<E> {
 
+	public YieldTakeStrategy() {
+		super();
+	}
+
 	@Override
 	public void signal() {
 		// Nothing to do
