@@ -17,6 +17,8 @@
 package kieker.analysis.plugin.reader.filesystem;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PriorityQueue;
 
 import kieker.analysis.IProjectContext;
@@ -58,13 +60,10 @@ public class AsciiLogReader extends AbstractReaderPlugin implements IMonitoringR
 	private static final IMonitoringRecord EOF = new EmptyRecord();
 
 	private final boolean ignoreUnknownRecordTypes;
-
+	private final boolean shouldDecompress;
 	private final String[] inputDirs;
 	private final PriorityQueue<IMonitoringRecord> recordQueue;
-
-	private volatile boolean running = true;
-
-	private final boolean shouldDecompress;
+	private final List<AbstractLogReaderThread> readerThreads = new ArrayList<>();
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -101,7 +100,9 @@ public class AsciiLogReader extends AbstractReaderPlugin implements IMonitoringR
 	@Override
 	public void terminate(final boolean error) {
 		this.log.info("Shutting down reader.");
-		this.running = false;
+		for (final AbstractLogReaderThread readerThread : this.readerThreads) {
+			readerThread.terminate();
+		}
 	}
 
 	/**
@@ -115,16 +116,15 @@ public class AsciiLogReader extends AbstractReaderPlugin implements IMonitoringR
 			// Make sure that white spaces in paths are handled correctly
 			final File inputDir = new File(inputDirFn);
 
-			final Thread readerThread;
 			if (inputDir.isDirectory()) {
-				readerThread = new Thread(new AsciiDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes, this.shouldDecompress));
+				final AsciiLogReaderThread readerThread = new AsciiLogReaderThread(inputDir, this, this.ignoreUnknownRecordTypes, this.shouldDecompress);
+				this.readerThreads.add(readerThread);
+				readerThread.start();
 			} else {
 				this.log.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
 				notInitializesReaders++;
 				continue;
 			}
-			readerThread.setDaemon(true);
-			readerThread.start();
 		}
 		// consume incoming records
 		int readingReaders = this.inputDirs.length - notInitializesReaders;
@@ -167,7 +167,7 @@ public class AsciiLogReader extends AbstractReaderPlugin implements IMonitoringR
 				// ignore InterruptedException
 			}
 		}
-		return this.running;
+		return true;
 	}
 
 	/**

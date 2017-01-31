@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -47,19 +46,17 @@ import kieker.common.util.filesystem.FileExtensionFilter;
  *
  * @since 1.2
  */
-class AsciiDirectoryReader implements Runnable {
-	private static final Log LOG = LogFactory.getLog(AsciiDirectoryReader.class);
+class AsciiLogReaderThread extends AbstractLogReaderThread {
+
+	private static final Log LOG = LogFactory.getLog(AsciiLogReaderThread.class);
 
 	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>(); // NOPMD (no synchronization needed)
-
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
 	private final boolean ignoreUnknownRecordTypes;
 	private final boolean shouldDecompress;
-
 	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
 	private final Set<String> unknownTypesObserved = new HashSet<String>();
-	private boolean terminated;
 
 	/**
 	 * Creates a new instance of this class.
@@ -73,8 +70,9 @@ class AsciiDirectoryReader implements Runnable {
 	 * @param shouldDecompress
 	 *            <code>true</code> if each log file is compressed, otherwise <code>false</code>
 	 */
-	public AsciiDirectoryReader(final File inputDir, final IMonitoringRecordReceiver recordReceiver,
+	public AsciiLogReaderThread(final File inputDir, final IMonitoringRecordReceiver recordReceiver,
 			final boolean ignoreUnknownRecordTypes, final boolean shouldDecompress) {
+		super(LOG, inputDir);
 		if ((inputDir == null) || !inputDir.isDirectory()) {
 			throw new IllegalArgumentException("Invalid or empty inputDir");
 		}
@@ -85,45 +83,10 @@ class AsciiDirectoryReader implements Runnable {
 	}
 
 	/**
-	 * Starts reading and returns after each record has been passed to the registered {@link #recordReceiver}.
-	 */
-	@Override
-	public final void run() {
-		this.readMappingFile(); // must be the first line to set filePrefix!
-
-		final FileExtensionFilter fileExtensionFilter = (this.shouldDecompress) ? FileExtensionFilter.ZIP : FileExtensionFilter.DAT;
-
-		final File[] inputFiles = this.inputDir.listFiles(fileExtensionFilter);
-		if (inputFiles == null) {
-			LOG.error("Directory '" + this.inputDir + "' does not exist or an I/O error occured.");
-		} else if (inputFiles.length == 0) {
-			// level 'warn' for this case, because this is not unusual for large monitoring logs including a number of directories
-			LOG.warn("Directory '" + this.inputDir + "' contains no Kieker log files.");
-		} else { // everything ok, we process the files
-			Arrays.sort(inputFiles, new Comparator<File>() {
-
-				@Override
-				public final int compare(final File f1, final File f2) {
-					return f1.compareTo(f2); // simplified (we expect no dirs!)
-				}
-			});
-			for (final File inputFile : inputFiles) {
-				if (this.terminated) {
-					LOG.info("Shutting down DirectoryReader.");
-					break;
-				}
-
-				LOG.info("< Loading " + inputFile.getAbsolutePath());
-				this.processNormalInputFile(inputFile);
-			}
-		}
-		this.recordReceiver.newEndOfFileRecord();
-	}
-
-	/**
 	 * Reads the mapping file located in the directory.
 	 */
-	private final void readMappingFile() {
+	@Override
+	protected void readMappingFile() {
 		File mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + FSUtil.MAP_FILENAME);
 		if (!mappingFile.exists()) {
 			// No mapping file found. Check whether we find a legacy tpmon.map file!
@@ -189,7 +152,8 @@ class AsciiDirectoryReader implements Runnable {
 	 * @param inputFile
 	 *            The input file which should be processed.
 	 */
-	private final void processNormalInputFile(final File inputFile) {
+	@Override
+	protected void processNormalInputFile(final File inputFile) {
 		boolean abortDueToUnknownRecordType = false;
 		BufferedReader in = null;
 		try {
@@ -254,7 +218,7 @@ class AsciiDirectoryReader implements Runnable {
 					}
 				} catch (final MonitoringRecordException ex) { // NOPMD (exception as flow control)
 					if (abortDueToUnknownRecordType) {
-						this.terminated = true; // at least it doesn't hurt to set it
+						this.terminate(); // at least it doesn't hurt to set it
 						final IOException newEx = new IOException("Error processing line: " + line);
 						newEx.initCause(ex);
 						throw newEx; // NOPMD (cause is set above)
@@ -264,7 +228,7 @@ class AsciiDirectoryReader implements Runnable {
 					}
 				}
 				if (!this.recordReceiver.newMonitoringRecord(record)) {
-					this.terminated = true;
+					this.terminate();
 					break; // we got the signal to stop processing
 				}
 			}
@@ -279,6 +243,16 @@ class AsciiDirectoryReader implements Runnable {
 				}
 			}
 		}
+	}
+
+	@Override
+	protected FileExtensionFilter getFileExtensionFilter() {
+		return (this.shouldDecompress) ? FileExtensionFilter.ZIP : FileExtensionFilter.DAT;
+	}
+
+	@Override
+	protected void onEndOfRun() {
+		this.recordReceiver.newEndOfFileRecord();
 	}
 
 }

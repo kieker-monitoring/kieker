@@ -42,9 +42,9 @@ import kieker.common.util.registry.reader.ReaderRegistry;
  *
  * @since 1.2
  */
-class BinaryDirectoryReader extends DirectoryReaderThread {
+class BinaryLogReaderThread extends AbstractLogReaderThread {
 
-	private static final Log LOG = LogFactory.getLog(BinaryDirectoryReader.class);
+	private static final Log LOG = LogFactory.getLog(BinaryLogReaderThread.class);
 
 	private final ReaderRegistry<String> readerRegistry = new ReaderRegistry<String>();
 	private final IMonitoringRecordReceiver recordReceiver;
@@ -64,7 +64,7 @@ class BinaryDirectoryReader extends DirectoryReaderThread {
 	 * @param shouldDecompress
 	 *            <code>true</code> if each log file is compressed, otherwise <code>false</code>
 	 */
-	public BinaryDirectoryReader(final File inputDir, final IMonitoringRecordReceiver recordReceiver, final boolean shouldDecompress) {
+	public BinaryLogReaderThread(final File inputDir, final IMonitoringRecordReceiver recordReceiver, final boolean shouldDecompress) {
 		super(LOG, inputDir);
 		if ((inputDir == null) || !inputDir.isDirectory()) {
 			throw new IllegalArgumentException("Invalid or empty inputDir");

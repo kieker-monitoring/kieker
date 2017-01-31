@@ -29,18 +29,19 @@ import kieker.common.util.filesystem.FileExtensionFilter;
  *
  * @since 1.13
  */
-abstract class DirectoryReaderThread extends Thread {
+abstract class AbstractLogReaderThread extends Thread {
 
-	private final Log LOG; // NOPMD (private log instance passed by ctor)
+	private final Log logger; // NOPMD (private log instance passed by ctor)
 	private final File inputDir;
 
-	public DirectoryReaderThread(final Log logger, final File inputDir) {
+	/** indicates that this thread should terminate itself */
+	private volatile boolean shouldTerminate;
+
+	protected AbstractLogReaderThread(final Log logger, final File inputDir) {
 		super();
-		this.LOG = logger;
+		this.logger = logger;
 		this.inputDir = inputDir;
 	}
-
-	private volatile boolean shouldTerminate;
 
 	@Override
 	public final void run() {
@@ -50,10 +51,10 @@ abstract class DirectoryReaderThread extends Thread {
 
 		final File[] inputFiles = this.inputDir.listFiles(fileExtensionFilter);
 		if (inputFiles == null) {
-			this.LOG.error("Directory '" + this.inputDir + "' does not exist or an I/O error occured.");
+			this.logger.error("Directory '" + this.inputDir + "' does not exist or an I/O error occured.");
 		} else if (inputFiles.length == 0) {
 			// level 'warn' for this case, because this is not unusual for large monitoring logs including a number of directories
-			this.LOG.warn("Directory '" + this.inputDir + "' contains no Kieker log files.");
+			this.logger.warn("Directory '" + this.inputDir + "' contains no Kieker log files.");
 		} else { // everything ok, we process the files
 			Arrays.sort(inputFiles, new Comparator<File>() {
 
@@ -64,11 +65,11 @@ abstract class DirectoryReaderThread extends Thread {
 			});
 			for (final File inputFile : inputFiles) {
 				if (this.shouldTerminate) {
-					this.LOG.info("Shutting down DirectoryReader.");
+					this.logger.info("Shutting down DirectoryReader.");
 					break;
 				}
 
-				this.LOG.info("< Loading " + inputFile.getAbsolutePath());
+				this.logger.info("< Loading " + inputFile.getAbsolutePath());
 
 				try {
 					this.processNormalInputFile(inputFile);

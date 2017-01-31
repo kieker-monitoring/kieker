@@ -63,7 +63,7 @@ public class BinaryLogReader extends AbstractReaderPlugin implements IMonitoring
 
 	private final boolean shouldDecompress;
 
-	private final List<DirectoryReaderThread> readerThreads = new ArrayList<>();
+	private final List<AbstractLogReaderThread> readerThreads = new ArrayList<>();
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -99,7 +99,7 @@ public class BinaryLogReader extends AbstractReaderPlugin implements IMonitoring
 	@Override
 	public void terminate(final boolean error) {
 		this.log.info("Shutting down reader.");
-		for (final DirectoryReaderThread readerThread : this.readerThreads) {
+		for (final AbstractLogReaderThread readerThread : this.readerThreads) {
 			readerThread.terminate();
 		}
 	}
@@ -116,7 +116,7 @@ public class BinaryLogReader extends AbstractReaderPlugin implements IMonitoring
 			final File inputDir = new File(inputDirFn);
 
 			if (inputDir.isDirectory()) {
-				final DirectoryReaderThread readerThread = new BinaryDirectoryReader(inputDir, this, this.shouldDecompress);
+				final AbstractLogReaderThread readerThread = new BinaryLogReaderThread(inputDir, this, this.shouldDecompress);
 				readerThread.setDaemon(true);
 				this.readerThreads.add(readerThread);
 				readerThread.start();
