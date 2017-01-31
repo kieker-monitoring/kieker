@@ -23,7 +23,7 @@ package kieker.monitoring.queue.behavior;
  *            the type of the element which should be inserted into the queue.
  * @since 1.13
  */
-public interface InsertBehavior<E> {
+public interface InsertBehavior<E> { // NOCS (should start without an "I" for reasons of readability)
 
 	/**
 	 * @return <code>true</code> if the element after this <code>element</code> can be inserted, otherwise <code>false</code>.

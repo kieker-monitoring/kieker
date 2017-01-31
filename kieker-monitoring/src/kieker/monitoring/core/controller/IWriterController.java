@@ -57,6 +57,7 @@ public interface IWriterController extends IMonitoringRecordReceiver {
 	 *
 	 * @author Christian Wulf
 	 *
+	 * @since 1.13
 	 */
 	void waitForTermination(long timeoutInMs) throws InterruptedException;
 

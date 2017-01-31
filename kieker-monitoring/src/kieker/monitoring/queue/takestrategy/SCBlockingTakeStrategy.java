@@ -20,6 +20,8 @@ import java.util.Queue;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.LockSupport;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * This take strategy blocks if the queue is empty.
  * <br>
@@ -33,7 +35,8 @@ public final class SCBlockingTakeStrategy<E> implements TakeStrategy<E> {
 
 	private final AtomicReference<Thread> t = new AtomicReference<Thread>(null);
 
-	public volatile int storeFence = 0; // NOCS
+	@SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
+	public volatile int storeFence = 0; // NOCS // NOPMD
 
 	@Override
 	public void signal() {

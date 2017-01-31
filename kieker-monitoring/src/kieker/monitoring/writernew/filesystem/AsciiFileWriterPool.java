@@ -34,6 +34,8 @@ import kieker.common.logging.Log;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.writernew.WriterUtil;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * @author Christian Wulf (chw)
  *
@@ -58,6 +60,7 @@ class AsciiFileWriterPool extends AbstractWriterPool {
 
 	private int currentFileNumber;
 
+	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	public AsciiFileWriterPool(final Log writerLog, final Path folder, final String charsetName, final int maxEntriesInFile, final boolean shouldCompress,
 			final int maxAmountOfFiles, final int maxMegaBytesPerFile) {
 		super(writerLog, folder);
