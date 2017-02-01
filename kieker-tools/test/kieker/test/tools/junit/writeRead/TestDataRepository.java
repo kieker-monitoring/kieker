@@ -73,6 +73,9 @@ public class TestDataRepository {
 		return someEvents;
 	}
 
+	/**
+	 * @return 10 (9+1) records
+	 */
 	public List<IMonitoringRecord> newTestRecords() {
 		final List<IMonitoringRecord> records = new ArrayList<IMonitoringRecord>();
 		for (int i = 0; i < DEFAULT_EVENTS_NUMBER; i = records.size()) {

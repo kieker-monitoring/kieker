@@ -16,6 +16,7 @@
 
 package kieker.monitoring.writernew.print;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -27,6 +28,8 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writernew.AbstractMonitoringWriter;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * A writer that prints incoming records to the specified PrintStream.
  *
@@ -35,17 +38,20 @@ import kieker.monitoring.writernew.AbstractMonitoringWriter;
  * @since 1.5
  */
 public class PrintStreamWriter extends AbstractMonitoringWriter {
+
 	private static final Log LOG = LogFactory.getLog(PrintStreamWriter.class);
 
+	private static final String ENCODING = "UTF-8";
 	private static final String PREFIX = PrintStreamWriter.class.getName() + ".";
+
 	public static final String STREAM = PREFIX + "Stream"; // NOCS (decl. order)
+
 	public static final String CONFIG_STREAM_STDOUT = "STDOUT"; // NOCS (decl. order)
 	public static final String CONFIG_STREAM_STDERR = "STDERR"; // NOCS (decl. order)
 
-	private static final String ENCODING = "UTF-8";
-
+	/** identifies which stream type this stream represents. */
 	private final String configPrintStreamName;
-
+	/** the stream to write out monitoring records. */
 	private PrintStream printStream;
 
 	/**
@@ -54,9 +60,11 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 	 * @param configuration
 	 *            The configuration which will be used to initialize this writer.
 	 */
+	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	public PrintStreamWriter(final Configuration configuration) {
 		super(configuration);
 		this.configPrintStreamName = configuration.getStringProperty(STREAM);
+		this.printStream = new PrintStream(new ByteArrayOutputStream()); // Null Object Pattern
 	}
 
 	@Override
@@ -81,7 +89,7 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public void onTerminating() {
-		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
+		if ((this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();
 		}
 		LOG.info(this.getClass().getName() + " shutting down.");

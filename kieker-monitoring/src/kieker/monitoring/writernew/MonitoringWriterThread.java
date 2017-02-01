@@ -80,11 +80,19 @@ public class MonitoringWriterThread extends Thread {
 		}
 	}
 
+	/**
+	 * Initiates the termination of this thread.
+	 */
 	public void terminate() {
 		// Do not call interrupt() to indicate thread termination.
 		// It interrupts writes to (socket) channels.
-		// Instead, we use a unique end-of-monitoring token to indicate that the thread shoudl terminate itself.
-		this.writerQueue.add(END_OF_MONITORING_RECORD);
+		// Instead, we use a unique end-of-monitoring token to indicate that the thread should terminate itself.
+		try {
+			// apply "blocking wait" since we must ensure that this EOF record is inserted to terminate the thread
+			this.writerQueue.put(END_OF_MONITORING_RECORD);
+		} catch (final InterruptedException e) {
+			LOG.warn("An exception occurred", e);
+		}
 	}
 
 }
