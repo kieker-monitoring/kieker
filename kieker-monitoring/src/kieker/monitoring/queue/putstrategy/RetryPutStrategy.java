@@ -23,10 +23,8 @@ import java.util.Queue;
  *
  * @since 1.13
  *
- * @param <E>
- *            the type of the queue's elements
  */
-public class RetryPutStrategy<E> implements PutStrategy<E> {
+public class RetryPutStrategy implements PutStrategy {
 
 	private final int maxTries;
 
@@ -35,7 +33,7 @@ public class RetryPutStrategy<E> implements PutStrategy<E> {
 	}
 
 	@Override
-	public void backoffOffer(final Queue<E> q, final E e) {
+	public <E> void backoffOffer(final Queue<E> q, final E e) {
 		boolean offered;
 		int numTries = 1;
 

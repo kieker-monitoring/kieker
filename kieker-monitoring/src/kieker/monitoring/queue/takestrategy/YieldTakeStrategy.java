@@ -24,10 +24,20 @@ import java.util.Queue;
  *
  * @since 1.13
  */
-public final class YieldTakeStrategy<E> implements TakeStrategy<E> {
+public class YieldTakeStrategy implements TakeStrategy {
 
 	public YieldTakeStrategy() {
 		super();
+	}
+
+	@Override
+	public <E> E waitPoll(final Queue<E> q) throws InterruptedException {
+		E e = q.poll();
+		while (e == null) {
+			Thread.yield();
+			e = q.poll();
+		}
+		return e;
 	}
 
 	@Override
@@ -35,12 +45,4 @@ public final class YieldTakeStrategy<E> implements TakeStrategy<E> {
 		// Nothing to do
 	}
 
-	@Override
-	public E waitPoll(final Queue<E> q) throws InterruptedException {
-		E e;
-		while ((e = q.poll()) == null) { // NOPMD // NOCS
-			Thread.yield();
-		}
-		return e;
-	}
 }

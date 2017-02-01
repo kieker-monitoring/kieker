@@ -24,7 +24,7 @@ import java.util.Queue;
  *
  * @since 1.13
  */
-public interface TakeStrategy<E> { // NOCS //NOPMD
+public interface TakeStrategy { // NOCS //NOPMD (name without prefix "I" for reasons of readability)
 
 	/**
 	 * @since 1.13
@@ -34,5 +34,5 @@ public interface TakeStrategy<E> { // NOCS //NOPMD
 	/**
 	 * @since 1.13
 	 */
-	E waitPoll(Queue<E> q) throws InterruptedException;
+	<E> E waitPoll(Queue<E> q) throws InterruptedException;
 }

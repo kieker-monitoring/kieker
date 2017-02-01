@@ -32,13 +32,13 @@ import kieker.monitoring.queue.takestrategy.TakeStrategy;
  *
  * @since 1.13
  */
-public final class PCBlockingQueue<E> implements BlockingQueue<E> {
+public class PCBlockingQueue<E> implements BlockingQueue<E> {
 
 	private final Queue<E> q;
-	private final PutStrategy<E> putStrategy;
-	private final TakeStrategy<E> takeStrategy;
+	private final PutStrategy putStrategy;
+	private final TakeStrategy takeStrategy;
 
-	public PCBlockingQueue(final Queue<E> q, final PutStrategy<E> putStrategy, final TakeStrategy<E> takeStrategy) {
+	public PCBlockingQueue(final Queue<E> q, final PutStrategy putStrategy, final TakeStrategy takeStrategy) {
 		this.q = q;
 		this.putStrategy = putStrategy;
 		this.takeStrategy = takeStrategy;
@@ -90,10 +90,11 @@ public final class PCBlockingQueue<E> implements BlockingQueue<E> {
 	@Override
 	public int drainTo(final Collection<? super E> c) {
 		int count = 0;
-		E e;
-		while ((e = this.poll()) != null) { // NOPMD // NOCS
+		E e = this.poll();
+		while (e != null) {
 			c.add(e);
 			count++;
+			e = this.poll();
 		}
 		return count;
 	}
@@ -101,10 +102,11 @@ public final class PCBlockingQueue<E> implements BlockingQueue<E> {
 	@Override
 	public int drainTo(final Collection<? super E> c, final int maxElements) {
 		int count = 0;
-		E e;
-		while (((e = this.poll()) != null) && (count < maxElements)) { // NOPMD // NOCS
+		E e = this.poll();
+		while ((e != null) && (count < maxElements)) {
 			c.add(e);
 			count++;
+			e = this.poll();
 		}
 		return count;
 	}

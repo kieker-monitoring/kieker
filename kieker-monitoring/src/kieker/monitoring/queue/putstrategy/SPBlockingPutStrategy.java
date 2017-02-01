@@ -31,12 +31,12 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *
  * @since 1.13
  */
-public class SPBlockingPutStrategy<E> implements PutStrategy<E> {
-
-	private final AtomicReference<Thread> t = new AtomicReference<Thread>(null);
+public class SPBlockingPutStrategy implements PutStrategy {
 
 	@SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
-	public volatile int storeFence = 0; // NOCS // NOPMD
+	public volatile int storeFence = 0; // NOCS // NOPMD (necessary for synchronization)
+
+	private final AtomicReference<Thread> t = new AtomicReference<Thread>(null);
 
 	public SPBlockingPutStrategy() {
 		super();
@@ -51,7 +51,7 @@ public class SPBlockingPutStrategy<E> implements PutStrategy<E> {
 	}
 
 	@Override
-	public void backoffOffer(final Queue<E> q, final E e) throws InterruptedException {
+	public <E> void backoffOffer(final Queue<E> q, final E e) throws InterruptedException {
 		final boolean offered = q.offer(e);
 		if (offered) {
 			return;

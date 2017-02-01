@@ -24,12 +24,12 @@ import java.util.Queue;
  *
  * @since 1.13
  */
-public interface PutStrategy<E> { // NOCS //NOPMD
+public interface PutStrategy { // NOCS //NOPMD (name without prefix "I" for reasons of readability)
 
 	/**
 	 * @since 1.13
 	 */
-	void backoffOffer(Queue<E> q, E e) throws InterruptedException;
+	<E> void backoffOffer(Queue<E> q, E e) throws InterruptedException;
 
 	/**
 	 * @since 1.13

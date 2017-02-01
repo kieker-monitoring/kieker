@@ -31,12 +31,12 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *
  * @since 1.13
  */
-public final class SCBlockingTakeStrategy<E> implements TakeStrategy<E> {
-
-	private final AtomicReference<Thread> t = new AtomicReference<Thread>(null);
+public final class SCBlockingTakeStrategy implements TakeStrategy {
 
 	@SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
-	public volatile int storeFence = 0; // NOCS // NOPMD
+	public volatile int storeFence = 0; // NOCS // NOPMD (necessary for synchronization)
+
+	private final AtomicReference<Thread> t = new AtomicReference<Thread>(null);
 
 	public SCBlockingTakeStrategy() {
 		super();
@@ -51,7 +51,7 @@ public final class SCBlockingTakeStrategy<E> implements TakeStrategy<E> {
 	}
 
 	@Override
-	public E waitPoll(final Queue<E> q) throws InterruptedException {
+	public <E> E waitPoll(final Queue<E> q) throws InterruptedException {
 		E e = q.poll();
 		if (e != null) {
 			return e;
@@ -60,11 +60,13 @@ public final class SCBlockingTakeStrategy<E> implements TakeStrategy<E> {
 		this.t.set(Thread.currentThread());
 
 		try {
-			while ((e = q.poll()) == null) {
+			e = q.poll();
+			while (e == null) {
 				LockSupport.park();
 				if (Thread.currentThread().isInterrupted()) {
 					throw new InterruptedException("Interrupted while waiting for the queue to become non-empty.");
 				}
+				e = q.poll();
 			}
 		} finally {
 			this.t.lazySet(null);
