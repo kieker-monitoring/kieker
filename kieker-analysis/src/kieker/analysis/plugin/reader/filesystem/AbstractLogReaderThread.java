@@ -34,7 +34,7 @@ abstract class AbstractLogReaderThread extends Thread {
 	private final Log logger; // NOPMD (private log instance passed by ctor)
 	private final File inputDir;
 
-	/** indicates that this thread should terminate itself */
+	/** indicates that this thread should terminate itself. */
 	private volatile boolean shouldTerminate;
 
 	protected AbstractLogReaderThread(final Log logger, final File inputDir) {

@@ -49,15 +49,10 @@ public class TestDataRepository {
 
 	public List<IMonitoringRecord> newTestUnknownRecords() {
 		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
-		final EmptyRecord EVENT0_KNOWN_TYPE = new EmptyRecord();
-		final BranchingRecord EVENT1_UNKNOWN_TYPE = new BranchingRecord(-1, -1, -1);
-		final EmptyRecord EVENT2_KNOWN_TYPE = new EmptyRecord();
-		final BranchingRecord EVENT3_UNKNOWN_TYPE = new BranchingRecord(-1, -1, -1);
-
-		someEvents.add(EVENT0_KNOWN_TYPE);
-		someEvents.add(EVENT1_UNKNOWN_TYPE);
-		someEvents.add(EVENT2_KNOWN_TYPE);
-		someEvents.add(EVENT3_UNKNOWN_TYPE);
+		someEvents.add(new EmptyRecord()); // event with known type
+		someEvents.add(new BranchingRecord(-1, -1, -1)); // event with unknown type
+		someEvents.add(new EmptyRecord()); // event with known type
+		someEvents.add(new BranchingRecord(-1, -1, -1)); // event with unknown type
 		return someEvents;
 	}
 

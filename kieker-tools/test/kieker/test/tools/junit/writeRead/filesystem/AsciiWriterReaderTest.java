@@ -51,6 +51,10 @@ public class AsciiWriterReaderTest {
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
+	public AsciiWriterReaderTest() {
+		super();
+	}
+
 	@Test
 	public void testUncompressedAsciiCommunication() throws Exception {
 		this.testAsciiCommunication(false);
@@ -61,6 +65,7 @@ public class AsciiWriterReaderTest {
 		this.testAsciiCommunication(true);
 	}
 
+	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
 	private void testAsciiCommunication(final boolean shouldDecompress) throws IOException, Exception, InterruptedException, AnalysisConfigurationException {
 		// 1. define records to be triggered by the test probe
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestRecords();

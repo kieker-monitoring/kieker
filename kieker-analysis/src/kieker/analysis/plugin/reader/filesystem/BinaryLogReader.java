@@ -41,7 +41,7 @@ import kieker.common.record.misc.EmptyRecord;
 @Plugin(description = "A file system reader which reads records from multiple directories", outputPorts = {
 	@OutputPort(name = BinaryLogReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
 		IMonitoringRecord.class }, description = "Output Port of the reader") }, configuration = {
-			@Property(name = BinaryLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".", description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
+			@Property(name = BinaryLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".", description = "The name of the input dirs used to read data (multiple dirs are separated by |).")
 		})
 public class BinaryLogReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 

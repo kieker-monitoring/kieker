@@ -42,7 +42,7 @@ public class NamedListWriter extends AbstractMonitoringWriter {
 
 	private static final Log LOG = LogFactory.getLog(NamedListWriter.class);
 
-	private static final Map<String, List<IMonitoringRecord>> NAMED_LISTS = new HashMap<String, List<IMonitoringRecord>>();
+	private static final Map<String, List<IMonitoringRecord>> NAMED_LISTS = new HashMap<String, List<IMonitoringRecord>>(); // NOPMD (no synchronization necessary)
 
 	private final List<IMonitoringRecord> myNamedList;
 

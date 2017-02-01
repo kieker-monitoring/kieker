@@ -96,7 +96,9 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 						+ "' ... switching to legacy mode");
 			} else {
 				// no {kieker|tpmon}.map exists. This is valid for very old monitoring logs. Hence, only dump a log.warn
-				LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'");
+				if (LOG.isWarnEnabled()) {
+					LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'");
+				}
 				return;
 			}
 		}
@@ -232,8 +234,10 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 					break; // we got the signal to stop processing
 				}
 			}
-		} catch (final Exception ex) { // NOCS NOPMD (gonna catch them all)
-			LOG.error("Error reading " + inputFile, ex);
+		} catch (final IOException e) {
+			LOG.error("Error reading " + inputFile, e);
+		} catch (final RuntimeException e) { // NOCS NOPMD (gonna catch them all)
+			LOG.error("Error reading " + inputFile, e);
 		} finally {
 			if (in != null) {
 				try {
@@ -247,7 +251,7 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 
 	@Override
 	protected FileExtensionFilter getFileExtensionFilter() {
-		return (this.shouldDecompress) ? FileExtensionFilter.ZIP : FileExtensionFilter.DAT;
+		return (this.shouldDecompress) ? FileExtensionFilter.ZIP : FileExtensionFilter.DAT; // NOCS
 	}
 
 	@Override

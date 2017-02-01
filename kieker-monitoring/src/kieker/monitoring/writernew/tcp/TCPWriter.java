@@ -182,12 +182,10 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 		try {
 			socketChannel.close();
 		} catch (final IOException e) {
-			LOG.warn("Error in closing the connection.", e);
+			if (LOG.isWarnEnabled()) {
+				LOG.warn("Error in closing the connection.", e);
+			}
 		}
 	}
 
-	@Override
-	public String toString() {
-		return super.toString();
-	}
 }

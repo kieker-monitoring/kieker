@@ -16,7 +16,6 @@
 
 package kieker.test.tools.junit.writeRead.filesystem;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
@@ -27,7 +26,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.reader.filesystem.AsciiLogReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
@@ -55,6 +53,10 @@ public class AsciiSkipBrokenRecordsTest {
 
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
+
+	public AsciiSkipBrokenRecordsTest() {
+		super();
+	}
 
 	@Before
 	public void before() {
@@ -90,8 +92,9 @@ public class AsciiSkipBrokenRecordsTest {
 		Assert.assertThat(analyzedRecords.size(), CoreMatchers.is(2));
 	}
 
+	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
 	private List<IMonitoringRecord> executeTestSetup(final List<IMonitoringRecord> records, final boolean ignoreUnknownRecordTypes)
-			throws IOException, Exception, InterruptedException, AnalysisConfigurationException {
+			throws Exception {
 		// 2. define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
@@ -131,7 +134,6 @@ public class AsciiSkipBrokenRecordsTest {
 		analysis.startAndWaitForTermination();
 
 		// 7. read actual records
-		final List<IMonitoringRecord> analyzedRecords = analysis.getList();
-		return analyzedRecords;
+		return analysis.getList();
 	}
 }

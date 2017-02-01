@@ -28,6 +28,9 @@ import kieker.monitoring.queue.takestrategy.TakeStrategy;
 /**
  * A wrapper to provide a given queue a strategy to put and to take possibly in blocking mode.
  *
+ * @param <E>
+ *            the type of the elements in the given queue
+ *
  * @author Christian Wulf
  *
  * @since 1.13

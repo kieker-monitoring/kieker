@@ -16,7 +16,6 @@
 
 package kieker.test.tools.junit.writeRead.filesystem;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
@@ -27,7 +26,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.reader.filesystem.BinaryLogReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
@@ -56,6 +54,10 @@ public class BinaryUnknownTypeTest {
 
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
+
+	public BinaryUnknownTypeTest() {
+		super();
+	}
 
 	@Before
 	public void before() {
@@ -89,8 +91,9 @@ public class BinaryUnknownTypeTest {
 		Assert.assertThat(analyzedRecords.size(), CoreMatchers.is(1));
 	}
 
+	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
 	private List<IMonitoringRecord> testUnknownRecordTypes(final List<IMonitoringRecord> records, final boolean ignoreUnknownRecordTypes)
-			throws IOException, Exception, InterruptedException, AnalysisConfigurationException {
+			throws Exception {
 		// 2. define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, BinaryFileWriter.class.getName());
@@ -127,7 +130,6 @@ public class BinaryUnknownTypeTest {
 		analysis.startAndWaitForTermination();
 
 		// 7. read actual records
-		final List<IMonitoringRecord> analyzedRecords = analysis.getList();
-		return analyzedRecords;
+		return analysis.getList();
 	}
 }

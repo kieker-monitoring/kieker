@@ -16,7 +16,6 @@
 
 package kieker.test.tools.junit.writeRead.filesystem;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
@@ -25,7 +24,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.reader.filesystem.BinaryLogReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
@@ -51,6 +49,10 @@ public class BinaryWriterReaderTest {
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
+	public BinaryWriterReaderTest() {
+		super();
+	}
+
 	@Test
 	public void testUncompressedBinaryCommunication() throws Exception {
 		this.testAsciiCommunication(false);
@@ -61,7 +63,8 @@ public class BinaryWriterReaderTest {
 		this.testAsciiCommunication(true);
 	}
 
-	private void testAsciiCommunication(final boolean shouldDecompress) throws IOException, Exception, InterruptedException, AnalysisConfigurationException {
+	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
+	private void testAsciiCommunication(final boolean shouldDecompress) throws Exception {
 		// 1. define records to be triggered by the test probe
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestRecords();
 

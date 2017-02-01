@@ -56,13 +56,13 @@ public class ByteBufferDeserializer {
 	}
 
 	public void deserialize(final ReadableByteChannel channel) throws IOException {
-		final ByteBuffer buffer = this.buffer;
+		final ByteBuffer buffer = this.buffer; // NOCS
 		while ((channel.read(buffer) != -1)) {
 			this.process(buffer);
 		}
 	}
 
-	private void process(final ByteBuffer buffer) {
+	private void process(final ByteBuffer buffer) { // NOCS
 		buffer.flip();
 		try {
 			while (buffer.hasRemaining()) {
@@ -82,7 +82,7 @@ public class ByteBufferDeserializer {
 		}
 	}
 
-	private boolean onBufferReceived(final ByteBuffer buffer) {
+	private boolean onBufferReceived(final ByteBuffer buffer) { // NOCS
 		// identify record class
 		if (buffer.remaining() < INT_BYTES) {
 			return false;
@@ -115,7 +115,7 @@ public class ByteBufferDeserializer {
 		return true;
 	}
 
-	public void register(final IMonitoringRecordReceiver recordReceiver) {
+	public void register(final IMonitoringRecordReceiver recordReceiver) { // NOCS
 		this.recordReceiver = recordReceiver;
 	}
 

@@ -18,7 +18,6 @@ package kieker.test.tools.junit.writeRead.namedPipe;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.common.namedRecordPipe.Pipe;
 import kieker.monitoring.writernew.namedRecordPipe.PipeWriter;
 
 /**
@@ -27,6 +26,7 @@ import kieker.monitoring.writernew.namedRecordPipe.PipeWriter;
  * @since 1.6
  */
 final class NamedPipeWriterFactory {
+
 	private static final AtomicInteger NEXT_PIPE_ID = new AtomicInteger(0);
 	private static final String PIPE_NAME_PREFIX = "pipeName_" + NamedPipeWriterFactory.class.getName() + "_";
 
@@ -45,7 +45,7 @@ final class NamedPipeWriterFactory {
 
 	/**
 	 * Creates a new {@link PipeWriter} that writes records
-	 * to a {@link Pipe} with the given name.
+	 * to a {@link kieker.common.namedRecordPipe.Pipe} with the given name.
 	 *
 	 * @param pipeName
 	 *            The name of the pipe to use.

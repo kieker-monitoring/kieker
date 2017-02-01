@@ -19,7 +19,6 @@ package kieker.common.configuration;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.util.InvalidPropertiesFormatException;
 import java.util.Map;
 import java.util.Properties;
 
@@ -67,7 +66,7 @@ public class ReadOnlyConfiguration extends Configuration {
 	}
 
 	@Override
-	public synchronized void loadFromXML(final InputStream in) throws IOException, InvalidPropertiesFormatException {
+	public synchronized void loadFromXML(final InputStream in) throws IOException {
 		throw new UnsupportedOperationException("This is a read-only configuration. Changes are not permitted.");
 	}
 

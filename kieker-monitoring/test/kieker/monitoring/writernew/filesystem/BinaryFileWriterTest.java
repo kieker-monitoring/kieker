@@ -173,7 +173,7 @@ public class BinaryFileWriterTest {
 
 	@Test
 	public void testMaxLogSize() throws Exception {
-		final int recordSizeInBytes = 4 + 8 + EmptyRecord.SIZE;// 12
+		final int recordSizeInBytes = 4 + 8 + EmptyRecord.SIZE; // 12
 
 		// semantics of the tuple: (maxMegaBytesPerFile, megaBytesToWrite, expectedNumRecordFiles)
 		final int[][] testInputTuples = {

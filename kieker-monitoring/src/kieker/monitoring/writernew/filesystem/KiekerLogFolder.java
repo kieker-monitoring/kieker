@@ -41,8 +41,8 @@ final class KiekerLogFolder {
 	public static Path buildKiekerLogFolder(final String customStoragePath, final Configuration configuration) {
 		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmss", Locale.US);
 		date.setTimeZone(TimeZone.getTimeZone("UTC"));
-		String currentDateStr = date.format(new java.util.Date()); // NOPMD (Date)
-		currentDateStr += "-" + System.nanoTime(); // 'SSS' in SimpleDateFormat is not accurate enough for fast unit tests
+		final String currentDateStr = date.format(new java.util.Date())
+				+ "-" + System.nanoTime(); // 'SSS' in SimpleDateFormat is not accurate enough for fast unit tests
 
 		final String hostName = configuration.getStringProperty(ConfigurationFactory.HOST_NAME);
 		final String controllerName = configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME);

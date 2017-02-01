@@ -46,7 +46,7 @@ public class TestJMSClientConnector extends AbstractConnectorTest {
 	 */
 	@Test
 	@Ignore
-	public void testJMSClientConnector() throws ConnectorDataTransmissionException { // NOPMD
+	public void testJMSClientConnector() throws ConnectorDataTransmissionException { // NOPMD // NOCS (ignore test until it was fixed)
 		final Thread messageGenerator = new Thread(new JMSMessageGenerator(ConfigurationParameters.JMS_URI, ConfigurationParameters.JMS_CLIENT_FACTORY_LOOKUP_NAME),
 				"Generator");
 		messageGenerator.start();

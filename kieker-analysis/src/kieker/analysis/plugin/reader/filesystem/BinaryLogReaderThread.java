@@ -78,7 +78,7 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 
 	@Override
 	protected FileExtensionFilter getFileExtensionFilter() {
-		return (this.shouldDecompress) ? FileExtensionFilter.ZIP : FileExtensionFilter.BIN;
+		return (this.shouldDecompress) ? FileExtensionFilter.ZIP : FileExtensionFilter.BIN; // NOCS // NOPMD
 	}
 
 	/**
@@ -95,7 +95,9 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 						+ "' ... switching to legacy mode");
 			} else {
 				// no {kieker|tpmon}.map exists. This is valid for very old monitoring logs. Hence, only dump a log.warn
-				LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'");
+				if (LOG.isWarnEnabled()) {
+					LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'");
+				}
 				return;
 			}
 		}
@@ -132,8 +134,8 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 					LOG.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
 				}
 			}
-		} catch (final IOException ex) {
-			LOG.error("Error reading mapping file", ex);
+		} catch (final IOException e) {
+			LOG.error("Error reading " + mappingFile, e);
 		} finally {
 			if (in != null) {
 				try {

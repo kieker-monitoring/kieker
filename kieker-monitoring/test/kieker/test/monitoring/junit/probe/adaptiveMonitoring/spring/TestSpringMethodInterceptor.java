@@ -52,17 +52,16 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	private static final int TIMEOUT_IN_MS = 1000;
 	private static final URL BOOKSTORE_SEARCH_ANY_URL;
 
+	private FileSystemXmlApplicationContext ctx;
+	private List<IMonitoringRecord> recordListFilledByListWriter;
+
 	static {
 		try {
 			BOOKSTORE_SEARCH_ANY_URL = new URL("http://localhost:9293/bookstore/search/any/");
 		} catch (final MalformedURLException e) {
-			throw new IllegalStateException("Should not happen because the URL is valid.");
+			throw new IllegalStateException("Should not happen because the URL is valid.", e);
 		}
 	}
-
-	private FileSystemXmlApplicationContext ctx;
-	private List<IMonitoringRecord> recordListFilledByListWriter;
-	private IMonitoringController monitoringController;
 
 	/**
 	 * Default constructor.
@@ -98,12 +97,12 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 
 	@Test
 	@Ignore // server returns a 503 on access
-	public void testIt() throws IOException, InterruptedException {
+	public void testIt() throws IOException, InterruptedException { // NOCS (ignore test until it was fixed)
 		// Assert.assertNotNull(this.ctx);
 		Assert.assertThat(this.ctx.isRunning(), CoreMatchers.is(true));
 
-		this.monitoringController = MonitoringController.getInstance();
-		Assume.assumeThat(this.monitoringController.getName(), CoreMatchers.is(CTRLNAME));
+		final IMonitoringController monitoringController = MonitoringController.getInstance();
+		Assume.assumeThat(monitoringController.getName(), CoreMatchers.is(CTRLNAME));
 
 		final String getBookPattern = "public kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Book "
 				+ "kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Catalog.getBook(boolean)";
@@ -115,19 +114,19 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		UrlUtil.ping(BOOKSTORE_SEARCH_ANY_URL);
 		NamedListWriter.awaitListSize(this.recordListFilledByListWriter, 3, TIMEOUT_IN_MS);
 
-		this.monitoringController.deactivateProbe(getBookPattern);
+		monitoringController.deactivateProbe(getBookPattern);
 		UrlUtil.ping(BOOKSTORE_SEARCH_ANY_URL);
 		NamedListWriter.awaitListSize(this.recordListFilledByListWriter, 4, TIMEOUT_IN_MS);
 
-		this.monitoringController.deactivateProbe(searchBookPattern);
+		monitoringController.deactivateProbe(searchBookPattern);
 		UrlUtil.ping(BOOKSTORE_SEARCH_ANY_URL);
 		NamedListWriter.awaitListSize(this.recordListFilledByListWriter, 4, TIMEOUT_IN_MS);
 
-		this.monitoringController.activateProbe(getBookPattern);
+		monitoringController.activateProbe(getBookPattern);
 		UrlUtil.ping(BOOKSTORE_SEARCH_ANY_URL);
 		NamedListWriter.awaitListSize(this.recordListFilledByListWriter, 6, TIMEOUT_IN_MS);
 
-		this.monitoringController.activateProbe(searchBookPattern);
+		monitoringController.activateProbe(searchBookPattern);
 		UrlUtil.ping(BOOKSTORE_SEARCH_ANY_URL);
 		NamedListWriter.awaitListSize(this.recordListFilledByListWriter, 9, TIMEOUT_IN_MS);
 	}

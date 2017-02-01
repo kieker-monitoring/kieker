@@ -40,7 +40,7 @@ class WriterPool {
 	private static final Locale LOCALE = Locale.US;
 
 	protected final List<Path> logFiles = new ArrayList<>();
-	protected final Log writerLog;
+	protected final Log writerLog; // NOPMD (logger passed by caller)
 	protected final Path folder;
 
 	private final SimpleDateFormat dateFormatter;

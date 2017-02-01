@@ -49,6 +49,10 @@ public class BasicExplorVizExportWriterTest {
 	private static final TestDataRepository TEST_DATA_REPOSITORY = new TestDataRepository();
 	private static final int TIMEOUT_IN_MS = 0;
 
+	public BasicExplorVizExportWriterTest() {
+		super();
+	}
+
 	@Test
 	public void testExplorvizCommunication() throws Exception {
 		// define records to be triggered by the test probe

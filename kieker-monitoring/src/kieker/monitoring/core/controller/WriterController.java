@@ -59,7 +59,7 @@ public final class WriterController extends AbstractController implements IWrite
 	private AbstractMonitoringWriter monitoringWriter;
 	/** Whether or not to automatically log the metadata record. */
 	private final boolean logMetadataRecord;
-	/** the capacity of the queue */
+	/** the capacity of the queue. */
 	private final int queueCapacity;
 
 	private final BlockingQueue<IMonitoringRecord> writerQueue;
@@ -234,15 +234,12 @@ public final class WriterController extends AbstractController implements IWrite
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder(256);
-		sb.append("WriterController:");
-
-		sb.append("\n\tQueue capacity: ");
-		sb.append(this.queueCapacity);
-
-		sb.append("\n\tInsert behavior (a.k.a. QueueFullBehavior): ");
-		sb.append(this.insertBehavior.toString());
-
+		final StringBuilder sb = new StringBuilder(256) // NOPMD (consecutive calls of append with string literals)
+				.append("WriterController:")
+				.append("\n\tQueue capacity: ")
+				.append(this.queueCapacity)
+				.append("\n\tInsert behavior (a.k.a. QueueFullBehavior): ")
+				.append(this.insertBehavior.toString());
 		if (this.monitoringWriter != null) {
 			sb.append(this.monitoringWriter.toString());
 		} else {
