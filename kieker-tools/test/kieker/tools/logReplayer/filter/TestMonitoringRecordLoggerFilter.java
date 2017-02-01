@@ -166,6 +166,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	 * @throws Exception
 	 *             If something went wrong during the test.
 	 */
+	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
 	private List<IMonitoringRecord> testIt(final List<IMonitoringRecord> eventsToWrite, final boolean keepLoggingTimestamps) throws Exception {
 		final AnalysisController analysisController = new AnalysisController();
 

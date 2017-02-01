@@ -98,7 +98,7 @@ public final class NamedPipeFactory {
 	}
 
 	/**
-	 * Creates an {@link kieker.monitoring.writer.IMonitoringWriter} that collects records from a {@link Pipe} and collects these in the returned {@link List}.
+	 * Creates an {@link IPipeReader} that collects records from a {@link Pipe} and collects these in the returned {@link List}.
 	 *
 	 * @param pipeName
 	 *            The name of the pipe to use.

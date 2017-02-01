@@ -56,6 +56,7 @@ import kieker.monitoring.core.signaturePattern.PatternParser;
  * @since 1.6
  */
 public class ProbeController extends AbstractController implements IProbeController {
+
 	static final Log LOG = LogFactory.getLog(ProbeController.class); // NOPMD package for inner class
 	private static final String ENCODING = "UTF-8";
 
@@ -142,10 +143,9 @@ public class ProbeController extends AbstractController implements IProbeControl
 						this.configFileReadIntervall, this.configFileReadIntervall, TimeUnit.SECONDS);
 			} else {
 				if ((this.configFileReadIntervall > 0) && (null == scheduler)) {
-					if (LOG.isWarnEnabled()) {
-						LOG.warn("Failed to enable regular reading of adaptive monitoring config file. '" + ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE
-								+ "' must be > 0!");
-					}
+					LOG.warn("Failed to enable regular reading of adaptive monitoring config file. '"
+							+ ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE
+							+ "' must be > 0!");
 				}
 			}
 		}

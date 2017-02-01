@@ -42,43 +42,43 @@ import kieker.monitoring.writernew.WriterUtil;
  */
 public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
 
-	/** default size for the monitoring buffer */
+	/** default size for the monitoring buffer. */
 	private static final int DEFAULT_STRING_REGISTRY_BUFFER_SIZE = 1024;
-	/** the logger for this class */
+	/** the logger for this class. */
 	private static final Log LOG = LogFactory.getLog(DualSocketTcpWriter.class);
-	/** prefix for all configuration keys */
+	/** prefix for all configuration keys. */
 	private static final String PREFIX = DualSocketTcpWriter.class.getName() + ".";
 
-	/** configuration key for the hostname */
+	/** configuration key for the hostname. */
 	public static final String CONFIG_HOSTNAME = PREFIX + "hostname"; // NOCS (afterPREFIX)
-	/** configuration key for the monitoring port */
+	/** configuration key for the monitoring port. */
 	public static final String CONFIG_PORT1 = PREFIX + "port1"; // NOCS (afterPREFIX)
-	/** configuration key for the registry port */
+	/** configuration key for the registry port. */
 	public static final String CONFIG_PORT2 = PREFIX + "port2"; // NOCS (afterPREFIX)
-	/** configuration key for the size of the {@link #byteBuffer} */
+	/** configuration key for the size of the {@link #byteBuffer}. */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
-	/** configuration key for {@link #flush} */
+	/** configuration key for {@link #flush}. */
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
-	/** configuration key for the size of the {@link #stringRegistryBuffer} */
+	/** configuration key for the size of the {@link #stringRegistryBuffer}. */
 	private static final String CONFIG_STRING_REGISTRY_BUFFERSIZE = PREFIX + "StringRegistryBufferSize"; // NOCS (afterPREFIX)
 
-	/** <code>true</code> if the {@link #byteBuffer} should be flushed upon each new incoming monitoring record */
+	/** <code>true</code> if the {@link #byteBuffer} should be flushed upon each new incoming monitoring record. */
 	private final boolean flush;
 
-	/** the channel which writes out monitoring records */
+	/** the channel which writes out monitoring records. */
 	private final SocketChannel monitoringRecordChannel;
-	/** the channel which writes out registry records */
+	/** the channel which writes out registry records. */
 	private final SocketChannel registryRecordChannel;
-	/** the buffer used for buffering monitoring records */
+	/** the buffer used for buffering monitoring records. */
 	private final ByteBuffer byteBuffer;
-	/** the buffer used for buffering registry records */
+	/** the buffer used for buffering registry records. */
 	private final ByteBuffer stringRegistryBuffer;
 
-	/** the registry used to compress string fields in monitoring records */
+	/** the registry used to compress string fields in monitoring records. */
 	private final IWriterRegistry<String> writerRegistry;
-	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.registerStrings(..)} */
+	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.registerStrings(..)}. */
 	private final RegisterAdapter<String> registerStringsAdapter;
-	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.writeBytes(..)} */
+	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.writeBytes(..)}. */
 	private final GetIdAdapter<String> writeBytesAdapter;
 
 	public DualSocketTcpWriter(final Configuration configuration) throws IOException {

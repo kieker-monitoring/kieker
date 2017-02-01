@@ -21,6 +21,9 @@ import kieker.common.util.registry.IRegistryRecordReceiver;
 /**
  * Represents an adaptor from the new ReaderRegistry to the legacy IRegistry interface.
  *
+ * @param <E>
+ *            the type of the values in the passed registry
+ *
  * @author Christian Wulf
  *
  * @since 1.13

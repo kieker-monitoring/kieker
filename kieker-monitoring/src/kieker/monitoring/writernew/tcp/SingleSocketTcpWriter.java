@@ -44,32 +44,32 @@ import kieker.monitoring.writernew.WriterUtil;
  */
 public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
 
-	/** the logger for this class */
+	/** the logger for this class. */
 	private static final Log LOG = LogFactory.getLog(SingleSocketTcpWriter.class);
-	/** prefix for all configuration keys */
+	/** prefix for all configuration keys. */
 	private static final String PREFIX = SingleSocketTcpWriter.class.getName() + ".";
 
-	/** configuration key for the hostname */
+	/** configuration key for the hostname. */
 	public static final String CONFIG_HOSTNAME = PREFIX + "hostname"; // NOCS (afterPREFIX)
-	/** configuration key for the port */
+	/** configuration key for the port. */
 	public static final String CONFIG_PORT = PREFIX + "port"; // NOCS (afterPREFIX)
-	/** configuration key for the size of the {@link #buffer} */
+	/** configuration key for the size of the {@link #buffer}. */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
-	/** configuration key for {@link #flush} */
+	/** configuration key for {@link #flush}. */
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
-	/** the channel which writes out monitoring and registry records */
+	/** the channel which writes out monitoring and registry records. */
 	private final WritableByteChannel socketChannel;
-	/** the buffer used for buffering monitoring and registry records */
+	/** the buffer used for buffering monitoring and registry records. */
 	private final ByteBuffer buffer;
-	/** <code>true</code> if the {@link #buffer} should be flushed upon each new incoming monitoring record */
+	/** <code>true</code> if the {@link #buffer} should be flushed upon each new incoming monitoring record. */
 	private final boolean flush;
 
-	/** the registry used to compress string fields in monitoring records */
+	/** the registry used to compress string fields in monitoring records. */
 	private final IWriterRegistry<String> writerRegistry;
-	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.registerStrings(..)} */
+	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.registerStrings(..)}. */
 	private final RegisterAdapter<String> registerStringsAdapter;
-	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.writeBytes(..)} */
+	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.writeBytes(..)}. */
 	private final GetIdAdapter<String> writeBytesAdapter;
 
 	public SingleSocketTcpWriter(final Configuration configuration) throws IOException {

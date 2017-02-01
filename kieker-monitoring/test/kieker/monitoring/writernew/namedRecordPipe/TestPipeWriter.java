@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.monitoring.junit.writer.namedRecordPipe;
+package kieker.monitoring.writernew.namedRecordPipe;
 
 import java.util.List;
 
@@ -34,6 +34,10 @@ import kieker.test.monitoring.util.NamedPipeFactory;
  * @since 1.3
  */
 public class TestPipeWriter extends AbstractKiekerTest { // NOCS
+
+	public TestPipeWriter() {
+		super();
+	}
 
 	/**
 	 * Tests whether the {@link kieker.monitoring.writer.namedRecordPipe.PipeWriter} correctly passes received {@link IMonitoringRecord}s to the

@@ -20,6 +20,9 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.IRegistryRecordReceiver;
 
 /**
+ * @param <E>
+ *            the type of the values in the passed registry
+ *
  * @author Christian Wulf
  *
  * @since 1.13

@@ -21,6 +21,9 @@ import java.util.Map;
 /**
  * Represents an unsynchronized registry for read-only purposes. It is used by the readers within the analysis component.
  *
+ * @param <E>
+ *            the type of the values in this registry
+ *
  * @author Christian Wulf
  *
  * @since 1.13
