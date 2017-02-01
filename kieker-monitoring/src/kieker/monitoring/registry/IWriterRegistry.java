@@ -1,5 +1,3 @@
-package kieker.monitoring.registry;
-
 /***************************************************************************
  * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
@@ -15,6 +13,8 @@ package kieker.monitoring.registry;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+
+package kieker.monitoring.registry;
 
 /**
  * A generic interface to assign unique IDs to objects.

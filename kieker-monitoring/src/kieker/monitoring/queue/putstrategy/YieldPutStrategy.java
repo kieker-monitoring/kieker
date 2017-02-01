@@ -18,6 +18,12 @@ package kieker.monitoring.queue.putstrategy;
 
 import java.util.Queue;
 
+/**
+ *
+ * @author Christian Wulf
+ *
+ * @since 1.13
+ */
 public class YieldPutStrategy implements PutStrategy {
 
 	public YieldPutStrategy() {

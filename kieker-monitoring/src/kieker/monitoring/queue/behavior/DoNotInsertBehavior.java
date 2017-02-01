@@ -22,17 +22,17 @@ package kieker.monitoring.queue.behavior;
  *
  * @since 1.13
  *
- * @param <T>
+ * @param <E>
  *            the type of the element which should be inserted into the queue.
  */
-public class DoNotInsertBehavior<T> implements InsertBehavior<T> {
+public class DoNotInsertBehavior<E> implements InsertBehavior<E> {
 
 	public DoNotInsertBehavior() {
 		super();
 	}
 
 	@Override
-	public boolean insert(final T element) {
+	public boolean insert(final E element) {
 		// absorb each element
 		return true;
 	}

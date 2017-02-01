@@ -26,12 +26,16 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.queue.BlockingQueueAdapter;
+import kieker.monitoring.queue.BlockingQueueDecorator;
 import kieker.monitoring.queue.behavior.BlockOnFailedInsertBehavior;
 import kieker.monitoring.queue.behavior.CountOnFailedInsertBehavior;
 import kieker.monitoring.queue.behavior.DoNotInsertBehavior;
 import kieker.monitoring.queue.behavior.InsertBehavior;
 import kieker.monitoring.queue.behavior.TerminateOnFailedInsertBehavior;
+import kieker.monitoring.queue.putstrategy.PutStrategy;
+import kieker.monitoring.queue.putstrategy.SPBlockingPutStrategy;
+import kieker.monitoring.queue.takestrategy.SCBlockingTakeStrategy;
+import kieker.monitoring.queue.takestrategy.TakeStrategy;
 import kieker.monitoring.writernew.AbstractMonitoringWriter;
 import kieker.monitoring.writernew.MonitoringWriterThread;
 
@@ -84,15 +88,16 @@ public final class WriterController extends AbstractController implements IWrite
 		this.autoSetLoggingTimestamp = configuration.getBooleanProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP);
 
 		this.queueCapacity = configuration.getIntProperty(PREFIX + RECORD_QUEUE_SIZE);
-
 		final String queueFqn = configuration.getStringProperty(PREFIX + RECORD_QUEUE_FQN);
-		LOG.info("Using writer queue: " + queueFqn);
+		LOG.info("Using writer queue '" + queueFqn + "' with a capacity of " + this.queueCapacity);
 
 		final Queue<IMonitoringRecord> queue = this.newQueue(queueFqn, this.queueCapacity);
 		if (queue instanceof BlockingQueue) {
 			this.writerQueue = (BlockingQueue<IMonitoringRecord>) queue;
 		} else {
-			this.writerQueue = new BlockingQueueAdapter(queue); // TODO use PCBlockingQueue instead
+			final PutStrategy putStrategy = new SPBlockingPutStrategy();
+			final TakeStrategy takeStrategy = new SCBlockingTakeStrategy();
+			this.writerQueue = new BlockingQueueDecorator<IMonitoringRecord>(queue, putStrategy, takeStrategy);
 		}
 
 		final String writerClassName = configuration.getStringProperty(ConfigurationFactory.WRITER_CLASSNAME);

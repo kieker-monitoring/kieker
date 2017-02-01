@@ -32,13 +32,13 @@ import kieker.monitoring.queue.takestrategy.TakeStrategy;
  *
  * @since 1.13
  */
-public class PCBlockingQueue<E> implements BlockingQueue<E> {
+public class BlockingQueueDecorator<E> implements BlockingQueue<E> {
 
 	private final Queue<E> q;
 	private final PutStrategy putStrategy;
 	private final TakeStrategy takeStrategy;
 
-	public PCBlockingQueue(final Queue<E> q, final PutStrategy putStrategy, final TakeStrategy takeStrategy) {
+	public BlockingQueueDecorator(final Queue<E> q, final PutStrategy putStrategy, final TakeStrategy takeStrategy) {
 		this.q = q;
 		this.putStrategy = putStrategy;
 		this.takeStrategy = takeStrategy;

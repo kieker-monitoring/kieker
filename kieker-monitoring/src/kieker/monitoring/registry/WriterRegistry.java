@@ -28,13 +28,12 @@ import java.util.Map;
 public class WriterRegistry implements IWriterRegistry<String> {
 
 	// TODO introduce faster, non-boxing ObjectIntMap
-	private final Map<String, Integer> storage = new HashMap<String, Integer>();
-	private int nextId = 0;
-
+	private final Map<String, Integer> storage = new HashMap<String, Integer>(); // NOPMD (synchronization is not necessary)
+	/** id of the next value which will be registered */
+	private int nextId;
+	/** the listener of this registry which is notified upon a newly registered value */
 	private final IRegistryListener<String> registryListener;
-	/**
-	 * ID of this registry.
-	 */
+	/** ID of this registry to distinguish multiple ones */
 	private final long id;
 
 	public WriterRegistry(final IRegistryListener<String> registryListener) {
@@ -55,9 +54,9 @@ public class WriterRegistry implements IWriterRegistry<String> {
 	@Override
 	public void register(final String value) {
 		if (!this.storage.containsKey(value)) {
-			final int id = this.nextId++;
-			this.storage.put(value, id);
-			this.registryListener.onNewRegistryEntry(value, id);
+			final int valueId = this.nextId++;
+			this.storage.put(value, valueId);
+			this.registryListener.onNewRegistryEntry(value, valueId);
 		}
 	}
 
