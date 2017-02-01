@@ -30,7 +30,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writer.tcp.SingleSocketTcpWriter;
+import kieker.monitoring.writernew.tcp.SingleSocketTcpWriter;
 
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
@@ -49,7 +49,7 @@ public class SingleSocketTcpWriterReaderTest extends AbstractWriterReaderTest { 
 	private volatile AnalysisControllerThread analysisThread = null; // NOPMD (init for findbugs)
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
+	protected MonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
 			InterruptedException {
 		this.analysisController = new AnalysisController();
 
@@ -67,7 +67,7 @@ public class SingleSocketTcpWriterReaderTest extends AbstractWriterReaderTest { 
 
 		final Configuration monitoringConfig = ConfigurationFactory.createDefaultConfiguration();
 		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, SingleSocketTcpWriter.class.getName());
-		monitoringConfig.setProperty(SingleSocketTcpWriter.CONFIG_PORT1, SingleSocketTcpWriterReaderTest.PORT1);
+		monitoringConfig.setProperty(SingleSocketTcpWriter.CONFIG_PORT, SingleSocketTcpWriterReaderTest.PORT1);
 		return MonitoringController.createInstance(monitoringConfig);
 	}
 

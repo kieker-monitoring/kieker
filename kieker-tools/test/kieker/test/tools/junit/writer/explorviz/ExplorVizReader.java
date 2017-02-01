@@ -40,18 +40,14 @@ import kieker.common.util.registry.Lookup;
 
 /**
  * @author Micky Singh Multani
- * 
+ *
  * @since 1.11
  */
-@Plugin(description = "A reader which reads records from a TCP port",
-		outputPorts = {
-			@OutputPort(name = ExplorVizReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class },
-					description = "Output Port of the ExplorVizReader")
-		},
-		configuration = {
-			@Property(name = ExplorVizReader.CONFIG_PROPERTY_NAME_PORT, defaultValue = "10555",
-					description = "The port of the server used for the TCP connection.")
-		})
+@Plugin(description = "A reader which reads records from a TCP port", outputPorts = {
+	@OutputPort(name = ExplorVizReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the ExplorVizReader")
+}, configuration = {
+	@Property(name = ExplorVizReader.CONFIG_PROPERTY_NAME_PORT, defaultValue = "10555", description = "The port of the server used for the TCP connection.")
+})
 public class ExplorVizReader extends AbstractReaderPlugin {
 
 	/** The name of the output port delivering the received records. */
@@ -85,15 +81,8 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 			if (this.log.isDebugEnabled()) {
 				this.log.debug("Listening on port " + this.port);
 			}
-			try {
-				Thread.sleep(2000);
-			} catch (final InterruptedException e) {
-				LOG.warn("An exception occurred", e);
-			}
 			final SocketChannel socketChannel = serversocket.accept();
 			final ByteBuffer buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
-			byte clazzid;
-			boolean flag = true;
 
 			while ((socketChannel.read(buffer) != -1) && (!this.terminated)) {
 				buffer.flip();
@@ -101,12 +90,7 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 					while (buffer.hasRemaining()) {
 						buffer.mark();
 
-						if (flag) {
-							this.skipBufferToFirstTestRecord(buffer);
-							flag = false;
-						}
-
-						clazzid = buffer.get();
+						final byte clazzid = buffer.get();
 						this.createReceivedRecord(clazzid, buffer);
 					}
 					buffer.clear();
@@ -133,13 +117,14 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 					}
 				}
 			}
+
+			this.deliverRecords();
 		}
 		return true;
 	}
 
 	@Override
 	public void terminate(final boolean error) {
-		this.deliverRecords();
 		this.log.info("Shutdown of ExplorVizReader requested.");
 		this.terminated = true;
 		this.readerThread.interrupt();
@@ -153,8 +138,20 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 	}
 
 	public void createReceivedRecord(final byte clazzid, final ByteBuffer buffer) {
-		// BeforeOperationEvent
-		if (clazzid == 1) {
+		// HostApplicationMetaData
+		if (clazzid == 0) {
+			// this.recordValues.add(clazzid);
+			// this.recordValues.add(buffer.getInt());
+			// this.recordValues.add(buffer.getInt());
+			// this.recordValues.add(buffer.getInt());
+			// this.recordValues.add(buffer.getInt());
+			buffer.getInt(); // not needed value
+			buffer.getInt(); // not needed value
+			buffer.getInt(); // not needed value
+			buffer.getInt(); // not needed value
+
+			// BeforeOperationEvent
+		} else if (clazzid == 1) {
 			this.recordValues.add(clazzid);
 			this.recordValues.add(buffer.getLong());
 			this.recordValues.add(buffer.getLong());
@@ -162,6 +159,7 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 			buffer.getInt(); // not needed value
 			this.recordValues.add(buffer.getInt());
 			this.recordValues.add(buffer.getInt());
+			buffer.getInt(); // not needed value
 
 			// AfterOperationFailedEvent
 		} else if (clazzid == 2) {
@@ -184,22 +182,14 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 		}
 	}
 
-	public void skipBufferToFirstTestRecord(final ByteBuffer buffer) {
-		int i;
-		int j;
-		buffer.get();
-		for (i = 0; i < 4; i++) {
-			buffer.getInt();
-		}
-		for (j = 0; j < 4; j++) {
-			buffer.get();
-			buffer.getInt();
-			buffer.getInt();
-			buffer.get();
-		}
-	}
-
 	public void deliverRecords() {
+		// skip HostApplicationMetaData
+		// final Number firstClassId = this.recordValues.removeFirst(); // clazzid
+		// this.recordValues.removeFirst();
+		// this.recordValues.removeFirst();
+		// this.recordValues.removeFirst();
+		// this.recordValues.removeFirst();
+
 		while (!this.recordValues.isEmpty()) {
 			final byte clazzid = (Byte) this.recordValues.removeFirst();
 			final long timestamp = (Long) this.recordValues.removeFirst();
@@ -209,8 +199,10 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 			if (clazzid == 1) {
 				final int opSinatureStringID = (Integer) this.recordValues.removeFirst();
 				final int classSignatureStringID = (Integer) this.recordValues.removeFirst();
+				// final int interfaceSignatureStringID = (Integer) this.recordValues.removeFirst();
 				final String opSignature = this.stringRegistry.get(opSinatureStringID);
 				final String classSignature = this.stringRegistry.get(classSignatureStringID);
+				// final String interfaceSignature = this.stringRegistry.get(interfaceSignatureStringID);
 
 				final BeforeOperationEvent record = new BeforeOperationEvent(timestamp, traceID, orderIndex,
 						opSignature, classSignature);
@@ -228,8 +220,5 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 				super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 			}
 		}
-		final String rString = this.stringRegistry.get(10); // sent RegistryRecordID is 10
-		final RegistryRecord record = new RegistryRecord(10, rString);
-		super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 	}
 }

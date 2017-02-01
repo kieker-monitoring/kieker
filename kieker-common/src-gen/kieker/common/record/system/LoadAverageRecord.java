@@ -1,19 +1,3 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
@@ -23,7 +7,6 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
 
 
 /**
@@ -32,6 +15,8 @@ import kieker.common.util.Version;
  * @since 1.12
  */
 public class LoadAverageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	private static final long serialVersionUID = -664763923774505966L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // LoadAverageRecord.timestamp
 			 + TYPE_SIZE_STRING // LoadAverageRecord.hostname
@@ -39,7 +24,6 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 			 + TYPE_SIZE_DOUBLE // LoadAverageRecord.fiveMinLoadAverage
 			 + TYPE_SIZE_DOUBLE // LoadAverageRecord.fifteenMinLoadAverage
 	;
-	private static final long serialVersionUID = -664763923774505966L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // LoadAverageRecord.timestamp
@@ -49,20 +33,22 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		double.class, // LoadAverageRecord.fifteenMinLoadAverage
 	};
 	
-	/* user-defined constants */
-	/* default constants */
+	/** user-defined constants */
+	
+	/** default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final double ONE_MIN_LOAD_AVERAGE = 0.0;
 	public static final double FIVE_MIN_LOAD_AVERAGE = 0.0;
 	public static final double FIFTEEN_MIN_LOAD_AVERAGE = 0.0;
-	/* property declarations */
+	
+	/** property declarations */
 	private final long timestamp;
 	private final String hostname;
 	private final double oneMinLoadAverage;
 	private final double fiveMinLoadAverage;
 	private final double fifteenMinLoadAverage;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -100,7 +86,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		this.fiveMinLoadAverage = (Double) values[3];
 		this.fifteenMinLoadAverage = (Double) values[4];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -148,7 +134,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 			this.getFifteenMinLoadAverage()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -156,7 +142,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getHostname());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -168,7 +154,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		buffer.putDouble(this.getFiveMinLoadAverage());
 		buffer.putDouble(this.getFifteenMinLoadAverage());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -176,7 +162,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -184,6 +170,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -194,7 +181,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -205,7 +192,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -224,25 +211,24 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		if (isNotEqual(this.getFifteenMinLoadAverage(), castedRecord.getFifteenMinLoadAverage())) return false;
 		return true;
 	}
-
+	
 	public final long getTimestamp() {
 		return this.timestamp;
-	}
+	}	
 	
 	public final String getHostname() {
 		return this.hostname;
-	}
+	}	
 	
 	public final double getOneMinLoadAverage() {
 		return this.oneMinLoadAverage;
-	}
+	}	
 	
 	public final double getFiveMinLoadAverage() {
 		return this.fiveMinLoadAverage;
-	}
+	}	
 	
 	public final double getFifteenMinLoadAverage() {
 		return this.fifteenMinLoadAverage;
-	}
-	
+	}	
 }

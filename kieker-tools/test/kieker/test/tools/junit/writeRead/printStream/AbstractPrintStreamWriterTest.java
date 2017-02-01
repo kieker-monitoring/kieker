@@ -26,13 +26,13 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writer.PrintStreamWriter;
+import kieker.monitoring.writernew.print.PrintStreamWriter;
 
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReaderTest {
@@ -42,13 +42,13 @@ public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReader
 
 	/**
 	 * Returns the name of the stream to write to. In addition to a file name, the constants <i>STDOUT</i> and <i>STDERR</i> can be used.
-	 * 
+	 *
 	 * @return The stream name.
 	 */
 	protected abstract String provideStreamName();
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) {
+	protected MonitoringController createController(final int numRecordsWritten) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PrintStreamWriter.class.getName());
 		config.setProperty(PrintStreamWriter.STREAM, this.provideStreamName());

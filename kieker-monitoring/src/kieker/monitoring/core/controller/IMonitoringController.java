@@ -16,8 +16,6 @@
 
 package kieker.monitoring.core.controller;
 
-import kieker.common.util.registry.IRegistryRecordReceiver;
-
 /**
  * @author Jan Waller, Robert von Massow
  *
@@ -26,12 +24,10 @@ import kieker.common.util.registry.IRegistryRecordReceiver;
 public interface IMonitoringController extends
 		IJMXController,
 		IProbeController,
-		IRegistryController,
 		ISamplingController,
 		IStateController,
 		ITimeSourceController,
-		IWriterController,
-		IRegistryRecordReceiver {
+		IWriterController {
 
 	/**
 	 * This method is used to log the status of the controllers to the console.
