@@ -51,6 +51,8 @@ public final class MonitoringController extends AbstractController implements IM
 	private final WriterController writerController;
 	private final TimeSourceController timeSourceController;
 	private final ProbeController probeController;
+	/** Whether or not the {@link IMonitoringRecord#setLoggingTimestamp(long)} is automatically set. */
+	private final boolean autoSetLoggingTimestamp;
 
 	// private Constructor
 	private MonitoringController(final Configuration configuration) {
@@ -62,6 +64,8 @@ public final class MonitoringController extends AbstractController implements IM
 		this.stateController.setStateListener(this.writerController);
 		this.timeSourceController = new TimeSourceController(configuration);
 		this.probeController = new ProbeController(configuration);
+
+		this.autoSetLoggingTimestamp = configuration.getBooleanProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP);
 	}
 
 	// FACTORY
@@ -188,6 +192,9 @@ public final class MonitoringController extends AbstractController implements IM
 				.append(this.timeSourceController.toString())
 				.append(this.probeController.toString())
 				.append(this.writerController.toString())
+				.append("\n\tAutomatic assignment of logging timestamps: '")
+				.append(this.autoSetLoggingTimestamp)
+				.append("'\n")
 				.append(this.samplingController.toString());
 		return sb.toString();
 	}
@@ -283,6 +290,12 @@ public final class MonitoringController extends AbstractController implements IM
 
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
+		if (!this.isMonitoringEnabled()) { // enabled and not terminated
+			return false;
+		}
+		if (this.autoSetLoggingTimestamp) {
+			record.setLoggingTimestamp(this.getTimeSource().getTime());
+		}
 		return this.writerController.newMonitoringRecord(record);
 	}
 

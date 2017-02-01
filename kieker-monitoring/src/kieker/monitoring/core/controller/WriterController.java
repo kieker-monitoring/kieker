@@ -57,8 +57,6 @@ public final class WriterController extends AbstractController implements IWrite
 	private static final Log LOG = LogFactory.getLog(WriterController.class);
 	/** Monitoring Writer. */
 	private AbstractMonitoringWriter monitoringWriter;
-	/** Whether or not the {@link IMonitoringRecord#setLoggingTimestamp(long)} is automatically set. */
-	private final boolean autoSetLoggingTimestamp;
 	/** Whether or not to automatically log the metadata record. */
 	private final boolean logMetadataRecord;
 	/** the capacity of the queue */
@@ -85,11 +83,9 @@ public final class WriterController extends AbstractController implements IWrite
 	public WriterController(final Configuration configuration) {
 		super(configuration);
 		this.logMetadataRecord = configuration.getBooleanProperty(ConfigurationFactory.METADATA);
-		this.autoSetLoggingTimestamp = configuration.getBooleanProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP);
 
 		this.queueCapacity = configuration.getIntProperty(PREFIX + RECORD_QUEUE_SIZE);
 		final String queueFqn = configuration.getStringProperty(PREFIX + RECORD_QUEUE_FQN);
-		LOG.info("Using writer queue '" + queueFqn + "' with a capacity of " + this.queueCapacity);
 
 		final Queue<IMonitoringRecord> queue = this.newQueue(queueFqn, this.queueCapacity);
 		if (queue instanceof BlockingQueue) {
@@ -99,6 +95,8 @@ public final class WriterController extends AbstractController implements IWrite
 			final TakeStrategy takeStrategy = new SCBlockingTakeStrategy();
 			this.writerQueue = new BlockingQueueDecorator<IMonitoringRecord>(queue, putStrategy, takeStrategy);
 		}
+
+		LOG.info("Using writer queue '" + this.writerQueue.getClass().getName() + "' with a capacity of (at least) " + this.queueCapacity);
 
 		final String writerClassName = configuration.getStringProperty(ConfigurationFactory.WRITER_CLASSNAME);
 		this.monitoringWriter = AbstractController.createAndInitialize(AbstractMonitoringWriter.class, writerClassName,
@@ -207,7 +205,9 @@ public final class WriterController extends AbstractController implements IWrite
 
 	@Override
 	protected final void init() {
-		LOG.debug("Initialzing Writer Controller");
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Initializing Writer Controller");
+		}
 
 		if (this.monitoringWriterThread != null) {
 			this.monitoringWriterThread.start();
@@ -216,7 +216,9 @@ public final class WriterController extends AbstractController implements IWrite
 
 	@Override
 	protected final void cleanup() {
-		LOG.info("Shutting down Writer Controller");
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Shutting down Writer Controller");
+		}
 
 		if (this.monitoringWriterThread != null) {
 			this.monitoringWriterThread.terminate();
@@ -241,9 +243,6 @@ public final class WriterController extends AbstractController implements IWrite
 		sb.append("\n\tInsert behavior (a.k.a. QueueFullBehavior): ");
 		sb.append(this.insertBehavior.toString());
 
-		sb.append("\n\tAutomatic assignment of logging timestamps: '");
-		sb.append(this.autoSetLoggingTimestamp);
-		sb.append("'\n");
 		if (this.monitoringWriter != null) {
 			sb.append(this.monitoringWriter.toString());
 		} else {
@@ -253,19 +252,8 @@ public final class WriterController extends AbstractController implements IWrite
 		return sb.toString();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
-		final IMonitoringController monitoringController = super.monitoringController;
-		if (!monitoringController.isMonitoringEnabled()) { // enabled and not terminated
-			return false;
-		}
-		if (this.autoSetLoggingTimestamp) {
-			record.setLoggingTimestamp(monitoringController.getTimeSource().getTime());
-		}
-
 		final boolean recordSent = this.insertBehavior.insert(record);
 		if (!recordSent) {
 			LOG.error("Error writing the monitoring data. Will terminate monitoring!");

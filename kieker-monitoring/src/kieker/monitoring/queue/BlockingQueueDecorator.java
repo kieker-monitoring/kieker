@@ -46,12 +46,12 @@ public class BlockingQueueDecorator<E> implements BlockingQueue<E> {
 
 	@Override
 	public void put(final E e) throws InterruptedException {
-		this.putStrategy.backoffOffer(this.q, e); // internally calls "offer(e)"
+		this.putStrategy.backoffOffer(this, e); // internally calls "offer(e)"
 	}
 
 	@Override
 	public E take() throws InterruptedException {
-		return this.takeStrategy.waitPoll(this.q);
+		return this.takeStrategy.waitPoll(this);
 	}
 
 	@Override
@@ -199,6 +199,11 @@ public class BlockingQueueDecorator<E> implements BlockingQueue<E> {
 	@Override
 	public int hashCode() {
 		return this.q.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return this.q.toString();
 	}
 
 }

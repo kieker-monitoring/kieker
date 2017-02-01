@@ -54,6 +54,7 @@ final class FileContentUtil {
 	public static void replaceStringInMapFiles(final String[] dirs, final String findString, final String replaceByString) throws IOException {
 		for (final String curLogDir : dirs) {
 			final String[] mapFilesInDir = new File(curLogDir).list(new KiekerMapFileFilter());
+			Assert.assertNotNull(mapFilesInDir);
 			Assert.assertEquals("Unexpected number of map files", 1, mapFilesInDir.length);
 
 			final String curMapFile = curLogDir + File.separator + mapFilesInDir[0];
