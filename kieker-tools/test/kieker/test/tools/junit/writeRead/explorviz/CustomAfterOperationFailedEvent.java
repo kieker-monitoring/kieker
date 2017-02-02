@@ -14,34 +14,25 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.spring.executions.jetty;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
+package kieker.test.tools.junit.writeRead.explorviz;
 
 /**
- * @author Christian Wulf
- *
- * @since 1.13
+ * @author Micky Singh Multani
+ * 
+ * @since 1.11
  */
-public final class UrlUtil {
+public class CustomAfterOperationFailedEvent extends CustomAfterOperationEvent {
+	private static final long serialVersionUID = 903748521115122813L;
 
-	private UrlUtil() {
-		// utility class
+	private final String cause;
+
+	public CustomAfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String cause) {
+		super(timestamp, traceId, orderIndex);
+		this.cause = cause;
 	}
 
-	public static void ping(final URL url) throws IOException {
-		BufferedReader in = null;
-		try {
-			in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
-			// final String result = in.readLine(); // the result is currently an empty string.
-		} finally {
-			if (null != in) {
-				in.close();
-			}
-		}
+	public String getCause() {
+		return this.cause;
 	}
 
 }

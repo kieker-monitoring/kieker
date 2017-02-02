@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writer.explorviz;
+package kieker.test.tools.junit.writeRead.explorviz;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;

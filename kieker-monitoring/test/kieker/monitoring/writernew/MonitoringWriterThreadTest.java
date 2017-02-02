@@ -16,12 +16,13 @@
 
 package kieker.monitoring.writernew;
 
+import java.lang.Thread.State;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.Await;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
@@ -34,6 +35,8 @@ import kieker.monitoring.writernew.dump.DumpWriter;
  * @since 1.13
  */
 public class MonitoringWriterThreadTest {
+
+	private static final int THREAD_STATE_CHANGE_TIMEOUT_IN_MS = 1000;
 
 	static {
 		final String rootExecutionDir = MonitoringWriterThreadTest.class.getResource("/").getFile();
@@ -71,7 +74,7 @@ public class MonitoringWriterThreadTest {
 		thread.join();
 	}
 
-	@Test(timeout = 10000)
+	@Test
 	public void testBlocking() throws Exception {
 		final Configuration configuration = new Configuration();
 		final AbstractMonitoringWriter writer = new DumpWriter(configuration);
@@ -80,10 +83,7 @@ public class MonitoringWriterThreadTest {
 		final MonitoringWriterThread thread = new MonitoringWriterThread(writer, writerQueue);
 		thread.start();
 
-		thread.join(200);
-
-		Assert.assertTrue(thread.isAlive());
-		// thread is still alive, i.e., it correctly blocks forever
+		Await.awaitThreadState(thread, State.WAITING, THREAD_STATE_CHANGE_TIMEOUT_IN_MS);
 
 		thread.terminate();
 		thread.join();

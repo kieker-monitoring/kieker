@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writer.explorviz;
+package kieker.test.tools.junit.writeRead.explorviz;
 
 import java.util.List;
 
@@ -45,7 +45,6 @@ import kieker.test.tools.junit.writeRead.TestProbe;
 public class BasicExplorVizExportWriterTest {
 
 	private static final String PORT = "10555";
-
 	private static final TestDataRepository TEST_DATA_REPOSITORY = new TestDataRepository();
 	private static final int TIMEOUT_IN_MS = 0;
 
@@ -58,18 +57,24 @@ public class BasicExplorVizExportWriterTest {
 		// define records to be triggered by the test probe
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestEventRecords();
 
+		final String hostname = "localhost";
+		final String port = BasicExplorVizExportWriterTest.PORT;
+
 		// define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, ExplorVizTcpWriter.class.getName());
-		config.setProperty(ExplorVizTcpWriter.CONFIG_PORT, BasicExplorVizExportWriterTest.PORT);
+		config.setProperty(ExplorVizTcpWriter.CONFIG_HOSTNAME, hostname);
+		config.setProperty(ExplorVizTcpWriter.CONFIG_PORT, port);
 
 		// define analysis config
 		final Configuration readerConfiguration = new Configuration();
-		readerConfiguration.setProperty(ExplorVizReader.CONFIG_PROPERTY_NAME_PORT, BasicExplorVizExportWriterTest.PORT);
+		readerConfiguration.setProperty(ExplorVizReader.CONFIG_PROPERTY_NAME_PORT, port);
 
 		// declare controllers and start the analysis before monitoring
 		final TestAnalysis analysis = new TestAnalysis(readerConfiguration, ExplorVizReader.class);
 		analysis.startInNewThread();
+		analysis.waitUntilReaderIsWaitingForInput(TIMEOUT_IN_MS);
+
 		final MonitoringController monitoringController = MonitoringController.createInstance(config);
 
 		// trigger records

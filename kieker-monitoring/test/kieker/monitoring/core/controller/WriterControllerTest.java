@@ -21,6 +21,7 @@ import java.lang.Thread.State;
 import org.jctools.queues.MpscArrayQueue;
 import org.junit.Test;
 
+import kieker.Await;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
@@ -59,24 +60,11 @@ public class WriterControllerTest {
 		});
 		thread.start();
 
-		this.awaitThreadState(thread, State.WAITING, THREAD_STATE_CHANGE_TIMEOUT_IN_MS);
+		Await.awaitThreadState(thread, State.WAITING, THREAD_STATE_CHANGE_TIMEOUT_IN_MS);
 
 		writerController.init(); // starts the queue consumer
 
-		this.awaitThreadState(thread, State.TERMINATED, THREAD_STATE_CHANGE_TIMEOUT_IN_MS);
+		Await.awaitThreadState(thread, State.TERMINATED, THREAD_STATE_CHANGE_TIMEOUT_IN_MS);
 	}
 
-	private void awaitThreadState(final Thread thread, final State state, final int timeoutInMs) throws InterruptedException {
-		final long interPauseTimeInMs = 10;
-
-		int waitingTimeInMs = 0;
-		while (thread.getState() != state) {
-			if (waitingTimeInMs > timeoutInMs) {
-				throw new AssertionError(
-						"The given thread does not change its state to " + state + " within " + timeoutInMs + " ms. Current state: " + thread.getState());
-			}
-			Thread.sleep(interPauseTimeInMs);
-			waitingTimeInMs += interPauseTimeInMs;
-		}
-	}
 }

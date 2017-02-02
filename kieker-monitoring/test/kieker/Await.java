@@ -14,25 +14,32 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writer.explorviz;
+package kieker;
+
+import java.lang.Thread.State;
 
 /**
- * @author Micky Singh Multani
- * 
- * @since 1.11
+ * @author Christian Wulf
+ *
+ * @since 1.13
  */
-public class CustomAfterOperationFailedEvent extends CustomAfterOperationEvent {
-	private static final long serialVersionUID = 903748521115122813L;
+public final class Await {
 
-	private final String cause;
-
-	public CustomAfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String cause) {
-		super(timestamp, traceId, orderIndex);
-		this.cause = cause;
+	private Await() {
+		// utility class
 	}
 
-	public String getCause() {
-		return this.cause;
-	}
+	public static void awaitThreadState(final Thread thread, final State state, final int timeoutInMs) throws InterruptedException {
+		final long interPauseTimeInMs = 10;
 
+		int waitingTimeInMs = 0;
+		while (thread.getState() != state) {
+			if (waitingTimeInMs > timeoutInMs) {
+				throw new AssertionError(
+						"The given thread does not change its state to " + state + " within " + timeoutInMs + " ms. Current state: " + thread.getState());
+			}
+			Thread.sleep(interPauseTimeInMs);
+			waitingTimeInMs += interPauseTimeInMs;
+		}
+	}
 }

@@ -96,7 +96,7 @@ public final class WriterController extends AbstractController implements IWrite
 			this.writerQueue = new BlockingQueueDecorator<IMonitoringRecord>(queue, putStrategy, takeStrategy);
 		}
 
-		LOG.info("Using writer queue '" + this.writerQueue.getClass().getName() + "' with a capacity of (at least) " + this.queueCapacity);
+		LOG.info("Using writer queue '" + queueFqn + "' with a capacity of (at least) " + this.queueCapacity);
 
 		final String writerClassName = configuration.getStringProperty(ConfigurationFactory.WRITER_CLASSNAME);
 		this.monitoringWriter = AbstractController.createAndInitialize(AbstractMonitoringWriter.class, writerClassName,

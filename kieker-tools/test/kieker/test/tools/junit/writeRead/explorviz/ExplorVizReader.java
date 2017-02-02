@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.writer.explorviz;
+package kieker.test.tools.junit.writeRead.explorviz;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
