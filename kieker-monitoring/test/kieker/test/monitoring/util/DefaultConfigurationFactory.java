@@ -18,17 +18,17 @@ package kieker.test.monitoring.util;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.writer.DummyWriter;
+import kieker.monitoring.writernew.dump.DumpWriter;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 public final class DefaultConfigurationFactory {
 
 	/** The name of the writer used for the configuration. */
-	public static final String WRITER_NAME = DummyWriter.class.getName();
+	public static final String WRITER_NAME = DumpWriter.class.getName();
 
 	/**
 	 * Private constructor to avoid instantiation.
@@ -37,7 +37,7 @@ public final class DefaultConfigurationFactory {
 
 	/**
 	 * This method creates a simple default configuration containing the dummy writer.
-	 * 
+	 *
 	 * @return The configuration object.
 	 */
 	public static Configuration createDefaultConfigurationWithDummyWriter() {

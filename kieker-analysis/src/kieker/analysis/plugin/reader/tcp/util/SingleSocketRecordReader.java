@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package kieker.analysis.plugin.reader.tcp.util;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
+import kieker.analysis.plugin.reader.util.IRecordReceivedListener;
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.logging.Log;
 import kieker.common.record.AbstractMonitoringRecord;

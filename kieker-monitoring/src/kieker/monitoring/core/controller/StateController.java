@@ -26,7 +26,7 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 public final class StateController extends AbstractController implements IStateController {
@@ -38,9 +38,11 @@ public final class StateController extends AbstractController implements IStateC
 	private final AtomicInteger experimentId = new AtomicInteger(0);
 	private final boolean debug;
 
+	private IStateListener stateListener;
+
 	/**
 	 * Creates a new instance of this class using the given parameter.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration which will be used to initialize the controller.
 	 */
@@ -123,6 +125,11 @@ public final class StateController extends AbstractController implements IStateC
 			return false;
 		}
 		LOG.info("Enabling monitoring");
+
+		if (this.stateListener != null) {
+			this.stateListener.beforeEnableMonitoring();
+		}
+
 		this.monitoringEnabled = true;
 		return true;
 	}
@@ -176,5 +183,9 @@ public final class StateController extends AbstractController implements IStateC
 	@Override
 	public final boolean isDebug() {
 		return this.debug;
+	}
+
+	public void setStateListener(final IStateListener stateListener) {
+		this.stateListener = stateListener;
 	}
 }

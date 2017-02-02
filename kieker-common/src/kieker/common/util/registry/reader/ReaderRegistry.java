@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,13 @@ import java.util.Map;
 /**
  * Represents an unsynchronized registry for read-only purposes. It is used by the readers within the analysis component.
  *
+ * @param <E>
+ *            the type of the values in this registry
+ *
  * @author Christian Wulf
  *
  * @since 1.13
  */
-// TODO move to kieker.common.registry.read
 public class ReaderRegistry<E> {
 
 	// TODO replace by a high performance map with primitive key type
@@ -42,7 +44,10 @@ public class ReaderRegistry<E> {
 		return this.registryEntries.get(key);
 	}
 
-	public void register(final long key, final E value) {
-		this.registryEntries.put(key, value);
+	/**
+	 * @return the previous associated value for the given <code>key</code>, or <code>null</code> otherwise.
+	 */
+	public E register(final long key, final E value) {
+		return this.registryEntries.put(key, value);
 	}
 }

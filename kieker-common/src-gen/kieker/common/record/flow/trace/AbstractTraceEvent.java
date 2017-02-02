@@ -1,28 +1,11 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.flow.trace;
 
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
 import kieker.common.record.flow.AbstractEvent;
+import kieker.common.util.registry.IRegistry;
+
 import kieker.common.record.flow.ITraceRecord;
 
 /**
@@ -31,17 +14,19 @@ import kieker.common.record.flow.ITraceRecord;
  * @since 1.5
  */
 public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {
-		private static final long serialVersionUID = -3022261747819944031L;
+	private static final long serialVersionUID = -3022261747819944031L;
+
 	
+	/** user-defined constants */
 	
-	/* user-defined constants */
-	/* default constants */
+	/** default constants */
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
-	/* property declarations */
+	
+	/** property declarations */
 	private final long traceId;
 	private final int orderIndex;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -58,7 +43,7 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		this.orderIndex = orderIndex;
 	}
 
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -88,6 +73,7 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		this.orderIndex = buffer.getInt();
 	}
 
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -98,7 +84,7 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -109,7 +95,7 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -126,13 +112,12 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
 		return true;
 	}
-
+	
 	public final long getTraceId() {
 		return this.traceId;
-	}
+	}	
 	
 	public final int getOrderIndex() {
 		return this.orderIndex;
-	}
-	
+	}	
 }
