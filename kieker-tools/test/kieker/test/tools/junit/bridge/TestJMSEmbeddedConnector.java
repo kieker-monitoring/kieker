@@ -46,8 +46,8 @@ public class TestJMSEmbeddedConnector extends AbstractConnectorTest {
 	 *             on lookup failure for the test record
 	 */
 	@Test
-	@Ignore
-	public void testJMSEmbeddedConnector() throws ConnectorDataTransmissionException { // NOPMD // NOCS (ignore test until it was fixed)
+	@Ignore // NOCS (ignore test until it was fixed)
+	public void testJMSEmbeddedConnector() throws ConnectorDataTransmissionException { // NOPMD
 		final Thread messageGenerator = new Thread(new JMSMessageGenerator(ConfigurationParameters.JMS_EMBEDDED_URI,
 				ConfigurationParameters.JMS_EMBEDDED_FACTORY_LOOKUP_NAME), "Generator");
 

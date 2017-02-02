@@ -36,7 +36,7 @@ import kieker.common.record.IMonitoringRecord;
  */
 public class TestAnalysis {
 
-	final AnalysisController analysisController;
+	private final AnalysisController analysisController;
 	private final ListCollectionFilter<IMonitoringRecord> sinkPlugin;
 	private final Thread thread;
 
@@ -53,12 +53,16 @@ public class TestAnalysis {
 			@Override
 			public void run() {
 				try {
-					TestAnalysis.this.analysisController.run();
+					TestAnalysis.this.getAnalysisController().run();
 				} catch (IllegalStateException | AnalysisConfigurationException e) {
 					throw new IllegalStateException("Should never happen", e);
 				}
 			}
 		};
+	}
+
+	AnalysisController getAnalysisController() { // NOPMD
+		return this.analysisController;
 	}
 
 	private AbstractReaderPlugin newReader(final Class<? extends AbstractReaderPlugin> readerClass, final Object... args) throws Exception {

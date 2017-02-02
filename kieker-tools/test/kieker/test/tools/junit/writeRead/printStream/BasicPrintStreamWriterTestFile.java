@@ -17,7 +17,6 @@
 package kieker.test.tools.junit.writeRead.printStream;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +26,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
@@ -87,8 +85,7 @@ public class BasicPrintStreamWriterTestFile {
 	}
 
 	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
-	private List<IMonitoringRecord> executeTest(final List<IMonitoringRecord> records, final String outputFileName)
-			throws IOException, Exception, InterruptedException, AnalysisConfigurationException {
+	private List<IMonitoringRecord> executeTest(final List<IMonitoringRecord> records, final String outputFileName) throws InterruptedException {
 		// 2. define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(WriterController.RECORD_QUEUE_SIZE, "128");
