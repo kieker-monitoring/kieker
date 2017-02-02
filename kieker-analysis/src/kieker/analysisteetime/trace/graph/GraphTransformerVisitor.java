@@ -21,6 +21,7 @@ import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import kieker.analysisteetime.trace.traversal.OperationCallVisitor;
+import kieker.analysisteetime.util.ObjectIdentifierRegistry;
 import kieker.analysisteetime.util.graph.Edge;
 import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.Vertex;
@@ -33,6 +34,7 @@ import kieker.analysisteetime.util.graph.Vertex;
 public class GraphTransformerVisitor extends OperationCallVisitor {
 
 	private final Graph graph;
+	private final ObjectIdentifierRegistry objectIdentifierRegistry = new ObjectIdentifierRegistry();
 
 	public GraphTransformerVisitor(final Graph graph) {
 		super();
@@ -54,7 +56,8 @@ public class GraphTransformerVisitor extends OperationCallVisitor {
 		// FIXME Using the hashCode() method here is a bad idea,
 		// since it can lead to collisions. We need an absolute unique identifier
 		// which could be the object itself or an identifier field.
-		final Vertex vertex = this.graph.addVertex(operationCall.hashCode());
+		final int identifier = this.objectIdentifierRegistry.getIdentifier(operationCall);
+		final Vertex vertex = this.graph.addVertex(identifier);
 
 		final OperationType operationType = operationCall.getOperation().getAssemblyOperation().getOperationType();
 		final ComponentType componentType = operationType.getComponentType();
@@ -74,8 +77,10 @@ public class GraphTransformerVisitor extends OperationCallVisitor {
 
 	private Edge addEdge(final OperationCall operationCall, final OperationCall parentOperationCall) {
 
-		final Vertex thisVertex = this.graph.getVertex(operationCall.hashCode()); // TODO hashCode
-		final Vertex parentVertex = this.graph.getVertex(operationCall.getParent().hashCode()); // TODO hashCode
+		final int thisVertexId = this.objectIdentifierRegistry.getIdentifier(operationCall);
+		final Vertex thisVertex = this.graph.getVertex(thisVertexId);
+		final int parentVertexId = this.objectIdentifierRegistry.getIdentifier(operationCall.getParent());
+		final Vertex parentVertex = this.graph.getVertex(parentVertexId);
 
 		if (thisVertex == null) {
 			throw new IllegalStateException("Target vertex not found (operationCall:" + operationCall + ").");
@@ -90,7 +95,8 @@ public class GraphTransformerVisitor extends OperationCallVisitor {
 	}
 
 	private Vertex addRootVertex(final OperationCall rootOperationCall) {
-		final Vertex realRootVertex = this.graph.getVertex(rootOperationCall.hashCode()); // TODO hashCode
+		final int id = this.objectIdentifierRegistry.getIdentifier(rootOperationCall);
+		final Vertex realRootVertex = this.graph.getVertex(id);
 
 		if (realRootVertex == null) {
 			throw new IllegalStateException("Root vertex not found (operationCall:" + rootOperationCall + ").");
