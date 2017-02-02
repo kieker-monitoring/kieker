@@ -16,7 +16,10 @@
 
 package kieker.analysisteetime.trace.graph;
 
+import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import kieker.analysisteetime.model.analysismodel.type.ComponentType;
+import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import kieker.analysisteetime.trace.traversal.OperationCallVisitor;
 import kieker.analysisteetime.util.graph.Edge;
 import kieker.analysisteetime.util.graph.Graph;
@@ -49,26 +52,22 @@ public class GraphTransformerVisitor extends OperationCallVisitor {
 
 	private Vertex addVertex(final OperationCall operationCall) {
 		// FIXME Using the hashCode() method here is a bad idea,
-		// since it can lead collisions. We need an absolute unique identifier
+		// since it can lead to collisions. We need an absolute unique identifier
 		// which could be the object itself or an identifier field.
 		final Vertex vertex = this.graph.addVertex(operationCall.hashCode());
 
-		// TODO Perform the mapping
+		final OperationType operationType = operationCall.getOperation().getAssemblyOperation().getOperationType();
+		final ComponentType componentType = operationType.getComponentType();
+		final DeploymentContext deploymentContext = operationCall.getOperation().getComponent().getDeploymentContext();
 
-		// String name = operationCall.getOperation();
-		// String stackDepth = String.valueOf(operationCall.getStackDepth() + 1);
-		// String component = operationCall.getComponent();
-		// String container = operationCall.getContainer();
-		//
-		// Boolean shortNames = true; // TODO hard coded
-		//
-		// if (shortNames) {
-		// name = NameConverter.toShortOperationName(name);
-		// }
-		//
-		// String label = container + "::\\n" + "@" + stackDepth + ":" + component + "\\n" + name;
-
-		// vertex.setProperty("label", label);
+		vertex.setProperty("name", operationType.getName());
+		vertex.setProperty("returnType", operationType.getReturnType());
+		vertex.setProperty("modifiers", operationType.getModifiers());
+		vertex.setProperty("parameterTypes", operationType.getParameterTypes());
+		vertex.setProperty("component", componentType.getName());
+		vertex.setProperty("package", componentType.getPackage());
+		vertex.setProperty("deploymentContext", deploymentContext.getName());
+		// ... maybe further parameters
 
 		return vertex;
 	}
@@ -78,29 +77,31 @@ public class GraphTransformerVisitor extends OperationCallVisitor {
 		final Vertex thisVertex = this.graph.getVertex(operationCall.hashCode()); // TODO hashCode
 		final Vertex parentVertex = this.graph.getVertex(operationCall.getParent().hashCode()); // TODO hashCode
 
-		if ((thisVertex == null) || (parentVertex == null)) {
-			return null; // TODO
+		if (thisVertex == null) {
+			throw new IllegalStateException("Target vertex not found (operationCall:" + operationCall + ").");
+		} else if (parentVertex == null) {
+			throw new IllegalStateException("Source vertex not found (operationCall:" + operationCall.getParent() + ").");
 		}
 
 		final Edge edge = this.graph.addEdge(null, parentVertex, thisVertex);
-		// TODO Perform the mapping
-		// edge.setProperty("label", String.valueOf(operationCall.getOrderIndex() + 1) + '.');
+		edge.setProperty("orderIndex", operationCall.getOrderIndex());
+
 		return edge;
 	}
 
 	private Vertex addRootVertex(final OperationCall rootOperationCall) {
-
 		final Vertex realRootVertex = this.graph.getVertex(rootOperationCall.hashCode()); // TODO hashCode
 
 		if (realRootVertex == null) {
-			return null; // TODO
+			throw new IllegalStateException("Root vertex not found (operationCall:" + rootOperationCall + ").");
 		}
 
-		// TODO Perform the mapping
-		final Vertex rootVertex = this.graph.addVertex("Entry");
-		// rootVertex.setProperty("label", "'Entry'");
+		final Vertex rootVertex = this.graph.addVertex("'Entry'");
+		rootVertex.setProperty("artificial", true);
+		rootVertex.setProperty("name", "'Entry'");
+
 		final Edge edge = this.graph.addEdge(null, rootVertex, realRootVertex);
-		// edge.setProperty("label", "1.");
+		edge.setProperty("orderIndex", 1);
 
 		return rootVertex;
 	}
