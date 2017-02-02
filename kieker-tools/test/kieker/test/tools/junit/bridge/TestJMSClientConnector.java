@@ -44,8 +44,8 @@ public class TestJMSClientConnector extends AbstractConnectorTest {
 	 * @throws ConnectorDataTransmissionException
 	 *             on lookup failure for the test record
 	 */
-	@Test
-	@Ignore // NOCS (ignore test until it was fixed)
+	@Test // NOCS (ignore test until it was fixed)
+	@Ignore
 	public void testJMSClientConnector() throws ConnectorDataTransmissionException { // NOPMD
 		final Thread messageGenerator = new Thread(new JMSMessageGenerator(ConfigurationParameters.JMS_URI, ConfigurationParameters.JMS_CLIENT_FACTORY_LOOKUP_NAME),
 				"Generator");
