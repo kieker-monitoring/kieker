@@ -56,7 +56,7 @@ public final class WriterController extends AbstractController implements IWrite
 
 	private static final Log LOG = LogFactory.getLog(WriterController.class);
 	/** Monitoring Writer. */
-	private AbstractMonitoringWriter monitoringWriter;
+	private AbstractMonitoringWriter monitoringWriter; // NOPMD (so far, cannot be made final due to the MonitoringController)
 	/** Whether or not to automatically log the metadata record. */
 	private final boolean logMetadataRecord;
 	/** the capacity of the queue. */
@@ -64,9 +64,9 @@ public final class WriterController extends AbstractController implements IWrite
 
 	private final BlockingQueue<IMonitoringRecord> writerQueue;
 
-	private MonitoringWriterThread monitoringWriterThread;
+	private MonitoringWriterThread monitoringWriterThread; // NOPMD (so far, cannot be made final due to the MonitoringController)
 
-	private InsertBehavior<IMonitoringRecord> insertBehavior;
+	private InsertBehavior<IMonitoringRecord> insertBehavior; // NOPMD (so far, cannot be made final due to the MonitoringController)
 
 	// private Disruptor<IMonitoringRecordEvent> disruptor;
 

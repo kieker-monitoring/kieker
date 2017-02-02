@@ -42,7 +42,7 @@ public class ByteBufferDeserializer {
 	private static final int LONG_BYTES = AbstractMonitoringRecord.TYPE_SIZE_LONG;
 
 	private final IRegistry<String> stringRegistry;
-	private final Log logger;
+	private final Log logger; // NOPMD (logger from the caller)
 	private final CachedRecordFactoryCatalog recordFactories;
 	private final ByteBuffer buffer;
 	private IMonitoringRecordReceiver recordReceiver;
@@ -56,13 +56,13 @@ public class ByteBufferDeserializer {
 	}
 
 	public void deserialize(final ReadableByteChannel channel) throws IOException {
-		final ByteBuffer buffer = this.buffer; // NOCS
+		final ByteBuffer buffer = this.buffer; // NOCS (hides field)
 		while ((channel.read(buffer) != -1)) {
 			this.process(buffer);
 		}
 	}
 
-	private void process(final ByteBuffer buffer) { // NOCS
+	private void process(final ByteBuffer buffer) { // NOCS (hides field)
 		buffer.flip();
 		try {
 			while (buffer.hasRemaining()) {
@@ -82,7 +82,7 @@ public class ByteBufferDeserializer {
 		}
 	}
 
-	private boolean onBufferReceived(final ByteBuffer buffer) { // NOCS
+	private boolean onBufferReceived(final ByteBuffer buffer) { // NOCS (hides field)
 		// identify record class
 		if (buffer.remaining() < INT_BYTES) {
 			return false;
@@ -115,7 +115,7 @@ public class ByteBufferDeserializer {
 		return true;
 	}
 
-	public void register(final IMonitoringRecordReceiver recordReceiver) { // NOCS
+	public void register(final IMonitoringRecordReceiver recordReceiver) { // NOCS (hides field)
 		this.recordReceiver = recordReceiver;
 	}
 
