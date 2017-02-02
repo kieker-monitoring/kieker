@@ -29,7 +29,6 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
 import com.rabbitmq.client.ShutdownSignalException;
 
-import kieker.analysisteetime.plugin.reader.IReaderLogic;
 import kieker.common.logging.Log;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.ILookup;
@@ -42,7 +41,7 @@ import kieker.common.util.registry.Lookup;
  *
  * @since 1.12
  */
-public final class AMQPReaderLogic implements IReaderLogic {
+public final class AMQPReaderLogic {
 
 	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
@@ -141,7 +140,6 @@ public final class AMQPReaderLogic implements IReaderLogic {
 		return connectionFactory.newConnection();
 	}
 
-	@Override
 	public boolean read() {
 		// Start the worker threads, if necessary
 		if (!this.threadsStarted) {
@@ -187,8 +185,10 @@ public final class AMQPReaderLogic implements IReaderLogic {
 		return true;
 	}
 
-	@Override
-	public void terminate(final boolean error) {
+	/**
+	 * Terminates the reader logic by returning from read method.
+	 */
+	public void terminate() {
 		try {
 			this.terminated = true;
 			this.connection.close();

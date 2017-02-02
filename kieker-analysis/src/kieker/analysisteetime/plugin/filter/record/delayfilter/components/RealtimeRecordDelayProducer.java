@@ -41,7 +41,7 @@ public class RealtimeRecordDelayProducer extends AbstractProducerStage<IMonitori
 	private final TimeUnit timeunit;
 	private final TimerWithPrecision timer;
 	private final double accelerationFactor;
-	private final long warnOnNegativeSchedTime;
+	private long negativeDelayWarningBound;
 
 	private volatile long startTime = -1;
 	private volatile long firstLoggingTimestamp;
@@ -57,11 +57,9 @@ public class RealtimeRecordDelayProducer extends AbstractProducerStage<IMonitori
 	 *            The time unit to be used.
 	 * @param accelerationFactor
 	 *            Determines the replay speed.
-	 * @param warnOnNegativeSchedTime
-	 *            A time bound to configure a warning when a record is forwarded too late.
 	 */
 	public RealtimeRecordDelayProducer(final LinkedBlockingQueue<Object> recordQueue, final Object endToken, final TimeUnit timeunit,
-			final double accelerationFactor, final long warnOnNegativeSchedTime) {
+			final double accelerationFactor) {
 
 		this.recordQueue = recordQueue;
 		this.endToken = endToken;
@@ -83,7 +81,7 @@ public class RealtimeRecordDelayProducer extends AbstractProducerStage<IMonitori
 			this.accelerationFactor = accelerationFactor;
 		}
 
-		this.warnOnNegativeSchedTime = warnOnNegativeSchedTime;
+		this.negativeDelayWarningBound = this.timeunit.convert(2, TimeUnit.SECONDS); // default 2 seconds
 	}
 
 	@Override
@@ -103,20 +101,23 @@ public class RealtimeRecordDelayProducer extends AbstractProducerStage<IMonitori
 					this.startTime = currentTime;
 				}
 
-				// Compute scheduling time (without acceleration)
-				long schedTimeFromNow = (monitoringRecord.getLoggingTimestamp() - this.firstLoggingTimestamp) // relative to 1st record
-						- (currentTime - this.startTime); // subtract elapsed time
-				schedTimeFromNow /= this.accelerationFactor;
-				if (schedTimeFromNow < -this.warnOnNegativeSchedTime) {
+				// Compute scheduling time
+				long schedTimeFromNow = (long) (((monitoringRecord.getLoggingTimestamp() - this.firstLoggingTimestamp) // relative to 1st record
+						/ this.accelerationFactor) // accelerate / slow down
+						- (currentTime - this.startTime)); // subtract elapsed time
+
+				if (schedTimeFromNow < -this.negativeDelayWarningBound) {
 					final long schedTimeSeconds = TimeUnit.SECONDS.convert(schedTimeFromNow, this.timeunit);
 					this.logger.warn("negative scheduling time: " + schedTimeFromNow + " (" + this.timeunit.toString() + ") / " + schedTimeSeconds
 							+ " (seconds)-> scheduling with a delay of 0");
 				}
+
 				if (schedTimeFromNow < 0) {
 					schedTimeFromNow = 0; // i.e., schedule immediately
 				}
 
-				Thread.sleep(schedTimeFromNow);
+				Thread.sleep(TimeUnit.MILLISECONDS.convert(schedTimeFromNow, this.timeunit));
+
 				this.outputPort.send(monitoringRecord);
 			}
 
@@ -124,6 +125,27 @@ public class RealtimeRecordDelayProducer extends AbstractProducerStage<IMonitori
 			this.logger.warn("Interrupted while waiting for next record.");
 		}
 
+	}
+
+	/**
+	 * Returns the time bound for which a warning is displayed when the computed delay falls below -(time bound).
+	 *
+	 * @return negativeDelayWarningBound
+	 */
+	public long getNegativeDelayWarningBound() {
+		return this.negativeDelayWarningBound;
+	}
+
+	/**
+	 * Sets the time bound for which a warning is displayed when the computed delay falls below -(time bound).
+	 *
+	 * @param negativeDelay
+	 *            The chosen time bound.
+	 * @param unit
+	 *            Time unit of the chosen time bound.
+	 */
+	public void setNegativeDelayWarningBound(final long negativeDelay, final TimeUnit unit) {
+		this.negativeDelayWarningBound = this.timeunit.convert(negativeDelay, unit);
 	}
 
 	/**
