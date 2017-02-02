@@ -8,28 +8,24 @@ import kieker.analysisteetime.util.graph.Element;
  * This function maps a graph element by a passed property key to the
  * corresponding property value and returns it as string.
  *
- * @author SÃ¶ren Henning
+ * @author Sören Henning
  *
  */
 public class DirectPropertyMapper<T extends Element> implements Function<T, String> {
 
-	private String propertyKey;
+	private final String propertyKey;
 
-	public DirectPropertyMapper(final String propertyKey) {
-		this.propertyKey = propertyKey;
-	}
-
-	public String getPropertyKey() {
-		return propertyKey;
-	}
-
-	public void setPropertyKey(final String propertyKey) {
+	private DirectPropertyMapper(final String propertyKey) {
 		this.propertyKey = propertyKey;
 	}
 
 	@Override
 	public String apply(final T element) {
-		return element.getProperty(propertyKey);
+		return element.getProperty(this.propertyKey);
+	}
+
+	public static <T extends Element> DirectPropertyMapper<T> of(final String propertyKey) {
+		return new DirectPropertyMapper<T>(propertyKey);
 	}
 
 }
