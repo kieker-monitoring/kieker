@@ -12,6 +12,14 @@ import kieker.analysisteetime.util.graph.util.dot.attributes.DotEdgeAttribute;
 import kieker.analysisteetime.util.graph.util.dot.attributes.DotGraphAttribute;
 import kieker.analysisteetime.util.graph.util.dot.attributes.DotNodeAttribute;
 
+/**
+ * This class specifies how attributes (for graphs, vertices and edges) are mapped
+ * to a dot graph.
+ *
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 public class DotExportConfiguration {
 
 	final private Map<DotGraphAttribute, Function<Graph, String>> graphAttributes = new EnumMap<>(DotGraphAttribute.class);
@@ -22,27 +30,27 @@ public class DotExportConfiguration {
 	final private Map<DotClusterAttribute, Function<Vertex, String>> clusterAttributes = new EnumMap<>(DotClusterAttribute.class);
 
 	public Map<DotGraphAttribute, Function<Graph, String>> getGraphAttributes() {
-		return graphAttributes;
+		return this.graphAttributes;
 	}
 
 	public Map<DotNodeAttribute, Function<Graph, String>> getDefaultNodeAttributes() {
-		return defaultNodeAttributes;
+		return this.defaultNodeAttributes;
 	}
 
 	public Map<DotEdgeAttribute, Function<Graph, String>> getDefaultEdgeAttributes() {
-		return defaultEdgeAttributes;
+		return this.defaultEdgeAttributes;
 	}
 
 	public Map<DotNodeAttribute, Function<Vertex, String>> getNodeAttributes() {
-		return nodeAttributes;
+		return this.nodeAttributes;
 	}
 
 	public Map<DotEdgeAttribute, Function<Edge, String>> getEdgeAttributes() {
-		return edgeAttributes;
+		return this.edgeAttributes;
 	}
 
 	public Map<DotClusterAttribute, Function<Vertex, String>> getClusterAttributes() {
-		return clusterAttributes;
+		return this.clusterAttributes;
 	}
 
 	public void addGraphAttribute(final DotGraphAttribute attribute, final Function<Graph, String> function) {
