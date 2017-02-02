@@ -16,8 +16,6 @@
 
 package kieker.analysisteetime;
 
-import java.util.Arrays;
-
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.common.util.signature.Signature;
@@ -36,9 +34,17 @@ public class JavaOperationSignatureExtractor implements OperationSignatureExtrac
 		final Signature signature = classSignaturePair.getSignature();
 
 		operationType.setName(signature.getName());
-		operationType.getModifiers().addAll(Arrays.asList(signature.getModifier()));
 		operationType.setReturnType(signature.getReturnType());
-		operationType.getParameterTypes().addAll(Arrays.asList(signature.getParamTypeList()));
+		for (final String modifier : signature.getModifier()) {
+			if (!modifier.isEmpty()) {
+				operationType.getModifiers().add(modifier);
+			}
+		}
+		for (final String parameterType : signature.getParamTypeList()) {
+			if (!parameterType.isEmpty()) {
+				operationType.getParameterTypes().add(parameterType);
+			}
+		}
 	}
 
 }
