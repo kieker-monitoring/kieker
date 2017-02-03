@@ -22,5 +22,7 @@ task unwar(type: Copy) {
   rename '(.*).war', 'livedemo.war'
 }
 
-task buildExample(dependsOn: [war, unwar]) << {
+task buildExample(dependsOn: [war, unwar]) {
+  doLast {
+  }
 }

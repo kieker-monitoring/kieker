@@ -30,8 +30,10 @@ dependencies {
   testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
 }
 
-task replaceHardCodedVersionNames() << {
+task replaceHardCodedVersionNames() {
+  doLast {
 	regexpReplaceInFiles(project.file("test/kieker/test/tools/manual/TestTCPReader.java"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+  }
 }
 
 compileJava.dependsOn replaceHardCodedVersionNames
