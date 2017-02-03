@@ -16,11 +16,9 @@
 
 package kieker.test.tools.junit.writeRead;
 
-import java.lang.Thread.State;
 import java.lang.reflect.Constructor;
 import java.util.List;
 
-import kieker.Await;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -70,18 +68,8 @@ public class TestAnalysis {
 		return constructor.newInstance(args);
 	}
 
-	/**
-	 * Consider to also call {@link #waitUntilReaderIsWaitingForInput(int)} afterwards.
-	 */
 	public void startInNewThread() {
 		this.thread.start();
-	}
-
-	/**
-	 * Waits for the reader thread to block.
-	 */
-	public void waitUntilReaderIsWaitingForInput(final int timoutInMs) throws InterruptedException {
-		Await.awaitThreadState(this.thread, State.WAITING, timoutInMs);
 	}
 
 	public void startAndWaitForTermination() throws IllegalStateException, AnalysisConfigurationException {

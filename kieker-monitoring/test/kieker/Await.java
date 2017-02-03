@@ -16,7 +16,9 @@
 
 package kieker;
 
+import java.io.IOException;
 import java.lang.Thread.State;
+import java.net.ServerSocket;
 
 /**
  * @author Christian Wulf
@@ -29,10 +31,14 @@ public final class Await {
 		// utility class
 	}
 
+	/**
+	 * @param timeoutInMs
+	 *            a non-positive value means "do not wait at all"
+	 */
 	public static void awaitThreadState(final Thread thread, final State state, final int timeoutInMs) throws InterruptedException {
 		final long interPauseTimeInMs = 10;
 
-		int waitingTimeInMs = 0;
+		int waitingTimeInMs = 1;
 		while (thread.getState() != state) {
 			if (waitingTimeInMs > timeoutInMs) {
 				throw new AssertionError(
@@ -40,6 +46,33 @@ public final class Await {
 			}
 			Thread.sleep(interPauseTimeInMs);
 			waitingTimeInMs += interPauseTimeInMs;
+		}
+	}
+
+	/**
+	 * @param timeoutInMs
+	 *            a non-positive value means "do not wait at all"
+	 */
+	public static void awaitTcpPortIsBound(final int port, final int timeoutInMs) throws InterruptedException {
+		final long interPauseTimeInMs = 10;
+
+		int waitingTimeInMs = 1;
+		while (Await.isTcpPortAvailable(port)) {
+			if (waitingTimeInMs > timeoutInMs) {
+				throw new AssertionError(
+						"The given port " + port + " has not been bound within " + timeoutInMs + " ms.");
+			}
+			Thread.sleep(interPauseTimeInMs);
+			waitingTimeInMs += interPauseTimeInMs;
+		}
+	}
+
+	private static boolean isTcpPortAvailable(final int port) {
+		try (ServerSocket ss = new ServerSocket(port)) {
+			ss.setReuseAddress(true);
+			return true;
+		} catch (final IOException e) {
+			return false;
 		}
 	}
 }

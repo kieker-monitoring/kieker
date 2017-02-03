@@ -22,6 +22,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.Await;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
@@ -47,13 +48,14 @@ public class BasicExplorVizExportWriterTest {
 
 	private static final String PORT = "10555";
 	private static final TestDataRepository TEST_DATA_REPOSITORY = new TestDataRepository();
-	private static final int TIMEOUT_IN_MS = 0;
+	private static final int PORT_BINDING_TIMEOUT_IN_MS = 10000;
+	private static final int UNLIMITED_TIMEOUT = 0;
 
 	public BasicExplorVizExportWriterTest() {
 		super();
 	}
 
-	@Test
+	@Test(timeout = 10000)
 	public void testExplorvizCommunication() throws Exception {
 		// define records to be triggered by the test probe
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestEventRecords();
@@ -74,7 +76,8 @@ public class BasicExplorVizExportWriterTest {
 		// declare controllers and start the analysis before monitoring
 		final TestAnalysis analysis = new TestAnalysis(readerConfiguration, ExplorVizReader.class);
 		analysis.startInNewThread();
-		analysis.waitUntilReaderIsWaitingForInput(TIMEOUT_IN_MS);
+		// wait for the TCP reader to accept connections
+		Await.awaitTcpPortIsBound(Integer.parseInt(port), PORT_BINDING_TIMEOUT_IN_MS);
 
 		final MonitoringController monitoringController = MonitoringController.createInstance(config);
 
@@ -88,8 +91,10 @@ public class BasicExplorVizExportWriterTest {
 		monitoringController.terminateMonitoring();
 
 		// wait for termination
-		monitoringController.waitForTermination(TIMEOUT_IN_MS);
-		analysis.waitForTermination(TIMEOUT_IN_MS);
+		// It is impossible to get to know whether waitForTermination() has returned normally or due to a timeout.
+		// Hence, we use JUnit's timeout at method level to fail this test upon a deadlock.
+		monitoringController.waitForTermination(UNLIMITED_TIMEOUT);
+		analysis.waitForTermination(UNLIMITED_TIMEOUT);
 
 		// read actual records
 		final List<IMonitoringRecord> analyzedRecords = analysis.getList();
