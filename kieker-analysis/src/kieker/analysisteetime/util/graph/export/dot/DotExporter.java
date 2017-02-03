@@ -26,35 +26,35 @@ public class DotExporter extends DotElementExporter {
 	@Override
 	protected void beforeTransformation() {
 		try {
-			dotGraphWriter.start(graph.getName());
+			this.dotGraphWriter.start(this.graph.getName());
 
-			for (Entry<DotGraphAttribute, Function<Graph, String>> attribute : configuration.getGraphAttributes().entrySet()) {
-				dotGraphWriter.addGraphAttribute(attribute.getKey().toString(), attribute.getValue().apply(graph));
+			for (final Entry<DotGraphAttribute, Function<Graph, String>> attribute : this.configuration.getGraphAttributes()) {
+				this.dotGraphWriter.addGraphAttribute(attribute.getKey().toString(), attribute.getValue().apply(this.graph));
 			}
 
-			Map<String, String> defaultNodeAttributes = new HashMap<>();
-			for (Entry<DotNodeAttribute, Function<Graph, String>> attribute : configuration.getDefaultNodeAttributes().entrySet()) {
-				defaultNodeAttributes.put(attribute.getKey().toString(), attribute.getValue().apply(graph));
+			final Map<String, String> defaultNodeAttributes = new HashMap<>();
+			for (final Entry<DotNodeAttribute, Function<Graph, String>> attribute : this.configuration.getDefaultNodeAttributes()) {
+				defaultNodeAttributes.put(attribute.getKey().toString(), attribute.getValue().apply(this.graph));
 			}
-			dotGraphWriter.addDefaultNodeAttributes(defaultNodeAttributes);
+			this.dotGraphWriter.addDefaultNodeAttributes(defaultNodeAttributes);
 
-			Map<String, String> defaultEdgeAttributes = new HashMap<>();
-			for (Entry<DotEdgeAttribute, Function<Graph, String>> attribute : configuration.getDefaultEdgeAttributes().entrySet()) {
-				defaultEdgeAttributes.put(attribute.getKey().toString(), attribute.getValue().apply(graph));
+			final Map<String, String> defaultEdgeAttributes = new HashMap<>();
+			for (final Entry<DotEdgeAttribute, Function<Graph, String>> attribute : this.configuration.getDefaultEdgeAttributes()) {
+				defaultEdgeAttributes.put(attribute.getKey().toString(), attribute.getValue().apply(this.graph));
 			}
-			dotGraphWriter.addDefaultEdgeAttributes(defaultEdgeAttributes);
+			this.dotGraphWriter.addDefaultEdgeAttributes(defaultEdgeAttributes);
 
-		} catch (IOException e) {
-			handleIOException(e);
+		} catch (final IOException e) {
+			this.handleIOException(e);
 		}
 	}
 
 	@Override
 	protected void afterTransformation() {
 		try {
-			dotGraphWriter.finish();
-		} catch (IOException e) {
-			handleIOException(e);
+			this.dotGraphWriter.finish();
+		} catch (final IOException e) {
+			this.handleIOException(e);
 		}
 	}
 

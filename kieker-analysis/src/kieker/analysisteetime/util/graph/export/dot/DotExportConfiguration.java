@@ -1,7 +1,9 @@
 package kieker.analysisteetime.util.graph.export.dot;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 import kieker.analysisteetime.util.graph.Edge;
@@ -16,64 +18,78 @@ import kieker.analysisteetime.util.graph.util.dot.attributes.DotNodeAttribute;
  * This class specifies how attributes (for graphs, vertices and edges) are mapped
  * to a dot graph.
  *
+ * To create a {@link DotExportConfiguration} use the {@link DotExportConfiguration.Builder}.
+ *
  * @author Sören Henning
  *
  * @since 1.13
  */
 public class DotExportConfiguration {
 
-	final private Map<DotGraphAttribute, Function<Graph, String>> graphAttributes = new EnumMap<>(DotGraphAttribute.class);
-	final private Map<DotNodeAttribute, Function<Graph, String>> defaultNodeAttributes = new EnumMap<>(DotNodeAttribute.class);
-	final private Map<DotEdgeAttribute, Function<Graph, String>> defaultEdgeAttributes = new EnumMap<>(DotEdgeAttribute.class);
-	final private Map<DotNodeAttribute, Function<Vertex, String>> nodeAttributes = new EnumMap<>(DotNodeAttribute.class);
-	final private Map<DotEdgeAttribute, Function<Edge, String>> edgeAttributes = new EnumMap<>(DotEdgeAttribute.class);
-	final private Map<DotClusterAttribute, Function<Vertex, String>> clusterAttributes = new EnumMap<>(DotClusterAttribute.class);
+	final protected Map<DotGraphAttribute, Function<Graph, String>> graphAttributes = new EnumMap<>(DotGraphAttribute.class);
+	final protected Map<DotNodeAttribute, Function<Graph, String>> defaultNodeAttributes = new EnumMap<>(DotNodeAttribute.class);
+	final protected Map<DotEdgeAttribute, Function<Graph, String>> defaultEdgeAttributes = new EnumMap<>(DotEdgeAttribute.class);
+	final protected Map<DotNodeAttribute, Function<Vertex, String>> nodeAttributes = new EnumMap<>(DotNodeAttribute.class);
+	final protected Map<DotEdgeAttribute, Function<Edge, String>> edgeAttributes = new EnumMap<>(DotEdgeAttribute.class);
+	final protected Map<DotClusterAttribute, Function<Vertex, String>> clusterAttributes = new EnumMap<>(DotClusterAttribute.class);
 
-	public Map<DotGraphAttribute, Function<Graph, String>> getGraphAttributes() {
-		return this.graphAttributes;
+	protected DotExportConfiguration() {}
+
+	public Set<Map.Entry<DotGraphAttribute, Function<Graph, String>>> getGraphAttributes() {
+		return Collections.unmodifiableSet(this.graphAttributes.entrySet());
 	}
 
-	public Map<DotNodeAttribute, Function<Graph, String>> getDefaultNodeAttributes() {
-		return this.defaultNodeAttributes;
+	public Set<Map.Entry<DotNodeAttribute, Function<Graph, String>>> getDefaultNodeAttributes() {
+		return Collections.unmodifiableSet(this.defaultNodeAttributes.entrySet());
 	}
 
-	public Map<DotEdgeAttribute, Function<Graph, String>> getDefaultEdgeAttributes() {
-		return this.defaultEdgeAttributes;
+	public Set<Map.Entry<DotEdgeAttribute, Function<Graph, String>>> getDefaultEdgeAttributes() {
+		return Collections.unmodifiableSet(this.defaultEdgeAttributes.entrySet());
 	}
 
-	public Map<DotNodeAttribute, Function<Vertex, String>> getNodeAttributes() {
-		return this.nodeAttributes;
+	public Set<Map.Entry<DotNodeAttribute, Function<Vertex, String>>> getNodeAttributes() {
+		return Collections.unmodifiableSet(this.nodeAttributes.entrySet());
 	}
 
-	public Map<DotEdgeAttribute, Function<Edge, String>> getEdgeAttributes() {
-		return this.edgeAttributes;
+	public Set<Map.Entry<DotEdgeAttribute, Function<Edge, String>>> getEdgeAttributes() {
+		return Collections.unmodifiableSet(this.edgeAttributes.entrySet());
 	}
 
-	public Map<DotClusterAttribute, Function<Vertex, String>> getClusterAttributes() {
-		return this.clusterAttributes;
+	public Set<Map.Entry<DotClusterAttribute, Function<Vertex, String>>> getClusterAttributes() {
+		return Collections.unmodifiableSet(this.clusterAttributes.entrySet());
 	}
 
-	public void addGraphAttribute(final DotGraphAttribute attribute, final Function<Graph, String> function) {
-		this.graphAttributes.put(attribute, function);
-	}
+	public static class Builder {
 
-	public void addDefaultNodeAttribute(final DotNodeAttribute attribute, final Function<Graph, String> function) {
-		this.defaultNodeAttributes.put(attribute, function);
-	}
+		private final DotExportConfiguration configuration = new DotExportConfiguration();
 
-	public void addDefaultEdgeAttribute(final DotEdgeAttribute attribute, final Function<Graph, String> function) {
-		this.defaultEdgeAttributes.put(attribute, function);
-	}
+		public void addGraphAttribute(final DotGraphAttribute attribute, final Function<Graph, String> function) {
+			this.configuration.graphAttributes.put(attribute, function);
+		}
 
-	public void addNodeAttribute(final DotNodeAttribute attribute, final Function<Vertex, String> function) {
-		this.nodeAttributes.put(attribute, function);
-	}
+		public void addDefaultNodeAttribute(final DotNodeAttribute attribute, final Function<Graph, String> function) {
+			this.configuration.defaultNodeAttributes.put(attribute, function);
+		}
 
-	public void addEdgeAttribute(final DotEdgeAttribute attribute, final Function<Edge, String> function) {
-		this.edgeAttributes.put(attribute, function);
-	}
+		public void addDefaultEdgeAttribute(final DotEdgeAttribute attribute, final Function<Graph, String> function) {
+			this.configuration.defaultEdgeAttributes.put(attribute, function);
+		}
 
-	public void addClusterAttribute(final DotClusterAttribute attribute, final Function<Vertex, String> function) {
-		this.clusterAttributes.put(attribute, function);
+		public void addNodeAttribute(final DotNodeAttribute attribute, final Function<Vertex, String> function) {
+			this.configuration.nodeAttributes.put(attribute, function);
+		}
+
+		public void addEdgeAttribute(final DotEdgeAttribute attribute, final Function<Edge, String> function) {
+			this.configuration.edgeAttributes.put(attribute, function);
+		}
+
+		public void addClusterAttribute(final DotClusterAttribute attribute, final Function<Vertex, String> function) {
+			this.configuration.clusterAttributes.put(attribute, function);
+		}
+
+		public DotExportConfiguration build() {
+			return this.configuration;
+		}
+
 	}
 }

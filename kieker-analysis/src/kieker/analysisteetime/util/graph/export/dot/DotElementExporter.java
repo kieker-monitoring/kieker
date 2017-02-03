@@ -31,23 +31,23 @@ class DotElementExporter extends AbstractTransformer<Void> {
 	protected void transformVertex(final Vertex vertex) {
 		try {
 			if (vertex.hasChildGraph()) {
-				Graph childGraph = vertex.getChildGraph();
+				final Graph childGraph = vertex.getChildGraph();
 
-				dotGraphWriter.addClusterStart(vertex.getId().toString());
+				this.dotGraphWriter.addClusterStart(vertex.getId().toString());
 
-				for (Entry<DotClusterAttribute, Function<Vertex, String>> attribute : configuration.getClusterAttributes().entrySet()) {
-					dotGraphWriter.addGraphAttribute(attribute.getKey().toString(), attribute.getValue().apply(vertex));
+				for (final Entry<DotClusterAttribute, Function<Vertex, String>> attribute : this.configuration.getClusterAttributes()) {
+					this.dotGraphWriter.addGraphAttribute(attribute.getKey().toString(), attribute.getValue().apply(vertex));
 				}
 
-				DotElementExporter childGraphWriter = new DotElementExporter(childGraph, dotGraphWriter, configuration);
+				final DotElementExporter childGraphWriter = new DotElementExporter(childGraph, this.dotGraphWriter, this.configuration);
 				childGraphWriter.transform();
 
-				dotGraphWriter.addClusterStop();
+				this.dotGraphWriter.addClusterStop();
 			} else {
-				dotGraphWriter.addNode(vertex.getId().toString(), getAttributes(vertex));
+				this.dotGraphWriter.addNode(vertex.getId().toString(), this.getAttributes(vertex));
 			}
-		} catch (IOException e) {
-			handleIOException(e);
+		} catch (final IOException e) {
+			this.handleIOException(e);
 		}
 	}
 
@@ -57,9 +57,9 @@ class DotElementExporter extends AbstractTransformer<Void> {
 			final String sourceId = edge.getVertex(Direction.OUT).getId().toString();
 			final String targetId = edge.getVertex(Direction.IN).getId().toString();
 
-			dotGraphWriter.addEdge(sourceId, targetId, getAttributes(edge));
-		} catch (IOException e) {
-			handleIOException(e);
+			this.dotGraphWriter.addEdge(sourceId, targetId, this.getAttributes(edge));
+		} catch (final IOException e) {
+			this.handleIOException(e);
 		}
 
 	}
@@ -70,7 +70,7 @@ class DotElementExporter extends AbstractTransformer<Void> {
 
 	protected Map<String, String> getAttributes(final Edge edge) {
 		final Map<String, String> attributes = new HashMap<>();
-		for (Entry<DotEdgeAttribute, Function<Edge, String>> entry : configuration.getEdgeAttributes().entrySet()) {
+		for (final Entry<DotEdgeAttribute, Function<Edge, String>> entry : this.configuration.getEdgeAttributes()) {
 			final String value = entry.getValue().apply(edge);
 			if (value != null) {
 				attributes.put(entry.getKey().toString(), value);
@@ -81,7 +81,7 @@ class DotElementExporter extends AbstractTransformer<Void> {
 
 	protected Map<String, String> getAttributes(final Vertex vertex) {
 		final Map<String, String> attributes = new HashMap<>();
-		for (Entry<DotNodeAttribute, Function<Vertex, String>> entry : configuration.getNodeAttributes().entrySet()) {
+		for (final Entry<DotNodeAttribute, Function<Vertex, String>> entry : this.configuration.getNodeAttributes()) {
 			final String value = entry.getValue().apply(vertex);
 			if (value != null) {
 				attributes.put(entry.getKey().toString(), value);

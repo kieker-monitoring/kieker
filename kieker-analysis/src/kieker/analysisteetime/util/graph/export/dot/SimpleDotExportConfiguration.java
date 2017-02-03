@@ -17,8 +17,8 @@ public class SimpleDotExportConfiguration extends DotExportConfiguration {
 
 	public SimpleDotExportConfiguration() {
 		super();
-		this.getNodeAttributes().put(DotNodeAttribute.LABEL, DirectPropertyMapper.of("label"));
-		this.getEdgeAttributes().put(DotEdgeAttribute.LABEL, DirectPropertyMapper.of("label"));
+		super.nodeAttributes.put(DotNodeAttribute.LABEL, DirectPropertyMapper.of("label"));
+		super.edgeAttributes.put(DotEdgeAttribute.LABEL, DirectPropertyMapper.of("label"));
 	}
 
 }
