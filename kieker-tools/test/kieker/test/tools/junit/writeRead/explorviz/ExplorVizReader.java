@@ -18,6 +18,7 @@ package kieker.test.tools.junit.writeRead.explorviz;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedByInterruptException;
@@ -75,7 +76,9 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 		ServerSocketChannel serversocket = null;
 		try {
 			serversocket = ServerSocketChannel.open();
-			serversocket.socket().bind(new InetSocketAddress(this.port));
+			final ServerSocket socket = serversocket.socket();
+			socket.setReuseAddress(true);
+			socket.bind(new InetSocketAddress(this.port));
 			this.log.info("Listening on port " + this.port);
 			this.accept(serversocket);
 		} catch (final ClosedByInterruptException ex) {
