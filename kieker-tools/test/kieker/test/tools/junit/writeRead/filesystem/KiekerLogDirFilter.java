@@ -23,9 +23,9 @@ import kieker.common.util.filesystem.FSUtil;
 
 /**
  * Accepts Kieker file system monitoring logs.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 public class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)

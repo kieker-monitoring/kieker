@@ -1,29 +1,12 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.flow.trace.operation.object;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
 import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectEvent;
+import kieker.common.util.registry.IRegistry;
+
 import kieker.common.record.flow.IInterfaceRecord;
 
 /**
@@ -32,6 +15,8 @@ import kieker.common.record.flow.IInterfaceRecord;
  * @since 1.10
  */
 public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEvent implements IInterfaceRecord {
+	private static final long serialVersionUID = -8438691367718487460L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
@@ -41,7 +26,6 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 			 + TYPE_SIZE_STRING // IInterfaceRecord.interface
 	;
-	private static final long serialVersionUID = -8438691367718487460L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -53,12 +37,14 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		String.class, // IInterfaceRecord.interface
 	};
 	
-	/* user-defined constants */
-	/* default constants */
+	/** user-defined constants */
+	
+	/** default constants */
 	public static final String INTERFACE = "";
-	/* property declarations */
+	
+	/** property declarations */
 	private final String _interface;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -93,7 +79,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		super(values, TYPES);
 		this._interface = (String) values[6];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -136,7 +122,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 			this.getInterface()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -146,7 +132,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getInterface());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -160,7 +146,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		buffer.putInt(this.getObjectId());
 		buffer.putInt(stringRegistry.get(this.getInterface()));
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -168,7 +154,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -176,6 +162,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -186,7 +173,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -197,7 +184,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -218,9 +205,8 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		if (!this.getInterface().equals(castedRecord.getInterface())) return false;
 		return true;
 	}
-
+	
 	public final String getInterface() {
 		return this._interface;
-	}
-	
+	}	
 }

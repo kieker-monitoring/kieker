@@ -1,29 +1,12 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.flow.trace.operation.object;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
+import kieker.common.util.registry.IRegistry;
+
 import kieker.common.record.flow.ICallObjectRecord;
 
 /**
@@ -32,6 +15,8 @@ import kieker.common.record.flow.ICallObjectRecord;
  * @since 1.6
  */
 public class CallOperationObjectEvent extends CallOperationEvent implements ICallObjectRecord {
+	private static final long serialVersionUID = 357965549135860700L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
@@ -43,7 +28,6 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 			 + TYPE_SIZE_INT // ICallObjectRecord.calleeObjectId
 	;
-	private static final long serialVersionUID = 357965549135860700L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -57,14 +41,16 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		int.class, // ICallObjectRecord.calleeObjectId
 	};
 	
-	/* user-defined constants */
-	/* default constants */
+	/** user-defined constants */
+	
+	/** default constants */
 	public static final int OBJECT_ID = 0;
 	public static final int CALLEE_OBJECT_ID = 0;
-	/* property declarations */
+	
+	/** property declarations */
 	private final int objectId;
 	private final int calleeObjectId;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -105,7 +91,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		this.objectId = (Integer) values[7];
 		this.calleeObjectId = (Integer) values[8];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -152,7 +138,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 			this.getCalleeObjectId()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -163,7 +149,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		stringRegistry.get(this.getCalleeOperationSignature());
 		stringRegistry.get(this.getCalleeClassSignature());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -179,7 +165,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		buffer.putInt(this.getObjectId());
 		buffer.putInt(this.getCalleeObjectId());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -187,7 +173,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -195,6 +181,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -205,7 +192,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -216,7 +203,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -239,17 +226,16 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		if (this.getCalleeObjectId() != castedRecord.getCalleeObjectId()) return false;
 		return true;
 	}
-
+	
 	public final int getObjectId() {
 		return this.objectId;
-	}
+	}	
 	
 	public final int getCallerObjectId() {
 		return this.getObjectId();
-	}
+	}	
 	
 	public final int getCalleeObjectId() {
 		return this.calleeObjectId;
-	}
-	
+	}	
 }

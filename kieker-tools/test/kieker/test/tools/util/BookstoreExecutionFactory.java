@@ -25,9 +25,9 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 
 /**
  * This factory class can be used to create artificial executions within the bookstore example.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public class BookstoreExecutionFactory {
@@ -36,7 +36,7 @@ public class BookstoreExecutionFactory {
 
 	/**
 	 * Creates a new instance of this factory using the given parameter.
-	 * 
+	 *
 	 * @param systemEntityFactory
 	 *            The system repository.
 	 */
@@ -46,7 +46,7 @@ public class BookstoreExecutionFactory {
 
 	/**
 	 * This method creates an artificial bookstore execution of "Bookstore.searchBook(long)" with eoi set to 0 and ess set to 0.
-	 * 
+	 *
 	 * @param traceId
 	 *            The trace ID.
 	 * @param sessionId
@@ -59,10 +59,10 @@ public class BookstoreExecutionFactory {
 	 *            The time the execution finished.
 	 * @param assumed
 	 *            Whether the execution is assumed or not.
-	 * 
+	 *
 	 * @return An artificial execution.
 	 */
-	public Execution createBookstoreExecution_exec0_0__bookstore_searchBook(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
+	public Execution createBookstoreExecution_exec0_0__bookstore_searchBook( // NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
 			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final boolean assumed) {
 
 		final ClassOperationSignaturePair classOpSignaturePair = ClassOperationSignaturePair
@@ -75,7 +75,7 @@ public class BookstoreExecutionFactory {
 
 	/**
 	 * This method creates an artificial bookstore execution of "Catalog.getBook(long)" with eoi set to 1 and ess set to 1.
-	 * 
+	 *
 	 * @param traceId
 	 *            The trace ID.
 	 * @param sessionId
@@ -88,7 +88,7 @@ public class BookstoreExecutionFactory {
 	 *            The time the execution finished.
 	 * @param assumed
 	 *            Whether the execution is assumed or not.
-	 * 
+	 *
 	 * @return An artificial execution.
 	 */
 	public Execution createBookstoreExecution_exec1_1__catalog_getBook(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
@@ -103,7 +103,7 @@ public class BookstoreExecutionFactory {
 
 	/**
 	 * This method creates an artificial bookstore execution of "CRM.getOrders(long)".
-	 * 
+	 *
 	 * @param traceId
 	 *            The trace ID.
 	 * @param sessionId
@@ -120,10 +120,10 @@ public class BookstoreExecutionFactory {
 	 *            The execution stack size.
 	 * @param assumed
 	 *            Whether the execution is assumed or not.
-	 * 
+	 *
 	 * @return An artificial execution.
 	 */
-	public Execution createBookstoreExecution_crm_getOrders(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
+	public Execution createBookstoreExecution_crm_getOrders( // NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
 			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final int eoi, final int ess,
 			final boolean assumed) {
 		final ClassOperationSignaturePair classOpSignaturePair = ClassOperationSignaturePair
@@ -135,7 +135,7 @@ public class BookstoreExecutionFactory {
 
 	/**
 	 * This method creates an artificial bookstore execution of "CRM.getOrders(long)" with eoi set to 2 and ess set to 1.
-	 * 
+	 *
 	 * @param traceId
 	 *            The trace ID.
 	 * @param sessionId
@@ -148,10 +148,10 @@ public class BookstoreExecutionFactory {
 	 *            The time the execution finished.
 	 * @param assumed
 	 *            Whether the execution is assumed or not.
-	 * 
+	 *
 	 * @return An artificial execution.
 	 */
-	public Execution createBookstoreExecution_exec2_1__crm_getOrders(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
+	public Execution createBookstoreExecution_exec2_1__crm_getOrders( // NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
 			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final boolean assumed) {
 		return this.createBookstoreExecution_crm_getOrders(traceId, sessionId, hostname, tin, tout,
 				BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_EOI, BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_ESS, assumed);
@@ -159,7 +159,7 @@ public class BookstoreExecutionFactory {
 
 	/**
 	 * This method creates an artificial bookstore execution of "Catalog.getBook(long)".
-	 * 
+	 *
 	 * @param traceId
 	 *            The trace ID.
 	 * @param sessionId
@@ -176,10 +176,10 @@ public class BookstoreExecutionFactory {
 	 *            The execution stack size.
 	 * @param assumed
 	 *            Whether the execution is assumed or not.
-	 * 
+	 *
 	 * @return An artificial execution.
 	 */
-	public Execution createBookstoreExecution_catalog_getBook(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
+	public Execution createBookstoreExecution_catalog_getBook( // NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
 			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final int eoi, final int ess,
 			final boolean assumed) {
 
@@ -192,7 +192,7 @@ public class BookstoreExecutionFactory {
 
 	/**
 	 * This method creates an artificial bookstore execution of "Catalog.getBook(long)" with eoi set to 3 and ess set to 2.
-	 * 
+	 *
 	 * @param traceId
 	 *            The trace ID.
 	 * @param sessionId
@@ -205,10 +205,10 @@ public class BookstoreExecutionFactory {
 	 *            The time the execution finished.
 	 * @param assumed
 	 *            Whether the execution is assumed or not.
-	 * 
+	 *
 	 * @return An artificial execution.
 	 */
-	public Execution createBookstoreExecution_exec3_2__catalog_getBook(// NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
+	public Execution createBookstoreExecution_exec3_2__catalog_getBook( // NOPMD (MethodNamingConventions) // NOCS (MethodNameCheck)
 			final long traceId, final String sessionId, final String hostname, final long tin, final long tout, final boolean assumed) {
 		return this.createBookstoreExecution_catalog_getBook(traceId, sessionId, hostname, tin, tout,
 				BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_EOI, BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_ESS,

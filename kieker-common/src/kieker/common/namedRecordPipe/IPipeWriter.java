@@ -20,21 +20,23 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * This is a simple interface for a writer that works on a pipe.
- * 
- * @author Andre van Hoorn
- * 
+ *
+ * @author Andre van Hoorn, Christian Wulf
+ *
  * @since 1.5
+ *
+ * @deprecated since 2.0. Use {@link PipeWriter} instead.
  */
+@Deprecated
 public interface IPipeWriter {
 
 	/**
 	 * Called for each new record.
-	 * 
+	 *
 	 * @param record
 	 *            the record.
-	 * @return true on success; false in case of an error.
-	 * 
+	 *
 	 * @since 1.5
 	 */
-	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
+	public void writeMonitoringRecord(final IMonitoringRecord record);
 }

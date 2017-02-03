@@ -36,14 +36,7 @@ import kieker.common.logging.LogImplJUnit;
  */
 public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 
-	private static final Log LOG; // NOPMD
-
-	static {
-		if (System.getProperty("kieker.common.logging.Log") == null) {
-			System.setProperty("kieker.common.logging.Log", "JUNIT");
-		}
-		LOG = LogFactory.getLog(AbstractKiekerTest.class);
-	}
+	private static final Log LOG; // NOPMD (instantiation takes place in the static constructor)
 
 	/** This rule makes sure that we can dump the name of the currently executed test on the screen. */
 	@Rule
@@ -68,6 +61,13 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 	 *
 	 */
 	private volatile boolean workingDirectoryIsModuleDirectory;
+
+	static {
+		if (System.getProperty("kieker.common.logging.Log") == null) {
+			System.setProperty("kieker.common.logging.Log", "JUNIT");
+		}
+		LOG = LogFactory.getLog(AbstractKiekerTest.class);
+	}
 
 	/**
 	 * Default constructor.

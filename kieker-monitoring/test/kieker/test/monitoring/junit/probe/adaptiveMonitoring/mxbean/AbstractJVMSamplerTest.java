@@ -26,7 +26,6 @@ import org.junit.Test;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.sampler.ISampler;
 
@@ -35,16 +34,17 @@ import kieker.test.monitoring.util.NamedListWriter;
 
 /**
  * @author Micky Singh Multani
- * 
+ *
  * @since 1.10
  */
 public abstract class AbstractJVMSamplerTest extends AbstractKiekerTest {
 
-	private volatile String listName;
-	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
-	private volatile IMonitoringController monitoringController;
+	private final String listName;
 	private final String jvmSignature;
 	private final ISampler sampler;
+
+	private List<IMonitoringRecord> recordListFilledByListWriter;
+	private MonitoringController monitoringController;
 
 	AbstractJVMSamplerTest(final String listName, final String jvmSignature, final ISampler sampler) {
 		this.listName = listName;
@@ -119,9 +119,10 @@ public abstract class AbstractJVMSamplerTest extends AbstractKiekerTest {
 				numEventsAfterMonitoringReEnabled > 0);
 
 		this.monitoringController.terminateMonitoring();
+		this.monitoringController.waitForTermination(5000);
 	}
 
-	private IMonitoringController createMonitoringController() {
+	private MonitoringController createMonitoringController() {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
 		config.setProperty(ConfigurationFactory.METADATA, "false");

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Kieker</name>
+	<name>kieker</name>
 	<comment>
 	</comment>
 	<projects>
@@ -27,12 +27,17 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>net.sf.eclipsecs.core.CheckstyleBuilder</name>
+			<name>net.sourceforge.pmd.eclipse.plugin.pmdBuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>net.sourceforge.pmd.eclipse.plugin.pmdBuilder</name>
+			<name>de.walware.statet.r.builders.RSupport</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.buildship.core.gradleprojectbuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -42,8 +47,10 @@
 		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
 		<nature>ch.acanda.eclipse.pmd.builder.PMDNature</nature>
 		<nature>edu.umd.cs.findbugs.plugin.eclipse.findbugsNature</nature>
-		<nature>net.sf.eclipsecs.core.CheckstyleNature</nature>
 		<nature>net.sourceforge.pmd.eclipse.plugin.pmdNature</nature>
+		<nature>de.walware.statet.base.StatetNature</nature>
+		<nature>de.walware.statet.r.RNature</nature>
+		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
 	<filteredResources>
 		<filter>

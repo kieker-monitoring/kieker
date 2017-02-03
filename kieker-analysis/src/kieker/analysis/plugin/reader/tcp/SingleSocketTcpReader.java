@@ -21,8 +21,8 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
-import kieker.analysis.plugin.reader.tcp.util.IRecordReceivedListener;
 import kieker.analysis.plugin.reader.tcp.util.SingleSocketRecordReader;
+import kieker.analysis.plugin.reader.util.IRecordReceivedListener;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 

@@ -19,12 +19,15 @@ package kieker.test.monitoring.junit.core.configuration;
 import java.io.File;
 import java.net.URISyntaxException;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.timer.SystemNanoTimer;
+import kieker.monitoring.writernew.filesystem.AsciiFileWriter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.DefaultConfigurationFactory;
@@ -130,9 +133,9 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 		// Writer controller
 		Assert.assertEquals(true, configuration.getBooleanProperty(ConfigurationFactory.METADATA));
 		Assert.assertEquals(true, configuration.getBooleanProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP));
-		Assert.assertEquals("kieker.monitoring.writer.filesystem.AsyncFsWriter", configuration.getStringProperty(ConfigurationFactory.WRITER_CLASSNAME));
+		Assert.assertThat(configuration.getStringProperty(ConfigurationFactory.WRITER_CLASSNAME), CoreMatchers.is(AsciiFileWriter.class.getName()));
 		// TimeSource controller
-		Assert.assertEquals("kieker.monitoring.timer.SystemNanoTimer", configuration.getStringProperty(ConfigurationFactory.TIMER_CLASSNAME));
+		Assert.assertThat(configuration.getStringProperty(ConfigurationFactory.TIMER_CLASSNAME), CoreMatchers.is(SystemNanoTimer.class.getName()));
 		// Sampling controller
 		Assert.assertEquals(1, configuration.getIntProperty(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE));
 		// Probe controller
