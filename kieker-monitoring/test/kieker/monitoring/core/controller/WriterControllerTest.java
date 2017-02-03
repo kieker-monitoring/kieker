@@ -18,7 +18,9 @@ package kieker.monitoring.core.controller;
 
 import java.lang.Thread.State;
 
+import org.hamcrest.CoreMatchers;
 import org.jctools.queues.MpscArrayQueue;
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.Await;
@@ -36,6 +38,7 @@ import kieker.monitoring.writernew.dump.DumpWriter;
 public class WriterControllerTest {
 
 	private static final int THREAD_STATE_CHANGE_TIMEOUT_IN_MS = 1000;
+	private static final long CONTROLLER_TIMEOUT_IN_MS = 1000;
 
 	public WriterControllerTest() {
 		super();
@@ -65,6 +68,12 @@ public class WriterControllerTest {
 		writerController.init(); // starts the queue consumer
 
 		Await.awaitThreadState(thread, State.TERMINATED, THREAD_STATE_CHANGE_TIMEOUT_IN_MS);
+
+		writerController.cleanup(); // triggers the termination of the queue consumer
+
+		writerController.waitForTermination(CONTROLLER_TIMEOUT_IN_MS);
+
+		Assert.assertThat(writerController.getStateOfMonitoringWriterThread(), CoreMatchers.is(State.TERMINATED));
 	}
 
 }

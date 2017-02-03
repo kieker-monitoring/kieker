@@ -16,6 +16,7 @@
 
 package kieker.monitoring.core.controller;
 
+import java.lang.Thread.State;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Queue;
@@ -61,7 +62,7 @@ public final class WriterController extends AbstractController implements IWrite
 	private final boolean logMetadataRecord;
 	/** the capacity of the queue. */
 	private final int queueCapacity;
-
+	/** the synchronized, blocking queue used for the communication between the monitored application's threads and the writer thread. */
 	private final BlockingQueue<IMonitoringRecord> writerQueue;
 
 	private MonitoringWriterThread monitoringWriterThread; // NOPMD (so far, cannot be made final due to the MonitoringController)
@@ -272,5 +273,13 @@ public final class WriterController extends AbstractController implements IWrite
 		if (this.monitoringWriterThread != null) {
 			this.monitoringWriterThread.join(timeoutInMs);
 		}
+	}
+
+	/**
+	 * Used in tests only.
+	 */
+	@SuppressWarnings({ "PMD.DefaultPackage", "PMD.CommentDefaultAccessModifier" })
+	State getStateOfMonitoringWriterThread() {
+		return this.monitoringWriterThread.getState();
 	}
 }

@@ -55,19 +55,28 @@ public class AsciiWriterReaderTest {
 
 	@Test
 	public void testUncompressedAsciiCommunication() throws Exception {
-		this.testAsciiCommunication(false);
+		// 1. define records to be triggered by the test probe
+		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestRecords();
+
+		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, false);
+
+		// 8. compare actual and expected records
+		Assert.assertThat(analyzedRecords, CoreMatchers.is(CoreMatchers.equalTo(records)));
 	}
 
 	@Test
 	public void testCompressedAsciiCommunication() throws Exception {
-		this.testAsciiCommunication(true);
-	}
-
-	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
-	private void testAsciiCommunication(final boolean shouldDecompress) throws Exception {
 		// 1. define records to be triggered by the test probe
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestRecords();
 
+		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, true);
+
+		// 8. compare actual and expected records
+		Assert.assertThat(analyzedRecords, CoreMatchers.is(CoreMatchers.equalTo(records)));
+	}
+
+	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
+	private List<IMonitoringRecord> testAsciiCommunication(final List<IMonitoringRecord> records, final boolean shouldDecompress) throws Exception {
 		// 2. define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
@@ -100,9 +109,6 @@ public class AsciiWriterReaderTest {
 		analysis.startAndWaitForTermination();
 
 		// 7. read actual records
-		final List<IMonitoringRecord> analyzedRecords = analysis.getList();
-
-		// 8. compare actual and expected records
-		Assert.assertThat(analyzedRecords, CoreMatchers.is(CoreMatchers.equalTo(records)));
+		return analysis.getList();
 	}
 }

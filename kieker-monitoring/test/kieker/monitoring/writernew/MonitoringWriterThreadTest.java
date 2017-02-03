@@ -20,6 +20,8 @@ import java.lang.Thread.State;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.Await;
@@ -54,11 +56,12 @@ public class MonitoringWriterThreadTest {
 		super();
 	}
 
-	@Test(timeout = 10000)
+	@Test
 	public void testTermination() throws Exception {
 		final Configuration configuration = new Configuration();
 		final AbstractMonitoringWriter writer = new DumpWriter(configuration);
 		final BlockingQueue<IMonitoringRecord> writerQueue = new LinkedBlockingQueue<IMonitoringRecord>();
+
 		writerQueue.add(new EmptyRecord());
 
 		final MonitoringWriterThread thread = new MonitoringWriterThread(writer, writerQueue);
@@ -71,7 +74,9 @@ public class MonitoringWriterThreadTest {
 		// it correctly writes out the EmptyRecord from the writerQueue
 
 		thread.terminate();
-		thread.join();
+		thread.join(THREAD_STATE_CHANGE_TIMEOUT_IN_MS);
+
+		Assert.assertThat(thread.getState(), CoreMatchers.is(State.TERMINATED));
 	}
 
 	@Test
@@ -86,6 +91,8 @@ public class MonitoringWriterThreadTest {
 		Await.awaitThreadState(thread, State.WAITING, THREAD_STATE_CHANGE_TIMEOUT_IN_MS);
 
 		thread.terminate();
-		thread.join();
+		thread.join(THREAD_STATE_CHANGE_TIMEOUT_IN_MS);
+
+		Assert.assertThat(thread.getState(), CoreMatchers.is(State.TERMINATED));
 	}
 }
