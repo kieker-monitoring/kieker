@@ -53,11 +53,8 @@ public class GraphTransformerVisitor extends OperationCallVisitor {
 	}
 
 	private Vertex addVertex(final OperationCall operationCall) {
-		// FIXME Using the hashCode() method here is a bad idea,
-		// since it can lead to collisions. We need an absolute unique identifier
-		// which could be the object itself or an identifier field.
-		final int identifier = this.objectIdentifierRegistry.getIdentifier(operationCall);
-		final Vertex vertex = this.graph.addVertex(identifier);
+		final int vertexId = this.objectIdentifierRegistry.getIdentifier(operationCall);
+		final Vertex vertex = this.graph.addVertex(vertexId);
 
 		final OperationType operationType = operationCall.getOperation().getAssemblyOperation().getOperationType();
 		final ComponentType componentType = operationType.getComponentType();
@@ -95,21 +92,21 @@ public class GraphTransformerVisitor extends OperationCallVisitor {
 	}
 
 	private Vertex addRootVertex(final OperationCall rootOperationCall) {
-		final int id = this.objectIdentifierRegistry.getIdentifier(rootOperationCall);
-		final Vertex realRootVertex = this.graph.getVertex(id);
+		final int rootVertexId = this.objectIdentifierRegistry.getIdentifier(rootOperationCall);
+		final Vertex rootVertex = this.graph.getVertex(rootVertexId);
 
-		if (realRootVertex == null) {
+		if (rootVertex == null) {
 			throw new IllegalStateException("Root vertex not found (operationCall:" + rootOperationCall + ").");
 		}
 
-		final Vertex rootVertex = this.graph.addVertex("'Entry'");
-		rootVertex.setProperty("artificial", true);
-		rootVertex.setProperty("name", "'Entry'");
+		final Vertex entryVertex = this.graph.addVertex("'Entry'");
+		entryVertex.setProperty("artificial", true);
+		entryVertex.setProperty("name", "'Entry'");
 
-		final Edge edge = this.graph.addEdge(null, rootVertex, realRootVertex);
+		final Edge edge = this.graph.addEdge(null, entryVertex, rootVertex);
 		edge.setProperty("orderIndex", 1);
 
-		return rootVertex;
+		return entryVertex;
 	}
 
 }
