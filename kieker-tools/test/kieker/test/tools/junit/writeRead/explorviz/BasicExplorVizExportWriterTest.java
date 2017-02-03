@@ -58,7 +58,7 @@ public class BasicExplorVizExportWriterTest {
 		// define records to be triggered by the test probe
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestEventRecords();
 
-		final String hostname = InetAddress.getLocalHost().getHostAddress();
+		final String hostname = InetAddress.getLoopbackAddress().getHostAddress();
 		final String port = BasicExplorVizExportWriterTest.PORT;
 
 		// define monitoring config

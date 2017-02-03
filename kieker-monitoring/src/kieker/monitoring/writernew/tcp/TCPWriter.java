@@ -33,6 +33,7 @@ import kieker.monitoring.registry.IWriterRegistry;
 import kieker.monitoring.registry.RegisterAdapter;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writernew.AbstractMonitoringWriter;
+import kieker.monitoring.writernew.WriterUtil;
 
 /**
  * @author "Christian Wulf"
@@ -111,7 +112,7 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 		final ByteBuffer buffer = this.byteBuffer;
 		final int requiredBufferSize = 4 + 8 + monitoringRecord.getSize();
 		if (requiredBufferSize > buffer.remaining()) {
-			this.flushBuffer(buffer, this.monitoringRecordChannel);
+			WriterUtil.flushBuffer(buffer, this.monitoringRecordChannel, LOG);
 		}
 
 		monitoringRecord.registerStrings(this.registerAdapter);
@@ -129,7 +130,7 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 		// monitoringRecord.writeToBuffer(buffer, this.writerRegistry);
 
 		if (this.flush) {
-			this.flushBuffer(buffer, this.monitoringRecordChannel);
+			WriterUtil.flushBuffer(buffer, this.monitoringRecordChannel, LOG);
 		}
 	}
 
@@ -153,39 +154,16 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 		buffer.put(bytes);
 
 		// always flush so that on the reader side the records can be reconstructed
-		this.flushBuffer(buffer, this.registryRecordChannel);
+		WriterUtil.flushBuffer(buffer, this.registryRecordChannel, LOG);
 	}
 
 	@Override
 	public void onTerminating() {
-		this.flushBuffer(this.byteBuffer, this.monitoringRecordChannel);
-		this.flushBuffer(this.byteBuffer, this.registryRecordChannel);
+		WriterUtil.flushBuffer(this.byteBuffer, this.monitoringRecordChannel, LOG);
+		WriterUtil.flushBuffer(this.byteBuffer, this.registryRecordChannel, LOG);
 
-		this.closeChannel(this.monitoringRecordChannel);
-		this.closeChannel(this.registryRecordChannel);
-	}
-
-	private void flushBuffer(final ByteBuffer buffer, final SocketChannel socketChannel) {
-		buffer.flip();
-		try {
-			while (buffer.hasRemaining()) {
-				socketChannel.write(buffer);
-			}
-			buffer.clear();
-		} catch (final IOException e) {
-			LOG.error("Error in writing the record", e);
-			this.closeChannel(socketChannel);
-		}
-	}
-
-	private void closeChannel(final SocketChannel socketChannel) {
-		try {
-			socketChannel.close();
-		} catch (final IOException e) {
-			if (LOG.isWarnEnabled()) {
-				LOG.warn("Error in closing the connection.", e);
-			}
-		}
+		WriterUtil.close(this.monitoringRecordChannel, LOG);
+		WriterUtil.close(this.registryRecordChannel, LOG);
 	}
 
 }

@@ -18,6 +18,7 @@ package kieker.tools.bridge;
 import java.io.File;
 import java.io.IOException;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -84,8 +85,7 @@ public class TestServiceContainer extends AbstractKiekerTest {
 		configuration.setProperty(AsciiFileWriter.CONFIG_PATH, path.getCanonicalPath());
 
 		// Create the service container and deploy the TestServiceConnector.
-		final ServiceContainer serviceContainer = new ServiceContainer(configuration,
-				new ServiceConnectorStub(), false);
+		final ServiceContainer serviceContainer = new ServiceContainer(configuration, new ServiceConnectorStub(), false);
 
 		// Run the service
 		serviceContainer.run();
@@ -93,11 +93,14 @@ public class TestServiceContainer extends AbstractKiekerTest {
 		// Check number of written records.
 		// logDirs should contain one Kieker records folders.
 		final File[] logDirs = new File(this.tmpFolder.getRoot().getCanonicalPath()).listFiles();
+		Assert.assertThat(logDirs, CoreMatchers.is(CoreMatchers.notNullValue()));
 		Assert.assertEquals("Should contain one folder.", 1, logDirs.length);
 		Assert.assertTrue("The first entry must be the kieker directory.", logDirs[0].isDirectory());
 
 		// enter that folder and count the number of files.
-		final int numberOfLogFiles = new File(logDirs[0].getCanonicalPath()).listFiles().length;
+		final File[] firstLogDirContents = new File(logDirs[0].getCanonicalPath()).listFiles();
+		Assert.assertThat(firstLogDirContents, CoreMatchers.is(CoreMatchers.notNullValue()));
+		final int numberOfLogFiles = firstLogDirContents.length;
 
 		// The result contains 20 data records, 1 record containing the version field and 1 kieker map file
 		Assert.assertEquals("The number of send records is not equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS",
