@@ -59,8 +59,6 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 	private static final int CONNECTION_CLOSED_BY_CLIENT = -1;
 	private static final int MESSAGE_BUFFER_SIZE = 65535;
 
-	private volatile Thread readerThread;
-	private volatile boolean terminated = false; // NOPMD
 	private final int port;
 	private final ILookup<String> stringRegistry = new Lookup<String>();
 	private final Deque<Number> recordValues = new LinkedList<Number>();
@@ -72,18 +70,27 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 
 	@Override
 	public boolean read() {
-		this.readerThread = Thread.currentThread();
 		ServerSocketChannel serversocket = null;
 		try {
 			serversocket = ServerSocketChannel.open();
 			final ServerSocket socket = serversocket.socket();
-			socket.setReuseAddress(true);
-			socket.bind(new InetSocketAddress(this.port));
-			this.log.info("Listening on port " + this.port);
-			this.accept(serversocket);
+			final InetSocketAddress address = new InetSocketAddress(this.port);
+			socket.bind(address);
+			this.log.info("Listening on " + address);
+
+			final ByteBuffer buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
+
+			this.log.info("Waiting for a (single) connection test...");
+			try (SocketChannel socketChannel = serversocket.accept()) {
+				socketChannel.read(buffer); // blocking wait
+			}
+
+			this.log.info("Waiting for the actual data connection...");
+			this.accept(serversocket, buffer);
+
 		} catch (final ClosedByInterruptException ex) {
 			this.log.warn("Reader interrupted", ex);
-			return this.terminated;
+			return false;
 		} catch (final IOException ex) {
 			this.log.error("Error while reading", ex);
 			return false;
@@ -103,12 +110,10 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 		return true;
 	}
 
-	private void accept(final ServerSocketChannel serversocket) throws IOException {
+	private void accept(final ServerSocketChannel serversocket, final ByteBuffer buffer) throws IOException {
 		final SocketChannel socketChannel = serversocket.accept();
 		try {
-			final ByteBuffer buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
-
-			while ((socketChannel.read(buffer) != CONNECTION_CLOSED_BY_CLIENT) && (!this.terminated)) {
+			while ((socketChannel.read(buffer) != CONNECTION_CLOSED_BY_CLIENT)) {
 				buffer.flip();
 				try {
 					while (buffer.hasRemaining()) {
@@ -130,11 +135,7 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutdown of ExplorVizReader requested.");
-		this.terminated = true;
-		if (this.readerThread != null) {
-			this.readerThread.interrupt();
-		}
+		// This is a one-shot reader. It terminates itself after the first client has disconnected.
 	}
 
 	@Override
@@ -228,4 +229,5 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 			}
 		}
 	}
+
 }

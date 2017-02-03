@@ -48,14 +48,15 @@ public class BasicExplorVizExportWriterTest {
 
 	private static final String PORT = "10555";
 	private static final TestDataRepository TEST_DATA_REPOSITORY = new TestDataRepository();
-	private static final int PORT_BINDING_TIMEOUT_IN_MS = 10000;
+	private static final int WHOLE_TEST_TIMEOUT = 10000;
+	private static final int CONNECTION_TIMEOUT_IN_MS = WHOLE_TEST_TIMEOUT - 2000;
 	private static final int UNLIMITED_TIMEOUT = 0;
 
 	public BasicExplorVizExportWriterTest() {
 		super();
 	}
 
-	@Test(timeout = 10000)
+	@Test(timeout = WHOLE_TEST_TIMEOUT)
 	public void testExplorvizCommunication() throws Exception {
 		// define records to be triggered by the test probe
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestEventRecords();
@@ -77,7 +78,7 @@ public class BasicExplorVizExportWriterTest {
 		final TestAnalysis analysis = new TestAnalysis(readerConfiguration, ExplorVizReader.class);
 		analysis.startInNewThread();
 		// wait for the TCP reader to accept connections
-		Await.awaitTcpPortIsBound(Integer.parseInt(port), PORT_BINDING_TIMEOUT_IN_MS);
+		Await.awaitTcpPortIsReachable(hostname, Integer.parseInt(port), CONNECTION_TIMEOUT_IN_MS);
 
 		final MonitoringController monitoringController = MonitoringController.createInstance(config);
 

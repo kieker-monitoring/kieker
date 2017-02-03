@@ -18,7 +18,9 @@ package kieker;
 
 import java.io.IOException;
 import java.lang.Thread.State;
-import java.net.ServerSocket;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Christian Wulf
@@ -53,25 +55,24 @@ public final class Await {
 	 * @param timeoutInMs
 	 *            a non-positive value means "do not wait at all"
 	 */
-	public static void awaitTcpPortIsBound(final int port, final int timeoutInMs) throws InterruptedException {
-		final long interPauseTimeInMs = 10;
+	public static void awaitTcpPortIsReachable(final String hostname, final int port, final int timeoutInMs) throws InterruptedException {
+		final long timeoutInNs = TimeUnit.MILLISECONDS.toNanos(timeoutInMs);
+		final long start = System.nanoTime();
 
-		int waitingTimeInMs = 1;
-		while (Await.isTcpPortAvailable(port)) {
-			if (waitingTimeInMs > timeoutInMs) {
-				throw new AssertionError(
-						"The given port " + port + " has not been bound within " + timeoutInMs + " ms.");
+		while (!Await.isTcpPortReachable(hostname, port)) {
+			final long currentWaitingTimeInNs = System.nanoTime() - start;
+			if (currentWaitingTimeInNs > timeoutInNs) {
+				throw new AssertionError(String.format("No server has listened on %s:%d within %d ms.", hostname, port, timeoutInMs));
 			}
-			Thread.sleep(interPauseTimeInMs);
-			waitingTimeInMs += interPauseTimeInMs;
+			Thread.sleep(50);
 		}
 	}
 
-	private static boolean isTcpPortAvailable(final int port) {
-		try (ServerSocket ss = new ServerSocket(port)) {
-			ss.setReuseAddress(true);
+	private static boolean isTcpPortReachable(final String hostname, final int port) {
+		try (Socket socket = new Socket()) {
+			socket.connect(new InetSocketAddress(hostname, port));
 			return true;
-		} catch (final IOException e) {
+		} catch (final IOException e) { // especially, a java.net.ConnectException
 			return false;
 		}
 	}

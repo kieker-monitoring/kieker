@@ -228,13 +228,7 @@ public final class MonitoringController extends AbstractController implements IM
 
 	@Override
 	public final boolean terminateMonitoring() {
-		LOG.info("Controller shutting down in " + SHUTDOWN_DELAY_MILLIS + " milliseconds");
-		// System.err.println(monitoringController.toString());
-		// try {
-		// Thread.sleep(SHUTDOWN_DELAY_MILLIS);
-		// } catch (final InterruptedException e) {
-		// LOG.warn("Shutdown was interrupted while waiting");
-		// }
+		LOG.info("Terminating monitoring...");
 		return this.stateController.terminateMonitoring();
 	}
 
