@@ -3,6 +3,9 @@
 # include common variables and functions
 source "$(dirname $0)/release-check-common.sh"
 
+#javaVersion="50.0 (Java 1.6)"
+javaVersion="51.0 (Java 1.7)"
+
 # build with ant (target may be passed as $1)
 function run_gradle {
 	echo "Trying to invoke gradle with target '$1' ..."
@@ -63,13 +66,13 @@ function check_src_archive {
 	assert_file_NOT_exists "${DIST_JAR_DIR}/kieker-monitoring-servlet-"*".war"
 
 	# check bytecode version of classes contained in jar
-	echo "Making sure that bytecode version of class in jar is 50.0 (Java 1.6)"
+	echo "Making sure that bytecode version of class in jar is $javaVersion"
 	MAIN_JAR=$(ls "${DIST_JAR_DIR}/kieker-"*".jar" | grep -v emf | grep -v aspectj)
 	assert_file_exists_regular ${MAIN_JAR}
 
 	VERSION_CLASS=$(find build -name "Version.class" | grep "kieker-common")
 	assert_file_exists_regular "${VERSION_CLASS}"
-	if ! file ${VERSION_CLASS} | grep "version 50.0 (Java 1.6)"; then
+	if ! file ${VERSION_CLASS} | grep "version $javaVersion"; then
 		echo "Unexpected bytecode version"
 		exit 1
 	fi
@@ -87,13 +90,13 @@ function check_bin_archive {
 	touch $(basename "$1") # just to mark where this dir comes from
 
 	# check bytecode version of classes contained in jar
-	echo -n "Making sure that bytecode version of class in jar is version 50.0 (Java 1.6)"
+	echo "Making sure that bytecode version of class in jar is $javaVersion"
 	MAIN_JAR=$(ls "${DIST_JAR_DIR}/kieker-"*".jar" | grep -v emf | grep -v aspectj)
 	assert_file_exists_regular ${MAIN_JAR}
 	VERSION_CLASS_IN_JAR=$(unzip -l	 ${MAIN_JAR} | grep Version.class | awk '{ print $4 }')
 	unzip "${MAIN_JAR}" "${VERSION_CLASS_IN_JAR}"
 	assert_file_exists_regular "${VERSION_CLASS_IN_JAR}"
-	if ! file ${VERSION_CLASS_IN_JAR} | grep "version 50.0 (Java 1.6)"; then
+	if ! file ${VERSION_CLASS_IN_JAR} | grep "version $javaVersion"; then
 		echo "Unexpected bytecode version"
 		exit 1
 	fi
