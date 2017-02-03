@@ -1,7 +1,9 @@
 package kieker.analysisteetime.util.graph.export.dot;
 
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
 import kieker.analysisteetime.util.graph.Graph;
@@ -17,8 +19,9 @@ public class DotFileWriterStage extends DotWriterStage {
 	public DotFileWriterStage(final Function<Graph, String> fileNameMapper, final DotExportConfiguration exportConfiguration) {
 		super(fileNameMapper.andThen(fileName -> {
 			try {
-				return new FileWriter(fileName);
-			} catch (IOException e) {
+				// return new FileWriter(fileName); // Criticized by Findbugs
+				return new OutputStreamWriter(new FileOutputStream(fileName), StandardCharsets.UTF_8);
+			} catch (final IOException e) {
 				throw new IllegalArgumentException(e);
 			}
 		}), exportConfiguration);
