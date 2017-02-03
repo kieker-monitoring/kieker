@@ -16,6 +16,7 @@
 
 package kieker.test.tools.junit.writeRead.explorviz;
 
+import java.net.InetAddress;
 import java.util.List;
 
 import org.junit.Assert;
@@ -57,7 +58,7 @@ public class BasicExplorVizExportWriterTest {
 		// define records to be triggered by the test probe
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestEventRecords();
 
-		final String hostname = "localhost";
+		final String hostname = InetAddress.getLocalHost().getHostAddress();
 		final String port = BasicExplorVizExportWriterTest.PORT;
 
 		// define monitoring config

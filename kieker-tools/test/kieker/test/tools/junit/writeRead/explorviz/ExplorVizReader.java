@@ -52,12 +52,10 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 
 	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
-
-	public static final String ENCODING = "UTF-8";
-
 	/** The name of the configuration determining the TCP port. */
 	public static final String CONFIG_PROPERTY_NAME_PORT = "port";
 
+	private static final int CONNECTION_CLOSED_BY_CLIENT = -1;
 	private static final int MESSAGE_BUFFER_SIZE = 65535;
 
 	private volatile Thread readerThread;
@@ -68,7 +66,7 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 
 	public ExplorVizReader(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-		this.port = this.configuration.getIntProperty(CONFIG_PROPERTY_NAME_PORT);
+		this.port = configuration.getIntProperty(CONFIG_PROPERTY_NAME_PORT);
 	}
 
 	@Override
@@ -78,29 +76,8 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 		try {
 			serversocket = ServerSocketChannel.open();
 			serversocket.socket().bind(new InetSocketAddress(this.port));
-			if (this.log.isDebugEnabled()) {
-				this.log.debug("Listening on port " + this.port);
-			}
-			final SocketChannel socketChannel = serversocket.accept();
-			final ByteBuffer buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
-
-			while ((socketChannel.read(buffer) != -1) && (!this.terminated)) {
-				buffer.flip();
-				try {
-					while (buffer.hasRemaining()) {
-						buffer.mark();
-
-						final byte clazzid = buffer.get();
-						this.createReceivedRecord(clazzid, buffer);
-					}
-					buffer.clear();
-				} catch (final BufferUnderflowException ex) {
-					buffer.reset();
-					buffer.compact();
-				}
-			}
-
-			socketChannel.close();
+			this.log.info("Listening on port " + this.port);
+			this.accept(serversocket);
 		} catch (final ClosedByInterruptException ex) {
 			this.log.warn("Reader interrupted", ex);
 			return this.terminated;
@@ -123,11 +100,38 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 		return true;
 	}
 
+	private void accept(final ServerSocketChannel serversocket) throws IOException {
+		final SocketChannel socketChannel = serversocket.accept();
+		try {
+			final ByteBuffer buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
+
+			while ((socketChannel.read(buffer) != CONNECTION_CLOSED_BY_CLIENT) && (!this.terminated)) {
+				buffer.flip();
+				try {
+					while (buffer.hasRemaining()) {
+						buffer.mark();
+
+						final byte clazzid = buffer.get();
+						this.createReceivedRecord(clazzid, buffer);
+					}
+					buffer.clear();
+				} catch (final BufferUnderflowException ex) {
+					buffer.reset();
+					buffer.compact();
+				}
+			}
+		} finally {
+			socketChannel.close();
+		}
+	}
+
 	@Override
 	public void terminate(final boolean error) {
 		this.log.info("Shutdown of ExplorVizReader requested.");
 		this.terminated = true;
-		this.readerThread.interrupt();
+		if (this.readerThread != null) {
+			this.readerThread.interrupt();
+		}
 	}
 
 	@Override
