@@ -18,6 +18,10 @@ import kieker.analysisteetime.util.graph.Vertex;
  */
 public class NodeLabelMapper implements Function<Vertex, String> {
 
+	public NodeLabelMapper() {
+		super();
+	}
+
 	@Override
 	public String apply(final Vertex vertex) {
 		final Collection<String> modifiers;

@@ -67,6 +67,7 @@ public class GraphTransformerVisitor extends OperationCallVisitor {
 		vertex.setProperty("component", componentType.getName());
 		vertex.setProperty("package", componentType.getPackage());
 		vertex.setProperty("deploymentContext", deploymentContext.getName());
+		vertex.setProperty("stackDepth", operationCall.getStackDepth());
 		// ... maybe further parameters
 
 		return vertex;

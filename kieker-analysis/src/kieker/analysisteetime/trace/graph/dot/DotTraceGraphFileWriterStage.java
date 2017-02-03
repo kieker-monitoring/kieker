@@ -35,6 +35,7 @@ public class DotTraceGraphFileWriterStage extends DotFileWriterStage {
 		final DotExportConfiguration exportConfiguration = new DotExportConfiguration();
 		exportConfiguration.getDefaultNodeAttributes().put(DotNodeAttribute.SHAPE, g -> "none");
 		exportConfiguration.getEdgeAttributes().put(DotEdgeAttribute.LABEL, e -> e.getProperty("orderIndex").toString() + '.');
+		exportConfiguration.getNodeAttributes().put(DotNodeAttribute.LABEL, new NodeLabelMapper());
 
 		return new DotTraceGraphFileWriterStage(outputDirectory, exportConfiguration);
 	}
