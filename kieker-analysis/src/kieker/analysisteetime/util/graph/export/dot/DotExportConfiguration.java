@@ -26,6 +26,12 @@ import kieker.analysisteetime.util.graph.util.dot.attributes.DotNodeAttribute;
  */
 public class DotExportConfiguration {
 
+	/*
+	 * BETTER Even if EnumMaps are very efficient in terms of lookup, etc. they require
+	 * a constant memory space, which is the size of the enums list. Moreover, we only
+	 * want to iterate over the map and do not perform any lookups etc. A more efficient
+	 * way would be to use a List of Pairs of constant size.
+	 */
 	final protected Map<DotGraphAttribute, Function<Graph, String>> graphAttributes = new EnumMap<>(DotGraphAttribute.class);
 	final protected Map<DotNodeAttribute, Function<Graph, String>> defaultNodeAttributes = new EnumMap<>(DotNodeAttribute.class);
 	final protected Map<DotEdgeAttribute, Function<Graph, String>> defaultEdgeAttributes = new EnumMap<>(DotEdgeAttribute.class);
