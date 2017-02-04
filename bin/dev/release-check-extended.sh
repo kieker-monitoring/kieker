@@ -3,11 +3,11 @@
 # include common variables and functions
 source "$(dirname $0)/release-check-common.sh"
 
-# 51=Java 1.6
-# 52=Java 1.7
-# 53=Java 1.8
-# 54=Java 1.9
-javaVersion="major version: 52"
+# 50=Java 1.6
+# 51=Java 1.7
+# 52=Java 1.8
+# 53=Java 1.9
+javaVersion="major version: 51"
 
 # build with ant (target may be passed as $1)
 function run_gradle {
@@ -75,7 +75,7 @@ function check_src_archive {
 
 	VERSION_CLASS=$(find build -name "Version.class" | grep "kieker-common")
 	assert_file_exists_regular "${VERSION_CLASS}"
-	if ! javap -verbose ${VERSION_CLASS} | grep "${javaVersion}"; then
+	if ! javap -verbose ${VERSION_CLASS} | grep -q "${javaVersion}"; then
 		echo "Unexpected bytecode version"
 		exit 1
 	fi
@@ -106,9 +106,9 @@ function check_bin_archive {
 	fileResult="$(file ${VERSION_CLASS_IN_JAR})"
 	echo "${fileResult}"
 	
-	bytecodeVersion=$(javap -verbose ${VERSION_CLASS_IN_JAR} | grep "${javaVersion}")
+	bytecodeVersion="$(javap -verbose ${VERSION_CLASS_IN_JAR} | grep "${javaVersion}")"
 
-	if ! javap -verbose ${VERSION_CLASS_IN_JAR} | grep "${javaVersion}"; then
+	if ! javap -verbose ${VERSION_CLASS_IN_JAR} | grep -q "${javaVersion}"; then
 		echo "Unexpected bytecode version: ${bytecodeVersion}"
 		exit 1
 	fi
