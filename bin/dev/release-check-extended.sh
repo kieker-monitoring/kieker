@@ -76,7 +76,6 @@ function check_src_archive {
 	VERSION_CLASS=$(find build -name "Version.class" | grep "kieker-common")
 	assert_file_exists_regular "${VERSION_CLASS}"
 	if ! javap -verbose ${VERSION_CLASS} | grep "${javaVersion}"; then
-		
 		echo "Unexpected bytecode version"
 		exit 1
 	fi
@@ -101,8 +100,14 @@ function check_bin_archive {
 	unzip "${MAIN_JAR}" "${VERSION_CLASS_IN_JAR}"
 	assert_file_exists_regular "${VERSION_CLASS_IN_JAR}"
 	
-	bytecodeVersion=$(javap -verbose ${VERSION_CLASS_IN_JAR} | grep "${javaVersion}")
+	versionClassDisassembled="$(javap -verbose ${VERSION_CLASS_IN_JAR} )"
+	echo "${versionClassDisassembled}"
 	
+	fileResult="$(file ${VERSION_CLASS_IN_JAR})"
+	echo "${fileResult}"
+	
+	bytecodeVersion=$(javap -verbose ${VERSION_CLASS_IN_JAR} | grep "${javaVersion}")
+
 	if ! javap -verbose ${VERSION_CLASS_IN_JAR} | grep "${javaVersion}"; then
 		echo "Unexpected bytecode version: ${bytecodeVersion}"
 		exit 1
