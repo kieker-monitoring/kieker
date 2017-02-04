@@ -31,7 +31,7 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writernew.explorviz.ExplorVizTcpWriter;
+import kieker.monitoring.writer.explorviz.ExplorVizTcpWriter;
 
 import kieker.test.tools.junit.writeRead.TestAnalysis;
 import kieker.test.tools.junit.writeRead.TestDataRepository;

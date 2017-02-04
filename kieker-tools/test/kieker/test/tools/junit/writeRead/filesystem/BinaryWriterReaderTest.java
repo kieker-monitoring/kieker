@@ -30,7 +30,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
-import kieker.monitoring.writernew.filesystem.BinaryFileWriter;
+import kieker.monitoring.writer.filesystem.BinaryFileWriter;
 
 import kieker.test.tools.junit.writeRead.TestAnalysis;
 import kieker.test.tools.junit.writeRead.TestDataRepository;

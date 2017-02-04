@@ -23,7 +23,7 @@ import org.junit.After;
 import org.junit.Before;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.writernew.print.PrintStreamWriter;
+import kieker.monitoring.writer.print.PrintStreamWriter;
 
 import kieker.test.tools.util.StringTeePrintStream;
 

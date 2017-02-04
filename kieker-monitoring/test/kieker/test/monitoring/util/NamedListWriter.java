@@ -26,7 +26,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.writernew.AbstractMonitoringWriter;
+import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 /**
  * @author Andre van Hoorn

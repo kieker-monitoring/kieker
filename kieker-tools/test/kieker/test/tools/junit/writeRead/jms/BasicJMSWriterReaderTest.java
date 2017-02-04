@@ -32,7 +32,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writernew.jms.JmsWriter;
+import kieker.monitoring.writer.jms.JmsWriter;
 
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 

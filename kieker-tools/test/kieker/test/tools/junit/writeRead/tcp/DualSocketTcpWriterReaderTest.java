@@ -30,7 +30,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writernew.tcp.DualSocketTcpWriter;
+import kieker.monitoring.writer.tcp.DualSocketTcpWriter;
 
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 

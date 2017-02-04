@@ -30,7 +30,7 @@ import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writernew.namedRecordPipe.PipeWriter;
+import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
 
 /**
  * Provides factory methods for {@link MonitoringController}s configured to write to a {@link Pipe} and a convenient collector facility to access the records

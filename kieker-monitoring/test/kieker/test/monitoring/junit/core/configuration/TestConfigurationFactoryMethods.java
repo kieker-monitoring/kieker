@@ -27,7 +27,7 @@ import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.timer.SystemNanoTimer;
-import kieker.monitoring.writernew.filesystem.AsciiFileWriter;
+import kieker.monitoring.writer.filesystem.AsciiFileWriter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.DefaultConfigurationFactory;

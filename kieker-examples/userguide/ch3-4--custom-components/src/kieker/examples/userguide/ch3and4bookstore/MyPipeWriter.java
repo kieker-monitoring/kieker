@@ -18,7 +18,7 @@ package kieker.examples.userguide.ch3and4bookstore;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.writernew.AbstractMonitoringWriter;
+import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 public class MyPipeWriter extends AbstractMonitoringWriter {
 

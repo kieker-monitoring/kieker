@@ -18,7 +18,7 @@ package kieker.test.tools.junit.writeRead.namedPipe;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.monitoring.writernew.namedRecordPipe.PipeWriter;
+import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
 
 /**
  * @author Andre van Hoorn

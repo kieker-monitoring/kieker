@@ -26,7 +26,7 @@ import org.junit.rules.TemporaryFolder;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.writernew.filesystem.AsciiFileWriter;
+import kieker.monitoring.writer.filesystem.AsciiFileWriter;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 
 import kieker.test.common.junit.AbstractKiekerTest;

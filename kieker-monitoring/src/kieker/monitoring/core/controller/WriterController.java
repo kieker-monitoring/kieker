@@ -37,8 +37,8 @@ import kieker.monitoring.queue.putstrategy.PutStrategy;
 import kieker.monitoring.queue.putstrategy.SPBlockingPutStrategy;
 import kieker.monitoring.queue.takestrategy.SCBlockingTakeStrategy;
 import kieker.monitoring.queue.takestrategy.TakeStrategy;
-import kieker.monitoring.writernew.AbstractMonitoringWriter;
-import kieker.monitoring.writernew.MonitoringWriterThread;
+import kieker.monitoring.writer.AbstractMonitoringWriter;
+import kieker.monitoring.writer.MonitoringWriterThread;
 
 /**
  * @author Andre van Hoorn, Matthias Rohr, Jan Waller, Robert von Massow

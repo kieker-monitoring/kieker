@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
-import kieker.monitoring.writernew.dump.DumpWriter;
+import kieker.monitoring.writer.dump.DumpWriter;
 
 /**
  * A writer that simply counts the number of records of type DummyRecord received.

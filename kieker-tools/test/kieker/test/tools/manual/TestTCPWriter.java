@@ -22,7 +22,7 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
-import kieker.monitoring.writernew.tcp.TCPWriter;
+import kieker.monitoring.writer.tcp.TCPWriter;
 
 /**
  * @author Jan Waller

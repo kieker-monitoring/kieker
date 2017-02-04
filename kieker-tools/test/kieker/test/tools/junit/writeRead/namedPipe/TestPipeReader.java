@@ -26,7 +26,7 @@ import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
-import kieker.monitoring.writernew.namedRecordPipe.PipeWriter;
+import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 

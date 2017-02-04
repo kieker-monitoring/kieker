@@ -45,7 +45,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.writernew.filesystem.AsciiFileWriter;
+import kieker.monitoring.writer.filesystem.AsciiFileWriter;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;

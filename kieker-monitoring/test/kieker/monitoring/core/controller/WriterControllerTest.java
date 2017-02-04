@@ -27,7 +27,7 @@ import kieker.Await;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.writernew.dump.DumpWriter;
+import kieker.monitoring.writer.dump.DumpWriter;
 
 /**
  *

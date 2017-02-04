@@ -22,7 +22,7 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writernew.explorviz.ExplorVizTcpWriter;
+import kieker.monitoring.writer.explorviz.ExplorVizTcpWriter;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 

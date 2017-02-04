@@ -49,7 +49,7 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.signaturePattern.InvalidPatternException;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
-import kieker.monitoring.writernew.dump.DumpWriter;
+import kieker.monitoring.writer.dump.DumpWriter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
