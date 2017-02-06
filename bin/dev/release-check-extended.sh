@@ -67,7 +67,7 @@ function check_src_archive {
 	MAIN_JAR=$(ls "${DIST_JAR_DIR}/kieker-"*".jar" | grep -v emf | grep -v aspectj)
 	assert_file_exists_regular ${MAIN_JAR}
 
-	VERSION_CLASS=$(find build -name "Version.class" | grep "kieker-common")
+	VERSION_CLASS=$(find kieker-common/build -name "Version.class")
 	assert_file_exists_regular "${VERSION_CLASS}"
 	if ! file ${VERSION_CLASS} | grep "version 50.0 (Java 1.6)"; then
 		echo "Unexpected bytecode version"
