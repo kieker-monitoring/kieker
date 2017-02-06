@@ -151,14 +151,14 @@ public final class LogImplWebguiLogging implements Log {
 			// Is the queue full?
 			if (queue.size() >= MAX_ENTRIES) {
 				// Yes, remove the oldest entry.
-				queue.poll(); // NOFB (ignore the return value)
+				queue.poll();
 			}
-			final StringBuilder sb = new StringBuilder(255);
-			sb.append(this.date.format(new java.util.Date())); // this has to be within synchronized
-			sb.append(": ");
-			sb.append(severity);
-			sb.append(' ');
-			sb.append(message);
+			final StringBuilder sb = new StringBuilder(255)
+					.append(this.date.format(new java.util.Date())) // this has to be within synchronized
+					.append(": ")
+					.append(severity)
+					.append(' ')
+					.append(message);
 			if (null != throwable) {
 				sb.append('\n');
 				sb.append(throwable.toString());

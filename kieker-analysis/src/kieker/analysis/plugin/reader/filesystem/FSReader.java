@@ -24,6 +24,7 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
+import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
@@ -31,20 +32,16 @@ import kieker.common.util.filesystem.FSUtil;
 
 /**
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
- * 
+ *
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 0.95a
  */
-@Plugin(description = "A file system reader which reads records from multiple directories",
-		outputPorts = {
-			@OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader") },
-		configuration = {
-			@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".",
-					description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
-			@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false",
-					description = "Ignore unknown records? Aborts if encountered and value is false.")
-		})
+@Plugin(description = "A file system reader which reads records from multiple directories", outputPorts = {
+	@OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader") }, configuration = {
+		@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".", description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
+		@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false", description = "Ignore unknown records? Aborts if encountered and value is false.")
+	})
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
 	/** The name of the output port delivering the record read by this plugin. */
@@ -56,7 +53,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES = "ignoreUnknownRecordTypes";
 
 	/** This dummy record can be send to the reader's record queue to mark the end of the current file. */
-	public static final IMonitoringRecord EOF = new EmptyRecord();
+	private static final IMonitoringRecord EOF = new EmptyRecord();
 
 	private final boolean ignoreUnknownRecordTypes;
 
@@ -67,7 +64,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -179,25 +176,9 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.toString(this.ignoreUnknownRecordTypes));
 		return configuration;
 	}
-}
 
-/**
- * This is a simple interface showing that the {@link FSReader} can receive records. This is mostly a relict from an older version.
- * 
- * @author Andre van Hoorn, Jan Waller
- * 
- * @since 1.2
- */
-interface IMonitoringRecordReceiver {
-
-	/**
-	 * This method is called for each new record by each ReaderThread.
-	 * 
-	 * @param record
-	 *            The record to be processed.
-	 * @return true if and only if the record has been handled correctly.
-	 * 
-	 * @since 1.2
-	 */
-	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
+	@Override
+	public void newEndOfFileRecord() {
+		this.newMonitoringRecord(EOF);
+	}
 }

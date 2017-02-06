@@ -22,13 +22,13 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writer.explorviz.ExplorVizExportWriter;
+import kieker.monitoring.writer.explorviz.ExplorVizTcpWriter;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 
 /**
  * @author Florian Fittkau, Jan Waller
- * 
+ *
  * @since 1.9
  */
 public final class TestExplorVizExportWriter {
@@ -39,7 +39,7 @@ public final class TestExplorVizExportWriter {
 
 	public static void main(final String[] args) {
 		final Configuration monitoringConfig = ConfigurationFactory.createDefaultConfiguration();
-		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, ExplorVizExportWriter.class.getName());
+		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, ExplorVizTcpWriter.class.getName());
 		monitoringConfig.setProperty(ConfigurationFactory.CONTROLLER_NAME, "Bookstore");
 		final IMonitoringController ctrl = MonitoringController.createInstance(monitoringConfig);
 

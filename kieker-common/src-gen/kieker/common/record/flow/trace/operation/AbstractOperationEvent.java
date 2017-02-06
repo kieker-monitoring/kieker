@@ -1,28 +1,11 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.flow.trace.operation;
 
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.util.registry.IRegistry;
+
 import kieker.common.record.flow.IOperationRecord;
 
 /**
@@ -31,17 +14,19 @@ import kieker.common.record.flow.IOperationRecord;
  * @since 1.5
  */
 public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IOperationRecord {
-		private static final long serialVersionUID = -4876224316055177674L;
+	private static final long serialVersionUID = -4876224316055177674L;
+
 	
+	/** user-defined constants */
 	
-	/* user-defined constants */
-	/* default constants */
+	/** default constants */
 	public static final String OPERATION_SIGNATURE = "";
 	public static final String CLASS_SIGNATURE = "";
-	/* property declarations */
+	
+	/** property declarations */
 	private final String operationSignature;
 	private final String classSignature;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -62,7 +47,7 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		this.classSignature = classSignature == null?CLASS_SIGNATURE:classSignature;
 	}
 
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -92,6 +77,7 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		this.classSignature = stringRegistry.get(buffer.getInt());
 	}
 
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -102,7 +88,7 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -113,7 +99,7 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -132,13 +118,12 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
 		return true;
 	}
-
+	
 	public final String getOperationSignature() {
 		return this.operationSignature;
-	}
+	}	
 	
 	public final String getClassSignature() {
 		return this.classSignature;
-	}
-	
+	}	
 }

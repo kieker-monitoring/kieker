@@ -31,6 +31,8 @@ plugin.xml
 /build-eclipse/
 /javadoc
 **/.gradle
+/src-gen
+/test-gen
 
 # IntelliJ
 .idea/

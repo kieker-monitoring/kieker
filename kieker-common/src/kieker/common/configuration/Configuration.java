@@ -36,7 +36,7 @@ import kieker.common.logging.LogFactory;
  *
  * @since 1.5
  */
-public final class Configuration extends Properties {
+public class Configuration extends Properties {
 
 	private static final long serialVersionUID = 3364877592243422259L;
 	private static final Log LOG = LogFactory.getLog(Configuration.class);
@@ -71,15 +71,15 @@ public final class Configuration extends Properties {
 	}
 
 	/**
-	 * Reads the given property from the configuration and interprets it as a string. If no value
-	 * exists for this property, the given default value is returned.
+	 * Reads the given property from the configuration and interprets it as a string.
 	 *
 	 * @param key
 	 *            The key of the property.
-	 * @param defaultValue
-	 *            The default value for this property.
 	 *
-	 * @return A string with the value of the given property or null, if the property does not exist.
+	 * @param defaultValue
+	 *            The default value for the given <code>key</code>
+	 * 
+	 * @return A string with the value of the given property or the given <code>defaultValue</code>, if the property does not exist.
 	 */
 	public final String getStringProperty(final String key, final String defaultValue) {
 		final String s = super.getProperty(key);
@@ -318,7 +318,7 @@ public final class Configuration extends Properties {
 	 * @param value
 	 *            The array to set
 	 */
-	public final void setStringArrayProperty(final String key, final String[] value) {
+	public void setStringArrayProperty(final String key, final String[] value) {
 		this.setProperty(key, Configuration.toProperty(value));
 	}
 
@@ -503,7 +503,7 @@ public final class Configuration extends Properties {
 	 * @param defaultConfiguration
 	 *            The default configuration for this configuration object.
 	 */
-	public final void setDefaultConfiguration(final Configuration defaultConfiguration) {
+	public void setDefaultConfiguration(final Configuration defaultConfiguration) {
 		Configuration conf = this;
 		while ((conf.defaults != null) && (conf.defaults instanceof Configuration)) {
 			conf = (Configuration) conf.defaults;

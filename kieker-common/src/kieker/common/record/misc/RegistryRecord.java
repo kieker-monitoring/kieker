@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -60,13 +61,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	public RegistryRecord(final int id, final String string) {
 		this.id = id;
 		this.string = string;
-		byte[] tmpBytes;
-		try {
-			tmpBytes = this.getString().getBytes(ENCODING);
-		} catch (final UnsupportedEncodingException ex) {
-			tmpBytes = this.getString().getBytes();
-		}
-		this.strBytes = tmpBytes;
+		this.strBytes = RegistryRecord.stringToBytes(this.string);
 	}
 
 	/**
@@ -80,13 +75,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.id = (Integer) values[0];
 		this.string = (String) (values[1]);
-		byte[] tmpBytes;
-		try {
-			tmpBytes = this.getString().getBytes(ENCODING);
-		} catch (final UnsupportedEncodingException ex) {
-			tmpBytes = this.getString().getBytes();
-		}
-		this.strBytes = tmpBytes;
+		this.strBytes = RegistryRecord.stringToBytes(this.string);
 	}
 
 	/**
@@ -104,13 +93,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 		this.id = buffer.getInt();
 		this.strBytes = new byte[buffer.getInt()];
 		buffer.get(this.strBytes);
-		String str;
-		try {
-			str = new String(this.strBytes, ENCODING);
-		} catch (final UnsupportedEncodingException e) {
-			str = new String(this.strBytes); // NOPMD
-		}
-		this.string = str;
+		this.string = RegistryRecord.bytesToString(this.strBytes);
 	}
 
 	/**
@@ -213,13 +196,28 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 		final int id = buffer.getInt();
 		final byte[] strBytes = new byte[buffer.getInt()];
 		buffer.get(strBytes);
-		String string;
-		try {
-			string = new String(strBytes, ENCODING);
-		} catch (final UnsupportedEncodingException e) {
-			string = new String(strBytes); // NOPMD
-		}
+		final String string = RegistryRecord.bytesToString(strBytes);
 		stringRegistry.set(string, id);
+	}
+
+	private static String bytesToString(final byte[] strBytes) {
+		String str;
+		try {
+			str = new String(strBytes, ENCODING);
+		} catch (final UnsupportedEncodingException e) {
+			str = new String(strBytes, Charset.defaultCharset());
+		}
+		return str;
+	}
+
+	private static byte[] stringToBytes(final String string) {
+		byte[] tmpBytes;
+		try {
+			tmpBytes = string.getBytes(ENCODING);
+		} catch (final UnsupportedEncodingException ex) {
+			tmpBytes = string.getBytes(Charset.defaultCharset());
+		}
+		return tmpBytes;
 	}
 
 }

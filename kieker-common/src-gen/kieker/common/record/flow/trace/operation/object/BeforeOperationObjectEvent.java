@@ -1,29 +1,12 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.flow.trace.operation.object;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.common.util.registry.IRegistry;
+
 import kieker.common.record.flow.IObjectRecord;
 
 /**
@@ -32,6 +15,8 @@ import kieker.common.record.flow.IObjectRecord;
  * @since 1.6
  */
 public class BeforeOperationObjectEvent extends BeforeOperationEvent implements IObjectRecord {
+	private static final long serialVersionUID = 1420636123206687333L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
@@ -40,7 +25,6 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 	;
-	private static final long serialVersionUID = 1420636123206687333L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -51,12 +35,14 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 		int.class, // IObjectRecord.objectId
 	};
 	
-	/* user-defined constants */
-	/* default constants */
+	/** user-defined constants */
+	
+	/** default constants */
 	public static final int OBJECT_ID = 0;
-	/* property declarations */
+	
+	/** property declarations */
 	private final int objectId;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -89,7 +75,7 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 		super(values, TYPES);
 		this.objectId = (Integer) values[5];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -131,7 +117,7 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 			this.getObjectId()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -140,7 +126,7 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 		stringRegistry.get(this.getOperationSignature());
 		stringRegistry.get(this.getClassSignature());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -153,7 +139,7 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(this.getObjectId());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -161,7 +147,7 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -169,6 +155,7 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -179,7 +166,7 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -190,7 +177,7 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -210,9 +197,8 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 		if (this.getObjectId() != castedRecord.getObjectId()) return false;
 		return true;
 	}
-
+	
 	public final int getObjectId() {
 		return this.objectId;
-	}
-	
+	}	
 }
