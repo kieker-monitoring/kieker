@@ -88,6 +88,8 @@ public final class WriterController extends AbstractController implements IWrite
 		this.queueCapacity = configuration.getIntProperty(PREFIX + RECORD_QUEUE_SIZE);
 		final String queueFqn = configuration.getStringProperty(PREFIX + RECORD_QUEUE_FQN);
 
+		LOG.info("Initializing writer queue '" + queueFqn + "' with a capacity of (at least) " + this.queueCapacity);
+
 		final Queue<IMonitoringRecord> queue = this.newQueue(queueFqn, this.queueCapacity);
 		if (queue instanceof BlockingQueue) {
 			this.writerQueue = (BlockingQueue<IMonitoringRecord>) queue;
@@ -96,8 +98,6 @@ public final class WriterController extends AbstractController implements IWrite
 			final TakeStrategy takeStrategy = new SCBlockingTakeStrategy();
 			this.writerQueue = new BlockingQueueDecorator<IMonitoringRecord>(queue, putStrategy, takeStrategy);
 		}
-
-		LOG.info("Using writer queue '" + queueFqn + "' with a capacity of (at least) " + this.queueCapacity);
 
 		final String writerClassName = configuration.getStringProperty(ConfigurationFactory.WRITER_CLASSNAME);
 		this.monitoringWriter = AbstractController.createAndInitialize(AbstractMonitoringWriter.class, writerClassName,
