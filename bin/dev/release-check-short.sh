@@ -34,6 +34,7 @@ function assert_no_duplicate_files_in_archive {
 }
 
 function assert_all_sh_scripts_executable {
+    cat ./build-script-*.sh
     for sh in $(find -name "*.sh"); do
 	echo -n "Checking for exectuable flag: $sh ... "
 	if ! test -x $sh; then
