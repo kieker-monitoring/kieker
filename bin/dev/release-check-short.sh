@@ -39,7 +39,7 @@ function assert_all_sh_scripts_executable {
 	if ! test -x $sh; then
 	    if [[ $sh =~ build-script-.*\.sh ]] ; then
 		echo "excluded (workaround for SnapCI)"
-		exit 0
+		continue
             fi
 	    echo " not executable"
 	    exit 1
