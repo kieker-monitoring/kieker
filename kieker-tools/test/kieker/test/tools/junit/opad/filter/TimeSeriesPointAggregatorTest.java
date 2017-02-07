@@ -34,10 +34,10 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * Checks if values in the given timespan (10 milliseconds) are aggregated correctly.
  * Also checks if zero values are created for timestamps with no incoming values.
- * 
+ *
  * @author Tom Frotscher, Teerat Pitakrat
  * @since 1.10
- * 
+ *
  */
 public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 
@@ -227,33 +227,33 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 
 		/**
 		 * <pre>
-		 * 
+		 *
 		 *       1.[1,10]        5.[11,20]         9.[21,30]          13.[31,40]
 		 * A -[1--------10]-[11--------18---]-[----------------]-[----------------]-[------------
-		 * 
-		 * 
-		 *                 4.[8,17]            8.[18,27]        12.[28,37]         16.[38,47]    
+		 *
+		 *
+		 *                 4.[8,17]            8.[18,27]        12.[28,37]         16.[38,47]
 		 * B -------[8---------12--------]-[--------------]-[28--------------]-[----------------]
-		 * 
-		 * 
+		 *
+		 *
 		 *            3.[5,14]          7.[15,24]         11.[25,34]         15.[35,44]
 		 * C ----[5--------------]-[---18----------]-[----------------]-[----------------]-[---48
-		 * 
-		 * 
+		 *
+		 *
 		 *            2.[5,14]          6.[15,24]         10.[25,34]         14.[35,44]
 		 * D ----[5--------------]-[---18----------]-[----------------]-[----------------]-[-----
-		 * 
-		 * 
+		 *
+		 *
 		 * Description:
 		 * A -[1--------10]--- = A has two monitoring records at timestamp 1 and 10
 		 * [ = Begining of aggregation window
 		 * ] = End of aggregation window
-		 * 
+		 *
 		 * X.[Y,Z] = aggregation window
 		 * X = expected order of aggregated window from the filter
 		 * Y = first timestamp
 		 * Z = last timestamp
-		 * 
+		 *
 		 * </pre>
 		 */
 
@@ -294,54 +294,66 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		controller.run();
 
 		final List<NamedDoubleTimeSeriesPoint> sinkList = sinkPlugin.getList();
-		Assert.assertEquals(16, sinkList.size());
+		// We do not check the time since the elements are aggregated values across multiple different points in time.
+
 		// Expected: (1000 + 2000) / 2 = 1500 Application A
 		Assert.assertEquals(OP_SIGNATURE_A, sinkList.get(0).getName());
 		Assert.assertEquals(1500.0, sinkList.get(0).getDoubleValue(), EPSILON);
-		// Expected: 1000 Application D
-		Assert.assertEquals(OP_SIGNATURE_D, sinkList.get(1).getName());
+
 		Assert.assertEquals(1000.0, sinkList.get(1).getDoubleValue(), EPSILON);
-		// Expected: 1000 Application C
-		Assert.assertEquals(OP_SIGNATURE_C, sinkList.get(2).getName());
 		Assert.assertEquals(1000.0, sinkList.get(2).getDoubleValue(), EPSILON);
+		this.assertAppNames(sinkList, 1, 2);
+
 		// Expected: (2000+4000) / 2 = 3000 Application B
 		Assert.assertEquals(OP_SIGNATURE_B, sinkList.get(3).getName());
 		Assert.assertEquals(3000.0, sinkList.get(3).getDoubleValue(), EPSILON);
 		// Expected: (3000+5000) / 2 = 4000 Application A
 		Assert.assertEquals(OP_SIGNATURE_A, sinkList.get(4).getName());
 		Assert.assertEquals(4000.0, sinkList.get(4).getDoubleValue(), EPSILON);
-		// Expected: 5000 Application D
-		Assert.assertEquals(OP_SIGNATURE_D, sinkList.get(5).getName());
+
 		Assert.assertEquals(5000.0, sinkList.get(5).getDoubleValue(), EPSILON);
-		// Expected: 5000 Application C
-		Assert.assertEquals(OP_SIGNATURE_C, sinkList.get(6).getName());
 		Assert.assertEquals(5000.0, sinkList.get(6).getDoubleValue(), EPSILON);
+		this.assertAppNames(sinkList, 5, 6);
+
 		// Expected: NaN Application B
 		Assert.assertEquals(OP_SIGNATURE_B, sinkList.get(7).getName());
 		Assert.assertEquals(Double.NaN, sinkList.get(7).getDoubleValue(), EPSILON);
 		// Expected: NaN Application A
 		Assert.assertEquals(OP_SIGNATURE_A, sinkList.get(8).getName());
 		Assert.assertEquals(Double.NaN, sinkList.get(8).getDoubleValue(), EPSILON);
-		// Expected: NaN Application D
-		Assert.assertEquals(OP_SIGNATURE_D, sinkList.get(9).getName());
+
 		Assert.assertEquals(Double.NaN, sinkList.get(9).getDoubleValue(), EPSILON);
-		// Expected: NaN Application C
-		Assert.assertEquals(OP_SIGNATURE_C, sinkList.get(10).getName());
 		Assert.assertEquals(Double.NaN, sinkList.get(10).getDoubleValue(), EPSILON);
+		this.assertAppNames(sinkList, 9, 10);
+
 		// Expected: NaN Application B
 		Assert.assertEquals(OP_SIGNATURE_B, sinkList.get(11).getName());
 		Assert.assertEquals(6000.0, sinkList.get(11).getDoubleValue(), EPSILON);
 		// Expected: NaN Application A
 		Assert.assertEquals(OP_SIGNATURE_A, sinkList.get(12).getName());
 		Assert.assertEquals(Double.NaN, sinkList.get(12).getDoubleValue(), EPSILON);
-		// Expected: NaN Application D
-		Assert.assertEquals(OP_SIGNATURE_D, sinkList.get(13).getName());
+
 		Assert.assertEquals(Double.NaN, sinkList.get(13).getDoubleValue(), EPSILON);
-		// Expected: NaN Application C
-		Assert.assertEquals(OP_SIGNATURE_C, sinkList.get(14).getName());
 		Assert.assertEquals(Double.NaN, sinkList.get(14).getDoubleValue(), EPSILON);
+		this.assertAppNames(sinkList, 13, 14);
+
 		// Expected: NaN Application B
 		Assert.assertEquals(OP_SIGNATURE_B, sinkList.get(15).getName());
 		Assert.assertEquals(Double.NaN, sinkList.get(15).getDoubleValue(), EPSILON);
+
+		Assert.assertEquals(16, sinkList.size());
+	}
+
+	private void assertAppNames(final List<NamedDoubleTimeSeriesPoint> sinkList, final int firstIndex, final int secondIndex) throws AssertionError {
+		// the order of the app names varies from execution to execution since the aggregation filter uses an unsorted map
+		final String firstAppName = sinkList.get(firstIndex).getName();
+		final String secondAppName = sinkList.get(secondIndex).getName();
+		if (OP_SIGNATURE_D.equals(firstAppName)) {
+			Assert.assertEquals(OP_SIGNATURE_C, secondAppName);
+		} else if (OP_SIGNATURE_C.equals(firstAppName)) {
+			Assert.assertEquals(OP_SIGNATURE_D, secondAppName);
+		} else {
+			throw new AssertionError("Unexpected app name: " + firstAppName);
+		}
 	}
 }

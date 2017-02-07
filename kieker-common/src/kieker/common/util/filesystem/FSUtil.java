@@ -18,7 +18,7 @@ package kieker.common.util.filesystem;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.7
  */
 public final class FSUtil { // NOCS NOPMD (constants interface)
@@ -37,6 +37,12 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 	public static final String NORMAL_FILE_EXTENSION = ".dat";
 	/** The extension of Kieker's zipped record files. */
 	public static final String ZIP_FILE_EXTENSION = ".zip";
+	/** The extension of Kieker's gzipped record files. */
+	public static final String GZIP_FILE_EXTENSION = ".gz";
+	/** The extension of Kieker's binary record files. */
+	public static final String BINARY_FILE_EXTENSION = ".bin";
+	/** The extension of Kieker's mapping files. */
+	public static final String MAP_FILE_EXTENSION = ".map";
 
 	/** The encoding usually used within Kieker. */
 	public static final String ENCODING = "UTF-8";
@@ -47,10 +53,10 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 
 	/**
 	 * Encodes the given line (replaces {@code \\} with {@code \\\\}, {@code \r} with {@code \\r} and {@code \n} with {@code \\n}).
-	 * 
+	 *
 	 * @param str
 	 *            The string to encode.
-	 * 
+	 *
 	 * @return The modified string.
 	 */
 	public static final String encodeNewline(final String str) {
@@ -84,10 +90,10 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 
 	/**
 	 * Decodes the given line (replaces {@code \\\\} with {@code \\}, {@code \\r} with {@code \r} and {@code \\n} with {@code \n}).
-	 * 
+	 *
 	 * @param str
 	 *            The string to decode.
-	 * 
+	 *
 	 * @return The modified string.
 	 */
 	public static final String decodeNewline(final String str) {

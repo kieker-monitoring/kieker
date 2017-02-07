@@ -1,19 +1,3 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.misc;
 
 import java.nio.BufferOverflowException;
@@ -23,7 +7,6 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
 
 
 /**
@@ -32,18 +15,21 @@ import kieker.common.util.Version;
  * @since 0.95a
  */
 public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	private static final long serialVersionUID = -177095911417362302L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = 0
 	;
-	private static final long serialVersionUID = -177095911417362302L;
 	
 	public static final Class<?>[] TYPES = {
 	};
 	
-	/* user-defined constants */
-	/* default constants */
-	/* property declarations */
-
+	/** user-defined constants */
+	
+	/** default constants */
+	
+	/** property declarations */
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -61,7 +47,7 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 	public EmptyRecord(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -94,21 +80,21 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 		return new Object[] {
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -116,7 +102,7 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -124,6 +110,7 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -134,7 +121,7 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -145,7 +132,7 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -159,5 +146,5 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
 		return true;
 	}
-
+	
 }

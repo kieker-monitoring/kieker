@@ -29,17 +29,16 @@ import kieker.common.namedRecordPipe.IPipeReader;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
 
 /**
  * Provides factory methods for {@link MonitoringController}s configured to write to a {@link Pipe} and a convenient collector facility to access the records
  * received in a {@link List}. Note that, in contrast to the similar class {@link NamedPipeFactory}, doesn't use the {@link PipeWriter} directly, but uses an *
- * {@link IMonitoringController}. Also, the {@link kieker.analysis.plugin.reader.namedRecordPipe.PipeReader} is used.
- * 
+ * {@link MonitoringController}. Also, the {@link kieker.analysis.plugin.reader.namedRecordPipe.PipeReader} is used.
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.4
  */
 public final class NamedPipeFactory {
@@ -52,7 +51,7 @@ public final class NamedPipeFactory {
 	/**
 	 * This method should be used in tests to generate unique names for {@link Configuration}s with {@link PipeWriter}s and {@link java.io.PipedReader}s
 	 * in order to avoid naming conflicts.
-	 * 
+	 *
 	 * @return a unique name
 	 */
 	public static String createPipeName() {
@@ -60,29 +59,29 @@ public final class NamedPipeFactory {
 	}
 
 	/**
-	 * Creates a new {@link IMonitoringController} instance with the writer
+	 * Creates a new {@link MonitoringController} instance with the writer
 	 * being a {@link PipeWriter} with the given name.
-	 * 
+	 *
 	 * @param pipeName
 	 *            The name of the pipe to use.
 	 * @return the created IMonitoringController instance
 	 */
-	public static IMonitoringController createMonitoringControllerWithNamedPipe(final String pipeName) {
+	public static MonitoringController createMonitoringControllerWithNamedPipe(final String pipeName) {
 		return NamedPipeFactory.createMonitoringControllerWithNamedPipe(pipeName, null);
 	}
 
 	/**
-	 * Creates a new {@link IMonitoringController} instance with the writer
+	 * Creates a new {@link MonitoringController} instance with the writer
 	 * being a {@link PipeWriter} with the given name. Additional configuration
 	 * properties can be passed.
-	 * 
+	 *
 	 * @param pipeName
 	 *            The name of the pipe to use.
 	 * @param additionalProperties
 	 *            additional configuration properties; null is allowed
 	 * @return the created IMonitoringController instance
 	 */
-	public static IMonitoringController createMonitoringControllerWithNamedPipe(final String pipeName, final Properties additionalProperties) {
+	public static MonitoringController createMonitoringControllerWithNamedPipe(final String pipeName, final Properties additionalProperties) {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 		configuration.setProperty(ConfigurationFactory.METADATA, "false");
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PipeWriter.class.getName());
@@ -99,8 +98,8 @@ public final class NamedPipeFactory {
 	}
 
 	/**
-	 * Creates an {@link kieker.monitoring.writer.IMonitoringWriter} that collects records from a {@link Pipe} and collects these in the returned {@link List}.
-	 * 
+	 * Creates an {@link IPipeReader} that collects records from a {@link Pipe} and collects these in the returned {@link List}.
+	 *
 	 * @param pipeName
 	 *            The name of the pipe to use.
 	 * @return a list which contains the collected records
@@ -117,7 +116,7 @@ public final class NamedPipeFactory {
 
 			@Override
 			public void notifyPipeClosed() {
-				// nothing to do
+				// do nothing
 			}
 		});
 		return receivedRecords;

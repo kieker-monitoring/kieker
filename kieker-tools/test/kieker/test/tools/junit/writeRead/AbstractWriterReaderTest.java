@@ -27,16 +27,20 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
+@Deprecated
 public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
+
+	private static final int TIMEOUT_IN_MS = 0;
 
 	// parameters for the default list of events to use in the test
 	private static final String DEFAULT_EVENTS_SESSION_ID = "Mn51D97t0";
@@ -45,18 +49,18 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * @param numRecordsWritten
-	 * 
-	 * @return An {@link IMonitoringController} initialized with the respective FS Writer.
+	 *
+	 * @return A {@link MonitoringController} initialized with the respective FS Writer.
 	 */
-	protected abstract IMonitoringController createController(final int numRecordsWritten) throws Exception;
+	protected abstract MonitoringController createController(final int numRecordsWritten) throws Exception;
 
 	/**
 	 * Checks if the given {@link IMonitoringController} is in the expected state after having passed
 	 * the records to the controller.
-	 * 
+	 *
 	 * @param monitoringController
 	 *            The monitoring controller in question.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If something went wrong during the check.
 	 */
@@ -65,10 +69,10 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	/**
 	 * Checks if the given {@link IMonitoringController} is in the expected state before having passed
 	 * the records to the controller.
-	 * 
+	 *
 	 * @param monitoringController
 	 *            The monitoring controller in question.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If something went wrong during the check.
 	 */
@@ -76,7 +80,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * Check if the given set of records is as expected.
-	 * 
+	 *
 	 * @param eventsPassedToController
 	 *            The events which have been passed to the controller.
 	 * @param eventFromMonitoringLog
@@ -88,7 +92,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * Returns a list of {@link IMonitoringRecord}s to be used in this test. Extending classes can override this method to use their own list of records.
-	 * 
+	 *
 	 * @return A list of records.
 	 */
 	protected List<IMonitoringRecord> provideEvents() {
@@ -105,9 +109,9 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * Returns the list of records read from the previously written monitoring log.
-	 * 
+	 *
 	 * @return The list of records.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If something went wrong during the reading.
 	 */
@@ -115,7 +119,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * Provides implementing classes to do something before reading the log, e.g., manipulating it.
-	 * 
+	 *
 	 * @throws IOException
 	 *             If something went wrong during the manipulation of the log.
 	 */
@@ -123,7 +127,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * The actual Test. Note that this should be the only {@link Test} in this class.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If something went wrong during the test.
 	 */
@@ -132,21 +136,22 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 		final List<IMonitoringRecord> someEvents = this.provideEvents();
 
 		// Write batch of records:
-		final IMonitoringController ctrl = this.createController(someEvents.size());
+		final MonitoringController monCtrl = this.createController(someEvents.size());
 
-		this.checkControllerStateBeforeRecordsPassedToController(ctrl);
+		this.checkControllerStateBeforeRecordsPassedToController(monCtrl);
 
 		for (final IMonitoringRecord record : someEvents) {
-			ctrl.newMonitoringRecord(record);
+			monCtrl.newMonitoringRecord(record);
 		}
 
 		Thread.sleep(1000); // wait a second to give the FS writer the chance to write the monitoring log.
 
-		this.checkControllerStateAfterRecordsPassedToController(ctrl);
+		this.checkControllerStateAfterRecordsPassedToController(monCtrl);
 
 		if (this.terminateBeforeLogInspection()) {
 			// need to terminate explicitly, because otherwise, the monitoring log directory cannot be removed
-			ctrl.terminateMonitoring();
+			monCtrl.terminateMonitoring();
+			monCtrl.waitForTermination(TIMEOUT_IN_MS);
 		}
 
 		this.doBeforeReading();
@@ -160,7 +165,8 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 		if (!this.terminateBeforeLogInspection()) {
 			// need to terminate explicitly, because otherwise, the monitoring log directory cannot be removed
-			ctrl.terminateMonitoring();
+			monCtrl.terminateMonitoring();
+			monCtrl.waitForTermination(TIMEOUT_IN_MS);
 		}
 	}
 }
