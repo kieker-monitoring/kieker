@@ -186,22 +186,19 @@ public final class WriterController extends AbstractController implements IWrite
 			@SuppressWarnings("rawtypes")
 			final Constructor<? extends Queue> constructor = queueClass.getConstructor(int.class);
 			return constructor.newInstance(capacity);
-		} catch (final ClassNotFoundException e) {
+		} catch (final ClassNotFoundException | InstantiationException e) {
 			LOG.warn("An exception occurred", e);
-		} catch (final NoSuchMethodException e) {
+			throw new IllegalStateException(e);
+		} catch (final NoSuchMethodException | SecurityException e) {
 			LOG.warn("An exception occurred", e);
-		} catch (final SecurityException e) {
+			throw new IllegalStateException(e);
+		} catch (final IllegalAccessException | IllegalArgumentException e) {
 			LOG.warn("An exception occurred", e);
-		} catch (final InstantiationException e) {
-			LOG.warn("An exception occurred", e);
-		} catch (final IllegalAccessException e) {
-			LOG.warn("An exception occurred", e);
-		} catch (final IllegalArgumentException e) {
-			LOG.warn("An exception occurred", e);
+			throw new IllegalStateException(e);
 		} catch (final InvocationTargetException e) {
 			LOG.warn("An exception occurred", e);
+			throw new IllegalStateException(e);
 		}
-		throw new IllegalStateException();
 	}
 
 	@Override
