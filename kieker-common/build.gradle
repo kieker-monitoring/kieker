@@ -4,8 +4,10 @@ dependencies {
 	compile resolveLibrary('framework-libs/cxf/cxf-*.jar')
 }
 
-task replaceHardCodedVersionNames() << {
+task replaceHardCodedVersionNames() {
+  doLast {
 	regexpReplaceInFiles(project.file("src/kieker/common/util/Version.java"), "VERSION = \".*?\"", "VERSION = \"${version}\"")
+  }
 }
 
 compileJava.dependsOn replaceHardCodedVersionNames
