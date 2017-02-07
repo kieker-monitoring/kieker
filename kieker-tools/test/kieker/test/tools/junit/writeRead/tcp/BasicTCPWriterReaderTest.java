@@ -36,7 +36,7 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public class BasicTCPWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
@@ -49,7 +49,7 @@ public class BasicTCPWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	private volatile AnalysisControllerThread analysisThread = null; // NOPMD (init for findbugs)
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
+	protected MonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
 			InterruptedException {
 		this.analysisController = new AnalysisController();
 

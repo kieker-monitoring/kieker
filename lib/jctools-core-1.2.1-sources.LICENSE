@@ -1,10 +1,12 @@
-We add the jar file of the sources, not of the javadoc, since Eclipse does not allow to attach a javadoc file as relative path. However, Eclipse allows to attach a sources file as a relative path.
-
 The Apache Software License - ASL - v2.0
 Project: https://github.com/JCTools/JCTools
 Description: Java Concurrency Tools for the JVM
 License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Required by: jctools-core-1.2.1-sources
+
+We add the jar file of the sources, not of the javadoc, since Eclipse does not allow to attach a javadoc file as relative path. 
+However, Eclipse allows to attach a sources file as a relative path.
+
 
 								Apache License
                            Version 2.0, January 2004

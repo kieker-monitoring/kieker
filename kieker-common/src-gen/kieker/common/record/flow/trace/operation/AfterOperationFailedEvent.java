@@ -1,29 +1,12 @@
-/***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.common.record.flow.trace.operation;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
+import kieker.common.util.registry.IRegistry;
+
 import kieker.common.record.flow.IExceptionRecord;
 
 /**
@@ -32,6 +15,8 @@ import kieker.common.record.flow.IExceptionRecord;
  * @since 1.5
  */
 public class AfterOperationFailedEvent extends AfterOperationEvent implements IExceptionRecord {
+	private static final long serialVersionUID = -1887200574513819573L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
@@ -40,7 +25,6 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 			 + TYPE_SIZE_STRING // IExceptionRecord.cause
 	;
-	private static final long serialVersionUID = -1887200574513819573L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -51,12 +35,14 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		String.class, // IExceptionRecord.cause
 	};
 	
-	/* user-defined constants */
-	/* default constants */
+	/** user-defined constants */
+	
+	/** default constants */
 	public static final String CAUSE = "";
-	/* property declarations */
+	
+	/** property declarations */
 	private final String cause;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -89,7 +75,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		super(values, TYPES);
 		this.cause = (String) values[5];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -131,7 +117,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 			this.getCause()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -141,7 +127,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getCause());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -154,7 +140,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(stringRegistry.get(this.getCause()));
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -162,7 +148,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -170,6 +156,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -180,7 +167,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -191,7 +178,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -211,9 +198,8 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		if (!this.getCause().equals(castedRecord.getCause())) return false;
 		return true;
 	}
-
+	
 	public final String getCause() {
 		return this.cause;
-	}
-	
+	}	
 }
