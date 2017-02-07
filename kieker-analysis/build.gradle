@@ -15,4 +15,4 @@ dependencies {
 	testCompile project(':kieker-common').sourceSets.test.output
 	
 	testRuntime resolveLibrary('derby-*.jar')
-}	
+}

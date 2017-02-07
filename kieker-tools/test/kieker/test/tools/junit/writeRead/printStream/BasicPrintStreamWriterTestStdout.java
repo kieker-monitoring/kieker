@@ -23,13 +23,13 @@ import org.junit.After;
 import org.junit.Before;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.writer.PrintStreamWriter;
+import kieker.monitoring.writer.print.PrintStreamWriter;
 
 import kieker.test.tools.util.StringTeePrintStream;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterTest {
@@ -47,7 +47,7 @@ public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterT
 
 	/**
 	 * Initializes the test setup.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If something went wrong during the initialization.
 	 */
@@ -60,7 +60,7 @@ public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterT
 
 	/**
 	 * Cleans up after the test.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If something went wrong.
 	 */

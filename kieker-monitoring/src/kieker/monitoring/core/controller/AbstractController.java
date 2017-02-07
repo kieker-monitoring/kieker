@@ -16,15 +16,17 @@
 
 package kieker.monitoring.core.controller;
 
+import java.lang.reflect.Constructor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.configuration.ReadOnlyConfiguration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.3
  */
 public abstract class AbstractController {
@@ -35,7 +37,7 @@ public abstract class AbstractController {
 
 	/**
 	 * Default constructor.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this controller.
 	 */
@@ -45,7 +47,7 @@ public abstract class AbstractController {
 
 	/**
 	 * Sets and initializes the monitoring controller, if it has not been set yet.
-	 * 
+	 *
 	 * @param monitoringController
 	 *            The monitoring controller.
 	 */
@@ -62,9 +64,9 @@ public abstract class AbstractController {
 
 	/**
 	 * Permanently terminates this controller.
-	 * 
+	 *
 	 * @return true iff the controller was terminated.
-	 * 
+	 *
 	 * @see #isTerminated()
 	 */
 	protected final boolean terminate() {
@@ -80,7 +82,7 @@ public abstract class AbstractController {
 
 	/**
 	 * Returns whether this controller is terminated.
-	 * 
+	 *
 	 * @see #terminate()
 	 * @return true if terminated
 	 */
@@ -103,16 +105,16 @@ public abstract class AbstractController {
 
 	/**
 	 * This is a helper method trying to find, create and initialize the given class, using its public constructor which accepts a single {@link Configuration}.
-	 * 
+	 *
 	 * @param c
 	 *            This class defines the expected result of the method call.
 	 * @param classname
 	 *            The name of the class to be created.
 	 * @param configuration
 	 *            The configuration which will be used to initialize the class in question.
-	 * 
+	 *
 	 * @return A new and initializes class instance if everything went well.
-	 * 
+	 *
 	 * @param <C>
 	 *            The type of the returned class.
 	 */
@@ -122,9 +124,12 @@ public abstract class AbstractController {
 		try {
 			final Class<?> clazz = Class.forName(classname);
 			if (c.isAssignableFrom(clazz)) {
-				createdClass = (C) clazz.getConstructor(Configuration.class).newInstance(configuration.getPropertiesStartingWith(classname));
+				final Constructor<?> constructor = clazz.getConstructor(Configuration.class);
+				// final Configuration classConfiguration = configuration.getPropertiesStartingWith(classname);
+				final Configuration classConfiguration = new ReadOnlyConfiguration(configuration);
+				createdClass = (C) constructor.newInstance(classConfiguration);
 			} else {
-				LOG.error("Class '" + classname + "' has to implement '" + c.getSimpleName() + "'");
+				LOG.error("Class '" + classname + "' has to extend/implement '" + c.getSimpleName() + "'");
 			}
 		} catch (final ClassNotFoundException e) {
 			LOG.error(c.getSimpleName() + ": Class '" + classname + "' not found", e);

@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.common.configuration.Configuration;
-import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
@@ -28,15 +27,15 @@ import kieker.tools.bridge.connector.IServiceConnector;
 
 /**
  * Container for the Kieker Data Bridge handling the startup and shutdown of Kieker and the service connector.
- * 
+ *
  * @author Reiner Jung
  * @since 1.8
  */
 public class ServiceContainer {
 
 	/**
-	 * Update interval for the process listener. The process listener is
-	 * mainly used in verbose mode or in UI applications utilizing a ServiceContainer.
+	 * Update interval for the process listener. The process listener is mainly used in verbose mode or in UI
+	 * applications utilizing a ServiceContainer.
 	 */
 	public static final long DEFAULT_LISTENER_UPDATE_INTERVAL = 100L;
 
@@ -46,11 +45,13 @@ public class ServiceContainer {
 	protected volatile boolean active;
 
 	private final Collection<IServiceListener> listeners = new CopyOnWriteArrayList<IServiceListener>();
-	private final IMonitoringController kiekerMonitoringController;
+	private final MonitoringController kiekerMonitoringController;
 	private final IServiceConnector service;
 
 	private volatile boolean respawn;
 	private volatile long listenerUpdateInterval = DEFAULT_LISTENER_UPDATE_INTERVAL;
+
+	private int numRecordsReceived;
 
 	/**
 	 * @param configuration
@@ -58,7 +59,8 @@ public class ServiceContainer {
 	 * @param service
 	 *            A service component to handle incoming data
 	 * @param respawn
-	 *            Respawn the connector if it fails (this construct is debatable it should be handled by the connector itself)
+	 *            Respawn the connector if it fails (this construct is debatable it should be handled by the connector
+	 *            itself)
 	 */
 	public ServiceContainer(final Configuration configuration, final IServiceConnector service, final boolean respawn) {
 		this.kiekerMonitoringController = MonitoringController.createInstance(configuration);
@@ -68,7 +70,7 @@ public class ServiceContainer {
 
 	/**
 	 * Main loop of the Kieker bridge.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             if deserializeNextRecord exits with a ConnectorDataTransmissionException
 	 */
@@ -80,7 +82,8 @@ public class ServiceContainer {
 			while (this.active) {
 				try {
 					this.kiekerMonitoringController.newMonitoringRecord(this.service.deserializeNextRecord());
-					if ((this.kiekerMonitoringController.getNumberOfInserts() % this.listenerUpdateInterval) == 0) {
+					this.numRecordsReceived++;
+					if ((this.numRecordsReceived % this.listenerUpdateInterval) == 0) {
 						this.updateState(this.listenerUpdateInterval + " records received.");
 					}
 				} catch (final ConnectorEndOfDataException e) {
@@ -92,15 +95,22 @@ public class ServiceContainer {
 		} while (this.respawn);
 
 		this.kiekerMonitoringController.terminateMonitoring();
+		try {
+			// we expect a waiting time of 10-100 ms.
+			// So, a timeout of 10,000 ms should be high enough.
+			this.kiekerMonitoringController.waitForTermination(10000);
+		} catch (final InterruptedException e) {
+			throw new IllegalStateException("Exception occured while waiting for the monitoring to terminate.", e);
+		}
 	}
 
 	/**
-	 * Safely end bridge loop. This routine should only be called from the shutdown hook thread
-	 * in the main part of a server. In other cases it will result in strange runtime errors.
-	 * 
+	 * Safely end bridge loop. This routine should only be called from the shutdown hook thread in the main part of a
+	 * server. In other cases it will result in strange runtime errors.
+	 *
 	 * @throws ConnectorDataTransmissionException
-	 *             An error occurred during data transmission and in this particular case
-	 *             while closing the data transmission.
+	 *             An error occurred during data transmission and in this particular case while closing the data
+	 *             transmission.
 	 */
 	public void shutdown() throws ConnectorDataTransmissionException {
 		this.active = false;
@@ -111,19 +121,19 @@ public class ServiceContainer {
 
 	/**
 	 * Informs all listeners about record count and an option message. The message may be null.
-	 * 
+	 *
 	 * @param message
 	 *            the message passed to all listeners. May be null.
 	 */
 	private void updateState(final String message) {
 		for (final IServiceListener listener : this.listeners) {
-			listener.handleEvent(this.kiekerMonitoringController.getNumberOfInserts(), message);
+			listener.handleEvent(this.numRecordsReceived, message);
 		}
 	}
 
 	/**
 	 * Add an update state listener.
-	 * 
+	 *
 	 * @param listener
 	 *            an object implementing the IServiceListener interface
 	 */
@@ -133,7 +143,7 @@ public class ServiceContainer {
 
 	/**
 	 * Set the update interval for the listener information. The default is 100 records.
-	 * 
+	 *
 	 * @param listenerUpdateInterval
 	 *            the new update interval in number of records
 	 */
@@ -142,10 +152,17 @@ public class ServiceContainer {
 	}
 
 	public long getRecordCount() {
-		return this.kiekerMonitoringController.getNumberOfInserts();
+		return this.numRecordsReceived;
 	}
 
 	public boolean isRespawn() {
 		return this.respawn;
 	}
+
+	// /**
+	// * Used in tests only.
+	// */
+	// /* default */ MonitoringController getKiekerMonitoringController() {
+	// return this.kiekerMonitoringController;
+	// }
 }
