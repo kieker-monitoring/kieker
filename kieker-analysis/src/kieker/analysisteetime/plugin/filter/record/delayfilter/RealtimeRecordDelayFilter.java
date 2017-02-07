@@ -36,8 +36,7 @@ import teetime.framework.OutputPort;
  * stores them in a queue. At second a producer stage (always active) which takes the records from the queue and forwards them with the proper delay.
  * <br>
  * <b>Note:</b> We assume that the incoming records are ordered by their timestamps. The stage does not provide an ordering mechanism. Records that are received
- * "too late"
- * are forwarded with a delay of 0 but stay "too late".
+ * "too late" are forwarded with a delay of 0 but stay "too late".
  *
  * @author Andre van Hoorn, Robert von Massow, Jan Waller, Lars Bluemke
  *
@@ -50,6 +49,9 @@ public class RealtimeRecordDelayFilter extends CompositeStage {
 	private final InputPort<IMonitoringRecord> inputPort;
 	private final OutputPort<IMonitoringRecord> outputPort;
 
+	private final RealtimeRecordDelayConsumer consumer;
+	private final RealtimeRecordDelayProducer producer;
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -57,17 +59,36 @@ public class RealtimeRecordDelayFilter extends CompositeStage {
 	 *            The time unit to be used.
 	 * @param accelerationFactor
 	 *            Determines the replay speed.
-	 * @param warnOnNegativeSchedTime
-	 *            A time bound to configure a warning when a record is forwarded too late.
 	 */
-	public RealtimeRecordDelayFilter(final TimeUnit timeunit, final double accelerationFactor, final long warnOnNegativeSchedTime) {
+	public RealtimeRecordDelayFilter(final TimeUnit timeunit, final double accelerationFactor) {
 
 		final LinkedBlockingQueue<Object> recordQueue = new LinkedBlockingQueue<Object>();
-		final RealtimeRecordDelayConsumer consumer = new RealtimeRecordDelayConsumer(recordQueue, END_TOKEN);
-		final RealtimeRecordDelayProducer producer = new RealtimeRecordDelayProducer(recordQueue, END_TOKEN, timeunit, accelerationFactor, warnOnNegativeSchedTime);
+		this.consumer = new RealtimeRecordDelayConsumer(recordQueue, END_TOKEN);
+		this.producer = new RealtimeRecordDelayProducer(recordQueue, END_TOKEN, timeunit, accelerationFactor);
 
-		this.inputPort = consumer.getInputPort();
-		this.outputPort = producer.getOutputPort();
+		this.inputPort = this.consumer.getInputPort();
+		this.outputPort = this.producer.getOutputPort();
+	}
+
+	/**
+	 * Returns the time bound for which a warning is displayed when the computed delay falls below -(time bound).
+	 *
+	 * @return negativeDelayWarningBound
+	 */
+	public long getNegativeDelayWarningBound() {
+		return this.producer.getNegativeDelayWarningBound();
+	}
+
+	/**
+	 * Sets the time bound for which a warning is displayed when the computed delay falls below -(time bound).
+	 *
+	 * @param negativeDelay
+	 *            The chosen time bound.
+	 * @param unit
+	 *            Time unit of the chosen time bound.
+	 */
+	public void setNegativeDelayWarningBound(final long negativeDelay, final TimeUnit unit) {
+		this.producer.setNegativeDelayWarningBound(negativeDelay, unit);
 	}
 
 	public InputPort<IMonitoringRecord> getInputPort() {

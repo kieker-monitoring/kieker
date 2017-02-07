@@ -36,6 +36,7 @@ public class AnalysisThroughputFilter extends AbstractStage {
 
 	private final InputPort<IMonitoringRecord> recordsInputPort = this.createInputPort();
 	private final InputPort<Long> timestampsInputPort = this.createInputPort();
+	private final OutputPort<IMonitoringRecord> recordsOutputPort = this.createOutputPort();
 	private final OutputPort<Long> recordsCountOutputPort = this.createOutputPort();
 
 	private long numPassedElements;
@@ -56,15 +57,14 @@ public class AnalysisThroughputFilter extends AbstractStage {
 
 		final IMonitoringRecord record = this.recordsInputPort.receive();
 		if (record != null) {
-
 			this.numPassedElements++;
+			this.recordsOutputPort.send(record);
 		} else {
 			failt++;
 		}
 
 		final Long timestampInNs = this.timestampsInputPort.receive();
 		if (timestampInNs != null) {
-
 			final long duration = timestampInNs - this.lastTimestampInNs;
 			final StringBuilder sb = new StringBuilder(256);
 			sb.append(this.numPassedElements);
@@ -73,10 +73,13 @@ public class AnalysisThroughputFilter extends AbstractStage {
 			sb.append(' ');
 			sb.append(TimeUnit.NANOSECONDS.toString());
 			this.plainTextDisplayObject.setText(sb.toString());
-
 			this.recordsCountOutputPort.send(this.numPassedElements);
-
 			this.resetTimestamp(timestampInNs);
+
+			// Manually terminate the stage when the records input port received a termination signal.
+			if (this.recordsInputPort.isClosed()) {
+				this.terminateStage();
+			}
 		} else {
 			failt++;
 		}
@@ -104,6 +107,10 @@ public class AnalysisThroughputFilter extends AbstractStage {
 
 	public InputPort<Long> getTimestampsInputPort() {
 		return this.timestampsInputPort;
+	}
+
+	public OutputPort<IMonitoringRecord> getRecordsOutputPort() {
+		return this.recordsOutputPort;
 	}
 
 	public OutputPort<Long> getRecordsCountOutputPort() {
