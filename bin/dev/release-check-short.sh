@@ -38,7 +38,7 @@ function assert_all_sh_scripts_executable {
 	echo -n "Checking for exectuable flag: $sh ... "
 	if ! test -x $sh; then
 	    if [[ $sh =~ build-script-.*\.sh ]] ; then
-		echo "excluded (workaround for SnapCI)"
+		echo "excluded (workaround for SnapCI, see Ticket 1519 - https://kieker-monitoring.atlassian.net/browse/KIEKER-1519)"
 		continue
             fi
 	    echo " not executable"
