@@ -49,13 +49,8 @@ public class NodeLabelMapper implements Function<Vertex, String> {
 			throw new IllegalArgumentException("Vertex property 'parameterTypes' is not a collection.");
 		}
 
-		final String temp = modifiers.stream().collect(Collectors.joining(" "));
-
 		// TODO this could be extracted
 		final StringBuilder signature = new StringBuilder();
-
-		final String temp2 = parameters.stream().collect(Collectors.joining(" "));
-
 		signature.append(modifiers.stream().collect(Collectors.joining(" ")));
 		signature.append(' ');
 		signature.append(vertex.getProperty("returnType").toString());
