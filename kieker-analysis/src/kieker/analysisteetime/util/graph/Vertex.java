@@ -22,4 +22,6 @@ public interface Vertex extends GraphElement {
 
 	public Edge addEdge(Object id, Vertex inVertex);
 
+	public Edge addEdgeIfAbsent(Object id, Vertex inVertex);
+
 }

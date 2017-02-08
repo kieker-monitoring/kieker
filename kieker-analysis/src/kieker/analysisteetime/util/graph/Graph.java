@@ -18,6 +18,8 @@ public interface Graph extends Element {
 
 	public Edge addEdge(Object id, Vertex outVertex, Vertex inVertex);
 
+	public Edge addEdgeIfAbsent(Object id, Vertex outVertex, Vertex inVertex);
+
 	public Edge getEdge(Object id);
 
 	public void removeEdge(Edge edge);

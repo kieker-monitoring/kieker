@@ -110,6 +110,15 @@ public class GraphImpl extends ElementImpl implements Graph {
 		return firstEqualParent.addEdgeChecked(id, outVertex, inVertex);
 	}
 
+	@Override
+	public Edge addEdgeIfAbsent(final Object id, final Vertex outVertex, final Vertex inVertex) {
+		Edge edge = this.getEdge(id);
+		if (edge == null) {
+			edge = this.addEdge(id, outVertex, inVertex);
+		}
+		return edge;
+	}
+
 	protected Edge addEdgeChecked(final Object id, final Vertex outVertex, final Vertex inVertex) {
 		String idString;
 		if (id == null) {

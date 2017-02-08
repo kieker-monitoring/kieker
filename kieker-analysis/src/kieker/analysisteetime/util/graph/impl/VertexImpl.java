@@ -97,6 +97,11 @@ class VertexImpl extends GraphElementImpl implements Vertex {
 	}
 
 	@Override
+	public Edge addEdgeIfAbsent(final Object id, final Vertex inVertex) {
+		return this.graph.addEdgeIfAbsent(id, this, inVertex);
+	}
+
+	@Override
 	public Edge addEdge(final Object id, final Vertex inVertex) {
 		return this.graph.addEdge(id, this, inVertex);
 	}
