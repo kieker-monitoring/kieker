@@ -7,6 +7,8 @@ import java.io.File;
 
 import kieker.analysisteetime.AssemblyModelAssemblerStage;
 import kieker.analysisteetime.DeploymentModelAssemblerStage;
+import kieker.analysisteetime.JavaComponentSignatureExtractor;
+import kieker.analysisteetime.JavaOperationSignatureExtractor;
 import kieker.analysisteetime.TypeModelAssemblerStage;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
@@ -41,7 +43,8 @@ public class HotspotDetectionConfiguration extends Configuration {
 		// TODO consider if KiekerMetadataRecord has to be processed
 		// final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final InstanceOfFilter<IMonitoringRecord, IFlowRecord> instanceOfFilter = new InstanceOfFilter<>(IFlowRecord.class);
-		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(typeModel);
+		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(typeModel, new JavaComponentSignatureExtractor(),
+				new JavaOperationSignatureExtractor());
 		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(typeModel, assemblyModel);
 		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(assemblyModel, deploymentModel);
 		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(deploymentModel, false); // TODO second parameter
