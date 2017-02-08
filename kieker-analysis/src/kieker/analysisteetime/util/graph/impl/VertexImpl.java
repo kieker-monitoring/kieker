@@ -27,6 +27,11 @@ class VertexImpl extends GraphElementImpl implements Vertex {
 	}
 
 	@Override
+	public Graph addChildGraphIfAbsent() {
+		return this.childGraph != null ? this.childGraph : this.addChildGraph();
+	}
+
+	@Override
 	public boolean hasChildGraph() {
 		return this.childGraph != null;
 	}

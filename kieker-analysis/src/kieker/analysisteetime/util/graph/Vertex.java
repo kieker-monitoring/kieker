@@ -4,6 +4,8 @@ public interface Vertex extends GraphElement {
 
 	public Graph addChildGraph();
 
+	public Graph addChildGraphIfAbsent();
+
 	public boolean hasChildGraph();
 
 	public Graph getChildGraph();
