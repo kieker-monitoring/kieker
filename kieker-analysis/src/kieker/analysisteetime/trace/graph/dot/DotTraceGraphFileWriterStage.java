@@ -15,6 +15,8 @@
  ***************************************************************************/
 package kieker.analysisteetime.trace.graph.dot;
 
+import java.io.File;
+
 import kieker.analysisteetime.util.graph.export.dot.DotExportConfiguration;
 import kieker.analysisteetime.util.graph.export.dot.DotFileWriterStage;
 import kieker.analysisteetime.util.graph.util.dot.attributes.DotEdgeAttribute;
@@ -27,11 +29,11 @@ import kieker.analysisteetime.util.graph.util.dot.attributes.DotNodeAttribute;
  */
 public class DotTraceGraphFileWriterStage extends DotFileWriterStage {
 
-	public DotTraceGraphFileWriterStage(final String outputDirectory, final DotExportConfiguration exportConfiguration) {
-		super(outputDirectory, exportConfiguration);
+	public DotTraceGraphFileWriterStage(final File outputDirectory, final DotExportConfiguration exportConfiguration) {
+		super(outputDirectory.getPath(), exportConfiguration);
 	}
 
-	public static DotTraceGraphFileWriterStage create(final String outputDirectory) {
+	public static DotTraceGraphFileWriterStage create(final File outputDirectory) {
 		final DotExportConfiguration.Builder exportConfigurationBuilder = new DotExportConfiguration.Builder();
 		exportConfigurationBuilder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, g -> "none");
 		exportConfigurationBuilder.addEdgeAttribute(DotEdgeAttribute.LABEL, e -> e.getProperty("orderIndex").toString() + '.');

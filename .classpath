@@ -34,7 +34,6 @@
 	<classpathentry kind="src" path="kieker-examples/userguide/ch3-4--custom-components/src"/>
 	<classpathentry kind="src" path="kieker-examples/userguide/ch5--trace-monitoring-aspectj/src"/>
 	<classpathentry kind="src" path="kieker-examples/analysis/trace-analysis/src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
 	<classpathentry kind="lib" path="lib/framework-libs/javax.servlet-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/activemq-core-5.7.0.jar"/>
@@ -72,7 +71,6 @@
 	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-servlet-8.1.16.v20140903.jar"/>
 	<classpathentry kind="lib" path="lib/amqp-client-3.5.3.jar" sourcepath="C:/Users/chw/.m2/repository/com/rabbitmq/amqp-client/3.5.3/amqp-client-3.5.3-sources.jar"/>
 	<classpathentry kind="lib" path="lib/opencsv-2.4-SNAPSHOT.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="lib/jctools-core-1.2.1.jar" sourcepath="lib/jctools-core-1.2.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/static-analysis/findbugs-3.0.1/lib/findbugs-3.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-expression-3.2.8.RELEASE.jar"/>
@@ -116,5 +114,6 @@
 	<classpathentry kind="lib" path="lib/framework-libs/javax.ws.rs-api-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/teetime-3.0-20161128.194027-256-jar-with-dependencies.jar"/>
 	<classpathentry kind="lib" path="lib/blueprints-core-2.6.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>

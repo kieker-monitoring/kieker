@@ -35,6 +35,7 @@ public class TraceToGraphTransformer {
 
 	public Graph transform(final Trace trace) {
 		final Graph graph = new GraphImpl();
+		graph.setName("trace-" + trace.getTraceID());
 		final OperationCallVisitor visitor = new GraphTransformerVisitor(graph);
 		this.traceTraverser.traverse(trace, visitor);
 		return graph;

@@ -24,6 +24,11 @@ public class NodeLabelMapper implements Function<Vertex, String> {
 
 	@Override
 	public String apply(final Vertex vertex) {
+
+		if (vertex.getProperty("artificial") != null) {
+			return vertex.getProperty("name").toString();
+		}
+
 		final Collection<String> modifiers;
 		final Collection<String> parameters;
 
@@ -36,16 +41,21 @@ public class NodeLabelMapper implements Function<Vertex, String> {
 		} else {
 			throw new IllegalArgumentException("Vertex property 'modifiers' is not a collection.");
 		}
-		if (vertex.getProperty("parameters") instanceof Collection) {
+		if (vertex.getProperty("parameterTypes") instanceof Collection) {
 			@SuppressWarnings("unchecked")
-			final Collection<String> castedParameters = (Collection<String>) vertex.getProperty("parameters");
+			final Collection<String> castedParameters = (Collection<String>) vertex.getProperty("parameterTypes");
 			parameters = castedParameters;
 		} else {
-			throw new IllegalArgumentException("Vertex property 'parameters' is not a collection.");
+			throw new IllegalArgumentException("Vertex property 'parameterTypes' is not a collection.");
 		}
+
+		final String temp = modifiers.stream().collect(Collectors.joining(" "));
 
 		// TODO this could be extracted
 		final StringBuilder signature = new StringBuilder();
+
+		final String temp2 = parameters.stream().collect(Collectors.joining(" "));
+
 		signature.append(modifiers.stream().collect(Collectors.joining(" ")));
 		signature.append(' ');
 		signature.append(vertex.getProperty("returnType").toString());

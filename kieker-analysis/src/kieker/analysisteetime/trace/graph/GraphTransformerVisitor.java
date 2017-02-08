@@ -87,7 +87,7 @@ public class GraphTransformerVisitor extends OperationCallVisitor {
 		}
 
 		final Edge edge = this.graph.addEdge(null, parentVertex, thisVertex);
-		edge.setProperty("orderIndex", operationCall.getOrderIndex());
+		edge.setProperty("orderIndex", operationCall.getOrderIndex() + 1);
 
 		return edge;
 	}

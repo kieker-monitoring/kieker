@@ -23,8 +23,9 @@ public final class ExampleConfigExecution {
 		// TODO Temp
 		// final File importDirectory = new File("C:/Users/Soeren/Desktop/SoftArchKram/jedit-records/kieker-20170115-163405515-UTC-Leonard-KIEKER");
 		final File importDirectory = new File("kieker-examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141008-101258768-UTC");
+		final File exportDirectory = new File("C:/Users/Soeren/Desktop/kieker-output");
 
-		final ExampleConfiguration configuration = new ExampleConfiguration(importDirectory);
+		final ExampleConfiguration configuration = new ExampleConfiguration(importDirectory, exportDirectory);
 		final Execution<ExampleConfiguration> analysis = new Execution<>(configuration);
 		analysis.executeBlocking();
 

@@ -14,6 +14,8 @@ import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.analysisteetime.recordreading.ReadingComposite;
+import kieker.analysisteetime.trace.graph.TraceToGraphTransformerStage;
+import kieker.analysisteetime.trace.graph.dot.DotTraceGraphFileWriterStage;
 import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
 import kieker.analysisteetime.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.common.record.IMonitoringRecord;
@@ -35,7 +37,7 @@ public class ExampleConfiguration extends Configuration {
 	private final DeploymentModel deploymentModel = DeploymentFactory.eINSTANCE.createDeploymentModel();
 	private final ExecutionModel executionModel = ExecutionFactory.eINSTANCE.createExecutionModel();
 
-	public ExampleConfiguration(final File importDirectory) {
+	public ExampleConfiguration(final File importDirectory, final File exportDirectory) {
 
 		// TODO Model creation should be available as composite stage
 
@@ -44,12 +46,15 @@ public class ExampleConfiguration extends Configuration {
 		// TODO consider if KiekerMetadataRecord has to be processed
 		// final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final InstanceOfFilter<IMonitoringRecord, IFlowRecord> instanceOfFilter = new InstanceOfFilter<>(IFlowRecord.class);
-		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(this.typeModel);
+		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(this.typeModel, new JavaComponentSignatureExtractor(),
+				new JavaOperationSignatureExtractor());
 		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(this.typeModel, this.assemblyModel);
 		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(this.assemblyModel, this.deploymentModel);
 		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, false); // TODO second parameter
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
-		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(this.executionModel);
+		// final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(this.executionModel);
+		final TraceToGraphTransformerStage traceToGraphTransformer = new TraceToGraphTransformerStage();
+		final DotTraceGraphFileWriterStage dotTraceGraphFileWriter = DotTraceGraphFileWriterStage.create(exportDirectory);
 
 		// Connect the stages
 		super.connectPorts(reader.getOutputPort(), instanceOfFilter.getInputPort());
@@ -58,7 +63,9 @@ public class ExampleConfiguration extends Configuration {
 		super.connectPorts(assemblyModelAssembler.getOutputPort(), deploymentModelAssembler.getInputPort());
 		super.connectPorts(deploymentModelAssembler.getOutputPort(), traceReconstructor.getInputPort());
 		super.connectPorts(traceReconstructor.getOutputPort(), traceStatisticsDecorator.getInputPort());
-		super.connectPorts(traceStatisticsDecorator.getOutputPort(), executionModelAssembler.getInputPort());
+		// super.connectPorts(traceStatisticsDecorator.getOutputPort(), executionModelAssembler.getInputPort());
+		super.connectPorts(traceStatisticsDecorator.getOutputPort(), traceToGraphTransformer.getInputPort());
+		super.connectPorts(traceToGraphTransformer.getOutputPort(), dotTraceGraphFileWriter.getInputPort());
 
 	}
 
