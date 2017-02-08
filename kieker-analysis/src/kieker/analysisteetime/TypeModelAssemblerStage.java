@@ -31,8 +31,9 @@ public class TypeModelAssemblerStage extends AbstractFilter<IFlowRecord> {
 
 	private final TypeModelAssembler assembler;
 
-	public TypeModelAssemblerStage(final TypeModel typeModel) {
-		this.assembler = new TypeModelAssembler(typeModel);
+	public TypeModelAssemblerStage(final TypeModel typeModel, final ComponentSignatureExtractor componentSignatureExtractor,
+			final OperationSignatureExtractor operationSignatureExtractor) {
+		this.assembler = new TypeModelAssembler(typeModel, componentSignatureExtractor, operationSignatureExtractor);
 	}
 
 	@Override

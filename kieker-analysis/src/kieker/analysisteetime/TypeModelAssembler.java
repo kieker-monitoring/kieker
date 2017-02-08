@@ -30,11 +30,16 @@ import kieker.common.record.flow.IOperationRecord;
 public class TypeModelAssembler {
 
 	private final TypeFactory factory = TypeFactory.eINSTANCE;
+	private final ComponentSignatureExtractor componentSignatureExtractor;
+	private final OperationSignatureExtractor operationSignatureExtractor;
 
 	private final TypeModel typeModel;
 
-	public TypeModelAssembler(final TypeModel typeModel) {
+	public TypeModelAssembler(final TypeModel typeModel, final ComponentSignatureExtractor componentSignatureExtractor,
+			final OperationSignatureExtractor operationSignatureExtractor) {
 		this.typeModel = typeModel;
+		this.componentSignatureExtractor = componentSignatureExtractor;
+		this.operationSignatureExtractor = operationSignatureExtractor;
 	}
 
 	public void addRecord(final IOperationRecord record) {
@@ -55,6 +60,7 @@ public class TypeModelAssembler {
 		if (componentType == null) {
 			componentType = this.factory.createComponentType();
 			componentType.setSignature(componentSignature);
+			this.componentSignatureExtractor.extract(componentType);
 			this.typeModel.getComponentTypes().put(componentTypeKey, componentType);
 		}
 		return componentType;
@@ -66,6 +72,7 @@ public class TypeModelAssembler {
 		if (operationType == null) {
 			operationType = this.factory.createOperationType();
 			operationType.setSignature(operationSignature);
+			this.operationSignatureExtractor.extract(operationType);
 			componentType.getProvidedOperations().put(operationTypeKey, operationType);
 		}
 		return operationType;
