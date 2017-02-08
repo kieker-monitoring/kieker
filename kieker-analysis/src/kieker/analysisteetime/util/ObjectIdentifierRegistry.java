@@ -30,9 +30,16 @@ public class ObjectIdentifierRegistry {
 	private int counter = 0;
 
 	public int getIdentifier(final Object object) {
-		final int identifier = this.identifiers.putIfAbsent(object, this.counter);
-		this.counter++;
-		return identifier;
+		final Integer identifier = this.identifiers.putIfAbsent(object, this.counter);
+		if (identifier == null) {
+			// Value was added
+			final int id = this.counter;
+			this.counter++;
+			return id;
+		} else {
+			// Value was already present
+			return identifier;
+		}
 	}
 
 }
