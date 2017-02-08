@@ -8,6 +8,8 @@ public interface Graph extends Element {
 
 	public Vertex addVertex(Object id);
 
+	public Vertex addVertexIfAbsent(Object id);
+
 	public Vertex getVertex(Object id);
 
 	public void removeVertex(Vertex vertex);

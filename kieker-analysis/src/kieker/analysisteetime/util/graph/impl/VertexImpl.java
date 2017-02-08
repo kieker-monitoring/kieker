@@ -2,6 +2,7 @@ package kieker.analysisteetime.util.graph.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import kieker.analysisteetime.util.graph.Direction;
@@ -22,7 +23,7 @@ class VertexImpl extends GraphElementImpl implements Vertex {
 	@Override
 	public Graph addChildGraph() {
 		this.childGraph = new GraphImpl(this);
-		return getChildGraph();
+		return this.getChildGraph();
 	}
 
 	@Override
@@ -32,14 +33,15 @@ class VertexImpl extends GraphElementImpl implements Vertex {
 
 	@Override
 	public Graph getChildGraph() {
-		return childGraph;
+		return this.childGraph;
 	}
 
 	@Override
 	public void removeChildGraph() {
-		childGraph = null;
+		this.childGraph = null;
 	}
 
+	@Override
 	public int getDepth() {
 		int depth = 0;
 		GraphImpl graph = this.graph;
@@ -57,7 +59,7 @@ class VertexImpl extends GraphElementImpl implements Vertex {
 		} else if (direction.equals(Direction.IN)) {
 			return new ArrayList<>(this.inEdges.values());
 		} else {
-			ArrayList<Edge> edges = new ArrayList<>(this.outEdges.values());
+			final List<Edge> edges = new ArrayList<>(this.outEdges.values());
 			edges.addAll(this.inEdges.values());
 			return edges;
 		}
@@ -67,13 +69,13 @@ class VertexImpl extends GraphElementImpl implements Vertex {
 	public Iterable<Vertex> getVertices(final Direction direction) {
 
 		if (direction.equals(Direction.BOTH)) {
-			ArrayList<Vertex> vertices = (ArrayList<Vertex>) getVertices(Direction.IN);
-			vertices.addAll((ArrayList<Vertex>) getVertices(Direction.OUT));
+			final List<Vertex> vertices = (List<Vertex>) this.getVertices(Direction.IN);
+			vertices.addAll((List<Vertex>) this.getVertices(Direction.OUT));
 			return vertices;
 		}
 
-		ArrayList<Vertex> vertices = new ArrayList<>();
-		for (Edge edge : getEdges(direction)) {
+		final List<Vertex> vertices = new ArrayList<>();
+		for (final Edge edge : this.getEdges(direction)) {
 			vertices.add(edge.getVertex(direction.opposite()));
 		}
 		return vertices;
@@ -81,12 +83,12 @@ class VertexImpl extends GraphElementImpl implements Vertex {
 
 	@Override
 	public void remove() {
-		graph.removeVertex(this);
+		this.graph.removeVertex(this);
 	}
 
 	@Override
 	public Edge addEdge(final Vertex inVertex) {
-		return addEdge(null, inVertex);
+		return this.addEdge(null, inVertex);
 	}
 
 	@Override

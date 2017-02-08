@@ -32,17 +32,26 @@ public class GraphImpl extends ElementImpl implements Graph {
 		String idString = null;
 		if (id == null) {
 			do {
-				idString = getDefaultId();
-			} while (vertices.containsKey(idString));
+				idString = this.getDefaultId();
+			} while (this.vertices.containsKey(idString));
 		} else {
 			idString = id.toString();
-			if (vertices.containsKey(idString)) {
+			if (this.vertices.containsKey(idString)) {
 				throw ExceptionFactory.vertexWithIdAlreadyExists(id);
 			}
 		}
 
-		Vertex vertex = new VertexImpl(idString, this);
-		vertices.put(vertex.getId().toString(), vertex);
+		final Vertex vertex = new VertexImpl(idString, this);
+		this.vertices.put(vertex.getId().toString(), vertex);
+		return vertex;
+	}
+
+	@Override
+	public Vertex addVertexIfAbsent(final Object id) {
+		Vertex vertex = this.getVertex(id);
+		if (vertex == null) {
+			vertex = this.addVertex(id);
+		}
 		return vertex;
 	}
 
@@ -51,7 +60,7 @@ public class GraphImpl extends ElementImpl implements Graph {
 		if (id == null) {
 			throw ExceptionFactory.vertexIdCanNotBeNull();
 		}
-		String idString = id.toString();
+		final String idString = id.toString();
 		return this.vertices.get(idString);
 	}
 
@@ -66,10 +75,10 @@ public class GraphImpl extends ElementImpl implements Graph {
 			throw ExceptionFactory.vertexWithIdDoesNotExist(vertex.getId());
 		}
 
-		for (Edge edge : vertex.getEdges(Direction.IN)) {
+		for (final Edge edge : vertex.getEdges(Direction.IN)) {
 			this.removeEdge(edge);
 		}
-		for (Edge edge : vertex.getEdges(Direction.OUT)) {
+		for (final Edge edge : vertex.getEdges(Direction.OUT)) {
 			this.removeEdge(edge);
 		}
 
@@ -81,11 +90,11 @@ public class GraphImpl extends ElementImpl implements Graph {
 
 		// BETTER Throw Exception if Vertices are null
 
-		Stack<VertexImpl> outVertexParents = new Stack<>();
+		final Stack<VertexImpl> outVertexParents = new Stack<>();
 		for (VertexImpl parent = (VertexImpl) outVertex; parent != null; parent = parent.graph.parentVertex) {
 			outVertexParents.push(parent);
 		}
-		Stack<VertexImpl> inVertexParents = new Stack<>();
+		final Stack<VertexImpl> inVertexParents = new Stack<>();
 		for (VertexImpl parent = (VertexImpl) inVertex; parent != null; parent = parent.graph.parentVertex) {
 			inVertexParents.push(parent);
 		}
@@ -95,7 +104,7 @@ public class GraphImpl extends ElementImpl implements Graph {
 		}
 
 		GraphImpl firstEqualParent = null;
-		while (!outVertexParents.isEmpty() && !inVertexParents.isEmpty() && outVertexParents.peek().graph == inVertexParents.pop().graph) {
+		while (!outVertexParents.isEmpty() && !inVertexParents.isEmpty() && (outVertexParents.peek().graph == inVertexParents.pop().graph)) {
 			firstEqualParent = outVertexParents.pop().graph;
 		}
 		return firstEqualParent.addEdgeChecked(id, outVertex, inVertex);
@@ -105,11 +114,11 @@ public class GraphImpl extends ElementImpl implements Graph {
 		String idString;
 		if (id == null) {
 			do {
-				idString = getDefaultId();
-			} while (edges.containsKey(idString));
+				idString = this.getDefaultId();
+			} while (this.edges.containsKey(idString));
 		} else {
 			idString = id.toString();
-			if (edges.containsKey(idString)) {
+			if (this.edges.containsKey(idString)) {
 				throw ExceptionFactory.edgeWithIdAlreadyExists(id);
 			}
 		}
@@ -127,7 +136,7 @@ public class GraphImpl extends ElementImpl implements Graph {
 		if (id == null) {
 			throw ExceptionFactory.edgeIdCanNotBeNull();
 		}
-		String idString = id.toString();
+		final String idString = id.toString();
 		return this.edges.get(idString);
 	}
 
@@ -151,9 +160,9 @@ public class GraphImpl extends ElementImpl implements Graph {
 	private String getDefaultId() {
 		String idString;
 		do {
-			idString = currentDefaultId.toString();
-			currentDefaultId++;
-		} while (vertices.containsKey(idString) || edges.containsKey(idString));
+			idString = this.currentDefaultId.toString();
+			this.currentDefaultId++;
+		} while (this.vertices.containsKey(idString) || this.edges.containsKey(idString));
 		return idString;
 	}
 
