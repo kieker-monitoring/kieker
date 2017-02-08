@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.analysisteetime.JavaComponentSignatureExtractor;
+import kieker.analysisteetime.JavaOperationSignatureExtractor;
 import kieker.analysisteetime.TypeModelAssembler;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 import kieker.analysisteetime.model.analysismodel.type.TypeModel;
@@ -56,7 +58,8 @@ public class ArchitectureModelAssemblerTest {
 	@Test
 	public void testComponentsExistsAfterAddRecordFromRecord() {
 		final TypeModel typeModel = this.factory.createTypeModel();
-		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel);
+		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, new JavaComponentSignatureExtractor(),
+				new JavaOperationSignatureExtractor());
 
 		typeModelAssembler.addRecord(this.beforeOperationEvent1);
 		typeModelAssembler.addRecord(this.beforeOperationEvent2);
@@ -77,7 +80,8 @@ public class ArchitectureModelAssemblerTest {
 	@Test
 	public void testComponentKeysExistsAfterAddRecordFromRecord() {
 		final TypeModel typeModel = this.factory.createTypeModel();
-		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel);
+		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, new JavaComponentSignatureExtractor(),
+				new JavaOperationSignatureExtractor());
 
 		typeModelAssembler.addRecord(this.beforeOperationEvent1);
 		typeModelAssembler.addRecord(this.beforeOperationEvent2);
@@ -97,7 +101,8 @@ public class ArchitectureModelAssemblerTest {
 	@Test
 	public void testOperationExistsAfterAddRecordFromRecord() {
 		final TypeModel typeModel = this.factory.createTypeModel();
-		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel);
+		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, new JavaComponentSignatureExtractor(),
+				new JavaOperationSignatureExtractor());
 
 		typeModelAssembler.addRecord(this.beforeOperationEvent1);
 		typeModelAssembler.addRecord(this.beforeOperationEvent2);
@@ -118,7 +123,8 @@ public class ArchitectureModelAssemblerTest {
 	@Test
 	public void testOperationKeysExistsAfterAddRecordFromRecord() {
 		final TypeModel typeModel = this.factory.createTypeModel();
-		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel);
+		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, new JavaComponentSignatureExtractor(),
+				new JavaOperationSignatureExtractor());
 
 		typeModelAssembler.addRecord(this.beforeOperationEvent1);
 		typeModelAssembler.addRecord(this.beforeOperationEvent2);
@@ -138,7 +144,8 @@ public class ArchitectureModelAssemblerTest {
 	@Test
 	public void testOperationExistsAfterAddRecordFromString() {
 		final TypeModel typeModel = this.factory.createTypeModel();
-		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel);
+		final TypeModelAssembler typeModelAssembler = new TypeModelAssembler(typeModel, new JavaComponentSignatureExtractor(),
+				new JavaOperationSignatureExtractor());
 
 		typeModelAssembler.addRecord(EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_1);
 		typeModelAssembler.addRecord(EXAMPLE_CLASS_SIGNATURE_1, EXAMPLE_OPERATION_SIGNATURE_2);
