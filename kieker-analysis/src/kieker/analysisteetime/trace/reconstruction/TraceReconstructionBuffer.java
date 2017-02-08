@@ -64,7 +64,7 @@ public class TraceReconstructionBuffer {
 
 		final OperationCall newCall = this.factory.createOperationCall();
 
-		// TODO Calculate Start
+		// TODO Calculate Start, if necessary
 		final long nanosOffset = this.traceMetadata.getLoggingTimestamp() - record.getTimestamp();
 		newCall.setStart(this.traceStart.plusNanos(nanosOffset));
 
@@ -87,6 +87,7 @@ public class TraceReconstructionBuffer {
 	public void handleAfterOperationEventRecord(final AfterOperationEvent record) {
 		final BeforeOperationEvent beforeEvent = this.stack.pop();
 
+		// TODO This does not work for other time units
 		final long durationInNanos = record.getTimestamp() - beforeEvent.getTimestamp();
 		this.current.setDuration(Duration.ofNanos(durationInNanos));
 
