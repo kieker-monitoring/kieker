@@ -29,6 +29,7 @@ public class TriggerEveryXthStage extends AbstractTransformation<Object, Trigger
 
 	private int counter = 0;
 	private final int threshold;
+	private final Trigger trigger = new Trigger();
 
 	public TriggerEveryXthStage(final int threshold) {
 		super();
@@ -40,7 +41,7 @@ public class TriggerEveryXthStage extends AbstractTransformation<Object, Trigger
 		this.counter++;
 		if ((this.counter % this.threshold) == 0) {
 			this.counter = 0; // To avoid overflows in some point in time
-			this.outputPort.send(Trigger.INSTANCE);
+			this.outputPort.send(this.trigger);
 		}
 	}
 

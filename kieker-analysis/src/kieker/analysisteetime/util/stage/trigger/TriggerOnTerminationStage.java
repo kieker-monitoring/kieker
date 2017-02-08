@@ -27,6 +27,8 @@ import teetime.stage.basic.AbstractTransformation;
  */
 public class TriggerOnTerminationStage extends AbstractTransformation<Object, Trigger> {
 
+	private final Trigger trigger = new Trigger();
+
 	public TriggerOnTerminationStage() {
 		super();
 	}
@@ -38,7 +40,7 @@ public class TriggerOnTerminationStage extends AbstractTransformation<Object, Tr
 
 	@Override
 	public void onTerminating() throws Exception {
-		this.outputPort.send(Trigger.INSTANCE);
+		this.outputPort.send(this.trigger);
 		super.onTerminating();
 	}
 
