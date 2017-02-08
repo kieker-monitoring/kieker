@@ -2,7 +2,7 @@ package kieker.analysisteetime.util.graph;
 
 import java.util.Set;
 
-public abstract interface Element {
+public interface Element {
 
 	public <T> T getProperty(String key);
 

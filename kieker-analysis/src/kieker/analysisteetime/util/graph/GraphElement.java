@@ -1,6 +1,6 @@
 package kieker.analysisteetime.util.graph;
 
-public abstract interface GraphElement extends Element {
+public interface GraphElement extends Element {
 
 	public void remove();
 
