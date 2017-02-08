@@ -39,12 +39,11 @@ public interface IRawDataWriter {
 	public void writeData(ByteBuffer data, int offset, int length);
 
 	/**
-	 * Implementing classes should indicate an initialization error by throwing
-	 * an {@link Exception}.
+	 * Called by the collector before records are written.
 	 * 
 	 * @since 1.13
 	 */
-	public void init() throws Exception;
+	public void init();
 
 	/**
 	 * Called by the collector to announce a shutdown of monitoring. Writers

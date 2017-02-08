@@ -79,7 +79,7 @@ public class KafkaWriter extends AbstractRawDataWriter {
 	}
 
 	@Override
-	public void init() throws Exception {
+	public void init() {
 		final Properties properties = new Properties();
 		
 		properties.put("bootstrap.servers", this.bootstrapServers);

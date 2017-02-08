@@ -90,7 +90,7 @@ public class StringSerializer extends AbstractMonitoringRecordSerializer {
 	}
 
 	@Override
-	public void init() throws Exception {
+	public void init() {
 		// Nothing to do
 	}
 

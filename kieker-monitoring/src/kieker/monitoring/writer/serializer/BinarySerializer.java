@@ -119,7 +119,7 @@ public class BinarySerializer extends AbstractContainerFormatSerializer {
 	}
 
 	@Override
-	public void init() throws Exception {
+	public void init() {
 		// Nothing to do
 	}
 

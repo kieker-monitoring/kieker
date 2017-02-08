@@ -129,13 +129,13 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	protected void init() throws Exception {
-		this.scheduledExecutor.scheduleAtFixedRate(this.writerTask, 0, this.taskRunInterval, TimeUnit.MILLISECONDS);
+	public void onStarting() {
+		this.scheduledExecutor.scheduleAtFixedRate(this.writerTask, 0, this.taskRunInterval, TimeUnit.MILLISECONDS);		
 		this.writerTask.init();
 	}
 
 	@Override
-	public void terminate() {
+	public void onTerminating() {
 		// Terminate scheduled execution and write remaining chunks, if any
 		this.scheduledExecutor.shutdown();
 		this.writerTask.terminate();
@@ -157,8 +157,8 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord record) {
-		return this.enqueueRecord(record);
+	public void writeMonitoringRecord(final IMonitoringRecord record) {
+		this.enqueueRecord(record);
 	}
 
 	class ChunkWriterTask implements Runnable {
@@ -216,7 +216,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 			}
 		}
 
-		public void init() throws Exception {
+		public void init() {
 			this.serializer.init();
 			this.writer.init();
 		}

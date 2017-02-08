@@ -55,14 +55,11 @@ public interface IMonitoringRecordSerializer {
 	public int serializeRecords(Collection<IMonitoringRecord> records, ByteBuffer buffer);
 
 	/**
-	 * Implementing classes should indicate an initialization error by throwing
-	 * an {@link Exception}.
+	 * Called by the collector before records are written.
 	 * 
-	 * @throws Exception
-	 *             If the initialization fails
 	 * @since 1.13
 	 */
-	public void init() throws Exception;
+	public void init();
 
 	/**
 	 * Called by the collector to announce a shutdown of monitoring. Serializers
