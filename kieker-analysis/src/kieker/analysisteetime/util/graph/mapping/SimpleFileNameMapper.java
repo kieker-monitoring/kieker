@@ -9,7 +9,7 @@ import kieker.analysisteetime.util.graph.util.FileExtension;
  * This function maps a graph to a file name with the pattern:
  * output directory + graph name + file extension
  *
- * @author SÃ¶ren Henning
+ * @author Sören Henning
  *
  */
 public class SimpleFileNameMapper implements Function<Graph, String> {
@@ -24,7 +24,7 @@ public class SimpleFileNameMapper implements Function<Graph, String> {
 
 	@Override
 	public String apply(final Graph graph) {
-		return outputDirectory + '/' + graph.getName() + '.' + fileExtension;
+		return this.outputDirectory + '/' + graph.getName() + '.' + this.fileExtension;
 	}
 
 }

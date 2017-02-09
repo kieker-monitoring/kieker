@@ -25,7 +25,7 @@ import kieker.analysisteetime.util.graph.traversal.GraphTraverser;
 import kieker.analysisteetime.util.graph.traversal.VertexVisitor;
 
 /**
- * @author Soeren
+ * @author Sören Henning
  *
  * @since 1.13
  */

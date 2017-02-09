@@ -10,7 +10,7 @@ import kieker.analysisteetime.util.graph.util.IndentWriter;
 /**
  * Class to build and write a DOT Graph to a writer.
  *
- * @author SÃ¶ren Henning
+ * @author Sören Henning
  *
  */
 public class DotGraphWriter {
@@ -26,11 +26,11 @@ public class DotGraphWriter {
 	}
 
 	public void start(final String name) throws IOException {
-		start(DotGraphType.DIRECTED, name);
+		this.start(DotGraphType.DIRECTED, name);
 	}
 
 	public void start(final DotGraphType graphType, final String name) throws IOException {
-		checkState(DotWriterState.CREATED);
+		this.checkState(DotWriterState.CREATED);
 
 		this.graphType = graphType;
 
@@ -40,112 +40,112 @@ public class DotGraphWriter {
 		} else {
 			openToken = DotGraph.DIRECTED_START_TOKEN;
 		}
-		writer.writeln(openToken + ' ' + '"' + name + '"' + ' ' + DotGraph.START_GRAPH_BRACKET);
-		writer.indent();
-		state = DotWriterState.STARTED;
+		this.writer.writeln(openToken + ' ' + '"' + name + '"' + ' ' + DotGraph.START_GRAPH_BRACKET);
+		this.writer.indent();
+		this.state = DotWriterState.STARTED;
 	}
 
 	public void finish() throws IOException {
-		checkState(DotWriterState.STARTED);
+		this.checkState(DotWriterState.STARTED);
 
-		if (openSubgraphs > 0) {
+		if (this.openSubgraphs > 0) {
 			throw new IllegalStateException("There are unclosed subgraphs.");
 		}
 
-		writer.unindent();
-		writer.writeln(DotGraph.END_GRAPH_BRACKET);
-		state = DotWriterState.FINISHED;
+		this.writer.unindent();
+		this.writer.writeln(DotGraph.END_GRAPH_BRACKET);
+		this.state = DotWriterState.FINISHED;
 
-		writer.close();
+		this.writer.close();
 	}
 
 	public void addDefaultNodeAttributes(final Map<String, String> attributes) throws IOException {
-		checkState(DotWriterState.STARTED);
+		this.checkState(DotWriterState.STARTED);
 
-		if (attributes != null && !attributes.isEmpty()) {
-			writer.writeln(DotGraph.NODE + ' ' + assembleAttributes(attributes));
+		if ((attributes != null) && !attributes.isEmpty()) {
+			this.writer.writeln(DotGraph.NODE + ' ' + this.assembleAttributes(attributes));
 		}
 	}
 
 	public void addDefaultEdgeAttributes(final Map<String, String> attributes) throws IOException {
-		checkState(DotWriterState.STARTED);
+		this.checkState(DotWriterState.STARTED);
 
-		if (attributes != null && !attributes.isEmpty()) {
-			writer.writeln(DotGraph.EDGE + ' ' + assembleAttributes(attributes));
+		if ((attributes != null) && !attributes.isEmpty()) {
+			this.writer.writeln(DotGraph.EDGE + ' ' + this.assembleAttributes(attributes));
 		}
 	}
 
 	public void addGraphAttribute(final String key, final String value) throws IOException {
-		checkState(DotWriterState.STARTED);
+		this.checkState(DotWriterState.STARTED);
 
-		writer.writeln(assembleAttribute(key, value));
+		this.writer.writeln(this.assembleAttribute(key, value));
 	}
 
 	public void addNode(final String id) throws IOException {
-		addNode(id, null);
+		this.addNode(id, null);
 	}
 
 	public void addNode(final String id, final Map<String, String> attributes) throws IOException {
-		checkState(DotWriterState.STARTED);
+		this.checkState(DotWriterState.STARTED);
 
-		if (attributes == null || attributes.isEmpty()) {
-			writer.writeln('"' + id + '"');
+		if ((attributes == null) || attributes.isEmpty()) {
+			this.writer.writeln('"' + id + '"');
 		} else {
-			writer.writeln('"' + id + '"' + ' ' + assembleAttributes(attributes));
+			this.writer.writeln('"' + id + '"' + ' ' + this.assembleAttributes(attributes));
 		}
 	}
 
 	public void addEdge(final String sourceId, final String targetId) throws IOException {
-		addEdge(sourceId, targetId, null);
+		this.addEdge(sourceId, targetId, null);
 	}
 
 	public void addEdge(final String sourceId, final String targetId, final Map<String, String> attributes) throws IOException {
-		checkState(DotWriterState.STARTED);
+		this.checkState(DotWriterState.STARTED);
 
 		String edgeConnector;
-		if (graphType == DotGraphType.UNDIRECTED) {
+		if (this.graphType == DotGraphType.UNDIRECTED) {
 			edgeConnector = DotGraph.UNDIRECTED_EDGE_CONNECTOR;
 		} else {
 			edgeConnector = DotGraph.DIRECTED_EDGE_CONNECTOR;
 		}
 
-		if (attributes == null || attributes.isEmpty()) {
-			writer.writeln('"' + sourceId + '"' + ' ' + edgeConnector + ' ' + '"' + targetId + '"');
+		if ((attributes == null) || attributes.isEmpty()) {
+			this.writer.writeln('"' + sourceId + '"' + ' ' + edgeConnector + ' ' + '"' + targetId + '"');
 		} else {
-			writer.writeln('"' + sourceId + '"' + ' ' + edgeConnector + ' ' + '"' + targetId + '"' + ' ' + assembleAttributes(attributes));
+			this.writer.writeln('"' + sourceId + '"' + ' ' + edgeConnector + ' ' + '"' + targetId + '"' + ' ' + this.assembleAttributes(attributes));
 		}
 	}
 
 	public void addSubgraphStart(final String name) throws IOException {
-		checkState(DotWriterState.STARTED);
+		this.checkState(DotWriterState.STARTED);
 
-		writer.writeln(DotGraph.SUB_START_TOKEN + ' ' + '"' + name + '"' + ' ' + DotGraph.START_GRAPH_BRACKET);
-		writer.indent();
-		openSubgraphs++;
+		this.writer.writeln(DotGraph.SUB_START_TOKEN + ' ' + '"' + name + '"' + ' ' + DotGraph.START_GRAPH_BRACKET);
+		this.writer.indent();
+		this.openSubgraphs++;
 	}
 
 	public void addSubgraphStop() throws IOException {
-		checkState(DotWriterState.STARTED);
+		this.checkState(DotWriterState.STARTED);
 
-		if (openSubgraphs == 0) {
+		if (this.openSubgraphs == 0) {
 			throw new IllegalStateException("There is no subgraph to close.");
 		}
 
-		writer.unindent();
-		writer.writeln(DotGraph.END_GRAPH_BRACKET);
-		openSubgraphs--;
+		this.writer.unindent();
+		this.writer.writeln(DotGraph.END_GRAPH_BRACKET);
+		this.openSubgraphs--;
 	}
 
 	public void addClusterStart(final String name) throws IOException {
-		addSubgraphStart(DotGraph.CLUSTER_PREFIX + name);
+		this.addSubgraphStart(DotGraph.CLUSTER_PREFIX + name);
 	}
 
 	public void addClusterStop() throws IOException {
-		addSubgraphStop();
+		this.addSubgraphStop();
 	}
 
 	private void checkState(final DotWriterState expectedState) {
-		if (state != expectedState) {
+		if (this.state != expectedState) {
 			switch (expectedState) {
 			case CREATED:
 				throw new IllegalStateException("The writing has already been started.");
@@ -162,7 +162,7 @@ public class DotGraphWriter {
 	private String assembleAttributes(final Map<String, String> attributes) {
 		return DotGraph.START_ATTRS_BRACKET
 				+ attributes.entrySet().stream()
-						.map(e -> assembleAttribute(e.getKey(), e.getValue()))
+						.map(e -> this.assembleAttribute(e.getKey(), e.getValue()))
 						.collect(Collectors.joining(","))
 				+ DotGraph.END_ATTRS_BRACKET;
 	}

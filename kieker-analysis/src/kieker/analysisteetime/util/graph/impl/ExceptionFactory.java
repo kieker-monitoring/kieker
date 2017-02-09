@@ -3,7 +3,7 @@ package kieker.analysisteetime.util.graph.impl;
 /**
  * The ExceptionFactory provides standard exceptions for graphs.
  *
- * @author SÃ¶ren Henning
+ * @author Sören Henning
  */
 class ExceptionFactory {
 
