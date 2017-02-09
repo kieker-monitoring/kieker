@@ -16,28 +16,13 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.util.graph.Graph;
-
 /**
  * @author Sören Henning
  *
  * @since 1.13
  */
-public class DependencyGraphCreator {
+public interface DependecyGraphBuilderFactory {
 
-	private final ExecutionModel executionModel;
-	private final DependecyGraphBuilderFactory graphBuilderFactory;
-
-	public DependencyGraphCreator(final ExecutionModel executionModel, final DependecyGraphBuilderFactory graphBuilderFactory) {
-		this.executionModel = executionModel;
-		this.graphBuilderFactory = graphBuilderFactory;
-	}
-
-	public Graph create() {
-		final DependencyGraphBuilder graphBuilder = this.graphBuilderFactory.createDependencyGraphBuilder();
-		final Graph graph = graphBuilder.build(this.executionModel);
-		return graph;
-	}
+	public DependencyGraphBuilder createDependencyGraphBuilder();
 
 }

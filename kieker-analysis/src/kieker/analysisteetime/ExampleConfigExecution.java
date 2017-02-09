@@ -31,7 +31,8 @@ public final class ExampleConfigExecution {
 
 		try {
 			final DeploymentModel deploymentModel = configuration.getDeploymentModel();
-			final DeploymentModelPrinter deploymentModelPrinter = new DeploymentModelPrinter(new PrintStream(new File("output.txt")));
+			final DeploymentModelPrinter deploymentModelPrinter = new DeploymentModelPrinter(
+					new PrintStream(new File("C:/Users/Soeren/Desktop/kieker-output/model.txt")));
 			// final DeploymentModelPrinter deploymentModelPrinter = new DeploymentModelPrinter(System.out);
 			deploymentModelPrinter.print(deploymentModel);
 		} catch (final FileNotFoundException e) {

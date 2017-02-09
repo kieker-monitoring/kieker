@@ -28,7 +28,7 @@ import kieker.analysisteetime.util.graph.Vertex;
 import kieker.analysisteetime.util.graph.impl.GraphImpl;
 
 /**
- * Abstract template class for Dependency Graph Builders. To use this abstract builder,
+ * Abstract template class for dependency graph builders. To use this abstract builder,
  * simply extend it and implement the {@code addVertex(DeployedOperation deployedOperation)}
  * method.
  *
