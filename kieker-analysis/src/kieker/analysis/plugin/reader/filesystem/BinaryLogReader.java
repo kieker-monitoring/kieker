@@ -31,6 +31,8 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
  *
@@ -108,6 +110,7 @@ public class BinaryLogReader extends AbstractReaderPlugin implements IMonitoring
 	 * {@inheritDoc}
 	 */
 	@Override
+	@SuppressFBWarnings("NN_NAKED_NOTIFY")
 	public boolean read() {
 		// start all reader
 		int notInitializesReaders = 0;
@@ -155,6 +158,7 @@ public class BinaryLogReader extends AbstractReaderPlugin implements IMonitoring
 	 * {@inheritDoc}
 	 */
 	@Override
+	@SuppressFBWarnings("WA_NOT_IN_LOOP")
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		synchronized (record) { // with read()
 			synchronized (this.recordQueue) { // with read()
