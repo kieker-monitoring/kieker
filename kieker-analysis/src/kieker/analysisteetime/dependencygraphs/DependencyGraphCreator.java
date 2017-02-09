@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime;
+package kieker.analysisteetime.dependencygraphs;
 
 import java.util.Collection;
 
@@ -311,40 +311,6 @@ public class DependencyGraphCreator {
 		}
 
 		return graph;
-	}
-
-	// TODO Temporary nested
-	public static abstract class Builder {
-
-		protected final Graph graph;
-		protected final ObjectIdentifierRegistry identifierRegistry;
-
-		public Builder() {
-			this.graph = new GraphImpl();
-			this.identifierRegistry = new ObjectIdentifierRegistry();
-		}
-
-		public Graph build(final ExecutionModel executionModel) {
-			for (final AggregatedInvocation invocation : executionModel.getAggregatedInvocations().values()) {
-				this.handleInvocation(invocation);
-			}
-			return this.graph;
-		}
-
-		public void handleInvocation(final AggregatedInvocation invocation) {
-			final Vertex sourceVertex = this.addVertex(invocation.getSource());
-			final Vertex targetVertex = this.addVertex(invocation.getTarget());
-			this.addEdge(sourceVertex, targetVertex);
-		}
-
-		protected abstract Vertex addVertex(DeployedOperation deployedOperation);
-
-		private Edge addEdge(final Vertex source, final Vertex target) {
-			final int edgeId = this.identifierRegistry.getIdentifier(Pair.of(source, target));
-			final Edge edge = source.addEdgeIfAbsent(edgeId, target);
-			return edge;
-		}
-
 	}
 
 }
