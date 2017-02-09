@@ -5,6 +5,8 @@ package kieker.analysisteetime;
 
 import java.io.File;
 
+import kieker.analysisteetime.dependencygraphs.DependencyGraphCreatorStage;
+import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependencyGraphBuilderFactory;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
@@ -19,10 +21,15 @@ import kieker.analysisteetime.trace.graph.TraceToGraphTransformerStage;
 import kieker.analysisteetime.trace.graph.dot.DotTraceGraphFileWriterStage;
 import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
 import kieker.analysisteetime.trace.reconstruction.TraceStatisticsDecoratorStage;
+import kieker.analysisteetime.util.graph.Direction;
+import kieker.analysisteetime.util.graph.Edge;
+import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.graph.Vertex;
 import kieker.analysisteetime.util.stage.trigger.TriggerOnTerminationStage;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
 
+import teetime.framework.AbstractConsumerStage;
 import teetime.framework.Configuration;
 import teetime.stage.InstanceOfFilter;
 import teetime.stage.basic.distributor.Distributor;
@@ -59,7 +66,38 @@ public class ExampleConfiguration extends Configuration {
 		final TraceToGraphTransformerStage traceToGraphTransformer = new TraceToGraphTransformerStage();
 		final DotTraceGraphFileWriterStage dotTraceGraphFileWriter = DotTraceGraphFileWriterStage.create(exportDirectory);
 		final Distributor<Trace> traceDistributor = new Distributor<>();
-		final TriggerOnTerminationStage triggerOnTerminationStage = new TriggerOnTerminationStage();
+		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
+		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(this.executionModel,
+				new DeploymentLevelOperationDependencyGraphBuilderFactory());
+		final AbstractConsumerStage<Graph> debugStage = new AbstractConsumerStage<Graph>() {
+			@Override
+			protected void execute(final Graph graph) {
+				for (final Vertex vertex : graph.getVertices()) {
+					System.out.println("Vertices:");
+					System.out.println(vertex.getId());
+					System.out.println("    Vertices:");
+					for (final Vertex vertex1 : vertex.getChildGraph().getVertices()) {
+						System.out.println("    " + vertex1.getId());
+						System.out.println("        Vertices:");
+						for (final Vertex vertex2 : vertex1.getChildGraph().getVertices()) {
+							System.out.println("        " + vertex2.getId());
+						}
+						System.out.println("        Edges:");
+						for (final Edge edge2 : vertex1.getChildGraph().getEdges()) {
+							System.out.println("        " + edge2.getVertex(Direction.OUT).getId() + "->" + edge2.getVertex(Direction.IN).getId());
+						}
+					}
+					System.out.println("    Edges:");
+					for (final Edge edge1 : vertex.getChildGraph().getEdges()) {
+						System.out.println("    " + edge1.getVertex(Direction.OUT).getId() + "->" + edge1.getVertex(Direction.IN).getId());
+					}
+				}
+				System.out.println("Edges:");
+				for (final Edge edge : graph.getEdges()) {
+					System.out.println(edge.getVertex(Direction.OUT).getId() + "->" + edge.getVertex(Direction.IN).getId());
+				}
+			}
+		};
 
 		// Connect the stages
 		super.connectPorts(reader.getOutputPort(), instanceOfFilter.getInputPort());
@@ -69,10 +107,12 @@ public class ExampleConfiguration extends Configuration {
 		super.connectPorts(deploymentModelAssembler.getOutputPort(), traceReconstructor.getInputPort());
 		super.connectPorts(traceReconstructor.getOutputPort(), traceStatisticsDecorator.getInputPort());
 		super.connectPorts(traceStatisticsDecorator.getOutputPort(), traceDistributor.getInputPort());
-		super.connectPorts(traceDistributor.getNewOutputPort(), traceToGraphTransformer.getInputPort());
-		super.connectPorts(traceToGraphTransformer.getOutputPort(), dotTraceGraphFileWriter.getInputPort());
+		// super.connectPorts(traceDistributor.getNewOutputPort(), traceToGraphTransformer.getInputPort());
+		// super.connectPorts(traceToGraphTransformer.getOutputPort(), dotTraceGraphFileWriter.getInputPort());
 		super.connectPorts(traceDistributor.getNewOutputPort(), executionModelAssembler.getInputPort());
-		super.connectPorts(executionModelAssembler.getOutputPort(), triggerOnTerminationStage.getInputPort());
+		super.connectPorts(executionModelAssembler.getOutputPort(), onTerminationTrigger.getInputPort());
+		super.connectPorts(onTerminationTrigger.getOutputPort(), dependencyGraphCreator.getInputPort());
+		super.connectPorts(dependencyGraphCreator.getOutputPort(), debugStage.getInputPort());
 
 	}
 
