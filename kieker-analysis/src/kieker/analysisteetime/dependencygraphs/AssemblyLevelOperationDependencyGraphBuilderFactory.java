@@ -21,7 +21,7 @@ package kieker.analysisteetime.dependencygraphs;
  *
  * @since 1.13
  */
-public class AssemblyLevelOperationDependencyGraphBuilderFactory implements DependecyGraphBuilderFactory {
+public class AssemblyLevelOperationDependencyGraphBuilderFactory implements DependencyGraphBuilderFactory {
 
 	public AssemblyLevelOperationDependencyGraphBuilderFactory() {
 		super();

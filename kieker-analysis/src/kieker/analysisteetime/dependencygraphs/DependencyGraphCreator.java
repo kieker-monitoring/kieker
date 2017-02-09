@@ -26,10 +26,12 @@ import kieker.analysisteetime.util.graph.Graph;
  */
 public class DependencyGraphCreator {
 
-	private final ExecutionModel executionModel;
-	private final DependecyGraphBuilderFactory graphBuilderFactory;
+	// TODO Name
 
-	public DependencyGraphCreator(final ExecutionModel executionModel, final DependecyGraphBuilderFactory graphBuilderFactory) {
+	private final ExecutionModel executionModel;
+	private final DependencyGraphBuilderFactory graphBuilderFactory;
+
+	public DependencyGraphCreator(final ExecutionModel executionModel, final DependencyGraphBuilderFactory graphBuilderFactory) {
 		this.executionModel = executionModel;
 		this.graphBuilderFactory = graphBuilderFactory;
 	}

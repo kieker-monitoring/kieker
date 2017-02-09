@@ -16,20 +16,29 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
+import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.stage.trigger.Trigger;
+
+import teetime.stage.basic.AbstractTransformation;
+
 /**
- * @author Sören Henning
+ * @author Soeren
  *
  * @since 1.13
  */
-public class DeploymentLevelContextDependencyGraphBuilderFactory implements DependencyGraphBuilderFactory {
+public class DependencyGraphCreatorStage extends AbstractTransformation<Trigger, Graph> {
 
-	public DeploymentLevelContextDependencyGraphBuilderFactory() {
-		super();
+	private final DependencyGraphCreator graphCreator;
+
+	public DependencyGraphCreatorStage(final ExecutionModel executionModel, final DependencyGraphBuilderFactory graphBuilderFactory) {
+		this.graphCreator = new DependencyGraphCreator(executionModel, graphBuilderFactory);
 	}
 
 	@Override
-	public DependencyGraphBuilder createDependencyGraphBuilder() {
-		return new DeploymentLevelContextDependencyGraphBuilder();
+	protected void execute(final Trigger trigger) {
+		final Graph graph = this.graphCreator.create();
+		this.outputPort.send(graph);
 	}
 
 }
