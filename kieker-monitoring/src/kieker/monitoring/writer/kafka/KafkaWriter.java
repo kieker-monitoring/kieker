@@ -34,26 +34,26 @@ import kieker.monitoring.writer.raw.AbstractRawDataWriter;
  */
 public class KafkaWriter extends AbstractRawDataWriter {
 	
-	private static final String PREFIX = KafkaWriter.class.getName() + ".";
-	
-	/** The name of the configuration property for the acks parameter. */
-	public static final String CONFIG_PROPERTY_ACKS = PREFIX + "acks";
-	/** The name of the configuration property for the batch size. */
-	public static final String CONFIG_PROPERTY_BATCH_SIZE = PREFIX + "batchSize";
-	/** The name of the configuration property for the bootstrap servers. */
-	public static final String CONFIG_PROPERTY_BOOTSTRAP_SERVERS = PREFIX + "bootstrapServers";	
-	/** The name of the configuration property for the buffer memory size. */
-	public static final String CONFIG_PROPERTY_BUFFER_MEMORY = PREFIX + "bufferMemory";
-	/** The name of the configuration property for the linger interval. */
-	public static final String CONFIG_PROPERTY_LINGER_MS = PREFIX + "lingerMs";
-	/** The name of the configuration property for the topic name. */
-	public static final String CONFIG_PROPERTY_TOPIC_NAME = PREFIX + "topicName";
-	
 	private static final String DEFAULT_ACKS = "all";
 	private static final int DEFAULT_BATCH_SIZE = 16384;
 	private static final int DEFAULT_LINGER_MS = 1;
 	private static final int DEFAULT_BUFFER_MEMORY = 32 << 20;	
-
+	
+	private static final String PREFIX = KafkaWriter.class.getName() + ".";
+	
+	/** The name of the configuration property for the acks parameter. */
+	public static final String CONFIG_PROPERTY_ACKS = PREFIX + "acks"; // NOCS (afterPREFIX)
+	/** The name of the configuration property for the batch size. */
+	public static final String CONFIG_PROPERTY_BATCH_SIZE = PREFIX + "batchSize"; // NOCS (afterPREFIX)
+	/** The name of the configuration property for the bootstrap servers. */
+	public static final String CONFIG_PROPERTY_BOOTSTRAP_SERVERS = PREFIX + "bootstrapServers";	// NOCS (afterPREFIX)
+	/** The name of the configuration property for the buffer memory size. */
+	public static final String CONFIG_PROPERTY_BUFFER_MEMORY = PREFIX + "bufferMemory"; // NOCS (afterPREFIX)
+	/** The name of the configuration property for the linger interval. */
+	public static final String CONFIG_PROPERTY_LINGER_MS = PREFIX + "lingerMs"; // NOCS (afterPREFIX)
+	/** The name of the configuration property for the topic name. */
+	public static final String CONFIG_PROPERTY_TOPIC_NAME = PREFIX + "topicName"; // NOCS (afterPREFIX)
+	
 	private final String bootstrapServers;
 	private final String topicName;
 	private final String acknowledges;

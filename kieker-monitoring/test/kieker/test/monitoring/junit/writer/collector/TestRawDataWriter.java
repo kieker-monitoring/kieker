@@ -53,7 +53,7 @@ public class TestRawDataWriter implements IRawDataWriter {
 		try {
 			this.dataStorage.appendData(this.testId, dataArray);
 		} catch (final IOException e) {
-			throw new RuntimeException(e);
+			// Should not happen
 		}
 	}
 

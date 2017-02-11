@@ -29,21 +29,29 @@ import kieker.common.logging.LogFactory;
  *
  * @since 1.13
  */
-public class ControllerFactory {
+public final class ControllerFactory {
 
 	private static final Log LOG = LogFactory.getLog(ControllerFactory.class);
 
 	private static final ControllerFactory INSTANCE = new ControllerFactory();
 
+	public ControllerFactory() {
+		// Default Constructor
+	}
+
 	/**
 	 * Get an instance of the controller factory for the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * @return A controller factory instance
 	 */
 	public static ControllerFactory getInstance(final Configuration configuration) {
 		// Currently, no configuration parameter for choosing a separate controller
 		// factory is implemented
 		return INSTANCE;
 	}
-
+	
 	/**
 	 * This is a helper method trying to find, create and initialize the given class, using its public constructor which accepts a single {@link Configuration}.
 	 *

@@ -16,8 +16,6 @@
 
 package kieker.analysis.plugin.reader.newio.deserializer;
 
-import static kieker.common.util.dataformat.VariableLengthEncoding.decodeInt;
-
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -29,6 +27,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.util.dataformat.FormatIdentifier;
+import kieker.common.util.dataformat.VariableLengthEncoding;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -87,11 +86,11 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 	}
 
 	private IRegistry<String> decodeStringRegistry(final ByteBuffer buffer) {
-		final int numberOfEntries = decodeInt(buffer);
+		final int numberOfEntries = VariableLengthEncoding.decodeInt(buffer);
 		final List<String> values = new ArrayList<String>(numberOfEntries);
 
 		for (int entryIndex = 0; entryIndex < numberOfEntries; entryIndex++) {
-			final int entryLength = decodeInt(buffer);
+			final int entryLength = VariableLengthEncoding.decodeInt(buffer);
 			final byte[] entryDataBytes = new byte[entryLength];
 			buffer.get(entryDataBytes);
 

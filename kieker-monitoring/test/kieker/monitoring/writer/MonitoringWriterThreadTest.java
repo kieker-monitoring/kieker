@@ -28,8 +28,6 @@ import kieker.Await;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
-import kieker.monitoring.writer.AbstractMonitoringWriter;
-import kieker.monitoring.writer.MonitoringWriterThread;
 import kieker.monitoring.writer.dump.DumpWriter;
 
 /**

@@ -19,8 +19,6 @@ package kieker.test.monitoring.junit.writer.serializer;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import javax.xml.bind.DatatypeConverter;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,8 +30,8 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.collector.ChunkingCollector;
 import kieker.monitoring.writer.serializer.BinarySerializer;
-import kieker.test.monitoring.junit.writer.collector.TestRawDataStorage;
-import kieker.test.monitoring.junit.writer.collector.TestRawDataWriter;
+import kieker.test.monitoring.junit.writer.collector.TestRawDataStorage; // NOCS
+import kieker.test.monitoring.junit.writer.collector.TestRawDataWriter; // NOCS
 
 /**
  * Tests for the default binary serializer.
@@ -44,6 +42,10 @@ import kieker.test.monitoring.junit.writer.collector.TestRawDataWriter;
  */
 public class BinarySerializerTest {
 
+	public BinarySerializerTest() {
+		// Default Constructor
+	}
+	
 	@Test
 	public void testSingleRecord() throws IOException {
 		final String testId = "testSingleRecord";
@@ -77,8 +79,6 @@ public class BinarySerializerTest {
 
 		// Check the size of the string table
 		Assert.assertEquals(9, numberOfStrings);
-
-		System.out.println(DatatypeConverter.printBase64Binary(data));
 	}
 
 	@Test

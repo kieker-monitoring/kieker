@@ -161,6 +161,12 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		this.enqueueRecord(record);
 	}
 
+	/**
+	 * Writer task to write records collected by the collector.
+	 * @author Holger Knoche
+	 * @since 1.13
+	 *
+	 */
 	class ChunkWriterTask implements Runnable {
 
 		private final ByteBuffer buffer;

@@ -30,7 +30,6 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.filesystem.FileExtensionFilter;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.writer.filesystem.AsciiFileWriter;
 
 /**
  * @author Christian Wulf

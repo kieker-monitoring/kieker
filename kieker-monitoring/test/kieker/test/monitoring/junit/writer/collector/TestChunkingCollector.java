@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.LockSupport;
@@ -42,8 +43,14 @@ import kieker.monitoring.writer.serializer.StringSerializer;
  *
  * @since 1.13
  */
-public class TestChunkingCollector {
+public final class TestChunkingCollector {
 
+	private static final Charset CHARSET = Charset.forName("UTF-8");
+	
+	private TestChunkingCollector() {
+		// Default Constructor
+	}
+	
 	/**
 	 * Tests both writing of chunks due to size (a full chunk can be written) and to time (records remain unwritten for some time).
 	 *
@@ -81,7 +88,7 @@ public class TestChunkingCollector {
 	private static List<String> linesFromData(final byte[] data) throws IOException {
 		final List<String> lines = new ArrayList<String>();
 
-		final BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(data)));
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(data), CHARSET));
 		try {
 			while (true) {
 				final String currentLine = reader.readLine();

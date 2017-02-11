@@ -29,11 +29,15 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @since 1.13
  */
-public class TestRawDataStorage {
+public final class TestRawDataStorage {
 
 	private static final TestRawDataStorage INSTANCE = new TestRawDataStorage();
 
 	private final ConcurrentHashMap<String, ByteArrayOutputStream> rawData;
+
+	private TestRawDataStorage() {
+		this.rawData = new ConcurrentHashMap<String, ByteArrayOutputStream>();
+	}
 
 	/**
 	 * Retrieves the singleton instance.
@@ -42,10 +46,6 @@ public class TestRawDataStorage {
 	 */
 	public static TestRawDataStorage getInstance() {
 		return INSTANCE;
-	}
-
-	private TestRawDataStorage() {
-		this.rawData = new ConcurrentHashMap<String, ByteArrayOutputStream>();
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class TestRawDataStorage {
 
 	/**
 	 * Retrieves the data currently stored under the given ID.
-	 * 
+	 *
 	 * @param id
 	 *            The ID to retrieve the data for
 	 * @return The stored data, or {@code null} if no data exists

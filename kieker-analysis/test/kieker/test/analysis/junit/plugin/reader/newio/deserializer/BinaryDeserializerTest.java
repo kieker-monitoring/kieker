@@ -40,6 +40,10 @@ import kieker.common.record.misc.KiekerMetadataRecord;
  */
 public class BinaryDeserializerTest {
 
+	public BinaryDeserializerTest() {
+		// Default serializer
+	}
+	
 	/**
 	 * Tests the decoding of a single record and its associated metadata record.
 	 */
