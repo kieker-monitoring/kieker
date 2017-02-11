@@ -9,7 +9,7 @@ class EdgeImpl extends GraphElementImpl implements Edge {
 	private final Vertex outVertex;
 	private final Vertex inVertex;
 
-	protected EdgeImpl(final String id, final Vertex outVertex, final Vertex inVertex, final GraphImpl graph) {
+	protected EdgeImpl(final Object id, final Vertex outVertex, final Vertex inVertex, final GraphImpl graph) {
 		super(id, graph);
 		this.outVertex = outVertex;
 		this.inVertex = inVertex;
@@ -22,11 +22,12 @@ class EdgeImpl extends GraphElementImpl implements Edge {
 
 	@Override
 	public Vertex getVertex(final Direction direction) throws IllegalArgumentException {
-		if (direction.equals(Direction.IN)) {
+		switch (direction) {
+		case IN:
 			return this.inVertex;
-		} else if (direction.equals(Direction.OUT)) {
+		case OUT:
 			return this.outVertex;
-		} else {
+		default:
 			throw ExceptionFactory.bothIsNotSupported();
 		}
 	}

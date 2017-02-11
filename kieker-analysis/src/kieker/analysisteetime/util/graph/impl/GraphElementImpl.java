@@ -4,10 +4,10 @@ import kieker.analysisteetime.util.graph.GraphElement;
 
 abstract class GraphElementImpl extends ElementImpl implements GraphElement {
 
-	protected final String id;
+	protected final Object id;
 	protected final GraphImpl graph;
 
-	protected GraphElementImpl(final String id, final GraphImpl graph) {
+	protected GraphElementImpl(final Object id, final GraphImpl graph) {
 		super();
 		this.graph = graph;
 		this.id = id;

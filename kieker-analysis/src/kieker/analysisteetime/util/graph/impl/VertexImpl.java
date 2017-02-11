@@ -12,11 +12,11 @@ import kieker.analysisteetime.util.graph.Vertex;
 
 class VertexImpl extends GraphElementImpl implements Vertex {
 
-	protected Map<String, Edge> outEdges = new HashMap<String, Edge>();
-	protected Map<String, Edge> inEdges = new HashMap<String, Edge>();
+	protected Map<Object, Edge> outEdges = new HashMap<>();
+	protected Map<Object, Edge> inEdges = new HashMap<>();
 	private Graph childGraph;
 
-	protected VertexImpl(final String id, final GraphImpl graph) {
+	protected VertexImpl(final Object id, final GraphImpl graph) {
 		super(id, graph);
 	}
 
@@ -107,19 +107,19 @@ class VertexImpl extends GraphElementImpl implements Vertex {
 	}
 
 	protected void addOutEdge(final Edge edge) {
-		this.outEdges.put(edge.getId().toString(), edge);
+		this.outEdges.put(edge.getId(), edge);
 	}
 
 	protected void addInEdge(final Edge edge) {
-		this.inEdges.put(edge.getId().toString(), edge);
+		this.inEdges.put(edge.getId(), edge);
 	}
 
 	protected void removeInEdge(final Edge edge) {
-		this.inEdges.remove(edge.getId().toString());
+		this.inEdges.remove(edge.getId());
 	}
 
 	protected void removeOutEdge(final Edge edge) {
-		this.outEdges.remove(edge.getId().toString());
+		this.outEdges.remove(edge.getId());
 	}
 
 }

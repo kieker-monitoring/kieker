@@ -19,6 +19,7 @@ abstract class ElementImpl implements Element {
 
 	@Override
 	public Set<String> getPropertyKeys() {
+		// TODO no copying, use unmodifiable wrapper instead
 		return new HashSet<String>(this.properties.keySet());
 	}
 

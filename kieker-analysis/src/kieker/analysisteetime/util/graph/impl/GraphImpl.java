@@ -14,10 +14,10 @@ public class GraphImpl extends ElementImpl implements Graph {
 
 	protected String name = "G";
 
-	protected Map<String, Vertex> vertices = new HashMap<String, Vertex>();
-	protected Map<String, Edge> edges = new HashMap<String, Edge>();
+	protected Map<Object, Vertex> vertices = new HashMap<>();
+	protected Map<Object, Edge> edges = new HashMap<>();
 
-	protected Long currentDefaultId = 0l;
+	protected long currentDefaultId = 0l;
 
 	protected VertexImpl parentVertex = null;
 
@@ -28,21 +28,19 @@ public class GraphImpl extends ElementImpl implements Graph {
 	}
 
 	@Override
-	public Vertex addVertex(final Object id) {
-		String idString = null;
+	public Vertex addVertex(Object id) {
 		if (id == null) {
 			do {
-				idString = this.getDefaultId();
-			} while (this.vertices.containsKey(idString));
+				id = this.getDefaultId();
+			} while (this.vertices.containsKey(id));
 		} else {
-			idString = id.toString();
-			if (this.vertices.containsKey(idString)) {
+			if (this.vertices.containsKey(id)) {
 				throw ExceptionFactory.vertexWithIdAlreadyExists(id);
 			}
 		}
 
-		final Vertex vertex = new VertexImpl(idString, this);
-		this.vertices.put(vertex.getId().toString(), vertex);
+		final Vertex vertex = new VertexImpl(id, this);
+		this.vertices.put(vertex.getId(), vertex);
 		return vertex;
 	}
 
@@ -60,8 +58,7 @@ public class GraphImpl extends ElementImpl implements Graph {
 		if (id == null) {
 			throw ExceptionFactory.vertexIdCanNotBeNull();
 		}
-		final String idString = id.toString();
-		return this.vertices.get(idString);
+		return this.vertices.get(id);
 	}
 
 	@Override
@@ -71,7 +68,7 @@ public class GraphImpl extends ElementImpl implements Graph {
 
 	@Override
 	public void removeVertex(final Vertex vertex) {
-		if (!this.vertices.containsKey(vertex.getId().toString())) {
+		if (!this.vertices.containsKey(vertex.getId())) {
 			throw ExceptionFactory.vertexWithIdDoesNotExist(vertex.getId());
 		}
 
@@ -82,7 +79,7 @@ public class GraphImpl extends ElementImpl implements Graph {
 			this.removeEdge(edge);
 		}
 
-		this.vertices.remove(vertex.getId().toString());
+		this.vertices.remove(vertex.getId());
 	}
 
 	@Override
@@ -119,21 +116,19 @@ public class GraphImpl extends ElementImpl implements Graph {
 		return edge;
 	}
 
-	protected Edge addEdgeChecked(final Object id, final Vertex outVertex, final Vertex inVertex) {
-		String idString;
+	protected Edge addEdgeChecked(Object id, final Vertex outVertex, final Vertex inVertex) {
 		if (id == null) {
 			do {
-				idString = this.getDefaultId();
-			} while (this.edges.containsKey(idString));
+				id = this.getDefaultId();
+			} while (this.edges.containsKey(id));
 		} else {
-			idString = id.toString();
-			if (this.edges.containsKey(idString)) {
+			if (this.edges.containsKey(id)) {
 				throw ExceptionFactory.edgeWithIdAlreadyExists(id);
 			}
 		}
 
-		final Edge edge = new EdgeImpl(idString, outVertex, inVertex, this);
-		this.edges.put(edge.getId().toString(), edge);
+		final Edge edge = new EdgeImpl(id, outVertex, inVertex, this);
+		this.edges.put(edge.getId(), edge);
 		((VertexImpl) outVertex).addOutEdge(edge);
 		((VertexImpl) inVertex).addInEdge(edge);
 
@@ -145,8 +140,7 @@ public class GraphImpl extends ElementImpl implements Graph {
 		if (id == null) {
 			throw ExceptionFactory.edgeIdCanNotBeNull();
 		}
-		final String idString = id.toString();
-		return this.edges.get(idString);
+		return this.edges.get(id);
 	}
 
 	@Override
@@ -156,23 +150,23 @@ public class GraphImpl extends ElementImpl implements Graph {
 
 	@Override
 	public void removeEdge(final Edge edge) {
-		if (!this.edges.containsKey(edge.getId().toString())) {
+		if (!this.edges.containsKey(edge.getId())) {
 			throw ExceptionFactory.edgeWithIdDoesNotExist(edge.getId());
 		}
 
 		((VertexImpl) edge.getVertex(Direction.IN)).removeInEdge(edge);
 		((VertexImpl) edge.getVertex(Direction.OUT)).removeOutEdge(edge);
 
-		this.edges.remove(edge.getId().toString());
+		this.edges.remove(edge.getId());
 	}
 
-	private String getDefaultId() {
-		String idString;
+	private Object getDefaultId() {
+		long id;
 		do {
-			idString = this.currentDefaultId.toString();
+			id = this.currentDefaultId;
 			this.currentDefaultId++;
-		} while (this.vertices.containsKey(idString) || this.edges.containsKey(idString));
-		return idString;
+		} while (this.vertices.containsKey(id) || this.edges.containsKey(id));
+		return id;
 	}
 
 	@Override
