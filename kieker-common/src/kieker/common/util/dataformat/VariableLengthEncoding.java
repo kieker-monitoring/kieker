@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.writer.serializer.util;
+package kieker.common.util.dataformat;
 
 import java.nio.ByteBuffer;
 

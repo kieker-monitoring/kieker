@@ -23,8 +23,9 @@ import java.util.List;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.dataformat.FormatIdentifier;
+import kieker.common.util.dataformat.VariableLengthEncoding;
 import kieker.common.util.registry.IRegistry;
-import kieker.monitoring.writer.serializer.util.VariableLengthEncoding;
 
 /**
  * Serializer for the default Kieker binary record format.
@@ -35,8 +36,8 @@ import kieker.monitoring.writer.serializer.util.VariableLengthEncoding;
  */
 public class BinarySerializer extends AbstractContainerFormatSerializer {
 
-	/** Format identifier. Reads "DFLT" in ASCII encoding. */
-	public static final int FORMAT_IDENTIFIER = 0x44464C54;
+	/** Format identifier. */
+	public static final int FORMAT_IDENTIFIER = FormatIdentifier.DEFAULT_BINARY_FORMAT.getIdentifierValue();
 
 	/** Encoding to use for Strings. */
 	private static final String ENCODING_NAME = "UTF-8";

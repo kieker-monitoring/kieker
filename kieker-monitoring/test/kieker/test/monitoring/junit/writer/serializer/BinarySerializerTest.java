@@ -26,13 +26,12 @@ import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.util.dataformat.VariableLengthEncoding;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.collector.ChunkingCollector;
 import kieker.monitoring.writer.serializer.BinarySerializer;
-import kieker.monitoring.writer.serializer.util.VariableLengthEncoding;
-
 import kieker.test.monitoring.junit.writer.collector.TestRawDataStorage;
 import kieker.test.monitoring.junit.writer.collector.TestRawDataWriter;
 

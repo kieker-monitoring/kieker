@@ -16,6 +16,8 @@
 
 package kieker.analysis.plugin.reader.newio.deserializer;
 
+import static kieker.common.util.dataformat.VariableLengthEncoding.decodeInt;
+
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.util.dataformat.FormatIdentifier;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -35,8 +38,8 @@ import kieker.common.util.registry.IRegistry;
  */
 public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 
-	/** Format identifier. Reads "DFLT" in ASCII encoding. */
-	public static final int FORMAT_IDENTIFIER = 0x44464C54;
+	/** Format identifier.*/
+	public static final int FORMAT_IDENTIFIER = FormatIdentifier.DEFAULT_BINARY_FORMAT.getIdentifierValue();
 
 	/** Encoding to use for Strings. */
 	private static final String ENCODING_NAME = "UTF-8";
@@ -84,11 +87,11 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 	}
 
 	private IRegistry<String> decodeStringRegistry(final ByteBuffer buffer) {
-		final int numberOfEntries = BinaryDeserializer.decodeInt(buffer);
+		final int numberOfEntries = decodeInt(buffer);
 		final List<String> values = new ArrayList<String>(numberOfEntries);
 
 		for (int entryIndex = 0; entryIndex < numberOfEntries; entryIndex++) {
-			final int entryLength = BinaryDeserializer.decodeInt(buffer);
+			final int entryLength = decodeInt(buffer);
 			final byte[] entryDataBytes = new byte[entryLength];
 			buffer.get(entryDataBytes);
 
@@ -125,43 +128,6 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 		}
 
 		return records;
-	}
-
-	/**
-	 * Decodes a variable-length integer value stored at the current position
-	 * in the byte buffer.
-	 *
-	 * @param buffer
-	 *            The buffer to decode the data from
-	 * @return The decoded integer value
-	 */
-	private static int decodeInt(final ByteBuffer buffer) {
-		// FIXME Move VariableLengthEncoding to common so that this redundant implementation
-		// can be removed
-		final int startPosition = buffer.position();
-		int value = 0;
-		int shiftAmount = 0;
-
-		while (true) {
-			final byte currentByte = buffer.get();
-			// Non-terminal bytes have their msb set and are thus negative
-			final boolean terminalByte = (currentByte >= 0);
-
-			if (terminalByte) {
-				value |= (currentByte << shiftAmount);
-				break;
-			} else {
-				value |= ((currentByte & 0x7F) << shiftAmount);
-				shiftAmount += 7;
-			}
-		}
-
-		// Check whether the highest allowed shift amount was exceeded
-		if (shiftAmount > 28) {
-			throw new IllegalArgumentException("Unterminated variable-length int found at position " + startPosition);
-		}
-
-		return value;
 	}
 
 	@Override

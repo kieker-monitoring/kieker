@@ -14,14 +14,14 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.monitoring.junit.writer.serializer.util;
+package kieker.test.common.util.dataformat;
 
 import java.nio.ByteBuffer;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.monitoring.writer.serializer.util.VariableLengthEncoding;
+import kieker.common.util.dataformat.VariableLengthEncoding;
 
 /**
  * Tests for the variable-length encoding of integers.

@@ -22,6 +22,7 @@ import java.util.List;
 import kieker.analysis.IProjectContext;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.dataformat.FormatIdentifier;
 
 /**
  * @author holger
@@ -30,8 +31,8 @@ import kieker.common.record.IMonitoringRecord;
  */
 public abstract class AbstractContainerFormatDeserializer extends AbstractMonitoringRecordDeserializer {
 
-	/** Container format identifier. Reads "KIKA" in ASCII encoding. */
-	public static final int CONTAINER_IDENTIFIER = 0x4B494B41;
+	/** Container format identifier. */
+	public static final int CONTAINER_IDENTIFIER = FormatIdentifier.CONTAINER_FORMAT.getIdentifierValue();
 
 	private static final int HEADER_SIZE = 8;
 
