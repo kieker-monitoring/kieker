@@ -1,0 +1,41 @@
+apply plugin: 'application'
+apply plugin: 'eclipse'
+
+dependencies {
+	compile fileTree('lib') {
+		include "*.jar"
+  }
+}
+
+def monitoringConfigurationKafka = 'META-INF/kieker.monitoring.properties'
+
+// Simplify the JAR's file name
+archivesBaseName = 'KafkaMonitoringAnalysis'
+version = ''
+	
+sourceSets.main.java.srcDirs = ['src']
+sourceSets.main.resources.srcDirs = ['src-resources']
+
+def monitoringConfiguration = {
+  main = 'kieker.examples.userguide.appendixKafka.BookstoreStarter'
+  classpath = sourceSets.main.runtimeClasspath
+  
+  jvmArgs = ['-Dlog4j.configuration=META-INF/log4j.properties']
+}
+
+task runMonitoringKafka(type: JavaExec) {
+  configure monitoringConfiguration
+  jvmArgs += "-Dkieker.monitoring.configuration=${monitoringConfigurationKafka}"
+}
+
+def analysisConfiguration = {
+  main = 'kieker.examples.userguide.appendixKafka.KafkaAnalysisStarter'
+	classpath = sourceSets.main.runtimeClasspath
+  
+  jvmArgs = ['-Dlog4j.configuration=META-INF/log4j.properties']
+}
+
+task runAnalysisKafka(type: JavaExec) {
+  configure analysisConfiguration
+	args = ['192.168.2.70:9092', 'kiekerRecords', 'kieker']
+}

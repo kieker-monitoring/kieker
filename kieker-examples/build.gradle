@@ -9,6 +9,7 @@ task buildStandaloneExamples(dependsOn: [
 					 'buildStandaloneExamplesUserguideAppendixSigar',
 					 'buildStandaloneExamplesUserguideAppendixJMS', 
 					 'buildStandaloneExamplesUserguideAppendixAMQP',
+					 'buildStandaloneExamplesUserguideAppendixKafka',
 					 'buildStandaloneExamplesMonitoringSigar',
 					 'buildStandaloneExamplesMonitoringJVM',
 					 'buildStandaloneExamplesMonitoringSpring',
@@ -145,6 +146,28 @@ task copyLibsStandaloneExamplesUserguideAppendixAMQP(type: Copy, dependsOn: [roo
 
 task buildStandaloneExamplesUserguideAppendixAMQP(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixAMQP') {
 	buildFile = 'userguide/appendix-AMQP/build.gradle'
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+}
+
+task copyLibsStandaloneExamplesUserguideAppendixKafka(type: Copy, dependsOn: [rootProject.emfJar]) {
+	from ('../build/libs') {
+		include "kieker-${version}.jar"
+	}
+	from ('../lib') {
+		include "commons-logging-*.jar"
+		include "guava-*.jar"
+		include "jctools-core-*.jar"
+		include "kafka-clients-*.jar"
+		include "kieker-*.jar"
+		include "lz4-*.jar"
+		include "slf4j-*.jar"
+		include "snappy-java-*.jar"
+	}
+	into 'userguide/appendix-AMQP/lib/'
+}
+
+task buildStandaloneExamplesUserguideAppendixKafka(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixKafka') {
+	buildFile = 'userguide/appendix-Kafka/build.gradle'
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
