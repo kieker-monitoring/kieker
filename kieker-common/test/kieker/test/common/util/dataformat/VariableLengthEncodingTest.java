@@ -32,6 +32,10 @@ import kieker.common.util.dataformat.VariableLengthEncoding;
  */
 public class VariableLengthEncodingTest {
 
+	public VariableLengthEncodingTest() {
+		// Default Constructor
+	}
+	
 	/**
 	 * Tests a value that is encoded into a single byte.
 	 */

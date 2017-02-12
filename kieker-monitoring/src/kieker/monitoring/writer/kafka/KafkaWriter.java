@@ -76,8 +76,14 @@ public class KafkaWriter extends AbstractRawDataWriter {
 		this.lingerMs = configuration.getIntProperty(CONFIG_PROPERTY_LINGER_MS, DEFAULT_LINGER_MS);
 		this.batchSize = configuration.getIntProperty(CONFIG_PROPERTY_BATCH_SIZE, DEFAULT_BATCH_SIZE);
 		this.bufferMemory = configuration.getIntProperty(CONFIG_PROPERTY_BUFFER_MEMORY, DEFAULT_BUFFER_MEMORY);
+		
+		this.checkConfiguration();
 	}
 
+	private void checkConfiguration() {
+		
+	}
+	
 	@Override
 	public void init() {
 		final Properties properties = new Properties();
