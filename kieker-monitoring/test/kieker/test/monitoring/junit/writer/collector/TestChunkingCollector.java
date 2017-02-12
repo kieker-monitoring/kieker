@@ -47,7 +47,7 @@ public final class TestChunkingCollector {
 
 	private static final Charset CHARSET = Charset.forName("UTF-8");
 	
-	private TestChunkingCollector() {
+	public TestChunkingCollector() {
 		// Default Constructor
 	}
 	
