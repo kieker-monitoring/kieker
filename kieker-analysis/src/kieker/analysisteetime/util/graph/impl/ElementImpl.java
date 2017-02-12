@@ -1,7 +1,7 @@
 package kieker.analysisteetime.util.graph.impl;
 
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,8 +19,7 @@ abstract class ElementImpl implements Element {
 
 	@Override
 	public Set<String> getPropertyKeys() {
-		// TODO no copying, use unmodifiable wrapper instead
-		return new HashSet<String>(this.properties.keySet());
+		return Collections.unmodifiableSet(this.properties.keySet());
 	}
 
 	@Override

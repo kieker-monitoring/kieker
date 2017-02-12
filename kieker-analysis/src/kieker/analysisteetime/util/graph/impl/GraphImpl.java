@@ -1,9 +1,10 @@
 package kieker.analysisteetime.util.graph.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
+
+import com.google.common.collect.Iterables;
 
 import kieker.analysisteetime.util.graph.Direction;
 import kieker.analysisteetime.util.graph.Edge;
@@ -63,7 +64,7 @@ public class GraphImpl extends ElementImpl implements Graph {
 
 	@Override
 	public Iterable<Vertex> getVertices() {
-		return new ArrayList<Vertex>(this.vertices.values());
+		return Iterables.unmodifiableIterable(this.vertices.values());
 	}
 
 	@Override
@@ -145,7 +146,7 @@ public class GraphImpl extends ElementImpl implements Graph {
 
 	@Override
 	public Iterable<Edge> getEdges() {
-		return new ArrayList<Edge>(this.edges.values());
+		return Iterables.unmodifiableIterable(this.edges.values());
 	}
 
 	@Override

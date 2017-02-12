@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Iterables;
+
 import kieker.analysisteetime.util.graph.Direction;
 import kieker.analysisteetime.util.graph.Edge;
 import kieker.analysisteetime.util.graph.Graph;
@@ -60,13 +62,11 @@ class VertexImpl extends GraphElementImpl implements Vertex {
 	@Override
 	public Iterable<Edge> getEdges(final Direction direction) {
 		if (direction.equals(Direction.OUT)) {
-			return new ArrayList<>(this.outEdges.values());
+			return Iterables.unmodifiableIterable(this.outEdges.values());
 		} else if (direction.equals(Direction.IN)) {
-			return new ArrayList<>(this.inEdges.values());
+			return Iterables.unmodifiableIterable(this.inEdges.values());
 		} else {
-			final List<Edge> edges = new ArrayList<>(this.outEdges.values());
-			edges.addAll(this.inEdges.values());
-			return edges;
+			return Iterables.unmodifiableIterable(Iterables.concat(this.outEdges.values(), this.inEdges.values()));
 		}
 	}
 
