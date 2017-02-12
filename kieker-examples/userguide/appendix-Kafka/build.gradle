@@ -37,5 +37,5 @@ def analysisConfiguration = {
 
 task runAnalysisKafka(type: JavaExec) {
   configure analysisConfiguration
-	args = ['192.168.2.70:9092', 'kiekerRecords', 'kieker']
+	args = ['127.0.0.1:9092', 'kiekerRecords', 'kieker']
 }
