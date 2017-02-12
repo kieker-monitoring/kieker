@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 import kieker.common.util.filesystem.FSUtil;
+import kieker.common.util.filesystem.FileExtensionFilter;
 
 /**
  * Accepts Kieker file system monitoring logs.
@@ -54,15 +55,10 @@ public class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassW
 			return false;
 		}
 
-		final String[] kiekerMapFiles = potentialDir.list(new FilenameFilter() {
-			/**
-			 * Accepts directories containing a `kieker.map` file.
-			 */
-			@Override
-			public boolean accept(final File dir, final String name) {
-				return name.equals(FSUtil.MAP_FILENAME);
-			}
-		});
+		final String[] kiekerMapFiles = potentialDir.list(FileExtensionFilter.MAP);
+		if (kiekerMapFiles == null) {
+			return false;
+		}
 		return kiekerMapFiles.length == 1;
 	}
 }

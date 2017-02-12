@@ -25,6 +25,8 @@ import java.util.Queue;
 import java.util.TimeZone;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * This is a simple logger for the Kieker WebGUI. It stores the log messages within a buffer of a static size. If the buffer is full, the oldest entry will be
  * removed for new entries. As the entries have to be accessible from outside, the queues are stored statically.
@@ -150,8 +152,7 @@ public final class LogImplWebguiLogging implements Log {
 		synchronized (queue) {
 			// Is the queue full?
 			if (queue.size() >= MAX_ENTRIES) {
-				// Yes, remove the oldest entry.
-				queue.poll();
+				this.removeOldestEntryFrom(queue);
 			}
 			final StringBuilder sb = new StringBuilder(255)
 					.append(this.date.format(new java.util.Date())) // this has to be within synchronized
@@ -165,6 +166,12 @@ public final class LogImplWebguiLogging implements Log {
 			}
 			queue.add(sb.toString());
 		}
+	}
+
+	// extracted into a separate method to mark it with Findbugs' @SuppressFBWarnings
+	@SuppressFBWarnings("RV_RETURN_VALUE_IGNORED")
+	private void removeOldestEntryFrom(final Queue<String> queue) {
+		queue.poll();
 	}
 
 	/**
