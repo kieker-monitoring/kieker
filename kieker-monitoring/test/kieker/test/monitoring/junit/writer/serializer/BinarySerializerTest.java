@@ -18,7 +18,6 @@ package kieker.test.monitoring.junit.writer.serializer;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.concurrent.locks.LockSupport;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -61,12 +60,14 @@ public class BinarySerializerTest {
 			controller.newMonitoringRecord(record);
 		}
 
-		// Terminate monitoring
-		controller.terminateMonitoring();
+		// Terminate monitoring and wait for termination
+		try {
+			controller.terminateMonitoring();
+			controller.waitForTermination(2000);
+		} catch (InterruptedException e) {
+			Assert.fail(e.getMessage());
+		}
 		
-		// Wait for a short time as the termination is *not* synchronous
-		LockSupport.parkNanos(200 * 1000000L);
-
 		// Retrieve written data from the data storage
 		final byte[] data = TestRawDataStorage.getInstance().getData(testId);
 
@@ -100,10 +101,12 @@ public class BinarySerializerTest {
 		}
 
 		// Terminate monitoring
-		controller.terminateMonitoring();
-		
-		// Wait for a short time as the termination is *not* synchronous
-		LockSupport.parkNanos(200 * 1000000L);
+		try {
+			controller.terminateMonitoring();
+			controller.waitForTermination(2000);
+		} catch (InterruptedException e) {
+			Assert.fail(e.getMessage());
+		}
 
 		// Retrieve written data from the data storage
 		final byte[] data = TestRawDataStorage.getInstance().getData(testId);
