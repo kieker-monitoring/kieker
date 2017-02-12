@@ -7,6 +7,8 @@ dependencies {
 	compile resolveLibrary('javax.jms-*.jar')
 	compile resolveLibrary('jctools-core-1.2.1.jar')
 	compile resolveLibrary('sigar/sigar-*.jar')
+
+	compile resolveLibrary('kafka-clients-0.10.1.1.jar')
 	
 	compile resolveLibrary('framework-libs/cxf/cxf-*.jar')
 	compile resolveLibrary('framework-libs/jsr311-api-1.1.1.jar')
