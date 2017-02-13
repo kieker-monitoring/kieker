@@ -163,7 +163,7 @@ task copyLibsStandaloneExamplesUserguideAppendixKafka(type: Copy, dependsOn: [ro
 		include "slf4j-*.jar"
 		include "snappy-java-*.jar"
 	}
-	into 'userguide/appendix-AMQP/lib/'
+	into 'userguide/appendix-Kafka/lib/'
 }
 
 task buildStandaloneExamplesUserguideAppendixKafka(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixKafka') {
