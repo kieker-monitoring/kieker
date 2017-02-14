@@ -23,6 +23,7 @@ import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.exception.InvalidConfigurationException;
 import kieker.monitoring.writer.raw.AbstractRawDataWriter;
 
 /**
@@ -81,7 +82,15 @@ public class KafkaWriter extends AbstractRawDataWriter {
 	}
 
 	private void checkConfiguration() {
+		// Check bootstrap servers field
+		if (this.bootstrapServers.isEmpty()) {
+			throw new InvalidConfigurationException("At least one bootstrap server must be provided.");
+		}
 		
+		// Check whether a topic name was given
+		if(this.topicName.isEmpty()) {
+			throw new InvalidConfigurationException("A topic name must be provided.");
+		}
 	}
 	
 	@Override
