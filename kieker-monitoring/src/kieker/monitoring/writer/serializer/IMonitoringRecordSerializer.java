@@ -55,18 +55,17 @@ public interface IMonitoringRecordSerializer {
 	public int serializeRecords(Collection<IMonitoringRecord> records, ByteBuffer buffer);
 
 	/**
-	 * Called by the collector before records are written.
+	 * Called by the collector during initialization (before any records are written).
 	 * 
 	 * @since 1.13
 	 */
-	public void init();
+	public void onInitialization();
 
 	/**
-	 * Called by the collector to announce a shutdown of monitoring. Serializers
-	 * should return as soon as it is safe to terminate Kieker.
+	 * Called by the collector upon termination (after remaining records have been flushed).
 	 * 
 	 * @since 1.13
 	 */
-	public void terminate();
+	public void onTermination();
 
 }

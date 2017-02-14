@@ -47,7 +47,7 @@ public class BinarySerializerTest {
 	}
 	
 	@Test
-	public void testSingleRecord() throws IOException {
+	public void testSingleRecord() throws IOException, InterruptedException {
 		final String testId = "testSingleRecord";
 		final int recordCount = 1;
 		final int taskRunInterval = 10;
@@ -61,12 +61,8 @@ public class BinarySerializerTest {
 		}
 
 		// Terminate monitoring and wait for termination
-		try {
-			controller.terminateMonitoring();
-			controller.waitForTermination(2000);
-		} catch (InterruptedException e) {
-			Assert.fail(e.getMessage());
-		}
+		controller.terminateMonitoring();
+		controller.waitForTermination(2000);
 		
 		// Retrieve written data from the data storage
 		final byte[] data = TestRawDataStorage.getInstance().getData(testId);
@@ -87,7 +83,7 @@ public class BinarySerializerTest {
 	}
 
 	@Test
-	public void testMultipleRecords() {
+	public void testMultipleRecords() throws InterruptedException {
 		final String testId = "testMultipleRecords";
 		final int recordCount = 15;
 		final int taskRunInterval = 10;
@@ -101,12 +97,8 @@ public class BinarySerializerTest {
 		}
 
 		// Terminate monitoring
-		try {
-			controller.terminateMonitoring();
-			controller.waitForTermination(2000);
-		} catch (InterruptedException e) {
-			Assert.fail(e.getMessage());
-		}
+		controller.terminateMonitoring();
+		controller.waitForTermination(2000);
 
 		// Retrieve written data from the data storage
 		final byte[] data = TestRawDataStorage.getInstance().getData(testId);

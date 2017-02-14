@@ -61,9 +61,9 @@ public final class TestChunkingCollector {
 	public void testChunkingSizeAndTime() throws IOException {
 		final String testId = "testChunkingSizeAndTime";
 		final int recordCount = 25;
-		final int deferredWriteDelay = 500;
+		final int deferredWriteDelayInMs = 500;
 
-		final IMonitoringController controller = this.createController(testId, deferredWriteDelay);
+		final IMonitoringController controller = this.createController(testId, deferredWriteDelayInMs);
 
 		for (int recordIndex = 0; recordIndex < recordCount; recordIndex++) {
 			final OperationExecutionRecord record = new OperationExecutionRecord("op()", "SESS-ID", 0, recordIndex, recordIndex, "host", recordIndex, 1);
@@ -71,7 +71,7 @@ public final class TestChunkingCollector {
 		}
 
 		// Wait until a timed write should have occurred
-		LockSupport.parkNanos(2 * deferredWriteDelay * 1000000L);
+		LockSupport.parkNanos(2 * deferredWriteDelayInMs * 1000000L);
 		controller.terminateMonitoring();
 
 		// Retrieve written data from the data storage
@@ -88,8 +88,8 @@ public final class TestChunkingCollector {
 	private static List<String> linesFromData(final byte[] data) throws IOException {
 		final List<String> lines = new ArrayList<String>();
 
-		final BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(data), CHARSET));
-		try {
+		try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(new ByteArrayInputStream(data), CHARSET))) {
 			while (true) {
 				final String currentLine = reader.readLine();
 
@@ -99,8 +99,6 @@ public final class TestChunkingCollector {
 
 				lines.add(currentLine);
 			}
-		} finally {
-			reader.close();
 		}
 
 		return lines;

@@ -85,7 +85,7 @@ public class KafkaWriter extends AbstractRawDataWriter {
 	}
 	
 	@Override
-	public void init() {
+	public void onInitialization() {
 		final Properties properties = new Properties();
 		
 		properties.put("bootstrap.servers", this.bootstrapServers);
@@ -101,7 +101,7 @@ public class KafkaWriter extends AbstractRawDataWriter {
 	}
 
 	@Override
-	public void terminate() {
+	public void onTermination() {
 		if (this.producer != null) {
 			this.producer.close();
 		}

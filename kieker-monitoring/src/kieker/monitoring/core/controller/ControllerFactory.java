@@ -35,7 +35,7 @@ public final class ControllerFactory {
 
 	private static final ControllerFactory INSTANCE = new ControllerFactory();
 
-	public ControllerFactory() {
+	private ControllerFactory() {
 		// Default Constructor
 	}
 

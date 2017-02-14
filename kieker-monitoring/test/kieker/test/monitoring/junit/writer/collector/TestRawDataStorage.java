@@ -18,7 +18,8 @@ package kieker.test.monitoring.junit.writer.collector;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Raw data storage for test purposes. This storage allows to store raw byte data under arbitrary
@@ -33,10 +34,10 @@ public final class TestRawDataStorage {
 
 	private static final TestRawDataStorage INSTANCE = new TestRawDataStorage();
 
-	private final ConcurrentHashMap<String, ByteArrayOutputStream> rawData;
+	private final Map<String, ByteArrayOutputStream> rawData;
 
 	private TestRawDataStorage() {
-		this.rawData = new ConcurrentHashMap<String, ByteArrayOutputStream>();
+		this.rawData = new HashMap<>();
 	}
 
 	/**
@@ -57,9 +58,13 @@ public final class TestRawDataStorage {
 	 * @param data
 	 *            The data to store
 	 */
-	public void appendData(final String id, final byte[] data) throws IOException {
-		this.rawData.putIfAbsent(id, new ByteArrayOutputStream());
-		final ByteArrayOutputStream stream = this.rawData.get(id);
+	public synchronized void appendData(final String id, final byte[] data) throws IOException {
+		ByteArrayOutputStream stream = this.rawData.get(id);
+		
+		if(stream == null) {
+			stream = new ByteArrayOutputStream();
+			this.rawData.put(id, stream);
+		}
 
 		stream.write(data);
 	}

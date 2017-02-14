@@ -120,12 +120,12 @@ public class BinarySerializer extends AbstractContainerFormatSerializer {
 	}
 
 	@Override
-	public void init() {
+	public void onInitialization() {
 		// Nothing to do
 	}
 
 	@Override
-	public void terminate() {
+	public void onTermination() {
 		// Nothing to do
 	}
 

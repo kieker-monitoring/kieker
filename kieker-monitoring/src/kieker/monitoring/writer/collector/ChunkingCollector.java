@@ -131,7 +131,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	@Override
 	public void onStarting() {
 		this.scheduledExecutor.scheduleAtFixedRate(this.writerTask, 0, this.taskRunInterval, TimeUnit.MILLISECONDS);		
-		this.writerTask.init();
+		this.writerTask.initialize();
 	}
 
 	@Override
@@ -222,13 +222,16 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 			}
 		}
 
-		public void init() {
-			this.serializer.init();
-			this.writer.init();
+		public void initialize() {
+			this.writer.onInitialization();
+			this.serializer.onInitialization();		
 		}
 
 		public void terminate() {
 			this.flush();
+			
+			this.serializer.onTermination();
+			this.writer.onTermination();
 		}
 
 		@SuppressWarnings("synthetic-access")
