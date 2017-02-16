@@ -64,7 +64,7 @@ public class Configuration extends Properties {
 	 * @param key
 	 *            The key of the property.
 	 *
-	 * @return A string with the value of the given property or null, if the property does not exist.
+	 * @return A string with the value of the given property or the empty string, if the property does not exist.
 	 */
 	public final String getStringProperty(final String key) {
 		return this.getStringProperty(key, "");
@@ -78,7 +78,7 @@ public class Configuration extends Properties {
 	 *
 	 * @param defaultValue
 	 *            The default value for the given <code>key</code>
-	 * 
+	 *
 	 * @return A string with the value of the given property or the given <code>defaultValue</code>, if the property does not exist.
 	 */
 	public final String getStringProperty(final String key, final String defaultValue) {

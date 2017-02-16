@@ -17,6 +17,7 @@
 package kieker.monitoring.writer.filesystem;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 
 import org.hamcrest.CoreMatchers;
@@ -30,7 +31,6 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.filesystem.FileExtensionFilter;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.writer.filesystem.AsciiFileWriter;
 
 /**
  * @author Christian Wulf
@@ -218,6 +218,35 @@ public class AsciiFileWriterTest {
 			Assert.assertNotNull(recordFiles);
 			Assert.assertThat(reasonMessage, recordFiles.length, CoreMatchers.is(expectedNumRecordFiles));
 		}
+	}
+
+	@Test
+	public void testValidLogFolder() {
+		final String passedConfigPathName = this.tmpFolder.getRoot().getAbsolutePath();
+		this.configuration.setProperty(AsciiFileWriter.CONFIG_PATH, passedConfigPathName);
+		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
+
+		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(passedConfigPathName));
+	}
+
+	@Test
+	public void testEmptyConfigPath() {
+		final String passedConfigPathName = "";
+		this.configuration.setProperty(AsciiFileWriter.CONFIG_PATH, passedConfigPathName);
+		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
+
+		final String defaultDir = System.getProperty("java.io.tmpdir");
+		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testNonDirectoryConfigPath() throws IOException {
+		final String passedConfigPathName = this.tmpFolder.newFile().getAbsolutePath();
+		this.configuration.setProperty(AsciiFileWriter.CONFIG_PATH, passedConfigPathName);
+		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
+
+		final String defaultDir = System.getProperty("java.io.tmpdir");
+		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
 	}
 
 }

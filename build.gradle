@@ -546,6 +546,9 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
     configure licence
     configure aopxml
 
+    from fileTree("lib/jctools-core-${libJctoolsVersion}.jar").collect { zipTree(it) }
+    from file("lib/jctools-core-${libJctoolsVersion}.LICENSE")
+
     manifest = project.manifest {
         from sharedManifest
     }
@@ -577,6 +580,9 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
         exclude "modeling32.png"
     }
 
+    from fileTree("lib/jctools-core-${libJctoolsVersion}.jar").collect { zipTree(it) }
+    from file("lib/jctools-core-${libJctoolsVersion}.LICENSE")
+
     manifest = project.manifest {
         from sharedManifest
     }
@@ -592,8 +598,10 @@ task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
     from fileTree(dir: 'lib', include: 'aspectjweaver-*.jar').collect {
         zipTree(it)
     }
-
     from file("lib/aspectjweaver-${libAspectjVersion}.LICENSE")
+
+    from fileTree("lib/jctools-core-${libJctoolsVersion}.jar").collect { zipTree(it) }
+    from file("lib/jctools-core-${libJctoolsVersion}.LICENSE")
 
     manifest = project.manifest {
         from sharedManifest

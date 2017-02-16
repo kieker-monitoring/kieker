@@ -16,6 +16,7 @@
 
 package kieker.monitoring.writer.filesystem;
 
+import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -72,7 +73,17 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 
 	public BinaryFileWriter(final Configuration configuration) {
 		super(configuration);
-		this.logFolder = KiekerLogFolder.buildKiekerLogFolder(configuration.getStringProperty(CONFIG_PATH), configuration);
+
+		String configPathName = configuration.getStringProperty(CONFIG_PATH);
+		if (configPathName.isEmpty()) { // if the property does not exist or if the path is empty
+			configPathName = System.getProperty("java.io.tmpdir");
+		}
+
+		if (!(new File(configPathName)).isDirectory()) {
+			throw new IllegalArgumentException("'" + configPathName + "' is not a directory.");
+		}
+
+		this.logFolder = KiekerLogFolder.buildKiekerLogFolder(configPathName, configuration);
 
 		try {
 			Files.createDirectories(this.logFolder);
