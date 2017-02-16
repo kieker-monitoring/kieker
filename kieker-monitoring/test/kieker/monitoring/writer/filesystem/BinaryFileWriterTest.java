@@ -17,6 +17,7 @@
 package kieker.monitoring.writer.filesystem;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 
 import org.hamcrest.CoreMatchers;
@@ -30,7 +31,6 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.filesystem.FileExtensionFilter;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.writer.filesystem.BinaryFileWriter;
 
 /**
  * @author Christian Wulf
@@ -55,6 +55,7 @@ public class BinaryFileWriterTest {
 		this.configuration.setProperty(ConfigurationFactory.CONTROLLER_NAME, "testControllerName");
 		this.configuration.setProperty(BinaryFileWriter.CONFIG_BUFFERSIZE, "8192");
 		this.configuration.setProperty(BinaryFileWriter.CONFIG_CHARSET_NAME, "UTF-8");
+		this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXENTRIESINFILE, "-1");
 		this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXLOGFILES, String.valueOf(Integer.MAX_VALUE));
 		this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXLOGSIZE, String.valueOf(Integer.MAX_VALUE));
 		this.configuration.setProperty(BinaryFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
@@ -206,4 +207,32 @@ public class BinaryFileWriterTest {
 		}
 	}
 
+	@Test
+	public void testValidLogFolder() {
+		final String passedConfigPathName = this.tmpFolder.getRoot().getAbsolutePath();
+		this.configuration.setProperty(BinaryFileWriter.CONFIG_PATH, passedConfigPathName);
+		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
+
+		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(passedConfigPathName));
+	}
+
+	@Test
+	public void testEmptyConfigPath() {
+		final String passedConfigPathName = "";
+		this.configuration.setProperty(BinaryFileWriter.CONFIG_PATH, passedConfigPathName);
+		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
+
+		final String defaultDir = System.getProperty("java.io.tmpdir");
+		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testNonDirectoryConfigPath() throws IOException {
+		final String passedConfigPathName = this.tmpFolder.newFile().getAbsolutePath();
+		this.configuration.setProperty(BinaryFileWriter.CONFIG_PATH, passedConfigPathName);
+		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
+
+		final String defaultDir = System.getProperty("java.io.tmpdir");
+		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
+	}
 }
