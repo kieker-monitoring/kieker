@@ -11,7 +11,7 @@ import kieker.analysisteetime.util.graph.Element;
  * @author Sören Henning
  *
  */
-public class DirectPropertyMapper<T extends Element> implements Function<T, String> {
+public final class DirectPropertyMapper<T extends Element> implements Function<T, String> {
 
 	private final String propertyKey;
 
