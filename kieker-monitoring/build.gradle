@@ -78,6 +78,12 @@ dependencies {
 	implementation "org.springframework:spring-core:$springVersion"
 	implementation "org.springframework:spring-web:$springVersion"
 	implementation "org.springframework:spring-webmvc:$springVersion"
+	
+	// influxdb
+	// https://mvnrepository.com/artifact/org.influxdb/influxdb-java
+	implementation 'org.influxdb:influxdb-java:2.22'
+	// https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+	implementation 'com.squareup.okhttp3:okhttp:4.9.3'
 
 	// testing
 	testImplementation "org.hamcrest:hamcrest:$libHamcrestVersion"
