@@ -21,18 +21,18 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  * Created by Teerat Pitakrat on 2/11/17.
  */
 @Plugin(description = "A filter to write Kieker records to InfluxDB",
-		configuration = {
-			@Property(name = InfluxDBWriter.CONFIG_PROPERTY_DB_URL, defaultValue = "localhost",
-					description = "InfluxDB URL"),
-			@Property(name = InfluxDBWriter.CONFIG_PROPERTY_DB_PORT, defaultValue = "8086",
-					description = "InfluxDB port"),
-			@Property(name = InfluxDBWriter.CONFIG_PROPERTY_DB_USERNAME, defaultValue = "root",
-					description = "InfluxDB username (default: root)"),
-			@Property(name = InfluxDBWriter.CONFIG_PROPERTY_DB_PASSWORD, defaultValue = "root",
-					description = "InfluxDB password (default: root)"),
-			@Property(name = InfluxDBWriter.CONFIG_PROPERTY_DB_NAME, defaultValue = "kieker",
-					description = "InfluxDB database name")
-		})
+configuration = {
+		@Property(name = InfluxDBWriter.CONFIG_PROPERTY_DB_URL, defaultValue = "localhost",
+				description = "InfluxDB URL"),
+				@Property(name = InfluxDBWriter.CONFIG_PROPERTY_DB_PORT, defaultValue = "8086",
+				description = "InfluxDB port"),
+				@Property(name = InfluxDBWriter.CONFIG_PROPERTY_DB_USERNAME, defaultValue = "root",
+				description = "InfluxDB username (default: root)"),
+				@Property(name = InfluxDBWriter.CONFIG_PROPERTY_DB_PASSWORD, defaultValue = "root",
+				description = "InfluxDB password (default: root)"),
+				@Property(name = InfluxDBWriter.CONFIG_PROPERTY_DB_NAME, defaultValue = "kieker",
+				description = "InfluxDB database name")
+})
 public class InfluxDBWriter extends AbstractMonitoringWriter {
 
 	private static final Log LOG = LogFactory.getLog(InfluxDBWriter.class);
@@ -114,10 +114,10 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 
 	@Override
 	@InputPort(name = INPUT_PORT_NAME_RECORD,
-			description = "Receives incoming records and writes to InfluxDB",
-			eventTypes = { IMonitoringRecord.class }
+	description = "Receives incoming records and writes to InfluxDB",
+	eventTypes = { IMonitoringRecord.class }
 			)
-			public final void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+	public final void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		// Check connection to InfluxDB
 		if (this.isConnected == false) {
 			try {
@@ -159,8 +159,7 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 
 		// Write to InfluxDB
 		try {
-			if (this.influxDBMajorVersion < 1)
-			{
+			if (this.influxDBMajorVersion < 1) {
 				this.influxDB.write(this.dbName, "default", point);
 			} else {
 				this.influxDB.write(this.dbName, "autogen", point);
