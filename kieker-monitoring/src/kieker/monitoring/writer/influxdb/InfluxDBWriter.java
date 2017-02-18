@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.monitoring.writer.influxdb;
 
 import java.util.List;
@@ -15,19 +31,19 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 /**
- * Created by Teerat Pitakrat on 2/11/17.
+ * @author Teerat Pitakrat
+ *
+ * @since 1.13
  */
 public class InfluxDBWriter extends AbstractMonitoringWriter {
-
-	private static final Log LOG = LogFactory.getLog(InfluxDBWriter.class);
-
-	public static final String INPUT_PORT_NAME_RECORD = "record";
 
 	public static final String CONFIG_PROPERTY_DB_URL = "databaseURL";
 	public static final String CONFIG_PROPERTY_DB_PORT = "databasePort";
 	public static final String CONFIG_PROPERTY_DB_USERNAME = "databaseUsername";
 	public static final String CONFIG_PROPERTY_DB_PASSWORD = "databasePassword";
 	public static final String CONFIG_PROPERTY_DB_NAME = "databaseName";
+
+	private static final Log LOG = LogFactory.getLog(InfluxDBWriter.class);
 
 	private final String dbURL;
 	private final int dbPort;
@@ -56,6 +72,9 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 		this.isConnected = false;
 	}
 
+	/**
+	 * Connect to InfluxDB.
+	 **/
 	protected final void connectToInfluxDB() {
 		LOG.info("Connecting to database using the following parameters:");
 		LOG.info("URL = " + this.dbURL);
@@ -63,7 +82,7 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 		LOG.info("Username = " + this.dbUsername);
 		LOG.info("Password = " + this.dbPassword);
 		this.influxDB = InfluxDBFactory.connect(this.dbURL + ":" + this.dbPort, this.dbUsername, this.dbPassword);
-		if (this.influxDB.isBatchEnabled() == false) {
+		if (!this.influxDB.isBatchEnabled()) {
 			this.influxDB.enableBatch(2000, 500, TimeUnit.MILLISECONDS);
 		}
 
@@ -88,7 +107,7 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 
 		// Create database if it does not exist
 		final List<String> dbList = this.influxDB.describeDatabases();
-		if (dbList.contains(this.dbName) == false) {
+		if (!dbList.contains(this.dbName)) {
 			LOG.info("Database " + this.dbName + " does not exist. Creating ...");
 			this.influxDB.createDatabase(this.dbName);
 			LOG.info("Done");
@@ -99,14 +118,8 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 	@Override
 	public final void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		// Check connection to InfluxDB
-		if (this.isConnected == false) {
-			try {
-				this.connectToInfluxDB();
-			} catch (final RuntimeException e) {
-				LOG.error("Cannot connect to InfluxDB. Dropping record.");
-				LOG.error(e.getMessage());
-				return;
-			}
+		if (!this.isConnected) {
+			this.connectToInfluxDB();
 		}
 
 		// Extract data
@@ -138,27 +151,16 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 		final Point point = pointBuilder.build();
 
 		// Write to InfluxDB
-		try {
-			if (this.influxDBMajorVersion < 1) {
-				this.influxDB.write(this.dbName, "default", point);
-			} else {
-				this.influxDB.write(this.dbName, "autogen", point);
-			}
-		} catch (final RuntimeException e) {
-			LOG.error("Cannot write to InfluxDB. Dropping record.");
-			LOG.error(e.getMessage());
-			return;
+		if (this.influxDBMajorVersion < 1) {
+			this.influxDB.write(this.dbName, "default", point);
+		} else {
+			this.influxDB.write(this.dbName, "autogen", point);
 		}
 	}
 
 	@Override
 	public void onStarting() {
-		try {
-			this.connectToInfluxDB();
-		} catch (final RuntimeException e) {
-			LOG.error("Cannot connect to InfluxDB.");
-			LOG.error(e.getMessage());
-		}
+		this.connectToInfluxDB();
 	}
 
 	@Override
