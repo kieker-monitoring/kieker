@@ -9,6 +9,12 @@ dependencies {
 	compile resolveLibrary('sigar/sigar-*.jar')
 	compile resolveLibrary('influxdb-java-*.jar')
 	compile resolveLibrary('okhttp-*.jar')
+	compile resolveLibrary('guava-*.jar')
+	compile resolveLibrary('retrofit-*.jar')
+	compile resolveLibrary('converter-moshi-*.jar')
+	compile resolveLibrary('okio-*.jar')
+	compile resolveLibrary('logging-interceptor-*.jar')
+	compile resolveLibrary('moshi-*.jar')
 	
 	compile resolveLibrary('framework-libs/cxf/cxf-*.jar')
 	compile resolveLibrary('framework-libs/jsr311-api-1.1.1.jar')
