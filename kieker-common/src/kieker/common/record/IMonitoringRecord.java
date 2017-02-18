@@ -137,6 +137,15 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * @since 1.2
 	 */
 	public Class<?>[] getValueTypes();
+	
+	/**
+	 * This method provides access to an array holding all the property names.
+	 * 
+	 * @return An array of strings containing the property names.
+	 * 
+	 * @since 1.13
+	 */
+	public String[] getValueNames();
 
 	/**
 	 * This method should deliver the size of a binary representation of this record.

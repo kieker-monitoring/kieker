@@ -33,6 +33,10 @@ plugin.xml
 **/.gradle
 /src-gen
 /test-gen
+**/bin/**
+**/.settings/**
+**/.project
+**/.classpath
 
 # IntelliJ
 .idea/

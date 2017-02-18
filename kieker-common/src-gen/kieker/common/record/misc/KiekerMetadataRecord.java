@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.misc;
 
 import java.nio.BufferOverflowException;
@@ -39,13 +54,13 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 		long.class, // KiekerMetadataRecord.numberOfRecords
 	};
 	
-	/** user-defined constants */
+	/** user-defined constants. */
 	public static final String NO_CONTROLLERNAME = "<no-controller-name>";
 	public static final String NO_HOSTNAME = "<no-hostname>";
 	public static final String NO_TIMESOURCE = "<no-timesource>";
 	public static final String NO_TIMEUNIT = "NANOSECONDS";
 	
-	/** default constants */
+	/** default constants. */
 	public static final String VERSION = kieker.common.util.Version.getVERSION();
 	public static final String CONTROLLER_NAME = NO_CONTROLLERNAME;
 	public static final String HOSTNAME = NO_HOSTNAME;
@@ -55,7 +70,19 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	public static final String TIME_UNIT = NO_TIMEUNIT;
 	public static final long NUMBER_OF_RECORDS = 0L;
 	
-	/** property declarations */
+	/** property name array. */
+	public static final String[] PROPERTY_NAMES = {
+		"version",
+		"controllerName",
+		"hostname",
+		"experimentId",
+		"debugMode",
+		"timeOffset",
+		"timeUnit",
+		"numberOfRecords",
+	};
+	
+	/** property declarations. */
 	private final String version;
 	private final String controllerName;
 	private final String hostname;
@@ -204,6 +231,14 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**

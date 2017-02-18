@@ -1,3 +1,2 @@
-*.log
-*.lck
-TraceAnalysisGUI.properties
+/kieker/
+/org/

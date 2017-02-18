@@ -30,6 +30,12 @@ import kieker.common.util.registry.IRegistry;
  */
 public class CustomAfterOperationEvent implements IMonitoringRecord {
 	private static final long serialVersionUID = -6594854001439034288L;
+	
+	public static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex"
+	};
 
 	private final long timestamp;
 	private final long traceId;
@@ -90,6 +96,14 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 	@Override
 	public Class<?>[] getValueTypes() { // NOPMD (not used method)
 		return (Class<?>[]) this.toArray();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
 	}
 
 	@Override
