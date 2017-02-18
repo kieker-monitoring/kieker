@@ -113,5 +113,7 @@
 	<classpathentry kind="lib" path="lib/framework-libs/jersey/jersey-client-1.19.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/jersey/jersey-server-1.19.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/javax.ws.rs-api-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/influxdb-java-2.5.jar"/>
+	<classpathentry kind="lib" path="lib/okhttp-3.5.0.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
