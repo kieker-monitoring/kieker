@@ -16,6 +16,7 @@
 
 package kieker.monitoring.writer.influxdb;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -51,7 +52,6 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 	private final String dbPassword;
 	private final String dbName;
 	private volatile InfluxDB influxDB;
-	private volatile String influxDBVersion;
 	private volatile int influxDBMajorVersion;
 	private volatile boolean isConnected;
 
@@ -74,8 +74,11 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 
 	/**
 	 * Connect to InfluxDB.
+	 *
+	 * @throws IOException
+	 *             If connection to InfluxDB fails.
 	 **/
-	protected final void connectToInfluxDB() {
+	protected final void connectToInfluxDB() throws IOException {
 		LOG.info("Connecting to database using the following parameters:");
 		LOG.info("URL = " + this.dbURL);
 		LOG.info("Port = " + this.dbPort);
@@ -90,19 +93,19 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 		final Pong pong;
 		try {
 			pong = this.influxDB.ping();
-			LOG.info("Connected to database");
-		} catch (final RuntimeException e) {
-			throw new RuntimeException("Cannot connect to InfluxDB with the following parameters:"
+			LOG.info("Connected to InfluxDB");
+		} catch (final RuntimeException e) { // NOCS NOPMD (thrown by InfluxDB library)
+			throw new IOException("Cannot connect to InfluxDB with the following parameters:"
 					+ "URL = " + this.dbURL
-					+ " Port = " + this.dbPort
-					+ " Username = " + this.dbUsername
-					+ " Password = " + this.dbPassword
+					+ "; Port = " + this.dbPort
+					+ "; Username = " + this.dbUsername
+					+ "; Password = " + this.dbPassword
 					, e);
 		}
-		this.influxDBVersion = pong.getVersion();
-		final String[] splitVersion = this.influxDBVersion.split("\\.");
-		this.influxDBMajorVersion = Integer.valueOf(splitVersion[0]);
-		LOG.info("Version: " + this.influxDBVersion);
+		final String influxDBVersion = pong.getVersion();
+		final String[] splitVersion = influxDBVersion.split("\\.");
+		this.influxDBMajorVersion = Integer.parseInt(splitVersion[0]);
+		LOG.info("Version: " + influxDBVersion);
 		LOG.info("Response time: " + pong.getResponseTime());
 
 		// Create database if it does not exist
@@ -119,7 +122,12 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 	public final void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		// Check connection to InfluxDB
 		if (!this.isConnected) {
-			this.connectToInfluxDB();
+			try {
+				this.connectToInfluxDB();
+			} catch (final IOException e) {
+				LOG.error("Cannot connect to InfluxDB. Dropping record.", e);
+				return;
+			}
 		}
 
 		// Extract data
@@ -160,7 +168,11 @@ public class InfluxDBWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public void onStarting() {
-		this.connectToInfluxDB();
+		try {
+			this.connectToInfluxDB();
+		} catch (final IOException e) {
+			LOG.error("Cannot connect to InfluxDB.", e);
+		}
 	}
 
 	@Override

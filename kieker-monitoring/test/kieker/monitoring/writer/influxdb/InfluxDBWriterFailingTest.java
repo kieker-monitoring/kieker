@@ -16,27 +16,34 @@
 
 package kieker.monitoring.writer.influxdb;
 
+import java.io.IOException;
+
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.record.controlflow.OperationExecutionRecord;
 
 /**
- * @author tp
+ * @author Teerat Pitakrat
  *
  * @since 1.13
  */
 public class InfluxDBWriterFailingTest {
 
+	/**
+	 * Constructor.
+	 */
 	public InfluxDBWriterFailingTest() {
 		super();
 	}
 
 	/**
 	 * Test method for {@link kieker.monitoring.writer.influxdb.InfluxDBWriter#connectToInfluxDB()}.
+	 *
+	 * @throws IOException
+	 *             If connection to InfluxDB fails.
 	 */
-	@Test(expected = RuntimeException.class)
-	public void testConnectToInfluxDB() {
+	@Test(expected = IOException.class)
+	public void testConnectToInfluxDB() throws IOException {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(InfluxDBWriter.CONFIG_PROPERTY_DB_URL, "http://localhost");
 		configuration.setProperty(InfluxDBWriter.CONFIG_PROPERTY_DB_PORT, "80");
@@ -45,22 +52,6 @@ public class InfluxDBWriterFailingTest {
 		configuration.setProperty(InfluxDBWriter.CONFIG_PROPERTY_DB_NAME, "kieker");
 		final InfluxDBWriter influxDBWriter = new InfluxDBWriter(configuration);
 		influxDBWriter.connectToInfluxDB();
-	}
-
-	/**
-	 * Test method for {@link kieker.monitoring.writer.influxdb.InfluxDBWriter#writeMonitoringRecord(kieker.common.record.IMonitoringRecord)}.
-	 */
-	@Test(expected = RuntimeException.class)
-	public void testWriteMonitoringRecord() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(InfluxDBWriter.CONFIG_PROPERTY_DB_URL, "http://localhost");
-		configuration.setProperty(InfluxDBWriter.CONFIG_PROPERTY_DB_PORT, "80");
-		configuration.setProperty(InfluxDBWriter.CONFIG_PROPERTY_DB_USERNAME, "root");
-		configuration.setProperty(InfluxDBWriter.CONFIG_PROPERTY_DB_PASSWORD, "root");
-		configuration.setProperty(InfluxDBWriter.CONFIG_PROPERTY_DB_NAME, "kieker");
-		final InfluxDBWriter influxDBWriter = new InfluxDBWriter(configuration);
-		final OperationExecutionRecord operationExecutionRecord = new OperationExecutionRecord("signature", "sessionId", 1, 1, 2, "hostname", 1, 1);
-		influxDBWriter.writeMonitoringRecord(operationExecutionRecord);
 	}
 
 }
