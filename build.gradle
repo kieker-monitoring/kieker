@@ -180,7 +180,10 @@ allprojects {
         testCompile resolveLibrary('junit-*.jar')
         testCompile resolveLibrary('hamcrest-core-*.jar')
     }
-    
+
+/*
+	// if enabled the kieker root project would not contain any source folders. 
+	// All subprojects would be represented as dedicated Eclipse projects.
     apply plugin: 'eclipse'
     eclipse {
 	  //if you want parts of paths in resulting file to be replaced by variables (files):
@@ -204,11 +207,13 @@ allprojects {
 	    downloadJavadoc = false
 	  }
 	}
+*/
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
 def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
 
+/*
 sourceSets {
     main {
         java {
@@ -247,6 +252,7 @@ sourceSets {
 		}
 	}
 }
+*/
 
 def parseCheckstyleReport(File reportFile) {
     def errors = 0
