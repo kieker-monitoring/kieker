@@ -1,5 +1,3 @@
-apply plugin: 'eclipse'
-
 dependencies {
 	compile project(':kieker-common')
 	compile project(':kieker-analysis')
@@ -20,6 +18,7 @@ dependencies {
 	compile fileTree(dir: 'lib/jetty', include: 'jetty-*.jar')
 	
 	// This is a workaround allowing the Kieker tests to depend on each other. I do not recommend to do this.
+	// necessary for folder "test-gen"
 	testCompile project(':kieker-common').sourceSets.test.output
 	testCompile project(':kieker-analysis').sourceSets.test.output
 	testCompile project(':kieker-monitoring').sourceSets.test.output
