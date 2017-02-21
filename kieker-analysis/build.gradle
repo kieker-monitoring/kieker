@@ -8,6 +8,7 @@ dependencies {
 	compile resolveLibrary('org.eclipse.emf.ecore_*.jar')
 	compile resolveLibrary('amqp-client-3.5.3.jar')
 	compile resolveLibrary('guava-18.0.jar')
+	compile resolveLibrary('kafka-clients-0.10.1.1.jar')
 	
 	// This is a workaround allowing the Kieker tests to depend on each other. I do not recommend to do this.
 	testCompile project(':kieker-common').sourceSets.test.output

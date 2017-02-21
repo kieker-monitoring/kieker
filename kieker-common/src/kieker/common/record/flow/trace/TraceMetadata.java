@@ -189,7 +189,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	public int getSize() {
 		return SIZE;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
