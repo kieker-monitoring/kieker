@@ -60,8 +60,8 @@ public final class TestRawDataStorage {
 	 */
 	public synchronized void appendData(final String id, final byte[] data) throws IOException {
 		ByteArrayOutputStream stream = this.rawData.get(id);
-		
-		if(stream == null) {
+
+		if (stream == null) {
 			stream = new ByteArrayOutputStream();
 			this.rawData.put(id, stream);
 		}
@@ -76,7 +76,7 @@ public final class TestRawDataStorage {
 	 *            The ID to retrieve the data for
 	 * @return The stored data, or {@code null} if no data exists
 	 */
-	public byte[] getData(final String id) {
+	public synchronized byte[] getData(final String id) {
 		final ByteArrayOutputStream stream = this.rawData.get(id);
 
 		if (stream == null) {
