@@ -30,6 +30,12 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 
 	private static final long serialVersionUID = 7837873751833770201L;
 
+	public static final String[] PROPERTY_NAMES = {
+		"className",
+		"methodName",
+		"responseTimeNanos"
+	};
+
 	// Attributes storing the actual monitoring data:
 	private final String className;
 	private final String methodName;
@@ -90,6 +96,14 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 	@Override
 	public Class<?>[] getValueTypes() {
 		return MyResponseTimeRecord.TYPES;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
 	}
 
 	@Override

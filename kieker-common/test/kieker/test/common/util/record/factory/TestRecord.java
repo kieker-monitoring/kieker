@@ -33,7 +33,11 @@ import kieker.common.util.registry.IRegistry;
 public class TestRecord extends AbstractMonitoringRecord {
 
 	private static final long serialVersionUID = 9088190056147961692L;
-
+	
+	public static final String[] PROPERTY_NAMES = {
+			
+	};
+	
 	public TestRecord() {
 		// Nothing to do
 	}
@@ -67,6 +71,14 @@ public class TestRecord extends AbstractMonitoringRecord {
 	public Class<?>[] getValueTypes() {
 		return new Class<?>[0];
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+    public String[] getValueNames() {
+        return PROPERTY_NAMES; // NOPMD
+    }
 
 	@Override
 	public int getSize() {
