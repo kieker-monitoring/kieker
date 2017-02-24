@@ -45,7 +45,7 @@ import kieker.monitoring.writer.MonitoringWriterThread;
  *
  * @since 1.3
  */
-public final class WriterController extends AbstractController implements IWriterController, IStateListener {
+public final class WriterController extends AbstractController implements IWriterController {
 
 	public static final String PREFIX = WriterController.class.getName() + ".";
 	/** The name of the configuration determining the size of the queue of this writer. */
@@ -201,6 +201,11 @@ public final class WriterController extends AbstractController implements IWrite
 		}
 	}
 
+	@SuppressWarnings("PMD.DefaultPackage")
+	/* default */ boolean isLogMetadataRecord() {
+		return this.logMetadataRecord;
+	}
+
 	@Override
 	protected final void init() {
 		if (LOG.isDebugEnabled()) {
@@ -256,13 +261,6 @@ public final class WriterController extends AbstractController implements IWrite
 		}
 
 		return recordSent;
-	}
-
-	@Override
-	public void beforeEnableMonitoring() {
-		if (this.logMetadataRecord) {
-			this.monitoringController.sendMetadataAsRecord();
-		}
 	}
 
 	@Override
