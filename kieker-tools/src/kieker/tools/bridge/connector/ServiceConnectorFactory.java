@@ -18,6 +18,7 @@ package kieker.tools.bridge.connector;
 
 import java.lang.reflect.Field;
 import java.security.PrivilegedAction;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -52,8 +53,10 @@ public final class ServiceConnectorFactory {
 	public static ConcurrentMap<Integer, LookupEntity> createLookupEntityMap(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap)
 			throws ConnectorDataTransmissionException {
 		final ConcurrentMap<Integer, LookupEntity> lookupEntityMap = new ConcurrentHashMap<Integer, LookupEntity>();
-		for (final int key : recordMap.keySet()) {
-			final Class<? extends IMonitoringRecord> type = recordMap.get(key);
+
+		for(Map.Entry<Integer, Class<? extends IMonitoringRecord>> entry : recordMap.entrySet()) {
+			final int key = entry.getKey();
+			final Class<? extends IMonitoringRecord> type = entry.getValue();
 
 			try {
 				final Field parameterTypesField = type.getDeclaredField(TYPES);
