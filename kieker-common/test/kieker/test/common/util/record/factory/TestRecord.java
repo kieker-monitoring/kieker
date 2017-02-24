@@ -32,11 +32,9 @@ import kieker.common.util.registry.IRegistry;
  */
 public class TestRecord extends AbstractMonitoringRecord {
 
+	public static final String[] PROPERTY_NAMES = {};
+
 	private static final long serialVersionUID = 9088190056147961692L;
-	
-	public static final String[] PROPERTY_NAMES = {
-			
-	};
 	
 	public TestRecord() {
 		// Nothing to do

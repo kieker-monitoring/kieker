@@ -47,10 +47,10 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	private static final AbstractTraceEvent EVENT = new AbstractTraceEvent(34556L, 324440L, 0) {
 		private static final long serialVersionUID = 1L;
 		
-		public String[] PROPERTY_NAMES = {
+		private final String[] propertyNames = {
 			"timestamp",
 			"traceId",
-			"orderIndex"
+			"orderIndex",
 		};
 		
 		/**
@@ -58,7 +58,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		 */
 		@Override
 		public String[] getValueNames() {
-			return PROPERTY_NAMES; // NOPMD
+			return propertyNames; // NOPMD
 		}
 
 		@Override

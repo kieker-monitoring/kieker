@@ -50,7 +50,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		"sessionId",
 		"hostname",
 		"parentTraceId",
-		"parentOrderId"
+		"parentOrderId",
 	};
 
 	/** Constant to be used if no sessionId required. */

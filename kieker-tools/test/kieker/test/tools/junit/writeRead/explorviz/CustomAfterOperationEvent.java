@@ -29,14 +29,14 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.11
  */
 public class CustomAfterOperationEvent implements IMonitoringRecord {
-	private static final long serialVersionUID = -6594854001439034288L;
-	
 	public static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex"
 	};
 
+	private static final long serialVersionUID = -6594854001439034288L;
+	
 	private final long timestamp;
 	private final long traceId;
 	private final int orderIndex;
