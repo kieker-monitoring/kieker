@@ -18,6 +18,7 @@ package kieker.analysisteetime.trace.reconstruction;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -28,6 +29,7 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.analysisteetime.model.analysismodel.trace.TraceFactory;
+import kieker.analysisteetime.util.time.Instants;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
@@ -44,7 +46,7 @@ public class TraceReconstructionBuffer {
 	private final TraceFactory factory = TraceFactory.eINSTANCE;
 	private final DeploymentModel deploymentModel;
 	private final TraceMetadata traceMetadata;
-	private final Instant traceStart;
+	private final ChronoUnit timeUnit;
 
 	private final Deque<BeforeOperationEvent> stack = new LinkedList<>();
 	private OperationCall root;
@@ -53,20 +55,15 @@ public class TraceReconstructionBuffer {
 	public TraceReconstructionBuffer(final DeploymentModel deploymentModel, final TraceMetadata traceMetadata) {
 		this.deploymentModel = deploymentModel;
 		this.traceMetadata = traceMetadata;
-		// TODO Temp Get from TraceMetadata
-		// final long epochMilli = 0;
-		// this.traceStart = Instant.ofEpochMilli(epochMilli);
-		this.traceStart = Instant.now();
+		this.timeUnit = ChronoUnit.NANOS; // TODO Temporary hard coded
 	}
 
 	public void handleBeforeOperationEventRecord(final BeforeOperationEvent record) {
 		this.stack.push(record);
 
 		final OperationCall newCall = this.factory.createOperationCall();
-
-		// TODO Calculate Start, if necessary
-		final long nanosOffset = this.traceMetadata.getLoggingTimestamp() - record.getTimestamp();
-		newCall.setStart(this.traceStart.plusNanos(nanosOffset));
+		final Instant start = Instants.createFromEpochTimestamp(record.getTimestamp(), this.timeUnit);
+		newCall.setStart(start);
 
 		final DeploymentContext context = this.deploymentModel.getDeploymentContexts().get(this.traceMetadata.getHostname());
 		final DeployedComponent component = context.getComponents().get(record.getClassSignature());
@@ -87,9 +84,8 @@ public class TraceReconstructionBuffer {
 	public void handleAfterOperationEventRecord(final AfterOperationEvent record) {
 		final BeforeOperationEvent beforeEvent = this.stack.pop();
 
-		// TODO This does not work for other time units
-		final long durationInNanos = record.getTimestamp() - beforeEvent.getTimestamp();
-		this.current.setDuration(Duration.ofNanos(durationInNanos));
+		final long timestampDifference = record.getTimestamp() - beforeEvent.getTimestamp();
+		this.current.setDuration(Duration.of(timestampDifference, this.timeUnit));
 
 		if (record instanceof AfterOperationFailedEvent) {
 			final String failedCause = ((AfterOperationFailedEvent) record).getCause();
