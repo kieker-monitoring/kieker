@@ -28,7 +28,6 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.FileExtensionFilter;
-import kieker.monitoring.core.controller.ReceiveUnfilteredConfiguration;
 import kieker.monitoring.registry.IRegistryListener;
 import kieker.monitoring.registry.IWriterRegistry;
 import kieker.monitoring.registry.WriterRegistry;
@@ -39,7 +38,6 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  *
  * @since < 0.9
  */
-@ReceiveUnfilteredConfiguration // required for using class KiekerLogFolder
 public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegistryListener<String>, IFileWriter {
 
 	public static final String PREFIX = AsciiFileWriter.class.getName() + ".";

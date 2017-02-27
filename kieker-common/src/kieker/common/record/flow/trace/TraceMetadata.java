@@ -43,6 +43,15 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		long.class, // parentTraceId
 		int.class, // parentOrderId
 	};
+	
+	public static final String[] PROPERTY_NAMES = {
+		"traceId",
+		"threadId",
+		"sessionId",
+		"hostname",
+		"parentTraceId",
+		"parentOrderId",
+	};
 
 	/** Constant to be used if no sessionId required. */
 	public static final String NO_SESSION_ID = "<no-session-id>";
@@ -181,6 +190,14 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+    public String[] getValueNames() {
+        return PROPERTY_NAMES; // NOPMD
+    }
 
 	/**
 	 * {@inheritDoc}
@@ -189,7 +206,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	public int getSize() {
 		return SIZE;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
