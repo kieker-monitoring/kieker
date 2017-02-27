@@ -242,7 +242,8 @@ public final class WriterController extends AbstractController implements IWrite
 				.append("\n\tQueue capacity: ")
 				.append(this.queueCapacity)
 				.append("\n\tInsert behavior (a.k.a. QueueFullBehavior): ")
-				.append(this.insertBehavior.toString());
+				.append(this.insertBehavior.toString())
+				.append("\n");
 		if (this.monitoringWriter != null) {
 			sb.append(this.monitoringWriter.toString());
 		} else {

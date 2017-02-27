@@ -249,7 +249,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 	}
 
 	private void addToPatternEntryList(final String pattern) {
-		if (pattern.length() > 0) {
+		if (pattern.length() == 0) {
 			// ignore empty lines
 			return;
 		}
