@@ -54,7 +54,7 @@ public final class ServiceConnectorFactory {
 			throws ConnectorDataTransmissionException {
 		final ConcurrentMap<Integer, LookupEntity> lookupEntityMap = new ConcurrentHashMap<Integer, LookupEntity>();
 
-		for(Map.Entry<Integer, Class<? extends IMonitoringRecord>> entry : recordMap.entrySet()) {
+		for (final Map.Entry<Integer, Class<? extends IMonitoringRecord>> entry : recordMap.entrySet()) {
 			final int key = entry.getKey();
 			final Class<? extends IMonitoringRecord> type = entry.getValue();
 
