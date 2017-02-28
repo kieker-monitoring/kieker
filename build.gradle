@@ -548,6 +548,7 @@ task apidoc(type: Javadoc) {
     destinationDir = new File(projectDir, 'docs')
 
     title = "Kieker Monitoring and Analysis Framework, Vers. $kiekerVersion<br/>API Documentation"
+    failOnError = false
     options.header = "Kieker $kiekerVersion"
     options.footer = "Kieker $kiekerVersion"
     options.bottom = "Copyright " + year() + " $kiekerCopyright, <a href=\"http://kieker-monitoring.net\">http://kieker-monitoring.net</a>"
