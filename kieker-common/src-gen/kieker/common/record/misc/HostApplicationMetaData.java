@@ -55,7 +55,7 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 	public static final String APPLICATION_NAME = "";
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"systemName",
 		"ipAddress",
 		"hostName",
@@ -119,10 +119,12 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -133,7 +135,7 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 		this.hostName = stringRegistry.get(buffer.getInt());
 		this.applicationName = stringRegistry.get(buffer.getInt());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -146,7 +148,6 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 			this.getApplicationName()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -157,7 +158,6 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 		stringRegistry.get(this.getHostName());
 		stringRegistry.get(this.getApplicationName());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -168,7 +168,6 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 		buffer.putInt(stringRegistry.get(this.getHostName()));
 		buffer.putInt(stringRegistry.get(this.getApplicationName()));
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

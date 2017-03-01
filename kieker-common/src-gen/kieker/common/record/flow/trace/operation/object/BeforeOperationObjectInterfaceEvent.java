@@ -58,7 +58,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	public static final String INTERFACE = "";
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -120,10 +120,12 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -132,7 +134,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		super(buffer, stringRegistry);
 		this._interface = stringRegistry.get(buffer.getInt());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -148,7 +150,6 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 			this.getInterface()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -158,7 +159,6 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getInterface());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -172,7 +172,6 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		buffer.putInt(this.getObjectId());
 		buffer.putInt(stringRegistry.get(this.getInterface()));
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

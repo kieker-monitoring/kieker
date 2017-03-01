@@ -48,7 +48,7 @@ public class SplitEvent extends AbstractTraceEvent  {
 	/** default constants. */
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -94,10 +94,12 @@ public class SplitEvent extends AbstractTraceEvent  {
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -105,7 +107,7 @@ public class SplitEvent extends AbstractTraceEvent  {
 	public SplitEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -117,14 +119,12 @@ public class SplitEvent extends AbstractTraceEvent  {
 			this.getOrderIndex()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -134,7 +134,6 @@ public class SplitEvent extends AbstractTraceEvent  {
 		buffer.putLong(this.getTraceId());
 		buffer.putInt(this.getOrderIndex());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

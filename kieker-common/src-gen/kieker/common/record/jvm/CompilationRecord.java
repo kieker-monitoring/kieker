@@ -53,7 +53,7 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	public static final String JIT_COMPILER_NAME = "";
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"hostname",
 		"vmName",
@@ -113,10 +113,12 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -126,7 +128,7 @@ public class CompilationRecord extends AbstractJVMRecord  {
 		this.jitCompilerName = stringRegistry.get(buffer.getInt());
 		this.totalCompilationTimeMS = buffer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -140,7 +142,6 @@ public class CompilationRecord extends AbstractJVMRecord  {
 			this.getTotalCompilationTimeMS()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -150,7 +151,6 @@ public class CompilationRecord extends AbstractJVMRecord  {
 		stringRegistry.get(this.getVmName());
 		stringRegistry.get(this.getJitCompilerName());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -162,7 +162,6 @@ public class CompilationRecord extends AbstractJVMRecord  {
 		buffer.putInt(stringRegistry.get(this.getJitCompilerName()));
 		buffer.putLong(this.getTotalCompilationTimeMS());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

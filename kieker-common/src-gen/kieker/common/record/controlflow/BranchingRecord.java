@@ -52,7 +52,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	public static final int BRANCHING_OUTCOME = 0;
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"branchID",
 		"branchingOutcome",
@@ -109,10 +109,12 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -122,7 +124,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 		this.branchID = buffer.getInt();
 		this.branchingOutcome = buffer.getInt();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -134,14 +136,12 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 			this.getBranchingOutcome()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -151,7 +151,6 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 		buffer.putInt(this.getBranchID());
 		buffer.putInt(this.getBranchingOutcome());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

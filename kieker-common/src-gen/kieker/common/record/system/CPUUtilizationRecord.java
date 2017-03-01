@@ -73,7 +73,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	public static final double IDLE = 0.0;
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"hostname",
 		"cpuID",
@@ -179,10 +179,12 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -199,7 +201,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		this.totalUtilization = buffer.getDouble();
 		this.idle = buffer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -218,7 +220,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 			this.getIdle()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -227,7 +228,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getCpuID());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -244,7 +244,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		buffer.putDouble(this.getTotalUtilization());
 		buffer.putDouble(this.getIdle());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

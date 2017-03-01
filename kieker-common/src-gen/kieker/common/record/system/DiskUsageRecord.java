@@ -70,7 +70,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	public static final double WRITES_PER_SECOND = 0.0;
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"hostname",
 		"deviceName",
@@ -169,10 +169,12 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -188,7 +190,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		this.writeBytesPerSecond = buffer.getDouble();
 		this.writesPerSecond = buffer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -206,7 +208,6 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 			this.getWritesPerSecond()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -215,7 +216,6 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getDeviceName());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -231,7 +231,6 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		buffer.putDouble(this.getWriteBytesPerSecond());
 		buffer.putDouble(this.getWritesPerSecond());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

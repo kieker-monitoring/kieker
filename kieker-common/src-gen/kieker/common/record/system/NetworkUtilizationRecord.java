@@ -94,7 +94,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	public static final double RX_PACKETS_PER_SECOND = 0.0;
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"hostname",
 		"interfaceName",
@@ -249,10 +249,12 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -276,7 +278,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		this.rxOverrunsPerSecond = buffer.getDouble();
 		this.rxPacketsPerSecond = buffer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -302,7 +304,6 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 			this.getRxPacketsPerSecond()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -311,7 +312,6 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getInterfaceName());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -335,7 +335,6 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		buffer.putDouble(this.getRxOverrunsPerSecond());
 		buffer.putDouble(this.getRxPacketsPerSecond());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

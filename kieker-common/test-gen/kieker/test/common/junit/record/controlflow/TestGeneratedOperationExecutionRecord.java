@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.test.common.junit.record.controlflow;
 
 import java.nio.ByteBuffer;
@@ -32,9 +31,9 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
  * Creates {@link OperationExecutionRecord}s via the available constructors and
  * checks the values passed values via getters.
  * 
- * @author Kieker Build
+ * @author Andre van Hoorn, Jan Waller
  * 
- * @since 1.10
+ * @since 0.91
  */
 public class TestGeneratedOperationExecutionRecord extends AbstractGeneratedKiekerTest {
 
@@ -43,11 +42,11 @@ public class TestGeneratedOperationExecutionRecord extends AbstractGeneratedKiek
 	}
 
 	/**
-	 * Tests {@link OperationExecutionRecord#TestOperationExecutionRecord(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link OperationExecutionRecord#TestOperationExecutionRecord(string, string, long, long, long, string, int, int)}.
 	 */
 	@Test
 	public void testToArray() { // NOPMD (assert missing)
-	for (int i=0;i<ARRAY_LENGTH;i++) {
+		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
 			OperationExecutionRecord record = new OperationExecutionRecord(STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
 			
@@ -115,7 +114,7 @@ public class TestGeneratedOperationExecutionRecord extends AbstractGeneratedKiek
 	}
 	
 	/**
-	 * Tests {@link OperationExecutionRecord#TestOperationExecutionRecord(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link OperationExecutionRecord#TestOperationExecutionRecord(string, string, long, long, long, string, int, int)}.
 	 */
 	@Test
 	public void testBuffer() { // NOPMD (assert missing)
@@ -136,7 +135,7 @@ public class TestGeneratedOperationExecutionRecord extends AbstractGeneratedKiek
 	}
 	
 	/**
-	 * Tests {@link OperationExecutionRecord#TestOperationExecutionRecord(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link OperationExecutionRecord#TestOperationExecutionRecord(string, string, long, long, long, string, int, int)}.
 	 */
 	@Test
 	public void testParameterConstruction() { // NOPMD (assert missing)
@@ -154,5 +153,25 @@ public class TestGeneratedOperationExecutionRecord extends AbstractGeneratedKiek
 			Assert.assertEquals("OperationExecutionRecord.eoi values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getEoi());
 			Assert.assertEquals("OperationExecutionRecord.ess values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getEss());
 		}
+	}
+	
+	@Test
+	public void testEquality() {
+		int i = 0;
+		OperationExecutionRecord oneRecord = new OperationExecutionRecord(STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
+		i = 0;
+		OperationExecutionRecord copiedRecord = new OperationExecutionRecord(STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
+		
+		Assert.assertEquals(oneRecord, copiedRecord);
+	}	
+	
+	@Test
+	public void testUnequality() {
+		int i = 0;
+		OperationExecutionRecord oneRecord = new OperationExecutionRecord(STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
+		i = 2;
+		OperationExecutionRecord anotherRecord = new OperationExecutionRecord(STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
+		
+		Assert.assertNotEquals(oneRecord, anotherRecord);
 	}
 }

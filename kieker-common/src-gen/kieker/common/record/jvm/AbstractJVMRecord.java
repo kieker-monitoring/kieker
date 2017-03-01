@@ -39,7 +39,7 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	public static final String VM_NAME = "";
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"hostname",
 		"vmName",
@@ -83,10 +83,12 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -96,7 +98,7 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 		this.hostname = stringRegistry.get(buffer.getInt());
 		this.vmName = stringRegistry.get(buffer.getInt());
 	}
-
+	
 
 	/**
 	 * {@inheritDoc}

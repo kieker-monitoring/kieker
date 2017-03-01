@@ -66,7 +66,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	/** default constants. */
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"hostname",
 		"vmName",
@@ -175,10 +175,12 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -195,7 +197,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		this.nonHeapInitBytes = buffer.getLong();
 		this.objectPendingFinalizationCount = buffer.getInt();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -216,7 +218,6 @@ public class MemoryRecord extends AbstractJVMRecord  {
 			this.getObjectPendingFinalizationCount()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -225,7 +226,6 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getVmName());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -244,7 +244,6 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		buffer.putLong(this.getNonHeapInitBytes());
 		buffer.putInt(this.getObjectPendingFinalizationCount());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

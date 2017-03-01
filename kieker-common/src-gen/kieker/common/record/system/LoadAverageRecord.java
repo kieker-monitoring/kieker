@@ -58,7 +58,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	public static final double FIFTEEN_MIN_LOAD_AVERAGE = 0.0;
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"hostname",
 		"oneMinLoadAverage",
@@ -129,10 +129,12 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -144,7 +146,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		this.fiveMinLoadAverage = buffer.getDouble();
 		this.fifteenMinLoadAverage = buffer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -158,7 +160,6 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 			this.getFifteenMinLoadAverage()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -166,7 +167,6 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getHostname());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -178,7 +178,6 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		buffer.putDouble(this.getFiveMinLoadAverage());
 		buffer.putDouble(this.getFifteenMinLoadAverage());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

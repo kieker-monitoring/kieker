@@ -56,7 +56,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	public static final String CAUSE = "";
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -115,10 +115,12 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -127,7 +129,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		super(buffer, stringRegistry);
 		this.cause = stringRegistry.get(buffer.getInt());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -142,7 +144,6 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 			this.getCause()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -152,7 +153,6 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getCause());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -165,7 +165,6 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(stringRegistry.get(this.getCause()));
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

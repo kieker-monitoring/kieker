@@ -63,7 +63,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	public static final int CALLEE_OBJECT_ID = 0;
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -135,10 +135,12 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -148,7 +150,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		this.objectId = buffer.getInt();
 		this.calleeObjectId = buffer.getInt();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -166,7 +168,6 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 			this.getCalleeObjectId()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -177,7 +178,6 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		stringRegistry.get(this.getCalleeOperationSignature());
 		stringRegistry.get(this.getCalleeClassSignature());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -193,7 +193,6 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		buffer.putInt(this.getObjectId());
 		buffer.putInt(this.getCalleeObjectId());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

@@ -51,7 +51,7 @@ public class JoinEvent extends AbstractTraceEvent  {
 	public static final long JOINED_TRACE_ID = 0L;
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -104,10 +104,12 @@ public class JoinEvent extends AbstractTraceEvent  {
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -116,7 +118,7 @@ public class JoinEvent extends AbstractTraceEvent  {
 		super(buffer, stringRegistry);
 		this.joinedTraceId = buffer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -129,14 +131,12 @@ public class JoinEvent extends AbstractTraceEvent  {
 			this.getJoinedTraceId()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -147,7 +147,6 @@ public class JoinEvent extends AbstractTraceEvent  {
 		buffer.putInt(this.getOrderIndex());
 		buffer.putLong(this.getJoinedTraceId());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

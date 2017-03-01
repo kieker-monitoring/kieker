@@ -46,7 +46,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	public static final long TIMESTAMP = 0L;
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 	};
 	
@@ -89,10 +89,12 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -100,7 +102,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	public TimestampRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		this.timestamp = buffer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -110,14 +112,12 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 			this.getTimestamp()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -125,7 +125,6 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

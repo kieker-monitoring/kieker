@@ -52,7 +52,7 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 	/** default constants. */
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -104,10 +104,12 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -115,7 +117,7 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 	public AfterOperationEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -129,7 +131,6 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 			this.getClassSignature()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -138,7 +139,6 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 		stringRegistry.get(this.getOperationSignature());
 		stringRegistry.get(this.getClassSignature());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -150,7 +150,6 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
 		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

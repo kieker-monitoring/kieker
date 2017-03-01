@@ -71,7 +71,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	public static final long NUMBER_OF_RECORDS = 0L;
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"version",
 		"controllerName",
 		"hostname",
@@ -163,10 +163,12 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -181,7 +183,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 		this.timeUnit = stringRegistry.get(buffer.getInt());
 		this.numberOfRecords = buffer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -198,7 +200,6 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 			this.getNumberOfRecords()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -209,7 +210,6 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getTimeUnit());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -224,7 +224,6 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 		buffer.putInt(stringRegistry.get(this.getTimeUnit()));
 		buffer.putLong(this.getNumberOfRecords());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

@@ -39,7 +39,7 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	public static final int ORDER_INDEX = -1;
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -81,10 +81,12 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -94,7 +96,7 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		this.traceId = buffer.getLong();
 		this.orderIndex = buffer.getInt();
 	}
-
+	
 
 	/**
 	 * {@inheritDoc}

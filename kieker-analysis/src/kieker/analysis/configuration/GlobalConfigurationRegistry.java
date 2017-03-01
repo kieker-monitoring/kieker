@@ -45,6 +45,8 @@ public final class GlobalConfigurationRegistry {
 	 * 
 	 * @param plugin
 	 *            plugin to be registered
+	 * 
+	 * @return returns filter ID
 	 */
 	public int registerUpdateableFilterPlugin(final AbstractUpdateableFilterPlugin plugin) {
 		return this.updateableFilters.get(plugin);

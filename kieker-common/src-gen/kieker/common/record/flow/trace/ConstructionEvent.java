@@ -54,7 +54,7 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	public static final int OBJECT_ID = 0;
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -114,10 +114,12 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -127,7 +129,7 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 		this.classSignature = stringRegistry.get(buffer.getInt());
 		this.objectId = buffer.getInt();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -141,7 +143,6 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 			this.getObjectId()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -149,7 +150,6 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getClassSignature());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -161,7 +161,6 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(this.getObjectId());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

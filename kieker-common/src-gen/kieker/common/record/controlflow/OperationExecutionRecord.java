@@ -73,7 +73,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	public static final int ESS = NO_EOI_ESS;
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"operationSignature",
 		"sessionId",
 		"traceId",
@@ -165,10 +165,12 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -183,7 +185,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		this.eoi = buffer.getInt();
 		this.ess = buffer.getInt();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -200,7 +202,6 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 			this.getEss()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -210,7 +211,6 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		stringRegistry.get(this.getSessionId());
 		stringRegistry.get(this.getHostname());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -225,7 +225,6 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		buffer.putInt(this.getEoi());
 		buffer.putInt(this.getEss());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

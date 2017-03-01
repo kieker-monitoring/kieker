@@ -55,7 +55,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	public static final double UTILIZATION = 0.0;
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"hostname",
 		"resourceName",
@@ -119,10 +119,12 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -133,7 +135,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		this.resourceName = stringRegistry.get(buffer.getInt());
 		this.utilization = buffer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -146,7 +148,6 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 			this.getUtilization()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -155,7 +156,6 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getResourceName());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -166,7 +166,6 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		buffer.putInt(stringRegistry.get(this.getResourceName()));
 		buffer.putDouble(this.getUtilization());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

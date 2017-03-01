@@ -50,7 +50,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 	/** default constants. */
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"hostname",
 		"vmName",
@@ -103,10 +103,12 @@ public class UptimeRecord extends AbstractJVMRecord  {
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -115,7 +117,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 		super(buffer, stringRegistry);
 		this.uptimeMS = buffer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -128,7 +130,6 @@ public class UptimeRecord extends AbstractJVMRecord  {
 			this.getUptimeMS()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -137,7 +138,6 @@ public class UptimeRecord extends AbstractJVMRecord  {
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getVmName());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -148,7 +148,6 @@ public class UptimeRecord extends AbstractJVMRecord  {
 		buffer.putInt(stringRegistry.get(this.getVmName()));
 		buffer.putLong(this.getUptimeMS());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

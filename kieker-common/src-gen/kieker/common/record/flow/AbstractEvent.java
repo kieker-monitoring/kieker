@@ -39,7 +39,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	public static final long TIMESTAMP = 0L;
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 	};
 	
@@ -71,10 +71,12 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -82,7 +84,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	public AbstractEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		this.timestamp = buffer.getLong();
 	}
-
+	
 
 	/**
 	 * {@inheritDoc}

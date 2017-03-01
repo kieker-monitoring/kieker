@@ -57,7 +57,7 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 	/** default constants. */
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -115,10 +115,12 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -126,7 +128,7 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 	public CallConstructorEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -142,7 +144,6 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 			this.getCalleeClassSignature()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -153,7 +154,6 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		stringRegistry.get(this.getCalleeOperationSignature());
 		stringRegistry.get(this.getCalleeClassSignature());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -167,7 +167,6 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		buffer.putInt(stringRegistry.get(this.getCalleeOperationSignature()));
 		buffer.putInt(stringRegistry.get(this.getCalleeClassSignature()));
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

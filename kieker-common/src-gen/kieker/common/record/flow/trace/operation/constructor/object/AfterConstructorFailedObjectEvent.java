@@ -58,7 +58,7 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	public static final int OBJECT_ID = 0;
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -120,10 +120,12 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -132,7 +134,7 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		super(buffer, stringRegistry);
 		this.objectId = buffer.getInt();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -148,7 +150,6 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 			this.getObjectId()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -158,7 +159,6 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getCause());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -172,7 +172,6 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		buffer.putInt(stringRegistry.get(this.getCause()));
 		buffer.putInt(this.getObjectId());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

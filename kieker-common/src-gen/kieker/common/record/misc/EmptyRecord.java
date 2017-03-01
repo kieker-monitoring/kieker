@@ -44,7 +44,7 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 	/** default constants. */
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 	};
 	
 	/** property declarations. */
@@ -80,17 +80,19 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
 	public EmptyRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -99,21 +101,18 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 		return new Object[] {
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

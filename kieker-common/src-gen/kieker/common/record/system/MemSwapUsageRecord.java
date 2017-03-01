@@ -67,7 +67,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public static final long SWAP_FREE = 0L;
 	
 	/** property name array. */
-	public static final String[] PROPERTY_NAMES = {
+	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
 		"hostname",
 		"memTotal",
@@ -159,10 +159,12 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -177,7 +179,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		this.swapUsed = buffer.getLong();
 		this.swapFree = buffer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -194,7 +196,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 			this.getSwapFree()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -202,7 +203,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getHostname());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -217,7 +217,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		buffer.putLong(this.getSwapUsed());
 		buffer.putLong(this.getSwapFree());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
