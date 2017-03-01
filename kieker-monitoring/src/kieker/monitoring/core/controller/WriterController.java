@@ -201,6 +201,12 @@ public final class WriterController extends AbstractController implements IWrite
 		}
 	}
 
+	@SuppressWarnings("PMD.DefaultPackage")
+	// default
+	boolean isLogMetadataRecord() {
+		return this.logMetadataRecord;
+	}
+
 	@Override
 	protected final void init() {
 		if (LOG.isDebugEnabled()) {
