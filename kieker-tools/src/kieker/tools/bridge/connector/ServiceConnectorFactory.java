@@ -18,6 +18,7 @@ package kieker.tools.bridge.connector;
 
 import java.lang.reflect.Field;
 import java.security.PrivilegedAction;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
