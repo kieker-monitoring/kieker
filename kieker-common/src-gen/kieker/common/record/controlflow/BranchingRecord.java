@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 
@@ -89,16 +91,18 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public BranchingRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.branchID = buffer.getInt();
-		this.branchingOutcome = buffer.getInt();
+	public BranchingRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = deserializer.getLong(buffer);
+		this.branchID = deserializer.getInt(buffer);
+		this.branchingOutcome = deserializer.getInt(buffer);
 	}
 
 	/**
@@ -124,10 +128,10 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(this.getBranchID());
-		buffer.putInt(this.getBranchingOutcome());
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp(), buffer);
+		serializer.putInt(this.getBranchID(), buffer);
+		serializer.putInt(this.getBranchingOutcome(), buffer);
 	}
 	
 	/**
@@ -164,7 +168,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -173,15 +177,29 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final BranchingRecord castedRecord = (BranchingRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getBranchID() != castedRecord.getBranchID()) return false;
-		if (this.getBranchingOutcome() != castedRecord.getBranchingOutcome()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getBranchID() != castedRecord.getBranchID()) {
+			return false;
+		}
+		if (this.getBranchingOutcome() != castedRecord.getBranchingOutcome()) {
+			return false;
+		}
 		return true;
 	}
 	

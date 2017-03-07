@@ -22,9 +22,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.constructor.BeforeConstructorEvent;
+import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
-
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.record.UtilityClass;
 
@@ -92,10 +93,10 @@ public class TestBeforeConstructorEvent extends AbstractKiekerTest {
 
 		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
-		event1.writeBytes(buffer, stringRegistry);
+		event1.writeBytes(DefaultValueSerializer.instance(), buffer, stringRegistry);
 		buffer.flip();
 
-		final BeforeConstructorEvent event2 = new BeforeConstructorEvent(buffer, stringRegistry);
+		final BeforeConstructorEvent event2 = new BeforeConstructorEvent(DefaultValueDeserializer.instance(), buffer, stringRegistry);
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

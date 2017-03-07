@@ -22,9 +22,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectEvent;
+import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
-
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
@@ -87,7 +88,7 @@ public class TestBeforeOperationObjectEventPropertyOrder extends AbstractKiekerT
 			PROPERTY_CLASS_SIGNATURE,
 			PROPERTY_OBJECT_ID
 		);
-		final BeforeOperationObjectEvent recordInitBuffer = new BeforeOperationObjectEvent(inputBuffer, this.makeStringRegistry());
+		final BeforeOperationObjectEvent recordInitBuffer = new BeforeOperationObjectEvent(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
 		final BeforeOperationObjectEvent recordInitArray = new BeforeOperationObjectEvent(values);
 		
 		this.assertBeforeOperationObjectEvent(recordInitParameter);
@@ -104,15 +105,15 @@ public class TestBeforeOperationObjectEventPropertyOrder extends AbstractKiekerT
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(BeforeOperationObjectEvent.SIZE);
-		recordInitParameter.writeBytes(outputBufferParameter, stringRegistry);
+		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(BeforeOperationObjectEvent.SIZE);
-		recordInitParameter.writeBytes(outputBufferBuffer, stringRegistry);
+		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(BeforeOperationObjectEvent.SIZE);
-		recordInitParameter.writeBytes(outputBufferArray, stringRegistry);
+		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 

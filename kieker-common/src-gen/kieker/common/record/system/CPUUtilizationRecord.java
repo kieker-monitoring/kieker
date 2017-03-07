@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 
@@ -152,23 +154,25 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public CPUUtilizationRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.cpuID = stringRegistry.get(buffer.getInt());
-		this.user = buffer.getDouble();
-		this.system = buffer.getDouble();
-		this.wait = buffer.getDouble();
-		this.nice = buffer.getDouble();
-		this.irq = buffer.getDouble();
-		this.totalUtilization = buffer.getDouble();
-		this.idle = buffer.getDouble();
+	public CPUUtilizationRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = deserializer.getLong(buffer);
+		this.hostname = deserializer.getString(buffer, stringRegistry);
+		this.cpuID = deserializer.getString(buffer, stringRegistry);
+		this.user = deserializer.getDouble(buffer);
+		this.system = deserializer.getDouble(buffer);
+		this.wait = deserializer.getDouble(buffer);
+		this.nice = deserializer.getDouble(buffer);
+		this.irq = deserializer.getDouble(buffer);
+		this.totalUtilization = deserializer.getDouble(buffer);
+		this.idle = deserializer.getDouble(buffer);
 	}
 
 	/**
@@ -203,17 +207,17 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(stringRegistry.get(this.getCpuID()));
-		buffer.putDouble(this.getUser());
-		buffer.putDouble(this.getSystem());
-		buffer.putDouble(this.getWait());
-		buffer.putDouble(this.getNice());
-		buffer.putDouble(this.getIrq());
-		buffer.putDouble(this.getTotalUtilization());
-		buffer.putDouble(this.getIdle());
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp(), buffer);
+		serializer.putString(this.getHostname(), buffer, stringRegistry);
+		serializer.putString(this.getCpuID(), buffer, stringRegistry);
+		serializer.putDouble(this.getUser(), buffer);
+		serializer.putDouble(this.getSystem(), buffer);
+		serializer.putDouble(this.getWait(), buffer);
+		serializer.putDouble(this.getNice(), buffer);
+		serializer.putDouble(this.getIrq(), buffer);
+		serializer.putDouble(this.getTotalUtilization(), buffer);
+		serializer.putDouble(this.getIdle(), buffer);
 	}
 	
 	/**
@@ -250,7 +254,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer,  final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -259,22 +263,50 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final CPUUtilizationRecord castedRecord = (CPUUtilizationRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getCpuID().equals(castedRecord.getCpuID())) return false;
-		if (isNotEqual(this.getUser(), castedRecord.getUser())) return false;
-		if (isNotEqual(this.getSystem(), castedRecord.getSystem())) return false;
-		if (isNotEqual(this.getWait(), castedRecord.getWait())) return false;
-		if (isNotEqual(this.getNice(), castedRecord.getNice())) return false;
-		if (isNotEqual(this.getIrq(), castedRecord.getIrq())) return false;
-		if (isNotEqual(this.getTotalUtilization(), castedRecord.getTotalUtilization())) return false;
-		if (isNotEqual(this.getIdle(), castedRecord.getIdle())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getCpuID().equals(castedRecord.getCpuID())) {
+			return false;
+		}
+		if (isNotEqual(this.getUser(), castedRecord.getUser())) {
+			return false;
+		}
+		if (isNotEqual(this.getSystem(), castedRecord.getSystem())) {
+			return false;
+		}
+		if (isNotEqual(this.getWait(), castedRecord.getWait())) {
+			return false;
+		}
+		if (isNotEqual(this.getNice(), castedRecord.getNice())) {
+			return false;
+		}
+		if (isNotEqual(this.getIrq(), castedRecord.getIrq())) {
+			return false;
+		}
+		if (isNotEqual(this.getTotalUtilization(), castedRecord.getTotalUtilization())) {
+			return false;
+		}
+		if (isNotEqual(this.getIdle(), castedRecord.getIdle())) {
+			return false;
+		}
 		return true;
 	}
 	

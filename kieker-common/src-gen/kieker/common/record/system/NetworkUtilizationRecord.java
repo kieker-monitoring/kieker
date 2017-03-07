@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 
@@ -215,30 +217,32 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public NetworkUtilizationRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.interfaceName = stringRegistry.get(buffer.getInt());
-		this.speed = buffer.getLong();
-		this.txBytesPerSecond = buffer.getDouble();
-		this.txCarrierPerSecond = buffer.getDouble();
-		this.txCollisionsPerSecond = buffer.getDouble();
-		this.txDroppedPerSecond = buffer.getDouble();
-		this.txErrorsPerSecond = buffer.getDouble();
-		this.txOverrunsPerSecond = buffer.getDouble();
-		this.txPacketsPerSecond = buffer.getDouble();
-		this.rxBytesPerSecond = buffer.getDouble();
-		this.rxDroppedPerSecond = buffer.getDouble();
-		this.rxErrorsPerSecond = buffer.getDouble();
-		this.rxFramePerSecond = buffer.getDouble();
-		this.rxOverrunsPerSecond = buffer.getDouble();
-		this.rxPacketsPerSecond = buffer.getDouble();
+	public NetworkUtilizationRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = deserializer.getLong(buffer);
+		this.hostname = deserializer.getString(buffer, stringRegistry);
+		this.interfaceName = deserializer.getString(buffer, stringRegistry);
+		this.speed = deserializer.getLong(buffer);
+		this.txBytesPerSecond = deserializer.getDouble(buffer);
+		this.txCarrierPerSecond = deserializer.getDouble(buffer);
+		this.txCollisionsPerSecond = deserializer.getDouble(buffer);
+		this.txDroppedPerSecond = deserializer.getDouble(buffer);
+		this.txErrorsPerSecond = deserializer.getDouble(buffer);
+		this.txOverrunsPerSecond = deserializer.getDouble(buffer);
+		this.txPacketsPerSecond = deserializer.getDouble(buffer);
+		this.rxBytesPerSecond = deserializer.getDouble(buffer);
+		this.rxDroppedPerSecond = deserializer.getDouble(buffer);
+		this.rxErrorsPerSecond = deserializer.getDouble(buffer);
+		this.rxFramePerSecond = deserializer.getDouble(buffer);
+		this.rxOverrunsPerSecond = deserializer.getDouble(buffer);
+		this.rxPacketsPerSecond = deserializer.getDouble(buffer);
 	}
 
 	/**
@@ -275,29 +279,29 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getInterfaceName());
 	}
-	
+	 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(stringRegistry.get(this.getInterfaceName()));
-		buffer.putLong(this.getSpeed());
-		buffer.putDouble(this.getTxBytesPerSecond());
-		buffer.putDouble(this.getTxCarrierPerSecond());
-		buffer.putDouble(this.getTxCollisionsPerSecond());
-		buffer.putDouble(this.getTxDroppedPerSecond());
-		buffer.putDouble(this.getTxErrorsPerSecond());
-		buffer.putDouble(this.getTxOverrunsPerSecond());
-		buffer.putDouble(this.getTxPacketsPerSecond());
-		buffer.putDouble(this.getRxBytesPerSecond());
-		buffer.putDouble(this.getRxDroppedPerSecond());
-		buffer.putDouble(this.getRxErrorsPerSecond());
-		buffer.putDouble(this.getRxFramePerSecond());
-		buffer.putDouble(this.getRxOverrunsPerSecond());
-		buffer.putDouble(this.getRxPacketsPerSecond());
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp(), buffer);
+		serializer.putString(this.getHostname(), buffer, stringRegistry);
+		serializer.putString(this.getInterfaceName(), buffer, stringRegistry);
+		serializer.putLong(this.getSpeed(), buffer);
+		serializer.putDouble(this.getTxBytesPerSecond(), buffer);
+		serializer.putDouble(this.getTxCarrierPerSecond(), buffer);
+		serializer.putDouble(this.getTxCollisionsPerSecond(), buffer);
+		serializer.putDouble(this.getTxDroppedPerSecond(), buffer);
+		serializer.putDouble(this.getTxErrorsPerSecond(), buffer);
+		serializer.putDouble(this.getTxOverrunsPerSecond(), buffer);
+		serializer.putDouble(this.getTxPacketsPerSecond(), buffer);
+		serializer.putDouble(this.getRxBytesPerSecond(), buffer);
+		serializer.putDouble(this.getRxDroppedPerSecond(), buffer);
+		serializer.putDouble(this.getRxErrorsPerSecond(), buffer);
+		serializer.putDouble(this.getRxFramePerSecond(), buffer);
+		serializer.putDouble(this.getRxOverrunsPerSecond(), buffer);
+		serializer.putDouble(this.getRxPacketsPerSecond(), buffer);
 	}
 	
 	/**
@@ -334,7 +338,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -343,29 +347,71 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final NetworkUtilizationRecord castedRecord = (NetworkUtilizationRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getInterfaceName().equals(castedRecord.getInterfaceName())) return false;
-		if (this.getSpeed() != castedRecord.getSpeed()) return false;
-		if (isNotEqual(this.getTxBytesPerSecond(), castedRecord.getTxBytesPerSecond())) return false;
-		if (isNotEqual(this.getTxCarrierPerSecond(), castedRecord.getTxCarrierPerSecond())) return false;
-		if (isNotEqual(this.getTxCollisionsPerSecond(), castedRecord.getTxCollisionsPerSecond())) return false;
-		if (isNotEqual(this.getTxDroppedPerSecond(), castedRecord.getTxDroppedPerSecond())) return false;
-		if (isNotEqual(this.getTxErrorsPerSecond(), castedRecord.getTxErrorsPerSecond())) return false;
-		if (isNotEqual(this.getTxOverrunsPerSecond(), castedRecord.getTxOverrunsPerSecond())) return false;
-		if (isNotEqual(this.getTxPacketsPerSecond(), castedRecord.getTxPacketsPerSecond())) return false;
-		if (isNotEqual(this.getRxBytesPerSecond(), castedRecord.getRxBytesPerSecond())) return false;
-		if (isNotEqual(this.getRxDroppedPerSecond(), castedRecord.getRxDroppedPerSecond())) return false;
-		if (isNotEqual(this.getRxErrorsPerSecond(), castedRecord.getRxErrorsPerSecond())) return false;
-		if (isNotEqual(this.getRxFramePerSecond(), castedRecord.getRxFramePerSecond())) return false;
-		if (isNotEqual(this.getRxOverrunsPerSecond(), castedRecord.getRxOverrunsPerSecond())) return false;
-		if (isNotEqual(this.getRxPacketsPerSecond(), castedRecord.getRxPacketsPerSecond())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getInterfaceName().equals(castedRecord.getInterfaceName())) {
+			return false;
+		}
+		if (this.getSpeed() != castedRecord.getSpeed()) {
+			return false;
+		}
+		if (isNotEqual(this.getTxBytesPerSecond(), castedRecord.getTxBytesPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxCarrierPerSecond(), castedRecord.getTxCarrierPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxCollisionsPerSecond(), castedRecord.getTxCollisionsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxDroppedPerSecond(), castedRecord.getTxDroppedPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxErrorsPerSecond(), castedRecord.getTxErrorsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxOverrunsPerSecond(), castedRecord.getTxOverrunsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxPacketsPerSecond(), castedRecord.getTxPacketsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxBytesPerSecond(), castedRecord.getRxBytesPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxDroppedPerSecond(), castedRecord.getRxDroppedPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxErrorsPerSecond(), castedRecord.getRxErrorsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxFramePerSecond(), castedRecord.getRxFramePerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxOverrunsPerSecond(), castedRecord.getRxOverrunsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxPacketsPerSecond(), castedRecord.getRxPacketsPerSecond())) {
+			return false;
+		}
 		return true;
 	}
 	

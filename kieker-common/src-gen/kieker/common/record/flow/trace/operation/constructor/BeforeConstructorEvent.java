@@ -4,10 +4,11 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
-import kieker.common.util.registry.IRegistry;
-
 import kieker.common.record.flow.IConstructorRecord;
+import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -83,14 +84,16 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public BeforeConstructorEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
+	public BeforeConstructorEvent(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(deserializer, buffer, stringRegistry);
 	}
 
 	/**
@@ -120,12 +123,12 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putLong(this.getTraceId());
-		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
-		buffer.putInt(stringRegistry.get(this.getClassSignature()));
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp(), buffer);
+		serializer.putLong(this.getTraceId(), buffer);
+		serializer.putInt(this.getOrderIndex(), buffer);
+		serializer.putString(this.getOperationSignature(), buffer, stringRegistry);
+		serializer.putString(this.getClassSignature(), buffer, stringRegistry);
 	}
 	
 	/**
@@ -162,7 +165,7 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -171,17 +174,35 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final BeforeConstructorEvent castedRecord = (BeforeConstructorEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
 		return true;
 	}
 	

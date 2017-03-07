@@ -4,7 +4,8 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.jvm.AbstractJVMRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 
@@ -91,16 +92,18 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public CompilationRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.jitCompilerName = stringRegistry.get(buffer.getInt());
-		this.totalCompilationTimeMS = buffer.getLong();
+	public CompilationRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(deserializer, buffer, stringRegistry);
+		this.jitCompilerName = deserializer.getString(buffer, stringRegistry);
+		this.totalCompilationTimeMS = deserializer.getLong(buffer);
 	}
 
 	/**
@@ -131,12 +134,12 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(stringRegistry.get(this.getVmName()));
-		buffer.putInt(stringRegistry.get(this.getJitCompilerName()));
-		buffer.putLong(this.getTotalCompilationTimeMS());
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp(), buffer);
+		serializer.putString(this.getHostname(), buffer, stringRegistry);
+		serializer.putString(this.getVmName(), buffer, stringRegistry);
+		serializer.putString(this.getJitCompilerName(), buffer, stringRegistry);
+		serializer.putLong(this.getTotalCompilationTimeMS(), buffer);
 	}
 	
 	/**
@@ -173,7 +176,7 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -182,17 +185,35 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final CompilationRecord castedRecord = (CompilationRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getVmName().equals(castedRecord.getVmName())) return false;
-		if (!this.getJitCompilerName().equals(castedRecord.getJitCompilerName())) return false;
-		if (this.getTotalCompilationTimeMS() != castedRecord.getTotalCompilationTimeMS()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getVmName().equals(castedRecord.getVmName())) {
+			return false;
+		}
+		if (!this.getJitCompilerName().equals(castedRecord.getJitCompilerName())) {
+			return false;
+		}
+		if (this.getTotalCompilationTimeMS() != castedRecord.getTotalCompilationTimeMS()) {
+			return false;
+		}
 		return true;
 	}
 	

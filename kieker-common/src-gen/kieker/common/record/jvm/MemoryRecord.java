@@ -4,7 +4,8 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.jvm.AbstractJVMRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 
@@ -146,23 +147,25 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public MemoryRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.heapMaxBytes = buffer.getLong();
-		this.heapUsedBytes = buffer.getLong();
-		this.heapCommittedBytes = buffer.getLong();
-		this.heapInitBytes = buffer.getLong();
-		this.nonHeapMaxBytes = buffer.getLong();
-		this.nonHeapUsedBytes = buffer.getLong();
-		this.nonHeapCommittedBytes = buffer.getLong();
-		this.nonHeapInitBytes = buffer.getLong();
-		this.objectPendingFinalizationCount = buffer.getInt();
+	public MemoryRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(deserializer, buffer, stringRegistry);
+		this.heapMaxBytes = deserializer.getLong(buffer);
+		this.heapUsedBytes = deserializer.getLong(buffer);
+		this.heapCommittedBytes = deserializer.getLong(buffer);
+		this.heapInitBytes = deserializer.getLong(buffer);
+		this.nonHeapMaxBytes = deserializer.getLong(buffer);
+		this.nonHeapUsedBytes = deserializer.getLong(buffer);
+		this.nonHeapCommittedBytes = deserializer.getLong(buffer);
+		this.nonHeapInitBytes = deserializer.getLong(buffer);
+		this.objectPendingFinalizationCount = deserializer.getInt(buffer);
 	}
 
 	/**
@@ -199,19 +202,19 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(stringRegistry.get(this.getVmName()));
-		buffer.putLong(this.getHeapMaxBytes());
-		buffer.putLong(this.getHeapUsedBytes());
-		buffer.putLong(this.getHeapCommittedBytes());
-		buffer.putLong(this.getHeapInitBytes());
-		buffer.putLong(this.getNonHeapMaxBytes());
-		buffer.putLong(this.getNonHeapUsedBytes());
-		buffer.putLong(this.getNonHeapCommittedBytes());
-		buffer.putLong(this.getNonHeapInitBytes());
-		buffer.putInt(this.getObjectPendingFinalizationCount());
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp(), buffer);
+		serializer.putString(this.getHostname(), buffer, stringRegistry);
+		serializer.putString(this.getVmName(), buffer, stringRegistry);
+		serializer.putLong(this.getHeapMaxBytes(), buffer);
+		serializer.putLong(this.getHeapUsedBytes(), buffer);
+		serializer.putLong(this.getHeapCommittedBytes(), buffer);
+		serializer.putLong(this.getHeapInitBytes(), buffer);
+		serializer.putLong(this.getNonHeapMaxBytes(), buffer);
+		serializer.putLong(this.getNonHeapUsedBytes(), buffer);
+		serializer.putLong(this.getNonHeapCommittedBytes(), buffer);
+		serializer.putLong(this.getNonHeapInitBytes(), buffer);
+		serializer.putInt(this.getObjectPendingFinalizationCount(), buffer);
 	}
 	
 	/**
@@ -248,7 +251,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -257,24 +260,56 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final MemoryRecord castedRecord = (MemoryRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getVmName().equals(castedRecord.getVmName())) return false;
-		if (this.getHeapMaxBytes() != castedRecord.getHeapMaxBytes()) return false;
-		if (this.getHeapUsedBytes() != castedRecord.getHeapUsedBytes()) return false;
-		if (this.getHeapCommittedBytes() != castedRecord.getHeapCommittedBytes()) return false;
-		if (this.getHeapInitBytes() != castedRecord.getHeapInitBytes()) return false;
-		if (this.getNonHeapMaxBytes() != castedRecord.getNonHeapMaxBytes()) return false;
-		if (this.getNonHeapUsedBytes() != castedRecord.getNonHeapUsedBytes()) return false;
-		if (this.getNonHeapCommittedBytes() != castedRecord.getNonHeapCommittedBytes()) return false;
-		if (this.getNonHeapInitBytes() != castedRecord.getNonHeapInitBytes()) return false;
-		if (this.getObjectPendingFinalizationCount() != castedRecord.getObjectPendingFinalizationCount()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getVmName().equals(castedRecord.getVmName())) {
+			return false;
+		}
+		if (this.getHeapMaxBytes() != castedRecord.getHeapMaxBytes()) {
+			return false;
+		}
+		if (this.getHeapUsedBytes() != castedRecord.getHeapUsedBytes()) {
+			return false;
+		}
+		if (this.getHeapCommittedBytes() != castedRecord.getHeapCommittedBytes()) {
+			return false;
+		}
+		if (this.getHeapInitBytes() != castedRecord.getHeapInitBytes()) {
+			return false;
+		}
+		if (this.getNonHeapMaxBytes() != castedRecord.getNonHeapMaxBytes()) {
+			return false;
+		}
+		if (this.getNonHeapUsedBytes() != castedRecord.getNonHeapUsedBytes()) {
+			return false;
+		}
+		if (this.getNonHeapCommittedBytes() != castedRecord.getNonHeapCommittedBytes()) {
+			return false;
+		}
+		if (this.getNonHeapInitBytes() != castedRecord.getNonHeapInitBytes()) {
+			return false;
+		}
+		if (this.getObjectPendingFinalizationCount() != castedRecord.getObjectPendingFinalizationCount()) {
+			return false;
+		}
 		return true;
 	}
 	

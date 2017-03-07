@@ -3,6 +3,7 @@ package kieker.common.record.flow.trace.concurrency.monitor;
 import java.nio.ByteBuffer;
 
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -13,8 +14,8 @@ import kieker.common.util.registry.IRegistry;
 public final class MonitorExitEventFactory implements IRecordFactory<MonitorExitEvent> {
 	
 	@Override
-	public MonitorExitEvent create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new MonitorExitEvent(buffer, stringRegistry);
+	public MonitorExitEvent create(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new MonitorExitEvent(deserializer, buffer, stringRegistry);
 	}
 	
 	@Override
@@ -22,6 +23,7 @@ public final class MonitorExitEventFactory implements IRecordFactory<MonitorExit
 		return new MonitorExitEvent(values);
 	}
 	
+	@Override
 	public int getRecordSizeInBytes() {
 		return MonitorExitEvent.SIZE;
 	}

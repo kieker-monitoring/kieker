@@ -23,6 +23,8 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -113,13 +115,13 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public TraceMetadata(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.traceId = buffer.getLong();
-		this.threadId = buffer.getLong();
-		this.sessionId = stringRegistry.get(buffer.getInt());
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.parentTraceId = buffer.getLong();
-		this.parentOrderId = buffer.getInt();
+	public TraceMetadata(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.traceId = deserializer.getLong(buffer);
+		this.threadId = deserializer.getLong(buffer);
+		this.sessionId = deserializer.getString(buffer, stringRegistry);
+		this.hostname = deserializer.getString(buffer, stringRegistry);
+		this.parentTraceId = deserializer.getLong(buffer);
+		this.parentOrderId = deserializer.getInt(buffer);
 	}
 
 	/**
@@ -143,13 +145,13 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTraceId());
-		buffer.putLong(this.getThreadId());
-		buffer.putInt(stringRegistry.get(this.getSessionId()));
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putLong(this.getParentTraceId());
-		buffer.putInt(this.getParentOrderId());
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putLong(this.getTraceId(), buffer);
+		serializer.putLong(this.getThreadId(), buffer);
+		serializer.putString(this.getSessionId(), buffer, stringRegistry);
+		serializer.putString(this.getHostname(), buffer, stringRegistry);
+		serializer.putLong(this.getParentTraceId(), buffer);
+		serializer.putInt(this.getParentOrderId(), buffer);
 	}
 
 	/**
@@ -170,7 +172,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 */
 	@Override
 	@Deprecated
-	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public final void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 

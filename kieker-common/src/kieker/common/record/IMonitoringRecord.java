@@ -21,6 +21,8 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -87,8 +89,12 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	public void registerStrings(final IRegistry<String> stringRegistry);
 
 	/**
-	 * This method should deliver an byte array containing the content of the record. It should be possible to convert this array later into a record again.
+	 * This method should deliver an byte array containing the content of the
+	 * record. It should be possible to convert this array later into a record
+	 * again.
 	 *
+	 * @param serializer
+	 *            The value serializer to use
 	 * @param buffer
 	 *            The used ByteBuffer with sufficient capacity
 	 * @param stringRegistry
@@ -99,12 +105,15 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 *
 	 * @since 1.8
 	 */
-	public void writeBytes(ByteBuffer buffer, IRegistry<String> stringRegistry) throws BufferOverflowException;
+	public void writeBytes(IValueSerializer serializer, ByteBuffer buffer, IRegistry<String> stringRegistry) throws BufferOverflowException;
 
 	/**
-	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to
+	 * This method should initialize the record based on the given values. The
+	 * array should be one of those resulting from a call to
 	 * {@link #writeBytes(ByteBuffer, IRegistry)}.
 	 *
+	 * @param deserializer
+	 *            The value deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * @param stringRegistry
@@ -115,7 +124,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 *
 	 * @since 1.8
 	 */
-	public void initFromBytes(ByteBuffer buffer, IRegistry<String> stringRegistry) throws BufferUnderflowException;
+	public void initFromBytes(IValueDeserializer deserializer, ByteBuffer buffer, IRegistry<String> stringRegistry) throws BufferUnderflowException;
 
 	/**
 	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to {@link #toArray()}.

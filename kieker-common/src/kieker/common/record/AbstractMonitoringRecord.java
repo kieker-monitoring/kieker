@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.exception.MonitoringRecordException;
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -435,23 +436,28 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	}
 
 	/**
-	 * This method creates a new monitoring record from a byte buffer containing a serialized record.
+	 * This method creates a new monitoring record from a byte buffer containing
+	 * a serialized record.
 	 *
 	 * @param clazzid
 	 *            The class id of the monitoring record.
+	 * @param deserializer
+	 *            The deserializer to use for decoding the values
 	 * @param buffer
 	 *            The byte buffer containing the data.
 	 * @param stringRegistry
-	 *            the string registry used to find the correct strings for the given string ids in the serialization.
+	 *            the string registry used to find the correct strings for the
+	 *            given string ids in the serialization.
 	 *
 	 * @return An initialized record instance.
 	 *
 	 * @throws MonitoringRecordException
 	 *             If this method failed to create the record for some reason.
 	 * @throws BufferUnderflowException
-	 *             If the byte buffer is to small to hold all necessary information for a record.
+	 *             If the byte buffer is to small to hold all necessary
+	 *             information for a record.
 	 */
-	public static final IMonitoringRecord createFromByteBuffer(final int clazzid, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
+	public static final IMonitoringRecord createFromByteBuffer(final int clazzid, final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
 			throws MonitoringRecordException, BufferUnderflowException {
 		try {
 			Constructor<? extends IMonitoringRecord> constructor = CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY.get(clazzid);
@@ -465,7 +471,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				} else {
 					// try ordinary method
 					final IMonitoringRecord record = clazz.newInstance();
-					record.initFromBytes(buffer, stringRegistry);
+					record.initFromBytes(deserializer, buffer, stringRegistry);
 					return record;
 				}
 			}
@@ -534,9 +540,9 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
-	public static final IMonitoringRecord createFromByteBuffer(final String recordClassName, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
+	public static final IMonitoringRecord createFromByteBuffer(final String recordClassName, final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
 			throws BufferUnderflowException, MonitoringRecordException {
-		return AbstractMonitoringRecord.createFromByteBufferChw(recordClassName, buffer, stringRegistry);
+		return AbstractMonitoringRecord.createFromByteBufferChw(recordClassName, deserializer, buffer, stringRegistry);
 	}
 
 	public static final IMonitoringRecord createFromArray(final String recordClassName, final Object[] values) throws MonitoringRecordException {
@@ -547,7 +553,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	/**
 	 * Copy of {@link #createFromByteBuffer}. However, the constructor cache's key is a string, not an integer
 	 */
-	private static final IMonitoringRecord createFromByteBufferChw(final String recordClassName, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
+	private static final IMonitoringRecord createFromByteBufferChw(final String recordClassName, final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
 			throws MonitoringRecordException, BufferUnderflowException {
 		try {
 			Constructor<? extends IMonitoringRecord> constructor = CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY_CHW.get(recordClassName);
@@ -560,7 +566,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				} else {
 					// try ordinary method
 					final IMonitoringRecord record = clazz.newInstance();
-					record.initFromBytes(buffer, stringRegistry);
+					record.initFromBytes(deserializer, buffer, stringRegistry);
 					return record;
 				}
 			}

@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 
@@ -138,21 +140,23 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public KiekerMetadataRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.version = stringRegistry.get(buffer.getInt());
-		this.controllerName = stringRegistry.get(buffer.getInt());
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.experimentId = buffer.getInt();
-		this.debugMode = buffer.get()==1?true:false;
-		this.timeOffset = buffer.getLong();
-		this.timeUnit = stringRegistry.get(buffer.getInt());
-		this.numberOfRecords = buffer.getLong();
+	public KiekerMetadataRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.version = deserializer.getString(buffer, stringRegistry);
+		this.controllerName = deserializer.getString(buffer, stringRegistry);
+		this.hostname = deserializer.getString(buffer, stringRegistry);
+		this.experimentId = deserializer.getInt(buffer);
+		this.debugMode = (deserializer.getByte(buffer) == 1) ? true : false;
+		this.timeOffset = deserializer.getLong(buffer);
+		this.timeUnit = deserializer.getString(buffer, stringRegistry);
+		this.numberOfRecords = deserializer.getLong(buffer);
 	}
 
 	/**
@@ -187,15 +191,15 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putInt(stringRegistry.get(this.getVersion()));
-		buffer.putInt(stringRegistry.get(this.getControllerName()));
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(this.getExperimentId());
-		buffer.put((byte)(this.isDebugMode()?1:0));
-		buffer.putLong(this.getTimeOffset());
-		buffer.putInt(stringRegistry.get(this.getTimeUnit()));
-		buffer.putLong(this.getNumberOfRecords());
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putString(this.getVersion(), buffer, stringRegistry);
+		serializer.putString(this.getControllerName(), buffer, stringRegistry);
+		serializer.putString(this.getHostname(), buffer, stringRegistry);
+		serializer.putInt(this.getExperimentId(), buffer);
+		serializer.putByte((byte)((this.isDebugMode()) ? 1 : 0), buffer);
+		serializer.putLong(this.getTimeOffset(), buffer);
+		serializer.putString(this.getTimeUnit(), buffer, stringRegistry);
+		serializer.putLong(this.getNumberOfRecords(), buffer);
 	}
 	
 	/**
@@ -232,7 +236,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -241,20 +245,44 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final KiekerMetadataRecord castedRecord = (KiekerMetadataRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (!this.getVersion().equals(castedRecord.getVersion())) return false;
-		if (!this.getControllerName().equals(castedRecord.getControllerName())) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (this.getExperimentId() != castedRecord.getExperimentId()) return false;
-		if (this.isDebugMode() != castedRecord.isDebugMode()) return false;
-		if (this.getTimeOffset() != castedRecord.getTimeOffset()) return false;
-		if (!this.getTimeUnit().equals(castedRecord.getTimeUnit())) return false;
-		if (this.getNumberOfRecords() != castedRecord.getNumberOfRecords()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (!this.getVersion().equals(castedRecord.getVersion())) {
+			return false;
+		}
+		if (!this.getControllerName().equals(castedRecord.getControllerName())) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (this.getExperimentId() != castedRecord.getExperimentId()) {
+			return false;
+		}
+		if (this.isDebugMode() != castedRecord.isDebugMode()) {
+			return false;
+		}
+		if (this.getTimeOffset() != castedRecord.getTimeOffset()) {
+			return false;
+		}
+		if (!this.getTimeUnit().equals(castedRecord.getTimeUnit())) {
+			return false;
+		}
+		if (this.getNumberOfRecords() != castedRecord.getNumberOfRecords()) {
+			return false;
+		}
 		return true;
 	}
 	

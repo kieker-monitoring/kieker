@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 
@@ -98,17 +100,19 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public HostApplicationMetaData(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.systemName = stringRegistry.get(buffer.getInt());
-		this.ipAddress = stringRegistry.get(buffer.getInt());
-		this.hostName = stringRegistry.get(buffer.getInt());
-		this.applicationName = stringRegistry.get(buffer.getInt());
+	public HostApplicationMetaData(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.systemName = deserializer.getString(buffer, stringRegistry);
+		this.ipAddress = deserializer.getString(buffer, stringRegistry);
+		this.hostName = deserializer.getString(buffer, stringRegistry);
+		this.applicationName = deserializer.getString(buffer, stringRegistry);
 	}
 
 	/**
@@ -139,11 +143,11 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putInt(stringRegistry.get(this.getSystemName()));
-		buffer.putInt(stringRegistry.get(this.getIpAddress()));
-		buffer.putInt(stringRegistry.get(this.getHostName()));
-		buffer.putInt(stringRegistry.get(this.getApplicationName()));
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putString(this.getSystemName(), buffer, stringRegistry);
+		serializer.putString(this.getIpAddress(), buffer, stringRegistry);
+		serializer.putString(this.getHostName(), buffer, stringRegistry);
+		serializer.putString(this.getApplicationName(), buffer, stringRegistry);
 	}
 	
 	/**
@@ -180,7 +184,7 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -189,16 +193,32 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final HostApplicationMetaData castedRecord = (HostApplicationMetaData) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (!this.getSystemName().equals(castedRecord.getSystemName())) return false;
-		if (!this.getIpAddress().equals(castedRecord.getIpAddress())) return false;
-		if (!this.getHostName().equals(castedRecord.getHostName())) return false;
-		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (!this.getSystemName().equals(castedRecord.getSystemName())) {
+			return false;
+		}
+		if (!this.getIpAddress().equals(castedRecord.getIpAddress())) {
+			return false;
+		}
+		if (!this.getHostName().equals(castedRecord.getHostName())) {
+			return false;
+		}
+		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) {
+			return false;
+		}
 		return true;
 	}
 	

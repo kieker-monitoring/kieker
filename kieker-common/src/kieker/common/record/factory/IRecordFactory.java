@@ -18,6 +18,7 @@ package kieker.common.record.factory;
 
 import java.nio.ByteBuffer;
 
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -36,6 +37,8 @@ public interface IRecordFactory<T> {
 
 	/**
 	 *
+	 * @param deserializer
+	 *            The deserializer to use for decoding the values
 	 * @param buffer
 	 *            the buffer to read from
 	 * @param stringRegistry
@@ -44,7 +47,7 @@ public interface IRecordFactory<T> {
 	 * @return a new instance of the declared record type
 	 * @since 1.11
 	 */
-	T create(ByteBuffer buffer, IRegistry<String> stringRegistry);
+	T create(IValueDeserializer deserializer, ByteBuffer buffer, IRegistry<String> stringRegistry);
 
 	/**
 	 *

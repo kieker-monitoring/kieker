@@ -22,9 +22,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
-
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 
@@ -106,9 +107,9 @@ public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest
 	private void checkToFromBinaryAllFields(final OperationExecutionRecord opExecutionRecord) {
 		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(OperationExecutionRecord.SIZE);
-		opExecutionRecord.writeBytes(buffer, stringRegistry);
+		opExecutionRecord.writeBytes(DefaultValueSerializer.instance(), buffer, stringRegistry);
 		buffer.flip();
-		final OperationExecutionRecord deserializedRecord = new OperationExecutionRecord(buffer, stringRegistry);
+		final OperationExecutionRecord deserializedRecord = new OperationExecutionRecord(DefaultValueDeserializer.instance(), buffer, stringRegistry);
 
 		Assert.assertEquals("Records not equal (binary)", opExecutionRecord, deserializedRecord);
 

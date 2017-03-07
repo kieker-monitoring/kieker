@@ -36,6 +36,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.DefaultValueDeserializer;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.registry.ILookup;
 import kieker.common.util.registry.Lookup;
@@ -64,7 +65,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 	public static final String CONFIG_PROPERTY_NAME_PORT2 = "port2";
 
 	private static final int MESSAGE_BUFFER_SIZE = 65535;
-
+	
 	private volatile Thread readerThread;
 	private volatile TCPStringReader tcpStringReader;
 	private volatile boolean terminated;
@@ -147,7 +148,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 				// final IMonitoringRecord record = AbstractMonitoringRecord.createFromByteBuffer(clazzid, buffer, this.stringRegistry);
 			final String recordClassName = this.stringRegistry.get(clazzId);
 			final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactoryCatalog.get(recordClassName);
-			final IMonitoringRecord record = recordFactory.create(buffer, this.stringRegistry);
+			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.instance(), buffer, this.stringRegistry);
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			super.deliver(OUTPUT_PORT_NAME_RECORDS, record);

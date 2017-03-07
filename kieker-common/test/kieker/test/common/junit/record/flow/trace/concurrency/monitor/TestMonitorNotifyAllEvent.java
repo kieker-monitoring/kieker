@@ -22,9 +22,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.concurrency.monitor.MonitorNotifyAllEvent;
+import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
-
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
@@ -85,10 +86,10 @@ public class TestMonitorNotifyAllEvent extends AbstractKiekerTest {
 
 		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
-		event1.writeBytes(buffer, stringRegistry);
+		event1.writeBytes(DefaultValueSerializer.instance(), buffer, stringRegistry);
 		buffer.flip();
 
-		final MonitorNotifyAllEvent event2 = new MonitorNotifyAllEvent(buffer, stringRegistry);
+		final MonitorNotifyAllEvent event2 = new MonitorNotifyAllEvent(DefaultValueDeserializer.instance(), buffer, stringRegistry);
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

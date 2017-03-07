@@ -22,9 +22,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.TraceMetadata;
+import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
-
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
@@ -91,10 +92,10 @@ public class TestTraceMetadata extends AbstractKiekerTest {
 
 		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(trace1.getSize());
-		trace1.writeBytes(buffer, stringRegistry);
+		trace1.writeBytes(DefaultValueSerializer.instance(), buffer, stringRegistry);
 		buffer.flip();
 
-		final TraceMetadata trace2 = new TraceMetadata(buffer, stringRegistry);
+		final TraceMetadata trace2 = new TraceMetadata(DefaultValueDeserializer.instance(), buffer, stringRegistry);
 
 		Assert.assertEquals(trace1, trace2);
 		Assert.assertEquals(0, trace1.compareTo(trace2));

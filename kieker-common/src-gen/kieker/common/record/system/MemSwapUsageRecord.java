@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 
@@ -134,21 +136,23 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public MemSwapUsageRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.memTotal = buffer.getLong();
-		this.memUsed = buffer.getLong();
-		this.memFree = buffer.getLong();
-		this.swapTotal = buffer.getLong();
-		this.swapUsed = buffer.getLong();
-		this.swapFree = buffer.getLong();
+	public MemSwapUsageRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = deserializer.getLong(buffer);
+		this.hostname = deserializer.getString(buffer, stringRegistry);
+		this.memTotal = deserializer.getLong(buffer);
+		this.memUsed = deserializer.getLong(buffer);
+		this.memFree = deserializer.getLong(buffer);
+		this.swapTotal = deserializer.getLong(buffer);
+		this.swapUsed = deserializer.getLong(buffer);
+		this.swapFree = deserializer.getLong(buffer);
 	}
 
 	/**
@@ -180,15 +184,15 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putLong(this.getMemTotal());
-		buffer.putLong(this.getMemUsed());
-		buffer.putLong(this.getMemFree());
-		buffer.putLong(this.getSwapTotal());
-		buffer.putLong(this.getSwapUsed());
-		buffer.putLong(this.getSwapFree());
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp(), buffer);
+		serializer.putString(this.getHostname(), buffer, stringRegistry);
+		serializer.putLong(this.getMemTotal(), buffer);
+		serializer.putLong(this.getMemUsed(), buffer);
+		serializer.putLong(this.getMemFree(), buffer);
+		serializer.putLong(this.getSwapTotal(), buffer);
+		serializer.putLong(this.getSwapUsed(), buffer);
+		serializer.putLong(this.getSwapFree(), buffer);
 	}
 	
 	/**
@@ -225,7 +229,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -234,20 +238,44 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final MemSwapUsageRecord castedRecord = (MemSwapUsageRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (this.getMemTotal() != castedRecord.getMemTotal()) return false;
-		if (this.getMemUsed() != castedRecord.getMemUsed()) return false;
-		if (this.getMemFree() != castedRecord.getMemFree()) return false;
-		if (this.getSwapTotal() != castedRecord.getSwapTotal()) return false;
-		if (this.getSwapUsed() != castedRecord.getSwapUsed()) return false;
-		if (this.getSwapFree() != castedRecord.getSwapFree()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (this.getMemTotal() != castedRecord.getMemTotal()) {
+			return false;
+		}
+		if (this.getMemUsed() != castedRecord.getMemUsed()) {
+			return false;
+		}
+		if (this.getMemFree() != castedRecord.getMemFree()) {
+			return false;
+		}
+		if (this.getSwapTotal() != castedRecord.getSwapTotal()) {
+			return false;
+		}
+		if (this.getSwapUsed() != castedRecord.getSwapUsed()) {
+			return false;
+		}
+		if (this.getSwapFree() != castedRecord.getSwapFree()) {
+			return false;
+		}
 		return true;
 	}
 	

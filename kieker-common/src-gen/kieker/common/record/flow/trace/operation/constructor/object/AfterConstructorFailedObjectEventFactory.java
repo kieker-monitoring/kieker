@@ -3,6 +3,7 @@ package kieker.common.record.flow.trace.operation.constructor.object;
 import java.nio.ByteBuffer;
 
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -13,8 +14,8 @@ import kieker.common.util.registry.IRegistry;
 public final class AfterConstructorFailedObjectEventFactory implements IRecordFactory<AfterConstructorFailedObjectEvent> {
 	
 	@Override
-	public AfterConstructorFailedObjectEvent create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new AfterConstructorFailedObjectEvent(buffer, stringRegistry);
+	public AfterConstructorFailedObjectEvent create(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new AfterConstructorFailedObjectEvent(deserializer, buffer, stringRegistry);
 	}
 	
 	@Override
@@ -22,6 +23,7 @@ public final class AfterConstructorFailedObjectEventFactory implements IRecordFa
 		return new AfterConstructorFailedObjectEvent(values);
 	}
 	
+	@Override
 	public int getRecordSizeInBytes() {
 		return AfterConstructorFailedObjectEvent.SIZE;
 	}

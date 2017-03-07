@@ -4,10 +4,10 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.flow.trace.operation.constructor.object.BeforeConstructorObjectEvent;
-import kieker.common.util.registry.IRegistry;
-
 import kieker.common.record.flow.IInterfaceRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Florian Fittkau
@@ -96,15 +96,17 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public BeforeConstructorObjectInterfaceEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this._interface = stringRegistry.get(buffer.getInt());
+	public BeforeConstructorObjectInterfaceEvent(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(deserializer, buffer, stringRegistry);
+		this._interface = deserializer.getString(buffer, stringRegistry);
 	}
 
 	/**
@@ -137,14 +139,14 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putLong(this.getTraceId());
-		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
-		buffer.putInt(stringRegistry.get(this.getClassSignature()));
-		buffer.putInt(this.getObjectId());
-		buffer.putInt(stringRegistry.get(this.getInterface()));
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp(), buffer);
+		serializer.putLong(this.getTraceId(), buffer);
+		serializer.putInt(this.getOrderIndex(), buffer);
+		serializer.putString(this.getOperationSignature(), buffer, stringRegistry);
+		serializer.putString(this.getClassSignature(), buffer, stringRegistry);
+		serializer.putInt(this.getObjectId(), buffer);
+		serializer.putString(this.getInterface(), buffer, stringRegistry);
 	}
 	
 	/**
@@ -181,7 +183,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -190,22 +192,45 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final BeforeConstructorObjectInterfaceEvent castedRecord = (BeforeConstructorObjectInterfaceEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
-		if (this.getObjectId() != castedRecord.getObjectId()) return false;
-		if (!this.getInterface().equals(castedRecord.getInterface())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (this.getObjectId() != castedRecord.getObjectId()) {
+			return false;
+		}
+		if (!this.getInterface().equals(castedRecord.getInterface())) {
+			return false;
+		}
 		return true;
 	}
 	
+	@Override
 	public final String getInterface() {
 		return this._interface;
 	}	

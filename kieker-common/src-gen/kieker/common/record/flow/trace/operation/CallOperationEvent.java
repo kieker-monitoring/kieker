@@ -4,10 +4,10 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
-import kieker.common.util.registry.IRegistry;
-
 import kieker.common.record.flow.ICallRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
@@ -101,16 +101,19 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The value deserializer to use.
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public CallOperationEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.calleeOperationSignature = stringRegistry.get(buffer.getInt());
-		this.calleeClassSignature = stringRegistry.get(buffer.getInt());
+	public CallOperationEvent(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(deserializer, buffer, stringRegistry);
+		
+		this.calleeOperationSignature = deserializer.getString(buffer, stringRegistry);
+		this.calleeClassSignature = deserializer.getString(buffer, stringRegistry);
 	}
 
 	/**
@@ -144,14 +147,14 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putLong(this.getTraceId());
-		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
-		buffer.putInt(stringRegistry.get(this.getClassSignature()));
-		buffer.putInt(stringRegistry.get(this.getCalleeOperationSignature()));
-		buffer.putInt(stringRegistry.get(this.getCalleeClassSignature()));
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp(), buffer);
+		serializer.putLong(this.getTraceId(), buffer);
+		serializer.putInt(this.getOrderIndex(), buffer);
+		serializer.putString(this.getOperationSignature(), buffer, stringRegistry);
+		serializer.putString(this.getClassSignature(), buffer, stringRegistry);
+		serializer.putString(this.getCalleeOperationSignature(), buffer, stringRegistry);
+		serializer.putString(this.getCalleeClassSignature(), buffer, stringRegistry);
 	}
 	
 	/**
@@ -188,7 +191,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -197,34 +200,60 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final CallOperationEvent castedRecord = (CallOperationEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
-		if (!this.getCalleeOperationSignature().equals(castedRecord.getCalleeOperationSignature())) return false;
-		if (!this.getCalleeClassSignature().equals(castedRecord.getCalleeClassSignature())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (!this.getCalleeOperationSignature().equals(castedRecord.getCalleeOperationSignature())) {
+			return false;
+		}
+		if (!this.getCalleeClassSignature().equals(castedRecord.getCalleeClassSignature())) {
+			return false;
+		}
 		return true;
 	}
 	
+	@Override
 	public final String getCallerOperationSignature() {
 		return this.getOperationSignature();
 	}	
 	
+	@Override
 	public final String getCallerClassSignature() {
 		return this.getClassSignature();
 	}	
 	
+	@Override
 	public final String getCalleeOperationSignature() {
 		return this.calleeOperationSignature;
 	}	
 	
+	@Override
 	public final String getCalleeClassSignature() {
 		return this.calleeClassSignature;
 	}	

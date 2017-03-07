@@ -24,6 +24,8 @@ import java.nio.charset.Charset;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.ILookup;
 import kieker.common.util.registry.IRegistry;
 
@@ -89,7 +91,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public RegistryRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException { // NOPMD
+	public RegistryRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException { // NOPMD
 		this.id = buffer.getInt();
 		this.strBytes = new byte[buffer.getInt()];
 		buffer.get(this.strBytes);
@@ -116,10 +118,10 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putInt(this.getId());
-		buffer.putInt(this.getString().length());
-		buffer.put(this.strBytes);
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putInt(this.getId(), buffer);
+		serializer.putInt(this.getString().length(), buffer);
+		serializer.putBytes(this.strBytes, buffer);
 	}
 
 	/**
@@ -140,7 +142,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 */
 	@Override
 	@Deprecated
-	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public final void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 

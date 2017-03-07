@@ -3,6 +3,7 @@ package kieker.common.record.misc;
 import java.nio.ByteBuffer;
 
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -13,8 +14,8 @@ import kieker.common.util.registry.IRegistry;
 public final class HostApplicationMetaDataFactory implements IRecordFactory<HostApplicationMetaData> {
 	
 	@Override
-	public HostApplicationMetaData create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new HostApplicationMetaData(buffer, stringRegistry);
+	public HostApplicationMetaData create(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new HostApplicationMetaData(deserializer, buffer, stringRegistry);
 	}
 	
 	@Override
@@ -22,6 +23,7 @@ public final class HostApplicationMetaDataFactory implements IRecordFactory<Host
 		return new HostApplicationMetaData(values);
 	}
 	
+	@Override
 	public int getRecordSizeInBytes() {
 		return HostApplicationMetaData.SIZE;
 	}

@@ -21,10 +21,11 @@ import java.nio.ByteBuffer;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.record.system.ResourceUtilizationRecord;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
-
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
@@ -79,7 +80,7 @@ public class TestResourceUtilizationRecordPropertyOrder extends AbstractKiekerTe
 			PROPERTY_RESOURCE_NAME,
 			PROPERTY_UTILIZATION
 		);
-		final ResourceUtilizationRecord recordInitBuffer = new ResourceUtilizationRecord(inputBuffer, this.makeStringRegistry());
+		final ResourceUtilizationRecord recordInitBuffer = new ResourceUtilizationRecord(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
 		final ResourceUtilizationRecord recordInitArray = new ResourceUtilizationRecord(values);
 		
 		this.assertResourceUtilizationRecord(recordInitParameter);
@@ -96,15 +97,15 @@ public class TestResourceUtilizationRecordPropertyOrder extends AbstractKiekerTe
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(ResourceUtilizationRecord.SIZE);
-		recordInitParameter.writeBytes(outputBufferParameter, stringRegistry);
+		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(ResourceUtilizationRecord.SIZE);
-		recordInitParameter.writeBytes(outputBufferBuffer, stringRegistry);
+		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(ResourceUtilizationRecord.SIZE);
-		recordInitParameter.writeBytes(outputBufferArray, stringRegistry);
+		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 

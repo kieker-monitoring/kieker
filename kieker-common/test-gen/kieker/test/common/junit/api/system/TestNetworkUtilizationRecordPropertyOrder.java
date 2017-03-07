@@ -21,10 +21,11 @@ import java.nio.ByteBuffer;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.record.system.NetworkUtilizationRecord;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
-
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
@@ -131,7 +132,7 @@ public class TestNetworkUtilizationRecordPropertyOrder extends AbstractKiekerTes
 			PROPERTY_RX_OVERRUNS_PER_SECOND,
 			PROPERTY_RX_PACKETS_PER_SECOND
 		);
-		final NetworkUtilizationRecord recordInitBuffer = new NetworkUtilizationRecord(inputBuffer, this.makeStringRegistry());
+		final NetworkUtilizationRecord recordInitBuffer = new NetworkUtilizationRecord(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
 		final NetworkUtilizationRecord recordInitArray = new NetworkUtilizationRecord(values);
 		
 		this.assertNetworkUtilizationRecord(recordInitParameter);
@@ -148,15 +149,15 @@ public class TestNetworkUtilizationRecordPropertyOrder extends AbstractKiekerTes
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(NetworkUtilizationRecord.SIZE);
-		recordInitParameter.writeBytes(outputBufferParameter, stringRegistry);
+		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(NetworkUtilizationRecord.SIZE);
-		recordInitParameter.writeBytes(outputBufferBuffer, stringRegistry);
+		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(NetworkUtilizationRecord.SIZE);
-		recordInitParameter.writeBytes(outputBufferArray, stringRegistry);
+		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 

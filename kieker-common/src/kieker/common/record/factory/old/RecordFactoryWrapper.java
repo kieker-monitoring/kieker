@@ -23,6 +23,7 @@ import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -40,11 +41,10 @@ public final class RecordFactoryWrapper implements IRecordFactory<IMonitoringRec
 		this.recordClassName = recordClassName;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public IMonitoringRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+	public IMonitoringRecord create(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
 		try {
-			return AbstractMonitoringRecord.createFromByteBuffer(this.recordClassName, buffer, stringRegistry);
+			return AbstractMonitoringRecord.createFromByteBuffer(this.recordClassName, deserializer, buffer, stringRegistry);
 		} catch (final MonitoringRecordException e) {
 			throw new RecordInstantiationException(e);
 		}

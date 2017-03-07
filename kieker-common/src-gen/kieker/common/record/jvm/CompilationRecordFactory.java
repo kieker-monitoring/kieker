@@ -3,6 +3,7 @@ package kieker.common.record.jvm;
 import java.nio.ByteBuffer;
 
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -13,8 +14,8 @@ import kieker.common.util.registry.IRegistry;
 public final class CompilationRecordFactory implements IRecordFactory<CompilationRecord> {
 	
 	@Override
-	public CompilationRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new CompilationRecord(buffer, stringRegistry);
+	public CompilationRecord create(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new CompilationRecord(deserializer, buffer, stringRegistry);
 	}
 	
 	@Override
@@ -22,6 +23,7 @@ public final class CompilationRecordFactory implements IRecordFactory<Compilatio
 		return new CompilationRecord(values);
 	}
 	
+	@Override
 	public int getRecordSizeInBytes() {
 		return CompilationRecord.SIZE;
 	}

@@ -4,7 +4,8 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.jvm.AbstractJVMRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 
@@ -106,18 +107,20 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public ThreadsStatusRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.threadCount = buffer.getLong();
-		this.daemonThreadCount = buffer.getLong();
-		this.peakThreadCount = buffer.getLong();
-		this.totalStartedThreadCount = buffer.getLong();
+	public ThreadsStatusRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(deserializer, buffer, stringRegistry);
+		this.threadCount = deserializer.getLong(buffer);
+		this.daemonThreadCount = deserializer.getLong(buffer);
+		this.peakThreadCount = deserializer.getLong(buffer);
+		this.totalStartedThreadCount = deserializer.getLong(buffer);
 	}
 
 	/**
@@ -149,14 +152,14 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(stringRegistry.get(this.getVmName()));
-		buffer.putLong(this.getThreadCount());
-		buffer.putLong(this.getDaemonThreadCount());
-		buffer.putLong(this.getPeakThreadCount());
-		buffer.putLong(this.getTotalStartedThreadCount());
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp(), buffer);
+		serializer.putString(this.getHostname(), buffer, stringRegistry);
+		serializer.putString(this.getVmName(), buffer, stringRegistry);
+		serializer.putLong(this.getThreadCount(), buffer);
+		serializer.putLong(this.getDaemonThreadCount(), buffer);
+		serializer.putLong(this.getPeakThreadCount(), buffer);
+		serializer.putLong(this.getTotalStartedThreadCount(), buffer);
 	}
 	
 	/**
@@ -193,7 +196,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -202,19 +205,41 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final ThreadsStatusRecord castedRecord = (ThreadsStatusRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getVmName().equals(castedRecord.getVmName())) return false;
-		if (this.getThreadCount() != castedRecord.getThreadCount()) return false;
-		if (this.getDaemonThreadCount() != castedRecord.getDaemonThreadCount()) return false;
-		if (this.getPeakThreadCount() != castedRecord.getPeakThreadCount()) return false;
-		if (this.getTotalStartedThreadCount() != castedRecord.getTotalStartedThreadCount()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getVmName().equals(castedRecord.getVmName())) {
+			return false;
+		}
+		if (this.getThreadCount() != castedRecord.getThreadCount()) {
+			return false;
+		}
+		if (this.getDaemonThreadCount() != castedRecord.getDaemonThreadCount()) {
+			return false;
+		}
+		if (this.getPeakThreadCount() != castedRecord.getPeakThreadCount()) {
+			return false;
+		}
+		if (this.getTotalStartedThreadCount() != castedRecord.getTotalStartedThreadCount()) {
+			return false;
+		}
 		return true;
 	}
 	

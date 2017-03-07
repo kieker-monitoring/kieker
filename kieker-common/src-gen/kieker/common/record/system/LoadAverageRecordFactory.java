@@ -3,6 +3,7 @@ package kieker.common.record.system;
 import java.nio.ByteBuffer;
 
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -13,8 +14,8 @@ import kieker.common.util.registry.IRegistry;
 public final class LoadAverageRecordFactory implements IRecordFactory<LoadAverageRecord> {
 	
 	@Override
-	public LoadAverageRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new LoadAverageRecord(buffer, stringRegistry);
+	public LoadAverageRecord create(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new LoadAverageRecord(deserializer, buffer, stringRegistry);
 	}
 	
 	@Override
@@ -22,6 +23,7 @@ public final class LoadAverageRecordFactory implements IRecordFactory<LoadAverag
 		return new LoadAverageRecord(values);
 	}
 	
+	@Override
 	public int getRecordSizeInBytes() {
 		return LoadAverageRecord.SIZE;
 	}

@@ -3,6 +3,7 @@ package kieker.common.record.system;
 import java.nio.ByteBuffer;
 
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -13,8 +14,8 @@ import kieker.common.util.registry.IRegistry;
 public final class CPUUtilizationRecordFactory implements IRecordFactory<CPUUtilizationRecord> {
 	
 	@Override
-	public CPUUtilizationRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new CPUUtilizationRecord(buffer, stringRegistry);
+	public CPUUtilizationRecord create(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new CPUUtilizationRecord(deserializer, buffer, stringRegistry);
 	}
 	
 	@Override
@@ -22,6 +23,7 @@ public final class CPUUtilizationRecordFactory implements IRecordFactory<CPUUtil
 		return new CPUUtilizationRecord(values);
 	}
 	
+	@Override
 	public int getRecordSizeInBytes() {
 		return CPUUtilizationRecord.SIZE;
 	}

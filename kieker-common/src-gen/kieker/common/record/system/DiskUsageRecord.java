@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 
@@ -143,22 +145,24 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public DiskUsageRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.deviceName = stringRegistry.get(buffer.getInt());
-		this.queue = buffer.getDouble();
-		this.readBytesPerSecond = buffer.getDouble();
-		this.readsPerSecond = buffer.getDouble();
-		this.serviceTime = buffer.getDouble();
-		this.writeBytesPerSecond = buffer.getDouble();
-		this.writesPerSecond = buffer.getDouble();
+	public DiskUsageRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = deserializer.getLong(buffer);
+		this.hostname = deserializer.getString(buffer, stringRegistry);
+		this.deviceName = deserializer.getString(buffer, stringRegistry);
+		this.queue = deserializer.getDouble(buffer);
+		this.readBytesPerSecond = deserializer.getDouble(buffer);
+		this.readsPerSecond = deserializer.getDouble(buffer);
+		this.serviceTime = deserializer.getDouble(buffer);
+		this.writeBytesPerSecond = deserializer.getDouble(buffer);
+		this.writesPerSecond = deserializer.getDouble(buffer);
 	}
 
 	/**
@@ -192,16 +196,16 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(stringRegistry.get(this.getDeviceName()));
-		buffer.putDouble(this.getQueue());
-		buffer.putDouble(this.getReadBytesPerSecond());
-		buffer.putDouble(this.getReadsPerSecond());
-		buffer.putDouble(this.getServiceTime());
-		buffer.putDouble(this.getWriteBytesPerSecond());
-		buffer.putDouble(this.getWritesPerSecond());
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp(), buffer);
+		serializer.putString(this.getHostname(), buffer, stringRegistry);
+		serializer.putString(this.getDeviceName(), buffer, stringRegistry);
+		serializer.putDouble(this.getQueue(), buffer);
+		serializer.putDouble(this.getReadBytesPerSecond(), buffer);
+		serializer.putDouble(this.getReadsPerSecond(), buffer);
+		serializer.putDouble(this.getServiceTime(), buffer);
+		serializer.putDouble(this.getWriteBytesPerSecond(), buffer);
+		serializer.putDouble(this.getWritesPerSecond(), buffer);
 	}
 	
 	/**
@@ -238,7 +242,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -247,21 +251,47 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final DiskUsageRecord castedRecord = (DiskUsageRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getDeviceName().equals(castedRecord.getDeviceName())) return false;
-		if (isNotEqual(this.getQueue(), castedRecord.getQueue())) return false;
-		if (isNotEqual(this.getReadBytesPerSecond(), castedRecord.getReadBytesPerSecond())) return false;
-		if (isNotEqual(this.getReadsPerSecond(), castedRecord.getReadsPerSecond())) return false;
-		if (isNotEqual(this.getServiceTime(), castedRecord.getServiceTime())) return false;
-		if (isNotEqual(this.getWriteBytesPerSecond(), castedRecord.getWriteBytesPerSecond())) return false;
-		if (isNotEqual(this.getWritesPerSecond(), castedRecord.getWritesPerSecond())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getDeviceName().equals(castedRecord.getDeviceName())) {
+			return false;
+		}
+		if (isNotEqual(this.getQueue(), castedRecord.getQueue())) {
+			return false;
+		}
+		if (isNotEqual(this.getReadBytesPerSecond(), castedRecord.getReadBytesPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getReadsPerSecond(), castedRecord.getReadsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getServiceTime(), castedRecord.getServiceTime())) {
+			return false;
+		}
+		if (isNotEqual(this.getWriteBytesPerSecond(), castedRecord.getWriteBytesPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getWritesPerSecond(), castedRecord.getWritesPerSecond())) {
+			return false;
+		}
 		return true;
 	}
 	

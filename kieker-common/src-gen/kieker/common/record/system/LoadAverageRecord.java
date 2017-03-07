@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 
@@ -107,18 +109,20 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public LoadAverageRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.oneMinLoadAverage = buffer.getDouble();
-		this.fiveMinLoadAverage = buffer.getDouble();
-		this.fifteenMinLoadAverage = buffer.getDouble();
+	public LoadAverageRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = deserializer.getLong(buffer);
+		this.hostname = deserializer.getString(buffer, stringRegistry);
+		this.oneMinLoadAverage = deserializer.getDouble(buffer);
+		this.fiveMinLoadAverage = deserializer.getDouble(buffer);
+		this.fifteenMinLoadAverage = deserializer.getDouble(buffer);
 	}
 
 	/**
@@ -147,12 +151,12 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putDouble(this.getOneMinLoadAverage());
-		buffer.putDouble(this.getFiveMinLoadAverage());
-		buffer.putDouble(this.getFifteenMinLoadAverage());
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp(), buffer);
+		serializer.putString(this.getHostname(), buffer, stringRegistry);
+		serializer.putDouble(this.getOneMinLoadAverage(), buffer);
+		serializer.putDouble(this.getFiveMinLoadAverage(), buffer);
+		serializer.putDouble(this.getFifteenMinLoadAverage(), buffer);
 	}
 	
 	/**
@@ -189,7 +193,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -198,17 +202,35 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final LoadAverageRecord castedRecord = (LoadAverageRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (isNotEqual(this.getOneMinLoadAverage(), castedRecord.getOneMinLoadAverage())) return false;
-		if (isNotEqual(this.getFiveMinLoadAverage(), castedRecord.getFiveMinLoadAverage())) return false;
-		if (isNotEqual(this.getFifteenMinLoadAverage(), castedRecord.getFifteenMinLoadAverage())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (isNotEqual(this.getOneMinLoadAverage(), castedRecord.getOneMinLoadAverage())) {
+			return false;
+		}
+		if (isNotEqual(this.getFiveMinLoadAverage(), castedRecord.getFiveMinLoadAverage())) {
+			return false;
+		}
+		if (isNotEqual(this.getFifteenMinLoadAverage(), castedRecord.getFifteenMinLoadAverage())) {
+			return false;
+		}
 		return true;
 	}
 	

@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 
@@ -140,21 +142,23 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public OperationExecutionRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.operationSignature = stringRegistry.get(buffer.getInt());
-		this.sessionId = stringRegistry.get(buffer.getInt());
-		this.traceId = buffer.getLong();
-		this.tin = buffer.getLong();
-		this.tout = buffer.getLong();
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.eoi = buffer.getInt();
-		this.ess = buffer.getInt();
+	public OperationExecutionRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.operationSignature = deserializer.getString(buffer, stringRegistry);
+		this.sessionId = deserializer.getString(buffer, stringRegistry);
+		this.traceId = deserializer.getLong(buffer);
+		this.tin = deserializer.getLong(buffer);
+		this.tout = deserializer.getLong(buffer);
+		this.hostname = deserializer.getString(buffer, stringRegistry);
+		this.eoi = deserializer.getInt(buffer);
+		this.ess = deserializer.getInt(buffer);
 	}
 
 	/**
@@ -183,20 +187,20 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		stringRegistry.get(this.getSessionId());
 		stringRegistry.get(this.getHostname());
 	}
-	
+		
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
-		buffer.putInt(stringRegistry.get(this.getSessionId()));
-		buffer.putLong(this.getTraceId());
-		buffer.putLong(this.getTin());
-		buffer.putLong(this.getTout());
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(this.getEoi());
-		buffer.putInt(this.getEss());
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putString(this.getOperationSignature(), buffer, stringRegistry);
+		serializer.putString(this.getSessionId(), buffer, stringRegistry);
+		serializer.putLong(this.getTraceId(), buffer);
+		serializer.putLong(this.getTin(), buffer);
+		serializer.putLong(this.getTout(), buffer);
+		serializer.putString(this.getHostname(), buffer, stringRegistry);
+		serializer.putInt(this.getEoi(), buffer);
+		serializer.putInt(this.getEss(), buffer);
 	}
 	
 	/**
@@ -233,7 +237,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -242,20 +246,44 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final OperationExecutionRecord castedRecord = (OperationExecutionRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getSessionId().equals(castedRecord.getSessionId())) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getTin() != castedRecord.getTin()) return false;
-		if (this.getTout() != castedRecord.getTout()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (this.getEoi() != castedRecord.getEoi()) return false;
-		if (this.getEss() != castedRecord.getEss()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getSessionId().equals(castedRecord.getSessionId())) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getTin() != castedRecord.getTin()) {
+			return false;
+		}
+		if (this.getTout() != castedRecord.getTout()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (this.getEoi() != castedRecord.getEoi()) {
+			return false;
+		}
+		if (this.getEss() != castedRecord.getEss()) {
+			return false;
+		}
 		return true;
 	}
 	
