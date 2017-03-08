@@ -19,6 +19,7 @@ package kieker.tools.opad.filter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -43,13 +44,12 @@ import kieker.tools.util.AggregationVariableSet;
  */
 @Plugin(name = "Variate TimeSeriesPoint Aggregator", outputPorts = {
 	@OutputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT),
-	@OutputPort(eventTypes = { AggregationWindow.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATION_WINDOW) },
-		configuration = {
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, defaultValue = "MEAN"),
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, defaultValue = "1000"),
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, defaultValue = "MILLISECONDS"),
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE, defaultValue = "perVariable")
-		})
+	@OutputPort(eventTypes = { AggregationWindow.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATION_WINDOW) }, configuration = {
+		@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, defaultValue = "MEAN"),
+		@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, defaultValue = "1000"),
+		@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, defaultValue = "MILLISECONDS"),
+		@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE, defaultValue = "perVariable")
+	})
 public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_TSPOINT = "tspoint";
@@ -205,8 +205,9 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		// There is no ConcurrentTreeMap implementation
 		final Map<Long, List<NamedDoubleTimeSeriesPoint>> orderedTsPoints = new TreeMap<Long, List<NamedDoubleTimeSeriesPoint>>(); // NOPMD (UseConcurrentHashMap)
 
-		for (final String appname : this.aggregationVariables.keySet()) {
-			final AggregationVariableSet variables = this.aggregationVariables.get(appname);
+		for (final Entry<String, AggregationVariableSet> entry : this.aggregationVariables.entrySet()) {
+			final String appname = entry.getKey();
+			final AggregationVariableSet variables = entry.getValue();
 			final long startOfLatestIntervalTimestamp = this.computeFirstTimestampInInterval(inputTimestamp, variables);
 			final long endOfLatestIntervalTimestamp = this.computeLastTimestampInInterval(inputTimestamp, variables);
 			long lastTimestampInCurrentInterval = variables.getLastTimestampInCurrentInterval();
@@ -232,8 +233,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 			inputVariables.getAggregationList().add(input);
 		}
 
-		for (final long timestamp : orderedTsPoints.keySet()) {
-			final List<NamedDoubleTimeSeriesPoint> tsPointList = orderedTsPoints.get(timestamp);
+		for (final List<NamedDoubleTimeSeriesPoint> tsPointList : orderedTsPoints.values()) {
 			for (final NamedDoubleTimeSeriesPoint tsPoint : tsPointList) {
 				super.deliver(OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, tsPoint);
 			}

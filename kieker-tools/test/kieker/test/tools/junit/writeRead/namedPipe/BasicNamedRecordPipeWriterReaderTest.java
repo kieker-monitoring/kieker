@@ -36,7 +36,7 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
@@ -60,7 +60,7 @@ public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTe
 	}
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) {
+	protected MonitoringController createController(final int numRecordsWritten) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PipeWriter.class.getName());
 		config.setProperty(PipeWriter.CONFIG_PIPENAME, BasicNamedRecordPipeWriterReaderTest.PIPE_NAME);

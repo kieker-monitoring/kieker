@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -44,9 +43,9 @@ import kieker.test.monitoring.util.NamedListWriter;
 
 /**
  * Tests the {@link AbstractLogReplayer}.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 public class TestLogReplayer extends AbstractKiekerTest {
@@ -60,7 +59,7 @@ public class TestLogReplayer extends AbstractKiekerTest {
 	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
 
 	/**
-	 * Creastes a new instance of this class.
+	 * Creates a new instance of this class.
 	 */
 	public TestLogReplayer() {
 		// Adding arbitrary records
@@ -79,13 +78,12 @@ public class TestLogReplayer extends AbstractKiekerTest {
 
 	/**
 	 * Performs an initial test setup.
-	 * 
+	 *
 	 * @throws IOException
 	 *             If the setup failed.
 	 */
 	@Before
 	public void init() throws IOException {
-		this.tmpFolder.create();
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.METADATA, "false");
 		final String listName = NamedListWriter.FALLBACK_LIST_NAME;
@@ -116,16 +114,11 @@ public class TestLogReplayer extends AbstractKiekerTest {
 
 		Assert.assertEquals("Unexpected list replayed", this.replayList, this.recordListFilledByListWriter);
 	}
-
-	@After
-	public void cleanup() {
-		this.tmpFolder.delete();
-	}
 }
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 class ListReplayer extends AbstractLogReplayer { // NOPMD

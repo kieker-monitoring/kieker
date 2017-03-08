@@ -37,13 +37,13 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writer.jmx.JMXWriter;
+import kieker.monitoring.writer.jmx.JmxWriter;
 
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.8
  */
 public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
@@ -56,7 +56,7 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	private volatile ListCollectionFilter<IMonitoringRecord> sinkFilter = null; // NOPMD (init for findbugs)
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
+	protected MonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
 			InterruptedException {
 		final AnalysisController analysisController = new AnalysisController();
 
@@ -69,10 +69,10 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_FALLBACK, "false");
 		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_NAME, "JMXServer");
 		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_PORT, BasicJMXWriterReaderTest.PORT);
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, JMXWriter.class.getName());
-		config.setProperty(JMXWriter.CONFIG_DOMAIN, "");
-		config.setProperty(JMXWriter.CONFIG_LOGNAME, BasicJMXWriterReaderTest.LOGNAME);
-		final IMonitoringController ctrl = MonitoringController.createInstance(config);
+		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, JmxWriter.class.getName());
+		config.setProperty(JmxWriter.CONFIG_DOMAIN, "");
+		config.setProperty(JmxWriter.CONFIG_LOGNAME, BasicJMXWriterReaderTest.LOGNAME);
+		final MonitoringController ctrl = MonitoringController.createInstance(config);
 		Thread.sleep(1000);
 		final Configuration jmxReaderConfig = new Configuration();
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_DOMAIN, BasicJMXWriterReaderTest.DOMAIN);

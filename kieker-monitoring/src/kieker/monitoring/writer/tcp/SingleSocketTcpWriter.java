@@ -13,66 +13,129 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+
 package kieker.monitoring.writer.tcp;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
+import java.nio.channels.WritableByteChannel;
+import java.nio.charset.StandardCharsets;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.writer.AbstractAsyncWriter;
+import kieker.common.record.misc.RegistryRecord;
+import kieker.monitoring.registry.GetIdAdapter;
+import kieker.monitoring.registry.IRegistryListener;
+import kieker.monitoring.registry.IWriterRegistry;
+import kieker.monitoring.registry.RegisterAdapter;
+import kieker.monitoring.registry.WriterRegistry;
+import kieker.monitoring.writer.AbstractMonitoringWriter;
+import kieker.monitoring.writer.WriterUtil;
 
 /**
  * @author Christian Wulf
  *
- * @since 1.12
+ * @since 1.13
  */
-public class SingleSocketTcpWriter extends AbstractAsyncWriter {
+public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
 
+	/** the logger for this class. */
 	private static final Log LOG = LogFactory.getLog(SingleSocketTcpWriter.class);
+	/** prefix for all configuration keys. */
 	private static final String PREFIX = SingleSocketTcpWriter.class.getName() + ".";
 
+	/** configuration key for the hostname. */
 	public static final String CONFIG_HOSTNAME = PREFIX + "hostname"; // NOCS (afterPREFIX)
-	public static final String CONFIG_PORT1 = PREFIX + "port1"; // NOCS (afterPREFIX)
+	/** configuration key for the port. */
+	public static final String CONFIG_PORT = PREFIX + "port"; // NOCS (afterPREFIX)
+	/** configuration key for the size of the {@link #buffer}. */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
+	/** configuration key for {@link #flush}. */
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
-	// private Queue<IMonitoringRecord> queue;
-
-	private final String hostname;
-	private final int port1;
-	private final int bufferSize;
+	/** the channel which writes out monitoring and registry records. */
+	private final WritableByteChannel socketChannel;
+	/** the buffer used for buffering monitoring and registry records. */
+	private final ByteBuffer buffer;
+	/** <code>true</code> if the {@link #buffer} should be flushed upon each new incoming monitoring record. */
 	private final boolean flush;
 
-	private SingleSocketTcpWriterThread worker;
+	/** the registry used to compress string fields in monitoring records. */
+	private final IWriterRegistry<String> writerRegistry;
+	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.registerStrings(..)}. */
+	private final RegisterAdapter<String> registerStringsAdapter;
+	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.writeBytes(..)}. */
+	private final GetIdAdapter<String> writeBytesAdapter;
 
-	public SingleSocketTcpWriter(final Configuration configuration) {
+	public SingleSocketTcpWriter(final Configuration configuration) throws IOException {
 		super(configuration);
-		this.hostname = configuration.getStringProperty(CONFIG_HOSTNAME);
-		this.port1 = configuration.getIntProperty(CONFIG_PORT1);
-		this.bufferSize = configuration.getIntProperty(CONFIG_BUFFERSIZE);
+		final String hostname = configuration.getStringProperty(CONFIG_HOSTNAME);
+		final int port = configuration.getIntProperty(CONFIG_PORT);
+		// buffer size is available by byteBuffer.capacity()
+		this.socketChannel = SocketChannel.open(new InetSocketAddress(hostname, port));
+		// TODO should we check for buffers too small for a single record?
+		final int bufferSize = this.configuration.getIntProperty(CONFIG_BUFFERSIZE);
+		this.buffer = ByteBuffer.allocateDirect(bufferSize);
 		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
+
+		this.writerRegistry = new WriterRegistry(this);
+		this.registerStringsAdapter = new RegisterAdapter<String>(this.writerRegistry);
+		this.writeBytesAdapter = new GetIdAdapter<String>(this.writerRegistry);
 	}
 
 	@Override
-	protected void init() throws Exception {
-		this.worker = new SingleSocketTcpWriterThread(this.monitoringController, this.blockingQueue, this.hostname, this.port1, this.bufferSize, this.flush);
-		this.addWorker(this.worker);
+	public void onStarting() {
+		// do nothing
 	}
 
 	@Override
-	// only invoked by the WriterController and only by the worker thread.
-	// hence, it does not need to be synchronized.
-	// it must not be added to the blockingQueue because the currently serialized record would then be transferred before its class name.
-	public boolean newMonitoringRecordNonBlocking(final IMonitoringRecord monitoringRecord) {
-		// delegates string registry records to the worker directly and thus ignores the prioritizedBlockingQueue
-		try {
-			this.worker.consume(monitoringRecord);
-			// this.blockingQueue.add(monitoringRecord);
-			return true;
-		} catch (final Exception e) { // NOPMD (must be caught due to Kieker's bad API)
-			LOG.warn("An exception occurred while consuming a registry record.", e);
+	public void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
+		monitoringRecord.registerStrings(this.registerStringsAdapter);
+
+		final ByteBuffer recordBuffer = this.buffer;
+		if ((4 + 8 + monitoringRecord.getSize()) > recordBuffer.remaining()) {
+			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOG);
 		}
-		return false;
+
+		final String recordClassName = monitoringRecord.getClass().getName();
+		this.writerRegistry.register(recordClassName);
+
+		recordBuffer.putInt(this.writerRegistry.getId(recordClassName));
+		recordBuffer.putLong(monitoringRecord.getLoggingTimestamp());
+		monitoringRecord.writeBytes(recordBuffer, this.writeBytesAdapter);
+		// monitoringRecord.writeToBuffer(buffer, this.writerRegistry);
+
+		if (this.flush) {
+			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOG);
+		}
 	}
 
+	@Override
+	public void onNewRegistryEntry(final String value, final int id) {
+		final ByteBuffer registryBuffer = this.buffer;
+
+		final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
+		// logging timestamp + class id + RegistryRecord.SIZE + bytes.length
+		final int requiredBufferSize = (2 * AbstractMonitoringRecord.TYPE_SIZE_INT) + RegistryRecord.SIZE + bytes.length;
+
+		if (registryBuffer.remaining() < requiredBufferSize) {
+			WriterUtil.flushBuffer(registryBuffer, this.socketChannel, LOG);
+		}
+
+		registryBuffer.putInt(RegistryRecord.CLASS_ID);
+		registryBuffer.putInt(id);
+		registryBuffer.putInt(value.length());
+		registryBuffer.put(bytes);
+	}
+
+	@Override
+	public void onTerminating() {
+		WriterUtil.flushBuffer(this.buffer, this.socketChannel, LOG);
+		WriterUtil.close(this.socketChannel, LOG);
+	}
 }

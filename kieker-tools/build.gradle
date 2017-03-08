@@ -4,7 +4,7 @@ dependencies {
 	compile project(':kieker-common')
 	compile project(':kieker-analysis')
 	compile project(':kieker-monitoring')
-		
+
 	compile resolveLibrary('commons-cli-*.jar')
 	compile resolveLibrary('jgraphx-*.jar')
 	compile resolveLibrary('commons-math3-*.jar')
@@ -27,11 +27,13 @@ dependencies {
 	testRuntime resolveLibrary('derby-*.jar')
 	testRuntime resolveLibrary('geronimo-j2ee-management_1.1_spec-*.jar')
 	testRuntime resolveLibrary('kahadb-*.jar')
-  testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
+	testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
 }
 
-task replaceHardCodedVersionNames() << {
+task replaceHardCodedVersionNames() {
+  doLast {
 	regexpReplaceInFiles(project.file("test/kieker/test/tools/manual/TestTCPReader.java"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+  }
 }
 
 compileJava.dependsOn replaceHardCodedVersionNames

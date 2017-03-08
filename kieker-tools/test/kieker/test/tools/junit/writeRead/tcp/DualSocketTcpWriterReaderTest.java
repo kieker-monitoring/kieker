@@ -30,7 +30,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.writer.tcp.TCPWriter;
+import kieker.monitoring.writer.tcp.DualSocketTcpWriter;
 
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
@@ -49,7 +49,7 @@ public class DualSocketTcpWriterReaderTest extends AbstractWriterReaderTest { //
 	private volatile AnalysisControllerThread analysisThread = null; // NOPMD (init for findbugs)
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
+	protected MonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
 			InterruptedException {
 		this.analysisController = new AnalysisController();
 
@@ -65,9 +65,9 @@ public class DualSocketTcpWriterReaderTest extends AbstractWriterReaderTest { //
 		Thread.sleep(1000);
 
 		final Configuration monitoringConfig = ConfigurationFactory.createDefaultConfiguration();
-		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, TCPWriter.class.getName());
-		monitoringConfig.setProperty(TCPWriter.CONFIG_PORT1, DualSocketTcpWriterReaderTest.PORT1);
-		monitoringConfig.setProperty(TCPWriter.CONFIG_PORT2, DualSocketTcpWriterReaderTest.PORT2);
+		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DualSocketTcpWriter.class.getName());
+		monitoringConfig.setProperty(DualSocketTcpWriter.CONFIG_PORT1, DualSocketTcpWriterReaderTest.PORT1);
+		monitoringConfig.setProperty(DualSocketTcpWriter.CONFIG_PORT2, DualSocketTcpWriterReaderTest.PORT2);
 		return MonitoringController.createInstance(monitoringConfig);
 	}
 

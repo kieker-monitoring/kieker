@@ -1,11 +1,13 @@
 dependencies {
-  compile resolveLibrary('commons-logging-*.jar')
-  compile resolveLibrary('slf4j-api-*.jar')
-  compile resolveLibrary('framework-libs/cxf/cxf-*.jar')
+	compile resolveLibrary('commons-logging-*.jar')
+	compile resolveLibrary('slf4j-api-*.jar')
+	compile resolveLibrary('framework-libs/cxf/cxf-*.jar')
 }
 
-task replaceHardCodedVersionNames() << {
+task replaceHardCodedVersionNames() {
+  doLast {
 	regexpReplaceInFiles(project.file("src/kieker/common/util/Version.java"), "VERSION = \".*?\"", "VERSION = \"${version}\"")
+  }
 }
 
 compileJava.dependsOn replaceHardCodedVersionNames
