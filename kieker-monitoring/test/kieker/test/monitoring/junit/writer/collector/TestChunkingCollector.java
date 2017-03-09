@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.LockSupport;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -46,19 +45,21 @@ import kieker.monitoring.writer.serializer.StringSerializer;
 public final class TestChunkingCollector {
 
 	private static final Charset CHARSET = Charset.forName("UTF-8");
-	
+
 	public TestChunkingCollector() {
 		// Default Constructor
 	}
-	
+
 	/**
-	 * Tests both writing of chunks due to size (a full chunk can be written) and to time (records remain unwritten for some time).
+	 * Tests both writing of chunks due to size (a full chunk can be written) and to time (records remain unwritten for
+	 * some time).
 	 *
 	 * @throws IOException
 	 *             Not expected
+	 * @throws InterruptedException
 	 */
 	@Test
-	public void testChunkingSizeAndTime() throws IOException {
+	public void testChunkingSizeAndTime() throws IOException, InterruptedException {
 		final String testId = "testChunkingSizeAndTime";
 		final int recordCount = 25;
 		final int deferredWriteDelayInMs = 500;
@@ -66,12 +67,13 @@ public final class TestChunkingCollector {
 		final IMonitoringController controller = this.createController(testId, deferredWriteDelayInMs);
 
 		for (int recordIndex = 0; recordIndex < recordCount; recordIndex++) {
-			final OperationExecutionRecord record = new OperationExecutionRecord("op()", "SESS-ID", 0, recordIndex, recordIndex, "host", recordIndex, 1);
+			final OperationExecutionRecord record = new OperationExecutionRecord("op()", "SESS-ID", 0, recordIndex,
+					recordIndex, "host", recordIndex, 1);
 			controller.newMonitoringRecord(record);
 		}
 
 		// Wait until a timed write should have occurred
-		LockSupport.parkNanos(2 * deferredWriteDelayInMs * 1000000L);
+		Thread.sleep(2 * deferredWriteDelayInMs);
 		controller.terminateMonitoring();
 
 		// Retrieve written data from the data storage
@@ -81,12 +83,12 @@ public final class TestChunkingCollector {
 		// Count the number of lines (= records) written
 		final int numberOfLines = lines.size();
 
-		// One more line due to the metadata record
+		// +1 due to one more line for the metadata record
 		Assert.assertEquals(recordCount + 1, numberOfLines);
 	}
 
 	private static List<String> linesFromData(final byte[] data) throws IOException {
-		final List<String> lines = new ArrayList<String>();
+		final List<String> lines = new ArrayList<>();
 
 		try (BufferedReader reader = new BufferedReader(
 				new InputStreamReader(new ByteArrayInputStream(data), CHARSET))) {
