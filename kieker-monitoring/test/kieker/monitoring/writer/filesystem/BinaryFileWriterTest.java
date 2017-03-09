@@ -29,7 +29,6 @@ import org.junit.rules.TemporaryFolder;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
-import kieker.common.util.filesystem.FSUtil;
 import kieker.common.util.filesystem.FileExtensionFilter;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 
@@ -235,23 +234,5 @@ public class BinaryFileWriterTest {
 
 		final String defaultDir = System.getProperty("java.io.tmpdir");
 		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
-	}
-
-	@Test
-	public void testValidLogFolderDirectory() throws Exception {
-		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
-
-		final String directoryName = this.configuration.getStringProperty(BinaryFileWriter.CONFIG_PATH);
-		Assert.assertThat(writer.getLogFolder().getParent().toString(), CoreMatchers.is(directoryName));
-	}
-
-	@Test
-	public void testValidLogFolderFileName() throws Exception {
-		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
-
-		final String hostName = this.configuration.getStringProperty(ConfigurationFactory.HOST_NAME);
-		final String controllerName = this.configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME);
-		Assert.assertThat(writer.getLogFolder().getFileName().toString(), CoreMatchers.startsWith(FSUtil.FILE_PREFIX));
-		Assert.assertThat(writer.getLogFolder().getFileName().toString(), CoreMatchers.endsWith(hostName + "-" + controllerName));
 	}
 }

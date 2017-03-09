@@ -42,6 +42,8 @@ public @interface Repository {
 	/**
 	 * This flag determines whether the annotated repository should only be used for programmatic purposes or not. This can for example be used by tools to ignore
 	 * specific repositories.
+	 * 
+	 * @return The kind of purpose of the repository.
 	 */
 	boolean programmaticOnly() default false;
 

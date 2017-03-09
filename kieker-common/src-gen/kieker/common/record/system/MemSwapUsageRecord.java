@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
@@ -39,9 +54,9 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		long.class, // MemSwapUsageRecord.swapFree
 	};
 	
-	/** user-defined constants */
+	/** user-defined constants. */
 	
-	/** default constants */
+	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final long MEM_TOTAL = 0L;
@@ -51,7 +66,19 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public static final long SWAP_USED = 0L;
 	public static final long SWAP_FREE = 0L;
 	
-	/** property declarations */
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"memTotal",
+		"memUsed",
+		"memFree",
+		"swapTotal",
+		"swapUsed",
+		"swapFree",
+	};
+	
+	/** property declarations. */
 	private final long timestamp;
 	private final String hostname;
 	private final long memTotal;
@@ -132,10 +159,12 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -150,7 +179,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		this.swapUsed = buffer.getLong();
 		this.swapFree = buffer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -167,7 +196,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 			this.getSwapFree()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -175,7 +203,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getHostname());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -190,13 +217,20 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		buffer.putLong(this.getSwapUsed());
 		buffer.putLong(this.getSwapFree());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**

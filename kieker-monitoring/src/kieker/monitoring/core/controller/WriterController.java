@@ -45,7 +45,7 @@ import kieker.monitoring.writer.MonitoringWriterThread;
  *
  * @since 1.3
  */
-public final class WriterController extends AbstractController implements IWriterController {
+public final class WriterController extends AbstractController implements IWriterController, IStateListener {
 
 	public static final String PREFIX = WriterController.class.getName() + ".";
 	/** The name of the configuration determining the size of the queue of this writer. */
@@ -243,8 +243,7 @@ public final class WriterController extends AbstractController implements IWrite
 				.append("\n\tQueue capacity: ")
 				.append(this.queueCapacity)
 				.append("\n\tInsert behavior (a.k.a. QueueFullBehavior): ")
-				.append(this.insertBehavior.toString())
-				.append("\n");
+				.append(this.insertBehavior.toString());
 		if (this.monitoringWriter != null) {
 			sb.append(this.monitoringWriter.toString());
 		} else {
@@ -263,6 +262,13 @@ public final class WriterController extends AbstractController implements IWrite
 		}
 
 		return recordSent;
+	}
+
+	@Override
+	public void beforeEnableMonitoring() {
+		if (this.logMetadataRecord) {
+			this.monitoringController.sendMetadataAsRecord();
+		}
 	}
 
 	@Override

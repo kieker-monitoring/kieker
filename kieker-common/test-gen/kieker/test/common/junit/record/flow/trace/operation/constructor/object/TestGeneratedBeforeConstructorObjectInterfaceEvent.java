@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.test.common.junit.record.flow.trace.operation.constructor.object;
 
 import java.nio.ByteBuffer;
@@ -32,7 +31,7 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
  * Creates {@link OperationExecutionRecord}s via the available constructors and
  * checks the values passed values via getters.
  * 
- * @author Kieker Build
+ * @author Florian Fittkau
  * 
  * @since 1.10
  */
@@ -43,11 +42,11 @@ public class TestGeneratedBeforeConstructorObjectInterfaceEvent extends Abstract
 	}
 
 	/**
-	 * Tests {@link BeforeConstructorObjectInterfaceEvent#TestBeforeConstructorObjectInterfaceEvent(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link BeforeConstructorObjectInterfaceEvent#TestBeforeConstructorObjectInterfaceEvent(long, long, int, string, string, int, string)}.
 	 */
 	@Test
 	public void testToArray() { // NOPMD (assert missing)
-	for (int i=0;i<ARRAY_LENGTH;i++) {
+		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
 			BeforeConstructorObjectInterfaceEvent record = new BeforeConstructorObjectInterfaceEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()));
 			
@@ -109,7 +108,7 @@ public class TestGeneratedBeforeConstructorObjectInterfaceEvent extends Abstract
 	}
 	
 	/**
-	 * Tests {@link BeforeConstructorObjectInterfaceEvent#TestBeforeConstructorObjectInterfaceEvent(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link BeforeConstructorObjectInterfaceEvent#TestBeforeConstructorObjectInterfaceEvent(long, long, int, string, string, int, string)}.
 	 */
 	@Test
 	public void testBuffer() { // NOPMD (assert missing)
@@ -129,7 +128,7 @@ public class TestGeneratedBeforeConstructorObjectInterfaceEvent extends Abstract
 	}
 	
 	/**
-	 * Tests {@link BeforeConstructorObjectInterfaceEvent#TestBeforeConstructorObjectInterfaceEvent(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link BeforeConstructorObjectInterfaceEvent#TestBeforeConstructorObjectInterfaceEvent(long, long, int, string, string, int, string)}.
 	 */
 	@Test
 	public void testParameterConstruction() { // NOPMD (assert missing)
@@ -146,5 +145,25 @@ public class TestGeneratedBeforeConstructorObjectInterfaceEvent extends Abstract
 			Assert.assertEquals("BeforeConstructorObjectInterfaceEvent.objectId values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getObjectId());
 			Assert.assertEquals("BeforeConstructorObjectInterfaceEvent.interface values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getInterface());
 		}
+	}
+	
+	@Test
+	public void testEquality() {
+		int i = 0;
+		BeforeConstructorObjectInterfaceEvent oneRecord = new BeforeConstructorObjectInterfaceEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()));
+		i = 0;
+		BeforeConstructorObjectInterfaceEvent copiedRecord = new BeforeConstructorObjectInterfaceEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()));
+		
+		Assert.assertEquals(oneRecord, copiedRecord);
+	}	
+	
+	@Test
+	public void testUnequality() {
+		int i = 0;
+		BeforeConstructorObjectInterfaceEvent oneRecord = new BeforeConstructorObjectInterfaceEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()));
+		i = 2;
+		BeforeConstructorObjectInterfaceEvent anotherRecord = new BeforeConstructorObjectInterfaceEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()));
+		
+		Assert.assertNotEquals(oneRecord, anotherRecord);
 	}
 }

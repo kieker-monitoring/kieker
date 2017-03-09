@@ -43,17 +43,24 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 
 	/**
 	 * Default constructor with <code>port=10133</code> and <code>bufferCapacity=65535</code> and <code>new CachedRecordFactoryCatalog()</code>
+	 * 
+	 * @param logger error and info logger
+	 * @param stringRegistry the registry for string mapping
 	 */
 	public AbstractRecordTcpReader(final Log logger, final ILookup<String> stringRegistry) {
 		this(10133, 65535, logger, stringRegistry, new CachedRecordFactoryCatalog());
 	}
 
 	/**
-	 *
+	 * General constructor.
+	 * 
 	 * @param port
 	 *            accept connections on this port
 	 * @param bufferCapacity
 	 *            capacity of the receiving buffer
+	 * @param logger error and info logger
+	 * @param stringRegistry the registry for string mapping
+	 * @param recordFactories cache of factories for record types
 	 */
 	public AbstractRecordTcpReader(final int port, final int bufferCapacity, final Log logger, final ILookup<String> stringRegistry,
 			final CachedRecordFactoryCatalog recordFactories) {

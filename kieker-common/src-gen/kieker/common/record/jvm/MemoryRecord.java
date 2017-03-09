@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
@@ -46,11 +61,27 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		int.class, // MemoryRecord.objectPendingFinalizationCount
 	};
 	
-	/** user-defined constants */
+	/** user-defined constants. */
 	
-	/** default constants */
+	/** default constants. */
 	
-	/** property declarations */
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"vmName",
+		"heapMaxBytes",
+		"heapUsedBytes",
+		"heapCommittedBytes",
+		"heapInitBytes",
+		"nonHeapMaxBytes",
+		"nonHeapUsedBytes",
+		"nonHeapCommittedBytes",
+		"nonHeapInitBytes",
+		"objectPendingFinalizationCount",
+	};
+	
+	/** property declarations. */
 	private final long heapMaxBytes;
 	private final long heapUsedBytes;
 	private final long heapCommittedBytes;
@@ -144,10 +175,12 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -164,7 +197,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		this.nonHeapInitBytes = buffer.getLong();
 		this.objectPendingFinalizationCount = buffer.getInt();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -185,7 +218,6 @@ public class MemoryRecord extends AbstractJVMRecord  {
 			this.getObjectPendingFinalizationCount()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -194,7 +226,6 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getVmName());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -213,13 +244,20 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		buffer.putLong(this.getNonHeapInitBytes());
 		buffer.putInt(this.getObjectPendingFinalizationCount());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**

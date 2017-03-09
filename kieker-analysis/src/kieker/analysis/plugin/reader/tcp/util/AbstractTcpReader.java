@@ -117,8 +117,9 @@ public abstract class AbstractTcpReader implements Runnable {
 	 *            to be read from
 	 * @return
 	 *         <ul>
-	 *         <li><code>true</code> when there were enough bytes to perform the read operation
-	 *         <li><code>false</code> otherwise. In this case, the buffer is reset, compacted, and filled with new content.
+	 *         <li><code>true</code> when there were enough bytes to perform the read operation</li>
+	 *         <li><code>false</code> otherwise. In this case, the buffer is reset, compacted, and filled with new content.</li>
+	 *         </ul>
 	 */
 	protected abstract boolean onBufferReceived(final ByteBuffer buffer);
 

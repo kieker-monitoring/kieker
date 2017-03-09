@@ -16,9 +16,13 @@
 
 package kieker.monitoring.core.controller;
 
+import java.lang.reflect.Constructor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.configuration.ReadOnlyConfiguration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
  * @author Jan Waller
@@ -26,6 +30,8 @@ import kieker.common.configuration.Configuration;
  * @since 1.3
  */
 public abstract class AbstractController {
+	private static final Log LOG = LogFactory.getLog(AbstractController.class);
+
 	protected volatile MonitoringController monitoringController;
 	private final AtomicBoolean terminated = new AtomicBoolean(false);
 
@@ -112,7 +118,28 @@ public abstract class AbstractController {
 	 * @param <C>
 	 *            The type of the returned class.
 	 */
+	@SuppressWarnings("unchecked")
 	protected static final <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration) {
-		return ControllerFactory.getInstance(configuration).createAndInitialize(c, classname, configuration);
+		C createdClass = null; // NOPMD (null)
+		try {
+			final Class<?> clazz = Class.forName(classname);
+			if (c.isAssignableFrom(clazz)) {
+				final Constructor<?> constructor = clazz.getConstructor(Configuration.class);
+				// final Configuration classConfiguration = configuration.getPropertiesStartingWith(classname);
+				final Configuration classConfiguration = new ReadOnlyConfiguration(configuration);
+				createdClass = (C) constructor.newInstance(classConfiguration);
+			} else {
+				LOG.error("Class '" + classname + "' has to extend/implement '" + c.getSimpleName() + "'");
+			}
+		} catch (final ClassNotFoundException e) {
+			LOG.error(c.getSimpleName() + ": Class '" + classname + "' not found", e);
+		} catch (final NoSuchMethodException e) {
+			LOG.error(c.getSimpleName() + ": Class '" + classname
+					+ "' has to implement a (public) constructor that accepts a single Configuration", e);
+		} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
+			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
+			LOG.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", e);
+		}
+		return createdClass;
 	}
 }

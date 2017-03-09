@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.controlflow;
 
 import java.nio.BufferOverflowException;
@@ -29,14 +44,21 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 		int.class, // BranchingRecord.branchingOutcome
 	};
 	
-	/** user-defined constants */
+	/** user-defined constants. */
 	
-	/** default constants */
+	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final int BRANCH_ID = 0;
 	public static final int BRANCHING_OUTCOME = 0;
 	
-	/** property declarations */
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"branchID",
+		"branchingOutcome",
+	};
+	
+	/** property declarations. */
 	private final long timestamp;
 	private final int branchID;
 	private final int branchingOutcome;
@@ -87,10 +109,12 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -100,7 +124,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 		this.branchID = buffer.getInt();
 		this.branchingOutcome = buffer.getInt();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -112,14 +136,12 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 			this.getBranchingOutcome()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -129,13 +151,20 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 		buffer.putInt(this.getBranchID());
 		buffer.putInt(this.getBranchingOutcome());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**

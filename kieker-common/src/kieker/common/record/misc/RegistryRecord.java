@@ -41,6 +41,11 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 		String.class, // object
 	};
 
+	public static final String[] PROPERTY_NAMES = {
+		"id",
+		"string",
+	};
+	
 	public static final String ENCODING = "UTF-8";
 	public static final int CLASS_ID = -1;
 
@@ -151,7 +156,15 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+    public String[] getValueNames() {
+        return PROPERTY_NAMES; // NOPMD
+    }
+	
 	/**
 	 * {@inheritDoc}
 	 */

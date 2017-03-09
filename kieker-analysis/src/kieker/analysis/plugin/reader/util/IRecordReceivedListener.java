@@ -27,6 +27,9 @@ import kieker.common.record.IMonitoringRecord;
 public interface IRecordReceivedListener {
 
 	/**
+	 * Listener method declaration.
+	 * 
+	 * @param record the received record
 	 * @since 1.13
 	 */
 	void onRecordReceived(IMonitoringRecord record);
