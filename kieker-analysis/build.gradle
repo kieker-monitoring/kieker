@@ -18,3 +18,9 @@ dependencies {
 	
 	testRuntime resolveLibrary('derby-*.jar')
 }
+
+eclipse {
+	classpath {
+		defaultOutputDir = file('build-eclipse')
+	}
+}

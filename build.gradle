@@ -12,8 +12,14 @@ buildscript {
 
     dependencies {
         classpath 'de.aaschmid.gradle.plugins:gradle-cpd-plugin:0.1'
-        classpath 'gradle.plugin.gradle-plugins:jartest:1.0'			// necessary to depend tests on tests
+        classpath 'gradle.plugin.gradle-plugins:jartest:1.0.1'			// necessary to depend tests on tests
     }
+}
+
+eclipse {
+	classpath {
+		defaultOutputDir = file('build-eclipse')
+	}
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
@@ -22,12 +28,6 @@ def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'),
 // better use subprojects to avoid if-then-else in sourceSets
 allprojects {
     version = kiekerVersion
-
-	eclipse {
-		classpath {
-			defaultOutputDir = file('build-eclipse')
-		}
-	}
 
     apply plugin: 'java'
     sourceCompatibility = 1.7

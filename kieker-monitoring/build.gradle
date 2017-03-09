@@ -39,6 +39,12 @@ dependencies {
 	testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
 }
 
+eclipse {
+	classpath {
+		defaultOutputDir = file('build-eclipse')
+	}
+}
+
 task iajc(dependsOn: classes) {
     doLast {
         ant.taskdef(resource: 'org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties') {

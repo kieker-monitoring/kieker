@@ -7,6 +7,12 @@ dependencies {
 	compile resolveLibrary('framework-libs/cxf/cxf-*.jar')
 }
 
+eclipse {
+	classpath {
+		defaultOutputDir = file('build-eclipse')
+	}
+}
+
 task replaceHardCodedVersionNames() {
   doLast {
 	regexpReplaceInFiles(project.file("src/kieker/common/util/Version.java"), "VERSION = \".*?\"", "VERSION = \"${version}\"")
