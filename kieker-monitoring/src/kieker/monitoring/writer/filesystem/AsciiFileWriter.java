@@ -57,6 +57,8 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	public static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
 	/** The name of the configuration determining whether to flush upon each incoming record. */
 	public static final String CONFIG_FLUSH = PREFIX + "flush";
+	/** The name of the configuration determining whether to flush upon each incoming registry entry. */
+	public static final String CONFIG_FLUSH_MAPFILE = PREFIX + "flushMapfile";
 
 	private static final Log LOG = LogFactory.getLog(AsciiFileWriter.class);
 
@@ -65,6 +67,7 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	private final MappingFileWriter mappingFileWriter;
 	private final IWriterRegistry<String> writerRegistry;
 	private final boolean flush;
+	private final boolean flushMapfile;
 
 	public AsciiFileWriter(final Configuration configuration) {
 		super(configuration);
@@ -97,7 +100,8 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME, "UTF-8");
 		final boolean shouldCompress = configuration.getBooleanProperty(CONFIG_SHOULD_COMPRESS);
 
-		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
+		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH, false);
+		this.flushMapfile = configuration.getBooleanProperty(CONFIG_FLUSH_MAPFILE, true);
 
 		this.mappingFileWriter = new MappingFileWriter(this.logFolder, charsetName);
 		this.fileWriterPool = new AsciiFileWriterPool(LOG, this.logFolder, charsetName, maxEntriesPerFile, shouldCompress, maxAmountOfFiles, maxMegaBytesPerFile);
@@ -143,7 +147,7 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		mappingPrintWriter.print(recordClassName);
 		mappingPrintWriter.println();
 
-		if (this.flush) {
+		if (this.flushMapfile) {
 			mappingPrintWriter.flush();
 		}
 	}
