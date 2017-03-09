@@ -61,7 +61,7 @@ public final class TestRawDataStorage {
 	public synchronized void appendData(final String id, final byte[] data) throws IOException {
 		ByteArrayOutputStream stream = this.rawData.get(id);
 		
-		if(stream == null) {
+		if (stream == null) {
 			stream = new ByteArrayOutputStream();
 			this.rawData.put(id, stream);
 		}

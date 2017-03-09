@@ -88,7 +88,7 @@ public class KafkaWriter extends AbstractRawDataWriter {
 		}
 		
 		// Check whether a topic name was given
-		if(this.topicName.isEmpty()) {
+		if (this.topicName.isEmpty()) {
 			throw new InvalidConfigurationException("A topic name must be provided.");
 		}
 	}

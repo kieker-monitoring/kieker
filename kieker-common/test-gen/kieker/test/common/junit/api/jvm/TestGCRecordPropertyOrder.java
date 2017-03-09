@@ -26,6 +26,7 @@ import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.record.jvm.GCRecord;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
+
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
 			

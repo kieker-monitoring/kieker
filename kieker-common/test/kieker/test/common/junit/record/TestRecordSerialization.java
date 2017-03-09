@@ -31,6 +31,7 @@ import kieker.common.record.io.DefaultValueDeserializer;
 import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
+
 import kieker.test.common.junit.AbstractDynamicKiekerTest;
 
 /**
