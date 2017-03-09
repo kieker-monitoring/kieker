@@ -1,10 +1,19 @@
 apply plugin: 'application'
 apply plugin: 'eclipse'
 
+task buildKiekerJar(type: GradleBuild, dependsOn: 'copyKiekerJar') {
+	buildFile = '../../../build.gradle'
+	tasks = ['emfJar']
+}
+
+task copyKiekerJar(type: Copy) {
+	from '../../../build/libs/kieker-1.13-SNAPSHOT-emf.jar'
+	into 'lib'
+}
+
 dependencies {
-	compile fileTree('lib') {
-		include 'kieker-*-emf.jar'
-	}
+	//compile files('../../../build/libs/kieker-1.13-SNAPSHOT-emf.jar')
+	compile files('lib/kieker-1.13-SNAPSHOT-emf.jar')
 }
 
 // Simplify the JAR's file name

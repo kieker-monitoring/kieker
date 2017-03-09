@@ -23,7 +23,6 @@ def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'),
 allprojects {
     version = kiekerVersion
 
-	apply plugin: 'eclipse'
 	eclipse {
 		classpath {
 			defaultOutputDir = file('build-eclipse')
