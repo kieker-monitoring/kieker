@@ -19,6 +19,7 @@ package kieker.tools.opad.record;
 import java.nio.ByteBuffer;
 
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -29,8 +30,8 @@ import kieker.common.util.registry.IRegistry;
 public final class ExtendedStorableDetectionResultFactory implements IRecordFactory<ExtendedStorableDetectionResult> {
 	
 	@Override
-	public ExtendedStorableDetectionResult create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new ExtendedStorableDetectionResult(buffer, stringRegistry);
+	public ExtendedStorableDetectionResult create(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new ExtendedStorableDetectionResult(deserializer, buffer, stringRegistry);
 	}
 	
 	@Override
@@ -38,6 +39,7 @@ public final class ExtendedStorableDetectionResultFactory implements IRecordFact
 		return new ExtendedStorableDetectionResult(values);
 	}
 	
+	@Override
 	public int getRecordSizeInBytes() {
 		return ExtendedStorableDetectionResult.SIZE;
 	}

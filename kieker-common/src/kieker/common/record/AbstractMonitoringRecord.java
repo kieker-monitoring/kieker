@@ -466,7 +466,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(recordClassName);
 				if (IMonitoringRecord.BinaryFactory.class.isAssignableFrom(clazz)) {
 					// Factory interface present
-					constructor = clazz.getConstructor(ByteBuffer.class, IRegistry.class);
+					constructor = clazz.getConstructor(IValueDeserializer.class, ByteBuffer.class, IRegistry.class);
 					CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY.putIfAbsent(clazzid, constructor);
 				} else {
 					// try ordinary method
@@ -475,7 +475,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 					return record;
 				}
 			}
-			return constructor.newInstance(buffer, stringRegistry);
+			return constructor.newInstance(deserializer, buffer, stringRegistry);
 		} catch (final SecurityException ex) {
 			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + stringRegistry.get(clazzid), ex);
 		} catch (final NoSuchMethodException ex) {
@@ -561,7 +561,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(recordClassName);
 				if (IMonitoringRecord.BinaryFactory.class.isAssignableFrom(clazz)) {
 					// Factory interface present
-					constructor = clazz.getConstructor(ByteBuffer.class, IRegistry.class);
+					constructor = clazz.getConstructor(IValueDeserializer.class, ByteBuffer.class, IRegistry.class);
 					CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY_CHW.putIfAbsent(recordClassName, constructor);
 				} else {
 					// try ordinary method
@@ -570,7 +570,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 					return record;
 				}
 			}
-			return constructor.newInstance(buffer, stringRegistry);
+			return constructor.newInstance(deserializer, buffer, stringRegistry);
 		} catch (final SecurityException ex) {
 			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + stringRegistry.get(recordClassName), ex);
 		} catch (final NoSuchMethodException ex) {

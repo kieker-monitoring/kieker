@@ -23,6 +23,7 @@ import java.util.List;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.util.dataformat.FormatIdentifier;
 import kieker.common.util.dataformat.VariableLengthEncoding;
 import kieker.common.util.registry.IRegistry;
@@ -90,7 +91,7 @@ public class BinarySerializer extends AbstractContainerFormatSerializer {
 			buffer.putInt(typeNameId);
 			buffer.putLong(record.getLoggingTimestamp());
 
-			record.writeBytes(buffer, stringRegistry);
+			record.writeBytes(DefaultValueSerializer.instance(), buffer, stringRegistry);
 		}
 
 		final int offsetAfter = buffer.position();

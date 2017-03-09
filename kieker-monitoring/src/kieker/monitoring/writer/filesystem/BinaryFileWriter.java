@@ -28,6 +28,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.util.filesystem.FileExtensionFilter;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
@@ -135,7 +136,7 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 
 		recordBuffer.putInt(this.writerRegistry.getId(recordClassName));
 		recordBuffer.putLong(monitoringRecord.getLoggingTimestamp());
-		monitoringRecord.writeBytes(recordBuffer, this.writeBytesAdapter);
+		monitoringRecord.writeBytes(DefaultValueSerializer.instance(), recordBuffer, this.writeBytesAdapter);
 
 		if (this.flush) {
 			channel.flush(recordBuffer, LOG);

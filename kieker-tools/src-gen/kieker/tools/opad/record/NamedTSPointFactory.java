@@ -19,6 +19,7 @@ package kieker.tools.opad.record;
 import java.nio.ByteBuffer;
 
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -29,8 +30,8 @@ import kieker.common.util.registry.IRegistry;
 public final class NamedTSPointFactory implements IRecordFactory<NamedTSPoint> {
 	
 	@Override
-	public NamedTSPoint create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new NamedTSPoint(buffer, stringRegistry);
+	public NamedTSPoint create(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new NamedTSPoint(deserializer, buffer, stringRegistry);
 	}
 	
 	@Override
@@ -38,6 +39,7 @@ public final class NamedTSPointFactory implements IRecordFactory<NamedTSPoint> {
 		return new NamedTSPoint(values);
 	}
 	
+	@Override
 	public int getRecordSizeInBytes() {
 		return NamedTSPoint.SIZE;
 	}

@@ -26,6 +26,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
@@ -126,7 +127,7 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 		buffer.putInt(recordClassId);
 		buffer.putLong(loggingTimestamp);
 
-		monitoringRecord.writeBytes(buffer, this.readAdapter);
+		monitoringRecord.writeBytes(DefaultValueSerializer.instance(), buffer, this.readAdapter);
 		// monitoringRecord.writeToBuffer(buffer, this.writerRegistry);
 
 		if (this.flush) {

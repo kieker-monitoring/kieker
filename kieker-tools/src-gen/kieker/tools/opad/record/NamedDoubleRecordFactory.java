@@ -19,6 +19,7 @@ package kieker.tools.opad.record;
 import java.nio.ByteBuffer;
 
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -29,8 +30,8 @@ import kieker.common.util.registry.IRegistry;
 public final class NamedDoubleRecordFactory implements IRecordFactory<NamedDoubleRecord> {
 	
 	@Override
-	public NamedDoubleRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new NamedDoubleRecord(buffer, stringRegistry);
+	public NamedDoubleRecord create(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new NamedDoubleRecord(deserializer, buffer, stringRegistry);
 	}
 	
 	@Override
@@ -38,6 +39,7 @@ public final class NamedDoubleRecordFactory implements IRecordFactory<NamedDoubl
 		return new NamedDoubleRecord(values);
 	}
 	
+	@Override
 	public int getRecordSizeInBytes() {
 		return NamedDoubleRecord.SIZE;
 	}

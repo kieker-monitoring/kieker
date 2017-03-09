@@ -22,8 +22,9 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
 
 
 /**
@@ -101,16 +102,18 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public NamedTSPoint(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.value = buffer.getDouble();
-		this.name = stringRegistry.get(buffer.getInt());
+	public NamedTSPoint(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = deserializer.getLong(buffer);
+		this.value = deserializer.getDouble(buffer);
+		this.name = deserializer.getString(buffer, stringRegistry);
 	}
 
 	/**
@@ -137,10 +140,10 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putDouble(this.getValue());
-		buffer.putInt(stringRegistry.get(this.getName()));
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp(), buffer);
+		serializer.putDouble(this.getValue(), buffer);
+		serializer.putString(this.getName(), buffer, stringRegistry);
 	}
 
 	/**
@@ -176,7 +179,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -185,15 +188,29 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final NamedTSPoint castedRecord = (NamedTSPoint) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (isNotEqual(this.getValue(), castedRecord.getValue())) return false;
-		if (!this.getName().equals(castedRecord.getName())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (isNotEqual(this.getValue(), castedRecord.getValue())) {
+			return false;
+		}
+		if (!this.getName().equals(castedRecord.getName())) {
+			return false;
+		}
 		return true;
 	}
 

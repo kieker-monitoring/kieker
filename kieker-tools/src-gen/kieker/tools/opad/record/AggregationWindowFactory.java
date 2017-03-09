@@ -19,6 +19,7 @@ package kieker.tools.opad.record;
 import java.nio.ByteBuffer;
 
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -29,8 +30,8 @@ import kieker.common.util.registry.IRegistry;
 public final class AggregationWindowFactory implements IRecordFactory<AggregationWindow> {
 	
 	@Override
-	public AggregationWindow create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new AggregationWindow(buffer, stringRegistry);
+	public AggregationWindow create(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new AggregationWindow(deserializer, buffer, stringRegistry);
 	}
 	
 	@Override
@@ -38,6 +39,7 @@ public final class AggregationWindowFactory implements IRecordFactory<Aggregatio
 		return new AggregationWindow(values);
 	}
 	
+	@Override
 	public int getRecordSizeInBytes() {
 		return AggregationWindow.SIZE;
 	}

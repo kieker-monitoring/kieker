@@ -22,8 +22,9 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
 
 
 /**
@@ -117,18 +118,20 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	/**
 	 * This constructor converts the given array into a record.
 	 * 
+	 * @param deserializer
+	 *            The deserializer to use
 	 * @param buffer
 	 *            The bytes for the record.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public StorableDetectionResult(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.applicationName = stringRegistry.get(buffer.getInt());
-		this.value = buffer.getDouble();
-		this.timestamp = buffer.getLong();
-		this.forecast = buffer.getDouble();
-		this.score = buffer.getDouble();
+	public StorableDetectionResult(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.applicationName = deserializer.getString(buffer, stringRegistry);
+		this.value = deserializer.getDouble(buffer);
+		this.timestamp = deserializer.getLong(buffer);
+		this.forecast = deserializer.getDouble(buffer);
+		this.score = deserializer.getDouble(buffer);
 	}
 
 	/**
@@ -157,12 +160,12 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putInt(stringRegistry.get(this.getApplicationName()));
-		buffer.putDouble(this.getValue());
-		buffer.putLong(this.getTimestamp());
-		buffer.putDouble(this.getForecast());
-		buffer.putDouble(this.getScore());
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putString(this.getApplicationName(), buffer, stringRegistry);
+		serializer.putDouble(this.getValue(), buffer);
+		serializer.putLong(this.getTimestamp(), buffer);
+		serializer.putDouble(this.getForecast(), buffer);
+		serializer.putDouble(this.getScore(), buffer);
 	}
 
 	/**
@@ -198,7 +201,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 */
 	@Override
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -207,17 +210,35 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final StorableDetectionResult castedRecord = (StorableDetectionResult) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) return false;
-		if (isNotEqual(this.getValue(), castedRecord.getValue())) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (isNotEqual(this.getForecast(), castedRecord.getForecast())) return false;
-		if (isNotEqual(this.getScore(), castedRecord.getScore())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) {
+			return false;
+		}
+		if (isNotEqual(this.getValue(), castedRecord.getValue())) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (isNotEqual(this.getForecast(), castedRecord.getForecast())) {
+			return false;
+		}
+		if (isNotEqual(this.getScore(), castedRecord.getScore())) {
+			return false;
+		}
 		return true;
 	}
 
