@@ -11,12 +11,12 @@ buildscript {
     }
 }
 
+// better use subprojects to avoid if-then-else in sourceSets
 allprojects {
     version = kiekerVersion
-    
-	apply plugin: 'java'
-	
-	sourceCompatibility = 1.7
+
+    apply plugin: 'java'
+    sourceCompatibility = 1.7
     targetCompatibility = 1.7
     
     sourceSets {
@@ -62,9 +62,9 @@ allprojects {
             showStandardStreams = 'true'
         }
 
-		afterTest { desc, result -> 
-		    println "Executed test ${desc.name} [${desc.className}] with result: ${result.resultType}"
-		}
+	afterTest { desc, result -> 
+	    println "Executed test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+	}
     }
 
     configurations {
@@ -81,7 +81,7 @@ allprojects {
      * */
     task wrapper(type: Wrapper) {
         description = 'Downloads the Gradle wrapper scripts.'
-        gradleVersion = '2.2.1'
+        gradleVersion = '3.3'
     }
 
     task integrationTest(type: Test) {
@@ -121,14 +121,9 @@ allprojects {
         configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
     }
 
-    def fbVersion
+    def fbVersion = '3.0.1'
     apply plugin: 'findbugs'
-    findbugs {
-        if (JavaVersion.current() == JavaVersion.VERSION_1_6) {
-            fbVersion = '2.0.3'
-        } else {
-            fbVersion = '3.0.1'
-        }
+    findbugs {	
         toolVersion = fbVersion
         ignoreFailures = true
         effort = "max"
@@ -174,15 +169,84 @@ allprojects {
         // compile-time dependency due to the annotation SuppressFBWarnings()
         compile resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
 
-		// moved to common to let Eclipse compile each module separately
-		testCompile "org.mockito:mockito-core:2.+"
+	// moved to common to let Eclipse compile each module separately
+	testCompile "org.mockito:mockito-core:2.+"
         testCompile resolveLibrary('junit-*.jar')
         testCompile resolveLibrary('hamcrest-core-*.jar')
     }
+
+/*
+	// if enabled the kieker root project would not contain any source folders. 
+	// All subprojects would be represented as dedicated Eclipse projects.
+    apply plugin: 'eclipse'
+    eclipse {
+	  //if you want parts of paths in resulting file to be replaced by variables (files):
+	  //pathVariables 'GRADLE_HOME': file('/best/software/gradle'), 'TOMCAT_HOME': file('../tomcat')
+	
+	  classpath {
+	    //you can tweak the classpath of the Eclipse project by adding extra configurations:
+	    //plusConfigurations += [ configurations.provided ]
+	
+	    //you can also remove configurations from the classpath:
+	    //minusConfigurations += [ configurations.someBoringConfig ]
+	
+	    //if you want to append extra containers:
+	    //containers 'someFriendlyContainer', 'andYetAnotherContainer'
+	
+	    //customizing the classes output directory:
+	    //defaultOutputDir = file('build-eclipse')
+	
+	    //default settings for downloading sources and Javadoc:
+	    downloadSources = true
+	    downloadJavadoc = false
+	  }
+	}
+*/
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
 def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
+
+/*
+sourceSets {
+    main {
+        java {
+        	subprojects.each {
+        		srcDir it.sourceSets.main.java.srcDirs
+        	}
+		}
+		resources {
+			subprojects.each {
+				srcDir it.sourceSets.main.resources.srcDirs
+			}
+		}
+	}
+    test {
+        java {
+        	subprojects.each {
+        		srcDir it.sourceSets.test.java.srcDirs
+        	}
+		}
+		resources {
+			subprojects.each {
+				srcDir it.sourceSets.test.resources.srcDirs
+			}
+		}
+	}
+    integrationTest {
+        java {
+        	subprojects.each {
+        		srcDir it.sourceSets.integrationTest.java.srcDirs
+        	}
+		}
+		resources {
+			subprojects.each {
+				srcDir it.sourceSets.integrationTest.resources.srcDirs
+			}
+		}
+	}
+}
+*/
 
 def parseCheckstyleReport(File reportFile) {
     def errors = 0
@@ -397,10 +461,10 @@ task htmlQualityReport() {
             def pmdReportsFolder = "${reports}/pmd"
 
             doLast {
-				p.javaexec {
-					main = '-jar'
-					args = ["$scautilJar", "${findbugsReportsFolder}/${type}.xml", "${checkstyleReportsFolder}/${type}.xml", "${pmdReportsFolder}/${type}.xml", "${reports}/${type}ReportSummary.html"]
-				}
+		p.javaexec {
+			main = '-jar'
+			args = ["$scautilJar", "${findbugsReportsFolder}/${type}.xml", "${checkstyleReportsFolder}/${type}.xml", "${pmdReportsFolder}/${type}.xml", "${reports}/${type}ReportSummary.html"]
+		}
                 println("The report summary for \'${type}\' can be found at ${reports}/${type}ReportSummary.html")
             }
         }
@@ -454,7 +518,7 @@ def resolveRelativeToParent(String directory, String file) {
 
 def resolveLibrary(String library) {
     def libraryDir = rootProject.file(dirLib)
-    return fileTree(dir: libraryDir, include: library)
+    return fileTree(dir: libraryDir, include: library).filter { it.isFile() }
 }
 
 def today() {

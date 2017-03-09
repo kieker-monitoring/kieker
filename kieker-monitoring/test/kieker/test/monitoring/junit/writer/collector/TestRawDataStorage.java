@@ -33,6 +33,7 @@ import java.util.Map;
 public final class TestRawDataStorage {
 
 	private static final TestRawDataStorage INSTANCE = new TestRawDataStorage();
+	private static final ByteArrayOutputStream EMPTY_STREAM = new ByteArrayOutputStream();
 
 	private final Map<String, ByteArrayOutputStream> rawData;
 
@@ -58,15 +59,17 @@ public final class TestRawDataStorage {
 	 * @param data
 	 *            The data to store
 	 */
-	public synchronized void appendData(final String id, final byte[] data) throws IOException {
-		ByteArrayOutputStream stream = this.rawData.get(id);
-		
-		if (stream == null) {
-			stream = new ByteArrayOutputStream();
-			this.rawData.put(id, stream);
-		}
+	public void appendData(final String id, final byte[] data) throws IOException {
+		synchronized (this) {
+			ByteArrayOutputStream stream = this.rawData.get(id);
 
-		stream.write(data);
+			if (stream == null) {
+				stream = new ByteArrayOutputStream();
+				this.rawData.put(id, stream);
+			}
+
+			stream.write(data);
+		}
 	}
 
 	/**
@@ -74,16 +77,17 @@ public final class TestRawDataStorage {
 	 *
 	 * @param id
 	 *            The ID to retrieve the data for
-	 * @return The stored data, or {@code null} if no data exists
+	 * @return The stored data (empty if no data exists)
 	 */
 	public byte[] getData(final String id) {
-		final ByteArrayOutputStream stream = this.rawData.get(id);
+		synchronized (this) {
+			ByteArrayOutputStream stream = this.rawData.get(id);
 
-		if (stream == null) {
-			return null;
+			if (stream == null) {
+				stream = EMPTY_STREAM;
+			}
+
+			return stream.toByteArray();
 		}
-
-		return stream.toByteArray();
 	}
-
 }

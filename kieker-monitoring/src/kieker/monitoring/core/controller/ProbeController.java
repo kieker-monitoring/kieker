@@ -136,8 +136,9 @@ public class ProbeController extends AbstractController implements IProbeControl
 
 	@Override
 	protected void init() {
-		if (this.enabled) {
-			final ScheduledThreadPoolExecutor scheduler = this.monitoringController.getSamplingController().periodicSensorsPoolExecutor;
+		if (this.enabled && (this.monitoringController != null)) {
+			final SamplingController samplingController = this.monitoringController.getSamplingController();
+			final ScheduledThreadPoolExecutor scheduler = samplingController.periodicSensorsPoolExecutor;
 			if ((this.configFileReadIntervall > 0) && (null != scheduler)) {
 				scheduler.scheduleWithFixedDelay(this.configFileReader,
 						this.configFileReadIntervall, this.configFileReadIntervall, TimeUnit.SECONDS);
@@ -237,35 +238,41 @@ public class ProbeController extends AbstractController implements IProbeControl
 		synchronized (this) {
 			this.patternList.clear();
 			this.signatureCache.clear();
-			for (final String string : strPatternList) {
-				if (string.length() > 0) { // ignore empty lines
-					try {
-						switch (string.charAt(0)) {
-						case '+':
-							this.patternList.add(new PatternEntry(string.substring(1).trim(), true));
-							break;
-						case '-':
-							this.patternList.add(new PatternEntry(string.substring(1).trim(), false));
-							break;
-						case '#':
-							// ignore comment
-							break;
-						default:
-							if (LOG.isWarnEnabled()) {
-								LOG.warn("Each line should either start with '+', '-', or '#'. Ignoring: " + string);
-							}
-							break;
-						}
-					} catch (final InvalidPatternException ex) {
-						LOG.error("'" + string.substring(1) + "' is not a valid pattern.", ex);
-					}
-				}
+			for (final String pattern : strPatternList) {
+				this.addToPatternEntryList(pattern);
 			}
 			if (updateConfig && this.configFileUpdate) {
 				this.updatePatternFile();
 			}
 		}
 
+	}
+
+	private void addToPatternEntryList(final String pattern) {
+		if (pattern.length() == 0) {
+			// ignore empty lines
+			return;
+		}
+		try {
+			switch (pattern.charAt(0)) {
+			case '+':
+				this.patternList.add(new PatternEntry(pattern.substring(1).trim(), true));
+				break;
+			case '-':
+				this.patternList.add(new PatternEntry(pattern.substring(1).trim(), false));
+				break;
+			case '#':
+				// ignore comment
+				break;
+			default:
+				if (LOG.isWarnEnabled()) {
+					LOG.warn("Each line should either start with '+', '-', or '#'. Ignoring: " + pattern);
+				}
+				break;
+			}
+		} catch (final InvalidPatternException ex) {
+			LOG.error("'" + pattern.substring(1) + "' is not a valid pattern.", ex);
+		}
 	}
 
 	/**
