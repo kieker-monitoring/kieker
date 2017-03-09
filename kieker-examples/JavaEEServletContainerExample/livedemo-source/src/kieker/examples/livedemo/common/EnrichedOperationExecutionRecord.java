@@ -21,6 +21,7 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -94,12 +95,12 @@ public final class EnrichedOperationExecutionRecord extends OperationExecutionRe
 	}
 
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		super.writeBytes(buffer, stringRegistry);
+	public void writeBytes(IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		super.writeBytes(serializer, buffer, stringRegistry);
 
-		buffer.putDouble(this.getResponseTime());
-		buffer.putInt(stringRegistry.get(this.getShortSignature()));
-		buffer.putInt(stringRegistry.get(this.getCommaSeperatedValues()));
+		serializer.putDouble(this.getResponseTime(), buffer);
+		serializer.putString(this.getShortSignature(), buffer, stringRegistry);
+		serializer.putString(this.getCommaSeperatedValues(), buffer, stringRegistry);
 	}
 
 	@Override

@@ -22,6 +22,8 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
@@ -49,10 +51,11 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 		this.responseTimeNanos = (Long) values[2];
 	}
 
-	public MyResponseTimeRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.className = stringRegistry.get(buffer.getInt());
-		this.methodName = stringRegistry.get(buffer.getInt());
-		this.responseTimeNanos = buffer.getLong();
+	public MyResponseTimeRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
+			throws BufferUnderflowException {
+		this.className = deserializer.getString(buffer, stringRegistry);
+		this.methodName = deserializer.getString(buffer, stringRegistry);
+		this.responseTimeNanos = deserializer.getLong(buffer);
 	}
 
 	@Override
@@ -65,7 +68,8 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 	@Override
 	@Deprecated
 	// Will not be used because the record implements IMonitoringRecord.BinaryFactory
-	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public final void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
+			throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -81,10 +85,10 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 	}
 
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putInt(stringRegistry.get(this.getClassName()));
-		buffer.putInt(stringRegistry.get(this.getMethodName()));
-		buffer.putLong(this.getResponseTimeNanos());
+	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		serializer.putString(this.getClassName(), buffer, stringRegistry);
+		serializer.putString(this.getMethodName(), buffer, stringRegistry);
+		serializer.putLong(this.getResponseTimeNanos(), buffer);
 	}
 
 	@Override
