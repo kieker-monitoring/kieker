@@ -1,19 +1,34 @@
+apply plugin: 'eclipse'
 apply plugin: 'maven'
 apply plugin: 'signing'
 
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+      		url "https://plugins.gradle.org/m2/"
+    	}
     }
 
     dependencies {
         classpath 'de.aaschmid.gradle.plugins:gradle-cpd-plugin:0.1'
+        classpath 'gradle.plugin.gradle-plugins:jartest:1.0'			// necessary to depend tests on tests
     }
 }
+
+// We have multiple subprojects - but we do not want all of them in our JAR files.
+def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
 
 // better use subprojects to avoid if-then-else in sourceSets
 allprojects {
     version = kiekerVersion
+
+	apply plugin: 'eclipse'
+	eclipse {
+		classpath {
+			defaultOutputDir = file('build-eclipse')
+		}
+	}
 
     apply plugin: 'java'
     sourceCompatibility = 1.7
@@ -175,78 +190,7 @@ allprojects {
         testCompile resolveLibrary('hamcrest-core-*.jar')
     }
 
-/*
-	// if enabled the kieker root project would not contain any source folders. 
-	// All subprojects would be represented as dedicated Eclipse projects.
-    apply plugin: 'eclipse'
-    eclipse {
-	  //if you want parts of paths in resulting file to be replaced by variables (files):
-	  //pathVariables 'GRADLE_HOME': file('/best/software/gradle'), 'TOMCAT_HOME': file('../tomcat')
-	
-	  classpath {
-	    //you can tweak the classpath of the Eclipse project by adding extra configurations:
-	    //plusConfigurations += [ configurations.provided ]
-	
-	    //you can also remove configurations from the classpath:
-	    //minusConfigurations += [ configurations.someBoringConfig ]
-	
-	    //if you want to append extra containers:
-	    //containers 'someFriendlyContainer', 'andYetAnotherContainer'
-	
-	    //customizing the classes output directory:
-	    //defaultOutputDir = file('build-eclipse')
-	
-	    //default settings for downloading sources and Javadoc:
-	    downloadSources = true
-	    downloadJavadoc = false
-	  }
-	}
-*/
 }
-
-// We have multiple subprojects - but we do not want all of them in our JAR files.
-def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
-
-/*
-sourceSets {
-    main {
-        java {
-        	subprojects.each {
-        		srcDir it.sourceSets.main.java.srcDirs
-        	}
-		}
-		resources {
-			subprojects.each {
-				srcDir it.sourceSets.main.resources.srcDirs
-			}
-		}
-	}
-    test {
-        java {
-        	subprojects.each {
-        		srcDir it.sourceSets.test.java.srcDirs
-        	}
-		}
-		resources {
-			subprojects.each {
-				srcDir it.sourceSets.test.resources.srcDirs
-			}
-		}
-	}
-    integrationTest {
-        java {
-        	subprojects.each {
-        		srcDir it.sourceSets.integrationTest.java.srcDirs
-        	}
-		}
-		resources {
-			subprojects.each {
-				srcDir it.sourceSets.integrationTest.resources.srcDirs
-			}
-		}
-	}
-}
-*/
 
 def parseCheckstyleReport(File reportFile) {
     def errors = 0
