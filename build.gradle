@@ -11,7 +11,6 @@ buildscript {
     }
 
     dependencies {
-        classpath 'de.aaschmid.gradle.plugins:gradle-cpd-plugin:0.1'
         classpath 'gradle.plugin.gradle-plugins:jartest:1.0.1'			// necessary to depend tests on tests
     }
 }
@@ -76,9 +75,9 @@ allprojects {
             showStandardStreams = 'true'
         }
 
-	afterTest { desc, result -> 
-	    println "Executed test ${desc.name} [${desc.className}] with result: ${result.resultType}"
-	}
+		afterTest { desc, result -> 
+		    println "Executed test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+		}
     }
 
     configurations {
@@ -109,17 +108,13 @@ allprojects {
 	    maxHeapSize = "2g" // Set limit to prevent Travis-CI build to crash
     }
 
-    apply plugin: 'cpd'
-    tasks.cpd {
-        reports {
-            xml.enabled = true
-            xml.destination = file("${buildDir}/reports/cpd/cpd.xml")
-        }
-        source = 'src'
-    }
-
+	def pmdAndCpdVersion = '5.0.5'	// works with 0 PMD errors and 0 PMD warnings
+//	def pmdAndCpdVersion = '5.1.3'	// causes many new PMD errors and PMD warnings
+//	def pmdAndCpdVersion = '5.5.0'	// causes many new PMD errors and PMD warnings
     apply plugin: 'pmd'
     pmd {
+    	// the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
+    	toolVersion = pmdAndCpdVersion
         ignoreFailures = true
 
         // Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
@@ -146,14 +141,14 @@ allprojects {
         excludeFilter = resolveRelativeToParent(dirConfig, 'fb-filter.xml')
     }
 
-    tasks.withType(FindBugs) {
+    tasks.withType(Pmd) {
         reports {
             xml.enabled = true
             html.enabled = false
         }
     }
 
-    tasks.withType(Pmd) {
+    tasks.withType(FindBugs) {
         reports {
             xml.enabled = true
             html.enabled = false
@@ -167,14 +162,13 @@ allprojects {
     checkstyleMain.source = 'src'
     checkstyleTest.source = 'test'
     
-    repositories { 
+    repositories {
+    	mavenCentral() 
     	jcenter() // for mockito
     }
 
     // Those are some dependencies which are needed by all submodules
     dependencies {
-        pmd resolveLibrary('**/pmd-*/**/*.jar')
-        cpd resolveLibrary('**/pmd-*/**/*.jar')
         checkstyle resolveLibrary('**/checkstyle-*/**/*.jar')
         checkstyle project(':kieker-checkstyle-extension')
 
@@ -183,10 +177,9 @@ allprojects {
         // compile-time dependency due to the annotation SuppressFBWarnings()
         compile resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
 
-	// moved to common to let Eclipse compile each module separately
-	testCompile "org.mockito:mockito-core:2.+"
-        testCompile resolveLibrary('junit-*.jar')
-        testCompile resolveLibrary('hamcrest-core-*.jar')
+		// moved to common to let Eclipse compile each module separately
+		testCompile "org.mockito:mockito-core:2.+"
+        testCompile 'junit:junit:4.11'
     }
 
 }
