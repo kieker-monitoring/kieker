@@ -1,4 +1,7 @@
-/build-eclipse/
+.settings/
+.project
+.classpath
+build-eclipse/
 /build/
 /dist/
 /tmp/
@@ -13,8 +16,6 @@ plugin.xml
 /activemq-data
 /invalidTraceArtifacts-yyyyMMdd-HHmmssSSS.txt
 /messageTraces-yyyyMMdd-HHmmssSSS.txt
-/examples/JavaEEServletContainerExample/livedemo/build-eclipse
-/.gradle
 /kieker-analysis/build
 /kieker-common/build
 /kieker-monitoring/build
@@ -28,9 +29,8 @@ plugin.xml
 /kieker-analysis/*.log
 /kieker-checkstyle-extension/build
 /docs
-/build-eclipse/
 /javadoc
-**/.gradle
+.gradle
 /src-gen
 /test-gen
 
