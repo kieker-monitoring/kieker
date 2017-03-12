@@ -114,5 +114,6 @@
 	<classpathentry kind="lib" path="lib/framework-libs/jersey/jersey-server-1.19.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/javax.ws.rs-api-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/kafka/kafka-clients-0.10.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/static-analysis/findbugs-3.0.1/lib/jsr305.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
