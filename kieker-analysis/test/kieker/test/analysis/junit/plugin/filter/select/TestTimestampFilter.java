@@ -33,6 +33,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
+
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
