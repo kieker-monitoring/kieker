@@ -60,7 +60,7 @@ public class ExecutionModelAssembler {
 			this.executionModel.getAggregatedInvocations().put(key, invocation);
 		}
 
-		// TODO
+		// TODO Statistics and so on
 
 	}
 
@@ -69,16 +69,11 @@ public class ExecutionModelAssembler {
 
 		@Override
 		public void visit(final OperationCall operationCall) {
+			// Check if operationCall is an entry operation call. If so than source is null
+			final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null;
+			final DeployedOperation target = operationCall.getOperation();
 
-			// TODO handle root OperationCalls
-
-			if (operationCall.getParent() != null) {
-				final DeployedOperation source = operationCall.getParent().getOperation();
-				final DeployedOperation target = operationCall.getOperation();
-
-				ExecutionModelAssembler.this.addExecution(source, target);
-			}
-
+			ExecutionModelAssembler.this.addExecution(source, target);
 		}
 	}
 }
