@@ -23,7 +23,7 @@ package kieker.analysisteetime.dependencygraphs.vertextypes;
  */
 public enum VertexType {
 
-	COMPONENT_TYPE("component type"), OPERATION_TYPE("operation type"), ASSEMBLY_COMPONENT("assembly component"), ASSEMBLY_OPERATION(
+	ENTRY("entry"), COMPONENT_TYPE("component type"), OPERATION_TYPE("operation type"), ASSEMBLY_COMPONENT("assembly component"), ASSEMBLY_OPERATION(
 			"assembly operation"), DEPLOYMENT_CONTEXT("deployment context"), DEPLOYED_COMPONENT("deployed component"), DEPLOYED_OPERATION("deployed operation");
 
 	private final String name;

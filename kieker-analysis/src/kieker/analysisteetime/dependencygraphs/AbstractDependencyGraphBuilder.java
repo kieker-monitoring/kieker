@@ -18,6 +18,7 @@ package kieker.analysisteetime.dependencygraphs;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
@@ -39,6 +40,8 @@ import kieker.analysisteetime.util.graph.impl.GraphImpl;
 
 public abstract class AbstractDependencyGraphBuilder implements DependencyGraphBuilder {
 
+	private static final Object ENTRY_VERTEX_IDENTIFIER = "entry";
+
 	protected final Graph graph;
 	protected final ObjectIdentifierRegistry identifierRegistry;
 
@@ -56,12 +59,19 @@ public abstract class AbstractDependencyGraphBuilder implements DependencyGraphB
 	}
 
 	private void handleInvocation(final AggregatedInvocation invocation) {
-		final Vertex sourceVertex = this.addVertex(invocation.getSource());
+		final Vertex sourceVertex = invocation.getSource() != null ? this.addVertex(invocation.getSource()) : this.addVertexForEntry();
 		final Vertex targetVertex = this.addVertex(invocation.getTarget());
 		this.addEdge(sourceVertex, targetVertex);
 	}
 
 	protected abstract Vertex addVertex(DeployedOperation deployedOperation);
+
+	protected Vertex addVertexForEntry() {
+		final int id = this.identifierRegistry.getIdentifier(ENTRY_VERTEX_IDENTIFIER);
+		final Vertex vertex = this.graph.addVertexIfAbsent(id);
+		vertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.ENTRY);
+		return vertex;
+	}
 
 	private Edge addEdge(final Vertex source, final Vertex target) {
 		final int edgeId = this.identifierRegistry.getIdentifier(Pair.of(source, target));
