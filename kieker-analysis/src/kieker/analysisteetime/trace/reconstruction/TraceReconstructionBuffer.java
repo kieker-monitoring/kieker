@@ -19,6 +19,7 @@ package kieker.analysisteetime.trace.reconstruction;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -46,7 +47,7 @@ public class TraceReconstructionBuffer {
 	private final TraceFactory factory = TraceFactory.eINSTANCE;
 	private final DeploymentModel deploymentModel;
 	private final TraceMetadata traceMetadata;
-	private final ChronoUnit timeUnit;
+	private final TemporalUnit temporalUnit;
 
 	private final Deque<BeforeOperationEvent> stack = new LinkedList<>();
 	private OperationCall root;
@@ -55,14 +56,14 @@ public class TraceReconstructionBuffer {
 	public TraceReconstructionBuffer(final DeploymentModel deploymentModel, final TraceMetadata traceMetadata) {
 		this.deploymentModel = deploymentModel;
 		this.traceMetadata = traceMetadata;
-		this.timeUnit = ChronoUnit.NANOS; // TODO Temporary hard coded
+		this.temporalUnit = ChronoUnit.NANOS; // TODO Temporary hard coded
 	}
 
 	public void handleBeforeOperationEventRecord(final BeforeOperationEvent record) {
 		this.stack.push(record);
 
 		final OperationCall newCall = this.factory.createOperationCall();
-		final Instant start = Instants.createFromEpochTimestamp(record.getTimestamp(), this.timeUnit);
+		final Instant start = Instants.createFromEpochTimestamp(record.getTimestamp(), this.temporalUnit);
 		newCall.setStart(start);
 
 		final DeploymentContext context = this.deploymentModel.getDeploymentContexts().get(this.traceMetadata.getHostname());
@@ -85,7 +86,7 @@ public class TraceReconstructionBuffer {
 		final BeforeOperationEvent beforeEvent = this.stack.pop();
 
 		final long timestampDifference = record.getTimestamp() - beforeEvent.getTimestamp();
-		this.current.setDuration(Duration.of(timestampDifference, this.timeUnit));
+		this.current.setDuration(Duration.of(timestampDifference, this.temporalUnit));
 
 		if (record instanceof AfterOperationFailedEvent) {
 			final String failedCause = ((AfterOperationFailedEvent) record).getCause();
