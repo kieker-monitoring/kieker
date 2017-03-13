@@ -8,6 +8,7 @@ import java.time.temporal.ChronoUnit;
 
 import kieker.analysisteetime.dependencygraphs.DependencyGraphCreatorStage;
 import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependencyGraphBuilderFactory;
+import kieker.analysisteetime.dependencygraphs.dot.DotExportConfigurationFactory;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
@@ -26,6 +27,7 @@ import kieker.analysisteetime.util.graph.Direction;
 import kieker.analysisteetime.util.graph.Edge;
 import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.export.dot.DotFileWriterStage;
 import kieker.analysisteetime.util.graph.export.graphml.GraphMLFileWriterStage;
 import kieker.analysisteetime.util.stage.trigger.TriggerOnTerminationStage;
 import kieker.common.record.IMonitoringRecord;
@@ -73,6 +75,8 @@ public class ExampleConfiguration extends Configuration {
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
 		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(this.executionModel,
 				new DeploymentLevelOperationDependencyGraphBuilderFactory());
+		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory.getPath(),
+				(new DotExportConfigurationFactory()).createForDeploymentLevelOperationDependencyGraph());
 		final AbstractConsumerStage<Graph> debugStage = new AbstractConsumerStage<Graph>() {
 			@Override
 			protected void execute(final Graph graph) {
@@ -117,7 +121,8 @@ public class ExampleConfiguration extends Configuration {
 		super.connectPorts(traceDistributor.getNewOutputPort(), executionModelAssembler.getInputPort());
 		super.connectPorts(executionModelAssembler.getOutputPort(), onTerminationTrigger.getInputPort());
 		super.connectPorts(onTerminationTrigger.getOutputPort(), dependencyGraphCreator.getInputPort());
-		super.connectPorts(dependencyGraphCreator.getOutputPort(), debugStage.getInputPort());
+		// super.connectPorts(dependencyGraphCreator.getOutputPort(), debugStage.getInputPort());
+		super.connectPorts(dependencyGraphCreator.getOutputPort(), dotDepGraphFileWriter.getInputPort());
 
 	}
 
