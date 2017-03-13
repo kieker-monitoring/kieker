@@ -16,6 +16,7 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
+import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
@@ -42,7 +43,7 @@ public class AssemblyLevelComponentDependencyGraphBuilder extends AbstractDepend
 
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final Vertex componentVertex = this.graph.addVertexIfAbsent(componentId);
-		componentVertex.setPropertyIfAbsent("type", DependencyGraphVertexType.ASSEMBLY_COMPONENT); // TODO move to constant
+		componentVertex.setPropertyIfAbsent("type", VertexType.ASSEMBLY_COMPONENT); // TODO move to constant
 		componentVertex.setPropertyIfAbsent("name", component.getComponentType().getName()); // TODO move to constant
 
 		return componentVertex;

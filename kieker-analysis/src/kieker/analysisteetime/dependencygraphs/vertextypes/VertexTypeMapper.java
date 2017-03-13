@@ -14,16 +14,17 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.dependencygraphs;
+package kieker.analysisteetime.dependencygraphs.vertextypes;
+
+import java.util.function.Function;
 
 /**
  * @author Sören Henning
  *
  * @since 1.13
  */
-public enum DependencyGraphVertexType {
+public interface VertexTypeMapper extends Function<VertexType, String> {
 
-	// TODO Add string representation
-	COMPONENT_TYPE, OPERATION_TYPE, ASSEMBLY_COMPONENT, ASSEMBLY_OPERATION, DEPLOYMENT_CONTEXT, DEPLOYED_COMPONENT, DEPLOYED_OPERATION;
+	public static VertexTypeMapper DEFAULT = t -> t.toString();
 
 }

@@ -16,6 +16,7 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
+import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
@@ -43,13 +44,13 @@ public class TypeLevelOperationDependencyGraphBuilder extends AbstractDependency
 
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final Vertex componentVertex = this.graph.addVertexIfAbsent(componentId);
-		componentVertex.setPropertyIfAbsent("type", DependencyGraphVertexType.COMPONENT_TYPE); // TODO move to constant
+		componentVertex.setPropertyIfAbsent("type", VertexType.COMPONENT_TYPE); // TODO move to constant
 		componentVertex.setPropertyIfAbsent("name", component.getName()); // TODO move to constant
 
 		final Graph componentSubgraph = componentVertex.addChildGraphIfAbsent();
 		final int operationId = this.identifierRegistry.getIdentifier(operation);
 		final Vertex operationVertex = componentSubgraph.addVertexIfAbsent(operationId);
-		operationVertex.setPropertyIfAbsent("type", DependencyGraphVertexType.OPERATION_TYPE); // TODO move to constant
+		operationVertex.setPropertyIfAbsent("type", VertexType.OPERATION_TYPE); // TODO move to constant
 		operationVertex.setPropertyIfAbsent("name", operation.getName()); // TODO move to constant
 
 		return operationVertex;

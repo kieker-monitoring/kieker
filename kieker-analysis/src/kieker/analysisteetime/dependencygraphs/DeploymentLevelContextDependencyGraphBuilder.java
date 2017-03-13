@@ -16,6 +16,7 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
+import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
@@ -45,7 +46,7 @@ class DeploymentLevelContextDependencyGraphBuilder extends AbstractDependencyGra
 
 		final int contextId = this.identifierRegistry.getIdentifier(context);
 		final Vertex contextVertex = this.graph.addVertexIfAbsent(contextId);
-		contextVertex.setPropertyIfAbsent("type", DependencyGraphVertexType.DEPLOYMENT_CONTEXT); // TODO move to constant
+		contextVertex.setPropertyIfAbsent("type", VertexType.DEPLOYMENT_CONTEXT); // TODO move to constant
 		contextVertex.setPropertyIfAbsent("name", context.getName()); // TODO move to constant
 
 		return contextVertex;

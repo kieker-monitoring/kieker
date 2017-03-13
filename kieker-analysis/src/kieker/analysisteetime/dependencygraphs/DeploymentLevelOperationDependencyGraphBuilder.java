@@ -16,6 +16,7 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
+import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
@@ -44,19 +45,19 @@ public class DeploymentLevelOperationDependencyGraphBuilder extends AbstractDepe
 
 		final int contextId = this.identifierRegistry.getIdentifier(context);
 		final Vertex contextVertex = this.graph.addVertexIfAbsent(contextId);
-		contextVertex.setPropertyIfAbsent("type", DependencyGraphVertexType.DEPLOYMENT_CONTEXT); // TODO move to constant
+		contextVertex.setPropertyIfAbsent("type", VertexType.DEPLOYMENT_CONTEXT); // TODO move to constant
 		contextVertex.setPropertyIfAbsent("name", context.getName()); // TODO move to constant
 
 		final Graph contextSubgraph = contextVertex.addChildGraphIfAbsent();
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final Vertex componentVertex = contextSubgraph.addVertexIfAbsent(componentId);
-		componentVertex.setPropertyIfAbsent("type", DependencyGraphVertexType.DEPLOYED_COMPONENT); // TODO move to constant
+		componentVertex.setPropertyIfAbsent("type", VertexType.DEPLOYED_COMPONENT); // TODO move to constant
 		componentVertex.setPropertyIfAbsent("name", component.getAssemblyComponent().getComponentType().getName()); // TODO move to constant
 
 		final Graph componentSubgraph = componentVertex.addChildGraphIfAbsent();
 		final int operationId = this.identifierRegistry.getIdentifier(operation);
 		final Vertex operationVertex = componentSubgraph.addVertexIfAbsent(operationId);
-		operationVertex.setPropertyIfAbsent("type", DependencyGraphVertexType.DEPLOYED_OPERATION); // TODO move to constant
+		operationVertex.setPropertyIfAbsent("type", VertexType.DEPLOYED_OPERATION); // TODO move to constant
 		operationVertex.setPropertyIfAbsent("name", operation.getAssemblyOperation().getOperationType().getName()); // TODO move to constant
 
 		return operationVertex;
