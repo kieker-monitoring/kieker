@@ -28,6 +28,11 @@ abstract class ElementImpl implements Element {
 	}
 
 	@Override
+	public void setPropertyIfAbsent(final String key, final Object value) {
+		this.properties.putIfAbsent(key, value);
+	}
+
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T removeProperty(final String key) {
 		return (T) this.properties.remove(key);

@@ -42,6 +42,8 @@ public class AssemblyLevelComponentDependencyGraphBuilder extends AbstractDepend
 
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final Vertex componentVertex = this.graph.addVertexIfAbsent(componentId);
+		componentVertex.setPropertyIfAbsent("type", "<<assembly component>>"); // TODO move to constant
+		componentVertex.setPropertyIfAbsent("name", component.getComponentType().getName()); // TODO move to constant
 
 		return componentVertex;
 	}

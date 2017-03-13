@@ -43,10 +43,14 @@ public class AssemblyLevelOperationDependencyGraphBuilder extends AbstractDepend
 
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final Vertex componentVertex = this.graph.addVertexIfAbsent(componentId);
+		componentVertex.setPropertyIfAbsent("type", "<<assembly component>>"); // TODO move to constant
+		componentVertex.setPropertyIfAbsent("name", component.getComponentType().getName()); // TODO move to constant
 
 		final Graph componentSubgraph = componentVertex.addChildGraphIfAbsent();
 		final int operationId = this.identifierRegistry.getIdentifier(operation);
 		final Vertex operationVertex = componentSubgraph.addVertexIfAbsent(operationId);
+		operationVertex.setPropertyIfAbsent("type", "[[[assembly operation]]]"); // TODO move to constant
+		operationVertex.setPropertyIfAbsent("name", operation.getOperationType().getName()); // TODO move to constant
 
 		return operationVertex;
 	}

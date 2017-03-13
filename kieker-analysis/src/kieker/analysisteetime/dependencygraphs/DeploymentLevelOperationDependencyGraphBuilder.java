@@ -44,14 +44,20 @@ public class DeploymentLevelOperationDependencyGraphBuilder extends AbstractDepe
 
 		final int contextId = this.identifierRegistry.getIdentifier(context);
 		final Vertex contextVertex = this.graph.addVertexIfAbsent(contextId);
+		contextVertex.setPropertyIfAbsent("type", "<<execution container>>"); // TODO move to constant
+		contextVertex.setPropertyIfAbsent("name", context.getName()); // TODO move to constant
 
 		final Graph contextSubgraph = contextVertex.addChildGraphIfAbsent();
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final Vertex componentVertex = contextSubgraph.addVertexIfAbsent(componentId);
+		componentVertex.setPropertyIfAbsent("type", "<<deployment component>>"); // TODO move to constant
+		componentVertex.setPropertyIfAbsent("name", component.getAssemblyComponent().getComponentType().getName()); // TODO move to constant
 
 		final Graph componentSubgraph = componentVertex.addChildGraphIfAbsent();
 		final int operationId = this.identifierRegistry.getIdentifier(operation);
 		final Vertex operationVertex = componentSubgraph.addVertexIfAbsent(operationId);
+		operationVertex.setPropertyIfAbsent("type", "[[[deployment operation]]]"); // TODO move to constant
+		operationVertex.setPropertyIfAbsent("name", operation.getAssemblyOperation().getOperationType().getName()); // TODO move to constant
 
 		return operationVertex;
 	}

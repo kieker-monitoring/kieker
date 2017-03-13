@@ -10,6 +10,8 @@ public interface Element {
 
 	public void setProperty(String key, Object value);
 
+	public void setPropertyIfAbsent(String key, Object value);
+
 	public <T> T removeProperty(String key);
 
 }

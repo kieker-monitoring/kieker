@@ -44,7 +44,10 @@ class DeploymentLevelContextDependencyGraphBuilder extends AbstractDependencyGra
 		final DeploymentContext context = component.getDeploymentContext();
 
 		final int contextId = this.identifierRegistry.getIdentifier(context);
+
 		final Vertex contextVertex = this.graph.addVertexIfAbsent(contextId);
+		contextVertex.setPropertyIfAbsent("type", "<<execution container>>"); // TODO move to constant
+		contextVertex.setPropertyIfAbsent("name", context.getName()); // TODO move to constant
 
 		return contextVertex;
 	}
