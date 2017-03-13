@@ -45,20 +45,23 @@ public class DeploymentLevelOperationDependencyGraphBuilder extends AbstractDepe
 
 		final int contextId = this.identifierRegistry.getIdentifier(context);
 		final Vertex contextVertex = this.graph.addVertexIfAbsent(contextId);
-		contextVertex.setPropertyIfAbsent("type", VertexType.DEPLOYMENT_CONTEXT); // TODO move to constant
-		contextVertex.setPropertyIfAbsent("name", context.getName()); // TODO move to constant
+		contextVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.DEPLOYMENT_CONTEXT);
+		contextVertex.setPropertyIfAbsent(PropertyKeys.NAME, context.getName());
 
 		final Graph contextSubgraph = contextVertex.addChildGraphIfAbsent();
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final Vertex componentVertex = contextSubgraph.addVertexIfAbsent(componentId);
-		componentVertex.setPropertyIfAbsent("type", VertexType.DEPLOYED_COMPONENT); // TODO move to constant
-		componentVertex.setPropertyIfAbsent("name", component.getAssemblyComponent().getComponentType().getName()); // TODO move to constant
+		componentVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.DEPLOYED_COMPONENT);
+		componentVertex.setPropertyIfAbsent(PropertyKeys.NAME, component.getAssemblyComponent().getComponentType().getName());
 
 		final Graph componentSubgraph = componentVertex.addChildGraphIfAbsent();
 		final int operationId = this.identifierRegistry.getIdentifier(operation);
 		final Vertex operationVertex = componentSubgraph.addVertexIfAbsent(operationId);
-		operationVertex.setPropertyIfAbsent("type", VertexType.DEPLOYED_OPERATION); // TODO move to constant
-		operationVertex.setPropertyIfAbsent("name", operation.getAssemblyOperation().getOperationType().getName()); // TODO move to constant
+		operationVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.DEPLOYED_OPERATION);
+		operationVertex.setPropertyIfAbsent(PropertyKeys.NAME, operation.getAssemblyOperation().getOperationType().getName());
+		operationVertex.setPropertyIfAbsent(PropertyKeys.RETURN_TYPE, operation.getAssemblyOperation().getOperationType().getReturnType());
+		operationVertex.setPropertyIfAbsent(PropertyKeys.MODIFIERS, operation.getAssemblyOperation().getOperationType().getModifiers());
+		operationVertex.setPropertyIfAbsent(PropertyKeys.PARAMETER_TYPES, operation.getAssemblyOperation().getOperationType().getParameterTypes());
 
 		return operationVertex;
 	}

@@ -44,14 +44,17 @@ public class TypeLevelOperationDependencyGraphBuilder extends AbstractDependency
 
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final Vertex componentVertex = this.graph.addVertexIfAbsent(componentId);
-		componentVertex.setPropertyIfAbsent("type", VertexType.COMPONENT_TYPE); // TODO move to constant
-		componentVertex.setPropertyIfAbsent("name", component.getName()); // TODO move to constant
+		componentVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.COMPONENT_TYPE);
+		componentVertex.setPropertyIfAbsent(PropertyKeys.NAME, component.getName());
 
 		final Graph componentSubgraph = componentVertex.addChildGraphIfAbsent();
 		final int operationId = this.identifierRegistry.getIdentifier(operation);
 		final Vertex operationVertex = componentSubgraph.addVertexIfAbsent(operationId);
-		operationVertex.setPropertyIfAbsent("type", VertexType.OPERATION_TYPE); // TODO move to constant
-		operationVertex.setPropertyIfAbsent("name", operation.getName()); // TODO move to constant
+		operationVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.OPERATION_TYPE);
+		operationVertex.setPropertyIfAbsent(PropertyKeys.NAME, operation.getName());
+		operationVertex.setPropertyIfAbsent(PropertyKeys.RETURN_TYPE, operation.getReturnType()); // TODO move to constant
+		operationVertex.setPropertyIfAbsent(PropertyKeys.MODIFIERS, operation.getModifiers()); // TODO move to constant
+		operationVertex.setPropertyIfAbsent(PropertyKeys.PARAMETER_TYPES, operation.getParameterTypes()); // TODO move to constant
 
 		return operationVertex;
 	}

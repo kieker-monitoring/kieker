@@ -16,6 +16,7 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
+import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
@@ -44,14 +45,14 @@ class DeploymentLevelComponentDependencyGraphBuilder extends AbstractDependencyG
 
 		final int contextId = this.identifierRegistry.getIdentifier(context);
 		final Vertex contextVertex = this.graph.addVertexIfAbsent(contextId);
-		contextVertex.setPropertyIfAbsent("type", "<<execution container>>"); // TODO move to constant
-		contextVertex.setPropertyIfAbsent("name", context.getName()); // TODO move to constant
+		contextVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.DEPLOYMENT_CONTEXT);
+		contextVertex.setPropertyIfAbsent(PropertyKeys.NAME, context.getName());
 
 		final Graph contextSubgraph = contextVertex.addChildGraphIfAbsent();
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final Vertex componentVertex = contextSubgraph.addVertexIfAbsent(componentId);
-		componentVertex.setPropertyIfAbsent("type", "<<deployment component>>"); // TODO move to constant
-		componentVertex.setPropertyIfAbsent("name", component.getAssemblyComponent().getComponentType().getName()); // TODO move to constant
+		componentVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.DEPLOYED_COMPONENT);
+		componentVertex.setPropertyIfAbsent(PropertyKeys.NAME, component.getAssemblyComponent().getComponentType().getName());
 
 		return componentVertex;
 	}

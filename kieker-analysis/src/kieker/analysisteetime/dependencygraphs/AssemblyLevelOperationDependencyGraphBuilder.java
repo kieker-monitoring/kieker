@@ -44,14 +44,17 @@ public class AssemblyLevelOperationDependencyGraphBuilder extends AbstractDepend
 
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final Vertex componentVertex = this.graph.addVertexIfAbsent(componentId);
-		componentVertex.setPropertyIfAbsent("type", VertexType.ASSEMBLY_COMPONENT); // TODO move to constant
-		componentVertex.setPropertyIfAbsent("name", component.getComponentType().getName()); // TODO move to constant
+		componentVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.ASSEMBLY_COMPONENT);
+		componentVertex.setPropertyIfAbsent(PropertyKeys.NAME, component.getComponentType().getName());
 
 		final Graph componentSubgraph = componentVertex.addChildGraphIfAbsent();
 		final int operationId = this.identifierRegistry.getIdentifier(operation);
 		final Vertex operationVertex = componentSubgraph.addVertexIfAbsent(operationId);
-		operationVertex.setPropertyIfAbsent("type", VertexType.ASSEMBLY_OPERATION); // TODO move to constant
-		operationVertex.setPropertyIfAbsent("name", operation.getOperationType().getName()); // TODO move to constant
+		operationVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.ASSEMBLY_OPERATION);
+		operationVertex.setPropertyIfAbsent(PropertyKeys.NAME, operation.getOperationType().getName());
+		operationVertex.setPropertyIfAbsent(PropertyKeys.RETURN_TYPE, operation.getOperationType().getReturnType());
+		operationVertex.setPropertyIfAbsent(PropertyKeys.MODIFIERS, operation.getOperationType().getModifiers());
+		operationVertex.setPropertyIfAbsent(PropertyKeys.PARAMETER_TYPES, operation.getOperationType().getParameterTypes());
 
 		return operationVertex;
 	}
