@@ -4,6 +4,7 @@
 package kieker.analysisteetime;
 
 import java.io.File;
+import java.time.temporal.ChronoUnit;
 
 import kieker.analysisteetime.dependencygraphs.DependencyGraphCreatorStage;
 import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependencyGraphBuilderFactory;
@@ -25,6 +26,7 @@ import kieker.analysisteetime.util.graph.Direction;
 import kieker.analysisteetime.util.graph.Edge;
 import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.export.graphml.GraphMLFileWriterStage;
 import kieker.analysisteetime.util.stage.trigger.TriggerOnTerminationStage;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
@@ -60,11 +62,13 @@ public class ExampleConfiguration extends Configuration {
 				new JavaOperationSignatureExtractor());
 		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(this.typeModel, this.assemblyModel);
 		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(this.assemblyModel, this.deploymentModel);
-		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, false); // TODO second parameter
+		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, false, ChronoUnit.NANOS); // TODO second parameter,
+																																		// NANOS temp
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
 		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(this.executionModel);
 		final TraceToGraphTransformerStage traceToGraphTransformer = new TraceToGraphTransformerStage();
 		final DotTraceGraphFileWriterStage dotTraceGraphFileWriter = DotTraceGraphFileWriterStage.create(exportDirectory);
+		final GraphMLFileWriterStage graphMLTraceGraphFileWriter = new GraphMLFileWriterStage(exportDirectory.getPath());
 		final Distributor<Trace> traceDistributor = new Distributor<>();
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
 		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(this.executionModel,
@@ -107,8 +111,9 @@ public class ExampleConfiguration extends Configuration {
 		super.connectPorts(deploymentModelAssembler.getOutputPort(), traceReconstructor.getInputPort());
 		super.connectPorts(traceReconstructor.getOutputPort(), traceStatisticsDecorator.getInputPort());
 		super.connectPorts(traceStatisticsDecorator.getOutputPort(), traceDistributor.getInputPort());
-		// super.connectPorts(traceDistributor.getNewOutputPort(), traceToGraphTransformer.getInputPort());
+		super.connectPorts(traceDistributor.getNewOutputPort(), traceToGraphTransformer.getInputPort());
 		// super.connectPorts(traceToGraphTransformer.getOutputPort(), dotTraceGraphFileWriter.getInputPort());
+		// super.connectPorts(traceToGraphTransformer.getOutputPort(), graphMLTraceGraphFileWriter.getInputPort());
 		super.connectPorts(traceDistributor.getNewOutputPort(), executionModelAssembler.getInputPort());
 		super.connectPorts(executionModelAssembler.getOutputPort(), onTerminationTrigger.getInputPort());
 		super.connectPorts(onTerminationTrigger.getOutputPort(), dependencyGraphCreator.getInputPort());

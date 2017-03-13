@@ -18,7 +18,6 @@ package kieker.analysisteetime.trace.reconstruction;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -53,10 +52,10 @@ public class TraceReconstructionBuffer {
 	private OperationCall root;
 	private OperationCall current;
 
-	public TraceReconstructionBuffer(final DeploymentModel deploymentModel, final TraceMetadata traceMetadata) {
+	public TraceReconstructionBuffer(final DeploymentModel deploymentModel, final TraceMetadata traceMetadata, final TemporalUnit temporalUnit) {
 		this.deploymentModel = deploymentModel;
 		this.traceMetadata = traceMetadata;
-		this.temporalUnit = ChronoUnit.NANOS; // TODO Temporary hard coded
+		this.temporalUnit = temporalUnit; // ChronoUnit.NANOS;
 	}
 
 	public void handleBeforeOperationEventRecord(final BeforeOperationEvent record) {

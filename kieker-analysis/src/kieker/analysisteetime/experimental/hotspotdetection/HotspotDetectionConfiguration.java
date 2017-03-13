@@ -4,6 +4,7 @@
 package kieker.analysisteetime.experimental.hotspotdetection;
 
 import java.io.File;
+import java.time.temporal.ChronoUnit;
 
 import kieker.analysisteetime.AssemblyModelAssemblerStage;
 import kieker.analysisteetime.DeploymentModelAssemblerStage;
@@ -47,7 +48,7 @@ public class HotspotDetectionConfiguration extends Configuration {
 				new JavaOperationSignatureExtractor());
 		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(typeModel, assemblyModel);
 		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(assemblyModel, deploymentModel);
-		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(deploymentModel, false); // TODO second parameter
+		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(deploymentModel, false, ChronoUnit.NANOS); // TODO second parameter
 		final HotspotDetectionStage hotspotDetector = new HotspotDetectionStage();
 
 		// Connect the stages

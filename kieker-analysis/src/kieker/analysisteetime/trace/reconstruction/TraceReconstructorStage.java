@@ -16,6 +16,7 @@
 
 package kieker.analysisteetime.trace.reconstruction;
 
+import java.time.temporal.TemporalUnit;
 import java.util.Optional;
 
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
@@ -39,14 +40,14 @@ public class TraceReconstructorStage extends AbstractTransformation<IFlowRecord,
 
 	private final TraceReconstructor traceReconstructor;
 
-	public TraceReconstructorStage(final DeploymentModel deploymentModel, final boolean activateAdditionalLogChecks) {
-		this.traceReconstructor = new TraceReconstructor(deploymentModel, activateAdditionalLogChecks);
+	public TraceReconstructorStage(final DeploymentModel deploymentModel, final boolean activateAdditionalLogChecks, final TemporalUnit temporalUnit) {
+		this.traceReconstructor = new TraceReconstructor(deploymentModel, activateAdditionalLogChecks, temporalUnit);
 	}
 
 	@Override
 	protected void execute(final IFlowRecord record) {
 		if (record instanceof TraceMetadata) {
-			this.traceReconstructor.handleMetadataRecord((TraceMetadata) record);
+			this.traceReconstructor.handleTraceMetadataRecord((TraceMetadata) record);
 		} else if (record instanceof BeforeOperationEvent) {
 			this.traceReconstructor.handleBeforeOperationEventRecord((BeforeOperationEvent) record);
 		} else if (record instanceof AbstractOperationEvent) {

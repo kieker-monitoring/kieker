@@ -16,6 +16,7 @@
 
 package kieker.analysisteetime.trace.reconstruction;
 
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,10 +43,12 @@ final class TraceReconstructor {
 	private final List<TraceReconstructionBuffer> faultyTraceBuffers = new ArrayList<>();
 	private final boolean activateAdditionalLogChecks;
 	private int danglingRecords;
+	private final TemporalUnit temporalUnit; // BETTER get this value by KiekerMetadataRecord
 
-	public TraceReconstructor(final DeploymentModel deploymentRoot, final boolean activateAdditionalLogChecks) {
+	public TraceReconstructor(final DeploymentModel deploymentRoot, final boolean activateAdditionalLogChecks, final TemporalUnit temporalUnit) {
 		this.deploymentModel = deploymentRoot;
 		this.activateAdditionalLogChecks = activateAdditionalLogChecks;
+		this.temporalUnit = temporalUnit;
 	}
 
 	public int countIncompleteTraces() {
@@ -56,9 +59,9 @@ final class TraceReconstructor {
 		return this.danglingRecords - this.faultyTraceBuffers.size();
 	}
 
-	public void handleMetadataRecord(final TraceMetadata record) {
+	public void handleTraceMetadataRecord(final TraceMetadata record) {
 		final long traceID = record.getTraceId();
-		final TraceReconstructionBuffer newTraceBuffer = new TraceReconstructionBuffer(this.deploymentModel, record);
+		final TraceReconstructionBuffer newTraceBuffer = new TraceReconstructionBuffer(this.deploymentModel, record, this.temporalUnit);
 
 		this.traceBuffers.put(traceID, newTraceBuffer);
 	}
