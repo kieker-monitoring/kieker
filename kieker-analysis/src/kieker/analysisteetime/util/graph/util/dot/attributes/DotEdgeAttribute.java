@@ -15,7 +15,7 @@ package kieker.analysisteetime.util.graph.util.dot.attributes;
  */
 public enum DotEdgeAttribute {
 
-	LABEL("label"), ARROWHEAD("arrowhead"), ARROWSIZE("arrowsize"), ARROWTAIL("arrowtail");
+	LABEL("label"), STYLE("style"), ARROWHEAD("arrowhead"), ARROWSIZE("arrowsize"), ARROWTAIL("arrowtail"), COLOR("color");
 
 	private final String attribute;
 
