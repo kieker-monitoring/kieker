@@ -15,7 +15,7 @@ package kieker.analysisteetime.util.graph.util.dot.attributes;
  */
 public enum DotClusterAttribute {
 
-	LABEL("label"), SHAPE("shape"), STYLE("style"), FILLCOLOR("fillcolor");
+	LABEL("label"), STYLE("style"), FILLCOLOR("fillcolor");
 
 	private final String attribute;
 

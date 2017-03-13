@@ -16,8 +16,6 @@
 
 package kieker.analysisteetime.dependencygraphs.dot;
 
-import kieker.analysisteetime.dependencygraphs.PropertyKeys;
-import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.util.graph.export.dot.DotExportConfiguration;
 import kieker.analysisteetime.util.graph.util.dot.attributes.DotClusterAttribute;
 import kieker.analysisteetime.util.graph.util.dot.attributes.DotEdgeAttribute;
@@ -57,7 +55,6 @@ public class DotExportConfigurationFactory {
 		final DotExportConfiguration.Builder builder = this.createBaseBuilder();
 
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "oval");
-		builder.addClusterAttribute(DotClusterAttribute.SHAPE, v -> "box");
 
 		// TODO
 
@@ -78,7 +75,6 @@ public class DotExportConfigurationFactory {
 		final DotExportConfiguration.Builder builder = this.createBaseBuilder();
 
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "oval");
-		builder.addClusterAttribute(DotClusterAttribute.SHAPE, v -> "box");
 
 		// TODO
 
@@ -99,15 +95,6 @@ public class DotExportConfigurationFactory {
 		final DotExportConfiguration.Builder builder = this.createBaseBuilder();
 
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "oval");
-		builder.addClusterAttribute(DotClusterAttribute.SHAPE, v -> {
-			final VertexType type = VertexType.class.cast(v.getProperty(PropertyKeys.TYPE));
-			switch (type) {
-			case DEPLOYMENT_CONTEXT:
-				return "box3d";
-			default:
-				return "box";
-			}
-		});
 
 		// TODO
 
@@ -118,7 +105,6 @@ public class DotExportConfigurationFactory {
 		final DotExportConfiguration.Builder builder = this.createBaseBuilder();
 
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "box");
-		builder.addClusterAttribute(DotClusterAttribute.SHAPE, v -> "box3d");
 
 		// TODO
 
