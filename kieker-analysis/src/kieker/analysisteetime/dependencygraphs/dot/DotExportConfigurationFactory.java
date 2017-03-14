@@ -16,9 +16,12 @@
 
 package kieker.analysisteetime.dependencygraphs.dot;
 
+import kieker.analysisteetime.ComponentNameBuilder;
+import kieker.analysisteetime.OperationNameBuilder;
 import kieker.analysisteetime.dependencygraphs.PropertyKeys;
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexTypeMapper;
+import kieker.analysisteetime.util.graph.Element;
 import kieker.analysisteetime.util.graph.Vertex;
 import kieker.analysisteetime.util.graph.export.dot.DotExportConfiguration;
 import kieker.analysisteetime.util.graph.util.dot.attributes.DotClusterAttribute;
@@ -33,7 +36,16 @@ import kieker.analysisteetime.util.graph.util.dot.attributes.DotNodeAttribute;
  */
 public class DotExportConfigurationFactory {
 
-	private final VertexTypeMapper vertexTypeMapper = VertexTypeMapper.DEFAULT; // TODO Temp
+	private final VertexTypeMapper vertexTypeMapper;
+	private final ComponentNameBuilder componentNameBuilder;
+	private final OperationNameBuilder operationNameBuilder;
+
+	public DotExportConfigurationFactory(final ComponentNameBuilder componentNameBuilder,
+			final OperationNameBuilder operationNameBuilder, final VertexTypeMapper vertexTypeMapper) {
+		this.vertexTypeMapper = vertexTypeMapper;
+		this.componentNameBuilder = componentNameBuilder;
+		this.operationNameBuilder = operationNameBuilder;
+	}
 
 	private DotExportConfiguration.Builder createBaseBuilder() {
 		final DotExportConfiguration.Builder builder = new DotExportConfiguration.Builder();
@@ -116,10 +128,10 @@ public class DotExportConfigurationFactory {
 			switch (type) {
 			case DEPLOYMENT_CONTEXT:
 				final String contextName = v.getProperty(PropertyKeys.NAME); // TODO use das neue ding
-				return this.createType(type) + '\n' + contextName;
+				return this.createType(type).toString() + '\n' + contextName;
 			case DEPLOYED_COMPONENT:
 				final String componentName = v.getProperty(PropertyKeys.NAME); // TODO use das neue ding
-				return this.createType(type) + '\n' + componentName;
+				return this.createType(type).toString() + '\n' + componentName;
 			default:
 				throw new IllegalArgumentException(); // TODO
 			}
@@ -133,7 +145,10 @@ public class DotExportConfigurationFactory {
 
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "box");
 
-		// TODO
+		builder.addNodeAttribute(DotNodeAttribute.LABEL,
+				v -> new StringBuilder().append(this.createComponentLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString());
+
+		builder.addClusterAttribute(DotClusterAttribute.LABEL, v -> this.createContextLabelFromVertex(v).toString());
 
 		return builder.build();
 	}
@@ -143,13 +158,28 @@ public class DotExportConfigurationFactory {
 
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "box3d");
 
-		// TODO
+		builder.addNodeAttribute(DotNodeAttribute.LABEL, v -> this.createContextLabelFromVertex(v).toString());
 
 		return builder.build();
 	}
 
-	private String createType(final VertexType type) {
-		return "<<" + this.vertexTypeMapper.apply(type) + ">>";
+	private StringBuilder createType(final VertexType type) {
+		return new StringBuilder().append("<<").append(this.vertexTypeMapper.apply(type)).append(">>");
+	}
+
+	private StringBuilder createComponentLabelFromVertex(final Vertex vertex) {
+		final VertexType type = this.getProperty(vertex, PropertyKeys.TYPE, VertexType.class);
+		final String name = this.getProperty(vertex, PropertyKeys.NAME, String.class);
+		final String packageName = this.getProperty(vertex, PropertyKeys.PACKAGE_NAME, String.class);
+
+		return new StringBuilder().append(this.createType(type)).append('\n').append(this.componentNameBuilder.build(packageName, name));
+	}
+
+	private StringBuilder createContextLabelFromVertex(final Vertex vertex) {
+		final VertexType type = this.getProperty(vertex, PropertyKeys.TYPE, VertexType.class);
+		final String name = this.getProperty(vertex, PropertyKeys.NAME, String.class);
+
+		return new StringBuilder().append(this.createType(type)).append('\n').append(name);
 	}
 
 	private StringBuilder createStatisticsFromVertex(final Vertex vertex) {
@@ -171,6 +201,19 @@ public class DotExportConfigurationFactory {
 		builder.append("avg: ").append(meanResponseTime).append(' ').append(timeUnit).append(", ");
 		builder.append("median: ").append(medianResponseTime).append(' ').append(timeUnit);
 		return builder;
+	}
+
+	// private final Function<Vertex, String> componentLabelMapper = v -> ""; // TODO Temp
+
+	private <T> T getProperty(final Element element, final String key, final Class<T> clazz) {
+		final Object object = element.getProperty(key);
+		if (object == null) {
+			throw new IllegalArgumentException("There is no key '" + key + "' for element '" + element + "'");
+		}
+		if (!clazz.isInstance(object)) {
+			throw new IllegalArgumentException("Object with key '" + key + "' is not of type '" + clazz + "'");
+		}
+		return clazz.cast(object);
 	}
 
 }

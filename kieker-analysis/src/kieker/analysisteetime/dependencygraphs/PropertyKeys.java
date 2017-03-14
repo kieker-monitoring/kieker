@@ -27,6 +27,8 @@ public final class PropertyKeys {
 
 	public static final String NAME = "name";
 
+	public static final String PACKAGE_NAME = "package name";
+
 	public static final String RETURN_TYPE = "return type";
 
 	public static final String MODIFIERS = "modifiers";
@@ -34,5 +36,17 @@ public final class PropertyKeys {
 	public static final String PARAMETER_TYPES = "parameter types";
 
 	public static final String CALLS = "calls";
+
+	public static final String MIN_REPSONSE_TIME = "min response time";
+
+	public static final String MAX_REPSONSE_TIME = "max response time";
+
+	public static final String MEAN_REPSONSE_TIME = "mean response time";
+
+	public static final String MEDIAN_REPSONSE_TIME = "median response time";
+
+	public static final String TOTAL_REPSONSE_TIME = "total response time";
+
+	public static final String TIME_UNIT = "time unit";
 
 }
