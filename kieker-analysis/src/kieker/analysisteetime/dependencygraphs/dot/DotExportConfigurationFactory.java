@@ -16,6 +16,7 @@
 
 package kieker.analysisteetime.dependencygraphs.dot;
 
+import kieker.analysisteetime.dependencygraphs.PropertyKeys;
 import kieker.analysisteetime.util.graph.export.dot.DotExportConfiguration;
 import kieker.analysisteetime.util.graph.util.dot.attributes.DotClusterAttribute;
 import kieker.analysisteetime.util.graph.util.dot.attributes.DotEdgeAttribute;
@@ -43,7 +44,7 @@ public class DotExportConfigurationFactory {
 
 		builder.addNodeAttribute(DotNodeAttribute.LABEL, v -> "node label"); // TODO TEMP
 
-		builder.addEdgeAttribute(DotEdgeAttribute.LABEL, e -> "edge label"); // TODO TEMP
+		builder.addEdgeAttribute(DotEdgeAttribute.LABEL, e -> e.getProperty(PropertyKeys.CALLS));
 
 		builder.addClusterAttribute(DotClusterAttribute.STYLE, v -> "filled");
 		builder.addClusterAttribute(DotClusterAttribute.FILLCOLOR, v -> "white");

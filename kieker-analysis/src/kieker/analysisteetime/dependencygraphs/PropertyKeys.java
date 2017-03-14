@@ -33,4 +33,6 @@ public final class PropertyKeys {
 
 	public static final String PARAMETER_TYPES = "parameter types";
 
+	public static final String CALLS = "calls";
+
 }

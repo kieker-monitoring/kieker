@@ -76,6 +76,7 @@ public abstract class AbstractDependencyGraphBuilder implements DependencyGraphB
 	private Edge addEdge(final Vertex source, final Vertex target) {
 		final int edgeId = this.identifierRegistry.getIdentifier(Pair.of(source, target));
 		final Edge edge = source.addEdgeIfAbsent(edgeId, target);
+		edge.setPropertyIfAbsent(PropertyKeys.CALLS, 999); // TODO Temp retrieve from statistics
 		return edge;
 	}
 
