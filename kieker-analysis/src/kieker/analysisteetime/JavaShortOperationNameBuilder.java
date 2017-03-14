@@ -16,7 +16,7 @@
 
 package kieker.analysisteetime;
 
-import kieker.analysisteetime.model.analysismodel.type.OperationType;
+import java.util.Collection;
 
 /**
  * @author Sören Henning
@@ -26,15 +26,8 @@ import kieker.analysisteetime.model.analysismodel.type.OperationType;
 public class JavaShortOperationNameBuilder implements OperationNameBuilder {
 
 	@Override
-	public String build(final OperationType operationType) {
-		final StringBuilder builder = new StringBuilder();
-		builder.append(operationType.getName());
-		builder.append('(');
-		if (operationType.getParameterTypes().size() > 0) {
-			builder.append("..");
-		}
-		builder.append(')');
-		return builder.toString();
+	public String build(final Collection<String> modifiers, final String returnType, final String name, final Collection<String> parameterTypes) {
+		return name + '(' + (!parameterTypes.isEmpty() ? ".." : "") + ')';
 	}
 
 }

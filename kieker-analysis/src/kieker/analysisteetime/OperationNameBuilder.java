@@ -16,6 +16,8 @@
 
 package kieker.analysisteetime;
 
+import java.util.Collection;
+
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
 
 /**
@@ -25,6 +27,10 @@ import kieker.analysisteetime.model.analysismodel.type.OperationType;
  */
 public interface OperationNameBuilder {
 
-	public String build(final OperationType operationType);
+	public String build(final Collection<String> modifiers, final String returnType, final String name, final Collection<String> parameterTypes);
+
+	public default String build(final OperationType operationType) {
+		return this.build(operationType.getModifiers(), operationType.getReturnType(), operationType.getName(), operationType.getParameterTypes());
+	}
 
 }

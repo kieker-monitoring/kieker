@@ -25,6 +25,10 @@ import kieker.analysisteetime.model.analysismodel.type.ComponentType;
  */
 public interface ComponentNameBuilder {
 
-	public String build(final ComponentType componentType);
+	public String build(final String packageName, final String name);
+
+	public default String build(final ComponentType componentType) {
+		return this.build(componentType.getPackage(), componentType.getName());
+	}
 
 }

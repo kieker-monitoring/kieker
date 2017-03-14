@@ -16,8 +16,6 @@
 
 package kieker.analysisteetime;
 
-import kieker.analysisteetime.model.analysismodel.type.ComponentType;
-
 /**
  * @author Sören Henning
  *
@@ -26,8 +24,8 @@ import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 public class JavaShortComponentNameBuilder implements ComponentNameBuilder {
 
 	@Override
-	public String build(final ComponentType componentType) {
-		return componentType.getName();
+	public String build(final String packageName, final String name) {
+		return name;
 	}
 
 }
