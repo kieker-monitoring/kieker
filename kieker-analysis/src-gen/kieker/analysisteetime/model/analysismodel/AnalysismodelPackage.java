@@ -76,15 +76,14 @@ public interface AnalysismodelPackage extends EPackage {
 
 
 	/**
-	 * The meta object id for the '<em>Pair</em>' data type.
+	 * The meta object id for the '<em>Composed Key</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.apache.commons.lang3.tuple.Pair
-	 * @see kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl#getPair()
+	 * @see kieker.analysisteetime.util
+	 * @see kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl#getComposedKey()
 	 * @generated
 	 */
-	int PAIR = 2;
-
+	int COMPOSED_KEY = 2;
 
 	/**
 	 * Returns the meta object for data type '{@link java.time.Instant <em>Instant</em>}'.
@@ -109,15 +108,15 @@ public interface AnalysismodelPackage extends EPackage {
 	EDataType getDuration();
 
 	/**
-	 * Returns the meta object for data type '{@link org.apache.commons.lang3.tuple.Pair <em>Pair</em>}'.
+	 * Returns the meta object for data type '{@link kieker.analysisteetime.util <em>Composed Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for data type '<em>Pair</em>'.
-	 * @see org.apache.commons.lang3.tuple.Pair
-	 * @model instanceClass="org.apache.commons.lang3.tuple.Pair" typeParameters="L R"
+	 * @return the meta object for data type '<em>Composed Key</em>'.
+	 * @see kieker.analysisteetime.util
+	 * @model instanceClass="kieker.analysisteetime.util" typeParameters="F S"
 	 * @generated
 	 */
-	EDataType getPair();
+	EDataType getComposedKey();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -163,14 +162,14 @@ public interface AnalysismodelPackage extends EPackage {
 		EDataType DURATION = eINSTANCE.getDuration();
 
 		/**
-		 * The meta object literal for the '<em>Pair</em>' data type.
+		 * The meta object literal for the '<em>Composed Key</em>' data type.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.apache.commons.lang3.tuple.Pair
-		 * @see kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl#getPair()
+		 * @see kieker.analysisteetime.util
+		 * @see kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl#getComposedKey()
 		 * @generated
 		 */
-		EDataType PAIR = eINSTANCE.getPair();
+		EDataType COMPOSED_KEY = eINSTANCE.getComposedKey();
 
 	}
 

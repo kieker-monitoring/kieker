@@ -7,8 +7,7 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionPackage;
 
-import org.apache.commons.lang3.tuple.Pair;
-
+import kieker.analysisteetime.util;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -36,7 +35,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *
  * @generated
  */
-public class DeployedOperationsPairToAggregatedInvocationMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<Pair<DeployedOperation, DeployedOperation>,AggregatedInvocation> {
+public class DeployedOperationsPairToAggregatedInvocationMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<util<DeployedOperation, DeployedOperation>,AggregatedInvocation> {
 	/**
 	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -45,7 +44,7 @@ public class DeployedOperationsPairToAggregatedInvocationMapEntryImpl extends Mi
 	 * @generated
 	 * @ordered
 	 */
-	protected Pair<DeployedOperation, DeployedOperation> key;
+	protected util<DeployedOperation, DeployedOperation> key;
 
 	/**
 	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference.
@@ -81,7 +80,7 @@ public class DeployedOperationsPairToAggregatedInvocationMapEntryImpl extends Mi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Pair<DeployedOperation, DeployedOperation> getTypedKey() {
+	public util<DeployedOperation, DeployedOperation> getTypedKey() {
 		return key;
 	}
 
@@ -90,8 +89,8 @@ public class DeployedOperationsPairToAggregatedInvocationMapEntryImpl extends Mi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setTypedKey(Pair<DeployedOperation, DeployedOperation> newKey) {
-		Pair<DeployedOperation, DeployedOperation> oldKey = key;
+	public void setTypedKey(util<DeployedOperation, DeployedOperation> newKey) {
+		util<DeployedOperation, DeployedOperation> oldKey = key;
 		key = newKey;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY__KEY, oldKey, key));
@@ -180,7 +179,7 @@ public class DeployedOperationsPairToAggregatedInvocationMapEntryImpl extends Mi
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY__KEY:
-				setTypedKey((Pair<DeployedOperation, DeployedOperation>)newValue);
+				setTypedKey((util<DeployedOperation, DeployedOperation>)newValue);
 				return;
 			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY__VALUE:
 				setTypedValue((AggregatedInvocation)newValue);
@@ -198,7 +197,7 @@ public class DeployedOperationsPairToAggregatedInvocationMapEntryImpl extends Mi
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY__KEY:
-				setTypedKey((Pair<DeployedOperation, DeployedOperation>)null);
+				setTypedKey((util<DeployedOperation, DeployedOperation>)null);
 				return;
 			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY__VALUE:
 				setTypedValue((AggregatedInvocation)null);
@@ -273,7 +272,7 @@ public class DeployedOperationsPairToAggregatedInvocationMapEntryImpl extends Mi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Pair<DeployedOperation, DeployedOperation> getKey() {
+	public util<DeployedOperation, DeployedOperation> getKey() {
 		return getTypedKey();
 	}
 
@@ -282,7 +281,7 @@ public class DeployedOperationsPairToAggregatedInvocationMapEntryImpl extends Mi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setKey(Pair<DeployedOperation, DeployedOperation> key) {
+	public void setKey(util<DeployedOperation, DeployedOperation> key) {
 		setTypedKey(key);
 	}
 
@@ -312,9 +311,9 @@ public class DeployedOperationsPairToAggregatedInvocationMapEntryImpl extends Mi
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public EMap<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation> getEMap() {
+	public EMap<util<DeployedOperation, DeployedOperation>, AggregatedInvocation> getEMap() {
 		EObject container = eContainer();
-		return container == null ? null : (EMap<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation>)container.eGet(eContainmentFeature());
+		return container == null ? null : (EMap<util<DeployedOperation, DeployedOperation>, AggregatedInvocation>)container.eGet(eContainmentFeature());
 	}
 
 } //DeployedOperationsPairToAggregatedInvocationMapEntryImpl

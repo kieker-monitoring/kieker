@@ -27,7 +27,7 @@ import kieker.analysisteetime.model.analysismodel.trace.impl.TracePackageImpl;
 
 import kieker.analysisteetime.model.analysismodel.type.TypePackage;
 import kieker.analysisteetime.model.analysismodel.type.impl.TypePackageImpl;
-import org.apache.commons.lang3.tuple.Pair;
+import kieker.analysisteetime.util;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -59,7 +59,7 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EDataType pairEDataType = null;
+	private EDataType composedKeyEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -165,8 +165,8 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EDataType getPair() {
-		return pairEDataType;
+	public EDataType getComposedKey() {
+		return composedKeyEDataType;
 	}
 
 	/**
@@ -199,7 +199,7 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		// Create data types
 		instantEDataType = createEDataType(INSTANT);
 		durationEDataType = createEDataType(DURATION);
-		pairEDataType = createEDataType(PAIR);
+		composedKeyEDataType = createEDataType(COMPOSED_KEY);
 	}
 
 	/**
@@ -244,7 +244,7 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		// Initialize data types
 		initEDataType(instantEDataType, Instant.class, "Instant", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 		initEDataType(durationEDataType, Duration.class, "Duration", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-		initEDataType(pairEDataType, Pair.class, "Pair", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(composedKeyEDataType, util.class, "ComposedKey", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

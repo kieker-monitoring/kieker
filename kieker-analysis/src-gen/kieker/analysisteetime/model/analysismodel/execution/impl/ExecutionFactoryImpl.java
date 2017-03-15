@@ -6,7 +6,7 @@ import java.util.Map;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.*;
 
-import org.apache.commons.lang3.tuple.Pair;
+import kieker.analysisteetime.util;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -82,7 +82,7 @@ public class ExecutionFactoryImpl extends EFactoryImpl implements ExecutionFacto
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Map.Entry<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation> createDeployedOperationsPairToAggregatedInvocationMapEntry() {
+	public Map.Entry<util<DeployedOperation, DeployedOperation>, AggregatedInvocation> createDeployedOperationsPairToAggregatedInvocationMapEntry() {
 		DeployedOperationsPairToAggregatedInvocationMapEntryImpl deployedOperationsPairToAggregatedInvocationMapEntry = new DeployedOperationsPairToAggregatedInvocationMapEntryImpl();
 		return deployedOperationsPairToAggregatedInvocationMapEntry;
 	}

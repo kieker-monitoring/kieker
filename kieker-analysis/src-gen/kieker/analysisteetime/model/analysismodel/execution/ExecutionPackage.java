@@ -213,7 +213,7 @@ public interface ExecutionPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Deployed Operations Pair To Aggregated Invocation Map Entry</em>'.
 	 * @see java.util.Map.Entry
-	 * @model keyDataType="kieker.analysisteetime.model.analysismodel.Pair<kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation, kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation>"
+	 * @model keyDataType="kieker.analysisteetime.model.analysismodel.ComposedKey<kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation, kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation>"
 	 *        valueType="kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation" valueContainment="true"
 	 * @generated
 	 */

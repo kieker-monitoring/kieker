@@ -293,7 +293,7 @@ public class ExecutionPackageImpl extends EPackageImpl implements ExecutionPacka
 		initEReference(getExecutionModel_AggregatedInvocations(), this.getDeployedOperationsPairToAggregatedInvocationMapEntry(), null, "aggregatedInvocations", null, 0, -1, ExecutionModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(deployedOperationsPairToAggregatedInvocationMapEntryEClass, Map.Entry.class, "DeployedOperationsPairToAggregatedInvocationMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		EGenericType g1 = createEGenericType(theAnalysismodelPackage.getPair());
+		EGenericType g1 = createEGenericType(theAnalysismodelPackage.getComposedKey());
 		EGenericType g2 = createEGenericType(theDeploymentPackage.getDeployedOperation());
 		g1.getETypeArguments().add(g2);
 		g2 = createEGenericType(theDeploymentPackage.getDeployedOperation());

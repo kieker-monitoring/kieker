@@ -7,7 +7,7 @@ import java.time.Instant;
 
 import kieker.analysisteetime.model.analysismodel.*;
 
-import org.apache.commons.lang3.tuple.Pair;
+import kieker.analysisteetime.util;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -78,8 +78,8 @@ public class AnalysismodelFactoryImpl extends EFactoryImpl implements Analysismo
 				return createInstantFromString(eDataType, initialValue);
 			case AnalysismodelPackage.DURATION:
 				return createDurationFromString(eDataType, initialValue);
-			case AnalysismodelPackage.PAIR:
-				return createPairFromString(eDataType, initialValue);
+			case AnalysismodelPackage.COMPOSED_KEY:
+				return createComposedKeyFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -97,8 +97,8 @@ public class AnalysismodelFactoryImpl extends EFactoryImpl implements Analysismo
 				return convertInstantToString(eDataType, instanceValue);
 			case AnalysismodelPackage.DURATION:
 				return convertDurationToString(eDataType, instanceValue);
-			case AnalysismodelPackage.PAIR:
-				return convertPairToString(eDataType, instanceValue);
+			case AnalysismodelPackage.COMPOSED_KEY:
+				return convertComposedKeyToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -145,8 +145,8 @@ public class AnalysismodelFactoryImpl extends EFactoryImpl implements Analysismo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Pair<?, ?> createPairFromString(EDataType eDataType, String initialValue) {
-		return (Pair<?, ?>)super.createFromString(initialValue);
+	public util<?, ?> createComposedKeyFromString(EDataType eDataType, String initialValue) {
+		return (util<?, ?>)super.createFromString(initialValue);
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class AnalysismodelFactoryImpl extends EFactoryImpl implements Analysismo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertPairToString(EDataType eDataType, Object instanceValue) {
+	public String convertComposedKeyToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(instanceValue);
 	}
 

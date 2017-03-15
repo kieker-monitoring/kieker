@@ -6,7 +6,7 @@ import java.util.Map;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.*;
 
-import org.apache.commons.lang3.tuple.Pair;
+import kieker.analysisteetime.util;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -76,7 +76,7 @@ public class ExecutionSwitch<T> extends Switch<T> {
 				return result;
 			}
 			case ExecutionPackage.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY: {
-				@SuppressWarnings("unchecked") Map.Entry<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation> deployedOperationsPairToAggregatedInvocationMapEntry = (Map.Entry<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation>)theEObject;
+				@SuppressWarnings("unchecked") Map.Entry<util<DeployedOperation, DeployedOperation>, AggregatedInvocation> deployedOperationsPairToAggregatedInvocationMapEntry = (Map.Entry<util<DeployedOperation, DeployedOperation>, AggregatedInvocation>)theEObject;
 				T result = caseDeployedOperationsPairToAggregatedInvocationMapEntry(deployedOperationsPairToAggregatedInvocationMapEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -117,7 +117,7 @@ public class ExecutionSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseDeployedOperationsPairToAggregatedInvocationMapEntry(Map.Entry<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation> object) {
+	public T caseDeployedOperationsPairToAggregatedInvocationMapEntry(Map.Entry<util<DeployedOperation, DeployedOperation>, AggregatedInvocation> object) {
 		return null;
 	}
 

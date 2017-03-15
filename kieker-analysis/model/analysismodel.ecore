@@ -4,9 +4,9 @@
     nsPrefix="analysismodel">
   <eClassifiers xsi:type="ecore:EDataType" name="Instant" instanceClassName="java.time.Instant"/>
   <eClassifiers xsi:type="ecore:EDataType" name="Duration" instanceClassName="java.time.Duration"/>
-  <eClassifiers xsi:type="ecore:EDataType" name="Pair" instanceClassName="org.apache.commons.lang3.tuple.Pair">
-    <eTypeParameters name="L"/>
-    <eTypeParameters name="R"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ComposedKey" instanceClassName="kieker.analysisteetime.util">
+    <eTypeParameters name="F"/>
+    <eTypeParameters name="S"/>
   </eClassifiers>
   <eSubpackages name="statistics" nsURI="platform:/resource/Kieker/model/analysismodel.ecore/statistics"
       nsPrefix="statistics">
@@ -190,7 +190,7 @@
     <eClassifiers xsi:type="ecore:EClass" name="DeployedOperationsPairToAggregatedInvocationMapEntry"
         instanceClassName="java.util.Map$Entry">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="key">
-        <eGenericType eClassifier="#//Pair">
+        <eGenericType eClassifier="#//ComposedKey">
           <eTypeArguments eClassifier="#//deployment/DeployedOperation"/>
           <eTypeArguments eClassifier="#//deployment/DeployedOperation"/>
         </eGenericType>

@@ -6,7 +6,7 @@ import java.util.Map;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.*;
 
-import org.apache.commons.lang3.tuple.Pair;
+import kieker.analysisteetime.util;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
@@ -75,7 +75,7 @@ public class ExecutionAdapterFactory extends AdapterFactoryImpl {
 				return createExecutionModelAdapter();
 			}
 			@Override
-			public Adapter caseDeployedOperationsPairToAggregatedInvocationMapEntry(Map.Entry<Pair<DeployedOperation, DeployedOperation>, AggregatedInvocation> object) {
+			public Adapter caseDeployedOperationsPairToAggregatedInvocationMapEntry(Map.Entry<util<DeployedOperation, DeployedOperation>, AggregatedInvocation> object) {
 				return createDeployedOperationsPairToAggregatedInvocationMapEntryAdapter();
 			}
 			@Override

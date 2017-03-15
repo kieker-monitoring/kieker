@@ -9,9 +9,9 @@
       ecorePackage="analysismodel.ecore#/">
     <genDataTypes ecoreDataType="analysismodel.ecore#//Instant"/>
     <genDataTypes ecoreDataType="analysismodel.ecore#//Duration"/>
-    <genDataTypes ecoreDataType="analysismodel.ecore#//Pair">
-      <genTypeParameters ecoreTypeParameter="analysismodel.ecore#//Pair/L"/>
-      <genTypeParameters ecoreTypeParameter="analysismodel.ecore#//Pair/R"/>
+    <genDataTypes ecoreDataType="analysismodel.ecore#//ComposedKey">
+      <genTypeParameters ecoreTypeParameter="analysismodel.ecore#//ComposedKey/F"/>
+      <genTypeParameters ecoreTypeParameter="analysismodel.ecore#//ComposedKey/S"/>
     </genDataTypes>
     <nestedGenPackages prefix="Statistics" basePackage="kieker.analysisteetime.model.analysismodel"
         disposableProviderFactory="true" ecorePackage="analysismodel.ecore#//statistics">
