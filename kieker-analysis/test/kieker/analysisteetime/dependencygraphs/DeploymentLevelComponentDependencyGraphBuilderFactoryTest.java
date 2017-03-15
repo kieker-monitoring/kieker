@@ -17,9 +17,9 @@
 package kieker.analysisteetime.dependencygraphs;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.util.Assert;
 
 /**
  * @author Sören Henning
@@ -50,7 +50,7 @@ public class DeploymentLevelComponentDependencyGraphBuilderFactoryTest {
 	@Test
 	public void testCreateDependencyGraphBuilder() {
 		final DependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder();
-		Assert.isInstanceOf(DeploymentLevelComponentDependencyGraphBuilder.class, graphBuilder);
+		Assert.assertTrue(graphBuilder instanceof DeploymentLevelComponentDependencyGraphBuilder);
 	}
 
 }
