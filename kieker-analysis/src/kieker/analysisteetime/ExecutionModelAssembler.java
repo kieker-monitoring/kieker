@@ -16,7 +16,6 @@
 
 package kieker.analysisteetime;
 
-import org.apache.commons.lang3.tuple.Pair;
 
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
@@ -26,6 +25,7 @@ import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.analysisteetime.trace.traversal.OperationCallVisitor;
 import kieker.analysisteetime.trace.traversal.TraceTraverser;
+import kieker.analysisteetime.util.ComposedKey;
 
 /**
  * @author Sören Henning
@@ -51,7 +51,7 @@ public class ExecutionModelAssembler {
 
 	protected void addExecution(final DeployedOperation source, final DeployedOperation target) {
 
-		final Pair<DeployedOperation, DeployedOperation> key = Pair.of(source, target);
+		final ComposedKey<DeployedOperation, DeployedOperation> key = ComposedKey.of(source, target);
 		if (!this.executionModel.getAggregatedInvocations().contains(key)) {
 			final AggregatedInvocation invocation = this.factory.createAggregatedInvocation();
 			invocation.setSource(source);
