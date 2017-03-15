@@ -12,6 +12,7 @@ dependencies {
 	compile resolveLibrary('amqp-client-3.5.3.jar')
 	compile resolveLibrary('guava-18.0.jar')
 	compile resolveLibrary('kafka-clients-0.10.1.1.jar')
+	compile resolveLibrary('teetime-3.0-20161128.194027-256-jar-with-dependencies.jar')
 	
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
