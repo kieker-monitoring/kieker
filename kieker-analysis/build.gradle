@@ -1,6 +1,9 @@
 apply plugin: 'eclipse'
 apply plugin: "com.github.hauner.jarTest"
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.7
+
 dependencies {
 	compile project(':kieker-common')
 	
