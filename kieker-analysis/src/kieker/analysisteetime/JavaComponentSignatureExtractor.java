@@ -30,10 +30,12 @@ public class JavaComponentSignatureExtractor implements ComponentSignatureExtrac
 		// TODO migrate directly
 		// TODO Currently we are using the old analysis model to extract the package and component name
 		final String signature = componentType.getSignature();
-		final kieker.tools.traceAnalysis.systemModel.ComponentType oldModelComponentType = new kieker.tools.traceAnalysis.systemModel.ComponentType(-1, signature);
 
-		componentType.setName(oldModelComponentType.getTypeName());
-		componentType.setPackage(oldModelComponentType.getPackageName());
+		//TODO Temporary deactivated
+		//final kieker.tools.traceAnalysis.systemModel.ComponentType oldModelComponentType = new kieker.tools.traceAnalysis.systemModel.ComponentType(-1, signature);
+
+		//componentType.setName(oldModelComponentType.getTypeName());
+		//componentType.setPackage(oldModelComponentType.getPackageName());
 
 	}
 
