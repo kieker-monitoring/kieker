@@ -1,6 +1,1 @@
-/jetty/webapps/root
-/jetty/webapps/jpetstore/WEB-INF/lib/kieker-*.jar
-/jetty/webapps/jpetstore/WEB-INF/lib/*sigar*
-/jetty/jmeter.log
-/livedemo/lib/kieker-*.jar
-/dist
+/bin/
