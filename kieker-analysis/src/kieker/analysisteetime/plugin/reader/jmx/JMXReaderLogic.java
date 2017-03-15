@@ -35,6 +35,8 @@ import javax.management.remote.JMXServiceURL;
 import kieker.common.logging.Log;
 import kieker.common.record.IMonitoringRecord;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * This is a reader which reads the records from a JMX queue.
  *
@@ -180,6 +182,7 @@ public class JMXReaderLogic {
 		return ret;
 	}
 
+	@SuppressFBWarnings("DE_MIGHT_IGNORE")
 	private final boolean read2() {
 		while (true) {
 			JMXConnector jmx = null;
