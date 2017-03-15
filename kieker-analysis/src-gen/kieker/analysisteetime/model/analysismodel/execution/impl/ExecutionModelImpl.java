@@ -7,8 +7,7 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionPackage;
-
-import kieker.analysisteetime.util;
+import kieker.analysisteetime.util.ComposedKey;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EMap;
@@ -44,7 +43,7 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	 * @generated
 	 * @ordered
 	 */
-	protected EMap<util<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations;
+	protected EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -70,9 +69,9 @@ public class ExecutionModelImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EMap<util<DeployedOperation, DeployedOperation>, AggregatedInvocation> getAggregatedInvocations() {
+	public EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> getAggregatedInvocations() {
 		if (aggregatedInvocations == null) {
-			aggregatedInvocations = new EcoreEMap<util<DeployedOperation, DeployedOperation>,AggregatedInvocation>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY, DeployedOperationsPairToAggregatedInvocationMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS);
+			aggregatedInvocations = new EcoreEMap<ComposedKey<DeployedOperation, DeployedOperation>,AggregatedInvocation>(ExecutionPackage.Literals.DEPLOYED_OPERATIONS_PAIR_TO_AGGREGATED_INVOCATION_MAP_ENTRY, DeployedOperationsPairToAggregatedInvocationMapEntryImpl.class, this, ExecutionPackage.EXECUTION_MODEL__AGGREGATED_INVOCATIONS);
 		}
 		return aggregatedInvocations;
 	}

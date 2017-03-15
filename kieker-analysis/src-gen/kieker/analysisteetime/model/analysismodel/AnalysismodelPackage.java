@@ -79,7 +79,7 @@ public interface AnalysismodelPackage extends EPackage {
 	 * The meta object id for the '<em>Composed Key</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysisteetime.util
+	 * @see kieker.analysisteetime.util.ComposedKey
 	 * @see kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl#getComposedKey()
 	 * @generated
 	 */
@@ -108,12 +108,12 @@ public interface AnalysismodelPackage extends EPackage {
 	EDataType getDuration();
 
 	/**
-	 * Returns the meta object for data type '{@link kieker.analysisteetime.util <em>Composed Key</em>}'.
+	 * Returns the meta object for data type '{@link kieker.analysisteetime.util.ComposedKey <em>Composed Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for data type '<em>Composed Key</em>'.
-	 * @see kieker.analysisteetime.util
-	 * @model instanceClass="kieker.analysisteetime.util" typeParameters="F S"
+	 * @see kieker.analysisteetime.util.ComposedKey
+	 * @model instanceClass="kieker.analysisteetime.util.ComposedKey" typeParameters="F S"
 	 * @generated
 	 */
 	EDataType getComposedKey();
@@ -165,7 +165,7 @@ public interface AnalysismodelPackage extends EPackage {
 		 * The meta object literal for the '<em>Composed Key</em>' data type.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysisteetime.util
+		 * @see kieker.analysisteetime.util.ComposedKey
 		 * @see kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl#getComposedKey()
 		 * @generated
 		 */

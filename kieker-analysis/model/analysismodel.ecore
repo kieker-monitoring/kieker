@@ -4,7 +4,7 @@
     nsPrefix="analysismodel">
   <eClassifiers xsi:type="ecore:EDataType" name="Instant" instanceClassName="java.time.Instant"/>
   <eClassifiers xsi:type="ecore:EDataType" name="Duration" instanceClassName="java.time.Duration"/>
-  <eClassifiers xsi:type="ecore:EDataType" name="ComposedKey" instanceClassName="kieker.analysisteetime.util">
+  <eClassifiers xsi:type="ecore:EDataType" name="ComposedKey" instanceClassName="kieker.analysisteetime.util.ComposedKey">
     <eTypeParameters name="F"/>
     <eTypeParameters name="S"/>
   </eClassifiers>

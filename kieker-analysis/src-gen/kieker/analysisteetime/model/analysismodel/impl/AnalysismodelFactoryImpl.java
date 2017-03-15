@@ -6,8 +6,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 import kieker.analysisteetime.model.analysismodel.*;
-
-import kieker.analysisteetime.util;
+import kieker.analysisteetime.util.ComposedKey;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -145,8 +144,8 @@ public class AnalysismodelFactoryImpl extends EFactoryImpl implements Analysismo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public util<?, ?> createComposedKeyFromString(EDataType eDataType, String initialValue) {
-		return (util<?, ?>)super.createFromString(initialValue);
+	public ComposedKey<?, ?> createComposedKeyFromString(EDataType eDataType, String initialValue) {
+		return (ComposedKey<?, ?>)super.createFromString(initialValue);
 	}
 
 	/**

@@ -27,7 +27,7 @@ import kieker.analysisteetime.model.analysismodel.trace.impl.TracePackageImpl;
 
 import kieker.analysisteetime.model.analysismodel.type.TypePackage;
 import kieker.analysisteetime.model.analysismodel.type.impl.TypePackageImpl;
-import kieker.analysisteetime.util;
+import kieker.analysisteetime.util.ComposedKey;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -244,7 +244,7 @@ public class AnalysismodelPackageImpl extends EPackageImpl implements Analysismo
 		// Initialize data types
 		initEDataType(instantEDataType, Instant.class, "Instant", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 		initEDataType(durationEDataType, Duration.class, "Duration", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-		initEDataType(composedKeyEDataType, util.class, "ComposedKey", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(composedKeyEDataType, ComposedKey.class, "ComposedKey", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);
