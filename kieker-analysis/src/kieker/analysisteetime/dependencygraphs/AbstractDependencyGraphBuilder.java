@@ -16,12 +16,11 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.analysisteetime.util.ComposedKey;
 import kieker.analysisteetime.util.ObjectIdentifierRegistry;
 import kieker.analysisteetime.util.graph.Edge;
 import kieker.analysisteetime.util.graph.Graph;
@@ -74,7 +73,7 @@ public abstract class AbstractDependencyGraphBuilder implements DependencyGraphB
 	}
 
 	private Edge addEdge(final Vertex source, final Vertex target) {
-		final int edgeId = this.identifierRegistry.getIdentifier(Pair.of(source, target));
+		final int edgeId = this.identifierRegistry.getIdentifier(ComposedKey.of(source, target));
 		final Edge edge = source.addEdgeIfAbsent(edgeId, target);
 		edge.setPropertyIfAbsent(PropertyKeys.CALLS, 999); // TODO Temp retrieve from statistics
 		return edge;
