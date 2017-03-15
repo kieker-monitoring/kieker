@@ -1,3 +1,5 @@
+apply plugin: 'eclipse'
+
 dependencies {
 	compile project(':kieker-common')
 	compile project(':kieker-analysis')

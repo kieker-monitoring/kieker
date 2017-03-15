@@ -20,7 +20,6 @@ import java.io.File;
 
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
-import kieker.monitoring.writer.filesystem.IFileWriter;
 
 /**
  * @author Christian Wulf
