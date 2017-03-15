@@ -9,6 +9,7 @@ import java.time.temporal.ChronoUnit;
 import kieker.analysisteetime.dependencygraphs.DependencyGraphCreatorStage;
 import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependencyGraphBuilderFactory;
 import kieker.analysisteetime.dependencygraphs.dot.DotExportConfigurationFactory;
+import kieker.analysisteetime.dependencygraphs.vertextypes.VertexTypeMapper;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
@@ -76,7 +77,7 @@ public class ExampleConfiguration extends Configuration {
 		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(this.executionModel,
 				new DeploymentLevelOperationDependencyGraphBuilderFactory());
 		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory.getPath(),
-				(new DotExportConfigurationFactory()).createForDeploymentLevelOperationDependencyGraph());
+				(new DotExportConfigurationFactory(new JavaFullComponentNameBuilder(), new JavaShortOperationNameBuilder(), VertexTypeMapper.DEFAULT)).createForDeploymentLevelOperationDependencyGraph());
 		final AbstractConsumerStage<Graph> debugStage = new AbstractConsumerStage<Graph>() {
 			@Override
 			protected void execute(final Graph graph) {
