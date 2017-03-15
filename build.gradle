@@ -1,22 +1,39 @@
-apply plugin: 'maven'
-apply plugin: 'signing'
-
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+      		url "https://plugins.gradle.org/m2/"
+    	}
     }
 
     dependencies {
-        classpath 'de.aaschmid.gradle.plugins:gradle-cpd-plugin:0.1'
+        classpath 'gradle.plugin.gradle-plugins:jartest:1.0.1'			// necessary to depend tests on tests
     }
 }
 
+plugins {
+    //id 'de.aaschmid.cpd' version '1.0'	// cpd plugin
+}
+
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+eclipse {
+	classpath {
+		defaultOutputDir = file('build-eclipse')
+	}
+}
+
+// We have multiple subprojects - but we do not want all of them in our JAR files.
+def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
+
+// better use subprojects to avoid if-then-else in sourceSets
 allprojects {
     version = kiekerVersion
-    
-	apply plugin: 'java'
-	
-	sourceCompatibility = 1.7
+
+    apply plugin: 'java'
+    sourceCompatibility = 1.7
     targetCompatibility = 1.7
     
     sourceSets {
@@ -81,7 +98,7 @@ allprojects {
      * */
     task wrapper(type: Wrapper) {
         description = 'Downloads the Gradle wrapper scripts.'
-        gradleVersion = '2.2.1'
+        gradleVersion = '3.3'
     }
 
     task integrationTest(type: Test) {
@@ -95,23 +112,24 @@ allprojects {
 	    maxHeapSize = "2g" // Set limit to prevent Travis-CI build to crash
     }
 
-    apply plugin: 'cpd'
-    tasks.cpd {
-        reports {
-            xml.enabled = true
-            xml.destination = file("${buildDir}/reports/cpd/cpd.xml")
-        }
-        source = 'src'
-    }
-
+	def pmdAndCpdVersion = '5.0.5'	// works with 0 PMD errors and 0 PMD warnings
+//	def pmdAndCpdVersion = '5.1.3'	// causes many new PMD errors and PMD warnings
+//	def pmdAndCpdVersion = '5.5.0'	// causes many new PMD errors and PMD warnings
     apply plugin: 'pmd'
     pmd {
+    	// the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
+    	toolVersion = pmdAndCpdVersion
         ignoreFailures = true
 
         // Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
         ruleSets = []
         ruleSetFiles = files(resolveRelativeToParent(dirConfig, 'pmdrules.xml'))
     }
+
+	/*apply plugin: 'cpd'
+	cpd {
+	    //toolVersion = pmdAndCpdVersion
+	}*/
 
     apply plugin: 'checkstyle'
     checkstyle {
@@ -121,14 +139,9 @@ allprojects {
         configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
     }
 
-    def fbVersion
+    def fbVersion = '3.0.1'
     apply plugin: 'findbugs'
-    findbugs {
-        if (JavaVersion.current() == JavaVersion.VERSION_1_6) {
-            fbVersion = '2.0.3'
-        } else {
-            fbVersion = '3.0.1'
-        }
+    findbugs {	
         toolVersion = fbVersion
         ignoreFailures = true
         effort = "max"
@@ -137,14 +150,22 @@ allprojects {
         excludeFilter = resolveRelativeToParent(dirConfig, 'fb-filter.xml')
     }
 
-    tasks.withType(FindBugs) {
+    tasks.withType(Pmd) {
         reports {
             xml.enabled = true
             html.enabled = false
         }
     }
 
-    tasks.withType(Pmd) {
+    /*tasks.withType(de.aaschmid.gradle.plugins.cpd.Cpd) {                                                                                                                                       
+		reports {
+		    xml.enabled = true
+		    text.enabled = false
+		}
+		source = files('src')
+	}*/
+
+    tasks.withType(FindBugs) {
         reports {
             xml.enabled = true
             html.enabled = false
@@ -158,14 +179,13 @@ allprojects {
     checkstyleMain.source = 'src'
     checkstyleTest.source = 'test'
     
-    repositories { 
+    repositories {
+    	mavenCentral() 
     	jcenter() // for mockito
     }
 
     // Those are some dependencies which are needed by all submodules
     dependencies {
-        pmd resolveLibrary('**/pmd-*/**/*.jar')
-        cpd resolveLibrary('**/pmd-*/**/*.jar')
         checkstyle resolveLibrary('**/checkstyle-*/**/*.jar')
         checkstyle project(':kieker-checkstyle-extension')
 
@@ -176,13 +196,10 @@ allprojects {
 
 		// moved to common to let Eclipse compile each module separately
 		testCompile "org.mockito:mockito-core:2.+"
-        testCompile resolveLibrary('junit-*.jar')
-        testCompile resolveLibrary('hamcrest-core-*.jar')
+        testCompile 'junit:junit:4.11'
     }
-}
 
-// We have multiple subprojects - but we do not want all of them in our JAR files.
-def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
+}
 
 def parseCheckstyleReport(File reportFile) {
     def errors = 0
@@ -397,10 +414,10 @@ task htmlQualityReport() {
             def pmdReportsFolder = "${reports}/pmd"
 
             doLast {
-				p.javaexec {
-					main = '-jar'
-					args = ["$scautilJar", "${findbugsReportsFolder}/${type}.xml", "${checkstyleReportsFolder}/${type}.xml", "${pmdReportsFolder}/${type}.xml", "${reports}/${type}ReportSummary.html"]
-				}
+		p.javaexec {
+			main = '-jar'
+			args = ["$scautilJar", "${findbugsReportsFolder}/${type}.xml", "${checkstyleReportsFolder}/${type}.xml", "${pmdReportsFolder}/${type}.xml", "${reports}/${type}ReportSummary.html"]
+		}
                 println("The report summary for \'${type}\' can be found at ${reports}/${type}ReportSummary.html")
             }
         }
@@ -454,7 +471,7 @@ def resolveRelativeToParent(String directory, String file) {
 
 def resolveLibrary(String library) {
     def libraryDir = rootProject.file(dirLib)
-    return fileTree(dir: libraryDir, include: library)
+    return fileTree(dir: libraryDir, include: library).filter { it.isFile() }
 }
 
 def today() {

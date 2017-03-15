@@ -29,6 +29,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.FileExtensionFilter;
+import kieker.monitoring.core.controller.ReceiveUnfilteredConfiguration;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
 import kieker.monitoring.registry.RegisterAdapter;
@@ -40,6 +41,7 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  *
  * @since 1.9
  */
+@ReceiveUnfilteredConfiguration // required for using class KiekerLogFolder
 public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegistryListener<String>, IFileWriter {
 
 	public static final String PREFIX = BinaryFileWriter.class.getName() + ".";
@@ -59,9 +61,12 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize";
 	/** The name of the configuration key determining to always flush the output file stream after writing each record */
 	public static final String CONFIG_FLUSH = PREFIX + "flush";
+	/** The name of the configuration determining whether to flush upon each incoming registry entry. */
+	public static final String CONFIG_FLUSH_MAPFILE = PREFIX + "flushMapfile";
 
 	private static final Log LOG = LogFactory.getLog(BinaryFileWriter.class);
 
+	private final Path logFolder;
 	private final ByteBuffer buffer;
 	private final MappingFileWriter mappingFileWriter;
 	private final BinaryFileWriterPool fileWriterPool;
@@ -69,7 +74,7 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 	private final RegisterAdapter<String> registerStringsAdapter;
 	private final GetIdAdapter<String> writeBytesAdapter;
 	private final boolean flush;
-	private final Path logFolder;
+	private final boolean flushMapfile;
 
 	public BinaryFileWriter(final Configuration configuration) {
 		super(configuration);
@@ -103,7 +108,8 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 		// TODO should we check for buffers too small for a single record?
 		final int bufferSize = this.configuration.getIntProperty(CONFIG_BUFFERSIZE);
 		final boolean shouldCompress = configuration.getBooleanProperty(CONFIG_SHOULD_COMPRESS);
-		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
+		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH, false);
+		this.flushMapfile = configuration.getBooleanProperty(CONFIG_FLUSH_MAPFILE, true);
 
 		this.buffer = ByteBuffer.allocateDirect(bufferSize);
 		this.mappingFileWriter = new MappingFileWriter(this.logFolder, charsetName);
@@ -151,6 +157,10 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 		mappingPrintWriter.print('=');
 		mappingPrintWriter.print(recordClassName);
 		mappingPrintWriter.println();
+
+		if (this.flushMapfile) {
+			mappingPrintWriter.flush();
+		}
 	}
 
 	@Override

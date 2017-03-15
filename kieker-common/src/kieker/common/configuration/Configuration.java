@@ -99,21 +99,86 @@ public class Configuration extends Properties {
 	}
 
 	/**
+	 * Reads the given property from the configuration and interprets it as a boolean. If no value
+	 * exists for this property, the given default value is returned.
+	 *
+	 * @param key
+	 *            The key of the property.
+	 * @param defaultValue
+	 *            The default value for this property
+	 *
+	 * @return A boolean with the value of the given property or the default value
+	 */
+	public final boolean getBooleanProperty(final String key, final boolean defaultValue) {
+		final String s = this.getStringProperty(key);
+
+		if (s == null) {
+			return defaultValue;
+		}
+
+		return Boolean.parseBoolean(this.getStringProperty(key));
+	}
+
+	/**
+	 * Convenience method to set boolean-valued properties.
+	 *
+	 * @param key
+	 *            The key to be placed in this configuration
+	 * @param value
+	 *            The value to be stored for the given key
+	 */
+	public void setProperty(final String key, final boolean value) {
+		this.setProperty(key, String.valueOf(value));
+	}
+
+	/**
 	 * Reads the given property from the configuration and interprets it as an integer.
 	 *
 	 * @param key
 	 *            The key of the property.
 	 *
-	 * @return An integer with the value of the given property or null, if the property does not exist.
+	 * @return An integer with the value of the given property or zero, if the property does not exist.
 	 */
 	public final int getIntProperty(final String key) {
+		return this.getIntProperty(key, 0);
+	}
+
+	/**
+	 * Reads the given property from the configuration and interprets it as an integer. If no value
+	 * exists for this property, the given default value is returned.
+	 *
+	 * @param key
+	 *            The key of the property.
+	 * @param defaultValue
+	 *            The default value for this property
+	 *
+	 * @return An integer with the value of the given property or the default value
+	 */
+	public final int getIntProperty(final String key, final int defaultValue) {
 		final String s = this.getStringProperty(key);
+
+		if (s == null) {
+			return defaultValue;
+		}
+
 		try {
 			return Integer.parseInt(s);
 		} catch (final NumberFormatException ex) {
-			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0"); // ignore ex
-			return 0;
+			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value " + defaultValue); // ignore ex
+			return defaultValue;
 		}
+	}
+
+	/**
+	 * Convenience method to set int-valued properties.
+	 *
+	 * @param key
+	 *            The key to be placed in this configuration
+	 * @param value
+	 *            The value to be stored for the given key
+	 */
+	public void setProperty(final String key, final int value) {
+		this.setProperty(key, String.valueOf(value));
 	}
 
 	/**
@@ -134,6 +199,44 @@ public class Configuration extends Properties {
 	}
 
 	/**
+	 * Reads the given property from the configuration and interprets it as a long. If no value
+	 * exists for this property, the given default value is returned.
+	 *
+	 * @param key
+	 *            The key of the property.
+	 * @param defaultValue
+	 *            The default value for this property
+	 *
+	 * @return A long with the value of the given property or the default value
+	 */
+	public final long getLongProperty(final String key, final long defaultValue) {
+		final String s = this.getStringProperty(key);
+
+		if (s == null) {
+			return defaultValue;
+		}
+
+		try {
+			return Long.parseLong(s);
+		} catch (final NumberFormatException ex) {
+			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value " + defaultValue); // ignore ex
+			return defaultValue;
+		}
+	}
+
+	/**
+	 * Convenience method to set long-valued properties.
+	 *
+	 * @param key
+	 *            The key to be placed in this configuration
+	 * @param value
+	 *            The value to be stored for the given key
+	 */
+	public void setProperty(final String key, final long value) {
+		this.setProperty(key, String.valueOf(value));
+	}
+
+	/**
 	 * Reads the given property from the configuration and interprets it as a double.
 	 *
 	 * @param key
@@ -141,13 +244,45 @@ public class Configuration extends Properties {
 	 * @return A long with the value of the given property or null, if the property does not exist.
 	 */
 	public final double getDoubleProperty(final String key) {
+		return this.getDoubleProperty(key, 0.0);
+	}
+
+	/**
+	 * Reads the given property from the configuration and interprets it as a double. If no value
+	 * exists for this property, the given default value is returned.
+	 *
+	 * @param key
+	 *            The key of the property.
+	 * @param defaultValue
+	 *            The default value for this property
+	 *
+	 * @return A double with the value of the given property or the default value
+	 */
+	public final double getDoubleProperty(final String key, final double defaultValue) {
 		final String s = this.getStringProperty(key);
+
+		if (s == null) {
+			return defaultValue;
+		}
+
 		try {
 			return Double.parseDouble(s);
 		} catch (final NumberFormatException ex) {
-			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0"); // ignore ex
-			return 0.0;
+			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value " + defaultValue); // ignore ex
+			return defaultValue;
 		}
+	}
+
+	/**
+	 * Convenience method to set double-valued properties.
+	 *
+	 * @param key
+	 *            The key to be placed in this configuration
+	 * @param value
+	 *            The value to be stored for the given key
+	 */
+	public void setProperty(final String key, final double value) {
+		this.setProperty(key, String.valueOf(value));
 	}
 
 	/**

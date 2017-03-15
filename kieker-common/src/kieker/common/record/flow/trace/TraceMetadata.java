@@ -36,12 +36,12 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	public static final int SIZE = (2 * TYPE_SIZE_LONG) + (2 * TYPE_SIZE_STRING) + TYPE_SIZE_LONG + TYPE_SIZE_INT;
 	// must be public to be resolved by reflection, e.g., for TestRecordsUsingCorrectBinarySize
 	public static final Class<?>[] TYPES = {
-		long.class, // traceId
-		long.class, // threadId
-		String.class, // sessionId
-		String.class, // hostname
-		long.class, // parentTraceId
-		int.class, // parentOrderId
+			long.class, // traceId
+			long.class, // threadId
+			String.class, // sessionId
+			String.class, // hostname
+			long.class, // parentTraceId
+			int.class, // parentOrderId
 	};
 
 	/** Constant to be used if no sessionId required. */
@@ -194,6 +194,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * {@inheritDoc}
 	 */
 	@Override
+	@SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
 	public boolean equals(final Object obj) {
 		if (obj == null) {
 			return false;

@@ -35,7 +35,7 @@ import kieker.monitoring.timer.ITimeSource;
  *
  * @since 1.3
  */
-public final class MonitoringController extends AbstractController implements IMonitoringController {
+public final class MonitoringController extends AbstractController implements IMonitoringController, IStateListener {
 	static final Log LOG = LogFactory.getLog(MonitoringController.class); // NOPMD package for inner class
 
 	/**
@@ -61,10 +61,9 @@ public final class MonitoringController extends AbstractController implements IM
 		this.samplingController = new SamplingController(configuration);
 		this.jmxController = new JMXController(configuration);
 		this.writerController = new WriterController(configuration);
-		this.stateController.setStateListener(this.writerController);
+		this.stateController.setStateListener(this);
 		this.timeSourceController = new TimeSourceController(configuration);
 		this.probeController = new ProbeController(configuration);
-
 		this.autoSetLoggingTimestamp = configuration.getBooleanProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP);
 	}
 
@@ -162,6 +161,13 @@ public final class MonitoringController extends AbstractController implements IM
 	 */
 	public static final String getVersion() {
 		return Version.getVERSION();
+	}
+
+	@Override
+	public void beforeEnableMonitoring() {
+		if (this.writerController.isLogMetadataRecord()) {
+			this.sendMetadataAsRecord();
+		}
 	}
 
 	@Override
