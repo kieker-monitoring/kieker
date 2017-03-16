@@ -41,7 +41,6 @@ public class TestPipeReader extends AbstractKiekerTest { // NOCS (MissingCtorChe
 		Thread.sleep(1000);
 
 		// Send 7 dummy records
-		System.out.println("hello");
 		final int numRecordsToSend = 7;
 		for (int i = 0; i < numRecordsToSend; i++) {
 			writer.writeMonitoringRecord(new EmptyRecord());
