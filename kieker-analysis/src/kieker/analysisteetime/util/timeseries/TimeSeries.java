@@ -17,7 +17,6 @@
 package kieker.analysisteetime.util.timeseries;
 
 import java.util.ArrayDeque;
-import java.util.Collection;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.stream.Stream;
@@ -37,19 +36,6 @@ public class TimeSeries implements Iterable<TimeSeriesPoint>, kieker.analysistee
 	 */
 	public TimeSeries() {
 		this.timeSeriesPoints = new ArrayDeque<>();
-	}
-
-	/**
-	 * Constructs a time series containing the time series points of the
-	 * specified collection, in the order they are returned by the
-	 * collection's iterator.
-	 */
-	public TimeSeries(final Collection<TimeSeriesPoint> timeSeriesPoints) {
-		this.timeSeriesPoints = new ArrayDeque<>(timeSeriesPoints.size());
-		for (TimeSeriesPoint timeSeriesPoint : timeSeriesPoints) {
-			appendEnd(timeSeriesPoint);
-		}
-		// TODO Catch exception to provide new
 	}
 
 	/**
@@ -134,21 +120,7 @@ public class TimeSeries implements Iterable<TimeSeriesPoint>, kieker.analysistee
 	}
 
 	/**
-	 * Returns an array containing all of the values of the time series point
-	 * in this time series in temporal order from earliest to latest.
-	 */
-	public double[] toValuesArray() {
-		double[] array = new double[size()];
-		int i = 0;
-		for (final TimeSeriesPoint point : this.timeSeriesPoints) {
-			array[i] = point.getValue();
-			i++;
-		}
-		return array;
-	}
-
-	/**
-	 * Returns a sequential Stream with this time series as its source.
+	 * Returns a sequential {@code Stream} with this time series as its source.
 	 */
 	public Stream<TimeSeriesPoint> stream() {
 		return this.timeSeriesPoints.stream();

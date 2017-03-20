@@ -29,9 +29,9 @@ public class TimeSeriesPoint {
 
 	private final Instant time;
 
-	private final double value;
+	private final long value;
 
-	public TimeSeriesPoint(final Instant time, final double value) {
+	public TimeSeriesPoint(final Instant time, final long value) {
 		this.time = time;
 		this.value = value;
 	}
@@ -40,7 +40,7 @@ public class TimeSeriesPoint {
 		return time;
 	}
 
-	public double getValue() {
+	public long getValue() {
 		return value;
 	}
 
