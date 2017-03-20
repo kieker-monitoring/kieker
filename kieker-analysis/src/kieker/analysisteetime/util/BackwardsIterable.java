@@ -16,34 +16,35 @@
 
 package kieker.analysisteetime.util;
 
-import com.google.common.base.Objects;
+import java.util.Iterator;
 
-public final class ComposedKey<F,S> {
+/**
+ * Implementing this interface allows an object to get iterated backwards. The
+ * object returned by {@code backwards()} can be used by a "foreach" statement.
+ *
+ * @author Sören Henning
+ *
+ * @param <T>
+ *            the type of elements returned by the iterator
+ */
+public interface BackwardsIterable<T> {
 
-	private final F first;
-	private final S second;
+	/**
+	 * Returns an Iterator that iterates the elements backwards.
+	 */
+	public Iterator<T> backwardsIterator();
 
-    private ComposedKey(F first, S second) {
-        this.first = first;
-        this.second = second;
-    }
+	/**
+	 * Returns an Iterable that iterates the elements backwards using the
+	 * Iterator returned by {@code backwardsIterator()}.
+	 */
+	default public Iterable<T> backwards() {
+		return new Iterable<T>() {
+			@Override
+			public Iterator<T> iterator() {
+				return backwardsIterator();
+			}
+		};
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof ComposedKey)) {
-            return false;
-        }
-        ComposedKey<?, ?> p = (ComposedKey<?, ?>) o;
-        return Objects.equal(p.first, first) && Objects.equal(p.second, second);
-    }
-
-    @Override
-    public int hashCode() {
-        return (first == null ? 0 : first.hashCode()) ^ (second == null ? 0 : second.hashCode());
-    }
-
-    public static <F, S> ComposedKey<F, S> of(F first, S second) {
-        return new ComposedKey<F, S>(first, second);
-    }
-	
 }
