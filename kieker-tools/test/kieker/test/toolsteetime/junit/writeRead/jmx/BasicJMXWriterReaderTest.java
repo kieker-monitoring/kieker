@@ -102,6 +102,38 @@ public class BasicJMXWriterReaderTest {
 	}
 
 	/**
+	 * Checks if the given {@link IMonitoringController} is in the expected state after having passed
+	 * the records to the controller.
+	 *
+	 * @param monitoringController
+	 *            The monitoring controller in question.
+	 *
+	 * @throws Exception
+	 *             If something went wrong during the check.
+	 */
+	protected void checkControllerStateAfterRecordsPassedToController(final IMonitoringController monitoringController) throws Exception {
+		// Test the JMX Controller
+		final JMXServiceURL serviceURL = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://localhost:" + BasicJMXWriterReaderTest.PORT + "/jmxrmi");
+		final ObjectName controllerObjectName = new ObjectName(BasicJMXWriterReaderTest.DOMAIN, "type", BasicJMXWriterReaderTest.CONTROLLER);
+	
+		final JMXConnector jmx = JMXConnectorFactory.connect(serviceURL);
+		final MBeanServerConnection mbServer = jmx.getMBeanServerConnection();
+	
+		final Object tmpObj = MBeanServerInvocationHandler.newProxyInstance(mbServer, controllerObjectName, IMonitoringController.class, false);
+		final IMonitoringController ctrlJMX = (IMonitoringController) tmpObj; // NOCS // NOPMD (required for the cast not being removed by Java 1.6 editors)
+	
+		Assert.assertTrue(monitoringController.isMonitoringEnabled());
+		Assert.assertTrue(ctrlJMX.isMonitoringEnabled());
+	
+		Assert.assertTrue(ctrlJMX.disableMonitoring());
+	
+		Assert.assertFalse(monitoringController.isMonitoringEnabled());
+		Assert.assertFalse(ctrlJMX.isMonitoringEnabled());
+	
+		jmx.close();
+	}
+
+	/**
 	 * Checks if the given {@link IMonitoringController} is in the expected state before having passed
 	 * the records to the controller.
 	 *
@@ -124,38 +156,6 @@ public class BasicJMXWriterReaderTest {
 
 		Assert.assertTrue(monitoringController.isMonitoringEnabled());
 		Assert.assertTrue(ctrlJMX.isMonitoringEnabled());
-
-		jmx.close();
-	}
-
-	/**
-	 * Checks if the given {@link IMonitoringController} is in the expected state after having passed
-	 * the records to the controller.
-	 *
-	 * @param monitoringController
-	 *            The monitoring controller in question.
-	 *
-	 * @throws Exception
-	 *             If something went wrong during the check.
-	 */
-	protected void checkControllerStateAfterRecordsPassedToController(final IMonitoringController monitoringController) throws Exception {
-		// Test the JMX Controller
-		final JMXServiceURL serviceURL = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://localhost:" + BasicJMXWriterReaderTest.PORT + "/jmxrmi");
-		final ObjectName controllerObjectName = new ObjectName(BasicJMXWriterReaderTest.DOMAIN, "type", BasicJMXWriterReaderTest.CONTROLLER);
-
-		final JMXConnector jmx = JMXConnectorFactory.connect(serviceURL);
-		final MBeanServerConnection mbServer = jmx.getMBeanServerConnection();
-
-		final Object tmpObj = MBeanServerInvocationHandler.newProxyInstance(mbServer, controllerObjectName, IMonitoringController.class, false);
-		final IMonitoringController ctrlJMX = (IMonitoringController) tmpObj; // NOCS // NOPMD (required for the cast not being removed by Java 1.6 editors)
-
-		Assert.assertTrue(monitoringController.isMonitoringEnabled());
-		Assert.assertTrue(ctrlJMX.isMonitoringEnabled());
-
-		Assert.assertTrue(ctrlJMX.disableMonitoring());
-
-		Assert.assertFalse(monitoringController.isMonitoringEnabled());
-		Assert.assertFalse(ctrlJMX.isMonitoringEnabled());
 
 		jmx.close();
 	}
