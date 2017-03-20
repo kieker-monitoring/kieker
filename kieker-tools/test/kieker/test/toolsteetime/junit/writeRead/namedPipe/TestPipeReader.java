@@ -51,6 +51,11 @@ public class TestPipeReader extends AbstractKiekerTest { // NOCS (MissingCtorChe
 
 	}
 
+	/**
+	 * Extra thread for PipeReader for testing
+	 *
+	 * @author Lars Bluemke
+	 */
 	private class PipeReaderThread extends Thread {
 
 		private final List<IMonitoringRecord> outputList;
