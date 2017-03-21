@@ -86,7 +86,7 @@ public class BinaryLogReader extends AbstractProducerStage<IMonitoringRecord> im
 
 	@Override
 	@SuppressFBWarnings("NN_NAKED_NOTIFY")
-	public void execute() {
+	protected void execute() {
 		// start all reader
 		int notInitializesReaders = 0;
 		for (final String inputDirFn : this.inputDirs) {
@@ -126,6 +126,7 @@ public class BinaryLogReader extends AbstractProducerStage<IMonitoringRecord> im
 				this.outputPort.send(record);
 			}
 		}
+		this.terminateStage();
 	}
 
 	/**
