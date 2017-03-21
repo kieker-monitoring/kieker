@@ -32,7 +32,7 @@ import teetime.framework.AbstractProducerStage;
 /**
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
  *
- * @author Andre van Hoorn, Jan Waller
+ * @author Andre van Hoorn, Jan Waller, Lars Bluemke
  *
  * @since 0.95a
  */

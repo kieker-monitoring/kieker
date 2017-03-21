@@ -20,14 +20,19 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.analysisteetime.plugin.reader.filesystem.fsReader.AsciiLogReader;
 import kieker.common.configuration.Configuration;
+import kieker.common.exception.MonitoringRecordException;
+import kieker.common.logging.LogImplJUnit;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
@@ -39,11 +44,11 @@ import kieker.test.tools.junit.writeRead.TestProbe;
 import teetime.framework.test.StageTester;
 
 /**
- * @author Christian Wulf, Lars Bluemke
+ * @author Andre van Hoorn, Christian Wulf, Lars Bluemke
  *
- * @since 1.13
+ * @since 1.5
  */
-public class AsciiWriterReaderTest {
+public class AsciiSkipBrokenRecordsTest {
 
 	private static final TestDataRepository TEST_DATA_REPOSITORY = new TestDataRepository();
 	private static final int TIMEOUT_IN_MS = 0;
@@ -51,46 +56,59 @@ public class AsciiWriterReaderTest {
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
-	public AsciiWriterReaderTest() {
+	public AsciiSkipBrokenRecordsTest() {
 		super();
 	}
 
-	@Test
-	public void testUncompressedAsciiCommunication() throws Exception {
-		// 1. define records to be triggered by the test probe
-		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestRecords();
+	@Before
+	public void before() {
+		LogImplJUnit.disableThrowable(MonitoringRecordException.class);
+	}
 
-		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, false);
-
-		// 8. compare actual and expected records
-		Assert.assertThat(analyzedRecords, CoreMatchers.is(CoreMatchers.equalTo(records)));
+	@After
+	public void after() {
+		LogImplJUnit.reset();
 	}
 
 	@Test
-	public void testCompressedAsciiCommunication() throws Exception {
-		// 1. define records to be triggered by the test probe
-		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestRecords();
+	public void testSkipBrokenRecordsWithEnabledIgnore() throws Exception {
+		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestUnknownRecords();
 
-		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, true);
+		final List<IMonitoringRecord> analyzedRecords = this.executeTestSetup(records, true);
 
-		// 8. compare actual and expected records
-		Assert.assertThat(analyzedRecords, CoreMatchers.is(CoreMatchers.equalTo(records)));
+		// we expect that EVENT1_UNKNOWN_TYPE and EVENT3_UNKNOWN_TYPE are simply ignored
+		Assert.assertThat(analyzedRecords.get(0), CoreMatchers.is(CoreMatchers.equalTo(records.get(0))));
+		Assert.assertThat(analyzedRecords.get(1), CoreMatchers.is(CoreMatchers.equalTo(records.get(2))));
+		Assert.assertThat(analyzedRecords.size(), CoreMatchers.is(2));
+	}
+
+	@Test
+	public void testSkipBrokenRecordsWithDisabledIgnore() throws Exception {
+		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestUnknownRecords();
+
+		final List<IMonitoringRecord> analyzedRecords = this.executeTestSetup(records, false);
+
+		// we expect that EVENT1_UNKNOWN_TYPE and EVENT3_UNKNOWN_TYPE are simply ignored
+		Assert.assertThat(analyzedRecords.get(0), CoreMatchers.is(CoreMatchers.equalTo(records.get(0))));
+		Assert.assertThat(analyzedRecords.get(1), CoreMatchers.is(CoreMatchers.equalTo(records.get(2))));
+		Assert.assertThat(analyzedRecords.size(), CoreMatchers.is(2));
 	}
 
 	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
-	private List<IMonitoringRecord> testAsciiCommunication(final List<IMonitoringRecord> records, final boolean shouldDecompress) throws Exception {
+	private List<IMonitoringRecord> executeTestSetup(final List<IMonitoringRecord> records, final boolean ignoreUnknownRecordTypes)
+			throws Exception {
 		// 2. define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
 		config.setProperty(WriterController.RECORD_QUEUE_SIZE, "128");
 		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
 		config.setProperty(AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
-		config.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, Boolean.toString(shouldDecompress));
+		config.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, "false");
 		final MonitoringController monitoringController = MonitoringController.createInstance(config);
 
 		// 3. initialize the reader
 		final String[] monitoringLogDirs = TEST_DATA_REPOSITORY.getAbsoluteMonitoringLogDirNames(this.tmpFolder.getRoot());
-		final AsciiLogReader asciiLogReader = new AsciiLogReader(monitoringLogDirs, false, shouldDecompress);
+		final AsciiLogReader asciiLogReader = new AsciiLogReader(monitoringLogDirs, ignoreUnknownRecordTypes, false);
 		final List<IMonitoringRecord> outputList = new LinkedList<>();
 
 		// 4. trigger records
@@ -101,9 +119,17 @@ public class AsciiWriterReaderTest {
 
 		// 5. terminate monitoring
 		monitoringController.terminateMonitoring();
+
+		// 6a. wait for termination: monitoring
 		monitoringController.waitForTermination(TIMEOUT_IN_MS);
 
-		// 6. execute the reader in test configuration
+		// Instead of replacing the type entry by an invalid one, we replace by just another
+		// valid type that does not match the type. We want to make sure that only these records
+		// are ignored, but the readers processes the remaining part of the file.
+		final String classnameToManipulate = records.get(1).getClass().getName();
+		FileContentUtil.replaceStringInMapFiles(monitoringLogDirs, classnameToManipulate, OperationExecutionRecord.class.getName());
+
+		// 6b. execute the reader in test configuration
 		StageTester.test(asciiLogReader).and().receive(outputList).from(asciiLogReader.getOutputPort()).start();
 
 		// 7. return actual records (sublist is used to exclude the KiekerMetadataRecord sent by the monitoring controller)
