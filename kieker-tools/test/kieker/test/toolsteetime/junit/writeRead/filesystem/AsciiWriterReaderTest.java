@@ -62,7 +62,7 @@ public class AsciiWriterReaderTest {
 
 		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, false);
 
-		// 8. compare actual and expected records
+		// 8. compare actual and expected records (sublist is used to exclude the KiekerMetadataRecord sent by the monitoring controller)
 		Assert.assertThat(analyzedRecords.subList(1, analyzedRecords.size()), CoreMatchers.is(CoreMatchers.equalTo(records)));
 	}
 
@@ -73,7 +73,7 @@ public class AsciiWriterReaderTest {
 
 		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, true);
 
-		// 8. compare actual and expected records
+		// 8. compare actual and expected records (sublist is used to exclude the KiekerMetadataRecord sent by the monitoring controller)
 		Assert.assertThat(analyzedRecords.subList(1, analyzedRecords.size()), CoreMatchers.is(CoreMatchers.equalTo(records)));
 	}
 
@@ -88,9 +88,8 @@ public class AsciiWriterReaderTest {
 		config.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, Boolean.toString(shouldDecompress));
 		final MonitoringController monitoringController = MonitoringController.createInstance(config);
 
-		// 3. define analysis config
+		// 3. initialize the reader
 		final String[] monitoringLogDirs = TEST_DATA_REPOSITORY.getAbsoluteMonitoringLogDirNames(this.tmpFolder.getRoot());
-
 		final AsciiLogReader asciiLogReader = new AsciiLogReader(monitoringLogDirs, false, shouldDecompress);
 		final List<IMonitoringRecord> outputList = new LinkedList<>();
 
@@ -104,7 +103,7 @@ public class AsciiWriterReaderTest {
 		monitoringController.terminateMonitoring();
 		monitoringController.waitForTermination(TIMEOUT_IN_MS);
 
-		// 6. execute the reader configuration
+		// 6. execute the reader in test configuration
 		StageTester.test(asciiLogReader).and().receive(outputList).from(asciiLogReader.getOutputPort()).start();
 
 		// 7. return read records
