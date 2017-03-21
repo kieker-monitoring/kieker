@@ -88,7 +88,7 @@ public class AsciiLogReader extends AbstractProducerStage<IMonitoringRecord> imp
 
 	@Override
 	@SuppressFBWarnings("NN_NAKED_NOTIFY")
-	public void execute() {
+	protected void execute() {
 		// start all reader
 		int notInitializesReaders = 0;
 		for (final String inputDirFn : this.inputDirs) {
@@ -127,6 +127,7 @@ public class AsciiLogReader extends AbstractProducerStage<IMonitoringRecord> imp
 				this.outputPort.send(record);
 			}
 		}
+		this.terminateStage();
 	}
 
 	/**
