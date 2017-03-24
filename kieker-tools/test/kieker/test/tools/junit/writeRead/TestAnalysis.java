@@ -47,7 +47,7 @@ public class TestAnalysis {
 
 		this.analysisController.connect(reader, outputPortName, this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 
-		this.thread = new Thread() {
+		this.thread = new Thread("TestAnalysis thread") {
 			@Override
 			public void run() {
 				try {
