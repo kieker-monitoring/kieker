@@ -27,10 +27,12 @@ import javax.management.remote.JMXServiceURL;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.junit.Test;
 
 import kieker.analysis.plugin.reader.jmx.JmxReader;
 import kieker.analysis.tt.writeRead.TestDataRepository;
 import kieker.analysis.tt.writeRead.TestProbe;
+
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
@@ -112,6 +114,7 @@ public class BasicJMXWriterReaderTest {
 
 	private TestAnalysis createAnalysis() throws Exception {
 		final Configuration jmxReaderConfig = new Configuration();
+
 		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_DOMAIN, BasicJMXWriterReaderTest.DOMAIN);
 		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_LOGNAME, BasicJMXWriterReaderTest.LOGNAME);
 		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_SERVER, "localhost");
