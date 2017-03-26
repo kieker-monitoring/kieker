@@ -41,6 +41,7 @@ public class Statistics {
 	public Statistic getStatistic(final Unit unit) {
 		// TODO implement null object pattern
 		//return this.statistics.getOrDefault(unit, ...);
+		// TODO Alternative: or add if absent
 		return this.statistics.get(unit);
 	}
 	
