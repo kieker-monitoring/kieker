@@ -2,44 +2,42 @@ package kieker.common.record.flow.trace.concurrency.monitor;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
-
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.8
  */
-public class MonitorNotifyEvent extends AbstractMonitorEvent  {
+public class MonitorNotifyEvent extends AbstractMonitorEvent {
 	private static final long serialVersionUID = 1829021258557510223L;
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_INT // AbstractMonitorEvent.lockId
+			+ TYPE_SIZE_LONG // ITraceRecord.traceId
+			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
+			+ TYPE_SIZE_INT // AbstractMonitorEvent.lockId
 	;
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
 		int.class, // ITraceRecord.orderIndex
 		int.class, // AbstractMonitorEvent.lockId
 	};
-	
+
 	/** user-defined constants */
-	
+
 	/** default constants */
-	
+
 	/** property declarations */
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -56,7 +54,7 @@ public class MonitorNotifyEvent extends AbstractMonitorEvent  {
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -66,7 +64,7 @@ public class MonitorNotifyEvent extends AbstractMonitorEvent  {
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -78,17 +76,15 @@ public class MonitorNotifyEvent extends AbstractMonitorEvent  {
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public MonitorNotifyEvent(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(deserializer, buffer, stringRegistry);
+	public MonitorNotifyEvent(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		super(deserializer);
 	}
 
 	/**
@@ -103,25 +99,25 @@ public class MonitorNotifyEvent extends AbstractMonitorEvent  {
 			this.getLockId()
 		};
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		serializer.putLong(this.getTimestamp(), buffer);
-		serializer.putLong(this.getTraceId(), buffer);
-		serializer.putInt(this.getOrderIndex(), buffer);
-		serializer.putInt(this.getLockId(), buffer);
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp());
+		serializer.putLong(this.getTraceId());
+		serializer.putInt(this.getOrderIndex());
+		serializer.putInt(this.getLockId());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -129,7 +125,7 @@ public class MonitorNotifyEvent extends AbstractMonitorEvent  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -140,7 +136,7 @@ public class MonitorNotifyEvent extends AbstractMonitorEvent  {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -148,18 +144,7 @@ public class MonitorNotifyEvent extends AbstractMonitorEvent  {
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -174,7 +159,7 @@ public class MonitorNotifyEvent extends AbstractMonitorEvent  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final MonitorNotifyEvent castedRecord = (MonitorNotifyEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -193,5 +178,5 @@ public class MonitorNotifyEvent extends AbstractMonitorEvent  {
 		}
 		return true;
 	}
-	
+
 }

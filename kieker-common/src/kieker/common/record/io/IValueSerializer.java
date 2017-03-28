@@ -16,82 +16,66 @@
 
 package kieker.common.record.io;
 
-import java.nio.ByteBuffer;
-
-import kieker.common.util.registry.IRegistry;
-
 /**
  * Interface for value serializers for use by monitoring records.
- * 
+ *
  * @author Holger Knoche
  * @since 1.13
  */
 public interface IValueSerializer {
 
 	/**
-	 * Stores a {@code byte} value in the given buffer.
-	 * 
+	 * Stores a {@code byte} value in the underlying data store.
+	 *
 	 * @param value
 	 *            The value to store
-	 * @param buffer
-	 *            The buffer to store the data in
 	 * @since 1.13
 	 */
-	public void putByte(byte value, ByteBuffer buffer);
+	public void putByte(byte value);
 
 	/**
-	 * Stores an {@code int} value in the given buffer.
-	 * 
+	 * Stores an {@code int} value in the underlying data store.
+	 *
 	 * @param value
 	 *            The value to store
-	 * @param buffer
-	 *            The buffer to store the data in
 	 * @since 1.13
 	 */
-	public void putInt(int value, ByteBuffer buffer);
+	public void putInt(int value);
 
 	/**
-	 * Stores a {@code long} value in the given buffer.
-	 * 
+	 * Stores a {@code long} value in the underlying data store.
+	 *
 	 * @param value
 	 *            The value to store
-	 * @param buffer
-	 *            The buffer to store the data in
 	 * @since 1.13
 	 */
-	public void putLong(long value, ByteBuffer buffer);
+	public void putLong(long value);
 
 	/**
-	 * Stores a {@code double} value in the given buffer.
-	 * 
+	 * Stores a {@code double} value in the underlying data store.
+	 *
 	 * @param value
 	 *            The value to store
-	 * @param buffer
-	 *            The buffer to store the data in
 	 * @since 1.13
 	 */
-	public void putDouble(double value, ByteBuffer buffer);
+	public void putDouble(double value);
 
 	/**
-	 * Stores raw data in the given buffer.
-	 * 
+	 * Stores raw data in the underlying data store.
+	 *
 	 * @param value
 	 *            The data to store
-	 * @param buffer
-	 *            The buffer to store the data in
 	 * @since 1.13
 	 */
-	public void putBytes(byte[] value, ByteBuffer buffer);
+	public void putBytes(byte[] value);
 
 	/**
-	 * Stores a {@code String} value in the given buffer.
-	 * 
+	 * Stores a {@code String} value in the underlying data store.
+	 *
 	 * @param value
 	 *            The value to store
-	 * @param buffer
-	 *            The buffer to store the data in
 	 * @since 1.13
 	 */
-	public void putString(String value, ByteBuffer buffer, IRegistry<String> stringRegistry);
+	public void putString(String value);
 
 }

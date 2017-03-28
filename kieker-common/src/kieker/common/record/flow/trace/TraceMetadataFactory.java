@@ -16,11 +16,8 @@
 
 package kieker.common.record.flow.trace;
 
-import java.nio.ByteBuffer;
-
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Christian Wulf
@@ -34,8 +31,8 @@ public final class TraceMetadataFactory implements IRecordFactory<TraceMetadata>
 	}
 
 	@Override
-	public TraceMetadata create(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new TraceMetadata(deserializer, buffer, stringRegistry);
+	public TraceMetadata create(final IValueDeserializer deserializer) {
+		return new TraceMetadata(deserializer);
 	}
 
 	@Override

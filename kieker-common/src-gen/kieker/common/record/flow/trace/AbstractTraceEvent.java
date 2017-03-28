@@ -1,35 +1,32 @@
 package kieker.common.record.flow.trace;
 
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.AbstractEvent;
 import kieker.common.record.flow.ITraceRecord;
 import kieker.common.record.io.IValueDeserializer;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {
 	private static final long serialVersionUID = -3022261747819944031L;
 
-	
 	/** user-defined constants */
-	
+
 	/** default constants */
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
-	
+
 	/** property declarations */
 	private final long traceId;
 	private final int orderIndex;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -43,10 +40,9 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		this.orderIndex = orderIndex;
 	}
 
-
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -60,26 +56,23 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param deserializer
 	 *            The value deserializer to use.
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public AbstractTraceEvent(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(deserializer, buffer, stringRegistry);
-		
-		this.traceId = deserializer.getLong(buffer);
-		this.orderIndex = deserializer.getInt(buffer);
-	}
+	public AbstractTraceEvent(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		super(deserializer);
 
+		this.traceId = deserializer.getLong();
+		this.orderIndex = deserializer.getInt();
+	}
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -87,18 +80,7 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -113,7 +95,7 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final AbstractTraceEvent castedRecord = (AbstractTraceEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -129,14 +111,14 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		}
 		return true;
 	}
-	
+
 	@Override
 	public final long getTraceId() {
 		return this.traceId;
-	}	
-	
+	}
+
 	@Override
 	public final int getOrderIndex() {
 		return this.orderIndex;
-	}	
+	}
 }

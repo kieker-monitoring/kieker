@@ -16,77 +16,62 @@
 
 package kieker.common.record.io;
 
-import java.nio.ByteBuffer;
-
-import kieker.common.util.registry.IRegistry;
-
 /**
  * Interface for value deserializers for use by monitoring records.
+ *
  * @author Holger Knoche
  * @since 1.13
  */
 public interface IValueDeserializer {
 
 	/**
-	 * Retrieves a {@code byte} value from the given buffer.
-	 * 
-	 * @param buffer
-	 *            The buffer to get the data from
+	 * Retrieves a {@code byte} value from the underlying data source.
+	 *
 	 * @return The retrieved value
 	 * @since 1.13
 	 */
-	public byte getByte(ByteBuffer buffer);
-	
+	public byte getByte();
+
 	/**
-	 * Retrieves an {@code int} value from the given buffer.
-	 * 
-	 * @param buffer
-	 *            The buffer to get the data from
+	 * Retrieves an {@code int} value from the underlying data source.
+	 *
 	 * @return The retrieved value
 	 * @since 1.13
 	 */
-	public int getInt(ByteBuffer buffer);
-	
+	public int getInt();
+
 	/**
-	 * Retrieves a {@code long} value from the given buffer.
-	 * 
-	 * @param buffer
-	 *            The buffer to get the data from
+	 * Retrieves a {@code long} value from the underlying data source.
+	 *
 	 * @return The retrieved value
 	 * @since 1.13
 	 */
-	public long getLong(ByteBuffer buffer);
-	
+	public long getLong();
+
 	/**
-	 * Retrieves a {@code double} value from the given buffer.
-	 * 
-	 * @param buffer
-	 *            The buffer to get the data from
+	 * Retrieves a {@code double} value from the underlying data source.
+	 *
 	 * @return The retrieved value
 	 * @since 1.13
 	 */
-	public double getDouble(ByteBuffer buffer);
-	
+	public double getDouble();
+
 	/**
-	 * Retrieves a {@code String} value from the given buffer.
-	 * 
-	 * @param buffer
-	 *            The buffer to get the data from
+	 * Retrieves a {@code String} value from the underlying data source.
+	 *
 	 * @return The retrieved value
 	 * @since 1.13
 	 */
-	public String getString(ByteBuffer buffer, IRegistry<String> stringRegistry);	
-	
+	public String getString();
+
 	/**
-	 * Retrieves raw data from the given buffer.
-	 * 
-	 * @param buffer
-	 *            The buffer to get the data from
+	 * Retrieves raw data from the underlying data source.
+	 *
 	 * @param target
 	 *            The array to store the data in
 	 * @return The retrieved data
 	 * @since 1.13
 	 */
-	public byte[] getBytes(ByteBuffer buffer, byte[] target);
-	
+	public byte[] getBytes(byte[] target);
+
 }

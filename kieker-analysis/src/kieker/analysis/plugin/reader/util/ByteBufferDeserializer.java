@@ -104,7 +104,7 @@ public class ByteBufferDeserializer {
 		}
 
 		try {
-			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.instance(), buffer, this.stringRegistry);
+			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.create(buffer, this.stringRegistry));
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			this.recordReceiver.newMonitoringRecord(record);

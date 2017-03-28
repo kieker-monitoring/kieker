@@ -17,7 +17,6 @@
 package kieker.test.analysis.junit.plugin.filter.select;
 
 import java.nio.BufferOverflowException;
-import java.nio.ByteBuffer;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -64,7 +63,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		}
 
 		@Override
-		public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 			// not used here
 		}
 

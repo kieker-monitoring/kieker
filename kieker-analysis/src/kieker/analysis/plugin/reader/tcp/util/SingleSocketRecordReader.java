@@ -105,7 +105,7 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 		}
 
 		try {
-			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.instance(), buffer, this.stringRegistryWrapper);
+			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.create(buffer, this.stringRegistryWrapper));
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			this.listener.onRecordReceived(record);

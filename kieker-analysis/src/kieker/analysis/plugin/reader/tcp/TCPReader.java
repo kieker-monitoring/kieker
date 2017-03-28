@@ -65,7 +65,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 	public static final String CONFIG_PROPERTY_NAME_PORT2 = "port2";
 
 	private static final int MESSAGE_BUFFER_SIZE = 65535;
-	
+
 	private volatile Thread readerThread;
 	private volatile TCPStringReader tcpStringReader;
 	private volatile boolean terminated;
@@ -148,7 +148,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 				// final IMonitoringRecord record = AbstractMonitoringRecord.createFromByteBuffer(clazzid, buffer, this.stringRegistry);
 			final String recordClassName = this.stringRegistry.get(clazzId);
 			final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactoryCatalog.get(recordClassName);
-			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.instance(), buffer, this.stringRegistry);
+			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.create(buffer, this.stringRegistry));
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			super.deliver(OUTPUT_PORT_NAME_RECORDS, record);

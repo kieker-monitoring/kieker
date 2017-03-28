@@ -18,7 +18,6 @@ package kieker.common.record.flow.trace;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -115,13 +114,13 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public TraceMetadata(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.traceId = deserializer.getLong(buffer);
-		this.threadId = deserializer.getLong(buffer);
-		this.sessionId = deserializer.getString(buffer, stringRegistry);
-		this.hostname = deserializer.getString(buffer, stringRegistry);
-		this.parentTraceId = deserializer.getLong(buffer);
-		this.parentOrderId = deserializer.getInt(buffer);
+	public TraceMetadata(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		this.traceId = deserializer.getLong();
+		this.threadId = deserializer.getLong();
+		this.sessionId = deserializer.getString();
+		this.hostname = deserializer.getString();
+		this.parentTraceId = deserializer.getLong();
+		this.parentOrderId = deserializer.getInt();
 	}
 
 	/**
@@ -145,13 +144,13 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		serializer.putLong(this.getTraceId(), buffer);
-		serializer.putLong(this.getThreadId(), buffer);
-		serializer.putString(this.getSessionId(), buffer, stringRegistry);
-		serializer.putString(this.getHostname(), buffer, stringRegistry);
-		serializer.putLong(this.getParentTraceId(), buffer);
-		serializer.putInt(this.getParentOrderId(), buffer);
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getTraceId());
+		serializer.putLong(this.getThreadId());
+		serializer.putString(this.getSessionId());
+		serializer.putString(this.getHostname());
+		serializer.putLong(this.getParentTraceId());
+		serializer.putInt(this.getParentOrderId());
 	}
 
 	/**
@@ -162,17 +161,6 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	@Override
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public final void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -191,7 +179,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	public int getSize() {
 		return SIZE;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */

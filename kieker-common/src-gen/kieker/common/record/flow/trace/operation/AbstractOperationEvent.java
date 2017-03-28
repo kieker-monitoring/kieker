@@ -1,35 +1,32 @@
 package kieker.common.record.flow.trace.operation;
 
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.IOperationRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueDeserializer;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IOperationRecord {
 	private static final long serialVersionUID = -4876224316055177674L;
 
-	
 	/** user-defined constants */
-	
+
 	/** default constants */
 	public static final String OPERATION_SIGNATURE = "";
 	public static final String CLASS_SIGNATURE = "";
-	
+
 	/** property declarations */
 	private final String operationSignature;
 	private final String classSignature;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -43,14 +40,13 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	 */
 	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature) {
 		super(timestamp, traceId, orderIndex);
-		this.operationSignature = operationSignature == null?OPERATION_SIGNATURE:operationSignature;
-		this.classSignature = classSignature == null?CLASS_SIGNATURE:classSignature;
+		this.operationSignature = operationSignature == null ? OPERATION_SIGNATURE : operationSignature;
+		this.classSignature = classSignature == null ? CLASS_SIGNATURE : classSignature;
 	}
-
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -64,26 +60,23 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param deserializer
 	 *            The value deserializer to use.
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public AbstractOperationEvent(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(deserializer, buffer, stringRegistry);
-		
-		this.operationSignature = deserializer.getString(buffer, stringRegistry);
-		this.classSignature = deserializer.getString(buffer, stringRegistry);
-	}
+	public AbstractOperationEvent(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		super(deserializer);
 
+		this.operationSignature = deserializer.getString();
+		this.classSignature = deserializer.getString();
+	}
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -91,18 +84,7 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -117,7 +99,7 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final AbstractOperationEvent castedRecord = (AbstractOperationEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -139,14 +121,14 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		}
 		return true;
 	}
-	
+
 	@Override
 	public final String getOperationSignature() {
 		return this.operationSignature;
-	}	
-	
+	}
+
 	@Override
 	public final String getClassSignature() {
 		return this.classSignature;
-	}	
+	}
 }

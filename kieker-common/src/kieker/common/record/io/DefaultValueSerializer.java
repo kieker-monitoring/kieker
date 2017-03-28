@@ -22,51 +22,54 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * Default value serializer implementation.
+ *
  * @author Holger Knoche
  * @since 1.13
  *
  */
 public class DefaultValueSerializer implements IValueSerializer {
 
-	private static final DefaultValueSerializer INSTANCE = new DefaultValueSerializer();
-	
-	protected DefaultValueSerializer() {
-		// Empty constructor
+	private final ByteBuffer buffer;
+	private final IRegistry<String> stringRegistry;
+
+	protected DefaultValueSerializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		this.buffer = buffer;
+		this.stringRegistry = stringRegistry;
 	}
-	
-	public static DefaultValueSerializer instance() {
-		return INSTANCE;
-	}
-	
-	@Override
-	public void putByte(final byte value, final ByteBuffer buffer) {
-		buffer.put(value);
-	}
-	
-	@Override
-	public void putInt(final int value, final ByteBuffer buffer) {
-		buffer.putInt(value);
+
+	public static DefaultValueSerializer create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new DefaultValueSerializer(buffer, stringRegistry);
 	}
 
 	@Override
-	public void putLong(final long value, final ByteBuffer buffer) {
-		buffer.putLong(value);
+	public void putByte(final byte value) {
+		this.buffer.put(value);
 	}
 
 	@Override
-	public void putDouble(final double value, final ByteBuffer buffer) {
-		buffer.putDouble(value);
-	}
-	
-	@Override
-	public void putBytes(final byte[] value, final ByteBuffer buffer) {
-		buffer.put(value);
+	public void putInt(final int value) {
+		this.buffer.putInt(value);
 	}
 
 	@Override
-	public void putString(final String value, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		final int stringId = stringRegistry.get(value);
-		this.putInt(stringId, buffer);
+	public void putLong(final long value) {
+		this.buffer.putLong(value);
+	}
+
+	@Override
+	public void putDouble(final double value) {
+		this.buffer.putDouble(value);
+	}
+
+	@Override
+	public void putBytes(final byte[] value) {
+		this.buffer.put(value);
+	}
+
+	@Override
+	public void putString(final String value) {
+		final int stringId = this.stringRegistry.get(value);
+		this.putInt(stringId);
 	}
 
 }

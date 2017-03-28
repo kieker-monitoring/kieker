@@ -22,51 +22,54 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * Default value deserializer implementation.
+ *
  * @author Holger Knoche
  * @since 1.13
  *
  */
 public class DefaultValueDeserializer implements IValueDeserializer {
 
-	private static final DefaultValueDeserializer INSTANCE = new DefaultValueDeserializer();
-	
-	protected DefaultValueDeserializer() {
-		// Empty constructor
+	private final ByteBuffer buffer;
+	private final IRegistry<String> stringRegistry;
+
+	protected DefaultValueDeserializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		this.buffer = buffer;
+		this.stringRegistry = stringRegistry;
 	}
-	
-	public static DefaultValueDeserializer instance() {
-		return INSTANCE;
-	}
-	
-	@Override
-	public byte getByte(final ByteBuffer buffer) {
-		return buffer.get();
-	}
-	
-	@Override
-	public int getInt(final ByteBuffer buffer) {
-		return buffer.getInt();
+
+	public static DefaultValueDeserializer create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new DefaultValueDeserializer(buffer, stringRegistry);
 	}
 
 	@Override
-	public long getLong(final ByteBuffer buffer) {
-		return buffer.getLong();
-	}
-	
-	@Override
-	public double getDouble(final ByteBuffer buffer) {
-		return buffer.getDouble();
+	public byte getByte() {
+		return this.buffer.get();
 	}
 
 	@Override
-	public String getString(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		final int stringId = this.getInt(buffer);
-		return stringRegistry.get(stringId);
+	public int getInt() {
+		return this.buffer.getInt();
 	}
 
 	@Override
-	public byte[] getBytes(final ByteBuffer buffer, final byte[] target) {
-		buffer.get(target);
+	public long getLong() {
+		return this.buffer.getLong();
+	}
+
+	@Override
+	public double getDouble() {
+		return this.buffer.getDouble();
+	}
+
+	@Override
+	public String getString() {
+		final int stringId = this.getInt();
+		return this.stringRegistry.get(stringId);
+	}
+
+	@Override
+	public byte[] getBytes(final byte[] target) {
+		this.buffer.get(target);
 		return target;
 	}
 

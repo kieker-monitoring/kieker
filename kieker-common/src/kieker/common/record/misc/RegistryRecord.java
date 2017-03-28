@@ -118,10 +118,9 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		serializer.putInt(this.getId(), buffer);
-		serializer.putInt(this.getString().length(), buffer);
-		serializer.putBytes(this.strBytes, buffer);
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putInt(this.getId());
+		serializer.putString(this.getString());
 	}
 
 	/**
@@ -132,17 +131,6 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	@Override
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public final void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 

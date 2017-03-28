@@ -42,7 +42,7 @@ public class RegularRecordHandler implements Runnable {
 	private static final int DEFAULT_QUEUE_SIZE = 4096;
 
 	private static final Log LOG = LogFactory.getLog(RegularRecordHandler.class);
-	
+
 	private final StringRegistryCache stringRegistryCache;
 	private final CachedRecordFactoryCatalog cachedRecordFactoryCatalog = CachedRecordFactoryCatalog.getInstance();
 	private final AbstractStringRegistryReaderPlugin reader;
@@ -103,7 +103,7 @@ public class RegularRecordHandler implements Runnable {
 		try {
 			final String recordClassName = stringRegistry.get(classId);
 			final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactoryCatalog.get(recordClassName);
-			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.instance(), buffer, stringRegistry);
+			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.create(buffer, stringRegistry));
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			this.reader.deliverRecord(record);
