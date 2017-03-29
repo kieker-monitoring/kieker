@@ -39,7 +39,7 @@ import kieker.test.tools.junit.writeRead.TestProbe;
 import teetime.framework.test.StageTester;
 
 /**
- * @author Christian Wulf
+ * @author Christian Wulf, Lars Bluemke
  *
  * @since 1.13
  */
