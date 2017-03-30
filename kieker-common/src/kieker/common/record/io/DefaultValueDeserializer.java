@@ -44,7 +44,7 @@ public class DefaultValueDeserializer implements IValueDeserializer {
 	}
 
 	@Override
-	public boolean getBoolean() {
+	public boolean getBoolean() { // NOPMD
 		return (this.getByte() == TRUE_VALUE);
 	}
 

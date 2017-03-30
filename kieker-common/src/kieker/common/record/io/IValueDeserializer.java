@@ -30,7 +30,7 @@ public interface IValueDeserializer {
 	 * @return The retrieved value
 	 * @since 1.13
 	 */
-	public boolean getBoolean();
+	public boolean getBoolean(); // NOPMD getBoolean is more consistent with other methods
 
 	/**
 	 * Retrieves a {@code byte} value from the underlying data source.
