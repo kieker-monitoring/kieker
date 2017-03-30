@@ -22,6 +22,11 @@ import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 
 import teetime.framework.test.StageTester;
 
+/**
+ * @author Nils Christian Ehmke, Lars Bluemke
+ *
+ * @since 1.8
+ */
 public class BasicJMSWriterReaderTest {
 	private static final int TIMEOUT_IN_MS = 0;
 
