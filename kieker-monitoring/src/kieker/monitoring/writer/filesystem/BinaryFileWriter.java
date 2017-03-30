@@ -142,7 +142,7 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 
 		recordBuffer.putInt(this.writerRegistry.getId(recordClassName));
 		recordBuffer.putLong(monitoringRecord.getLoggingTimestamp());
-		monitoringRecord.writeBytes(DefaultValueSerializer.instance(), recordBuffer, this.writeBytesAdapter);
+		monitoringRecord.serialize(DefaultValueSerializer.create(recordBuffer, this.writeBytesAdapter));
 
 		if (this.flush) {
 			channel.flush(recordBuffer, LOG);

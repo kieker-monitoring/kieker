@@ -79,7 +79,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 	private final IWriterRegistry<String> writerRegistry;
 	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.registerStrings(..)}. */
 	private final RegisterAdapter<String> registerStringsAdapter;
-	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.writeBytes(..)}. */
+	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.serialize(..)}. */
 	private final GetIdAdapter<String> writeBytesAdapter;
 
 	public DualSocketTcpWriter(final Configuration configuration) throws IOException {
@@ -134,7 +134,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		buffer.putInt(recordClassId);
 		buffer.putLong(loggingTimestamp);
 
-		monitoringRecord.writeBytes(DefaultValueSerializer.instance(), buffer, this.writeBytesAdapter);
+		monitoringRecord.serialize(DefaultValueSerializer.create(buffer, this.writeBytesAdapter));
 		// monitoringRecord.writeToBuffer(buffer, this.writerRegistry);
 
 		if (this.flush) {

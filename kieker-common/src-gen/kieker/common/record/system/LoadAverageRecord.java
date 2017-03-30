@@ -2,7 +2,6 @@ package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -10,10 +9,9 @@ import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
-
 /**
  * @author Teerat Pitakrat
- * 
+ *
  * @since 1.12
  */
 public class LoadAverageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
@@ -21,12 +19,12 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // LoadAverageRecord.timestamp
-			 + TYPE_SIZE_STRING // LoadAverageRecord.hostname
-			 + TYPE_SIZE_DOUBLE // LoadAverageRecord.oneMinLoadAverage
-			 + TYPE_SIZE_DOUBLE // LoadAverageRecord.fiveMinLoadAverage
-			 + TYPE_SIZE_DOUBLE // LoadAverageRecord.fifteenMinLoadAverage
+			+ TYPE_SIZE_STRING // LoadAverageRecord.hostname
+			+ TYPE_SIZE_DOUBLE // LoadAverageRecord.oneMinLoadAverage
+			+ TYPE_SIZE_DOUBLE // LoadAverageRecord.fiveMinLoadAverage
+			+ TYPE_SIZE_DOUBLE // LoadAverageRecord.fifteenMinLoadAverage
 	;
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // LoadAverageRecord.timestamp
 		String.class, // LoadAverageRecord.hostname
@@ -34,26 +32,26 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		double.class, // LoadAverageRecord.fiveMinLoadAverage
 		double.class, // LoadAverageRecord.fifteenMinLoadAverage
 	};
-	
+
 	/** user-defined constants */
-	
+
 	/** default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final double ONE_MIN_LOAD_AVERAGE = 0.0;
 	public static final double FIVE_MIN_LOAD_AVERAGE = 0.0;
 	public static final double FIFTEEN_MIN_LOAD_AVERAGE = 0.0;
-	
+
 	/** property declarations */
 	private final long timestamp;
 	private final String hostname;
 	private final double oneMinLoadAverage;
 	private final double fiveMinLoadAverage;
 	private final double fifteenMinLoadAverage;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param hostname
@@ -65,9 +63,10 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	 * @param fifteenMinLoadAverage
 	 *            fifteenMinLoadAverage
 	 */
-	public LoadAverageRecord(final long timestamp, final String hostname, final double oneMinLoadAverage, final double fiveMinLoadAverage, final double fifteenMinLoadAverage) {
+	public LoadAverageRecord(final long timestamp, final String hostname, final double oneMinLoadAverage, final double fiveMinLoadAverage,
+			final double fifteenMinLoadAverage) {
 		this.timestamp = timestamp;
-		this.hostname = hostname == null?HOSTNAME:hostname;
+		this.hostname = hostname == null ? HOSTNAME : hostname;
 		this.oneMinLoadAverage = oneMinLoadAverage;
 		this.fiveMinLoadAverage = fiveMinLoadAverage;
 		this.fifteenMinLoadAverage = fifteenMinLoadAverage;
@@ -76,7 +75,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -91,7 +90,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -108,21 +107,19 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public LoadAverageRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = deserializer.getLong(buffer);
-		this.hostname = deserializer.getString(buffer, stringRegistry);
-		this.oneMinLoadAverage = deserializer.getDouble(buffer);
-		this.fiveMinLoadAverage = deserializer.getDouble(buffer);
-		this.fifteenMinLoadAverage = deserializer.getDouble(buffer);
+	public LoadAverageRecord(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		this.timestamp = deserializer.getLong();
+		this.hostname = deserializer.getString();
+		this.oneMinLoadAverage = deserializer.getDouble();
+		this.fiveMinLoadAverage = deserializer.getDouble();
+		this.fifteenMinLoadAverage = deserializer.getDouble();
 	}
 
 	/**
@@ -138,27 +135,27 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 			this.getFifteenMinLoadAverage()
 		};
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getHostname());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		serializer.putLong(this.getTimestamp(), buffer);
-		serializer.putString(this.getHostname(), buffer, stringRegistry);
-		serializer.putDouble(this.getOneMinLoadAverage(), buffer);
-		serializer.putDouble(this.getFiveMinLoadAverage(), buffer);
-		serializer.putDouble(this.getFifteenMinLoadAverage(), buffer);
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp());
+		serializer.putString(this.getHostname());
+		serializer.putDouble(this.getOneMinLoadAverage());
+		serializer.putDouble(this.getFiveMinLoadAverage());
+		serializer.putDouble(this.getFifteenMinLoadAverage());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -166,7 +163,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -177,7 +174,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -185,18 +182,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -211,7 +197,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final LoadAverageRecord castedRecord = (LoadAverageRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -222,35 +208,35 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		if (!this.getHostname().equals(castedRecord.getHostname())) {
 			return false;
 		}
-		if (isNotEqual(this.getOneMinLoadAverage(), castedRecord.getOneMinLoadAverage())) {
+		if (AbstractMonitoringRecord.isNotEqual(this.getOneMinLoadAverage(), castedRecord.getOneMinLoadAverage())) {
 			return false;
 		}
-		if (isNotEqual(this.getFiveMinLoadAverage(), castedRecord.getFiveMinLoadAverage())) {
+		if (AbstractMonitoringRecord.isNotEqual(this.getFiveMinLoadAverage(), castedRecord.getFiveMinLoadAverage())) {
 			return false;
 		}
-		if (isNotEqual(this.getFifteenMinLoadAverage(), castedRecord.getFifteenMinLoadAverage())) {
+		if (AbstractMonitoringRecord.isNotEqual(this.getFifteenMinLoadAverage(), castedRecord.getFifteenMinLoadAverage())) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	public final long getTimestamp() {
 		return this.timestamp;
-	}	
-	
+	}
+
 	public final String getHostname() {
 		return this.hostname;
-	}	
-	
+	}
+
 	public final double getOneMinLoadAverage() {
 		return this.oneMinLoadAverage;
-	}	
-	
+	}
+
 	public final double getFiveMinLoadAverage() {
 		return this.fiveMinLoadAverage;
-	}	
-	
+	}
+
 	public final double getFifteenMinLoadAverage() {
 		return this.fifteenMinLoadAverage;
-	}	
+	}
 }

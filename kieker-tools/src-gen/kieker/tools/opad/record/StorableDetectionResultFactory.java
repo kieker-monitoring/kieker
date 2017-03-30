@@ -16,29 +16,26 @@
 
 package kieker.tools.opad.record;
 
-import java.nio.ByteBuffer;
-
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Tom Frotscher, Thomas Duellmann
- * 
+ *
  * @since 1.10
  */
 public final class StorableDetectionResultFactory implements IRecordFactory<StorableDetectionResult> {
-	
+
 	@Override
-	public StorableDetectionResult create(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new StorableDetectionResult(deserializer, buffer, stringRegistry);
+	public StorableDetectionResult create(final IValueDeserializer deserializer) {
+		return new StorableDetectionResult(deserializer);
 	}
-	
+
 	@Override
 	public StorableDetectionResult create(final Object[] values) {
 		return new StorableDetectionResult(values);
 	}
-	
+
 	@Override
 	public int getRecordSizeInBytes() {
 		return StorableDetectionResult.SIZE;

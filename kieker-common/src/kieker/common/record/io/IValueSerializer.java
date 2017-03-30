@@ -25,6 +25,15 @@ package kieker.common.record.io;
 public interface IValueSerializer {
 
 	/**
+	 * Stores a {@code boolean} value in the underlying data store.
+	 *
+	 * @param value
+	 *            The value to store
+	 * @since 1.13
+	 */
+	public void putBoolean(boolean value);
+
+	/**
 	 * Stores a {@code byte} value in the underlying data store.
 	 *
 	 * @param value

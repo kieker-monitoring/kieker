@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.flow.trace.concurrency.monitor.MonitorRequestEvent}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestMonitorRequestEventPropertyOrder extends AbstractKiekerTest {
@@ -51,7 +51,7 @@ public class TestMonitorRequestEventPropertyOrder extends AbstractKiekerTest {
 	private static final int PROPERTY_ORDER_INDEX = 1001;
 	/** Constant value parameter for lockId. */
 	private static final int PROPERTY_LOCK_ID = 1002;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -72,18 +72,17 @@ public class TestMonitorRequestEventPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_ORDER_INDEX,
 			PROPERTY_LOCK_ID,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(MonitorRequestEvent.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(MonitorRequestEvent.SIZE,
+				this.makeStringRegistry(), values);
+
 		final MonitorRequestEvent recordInitParameter = new MonitorRequestEvent(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_TRACE_ID,
-			PROPERTY_ORDER_INDEX,
-			PROPERTY_LOCK_ID
-		);
-		final MonitorRequestEvent recordInitBuffer = new MonitorRequestEvent(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_TRACE_ID,
+				PROPERTY_ORDER_INDEX,
+				PROPERTY_LOCK_ID);
+		final MonitorRequestEvent recordInitBuffer = new MonitorRequestEvent(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final MonitorRequestEvent recordInitArray = new MonitorRequestEvent(values);
-		
+
 		this.assertMonitorRequestEvent(recordInitParameter);
 		this.assertMonitorRequestEvent(recordInitBuffer);
 		this.assertMonitorRequestEvent(recordInitArray);
@@ -98,15 +97,15 @@ public class TestMonitorRequestEventPropertyOrder extends AbstractKiekerTest {
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(MonitorRequestEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(MonitorRequestEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(MonitorRequestEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -119,7 +118,7 @@ public class TestMonitorRequestEventPropertyOrder extends AbstractKiekerTest {
 		Assert.assertEquals("'orderIndex' value assertion failed.", record.getOrderIndex(), PROPERTY_ORDER_INDEX);
 		Assert.assertEquals("'lockId' value assertion failed.", record.getLockId(), PROPERTY_LOCK_ID);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

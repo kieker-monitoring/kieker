@@ -18,7 +18,6 @@ package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -26,26 +25,25 @@ import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
-
 /**
  * @author Tillmann Carlos Bielefeld
- * 
+ *
  * @since 1.10
  */
 public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // NamedTSPoint.timestamp
-			 + TYPE_SIZE_DOUBLE // NamedTSPoint.value
-			 + TYPE_SIZE_STRING // NamedTSPoint.name
+			+ TYPE_SIZE_DOUBLE // NamedTSPoint.value
+			+ TYPE_SIZE_STRING // NamedTSPoint.name
 	;
 	private static final long serialVersionUID = 4302229080791508406L;
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // NamedTSPoint.timestamp
 		double.class, // NamedTSPoint.value
 		String.class, // NamedTSPoint.name
 	};
-	
+
 	/* user-defined constants */
 	/* default constants */
 	public static final String NAME = "";
@@ -56,7 +54,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param value
@@ -67,13 +65,13 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	public NamedTSPoint(final long timestamp, final double value, final String name) {
 		this.timestamp = timestamp;
 		this.value = value;
-		this.name = name == null?"":name;
+		this.name = name == null ? "" : name;
 	}
 
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -83,10 +81,10 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		this.value = (Double) values[1];
 		this.name = (String) values[2];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -101,19 +99,17 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public NamedTSPoint(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = deserializer.getLong(buffer);
-		this.value = deserializer.getDouble(buffer);
-		this.name = deserializer.getString(buffer, stringRegistry);
+	public NamedTSPoint(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		this.timestamp = deserializer.getLong();
+		this.value = deserializer.getDouble();
+		this.name = deserializer.getString();
 	}
 
 	/**
@@ -132,7 +128,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getName());
 	}
 
@@ -140,10 +136,10 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		serializer.putLong(this.getTimestamp(), buffer);
-		serializer.putDouble(this.getValue(), buffer);
-		serializer.putString(this.getName(), buffer, stringRegistry);
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp());
+		serializer.putDouble(this.getValue());
+		serializer.putString(this.getName());
 	}
 
 	/**
@@ -161,25 +157,15 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -197,7 +183,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final NamedTSPoint castedRecord = (NamedTSPoint) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -205,7 +191,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		if (this.getTimestamp() != castedRecord.getTimestamp()) {
 			return false;
 		}
-		if (isNotEqual(this.getValue(), castedRecord.getValue())) {
+		if (AbstractMonitoringRecord.isNotEqual(this.getValue(), castedRecord.getValue())) {
 			return false;
 		}
 		if (!this.getName().equals(castedRecord.getName())) {
@@ -217,13 +203,13 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-	
+
 	public final double getValue() {
 		return this.value;
 	}
-	
+
 	public final String getName() {
 		return this.name;
 	}
-	
+
 }

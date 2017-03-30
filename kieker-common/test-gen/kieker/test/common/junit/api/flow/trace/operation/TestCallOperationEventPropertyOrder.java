@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.flow.trace.operation.CallOperationEvent}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestCallOperationEventPropertyOrder extends AbstractKiekerTest {
@@ -57,7 +57,7 @@ public class TestCallOperationEventPropertyOrder extends AbstractKiekerTest {
 	private static final String PROPERTY_CALLEE_OPERATION_SIGNATURE = "<calleeOperationSignature>";
 	/** Constant value parameter for calleeClassSignature. */
 	private static final String PROPERTY_CALLEE_CLASS_SIGNATURE = "<calleeClassSignature>";
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -81,21 +81,20 @@ public class TestCallOperationEventPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_CALLEE_OPERATION_SIGNATURE,
 			PROPERTY_CALLEE_CLASS_SIGNATURE,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(CallOperationEvent.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(CallOperationEvent.SIZE,
+				this.makeStringRegistry(), values);
+
 		final CallOperationEvent recordInitParameter = new CallOperationEvent(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_TRACE_ID,
-			PROPERTY_ORDER_INDEX,
-			PROPERTY_OPERATION_SIGNATURE,
-			PROPERTY_CLASS_SIGNATURE,
-			PROPERTY_CALLEE_OPERATION_SIGNATURE,
-			PROPERTY_CALLEE_CLASS_SIGNATURE
-		);
-		final CallOperationEvent recordInitBuffer = new CallOperationEvent(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_TRACE_ID,
+				PROPERTY_ORDER_INDEX,
+				PROPERTY_OPERATION_SIGNATURE,
+				PROPERTY_CLASS_SIGNATURE,
+				PROPERTY_CALLEE_OPERATION_SIGNATURE,
+				PROPERTY_CALLEE_CLASS_SIGNATURE);
+		final CallOperationEvent recordInitBuffer = new CallOperationEvent(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final CallOperationEvent recordInitArray = new CallOperationEvent(values);
-		
+
 		this.assertCallOperationEvent(recordInitParameter);
 		this.assertCallOperationEvent(recordInitBuffer);
 		this.assertCallOperationEvent(recordInitArray);
@@ -110,15 +109,15 @@ public class TestCallOperationEventPropertyOrder extends AbstractKiekerTest {
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(CallOperationEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(CallOperationEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(CallOperationEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -134,7 +133,7 @@ public class TestCallOperationEventPropertyOrder extends AbstractKiekerTest {
 		Assert.assertEquals("'calleeOperationSignature' value assertion failed.", record.getCalleeOperationSignature(), PROPERTY_CALLEE_OPERATION_SIGNATURE);
 		Assert.assertEquals("'calleeClassSignature' value assertion failed.", record.getCalleeClassSignature(), PROPERTY_CALLEE_CLASS_SIGNATURE);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

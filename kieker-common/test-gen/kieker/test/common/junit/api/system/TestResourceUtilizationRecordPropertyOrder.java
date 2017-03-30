@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.system.ResourceUtilizationRecord}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestResourceUtilizationRecordPropertyOrder extends AbstractKiekerTest {
@@ -51,7 +51,7 @@ public class TestResourceUtilizationRecordPropertyOrder extends AbstractKiekerTe
 	private static final String PROPERTY_RESOURCE_NAME = "<resourceName>";
 	/** Constant value parameter for utilization. */
 	private static final double PROPERTY_UTILIZATION = 2.0;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -72,18 +72,17 @@ public class TestResourceUtilizationRecordPropertyOrder extends AbstractKiekerTe
 			PROPERTY_RESOURCE_NAME,
 			PROPERTY_UTILIZATION,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(ResourceUtilizationRecord.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(ResourceUtilizationRecord.SIZE,
+				this.makeStringRegistry(), values);
+
 		final ResourceUtilizationRecord recordInitParameter = new ResourceUtilizationRecord(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_HOSTNAME,
-			PROPERTY_RESOURCE_NAME,
-			PROPERTY_UTILIZATION
-		);
-		final ResourceUtilizationRecord recordInitBuffer = new ResourceUtilizationRecord(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_HOSTNAME,
+				PROPERTY_RESOURCE_NAME,
+				PROPERTY_UTILIZATION);
+		final ResourceUtilizationRecord recordInitBuffer = new ResourceUtilizationRecord(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final ResourceUtilizationRecord recordInitArray = new ResourceUtilizationRecord(values);
-		
+
 		this.assertResourceUtilizationRecord(recordInitParameter);
 		this.assertResourceUtilizationRecord(recordInitBuffer);
 		this.assertResourceUtilizationRecord(recordInitArray);
@@ -98,15 +97,15 @@ public class TestResourceUtilizationRecordPropertyOrder extends AbstractKiekerTe
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(ResourceUtilizationRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(ResourceUtilizationRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(ResourceUtilizationRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -119,7 +118,7 @@ public class TestResourceUtilizationRecordPropertyOrder extends AbstractKiekerTe
 		Assert.assertEquals("'resourceName' value assertion failed.", record.getResourceName(), PROPERTY_RESOURCE_NAME);
 		Assert.assertEquals("'utilization' value assertion failed.", record.getUtilization(), PROPERTY_UTILIZATION, 0.1);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

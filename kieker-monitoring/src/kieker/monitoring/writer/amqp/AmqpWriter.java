@@ -162,7 +162,7 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 		// serialized monitoringRecord
 		recordBuffer.putInt(this.writerRegistry.getId(recordClassName));
 		recordBuffer.putLong(monitoringRecord.getLoggingTimestamp());
-		monitoringRecord.writeBytes(DefaultValueSerializer.instance(), recordBuffer, this.writeBytesAdapter);
+		monitoringRecord.serialize(DefaultValueSerializer.create(recordBuffer, this.writeBytesAdapter));
 
 		this.publishBuffer(recordBuffer);
 	}

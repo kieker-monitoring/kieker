@@ -16,29 +16,26 @@
 
 package kieker.tools.opad.record;
 
-import java.nio.ByteBuffer;
-
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Thomas Duellmann
- * 
+ *
  * @since 1.10
  */
 public final class AggregationWindowFactory implements IRecordFactory<AggregationWindow> {
-	
+
 	@Override
-	public AggregationWindow create(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new AggregationWindow(deserializer, buffer, stringRegistry);
+	public AggregationWindow create(final IValueDeserializer deserializer) {
+		return new AggregationWindow(deserializer);
 	}
-	
+
 	@Override
 	public AggregationWindow create(final Object[] values) {
 		return new AggregationWindow(values);
 	}
-	
+
 	@Override
 	public int getRecordSizeInBytes() {
 		return AggregationWindow.SIZE;

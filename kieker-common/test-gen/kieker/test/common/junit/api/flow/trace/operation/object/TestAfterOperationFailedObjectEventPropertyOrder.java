@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.flow.trace.operation.object.AfterOperationFailedObjectEvent}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestAfterOperationFailedObjectEventPropertyOrder extends AbstractKiekerTest {
@@ -57,7 +57,7 @@ public class TestAfterOperationFailedObjectEventPropertyOrder extends AbstractKi
 	private static final String PROPERTY_CAUSE = "<cause>";
 	/** Constant value parameter for objectId. */
 	private static final int PROPERTY_OBJECT_ID = 1002;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -81,21 +81,21 @@ public class TestAfterOperationFailedObjectEventPropertyOrder extends AbstractKi
 			PROPERTY_CAUSE,
 			PROPERTY_OBJECT_ID,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(AfterOperationFailedObjectEvent.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(AfterOperationFailedObjectEvent.SIZE,
+				this.makeStringRegistry(), values);
+
 		final AfterOperationFailedObjectEvent recordInitParameter = new AfterOperationFailedObjectEvent(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_TRACE_ID,
-			PROPERTY_ORDER_INDEX,
-			PROPERTY_OPERATION_SIGNATURE,
-			PROPERTY_CLASS_SIGNATURE,
-			PROPERTY_CAUSE,
-			PROPERTY_OBJECT_ID
-		);
-		final AfterOperationFailedObjectEvent recordInitBuffer = new AfterOperationFailedObjectEvent(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_TRACE_ID,
+				PROPERTY_ORDER_INDEX,
+				PROPERTY_OPERATION_SIGNATURE,
+				PROPERTY_CLASS_SIGNATURE,
+				PROPERTY_CAUSE,
+				PROPERTY_OBJECT_ID);
+		final AfterOperationFailedObjectEvent recordInitBuffer = new AfterOperationFailedObjectEvent(
+				DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final AfterOperationFailedObjectEvent recordInitArray = new AfterOperationFailedObjectEvent(values);
-		
+
 		this.assertAfterOperationFailedObjectEvent(recordInitParameter);
 		this.assertAfterOperationFailedObjectEvent(recordInitBuffer);
 		this.assertAfterOperationFailedObjectEvent(recordInitArray);
@@ -110,15 +110,15 @@ public class TestAfterOperationFailedObjectEventPropertyOrder extends AbstractKi
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(AfterOperationFailedObjectEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(AfterOperationFailedObjectEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(AfterOperationFailedObjectEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -134,7 +134,7 @@ public class TestAfterOperationFailedObjectEventPropertyOrder extends AbstractKi
 		Assert.assertEquals("'cause' value assertion failed.", record.getCause(), PROPERTY_CAUSE);
 		Assert.assertEquals("'objectId' value assertion failed.", record.getObjectId(), PROPERTY_OBJECT_ID);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

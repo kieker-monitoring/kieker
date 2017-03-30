@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.system.DiskUsageRecord}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestDiskUsageRecordPropertyOrder extends AbstractKiekerTest {
@@ -61,7 +61,7 @@ public class TestDiskUsageRecordPropertyOrder extends AbstractKiekerTest {
 	private static final double PROPERTY_WRITE_BYTES_PER_SECOND = 6.0;
 	/** Constant value parameter for writesPerSecond. */
 	private static final double PROPERTY_WRITES_PER_SECOND = 7.0;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -87,23 +87,22 @@ public class TestDiskUsageRecordPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_WRITE_BYTES_PER_SECOND,
 			PROPERTY_WRITES_PER_SECOND,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(DiskUsageRecord.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(DiskUsageRecord.SIZE,
+				this.makeStringRegistry(), values);
+
 		final DiskUsageRecord recordInitParameter = new DiskUsageRecord(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_HOSTNAME,
-			PROPERTY_DEVICE_NAME,
-			PROPERTY_QUEUE,
-			PROPERTY_READ_BYTES_PER_SECOND,
-			PROPERTY_READS_PER_SECOND,
-			PROPERTY_SERVICE_TIME,
-			PROPERTY_WRITE_BYTES_PER_SECOND,
-			PROPERTY_WRITES_PER_SECOND
-		);
-		final DiskUsageRecord recordInitBuffer = new DiskUsageRecord(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_HOSTNAME,
+				PROPERTY_DEVICE_NAME,
+				PROPERTY_QUEUE,
+				PROPERTY_READ_BYTES_PER_SECOND,
+				PROPERTY_READS_PER_SECOND,
+				PROPERTY_SERVICE_TIME,
+				PROPERTY_WRITE_BYTES_PER_SECOND,
+				PROPERTY_WRITES_PER_SECOND);
+		final DiskUsageRecord recordInitBuffer = new DiskUsageRecord(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final DiskUsageRecord recordInitArray = new DiskUsageRecord(values);
-		
+
 		this.assertDiskUsageRecord(recordInitParameter);
 		this.assertDiskUsageRecord(recordInitBuffer);
 		this.assertDiskUsageRecord(recordInitArray);
@@ -118,15 +117,15 @@ public class TestDiskUsageRecordPropertyOrder extends AbstractKiekerTest {
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(DiskUsageRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(DiskUsageRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(DiskUsageRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -144,7 +143,7 @@ public class TestDiskUsageRecordPropertyOrder extends AbstractKiekerTest {
 		Assert.assertEquals("'writeBytesPerSecond' value assertion failed.", record.getWriteBytesPerSecond(), PROPERTY_WRITE_BYTES_PER_SECOND, 0.1);
 		Assert.assertEquals("'writesPerSecond' value assertion failed.", record.getWritesPerSecond(), PROPERTY_WRITES_PER_SECOND, 0.1);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

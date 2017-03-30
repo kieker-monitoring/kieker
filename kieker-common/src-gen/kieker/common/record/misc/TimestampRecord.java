@@ -2,7 +2,6 @@ package kieker.common.record.misc;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -10,10 +9,9 @@ import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
-
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.5
  */
 public class TimestampRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
@@ -22,22 +20,22 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // TimestampRecord.timestamp
 	;
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // TimestampRecord.timestamp
 	};
-	
+
 	/** user-defined constants */
-	
+
 	/** default constants */
 	public static final long TIMESTAMP = 0L;
-	
+
 	/** property declarations */
 	private final long timestamp;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 */
@@ -48,7 +46,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -59,7 +57,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -72,17 +70,15 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public TimestampRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = deserializer.getLong(buffer);
+	public TimestampRecord(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		this.timestamp = deserializer.getLong();
 	}
 
 	/**
@@ -94,22 +90,22 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 			this.getTimestamp()
 		};
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		serializer.putLong(this.getTimestamp(), buffer);
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -117,7 +113,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -128,7 +124,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -136,18 +132,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -162,7 +147,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final TimestampRecord castedRecord = (TimestampRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -172,8 +157,8 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 		}
 		return true;
 	}
-	
+
 	public final long getTimestamp() {
 		return this.timestamp;
-	}	
+	}
 }

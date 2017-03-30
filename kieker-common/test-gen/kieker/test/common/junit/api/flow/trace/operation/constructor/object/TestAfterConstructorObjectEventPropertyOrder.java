@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.flow.trace.operation.constructor.object.AfterConstructorObjectEvent}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestAfterConstructorObjectEventPropertyOrder extends AbstractKiekerTest {
@@ -55,7 +55,7 @@ public class TestAfterConstructorObjectEventPropertyOrder extends AbstractKieker
 	private static final String PROPERTY_CLASS_SIGNATURE = "<classSignature>";
 	/** Constant value parameter for objectId. */
 	private static final int PROPERTY_OBJECT_ID = 1002;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -78,20 +78,20 @@ public class TestAfterConstructorObjectEventPropertyOrder extends AbstractKieker
 			PROPERTY_CLASS_SIGNATURE,
 			PROPERTY_OBJECT_ID,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(AfterConstructorObjectEvent.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(AfterConstructorObjectEvent.SIZE,
+				this.makeStringRegistry(), values);
+
 		final AfterConstructorObjectEvent recordInitParameter = new AfterConstructorObjectEvent(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_TRACE_ID,
-			PROPERTY_ORDER_INDEX,
-			PROPERTY_OPERATION_SIGNATURE,
-			PROPERTY_CLASS_SIGNATURE,
-			PROPERTY_OBJECT_ID
-		);
-		final AfterConstructorObjectEvent recordInitBuffer = new AfterConstructorObjectEvent(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_TRACE_ID,
+				PROPERTY_ORDER_INDEX,
+				PROPERTY_OPERATION_SIGNATURE,
+				PROPERTY_CLASS_SIGNATURE,
+				PROPERTY_OBJECT_ID);
+		final AfterConstructorObjectEvent recordInitBuffer = new AfterConstructorObjectEvent(
+				DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final AfterConstructorObjectEvent recordInitArray = new AfterConstructorObjectEvent(values);
-		
+
 		this.assertAfterConstructorObjectEvent(recordInitParameter);
 		this.assertAfterConstructorObjectEvent(recordInitBuffer);
 		this.assertAfterConstructorObjectEvent(recordInitArray);
@@ -106,15 +106,15 @@ public class TestAfterConstructorObjectEventPropertyOrder extends AbstractKieker
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(AfterConstructorObjectEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(AfterConstructorObjectEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(AfterConstructorObjectEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -129,7 +129,7 @@ public class TestAfterConstructorObjectEventPropertyOrder extends AbstractKieker
 		Assert.assertEquals("'classSignature' value assertion failed.", record.getClassSignature(), PROPERTY_CLASS_SIGNATURE);
 		Assert.assertEquals("'objectId' value assertion failed.", record.getObjectId(), PROPERTY_OBJECT_ID);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.jvm.UptimeRecord}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestUptimeRecordPropertyOrder extends AbstractKiekerTest {
@@ -51,7 +51,7 @@ public class TestUptimeRecordPropertyOrder extends AbstractKiekerTest {
 	private static final String PROPERTY_VM_NAME = "<vmName>";
 	/** Constant value parameter for uptimeMS. */
 	private static final long PROPERTY_UPTIME_M_S = 3L;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -72,18 +72,17 @@ public class TestUptimeRecordPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_VM_NAME,
 			PROPERTY_UPTIME_M_S,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(UptimeRecord.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(UptimeRecord.SIZE,
+				this.makeStringRegistry(), values);
+
 		final UptimeRecord recordInitParameter = new UptimeRecord(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_HOSTNAME,
-			PROPERTY_VM_NAME,
-			PROPERTY_UPTIME_M_S
-		);
-		final UptimeRecord recordInitBuffer = new UptimeRecord(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_HOSTNAME,
+				PROPERTY_VM_NAME,
+				PROPERTY_UPTIME_M_S);
+		final UptimeRecord recordInitBuffer = new UptimeRecord(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final UptimeRecord recordInitArray = new UptimeRecord(values);
-		
+
 		this.assertUptimeRecord(recordInitParameter);
 		this.assertUptimeRecord(recordInitBuffer);
 		this.assertUptimeRecord(recordInitArray);
@@ -98,15 +97,15 @@ public class TestUptimeRecordPropertyOrder extends AbstractKiekerTest {
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(UptimeRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(UptimeRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(UptimeRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -119,7 +118,7 @@ public class TestUptimeRecordPropertyOrder extends AbstractKiekerTest {
 		Assert.assertEquals("'vmName' value assertion failed.", record.getVmName(), PROPERTY_VM_NAME);
 		Assert.assertEquals("'uptimeMS' value assertion failed.", record.getUptimeMS(), PROPERTY_UPTIME_M_S);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

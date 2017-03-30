@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.jvm.GCRecord}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestGCRecordPropertyOrder extends AbstractKiekerTest {
@@ -55,7 +55,7 @@ public class TestGCRecordPropertyOrder extends AbstractKiekerTest {
 	private static final long PROPERTY_COLLECTION_COUNT = 3L;
 	/** Constant value parameter for collectionTimeMS. */
 	private static final long PROPERTY_COLLECTION_TIME_M_S = 4L;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -78,20 +78,19 @@ public class TestGCRecordPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_COLLECTION_COUNT,
 			PROPERTY_COLLECTION_TIME_M_S,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(GCRecord.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(GCRecord.SIZE,
+				this.makeStringRegistry(), values);
+
 		final GCRecord recordInitParameter = new GCRecord(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_HOSTNAME,
-			PROPERTY_VM_NAME,
-			PROPERTY_GC_NAME,
-			PROPERTY_COLLECTION_COUNT,
-			PROPERTY_COLLECTION_TIME_M_S
-		);
-		final GCRecord recordInitBuffer = new GCRecord(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_HOSTNAME,
+				PROPERTY_VM_NAME,
+				PROPERTY_GC_NAME,
+				PROPERTY_COLLECTION_COUNT,
+				PROPERTY_COLLECTION_TIME_M_S);
+		final GCRecord recordInitBuffer = new GCRecord(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final GCRecord recordInitArray = new GCRecord(values);
-		
+
 		this.assertGCRecord(recordInitParameter);
 		this.assertGCRecord(recordInitBuffer);
 		this.assertGCRecord(recordInitArray);
@@ -106,15 +105,15 @@ public class TestGCRecordPropertyOrder extends AbstractKiekerTest {
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(GCRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(GCRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(GCRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -129,7 +128,7 @@ public class TestGCRecordPropertyOrder extends AbstractKiekerTest {
 		Assert.assertEquals("'collectionCount' value assertion failed.", record.getCollectionCount(), PROPERTY_COLLECTION_COUNT);
 		Assert.assertEquals("'collectionTimeMS' value assertion failed.", record.getCollectionTimeMS(), PROPERTY_COLLECTION_TIME_M_S);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

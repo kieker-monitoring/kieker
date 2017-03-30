@@ -31,7 +31,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class TestTraceMetadata extends AbstractKiekerTest {
@@ -52,7 +52,7 @@ public class TestTraceMetadata extends AbstractKiekerTest {
 
 	/**
 	 * Tests the constructor and toArray(..) methods of {@link TraceMetadata}.
-	 * 
+	 *
 	 * Assert that a record instance trace1 equals an instance event2 created by serializing trace1 to an array trace1Array
 	 * and using trace1Array to construct trace2. This ignores a set loggingTimestamp!
 	 */
@@ -93,10 +93,10 @@ public class TestTraceMetadata extends AbstractKiekerTest {
 
 		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(trace1.getSize());
-		trace1.writeBytes(DefaultValueSerializer.instance(), buffer, stringRegistry);
+		trace1.serialize(DefaultValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
 
-		final TraceMetadata trace2 = new TraceMetadata(DefaultValueDeserializer.instance(), buffer, stringRegistry);
+		final TraceMetadata trace2 = new TraceMetadata(DefaultValueDeserializer.create(buffer, stringRegistry));
 
 		Assert.assertEquals(trace1, trace2);
 		Assert.assertEquals(0, trace1.compareTo(trace2));

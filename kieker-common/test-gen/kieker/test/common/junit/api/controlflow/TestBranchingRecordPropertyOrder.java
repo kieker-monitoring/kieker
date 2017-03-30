@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.controlflow.BranchingRecord}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestBranchingRecordPropertyOrder extends AbstractKiekerTest {
@@ -49,7 +49,7 @@ public class TestBranchingRecordPropertyOrder extends AbstractKiekerTest {
 	private static final int PROPERTY_BRANCH_I_D = 1001;
 	/** Constant value parameter for branchingOutcome. */
 	private static final int PROPERTY_BRANCHING_OUTCOME = 1002;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -69,17 +69,16 @@ public class TestBranchingRecordPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_BRANCH_I_D,
 			PROPERTY_BRANCHING_OUTCOME,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(BranchingRecord.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(BranchingRecord.SIZE,
+				this.makeStringRegistry(), values);
+
 		final BranchingRecord recordInitParameter = new BranchingRecord(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_BRANCH_I_D,
-			PROPERTY_BRANCHING_OUTCOME
-		);
-		final BranchingRecord recordInitBuffer = new BranchingRecord(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_BRANCH_I_D,
+				PROPERTY_BRANCHING_OUTCOME);
+		final BranchingRecord recordInitBuffer = new BranchingRecord(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final BranchingRecord recordInitArray = new BranchingRecord(values);
-		
+
 		this.assertBranchingRecord(recordInitParameter);
 		this.assertBranchingRecord(recordInitBuffer);
 		this.assertBranchingRecord(recordInitArray);
@@ -94,15 +93,15 @@ public class TestBranchingRecordPropertyOrder extends AbstractKiekerTest {
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(BranchingRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(BranchingRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(BranchingRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -114,7 +113,7 @@ public class TestBranchingRecordPropertyOrder extends AbstractKiekerTest {
 		Assert.assertEquals("'branchID' value assertion failed.", record.getBranchID(), PROPERTY_BRANCH_I_D);
 		Assert.assertEquals("'branchingOutcome' value assertion failed.", record.getBranchingOutcome(), PROPERTY_BRANCHING_OUTCOME);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

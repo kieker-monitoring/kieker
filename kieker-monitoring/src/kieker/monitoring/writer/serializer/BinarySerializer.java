@@ -42,10 +42,10 @@ public class BinarySerializer extends AbstractContainerFormatSerializer {
 
 	/** Encoding to use for Strings. */
 	private static final String ENCODING_NAME = "UTF-8";
-	
+
 	/** Charset to use for Strings. */
 	private static final Charset CHARSET = Charset.forName(ENCODING_NAME);
-	
+
 	/**
 	 * Creates a new serializer using the given configuration.
 	 *
@@ -91,7 +91,7 @@ public class BinarySerializer extends AbstractContainerFormatSerializer {
 			buffer.putInt(typeNameId);
 			buffer.putLong(record.getLoggingTimestamp());
 
-			record.writeBytes(DefaultValueSerializer.instance(), buffer, stringRegistry);
+			record.serialize(DefaultValueSerializer.create(buffer, stringRegistry));
 		}
 
 		final int offsetAfter = buffer.position();

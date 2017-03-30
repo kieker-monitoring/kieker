@@ -2,7 +2,6 @@ package kieker.common.record.misc;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -10,10 +9,9 @@ import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
-
 /**
  * @author Christian Wulf
- * 
+ *
  * @since 1.13
  */
 public class HostApplicationMetaData extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
@@ -21,35 +19,35 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // HostApplicationMetaData.systemName
-			 + TYPE_SIZE_STRING // HostApplicationMetaData.ipAddress
-			 + TYPE_SIZE_STRING // HostApplicationMetaData.hostName
-			 + TYPE_SIZE_STRING // HostApplicationMetaData.applicationName
+			+ TYPE_SIZE_STRING // HostApplicationMetaData.ipAddress
+			+ TYPE_SIZE_STRING // HostApplicationMetaData.hostName
+			+ TYPE_SIZE_STRING // HostApplicationMetaData.applicationName
 	;
-	
+
 	public static final Class<?>[] TYPES = {
 		String.class, // HostApplicationMetaData.systemName
 		String.class, // HostApplicationMetaData.ipAddress
 		String.class, // HostApplicationMetaData.hostName
 		String.class, // HostApplicationMetaData.applicationName
 	};
-	
+
 	/** user-defined constants */
-	
+
 	/** default constants */
 	public static final String SYSTEM_NAME = "";
 	public static final String IP_ADDRESS = "";
 	public static final String HOST_NAME = "";
 	public static final String APPLICATION_NAME = "";
-	
+
 	/** property declarations */
 	private final String systemName;
 	private final String ipAddress;
 	private final String hostName;
 	private final String applicationName;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param systemName
 	 *            systemName
 	 * @param ipAddress
@@ -60,16 +58,16 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 	 *            applicationName
 	 */
 	public HostApplicationMetaData(final String systemName, final String ipAddress, final String hostName, final String applicationName) {
-		this.systemName = systemName == null?"":systemName;
-		this.ipAddress = ipAddress == null?"":ipAddress;
-		this.hostName = hostName == null?"":hostName;
-		this.applicationName = applicationName == null?"":applicationName;
+		this.systemName = systemName == null ? "" : systemName;
+		this.ipAddress = ipAddress == null ? "" : ipAddress;
+		this.hostName = hostName == null ? "" : hostName;
+		this.applicationName = applicationName == null ? "" : applicationName;
 	}
 
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -83,7 +81,7 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -99,20 +97,18 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public HostApplicationMetaData(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.systemName = deserializer.getString(buffer, stringRegistry);
-		this.ipAddress = deserializer.getString(buffer, stringRegistry);
-		this.hostName = deserializer.getString(buffer, stringRegistry);
-		this.applicationName = deserializer.getString(buffer, stringRegistry);
+	public HostApplicationMetaData(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		this.systemName = deserializer.getString();
+		this.ipAddress = deserializer.getString();
+		this.hostName = deserializer.getString();
+		this.applicationName = deserializer.getString();
 	}
 
 	/**
@@ -127,29 +123,29 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 			this.getApplicationName()
 		};
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getSystemName());
 		stringRegistry.get(this.getIpAddress());
 		stringRegistry.get(this.getHostName());
 		stringRegistry.get(this.getApplicationName());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		serializer.putString(this.getSystemName(), buffer, stringRegistry);
-		serializer.putString(this.getIpAddress(), buffer, stringRegistry);
-		serializer.putString(this.getHostName(), buffer, stringRegistry);
-		serializer.putString(this.getApplicationName(), buffer, stringRegistry);
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putString(this.getSystemName());
+		serializer.putString(this.getIpAddress());
+		serializer.putString(this.getHostName());
+		serializer.putString(this.getApplicationName());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -157,7 +153,7 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -168,7 +164,7 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -176,18 +172,7 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -202,7 +187,7 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final HostApplicationMetaData castedRecord = (HostApplicationMetaData) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -221,20 +206,20 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 		}
 		return true;
 	}
-	
+
 	public final String getSystemName() {
 		return this.systemName;
-	}	
-	
+	}
+
 	public final String getIpAddress() {
 		return this.ipAddress;
-	}	
-	
+	}
+
 	public final String getHostName() {
 		return this.hostName;
-	}	
-	
+	}
+
 	public final String getApplicationName() {
 		return this.applicationName;
-	}	
+	}
 }

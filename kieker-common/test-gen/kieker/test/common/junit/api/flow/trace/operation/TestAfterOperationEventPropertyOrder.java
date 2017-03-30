@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.flow.trace.operation.AfterOperationEvent}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestAfterOperationEventPropertyOrder extends AbstractKiekerTest {
@@ -53,7 +53,7 @@ public class TestAfterOperationEventPropertyOrder extends AbstractKiekerTest {
 	private static final String PROPERTY_OPERATION_SIGNATURE = "<operationSignature>";
 	/** Constant value parameter for classSignature. */
 	private static final String PROPERTY_CLASS_SIGNATURE = "<classSignature>";
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -75,19 +75,18 @@ public class TestAfterOperationEventPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_OPERATION_SIGNATURE,
 			PROPERTY_CLASS_SIGNATURE,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(AfterOperationEvent.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(AfterOperationEvent.SIZE,
+				this.makeStringRegistry(), values);
+
 		final AfterOperationEvent recordInitParameter = new AfterOperationEvent(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_TRACE_ID,
-			PROPERTY_ORDER_INDEX,
-			PROPERTY_OPERATION_SIGNATURE,
-			PROPERTY_CLASS_SIGNATURE
-		);
-		final AfterOperationEvent recordInitBuffer = new AfterOperationEvent(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_TRACE_ID,
+				PROPERTY_ORDER_INDEX,
+				PROPERTY_OPERATION_SIGNATURE,
+				PROPERTY_CLASS_SIGNATURE);
+		final AfterOperationEvent recordInitBuffer = new AfterOperationEvent(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final AfterOperationEvent recordInitArray = new AfterOperationEvent(values);
-		
+
 		this.assertAfterOperationEvent(recordInitParameter);
 		this.assertAfterOperationEvent(recordInitBuffer);
 		this.assertAfterOperationEvent(recordInitArray);
@@ -102,15 +101,15 @@ public class TestAfterOperationEventPropertyOrder extends AbstractKiekerTest {
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(AfterOperationEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(AfterOperationEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(AfterOperationEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -124,7 +123,7 @@ public class TestAfterOperationEventPropertyOrder extends AbstractKiekerTest {
 		Assert.assertEquals("'operationSignature' value assertion failed.", record.getOperationSignature(), PROPERTY_OPERATION_SIGNATURE);
 		Assert.assertEquals("'classSignature' value assertion failed.", record.getClassSignature(), PROPERTY_CLASS_SIGNATURE);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

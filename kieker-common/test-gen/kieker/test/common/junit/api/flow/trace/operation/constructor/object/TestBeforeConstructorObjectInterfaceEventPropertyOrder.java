@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.flow.trace.operation.constructor.object.BeforeConstructorObjectInterfaceEvent}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestBeforeConstructorObjectInterfaceEventPropertyOrder extends AbstractKiekerTest {
@@ -57,7 +57,7 @@ public class TestBeforeConstructorObjectInterfaceEventPropertyOrder extends Abst
 	private static final int PROPERTY_OBJECT_ID = 1002;
 	/** Constant value parameter for _interface. */
 	private static final String PROPERTY__INTERFACE = "<_interface>";
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -81,21 +81,21 @@ public class TestBeforeConstructorObjectInterfaceEventPropertyOrder extends Abst
 			PROPERTY_OBJECT_ID,
 			PROPERTY__INTERFACE,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(BeforeConstructorObjectInterfaceEvent.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(BeforeConstructorObjectInterfaceEvent.SIZE,
+				this.makeStringRegistry(), values);
+
 		final BeforeConstructorObjectInterfaceEvent recordInitParameter = new BeforeConstructorObjectInterfaceEvent(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_TRACE_ID,
-			PROPERTY_ORDER_INDEX,
-			PROPERTY_OPERATION_SIGNATURE,
-			PROPERTY_CLASS_SIGNATURE,
-			PROPERTY_OBJECT_ID,
-			PROPERTY__INTERFACE
-		);
-		final BeforeConstructorObjectInterfaceEvent recordInitBuffer = new BeforeConstructorObjectInterfaceEvent(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_TRACE_ID,
+				PROPERTY_ORDER_INDEX,
+				PROPERTY_OPERATION_SIGNATURE,
+				PROPERTY_CLASS_SIGNATURE,
+				PROPERTY_OBJECT_ID,
+				PROPERTY__INTERFACE);
+		final BeforeConstructorObjectInterfaceEvent recordInitBuffer = new BeforeConstructorObjectInterfaceEvent(
+				DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final BeforeConstructorObjectInterfaceEvent recordInitArray = new BeforeConstructorObjectInterfaceEvent(values);
-		
+
 		this.assertBeforeConstructorObjectInterfaceEvent(recordInitParameter);
 		this.assertBeforeConstructorObjectInterfaceEvent(recordInitBuffer);
 		this.assertBeforeConstructorObjectInterfaceEvent(recordInitArray);
@@ -110,15 +110,15 @@ public class TestBeforeConstructorObjectInterfaceEventPropertyOrder extends Abst
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(BeforeConstructorObjectInterfaceEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(BeforeConstructorObjectInterfaceEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(BeforeConstructorObjectInterfaceEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -134,7 +134,7 @@ public class TestBeforeConstructorObjectInterfaceEventPropertyOrder extends Abst
 		Assert.assertEquals("'objectId' value assertion failed.", record.getObjectId(), PROPERTY_OBJECT_ID);
 		Assert.assertEquals("'_interface' value assertion failed.", record.getInterface(), PROPERTY__INTERFACE);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

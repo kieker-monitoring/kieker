@@ -2,45 +2,43 @@ package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
-
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
-public class UptimeRecord extends AbstractJVMRecord  {
+public class UptimeRecord extends AbstractJVMRecord {
 	private static final long serialVersionUID = 5233115844046765277L;
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
-			 + TYPE_SIZE_LONG // UptimeRecord.uptimeMS
+			+ TYPE_SIZE_STRING // AbstractJVMRecord.hostname
+			+ TYPE_SIZE_STRING // AbstractJVMRecord.vmName
+			+ TYPE_SIZE_LONG // UptimeRecord.uptimeMS
 	;
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp
 		String.class, // AbstractJVMRecord.hostname
 		String.class, // AbstractJVMRecord.vmName
 		long.class, // UptimeRecord.uptimeMS
 	};
-	
+
 	/** user-defined constants */
-	
+
 	/** default constants */
-	
+
 	/** property declarations */
 	private final long uptimeMS;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param hostname
@@ -58,7 +56,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -69,7 +67,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -82,18 +80,17 @@ public class UptimeRecord extends AbstractJVMRecord  {
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public UptimeRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(deserializer, buffer, stringRegistry);
-		this.uptimeMS = deserializer.getLong(buffer);
+	public UptimeRecord(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		super(deserializer);
+
+		this.uptimeMS = deserializer.getLong();
 	}
 
 	/**
@@ -108,27 +105,27 @@ public class UptimeRecord extends AbstractJVMRecord  {
 			this.getUptimeMS()
 		};
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getVmName());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		serializer.putLong(this.getTimestamp(), buffer);
-		serializer.putString(this.getHostname(), buffer, stringRegistry);
-		serializer.putString(this.getVmName(), buffer, stringRegistry);
-		serializer.putLong(this.getUptimeMS(), buffer);
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp());
+		serializer.putString(this.getHostname());
+		serializer.putString(this.getVmName());
+		serializer.putLong(this.getUptimeMS());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -136,7 +133,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -147,7 +144,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -155,18 +152,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -181,7 +167,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final UptimeRecord castedRecord = (UptimeRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -200,8 +186,8 @@ public class UptimeRecord extends AbstractJVMRecord  {
 		}
 		return true;
 	}
-	
+
 	public final long getUptimeMS() {
 		return this.uptimeMS;
-	}	
+	}
 }

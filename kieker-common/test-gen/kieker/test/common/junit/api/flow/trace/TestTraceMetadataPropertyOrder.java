@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.flow.trace.TraceMetadata}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestTraceMetadataPropertyOrder extends AbstractKiekerTest {
@@ -55,7 +55,7 @@ public class TestTraceMetadataPropertyOrder extends AbstractKiekerTest {
 	private static final long PROPERTY_PARENT_TRACE_ID = 4L;
 	/** Constant value parameter for parentOrderId. */
 	private static final int PROPERTY_PARENT_ORDER_ID = 1001;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -78,20 +78,19 @@ public class TestTraceMetadataPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_PARENT_TRACE_ID,
 			PROPERTY_PARENT_ORDER_ID,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(TraceMetadata.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(TraceMetadata.SIZE,
+				this.makeStringRegistry(), values);
+
 		final TraceMetadata recordInitParameter = new TraceMetadata(
-			PROPERTY_TRACE_ID,
-			PROPERTY_THREAD_ID,
-			PROPERTY_SESSION_ID,
-			PROPERTY_HOSTNAME,
-			PROPERTY_PARENT_TRACE_ID,
-			PROPERTY_PARENT_ORDER_ID
-		);
-		final TraceMetadata recordInitBuffer = new TraceMetadata(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TRACE_ID,
+				PROPERTY_THREAD_ID,
+				PROPERTY_SESSION_ID,
+				PROPERTY_HOSTNAME,
+				PROPERTY_PARENT_TRACE_ID,
+				PROPERTY_PARENT_ORDER_ID);
+		final TraceMetadata recordInitBuffer = new TraceMetadata(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final TraceMetadata recordInitArray = new TraceMetadata(values);
-		
+
 		this.assertTraceMetadata(recordInitParameter);
 		this.assertTraceMetadata(recordInitBuffer);
 		this.assertTraceMetadata(recordInitArray);
@@ -106,15 +105,15 @@ public class TestTraceMetadataPropertyOrder extends AbstractKiekerTest {
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(TraceMetadata.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(TraceMetadata.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(TraceMetadata.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -129,7 +128,7 @@ public class TestTraceMetadataPropertyOrder extends AbstractKiekerTest {
 		Assert.assertEquals("'parentTraceId' value assertion failed.", record.getParentTraceId(), PROPERTY_PARENT_TRACE_ID);
 		Assert.assertEquals("'parentOrderId' value assertion failed.", record.getParentOrderId(), PROPERTY_PARENT_ORDER_ID);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

@@ -2,7 +2,6 @@ package kieker.common.record.flow.trace.operation.constructor;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.IConstructorRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
@@ -12,7 +11,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class AfterConstructorFailedEvent extends AfterOperationFailedEvent implements IConstructorRecord {
@@ -20,13 +19,13 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // IExceptionRecord.cause
+			+ TYPE_SIZE_LONG // ITraceRecord.traceId
+			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
+			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			+ TYPE_SIZE_STRING // IClassSignature.classSignature
+			+ TYPE_SIZE_STRING // IExceptionRecord.cause
 	;
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -35,16 +34,16 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 		String.class, // IClassSignature.classSignature
 		String.class, // IExceptionRecord.cause
 	};
-	
+
 	/** user-defined constants */
-	
+
 	/** default constants */
-	
+
 	/** property declarations */
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -58,14 +57,15 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 	 * @param cause
 	 *            cause
 	 */
-	public AfterConstructorFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String cause) {
+	public AfterConstructorFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature,
+			final String cause) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature, cause);
 	}
 
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -75,7 +75,7 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -87,17 +87,16 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public AfterConstructorFailedEvent(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(deserializer, buffer, stringRegistry);
+	public AfterConstructorFailedEvent(final IValueDeserializer deserializer)
+			throws BufferUnderflowException {
+		super(deserializer);
 	}
 
 	/**
@@ -114,30 +113,30 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 			this.getCause()
 		};
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getOperationSignature());
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getCause());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		serializer.putLong(this.getTimestamp(), buffer);
-		serializer.putLong(this.getTraceId(), buffer);
-		serializer.putInt(this.getOrderIndex(), buffer);
-		serializer.putString(this.getOperationSignature(), buffer, stringRegistry);
-		serializer.putString(this.getClassSignature(), buffer, stringRegistry);
-		serializer.putString(this.getCause(), buffer, stringRegistry);
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp());
+		serializer.putLong(this.getTraceId());
+		serializer.putInt(this.getOrderIndex());
+		serializer.putString(this.getOperationSignature());
+		serializer.putString(this.getClassSignature());
+		serializer.putString(this.getCause());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -145,7 +144,7 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -156,7 +155,7 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -164,18 +163,7 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -190,7 +178,7 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final AfterConstructorFailedEvent castedRecord = (AfterConstructorFailedEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -215,5 +203,5 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 		}
 		return true;
 	}
-	
+
 }

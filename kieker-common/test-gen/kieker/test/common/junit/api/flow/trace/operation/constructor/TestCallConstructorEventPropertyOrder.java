@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.flow.trace.operation.constructor.CallConstructorEvent}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestCallConstructorEventPropertyOrder extends AbstractKiekerTest {
@@ -57,7 +57,7 @@ public class TestCallConstructorEventPropertyOrder extends AbstractKiekerTest {
 	private static final String PROPERTY_CALLEE_OPERATION_SIGNATURE = "<calleeOperationSignature>";
 	/** Constant value parameter for calleeClassSignature. */
 	private static final String PROPERTY_CALLEE_CLASS_SIGNATURE = "<calleeClassSignature>";
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -81,21 +81,20 @@ public class TestCallConstructorEventPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_CALLEE_OPERATION_SIGNATURE,
 			PROPERTY_CALLEE_CLASS_SIGNATURE,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(CallConstructorEvent.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(CallConstructorEvent.SIZE,
+				this.makeStringRegistry(), values);
+
 		final CallConstructorEvent recordInitParameter = new CallConstructorEvent(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_TRACE_ID,
-			PROPERTY_ORDER_INDEX,
-			PROPERTY_OPERATION_SIGNATURE,
-			PROPERTY_CLASS_SIGNATURE,
-			PROPERTY_CALLEE_OPERATION_SIGNATURE,
-			PROPERTY_CALLEE_CLASS_SIGNATURE
-		);
-		final CallConstructorEvent recordInitBuffer = new CallConstructorEvent(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_TRACE_ID,
+				PROPERTY_ORDER_INDEX,
+				PROPERTY_OPERATION_SIGNATURE,
+				PROPERTY_CLASS_SIGNATURE,
+				PROPERTY_CALLEE_OPERATION_SIGNATURE,
+				PROPERTY_CALLEE_CLASS_SIGNATURE);
+		final CallConstructorEvent recordInitBuffer = new CallConstructorEvent(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final CallConstructorEvent recordInitArray = new CallConstructorEvent(values);
-		
+
 		this.assertCallConstructorEvent(recordInitParameter);
 		this.assertCallConstructorEvent(recordInitBuffer);
 		this.assertCallConstructorEvent(recordInitArray);
@@ -110,15 +109,15 @@ public class TestCallConstructorEventPropertyOrder extends AbstractKiekerTest {
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(CallConstructorEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(CallConstructorEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(CallConstructorEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -134,7 +133,7 @@ public class TestCallConstructorEventPropertyOrder extends AbstractKiekerTest {
 		Assert.assertEquals("'calleeOperationSignature' value assertion failed.", record.getCalleeOperationSignature(), PROPERTY_CALLEE_OPERATION_SIGNATURE);
 		Assert.assertEquals("'calleeClassSignature' value assertion failed.", record.getCalleeClassSignature(), PROPERTY_CALLEE_CLASS_SIGNATURE);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

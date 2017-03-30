@@ -2,7 +2,6 @@ package kieker.common.record.controlflow;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -10,10 +9,9 @@ import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
-
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 0.91
  */
 public class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
@@ -21,15 +19,15 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // OperationExecutionRecord.operationSignature
-			 + TYPE_SIZE_STRING // OperationExecutionRecord.sessionId
-			 + TYPE_SIZE_LONG // OperationExecutionRecord.traceId
-			 + TYPE_SIZE_LONG // OperationExecutionRecord.tin
-			 + TYPE_SIZE_LONG // OperationExecutionRecord.tout
-			 + TYPE_SIZE_STRING // OperationExecutionRecord.hostname
-			 + TYPE_SIZE_INT // OperationExecutionRecord.eoi
-			 + TYPE_SIZE_INT // OperationExecutionRecord.ess
+			+ TYPE_SIZE_STRING // OperationExecutionRecord.sessionId
+			+ TYPE_SIZE_LONG // OperationExecutionRecord.traceId
+			+ TYPE_SIZE_LONG // OperationExecutionRecord.tin
+			+ TYPE_SIZE_LONG // OperationExecutionRecord.tout
+			+ TYPE_SIZE_STRING // OperationExecutionRecord.hostname
+			+ TYPE_SIZE_INT // OperationExecutionRecord.eoi
+			+ TYPE_SIZE_INT // OperationExecutionRecord.ess
 	;
-	
+
 	public static final Class<?>[] TYPES = {
 		String.class, // OperationExecutionRecord.operationSignature
 		String.class, // OperationExecutionRecord.sessionId
@@ -40,7 +38,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		int.class, // OperationExecutionRecord.eoi
 		int.class, // OperationExecutionRecord.ess
 	};
-	
+
 	/** user-defined constants */
 	public static final String NO_HOSTNAME = "<default-host>";
 	public static final String NO_SESSION_ID = "<no-session-id>";
@@ -48,7 +46,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	public static final long NO_TRACE_ID = -1L;
 	public static final long NO_TIMESTAMP = -1L;
 	public static final int NO_EOI_ESS = -1;
-	
+
 	/** default constants */
 	public static final String OPERATION_SIGNATURE = NO_OPERATION_SIGNATURE;
 	public static final String SESSION_ID = NO_SESSION_ID;
@@ -58,7 +56,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	public static final String HOSTNAME = NO_HOSTNAME;
 	public static final int EOI = NO_EOI_ESS;
 	public static final int ESS = NO_EOI_ESS;
-	
+
 	/** property declarations */
 	private final String operationSignature;
 	private final String sessionId;
@@ -68,10 +66,10 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	private final String hostname;
 	private final int eoi;
 	private final int ess;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param operationSignature
 	 *            operationSignature
 	 * @param sessionId
@@ -89,13 +87,14 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 * @param ess
 	 *            ess
 	 */
-	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout, final String hostname, final int eoi, final int ess) {
-		this.operationSignature = operationSignature == null?NO_OPERATION_SIGNATURE:operationSignature;
-		this.sessionId = sessionId == null?NO_SESSION_ID:sessionId;
+	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
+			final String hostname, final int eoi, final int ess) {
+		this.operationSignature = operationSignature == null ? NO_OPERATION_SIGNATURE : operationSignature;
+		this.sessionId = sessionId == null ? NO_SESSION_ID : sessionId;
 		this.traceId = traceId;
 		this.tin = tin;
 		this.tout = tout;
-		this.hostname = hostname == null?NO_HOSTNAME:hostname;
+		this.hostname = hostname == null ? NO_HOSTNAME : hostname;
 		this.eoi = eoi;
 		this.ess = ess;
 	}
@@ -103,7 +102,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -121,7 +120,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -141,24 +140,22 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public OperationExecutionRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.operationSignature = deserializer.getString(buffer, stringRegistry);
-		this.sessionId = deserializer.getString(buffer, stringRegistry);
-		this.traceId = deserializer.getLong(buffer);
-		this.tin = deserializer.getLong(buffer);
-		this.tout = deserializer.getLong(buffer);
-		this.hostname = deserializer.getString(buffer, stringRegistry);
-		this.eoi = deserializer.getInt(buffer);
-		this.ess = deserializer.getInt(buffer);
+	public OperationExecutionRecord(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		this.operationSignature = deserializer.getString();
+		this.sessionId = deserializer.getString();
+		this.traceId = deserializer.getLong();
+		this.tin = deserializer.getLong();
+		this.tout = deserializer.getLong();
+		this.hostname = deserializer.getString();
+		this.eoi = deserializer.getInt();
+		this.ess = deserializer.getInt();
 	}
 
 	/**
@@ -177,32 +174,32 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 			this.getEss()
 		};
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getOperationSignature());
 		stringRegistry.get(this.getSessionId());
 		stringRegistry.get(this.getHostname());
 	}
-		
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		serializer.putString(this.getOperationSignature(), buffer, stringRegistry);
-		serializer.putString(this.getSessionId(), buffer, stringRegistry);
-		serializer.putLong(this.getTraceId(), buffer);
-		serializer.putLong(this.getTin(), buffer);
-		serializer.putLong(this.getTout(), buffer);
-		serializer.putString(this.getHostname(), buffer, stringRegistry);
-		serializer.putInt(this.getEoi(), buffer);
-		serializer.putInt(this.getEss(), buffer);
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putString(this.getOperationSignature());
+		serializer.putString(this.getSessionId());
+		serializer.putLong(this.getTraceId());
+		serializer.putLong(this.getTin());
+		serializer.putLong(this.getTout());
+		serializer.putString(this.getHostname());
+		serializer.putInt(this.getEoi());
+		serializer.putInt(this.getEss());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -210,7 +207,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -221,7 +218,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -229,18 +226,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -255,7 +241,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final OperationExecutionRecord castedRecord = (OperationExecutionRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -286,36 +272,36 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		}
 		return true;
 	}
-	
+
 	public final String getOperationSignature() {
 		return this.operationSignature;
-	}	
-	
+	}
+
 	public final String getSessionId() {
 		return this.sessionId;
-	}	
-	
+	}
+
 	public final long getTraceId() {
 		return this.traceId;
-	}	
-	
+	}
+
 	public final long getTin() {
 		return this.tin;
-	}	
-	
+	}
+
 	public final long getTout() {
 		return this.tout;
-	}	
-	
+	}
+
 	public final String getHostname() {
 		return this.hostname;
-	}	
-	
+	}
+
 	public final int getEoi() {
 		return this.eoi;
-	}	
-	
+	}
+
 	public final int getEss() {
 		return this.ess;
-	}	
+	}
 }

@@ -127,7 +127,7 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 		buffer.putInt(recordClassId);
 		buffer.putLong(loggingTimestamp);
 
-		monitoringRecord.writeBytes(DefaultValueSerializer.instance(), buffer, this.readAdapter);
+		monitoringRecord.serialize(DefaultValueSerializer.create(buffer, this.readAdapter));
 		// monitoringRecord.writeToBuffer(buffer, this.writerRegistry);
 
 		if (this.flush) {

@@ -31,7 +31,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.8
  */
 public class TestMonitorWaitEvent extends AbstractKiekerTest {
@@ -50,7 +50,7 @@ public class TestMonitorWaitEvent extends AbstractKiekerTest {
 
 	/**
 	 * Tests the constructor and toArray(..) methods of {@link MonitorWaitEvent}.
-	 * 
+	 *
 	 * Assert that a record instance event1 equals an instance event2 created by serializing event1 to an array event1Array
 	 * and using event1Array to construct event2. This ignores a set loggingTimestamp!
 	 */
@@ -87,10 +87,10 @@ public class TestMonitorWaitEvent extends AbstractKiekerTest {
 
 		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
-		event1.writeBytes(DefaultValueSerializer.instance(), buffer, stringRegistry);
+		event1.serialize(DefaultValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
 
-		final MonitorWaitEvent event2 = new MonitorWaitEvent(DefaultValueDeserializer.instance(), buffer, stringRegistry);
+		final MonitorWaitEvent event2 = new MonitorWaitEvent(DefaultValueDeserializer.create(buffer, stringRegistry));
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

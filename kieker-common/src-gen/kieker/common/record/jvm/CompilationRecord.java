@@ -2,29 +2,27 @@ package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
-
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
-public class CompilationRecord extends AbstractJVMRecord  {
+public class CompilationRecord extends AbstractJVMRecord {
 	private static final long serialVersionUID = 3634137431488075031L;
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
-			 + TYPE_SIZE_STRING // CompilationRecord.jitCompilerName
-			 + TYPE_SIZE_LONG // CompilationRecord.totalCompilationTimeMS
+			+ TYPE_SIZE_STRING // AbstractJVMRecord.hostname
+			+ TYPE_SIZE_STRING // AbstractJVMRecord.vmName
+			+ TYPE_SIZE_STRING // CompilationRecord.jitCompilerName
+			+ TYPE_SIZE_LONG // CompilationRecord.totalCompilationTimeMS
 	;
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp
 		String.class, // AbstractJVMRecord.hostname
@@ -32,19 +30,19 @@ public class CompilationRecord extends AbstractJVMRecord  {
 		String.class, // CompilationRecord.jitCompilerName
 		long.class, // CompilationRecord.totalCompilationTimeMS
 	};
-	
+
 	/** user-defined constants */
-	
+
 	/** default constants */
 	public static final String JIT_COMPILER_NAME = "";
-	
+
 	/** property declarations */
 	private final String jitCompilerName;
 	private final long totalCompilationTimeMS;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param hostname
@@ -58,14 +56,14 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	 */
 	public CompilationRecord(final long timestamp, final String hostname, final String vmName, final String jitCompilerName, final long totalCompilationTimeMS) {
 		super(timestamp, hostname, vmName);
-		this.jitCompilerName = jitCompilerName == null?"":jitCompilerName;
+		this.jitCompilerName = jitCompilerName == null ? "" : jitCompilerName;
 		this.totalCompilationTimeMS = totalCompilationTimeMS;
 	}
 
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -77,7 +75,7 @@ public class CompilationRecord extends AbstractJVMRecord  {
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -91,19 +89,18 @@ public class CompilationRecord extends AbstractJVMRecord  {
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public CompilationRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(deserializer, buffer, stringRegistry);
-		this.jitCompilerName = deserializer.getString(buffer, stringRegistry);
-		this.totalCompilationTimeMS = deserializer.getLong(buffer);
+	public CompilationRecord(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		super(deserializer);
+
+		this.jitCompilerName = deserializer.getString();
+		this.totalCompilationTimeMS = deserializer.getLong();
 	}
 
 	/**
@@ -119,29 +116,29 @@ public class CompilationRecord extends AbstractJVMRecord  {
 			this.getTotalCompilationTimeMS()
 		};
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getVmName());
 		stringRegistry.get(this.getJitCompilerName());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		serializer.putLong(this.getTimestamp(), buffer);
-		serializer.putString(this.getHostname(), buffer, stringRegistry);
-		serializer.putString(this.getVmName(), buffer, stringRegistry);
-		serializer.putString(this.getJitCompilerName(), buffer, stringRegistry);
-		serializer.putLong(this.getTotalCompilationTimeMS(), buffer);
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp());
+		serializer.putString(this.getHostname());
+		serializer.putString(this.getVmName());
+		serializer.putString(this.getJitCompilerName());
+		serializer.putLong(this.getTotalCompilationTimeMS());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -149,7 +146,7 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -160,7 +157,7 @@ public class CompilationRecord extends AbstractJVMRecord  {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -168,18 +165,7 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -194,7 +180,7 @@ public class CompilationRecord extends AbstractJVMRecord  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final CompilationRecord castedRecord = (CompilationRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -216,12 +202,12 @@ public class CompilationRecord extends AbstractJVMRecord  {
 		}
 		return true;
 	}
-	
+
 	public final String getJitCompilerName() {
 		return this.jitCompilerName;
-	}	
-	
+	}
+
 	public final long getTotalCompilationTimeMS() {
 		return this.totalCompilationTimeMS;
-	}	
+	}
 }

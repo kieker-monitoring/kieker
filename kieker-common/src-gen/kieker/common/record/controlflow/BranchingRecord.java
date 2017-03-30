@@ -2,7 +2,6 @@ package kieker.common.record.controlflow;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -10,10 +9,9 @@ import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
-
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.2
  */
 public class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
@@ -21,31 +19,31 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // BranchingRecord.timestamp
-			 + TYPE_SIZE_INT // BranchingRecord.branchID
-			 + TYPE_SIZE_INT // BranchingRecord.branchingOutcome
+			+ TYPE_SIZE_INT // BranchingRecord.branchID
+			+ TYPE_SIZE_INT // BranchingRecord.branchingOutcome
 	;
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // BranchingRecord.timestamp
 		int.class, // BranchingRecord.branchID
 		int.class, // BranchingRecord.branchingOutcome
 	};
-	
+
 	/** user-defined constants */
-	
+
 	/** default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final int BRANCH_ID = 0;
 	public static final int BRANCHING_OUTCOME = 0;
-	
+
 	/** property declarations */
 	private final long timestamp;
 	private final int branchID;
 	private final int branchingOutcome;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param branchID
@@ -62,7 +60,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -75,7 +73,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -90,19 +88,17 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public BranchingRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = deserializer.getLong(buffer);
-		this.branchID = deserializer.getInt(buffer);
-		this.branchingOutcome = deserializer.getInt(buffer);
+	public BranchingRecord(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		this.timestamp = deserializer.getLong();
+		this.branchID = deserializer.getInt();
+		this.branchingOutcome = deserializer.getInt();
 	}
 
 	/**
@@ -116,24 +112,24 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 			this.getBranchingOutcome()
 		};
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		serializer.putLong(this.getTimestamp(), buffer);
-		serializer.putInt(this.getBranchID(), buffer);
-		serializer.putInt(this.getBranchingOutcome(), buffer);
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp());
+		serializer.putInt(this.getBranchID());
+		serializer.putInt(this.getBranchingOutcome());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -141,7 +137,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -152,7 +148,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -160,18 +156,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -186,7 +171,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final BranchingRecord castedRecord = (BranchingRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -202,16 +187,16 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 		}
 		return true;
 	}
-	
+
 	public final long getTimestamp() {
 		return this.timestamp;
-	}	
-	
+	}
+
 	public final int getBranchID() {
 		return this.branchID;
-	}	
-	
+	}
+
 	public final int getBranchingOutcome() {
 		return this.branchingOutcome;
-	}	
+	}
 }

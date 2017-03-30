@@ -1,37 +1,33 @@
 package kieker.common.record.jvm;
 
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
-import kieker.common.util.registry.IRegistry;
-
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public abstract class AbstractJVMRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	private static final long serialVersionUID = -961661872949303914L;
 
-	
 	/** user-defined constants */
-	
+
 	/** default constants */
 	public static final String HOSTNAME = "";
 	public static final String VM_NAME = "";
-	
+
 	/** property declarations */
 	private final long timestamp;
 	private final String hostname;
 	private final String vmName;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param hostname
@@ -41,14 +37,13 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	 */
 	public AbstractJVMRecord(final long timestamp, final String hostname, final String vmName) {
 		this.timestamp = timestamp;
-		this.hostname = hostname == null?"":hostname;
-		this.vmName = vmName == null?"":vmName;
+		this.hostname = hostname == null ? "" : hostname;
+		this.vmName = vmName == null ? "" : vmName;
 	}
-
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -63,25 +58,22 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public AbstractJVMRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = deserializer.getLong(buffer);
-		this.hostname = deserializer.getString(buffer, stringRegistry);
-		this.vmName = deserializer.getString(buffer, stringRegistry);
+	public AbstractJVMRecord(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		this.timestamp = deserializer.getLong();
+		this.hostname = deserializer.getString();
+		this.vmName = deserializer.getString();
 	}
-
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -89,18 +81,7 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -115,7 +96,7 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final AbstractJVMRecord castedRecord = (AbstractJVMRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -131,16 +112,16 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 		}
 		return true;
 	}
-	
+
 	public final long getTimestamp() {
 		return this.timestamp;
-	}	
-	
+	}
+
 	public final String getHostname() {
 		return this.hostname;
-	}	
-	
+	}
+
 	public final String getVmName() {
 		return this.vmName;
-	}	
+	}
 }

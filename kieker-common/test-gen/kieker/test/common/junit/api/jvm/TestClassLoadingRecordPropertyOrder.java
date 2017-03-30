@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.jvm.ClassLoadingRecord}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestClassLoadingRecordPropertyOrder extends AbstractKiekerTest {
@@ -55,7 +55,7 @@ public class TestClassLoadingRecordPropertyOrder extends AbstractKiekerTest {
 	private static final int PROPERTY_LOADED_CLASS_COUNT = 1001;
 	/** Constant value parameter for unloadedClassCount. */
 	private static final long PROPERTY_UNLOADED_CLASS_COUNT = 4L;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -78,20 +78,19 @@ public class TestClassLoadingRecordPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_LOADED_CLASS_COUNT,
 			PROPERTY_UNLOADED_CLASS_COUNT,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(ClassLoadingRecord.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(ClassLoadingRecord.SIZE,
+				this.makeStringRegistry(), values);
+
 		final ClassLoadingRecord recordInitParameter = new ClassLoadingRecord(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_HOSTNAME,
-			PROPERTY_VM_NAME,
-			PROPERTY_TOTAL_LOADED_CLASS_COUNT,
-			PROPERTY_LOADED_CLASS_COUNT,
-			PROPERTY_UNLOADED_CLASS_COUNT
-		);
-		final ClassLoadingRecord recordInitBuffer = new ClassLoadingRecord(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_HOSTNAME,
+				PROPERTY_VM_NAME,
+				PROPERTY_TOTAL_LOADED_CLASS_COUNT,
+				PROPERTY_LOADED_CLASS_COUNT,
+				PROPERTY_UNLOADED_CLASS_COUNT);
+		final ClassLoadingRecord recordInitBuffer = new ClassLoadingRecord(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final ClassLoadingRecord recordInitArray = new ClassLoadingRecord(values);
-		
+
 		this.assertClassLoadingRecord(recordInitParameter);
 		this.assertClassLoadingRecord(recordInitBuffer);
 		this.assertClassLoadingRecord(recordInitArray);
@@ -106,15 +105,15 @@ public class TestClassLoadingRecordPropertyOrder extends AbstractKiekerTest {
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(ClassLoadingRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(ClassLoadingRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(ClassLoadingRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -129,7 +128,7 @@ public class TestClassLoadingRecordPropertyOrder extends AbstractKiekerTest {
 		Assert.assertEquals("'loadedClassCount' value assertion failed.", record.getLoadedClassCount(), PROPERTY_LOADED_CLASS_COUNT);
 		Assert.assertEquals("'unloadedClassCount' value assertion failed.", record.getUnloadedClassCount(), PROPERTY_UNLOADED_CLASS_COUNT);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

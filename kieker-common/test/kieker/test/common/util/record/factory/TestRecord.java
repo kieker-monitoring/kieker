@@ -17,11 +17,8 @@
 package kieker.test.common.util.record.factory;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
@@ -51,12 +48,7 @@ public class TestRecord extends AbstractMonitoringRecord {
 	}
 
 	@Override
-	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		// not used in test
-	}
-
-	@Override
-	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		// not used in test
 	}
 

@@ -2,7 +2,6 @@ package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -10,10 +9,9 @@ import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
-
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
@@ -21,15 +19,15 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // MemSwapUsageRecord.timestamp
-			 + TYPE_SIZE_STRING // MemSwapUsageRecord.hostname
-			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memTotal
-			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memUsed
-			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memFree
-			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapTotal
-			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapUsed
-			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapFree
+			+ TYPE_SIZE_STRING // MemSwapUsageRecord.hostname
+			+ TYPE_SIZE_LONG // MemSwapUsageRecord.memTotal
+			+ TYPE_SIZE_LONG // MemSwapUsageRecord.memUsed
+			+ TYPE_SIZE_LONG // MemSwapUsageRecord.memFree
+			+ TYPE_SIZE_LONG // MemSwapUsageRecord.swapTotal
+			+ TYPE_SIZE_LONG // MemSwapUsageRecord.swapUsed
+			+ TYPE_SIZE_LONG // MemSwapUsageRecord.swapFree
 	;
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // MemSwapUsageRecord.timestamp
 		String.class, // MemSwapUsageRecord.hostname
@@ -40,9 +38,9 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		long.class, // MemSwapUsageRecord.swapUsed
 		long.class, // MemSwapUsageRecord.swapFree
 	};
-	
+
 	/** user-defined constants */
-	
+
 	/** default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -52,7 +50,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public static final long SWAP_TOTAL = 0L;
 	public static final long SWAP_USED = 0L;
 	public static final long SWAP_FREE = 0L;
-	
+
 	/** property declarations */
 	private final long timestamp;
 	private final String hostname;
@@ -62,10 +60,10 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	private final long swapTotal;
 	private final long swapUsed;
 	private final long swapFree;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param hostname
@@ -83,9 +81,10 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 * @param swapFree
 	 *            swapFree
 	 */
-	public MemSwapUsageRecord(final long timestamp, final String hostname, final long memTotal, final long memUsed, final long memFree, final long swapTotal, final long swapUsed, final long swapFree) {
+	public MemSwapUsageRecord(final long timestamp, final String hostname, final long memTotal, final long memUsed, final long memFree, final long swapTotal,
+			final long swapUsed, final long swapFree) {
 		this.timestamp = timestamp;
-		this.hostname = hostname == null?HOSTNAME:hostname;
+		this.hostname = hostname == null ? HOSTNAME : hostname;
 		this.memTotal = memTotal;
 		this.memUsed = memUsed;
 		this.memFree = memFree;
@@ -97,7 +96,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -115,7 +114,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -135,24 +134,22 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public MemSwapUsageRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = deserializer.getLong(buffer);
-		this.hostname = deserializer.getString(buffer, stringRegistry);
-		this.memTotal = deserializer.getLong(buffer);
-		this.memUsed = deserializer.getLong(buffer);
-		this.memFree = deserializer.getLong(buffer);
-		this.swapTotal = deserializer.getLong(buffer);
-		this.swapUsed = deserializer.getLong(buffer);
-		this.swapFree = deserializer.getLong(buffer);
+	public MemSwapUsageRecord(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		this.timestamp = deserializer.getLong();
+		this.hostname = deserializer.getString();
+		this.memTotal = deserializer.getLong();
+		this.memUsed = deserializer.getLong();
+		this.memFree = deserializer.getLong();
+		this.swapTotal = deserializer.getLong();
+		this.swapUsed = deserializer.getLong();
+		this.swapFree = deserializer.getLong();
 	}
 
 	/**
@@ -171,30 +168,30 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 			this.getSwapFree()
 		};
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getHostname());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		serializer.putLong(this.getTimestamp(), buffer);
-		serializer.putString(this.getHostname(), buffer, stringRegistry);
-		serializer.putLong(this.getMemTotal(), buffer);
-		serializer.putLong(this.getMemUsed(), buffer);
-		serializer.putLong(this.getMemFree(), buffer);
-		serializer.putLong(this.getSwapTotal(), buffer);
-		serializer.putLong(this.getSwapUsed(), buffer);
-		serializer.putLong(this.getSwapFree(), buffer);
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp());
+		serializer.putString(this.getHostname());
+		serializer.putLong(this.getMemTotal());
+		serializer.putLong(this.getMemUsed());
+		serializer.putLong(this.getMemFree());
+		serializer.putLong(this.getSwapTotal());
+		serializer.putLong(this.getSwapUsed());
+		serializer.putLong(this.getSwapFree());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -202,7 +199,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -213,7 +210,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -221,18 +218,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -247,7 +233,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final MemSwapUsageRecord castedRecord = (MemSwapUsageRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -278,36 +264,36 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		}
 		return true;
 	}
-	
+
 	public final long getTimestamp() {
 		return this.timestamp;
-	}	
-	
+	}
+
 	public final String getHostname() {
 		return this.hostname;
-	}	
-	
+	}
+
 	public final long getMemTotal() {
 		return this.memTotal;
-	}	
-	
+	}
+
 	public final long getMemUsed() {
 		return this.memUsed;
-	}	
-	
+	}
+
 	public final long getMemFree() {
 		return this.memFree;
-	}	
-	
+	}
+
 	public final long getSwapTotal() {
 		return this.swapTotal;
-	}	
-	
+	}
+
 	public final long getSwapUsed() {
 		return this.swapUsed;
-	}	
-	
+	}
+
 	public final long getSwapFree() {
 		return this.swapFree;
-	}	
+	}
 }

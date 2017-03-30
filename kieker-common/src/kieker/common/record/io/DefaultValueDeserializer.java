@@ -29,6 +29,8 @@ import kieker.common.util.registry.IRegistry;
  */
 public class DefaultValueDeserializer implements IValueDeserializer {
 
+	private static final byte TRUE_VALUE = (byte) 1;
+
 	private final ByteBuffer buffer;
 	private final IRegistry<String> stringRegistry;
 
@@ -39,6 +41,11 @@ public class DefaultValueDeserializer implements IValueDeserializer {
 
 	public static DefaultValueDeserializer create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
 		return new DefaultValueDeserializer(buffer, stringRegistry);
+	}
+
+	@Override
+	public boolean getBoolean() {
+		return (this.getByte() == TRUE_VALUE);
 	}
 
 	@Override

@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.flow.trace.concurrency.SplitEvent}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestSplitEventPropertyOrder extends AbstractKiekerTest {
@@ -49,7 +49,7 @@ public class TestSplitEventPropertyOrder extends AbstractKiekerTest {
 	private static final long PROPERTY_TRACE_ID = 3L;
 	/** Constant value parameter for orderIndex. */
 	private static final int PROPERTY_ORDER_INDEX = 1001;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -69,17 +69,16 @@ public class TestSplitEventPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_TRACE_ID,
 			PROPERTY_ORDER_INDEX,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(SplitEvent.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(SplitEvent.SIZE,
+				this.makeStringRegistry(), values);
+
 		final SplitEvent recordInitParameter = new SplitEvent(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_TRACE_ID,
-			PROPERTY_ORDER_INDEX
-		);
-		final SplitEvent recordInitBuffer = new SplitEvent(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_TRACE_ID,
+				PROPERTY_ORDER_INDEX);
+		final SplitEvent recordInitBuffer = new SplitEvent(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final SplitEvent recordInitArray = new SplitEvent(values);
-		
+
 		this.assertSplitEvent(recordInitParameter);
 		this.assertSplitEvent(recordInitBuffer);
 		this.assertSplitEvent(recordInitArray);
@@ -94,15 +93,15 @@ public class TestSplitEventPropertyOrder extends AbstractKiekerTest {
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(SplitEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(SplitEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(SplitEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -114,7 +113,7 @@ public class TestSplitEventPropertyOrder extends AbstractKiekerTest {
 		Assert.assertEquals("'traceId' value assertion failed.", record.getTraceId(), PROPERTY_TRACE_ID);
 		Assert.assertEquals("'orderIndex' value assertion failed.", record.getOrderIndex(), PROPERTY_ORDER_INDEX);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

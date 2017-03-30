@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.flow.trace.concurrency.JoinEvent}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestJoinEventPropertyOrder extends AbstractKiekerTest {
@@ -51,7 +51,7 @@ public class TestJoinEventPropertyOrder extends AbstractKiekerTest {
 	private static final int PROPERTY_ORDER_INDEX = 1001;
 	/** Constant value parameter for joinedTraceId. */
 	private static final long PROPERTY_JOINED_TRACE_ID = 4L;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -72,18 +72,17 @@ public class TestJoinEventPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_ORDER_INDEX,
 			PROPERTY_JOINED_TRACE_ID,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(JoinEvent.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(JoinEvent.SIZE,
+				this.makeStringRegistry(), values);
+
 		final JoinEvent recordInitParameter = new JoinEvent(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_TRACE_ID,
-			PROPERTY_ORDER_INDEX,
-			PROPERTY_JOINED_TRACE_ID
-		);
-		final JoinEvent recordInitBuffer = new JoinEvent(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_TRACE_ID,
+				PROPERTY_ORDER_INDEX,
+				PROPERTY_JOINED_TRACE_ID);
+		final JoinEvent recordInitBuffer = new JoinEvent(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final JoinEvent recordInitArray = new JoinEvent(values);
-		
+
 		this.assertJoinEvent(recordInitParameter);
 		this.assertJoinEvent(recordInitBuffer);
 		this.assertJoinEvent(recordInitArray);
@@ -98,15 +97,15 @@ public class TestJoinEventPropertyOrder extends AbstractKiekerTest {
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(JoinEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(JoinEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(JoinEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -119,7 +118,7 @@ public class TestJoinEventPropertyOrder extends AbstractKiekerTest {
 		Assert.assertEquals("'orderIndex' value assertion failed.", record.getOrderIndex(), PROPERTY_ORDER_INDEX);
 		Assert.assertEquals("'joinedTraceId' value assertion failed.", record.getJoinedTraceId(), PROPERTY_JOINED_TRACE_ID);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

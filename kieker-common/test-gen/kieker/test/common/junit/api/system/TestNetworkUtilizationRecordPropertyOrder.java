@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.system.NetworkUtilizationRecord}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestNetworkUtilizationRecordPropertyOrder extends AbstractKiekerTest {
@@ -77,7 +77,7 @@ public class TestNetworkUtilizationRecordPropertyOrder extends AbstractKiekerTes
 	private static final double PROPERTY_RX_OVERRUNS_PER_SECOND = 13.0;
 	/** Constant value parameter for rxPacketsPerSecond. */
 	private static final double PROPERTY_RX_PACKETS_PER_SECOND = 14.0;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -111,31 +111,30 @@ public class TestNetworkUtilizationRecordPropertyOrder extends AbstractKiekerTes
 			PROPERTY_RX_OVERRUNS_PER_SECOND,
 			PROPERTY_RX_PACKETS_PER_SECOND,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(NetworkUtilizationRecord.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(NetworkUtilizationRecord.SIZE,
+				this.makeStringRegistry(), values);
+
 		final NetworkUtilizationRecord recordInitParameter = new NetworkUtilizationRecord(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_HOSTNAME,
-			PROPERTY_INTERFACE_NAME,
-			PROPERTY_SPEED,
-			PROPERTY_TX_BYTES_PER_SECOND,
-			PROPERTY_TX_CARRIER_PER_SECOND,
-			PROPERTY_TX_COLLISIONS_PER_SECOND,
-			PROPERTY_TX_DROPPED_PER_SECOND,
-			PROPERTY_TX_ERRORS_PER_SECOND,
-			PROPERTY_TX_OVERRUNS_PER_SECOND,
-			PROPERTY_TX_PACKETS_PER_SECOND,
-			PROPERTY_RX_BYTES_PER_SECOND,
-			PROPERTY_RX_DROPPED_PER_SECOND,
-			PROPERTY_RX_ERRORS_PER_SECOND,
-			PROPERTY_RX_FRAME_PER_SECOND,
-			PROPERTY_RX_OVERRUNS_PER_SECOND,
-			PROPERTY_RX_PACKETS_PER_SECOND
-		);
-		final NetworkUtilizationRecord recordInitBuffer = new NetworkUtilizationRecord(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_HOSTNAME,
+				PROPERTY_INTERFACE_NAME,
+				PROPERTY_SPEED,
+				PROPERTY_TX_BYTES_PER_SECOND,
+				PROPERTY_TX_CARRIER_PER_SECOND,
+				PROPERTY_TX_COLLISIONS_PER_SECOND,
+				PROPERTY_TX_DROPPED_PER_SECOND,
+				PROPERTY_TX_ERRORS_PER_SECOND,
+				PROPERTY_TX_OVERRUNS_PER_SECOND,
+				PROPERTY_TX_PACKETS_PER_SECOND,
+				PROPERTY_RX_BYTES_PER_SECOND,
+				PROPERTY_RX_DROPPED_PER_SECOND,
+				PROPERTY_RX_ERRORS_PER_SECOND,
+				PROPERTY_RX_FRAME_PER_SECOND,
+				PROPERTY_RX_OVERRUNS_PER_SECOND,
+				PROPERTY_RX_PACKETS_PER_SECOND);
+		final NetworkUtilizationRecord recordInitBuffer = new NetworkUtilizationRecord(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final NetworkUtilizationRecord recordInitArray = new NetworkUtilizationRecord(values);
-		
+
 		this.assertNetworkUtilizationRecord(recordInitParameter);
 		this.assertNetworkUtilizationRecord(recordInitBuffer);
 		this.assertNetworkUtilizationRecord(recordInitArray);
@@ -150,15 +149,15 @@ public class TestNetworkUtilizationRecordPropertyOrder extends AbstractKiekerTes
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(NetworkUtilizationRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(NetworkUtilizationRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(NetworkUtilizationRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -184,7 +183,7 @@ public class TestNetworkUtilizationRecordPropertyOrder extends AbstractKiekerTes
 		Assert.assertEquals("'rxOverrunsPerSecond' value assertion failed.", record.getRxOverrunsPerSecond(), PROPERTY_RX_OVERRUNS_PER_SECOND, 0.1);
 		Assert.assertEquals("'rxPacketsPerSecond' value assertion failed.", record.getRxPacketsPerSecond(), PROPERTY_RX_PACKETS_PER_SECOND, 0.1);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

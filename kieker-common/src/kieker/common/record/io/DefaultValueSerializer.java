@@ -29,6 +29,9 @@ import kieker.common.util.registry.IRegistry;
  */
 public class DefaultValueSerializer implements IValueSerializer {
 
+	private static final byte TRUE_VALUE = (byte) 1;
+	private static final byte FALSE_VALUE = (byte) 0;
+
 	private final ByteBuffer buffer;
 	private final IRegistry<String> stringRegistry;
 
@@ -39,6 +42,12 @@ public class DefaultValueSerializer implements IValueSerializer {
 
 	public static DefaultValueSerializer create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
 		return new DefaultValueSerializer(buffer, stringRegistry);
+	}
+
+	@Override
+	public void putBoolean(final boolean value) {
+		final byte data = (value) ? TRUE_VALUE : FALSE_VALUE;
+		this.putByte(data);
 	}
 
 	@Override

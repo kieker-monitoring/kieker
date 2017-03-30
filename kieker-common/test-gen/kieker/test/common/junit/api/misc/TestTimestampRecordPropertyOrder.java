@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.misc.TimestampRecord}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestTimestampRecordPropertyOrder extends AbstractKiekerTest {
@@ -45,7 +45,7 @@ public class TestTimestampRecordPropertyOrder extends AbstractKiekerTest {
 	 */
 	/** Constant value parameter for timestamp. */
 	private static final long PROPERTY_TIMESTAMP = 2L;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -63,15 +63,14 @@ public class TestTimestampRecordPropertyOrder extends AbstractKiekerTest {
 		final Object[] values = {
 			PROPERTY_TIMESTAMP,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(TimestampRecord.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(TimestampRecord.SIZE,
+				this.makeStringRegistry(), values);
+
 		final TimestampRecord recordInitParameter = new TimestampRecord(
-			PROPERTY_TIMESTAMP
-		);
-		final TimestampRecord recordInitBuffer = new TimestampRecord(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP);
+		final TimestampRecord recordInitBuffer = new TimestampRecord(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final TimestampRecord recordInitArray = new TimestampRecord(values);
-		
+
 		this.assertTimestampRecord(recordInitParameter);
 		this.assertTimestampRecord(recordInitBuffer);
 		this.assertTimestampRecord(recordInitArray);
@@ -86,15 +85,15 @@ public class TestTimestampRecordPropertyOrder extends AbstractKiekerTest {
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(TimestampRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(TimestampRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(TimestampRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -104,7 +103,7 @@ public class TestTimestampRecordPropertyOrder extends AbstractKiekerTest {
 	private void assertTimestampRecord(final TimestampRecord record) {
 		Assert.assertEquals("'timestamp' value assertion failed.", record.getTimestamp(), PROPERTY_TIMESTAMP);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

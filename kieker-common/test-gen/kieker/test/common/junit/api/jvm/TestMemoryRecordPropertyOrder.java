@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.jvm.MemoryRecord}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestMemoryRecordPropertyOrder extends AbstractKiekerTest {
@@ -67,7 +67,7 @@ public class TestMemoryRecordPropertyOrder extends AbstractKiekerTest {
 	private static final long PROPERTY_NON_HEAP_INIT_BYTES = 10L;
 	/** Constant value parameter for objectPendingFinalizationCount. */
 	private static final int PROPERTY_OBJECT_PENDING_FINALIZATION_COUNT = 1001;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -96,26 +96,25 @@ public class TestMemoryRecordPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_NON_HEAP_INIT_BYTES,
 			PROPERTY_OBJECT_PENDING_FINALIZATION_COUNT,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(MemoryRecord.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(MemoryRecord.SIZE,
+				this.makeStringRegistry(), values);
+
 		final MemoryRecord recordInitParameter = new MemoryRecord(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_HOSTNAME,
-			PROPERTY_VM_NAME,
-			PROPERTY_HEAP_MAX_BYTES,
-			PROPERTY_HEAP_USED_BYTES,
-			PROPERTY_HEAP_COMMITTED_BYTES,
-			PROPERTY_HEAP_INIT_BYTES,
-			PROPERTY_NON_HEAP_MAX_BYTES,
-			PROPERTY_NON_HEAP_USED_BYTES,
-			PROPERTY_NON_HEAP_COMMITTED_BYTES,
-			PROPERTY_NON_HEAP_INIT_BYTES,
-			PROPERTY_OBJECT_PENDING_FINALIZATION_COUNT
-		);
-		final MemoryRecord recordInitBuffer = new MemoryRecord(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_HOSTNAME,
+				PROPERTY_VM_NAME,
+				PROPERTY_HEAP_MAX_BYTES,
+				PROPERTY_HEAP_USED_BYTES,
+				PROPERTY_HEAP_COMMITTED_BYTES,
+				PROPERTY_HEAP_INIT_BYTES,
+				PROPERTY_NON_HEAP_MAX_BYTES,
+				PROPERTY_NON_HEAP_USED_BYTES,
+				PROPERTY_NON_HEAP_COMMITTED_BYTES,
+				PROPERTY_NON_HEAP_INIT_BYTES,
+				PROPERTY_OBJECT_PENDING_FINALIZATION_COUNT);
+		final MemoryRecord recordInitBuffer = new MemoryRecord(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final MemoryRecord recordInitArray = new MemoryRecord(values);
-		
+
 		this.assertMemoryRecord(recordInitParameter);
 		this.assertMemoryRecord(recordInitBuffer);
 		this.assertMemoryRecord(recordInitArray);
@@ -130,15 +129,15 @@ public class TestMemoryRecordPropertyOrder extends AbstractKiekerTest {
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(MemoryRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(MemoryRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(MemoryRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -157,9 +156,10 @@ public class TestMemoryRecordPropertyOrder extends AbstractKiekerTest {
 		Assert.assertEquals("'nonHeapUsedBytes' value assertion failed.", record.getNonHeapUsedBytes(), PROPERTY_NON_HEAP_USED_BYTES);
 		Assert.assertEquals("'nonHeapCommittedBytes' value assertion failed.", record.getNonHeapCommittedBytes(), PROPERTY_NON_HEAP_COMMITTED_BYTES);
 		Assert.assertEquals("'nonHeapInitBytes' value assertion failed.", record.getNonHeapInitBytes(), PROPERTY_NON_HEAP_INIT_BYTES);
-		Assert.assertEquals("'objectPendingFinalizationCount' value assertion failed.", record.getObjectPendingFinalizationCount(), PROPERTY_OBJECT_PENDING_FINALIZATION_COUNT);
+		Assert.assertEquals("'objectPendingFinalizationCount' value assertion failed.", record.getObjectPendingFinalizationCount(),
+				PROPERTY_OBJECT_PENDING_FINALIZATION_COUNT);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

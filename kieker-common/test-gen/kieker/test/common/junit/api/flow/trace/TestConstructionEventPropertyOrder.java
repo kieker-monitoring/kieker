@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.flow.trace.ConstructionEvent}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestConstructionEventPropertyOrder extends AbstractKiekerTest {
@@ -53,7 +53,7 @@ public class TestConstructionEventPropertyOrder extends AbstractKiekerTest {
 	private static final String PROPERTY_CLASS_SIGNATURE = "<classSignature>";
 	/** Constant value parameter for objectId. */
 	private static final int PROPERTY_OBJECT_ID = 1002;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -75,19 +75,18 @@ public class TestConstructionEventPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_CLASS_SIGNATURE,
 			PROPERTY_OBJECT_ID,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(ConstructionEvent.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(ConstructionEvent.SIZE,
+				this.makeStringRegistry(), values);
+
 		final ConstructionEvent recordInitParameter = new ConstructionEvent(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_TRACE_ID,
-			PROPERTY_ORDER_INDEX,
-			PROPERTY_CLASS_SIGNATURE,
-			PROPERTY_OBJECT_ID
-		);
-		final ConstructionEvent recordInitBuffer = new ConstructionEvent(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_TRACE_ID,
+				PROPERTY_ORDER_INDEX,
+				PROPERTY_CLASS_SIGNATURE,
+				PROPERTY_OBJECT_ID);
+		final ConstructionEvent recordInitBuffer = new ConstructionEvent(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final ConstructionEvent recordInitArray = new ConstructionEvent(values);
-		
+
 		this.assertConstructionEvent(recordInitParameter);
 		this.assertConstructionEvent(recordInitBuffer);
 		this.assertConstructionEvent(recordInitArray);
@@ -102,15 +101,15 @@ public class TestConstructionEventPropertyOrder extends AbstractKiekerTest {
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(ConstructionEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(ConstructionEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(ConstructionEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -124,7 +123,7 @@ public class TestConstructionEventPropertyOrder extends AbstractKiekerTest {
 		Assert.assertEquals("'classSignature' value assertion failed.", record.getClassSignature(), PROPERTY_CLASS_SIGNATURE);
 		Assert.assertEquals("'objectId' value assertion failed.", record.getObjectId(), PROPERTY_OBJECT_ID);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

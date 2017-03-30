@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.flow.trace.operation.constructor.object.CallConstructorObjectEvent}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestCallConstructorObjectEventPropertyOrder extends AbstractKiekerTest {
@@ -61,7 +61,7 @@ public class TestCallConstructorObjectEventPropertyOrder extends AbstractKiekerT
 	private static final int PROPERTY_OBJECT_ID = 1002;
 	/** Constant value parameter for calleeObjectId. */
 	private static final int PROPERTY_CALLEE_OBJECT_ID = 1003;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -87,23 +87,22 @@ public class TestCallConstructorObjectEventPropertyOrder extends AbstractKiekerT
 			PROPERTY_OBJECT_ID,
 			PROPERTY_CALLEE_OBJECT_ID,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(CallConstructorObjectEvent.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(CallConstructorObjectEvent.SIZE,
+				this.makeStringRegistry(), values);
+
 		final CallConstructorObjectEvent recordInitParameter = new CallConstructorObjectEvent(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_TRACE_ID,
-			PROPERTY_ORDER_INDEX,
-			PROPERTY_OPERATION_SIGNATURE,
-			PROPERTY_CLASS_SIGNATURE,
-			PROPERTY_CALLEE_OPERATION_SIGNATURE,
-			PROPERTY_CALLEE_CLASS_SIGNATURE,
-			PROPERTY_OBJECT_ID,
-			PROPERTY_CALLEE_OBJECT_ID
-		);
-		final CallConstructorObjectEvent recordInitBuffer = new CallConstructorObjectEvent(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_TRACE_ID,
+				PROPERTY_ORDER_INDEX,
+				PROPERTY_OPERATION_SIGNATURE,
+				PROPERTY_CLASS_SIGNATURE,
+				PROPERTY_CALLEE_OPERATION_SIGNATURE,
+				PROPERTY_CALLEE_CLASS_SIGNATURE,
+				PROPERTY_OBJECT_ID,
+				PROPERTY_CALLEE_OBJECT_ID);
+		final CallConstructorObjectEvent recordInitBuffer = new CallConstructorObjectEvent(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final CallConstructorObjectEvent recordInitArray = new CallConstructorObjectEvent(values);
-		
+
 		this.assertCallConstructorObjectEvent(recordInitParameter);
 		this.assertCallConstructorObjectEvent(recordInitBuffer);
 		this.assertCallConstructorObjectEvent(recordInitArray);
@@ -118,15 +117,15 @@ public class TestCallConstructorObjectEventPropertyOrder extends AbstractKiekerT
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(CallConstructorObjectEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(CallConstructorObjectEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(CallConstructorObjectEvent.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -144,7 +143,7 @@ public class TestCallConstructorObjectEventPropertyOrder extends AbstractKiekerT
 		Assert.assertEquals("'objectId' value assertion failed.", record.getObjectId(), PROPERTY_OBJECT_ID);
 		Assert.assertEquals("'calleeObjectId' value assertion failed.", record.getCalleeObjectId(), PROPERTY_CALLEE_OBJECT_ID);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.controlflow.OperationExecutionRecord}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestOperationExecutionRecordPropertyOrder extends AbstractKiekerTest {
@@ -59,7 +59,7 @@ public class TestOperationExecutionRecordPropertyOrder extends AbstractKiekerTes
 	private static final int PROPERTY_EOI = 1001;
 	/** Constant value parameter for ess. */
 	private static final int PROPERTY_ESS = 1002;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -84,22 +84,21 @@ public class TestOperationExecutionRecordPropertyOrder extends AbstractKiekerTes
 			PROPERTY_EOI,
 			PROPERTY_ESS,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(OperationExecutionRecord.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(OperationExecutionRecord.SIZE,
+				this.makeStringRegistry(), values);
+
 		final OperationExecutionRecord recordInitParameter = new OperationExecutionRecord(
-			PROPERTY_OPERATION_SIGNATURE,
-			PROPERTY_SESSION_ID,
-			PROPERTY_TRACE_ID,
-			PROPERTY_TIN,
-			PROPERTY_TOUT,
-			PROPERTY_HOSTNAME,
-			PROPERTY_EOI,
-			PROPERTY_ESS
-		);
-		final OperationExecutionRecord recordInitBuffer = new OperationExecutionRecord(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_OPERATION_SIGNATURE,
+				PROPERTY_SESSION_ID,
+				PROPERTY_TRACE_ID,
+				PROPERTY_TIN,
+				PROPERTY_TOUT,
+				PROPERTY_HOSTNAME,
+				PROPERTY_EOI,
+				PROPERTY_ESS);
+		final OperationExecutionRecord recordInitBuffer = new OperationExecutionRecord(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final OperationExecutionRecord recordInitArray = new OperationExecutionRecord(values);
-		
+
 		this.assertOperationExecutionRecord(recordInitParameter);
 		this.assertOperationExecutionRecord(recordInitBuffer);
 		this.assertOperationExecutionRecord(recordInitArray);
@@ -114,15 +113,15 @@ public class TestOperationExecutionRecordPropertyOrder extends AbstractKiekerTes
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(OperationExecutionRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(OperationExecutionRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(OperationExecutionRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -139,7 +138,7 @@ public class TestOperationExecutionRecordPropertyOrder extends AbstractKiekerTes
 		Assert.assertEquals("'eoi' value assertion failed.", record.getEoi(), PROPERTY_EOI);
 		Assert.assertEquals("'ess' value assertion failed.", record.getEss(), PROPERTY_ESS);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

@@ -70,7 +70,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 	private final IWriterRegistry<String> writerRegistry;
 	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.registerStrings(..)}. */
 	private final RegisterAdapter<String> registerStringsAdapter;
-	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.writeBytes(..)}. */
+	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.serialize(..)}. */
 	private final GetIdAdapter<String> writeBytesAdapter;
 
 	public SingleSocketTcpWriter(final Configuration configuration) throws IOException {
@@ -108,7 +108,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 		recordBuffer.putInt(this.writerRegistry.getId(recordClassName));
 		recordBuffer.putLong(monitoringRecord.getLoggingTimestamp());
-		monitoringRecord.writeBytes(DefaultValueSerializer.instance(), recordBuffer, this.writeBytesAdapter);
+		monitoringRecord.serialize(DefaultValueSerializer.create(recordBuffer, this.writeBytesAdapter));
 		// monitoringRecord.writeToBuffer(buffer, this.writerRegistry);
 
 		if (this.flush) {

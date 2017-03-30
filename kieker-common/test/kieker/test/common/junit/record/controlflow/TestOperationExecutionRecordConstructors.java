@@ -33,9 +33,9 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 /**
  * Creates {@link OperationExecutionRecord}s via the available constructors and
  * checks the values passed values via getters.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest {
@@ -56,9 +56,9 @@ public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest
 		final long tout = 33449; // any number will do
 		final int eoi = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI;
 		final int ess = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS;
-		final OperationExecutionRecord opExecutionRecord =
-				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK, sessionId, traceId,
-						tin, tout, hostname, eoi, ess);
+		final OperationExecutionRecord opExecutionRecord = new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
+				sessionId, traceId,
+				tin, tout, hostname, eoi, ess);
 
 		this.checkTraceId(opExecutionRecord, traceId);
 		this.checkTinTout(opExecutionRecord, tin, tout);
@@ -108,9 +108,9 @@ public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest
 	private void checkToFromBinaryAllFields(final OperationExecutionRecord opExecutionRecord) {
 		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(OperationExecutionRecord.SIZE);
-		opExecutionRecord.writeBytes(DefaultValueSerializer.instance(), buffer, stringRegistry);
+		opExecutionRecord.serialize(DefaultValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
-		final OperationExecutionRecord deserializedRecord = new OperationExecutionRecord(DefaultValueDeserializer.instance(), buffer, stringRegistry);
+		final OperationExecutionRecord deserializedRecord = new OperationExecutionRecord(DefaultValueDeserializer.create(buffer, stringRegistry));
 
 		Assert.assertEquals("Records not equal (binary)", opExecutionRecord, deserializedRecord);
 

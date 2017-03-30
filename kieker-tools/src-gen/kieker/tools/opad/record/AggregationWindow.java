@@ -18,7 +18,6 @@ package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -26,24 +25,23 @@ import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
-
 /**
  * @author Thomas Duellmann
- * 
+ *
  * @since 1.10
  */
 public class AggregationWindow extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AggregationWindow.windowStart
-			 + TYPE_SIZE_LONG // AggregationWindow.windowEnd
+			+ TYPE_SIZE_LONG // AggregationWindow.windowEnd
 	;
 	private static final long serialVersionUID = -6015104562956593414L;
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // AggregationWindow.windowStart
 		long.class, // AggregationWindow.windowEnd
 	};
-	
+
 	/* user-defined constants */
 	/* default constants */
 	/* property declarations */
@@ -52,7 +50,7 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param windowStart
 	 *            windowStart
 	 * @param windowEnd
@@ -66,7 +64,7 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -75,10 +73,10 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 		this.windowStart = (Long) values[0];
 		this.windowEnd = (Long) values[1];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -92,18 +90,16 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public AggregationWindow(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.windowStart = deserializer.getLong(buffer);
-		this.windowEnd = deserializer.getLong(buffer);
+	public AggregationWindow(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		this.windowStart = deserializer.getLong();
+		this.windowEnd = deserializer.getLong();
 	}
 
 	/**
@@ -121,16 +117,16 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		serializer.putLong(this.getWindowStart(), buffer);
-		serializer.putLong(this.getWindowEnd(), buffer);
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getWindowStart());
+		serializer.putLong(this.getWindowEnd());
 	}
 
 	/**
@@ -148,25 +144,15 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -184,7 +170,7 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final AggregationWindow castedRecord = (AggregationWindow) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -201,9 +187,9 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 	public final long getWindowStart() {
 		return this.windowStart;
 	}
-	
+
 	public final long getWindowEnd() {
 		return this.windowEnd;
 	}
-	
+
 }

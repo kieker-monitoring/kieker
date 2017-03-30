@@ -25,6 +25,14 @@ package kieker.common.record.io;
 public interface IValueDeserializer {
 
 	/**
+	 * Retrieves a {@code boolean} value from the underlying data source.
+	 *
+	 * @return The retrieved value
+	 * @since 1.13
+	 */
+	public boolean getBoolean();
+
+	/**
 	 * Retrieves a {@code byte} value from the underlying data source.
 	 *
 	 * @return The retrieved value

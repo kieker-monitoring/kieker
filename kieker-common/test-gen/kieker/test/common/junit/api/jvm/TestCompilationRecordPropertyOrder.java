@@ -29,12 +29,12 @@ import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.util.APIEvaluationFunctions;
-			
+
 /**
  * Test API of {@link kieker.common.record.jvm.CompilationRecord}.
- * 
+ *
  * @author API Checker
- * 
+ *
  * @since 1.12
  */
 public class TestCompilationRecordPropertyOrder extends AbstractKiekerTest {
@@ -53,7 +53,7 @@ public class TestCompilationRecordPropertyOrder extends AbstractKiekerTest {
 	private static final String PROPERTY_JIT_COMPILER_NAME = "<jitCompilerName>";
 	/** Constant value parameter for totalCompilationTimeMS. */
 	private static final long PROPERTY_TOTAL_COMPILATION_TIME_M_S = 3L;
-							
+
 	/**
 	 * Empty constructor.
 	 */
@@ -75,19 +75,18 @@ public class TestCompilationRecordPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_JIT_COMPILER_NAME,
 			PROPERTY_TOTAL_COMPILATION_TIME_M_S,
 		};
-		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(CompilationRecord.SIZE, 
-			this.makeStringRegistry(), values);
-					
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(CompilationRecord.SIZE,
+				this.makeStringRegistry(), values);
+
 		final CompilationRecord recordInitParameter = new CompilationRecord(
-			PROPERTY_TIMESTAMP,
-			PROPERTY_HOSTNAME,
-			PROPERTY_VM_NAME,
-			PROPERTY_JIT_COMPILER_NAME,
-			PROPERTY_TOTAL_COMPILATION_TIME_M_S
-		);
-		final CompilationRecord recordInitBuffer = new CompilationRecord(DefaultValueDeserializer.instance(), inputBuffer, this.makeStringRegistry());
+				PROPERTY_TIMESTAMP,
+				PROPERTY_HOSTNAME,
+				PROPERTY_VM_NAME,
+				PROPERTY_JIT_COMPILER_NAME,
+				PROPERTY_TOTAL_COMPILATION_TIME_M_S);
+		final CompilationRecord recordInitBuffer = new CompilationRecord(DefaultValueDeserializer.create(inputBuffer, this.makeStringRegistry()));
 		final CompilationRecord recordInitArray = new CompilationRecord(values);
-		
+
 		this.assertCompilationRecord(recordInitParameter);
 		this.assertCompilationRecord(recordInitBuffer);
 		this.assertCompilationRecord(recordInitArray);
@@ -102,15 +101,15 @@ public class TestCompilationRecordPropertyOrder extends AbstractKiekerTest {
 
 		// test write to buffer
 		final ByteBuffer outputBufferParameter = ByteBuffer.allocate(CompilationRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferParameter, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferParameter, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (parameter).", inputBuffer.array(), outputBufferParameter.array());
 
 		final ByteBuffer outputBufferBuffer = ByteBuffer.allocate(CompilationRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferBuffer, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferBuffer, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (buffer).", inputBuffer.array(), outputBufferBuffer.array());
 
 		final ByteBuffer outputBufferArray = ByteBuffer.allocate(CompilationRecord.SIZE);
-		recordInitParameter.writeBytes(DefaultValueSerializer.instance(), outputBufferArray, stringRegistry);
+		recordInitParameter.serialize(DefaultValueSerializer.create(outputBufferArray, stringRegistry));
 		Assert.assertArrayEquals("Byte buffer do not match (array).", inputBuffer.array(), outputBufferArray.array());
 	}
 
@@ -124,7 +123,7 @@ public class TestCompilationRecordPropertyOrder extends AbstractKiekerTest {
 		Assert.assertEquals("'jitCompilerName' value assertion failed.", record.getJitCompilerName(), PROPERTY_JIT_COMPILER_NAME);
 		Assert.assertEquals("'totalCompilationTimeMS' value assertion failed.", record.getTotalCompilationTimeMS(), PROPERTY_TOTAL_COMPILATION_TIME_M_S);
 	}
-			
+
 	/**
 	 * Build a populated string registry for all tests.
 	 */

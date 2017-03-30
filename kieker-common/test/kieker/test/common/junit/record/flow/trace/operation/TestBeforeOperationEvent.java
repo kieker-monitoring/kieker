@@ -32,7 +32,7 @@ import kieker.test.common.junit.record.UtilityClass;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class TestBeforeOperationEvent extends AbstractKiekerTest {
@@ -52,15 +52,14 @@ public class TestBeforeOperationEvent extends AbstractKiekerTest {
 
 	/**
 	 * Tests the constructor and toArray(..) methods of {@link BeforeOperationEvent}.
-	 * 
+	 *
 	 * Assert that a record instance event1 equals an instance event2 created by serializing event1 to an array event1Array
 	 * and using event1Array to construct event2. This ignores a set loggingTimestamp!
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
 
-		final BeforeOperationEvent event1 =
-				new BeforeOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME);
+		final BeforeOperationEvent event1 = new BeforeOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
@@ -83,8 +82,7 @@ public class TestBeforeOperationEvent extends AbstractKiekerTest {
 	@Test
 	public void testSerializeDeserializeBinaryEquals() {
 
-		final BeforeOperationEvent event1 =
-				new BeforeOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME);
+		final BeforeOperationEvent event1 = new BeforeOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
@@ -94,10 +92,10 @@ public class TestBeforeOperationEvent extends AbstractKiekerTest {
 
 		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
-		event1.writeBytes(DefaultValueSerializer.instance(), buffer, stringRegistry);
+		event1.serialize(DefaultValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
 
-		final BeforeOperationEvent event2 = new BeforeOperationEvent(DefaultValueDeserializer.instance(), buffer, stringRegistry);
+		final BeforeOperationEvent event2 = new BeforeOperationEvent(DefaultValueDeserializer.create(buffer, stringRegistry));
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));
