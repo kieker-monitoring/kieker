@@ -46,11 +46,11 @@ import kieker.monitoring.writer.serializer.StringSerializer;
 public final class TestChunkingCollector {
 
 	private static final Charset CHARSET = Charset.forName("UTF-8");
-	
+
 	public TestChunkingCollector() {
 		// Default Constructor
 	}
-	
+
 	/**
 	 * Tests both writing of chunks due to size (a full chunk can be written) and to time (records remain unwritten for some time).
 	 *
@@ -58,7 +58,7 @@ public final class TestChunkingCollector {
 	 *             Not expected
 	 */
 	@Test
-	public void testChunkingSizeAndTime() throws IOException {
+	public void testChunkingSizeAndTime() throws IOException, InterruptedException {
 		final String testId = "testChunkingSizeAndTime";
 		final int recordCount = 25;
 		final int deferredWriteDelayInMs = 500;
@@ -73,6 +73,7 @@ public final class TestChunkingCollector {
 		// Wait until a timed write should have occurred
 		LockSupport.parkNanos(2 * deferredWriteDelayInMs * 1000000L);
 		controller.terminateMonitoring();
+		controller.waitForTermination(deferredWriteDelayInMs * 1000000L);
 
 		// Retrieve written data from the data storage
 		final byte[] data = TestRawDataStorage.getInstance().getData(testId);
