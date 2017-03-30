@@ -19,6 +19,7 @@ package kieker.analysisteetime.util;
 import java.util.PriorityQueue;
 import java.util.function.BiFunction;
 
+
 /**
  * @author Sören Henning
  *
@@ -64,7 +65,10 @@ public class RunningMedian<T extends Comparable<T>> {
 	}
 	
 	public T getMedian() {
-		if (this.maxHeap.size() == this.minHeap.size()) {
+		if (this.maxHeap.isEmpty() && this.minHeap.isEmpty()) {
+			throw new IllegalStateException("There are no present values for this running median.");
+		}
+		else if (this.maxHeap.size() == this.minHeap.size()) {
 			return this.meanBuilder.apply(this.maxHeap.peek(), this.minHeap.peek());			
 		} else if (this.maxHeap.size() > this.minHeap.size()) {
 			return this.maxHeap.peek();
