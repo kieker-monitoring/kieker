@@ -57,32 +57,32 @@ import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectEve
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 @Plugin(
 		name = "Trace Reconstruction Filter (Event)",
 		description = "Filter to reconstruct event based (flow) traces",
 		outputPorts = {
-			@OutputPort(
-					name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
-					description = "Outputs valid traces", eventTypes = { TraceEventRecords.class }),
-			@OutputPort(
-					name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID,
-					description = "Outputs traces missing crucial records", eventTypes = { TraceEventRecords.class }) },
+				@OutputPort(
+						name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
+						description = "Outputs valid traces", eventTypes = { TraceEventRecords.class }),
+				@OutputPort(
+						name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID,
+						description = "Outputs traces missing crucial records", eventTypes = { TraceEventRecords.class }) },
 		configuration = {
-			@Property(
-					name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
-					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-			@Property(
-					name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
-					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
-			@Property(
-					name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT,
-					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
-			@Property(
-					name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES,
-					defaultValue = "false") })
+				@Property(
+						name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
+						defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+				@Property(
+						name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
+						defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
+				@Property(
+						name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT,
+						defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
+				@Property(
+						name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES,
+						defaultValue = "false") })
 public final class EventRecordTraceReconstructionFilter extends AbstractFilterPlugin {
 	/**
 	 * The name of the output port delivering the valid traces.
@@ -134,7 +134,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	private final TimeUnit timeunit;
 	private final long maxTraceDuration;
 	private final long maxTraceTimeout;
-	private final boolean timeout;
+	private final boolean hasTimeout;
 	private final boolean repairEventBasedTracesEnabled;
 	private long maxEncounteredLoggingTimestamp = -1;
 
@@ -142,7 +142,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -166,13 +166,13 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				.getBooleanProperty(CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES);
 		this.maxTraceDuration = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION), configTimeunit);
 		this.maxTraceTimeout = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT), configTimeunit);
-		this.timeout = !((this.maxTraceTimeout == Long.MAX_VALUE) && (this.maxTraceDuration == Long.MAX_VALUE));
-		this.traceId2trace = new ConcurrentHashMap<Long, TraceBuffer>();
+		this.hasTimeout = (this.maxTraceTimeout != Long.MAX_VALUE) || (this.maxTraceDuration != Long.MAX_VALUE);
+		this.traceId2trace = new ConcurrentHashMap<>();
 	}
 
 	/**
 	 * This method is the input port for the timeout.
-	 * 
+	 *
 	 * @param timestamp
 	 *            The timestamp
 	 */
@@ -182,7 +182,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			eventTypes = { Long.class })
 	public void newEvent(final Long timestamp) {
 		synchronized (this) {
-			if (this.timeout) {
+			if (this.hasTimeout) {
 				this.processTimeoutQueue(timestamp);
 			}
 		}
@@ -190,7 +190,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 	/**
 	 * This method is the input port for the new events for this filter.
-	 * 
+	 *
 	 * @param traceEventRecords
 	 *            The new record to handle.
 	 */
@@ -210,7 +210,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 	/**
 	 * This method is the input port for the new events for this filter.
-	 * 
+	 *
 	 * @param record
 	 *            The new record to handle.
 	 */
@@ -261,7 +261,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			}
 			super.deliver(OUTPUT_PORT_NAME_TRACE_VALID, traceBuffer.toTraceEvents());
 		}
-		if (this.timeout) {
+		if (this.hasTimeout) {
 			synchronized (this) {
 				// can we assume a rough order of logging timestamps? (yes, except with DB reader)
 				if (loggingTimestamp > this.maxEncounteredLoggingTimestamp) {
@@ -326,7 +326,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 	/**
 	 * The TraceBuffer is synchronized to prevent problems with concurrent access.
-	 * 
+	 *
 	 * @author Jan Waller
 	 */
 	private static final class TraceBuffer {
@@ -334,7 +334,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		private static final Comparator<AbstractTraceEvent> COMPARATOR = new TraceEventComperator();
 
 		private TraceMetadata trace;
-		private final SortedSet<AbstractTraceEvent> events = new TreeSet<AbstractTraceEvent>(COMPARATOR);
+		private final SortedSet<AbstractTraceEvent> events = new TreeSet<>(COMPARATOR);
 
 		private boolean closeable;
 		private boolean damaged;
@@ -349,8 +349,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		private boolean beforeEventStackEmptyAtTermination;
 		private boolean repairEventBasedTracesEnabled;
 
-		private final Deque<BeforeOperationEvent> beforeEventStack = new LinkedList<BeforeOperationEvent>();
-		private final Deque<AbstractTraceEvent> eventQueue = new LinkedList<AbstractTraceEvent>();
+		private final Deque<BeforeOperationEvent> beforeEventStack = new LinkedList<>();
+		private final Deque<AbstractTraceEvent> eventQueue = new LinkedList<>();
 
 		/**
 		 * Creates a new instance of this class.
