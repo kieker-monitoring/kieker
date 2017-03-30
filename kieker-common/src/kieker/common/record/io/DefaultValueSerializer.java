@@ -46,7 +46,14 @@ public class DefaultValueSerializer implements IValueSerializer {
 
 	@Override
 	public void putBoolean(final boolean value) {
-		final byte data = (value) ? TRUE_VALUE : FALSE_VALUE;
+		final byte data;
+
+		if (value) {
+			data = TRUE_VALUE;
+		} else {
+			data = FALSE_VALUE;
+		}
+
 		this.putByte(data);
 	}
 

@@ -18,7 +18,6 @@ package kieker.common.record;
 
 import java.io.Serializable;
 import java.nio.BufferOverflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
@@ -91,8 +90,11 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	/**
 	 * This method serializes this record using the given serializer.
 	 *
+	 * @param serializer
+	 *            The serializer to serialize the record with. *
 	 * @throws BufferOverflowException
 	 *             If the underlying buffer has insufficient capacity to store this record
+	 * @since 1.13
 	 */
 	public void serialize(IValueSerializer serializer) throws BufferOverflowException;
 
@@ -153,9 +155,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * </p>
 	 *
 	 * <ul>
-	 * <li>a constructor accepting a ByteBuffer and a IRegistry<String> as arguments possibly throwing BufferUnderflowException.
+	 * <li>a constructor accepting a Deserializer as arguments possibly throwing BufferUnderflowException.
 	 * <li>a <code>public static final int SIZE</code> specifying the binary size of the record, usually returned via {@link #getSize()}.
-	 * <li>the {@link #initFromBytes(ByteBuffer, IRegistry)} method does not have to be implemented
 	 * </ul>
 	 *
 	 * @since 1.8
