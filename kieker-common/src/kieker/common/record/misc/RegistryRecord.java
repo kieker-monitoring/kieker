@@ -83,19 +83,16 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * This constructor converts the given array into a record.
 	 *
-	 * @param buffer
-	 *            The bytes for the record.
-	 * @param stringRegistry
-	 *            the string registry to decode the string ids in the byte buffer.
+	 * @param deserializer
+	 *            The deserializer to decode the record with.
 	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public RegistryRecord(final IValueDeserializer deserializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException { // NOPMD
-		this.id = buffer.getInt();
-		this.strBytes = new byte[buffer.getInt()];
-		buffer.get(this.strBytes);
-		this.string = RegistryRecord.bytesToString(this.strBytes);
+	public RegistryRecord(final IValueDeserializer deserializer) throws BufferUnderflowException { // NOPMD
+		this.id = deserializer.getInt();
+		this.string = deserializer.getString();
+		this.strBytes = this.string.getBytes();
 	}
 
 	/**
