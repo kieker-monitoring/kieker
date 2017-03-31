@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.test.toolsteetime.junit.writeRead.jmx;
 
 import java.util.ArrayList;
@@ -29,6 +45,11 @@ import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 
 import teetime.framework.test.StageTester;
 
+/**
+ * @author Jan Waller, Lars Blumke
+ *
+ * @since 1.8
+ */
 public class BasicJMXWriterReaderTest {
 
 	private static final int TIMEOUT_IN_MS = 0;
@@ -37,6 +58,13 @@ public class BasicJMXWriterReaderTest {
 	private static final String CONTROLLER = "MonitoringController";
 	private static final String PORT = "59999";
 	private static final String LOGNAME = "MonitoringLog";
+
+	/**
+	 * Empty default constructor
+	 */
+	public BasicJMXWriterReaderTest() {
+		// empty constructor
+	}
 
 	@Test
 	public void testWriteRead() throws Exception {
@@ -115,21 +143,21 @@ public class BasicJMXWriterReaderTest {
 		// Test the JMX Controller
 		final JMXServiceURL serviceURL = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://localhost:" + BasicJMXWriterReaderTest.PORT + "/jmxrmi");
 		final ObjectName controllerObjectName = new ObjectName(BasicJMXWriterReaderTest.DOMAIN, "type", BasicJMXWriterReaderTest.CONTROLLER);
-	
+
 		final JMXConnector jmx = JMXConnectorFactory.connect(serviceURL);
 		final MBeanServerConnection mbServer = jmx.getMBeanServerConnection();
-	
+
 		final Object tmpObj = MBeanServerInvocationHandler.newProxyInstance(mbServer, controllerObjectName, IMonitoringController.class, false);
 		final IMonitoringController ctrlJMX = (IMonitoringController) tmpObj; // NOCS // NOPMD (required for the cast not being removed by Java 1.6 editors)
-	
+
 		Assert.assertTrue(monitoringController.isMonitoringEnabled());
 		Assert.assertTrue(ctrlJMX.isMonitoringEnabled());
-	
+
 		Assert.assertTrue(ctrlJMX.disableMonitoring());
-	
+
 		Assert.assertFalse(monitoringController.isMonitoringEnabled());
 		Assert.assertFalse(ctrlJMX.isMonitoringEnabled());
-	
+
 		jmx.close();
 	}
 

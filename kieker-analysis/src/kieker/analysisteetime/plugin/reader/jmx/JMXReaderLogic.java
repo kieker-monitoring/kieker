@@ -50,10 +50,6 @@ public class JMXReaderLogic {
 	private final JMXServiceURL serviceURL;
 	private final ObjectName monitoringLog;
 	private final CountDownLatch cdLatch = new CountDownLatch(1);
-	private final String domain;
-	private final String logname;
-	private final int port;
-	private final String server;
 
 	private final Log log;
 	private final JMXReader jmxReaderStage;
@@ -80,22 +76,18 @@ public class JMXReaderLogic {
 	 */
 	public JMXReaderLogic(final boolean silentreconnect, final JMXServiceURL serviceURL, final String domain, final String logname,
 			final int port, final String server, final Log log, final JMXReader jmxReaderStage) {
-		this.server = server;
-		this.port = port;
 		final String tmpServiceURL;
-		if (this.port > 0) {
-			tmpServiceURL = "service:jmx:rmi:///jndi/rmi://" + this.server + ":" + this.port + "/jmxrmi";
+		if (port > 0) {
+			tmpServiceURL = "service:jmx:rmi:///jndi/rmi://" + server + ":" + port + "/jmxrmi";
 		} else {
 			tmpServiceURL = serviceURL.toString();
 		}
-		this.domain = domain;
-		this.logname = logname;
 		if (tmpServiceURL.length() == 0) {
 			throw new IllegalArgumentException("JMXReader has not sufficient parameters. Set either port or serviceURL");
 		}
 		try {
 			this.serviceURL = new JMXServiceURL(tmpServiceURL);
-			this.monitoringLog = new ObjectName(this.domain, "type", this.logname);
+			this.monitoringLog = new ObjectName(domain, "type", logname);
 		} catch (final MalformedObjectNameException e) {
 			throw new IllegalArgumentException("Failed to parse configuration.", e);
 		} catch (final MalformedURLException e) {

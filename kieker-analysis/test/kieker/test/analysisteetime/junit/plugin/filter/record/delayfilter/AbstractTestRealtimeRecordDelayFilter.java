@@ -55,13 +55,13 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 
 	private final List<IMonitoringRecord> inputRecords = new ArrayList<IMonitoringRecord>();
 
-	private InitialElementProducer<IMonitoringRecord> recordProducer;
+	private InitialElementProducer<IMonitoringRecord> recordProducer; // NOPMD (could be replaced by a local variable)
 	private Counter<IMonitoringRecord> preDelayCounter;
-	private RealtimeRecordDelayFilter delayFilter;
+	private RealtimeRecordDelayFilter delayFilter; // NOPMD (could be replaced by a local variable)
 	private Counter<IMonitoringRecord> postDelayCounter;
 	private CollectorSink<IMonitoringRecord> recordCollectorSink;
-	private AnalysisThroughputFilter throughputStage;
-	private Clock clock;
+	private AnalysisThroughputFilter throughputStage; // NOPMD (could be replaced by a local variable)
+	private Clock clock; // NOPMD (could be replaced by a local variable)
 	private CollectorSink<Long> throughputCollectorSink;
 
 	private RealtimeRecordDelayFilterConfig testConfig;

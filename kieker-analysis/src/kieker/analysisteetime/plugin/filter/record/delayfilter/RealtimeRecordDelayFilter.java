@@ -49,7 +49,7 @@ public class RealtimeRecordDelayFilter extends CompositeStage {
 	private final InputPort<IMonitoringRecord> inputPort;
 	private final OutputPort<IMonitoringRecord> outputPort;
 
-	private final RealtimeRecordDelayConsumer consumer;
+	private final RealtimeRecordDelayConsumer consumer; // NOPMD (could be replaced by a local variable)
 	private final RealtimeRecordDelayProducer producer;
 
 	/**

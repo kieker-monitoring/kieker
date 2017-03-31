@@ -93,7 +93,8 @@ public class BinaryUnknownTypeTest {
 		Assert.assertThat(analyzedRecords.size(), CoreMatchers.is(1));
 	}
 
-	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
+	@SuppressWarnings({ "PMD.JUnit4TestShouldUseTestAnnotation", "PMD.UnusedFormalParameter" }) // unused parameter: bug in BinaryLogReader mentioned in issue
+																								// KIEKER-1540
 	private List<IMonitoringRecord> testUnknownRecordTypes(final List<IMonitoringRecord> records, final boolean ignoreUnknownRecordTypes)
 			throws Exception {
 		// 2. define monitoring config
