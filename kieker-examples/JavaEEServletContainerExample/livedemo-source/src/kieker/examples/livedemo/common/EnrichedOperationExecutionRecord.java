@@ -95,12 +95,12 @@ public final class EnrichedOperationExecutionRecord extends OperationExecutionRe
 	}
 
 	@Override
-	public void writeBytes(IValueSerializer serializer, final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		super.writeBytes(serializer, buffer, stringRegistry);
+	public void serialize(IValueSerializer serializer) throws BufferOverflowException {
+		super.serialize(serializer);
 
-		serializer.putDouble(this.getResponseTime(), buffer);
-		serializer.putString(this.getShortSignature(), buffer, stringRegistry);
-		serializer.putString(this.getCommaSeperatedValues(), buffer, stringRegistry);
+		serializer.putDouble(this.getResponseTime());
+		serializer.putString(this.getShortSignature());
+		serializer.putString(this.getCommaSeperatedValues());
 	}
 
 	@Override
