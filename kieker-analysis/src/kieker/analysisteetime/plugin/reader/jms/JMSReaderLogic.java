@@ -102,7 +102,6 @@ public final class JMSReaderLogic {
 	 *
 	 * @return true if reading was successful; false if an error occurred
 	 *
-	 * @since 1.2
 	 */
 	public boolean read() {
 		boolean retVal = true;

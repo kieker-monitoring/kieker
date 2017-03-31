@@ -70,6 +70,7 @@ public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 	 * A simple test for the counting filter.
 	 */
 	@Test
+	@SuppressWarnings("PMD") // JUnit tests should include assert() or fail()
 	public void testNormal() {
 
 		final List<EmptyRecord> inputRecords = new ArrayList<EmptyRecord>();
