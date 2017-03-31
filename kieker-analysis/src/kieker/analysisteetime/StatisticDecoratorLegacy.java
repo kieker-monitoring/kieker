@@ -14,7 +14,7 @@ import kieker.analysisteetime.statistics.Statistics;
 import kieker.analysisteetime.statistics.Unit;
 import kieker.analysisteetime.util.RunningMedian;
 
-public class StatisticDecorator<T> {
+public class StatisticDecoratorLegacy<T> {
 
 	// General Fields
 	private final Map<T, Statistics> statisticsModel = new HashMap<>();
