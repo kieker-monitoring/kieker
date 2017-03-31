@@ -125,6 +125,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * @return The size.
 	 *
 	 * @since 1.8
+	 * @deprecated With the introduction of value serializers, this method has become obsolete.
 	 */
 	public int getSize();
 
