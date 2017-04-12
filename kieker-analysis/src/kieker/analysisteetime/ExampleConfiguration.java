@@ -117,13 +117,13 @@ public class ExampleConfiguration extends Configuration {
 		super.connectPorts(traceReconstructor.getOutputPort(), traceStatisticsDecorator.getInputPort());
 		super.connectPorts(traceStatisticsDecorator.getOutputPort(), traceDistributor.getInputPort());
 		super.connectPorts(traceDistributor.getNewOutputPort(), traceToGraphTransformer.getInputPort());
-		// super.connectPorts(traceToGraphTransformer.getOutputPort(), dotTraceGraphFileWriter.getInputPort());
+		super.connectPorts(traceToGraphTransformer.getOutputPort(), dotTraceGraphFileWriter.getInputPort());
 		// super.connectPorts(traceToGraphTransformer.getOutputPort(), graphMLTraceGraphFileWriter.getInputPort());
 		super.connectPorts(traceDistributor.getNewOutputPort(), executionModelAssembler.getInputPort());
 		super.connectPorts(executionModelAssembler.getOutputPort(), onTerminationTrigger.getInputPort());
 		super.connectPorts(onTerminationTrigger.getOutputPort(), dependencyGraphCreator.getInputPort());
 		// super.connectPorts(dependencyGraphCreator.getOutputPort(), debugStage.getInputPort());
-		super.connectPorts(dependencyGraphCreator.getOutputPort(), dotDepGraphFileWriter.getInputPort());
+		//super.connectPorts(dependencyGraphCreator.getOutputPort(), dotDepGraphFileWriter.getInputPort());
 
 	}
 

@@ -18,22 +18,22 @@ package kieker.analysisteetime.statistics;
 
 import java.util.function.Function;
 
-public class MinCalculator<T> implements StatisticsCalculator<T> {
+public class MaxCalculator<T> implements StatisticsCalculator<T> {
 
-	private final static Property MIN_PROPERTY = PredefinedProperties.MIN;
+	private final static Property MAX_PROPERTY = PredefinedProperties.MAX;
 
 	private final Function<T, Long> valueAccessor;
 
-	public MinCalculator(final Function<T, Long> valueAccessor) {
+	public MaxCalculator(final Function<T, Long> valueAccessor) {
 		this.valueAccessor = valueAccessor;
 	}
 
 	@Override
 	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
 		final long value = this.valueAccessor.apply(input);
-		final long oldMin = statistic.getProperty(MIN_PROPERTY);
-		if (value < oldMin) {
-			statistic.setProperty(MIN_PROPERTY, value);
+		final long oldMax = statistic.getProperty(MAX_PROPERTY);
+		if (value > oldMax) {
+			statistic.setProperty(MAX_PROPERTY, value);
 		}
 	}
 

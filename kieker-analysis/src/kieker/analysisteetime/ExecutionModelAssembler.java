@@ -50,7 +50,6 @@ public class ExecutionModelAssembler {
 	}
 
 	protected void addExecution(final DeployedOperation source, final DeployedOperation target) {
-
 		final ComposedKey<DeployedOperation, DeployedOperation> key = ComposedKey.of(source, target);
 		if (!this.executionModel.getAggregatedInvocations().contains(key)) {
 			final AggregatedInvocation invocation = this.factory.createAggregatedInvocation();
@@ -59,9 +58,6 @@ public class ExecutionModelAssembler {
 
 			this.executionModel.getAggregatedInvocations().put(key, invocation);
 		}
-
-		// TODO Statistics and so on
-
 	}
 
 	private class OperationCallInserter extends OperationCallVisitor {

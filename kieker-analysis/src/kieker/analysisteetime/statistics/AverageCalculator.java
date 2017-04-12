@@ -16,25 +16,20 @@
 
 package kieker.analysisteetime.statistics;
 
-import java.util.function.Function;
+public class AverageCalculator<T> implements StatisticsCalculator<T> {
 
-public class MinCalculator<T> implements StatisticsCalculator<T> {
+	private final static Property TOTAL_PROPERTY = PredefinedProperties.TOTAL;
+	private final static Property COUNT_PROPERTY = PredefinedProperties.COUNT;
+	private final static Property AVERAGE_PROPERTY = PredefinedProperties.AVERAGE;
 
-	private final static Property MIN_PROPERTY = PredefinedProperties.MIN;
-
-	private final Function<T, Long> valueAccessor;
-
-	public MinCalculator(final Function<T, Long> valueAccessor) {
-		this.valueAccessor = valueAccessor;
-	}
+	public AverageCalculator() {}
 
 	@Override
 	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
-		final long value = this.valueAccessor.apply(input);
-		final long oldMin = statistic.getProperty(MIN_PROPERTY);
-		if (value < oldMin) {
-			statistic.setProperty(MIN_PROPERTY, value);
-		}
+		final long total = statistic.getProperty(TOTAL_PROPERTY);
+		final long count = statistic.getProperty(COUNT_PROPERTY);
+		final long avg = total / count;
+		statistic.setProperty(AVERAGE_PROPERTY, avg);
 	}
 
 }

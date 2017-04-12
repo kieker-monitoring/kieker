@@ -34,11 +34,12 @@ public final class ModelObjectFromOperationCallAccesors {
 	
 	public static final Function<OperationCall, AggregatedInvocation> createForAggregatedInvocation(final ExecutionModel executionModel) {
 		return operationCall -> {
-			final DeployedOperation callee = operationCall.getOperation();
-			final DeployedOperation caller = operationCall.getParent().getOperation();
-			final ComposedKey<DeployedOperation, DeployedOperation> key = ComposedKey.of(caller, callee);
-			return executionModel.getAggregatedInvocations().get(key);			
+			// Check if operationCall is an entry operation call. If so than source is null
+			final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null;
+			final DeployedOperation target = operationCall.getOperation();
+			final ComposedKey<DeployedOperation, DeployedOperation> key = ComposedKey.of(source, target);
+			return executionModel.getAggregatedInvocations().get(key);
 		};
-	} 
+	}
 	
 }

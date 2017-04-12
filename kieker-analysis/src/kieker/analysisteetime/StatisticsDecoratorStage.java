@@ -14,27 +14,24 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.statistics;
+package kieker.analysisteetime;
 
-import java.util.function.Function;
+import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 
-public class MinCalculator<T> implements StatisticsCalculator<T> {
+import teetime.stage.basic.AbstractFilter;
 
-	private final static Property MIN_PROPERTY = PredefinedProperties.MIN;
+public class StatisticsDecoratorStage extends AbstractFilter<OperationCall> {
 
-	private final Function<T, Long> valueAccessor;
+	private final StatisticsDecorator<OperationCall> statisticsDecorator;
 
-	public MinCalculator(final Function<T, Long> valueAccessor) {
-		this.valueAccessor = valueAccessor;
+	public StatisticsDecoratorStage(final StatisticsDecorator<OperationCall> statisticsDecorator) {
+		this.statisticsDecorator = statisticsDecorator;
 	}
 
 	@Override
-	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
-		final long value = this.valueAccessor.apply(input);
-		final long oldMin = statistic.getProperty(MIN_PROPERTY);
-		if (value < oldMin) {
-			statistic.setProperty(MIN_PROPERTY, value);
-		}
+	protected void execute(final OperationCall operationCall) {
+		this.statisticsDecorator.decorate(operationCall);
+		this.outputPort.send(operationCall);
 	}
 
 }
