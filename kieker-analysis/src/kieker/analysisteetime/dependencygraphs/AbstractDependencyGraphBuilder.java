@@ -16,6 +16,7 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
@@ -23,8 +24,8 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.statistics.Properties;
-import kieker.analysisteetime.statistics.Units;
 import kieker.analysisteetime.statistics.Statistics;
+import kieker.analysisteetime.statistics.Units;
 import kieker.analysisteetime.util.ComposedKey;
 import kieker.analysisteetime.util.ObjectIdentifierRegistry;
 import kieker.analysisteetime.util.graph.Edge;
@@ -48,11 +49,13 @@ public abstract class AbstractDependencyGraphBuilder implements DependencyGraphB
 
 	protected final Graph graph;
 	protected final ObjectIdentifierRegistry identifierRegistry;
+	protected final ResponseTimeDecorator responseTimeDecorator;
 	protected final Map<Object, Statistics> statisticsModel;
 
 	public AbstractDependencyGraphBuilder(final Map<Object, Statistics> statisticsModel) {
 		this.graph = new GraphImpl();
 		this.identifierRegistry = new ObjectIdentifierRegistry();
+		this.responseTimeDecorator = new ResponseTimeDecorator(statisticsModel, ChronoUnit.NANOS);
 		this.statisticsModel = statisticsModel;
 	}
 

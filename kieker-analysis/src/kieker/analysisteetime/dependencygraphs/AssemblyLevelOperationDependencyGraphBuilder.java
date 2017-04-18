@@ -58,6 +58,7 @@ public class AssemblyLevelOperationDependencyGraphBuilder extends AbstractDepend
 		operationVertex.setPropertyIfAbsent(PropertyKeys.RETURN_TYPE, operation.getOperationType().getReturnType());
 		operationVertex.setPropertyIfAbsent(PropertyKeys.MODIFIERS, operation.getOperationType().getModifiers());
 		operationVertex.setPropertyIfAbsent(PropertyKeys.PARAMETER_TYPES, operation.getOperationType().getParameterTypes());
+		this.responseTimeDecorator.decorate(operationVertex, operation);
 
 		return operationVertex;
 	}

@@ -25,9 +25,9 @@ import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.analysisteetime.recordreading.ReadingComposite;
 import kieker.analysisteetime.statistics.CountCalculator;
 import kieker.analysisteetime.statistics.FullStatisticsDecoratorStage;
-import kieker.analysisteetime.statistics.Units;
 import kieker.analysisteetime.statistics.Statistics;
 import kieker.analysisteetime.statistics.StatisticsDecoratorStage;
+import kieker.analysisteetime.statistics.Units;
 import kieker.analysisteetime.trace.graph.TraceToGraphTransformerStage;
 import kieker.analysisteetime.trace.graph.dot.DotTraceGraphFileWriterStage;
 import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
@@ -90,7 +90,7 @@ public class ExampleConfiguration extends Configuration {
 		final GraphMLFileWriterStage graphMLTraceGraphFileWriter = new GraphMLFileWriterStage(exportDirectory.getPath());
 		final Distributor<Trace> traceDistributor = new Distributor<>();
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
-		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(this.executionModel,
+		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(this.executionModel, this.statisticsModel,
 				new DeploymentLevelOperationDependencyGraphBuilderFactory());
 		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory.getPath(),
 				(new DotExportConfigurationFactory(new JavaFullComponentNameBuilder(), new JavaShortOperationNameBuilder(), VertexTypeMapper.DEFAULT))

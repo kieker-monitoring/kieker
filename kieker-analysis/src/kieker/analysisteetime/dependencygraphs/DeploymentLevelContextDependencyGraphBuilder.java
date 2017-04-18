@@ -51,6 +51,7 @@ class DeploymentLevelContextDependencyGraphBuilder extends AbstractDependencyGra
 		final Vertex contextVertex = this.graph.addVertexIfAbsent(contextId);
 		contextVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.DEPLOYMENT_CONTEXT);
 		contextVertex.setPropertyIfAbsent(PropertyKeys.NAME, context.getName());
+		this.responseTimeDecorator.decorate(contextVertex, context);
 
 		return contextVertex;
 	}

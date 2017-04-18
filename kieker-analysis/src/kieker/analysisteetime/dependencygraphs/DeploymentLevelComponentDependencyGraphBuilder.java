@@ -56,6 +56,7 @@ class DeploymentLevelComponentDependencyGraphBuilder extends AbstractDependencyG
 		final Vertex componentVertex = contextSubgraph.addVertexIfAbsent(componentId);
 		componentVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.DEPLOYED_COMPONENT);
 		componentVertex.setPropertyIfAbsent(PropertyKeys.NAME, component.getAssemblyComponent().getComponentType().getName());
+		this.responseTimeDecorator.decorate(componentVertex, component);
 
 		return componentVertex;
 	}
