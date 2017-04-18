@@ -18,9 +18,9 @@ package kieker.analysisteetime.statistics;
 
 public class AverageCalculator<T> implements Calculator<T> {
 
-	private final static Property TOTAL_PROPERTY = PredefinedProperties.TOTAL;
-	private final static Property COUNT_PROPERTY = PredefinedProperties.COUNT;
-	private final static Property AVERAGE_PROPERTY = PredefinedProperties.AVERAGE;
+	private final static Property TOTAL_PROPERTY = Properties.TOTAL;
+	private final static Property COUNT_PROPERTY = Properties.COUNT;
+	private final static Property AVERAGE_PROPERTY = Properties.AVERAGE;
 
 	public AverageCalculator() {}
 

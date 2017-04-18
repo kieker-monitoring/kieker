@@ -19,7 +19,7 @@ public class FullStatisticsDecoratorStage extends CompositeStage {
 	private final StatisticsDecoratorStage<OperationCall> medianStatistics;
 
 	public FullStatisticsDecoratorStage(final Map<Object, Statistics> statisticsModel, final Function<OperationCall, Object> objectAccesor) {
-		final Unit unit = PredefinedUnits.RESPONSE_TIME;
+		final Unit unit = Units.RESPONSE_TIME;
 		final Function<OperationCall, Long> valueAccessor = c -> c.getDuration().toNanos();
 
 		this.countStatistics = new StatisticsDecoratorStage<>(statisticsModel, unit, new CountCalculator<>(), objectAccesor);

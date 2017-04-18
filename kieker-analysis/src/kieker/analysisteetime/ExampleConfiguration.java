@@ -25,7 +25,7 @@ import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.analysisteetime.recordreading.ReadingComposite;
 import kieker.analysisteetime.statistics.CountCalculator;
 import kieker.analysisteetime.statistics.FullStatisticsDecoratorStage;
-import kieker.analysisteetime.statistics.PredefinedUnits;
+import kieker.analysisteetime.statistics.Units;
 import kieker.analysisteetime.statistics.Statistics;
 import kieker.analysisteetime.statistics.StatisticsDecoratorStage;
 import kieker.analysisteetime.trace.graph.TraceToGraphTransformerStage;
@@ -82,7 +82,7 @@ public class ExampleConfiguration extends Configuration {
 		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(this.executionModel);
 		final FullStatisticsDecoratorStage fullStatisticsDecorator = new FullStatisticsDecoratorStage(this.statisticsModel,
 				ModelObjectFromOperationCallAccesors.DEPLOYED_OPERATION);
-		final StatisticsDecoratorStage<OperationCall> callStatisticsDecorator = new StatisticsDecoratorStage<>(this.statisticsModel, PredefinedUnits.RESPONSE_TIME,
+		final StatisticsDecoratorStage<OperationCall> callStatisticsDecorator = new StatisticsDecoratorStage<>(this.statisticsModel, Units.RESPONSE_TIME,
 				new CountCalculator<>(), ModelObjectFromOperationCallAccesors.createForAggregatedInvocation(this.executionModel));
 
 		final TraceToGraphTransformerStage traceToGraphTransformer = new TraceToGraphTransformerStage();

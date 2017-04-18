@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 public class MinCalculator<T> implements Calculator<T> {
 
-	private final static Property MIN_PROPERTY = PredefinedProperties.MIN;
+	private final static Property MIN_PROPERTY = Properties.MIN;
 
 	private final Function<T, Long> valueAccessor;
 

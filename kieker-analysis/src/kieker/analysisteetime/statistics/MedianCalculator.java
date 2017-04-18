@@ -24,7 +24,7 @@ import kieker.analysisteetime.util.RunningMedian;
 
 public class MedianCalculator<T> implements Calculator<T> {
 
-	private final static Property AVERAGE_PROPERTY = PredefinedProperties.AVERAGE;
+	private final static Property AVERAGE_PROPERTY = Properties.AVERAGE;
 
 	private final Map<Object, RunningMedian<Long>> runningMedians = new HashMap<>();
 	private final Function<T, Long> valueAccessor;

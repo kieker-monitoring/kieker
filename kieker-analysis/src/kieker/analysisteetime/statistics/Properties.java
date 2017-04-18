@@ -20,7 +20,7 @@ package kieker.analysisteetime.statistics;
  * @author Sören Henning
  *
  */
-public enum PredefinedProperties implements Property {
+public enum Properties implements Property {
 
 	MIN, MAX, AVERAGE, MEDIAN, TOTAL, COUNT;
 

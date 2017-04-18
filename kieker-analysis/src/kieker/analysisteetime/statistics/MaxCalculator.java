@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 public class MaxCalculator<T> implements Calculator<T> {
 
-	private final static Property MAX_PROPERTY = PredefinedProperties.MAX;
+	private final static Property MAX_PROPERTY = Properties.MAX;
 
 	private final Function<T, Long> valueAccessor;
 

@@ -22,8 +22,8 @@ import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.statistics.PredefinedProperties;
-import kieker.analysisteetime.statistics.PredefinedUnits;
+import kieker.analysisteetime.statistics.Properties;
+import kieker.analysisteetime.statistics.Units;
 import kieker.analysisteetime.statistics.Statistics;
 import kieker.analysisteetime.util.ComposedKey;
 import kieker.analysisteetime.util.ObjectIdentifierRegistry;
@@ -67,7 +67,7 @@ public abstract class AbstractDependencyGraphBuilder implements DependencyGraphB
 	private void handleInvocation(final AggregatedInvocation invocation) {
 		final Vertex sourceVertex = invocation.getSource() != null ? this.addVertex(invocation.getSource()) : this.addVertexForEntry();
 		final Vertex targetVertex = this.addVertex(invocation.getTarget());
-		final long calls = this.statisticsModel.get(invocation).getStatistic(PredefinedUnits.RESPONSE_TIME).getProperty(PredefinedProperties.COUNT);
+		final long calls = this.statisticsModel.get(invocation).getStatistic(Units.RESPONSE_TIME).getProperty(Properties.COUNT);
 		this.addEdge(sourceVertex, targetVertex, calls);
 	}
 
