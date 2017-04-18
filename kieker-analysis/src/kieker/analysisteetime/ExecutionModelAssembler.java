@@ -16,15 +16,11 @@
 
 package kieker.analysisteetime;
 
-
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
-import kieker.analysisteetime.model.analysismodel.trace.Trace;
-import kieker.analysisteetime.trace.traversal.OperationCallVisitor;
-import kieker.analysisteetime.trace.traversal.TraceTraverser;
 import kieker.analysisteetime.util.ComposedKey;
 
 /**
@@ -36,17 +32,18 @@ public class ExecutionModelAssembler {
 
 	private final ExecutionFactory factory = ExecutionFactory.eINSTANCE;
 
-	private final TraceTraverser traceTraverser = new TraceTraverser();
-	private final OperationCallInserter operationCallInserter = new OperationCallInserter();
-
 	private final ExecutionModel executionModel;
 
 	public ExecutionModelAssembler(final ExecutionModel executionModel) {
 		this.executionModel = executionModel;
 	}
 
-	public void addTrace(final Trace trace) {
-		this.traceTraverser.traverse(trace, this.operationCallInserter);
+	public void addOperationCall(final OperationCall operationCall) {
+		// Check if operationCall is an entry operation call. If so than source is null
+		final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null;
+		final DeployedOperation target = operationCall.getOperation();
+
+		this.addExecution(source, target);
 	}
 
 	protected void addExecution(final DeployedOperation source, final DeployedOperation target) {
@@ -60,16 +57,4 @@ public class ExecutionModelAssembler {
 		}
 	}
 
-	private class OperationCallInserter extends OperationCallVisitor {
-		public OperationCallInserter() {}
-
-		@Override
-		public void visit(final OperationCall operationCall) {
-			// Check if operationCall is an entry operation call. If so than source is null
-			final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null;
-			final DeployedOperation target = operationCall.getOperation();
-
-			ExecutionModelAssembler.this.addExecution(source, target);
-		}
-	}
 }

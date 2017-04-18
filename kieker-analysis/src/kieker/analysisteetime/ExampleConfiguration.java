@@ -5,6 +5,8 @@ package kieker.analysisteetime;
 
 import java.io.File;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.Map;
 
 import kieker.analysisteetime.dependencygraphs.DependencyGraphCreatorStage;
 import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependencyGraphBuilderFactory;
@@ -20,6 +22,8 @@ import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.analysisteetime.recordreading.ReadingComposite;
+import kieker.analysisteetime.statistics.FullStatisticsDecoratorStage;
+import kieker.analysisteetime.statistics.Statistics;
 import kieker.analysisteetime.trace.graph.TraceToGraphTransformerStage;
 import kieker.analysisteetime.trace.graph.dot.DotTraceGraphFileWriterStage;
 import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
@@ -51,6 +55,7 @@ public class ExampleConfiguration extends Configuration {
 	private final AssemblyModel assemblyModel = AssemblyFactory.eINSTANCE.createAssemblyModel();
 	private final DeploymentModel deploymentModel = DeploymentFactory.eINSTANCE.createDeploymentModel();
 	private final ExecutionModel executionModel = ExecutionFactory.eINSTANCE.createExecutionModel();
+	private final Map<Object, Statistics> deploymedOperationsStatisticsModel = new HashMap<>();
 
 	public ExampleConfiguration(final File importDirectory, final File exportDirectory) {
 
@@ -68,7 +73,12 @@ public class ExampleConfiguration extends Configuration {
 		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, false, ChronoUnit.NANOS); // TODO second parameter,
 																																		// NANOS temp
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
+
+		final OperationCallExtractorStage operationCallExtractor = new OperationCallExtractorStage();
 		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(this.executionModel);
+		final FullStatisticsDecoratorStage fullStatisticsDecorator = new FullStatisticsDecoratorStage(this.deploymedOperationsStatisticsModel,
+				ModelObjectFromOperationCallAccesors.DEPLOYED_OPERATION);
+
 		final TraceToGraphTransformerStage traceToGraphTransformer = new TraceToGraphTransformerStage();
 		final DotTraceGraphFileWriterStage dotTraceGraphFileWriter = DotTraceGraphFileWriterStage.create(exportDirectory);
 		final GraphMLFileWriterStage graphMLTraceGraphFileWriter = new GraphMLFileWriterStage(exportDirectory.getPath());
@@ -77,7 +87,8 @@ public class ExampleConfiguration extends Configuration {
 		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(this.executionModel,
 				new DeploymentLevelOperationDependencyGraphBuilderFactory());
 		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory.getPath(),
-				(new DotExportConfigurationFactory(new JavaFullComponentNameBuilder(), new JavaShortOperationNameBuilder(), VertexTypeMapper.DEFAULT)).createForDeploymentLevelOperationDependencyGraph());
+				(new DotExportConfigurationFactory(new JavaFullComponentNameBuilder(), new JavaShortOperationNameBuilder(), VertexTypeMapper.DEFAULT))
+						.createForDeploymentLevelOperationDependencyGraph());
 		final AbstractConsumerStage<Graph> debugStage = new AbstractConsumerStage<Graph>() {
 			@Override
 			protected void execute(final Graph graph) {
@@ -119,11 +130,13 @@ public class ExampleConfiguration extends Configuration {
 		super.connectPorts(traceDistributor.getNewOutputPort(), traceToGraphTransformer.getInputPort());
 		super.connectPorts(traceToGraphTransformer.getOutputPort(), dotTraceGraphFileWriter.getInputPort());
 		// super.connectPorts(traceToGraphTransformer.getOutputPort(), graphMLTraceGraphFileWriter.getInputPort());
-		super.connectPorts(traceDistributor.getNewOutputPort(), executionModelAssembler.getInputPort());
-		super.connectPorts(executionModelAssembler.getOutputPort(), onTerminationTrigger.getInputPort());
+		super.connectPorts(traceDistributor.getNewOutputPort(), operationCallExtractor.getInputPort());
+		super.connectPorts(operationCallExtractor.getOutputPort(), executionModelAssembler.getInputPort());
+		super.connectPorts(executionModelAssembler.getOutputPort(), fullStatisticsDecorator.getInputPort());
+		super.connectPorts(fullStatisticsDecorator.getOutputPort(), onTerminationTrigger.getInputPort());
 		super.connectPorts(onTerminationTrigger.getOutputPort(), dependencyGraphCreator.getInputPort());
 		// super.connectPorts(dependencyGraphCreator.getOutputPort(), debugStage.getInputPort());
-		//super.connectPorts(dependencyGraphCreator.getOutputPort(), dotDepGraphFileWriter.getInputPort());
+		// super.connectPorts(dependencyGraphCreator.getOutputPort(), dotDepGraphFileWriter.getInputPort());
 
 	}
 

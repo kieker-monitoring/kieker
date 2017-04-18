@@ -17,7 +17,7 @@
 package kieker.analysisteetime;
 
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.model.analysismodel.trace.Trace;
+import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 
 import teetime.stage.basic.AbstractFilter;
 
@@ -26,7 +26,7 @@ import teetime.stage.basic.AbstractFilter;
  *
  * @since 1.13
  */
-public class ExecutionModelAssemblerStage extends AbstractFilter<Trace> {
+public class ExecutionModelAssemblerStage extends AbstractFilter<OperationCall> {
 
 	private final ExecutionModelAssembler assembler;
 
@@ -35,9 +35,9 @@ public class ExecutionModelAssemblerStage extends AbstractFilter<Trace> {
 	}
 
 	@Override
-	protected void execute(final Trace trace) {
-		this.assembler.addTrace(trace);
-		this.outputPort.send(trace);
+	protected void execute(final OperationCall operationCall) {
+		this.assembler.addOperationCall(operationCall);
+		this.outputPort.send(operationCall);
 	}
 
 }

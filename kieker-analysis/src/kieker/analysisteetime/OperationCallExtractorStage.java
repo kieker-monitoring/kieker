@@ -36,6 +36,8 @@ public class OperationCallExtractorStage extends AbstractTransformation<Trace, O
 	private final TraceTraverser traceTraverser = new TraceTraverser();
 	private final Extractor extractor = new Extractor();
 
+	public OperationCallExtractorStage() {}
+
 	@Override
 	protected void execute(final Trace trace) {
 		this.traceTraverser.traverse(trace, this.extractor);
