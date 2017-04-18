@@ -16,6 +16,10 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
+import java.util.Map;
+
+import kieker.analysisteetime.statistics.Statistics;
+
 /**
  * @author Sören Henning
  *
@@ -28,8 +32,8 @@ public class AssemblyLevelComponentDependencyGraphBuilderFactory implements Depe
 	}
 
 	@Override
-	public DependencyGraphBuilder createDependencyGraphBuilder() {
-		return new AssemblyLevelComponentDependencyGraphBuilder();
+	public DependencyGraphBuilder createDependencyGraphBuilder(final Map<Object, Statistics> statisticsModel) {
+		return new AssemblyLevelComponentDependencyGraphBuilder(statisticsModel);
 	}
 
 }

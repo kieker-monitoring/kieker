@@ -16,10 +16,13 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
+import java.util.Map;
+
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
+import kieker.analysisteetime.statistics.Statistics;
 import kieker.analysisteetime.util.graph.Vertex;
 
 /**
@@ -32,8 +35,8 @@ import kieker.analysisteetime.util.graph.Vertex;
  */
 public class AssemblyLevelComponentDependencyGraphBuilder extends AbstractDependencyGraphBuilder {
 
-	public AssemblyLevelComponentDependencyGraphBuilder() {
-		super();
+	public AssemblyLevelComponentDependencyGraphBuilder(final Map<Object, Statistics> statisticsModel) {
+		super(statisticsModel);
 	}
 
 	@Override
@@ -45,6 +48,7 @@ public class AssemblyLevelComponentDependencyGraphBuilder extends AbstractDepend
 		final Vertex componentVertex = this.graph.addVertexIfAbsent(componentId);
 		componentVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.ASSEMBLY_COMPONENT);
 		componentVertex.setPropertyIfAbsent(PropertyKeys.NAME, component.getComponentType().getName());
+		// TODO set properties for statistics
 
 		return componentVertex;
 	}

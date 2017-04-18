@@ -16,10 +16,15 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
+import java.util.Map;
+
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.analysisteetime.statistics.PredefinedProperties;
+import kieker.analysisteetime.statistics.PredefinedUnits;
+import kieker.analysisteetime.statistics.Statistics;
 import kieker.analysisteetime.util.ComposedKey;
 import kieker.analysisteetime.util.ObjectIdentifierRegistry;
 import kieker.analysisteetime.util.graph.Edge;
@@ -43,10 +48,12 @@ public abstract class AbstractDependencyGraphBuilder implements DependencyGraphB
 
 	protected final Graph graph;
 	protected final ObjectIdentifierRegistry identifierRegistry;
+	protected final Map<Object, Statistics> statisticsModel;
 
-	public AbstractDependencyGraphBuilder() {
+	public AbstractDependencyGraphBuilder(final Map<Object, Statistics> statisticsModel) {
 		this.graph = new GraphImpl();
 		this.identifierRegistry = new ObjectIdentifierRegistry();
+		this.statisticsModel = statisticsModel;
 	}
 
 	@Override
@@ -60,10 +67,11 @@ public abstract class AbstractDependencyGraphBuilder implements DependencyGraphB
 	private void handleInvocation(final AggregatedInvocation invocation) {
 		final Vertex sourceVertex = invocation.getSource() != null ? this.addVertex(invocation.getSource()) : this.addVertexForEntry();
 		final Vertex targetVertex = this.addVertex(invocation.getTarget());
-		this.addEdge(sourceVertex, targetVertex);
+		final long calls = this.statisticsModel.get(invocation).getStatistic(PredefinedUnits.RESPONSE_TIME).getProperty(PredefinedProperties.COUNT);
+		this.addEdge(sourceVertex, targetVertex, calls);
 	}
 
-	protected abstract Vertex addVertex(DeployedOperation deployedOperation);
+	protected abstract Vertex addVertex(final DeployedOperation deployedOperation);
 
 	protected Vertex addVertexForEntry() {
 		final int id = this.identifierRegistry.getIdentifier(ENTRY_VERTEX_IDENTIFIER);
@@ -72,10 +80,10 @@ public abstract class AbstractDependencyGraphBuilder implements DependencyGraphB
 		return vertex;
 	}
 
-	private Edge addEdge(final Vertex source, final Vertex target) {
+	private Edge addEdge(final Vertex source, final Vertex target, final long calls) {
 		final int edgeId = this.identifierRegistry.getIdentifier(ComposedKey.of(source, target));
 		final Edge edge = source.addEdgeIfAbsent(edgeId, target);
-		edge.setPropertyIfAbsent(PropertyKeys.CALLS, 999); // TODO Temp retrieve from statistics
+		edge.setPropertyIfAbsent(PropertyKeys.CALLS, calls);
 		return edge;
 	}
 
