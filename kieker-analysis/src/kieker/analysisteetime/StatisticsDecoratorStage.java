@@ -16,22 +16,28 @@
 
 package kieker.analysisteetime;
 
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import java.util.Map;
+import java.util.function.Function;
+
+import kieker.analysisteetime.statistics.Calculator;
+import kieker.analysisteetime.statistics.Statistics;
+import kieker.analysisteetime.statistics.Unit;
 
 import teetime.stage.basic.AbstractFilter;
 
-public class StatisticsDecoratorStage extends AbstractFilter<OperationCall> {
+public class StatisticsDecoratorStage<T> extends AbstractFilter<T> {
 
-	private final StatisticsDecorator<OperationCall> statisticsDecorator;
+	private final StatisticsDecorator<T> statisticsDecorator;
 
-	public StatisticsDecoratorStage(final StatisticsDecorator<OperationCall> statisticsDecorator) {
-		this.statisticsDecorator = statisticsDecorator;
+	public StatisticsDecoratorStage(final Map<Object, Statistics> statisticsModel, final Unit unit, final Calculator<T> statisticCalculator,
+			final Function<T, Object> objectAccesor) {
+		this.statisticsDecorator = new StatisticsDecorator<>(statisticsModel, unit, statisticCalculator, objectAccesor);
 	}
 
 	@Override
-	protected void execute(final OperationCall operationCall) {
-		this.statisticsDecorator.decorate(operationCall);
-		this.outputPort.send(operationCall);
+	protected void execute(final T element) {
+		this.statisticsDecorator.decorate(element);
+		this.outputPort.send(element);
 	}
 
 }

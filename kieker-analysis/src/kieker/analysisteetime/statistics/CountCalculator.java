@@ -16,7 +16,7 @@
 
 package kieker.analysisteetime.statistics;
 
-public class CountCalculator<T> implements StatisticsCalculator<T> {
+public class CountCalculator<T> implements Calculator<T> {
 
 	private final static Property COUNT_PROPERTY = PredefinedProperties.COUNT;
 

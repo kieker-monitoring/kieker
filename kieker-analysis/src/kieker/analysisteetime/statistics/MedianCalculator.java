@@ -22,7 +22,7 @@ import java.util.function.Function;
 
 import kieker.analysisteetime.util.RunningMedian;
 
-public class MedianCalculator<T> implements StatisticsCalculator<T> {
+public class MedianCalculator<T> implements Calculator<T> {
 
 	private final static Property AVERAGE_PROPERTY = PredefinedProperties.AVERAGE;
 

@@ -17,8 +17,8 @@
 package kieker.analysisteetime.statistics;
 
 @FunctionalInterface
-public interface StatisticsCalculator<I> {
+public interface Calculator<I> {
 
-	public void calculate(Statistic statistic, I input, Object modelObject);
+	public void calculate(final Statistic statistic, final I input, final Object modelObject);
 
 }

@@ -18,7 +18,7 @@ package kieker.analysisteetime.statistics;
 
 import java.util.function.Function;
 
-public class MaxCalculator<T> implements StatisticsCalculator<T> {
+public class MaxCalculator<T> implements Calculator<T> {
 
 	private final static Property MAX_PROPERTY = PredefinedProperties.MAX;
 

@@ -17,39 +17,21 @@
 package kieker.analysisteetime;
 
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
+import kieker.analysisteetime.statistics.Calculator;
 import kieker.analysisteetime.statistics.Statistic;
 import kieker.analysisteetime.statistics.Statistics;
-import kieker.analysisteetime.statistics.StatisticsCalculator;
 import kieker.analysisteetime.statistics.Unit;
 
 public class StatisticsDecorator<T> {
 
 	private final Map<Object, Statistics> statisticsModel;
 	private final Unit unit;
-	private final StatisticsCalculator<T> statisticCalculator;
+	private final Calculator<T> statisticCalculator;
 	private final Function<T, Object> objectAccesor;
 
-	public StatisticsDecorator(final Map<Object, Statistics> statisticsModel, final Unit unit, final Consumer<Statistic> statisticCalculator,
-			final Function<T, Object> objectAccesor) {
-		this.statisticsModel = statisticsModel;
-		this.unit = unit;
-		this.statisticCalculator = (s, i, o) -> statisticCalculator.accept(s);
-		this.objectAccesor = objectAccesor;
-	}
-
-	public StatisticsDecorator(final Map<Object, Statistics> statisticsModel, final Unit unit, final BiConsumer<Statistic, T> statisticCalculator,
-			final Function<T, Object> objectAccesor) {
-		this.statisticsModel = statisticsModel;
-		this.unit = unit;
-		this.statisticCalculator = (s, i, o) -> statisticCalculator.accept(s, i);
-		this.objectAccesor = objectAccesor;
-	}
-
-	public StatisticsDecorator(final Map<Object, Statistics> statisticsModel, final Unit unit, final StatisticsCalculator<T> statisticCalculator,
+	public StatisticsDecorator(final Map<Object, Statistics> statisticsModel, final Unit unit, final Calculator<T> statisticCalculator,
 			final Function<T, Object> objectAccesor) {
 		this.statisticsModel = statisticsModel;
 		this.unit = unit;

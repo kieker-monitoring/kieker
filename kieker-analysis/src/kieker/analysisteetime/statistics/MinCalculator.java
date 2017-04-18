@@ -18,7 +18,7 @@ package kieker.analysisteetime.statistics;
 
 import java.util.function.Function;
 
-public class MinCalculator<T> implements StatisticsCalculator<T> {
+public class MinCalculator<T> implements Calculator<T> {
 
 	private final static Property MIN_PROPERTY = PredefinedProperties.MIN;
 

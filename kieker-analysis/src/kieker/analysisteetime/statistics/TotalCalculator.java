@@ -18,7 +18,7 @@ package kieker.analysisteetime.statistics;
 
 import java.util.function.Function;
 
-public class TotalCalculator<T> implements StatisticsCalculator<T> {
+public class TotalCalculator<T> implements Calculator<T> {
 
 	private final static Property TOTAL_PROPERTY = PredefinedProperties.TOTAL;
 
