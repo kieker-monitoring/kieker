@@ -3,7 +3,6 @@ package kieker.analysisteetime.statistics;
 import java.util.Map;
 import java.util.function.Function;
 
-import kieker.analysisteetime.StatisticsDecoratorStage;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 
 import teetime.framework.CompositeStage;

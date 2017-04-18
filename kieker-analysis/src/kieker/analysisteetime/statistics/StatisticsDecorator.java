@@ -14,15 +14,10 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime;
+package kieker.analysisteetime.statistics;
 
 import java.util.Map;
 import java.util.function.Function;
-
-import kieker.analysisteetime.statistics.Calculator;
-import kieker.analysisteetime.statistics.Statistic;
-import kieker.analysisteetime.statistics.Statistics;
-import kieker.analysisteetime.statistics.Unit;
 
 public class StatisticsDecorator<T> {
 
