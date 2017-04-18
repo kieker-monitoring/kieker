@@ -18,12 +18,16 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.analysisteetime.recordreading.ReadingComposite;
+import kieker.analysisteetime.statistics.CountCalculator;
 import kieker.analysisteetime.statistics.FullStatisticsDecoratorStage;
+import kieker.analysisteetime.statistics.PredefinedUnits;
 import kieker.analysisteetime.statistics.Statistics;
+import kieker.analysisteetime.statistics.StatisticsDecoratorStage;
 import kieker.analysisteetime.trace.graph.TraceToGraphTransformerStage;
 import kieker.analysisteetime.trace.graph.dot.DotTraceGraphFileWriterStage;
 import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
@@ -55,7 +59,7 @@ public class ExampleConfiguration extends Configuration {
 	private final AssemblyModel assemblyModel = AssemblyFactory.eINSTANCE.createAssemblyModel();
 	private final DeploymentModel deploymentModel = DeploymentFactory.eINSTANCE.createDeploymentModel();
 	private final ExecutionModel executionModel = ExecutionFactory.eINSTANCE.createExecutionModel();
-	private final Map<Object, Statistics> deploymedOperationsStatisticsModel = new HashMap<>();
+	private final Map<Object, Statistics> statisticsModel = new HashMap<>();
 
 	public ExampleConfiguration(final File importDirectory, final File exportDirectory) {
 
@@ -76,8 +80,10 @@ public class ExampleConfiguration extends Configuration {
 
 		final OperationCallExtractorStage operationCallExtractor = new OperationCallExtractorStage();
 		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(this.executionModel);
-		final FullStatisticsDecoratorStage fullStatisticsDecorator = new FullStatisticsDecoratorStage(this.deploymedOperationsStatisticsModel,
+		final FullStatisticsDecoratorStage fullStatisticsDecorator = new FullStatisticsDecoratorStage(this.statisticsModel,
 				ModelObjectFromOperationCallAccesors.DEPLOYED_OPERATION);
+		final StatisticsDecoratorStage<OperationCall> callStatisticsDecorator = new StatisticsDecoratorStage<>(this.statisticsModel, PredefinedUnits.RESPONSE_TIME,
+				new CountCalculator<>(), ModelObjectFromOperationCallAccesors.createForAggregatedInvocation(this.executionModel));
 
 		final TraceToGraphTransformerStage traceToGraphTransformer = new TraceToGraphTransformerStage();
 		final DotTraceGraphFileWriterStage dotTraceGraphFileWriter = DotTraceGraphFileWriterStage.create(exportDirectory);
@@ -133,7 +139,8 @@ public class ExampleConfiguration extends Configuration {
 		super.connectPorts(traceDistributor.getNewOutputPort(), operationCallExtractor.getInputPort());
 		super.connectPorts(operationCallExtractor.getOutputPort(), executionModelAssembler.getInputPort());
 		super.connectPorts(executionModelAssembler.getOutputPort(), fullStatisticsDecorator.getInputPort());
-		super.connectPorts(fullStatisticsDecorator.getOutputPort(), onTerminationTrigger.getInputPort());
+		super.connectPorts(fullStatisticsDecorator.getOutputPort(), callStatisticsDecorator.getInputPort());
+		super.connectPorts(callStatisticsDecorator.getOutputPort(), onTerminationTrigger.getInputPort());
 		super.connectPorts(onTerminationTrigger.getOutputPort(), dependencyGraphCreator.getInputPort());
 		// super.connectPorts(dependencyGraphCreator.getOutputPort(), debugStage.getInputPort());
 		// super.connectPorts(dependencyGraphCreator.getOutputPort(), dotDepGraphFileWriter.getInputPort());
