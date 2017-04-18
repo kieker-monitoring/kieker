@@ -22,10 +22,10 @@ package kieker.analysisteetime.statistics;
  */
 public enum Units implements Unit {
 
-	RESPONSE_TIME("response time"), CPU_UITL("CPU utilization");
-	
+	RESPONSE_TIME("response time"), CPU_UTIL("CPU utilization");
+
 	private final String name;
-	
+
 	private Units(final String name) {
 		this.name = name;
 	}
@@ -34,10 +34,10 @@ public enum Units implements Unit {
 	public String getName() {
 		return this.name;
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.name;
 	}
-	
+
 }
