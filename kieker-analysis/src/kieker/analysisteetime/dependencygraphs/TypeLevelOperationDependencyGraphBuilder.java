@@ -56,9 +56,9 @@ public class TypeLevelOperationDependencyGraphBuilder extends AbstractDependency
 		final Vertex operationVertex = componentSubgraph.addVertexIfAbsent(operationId);
 		operationVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.OPERATION_TYPE);
 		operationVertex.setPropertyIfAbsent(PropertyKeys.NAME, operation.getName());
-		operationVertex.setPropertyIfAbsent(PropertyKeys.RETURN_TYPE, operation.getReturnType()); // TODO move to constant
-		operationVertex.setPropertyIfAbsent(PropertyKeys.MODIFIERS, operation.getModifiers()); // TODO move to constant
-		operationVertex.setPropertyIfAbsent(PropertyKeys.PARAMETER_TYPES, operation.getParameterTypes()); // TODO move to constant
+		operationVertex.setPropertyIfAbsent(PropertyKeys.RETURN_TYPE, operation.getReturnType());
+		operationVertex.setPropertyIfAbsent(PropertyKeys.MODIFIERS, operation.getModifiers());
+		operationVertex.setPropertyIfAbsent(PropertyKeys.PARAMETER_TYPES, operation.getParameterTypes());
 		this.responseTimeDecorator.decorate(operationVertex, operation);
 
 		return operationVertex;
