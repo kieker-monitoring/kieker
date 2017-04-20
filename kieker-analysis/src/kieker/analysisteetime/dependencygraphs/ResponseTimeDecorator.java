@@ -6,6 +6,7 @@ import java.util.Map;
 import kieker.analysisteetime.statistics.Properties;
 import kieker.analysisteetime.statistics.Property;
 import kieker.analysisteetime.statistics.Statistics;
+import kieker.analysisteetime.statistics.Units;
 import kieker.analysisteetime.util.graph.Vertex;
 import kieker.analysisteetime.util.time.ChronoUnitToSymbolMapper;
 
@@ -30,12 +31,11 @@ public class ResponseTimeDecorator {
 
 	private long getStatisticValue(final Object object, final Property property) {
 		if (this.statisticsModel.containsKey(object)) {
-			// TODO
-			return 999;
-			// return this.statisticsModel.get(object).getStatistic(Units.RESPONSE_TIME).getProperty(property);
-		} else {
-			return 0;
+			final Long value = this.statisticsModel.get(object).getStatistic(Units.RESPONSE_TIME).getProperty(property);
+			if (value != null) {
+				return value;
+			}
 		}
-
+		return 0;
 	}
 }

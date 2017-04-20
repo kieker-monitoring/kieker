@@ -24,7 +24,7 @@ import kieker.analysisteetime.util.RunningMedian;
 
 public class MedianCalculator<T> implements Calculator<T> {
 
-	private final static Property AVERAGE_PROPERTY = Properties.AVERAGE;
+	private final static Property MEDIAN_PROPERTY = Properties.MEDIAN;
 
 	private final Map<Object, RunningMedian<Long>> runningMedians = new HashMap<>();
 	private final Function<T, Long> valueAccessor;
@@ -38,7 +38,7 @@ public class MedianCalculator<T> implements Calculator<T> {
 		final RunningMedian<Long> runningMedian = this.runningMedians.computeIfAbsent(modelObject, o -> RunningMedian.forLong());
 		runningMedian.add(this.valueAccessor.apply(input));
 		final long newMedian = runningMedian.getMedian();
-		statistic.setProperty(AVERAGE_PROPERTY, newMedian);
+		statistic.setProperty(MEDIAN_PROPERTY, newMedian);
 	}
 
 }
