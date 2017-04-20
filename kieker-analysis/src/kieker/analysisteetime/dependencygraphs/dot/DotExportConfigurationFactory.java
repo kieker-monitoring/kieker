@@ -38,6 +38,8 @@ import kieker.analysisteetime.util.graph.util.dot.attributes.DotNodeAttribute;
  */
 public class DotExportConfigurationFactory {
 
+	private static final String ENTRY_LABEL = "'Entry'";
+
 	private final VertexTypeMapper vertexTypeMapper;
 	private final ComponentNameBuilder componentNameBuilder;
 	private final OperationNameBuilder operationNameBuilder;
@@ -75,7 +77,14 @@ public class DotExportConfigurationFactory {
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "oval");
 
 		builder.addNodeAttribute(DotNodeAttribute.LABEL,
-				v -> new StringBuilder().append(this.createOperationLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString());
+				v -> {
+					final VertexType type = this.getProperty(v, PropertyKeys.TYPE, VertexType.class);
+					if (type == VertexType.ENTRY) {
+						return ENTRY_LABEL;
+					} else {
+						return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString();
+					}
+				});
 
 		builder.addClusterAttribute(DotClusterAttribute.LABEL, v -> this.createComponentLabelFromVertex(v).toString());
 
@@ -88,7 +97,14 @@ public class DotExportConfigurationFactory {
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "box");
 
 		builder.addNodeAttribute(DotNodeAttribute.LABEL,
-				v -> new StringBuilder().append(this.createComponentLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString());
+				v -> {
+					final VertexType type = this.getProperty(v, PropertyKeys.TYPE, VertexType.class);
+					if (type == VertexType.ENTRY) {
+						return ENTRY_LABEL;
+					} else {
+						return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString();
+					}
+				});
 
 		return builder.build();
 	}
@@ -99,7 +115,14 @@ public class DotExportConfigurationFactory {
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "oval");
 
 		builder.addNodeAttribute(DotNodeAttribute.LABEL,
-				v -> new StringBuilder().append(this.createOperationLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString());
+				v -> {
+					final VertexType type = this.getProperty(v, PropertyKeys.TYPE, VertexType.class);
+					if (type == VertexType.ENTRY) {
+						return ENTRY_LABEL;
+					} else {
+						return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString();
+					}
+				});
 
 		builder.addClusterAttribute(DotClusterAttribute.LABEL, v -> this.createComponentLabelFromVertex(v).toString());
 
@@ -112,7 +135,14 @@ public class DotExportConfigurationFactory {
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "box");
 
 		builder.addNodeAttribute(DotNodeAttribute.LABEL,
-				v -> new StringBuilder().append(this.createComponentLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString());
+				v -> {
+					final VertexType type = this.getProperty(v, PropertyKeys.TYPE, VertexType.class);
+					if (type == VertexType.ENTRY) {
+						return ENTRY_LABEL;
+					} else {
+						return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString();
+					}
+				});
 
 		return builder.build();
 	}
@@ -123,7 +153,14 @@ public class DotExportConfigurationFactory {
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "oval");
 
 		builder.addNodeAttribute(DotNodeAttribute.LABEL,
-				v -> new StringBuilder().append(this.createOperationLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString());
+				v -> {
+					final VertexType type = this.getProperty(v, PropertyKeys.TYPE, VertexType.class);
+					if (type == VertexType.ENTRY) {
+						return ENTRY_LABEL;
+					} else {
+						return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString();
+					}
+				});
 
 		builder.addClusterAttribute(DotClusterAttribute.LABEL, v -> {
 			final VertexType type = this.getProperty(v, PropertyKeys.TYPE, VertexType.class);
@@ -146,7 +183,14 @@ public class DotExportConfigurationFactory {
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "box");
 
 		builder.addNodeAttribute(DotNodeAttribute.LABEL,
-				v -> new StringBuilder().append(this.createComponentLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString());
+				v -> {
+					final VertexType type = this.getProperty(v, PropertyKeys.TYPE, VertexType.class);
+					if (type == VertexType.ENTRY) {
+						return ENTRY_LABEL;
+					} else {
+						return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString();
+					}
+				});
 
 		builder.addClusterAttribute(DotClusterAttribute.LABEL, v -> this.createContextLabelFromVertex(v).toString());
 
@@ -158,7 +202,15 @@ public class DotExportConfigurationFactory {
 
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "box3d");
 
-		builder.addNodeAttribute(DotNodeAttribute.LABEL, v -> this.createContextLabelFromVertex(v).toString());
+		builder.addNodeAttribute(DotNodeAttribute.LABEL,
+				v -> {
+					final VertexType type = this.getProperty(v, PropertyKeys.TYPE, VertexType.class);
+					if (type == VertexType.ENTRY) {
+						return ENTRY_LABEL;
+					} else {
+						return this.createContextLabelFromVertex(v).toString();
+					}
+				});
 
 		return builder.build();
 	}
@@ -168,10 +220,7 @@ public class DotExportConfigurationFactory {
 	}
 
 	private StringBuilder createOperationLabelFromVertex(final Vertex vertex) {
-		final VertexType type = this.getProperty(vertex, PropertyKeys.TYPE, VertexType.class);
-		if (type == VertexType.ENTRY) {
-			return this.createEntryLabel();
-		}
+
 		@SuppressWarnings("unchecked")
 		final Collection<String> modifiers = this.getProperty(vertex, PropertyKeys.MODIFIERS, Collection.class);
 		final String returnType = this.getProperty(vertex, PropertyKeys.RETURN_TYPE, String.class);
@@ -184,9 +233,6 @@ public class DotExportConfigurationFactory {
 
 	private StringBuilder createComponentLabelFromVertex(final Vertex vertex) {
 		final VertexType type = this.getProperty(vertex, PropertyKeys.TYPE, VertexType.class);
-		if (type == VertexType.ENTRY) {
-			return this.createEntryLabel();
-		}
 		final String name = this.getProperty(vertex, PropertyKeys.NAME, String.class);
 		final String packageName = this.getProperty(vertex, PropertyKeys.PACKAGE_NAME, String.class);
 
@@ -195,16 +241,9 @@ public class DotExportConfigurationFactory {
 
 	private StringBuilder createContextLabelFromVertex(final Vertex vertex) {
 		final VertexType type = this.getProperty(vertex, PropertyKeys.TYPE, VertexType.class);
-		if (type == VertexType.ENTRY) {
-			return this.createEntryLabel();
-		}
 		final String name = this.getProperty(vertex, PropertyKeys.NAME, String.class);
 
 		return new StringBuilder().append(this.createType(type)).append('\n').append(name);
-	}
-
-	private StringBuilder createEntryLabel() {
-		return new StringBuilder("'Entry'");
 	}
 
 	private StringBuilder createStatisticsFromVertex(final Vertex vertex) {
