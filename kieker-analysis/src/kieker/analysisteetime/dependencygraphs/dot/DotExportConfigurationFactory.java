@@ -82,7 +82,8 @@ public class DotExportConfigurationFactory {
 					if (type == VertexType.ENTRY) {
 						return ENTRY_LABEL;
 					} else {
-						return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString();
+						return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append("\\n").append(this.createStatisticsFromVertex(v))
+								.toString();
 					}
 				});
 
@@ -102,7 +103,8 @@ public class DotExportConfigurationFactory {
 					if (type == VertexType.ENTRY) {
 						return ENTRY_LABEL;
 					} else {
-						return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString();
+						return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append("\\n").append(this.createStatisticsFromVertex(v))
+								.toString();
 					}
 				});
 
@@ -120,7 +122,8 @@ public class DotExportConfigurationFactory {
 					if (type == VertexType.ENTRY) {
 						return ENTRY_LABEL;
 					} else {
-						return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString();
+						return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append("\\n").append(this.createStatisticsFromVertex(v))
+								.toString();
 					}
 				});
 
@@ -140,7 +143,8 @@ public class DotExportConfigurationFactory {
 					if (type == VertexType.ENTRY) {
 						return ENTRY_LABEL;
 					} else {
-						return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString();
+						return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append("\\n").append(this.createStatisticsFromVertex(v))
+								.toString();
 					}
 				});
 
@@ -158,7 +162,8 @@ public class DotExportConfigurationFactory {
 					if (type == VertexType.ENTRY) {
 						return ENTRY_LABEL;
 					} else {
-						return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString();
+						return new StringBuilder().append(this.createOperationLabelFromVertex(v)).append("\\n").append(this.createStatisticsFromVertex(v))
+								.toString();
 					}
 				});
 
@@ -188,7 +193,8 @@ public class DotExportConfigurationFactory {
 					if (type == VertexType.ENTRY) {
 						return ENTRY_LABEL;
 					} else {
-						return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append('\n').append(this.createStatisticsFromVertex(v)).toString();
+						return new StringBuilder().append(this.createComponentLabelFromVertex(v)).append("\\n").append(this.createStatisticsFromVertex(v))
+								.toString();
 					}
 				});
 
@@ -236,14 +242,14 @@ public class DotExportConfigurationFactory {
 		final String name = this.getProperty(vertex, PropertyKeys.NAME, String.class);
 		final String packageName = this.getProperty(vertex, PropertyKeys.PACKAGE_NAME, String.class);
 
-		return new StringBuilder().append(this.createType(type)).append('\n').append(this.componentNameBuilder.build(packageName, name));
+		return new StringBuilder().append(this.createType(type)).append("\\n").append(this.componentNameBuilder.build(packageName, name));
 	}
 
 	private StringBuilder createContextLabelFromVertex(final Vertex vertex) {
 		final VertexType type = this.getProperty(vertex, PropertyKeys.TYPE, VertexType.class);
 		final String name = this.getProperty(vertex, PropertyKeys.NAME, String.class);
 
-		return new StringBuilder().append(this.createType(type)).append('\n').append(name);
+		return new StringBuilder().append(this.createType(type)).append("\\n").append(name);
 	}
 
 	private StringBuilder createStatisticsFromVertex(final Vertex vertex) {
@@ -261,7 +267,7 @@ public class DotExportConfigurationFactory {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("min: ").append(minResponseTime).append(' ').append(timeUnit).append(", ");
 		builder.append("max: ").append(maxResponseTime).append(' ').append(timeUnit).append(", ");
-		builder.append("total: ").append(totalResponseTime).append(' ').append(timeUnit).append(",\n");
+		builder.append("total: ").append(totalResponseTime).append(' ').append(timeUnit).append(",\\n");
 		builder.append("avg: ").append(meanResponseTime).append(' ').append(timeUnit).append(", ");
 		builder.append("median: ").append(medianResponseTime).append(' ').append(timeUnit);
 		return builder;
