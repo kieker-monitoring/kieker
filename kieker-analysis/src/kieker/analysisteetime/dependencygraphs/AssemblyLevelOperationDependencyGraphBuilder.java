@@ -49,6 +49,7 @@ public class AssemblyLevelOperationDependencyGraphBuilder extends AbstractDepend
 		final Vertex componentVertex = this.graph.addVertexIfAbsent(componentId);
 		componentVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.ASSEMBLY_COMPONENT);
 		componentVertex.setPropertyIfAbsent(PropertyKeys.NAME, component.getComponentType().getName());
+		componentVertex.setPropertyIfAbsent(PropertyKeys.PACKAGE_NAME, component.getComponentType().getPackage());
 
 		final Graph componentSubgraph = componentVertex.addChildGraphIfAbsent();
 		final int operationId = this.identifierRegistry.getIdentifier(operation);

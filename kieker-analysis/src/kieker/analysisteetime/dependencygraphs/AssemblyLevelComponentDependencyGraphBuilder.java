@@ -48,6 +48,7 @@ public class AssemblyLevelComponentDependencyGraphBuilder extends AbstractDepend
 		final Vertex componentVertex = this.graph.addVertexIfAbsent(componentId);
 		componentVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.ASSEMBLY_COMPONENT);
 		componentVertex.setPropertyIfAbsent(PropertyKeys.NAME, component.getComponentType().getName());
+		componentVertex.setPropertyIfAbsent(PropertyKeys.PACKAGE_NAME, component.getComponentType().getPackage());
 		this.responseTimeDecorator.decorate(componentVertex, component);
 
 		return componentVertex;

@@ -49,6 +49,7 @@ public class TypeLevelOperationDependencyGraphBuilder extends AbstractDependency
 		final Vertex componentVertex = this.graph.addVertexIfAbsent(componentId);
 		componentVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.COMPONENT_TYPE);
 		componentVertex.setPropertyIfAbsent(PropertyKeys.NAME, component.getName());
+		componentVertex.setPropertyIfAbsent(PropertyKeys.PACKAGE_NAME, component.getPackage());
 
 		final Graph componentSubgraph = componentVertex.addChildGraphIfAbsent();
 		final int operationId = this.identifierRegistry.getIdentifier(operation);

@@ -24,8 +24,8 @@ public class CountCalculator<T> implements Calculator<T> {
 
 	@Override
 	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
-		final long oldCount = statistic.getProperty(COUNT_PROPERTY);
-		final long newCount = oldCount + 1;
+		final Long oldCount = statistic.getProperty(COUNT_PROPERTY);
+		final long newCount = oldCount != null ? oldCount + 1 : 1;
 		statistic.setProperty(COUNT_PROPERTY, newCount);
 	}
 

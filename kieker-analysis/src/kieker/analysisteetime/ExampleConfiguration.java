@@ -144,7 +144,7 @@ public class ExampleConfiguration extends Configuration {
 		super.connectPorts(callStatisticsDecorator.getOutputPort(), onTerminationTrigger.getInputPort());
 		super.connectPorts(onTerminationTrigger.getOutputPort(), dependencyGraphCreator.getInputPort());
 		// super.connectPorts(dependencyGraphCreator.getOutputPort(), debugStage.getInputPort());
-		// super.connectPorts(dependencyGraphCreator.getOutputPort(), dotDepGraphFileWriter.getInputPort());
+		super.connectPorts(dependencyGraphCreator.getOutputPort(), dotDepGraphFileWriter.getInputPort());
 
 	}
 

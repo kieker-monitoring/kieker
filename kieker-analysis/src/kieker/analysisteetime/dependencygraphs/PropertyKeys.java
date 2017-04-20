@@ -45,7 +45,7 @@ public final class PropertyKeys {
 
 	public static final String MEDIAN_REPSONSE_TIME = "median response time";
 
-	public static final String TOTAL_REPSONSE_TIME = "total response time";
+	public static final String TOTAL_RESPONSE_TIME = "total response time";
 
 	public static final String TIME_UNIT = "time unit";
 
