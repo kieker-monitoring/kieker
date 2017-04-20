@@ -41,7 +41,7 @@ public class FullStatisticsDecoratorStage extends CompositeStage {
 	}
 
 	public OutputPort<OperationCall> getOutputPort() {
-		return this.averageStatistics.getOutputPort();
+		return this.medianStatistics.getOutputPort();
 	}
 
 }

@@ -16,6 +16,7 @@
 
 package kieker.analysisteetime.statistics;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public class MinCalculator<T> implements Calculator<T> {
@@ -31,8 +32,8 @@ public class MinCalculator<T> implements Calculator<T> {
 	@Override
 	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
 		final long value = this.valueAccessor.apply(input);
-		final long oldMin = statistic.getProperty(MIN_PROPERTY);
-		if (value < oldMin) {
+		final Optional<Long> oldMin = Optional.ofNullable(statistic.getProperty(MIN_PROPERTY));
+		if (!oldMin.isPresent() || value < oldMin.get()) {
 			statistic.setProperty(MIN_PROPERTY, value);
 		}
 	}

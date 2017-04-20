@@ -31,9 +31,13 @@ public class TotalCalculator<T> implements Calculator<T> {
 	@Override
 	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
 		final long value = this.valueAccessor.apply(input);
-		final long oldCount = statistic.getProperty(TOTAL_PROPERTY);
-		final long newCount = oldCount + value;
-		statistic.setProperty(TOTAL_PROPERTY, newCount);
+		final Long oldCount = statistic.getProperty(TOTAL_PROPERTY);
+		if (oldCount == null) {
+			statistic.setProperty(TOTAL_PROPERTY, value);
+		} else {
+			final long newCount = oldCount + value;
+			statistic.setProperty(TOTAL_PROPERTY, newCount);
+		}
 	}
 
 }

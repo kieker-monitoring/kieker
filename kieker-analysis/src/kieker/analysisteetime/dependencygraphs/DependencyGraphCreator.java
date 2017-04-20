@@ -41,8 +41,8 @@ public class DependencyGraphCreator {
 	}
 
 	public Graph create() {
-		final DependencyGraphBuilder graphBuilder = this.graphBuilderFactory.createDependencyGraphBuilder();
-		final Graph graph = graphBuilder.build(this.executionModel, this.statisticsModel);
+		final DependencyGraphBuilder graphBuilder = this.graphBuilderFactory.createDependencyGraphBuilder(this.statisticsModel);
+		final Graph graph = graphBuilder.build(this.executionModel);
 		return graph;
 	}
 

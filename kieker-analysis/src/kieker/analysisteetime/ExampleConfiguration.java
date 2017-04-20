@@ -95,6 +95,7 @@ public class ExampleConfiguration extends Configuration {
 		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory.getPath(),
 				(new DotExportConfigurationFactory(new JavaFullComponentNameBuilder(), new JavaShortOperationNameBuilder(), VertexTypeMapper.DEFAULT))
 						.createForDeploymentLevelOperationDependencyGraph());
+
 		final AbstractConsumerStage<Graph> debugStage = new AbstractConsumerStage<Graph>() {
 			@Override
 			protected void execute(final Graph graph) {

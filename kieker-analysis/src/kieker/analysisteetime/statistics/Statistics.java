@@ -28,35 +28,24 @@ import java.util.Set;
  */
 public class Statistics {
 
-	private static final int DEFAULT_INITIAL_CAPACITY = 4; 
-	
-	private Map<Unit, Statistic> statistics = new HashMap<>(DEFAULT_INITIAL_CAPACITY);
-	
+	private static final int DEFAULT_INITIAL_CAPACITY = 4;
+
+	private final Map<Unit, Statistic> statistics = new HashMap<>(DEFAULT_INITIAL_CAPACITY);
+
 	public Statistics() {}
-	
-	public void addStatistic(final Unit unit) {
-		this.addStatistic(unit, new Statistic());
-	}
-	
+
 	public Statistic getStatistic(final Unit unit) {
-		// TODO implement null object pattern
-		//return this.statistics.getOrDefault(unit, ...);
-		// TODO Alternative: or add if absent
-		return this.statistics.get(unit);
+		Objects.requireNonNull(unit, "Unit must not be null");
+		return this.statistics.computeIfAbsent(unit, x -> new Statistic());
 	}
-	
+
 	public boolean hasStatistic(final Unit unit) {
+		Objects.requireNonNull(unit, "Unit must not be null");
 		return this.statistics.containsKey(unit);
 	}
-	
+
 	public Set<Unit> getUnits() {
 		return Collections.unmodifiableSet(this.statistics.keySet());
 	}
-	
-	private void addStatistic(final Unit unit, final Statistic statistic) {
-		Objects.requireNonNull(unit, "Unit must not be null");
-		if (this.statistics.putIfAbsent(unit, statistic) != null) {
-			throw new IllegalArgumentException("Statistic for unit is already present");
-		}
-	}
+
 }

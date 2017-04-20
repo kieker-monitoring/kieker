@@ -26,10 +26,12 @@ public class AverageCalculator<T> implements Calculator<T> {
 
 	@Override
 	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
-		final long total = statistic.getProperty(TOTAL_PROPERTY);
-		final long count = statistic.getProperty(COUNT_PROPERTY);
-		final long avg = total / count;
-		statistic.setProperty(AVERAGE_PROPERTY, avg);
+		final Long total = statistic.getProperty(TOTAL_PROPERTY);
+		final Long count = statistic.getProperty(COUNT_PROPERTY);
+		if (total != null || count != null) {
+			final long avg = total / count;
+			statistic.setProperty(AVERAGE_PROPERTY, avg);
+		}
 	}
 
 }

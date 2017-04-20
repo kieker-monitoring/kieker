@@ -36,7 +36,7 @@ public class StatisticsDecorator<T> {
 
 	public void decorate(final T input) {
 		final Object object = this.objectAccesor.apply(input);
-		final Statistic statistic = this.statisticsModel.get(object).getStatistic(this.unit);
+		final Statistic statistic = this.statisticsModel.computeIfAbsent(object, x -> new Statistics()).getStatistic(this.unit);
 		this.statisticCalculator.calculate(statistic, input, object);
 	}
 

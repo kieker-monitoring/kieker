@@ -16,6 +16,7 @@
 
 package kieker.analysisteetime.statistics;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public class MaxCalculator<T> implements Calculator<T> {
@@ -31,8 +32,8 @@ public class MaxCalculator<T> implements Calculator<T> {
 	@Override
 	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
 		final long value = this.valueAccessor.apply(input);
-		final long oldMax = statistic.getProperty(MAX_PROPERTY);
-		if (value > oldMax) {
+		final Optional<Long> oldMax = Optional.ofNullable(statistic.getProperty(MAX_PROPERTY));
+		if (!oldMax.isPresent() || value > oldMax.get()) {
 			statistic.setProperty(MAX_PROPERTY, value);
 		}
 	}

@@ -30,6 +30,11 @@ public class ResponseTimeDecorator {
 	}
 
 	private long getStatisticValue(final Object object, final Property property) {
-		return this.statisticsModel.get(object).getStatistic(Units.RESPONSE_TIME).getProperty(property);
+		if (this.statisticsModel.containsKey(object)) {
+			return this.statisticsModel.get(object).getStatistic(Units.RESPONSE_TIME).getProperty(property);
+		} else {
+			return 0;
+		}
+
 	}
 }
