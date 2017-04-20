@@ -20,6 +20,7 @@ import java.util.Map;
 
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
+import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import kieker.analysisteetime.statistics.Statistics;
@@ -35,8 +36,8 @@ import kieker.analysisteetime.util.graph.Vertex;
  */
 public class TypeLevelComponentDependencyGraphBuilder extends AbstractDependencyGraphBuilder {
 
-	public TypeLevelComponentDependencyGraphBuilder(final Map<Object, Statistics> statisticsModel) {
-		super(statisticsModel);
+	public TypeLevelComponentDependencyGraphBuilder(final ExecutionModel executionModel, final Map<Object, Statistics> statisticsModel) {
+		super(executionModel, statisticsModel);
 	}
 
 	@Override

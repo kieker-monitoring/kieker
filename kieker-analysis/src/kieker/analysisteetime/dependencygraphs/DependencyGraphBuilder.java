@@ -16,7 +16,6 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.util.graph.Graph;
 
 /**
@@ -26,6 +25,6 @@ import kieker.analysisteetime.util.graph.Graph;
  */
 public interface DependencyGraphBuilder {
 
-	public Graph build(final ExecutionModel executionModel);
+	public Graph build();
 
 }

@@ -50,18 +50,21 @@ public abstract class AbstractDependencyGraphBuilder implements DependencyGraphB
 	protected final Graph graph;
 	protected final ObjectIdentifierRegistry identifierRegistry;
 	protected final ResponseTimeDecorator responseTimeDecorator;
+
+	protected final ExecutionModel executionModel;
 	protected final Map<Object, Statistics> statisticsModel;
 
-	public AbstractDependencyGraphBuilder(final Map<Object, Statistics> statisticsModel) {
+	public AbstractDependencyGraphBuilder(final ExecutionModel executionModel, final Map<Object, Statistics> statisticsModel) {
 		this.graph = new GraphImpl();
 		this.identifierRegistry = new ObjectIdentifierRegistry();
 		this.responseTimeDecorator = new ResponseTimeDecorator(statisticsModel, ChronoUnit.NANOS);
+		this.executionModel = executionModel;
 		this.statisticsModel = statisticsModel;
 	}
 
 	@Override
-	public Graph build(final ExecutionModel executionModel) {
-		for (final AggregatedInvocation invocation : executionModel.getAggregatedInvocations().values()) {
+	public Graph build() {
+		for (final AggregatedInvocation invocation : this.executionModel.getAggregatedInvocations().values()) {
 			this.handleInvocation(invocation);
 		}
 		return this.graph;
