@@ -19,7 +19,6 @@ package kieker.analysisteetime.util;
 import java.util.PriorityQueue;
 import java.util.function.BiFunction;
 
-
 /**
  * @author Sören Henning
  *
@@ -27,25 +26,25 @@ import java.util.function.BiFunction;
  */
 public class RunningMedian<T extends Comparable<T>> {
 
-	private final PriorityQueue<T> maxHeap = new PriorityQueue<>((x,y) -> y.compareTo(x));
-	private final PriorityQueue<T> minHeap = new PriorityQueue<>((x,y) -> x.compareTo(y));
-	private final BiFunction<T,T,T> meanBuilder;   
-	
+	private final PriorityQueue<T> maxHeap = new PriorityQueue<>((x, y) -> y.compareTo(x));
+	private final PriorityQueue<T> minHeap = new PriorityQueue<>((x, y) -> x.compareTo(y));
+	private final BiFunction<T, T, T> meanBuilder;
+
 	public RunningMedian() {
-		this((x,y) -> x);
+		this((x, y) -> x);
 	}
-	
-	public RunningMedian(final BiFunction<T,T,T> meanBuilder) {
+
+	public RunningMedian(final BiFunction<T, T, T> meanBuilder) {
 		this.meanBuilder = meanBuilder;
 	}
-	
-	public void add(T element) {
+
+	public void add(final T element) {
 		this.insertToHeap(element);
 		this.balanceHeaps();
 	}
 
-	private void insertToHeap(T element) {
-		if(this.maxHeap.peek() == null || element.compareTo(this.maxHeap.peek()) < 0) {
+	private void insertToHeap(final T element) {
+		if (this.maxHeap.peek() == null || element.compareTo(this.maxHeap.peek()) < 0) {
 			// element < maxHeap.peek
 			this.maxHeap.add(element);
 		} else {
@@ -63,30 +62,29 @@ public class RunningMedian<T extends Comparable<T>> {
 			this.maxHeap.add(minHeapRoot);
 		}
 	}
-	
+
 	public T getMedian() {
 		if (this.maxHeap.isEmpty() && this.minHeap.isEmpty()) {
 			throw new IllegalStateException("There are no present values for this running median.");
-		}
-		else if (this.maxHeap.size() == this.minHeap.size()) {
-			return this.meanBuilder.apply(this.maxHeap.peek(), this.minHeap.peek());			
+		} else if (this.maxHeap.size() == this.minHeap.size()) {
+			return this.meanBuilder.apply(this.maxHeap.peek(), this.minHeap.peek());
 		} else if (this.maxHeap.size() > this.minHeap.size()) {
 			return this.maxHeap.peek();
 		} else {
 			return this.minHeap.peek();
 		}
 	}
-	
+
 	public static RunningMedian<Integer> forInteger() {
-		return new RunningMedian<>((x,y) -> (x + y) / 2);
+		return new RunningMedian<>((x, y) -> (x + y) / 2);
 	}
-	
+
 	public static RunningMedian<Long> forLong() {
-		return new RunningMedian<>((x,y) -> (x + y) / 2);
+		return new RunningMedian<>((x, y) -> (x + y) / 2);
 	}
-	
+
 	public static RunningMedian<Double> forDouble() {
-		return new RunningMedian<>((x,y) -> (x + y) / 2);
+		return new RunningMedian<>((x, y) -> (x + y) / 2);
 	}
-	
+
 }
