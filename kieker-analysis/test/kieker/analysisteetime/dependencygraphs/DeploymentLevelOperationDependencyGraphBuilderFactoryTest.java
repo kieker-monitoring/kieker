@@ -16,10 +16,17 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
+import java.util.Collections;
+import java.util.Map;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
+import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.analysisteetime.statistics.Statistics;
 
 /**
  * @author Sören Henning
@@ -29,6 +36,8 @@ import org.junit.Test;
 public class DeploymentLevelOperationDependencyGraphBuilderFactoryTest {
 
 	private DeploymentLevelOperationDependencyGraphBuilderFactory factory;
+	private final ExecutionModel executionModel = ExecutionFactory.eINSTANCE.createExecutionModel();
+	private final Map<Object, Statistics> statisticsModel = Collections.emptyMap();
 
 	public DeploymentLevelOperationDependencyGraphBuilderFactoryTest() {
 		super();
@@ -49,7 +58,7 @@ public class DeploymentLevelOperationDependencyGraphBuilderFactoryTest {
 	 */
 	@Test
 	public void testCreateDependencyGraphBuilder() {
-		final DependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder();
+		final DependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(this.executionModel, this.statisticsModel);
 		Assert.assertTrue(graphBuilder instanceof DeploymentLevelOperationDependencyGraphBuilder);
 	}
 
