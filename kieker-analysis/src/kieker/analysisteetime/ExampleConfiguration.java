@@ -12,6 +12,7 @@ import kieker.analysisteetime.dependencygraphs.DependencyGraphCreatorStage;
 import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependencyGraphBuilderFactory;
 import kieker.analysisteetime.dependencygraphs.dot.DotExportConfigurationFactory;
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexTypeMapper;
+import kieker.analysisteetime.experimental.GraphPrinterStage;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
@@ -32,10 +33,7 @@ import kieker.analysisteetime.trace.graph.TraceToGraphTransformerStage;
 import kieker.analysisteetime.trace.graph.dot.DotTraceGraphFileWriterStage;
 import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
 import kieker.analysisteetime.trace.reconstruction.TraceStatisticsDecoratorStage;
-import kieker.analysisteetime.util.graph.Direction;
-import kieker.analysisteetime.util.graph.Edge;
 import kieker.analysisteetime.util.graph.Graph;
-import kieker.analysisteetime.util.graph.Vertex;
 import kieker.analysisteetime.util.graph.export.dot.DotFileWriterStage;
 import kieker.analysisteetime.util.graph.export.graphml.GraphMLFileWriterStage;
 import kieker.analysisteetime.util.stage.trigger.TriggerOnTerminationStage;
@@ -96,35 +94,7 @@ public class ExampleConfiguration extends Configuration {
 				(new DotExportConfigurationFactory(new JavaFullComponentNameBuilder(), new JavaShortOperationNameBuilder(), VertexTypeMapper.DEFAULT))
 						.createForDeploymentLevelOperationDependencyGraph());
 
-		final AbstractConsumerStage<Graph> debugStage = new AbstractConsumerStage<Graph>() {
-			@Override
-			protected void execute(final Graph graph) {
-				for (final Vertex vertex : graph.getVertices()) {
-					System.out.println("Vertices:");
-					System.out.println(vertex.getId());
-					System.out.println("    Vertices:");
-					for (final Vertex vertex1 : vertex.getChildGraph().getVertices()) {
-						System.out.println("    " + vertex1.getId());
-						System.out.println("        Vertices:");
-						for (final Vertex vertex2 : vertex1.getChildGraph().getVertices()) {
-							System.out.println("        " + vertex2.getId());
-						}
-						System.out.println("        Edges:");
-						for (final Edge edge2 : vertex1.getChildGraph().getEdges()) {
-							System.out.println("        " + edge2.getVertex(Direction.OUT).getId() + "->" + edge2.getVertex(Direction.IN).getId());
-						}
-					}
-					System.out.println("    Edges:");
-					for (final Edge edge1 : vertex.getChildGraph().getEdges()) {
-						System.out.println("    " + edge1.getVertex(Direction.OUT).getId() + "->" + edge1.getVertex(Direction.IN).getId());
-					}
-				}
-				System.out.println("Edges:");
-				for (final Edge edge : graph.getEdges()) {
-					System.out.println(edge.getVertex(Direction.OUT).getId() + "->" + edge.getVertex(Direction.IN).getId());
-				}
-			}
-		};
+		final AbstractConsumerStage<Graph> debugStage = new GraphPrinterStage();
 
 		// Connect the stages
 		super.connectPorts(reader.getOutputPort(), instanceOfFilter.getInputPort());
