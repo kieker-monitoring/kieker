@@ -12,6 +12,7 @@ import kieker.analysisteetime.dependencygraphs.DependencyGraphCreatorStage;
 import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependencyGraphBuilderFactory;
 import kieker.analysisteetime.dependencygraphs.dot.DotExportConfigurationFactory;
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexTypeMapper;
+import kieker.analysisteetime.experimental.DebugStage;
 import kieker.analysisteetime.experimental.GraphPrinterStage;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
@@ -67,6 +68,7 @@ public class ExampleConfiguration extends Configuration {
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
 		// TODO consider if KiekerMetadataRecord has to be processed
 		// final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
+		final DebugStage<IMonitoringRecord> debugRecordsStage = new DebugStage<>();
 		final InstanceOfFilter<IMonitoringRecord, IFlowRecord> instanceOfFilter = new InstanceOfFilter<>(IFlowRecord.class);
 		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(this.typeModel, new JavaComponentSignatureExtractor(),
 				new JavaOperationSignatureExtractor());
@@ -97,7 +99,8 @@ public class ExampleConfiguration extends Configuration {
 		final AbstractConsumerStage<Graph> debugStage = new GraphPrinterStage();
 
 		// Connect the stages
-		super.connectPorts(reader.getOutputPort(), instanceOfFilter.getInputPort());
+		super.connectPorts(reader.getOutputPort(), debugRecordsStage.getInputPort());
+		super.connectPorts(debugRecordsStage.getOutputPort(), instanceOfFilter.getInputPort());
 		super.connectPorts(instanceOfFilter.getMatchedOutputPort(), typeModelAssembler.getInputPort());
 		super.connectPorts(typeModelAssembler.getOutputPort(), assemblyModelAssembler.getInputPort());
 		super.connectPorts(assemblyModelAssembler.getOutputPort(), deploymentModelAssembler.getInputPort());
