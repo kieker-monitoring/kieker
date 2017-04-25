@@ -14,11 +14,9 @@ import kieker.analysisteetime.dependencygraphs.dot.DotExportConfigurationFactory
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexTypeMapper;
 import kieker.analysisteetime.experimental.DebugStage;
 import kieker.analysisteetime.experimental.GraphPrinterStage;
-import kieker.analysisteetime.model.AssemblyModelAssemblerStage;
-import kieker.analysisteetime.model.DeploymentModelAssemblerStage;
 import kieker.analysisteetime.model.ExecutionModelAssemblerStage;
 import kieker.analysisteetime.model.ModelObjectFromOperationCallAccesors;
-import kieker.analysisteetime.model.TypeModelAssemblerStage;
+import kieker.analysisteetime.model.StaticModelsAssemblerStage;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
@@ -30,10 +28,9 @@ import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.analysisteetime.recordreading.ReadingComposite;
-import kieker.analysisteetime.signature.JavaComponentSignatureExtractor;
 import kieker.analysisteetime.signature.JavaFullComponentNameBuilder;
-import kieker.analysisteetime.signature.JavaOperationSignatureExtractor;
 import kieker.analysisteetime.signature.JavaShortOperationNameBuilder;
+import kieker.analysisteetime.signature.SignatureExtractor;
 import kieker.analysisteetime.statistics.FullStatisticsDecoratorStage;
 import kieker.analysisteetime.statistics.Statistics;
 import kieker.analysisteetime.statistics.StatisticsDecoratorStage;
@@ -68,10 +65,9 @@ public class ExampleConfiguration extends Configuration {
 	private final DeploymentModel deploymentModel = DeploymentFactory.eINSTANCE.createDeploymentModel();
 	private final ExecutionModel executionModel = ExecutionFactory.eINSTANCE.createExecutionModel();
 	private final Map<Object, Statistics> statisticsModel = new HashMap<>();
+	private final SignatureExtractor signatureExtractor = SignatureExtractor.forJava();
 
 	public ExampleConfiguration(final File importDirectory, final File exportDirectory) {
-
-		// TODO Model creation should be available as composite stage
 
 		// Create the stages
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
@@ -79,10 +75,8 @@ public class ExampleConfiguration extends Configuration {
 		// final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final DebugStage<IMonitoringRecord> debugRecordsStage = new DebugStage<>();
 		final InstanceOfFilter<IMonitoringRecord, IFlowRecord> instanceOfFilter = new InstanceOfFilter<>(IFlowRecord.class);
-		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(this.typeModel, new JavaComponentSignatureExtractor(),
-				new JavaOperationSignatureExtractor());
-		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(this.typeModel, this.assemblyModel);
-		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(this.assemblyModel, this.deploymentModel);
+		final StaticModelsAssemblerStage staticModelsAssembler = new StaticModelsAssemblerStage(this.typeModel, this.assemblyModel, this.deploymentModel,
+				this.signatureExtractor);
 		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, false, ChronoUnit.NANOS); // TODO second parameter,
 																																		// NANOS temp
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
@@ -110,10 +104,8 @@ public class ExampleConfiguration extends Configuration {
 		// Connect the stages
 		super.connectPorts(reader.getOutputPort(), debugRecordsStage.getInputPort());
 		super.connectPorts(debugRecordsStage.getOutputPort(), instanceOfFilter.getInputPort());
-		super.connectPorts(instanceOfFilter.getMatchedOutputPort(), typeModelAssembler.getInputPort());
-		super.connectPorts(typeModelAssembler.getOutputPort(), assemblyModelAssembler.getInputPort());
-		super.connectPorts(assemblyModelAssembler.getOutputPort(), deploymentModelAssembler.getInputPort());
-		super.connectPorts(deploymentModelAssembler.getOutputPort(), traceReconstructor.getInputPort());
+		super.connectPorts(instanceOfFilter.getMatchedOutputPort(), staticModelsAssembler.getInputPort());
+		super.connectPorts(staticModelsAssembler.getOutputPort(), traceReconstructor.getInputPort());
 		super.connectPorts(traceReconstructor.getOutputPort(), traceStatisticsDecorator.getInputPort());
 		super.connectPorts(traceStatisticsDecorator.getOutputPort(), traceDistributor.getInputPort());
 		super.connectPorts(traceDistributor.getNewOutputPort(), traceToGraphTransformer.getInputPort());
