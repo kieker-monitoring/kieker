@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.test.common.junit.record.jvm;
 
-import java.nio.ByteBuffer;
+//import java.nio.ByteBuffer;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.jvm.CompilationRecord;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.Registry;
+//import kieker.common.util.registry.IRegistry;
+//import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractGeneratedKiekerTest;
-import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
+//import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 		
 /**
  * Creates {@link OperationExecutionRecord}s via the available constructors and
  * checks the values passed values via getters.
  * 
- * @author Kieker Build
+ * @author Nils Christian Ehmke
  * 
  * @since 1.10
  */
@@ -43,11 +42,11 @@ public class TestGeneratedCompilationRecord extends AbstractGeneratedKiekerTest 
 	}
 
 	/**
-	 * Tests {@link CompilationRecord#TestCompilationRecord(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link CompilationRecord#TestCompilationRecord(long, string, string, string, long)}.
 	 */
 	@Test
 	public void testToArray() { // NOPMD (assert missing)
-	for (int i=0;i<ARRAY_LENGTH;i++) {
+		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
 			CompilationRecord record = new CompilationRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
 			
@@ -97,7 +96,7 @@ public class TestGeneratedCompilationRecord extends AbstractGeneratedKiekerTest 
 	}
 	
 	/**
-	 * Tests {@link CompilationRecord#TestCompilationRecord(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link CompilationRecord#TestCompilationRecord(long, string, string, string, long)}.
 	 */
 	@Test
 	public void testBuffer() { // NOPMD (assert missing)
@@ -115,7 +114,7 @@ public class TestGeneratedCompilationRecord extends AbstractGeneratedKiekerTest 
 	}
 	
 	/**
-	 * Tests {@link CompilationRecord#TestCompilationRecord(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link CompilationRecord#TestCompilationRecord(long, string, string, string, long)}.
 	 */
 	@Test
 	public void testParameterConstruction() { // NOPMD (assert missing)
@@ -130,5 +129,25 @@ public class TestGeneratedCompilationRecord extends AbstractGeneratedKiekerTest 
 			Assert.assertEquals("CompilationRecord.jitCompilerName values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getJitCompilerName());
 			Assert.assertEquals("CompilationRecord.totalCompilationTimeMS values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTotalCompilationTimeMS());
 		}
+	}
+	
+	@Test
+	public void testEquality() {
+		int i = 0;
+		CompilationRecord oneRecord = new CompilationRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
+		i = 0;
+		CompilationRecord copiedRecord = new CompilationRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
+		
+		Assert.assertEquals(oneRecord, copiedRecord);
+	}	
+	
+	@Test
+	public void testUnequality() {
+		int i = 0;
+		CompilationRecord oneRecord = new CompilationRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
+		i = 2;
+		CompilationRecord anotherRecord = new CompilationRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
+		
+		Assert.assertNotEquals(oneRecord, anotherRecord);
 	}
 }

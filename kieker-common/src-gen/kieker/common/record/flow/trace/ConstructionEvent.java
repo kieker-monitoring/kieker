@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.flow.trace;
 
 import java.nio.BufferOverflowException;
@@ -32,15 +47,23 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 		int.class, // ConstructionEvent.objectId
 	};
 	
-	/** user-defined constants */
 	
-	/** default constants */
+	/** default constants. */
 	public static final String CLASS_SIGNATURE = "";
 	public static final int OBJECT_ID = 0;
 	
-	/** property declarations */
-	private final String classSignature;
-	private final int objectId;
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"classSignature",
+		"objectId",
+	};
+	
+	/** property declarations. */
+	private String classSignature;
+	private int objectId;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -90,10 +113,12 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -103,7 +128,7 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 		this.classSignature = stringRegistry.get(buffer.getInt());
 		this.objectId = buffer.getInt();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -117,7 +142,6 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 			this.getObjectId()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -125,7 +149,6 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getClassSignature());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -137,13 +160,20 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(this.getObjectId());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**
@@ -197,9 +227,17 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	
 	public final String getClassSignature() {
 		return this.classSignature;
-	}	
+	}
+	
+	public final void setClassSignature(String classSignature) {
+		this.classSignature = classSignature;
+	}
 	
 	public final int getObjectId() {
 		return this.objectId;
-	}	
+	}
+	
+	public final void setObjectId(int objectId) {
+		this.objectId = objectId;
+	}
 }

@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.jvm;
 
 import java.nio.BufferUnderflowException;
@@ -17,16 +32,16 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	private static final long serialVersionUID = -961661872949303914L;
 
 	
-	/** user-defined constants */
 	
-	/** default constants */
+	/** default constants. */
 	public static final String HOSTNAME = "";
 	public static final String VM_NAME = "";
 	
-	/** property declarations */
-	private final long timestamp;
-	private final String hostname;
-	private final String vmName;
+		
+	/** property declarations. */
+	private long timestamp;
+	private String hostname;
+	private String vmName;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -61,10 +76,12 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -74,7 +91,7 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 		this.hostname = stringRegistry.get(buffer.getInt());
 		this.vmName = stringRegistry.get(buffer.getInt());
 	}
-
+	
 
 	/**
 	 * {@inheritDoc}
@@ -117,13 +134,25 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	
 	public final long getTimestamp() {
 		return this.timestamp;
-	}	
+	}
+	
+	public final void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
 	
 	public final String getHostname() {
 		return this.hostname;
-	}	
+	}
+	
+	public final void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
 	
 	public final String getVmName() {
 		return this.vmName;
-	}	
+	}
+	
+	public final void setVmName(String vmName) {
+		this.vmName = vmName;
+	}
 }

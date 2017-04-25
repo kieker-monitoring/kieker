@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
@@ -34,15 +49,24 @@ public class GCRecord extends AbstractJVMRecord  {
 		long.class, // GCRecord.collectionTimeMS
 	};
 	
-	/** user-defined constants */
 	
-	/** default constants */
+	/** default constants. */
 	public static final String GC_NAME = "";
 	
-	/** property declarations */
-	private final String gcName;
-	private final long collectionCount;
-	private final long collectionTimeMS;
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"vmName",
+		"gcName",
+		"collectionCount",
+		"collectionTimeMS",
+	};
+	
+	/** property declarations. */
+	private String gcName;
+	private long collectionCount;
+	private long collectionTimeMS;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -97,10 +121,12 @@ public class GCRecord extends AbstractJVMRecord  {
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -111,7 +137,7 @@ public class GCRecord extends AbstractJVMRecord  {
 		this.collectionCount = buffer.getLong();
 		this.collectionTimeMS = buffer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -126,7 +152,6 @@ public class GCRecord extends AbstractJVMRecord  {
 			this.getCollectionTimeMS()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -136,7 +161,6 @@ public class GCRecord extends AbstractJVMRecord  {
 		stringRegistry.get(this.getVmName());
 		stringRegistry.get(this.getGcName());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -149,13 +173,20 @@ public class GCRecord extends AbstractJVMRecord  {
 		buffer.putLong(this.getCollectionCount());
 		buffer.putLong(this.getCollectionTimeMS());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**
@@ -210,13 +241,25 @@ public class GCRecord extends AbstractJVMRecord  {
 	
 	public final String getGcName() {
 		return this.gcName;
-	}	
+	}
+	
+	public final void setGcName(String gcName) {
+		this.gcName = gcName;
+	}
 	
 	public final long getCollectionCount() {
 		return this.collectionCount;
-	}	
+	}
+	
+	public final void setCollectionCount(long collectionCount) {
+		this.collectionCount = collectionCount;
+	}
 	
 	public final long getCollectionTimeMS() {
 		return this.collectionTimeMS;
-	}	
+	}
+	
+	public final void setCollectionTimeMS(long collectionTimeMS) {
+		this.collectionTimeMS = collectionTimeMS;
+	}
 }
