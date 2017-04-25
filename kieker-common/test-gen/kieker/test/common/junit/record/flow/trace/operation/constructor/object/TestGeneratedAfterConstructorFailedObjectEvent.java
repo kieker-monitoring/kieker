@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.test.common.junit.record.flow.trace.operation.constructor.object;
 
-import java.nio.ByteBuffer;
+//import java.nio.ByteBuffer;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.constructor.object.AfterConstructorFailedObjectEvent;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.Registry;
+//import kieker.common.util.registry.IRegistry;
+//import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractGeneratedKiekerTest;
-import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
+//import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 		
 /**
  * Creates {@link OperationExecutionRecord}s via the available constructors and
  * checks the values passed values via getters.
  * 
- * @author Kieker Build
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.6
  */
 public class TestGeneratedAfterConstructorFailedObjectEvent extends AbstractGeneratedKiekerTest {
 
@@ -43,11 +42,11 @@ public class TestGeneratedAfterConstructorFailedObjectEvent extends AbstractGene
 	}
 
 	/**
-	 * Tests {@link AfterConstructorFailedObjectEvent#TestAfterConstructorFailedObjectEvent(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link AfterConstructorFailedObjectEvent#TestAfterConstructorFailedObjectEvent(long, long, int, string, string, string, int)}.
 	 */
 	@Test
 	public void testToArray() { // NOPMD (assert missing)
-	for (int i=0;i<ARRAY_LENGTH;i++) {
+		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
 			AfterConstructorFailedObjectEvent record = new AfterConstructorFailedObjectEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
 			
@@ -109,7 +108,7 @@ public class TestGeneratedAfterConstructorFailedObjectEvent extends AbstractGene
 	}
 	
 	/**
-	 * Tests {@link AfterConstructorFailedObjectEvent#TestAfterConstructorFailedObjectEvent(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link AfterConstructorFailedObjectEvent#TestAfterConstructorFailedObjectEvent(long, long, int, string, string, string, int)}.
 	 */
 	@Test
 	public void testBuffer() { // NOPMD (assert missing)
@@ -129,7 +128,7 @@ public class TestGeneratedAfterConstructorFailedObjectEvent extends AbstractGene
 	}
 	
 	/**
-	 * Tests {@link AfterConstructorFailedObjectEvent#TestAfterConstructorFailedObjectEvent(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link AfterConstructorFailedObjectEvent#TestAfterConstructorFailedObjectEvent(long, long, int, string, string, string, int)}.
 	 */
 	@Test
 	public void testParameterConstruction() { // NOPMD (assert missing)
@@ -146,5 +145,25 @@ public class TestGeneratedAfterConstructorFailedObjectEvent extends AbstractGene
 			Assert.assertEquals("AfterConstructorFailedObjectEvent.cause values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getCause());
 			Assert.assertEquals("AfterConstructorFailedObjectEvent.objectId values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getObjectId());
 		}
+	}
+	
+	@Test
+	public void testEquality() {
+		int i = 0;
+		AfterConstructorFailedObjectEvent oneRecord = new AfterConstructorFailedObjectEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
+		i = 0;
+		AfterConstructorFailedObjectEvent copiedRecord = new AfterConstructorFailedObjectEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
+		
+		Assert.assertEquals(oneRecord, copiedRecord);
+	}	
+	
+	@Test
+	public void testUnequality() {
+		int i = 0;
+		AfterConstructorFailedObjectEvent oneRecord = new AfterConstructorFailedObjectEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
+		i = 2;
+		AfterConstructorFailedObjectEvent anotherRecord = new AfterConstructorFailedObjectEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
+		
+		Assert.assertNotEquals(oneRecord, anotherRecord);
 	}
 }
