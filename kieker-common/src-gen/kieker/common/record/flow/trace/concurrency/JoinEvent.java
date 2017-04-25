@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.flow.trace.concurrency;
 
 import java.nio.BufferOverflowException;
@@ -30,13 +45,20 @@ public class JoinEvent extends AbstractTraceEvent  {
 		long.class, // JoinEvent.joinedTraceId
 	};
 	
-	/** user-defined constants */
 	
-	/** default constants */
+	/** default constants. */
 	public static final long JOINED_TRACE_ID = 0L;
 	
-	/** property declarations */
-	private final long joinedTraceId;
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"joinedTraceId",
+	};
+	
+	/** property declarations. */
+	private long joinedTraceId;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -81,10 +103,12 @@ public class JoinEvent extends AbstractTraceEvent  {
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -93,7 +117,7 @@ public class JoinEvent extends AbstractTraceEvent  {
 		super(buffer, stringRegistry);
 		this.joinedTraceId = buffer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -106,14 +130,12 @@ public class JoinEvent extends AbstractTraceEvent  {
 			this.getJoinedTraceId()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -124,13 +146,20 @@ public class JoinEvent extends AbstractTraceEvent  {
 		buffer.putInt(this.getOrderIndex());
 		buffer.putLong(this.getJoinedTraceId());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**
@@ -183,5 +212,9 @@ public class JoinEvent extends AbstractTraceEvent  {
 	
 	public final long getJoinedTraceId() {
 		return this.joinedTraceId;
-	}	
+	}
+	
+	public final void setJoinedTraceId(long joinedTraceId) {
+		this.joinedTraceId = joinedTraceId;
+	}
 }

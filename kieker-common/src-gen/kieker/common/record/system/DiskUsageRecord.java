@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
@@ -41,9 +56,8 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		double.class, // DiskUsageRecord.writesPerSecond
 	};
 	
-	/** user-defined constants */
 	
-	/** default constants */
+	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String DEVICE_NAME = "";
@@ -54,16 +68,29 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	public static final double WRITE_BYTES_PER_SECOND = 0.0;
 	public static final double WRITES_PER_SECOND = 0.0;
 	
-	/** property declarations */
-	private final long timestamp;
-	private final String hostname;
-	private final String deviceName;
-	private final double queue;
-	private final double readBytesPerSecond;
-	private final double readsPerSecond;
-	private final double serviceTime;
-	private final double writeBytesPerSecond;
-	private final double writesPerSecond;
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"deviceName",
+		"queue",
+		"readBytesPerSecond",
+		"readsPerSecond",
+		"serviceTime",
+		"writeBytesPerSecond",
+		"writesPerSecond",
+	};
+	
+	/** property declarations. */
+	private long timestamp;
+	private String hostname;
+	private String deviceName;
+	private double queue;
+	private double readBytesPerSecond;
+	private double readsPerSecond;
+	private double serviceTime;
+	private double writeBytesPerSecond;
+	private double writesPerSecond;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -141,10 +168,12 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -160,7 +189,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		this.writeBytesPerSecond = buffer.getDouble();
 		this.writesPerSecond = buffer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -178,7 +207,6 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 			this.getWritesPerSecond()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -187,7 +215,6 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getDeviceName());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -203,13 +230,20 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		buffer.putDouble(this.getWriteBytesPerSecond());
 		buffer.putDouble(this.getWritesPerSecond());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**
@@ -267,37 +301,73 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	
 	public final long getTimestamp() {
 		return this.timestamp;
-	}	
+	}
+	
+	public final void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
 	
 	public final String getHostname() {
 		return this.hostname;
-	}	
+	}
+	
+	public final void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
 	
 	public final String getDeviceName() {
 		return this.deviceName;
-	}	
+	}
+	
+	public final void setDeviceName(String deviceName) {
+		this.deviceName = deviceName;
+	}
 	
 	public final double getQueue() {
 		return this.queue;
-	}	
+	}
+	
+	public final void setQueue(double queue) {
+		this.queue = queue;
+	}
 	
 	public final double getReadBytesPerSecond() {
 		return this.readBytesPerSecond;
-	}	
+	}
+	
+	public final void setReadBytesPerSecond(double readBytesPerSecond) {
+		this.readBytesPerSecond = readBytesPerSecond;
+	}
 	
 	public final double getReadsPerSecond() {
 		return this.readsPerSecond;
-	}	
+	}
+	
+	public final void setReadsPerSecond(double readsPerSecond) {
+		this.readsPerSecond = readsPerSecond;
+	}
 	
 	public final double getServiceTime() {
 		return this.serviceTime;
-	}	
+	}
+	
+	public final void setServiceTime(double serviceTime) {
+		this.serviceTime = serviceTime;
+	}
 	
 	public final double getWriteBytesPerSecond() {
 		return this.writeBytesPerSecond;
-	}	
+	}
+	
+	public final void setWriteBytesPerSecond(double writeBytesPerSecond) {
+		this.writeBytesPerSecond = writeBytesPerSecond;
+	}
 	
 	public final double getWritesPerSecond() {
 		return this.writesPerSecond;
-	}	
+	}
+	
+	public final void setWritesPerSecond(double writesPerSecond) {
+		this.writesPerSecond = writesPerSecond;
+	}
 }

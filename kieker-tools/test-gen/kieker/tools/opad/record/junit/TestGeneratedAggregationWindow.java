@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.opad.record.junit;
 
-import java.nio.ByteBuffer;
+//import java.nio.ByteBuffer;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.tools.opad.record.AggregationWindow;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.Registry;
+//import kieker.common.util.registry.IRegistry;
+//import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractGeneratedKiekerTest;
-import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
+//import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 		
 /**
  * Creates {@link OperationExecutionRecord}s via the available constructors and
  * checks the values passed values via getters.
  * 
- * @author Kieker Build
+ * @author Thomas Duellmann
  * 
  * @since 1.10
  */
@@ -43,11 +42,11 @@ public class TestGeneratedAggregationWindow extends AbstractGeneratedKiekerTest 
 	}
 
 	/**
-	 * Tests {@link AggregationWindow#TestAggregationWindow(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link AggregationWindow#TestAggregationWindow(long, long)}.
 	 */
 	@Test
 	public void testToArray() { // NOPMD (assert missing)
-	for (int i=0;i<ARRAY_LENGTH;i++) {
+		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
 			AggregationWindow record = new AggregationWindow(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
 			
@@ -79,7 +78,7 @@ public class TestGeneratedAggregationWindow extends AbstractGeneratedKiekerTest 
 	}
 	
 	/**
-	 * Tests {@link AggregationWindow#TestAggregationWindow(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link AggregationWindow#TestAggregationWindow(long, long)}.
 	 */
 	@Test
 	public void testBuffer() { // NOPMD (assert missing)
@@ -94,7 +93,7 @@ public class TestGeneratedAggregationWindow extends AbstractGeneratedKiekerTest 
 	}
 	
 	/**
-	 * Tests {@link AggregationWindow#TestAggregationWindow(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link AggregationWindow#TestAggregationWindow(long, long)}.
 	 */
 	@Test
 	public void testParameterConstruction() { // NOPMD (assert missing)
@@ -106,5 +105,25 @@ public class TestGeneratedAggregationWindow extends AbstractGeneratedKiekerTest 
 			Assert.assertEquals("AggregationWindow.windowStart values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getWindowStart());
 			Assert.assertEquals("AggregationWindow.windowEnd values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getWindowEnd());
 		}
+	}
+	
+	@Test
+	public void testEquality() {
+		int i = 0;
+		AggregationWindow oneRecord = new AggregationWindow(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
+		i = 0;
+		AggregationWindow copiedRecord = new AggregationWindow(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
+		
+		Assert.assertEquals(oneRecord, copiedRecord);
+	}	
+	
+	@Test
+	public void testUnequality() {
+		int i = 0;
+		AggregationWindow oneRecord = new AggregationWindow(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
+		i = 2;
+		AggregationWindow anotherRecord = new AggregationWindow(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
+		
+		Assert.assertNotEquals(oneRecord, anotherRecord);
 	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
@@ -23,7 +22,6 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
 
 
 /**
@@ -32,12 +30,13 @@ import kieker.common.util.Version;
  * @since 1.10
  */
 public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	private static final long serialVersionUID = 3508131536785781597L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // NamedDoubleRecord.applicationName
 			 + TYPE_SIZE_LONG // NamedDoubleRecord.timestamp
 			 + TYPE_SIZE_DOUBLE // NamedDoubleRecord.responseTime
 	;
-	private static final long serialVersionUID = 3508131536785781597L;
 	
 	public static final Class<?>[] TYPES = {
 		String.class, // NamedDoubleRecord.applicationName
@@ -45,14 +44,22 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		double.class, // NamedDoubleRecord.responseTime
 	};
 	
-	/* user-defined constants */
-	/* default constants */
+	
+	/** default constants. */
 	public static final String APPLICATION_NAME = "";
-	/* property declarations */
-	private final String applicationName;
-	private final long timestamp;
-	private final double responseTime;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"applicationName",
+		"timestamp",
+		"responseTime",
+	};
+	
+	/** property declarations. */
+	private String applicationName;
+	private long timestamp;
+	private double responseTime;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -82,7 +89,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		this.timestamp = (Long) values[1];
 		this.responseTime = (Double) values[2];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -99,10 +106,12 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -112,7 +121,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		this.timestamp = buffer.getLong();
 		this.responseTime = buffer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -124,7 +133,6 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 			this.getResponseTime()
 		};
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -132,7 +140,6 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getApplicationName());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -142,7 +149,6 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		buffer.putLong(this.getTimestamp());
 		buffer.putDouble(this.getResponseTime());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -150,7 +156,15 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -158,6 +172,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -168,7 +183,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -179,7 +194,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -196,17 +211,28 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		if (isNotEqual(this.getResponseTime(), castedRecord.getResponseTime())) return false;
 		return true;
 	}
-
+	
 	public final String getApplicationName() {
 		return this.applicationName;
+	}
+	
+	public final void setApplicationName(String applicationName) {
+		this.applicationName = applicationName;
 	}
 	
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
 	
+	public final void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+	
 	public final double getResponseTime() {
 		return this.responseTime;
 	}
 	
+	public final void setResponseTime(double responseTime) {
+		this.responseTime = responseTime;
+	}
 }
