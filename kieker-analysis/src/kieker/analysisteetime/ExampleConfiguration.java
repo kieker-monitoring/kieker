@@ -27,6 +27,7 @@ import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 import kieker.analysisteetime.model.analysismodel.type.TypeModel;
+import kieker.analysisteetime.recordreading.AllowedRecordsFilter;
 import kieker.analysisteetime.recordreading.ReadingComposite;
 import kieker.analysisteetime.signature.JavaFullComponentNameBuilder;
 import kieker.analysisteetime.signature.JavaShortOperationNameBuilder;
@@ -45,11 +46,9 @@ import kieker.analysisteetime.util.graph.export.dot.DotFileWriterStage;
 import kieker.analysisteetime.util.graph.export.graphml.GraphMLFileWriterStage;
 import kieker.analysisteetime.util.stage.trigger.TriggerOnTerminationStage;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.flow.IFlowRecord;
 
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.Configuration;
-import teetime.stage.InstanceOfFilter;
 import teetime.stage.basic.distributor.Distributor;
 
 /**
@@ -72,9 +71,8 @@ public class ExampleConfiguration extends Configuration {
 		// Create the stages
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
 		// TODO consider if KiekerMetadataRecord has to be processed
-		// final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final DebugStage<IMonitoringRecord> debugRecordsStage = new DebugStage<>();
-		final InstanceOfFilter<IMonitoringRecord, IFlowRecord> instanceOfFilter = new InstanceOfFilter<>(IFlowRecord.class);
+		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final StaticModelsAssemblerStage staticModelsAssembler = new StaticModelsAssemblerStage(this.typeModel, this.assemblyModel, this.deploymentModel,
 				this.signatureExtractor);
 		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, false, ChronoUnit.NANOS); // TODO second parameter,
@@ -103,8 +101,8 @@ public class ExampleConfiguration extends Configuration {
 
 		// Connect the stages
 		super.connectPorts(reader.getOutputPort(), debugRecordsStage.getInputPort());
-		super.connectPorts(debugRecordsStage.getOutputPort(), instanceOfFilter.getInputPort());
-		super.connectPorts(instanceOfFilter.getMatchedOutputPort(), staticModelsAssembler.getInputPort());
+		super.connectPorts(debugRecordsStage.getOutputPort(), allowedRecordsFilter.getInputPort());
+		super.connectPorts(allowedRecordsFilter.getOutputPort(), staticModelsAssembler.getInputPort());
 		super.connectPorts(staticModelsAssembler.getOutputPort(), traceReconstructor.getInputPort());
 		super.connectPorts(traceReconstructor.getOutputPort(), traceStatisticsDecorator.getInputPort());
 		super.connectPorts(traceStatisticsDecorator.getOutputPort(), traceDistributor.getInputPort());

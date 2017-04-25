@@ -17,33 +17,43 @@
 package kieker.analysisteetime.recordreading;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.record.flow.trace.TraceMetadata;
-import kieker.common.record.flow.trace.operation.AfterOperationEvent;
-import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
-import kieker.common.record.misc.KiekerMetadataRecord;
+import kieker.common.record.flow.IFlowRecord;
 
-import teetime.stage.basic.AbstractTransformation;
+import teetime.framework.CompositeStage;
+import teetime.framework.InputPort;
+import teetime.framework.OutputPort;
+import teetime.stage.Counter;
+import teetime.stage.InstanceOfFilter;
 
 /**
- * @author Nils Christian Ehmke
+ * @author Sören Henning
  */
-public final class AllowedRecordsFilter extends AbstractTransformation<IMonitoringRecord, IMonitoringRecord> {
+public final class AllowedRecordsFilter extends CompositeStage {
 
-	private int ignoredRecords;
+	private final InstanceOfFilter<IMonitoringRecord, IFlowRecord> instanceOfFilter = new InstanceOfFilter<>(IFlowRecord.class);
+	private final Counter<IFlowRecord> processedRecordsCounter = new Counter<>();
+	private final Counter<IMonitoringRecord> ignoredRecordsCounter = new Counter<>();
 
-	@Override
-	protected void execute(final IMonitoringRecord element) {
-		if (element instanceof TraceMetadata || element instanceof BeforeOperationEvent || element instanceof AfterOperationEvent
-				|| element instanceof KiekerMetadataRecord || element instanceof OperationExecutionRecord) {
-			super.getOutputPort().send(element);
-		} else {
-			ignoredRecords++;
-		}
+	public AllowedRecordsFilter() {
+		this.connectPorts(this.instanceOfFilter.getMatchedOutputPort(), this.processedRecordsCounter.getInputPort());
+		this.connectPorts(this.instanceOfFilter.getMismatchedOutputPort(), this.ignoredRecordsCounter.getInputPort());
+
+	}
+
+	public InputPort<IMonitoringRecord> getInputPort() {
+		return this.instanceOfFilter.getInputPort();
+	}
+
+	public OutputPort<IFlowRecord> getOutputPort() {
+		return this.processedRecordsCounter.getOutputPort();
+	}
+
+	public int getProcessedRecords() {
+		return this.processedRecordsCounter.getNumElementsPassed();
 	}
 
 	public int getIgnoredRecords() {
-		return ignoredRecords;
+		return this.ignoredRecordsCounter.getNumElementsPassed();
 	}
 
 }
