@@ -15,9 +15,10 @@
  ***************************************************************************/
 package kieker.common.record.misc;
 
-import kieker.common.exception.RecordInstantiationException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.io.IValueDeserializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -25,22 +26,17 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.7
  */
 public final class KiekerMetadataRecordFactory implements IRecordFactory<KiekerMetadataRecord> {
-
+	
 	@Override
-	public KiekerMetadataRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
-		return new KiekerMetadataRecord(deserializer);
+	public KiekerMetadataRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new KiekerMetadataRecord(buffer, stringRegistry);
 	}
-
+	
 	@Override
-	public String[] getValueNames() {
-		return KiekerMetadataRecord.VALUE_NAMES; // NOPMD
+	public KiekerMetadataRecord create(final Object[] values) {
+		return new KiekerMetadataRecord(values);
 	}
-
-	@Override
-	public Class<?>[] getValueTypes() {
-		return KiekerMetadataRecord.TYPES; // NOPMD
-	}
-
+	
 	public int getRecordSizeInBytes() {
 		return KiekerMetadataRecord.SIZE;
 	}

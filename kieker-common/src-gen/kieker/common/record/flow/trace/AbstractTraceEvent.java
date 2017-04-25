@@ -1,5 +1,9 @@
 /***************************************************************************
+<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+=======
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +33,7 @@ import kieker.common.record.flow.ITraceRecord;
  */
 public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {
 
+<<<<<<< HEAD
 	/** default constants. */
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
@@ -38,6 +43,19 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	private long traceId;
 	private final int orderIndex;
 
+=======
+	
+	
+	/** default constants. */
+	public static final long TRACE_ID = -1L;
+	public static final int ORDER_INDEX = -1;
+	
+		
+	/** property declarations. */
+	private long traceId;
+	private int orderIndex;
+	
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -55,16 +73,46 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException
 	 *             when the record could not be deserialized
+=======
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param valueTypes
+	 *            The types of the elements in the first array.
+	 */
+	protected AbstractTraceEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
+		super(values, valueTypes);
+		this.traceId = (Long) values[1];
+		this.orderIndex = (Integer) values[2];
+	}
+
+	/**
+	 * This constructor converts the given buffer into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	 */
 	public AbstractTraceEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.traceId = deserializer.getLong();
 		this.orderIndex = deserializer.getInt();
 	}
+<<<<<<< HEAD
+=======
+	
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 
 	/**
 	 * {@inheritDoc}
@@ -140,4 +188,23 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 
 		return result;
 	}
+<<<<<<< HEAD
+=======
+	
+	public final long getTraceId() {
+		return this.traceId;
+	}
+	
+	public final void setTraceId(long traceId) {
+		this.traceId = traceId;
+	}
+	
+	public final int getOrderIndex() {
+		return this.orderIndex;
+	}
+	
+	public final void setOrderIndex(int orderIndex) {
+		this.orderIndex = orderIndex;
+	}
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 }

@@ -1,5 +1,9 @@
 /***************************************************************************
+<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+=======
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,9 +53,17 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		String.class, // ICallRecord.calleeOperationSignature
 		String.class, // ICallRecord.calleeClassSignature
 	};
+<<<<<<< HEAD
 
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
+=======
+	
+	
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -60,9 +72,14 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		"calleeOperationSignature",
 		"calleeClassSignature",
 	};
+<<<<<<< HEAD
 
 	private static final long serialVersionUID = 9163096253392108958L;
 
+=======
+	
+	
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -97,6 +114,51 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 	}
 
 	/**
+<<<<<<< HEAD
+=======
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param valueTypes
+	 *            The types of the elements in the first array.
+	 */
+	protected CallConstructorEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
+		super(values, valueTypes);
+	}
+
+	/**
+	 * This constructor converts the given buffer into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public CallConstructorEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Object[] toArray() {
+		return new Object[] {
+			this.getTimestamp(),
+			this.getTraceId(),
+			this.getOrderIndex(),
+			this.getOperationSignature(),
+			this.getClassSignature(),
+			this.getCalleeOperationSignature(),
+			this.getCalleeClassSignature()
+		};
+	}
+	/**
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -109,7 +171,10 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		serializer.putString(this.getCalleeOperationSignature());
 		serializer.putString(this.getCalleeClassSignature());
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * {@inheritDoc}
 	 */
@@ -117,7 +182,10 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * {@inheritDoc}
 	 */
@@ -126,6 +194,14 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		return VALUE_NAMES; // NOPMD
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

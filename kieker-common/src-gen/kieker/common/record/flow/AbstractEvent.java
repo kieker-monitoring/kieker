@@ -1,5 +1,9 @@
 /***************************************************************************
+<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+=======
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +33,7 @@ import kieker.common.record.flow.IEventRecord;
  */
 public abstract class AbstractEvent extends AbstractMonitoringRecord implements IEventRecord {
 
+<<<<<<< HEAD
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	private static final long serialVersionUID = -8847127127729394312L;
@@ -36,6 +41,17 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	/** property declarations. */
 	private long timestamp;
 
+=======
+	
+	
+	/** default constants. */
+	public static final long TIMESTAMP = 0L;
+	
+		
+	/** property declarations. */
+	private long timestamp;
+	
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -57,6 +73,25 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	}
 
 	/**
+<<<<<<< HEAD
+=======
+	 * This constructor converts the given buffer into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public AbstractEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = buffer.getLong();
+	}
+	
+
+	/**
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -112,4 +147,15 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 
 		return result;
 	}
+<<<<<<< HEAD
+=======
+	
+	public final long getTimestamp() {
+		return this.timestamp;
+	}
+	
+	public final void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 }

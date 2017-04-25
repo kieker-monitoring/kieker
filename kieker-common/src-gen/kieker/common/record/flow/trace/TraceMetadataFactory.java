@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,10 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace;
 
-import kieker.common.exception.RecordInstantiationException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.io.IValueDeserializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -25,22 +26,17 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.5
  */
 public final class TraceMetadataFactory implements IRecordFactory<TraceMetadata> {
-
+	
 	@Override
-	public TraceMetadata create(final IValueDeserializer deserializer) throws RecordInstantiationException {
-		return new TraceMetadata(deserializer);
+	public TraceMetadata create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new TraceMetadata(buffer, stringRegistry);
 	}
-
+	
 	@Override
-	public String[] getValueNames() {
-		return TraceMetadata.VALUE_NAMES; // NOPMD
+	public TraceMetadata create(final Object[] values) {
+		return new TraceMetadata(values);
 	}
-
-	@Override
-	public Class<?>[] getValueTypes() {
-		return TraceMetadata.TYPES; // NOPMD
-	}
-
+	
 	public int getRecordSizeInBytes() {
 		return TraceMetadata.SIZE;
 	}

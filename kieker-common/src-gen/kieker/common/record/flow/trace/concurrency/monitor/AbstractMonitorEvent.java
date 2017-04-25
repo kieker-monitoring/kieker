@@ -1,5 +1,9 @@
 /***************************************************************************
+<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+=======
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +31,7 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 
+<<<<<<< HEAD
 	/** default constants. */
 	public static final int LOCK_ID = 0;
 	private static final long serialVersionUID = -5428034537740978080L;
@@ -34,6 +39,17 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	/** property declarations. */
 	private final int lockId;
 
+=======
+	
+	
+	/** default constants. */
+	public static final int LOCK_ID = 0;
+	
+		
+	/** property declarations. */
+	private int lockId;
+	
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -52,15 +68,31 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException
 	 *             when the record could not be deserialized
+=======
+	 * This constructor converts the given buffer into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	 */
 	public AbstractMonitorEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.lockId = deserializer.getInt();
 	}
+<<<<<<< HEAD
+=======
+	
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 
 	/**
 	 * {@inheritDoc}
@@ -135,4 +167,15 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 
 		return result;
 	}
+<<<<<<< HEAD
+=======
+	
+	public final int getLockId() {
+		return this.lockId;
+	}
+	
+	public final void setLockId(int lockId) {
+		this.lockId = lockId;
+	}
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 }

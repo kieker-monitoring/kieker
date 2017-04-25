@@ -1,5 +1,9 @@
 /***************************************************************************
+<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+=======
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,16 +43,29 @@ public class SplitEvent extends AbstractTraceEvent {
 		long.class, // ITraceRecord.traceId
 		int.class, // ITraceRecord.orderIndex
 	};
+<<<<<<< HEAD
 
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
+=======
+	
+	
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 		"timestamp",
 		"traceId",
 		"orderIndex",
 	};
+<<<<<<< HEAD
 
 	private static final long serialVersionUID = 757022930650044358L;
 
+=======
+	
+	
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -64,25 +81,76 @@ public class SplitEvent extends AbstractTraceEvent {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException
 	 *             when the record could not be deserialized
+=======
+	 * This constructor converts the given array into a record.
+	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
+	public SplitEvent(final Object[] values) { // NOPMD (direct store of values)
+		super(values, TYPES);
+	}
+
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param valueTypes
+	 *            The types of the elements in the first array.
+	 */
+	protected SplitEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
+		super(values, valueTypes);
+	}
+
+	/**
+	 * This constructor converts the given buffer into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	 */
 	public SplitEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
+<<<<<<< HEAD
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		serializer.putLong(this.getTimestamp());
 		serializer.putLong(this.getTraceId());
 		serializer.putInt(this.getOrderIndex());
 	}
 
+=======
+	public Object[] toArray() {
+		return new Object[] {
+			this.getTimestamp(),
+			this.getTraceId(),
+			this.getOrderIndex()
+		};
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	}
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * {@inheritDoc}
 	 */
@@ -90,7 +158,10 @@ public class SplitEvent extends AbstractTraceEvent {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * {@inheritDoc}
 	 */
@@ -99,6 +170,14 @@ public class SplitEvent extends AbstractTraceEvent {
 		return VALUE_NAMES; // NOPMD
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

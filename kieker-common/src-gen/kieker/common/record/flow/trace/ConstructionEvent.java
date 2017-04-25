@@ -1,5 +1,9 @@
 /***************************************************************************
+<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+=======
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +47,7 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		String.class, // ConstructionEvent.classSignature
 		int.class, // ConstructionEvent.objectId
 	};
+<<<<<<< HEAD
 
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
@@ -62,6 +67,27 @@ public class ConstructionEvent extends AbstractTraceEvent {
 	private final String classSignature;
 	private final int objectId;
 
+=======
+	
+	
+	/** default constants. */
+	public static final String CLASS_SIGNATURE = "";
+	public static final int OBJECT_ID = 0;
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"classSignature",
+		"objectId",
+	};
+	
+	/** property declarations. */
+	private String classSignature;
+	private int objectId;
+	
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -88,12 +114,36 @@ public class ConstructionEvent extends AbstractTraceEvent {
 	 * @throws RecordInstantiationException
 	 *             when the record could not be deserialized
 	 */
+<<<<<<< HEAD
 	public ConstructionEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.classSignature = deserializer.getString();
 		this.objectId = deserializer.getInt();
+=======
+	protected ConstructionEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
+		super(values, valueTypes);
+		this.classSignature = (String) values[3];
+		this.objectId = (Integer) values[4];
 	}
 
+	/**
+	 * This constructor converts the given buffer into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public ConstructionEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.classSignature = stringRegistry.get(buffer.getInt());
+		this.objectId = buffer.getInt();
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -105,7 +155,17 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		serializer.putString(this.getClassSignature());
 		serializer.putInt(this.getObjectId());
 	}
+<<<<<<< HEAD
 
+=======
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+		stringRegistry.get(this.getClassSignature());
+	}
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * {@inheritDoc}
 	 */
@@ -113,7 +173,10 @@ public class ConstructionEvent extends AbstractTraceEvent {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * {@inheritDoc}
 	 */
@@ -122,6 +185,14 @@ public class ConstructionEvent extends AbstractTraceEvent {
 		return VALUE_NAMES; // NOPMD
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -214,4 +285,23 @@ public class ConstructionEvent extends AbstractTraceEvent {
 
 		return result;
 	}
+<<<<<<< HEAD
+=======
+	
+	public final String getClassSignature() {
+		return this.classSignature;
+	}
+	
+	public final void setClassSignature(String classSignature) {
+		this.classSignature = classSignature;
+	}
+	
+	public final int getObjectId() {
+		return this.objectId;
+	}
+	
+	public final void setObjectId(int objectId) {
+		this.objectId = objectId;
+	}
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 }

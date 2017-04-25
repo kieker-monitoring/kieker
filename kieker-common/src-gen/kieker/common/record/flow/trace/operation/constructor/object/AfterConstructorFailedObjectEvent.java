@@ -1,5 +1,9 @@
 /***************************************************************************
+<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+=======
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +53,7 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		String.class, // IExceptionRecord.cause
 		int.class, // IObjectRecord.objectId
 	};
+<<<<<<< HEAD
 
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
@@ -68,6 +73,27 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	/** property declarations. */
 	private final int objectId;
 
+=======
+	
+	
+	/** default constants. */
+	public static final int OBJECT_ID = 0;
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"operationSignature",
+		"classSignature",
+		"cause",
+		"objectId",
+	};
+	
+	/** property declarations. */
+	private int objectId;
+	
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -98,11 +124,46 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	 * @throws RecordInstantiationException
 	 *             when the record could not be deserialized
 	 */
+<<<<<<< HEAD
 	public AfterConstructorFailedObjectEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.objectId = deserializer.getInt();
+=======
+	public AfterConstructorFailedObjectEvent(final Object[] values) { // NOPMD (direct store of values)
+		super(values, TYPES);
+		this.objectId = (Integer) values[6];
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param valueTypes
+	 *            The types of the elements in the first array.
+	 */
+	protected AfterConstructorFailedObjectEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
+		super(values, valueTypes);
+		this.objectId = (Integer) values[6];
+	}
+
+	/**
+	 * This constructor converts the given buffer into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public AfterConstructorFailedObjectEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.objectId = buffer.getInt();
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -116,7 +177,10 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		serializer.putString(this.getCause());
 		serializer.putInt(this.getObjectId());
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * {@inheritDoc}
 	 */
@@ -124,7 +188,10 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * {@inheritDoc}
 	 */
@@ -132,7 +199,26 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
+<<<<<<< HEAD
 
+=======
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?>[] getValueTypes() {
+		return TYPES; // NOPMD
+	}
+	
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -235,4 +321,15 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 
 		return result;
 	}
+<<<<<<< HEAD
+=======
+	
+	public final int getObjectId() {
+		return this.objectId;
+	}
+	
+	public final void setObjectId(int objectId) {
+		this.objectId = objectId;
+	}
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 }

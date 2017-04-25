@@ -15,9 +15,10 @@
  ***************************************************************************/
 package kieker.common.record.system;
 
-import kieker.common.exception.RecordInstantiationException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.io.IValueDeserializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Teerat Pitakrat
@@ -25,22 +26,17 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.12
  */
 public final class NetworkUtilizationRecordFactory implements IRecordFactory<NetworkUtilizationRecord> {
-
+	
 	@Override
-	public NetworkUtilizationRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
-		return new NetworkUtilizationRecord(deserializer);
+	public NetworkUtilizationRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new NetworkUtilizationRecord(buffer, stringRegistry);
 	}
-
+	
 	@Override
-	public String[] getValueNames() {
-		return NetworkUtilizationRecord.VALUE_NAMES; // NOPMD
+	public NetworkUtilizationRecord create(final Object[] values) {
+		return new NetworkUtilizationRecord(values);
 	}
-
-	@Override
-	public Class<?>[] getValueTypes() {
-		return NetworkUtilizationRecord.TYPES; // NOPMD
-	}
-
+	
 	public int getRecordSizeInBytes() {
 		return NetworkUtilizationRecord.SIZE;
 	}

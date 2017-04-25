@@ -1,5 +1,9 @@
 /***************************************************************************
+<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+=======
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +33,7 @@ import kieker.common.record.flow.IOperationRecord;
  */
 public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IOperationRecord {
 
+<<<<<<< HEAD
 	/** default constants. */
 	public static final String OPERATION_SIGNATURE = "";
 	public static final String CLASS_SIGNATURE = "";
@@ -38,6 +43,19 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	private final String operationSignature;
 	private final String classSignature;
 
+=======
+	
+	
+	/** default constants. */
+	public static final String OPERATION_SIGNATURE = "";
+	public static final String CLASS_SIGNATURE = "";
+	
+		
+	/** property declarations. */
+	private String operationSignature;
+	private String classSignature;
+	
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -71,6 +89,27 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	}
 
 	/**
+<<<<<<< HEAD
+=======
+	 * This constructor converts the given buffer into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public AbstractOperationEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.operationSignature = stringRegistry.get(buffer.getInt());
+		this.classSignature = stringRegistry.get(buffer.getInt());
+	}
+	
+
+	/**
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -154,4 +193,23 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 
 		return result;
 	}
+<<<<<<< HEAD
+=======
+	
+	public final String getOperationSignature() {
+		return this.operationSignature;
+	}
+	
+	public final void setOperationSignature(String operationSignature) {
+		this.operationSignature = operationSignature;
+	}
+	
+	public final String getClassSignature() {
+		return this.classSignature;
+	}
+	
+	public final void setClassSignature(String classSignature) {
+		this.classSignature = classSignature;
+	}
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 }

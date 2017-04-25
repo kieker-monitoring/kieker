@@ -15,9 +15,10 @@
  ***************************************************************************/
 package kieker.common.record.misc;
 
-import kieker.common.exception.RecordInstantiationException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.io.IValueDeserializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -25,22 +26,17 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.5
  */
 public final class TimestampRecordFactory implements IRecordFactory<TimestampRecord> {
-
+	
 	@Override
-	public TimestampRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
-		return new TimestampRecord(deserializer);
+	public TimestampRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new TimestampRecord(buffer, stringRegistry);
 	}
-
+	
 	@Override
-	public String[] getValueNames() {
-		return TimestampRecord.VALUE_NAMES; // NOPMD
+	public TimestampRecord create(final Object[] values) {
+		return new TimestampRecord(values);
 	}
-
-	@Override
-	public Class<?>[] getValueTypes() {
-		return TimestampRecord.TYPES; // NOPMD
-	}
-
+	
 	public int getRecordSizeInBytes() {
 		return TimestampRecord.SIZE;
 	}

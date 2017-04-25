@@ -1,5 +1,9 @@
 /***************************************************************************
+<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+=======
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +53,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		String.class, // ICallRecord.calleeOperationSignature
 		String.class, // ICallRecord.calleeClassSignature
 	};
+<<<<<<< HEAD
 
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
@@ -70,6 +75,29 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	private final String calleeOperationSignature;
 	private final String calleeClassSignature;
 
+=======
+	
+	
+	/** default constants. */
+	public static final String CALLEE_OPERATION_SIGNATURE = "";
+	public static final String CALLEE_CLASS_SIGNATURE = "";
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"operationSignature",
+		"classSignature",
+		"calleeOperationSignature",
+		"calleeClassSignature",
+	};
+	
+	/** property declarations. */
+	private String calleeOperationSignature;
+	private String calleeClassSignature;
+	
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -101,12 +129,36 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 * @throws RecordInstantiationException
 	 *             when the record could not be deserialized
 	 */
+<<<<<<< HEAD
 	public CallOperationEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.calleeOperationSignature = deserializer.getString();
 		this.calleeClassSignature = deserializer.getString();
+=======
+	protected CallOperationEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
+		super(values, valueTypes);
+		this.calleeOperationSignature = (String) values[5];
+		this.calleeClassSignature = (String) values[6];
 	}
 
+	/**
+	 * This constructor converts the given buffer into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public CallOperationEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.calleeOperationSignature = stringRegistry.get(buffer.getInt());
+		this.calleeClassSignature = stringRegistry.get(buffer.getInt());
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -120,7 +172,33 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		serializer.putString(this.getCalleeOperationSignature());
 		serializer.putString(this.getCalleeClassSignature());
 	}
+<<<<<<< HEAD
 
+=======
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+		stringRegistry.get(this.getOperationSignature());
+		stringRegistry.get(this.getClassSignature());
+		stringRegistry.get(this.getCalleeOperationSignature());
+		stringRegistry.get(this.getCalleeClassSignature());
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getCalleeOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getCalleeClassSignature()));
+	}
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * {@inheritDoc}
 	 */
@@ -134,7 +212,19 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 */
 	@Override
 	public String[] getValueNames() {
+<<<<<<< HEAD
 		return VALUE_NAMES; // NOPMD
+=======
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize() {
+		return SIZE;
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	}
 
 	/**
@@ -209,6 +299,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	public final String getCallerOperationSignature() {
 		return this.getOperationSignature();
 	}
+<<<<<<< HEAD
 
 	public final String getCallerClassSignature() {
 		return this.getClassSignature();
@@ -250,5 +341,34 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		result += this.getCalleeClassSignature() + ", ";
 
 		return result;
+=======
+	
+	public final void setCallerOperationSignature(String callerOperationSignature) {
+		setOperationSignature(callerOperationSignature);
+	}
+	
+	public final String getCallerClassSignature() {
+		return this.getClassSignature();
+	}
+	
+	public final void setCallerClassSignature(String callerClassSignature) {
+		setClassSignature(callerClassSignature);
+	}
+	
+	public final String getCalleeOperationSignature() {
+		return this.calleeOperationSignature;
+	}
+	
+	public final void setCalleeOperationSignature(String calleeOperationSignature) {
+		this.calleeOperationSignature = calleeOperationSignature;
+	}
+	
+	public final String getCalleeClassSignature() {
+		return this.calleeClassSignature;
+	}
+	
+	public final void setCalleeClassSignature(String calleeClassSignature) {
+		this.calleeClassSignature = calleeClassSignature;
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	}
 }

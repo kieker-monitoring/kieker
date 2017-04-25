@@ -113,6 +113,11 @@ public final class RegistryRecord extends AbstractMonitoringRecord {
 	public String[] getValueNames() {
 		return new String[] { "id", "string", "strBytes" };
 	}
+	
+	@Override
+	public String[] getValueNames() {
+		return new String[] { "id", "string", "strBytes" };
+	}
 
 	/**
 	 * {@inheritDoc}

@@ -1,5 +1,9 @@
 /***************************************************************************
+<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+=======
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +51,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		String.class, // IClassSignature.classSignature
 		String.class, // IExceptionRecord.cause
 	};
+<<<<<<< HEAD
 
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
@@ -65,6 +70,26 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	/** property declarations. */
 	private final String cause;
 
+=======
+	
+	
+	/** default constants. */
+	public static final String CAUSE = "";
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"operationSignature",
+		"classSignature",
+		"cause",
+	};
+	
+	/** property declarations. */
+	private String cause;
+	
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -88,20 +113,33 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException
 	 *             when the record could not be deserialized
+=======
+	 * This constructor converts the given buffer into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	 */
 	public AfterOperationFailedEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.cause = deserializer.getString();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
+<<<<<<< HEAD
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		serializer.putLong(this.getTimestamp());
 		serializer.putLong(this.getTraceId());
@@ -111,6 +149,27 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		serializer.putString(this.getCause());
 	}
 
+=======
+	public Object[] toArray() {
+		return new Object[] {
+			this.getTimestamp(),
+			this.getTraceId(),
+			this.getOrderIndex(),
+			this.getOperationSignature(),
+			this.getClassSignature(),
+			this.getCause()
+		};
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+		stringRegistry.get(this.getOperationSignature());
+		stringRegistry.get(this.getClassSignature());
+		stringRegistry.get(this.getCause());
+	}
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * {@inheritDoc}
 	 */
@@ -118,7 +177,10 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * {@inheritDoc}
 	 */
@@ -127,6 +189,14 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		return VALUE_NAMES; // NOPMD
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -222,4 +292,15 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 
 		return result;
 	}
+<<<<<<< HEAD
+=======
+	
+	public final String getCause() {
+		return this.cause;
+	}
+	
+	public final void setCause(String cause) {
+		this.cause = cause;
+	}
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 }

@@ -15,9 +15,10 @@
  ***************************************************************************/
 package kieker.common.record.system;
 
-import kieker.common.exception.RecordInstantiationException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.io.IValueDeserializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -25,22 +26,17 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.3
  */
 public final class ResourceUtilizationRecordFactory implements IRecordFactory<ResourceUtilizationRecord> {
-
+	
 	@Override
-	public ResourceUtilizationRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
-		return new ResourceUtilizationRecord(deserializer);
+	public ResourceUtilizationRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new ResourceUtilizationRecord(buffer, stringRegistry);
 	}
-
+	
 	@Override
-	public String[] getValueNames() {
-		return ResourceUtilizationRecord.VALUE_NAMES; // NOPMD
+	public ResourceUtilizationRecord create(final Object[] values) {
+		return new ResourceUtilizationRecord(values);
 	}
-
-	@Override
-	public Class<?>[] getValueTypes() {
-		return ResourceUtilizationRecord.TYPES; // NOPMD
-	}
-
+	
 	public int getRecordSizeInBytes() {
 		return ResourceUtilizationRecord.SIZE;
 	}

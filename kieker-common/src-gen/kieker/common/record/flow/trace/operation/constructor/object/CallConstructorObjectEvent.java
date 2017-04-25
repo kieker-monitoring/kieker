@@ -1,5 +1,9 @@
 /***************************************************************************
+<<<<<<< HEAD
  * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
+=======
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,6 +57,7 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 		int.class, // IObjectRecord.objectId
 		int.class, // ICallObjectRecord.calleeObjectId
 	};
+<<<<<<< HEAD
 
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
@@ -76,6 +81,31 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	private final int objectId;
 	private final int calleeObjectId;
 
+=======
+	
+	
+	/** default constants. */
+	public static final int OBJECT_ID = 0;
+	public static final int CALLEE_OBJECT_ID = 0;
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"operationSignature",
+		"classSignature",
+		"calleeOperationSignature",
+		"calleeClassSignature",
+		"objectId",
+		"calleeObjectId",
+	};
+	
+	/** property declarations. */
+	private int objectId;
+	private int calleeObjectId;
+	
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -111,12 +141,36 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	 * @throws RecordInstantiationException
 	 *             when the record could not be deserialized
 	 */
+<<<<<<< HEAD
 	public CallConstructorObjectEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.objectId = deserializer.getInt();
 		this.calleeObjectId = deserializer.getInt();
+=======
+	protected CallConstructorObjectEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
+		super(values, valueTypes);
+		this.objectId = (Integer) values[7];
+		this.calleeObjectId = (Integer) values[8];
 	}
 
+	/**
+	 * This constructor converts the given buffer into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public CallConstructorObjectEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.objectId = buffer.getInt();
+		this.calleeObjectId = buffer.getInt();
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -132,7 +186,35 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 		serializer.putInt(this.getObjectId());
 		serializer.putInt(this.getCalleeObjectId());
 	}
+<<<<<<< HEAD
 
+=======
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+		stringRegistry.get(this.getOperationSignature());
+		stringRegistry.get(this.getClassSignature());
+		stringRegistry.get(this.getCalleeOperationSignature());
+		stringRegistry.get(this.getCalleeClassSignature());
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getCalleeOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getCalleeClassSignature()));
+		buffer.putInt(this.getObjectId());
+		buffer.putInt(this.getCalleeObjectId());
+	}
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	/**
 	 * {@inheritDoc}
 	 */
@@ -146,7 +228,19 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	 */
 	@Override
 	public String[] getValueNames() {
+<<<<<<< HEAD
 		return VALUE_NAMES; // NOPMD
+=======
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize() {
+		return SIZE;
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	}
 
 	/**
@@ -229,6 +323,7 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	public final int getObjectId() {
 		return this.objectId;
 	}
+<<<<<<< HEAD
 
 	public final int getCallerObjectId() {
 		return this.getObjectId();
@@ -272,5 +367,26 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 		result += this.getCalleeObjectId() + ", ";
 
 		return result;
+=======
+	
+	public final void setObjectId(int objectId) {
+		this.objectId = objectId;
+	}
+	
+	public final int getCallerObjectId() {
+		return this.getObjectId();
+	}
+	
+	public final void setCallerObjectId(int callerObjectId) {
+		setObjectId(callerObjectId);
+	}
+	
+	public final int getCalleeObjectId() {
+		return this.calleeObjectId;
+	}
+	
+	public final void setCalleeObjectId(int calleeObjectId) {
+		this.calleeObjectId = calleeObjectId;
+>>>>>>> d690fb62e (committing fix for issue 1524 introducing a parameter names array.)
 	}
 }

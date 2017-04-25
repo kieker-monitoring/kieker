@@ -15,9 +15,10 @@
  ***************************************************************************/
 package kieker.common.record.remotecontrol;
 
-import kieker.common.exception.RecordInstantiationException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.io.IValueDeserializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Marc Adolf
@@ -25,22 +26,17 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.14
  */
 public final class DeactivationEventFactory implements IRecordFactory<DeactivationEvent> {
-
+	
 	@Override
-	public DeactivationEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
-		return new DeactivationEvent(deserializer);
+	public DeactivationEvent create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new DeactivationEvent(buffer, stringRegistry);
 	}
-
+	
 	@Override
-	public String[] getValueNames() {
-		return DeactivationEvent.VALUE_NAMES; // NOPMD
+	public DeactivationEvent create(final Object[] values) {
+		return new DeactivationEvent(values);
 	}
-
-	@Override
-	public Class<?>[] getValueTypes() {
-		return DeactivationEvent.TYPES; // NOPMD
-	}
-
+	
 	public int getRecordSizeInBytes() {
 		return DeactivationEvent.SIZE;
 	}

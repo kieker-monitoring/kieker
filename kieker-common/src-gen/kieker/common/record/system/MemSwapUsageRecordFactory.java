@@ -15,9 +15,10 @@
  ***************************************************************************/
 package kieker.common.record.system;
 
-import kieker.common.exception.RecordInstantiationException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.io.IValueDeserializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -25,22 +26,17 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.3
  */
 public final class MemSwapUsageRecordFactory implements IRecordFactory<MemSwapUsageRecord> {
-
+	
 	@Override
-	public MemSwapUsageRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
-		return new MemSwapUsageRecord(deserializer);
+	public MemSwapUsageRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new MemSwapUsageRecord(buffer, stringRegistry);
 	}
-
+	
 	@Override
-	public String[] getValueNames() {
-		return MemSwapUsageRecord.VALUE_NAMES; // NOPMD
+	public MemSwapUsageRecord create(final Object[] values) {
+		return new MemSwapUsageRecord(values);
 	}
-
-	@Override
-	public Class<?>[] getValueTypes() {
-		return MemSwapUsageRecord.TYPES; // NOPMD
-	}
-
+	
 	public int getRecordSizeInBytes() {
 		return MemSwapUsageRecord.SIZE;
 	}

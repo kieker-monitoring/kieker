@@ -15,9 +15,10 @@
  ***************************************************************************/
 package kieker.common.record.system;
 
-import kieker.common.exception.RecordInstantiationException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.io.IValueDeserializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Teerat Pitakrat
@@ -25,22 +26,17 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.12
  */
 public final class LoadAverageRecordFactory implements IRecordFactory<LoadAverageRecord> {
-
+	
 	@Override
-	public LoadAverageRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
-		return new LoadAverageRecord(deserializer);
+	public LoadAverageRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new LoadAverageRecord(buffer, stringRegistry);
 	}
-
+	
 	@Override
-	public String[] getValueNames() {
-		return LoadAverageRecord.VALUE_NAMES; // NOPMD
+	public LoadAverageRecord create(final Object[] values) {
+		return new LoadAverageRecord(values);
 	}
-
-	@Override
-	public Class<?>[] getValueTypes() {
-		return LoadAverageRecord.TYPES; // NOPMD
-	}
-
+	
 	public int getRecordSizeInBytes() {
 		return LoadAverageRecord.SIZE;
 	}

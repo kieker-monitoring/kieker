@@ -15,9 +15,10 @@
  ***************************************************************************/
 package kieker.common.record.jvm;
 
-import kieker.common.exception.RecordInstantiationException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.io.IValueDeserializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Nils Christian Ehmke
@@ -25,22 +26,17 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.10
  */
 public final class MemoryRecordFactory implements IRecordFactory<MemoryRecord> {
-
+	
 	@Override
-	public MemoryRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
-		return new MemoryRecord(deserializer);
+	public MemoryRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new MemoryRecord(buffer, stringRegistry);
 	}
-
+	
 	@Override
-	public String[] getValueNames() {
-		return MemoryRecord.VALUE_NAMES; // NOPMD
+	public MemoryRecord create(final Object[] values) {
+		return new MemoryRecord(values);
 	}
-
-	@Override
-	public Class<?>[] getValueTypes() {
-		return MemoryRecord.TYPES; // NOPMD
-	}
-
+	
 	public int getRecordSizeInBytes() {
 		return MemoryRecord.SIZE;
 	}
