@@ -14,18 +14,17 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime;
+package kieker.analysisteetime.signature;
+
+import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 
 /**
  * @author Sören Henning
  *
  * @since 1.13
  */
-public class JavaShortComponentNameBuilder implements ComponentNameBuilder {
+public interface ComponentSignatureExtractor {
 
-	@Override
-	public String build(final String packageName, final String name) {
-		return name;
-	}
+	public void extract(final ComponentType componentType);
 
 }

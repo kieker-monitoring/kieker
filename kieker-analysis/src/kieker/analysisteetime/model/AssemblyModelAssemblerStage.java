@@ -14,8 +14,9 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime;
+package kieker.analysisteetime.model;
 
+import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
 import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
@@ -27,13 +28,12 @@ import teetime.stage.basic.AbstractFilter;
  *
  * @since 1.13
  */
-public class TypeModelAssemblerStage extends AbstractFilter<IFlowRecord> {
+public class AssemblyModelAssemblerStage extends AbstractFilter<IFlowRecord> {
 
-	private final TypeModelAssembler assembler;
+	private final AssemblyModelAssembler assembler;
 
-	public TypeModelAssemblerStage(final TypeModel typeModel, final ComponentSignatureExtractor componentSignatureExtractor,
-			final OperationSignatureExtractor operationSignatureExtractor) {
-		this.assembler = new TypeModelAssembler(typeModel, componentSignatureExtractor, operationSignatureExtractor);
+	public AssemblyModelAssemblerStage(final TypeModel typeModel, final AssemblyModel assemblyModel) {
+		this.assembler = new AssemblyModelAssembler(typeModel, assemblyModel);
 	}
 
 	@Override

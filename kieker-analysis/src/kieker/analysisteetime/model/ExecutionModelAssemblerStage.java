@@ -14,17 +14,30 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime;
+package kieker.analysisteetime.model;
 
-import kieker.analysisteetime.model.analysismodel.type.ComponentType;
+import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+
+import teetime.stage.basic.AbstractFilter;
 
 /**
  * @author Sören Henning
  *
  * @since 1.13
  */
-public interface ComponentSignatureExtractor {
+public class ExecutionModelAssemblerStage extends AbstractFilter<OperationCall> {
 
-	public void extract(final ComponentType componentType);
+	private final ExecutionModelAssembler assembler;
+
+	public ExecutionModelAssemblerStage(final ExecutionModel executionModel) {
+		this.assembler = new ExecutionModelAssembler(executionModel);
+	}
+
+	@Override
+	protected void execute(final OperationCall operationCall) {
+		this.assembler.addOperationCall(operationCall);
+		this.outputPort.send(operationCall);
+	}
 
 }

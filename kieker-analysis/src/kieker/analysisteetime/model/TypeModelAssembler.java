@@ -14,12 +14,14 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime;
+package kieker.analysisteetime.model;
 
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 import kieker.analysisteetime.model.analysismodel.type.TypeModel;
+import kieker.analysisteetime.signature.ComponentSignatureExtractor;
+import kieker.analysisteetime.signature.OperationSignatureExtractor;
 import kieker.common.record.flow.IOperationRecord;
 
 /**

@@ -14,20 +14,29 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime;
+package kieker.analysisteetime.signature;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * @author Sören Henning
  *
  * @since 1.13
  */
-public class JavaShortOperationNameBuilder implements OperationNameBuilder {
+public class JavaFullOperationNameBuilder implements OperationNameBuilder {
 
 	@Override
 	public String build(final Collection<String> modifiers, final String returnType, final String name, final Collection<String> parameterTypes) {
-		return name + '(' + (!parameterTypes.isEmpty() ? ".." : "") + ')';
+		final StringBuilder builder = new StringBuilder();
+		if (!modifiers.isEmpty()) {
+			builder.append(modifiers.stream().collect(Collectors.joining(" ", "", " ")));
+		}
+		builder.append(returnType);
+		builder.append(' ');
+		builder.append(name);
+		builder.append(parameterTypes.stream().collect(Collectors.joining(" ,", "(", ")")));
+		return builder.toString();
 	}
 
 }

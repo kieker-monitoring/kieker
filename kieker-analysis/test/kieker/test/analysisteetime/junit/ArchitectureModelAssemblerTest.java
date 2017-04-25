@@ -25,11 +25,11 @@ import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysisteetime.JavaComponentSignatureExtractor;
-import kieker.analysisteetime.JavaOperationSignatureExtractor;
-import kieker.analysisteetime.TypeModelAssembler;
+import kieker.analysisteetime.model.TypeModelAssembler;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 import kieker.analysisteetime.model.analysismodel.type.TypeModel;
+import kieker.analysisteetime.signature.JavaComponentSignatureExtractor;
+import kieker.analysisteetime.signature.JavaOperationSignatureExtractor;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
 /**
@@ -53,7 +53,7 @@ public class ArchitectureModelAssemblerTest {
 	private final TypeFactory factory = TypeFactory.eINSTANCE;
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.TypeModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
+	 * Test method for {@link kieker.analysisteetime.model.TypeModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
 	 */
 	@Test
 	public void testComponentsExistsAfterAddRecordFromRecord() {
@@ -75,7 +75,7 @@ public class ArchitectureModelAssemblerTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.TypeModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
+	 * Test method for {@link kieker.analysisteetime.model.TypeModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
 	 */
 	@Test
 	public void testComponentKeysExistsAfterAddRecordFromRecord() {
@@ -96,7 +96,7 @@ public class ArchitectureModelAssemblerTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.TypeModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
+	 * Test method for {@link kieker.analysisteetime.model.TypeModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
 	 */
 	@Test
 	public void testOperationExistsAfterAddRecordFromRecord() {
@@ -118,7 +118,7 @@ public class ArchitectureModelAssemblerTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.TypeModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
+	 * Test method for {@link kieker.analysisteetime.model.TypeModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.
 	 */
 	@Test
 	public void testOperationKeysExistsAfterAddRecordFromRecord() {
@@ -139,7 +139,7 @@ public class ArchitectureModelAssemblerTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.TypeModelAssembler#addRecord(java.lang.String, java.lang.String)}.
+	 * Test method for {@link kieker.analysisteetime.model.TypeModelAssembler#addRecord(java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public void testOperationExistsAfterAddRecordFromString() {

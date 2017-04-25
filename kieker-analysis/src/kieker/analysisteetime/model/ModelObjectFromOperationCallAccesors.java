@@ -1,4 +1,4 @@
-package kieker.analysisteetime;
+package kieker.analysisteetime.model;
 
 import java.util.function.Function;
 

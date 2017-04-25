@@ -28,6 +28,7 @@ import org.junit.Test;
 
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
+import kieker.analysisteetime.signature.JavaOperationSignatureExtractor;
 
 /**
  * @author Sören Henning
@@ -49,7 +50,7 @@ public class JavaOperationSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * Test method for {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
 	public void testExtractWithoutModifiersAndParameters() {
@@ -62,7 +63,7 @@ public class JavaOperationSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * Test method for {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
 	public void testExtractWithoutModifiersWithParameters() {
@@ -75,7 +76,7 @@ public class JavaOperationSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * Test method for {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
 	public void testExtractWithoutModifiersWithFullQualifiedParameters() {
@@ -88,7 +89,7 @@ public class JavaOperationSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * Test method for {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
 	public void testExtractWithMultipleModifiersWithoutParameters() {
@@ -101,7 +102,7 @@ public class JavaOperationSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * Test method for {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
 	public void testExtractFullQualifiedReturnType() {
@@ -114,7 +115,7 @@ public class JavaOperationSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * Test method for {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
 	public void testExtractNestedFullQualifiedReturnType() {

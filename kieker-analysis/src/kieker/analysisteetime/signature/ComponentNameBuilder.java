@@ -14,29 +14,21 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime;
+package kieker.analysisteetime.signature;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 
 /**
  * @author Sören Henning
  *
  * @since 1.13
  */
-public class JavaFullOperationNameBuilder implements OperationNameBuilder {
+public interface ComponentNameBuilder {
 
-	@Override
-	public String build(final Collection<String> modifiers, final String returnType, final String name, final Collection<String> parameterTypes) {
-		final StringBuilder builder = new StringBuilder();
-		if (!modifiers.isEmpty()) {
-			builder.append(modifiers.stream().collect(Collectors.joining(" ", "", " ")));
-		}
-		builder.append(returnType);
-		builder.append(' ');
-		builder.append(name);
-		builder.append(parameterTypes.stream().collect(Collectors.joining(" ,", "(", ")")));
-		return builder.toString();
+	public String build(final String packageName, final String name);
+
+	public default String build(final ComponentType componentType) {
+		return this.build(componentType.getPackage(), componentType.getName());
 	}
 
 }

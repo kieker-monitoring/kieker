@@ -23,6 +23,7 @@ import org.junit.Test;
 
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
+import kieker.analysisteetime.signature.JavaComponentSignatureExtractor;
 
 /**
  * @author Sören Henning
@@ -44,7 +45,7 @@ public class JavaComponentSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
+	 * Test method for {@link kieker.analysisteetime.signature.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
 	 */
 	@Test
 	public void testExtractWithNonNestedPackage() {
@@ -55,7 +56,7 @@ public class JavaComponentSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
+	 * Test method for {@link kieker.analysisteetime.signature.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
 	 */
 	@Test
 	public void testExtractWithNestedPackage() {
@@ -66,7 +67,7 @@ public class JavaComponentSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
+	 * Test method for {@link kieker.analysisteetime.signature.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
 	 */
 	@Test
 	public void testExtractWithoutPackage() {
@@ -77,7 +78,7 @@ public class JavaComponentSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
+	 * Test method for {@link kieker.analysisteetime.signature.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
 	 */
 	@Test
 	public void testExtractWithInnerClass() {

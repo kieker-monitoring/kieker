@@ -14,30 +14,18 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime;
-
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
-
-import teetime.stage.basic.AbstractFilter;
+package kieker.analysisteetime.signature;
 
 /**
  * @author Sören Henning
  *
  * @since 1.13
  */
-public class ExecutionModelAssemblerStage extends AbstractFilter<OperationCall> {
-
-	private final ExecutionModelAssembler assembler;
-
-	public ExecutionModelAssemblerStage(final ExecutionModel executionModel) {
-		this.assembler = new ExecutionModelAssembler(executionModel);
-	}
+public class JavaFullComponentNameBuilder implements ComponentNameBuilder {
 
 	@Override
-	protected void execute(final OperationCall operationCall) {
-		this.assembler.addOperationCall(operationCall);
-		this.outputPort.send(operationCall);
+	public String build(final String packageName, final String name) {
+		return packageName + '.' + name;
 	}
 
 }

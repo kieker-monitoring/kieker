@@ -14,18 +14,20 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime;
+package kieker.analysisteetime.signature;
+
+import java.util.Collection;
 
 /**
  * @author Sören Henning
  *
  * @since 1.13
  */
-public class JavaFullComponentNameBuilder implements ComponentNameBuilder {
+public class JavaShortOperationNameBuilder implements OperationNameBuilder {
 
 	@Override
-	public String build(final String packageName, final String name) {
-		return packageName + '.' + name;
+	public String build(final Collection<String> modifiers, final String returnType, final String name, final Collection<String> parameterTypes) {
+		return name + '(' + (!parameterTypes.isEmpty() ? ".." : "") + ')';
 	}
 
 }

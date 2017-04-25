@@ -18,11 +18,11 @@ package kieker.analysisteetime.dependencygraphs.dot;
 
 import java.util.Collection;
 
-import kieker.analysisteetime.ComponentNameBuilder;
-import kieker.analysisteetime.OperationNameBuilder;
 import kieker.analysisteetime.dependencygraphs.PropertyKeys;
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexTypeMapper;
+import kieker.analysisteetime.signature.ComponentNameBuilder;
+import kieker.analysisteetime.signature.OperationNameBuilder;
 import kieker.analysisteetime.util.graph.Element;
 import kieker.analysisteetime.util.graph.Vertex;
 import kieker.analysisteetime.util.graph.export.dot.DotExportConfiguration;
