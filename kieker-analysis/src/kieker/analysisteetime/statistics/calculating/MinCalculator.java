@@ -14,19 +14,32 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.statistics;
+package kieker.analysisteetime.statistics.calculating;
 
-public class CountCalculator<T> implements Calculator<T> {
+import java.util.Optional;
+import java.util.function.Function;
 
-	private final static Property COUNT_PROPERTY = Properties.COUNT;
+import kieker.analysisteetime.statistics.Properties;
+import kieker.analysisteetime.statistics.Property;
+import kieker.analysisteetime.statistics.Statistic;
 
-	public CountCalculator() {}
+public class MinCalculator<T> implements Calculator<T> {
+
+	private final static Property MIN_PROPERTY = Properties.MIN;
+
+	private final Function<T, Long> valueAccessor;
+
+	public MinCalculator(final Function<T, Long> valueAccessor) {
+		this.valueAccessor = valueAccessor;
+	}
 
 	@Override
 	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
-		final Long oldCount = statistic.getProperty(COUNT_PROPERTY);
-		final long newCount = oldCount != null ? oldCount + 1 : 1;
-		statistic.setProperty(COUNT_PROPERTY, newCount);
+		final long value = this.valueAccessor.apply(input);
+		final Optional<Long> oldMin = Optional.ofNullable(statistic.getProperty(MIN_PROPERTY));
+		if (!oldMin.isPresent() || value < oldMin.get()) {
+			statistic.setProperty(MIN_PROPERTY, value);
+		}
 	}
 
 }

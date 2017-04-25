@@ -14,28 +14,13 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.statistics;
+package kieker.analysisteetime.statistics.calculating;
 
-import java.util.Optional;
-import java.util.function.Function;
+import kieker.analysisteetime.statistics.Statistic;
 
-public class MinCalculator<T> implements Calculator<T> {
+@FunctionalInterface
+public interface Calculator<I> {
 
-	private final static Property MIN_PROPERTY = Properties.MIN;
-
-	private final Function<T, Long> valueAccessor;
-
-	public MinCalculator(final Function<T, Long> valueAccessor) {
-		this.valueAccessor = valueAccessor;
-	}
-
-	@Override
-	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
-		final long value = this.valueAccessor.apply(input);
-		final Optional<Long> oldMin = Optional.ofNullable(statistic.getProperty(MIN_PROPERTY));
-		if (!oldMin.isPresent() || value < oldMin.get()) {
-			statistic.setProperty(MIN_PROPERTY, value);
-		}
-	}
+	public void calculate(final Statistic statistic, final I input, final Object modelObject);
 
 }

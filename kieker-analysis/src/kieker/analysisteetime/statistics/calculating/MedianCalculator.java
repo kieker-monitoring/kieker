@@ -14,12 +14,15 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.statistics;
+package kieker.analysisteetime.statistics.calculating;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import kieker.analysisteetime.statistics.Properties;
+import kieker.analysisteetime.statistics.Property;
+import kieker.analysisteetime.statistics.Statistic;
 import kieker.analysisteetime.util.RunningMedian;
 
 public class MedianCalculator<T> implements Calculator<T> {

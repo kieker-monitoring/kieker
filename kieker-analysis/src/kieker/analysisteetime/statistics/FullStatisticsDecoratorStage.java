@@ -4,6 +4,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+import kieker.analysisteetime.statistics.calculating.AverageCalculator;
+import kieker.analysisteetime.statistics.calculating.CountCalculator;
+import kieker.analysisteetime.statistics.calculating.MaxCalculator;
+import kieker.analysisteetime.statistics.calculating.MedianCalculator;
+import kieker.analysisteetime.statistics.calculating.MinCalculator;
+import kieker.analysisteetime.statistics.calculating.TotalCalculator;
 
 import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;

@@ -19,6 +19,8 @@ package kieker.analysisteetime.statistics;
 import java.util.Map;
 import java.util.function.Function;
 
+import kieker.analysisteetime.statistics.calculating.Calculator;
+
 public class StatisticsDecorator<T> {
 
 	private final Map<Object, Statistics> statisticsModel;

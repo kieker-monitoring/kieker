@@ -14,24 +14,23 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.statistics;
+package kieker.analysisteetime.statistics.calculating;
 
-public class AverageCalculator<T> implements Calculator<T> {
+import kieker.analysisteetime.statistics.Properties;
+import kieker.analysisteetime.statistics.Property;
+import kieker.analysisteetime.statistics.Statistic;
 
-	private final static Property TOTAL_PROPERTY = Properties.TOTAL;
+public class CountCalculator<T> implements Calculator<T> {
+
 	private final static Property COUNT_PROPERTY = Properties.COUNT;
-	private final static Property AVERAGE_PROPERTY = Properties.AVERAGE;
 
-	public AverageCalculator() {}
+	public CountCalculator() {}
 
 	@Override
 	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
-		final Long total = statistic.getProperty(TOTAL_PROPERTY);
-		final Long count = statistic.getProperty(COUNT_PROPERTY);
-		if (total != null || count != null) {
-			final long avg = total / count;
-			statistic.setProperty(AVERAGE_PROPERTY, avg);
-		}
+		final Long oldCount = statistic.getProperty(COUNT_PROPERTY);
+		final long newCount = oldCount != null ? oldCount + 1 : 1;
+		statistic.setProperty(COUNT_PROPERTY, newCount);
 	}
 
 }

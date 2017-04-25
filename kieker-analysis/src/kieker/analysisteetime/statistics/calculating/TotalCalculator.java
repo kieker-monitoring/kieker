@@ -14,27 +14,33 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.statistics;
+package kieker.analysisteetime.statistics.calculating;
 
-import java.util.Optional;
 import java.util.function.Function;
 
-public class MaxCalculator<T> implements Calculator<T> {
+import kieker.analysisteetime.statistics.Properties;
+import kieker.analysisteetime.statistics.Property;
+import kieker.analysisteetime.statistics.Statistic;
 
-	private final static Property MAX_PROPERTY = Properties.MAX;
+public class TotalCalculator<T> implements Calculator<T> {
+
+	private final static Property TOTAL_PROPERTY = Properties.TOTAL;
 
 	private final Function<T, Long> valueAccessor;
 
-	public MaxCalculator(final Function<T, Long> valueAccessor) {
+	public TotalCalculator(final Function<T, Long> valueAccessor) {
 		this.valueAccessor = valueAccessor;
 	}
 
 	@Override
 	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
 		final long value = this.valueAccessor.apply(input);
-		final Optional<Long> oldMax = Optional.ofNullable(statistic.getProperty(MAX_PROPERTY));
-		if (!oldMax.isPresent() || value > oldMax.get()) {
-			statistic.setProperty(MAX_PROPERTY, value);
+		final Long oldCount = statistic.getProperty(TOTAL_PROPERTY);
+		if (oldCount == null) {
+			statistic.setProperty(TOTAL_PROPERTY, value);
+		} else {
+			final long newCount = oldCount + value;
+			statistic.setProperty(TOTAL_PROPERTY, newCount);
 		}
 	}
 
