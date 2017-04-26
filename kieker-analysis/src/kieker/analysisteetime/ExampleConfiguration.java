@@ -23,7 +23,6 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 import kieker.analysisteetime.model.analysismodel.type.TypeModel;
@@ -32,11 +31,9 @@ import kieker.analysisteetime.recordreading.ReadingComposite;
 import kieker.analysisteetime.signature.JavaFullComponentNameBuilder;
 import kieker.analysisteetime.signature.JavaShortOperationNameBuilder;
 import kieker.analysisteetime.signature.SignatureExtractor;
+import kieker.analysisteetime.statistics.CallStatisticsStage;
 import kieker.analysisteetime.statistics.FullStatisticsDecoratorStage;
 import kieker.analysisteetime.statistics.Statistics;
-import kieker.analysisteetime.statistics.StatisticsDecoratorStage;
-import kieker.analysisteetime.statistics.Units;
-import kieker.analysisteetime.statistics.calculating.CountCalculator;
 import kieker.analysisteetime.trace.graph.TraceToGraphTransformerStage;
 import kieker.analysisteetime.trace.graph.dot.DotTraceGraphFileWriterStage;
 import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
@@ -83,8 +80,7 @@ public class ExampleConfiguration extends Configuration {
 		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(this.executionModel);
 		final FullStatisticsDecoratorStage fullStatisticsDecorator = new FullStatisticsDecoratorStage(this.statisticsModel,
 				ModelObjectFromOperationCallAccesors.DEPLOYED_OPERATION);
-		final StatisticsDecoratorStage<OperationCall> callStatisticsDecorator = new StatisticsDecoratorStage<>(this.statisticsModel, Units.RESPONSE_TIME,
-				new CountCalculator<>(), ModelObjectFromOperationCallAccesors.createForAggregatedInvocation(this.executionModel));
+		final CallStatisticsStage callStatisticsDecorator = new CallStatisticsStage(this.statisticsModel, this.executionModel);
 
 		final TraceToGraphTransformerStage traceToGraphTransformer = new TraceToGraphTransformerStage();
 		final DotTraceGraphFileWriterStage dotTraceGraphFileWriter = DotTraceGraphFileWriterStage.create(exportDirectory);
