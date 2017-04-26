@@ -16,19 +16,18 @@
 
 package kieker.analysisteetime.statistics;
 
-import java.util.Map;
 import java.util.function.Function;
 
 import kieker.analysisteetime.statistics.calculating.Calculator;
 
 public class StatisticsDecorator<T> {
 
-	private final Map<Object, Statistics> statisticsModel;
+	private final StatisticsModel statisticsModel;
 	private final Unit unit;
 	private final Calculator<T> statisticCalculator;
 	private final Function<T, Object> objectAccesor;
 
-	public StatisticsDecorator(final Map<Object, Statistics> statisticsModel, final Unit unit, final Calculator<T> statisticCalculator,
+	public StatisticsDecorator(final StatisticsModel statisticsModel, final Unit unit, final Calculator<T> statisticCalculator,
 			final Function<T, Object> objectAccesor) {
 		this.statisticsModel = statisticsModel;
 		this.unit = unit;
@@ -38,7 +37,7 @@ public class StatisticsDecorator<T> {
 
 	public void decorate(final T input) {
 		final Object object = this.objectAccesor.apply(input);
-		final Statistic statistic = this.statisticsModel.computeIfAbsent(object, x -> new Statistics()).getStatistic(this.unit);
+		final Statistic statistic = this.statisticsModel.get(object).getStatistic(this.unit);
 		this.statisticCalculator.calculate(statistic, input, object);
 	}
 

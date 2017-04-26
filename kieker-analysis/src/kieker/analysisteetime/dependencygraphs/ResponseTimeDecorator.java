@@ -1,21 +1,20 @@
 package kieker.analysisteetime.dependencygraphs;
 
 import java.time.temporal.ChronoUnit;
-import java.util.Map;
 
 import kieker.analysisteetime.statistics.Properties;
 import kieker.analysisteetime.statistics.Property;
-import kieker.analysisteetime.statistics.Statistics;
+import kieker.analysisteetime.statistics.StatisticsModel;
 import kieker.analysisteetime.statistics.Units;
 import kieker.analysisteetime.util.graph.Vertex;
 import kieker.analysisteetime.util.time.ChronoUnitToSymbolMapper;
 
 public class ResponseTimeDecorator {
 
-	private final Map<Object, Statistics> statisticsModel;
+	private final StatisticsModel statisticsModel;
 	private final String timeUnit;
 
-	public ResponseTimeDecorator(final Map<Object, Statistics> statisticsModel, final ChronoUnit chronoUnit) {
+	public ResponseTimeDecorator(final StatisticsModel statisticsModel, final ChronoUnit chronoUnit) {
 		this.statisticsModel = statisticsModel;
 		this.timeUnit = ChronoUnitToSymbolMapper.create().apply(chronoUnit);
 	}
@@ -30,7 +29,7 @@ public class ResponseTimeDecorator {
 	}
 
 	private long getStatisticValue(final Object object, final Property property) {
-		if (this.statisticsModel.containsKey(object)) {
+		if (this.statisticsModel.has(object)) {
 			final Long value = this.statisticsModel.get(object).getStatistic(Units.RESPONSE_TIME).getProperty(property);
 			if (value != null) {
 				return value;

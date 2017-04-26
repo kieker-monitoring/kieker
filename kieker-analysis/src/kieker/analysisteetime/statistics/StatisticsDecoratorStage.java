@@ -16,7 +16,6 @@
 
 package kieker.analysisteetime.statistics;
 
-import java.util.Map;
 import java.util.function.Function;
 
 import kieker.analysisteetime.statistics.calculating.Calculator;
@@ -27,7 +26,7 @@ public class StatisticsDecoratorStage<T> extends AbstractFilter<T> {
 
 	private final StatisticsDecorator<T> statisticsDecorator;
 
-	public StatisticsDecoratorStage(final Map<Object, Statistics> statisticsModel, final Unit unit, final Calculator<T> statisticCalculator,
+	public StatisticsDecoratorStage(final StatisticsModel statisticsModel, final Unit unit, final Calculator<T> statisticCalculator,
 			final Function<T, Object> objectAccesor) {
 		this.statisticsDecorator = new StatisticsDecorator<>(statisticsModel, unit, statisticCalculator, objectAccesor);
 	}

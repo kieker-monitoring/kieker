@@ -16,10 +16,8 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
-import java.util.Map;
-
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.statistics.Statistics;
+import kieker.analysisteetime.statistics.StatisticsModel;
 import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.stage.trigger.Trigger;
 
@@ -34,7 +32,7 @@ public class DependencyGraphCreatorStage extends AbstractTransformation<Trigger,
 
 	private final DependencyGraphCreator graphCreator;
 
-	public DependencyGraphCreatorStage(final ExecutionModel executionModel, final Map<Object, Statistics> statisticsModel,
+	public DependencyGraphCreatorStage(final ExecutionModel executionModel, final StatisticsModel statisticsModel,
 			final DependencyGraphBuilderFactory graphBuilderFactory) {
 		this.graphCreator = new DependencyGraphCreator(executionModel, statisticsModel, graphBuilderFactory);
 	}

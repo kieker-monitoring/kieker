@@ -16,14 +16,12 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
-import java.util.Map;
-
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
-import kieker.analysisteetime.statistics.Statistics;
+import kieker.analysisteetime.statistics.StatisticsModel;
 import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.Vertex;
 
@@ -37,7 +35,7 @@ import kieker.analysisteetime.util.graph.Vertex;
  */
 public class TypeLevelOperationDependencyGraphBuilder extends AbstractDependencyGraphBuilder {
 
-	public TypeLevelOperationDependencyGraphBuilder(final ExecutionModel executionModel, final Map<Object, Statistics> statisticsModel) {
+	public TypeLevelOperationDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel) {
 		super(executionModel, statisticsModel);
 	}
 

@@ -16,10 +16,8 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
-import java.util.Map;
-
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.statistics.Statistics;
+import kieker.analysisteetime.statistics.StatisticsModel;
 
 /**
  * @author Sören Henning
@@ -33,7 +31,7 @@ public class DeploymentLevelComponentDependencyGraphBuilderFactory implements De
 	}
 
 	@Override
-	public DependencyGraphBuilder createDependencyGraphBuilder(final ExecutionModel executionModel, final Map<Object, Statistics> statisticsModel) {
+	public DependencyGraphBuilder createDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel) {
 		return new DeploymentLevelComponentDependencyGraphBuilder(executionModel, statisticsModel);
 	}
 

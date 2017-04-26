@@ -5,8 +5,6 @@ package kieker.analysisteetime;
 
 import java.io.File;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.Map;
 
 import kieker.analysisteetime.dependencygraphs.DependencyGraphCreatorStage;
 import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependencyGraphBuilderFactory;
@@ -32,8 +30,8 @@ import kieker.analysisteetime.signature.JavaFullComponentNameBuilder;
 import kieker.analysisteetime.signature.JavaShortOperationNameBuilder;
 import kieker.analysisteetime.signature.SignatureExtractor;
 import kieker.analysisteetime.statistics.CallStatisticsStage;
-import kieker.analysisteetime.statistics.FullStatisticsDecoratorStage;
-import kieker.analysisteetime.statistics.Statistics;
+import kieker.analysisteetime.statistics.FullReponseTimeStatisticsStage;
+import kieker.analysisteetime.statistics.StatisticsModel;
 import kieker.analysisteetime.trace.graph.TraceToGraphTransformerStage;
 import kieker.analysisteetime.trace.graph.dot.DotTraceGraphFileWriterStage;
 import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
@@ -60,7 +58,7 @@ public class ExampleConfiguration extends Configuration {
 	private final AssemblyModel assemblyModel = AssemblyFactory.eINSTANCE.createAssemblyModel();
 	private final DeploymentModel deploymentModel = DeploymentFactory.eINSTANCE.createDeploymentModel();
 	private final ExecutionModel executionModel = ExecutionFactory.eINSTANCE.createExecutionModel();
-	private final Map<Object, Statistics> statisticsModel = new HashMap<>();
+	private final StatisticsModel statisticsModel = new StatisticsModel();
 	private final SignatureExtractor signatureExtractor = SignatureExtractor.forJava();
 
 	public ExampleConfiguration(final File importDirectory, final File exportDirectory) {
@@ -78,7 +76,7 @@ public class ExampleConfiguration extends Configuration {
 
 		final OperationCallExtractorStage operationCallExtractor = new OperationCallExtractorStage();
 		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(this.executionModel);
-		final FullStatisticsDecoratorStage fullStatisticsDecorator = new FullStatisticsDecoratorStage(this.statisticsModel,
+		final FullReponseTimeStatisticsStage fullStatisticsDecorator = new FullReponseTimeStatisticsStage(this.statisticsModel,
 				ModelObjectFromOperationCallAccesors.DEPLOYED_OPERATION);
 		final CallStatisticsStage callStatisticsDecorator = new CallStatisticsStage(this.statisticsModel, this.executionModel);
 

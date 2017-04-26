@@ -16,10 +16,8 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
-import java.util.Map;
-
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.statistics.Statistics;
+import kieker.analysisteetime.statistics.StatisticsModel;
 import kieker.analysisteetime.util.graph.Graph;
 
 /**
@@ -30,10 +28,10 @@ import kieker.analysisteetime.util.graph.Graph;
 public class DependencyGraphCreator {
 
 	private final ExecutionModel executionModel;
-	private final Map<Object, Statistics> statisticsModel;
+	private final StatisticsModel statisticsModel;
 	private final DependencyGraphBuilderFactory graphBuilderFactory;
 
-	public DependencyGraphCreator(final ExecutionModel executionModel, final Map<Object, Statistics> statisticsModel,
+	public DependencyGraphCreator(final ExecutionModel executionModel, final StatisticsModel statisticsModel,
 			final DependencyGraphBuilderFactory graphBuilderFactory) {
 		this.executionModel = executionModel;
 		this.statisticsModel = statisticsModel;

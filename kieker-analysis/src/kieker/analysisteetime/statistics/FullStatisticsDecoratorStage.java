@@ -1,9 +1,7 @@
 package kieker.analysisteetime.statistics;
 
-import java.util.Map;
 import java.util.function.Function;
 
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.statistics.calculating.AverageCalculator;
 import kieker.analysisteetime.statistics.calculating.CountCalculator;
 import kieker.analysisteetime.statistics.calculating.MaxCalculator;
@@ -15,18 +13,17 @@ import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 
-public class FullStatisticsDecoratorStage extends CompositeStage {
+public class FullStatisticsDecoratorStage<T> extends CompositeStage {
 
-	private final StatisticsDecoratorStage<OperationCall> countStatistics;
-	private final StatisticsDecoratorStage<OperationCall> totalStatistics;
-	private final StatisticsDecoratorStage<OperationCall> minStatistics;
-	private final StatisticsDecoratorStage<OperationCall> maxStatistics;
-	private final StatisticsDecoratorStage<OperationCall> averageStatistics;
-	private final StatisticsDecoratorStage<OperationCall> medianStatistics;
+	private final StatisticsDecoratorStage<T> countStatistics;
+	private final StatisticsDecoratorStage<T> totalStatistics;
+	private final StatisticsDecoratorStage<T> minStatistics;
+	private final StatisticsDecoratorStage<T> maxStatistics;
+	private final StatisticsDecoratorStage<T> averageStatistics;
+	private final StatisticsDecoratorStage<T> medianStatistics;
 
-	public FullStatisticsDecoratorStage(final Map<Object, Statistics> statisticsModel, final Function<OperationCall, Object> objectAccesor) {
-		final Unit unit = Units.RESPONSE_TIME;
-		final Function<OperationCall, Long> valueAccessor = c -> c.getDuration().toNanos();
+	public FullStatisticsDecoratorStage(final StatisticsModel statisticsModel, final Unit unit, final Function<T, Long> valueAccessor,
+			final Function<T, Object> objectAccesor) {
 
 		this.countStatistics = new StatisticsDecoratorStage<>(statisticsModel, unit, new CountCalculator<>(), objectAccesor);
 		this.totalStatistics = new StatisticsDecoratorStage<>(statisticsModel, unit, new TotalCalculator<>(valueAccessor), objectAccesor);
@@ -42,11 +39,11 @@ public class FullStatisticsDecoratorStage extends CompositeStage {
 		super.connectPorts(this.averageStatistics.getOutputPort(), this.medianStatistics.getInputPort());
 	}
 
-	public InputPort<OperationCall> getInputPort() {
+	public InputPort<T> getInputPort() {
 		return this.countStatistics.getInputPort();
 	}
 
-	public OutputPort<OperationCall> getOutputPort() {
+	public OutputPort<T> getOutputPort() {
 		return this.medianStatistics.getOutputPort();
 	}
 

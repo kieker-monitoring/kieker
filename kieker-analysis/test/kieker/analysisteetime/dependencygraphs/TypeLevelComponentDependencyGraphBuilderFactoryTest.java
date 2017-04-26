@@ -16,9 +16,6 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
-import java.util.Collections;
-import java.util.Map;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,7 +23,7 @@ import org.junit.Test;
 
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.statistics.Statistics;
+import kieker.analysisteetime.statistics.StatisticsModel;
 
 /**
  * @author Sören Henning
@@ -37,7 +34,7 @@ public class TypeLevelComponentDependencyGraphBuilderFactoryTest {
 
 	private TypeLevelComponentDependencyGraphBuilderFactory factory;
 	private final ExecutionModel executionModel = ExecutionFactory.eINSTANCE.createExecutionModel();
-	private final Map<Object, Statistics> statisticsModel = Collections.emptyMap();
+	private final StatisticsModel statisticsModel = new StatisticsModel();
 
 	public TypeLevelComponentDependencyGraphBuilderFactoryTest() {
 		super();
