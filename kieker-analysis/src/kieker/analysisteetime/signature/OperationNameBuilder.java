@@ -21,6 +21,9 @@ import java.util.Collection;
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
 
 /**
+ * A {@link OperationNameBuilder} can be used to create the operation name from a list of
+ * modifiers, a return type, the actual name and a list of parameter types.
+ *
  * @author Sören Henning
  *
  * @since 1.13

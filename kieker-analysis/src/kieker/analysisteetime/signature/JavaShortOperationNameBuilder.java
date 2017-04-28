@@ -19,6 +19,10 @@ package kieker.analysisteetime.signature;
 import java.util.Collection;
 
 /**
+ * This {@link OperationNameBuilder} creates a operation names in a short Java style. That means, it returns
+ * the actual name followed by {@code ()} or {@code (..)} depending on whether this operation has parameters
+ * or not.
+ *
  * @author Sören Henning
  *
  * @since 1.13

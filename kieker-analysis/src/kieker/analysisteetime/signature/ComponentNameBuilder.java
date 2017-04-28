@@ -19,6 +19,8 @@ package kieker.analysisteetime.signature;
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 
 /**
+ * A {@link ComponentNameBuilder} can be used to create the component name from a package name and a component name.
+ *
  * @author Sören Henning
  *
  * @since 1.13

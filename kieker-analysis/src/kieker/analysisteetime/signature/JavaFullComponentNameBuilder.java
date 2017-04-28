@@ -17,6 +17,9 @@
 package kieker.analysisteetime.signature;
 
 /**
+ * This {@link ComponentNameBuilder} creates a component names in a full Java style. That means, it returns
+ * the package name followed by a dot and the actual name. E.g., {@code my.package.name.MyClass}.
+ *
  * @author Sören Henning
  *
  * @since 1.13

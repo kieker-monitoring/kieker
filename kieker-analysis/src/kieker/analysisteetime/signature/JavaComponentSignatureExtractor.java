@@ -19,6 +19,8 @@ package kieker.analysisteetime.signature;
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 
 /**
+ * A {@link ComponentSignatureExtractor} that uses the Java signature style.
+ *
  * @author Sören Henning
  *
  * @since 1.13
@@ -29,7 +31,7 @@ public class JavaComponentSignatureExtractor implements ComponentSignatureExtrac
 	public void extract(final ComponentType componentType) {
 		// TODO code clean up
 		final String signature = componentType.getSignature();
-		
+
 		String packageName;
 		String name;
 		if (signature.indexOf('.') != -1) {
@@ -46,7 +48,7 @@ public class JavaComponentSignatureExtractor implements ComponentSignatureExtrac
 			packageName = "";
 			name = signature;
 		}
-		
+
 		componentType.setName(name);
 		componentType.setPackage(packageName);
 	}

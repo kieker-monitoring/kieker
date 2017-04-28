@@ -21,6 +21,8 @@ import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.common.util.signature.Signature;
 
 /**
+ * A {@link OperationSignatureExtractor} that uses the Java signature style.
+ *
  * @author Sören Henning
  *
  * @since 1.13
