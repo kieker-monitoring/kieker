@@ -45,6 +45,7 @@ import kieker.common.record.IMonitoringRecord;
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.Configuration;
 import teetime.stage.basic.distributor.Distributor;
+import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
 
 /**
  *
@@ -83,7 +84,7 @@ public class ExampleConfiguration extends Configuration {
 		final TraceToGraphTransformerStage traceToGraphTransformer = new TraceToGraphTransformerStage();
 		final DotTraceGraphFileWriterStage dotTraceGraphFileWriter = DotTraceGraphFileWriterStage.create(exportDirectory);
 		final GraphMLFileWriterStage graphMLTraceGraphFileWriter = new GraphMLFileWriterStage(exportDirectory.getPath());
-		final Distributor<Trace> traceDistributor = new Distributor<>();
+		final Distributor<Trace> traceDistributor = new Distributor<>(new CopyByReferenceStrategy());
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
 		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(this.executionModel, this.statisticsModel,
 				new DeploymentLevelOperationDependencyGraphBuilderFactory());

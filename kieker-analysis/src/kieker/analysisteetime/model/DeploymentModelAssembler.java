@@ -73,7 +73,7 @@ public class DeploymentModelAssembler {
 		this.addRecord(hostname, classSignature, operationSignature);
 	}
 
-	public void addRecord(final String hostname, final String componentSignature, final String operationSignature) {
+	private void addRecord(final String hostname, final String componentSignature, final String operationSignature) {
 		final DeploymentContext deploymentContext = this.addDeploymentContext(hostname);
 		final DeployedComponent component = this.addDeployedComponent(deploymentContext, componentSignature);
 		this.addDeployedOperation(component, operationSignature);
