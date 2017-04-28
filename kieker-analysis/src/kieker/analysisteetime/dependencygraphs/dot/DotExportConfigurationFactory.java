@@ -21,8 +21,7 @@ import java.util.Collection;
 import kieker.analysisteetime.dependencygraphs.PropertyKeys;
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexTypeMapper;
-import kieker.analysisteetime.signature.ComponentNameBuilder;
-import kieker.analysisteetime.signature.OperationNameBuilder;
+import kieker.analysisteetime.signature.NameBuilder;
 import kieker.analysisteetime.util.graph.Element;
 import kieker.analysisteetime.util.graph.Vertex;
 import kieker.analysisteetime.util.graph.export.dot.DotExportConfiguration;
@@ -41,14 +40,11 @@ public class DotExportConfigurationFactory {
 	private static final String ENTRY_LABEL = "'Entry'";
 
 	private final VertexTypeMapper vertexTypeMapper;
-	private final ComponentNameBuilder componentNameBuilder;
-	private final OperationNameBuilder operationNameBuilder;
+	private final NameBuilder nameBuilder;
 
-	public DotExportConfigurationFactory(final ComponentNameBuilder componentNameBuilder,
-			final OperationNameBuilder operationNameBuilder, final VertexTypeMapper vertexTypeMapper) {
+	public DotExportConfigurationFactory(final NameBuilder nameBuilder, final VertexTypeMapper vertexTypeMapper) {
 		this.vertexTypeMapper = vertexTypeMapper;
-		this.componentNameBuilder = componentNameBuilder;
-		this.operationNameBuilder = operationNameBuilder;
+		this.nameBuilder = nameBuilder;
 	}
 
 	private DotExportConfiguration.Builder createBaseBuilder() {
@@ -234,7 +230,7 @@ public class DotExportConfigurationFactory {
 		@SuppressWarnings("unchecked")
 		final Collection<String> parameterTypes = this.getProperty(vertex, PropertyKeys.PARAMETER_TYPES, Collection.class);
 
-		return new StringBuilder(this.operationNameBuilder.build(modifiers, returnType, name, parameterTypes));
+		return new StringBuilder(this.nameBuilder.getOperationNameBuilder().build(modifiers, returnType, name, parameterTypes));
 	}
 
 	private StringBuilder createComponentLabelFromVertex(final Vertex vertex) {
@@ -242,7 +238,7 @@ public class DotExportConfigurationFactory {
 		final String name = this.getProperty(vertex, PropertyKeys.NAME, String.class);
 		final String packageName = this.getProperty(vertex, PropertyKeys.PACKAGE_NAME, String.class);
 
-		return new StringBuilder().append(this.createType(type)).append("\\n").append(this.componentNameBuilder.build(packageName, name));
+		return new StringBuilder().append(this.createType(type)).append("\\n").append(this.nameBuilder.getComponentNameBuilder().build(packageName, name));
 	}
 
 	private StringBuilder createContextLabelFromVertex(final Vertex vertex) {

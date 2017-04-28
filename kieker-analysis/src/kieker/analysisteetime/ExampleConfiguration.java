@@ -26,8 +26,7 @@ import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.analysisteetime.recordreading.AllowedRecordsFilter;
 import kieker.analysisteetime.recordreading.ReadingComposite;
-import kieker.analysisteetime.signature.JavaFullComponentNameBuilder;
-import kieker.analysisteetime.signature.JavaShortOperationNameBuilder;
+import kieker.analysisteetime.signature.NameBuilder;
 import kieker.analysisteetime.signature.SignatureExtractor;
 import kieker.analysisteetime.statistics.CallStatisticsStage;
 import kieker.analysisteetime.statistics.FullReponseTimeStatisticsStage;
@@ -89,7 +88,7 @@ public class ExampleConfiguration extends Configuration {
 		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(this.executionModel, this.statisticsModel,
 				new DeploymentLevelOperationDependencyGraphBuilderFactory());
 		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory.getPath(),
-				(new DotExportConfigurationFactory(new JavaFullComponentNameBuilder(), new JavaShortOperationNameBuilder(), VertexTypeMapper.DEFAULT))
+				(new DotExportConfigurationFactory(NameBuilder.forJavaShortOperations(), VertexTypeMapper.DEFAULT))
 						.createForDeploymentLevelOperationDependencyGraph());
 
 		final AbstractConsumerStage<Graph> debugStage = new GraphPrinterStage();

@@ -10,11 +10,11 @@ public final class NameBuilder {
 		this.componentNameBuilder = componentNameBuilder;
 	}
 
-	public OperationNameBuilder getOperationSignatureExtractor() {
+	public OperationNameBuilder getOperationNameBuilder() {
 		return this.operationNameBuilder;
 	}
 
-	public ComponentNameBuilder getComponentSignatureExtractor() {
+	public ComponentNameBuilder getComponentNameBuilder() {
 		return this.componentNameBuilder;
 	}
 
