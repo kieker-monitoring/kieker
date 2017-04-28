@@ -29,7 +29,7 @@ public class JavaComponentSignatureExtractor implements ComponentSignatureExtrac
 
 	@Override
 	public void extract(final ComponentType componentType) {
-		// TODO code clean up
+		// TODO code clean up, copied from old kieker analysis
 		final String signature = componentType.getSignature();
 
 		String packageName;

@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime;
+package kieker.analysisteetime.signature;
 
 import org.junit.After;
 import org.junit.Assert;
