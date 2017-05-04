@@ -26,8 +26,8 @@ import kieker.analysisteetime.trace.traversal.TraceTraverser;
 import teetime.stage.basic.AbstractFilter;
 
 /**
- * This class is a {@code TeeTime} stage adding statistics to instances of {@link TraceRoot}. The traces are forwarded to the output
- * port.
+ * This class is a {@code TeeTime} stage adding statistics to instances of {@link TraceRoot}.
+ * The traces are forwarded to the output port.
  *
  * @author Nils Christian Ehmke, Sören Henning
  */

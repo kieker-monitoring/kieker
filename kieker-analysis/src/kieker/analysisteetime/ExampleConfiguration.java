@@ -5,6 +5,8 @@ package kieker.analysisteetime;
 
 import java.io.File;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
+import java.util.function.Function;
 
 import kieker.analysisteetime.dependencygraphs.DependencyGraphCreatorStage;
 import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependencyGraphBuilderFactory;
@@ -21,6 +23,7 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeploymentFactory;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 import kieker.analysisteetime.model.analysismodel.type.TypeModel;
@@ -36,6 +39,7 @@ import kieker.analysisteetime.trace.graph.dot.DotTraceGraphFileWriterStage;
 import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
 import kieker.analysisteetime.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.graph.export.dot.DotExportConfiguration;
 import kieker.analysisteetime.util.graph.export.dot.DotFileWriterStage;
 import kieker.analysisteetime.util.graph.export.graphml.GraphMLFileWriterStage;
 import kieker.analysisteetime.util.stage.trigger.TriggerOnTerminationStage;
@@ -63,6 +67,12 @@ public class ExampleConfiguration extends Configuration {
 
 	public ExampleConfiguration(final File importDirectory, final File exportDirectory) {
 
+		final TemporalUnit timeUnitOfRecods = ChronoUnit.NANOS;
+		final Function<OperationCall, Object> statisticsObjectAccesor = ModelObjectFromOperationCallAccesors.DEPLOYED_OPERATION;
+		final DeploymentLevelOperationDependencyGraphBuilderFactory deploymentGraphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
+		final DotExportConfiguration dependencyGraphDotExportConfiguration = (new DotExportConfigurationFactory(NameBuilder.forJavaShortOperations(),
+				VertexTypeMapper.DEFAULT)).createForDeploymentLevelOperationDependencyGraph();
+
 		// Create the stages
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
 		// TODO consider if KiekerMetadataRecord has to be processed
@@ -70,14 +80,12 @@ public class ExampleConfiguration extends Configuration {
 		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final StaticModelsAssemblerStage staticModelsAssembler = new StaticModelsAssemblerStage(this.typeModel, this.assemblyModel, this.deploymentModel,
 				this.signatureExtractor);
-		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, false, ChronoUnit.NANOS); // TODO second parameter,
-																																		// NANOS temp
+		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, false, timeUnitOfRecods); // TODO second parameter
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
 
 		final OperationCallExtractorStage operationCallExtractor = new OperationCallExtractorStage();
 		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(this.executionModel);
-		final FullReponseTimeStatisticsStage fullStatisticsDecorator = new FullReponseTimeStatisticsStage(this.statisticsModel,
-				ModelObjectFromOperationCallAccesors.DEPLOYED_OPERATION);
+		final FullReponseTimeStatisticsStage fullStatisticsDecorator = new FullReponseTimeStatisticsStage(this.statisticsModel, statisticsObjectAccesor);
 		final CallStatisticsStage callStatisticsDecorator = new CallStatisticsStage(this.statisticsModel, this.executionModel);
 
 		final TraceToGraphTransformerStage traceToGraphTransformer = new TraceToGraphTransformerStage();
@@ -85,11 +93,10 @@ public class ExampleConfiguration extends Configuration {
 		final GraphMLFileWriterStage graphMLTraceGraphFileWriter = new GraphMLFileWriterStage(exportDirectory.getPath());
 		final Distributor<Trace> traceDistributor = new Distributor<>(new CopyByReferenceStrategy());
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
+
 		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(this.executionModel, this.statisticsModel,
-				new DeploymentLevelOperationDependencyGraphBuilderFactory());
-		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory.getPath(),
-				(new DotExportConfigurationFactory(NameBuilder.forJavaShortOperations(), VertexTypeMapper.DEFAULT))
-						.createForDeploymentLevelOperationDependencyGraph());
+				deploymentGraphBuilderFactory);
+		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory.getPath(), dependencyGraphDotExportConfiguration);
 
 		final AbstractConsumerStage<Graph> debugStage = new GraphPrinterStage();
 
