@@ -22,8 +22,11 @@ public final class ExampleConfigExecution {
 	public static void main(final String[] args) {
 
 		// TODO Temp
-		// final File importDirectory = new File("C:/Users/Soeren/Desktop/SoftArchKram/jedit-records/kieker-20170115-163405515-UTC-Leonard-KIEKER");
-		final File importDirectory = new File("../kieker-examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141008-101258768-UTC");
+		// final File importDirectory = new File("C:/Users/Soeren/Desktop/jedit-records/kieker-20170115-163405515-UTC-Leonard-KIEKER");
+		final File importDirectory = new File("C:/Users/Soeren/Desktop/jedit-records/kieker-20170505-083525426-UTC-DESKTOP-UTJ4LDE-KIEKER");
+		// final File importDirectory = new File("../kieker-examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141008-101258768-UTC");
+		// final File importDirectory = new File("C:/Users/Soeren/Desktop/Neuer Ordner/kieker-20141103-190203561-UTC-j2eeservice-KIEKER-TEST");
+
 		// final File importDirectory = new File("../kieker-examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC");
 		final File exportDirectory = new File("C:/Users/Soeren/Desktop/kieker-output");
 
