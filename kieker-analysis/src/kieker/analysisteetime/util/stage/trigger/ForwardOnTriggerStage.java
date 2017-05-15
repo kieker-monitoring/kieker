@@ -42,20 +42,19 @@ public class ForwardOnTriggerStage<T> extends AbstractStage implements ITransfor
 	}
 
 	private void handleTrigger(final Trigger trigger) {
-		switch (this.sendStrategy) {
-		case FIFO:
-			while (this.deque.size() > 0) {
-				final T element = this.deque.removeFirst();
-				this.getOutputPort().send(element);
+		while (this.deque.size() > 0) {
+			final T element;
+			switch (this.sendStrategy) {
+			case FIFO:
+				element = this.deque.removeFirst();
+				break;
+			case LIFO:
+				element = this.deque.removeLast();
+				break;
+			default:
+				throw new IllegalStateException();
 			}
-			break;
-		case LIFO:
-			while (this.deque.size() > 0) {
-				final T element = this.deque.removeLast();
-				this.getOutputPort().send(element);
-			}
-		default:
-			break;
+			this.getOutputPort().send(element);
 		}
 	}
 
