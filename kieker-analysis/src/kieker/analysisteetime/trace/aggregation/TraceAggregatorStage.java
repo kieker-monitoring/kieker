@@ -30,7 +30,7 @@ public class TraceAggregatorStage extends CompositeStage implements ITransformat
 
 	@Override
 	public InputPort<Trace> getInputPort() {
-		return this.getInputPort();
+		return this.inputPort;
 	}
 
 	@Override
