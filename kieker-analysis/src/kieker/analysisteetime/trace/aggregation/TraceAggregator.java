@@ -17,9 +17,14 @@ import kieker.analysisteetime.model.analysismodel.trace.TraceFactory;
 public class TraceAggregator {
 
 	private final TraceFactory traceFactory = TraceFactory.eINSTANCE;
-	private final boolean considerFailed = true; // TODO Temp
-	private final TraceEquivalence traceEquivalence = new TraceEquivalence(this.considerFailed);
+	private final boolean considerFailed;
+	private final TraceEquivalence traceEquivalence;
 	private final Map<Equivalence.Wrapper<Trace>, Trace> aggregatedTraces = new HashMap<>();
+
+	public TraceAggregator(final boolean considerFailed) {
+		this.considerFailed = considerFailed;
+		this.traceEquivalence = new TraceEquivalence(considerFailed);
+	}
 
 	public AggregatedTraceWrapper handleTrace(final Trace trace) {
 		final Equivalence.Wrapper<Trace> equalityWrappedTrace = this.traceEquivalence.wrap(trace);

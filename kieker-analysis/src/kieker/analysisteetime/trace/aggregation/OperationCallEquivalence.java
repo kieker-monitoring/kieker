@@ -13,15 +13,17 @@ import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 /**
  * Wrapper class for a {@link OperationCall} to provide adequate {@code equals()} and {@code hashCode()}
  * methods.
+ * This class defines an equivalence for {@link OperationCall}s using the class {@link Equivalence}. Therefore,
+ * it provides the ability to wrap {@link OperationCall}s with adequate {@code equals()} and {@code hashCode()}
+ * methods using its {@link #wrap(OperationCall)} method.
  *
  * With this class, two {@link OperationCall}s are considered equal iff both belong to the same
- * {@link DeployedOperation} and - optionally - have the same failed cause and if their children
- * are also considered equal (in the same order).
+ * {@link DeployedOperation}, their children are also considered equal (in the same order) and - optionally -
+ * have the same failed cause.
  *
  * @author Sören Henning
  *
  */
-// TODO Java Doc
 public class OperationCallEquivalence extends Equivalence<OperationCall> {
 
 	private final boolean considerFailed;

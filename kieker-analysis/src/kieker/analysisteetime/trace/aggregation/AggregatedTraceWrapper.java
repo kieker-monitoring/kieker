@@ -9,7 +9,7 @@ import kieker.analysisteetime.model.analysismodel.trace.Trace;
  */
 public final class AggregatedTraceWrapper {
 
-	private final Trace aggregatedTrace;
+	private final Trace aggregatedTrace; // BETTER use own class for aggregated traces
 	private final Trace trace;
 	private final boolean isFirst;
 

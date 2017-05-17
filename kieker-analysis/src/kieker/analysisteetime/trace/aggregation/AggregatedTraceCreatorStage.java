@@ -6,7 +6,11 @@ import teetime.stage.basic.AbstractTransformation;
 
 public class AggregatedTraceCreatorStage extends AbstractTransformation<Trace, AggregatedTraceWrapper> {
 
-	private final TraceAggregator aggregatedTraceCreator = new TraceAggregator();
+	private final TraceAggregator aggregatedTraceCreator;
+
+	public AggregatedTraceCreatorStage(final boolean considerFailed) {
+		this.aggregatedTraceCreator = new TraceAggregator(considerFailed);
+	}
 
 	@Override
 	protected void execute(final Trace trace) {
