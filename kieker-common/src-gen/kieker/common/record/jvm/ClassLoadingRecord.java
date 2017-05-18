@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
@@ -32,16 +47,22 @@ public class ClassLoadingRecord extends AbstractJVMRecord {
 		int.class, // ClassLoadingRecord.loadedClassCount
 		long.class, // ClassLoadingRecord.unloadedClassCount
 	};
-
-	/** user-defined constants */
-
-	/** default constants */
-
-	/** property declarations */
-	private final long totalLoadedClassCount;
-	private final int loadedClassCount;
-	private final long unloadedClassCount;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"vmName",
+		"totalLoadedClassCount",
+		"loadedClassCount",
+		"unloadedClassCount",
+	};
+	
+	/** property declarations. */
+	private long totalLoadedClassCount;
+	private int loadedClassCount;
+	private long unloadedClassCount;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -111,7 +132,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord {
 		this.loadedClassCount = deserializer.getInt();
 		this.unloadedClassCount = deserializer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -157,6 +178,14 @@ public class ClassLoadingRecord extends AbstractJVMRecord {
 		return TYPES; // NOPMD
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -219,12 +248,25 @@ public class ClassLoadingRecord extends AbstractJVMRecord {
 	public final long getTotalLoadedClassCount() {
 		return this.totalLoadedClassCount;
 	}
-
+	
+	public final void setTotalLoadedClassCount(long totalLoadedClassCount) {
+		this.totalLoadedClassCount = totalLoadedClassCount;
+	}
+	
 	public final int getLoadedClassCount() {
 		return this.loadedClassCount;
 	}
-
+	
+	public final void setLoadedClassCount(int loadedClassCount) {
+		this.loadedClassCount = loadedClassCount;
+	}
+	
 	public final long getUnloadedClassCount() {
 		return this.unloadedClassCount;
 	}
+	
+	public final void setUnloadedClassCount(long unloadedClassCount) {
+		this.unloadedClassCount = unloadedClassCount;
+	}
+
 }

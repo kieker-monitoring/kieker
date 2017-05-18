@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
@@ -32,23 +47,30 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		double.class, // LoadAverageRecord.fiveMinLoadAverage
 		double.class, // LoadAverageRecord.fifteenMinLoadAverage
 	};
-
-	/** user-defined constants */
-
-	/** default constants */
+	
+	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final double ONE_MIN_LOAD_AVERAGE = 0.0;
 	public static final double FIVE_MIN_LOAD_AVERAGE = 0.0;
 	public static final double FIFTEEN_MIN_LOAD_AVERAGE = 0.0;
-
-	/** property declarations */
-	private final long timestamp;
-	private final String hostname;
-	private final double oneMinLoadAverage;
-	private final double fiveMinLoadAverage;
-	private final double fifteenMinLoadAverage;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"oneMinLoadAverage",
+		"fiveMinLoadAverage",
+		"fifteenMinLoadAverage",
+	};
+	
+	/** property declarations. */
+	private long timestamp;
+	private String hostname;
+	private double oneMinLoadAverage;
+	private double fiveMinLoadAverage;
+	private double fifteenMinLoadAverage;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -121,7 +143,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		this.fiveMinLoadAverage = deserializer.getDouble();
 		this.fifteenMinLoadAverage = deserializer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -164,6 +186,14 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		return TYPES; // NOPMD
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -223,20 +253,41 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-
+	
+	public final void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+	
 	public final String getHostname() {
 		return this.hostname;
 	}
-
+	
+	public final void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
+	
 	public final double getOneMinLoadAverage() {
 		return this.oneMinLoadAverage;
 	}
-
+	
+	public final void setOneMinLoadAverage(double oneMinLoadAverage) {
+		this.oneMinLoadAverage = oneMinLoadAverage;
+	}
+	
 	public final double getFiveMinLoadAverage() {
 		return this.fiveMinLoadAverage;
 	}
-
+	
+	public final void setFiveMinLoadAverage(double fiveMinLoadAverage) {
+		this.fiveMinLoadAverage = fiveMinLoadAverage;
+	}
+	
 	public final double getFifteenMinLoadAverage() {
 		return this.fifteenMinLoadAverage;
 	}
+	
+	public final void setFifteenMinLoadAverage(double fifteenMinLoadAverage) {
+		this.fifteenMinLoadAverage = fifteenMinLoadAverage;
+	}
+
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
@@ -31,27 +30,35 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.10
  */
 public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	private static final long serialVersionUID = 4302229080791508406L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // NamedTSPoint.timestamp
 			+ TYPE_SIZE_DOUBLE // NamedTSPoint.value
 			+ TYPE_SIZE_STRING // NamedTSPoint.name
 	;
-	private static final long serialVersionUID = 4302229080791508406L;
-
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // NamedTSPoint.timestamp
 		double.class, // NamedTSPoint.value
 		String.class, // NamedTSPoint.name
 	};
-
-	/* user-defined constants */
-	/* default constants */
+		
+	/** default constants. */
 	public static final String NAME = "";
-	/* property declarations */
-	private final long timestamp;
-	private final double value;
-	private final String name;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"value",
+		"name",
+	};
+	
+	/** property declarations. */
+	private long timestamp;
+	private double value;
+	private String name;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -111,7 +118,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		this.value = deserializer.getDouble();
 		this.name = deserializer.getString();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -123,7 +130,6 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 			this.getName()
 		};
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -131,7 +137,6 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getName());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -141,7 +146,6 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		serializer.putDouble(this.getValue());
 		serializer.putString(this.getName());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -149,7 +153,15 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -168,7 +180,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -199,17 +211,29 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		}
 		return true;
 	}
-
+	
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-
+	
+	public final void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+	
 	public final double getValue() {
 		return this.value;
 	}
-
+	
+	public final void setValue(double value) {
+		this.value = value;
+	}
+	
 	public final String getName() {
 		return this.name;
+	}
+	
+	public final void setName(String name) {
+		this.name = name;
 	}
 
 }

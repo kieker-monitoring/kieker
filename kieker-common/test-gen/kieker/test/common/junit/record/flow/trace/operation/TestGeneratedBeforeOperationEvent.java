@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.test.common.junit.record.flow.trace.operation;
 
 import org.junit.Assert;
@@ -21,16 +20,15 @@ import org.junit.Test;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
-
 import kieker.test.common.junit.AbstractGeneratedKiekerTest;
-		
+
 /**
  * Creates {@link OperationExecutionRecord}s via the available constructors and
  * checks the values passed values via getters.
  * 
- * @author Kieker Build
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.5
  */
 public class TestGeneratedBeforeOperationEvent extends AbstractGeneratedKiekerTest {
 
@@ -39,11 +37,11 @@ public class TestGeneratedBeforeOperationEvent extends AbstractGeneratedKiekerTe
 	}
 
 	/**
-	 * Tests {@link BeforeOperationEvent#TestBeforeOperationEvent(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link BeforeOperationEvent#TestBeforeOperationEvent(long, long, int, string, string)}.
 	 */
 	@Test
 	public void testToArray() { // NOPMD (assert missing)
-	for (int i=0;i<ARRAY_LENGTH;i++) {
+		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
 			BeforeOperationEvent record = new BeforeOperationEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()));
 			
@@ -93,7 +91,7 @@ public class TestGeneratedBeforeOperationEvent extends AbstractGeneratedKiekerTe
 	}
 	
 	/**
-	 * Tests {@link BeforeOperationEvent#TestBeforeOperationEvent(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link BeforeOperationEvent#TestBeforeOperationEvent(long, long, int, string, string)}.
 	 */
 	@Test
 	public void testBuffer() { // NOPMD (assert missing)
@@ -111,7 +109,7 @@ public class TestGeneratedBeforeOperationEvent extends AbstractGeneratedKiekerTe
 	}
 	
 	/**
-	 * Tests {@link BeforeOperationEvent#TestBeforeOperationEvent(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link BeforeOperationEvent#TestBeforeOperationEvent(long, long, int, string, string)}.
 	 */
 	@Test
 	public void testParameterConstruction() { // NOPMD (assert missing)
@@ -126,5 +124,25 @@ public class TestGeneratedBeforeOperationEvent extends AbstractGeneratedKiekerTe
 			Assert.assertEquals("BeforeOperationEvent.operationSignature values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getOperationSignature());
 			Assert.assertEquals("BeforeOperationEvent.classSignature values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getClassSignature());
 		}
+	}
+	
+	@Test
+	public void testEquality() {
+		int i = 0;
+		BeforeOperationEvent oneRecord = new BeforeOperationEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()));
+		i = 0;
+		BeforeOperationEvent copiedRecord = new BeforeOperationEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()));
+		
+		Assert.assertEquals(oneRecord, copiedRecord);
+	}	
+	
+	@Test
+	public void testUnequality() {
+		int i = 0;
+		BeforeOperationEvent oneRecord = new BeforeOperationEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()));
+		i = 2;
+		BeforeOperationEvent anotherRecord = new BeforeOperationEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()));
+		
+		Assert.assertNotEquals(oneRecord, anotherRecord);
 	}
 }

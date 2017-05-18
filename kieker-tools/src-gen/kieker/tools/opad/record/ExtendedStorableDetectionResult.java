@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
@@ -29,7 +28,9 @@ import kieker.common.util.registry.IRegistry;
  *
  * @since 1.10
  */
-public class ExtendedStorableDetectionResult extends StorableDetectionResult {
+public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
+	private static final long serialVersionUID = 3489846495430494003L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // StorableDetectionResult.applicationName
 			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.value
@@ -38,8 +39,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.score
 			+ TYPE_SIZE_DOUBLE // ExtendedStorableDetectionResult.anomalyThreshold
 	;
-	private static final long serialVersionUID = 3489846495430494003L;
-
+	
 	public static final Class<?>[] TYPES = {
 		String.class, // StorableDetectionResult.applicationName
 		double.class, // StorableDetectionResult.value
@@ -48,12 +48,20 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 		double.class, // StorableDetectionResult.score
 		double.class, // ExtendedStorableDetectionResult.anomalyThreshold
 	};
-
-	/* user-defined constants */
-	/* default constants */
-	/* property declarations */
-	private final double anomalyThreshold;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"applicationName",
+		"value",
+		"timestamp",
+		"forecast",
+		"score",
+		"anomalyThreshold",
+	};
+	
+	/** property declarations. */
+	private double anomalyThreshold;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -115,7 +123,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 
 		this.anomalyThreshold = deserializer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -130,7 +138,6 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 			this.getAnomalyThreshold()
 		};
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -138,7 +145,6 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getApplicationName());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -151,7 +157,6 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 		serializer.putDouble(this.getScore());
 		serializer.putDouble(this.getAnomalyThreshold());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -159,7 +164,15 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -178,7 +191,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -218,9 +231,13 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 		}
 		return true;
 	}
-
+	
 	public final double getAnomalyThreshold() {
 		return this.anomalyThreshold;
+	}
+	
+	public final void setAnomalyThreshold(double anomalyThreshold) {
+		this.anomalyThreshold = anomalyThreshold;
 	}
 
 }

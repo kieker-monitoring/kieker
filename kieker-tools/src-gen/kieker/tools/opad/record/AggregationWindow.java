@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
@@ -31,23 +30,27 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.10
  */
 public class AggregationWindow extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	private static final long serialVersionUID = -6015104562956593414L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AggregationWindow.windowStart
 			+ TYPE_SIZE_LONG // AggregationWindow.windowEnd
 	;
-	private static final long serialVersionUID = -6015104562956593414L;
-
 	public static final Class<?>[] TYPES = {
 		long.class, // AggregationWindow.windowStart
 		long.class, // AggregationWindow.windowEnd
 	};
-
-	/* user-defined constants */
-	/* default constants */
-	/* property declarations */
-	private final long windowStart;
-	private final long windowEnd;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"windowStart",
+		"windowEnd",
+	};
+	
+	/** property declarations. */
+	private long windowStart;
+	private long windowEnd;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -101,7 +104,7 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 		this.windowStart = deserializer.getLong();
 		this.windowEnd = deserializer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -112,14 +115,12 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 			this.getWindowEnd()
 		};
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -128,7 +129,6 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 		serializer.putLong(this.getWindowStart());
 		serializer.putLong(this.getWindowEnd());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -136,7 +136,15 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -155,7 +163,7 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -183,13 +191,21 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 		}
 		return true;
 	}
-
+	
 	public final long getWindowStart() {
 		return this.windowStart;
 	}
-
+	
+	public final void setWindowStart(long windowStart) {
+		this.windowStart = windowStart;
+	}
+	
 	public final long getWindowEnd() {
 		return this.windowEnd;
+	}
+	
+	public final void setWindowEnd(long windowEnd) {
+		this.windowEnd = windowEnd;
 	}
 
 }

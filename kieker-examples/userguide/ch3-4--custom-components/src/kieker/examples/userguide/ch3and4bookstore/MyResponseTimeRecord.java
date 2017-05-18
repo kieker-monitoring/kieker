@@ -87,6 +87,11 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 	}
 
 	@Override
+	public String[] getValueNames() {
+		return new String[] { "className", "methodName", "responseTimeNanos" };
+	}	
+	
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

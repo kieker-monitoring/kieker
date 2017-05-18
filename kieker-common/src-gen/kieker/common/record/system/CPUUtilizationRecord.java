@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
@@ -42,10 +57,8 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		double.class, // CPUUtilizationRecord.totalUtilization
 		double.class, // CPUUtilizationRecord.idle
 	};
-
-	/** user-defined constants */
-
-	/** default constants */
+	
+	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String CPU_ID = "";
@@ -56,19 +69,33 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	public static final double IRQ = 0.0;
 	public static final double TOTAL_UTILIZATION = 0.0;
 	public static final double IDLE = 0.0;
-
-	/** property declarations */
-	private final long timestamp;
-	private final String hostname;
-	private final String cpuID;
-	private final double user;
-	private final double system;
-	private final double wait;
-	private final double nice;
-	private final double irq;
-	private final double totalUtilization;
-	private final double idle;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"cpuID",
+		"user",
+		"system",
+		"wait",
+		"nice",
+		"irq",
+		"totalUtilization",
+		"idle",
+	};
+	
+	/** property declarations. */
+	private long timestamp;
+	private String hostname;
+	private String cpuID;
+	private double user;
+	private double system;
+	private double wait;
+	private double nice;
+	private double irq;
+	private double totalUtilization;
+	private double idle;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -171,7 +198,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		this.totalUtilization = deserializer.getDouble();
 		this.idle = deserializer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -225,6 +252,14 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		return TYPES; // NOPMD
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -299,40 +334,81 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-
+	
+	public final void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+	
 	public final String getHostname() {
 		return this.hostname;
 	}
-
+	
+	public final void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
+	
 	public final String getCpuID() {
 		return this.cpuID;
 	}
-
+	
+	public final void setCpuID(String cpuID) {
+		this.cpuID = cpuID;
+	}
+	
 	public final double getUser() {
 		return this.user;
 	}
-
+	
+	public final void setUser(double user) {
+		this.user = user;
+	}
+	
 	public final double getSystem() {
 		return this.system;
 	}
-
+	
+	public final void setSystem(double system) {
+		this.system = system;
+	}
+	
 	public final double getWait() {
 		return this.wait;
 	}
-
+	
+	public final void setWait(double wait) {
+		this.wait = wait;
+	}
+	
 	public final double getNice() {
 		return this.nice;
 	}
-
+	
+	public final void setNice(double nice) {
+		this.nice = nice;
+	}
+	
 	public final double getIrq() {
 		return this.irq;
 	}
-
+	
+	public final void setIrq(double irq) {
+		this.irq = irq;
+	}
+	
 	public final double getTotalUtilization() {
 		return this.totalUtilization;
 	}
-
+	
+	public final void setTotalUtilization(double totalUtilization) {
+		this.totalUtilization = totalUtilization;
+	}
+	
 	public final double getIdle() {
 		return this.idle;
 	}
+	
+	public final void setIdle(double idle) {
+		this.idle = idle;
+	}
+
 }

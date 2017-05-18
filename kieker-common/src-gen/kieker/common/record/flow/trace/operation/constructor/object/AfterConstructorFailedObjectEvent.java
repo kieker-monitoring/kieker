@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.flow.trace.operation.constructor.object;
 
 import java.nio.BufferOverflowException;
@@ -36,15 +51,24 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		String.class, // IExceptionRecord.cause
 		int.class, // IObjectRecord.objectId
 	};
-
-	/** user-defined constants */
-
-	/** default constants */
+	
+	/** default constants. */
 	public static final int OBJECT_ID = 0;
-
-	/** property declarations */
-	private final int objectId;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"operationSignature",
+		"classSignature",
+		"cause",
+		"objectId",
+	};
+	
+	/** property declarations. */
+	private int objectId;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -108,7 +132,7 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 
 		this.objectId = deserializer.getInt();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -124,7 +148,7 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 			this.getObjectId()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -134,7 +158,7 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getCause());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -148,7 +172,7 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		serializer.putString(this.getCause());
 		serializer.putInt(this.getObjectId());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -157,6 +181,14 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		return TYPES; // NOPMD
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -223,4 +255,9 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	public final int getObjectId() {
 		return this.objectId;
 	}
+	
+	public final void setObjectId(int objectId) {
+		this.objectId = objectId;
+	}
+
 }

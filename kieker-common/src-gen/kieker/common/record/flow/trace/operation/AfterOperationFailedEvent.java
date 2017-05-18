@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.flow.trace.operation;
 
 import java.nio.BufferOverflowException;
@@ -33,15 +48,23 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		String.class, // IClassSignature.classSignature
 		String.class, // IExceptionRecord.cause
 	};
-
-	/** user-defined constants */
-
-	/** default constants */
+	
+	/** default constants. */
 	public static final String CAUSE = "";
-
-	/** property declarations */
-	private final String cause;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"operationSignature",
+		"classSignature",
+		"cause",
+	};
+	
+	/** property declarations. */
+	private String cause;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -103,7 +126,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 
 		this.cause = deserializer.getString();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -118,7 +141,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 			this.getCause()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -150,6 +173,14 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		return TYPES; // NOPMD
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -213,4 +244,9 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	public final String getCause() {
 		return this.cause;
 	}
+	
+	public final void setCause(String cause) {
+		this.cause = cause;
+	}
+
 }

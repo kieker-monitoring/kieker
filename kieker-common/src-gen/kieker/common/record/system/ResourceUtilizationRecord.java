@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
@@ -30,21 +45,27 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		String.class, // ResourceUtilizationRecord.resourceName
 		double.class, // ResourceUtilizationRecord.utilization
 	};
-
-	/** user-defined constants */
-
-	/** default constants */
+	
+	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String RESOURCE_NAME = "";
 	public static final double UTILIZATION = 0.0;
-
-	/** property declarations */
-	private final long timestamp;
-	private final String hostname;
-	private final String resourceName;
-	private final double utilization;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"resourceName",
+		"utilization",
+	};
+	
+	/** property declarations. */
+	private long timestamp;
+	private String hostname;
+	private String resourceName;
+	private double utilization;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -110,7 +131,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		this.resourceName = deserializer.getString();
 		this.utilization = deserializer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -152,6 +173,14 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		return TYPES; // NOPMD
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -208,16 +237,33 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-
+	
+	public final void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+	
 	public final String getHostname() {
 		return this.hostname;
 	}
-
+	
+	public final void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
+	
 	public final String getResourceName() {
 		return this.resourceName;
 	}
-
+	
+	public final void setResourceName(String resourceName) {
+		this.resourceName = resourceName;
+	}
+	
 	public final double getUtilization() {
 		return this.utilization;
 	}
+	
+	public final void setUtilization(double utilization) {
+		this.utilization = utilization;
+	}
+
 }

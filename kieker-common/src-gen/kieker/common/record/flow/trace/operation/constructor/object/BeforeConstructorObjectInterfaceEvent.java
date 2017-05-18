@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.flow.trace.operation.constructor.object;
 
 import java.nio.BufferOverflowException;
@@ -35,15 +50,24 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		int.class, // IObjectRecord.objectId
 		String.class, // IInterfaceRecord.interface
 	};
-
-	/** user-defined constants */
-
-	/** default constants */
+	
+	/** default constants. */
 	public static final String INTERFACE = "";
-
-	/** property declarations */
-	private final String _interface;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"operationSignature",
+		"classSignature",
+		"objectId",
+		"interface",
+	};
+	
+	/** property declarations. */
+	private String _interface;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -99,6 +123,13 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	 * @param deserializer
 	 *            The deserializer to use
 	 *
+	 * This constructor converts the given buffer into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
+	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
@@ -107,7 +138,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 
 		this._interface = deserializer.getString();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -123,7 +154,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 			this.getInterface()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -156,6 +187,14 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		return TYPES; // NOPMD
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -222,4 +261,9 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	public final String getInterface() {
 		return this._interface;
 	}
+	
+	public final void setInterface(String _interface) {
+		this._interface = _interface;
+	}
+
 }

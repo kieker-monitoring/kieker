@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.flow.trace.operation;
 
 import java.nio.BufferOverflowException;
@@ -35,17 +50,26 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		String.class, // ICallRecord.calleeOperationSignature
 		String.class, // ICallRecord.calleeClassSignature
 	};
-
-	/** user-defined constants */
-
-	/** default constants */
+	
+	/** default constants. */
 	public static final String CALLEE_OPERATION_SIGNATURE = "";
 	public static final String CALLEE_CLASS_SIGNATURE = "";
-
-	/** property declarations */
-	private final String calleeOperationSignature;
-	private final String calleeClassSignature;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"operationSignature",
+		"classSignature",
+		"calleeOperationSignature",
+		"calleeClassSignature",
+	};
+	
+	/** property declarations. */
+	private String calleeOperationSignature;
+	private String calleeClassSignature;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -113,7 +137,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		this.calleeOperationSignature = deserializer.getString();
 		this.calleeClassSignature = deserializer.getString();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -129,7 +153,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 			this.getCalleeClassSignature()
 		};
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -163,6 +187,14 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		return TYPES; // NOPMD
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -229,19 +261,33 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	public final String getCallerOperationSignature() {
 		return this.getOperationSignature();
 	}
-
-	@Override
+	
+	public final void setCallerOperationSignature(String callerOperationSignature) {
+		setOperationSignature(callerOperationSignature);
+	}
+	
 	public final String getCallerClassSignature() {
 		return this.getClassSignature();
 	}
-
-	@Override
+	
+	public final void setCallerClassSignature(String callerClassSignature) {
+		setClassSignature(callerClassSignature);
+	}
+	
 	public final String getCalleeOperationSignature() {
 		return this.calleeOperationSignature;
 	}
-
-	@Override
+	
+	public final void setCalleeOperationSignature(String calleeOperationSignature) {
+		this.calleeOperationSignature = calleeOperationSignature;
+	}
+	
 	public final String getCalleeClassSignature() {
 		return this.calleeClassSignature;
 	}
+	
+	public final void setCalleeClassSignature(String calleeClassSignature) {
+		this.calleeClassSignature = calleeClassSignature;
+	}
+
 }

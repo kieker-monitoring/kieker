@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
@@ -34,17 +49,24 @@ public class ThreadsStatusRecord extends AbstractJVMRecord {
 		long.class, // ThreadsStatusRecord.peakThreadCount
 		long.class, // ThreadsStatusRecord.totalStartedThreadCount
 	};
-
-	/** user-defined constants */
-
-	/** default constants */
-
-	/** property declarations */
-	private final long threadCount;
-	private final long daemonThreadCount;
-	private final long peakThreadCount;
-	private final long totalStartedThreadCount;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"vmName",
+		"threadCount",
+		"daemonThreadCount",
+		"peakThreadCount",
+		"totalStartedThreadCount",
+	};
+	
+	/** property declarations. */
+	private long threadCount;
+	private long daemonThreadCount;
+	private long peakThreadCount;
+	private long totalStartedThreadCount;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -120,7 +142,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord {
 		this.peakThreadCount = deserializer.getLong();
 		this.totalStartedThreadCount = deserializer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -168,6 +190,14 @@ public class ThreadsStatusRecord extends AbstractJVMRecord {
 		return TYPES; // NOPMD
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -233,16 +263,33 @@ public class ThreadsStatusRecord extends AbstractJVMRecord {
 	public final long getThreadCount() {
 		return this.threadCount;
 	}
-
+	
+	public final void setThreadCount(long threadCount) {
+		this.threadCount = threadCount;
+	}
+	
 	public final long getDaemonThreadCount() {
 		return this.daemonThreadCount;
 	}
-
+	
+	public final void setDaemonThreadCount(long daemonThreadCount) {
+		this.daemonThreadCount = daemonThreadCount;
+	}
+	
 	public final long getPeakThreadCount() {
 		return this.peakThreadCount;
 	}
-
+	
+	public final void setPeakThreadCount(long peakThreadCount) {
+		this.peakThreadCount = peakThreadCount;
+	}
+	
 	public final long getTotalStartedThreadCount() {
 		return this.totalStartedThreadCount;
 	}
+	
+	public final void setTotalStartedThreadCount(long totalStartedThreadCount) {
+		this.totalStartedThreadCount = totalStartedThreadCount;
+	}
+
 }

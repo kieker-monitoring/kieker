@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
@@ -56,10 +71,8 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		double.class, // NetworkUtilizationRecord.rxOverrunsPerSecond
 		double.class, // NetworkUtilizationRecord.rxPacketsPerSecond
 	};
-
-	/** user-defined constants */
-
-	/** default constants */
+	
+	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String INTERFACE_NAME = "";
@@ -77,26 +90,47 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	public static final double RX_FRAME_PER_SECOND = 0.0;
 	public static final double RX_OVERRUNS_PER_SECOND = 0.0;
 	public static final double RX_PACKETS_PER_SECOND = 0.0;
-
-	/** property declarations */
-	private final long timestamp;
-	private final String hostname;
-	private final String interfaceName;
-	private final long speed;
-	private final double txBytesPerSecond;
-	private final double txCarrierPerSecond;
-	private final double txCollisionsPerSecond;
-	private final double txDroppedPerSecond;
-	private final double txErrorsPerSecond;
-	private final double txOverrunsPerSecond;
-	private final double txPacketsPerSecond;
-	private final double rxBytesPerSecond;
-	private final double rxDroppedPerSecond;
-	private final double rxErrorsPerSecond;
-	private final double rxFramePerSecond;
-	private final double rxOverrunsPerSecond;
-	private final double rxPacketsPerSecond;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"interfaceName",
+		"speed",
+		"txBytesPerSecond",
+		"txCarrierPerSecond",
+		"txCollisionsPerSecond",
+		"txDroppedPerSecond",
+		"txErrorsPerSecond",
+		"txOverrunsPerSecond",
+		"txPacketsPerSecond",
+		"rxBytesPerSecond",
+		"rxDroppedPerSecond",
+		"rxErrorsPerSecond",
+		"rxFramePerSecond",
+		"rxOverrunsPerSecond",
+		"rxPacketsPerSecond",
+	};
+	
+	/** property declarations. */
+	private long timestamp;
+	private String hostname;
+	private String interfaceName;
+	private long speed;
+	private double txBytesPerSecond;
+	private double txCarrierPerSecond;
+	private double txCollisionsPerSecond;
+	private double txDroppedPerSecond;
+	private double txErrorsPerSecond;
+	private double txOverrunsPerSecond;
+	private double txPacketsPerSecond;
+	private double rxBytesPerSecond;
+	private double rxDroppedPerSecond;
+	private double rxErrorsPerSecond;
+	private double rxFramePerSecond;
+	private double rxOverrunsPerSecond;
+	private double rxPacketsPerSecond;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -243,7 +277,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		this.rxOverrunsPerSecond = deserializer.getDouble();
 		this.rxPacketsPerSecond = deserializer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -311,6 +345,14 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		return TYPES; // NOPMD
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -406,68 +448,137 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-
+	
+	public final void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+	
 	public final String getHostname() {
 		return this.hostname;
 	}
-
+	
+	public final void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
+	
 	public final String getInterfaceName() {
 		return this.interfaceName;
 	}
-
+	
+	public final void setInterfaceName(String interfaceName) {
+		this.interfaceName = interfaceName;
+	}
+	
 	public final long getSpeed() {
 		return this.speed;
 	}
-
+	
+	public final void setSpeed(long speed) {
+		this.speed = speed;
+	}
+	
 	public final double getTxBytesPerSecond() {
 		return this.txBytesPerSecond;
 	}
-
+	
+	public final void setTxBytesPerSecond(double txBytesPerSecond) {
+		this.txBytesPerSecond = txBytesPerSecond;
+	}
+	
 	public final double getTxCarrierPerSecond() {
 		return this.txCarrierPerSecond;
 	}
-
+	
+	public final void setTxCarrierPerSecond(double txCarrierPerSecond) {
+		this.txCarrierPerSecond = txCarrierPerSecond;
+	}
+	
 	public final double getTxCollisionsPerSecond() {
 		return this.txCollisionsPerSecond;
 	}
-
+	
+	public final void setTxCollisionsPerSecond(double txCollisionsPerSecond) {
+		this.txCollisionsPerSecond = txCollisionsPerSecond;
+	}
+	
 	public final double getTxDroppedPerSecond() {
 		return this.txDroppedPerSecond;
 	}
-
+	
+	public final void setTxDroppedPerSecond(double txDroppedPerSecond) {
+		this.txDroppedPerSecond = txDroppedPerSecond;
+	}
+	
 	public final double getTxErrorsPerSecond() {
 		return this.txErrorsPerSecond;
 	}
-
+	
+	public final void setTxErrorsPerSecond(double txErrorsPerSecond) {
+		this.txErrorsPerSecond = txErrorsPerSecond;
+	}
+	
 	public final double getTxOverrunsPerSecond() {
 		return this.txOverrunsPerSecond;
 	}
-
+	
+	public final void setTxOverrunsPerSecond(double txOverrunsPerSecond) {
+		this.txOverrunsPerSecond = txOverrunsPerSecond;
+	}
+	
 	public final double getTxPacketsPerSecond() {
 		return this.txPacketsPerSecond;
 	}
-
+	
+	public final void setTxPacketsPerSecond(double txPacketsPerSecond) {
+		this.txPacketsPerSecond = txPacketsPerSecond;
+	}
+	
 	public final double getRxBytesPerSecond() {
 		return this.rxBytesPerSecond;
 	}
-
+	
+	public final void setRxBytesPerSecond(double rxBytesPerSecond) {
+		this.rxBytesPerSecond = rxBytesPerSecond;
+	}
+	
 	public final double getRxDroppedPerSecond() {
 		return this.rxDroppedPerSecond;
 	}
-
+	
+	public final void setRxDroppedPerSecond(double rxDroppedPerSecond) {
+		this.rxDroppedPerSecond = rxDroppedPerSecond;
+	}
+	
 	public final double getRxErrorsPerSecond() {
 		return this.rxErrorsPerSecond;
 	}
-
+	
+	public final void setRxErrorsPerSecond(double rxErrorsPerSecond) {
+		this.rxErrorsPerSecond = rxErrorsPerSecond;
+	}
+	
 	public final double getRxFramePerSecond() {
 		return this.rxFramePerSecond;
 	}
-
+	
+	public final void setRxFramePerSecond(double rxFramePerSecond) {
+		this.rxFramePerSecond = rxFramePerSecond;
+	}
+	
 	public final double getRxOverrunsPerSecond() {
 		return this.rxOverrunsPerSecond;
 	}
-
+	
+	public final void setRxOverrunsPerSecond(double rxOverrunsPerSecond) {
+		this.rxOverrunsPerSecond = rxOverrunsPerSecond;
+	}
+	
 	public final double getRxPacketsPerSecond() {
 		return this.rxPacketsPerSecond;
 	}
+	
+	public final void setRxPacketsPerSecond(double rxPacketsPerSecond) {
+		this.rxPacketsPerSecond = rxPacketsPerSecond;
+	}
+
 }

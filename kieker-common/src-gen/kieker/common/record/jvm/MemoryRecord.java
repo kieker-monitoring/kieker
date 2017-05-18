@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
@@ -44,22 +59,34 @@ public class MemoryRecord extends AbstractJVMRecord {
 		long.class, // MemoryRecord.nonHeapInitBytes
 		int.class, // MemoryRecord.objectPendingFinalizationCount
 	};
-
-	/** user-defined constants */
-
-	/** default constants */
-
-	/** property declarations */
-	private final long heapMaxBytes;
-	private final long heapUsedBytes;
-	private final long heapCommittedBytes;
-	private final long heapInitBytes;
-	private final long nonHeapMaxBytes;
-	private final long nonHeapUsedBytes;
-	private final long nonHeapCommittedBytes;
-	private final long nonHeapInitBytes;
-	private final int objectPendingFinalizationCount;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"vmName",
+		"heapMaxBytes",
+		"heapUsedBytes",
+		"heapCommittedBytes",
+		"heapInitBytes",
+		"nonHeapMaxBytes",
+		"nonHeapUsedBytes",
+		"nonHeapCommittedBytes",
+		"nonHeapInitBytes",
+		"objectPendingFinalizationCount",
+	};
+	
+	/** property declarations. */
+	private long heapMaxBytes;
+	private long heapUsedBytes;
+	private long heapCommittedBytes;
+	private long heapInitBytes;
+	private long nonHeapMaxBytes;
+	private long nonHeapUsedBytes;
+	private long nonHeapCommittedBytes;
+	private long nonHeapInitBytes;
+	private int objectPendingFinalizationCount;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -166,7 +193,7 @@ public class MemoryRecord extends AbstractJVMRecord {
 		this.nonHeapInitBytes = deserializer.getLong();
 		this.objectPendingFinalizationCount = deserializer.getInt();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -224,6 +251,14 @@ public class MemoryRecord extends AbstractJVMRecord {
 		return TYPES; // NOPMD
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -304,36 +339,73 @@ public class MemoryRecord extends AbstractJVMRecord {
 	public final long getHeapMaxBytes() {
 		return this.heapMaxBytes;
 	}
-
+	
+	public final void setHeapMaxBytes(long heapMaxBytes) {
+		this.heapMaxBytes = heapMaxBytes;
+	}
+	
 	public final long getHeapUsedBytes() {
 		return this.heapUsedBytes;
 	}
-
+	
+	public final void setHeapUsedBytes(long heapUsedBytes) {
+		this.heapUsedBytes = heapUsedBytes;
+	}
+	
 	public final long getHeapCommittedBytes() {
 		return this.heapCommittedBytes;
 	}
-
+	
+	public final void setHeapCommittedBytes(long heapCommittedBytes) {
+		this.heapCommittedBytes = heapCommittedBytes;
+	}
+	
 	public final long getHeapInitBytes() {
 		return this.heapInitBytes;
 	}
-
+	
+	public final void setHeapInitBytes(long heapInitBytes) {
+		this.heapInitBytes = heapInitBytes;
+	}
+	
 	public final long getNonHeapMaxBytes() {
 		return this.nonHeapMaxBytes;
 	}
-
+	
+	public final void setNonHeapMaxBytes(long nonHeapMaxBytes) {
+		this.nonHeapMaxBytes = nonHeapMaxBytes;
+	}
+	
 	public final long getNonHeapUsedBytes() {
 		return this.nonHeapUsedBytes;
 	}
-
+	
+	public final void setNonHeapUsedBytes(long nonHeapUsedBytes) {
+		this.nonHeapUsedBytes = nonHeapUsedBytes;
+	}
+	
 	public final long getNonHeapCommittedBytes() {
 		return this.nonHeapCommittedBytes;
 	}
-
+	
+	public final void setNonHeapCommittedBytes(long nonHeapCommittedBytes) {
+		this.nonHeapCommittedBytes = nonHeapCommittedBytes;
+	}
+	
 	public final long getNonHeapInitBytes() {
 		return this.nonHeapInitBytes;
 	}
-
+	
+	public final void setNonHeapInitBytes(long nonHeapInitBytes) {
+		this.nonHeapInitBytes = nonHeapInitBytes;
+	}
+	
 	public final int getObjectPendingFinalizationCount() {
 		return this.objectPendingFinalizationCount;
 	}
+	
+	public final void setObjectPendingFinalizationCount(int objectPendingFinalizationCount) {
+		this.objectPendingFinalizationCount = objectPendingFinalizationCount;
+	}
+
 }

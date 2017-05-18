@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.test.common.junit.record.misc;
 
 import org.junit.Assert;
@@ -21,16 +20,15 @@ import org.junit.Test;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.misc.TimestampRecord;
-
 import kieker.test.common.junit.AbstractGeneratedKiekerTest;
-		
+
 /**
  * Creates {@link OperationExecutionRecord}s via the available constructors and
  * checks the values passed values via getters.
  * 
- * @author Kieker Build
+ * @author Andre van Hoorn, Jan Waller
  * 
- * @since 1.10
+ * @since 1.5
  */
 public class TestGeneratedTimestampRecord extends AbstractGeneratedKiekerTest {
 
@@ -39,11 +37,11 @@ public class TestGeneratedTimestampRecord extends AbstractGeneratedKiekerTest {
 	}
 
 	/**
-	 * Tests {@link TimestampRecord#TestTimestampRecord(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link TimestampRecord#TestTimestampRecord(long)}.
 	 */
 	@Test
 	public void testToArray() { // NOPMD (assert missing)
-	for (int i=0;i<ARRAY_LENGTH;i++) {
+		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
 			TimestampRecord record = new TimestampRecord(LONG_VALUES.get(i % LONG_VALUES.size()));
 			
@@ -69,7 +67,7 @@ public class TestGeneratedTimestampRecord extends AbstractGeneratedKiekerTest {
 	}
 	
 	/**
-	 * Tests {@link TimestampRecord#TestTimestampRecord(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link TimestampRecord#TestTimestampRecord(long)}.
 	 */
 	@Test
 	public void testBuffer() { // NOPMD (assert missing)
@@ -83,7 +81,7 @@ public class TestGeneratedTimestampRecord extends AbstractGeneratedKiekerTest {
 	}
 	
 	/**
-	 * Tests {@link TimestampRecord#TestTimestampRecord(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link TimestampRecord#TestTimestampRecord(long)}.
 	 */
 	@Test
 	public void testParameterConstruction() { // NOPMD (assert missing)
@@ -94,5 +92,25 @@ public class TestGeneratedTimestampRecord extends AbstractGeneratedKiekerTest {
 			// check values
 			Assert.assertEquals("TimestampRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
 		}
+	}
+	
+	@Test
+	public void testEquality() {
+		int i = 0;
+		TimestampRecord oneRecord = new TimestampRecord(LONG_VALUES.get(i % LONG_VALUES.size()));
+		i = 0;
+		TimestampRecord copiedRecord = new TimestampRecord(LONG_VALUES.get(i % LONG_VALUES.size()));
+		
+		Assert.assertEquals(oneRecord, copiedRecord);
+	}	
+	
+	@Test
+	public void testUnequality() {
+		int i = 0;
+		TimestampRecord oneRecord = new TimestampRecord(LONG_VALUES.get(i % LONG_VALUES.size()));
+		i = 2;
+		TimestampRecord anotherRecord = new TimestampRecord(LONG_VALUES.get(i % LONG_VALUES.size()));
+		
+		Assert.assertNotEquals(oneRecord, anotherRecord);
 	}
 }

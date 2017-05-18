@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.test.common.junit.record.system;
 
 import org.junit.Assert;
@@ -21,16 +20,15 @@ import org.junit.Test;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.system.LoadAverageRecord;
-
 import kieker.test.common.junit.AbstractGeneratedKiekerTest;
-		
+
 /**
  * Creates {@link OperationExecutionRecord}s via the available constructors and
  * checks the values passed values via getters.
  * 
- * @author Kieker Build
+ * @author Teerat Pitakrat
  * 
- * @since 1.10
+ * @since 1.12
  */
 public class TestGeneratedLoadAverageRecord extends AbstractGeneratedKiekerTest {
 
@@ -39,11 +37,11 @@ public class TestGeneratedLoadAverageRecord extends AbstractGeneratedKiekerTest 
 	}
 
 	/**
-	 * Tests {@link LoadAverageRecord#TestLoadAverageRecord(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link LoadAverageRecord#TestLoadAverageRecord(long, string, double, double, double)}.
 	 */
 	@Test
 	public void testToArray() { // NOPMD (assert missing)
-	for (int i=0;i<ARRAY_LENGTH;i++) {
+		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
 			LoadAverageRecord record = new LoadAverageRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()));
 			
@@ -96,7 +94,7 @@ public class TestGeneratedLoadAverageRecord extends AbstractGeneratedKiekerTest 
 	}
 	
 	/**
-	 * Tests {@link LoadAverageRecord#TestLoadAverageRecord(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link LoadAverageRecord#TestLoadAverageRecord(long, string, double, double, double)}.
 	 */
 	@Test
 	public void testBuffer() { // NOPMD (assert missing)
@@ -117,7 +115,7 @@ public class TestGeneratedLoadAverageRecord extends AbstractGeneratedKiekerTest 
 	}
 	
 	/**
-	 * Tests {@link LoadAverageRecord#TestLoadAverageRecord(String, String, long, long, long, String, int, int)}.
+	 * Tests {@link LoadAverageRecord#TestLoadAverageRecord(long, string, double, double, double)}.
 	 */
 	@Test
 	public void testParameterConstruction() { // NOPMD (assert missing)
@@ -135,5 +133,25 @@ public class TestGeneratedLoadAverageRecord extends AbstractGeneratedKiekerTest 
 			Assert.assertEquals("LoadAverageRecord.fifteenMinLoadAverage values are not equal.", 
 			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getFifteenMinLoadAverage(), 0.0000001);
 		}
+	}
+	
+	@Test
+	public void testEquality() {
+		int i = 0;
+		LoadAverageRecord oneRecord = new LoadAverageRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()));
+		i = 0;
+		LoadAverageRecord copiedRecord = new LoadAverageRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()));
+		
+		Assert.assertEquals(oneRecord, copiedRecord);
+	}	
+	
+	@Test
+	public void testUnequality() {
+		int i = 0;
+		LoadAverageRecord oneRecord = new LoadAverageRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()));
+		i = 2;
+		LoadAverageRecord anotherRecord = new LoadAverageRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()));
+		
+		Assert.assertNotEquals(oneRecord, anotherRecord);
 	}
 }

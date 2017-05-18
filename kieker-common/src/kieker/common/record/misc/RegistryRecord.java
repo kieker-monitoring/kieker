@@ -138,6 +138,11 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
+	
+	@Override
+	public String[] getValueNames() {
+		return new String[] { "id", "string", "strBytes" };
+	}
 
 	/**
 	 * {@inheritDoc}

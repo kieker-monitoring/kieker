@@ -109,7 +109,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	public void initFromArray(Object[] values);
 
 	/**
-	 * This method should deliver an array with the classes of the single values for the record.
+	 * This method delivers an array with the classes of the single values for the record.
 	 *
 	 * @return The types of the values. This returned array should be treated readonly.
 	 *
@@ -118,6 +118,17 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * @since 1.2
 	 */
 	public Class<?>[] getValueTypes();
+	
+	/**
+	 * This method delivers an array containing the value names of the record.
+	 *
+	 * @return The types of the values. This returned array should be treated readonly.
+	 *
+	 * @see #toArray()
+	 *
+	 * @since 1.2
+	 */
+	public String[] getValueNames();
 
 	/**
 	 * This method should deliver the size of a binary representation of this record.

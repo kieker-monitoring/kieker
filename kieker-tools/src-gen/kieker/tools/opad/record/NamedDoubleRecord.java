@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
@@ -31,27 +30,36 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.10
  */
 public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	private static final long serialVersionUID = 3508131536785781597L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // NamedDoubleRecord.applicationName
 			+ TYPE_SIZE_LONG // NamedDoubleRecord.timestamp
 			+ TYPE_SIZE_DOUBLE // NamedDoubleRecord.responseTime
 	;
-	private static final long serialVersionUID = 3508131536785781597L;
-
+	
 	public static final Class<?>[] TYPES = {
 		String.class, // NamedDoubleRecord.applicationName
 		long.class, // NamedDoubleRecord.timestamp
 		double.class, // NamedDoubleRecord.responseTime
 	};
-
-	/* user-defined constants */
-	/* default constants */
+	
+	
+	/** default constants. */
 	public static final String APPLICATION_NAME = "";
-	/* property declarations */
-	private final String applicationName;
-	private final long timestamp;
-	private final double responseTime;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"applicationName",
+		"timestamp",
+		"responseTime",
+	};
+	
+	/** property declarations. */
+	private String applicationName;
+	private long timestamp;
+	private double responseTime;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -111,7 +119,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		this.timestamp = deserializer.getLong();
 		this.responseTime = deserializer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -123,7 +131,6 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 			this.getResponseTime()
 		};
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -131,7 +138,6 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getApplicationName());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -141,7 +147,6 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		serializer.putLong(this.getTimestamp());
 		serializer.putDouble(this.getResponseTime());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -149,7 +154,15 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -168,7 +181,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -199,17 +212,29 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		}
 		return true;
 	}
-
+	
 	public final String getApplicationName() {
 		return this.applicationName;
 	}
-
+	
+	public final void setApplicationName(String applicationName) {
+		this.applicationName = applicationName;
+	}
+	
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-
+	
+	public final void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+	
 	public final double getResponseTime() {
 		return this.responseTime;
+	}
+	
+	public final void setResponseTime(double responseTime) {
+		this.responseTime = responseTime;
 	}
 
 }
