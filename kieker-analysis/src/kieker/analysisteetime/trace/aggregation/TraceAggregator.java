@@ -58,19 +58,19 @@ public class TraceAggregator {
 	}
 
 	private Trace createAggregatedTrace(final Trace trace) {
-		final OperationCall aggregatedRootOperationCall = this.createOperationCall(trace.getRootOperationCall());
+		final OperationCall aggregatedRootOperationCall = this.createAggregatedOperationCall(trace.getRootOperationCall());
 		final Trace aggregatedTrace = this.traceFactory.createTrace();
 		aggregatedTrace.setRootOperationCall(aggregatedRootOperationCall);
 		return aggregatedTrace;
 	}
 
-	private OperationCall createOperationCall(final OperationCall call) {
+	private OperationCall createAggregatedOperationCall(final OperationCall call) {
 		final OperationCall aggregatedCall = this.traceFactory.createOperationCall();
 		if (this.considerFailed) {
 			aggregatedCall.setFailed(call.isFailed());
 			aggregatedCall.setFailedCause(call.getFailedCause());
 		}
-		call.getChildren().forEach(c -> aggregatedCall.getChildren().add(this.createOperationCall(c)));
+		call.getChildren().forEach(c -> aggregatedCall.getChildren().add(this.createAggregatedOperationCall(c)));
 		return aggregatedCall;
 	}
 
