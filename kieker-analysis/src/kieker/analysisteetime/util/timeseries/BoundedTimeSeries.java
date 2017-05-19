@@ -20,12 +20,12 @@ import java.time.Duration;
 import java.time.Instant;
 
 /**
-*
-*
-* @author Sören Henning
-*
-*/
-public class BoundedTimeSeries extends TimeSeries {
+ *
+ *
+ * @author Sören Henning
+ *
+ */
+public class BoundedTimeSeries<T extends TimeSeriesPoint> extends TimeSeries<T> {
 
 	private final Duration capacity;
 
@@ -34,31 +34,31 @@ public class BoundedTimeSeries extends TimeSeries {
 		this.capacity = capacity;
 	}
 
-	public BoundedTimeSeries(final Duration capacity, final TimeSeries timeSeries) {
+	public BoundedTimeSeries(final Duration capacity, final TimeSeries<T> timeSeries) {
 		super(timeSeries);
 		this.capacity = capacity;
 		removeOverflow();
 	}
 
-	public BoundedTimeSeries(final BoundedTimeSeries timeSeries) {
+	public BoundedTimeSeries(final BoundedTimeSeries<T> timeSeries) {
 		super(timeSeries);
 		this.capacity = timeSeries.getCapacity();
 	}
 
 	@Override
-	public void appendBegin(final TimeSeriesPoint timeSeriesPoint) {
+	public void appendBegin(final T timeSeriesPoint) {
 		super.appendBegin(timeSeriesPoint);
 		removeOverflow();
 	}
 
 	@Override
-	public void appendEnd(final TimeSeriesPoint timeSeriesPoint) {
+	public void appendEnd(final T timeSeriesPoint) {
 		super.appendEnd(timeSeriesPoint);
 		removeOverflow();
 	}
 
 	public Duration getCapacity() {
-		return capacity;
+		return this.capacity;
 	}
 
 	private void removeOverflow() {

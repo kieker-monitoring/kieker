@@ -21,15 +21,17 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
+import kieker.analysisteetime.util.BackwardsIterable;
+
 /**
  *
  *
  * @author Sören Henning
  *
  */
-public class TimeSeries implements Iterable<TimeSeriesPoint>, kieker.analysisteetime.util.BackwardsIterable<TimeSeriesPoint> {
+public class TimeSeries<T extends TimeSeriesPoint> implements Iterable<T>, BackwardsIterable<T> {
 
-	private final Deque<TimeSeriesPoint> timeSeriesPoints;
+	private final Deque<T> timeSeriesPoints;
 
 	/**
 	 * Constructs an empty time series.
@@ -41,7 +43,7 @@ public class TimeSeries implements Iterable<TimeSeriesPoint>, kieker.analysistee
 	/**
 	 * Constructs a copy of the specified time series.
 	 */
-	public TimeSeries(final TimeSeries timeSeries) {
+	public TimeSeries(final TimeSeries<T> timeSeries) {
 		this.timeSeriesPoints = new ArrayDeque<>(timeSeries.timeSeriesPoints);
 	}
 
@@ -49,7 +51,7 @@ public class TimeSeries implements Iterable<TimeSeriesPoint>, kieker.analysistee
 	 * Appends a point at the end of this time series, so the point is the new
 	 * earliest point in this time series.
 	 */
-	public void appendBegin(final TimeSeriesPoint timeSeriesPoint) {
+	public void appendBegin(final T timeSeriesPoint) {
 		if (!this.timeSeriesPoints.isEmpty() && !timeSeriesPoint.getTime().isBefore(this.timeSeriesPoints.getFirst().getTime())) {
 			// TODO throw expection
 		}
@@ -61,7 +63,7 @@ public class TimeSeries implements Iterable<TimeSeriesPoint>, kieker.analysistee
 	 * Appends a point at the end of this time series, so the point is the new
 	 * latest point in this time series.
 	 */
-	public void appendEnd(final TimeSeriesPoint timeSeriesPoint) {
+	public void appendEnd(final T timeSeriesPoint) {
 		if (!this.timeSeriesPoints.isEmpty() && !timeSeriesPoint.getTime().isAfter(this.timeSeriesPoints.getLast().getTime())) {
 			// TODO throw expection
 		}
@@ -106,7 +108,7 @@ public class TimeSeries implements Iterable<TimeSeriesPoint>, kieker.analysistee
 	 * points will be returned in temporal order from earliest to latest.
 	 */
 	@Override
-	public Iterator<TimeSeriesPoint> iterator() {
+	public Iterator<T> iterator() {
 		return this.timeSeriesPoints.iterator();
 	}
 
@@ -115,14 +117,14 @@ public class TimeSeries implements Iterable<TimeSeriesPoint>, kieker.analysistee
 	 * points will be returned in temporal order from latest to earliest.
 	 */
 	@Override
-	public Iterator<TimeSeriesPoint> backwardsIterator() {
+	public Iterator<T> backwardsIterator() {
 		return this.timeSeriesPoints.descendingIterator();
 	}
 
 	/**
 	 * Returns a sequential {@code Stream} with this time series as its source.
 	 */
-	public Stream<TimeSeriesPoint> stream() {
+	public Stream<T> stream() {
 		return this.timeSeriesPoints.stream();
 	}
 
