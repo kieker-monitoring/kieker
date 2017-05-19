@@ -12,8 +12,6 @@ import kieker.analysisteetime.dependencygraphs.DependencyGraphCreatorStage;
 import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependencyGraphBuilderFactory;
 import kieker.analysisteetime.dependencygraphs.dot.DotExportConfigurationFactory;
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexTypeMapper;
-import kieker.analysisteetime.experimental.DebugStage;
-import kieker.analysisteetime.experimental.GraphPrinterStage;
 import kieker.analysisteetime.model.ExecutionModelAssemblerStage;
 import kieker.analysisteetime.model.ModelObjectFromOperationCallAccesors;
 import kieker.analysisteetime.model.StaticModelsAssemblerStage;
@@ -38,14 +36,11 @@ import kieker.analysisteetime.trace.graph.TraceToGraphTransformerStage;
 import kieker.analysisteetime.trace.graph.dot.DotTraceGraphFileWriterStage;
 import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
 import kieker.analysisteetime.trace.reconstruction.TraceStatisticsDecoratorStage;
-import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.export.dot.DotExportConfiguration;
 import kieker.analysisteetime.util.graph.export.dot.DotFileWriterStage;
 import kieker.analysisteetime.util.graph.export.graphml.GraphMLFileWriterStage;
 import kieker.analysisteetime.util.stage.trigger.TriggerOnTerminationStage;
-import kieker.common.record.IMonitoringRecord;
 
-import teetime.framework.AbstractConsumerStage;
 import teetime.framework.Configuration;
 import teetime.stage.basic.distributor.Distributor;
 import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
@@ -76,7 +71,7 @@ public class ExampleConfiguration extends Configuration {
 		// Create the stages
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
 		// TODO consider if KiekerMetadataRecord has to be processed
-		final DebugStage<IMonitoringRecord> debugRecordsStage = new DebugStage<>();
+		// final DebugStage<IMonitoringRecord> debugRecordsStage = new DebugStage<>();
 		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final StaticModelsAssemblerStage staticModelsAssembler = new StaticModelsAssemblerStage(this.typeModel, this.assemblyModel, this.deploymentModel,
 				this.signatureExtractor);
@@ -98,11 +93,10 @@ public class ExampleConfiguration extends Configuration {
 				deploymentGraphBuilderFactory);
 		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory.getPath(), dependencyGraphDotExportConfiguration);
 
-		final AbstractConsumerStage<Graph> debugStage = new GraphPrinterStage();
+		// final AbstractConsumerStage<Graph> debugStage = new GraphPrinterStage();
 
 		// Connect the stages
-		super.connectPorts(reader.getOutputPort(), debugRecordsStage.getInputPort());
-		super.connectPorts(debugRecordsStage.getOutputPort(), allowedRecordsFilter.getInputPort());
+		super.connectPorts(reader.getOutputPort(), allowedRecordsFilter.getInputPort());
 		super.connectPorts(allowedRecordsFilter.getOutputPort(), staticModelsAssembler.getInputPort());
 		super.connectPorts(staticModelsAssembler.getOutputPort(), traceReconstructor.getInputPort());
 		super.connectPorts(traceReconstructor.getOutputPort(), traceStatisticsDecorator.getInputPort());

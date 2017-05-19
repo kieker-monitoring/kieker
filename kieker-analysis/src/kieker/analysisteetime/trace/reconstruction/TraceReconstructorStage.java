@@ -23,7 +23,6 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
-import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
@@ -50,7 +49,7 @@ public class TraceReconstructorStage extends AbstractTransformation<IFlowRecord,
 			this.traceReconstructor.handleTraceMetadataRecord((TraceMetadata) record);
 		} else if (record instanceof BeforeOperationEvent) {
 			this.traceReconstructor.handleBeforeOperationEventRecord((BeforeOperationEvent) record);
-		} else if (record instanceof AbstractOperationEvent) {
+		} else if (record instanceof AfterOperationEvent) {
 			final Optional<Trace> trace = this.traceReconstructor.handleAfterOperationEventRecord((AfterOperationEvent) record);
 			// trace.ifPresent(this.outputPort::send);
 			if (trace.isPresent()) {
