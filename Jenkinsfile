@@ -17,6 +17,8 @@ node('docker') {
 
     stage ('4-release-check-short logs') {
         sh 'sudo docker run -v ${WORKSPACE}:/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew checkReleaseArchivesShort"'
+
+        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true
     }
 
     stage ('5-release-check-extended logs') {
