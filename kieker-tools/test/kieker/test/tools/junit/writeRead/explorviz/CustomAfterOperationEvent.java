@@ -91,6 +91,11 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 	public Class<?>[] getValueTypes() { // NOPMD (not used method)
 		return (Class<?>[]) this.toArray();
 	}
+	
+	@Override
+	public String[] getValueNames() {
+		return new String[] { "timestamp", "traceId", "orderIndex" } ;
+	}
 
 	@Override
 	public int getSize() {

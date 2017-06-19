@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
@@ -39,9 +54,8 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		long.class, // MemSwapUsageRecord.swapFree
 	};
 	
-	/** user-defined constants */
 	
-	/** default constants */
+	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final long MEM_TOTAL = 0L;
@@ -51,15 +65,27 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public static final long SWAP_USED = 0L;
 	public static final long SWAP_FREE = 0L;
 	
-	/** property declarations */
-	private final long timestamp;
-	private final String hostname;
-	private final long memTotal;
-	private final long memUsed;
-	private final long memFree;
-	private final long swapTotal;
-	private final long swapUsed;
-	private final long swapFree;
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"memTotal",
+		"memUsed",
+		"memFree",
+		"swapTotal",
+		"swapUsed",
+		"swapFree",
+	};
+	
+	/** property declarations. */
+	private long timestamp;
+	private String hostname;
+	private long memTotal;
+	private long memUsed;
+	private long memFree;
+	private long swapTotal;
+	private long swapUsed;
+	private long swapFree;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -132,10 +158,12 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	}
 
 	/**
-	 * This constructor converts the given array into a record.
+	 * This constructor converts the given buffer into a record.
 	 * 
 	 * @param buffer
-	 *            The bytes for the record.
+	 *            The bytes for the record
+	 * @param stringRegistry
+	 *            The string registry for deserialization
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -150,7 +178,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		this.swapUsed = buffer.getLong();
 		this.swapFree = buffer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -167,7 +195,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 			this.getSwapFree()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -175,7 +202,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getHostname());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -190,13 +216,20 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		buffer.putLong(this.getSwapUsed());
 		buffer.putLong(this.getSwapFree());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**
@@ -253,33 +286,65 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	
 	public final long getTimestamp() {
 		return this.timestamp;
-	}	
+	}
+	
+	public final void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
 	
 	public final String getHostname() {
 		return this.hostname;
-	}	
+	}
+	
+	public final void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
 	
 	public final long getMemTotal() {
 		return this.memTotal;
-	}	
+	}
+	
+	public final void setMemTotal(long memTotal) {
+		this.memTotal = memTotal;
+	}
 	
 	public final long getMemUsed() {
 		return this.memUsed;
-	}	
+	}
+	
+	public final void setMemUsed(long memUsed) {
+		this.memUsed = memUsed;
+	}
 	
 	public final long getMemFree() {
 		return this.memFree;
-	}	
+	}
+	
+	public final void setMemFree(long memFree) {
+		this.memFree = memFree;
+	}
 	
 	public final long getSwapTotal() {
 		return this.swapTotal;
-	}	
+	}
+	
+	public final void setSwapTotal(long swapTotal) {
+		this.swapTotal = swapTotal;
+	}
 	
 	public final long getSwapUsed() {
 		return this.swapUsed;
-	}	
+	}
+	
+	public final void setSwapUsed(long swapUsed) {
+		this.swapUsed = swapUsed;
+	}
 	
 	public final long getSwapFree() {
 		return this.swapFree;
-	}	
+	}
+	
+	public final void setSwapFree(long swapFree) {
+		this.swapFree = swapFree;
+	}
 }
