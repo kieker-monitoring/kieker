@@ -31,13 +31,15 @@ node('kieker-slave-docker') {
         }
     }
 
-    #stage ('push-to-stable') {
-    #    if (env.BRANCH_NAME == "master") {
-    #        sh 'echo "We are in master - pushing to stable branch."'
+    /*
+    stage ('push-to-stable') {
+        if (env.BRANCH_NAME == "master") {
+            sh 'echo "We are in master - pushing to stable branch."'
 
-    #        sh 'git push git@github.com:kieker-monitoring/kieker.git master:stable'
-    #    } else {
-    #        sh 'echo "We are not in master - skipping."'
-    #    }
-    #}
+            sh 'git push git@github.com:kieker-monitoring/kieker.git master:stable'
+        } else {
+            sh 'echo "We are not in master - skipping."'
+        }
+    }
+    */
 }
