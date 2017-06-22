@@ -1,6 +1,7 @@
 #!groovy
 
 node('kieker-slave-docker') {
+    
     checkout scm 
 
     stage ('1-compile logs') {
