@@ -1,7 +1,7 @@
 #!groovy
 
 node('kieker-slave-docker') {
-    checkout scm
+    checkout scm 
 
     stage ('1-compile logs') {
         sh 'docker run -v ${WORKSPACE}:/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew -S compileJava compileTestJava"'
@@ -35,9 +35,9 @@ node('kieker-slave-docker') {
         if (env.BRANCH_NAME == "master") {
             sh 'echo "We are in master - pushing to stable branch."'
 
-            sh 'git push git@github.com:kieker-monitoring/kieker.git master:stable'
+            sh 'git push git@github.com:fachstudieRSS/kieker.git master:stable'
         } else {
-            sh 'echo "We are not in master - skipping."'
+            sh 'echo "We are not in  master - skipping."'
         }
     }
 }
