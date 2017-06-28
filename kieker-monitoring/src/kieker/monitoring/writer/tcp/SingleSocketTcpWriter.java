@@ -28,7 +28,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.io.DefaultValueSerializer;
+import kieker.common.record.io.*;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
@@ -72,6 +72,8 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 	private final RegisterAdapter<String> registerStringsAdapter;
 	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.serialize(..)}. */
 	private final GetIdAdapter<String> writeBytesAdapter;
+	/** the serializer to use for the incoming records */
+	private final IValueSerializer serializer;
 
 	public SingleSocketTcpWriter(final Configuration configuration) throws IOException {
 		super(configuration);
@@ -87,6 +89,8 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		this.writerRegistry = new WriterRegistry(this);
 		this.registerStringsAdapter = new RegisterAdapter<String>(this.writerRegistry);
 		this.writeBytesAdapter = new GetIdAdapter<String>(this.writerRegistry);
+
+		this.serializer = DefaultValueSerializer.create(this.buffer, this.writeBytesAdapter);
 	}
 
 	@Override
@@ -108,7 +112,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 		recordBuffer.putInt(this.writerRegistry.getId(recordClassName));
 		recordBuffer.putLong(monitoringRecord.getLoggingTimestamp());
-		monitoringRecord.serialize(DefaultValueSerializer.create(recordBuffer, this.writeBytesAdapter));
+		monitoringRecord.serialize(this.serializer);
 		// monitoringRecord.writeToBuffer(buffer, this.writerRegistry);
 
 		if (this.flush) {
