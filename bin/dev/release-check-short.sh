@@ -167,6 +167,7 @@ function assert_files_exist_common {
 # Asserts the existence of files in the src release
 function assert_files_exist_src {
 	assert_files_exist_common
+	assert_file_exists_regular "Jenkinsfile"
 	assert_dir_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/"
 	assert_file_NOT_exists_recursive "build"
