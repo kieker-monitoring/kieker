@@ -17,16 +17,16 @@ package kieker.common.record.flow.trace.operation.object;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
-
-import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
-import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.IObjectRecord;
+import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent implements IObjectRecord {
@@ -34,14 +34,14 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // IExceptionRecord.cause
-			 + TYPE_SIZE_INT // IObjectRecord.objectId
+			+ TYPE_SIZE_LONG // ITraceRecord.traceId
+			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
+			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			+ TYPE_SIZE_STRING // IClassSignature.classSignature
+			+ TYPE_SIZE_STRING // IExceptionRecord.cause
+			+ TYPE_SIZE_INT // IObjectRecord.objectId
 	;
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -51,7 +51,6 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		String.class, // IExceptionRecord.cause
 		int.class, // IObjectRecord.objectId
 	};
-	
 	
 	/** default constants. */
 	public static final int OBJECT_ID = 0;
@@ -72,7 +71,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -88,7 +87,8 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	 * @param objectId
 	 *            objectId
 	 */
-	public AfterOperationFailedObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String cause, final int objectId) {
+	public AfterOperationFailedObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature,
+			final String classSignature, final String cause, final int objectId) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature, cause);
 		this.objectId = objectId;
 	}
@@ -96,7 +96,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -107,7 +107,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -119,19 +119,18 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	}
 
 	/**
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
+	 * This constructor converts the given array into a record.
+	 *
+	 * @param deserializer
+	 *            The deserializer to use
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public AfterOperationFailedObjectEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.objectId = buffer.getInt();
+	public AfterOperationFailedObjectEvent(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		super(deserializer);
+
+		this.objectId = deserializer.getInt();
 	}
 	
 	/**
@@ -149,28 +148,31 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 			this.getObjectId()
 		};
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getOperationSignature());
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getCause());
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putLong(this.getTraceId());
-		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
-		buffer.putInt(stringRegistry.get(this.getClassSignature()));
-		buffer.putInt(stringRegistry.get(this.getCause()));
-		buffer.putInt(this.getObjectId());
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp());
+		serializer.putLong(this.getTraceId());
+		serializer.putInt(this.getOrderIndex());
+		serializer.putString(this.getOperationSignature());
+		serializer.putString(this.getClassSignature());
+		serializer.putString(this.getCause());
+		serializer.putInt(this.getObjectId());
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -178,7 +180,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -197,7 +199,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -205,39 +207,51 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
-		
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+
 		final AfterOperationFailedObjectEvent castedRecord = (AfterOperationFailedObjectEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
-		if (!this.getCause().equals(castedRecord.getCause())) return false;
-		if (this.getObjectId() != castedRecord.getObjectId()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (!this.getCause().equals(castedRecord.getCause())) {
+			return false;
+		}
+		if (this.getObjectId() != castedRecord.getObjectId()) {
+			return false;
+		}
 		return true;
 	}
-	
+
+	@Override
 	public final int getObjectId() {
 		return this.objectId;
 	}
@@ -245,4 +259,5 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	public final void setObjectId(int objectId) {
 		this.objectId = objectId;
 	}
+
 }

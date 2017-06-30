@@ -18,9 +18,8 @@ package kieker.common.record;
 
 import java.io.Serializable;
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -83,39 +82,21 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * Registers the string attributes of the record at the given <code>stringRegistry</code>.
 	 *
 	 * @since 1.11
+	 * @deprecated Is unnecessary when using the new, serializer-based output.
 	 */
+	@Deprecated
 	public void registerStrings(final IRegistry<String> stringRegistry);
 
 	/**
-	 * This method should deliver an byte array containing the content of the record. It should be possible to convert this array later into a record again.
+	 * This method serializes this record using the given serializer.
 	 *
-	 * @param buffer
-	 *            The used ByteBuffer with sufficient capacity
-	 * @param stringRegistry
-	 *            Usually the associated MonitoringController
-	 *
+	 * @param serializer
+	 *            The serializer to serialize the record with. *
 	 * @throws BufferOverflowException
-	 *             if buffer not sufficient
-	 *
-	 * @since 1.8
+	 *             If the underlying buffer has insufficient capacity to store this record
+	 * @since 1.13
 	 */
-	public void writeBytes(ByteBuffer buffer, IRegistry<String> stringRegistry) throws BufferOverflowException;
-
-	/**
-	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to
-	 * {@link #writeBytes(ByteBuffer, IRegistry)}.
-	 *
-	 * @param buffer
-	 *            The bytes for the record.
-	 * @param stringRegistry
-	 *            The Registry storing the strings.
-	 *
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
-	 *
-	 * @since 1.8
-	 */
-	public void initFromBytes(ByteBuffer buffer, IRegistry<String> stringRegistry) throws BufferUnderflowException;
+	public void serialize(IValueSerializer serializer) throws BufferOverflowException;
 
 	/**
 	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to {@link #toArray()}.
@@ -155,6 +136,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * @return The size.
 	 *
 	 * @since 1.8
+	 * @deprecated With the introduction of value serializers, this method has become obsolete.
 	 */
 	public int getSize();
 
@@ -185,9 +167,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * </p>
 	 *
 	 * <ul>
-	 * <li>a constructor accepting a ByteBuffer and a IRegistry<String> as arguments possibly throwing BufferUnderflowException.
+	 * <li>a constructor accepting a Deserializer as arguments possibly throwing BufferUnderflowException.
 	 * <li>a <code>public static final int SIZE</code> specifying the binary size of the record, usually returned via {@link #getSize()}.
-	 * <li>the {@link #initFromBytes(ByteBuffer, IRegistry)} method does not have to be implemented
 	 * </ul>
 	 *
 	 * @since 1.8

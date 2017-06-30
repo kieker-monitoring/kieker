@@ -75,6 +75,7 @@ public final class TestChunkingCollector {
 		// Wait until a timed write should have occurred
 		Thread.sleep(2 * deferredWriteDelayInMs);
 		controller.terminateMonitoring();
+		controller.waitForTermination(deferredWriteDelayInMs * 1000000L);
 
 		// Retrieve written data from the data storage
 		final byte[] data = TestRawDataStorage.getInstance().getData(testId);

@@ -16,23 +16,18 @@
 package kieker.common.record.flow;
 
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.registry.IRegistry;
-
-import kieker.common.record.flow.IEventRecord;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public abstract class AbstractEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IEventRecord {
-	private static final long serialVersionUID = -8847127127729394312L;
-
-	
+	private static final long serialVersionUID = -8847127127729394312L;	
 	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
@@ -43,7 +38,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 */
@@ -51,10 +46,9 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		this.timestamp = timestamp;
 	}
 
-
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -66,24 +60,21 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	}
 
 	/**
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
+	 * This constructor converts the given array into a record.
+	 *
+	 * @param deserializer
+	 *            The value deserializer to use.
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public AbstractEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
+	public AbstractEvent(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		this.timestamp = deserializer.getLong();
 	}
-	
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -91,33 +82,33 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
-		
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+
 		final AbstractEvent castedRecord = (AbstractEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
 		return true;
 	}
-	
+
+	@Override
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
@@ -125,4 +116,5 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	public final void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}
+
 }

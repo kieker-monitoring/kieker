@@ -17,15 +17,15 @@ package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
-import kieker.tools.opad.record.StorableDetectionResult;
+import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
-
 
 /**
  * @author Thomas Duellmann
- * 
+ *
  * @since 1.10
  */
 public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
@@ -33,11 +33,11 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // StorableDetectionResult.applicationName
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.value
-			 + TYPE_SIZE_LONG // StorableDetectionResult.timestamp
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.forecast
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.score
-			 + TYPE_SIZE_DOUBLE // ExtendedStorableDetectionResult.anomalyThreshold
+			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.value
+			+ TYPE_SIZE_LONG // StorableDetectionResult.timestamp
+			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.forecast
+			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.score
+			+ TYPE_SIZE_DOUBLE // ExtendedStorableDetectionResult.anomalyThreshold
 	;
 	
 	public static final Class<?>[] TYPES = {
@@ -48,8 +48,6 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		double.class, // StorableDetectionResult.score
 		double.class, // ExtendedStorableDetectionResult.anomalyThreshold
 	};
-	
-	
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -66,7 +64,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param applicationName
 	 *            applicationName
 	 * @param value
@@ -80,7 +78,8 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	 * @param anomalyThreshold
 	 *            anomalyThreshold
 	 */
-	public ExtendedStorableDetectionResult(final String applicationName, final double value, final long timestamp, final double forecast, final double score, final double anomalyThreshold) {
+	public ExtendedStorableDetectionResult(final String applicationName, final double value, final long timestamp, final double forecast, final double score,
+			final double anomalyThreshold) {
 		super(applicationName, value, timestamp, forecast, score);
 		this.anomalyThreshold = anomalyThreshold;
 	}
@@ -88,7 +87,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -99,7 +98,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -111,19 +110,18 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	}
 
 	/**
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
+	 * This constructor converts the given array into a record.
+	 *
+	 * @param deserializer
+	 *            The deserializer to use
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public ExtendedStorableDetectionResult(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.anomalyThreshold = buffer.getDouble();
+	public ExtendedStorableDetectionResult(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		super(deserializer);
+
+		this.anomalyThreshold = deserializer.getDouble();
 	}
 	
 	/**
@@ -144,20 +142,20 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getApplicationName());
 	}
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putInt(stringRegistry.get(this.getApplicationName()));
-		buffer.putDouble(this.getValue());
-		buffer.putLong(this.getTimestamp());
-		buffer.putDouble(this.getForecast());
-		buffer.putDouble(this.getScore());
-		buffer.putDouble(this.getAnomalyThreshold());
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putString(this.getApplicationName());
+		serializer.putDouble(this.getValue());
+		serializer.putLong(this.getTimestamp());
+		serializer.putDouble(this.getForecast());
+		serializer.putDouble(this.getScore());
+		serializer.putDouble(this.getAnomalyThreshold());
 	}
 	/**
 	 * {@inheritDoc}
@@ -185,7 +183,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -196,32 +194,41 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
-	/**
-	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
-		
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+
 		final ExtendedStorableDetectionResult castedRecord = (ExtendedStorableDetectionResult) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) return false;
-		if (isNotEqual(this.getValue(), castedRecord.getValue())) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (isNotEqual(this.getForecast(), castedRecord.getForecast())) return false;
-		if (isNotEqual(this.getScore(), castedRecord.getScore())) return false;
-		if (isNotEqual(this.getAnomalyThreshold(), castedRecord.getAnomalyThreshold())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) {
+			return false;
+		}
+		if (AbstractMonitoringRecord.isNotEqual(this.getValue(), castedRecord.getValue())) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (AbstractMonitoringRecord.isNotEqual(this.getForecast(), castedRecord.getForecast())) {
+			return false;
+		}
+		if (AbstractMonitoringRecord.isNotEqual(this.getScore(), castedRecord.getScore())) {
+			return false;
+		}
+		if (AbstractMonitoringRecord.isNotEqual(this.getAnomalyThreshold(), castedRecord.getAnomalyThreshold())) {
+			return false;
+		}
 		return true;
 	}
 	
@@ -232,4 +239,5 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	public final void setAnomalyThreshold(double anomalyThreshold) {
 		this.anomalyThreshold = anomalyThreshold;
 	}
+
 }

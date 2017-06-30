@@ -17,16 +17,16 @@ package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
-
 
 /**
  * @author Tom Frotscher
- * 
+ *
  * @since 1.10
  */
 public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
@@ -34,8 +34,8 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // NamedDoubleRecord.applicationName
-			 + TYPE_SIZE_LONG // NamedDoubleRecord.timestamp
-			 + TYPE_SIZE_DOUBLE // NamedDoubleRecord.responseTime
+			+ TYPE_SIZE_LONG // NamedDoubleRecord.timestamp
+			+ TYPE_SIZE_DOUBLE // NamedDoubleRecord.responseTime
 	;
 	
 	public static final Class<?>[] TYPES = {
@@ -62,7 +62,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param applicationName
 	 *            applicationName
 	 * @param timestamp
@@ -71,7 +71,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	 *            responseTime
 	 */
 	public NamedDoubleRecord(final String applicationName, final long timestamp, final double responseTime) {
-		this.applicationName = applicationName == null?"":applicationName;
+		this.applicationName = applicationName == null ? "" : applicationName;
 		this.timestamp = timestamp;
 		this.responseTime = responseTime;
 	}
@@ -79,7 +79,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -92,7 +92,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -106,20 +106,18 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	}
 
 	/**
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
+	 * This constructor converts the given array into a record.
+	 *
+	 * @param deserializer
+	 *            The deserializer to use
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public NamedDoubleRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.applicationName = stringRegistry.get(buffer.getInt());
-		this.timestamp = buffer.getLong();
-		this.responseTime = buffer.getDouble();
+	public NamedDoubleRecord(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		this.applicationName = deserializer.getString();
+		this.timestamp = deserializer.getLong();
+		this.responseTime = deserializer.getDouble();
 	}
 	
 	/**
@@ -137,17 +135,17 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getApplicationName());
 	}
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putInt(stringRegistry.get(this.getApplicationName()));
-		buffer.putLong(this.getTimestamp());
-		buffer.putDouble(this.getResponseTime());
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putString(this.getApplicationName());
+		serializer.putLong(this.getTimestamp());
+		serializer.putDouble(this.getResponseTime());
 	}
 	/**
 	 * {@inheritDoc}
@@ -175,7 +173,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -186,29 +184,32 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
-	/**
-	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
-		
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+
 		final NamedDoubleRecord castedRecord = (NamedDoubleRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (isNotEqual(this.getResponseTime(), castedRecord.getResponseTime())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (AbstractMonitoringRecord.isNotEqual(this.getResponseTime(), castedRecord.getResponseTime())) {
+			return false;
+		}
 		return true;
 	}
 	
@@ -235,4 +236,5 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	public final void setResponseTime(double responseTime) {
 		this.responseTime = responseTime;
 	}
+
 }

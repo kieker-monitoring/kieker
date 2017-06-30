@@ -15,28 +15,27 @@
  ***************************************************************************/
 package kieker.common.record.system;
 
-import java.nio.ByteBuffer;
-
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Teerat Pitakrat
- * 
+ *
  * @since 1.12
  */
 public final class NetworkUtilizationRecordFactory implements IRecordFactory<NetworkUtilizationRecord> {
-	
+
 	@Override
-	public NetworkUtilizationRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new NetworkUtilizationRecord(buffer, stringRegistry);
+	public NetworkUtilizationRecord create(final IValueDeserializer deserializer) {
+		return new NetworkUtilizationRecord(deserializer);
 	}
-	
+
 	@Override
 	public NetworkUtilizationRecord create(final Object[] values) {
 		return new NetworkUtilizationRecord(values);
 	}
-	
+
+	@Override
 	public int getRecordSizeInBytes() {
 		return NetworkUtilizationRecord.SIZE;
 	}

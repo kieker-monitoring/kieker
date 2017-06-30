@@ -15,18 +15,13 @@
  ***************************************************************************/
 package kieker.test.common.junit.record.flow.trace.concurrency.monitor;
 
-//import java.nio.ByteBuffer;
-
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.trace.concurrency.monitor.MonitorEntryEvent;
-//import kieker.common.util.registry.IRegistry;
-//import kieker.common.util.registry.Registry;
-
 import kieker.test.common.junit.AbstractGeneratedKiekerTest;
-//import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
-		
+
 /**
  * Creates {@link OperationExecutionRecord}s via the available constructors and
  * checks the values passed values via getters.

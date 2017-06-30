@@ -26,6 +26,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.DefaultValueDeserializer;
 import kieker.common.util.dataformat.FormatIdentifier;
 import kieker.common.util.dataformat.VariableLengthEncoding;
 import kieker.common.util.registry.IRegistry;
@@ -37,7 +38,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 
-	/** Format identifier.*/
+	/** Format identifier. */
 	public static final int FORMAT_IDENTIFIER = FormatIdentifier.DEFAULT_BINARY_FORMAT.getIdentifierValue();
 
 	/** Encoding to use for Strings. */
@@ -45,7 +46,7 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 
 	/** Charset for the encoding. */
 	private static final Charset CHARSET = Charset.forName(ENCODING_NAME);
-	
+
 	private final CachedRecordFactoryCatalog cachedRecordFactoryCatalog = CachedRecordFactoryCatalog.getInstance();
 
 	/**
@@ -113,7 +114,7 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 			final long loggingTimestamp = buffer.getLong();
 
 			final IRecordFactory<? extends IMonitoringRecord> recordFactory = recordFactoryCatalog.get(recordTypeName);
-			final IMonitoringRecord record = recordFactory.create(buffer, stringRegistry);
+			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.create(buffer, stringRegistry));
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			records.add(record);

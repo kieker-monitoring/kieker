@@ -16,21 +16,18 @@
 package kieker.common.record.flow.trace.concurrency.monitor;
 
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.util.registry.IRegistry;
-
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.8
  */
-public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
+public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	private static final long serialVersionUID = 8385865083415561635L;
 
-	
 	
 	/** default constants. */
 	public static final int LOCK_ID = 0;
@@ -41,7 +38,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -56,10 +53,9 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 		this.lockId = lockId;
 	}
 
-
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -71,25 +67,24 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 	}
 
 	/**
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
+	 * This constructor converts the given array into a record.
+	 *
+	 * @param deserializer
+	 *            The deserializer to use
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public AbstractMonitorEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.lockId = buffer.getInt();
+	public AbstractMonitorEvent(final IValueDeserializer deserializer)
+			throws BufferUnderflowException {
+		super(deserializer);
+
+		this.lockId = deserializer.getInt();
 	}
-	
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -97,36 +92,41 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
-		
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+
 		final AbstractMonitorEvent castedRecord = (AbstractMonitorEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (this.getLockId() != castedRecord.getLockId()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (this.getLockId() != castedRecord.getLockId()) {
+			return false;
+		}
 		return true;
 	}
-	
+
 	public final int getLockId() {
 		return this.lockId;
 	}
@@ -134,4 +134,5 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 	public final void setLockId(int lockId) {
 		this.lockId = lockId;
 	}
+
 }

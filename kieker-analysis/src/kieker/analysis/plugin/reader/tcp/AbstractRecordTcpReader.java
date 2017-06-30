@@ -24,6 +24,7 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.DefaultValueDeserializer;
 import kieker.common.util.registry.ILookup;
 
 /**
@@ -84,7 +85,7 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 		}
 
 		try {
-			final IMonitoringRecord record = recordFactory.create(buffer, this.stringRegistry);
+			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.create(buffer, this.stringRegistry));
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			this.onRecordReceived(record);

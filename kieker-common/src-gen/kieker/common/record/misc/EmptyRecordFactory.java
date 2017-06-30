@@ -15,28 +15,27 @@
  ***************************************************************************/
 package kieker.common.record.misc;
 
-import java.nio.ByteBuffer;
-
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 0.95a
  */
 public final class EmptyRecordFactory implements IRecordFactory<EmptyRecord> {
-	
+
 	@Override
-	public EmptyRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new EmptyRecord(buffer, stringRegistry);
+	public EmptyRecord create(final IValueDeserializer deserializer) {
+		return new EmptyRecord(deserializer);
 	}
-	
+
 	@Override
 	public EmptyRecord create(final Object[] values) {
 		return new EmptyRecord(values);
 	}
-	
+
+	@Override
 	public int getRecordSizeInBytes() {
 		return EmptyRecord.SIZE;
 	}

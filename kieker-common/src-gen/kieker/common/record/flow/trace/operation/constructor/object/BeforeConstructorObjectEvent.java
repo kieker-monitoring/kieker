@@ -17,16 +17,16 @@ package kieker.common.record.flow.trace.operation.constructor.object;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
-
-import kieker.common.record.flow.trace.operation.constructor.BeforeConstructorEvent;
-import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.IObjectRecord;
+import kieker.common.record.flow.trace.operation.constructor.BeforeConstructorEvent;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class BeforeConstructorObjectEvent extends BeforeConstructorEvent implements IObjectRecord {
@@ -34,13 +34,13 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_INT // IObjectRecord.objectId
+			+ TYPE_SIZE_LONG // ITraceRecord.traceId
+			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
+			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			+ TYPE_SIZE_STRING // IClassSignature.classSignature
+			+ TYPE_SIZE_INT // IObjectRecord.objectId
 	;
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -49,7 +49,6 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 		String.class, // IClassSignature.classSignature
 		int.class, // IObjectRecord.objectId
 	};
-	
 	
 	/** default constants. */
 	public static final int OBJECT_ID = 0;
@@ -69,7 +68,7 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -83,7 +82,8 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 	 * @param objectId
 	 *            objectId
 	 */
-	public BeforeConstructorObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final int objectId) {
+	public BeforeConstructorObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature,
+			final int objectId) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
 		this.objectId = objectId;
 	}
@@ -91,7 +91,7 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -102,7 +102,7 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -114,19 +114,18 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 	}
 
 	/**
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
+	 * This constructor converts the given array into a record.
+	 *
+	 * @param deserializer
+	 *            The deserializer to use
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public BeforeConstructorObjectEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.objectId = buffer.getInt();
+	public BeforeConstructorObjectEvent(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		super(deserializer);
+
+		this.objectId = deserializer.getInt();
 	}
 	
 	/**
@@ -143,26 +142,29 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 			this.getObjectId()
 		};
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getOperationSignature());
 		stringRegistry.get(this.getClassSignature());
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putLong(this.getTraceId());
-		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
-		buffer.putInt(stringRegistry.get(this.getClassSignature()));
-		buffer.putInt(this.getObjectId());
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp());
+		serializer.putLong(this.getTraceId());
+		serializer.putInt(this.getOrderIndex());
+		serializer.putString(this.getOperationSignature());
+		serializer.putString(this.getClassSignature());
+		serializer.putInt(this.getObjectId());
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -170,7 +172,7 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -189,7 +191,7 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -197,38 +199,48 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
-		
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+
 		final BeforeConstructorObjectEvent castedRecord = (BeforeConstructorObjectEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
-		if (this.getObjectId() != castedRecord.getObjectId()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (this.getObjectId() != castedRecord.getObjectId()) {
+			return false;
+		}
 		return true;
 	}
-	
+
+	@Override
 	public final int getObjectId() {
 		return this.objectId;
 	}
@@ -236,4 +248,5 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 	public final void setObjectId(int objectId) {
 		this.objectId = objectId;
 	}
+
 }

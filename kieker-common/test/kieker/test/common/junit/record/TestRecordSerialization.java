@@ -27,6 +27,8 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
@@ -34,7 +36,7 @@ import kieker.test.common.junit.AbstractDynamicKiekerTest;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
  */
 public class TestRecordSerialization extends AbstractDynamicKiekerTest {
@@ -122,11 +124,11 @@ public class TestRecordSerialization extends AbstractDynamicKiekerTest {
 		final IMonitoringRecord inRecord = AbstractMonitoringRecord.createFromArray((Class<? extends IMonitoringRecord>) clazz, unserializedTestArray);
 		final ByteBuffer byteBuffer = ByteBuffer.allocate(inRecord.getSize());
 
-		final int clazzID = this.registry.get(clazz.getCanonicalName());
-		inRecord.writeBytes(byteBuffer, this.registry);
+		final String clazzID = clazz.getCanonicalName();
+		inRecord.serialize(DefaultValueSerializer.create(byteBuffer, this.registry));
 		byteBuffer.flip();
 
-		final IMonitoringRecord outRecord = AbstractMonitoringRecord.createFromByteBuffer(clazzID, byteBuffer, this.registry);
+		final IMonitoringRecord outRecord = AbstractMonitoringRecord.createFromDeserializer(clazzID, DefaultValueDeserializer.create(byteBuffer, this.registry));
 		return outRecord.toArray();
 	}
 

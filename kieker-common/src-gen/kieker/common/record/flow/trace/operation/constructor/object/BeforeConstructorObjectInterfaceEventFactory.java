@@ -15,28 +15,27 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace.operation.constructor.object;
 
-import java.nio.ByteBuffer;
-
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Florian Fittkau
- * 
+ *
  * @since 1.10
  */
 public final class BeforeConstructorObjectInterfaceEventFactory implements IRecordFactory<BeforeConstructorObjectInterfaceEvent> {
-	
+
 	@Override
-	public BeforeConstructorObjectInterfaceEvent create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new BeforeConstructorObjectInterfaceEvent(buffer, stringRegistry);
+	public BeforeConstructorObjectInterfaceEvent create(final IValueDeserializer deserializer) {
+		return new BeforeConstructorObjectInterfaceEvent(deserializer);
 	}
-	
+
 	@Override
 	public BeforeConstructorObjectInterfaceEvent create(final Object[] values) {
 		return new BeforeConstructorObjectInterfaceEvent(values);
 	}
-	
+
+	@Override
 	public int getRecordSizeInBytes() {
 		return BeforeConstructorObjectInterfaceEvent.SIZE;
 	}

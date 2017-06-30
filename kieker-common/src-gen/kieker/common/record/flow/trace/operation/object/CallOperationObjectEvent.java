@@ -17,16 +17,16 @@ package kieker.common.record.flow.trace.operation.object;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
-
-import kieker.common.record.flow.trace.operation.CallOperationEvent;
-import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.ICallObjectRecord;
+import kieker.common.record.flow.trace.operation.CallOperationEvent;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class CallOperationObjectEvent extends CallOperationEvent implements ICallObjectRecord {
@@ -34,16 +34,16 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
-			 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
-			 + TYPE_SIZE_INT // IObjectRecord.objectId
-			 + TYPE_SIZE_INT // ICallObjectRecord.calleeObjectId
+			+ TYPE_SIZE_LONG // ITraceRecord.traceId
+			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
+			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			+ TYPE_SIZE_STRING // IClassSignature.classSignature
+			+ TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
+			+ TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
+			+ TYPE_SIZE_INT // IObjectRecord.objectId
+			+ TYPE_SIZE_INT // ICallObjectRecord.calleeObjectId
 	;
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -55,7 +55,6 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		int.class, // IObjectRecord.objectId
 		int.class, // ICallObjectRecord.calleeObjectId
 	};
-	
 	
 	/** default constants. */
 	public static final int OBJECT_ID = 0;
@@ -80,7 +79,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -100,7 +99,8 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	 * @param calleeObjectId
 	 *            calleeObjectId
 	 */
-	public CallOperationObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String calleeOperationSignature, final String calleeClassSignature, final int objectId, final int calleeObjectId) {
+	public CallOperationObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature,
+			final String calleeOperationSignature, final String calleeClassSignature, final int objectId, final int calleeObjectId) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature, calleeOperationSignature, calleeClassSignature);
 		this.objectId = objectId;
 		this.calleeObjectId = calleeObjectId;
@@ -109,7 +109,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -121,7 +121,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -134,20 +134,19 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	}
 
 	/**
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
+	 * This constructor converts the given array into a record.
+	 *
+	 * @param deserializer
+	 *            The deserializer to use
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public CallOperationObjectEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.objectId = buffer.getInt();
-		this.calleeObjectId = buffer.getInt();
+	public CallOperationObjectEvent(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		super(deserializer);
+
+		this.objectId = deserializer.getInt();
+		this.calleeObjectId = deserializer.getInt();
 	}
 	
 	/**
@@ -167,31 +166,34 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 			this.getCalleeObjectId()
 		};
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getOperationSignature());
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getCalleeOperationSignature());
 		stringRegistry.get(this.getCalleeClassSignature());
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putLong(this.getTraceId());
-		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
-		buffer.putInt(stringRegistry.get(this.getClassSignature()));
-		buffer.putInt(stringRegistry.get(this.getCalleeOperationSignature()));
-		buffer.putInt(stringRegistry.get(this.getCalleeClassSignature()));
-		buffer.putInt(this.getObjectId());
-		buffer.putInt(this.getCalleeObjectId());
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp());
+		serializer.putLong(this.getTraceId());
+		serializer.putInt(this.getOrderIndex());
+		serializer.putString(this.getOperationSignature());
+		serializer.putString(this.getClassSignature());
+		serializer.putString(this.getCalleeOperationSignature());
+		serializer.putString(this.getCalleeClassSignature());
+		serializer.putInt(this.getObjectId());
+		serializer.putInt(this.getCalleeObjectId());
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -199,7 +201,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -218,7 +220,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -226,41 +228,57 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
-		
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+
 		final CallOperationObjectEvent castedRecord = (CallOperationObjectEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
-		if (!this.getCalleeOperationSignature().equals(castedRecord.getCalleeOperationSignature())) return false;
-		if (!this.getCalleeClassSignature().equals(castedRecord.getCalleeClassSignature())) return false;
-		if (this.getObjectId() != castedRecord.getObjectId()) return false;
-		if (this.getCalleeObjectId() != castedRecord.getCalleeObjectId()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (!this.getCalleeOperationSignature().equals(castedRecord.getCalleeOperationSignature())) {
+			return false;
+		}
+		if (!this.getCalleeClassSignature().equals(castedRecord.getCalleeClassSignature())) {
+			return false;
+		}
+		if (this.getObjectId() != castedRecord.getObjectId()) {
+			return false;
+		}
+		if (this.getCalleeObjectId() != castedRecord.getCalleeObjectId()) {
+			return false;
+		}
 		return true;
 	}
-	
+
+	@Override
 	public final int getObjectId() {
 		return this.objectId;
 	}
@@ -284,4 +302,5 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	public final void setCalleeObjectId(int calleeObjectId) {
 		this.calleeObjectId = calleeObjectId;
 	}
+
 }
