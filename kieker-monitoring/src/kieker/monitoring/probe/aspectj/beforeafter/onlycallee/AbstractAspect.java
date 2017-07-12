@@ -1,9 +1,24 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.monitoring.probe.aspectj.beforeafter.onlycallee;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.JoinPoint.StaticPart;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -32,6 +47,8 @@ import kieker.monitoring.timer.ITimeSource;
  * </blockquote>
  * 
  * @author Christian Wulf (chw)
+ * 
+ * @since 1.13
  *
  */
 @Aspect
@@ -41,7 +58,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
-	private final Map<JoinPoint.StaticPart, TraceMetadata> entryJoinPoints = new ConcurrentHashMap<>();
+	private final Map<StaticPart, TraceMetadata> entryJoinPoints = new ConcurrentHashMap<>(); // NOPMD (UseConcurrentHashMap)
 
 	/**
 	 * The pointcut for the monitored operations. Inheriting classes should
@@ -52,7 +69,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	public abstract void monitoredOperation();
 
 	@Before("monitoredOperation() && notWithinKieker()")
-	public void beforeOperation(final JoinPoint.StaticPart jpStaticPart) throws Throwable { // NOCS (Throwable)
+	public void beforeOperation(final StaticPart jpStaticPart) throws Throwable { // NOCS (Throwable)
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
@@ -64,7 +81,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final boolean newTrace = trace == null;
 		if (newTrace) {
-			trace = TRACEREGISTRY.registerTrace(); // TODO parent trace is never used, so reduce impl. (chw)
+			trace = TRACEREGISTRY.registerTrace(); // TO-DO parent trace is never used, so reduce impl. (chw)
 			CTRLINST.newMonitoringRecord(trace);
 			this.entryJoinPoints.put(jpStaticPart, trace);
 		}
@@ -76,29 +93,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 				new BeforeOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, typeName));
 	}
 
-	// @Around("monitoredOperation() && notWithinKieker()")
-	// public Object aroundOperation(ProceedingJoinPoint jp) throws Throwable {
-	// TraceMetadata trace = TRACEREGISTRY.getTrace();
-	// final boolean newTrace = trace == null;
-	// if (newTrace) {
-	// trace = TRACEREGISTRY.registerTrace();
-	// CTRLINST.newMonitoringRecord(trace);
-	// }
-	//
-	// try {
-	// return jp.proceed();
-	// } catch (Throwable th) {
-	// throw th;
-	// } finally {
-	// if (newTrace) { // close the trace
-	// TRACEREGISTRY.unregisterTrace();
-	// }
-	// }
-	// }
-
 	@AfterReturning("monitoredOperation() && notWithinKieker()")
-	public void afterReturningOperation(final JoinPoint.StaticPart jpStaticPart) {
-		System.out.println("AbstractAspect.afterReturningOperation()");
+	public void afterReturningOperation(final StaticPart jpStaticPart) {
+		System.out.println(jpStaticPart + " -> AbstractAspect.afterReturningOperation()"); // NOPMD
 		final TraceMetadata trace = TRACEREGISTRY.getTrace();
 		// this check indirectly includes the checks for isMonitoringEnabled and isProbeActivated
 		if (trace == null) {
@@ -112,8 +109,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	}
 
 	@AfterThrowing(pointcut = "monitoredOperation() && notWithinKieker()", throwing = "th")
-	public void afterThrowing(final JoinPoint.StaticPart jpStaticPart, Throwable th) {
-		System.out.println("AbstractAspect.afterThrowing()");
+	public void afterThrowing(final StaticPart jpStaticPart, final Throwable th) {
+		System.out.println(jpStaticPart + " -> AbstractAspect.afterThrowing()"); // NOPMD
 		final TraceMetadata trace = TRACEREGISTRY.getTrace();
 		// this check indirectly includes the checks for isMonitoringEnabled and isProbeActivated
 		if (trace == null) {
@@ -128,8 +125,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	}
 
 	@After("monitoredOperation() && notWithinKieker()")
-	public void afterOperation(final JoinPoint.StaticPart jpStaticPart) {
-		System.out.println("AbstractAspect.afterOperation()");
+	public void afterOperation(final StaticPart jpStaticPart) {
+		System.out.println(jpStaticPart + " -> AbstractAspect.afterOperation()"); // NOPMD
 		if (this.entryJoinPoints.remove(jpStaticPart) != null) {
 			TRACEREGISTRY.unregisterTrace();
 		}
