@@ -142,6 +142,15 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	@After("monitoredOperation() && notWithinKieker()")
 	public void afterOperation(final StaticPart jpStaticPart) {
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return;
+		}
+
+		final String operationSignature = this.signatureToLongString(jpStaticPart.getSignature());
+		if (!CTRLINST.isProbeActivated(operationSignature)) {
+			return;
+		}
+
 		final int stackIndex = this.currentStackIndex.get().decrementValue();
 		if (stackIndex == 1) {
 			TRACEREGISTRY.unregisterTrace();
