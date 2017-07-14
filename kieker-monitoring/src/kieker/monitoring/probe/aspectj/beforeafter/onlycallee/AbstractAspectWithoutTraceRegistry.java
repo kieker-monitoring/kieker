@@ -16,20 +16,17 @@
 package kieker.monitoring.probe.aspectj.beforeafter.onlycallee;
 
 import org.aspectj.lang.JoinPoint.StaticPart;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 
-import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.registry.TraceRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
 
@@ -49,19 +46,12 @@ import kieker.monitoring.timer.ITimeSource;
  *
  */
 @Aspect
-public abstract class AbstractAspect extends AbstractAspectJProbe {
+public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJProbe {
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
-	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
-	// private final ThreadLocal<Counter> currentOrderIndex = new ThreadLocal<Counter>() {
-	// @Override
-	// protected Counter initialValue() {
-	// return new Counter();
-	// }
-	// };
-	private final ThreadLocal<Counter> currentStackIndex = new ThreadLocal<Counter>() {
+	private final ThreadLocal<Counter> currentOrderIndex = new ThreadLocal<Counter>() {
 		@Override
 		protected Counter initialValue() {
 			return new Counter();
@@ -86,23 +76,13 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			return;
 		}
 
-		TraceMetadata trace = TRACEREGISTRY.getTrace();
-		final boolean newTrace = trace == null;
-		if (newTrace) {
-			trace = TRACEREGISTRY.registerTrace(); // TO-DO parent trace is never used, so reduce impl. (chw)
-			CTRLINST.newMonitoringRecord(trace);
-		}
-
-		// long threadId = Thread.currentThread().getId();
-		// int orderIndex = currentOrderIndex.get().incrementValue();
-		// int stackIndex =
-		this.currentStackIndex.get().incrementValue();
-
-		final long traceId = trace.getTraceId();
+		final long threadId = Thread.currentThread().getId();
+		final int orderIndex = currentOrderIndex.get().incrementValue();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
+
 		// measure before execution
 		CTRLINST.newMonitoringRecord(
-				new BeforeOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, typeName));
+				new BeforeOperationEvent(TIME.getTime(), threadId, orderIndex, operationSignature, typeName));
 	}
 
 	@AfterReturning("monitoredOperation() && notWithinKieker()")
@@ -110,16 +90,16 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
-
 		final String operationSignature = this.signatureToLongString(jpStaticPart.getSignature());
 		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return;
 		}
 
-		final TraceMetadata trace = TRACEREGISTRY.getTrace();
+		final long threadId = Thread.currentThread().getId();
+		final int orderIndex = currentOrderIndex.get().incrementValue();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 
-		CTRLINST.newMonitoringRecord(new AfterOperationEvent(TIME.getTime(), trace.getTraceId(), trace.getNextOrderId(), operationSignature, typeName));
+		CTRLINST.newMonitoringRecord(new AfterOperationEvent(TIME.getTime(), threadId, orderIndex, operationSignature, typeName));
 	}
 
 	@AfterThrowing(pointcut = "monitoredOperation() && notWithinKieker()", throwing = "th")
@@ -127,24 +107,17 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
-
 		final String operationSignature = this.signatureToLongString(jpStaticPart.getSignature());
 		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return;
 		}
 
-		final TraceMetadata trace = TRACEREGISTRY.getTrace();
+		final long threadId = Thread.currentThread().getId();
+		final int orderIndex = currentOrderIndex.get().incrementValue();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 
 		CTRLINST.newMonitoringRecord(
-				new AfterOperationFailedEvent(TIME.getTime(), trace.getTraceId(), trace.getNextOrderId(), operationSignature, typeName, th.toString()));
+				new AfterOperationFailedEvent(TIME.getTime(), threadId, orderIndex, operationSignature, typeName, th.toString()));
 	}
 
-	@After("monitoredOperation() && notWithinKieker()")
-	public void afterOperation(final StaticPart jpStaticPart) {
-		final int stackIndex = this.currentStackIndex.get().decrementValue();
-		if (stackIndex == 1) {
-			TRACEREGISTRY.unregisterTrace();
-		}
-	}
 }
