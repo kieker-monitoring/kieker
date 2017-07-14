@@ -15,9 +15,6 @@
  ***************************************************************************/
 package kieker.monitoring.probe.aspectj.beforeafter.onlycallee;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.aspectj.lang.JoinPoint.StaticPart;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -58,7 +55,18 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
-	private final Map<StaticPart, TraceMetadata> entryJoinPoints = new ConcurrentHashMap<>(); // NOPMD (UseConcurrentHashMap)
+	// private final ThreadLocal<Counter> currentOrderIndex = new ThreadLocal<Counter>() {
+	// @Override
+	// protected Counter initialValue() {
+	// return new Counter();
+	// }
+	// };
+	private final ThreadLocal<Counter> currentStackIndex = new ThreadLocal<Counter>() {
+		@Override
+		protected Counter initialValue() {
+			return new Counter();
+		}
+	};
 
 	/**
 	 * The pointcut for the monitored operations. Inheriting classes should
@@ -69,7 +77,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	public abstract void monitoredOperation();
 
 	@Before("monitoredOperation() && notWithinKieker()")
-	public void beforeOperation(final StaticPart jpStaticPart) throws Throwable { // NOCS (Throwable)
+	public void beforeOperation(final StaticPart jpStaticPart) {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
@@ -83,8 +91,12 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		if (newTrace) {
 			trace = TRACEREGISTRY.registerTrace(); // TO-DO parent trace is never used, so reduce impl. (chw)
 			CTRLINST.newMonitoringRecord(trace);
-			this.entryJoinPoints.put(jpStaticPart, trace);
 		}
+
+		// long threadId = Thread.currentThread().getId();
+		// int orderIndex = currentOrderIndex.get().incrementValue();
+		// int stackIndex =
+		this.currentStackIndex.get().incrementValue();
 
 		final long traceId = trace.getTraceId();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
@@ -96,13 +108,17 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@AfterReturning("monitoredOperation() && notWithinKieker()")
 	public void afterReturningOperation(final StaticPart jpStaticPart) {
 		System.out.println(jpStaticPart + " -> AbstractAspect.afterReturningOperation()"); // NOPMD
-		final TraceMetadata trace = TRACEREGISTRY.getTrace();
-		// this check indirectly includes the checks for isMonitoringEnabled and isProbeActivated
-		if (trace == null) {
+
+		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
 
 		final String operationSignature = this.signatureToLongString(jpStaticPart.getSignature());
+		if (!CTRLINST.isProbeActivated(operationSignature)) {
+			return;
+		}
+
+		final TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 
 		CTRLINST.newMonitoringRecord(new AfterOperationEvent(TIME.getTime(), trace.getTraceId(), trace.getNextOrderId(), operationSignature, typeName));
@@ -111,13 +127,17 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@AfterThrowing(pointcut = "monitoredOperation() && notWithinKieker()", throwing = "th")
 	public void afterThrowing(final StaticPart jpStaticPart, final Throwable th) {
 		System.out.println(jpStaticPart + " -> AbstractAspect.afterThrowing()"); // NOPMD
-		final TraceMetadata trace = TRACEREGISTRY.getTrace();
-		// this check indirectly includes the checks for isMonitoringEnabled and isProbeActivated
-		if (trace == null) {
+
+		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
 
 		final String operationSignature = this.signatureToLongString(jpStaticPart.getSignature());
+		if (!CTRLINST.isProbeActivated(operationSignature)) {
+			return;
+		}
+
+		final TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 
 		CTRLINST.newMonitoringRecord(
@@ -127,7 +147,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@After("monitoredOperation() && notWithinKieker()")
 	public void afterOperation(final StaticPart jpStaticPart) {
 		System.out.println(jpStaticPart + " -> AbstractAspect.afterOperation()"); // NOPMD
-		if (this.entryJoinPoints.remove(jpStaticPart) != null) {
+
+		final int stackIndex = this.currentStackIndex.get().decrementValue();
+		if (stackIndex == 1) {
 			TRACEREGISTRY.unregisterTrace();
 		}
 	}
