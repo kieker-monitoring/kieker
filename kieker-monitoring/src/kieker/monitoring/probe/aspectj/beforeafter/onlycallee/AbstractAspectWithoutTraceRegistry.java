@@ -40,6 +40,10 @@ import kieker.monitoring.timer.ITimeSource;
  * Using thisJoinPointStaticPart will avoid the run-time creation of the join point object that may be necessary when using thisJoinPoint directly.
  * </blockquote>
  * 
+ * This implementation avoids the usage of a trace id.
+ * Instead, it passes the thread id to the event records.
+ * The combination of the before/after events, the thread id, and the order index is sufficient to reconstruct different traces of the same thread.
+ * 
  * @author Christian Wulf (chw)
  * 
  * @since 1.13
