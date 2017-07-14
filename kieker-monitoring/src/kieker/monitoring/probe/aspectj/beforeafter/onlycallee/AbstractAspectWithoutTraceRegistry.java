@@ -77,7 +77,7 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 		}
 
 		final long threadId = Thread.currentThread().getId();
-		final int orderIndex = currentOrderIndex.get().incrementValue();
+		final int orderIndex = this.currentOrderIndex.get().incrementValue();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 
 		// measure before execution
@@ -96,7 +96,7 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 		}
 
 		final long threadId = Thread.currentThread().getId();
-		final int orderIndex = currentOrderIndex.get().incrementValue();
+		final int orderIndex = this.currentOrderIndex.get().incrementValue();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 
 		CTRLINST.newMonitoringRecord(new AfterOperationEvent(TIME.getTime(), threadId, orderIndex, operationSignature, typeName));
@@ -113,7 +113,7 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 		}
 
 		final long threadId = Thread.currentThread().getId();
-		final int orderIndex = currentOrderIndex.get().incrementValue();
+		final int orderIndex = this.currentOrderIndex.get().incrementValue();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 
 		CTRLINST.newMonitoringRecord(
