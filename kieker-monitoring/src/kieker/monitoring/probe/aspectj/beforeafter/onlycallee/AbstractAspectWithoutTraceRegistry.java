@@ -27,6 +27,7 @@ import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.registry.ThreadRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
 
@@ -54,6 +55,7 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
+	private static final ThreadRegistry THREAD_REGISTRY = ThreadRegistry.INSTANCE;
 
 	private final ThreadLocal<Counter> currentOrderIndex = new ThreadLocal<Counter>() {
 		@Override
@@ -80,11 +82,10 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 			return;
 		}
 
-		final long threadId = Thread.currentThread().getId();
+		final long threadId = THREAD_REGISTRY.getIdOfCurrentThread();
 		final int orderIndex = this.currentOrderIndex.get().incrementValue();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 
-		// measure before execution
 		CTRLINST.newMonitoringRecord(
 				new BeforeOperationEvent(TIME.getTime(), threadId, orderIndex, operationSignature, typeName));
 	}
@@ -99,7 +100,7 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 			return;
 		}
 
-		final long threadId = Thread.currentThread().getId();
+		final long threadId = THREAD_REGISTRY.getIdOfCurrentThread();
 		final int orderIndex = this.currentOrderIndex.get().incrementValue();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 
@@ -116,7 +117,7 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 			return;
 		}
 
-		final long threadId = Thread.currentThread().getId();
+		final long threadId = THREAD_REGISTRY.getIdOfCurrentThread();
 		final int orderIndex = this.currentOrderIndex.get().incrementValue();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 

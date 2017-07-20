@@ -47,7 +47,7 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.filter.flow.EventRecordTraceReconstructionFilter;
+import kieker.analysis.plugin.filter.flow.*;
 import kieker.analysis.plugin.filter.forward.StringBufferFilter;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.analysis.plugin.filter.select.TraceIdFilter;
@@ -418,6 +418,10 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 			final StringBufferFilter stringBufferFilter = new StringBufferFilter(new Configuration(), this.analysisController);
 			this.analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, stringBufferFilter, StringBufferFilter.INPUT_PORT_NAME_EVENTS);
 
+			
+			final ThreadEvent2TraceEventFilter threadEvent2TraceEventFilter;
+			
+			
 			// This map can be used within the constructor for all following plugins which use the repository with the name defined in the
 			// AbstractTraceAnalysisPlugin.
 			final TimestampFilter timestampFilter;
