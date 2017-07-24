@@ -5,6 +5,8 @@ node('kieker-slave-docker') {
     stage ('Checkout') {
         checkout scm
 
+        // sh 'print ' + env.WORKSPACE[-51..-1]
+
         sh 'printenv'
     }
 
