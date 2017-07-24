@@ -51,21 +51,12 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 	private final Map<Long, MonitoredTrace> monitoredTraces = new HashMap<>(); // NOPMD (not thread-safe)
 	private int currentTraceId; // NOPMD (not thread-safe)
 
-	private static class MonitoredTrace {
-		public final int identifier;	// NOCS (private field)
-		public int currentStackSize;	// NOCS (private field)
-
-		public MonitoredTrace(final int identifier) {
-			this.identifier = identifier;
-		}
-	}
-
 	public ThreadEvent2TraceEventFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
 
-	@InputPort(name = INPUT_PORT_NAME_DEFAULT, description = "Input port for a threadId-based event", 
-			eventTypes = { IMonitoringRecord.class })
+	@InputPort(name = INPUT_PORT_NAME_DEFAULT, description = "Input port for a threadId-based event", eventTypes = {
+			IMonitoringRecord.class })
 	public void readInput(final IThreadBasedRecord event) {
 		if (event instanceof BeforeThreadBasedEvent) {
 			final BeforeThreadBasedEvent beforeEvent = (BeforeThreadBasedEvent) event;
@@ -99,7 +90,7 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 
 			final long threadId = traceMetadata.getThreadId();
 			final String hostName = traceMetadata.getHostname();
-			hostNames.put(threadId, hostName);
+			this.hostNames.put(threadId, hostName);
 		} else {
 			// pass through all other record types
 			super.deliver(OUTPUT_PORT_NAME_DEFAULT, event);
@@ -114,7 +105,7 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 			monitoredTrace.currentStackSize = 0;
 			this.monitoredTraces.put(threadId, monitoredTrace);
 
-			final String hostName = hostNames.get(threadId);
+			final String hostName = this.hostNames.get(threadId);
 			final TraceMetadata traceMetadata = new TraceMetadata(monitoredTrace.identifier, threadId, "<NO SESSION>",
 					hostName, -1, -1);
 			super.deliver(OUTPUT_PORT_NAME_DEFAULT, traceMetadata);
@@ -139,5 +130,14 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration(this.configuration);
+	}
+
+	private static class MonitoredTrace {
+		public final int identifier; // NOCS (private field)
+		public int currentStackSize; // NOCS (private field)
+
+		public MonitoredTrace(final int identifier) {
+			this.identifier = identifier;
+		}
 	}
 }
