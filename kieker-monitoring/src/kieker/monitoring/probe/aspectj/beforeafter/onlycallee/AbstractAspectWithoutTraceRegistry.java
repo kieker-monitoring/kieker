@@ -22,28 +22,29 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.monitoring.IdGenerator;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.registry.ThreadRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
 
 /**
- * This aspect spawns before and after events by foregoing an around advice.
- * Instead, it uses before and after advices only so that "cflow" can be used when specifying its pointcut.
+ * This aspect spawns before and after events by foregoing an around advice. Instead, it uses before and after advices
+ * only so that "cflow" can be used when specifying its pointcut.
  * 
- * This implementation uses <code>JoinPoint.StaticPart</code> instead of <code>JoinPoint</code> in the advices for performance reasons:
- * <blockquote>If you only need the static information about the join point, you may access the static part of the join point directly with the special variable
- * thisJoinPointStaticPart.
- * Using thisJoinPointStaticPart will avoid the run-time creation of the join point object that may be necessary when using thisJoinPoint directly.
- * </blockquote>
+ * This implementation uses <code>JoinPoint.StaticPart</code> instead of <code>JoinPoint</code> in the advices for
+ * performance reasons: <blockquote>If you only need the static information about the join point, you may access the
+ * static part of the join point directly with the special variable thisJoinPointStaticPart. Using
+ * thisJoinPointStaticPart will avoid the run-time creation of the join point object that may be necessary when using
+ * thisJoinPoint directly. </blockquote>
  * 
- * This implementation avoids the usage of a trace id.
- * Instead, it passes the thread id to the event records.
- * The combination of the before/after events, the thread id, and the order index is sufficient to reconstruct different traces of the same thread.
+ * This implementation avoids the usage of a trace id. Instead, it passes the thread id to the event records. The
+ * combination of the before/after events, the thread id, and the order index is sufficient to reconstruct different
+ * traces of the same thread.
  * 
  * @author Christian Wulf (chw)
  * 
@@ -55,8 +56,9 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
-	private static final ThreadRegistry THREAD_REGISTRY = ThreadRegistry.INSTANCE;
 
+	private final IdGenerator idGenerator = new IdGenerator();
+	private final ThreadLocal<Long> threadLocalId = new ThreadLocal<Long>();
 	private final ThreadLocal<Counter> currentOrderIndex = new ThreadLocal<Counter>() {
 		@Override
 		protected Counter initialValue() {
@@ -65,9 +67,8 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 	};
 
 	/**
-	 * The pointcut for the monitored operations. Inheriting classes should
-	 * extend the pointcut in order to find the correct executions of the
-	 * methods (e.g. all methods or only methods with specific annotations).
+	 * The pointcut for the monitored operations. Inheriting classes should extend the pointcut in order to find the
+	 * correct executions of the methods (e.g. all methods or only methods with specific annotations).
 	 */
 	@Pointcut
 	public abstract void monitoredOperation();
@@ -82,14 +83,21 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 			return;
 		}
 
-		final long threadId = THREAD_REGISTRY.getIdOfCurrentThread();
+		Long threadId = this.threadLocalId.get();
+		if (null == threadId) {
+			threadId = this.idGenerator.getNewId();
+			this.threadLocalId.set(threadId);
+
+			CTRLINST.newMonitoringRecord(new TraceMetadata(-1, threadId, "<NO SESSION ID>", CTRLINST.getHostname(), -1, -1));
+		}
+		
 		final int orderIndex = this.currentOrderIndex.get().incrementValue();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 
 		CTRLINST.newMonitoringRecord(
 				new BeforeOperationEvent(TIME.getTime(), threadId, orderIndex, operationSignature, typeName));
 	}
-
+	
 	@AfterReturning("monitoredOperation() && notWithinKieker()")
 	public void afterReturningOperation(final StaticPart jpStaticPart) {
 		if (!CTRLINST.isMonitoringEnabled()) {
@@ -100,11 +108,12 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 			return;
 		}
 
-		final long threadId = THREAD_REGISTRY.getIdOfCurrentThread();
+		final long threadId = this.threadLocalId.get();
 		final int orderIndex = this.currentOrderIndex.get().incrementValue();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 
-		CTRLINST.newMonitoringRecord(new AfterOperationEvent(TIME.getTime(), threadId, orderIndex, operationSignature, typeName));
+		CTRLINST.newMonitoringRecord(
+				new AfterOperationEvent(TIME.getTime(), threadId, orderIndex, operationSignature, typeName));
 	}
 
 	@AfterThrowing(pointcut = "monitoredOperation() && notWithinKieker()", throwing = "th")
@@ -117,12 +126,12 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 			return;
 		}
 
-		final long threadId = THREAD_REGISTRY.getIdOfCurrentThread();
+		final long threadId = this.threadLocalId.get();
 		final int orderIndex = this.currentOrderIndex.get().incrementValue();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 
-		CTRLINST.newMonitoringRecord(
-				new AfterOperationFailedEvent(TIME.getTime(), threadId, orderIndex, operationSignature, typeName, th.toString()));
+		CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(TIME.getTime(), threadId, orderIndex,
+				operationSignature, typeName, th.toString()));
 	}
 
 }

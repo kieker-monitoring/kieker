@@ -47,7 +47,8 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.filter.flow.*;
+import kieker.analysis.plugin.filter.flow.EventRecordTraceReconstructionFilter;
+import kieker.analysis.plugin.filter.flow.ThreadEvent2TraceEventFilter;
 import kieker.analysis.plugin.filter.forward.StringBufferFilter;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.analysis.plugin.filter.select.TraceIdFilter;
@@ -215,7 +216,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				for (final String idStr : traceIdList) {
 					this.selectedTraces.add(Long.valueOf(idStr));
 				}
-				LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "")
+				LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "")	// NOCS
 						+ (this.invertTraceIdFilter ? " filtered" : " selected")); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 				LOG.error("Failed to parse list of trace IDs: " + Arrays.toString(traceIdList), e);
@@ -1308,8 +1309,8 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				LOG.debug("");
 				LOG.debug("#");
 				LOG.debug("# Plugin: " + "Trace equivalence report");
-				LOG.debug("Wrote " + numClasses + " equivalence class" + (numClasses > 1 ? "es" : "") + " to file '"
-						+ outputFn + "'"); // NOCS
+				LOG.debug("Wrote " + numClasses + " equivalence class" + (numClasses > 1 ? "es" : "") + " to file '"	// NOCS
+						+ outputFn + "'"); 
 			}
 		} catch (final FileNotFoundException e) {
 			LOG.error("File not found", e);

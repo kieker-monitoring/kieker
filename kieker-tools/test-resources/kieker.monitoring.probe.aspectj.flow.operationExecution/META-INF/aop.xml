@@ -2,22 +2,30 @@
 
 <aspectj>
 	<weaver options="-showWeaveInfo"> <!-- options="-verbose -showWeaveInfo -Xjoinpoints:synchronization" -->
-		<include within="kieker.examples..*"/>
+		<include within="kieker.examples..*" />
+		<!-- <include within="*"/> -->
 
-		<exclude within="org.apache.commons.logging..*" /> 
-		<exclude within="org.slf4j..*" /> 
-		<exclude within="java.util.logging..*" /> 
+		<exclude within="org.apache.commons.logging..*" />
+		<exclude within="org.slf4j..*" />
+		<exclude within="java.util.logging..*" />
 		<exclude within="org.apache.log4j..*" />
+
+		<!-- <exclude within="org.jctools..*" /> -->
 	</weaver>
 
 	<aspects>
 		<!-- <concrete-aspect name="MyTargetedAspect" extends="kieker.monitoring.probe.aspectj.beforeafter.onlycallee.AbstractAspect"> -->
-		<concrete-aspect name="MyTargetedAspect" extends="kieker.monitoring.probe.aspectj.flow.operationExecution.AbstractAspect">
+		<concrete-aspect name="kieker.monitoring.MyTargetAspect"
+			extends="kieker.monitoring.probe.aspectj.beforeafter.onlycallee.AbstractAspectWithoutTraceRegistry">
+			<!-- <concrete-aspect name="MyTargetedAspect" extends="kieker.monitoring.probe.aspectj.flow.operationExecution.AbstractAspect"> -->
 			<pointcut name="monitoredOperation" expression="execution(* *.*(..))" />
-			<!-- <pointcut name="b" expression="execution(* teetime.stage.ZipByteArray.execute(..))" /> -->
-			<!-- <pointcut name="c" expression="execution(* teetime.stage.MappingCounter.execute(..))" /> -->
-			<!-- <pointcut name="monitoredOperation" expression="a() || b() || c()" /> -->
+			<!-- <pointcut name="b" expression="execution(* teetime.stage.ZipByteArray.execute(..))" 
+				/> -->
+			<!-- <pointcut name="c" expression="execution(* teetime.stage.MappingCounter.execute(..))" 
+				/> -->
+			<!-- <pointcut name="monitoredOperation" expression="a() || b() || c()" 
+				/> -->
 		</concrete-aspect>
-		
+
 	</aspects>
 </aspectj>
