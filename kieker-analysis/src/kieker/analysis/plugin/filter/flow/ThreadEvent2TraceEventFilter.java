@@ -6,6 +6,7 @@ import kieker.analysis.*;
 import kieker.analysis.plugin.annotation.*;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.*;
 import kieker.common.record.flow.thread.*;
 import kieker.common.record.flow.trace.TraceMetadata;
@@ -17,8 +18,8 @@ import kieker.common.record.flow.trace.operation.*;
  * @since 1.13
  */
 @Plugin(name = "Thread Event to Trace Event Filter (Event)", description = "Filter to transform threadId-based events to traceId-based events", outputPorts = {
-		@OutputPort(name = ThreadEvent2TraceEventFilter.OUTPUT_PORT_NAME_DEFAULT, description = "Outputs traceId-based events", eventTypes = {
-				IEventRecord.class }) })
+		@OutputPort(name = ThreadEvent2TraceEventFilter.OUTPUT_PORT_NAME_DEFAULT, description = "Outputs monitoring records", eventTypes = {
+				IMonitoringRecord.class }) })
 public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 
 	private static class MonitoredTrace {
@@ -41,7 +42,7 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_DEFAULT, description = "Input port for a threadId-based event", eventTypes = {
-			IThreadBasedRecord.class })
+			IMonitoringRecord.class })
 	public void readInput(IThreadBasedRecord event) {
 		if (event instanceof BeforeThreadBasedEvent) {
 			BeforeThreadBasedEvent beforeEvent = (BeforeThreadBasedEvent) event;
