@@ -5,8 +5,6 @@ node('kieker-slave-docker') {
     stage ('Checkout') {
         checkout scm
 
-        // sh 'print ' + env.WORKSPACE[-51..-1]
-
         sh 'printenv'
     }
 
@@ -42,7 +40,17 @@ node('kieker-slave-docker') {
         if (env.BRANCH_NAME == "master") {
             sh 'echo "We are in master - pushing to stable branch."'
 
+<<<<<<< HEAD
+<<<<<<< HEAD
             sh 'git push git@github.com:fachstudieRSS/kieker.git $(git rev-parse HEAD):stable'
+=======
+            def gitCommit = sh 'git rev-parse HEAD'
+
+            sh 'git push git@github.com:fachstudieRSS/kieker.git ' + gitCommit + ':stable'
+>>>>>>> 6b120ff... Request commit hash via shell
+=======
+            sh 'git push git@github.com:fachstudieRSS/kieker.git $(git rev-parse HEAD):stable'
+>>>>>>> e505dd8... fixup! Request commit hash via shell
         } else {
             sh 'echo "We are not in  master - skipping."'
         }
