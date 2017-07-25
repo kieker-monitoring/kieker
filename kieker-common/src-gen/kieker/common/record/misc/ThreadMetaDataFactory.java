@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.common.record.flow.thread;
+package kieker.common.record.misc;
 
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -23,19 +23,19 @@ import kieker.common.record.io.IValueDeserializer;
  * 
  * @since 1.13
  */
-public final class AfterFailedThreadBasedEventFactory implements IRecordFactory<AfterFailedThreadBasedEvent> {
-	
+public final class ThreadMetaDataFactory implements IRecordFactory<ThreadMetaData> {
+
 	@Override
-	public AfterFailedThreadBasedEvent create(final IValueDeserializer deserializer) {
-		return new AfterFailedThreadBasedEvent(deserializer);
+	public ThreadMetaData create(final IValueDeserializer deserializer) {
+		return new ThreadMetaData(deserializer);
 	}
-	
+
 	@Override
-	public AfterFailedThreadBasedEvent create(final Object[] values) {
-		return new AfterFailedThreadBasedEvent(values);
+	public ThreadMetaData create(final Object[] values) {
+		return new ThreadMetaData(values);
 	}
-	
+
 	public int getRecordSizeInBytes() {
-		return AfterFailedThreadBasedEvent.SIZE;
+		return ThreadMetaData.SIZE;
 	}
 }
