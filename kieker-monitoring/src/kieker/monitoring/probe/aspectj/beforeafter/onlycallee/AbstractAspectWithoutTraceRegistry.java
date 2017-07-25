@@ -22,10 +22,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 
-import kieker.common.record.flow.trace.TraceMetadata;
-import kieker.common.record.flow.trace.operation.AfterOperationEvent;
-import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
-import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.common.record.flow.thread.AfterFailedThreadBasedEvent;
+import kieker.common.record.flow.thread.AfterThreadBasedEvent;
+import kieker.common.record.flow.thread.BeforeThreadBasedEvent;
+import kieker.common.record.misc.ThreadMetaData;
 import kieker.monitoring.IdGenerator;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -88,14 +88,15 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 			threadId = this.idGenerator.getNewId();
 			this.threadLocalId.set(threadId);
 
-			CTRLINST.newMonitoringRecord(new TraceMetadata(-1, threadId, "<NO SESSION ID>", CTRLINST.getHostname(), -1, -1));
+//			CTRLINST.newMonitoringRecord(new TraceMetadata(-1, threadId, "<NO SESSION ID>", CTRLINST.getHostname(), -1, -1));
+			CTRLINST.newMonitoringRecord(new ThreadMetaData(CTRLINST.getHostname(), threadId));
 		}
-		
+
 		final int orderIndex = this.currentOrderIndex.get().incrementValue();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 
 		CTRLINST.newMonitoringRecord(
-				new BeforeOperationEvent(TIME.getTime(), threadId, orderIndex, operationSignature, typeName));
+				new BeforeThreadBasedEvent(TIME.getTime(), threadId, orderIndex, operationSignature, typeName));
 	}
 	
 	@AfterReturning("monitoredOperation() && notWithinKieker()")
@@ -113,7 +114,7 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 
 		CTRLINST.newMonitoringRecord(
-				new AfterOperationEvent(TIME.getTime(), threadId, orderIndex, operationSignature, typeName));
+				new AfterThreadBasedEvent(TIME.getTime(), threadId, orderIndex, operationSignature, typeName));
 	}
 
 	@AfterThrowing(pointcut = "monitoredOperation() && notWithinKieker()", throwing = "th")
@@ -130,7 +131,7 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 		final int orderIndex = this.currentOrderIndex.get().incrementValue();
 		final String typeName = jpStaticPart.getSignature().getDeclaringTypeName();
 
-		CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(TIME.getTime(), threadId, orderIndex,
+		CTRLINST.newMonitoringRecord(new AfterFailedThreadBasedEvent(TIME.getTime(), threadId, orderIndex,
 				operationSignature, typeName, th.toString()));
 	}
 

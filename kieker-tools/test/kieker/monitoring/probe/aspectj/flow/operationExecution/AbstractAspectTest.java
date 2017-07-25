@@ -38,9 +38,10 @@ import static org.junit.Assert.assertThat; // NOCS (static import)
  *
  * @since 1.13
  */
-public class AbstractAspectTest {	// NOCS (abstract class)
+public class AbstractAspectTest { // NOCS (abstract class)
 
-	public AbstractAspectTest() {}	// NOCS NOPMD (empty ctor)
+	public AbstractAspectTest() {
+	} // NOCS NOPMD (empty ctor)
 
 	@Test
 	public void testMonitoring() throws Exception {
@@ -78,37 +79,37 @@ public class AbstractAspectTest {	// NOCS (abstract class)
 			}
 		});
 
-		// try {
-		conf.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(directories));
-		final AsciiLogReader reader = new AsciiLogReader(conf, analysisController);
+		try {
+			conf.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(directories));
+			final AsciiLogReader reader = new AsciiLogReader(conf, analysisController);
 
-		final ListCollectionFilter<IMonitoringRecord> collectionSink = new ListCollectionFilter<>(new Configuration(),
-				analysisController);
+			final ListCollectionFilter<IMonitoringRecord> collectionSink = new ListCollectionFilter<>(
+					new Configuration(), analysisController);
 
-		analysisController.connect(reader, AsciiLogReader.OUTPUT_PORT_NAME_RECORDS, collectionSink,
-				ListCollectionFilter.INPUT_PORT_NAME);
+			analysisController.connect(reader, AsciiLogReader.OUTPUT_PORT_NAME_RECORDS, collectionSink,
+					ListCollectionFilter.INPUT_PORT_NAME);
 
-		analysisController.run();
+			analysisController.run();
 
-		assertThat(collectionSink.getList().size(), is(19 - 1)); // -1 because AnalysisController absorbs the
-																	// KiekerMetadataRecord
-		// } finally {
-		// this.deleteTempoararyFiles(directories);
-		// }
+			assertThat(collectionSink.getList().size(), is(19 - 1)); // -1 because AnalysisController absorbs the
+																		// KiekerMetadataRecord
+		} finally {
+			this.deleteTempoararyFiles(directories);
+		}
 	}
 
-	// private void deleteTempoararyFiles(final File[] directories) {
-	// for (final File logDir : directories) {
-	// for (final File file : logDir.listFiles()) {
-	// final boolean deleted = file.delete();
-	// if (!deleted) {
-	// System.err.println("Could not delete temporary test file: " + file); // NOPMD (sysout)
-	// }
-	// }
-	// final boolean deleted = logDir.delete();
-	// if (!deleted) {
-	// System.err.println("Could not delete temporary kieker test log directory: " + logDir); // NOPMD (sysout)
-	// }
-	// }
-	// }
+	private void deleteTempoararyFiles(final File[] directories) {
+		for (final File logDir : directories) {
+			for (final File file : logDir.listFiles()) {
+				final boolean deleted = file.delete();
+				if (!deleted) {
+					System.err.println("Could not delete temporary test file: " + file); // NOPMD (sysout)
+				}
+			}
+			final boolean deleted = logDir.delete();
+			if (!deleted) {
+				System.err.println("Could not delete temporary kieker test log directory: " + logDir); // NOPMD (sysout)
+			}
+		}
+	}
 }

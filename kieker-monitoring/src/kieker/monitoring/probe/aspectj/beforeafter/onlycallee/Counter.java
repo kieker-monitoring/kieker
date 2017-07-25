@@ -41,10 +41,10 @@ public class Counter {
 	}
 
 	/**
-	 * @return the value after incrementing
+	 * @return the value before incrementing (starting with 0)
 	 */
 	public int incrementValue() {
-		return ++this.value;
+		return this.value++;
 	}
 
 	/**

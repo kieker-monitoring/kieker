@@ -216,7 +216,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				for (final String idStr : traceIdList) {
 					this.selectedTraces.add(Long.valueOf(idStr));
 				}
-				LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "")	// NOCS
+				LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") // NOCS
 						+ (this.invertTraceIdFilter ? " filtered" : " selected")); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 				LOG.error("Failed to parse list of trace IDs: " + Arrays.toString(traceIdList), e);
@@ -447,8 +447,8 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 			final Configuration config = new Configuration();
 			final ThreadEvent2TraceEventFilter threadEvent2TraceEventFilter = new ThreadEvent2TraceEventFilter(config,
 					this.analysisController);
-			this.analysisController.connect(sourceStage, sourcePort,
-					threadEvent2TraceEventFilter, ThreadEvent2TraceEventFilter.INPUT_PORT_NAME_DEFAULT);
+			this.analysisController.connect(sourceStage, sourcePort, threadEvent2TraceEventFilter,
+					ThreadEvent2TraceEventFilter.INPUT_PORT_NAME_DEFAULT);
 
 			sourceStage = threadEvent2TraceEventFilter;
 			sourcePort = ThreadEvent2TraceEventFilter.OUTPUT_PORT_NAME_DEFAULT;
@@ -549,15 +549,14 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(
 						configurationEventRecordTraceGenerationFilter, this.analysisController);
 
+				String outputPortName;
 				if (this.invertTraceIdFilter) {
-					this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH,
-							eventTraceReconstructionFilter,
-							EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
+					outputPortName = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH;
 				} else {
-					this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH,
-							eventTraceReconstructionFilter,
-							EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
+					outputPortName = TraceIdFilter.OUTPUT_PORT_NAME_MATCH;
 				}
+				this.analysisController.connect(traceIdFilter, outputPortName, eventTraceReconstructionFilter,
+						EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
 			}
 
 			{ // NOCS (nested block)
@@ -1309,8 +1308,8 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				LOG.debug("");
 				LOG.debug("#");
 				LOG.debug("# Plugin: " + "Trace equivalence report");
-				LOG.debug("Wrote " + numClasses + " equivalence class" + (numClasses > 1 ? "es" : "") + " to file '"	// NOCS
-						+ outputFn + "'"); 
+				LOG.debug("Wrote " + numClasses + " equivalence class" + (numClasses > 1 ? "es" : "") + " to file '" // NOCS
+						+ outputFn + "'");
 			}
 		} catch (final FileNotFoundException e) {
 			LOG.error("File not found", e);

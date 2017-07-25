@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
+ * Generates unique identifiers in a thread-safe way.
  * 
  * @author Christian Wulf
  *
@@ -45,6 +46,8 @@ public class IdGenerator {
 	}
 
 	/**
+	 * (<i>thread-safe</i>)
+	 * 
 	 * @return a unique identifier
 	 */
 	public long getNewId() {

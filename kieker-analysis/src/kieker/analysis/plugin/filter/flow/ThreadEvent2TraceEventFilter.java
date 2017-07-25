@@ -25,7 +25,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.flow.IThreadBasedRecord;
 import kieker.common.record.flow.thread.AfterFailedThreadBasedEvent;
 import kieker.common.record.flow.thread.AfterThreadBasedEvent;
 import kieker.common.record.flow.thread.BeforeThreadBasedEvent;
@@ -33,6 +32,7 @@ import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.common.record.misc.ThreadMetaData;
 
 /**
  * @author Christian Wulf (chw)
@@ -57,39 +57,46 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 
 	@InputPort(name = INPUT_PORT_NAME_DEFAULT, description = "Input port for a threadId-based event", eventTypes = {
 			IMonitoringRecord.class })
-	public void readInput(final IThreadBasedRecord event) {
+	public void readInput(final IMonitoringRecord event) {
 		if (event instanceof BeforeThreadBasedEvent) {
-			final BeforeThreadBasedEvent beforeEvent = (BeforeThreadBasedEvent) event;
+			final BeforeThreadBasedEvent originalEvent = (BeforeThreadBasedEvent) event;
 
-			final MonitoredTrace monitoredTrace = this.getOrCreateMonitoredThread(beforeEvent.getThreadId());
+			final MonitoredTrace monitoredTrace = this.getOrCreateMonitoredThread(originalEvent.getLoggingTimestamp(),
+					originalEvent.getThreadId());
 
-			final BeforeOperationEvent newEvent = new BeforeOperationEvent(beforeEvent.getTimestamp(),
-					monitoredTrace.identifier, beforeEvent.getOrderIndex(), beforeEvent.getOperationSignature(),
-					beforeEvent.getClassSignature());
+			final BeforeOperationEvent newEvent = new BeforeOperationEvent(originalEvent.getTimestamp(),
+					monitoredTrace.identifier, originalEvent.getOrderIndex(), originalEvent.getOperationSignature(),
+					originalEvent.getClassSignature());
+			newEvent.setLoggingTimestamp(originalEvent.getLoggingTimestamp());
+			
 			super.deliver(OUTPUT_PORT_NAME_DEFAULT, newEvent);
 		} else if (event instanceof AfterThreadBasedEvent) {
-			final AfterThreadBasedEvent afterEvent = (AfterThreadBasedEvent) event;
+			final AfterThreadBasedEvent originalEvent = (AfterThreadBasedEvent) event;
 
-			final MonitoredTrace monitoredTrace = this.getMonitoredThread(afterEvent.getThreadId());
+			final MonitoredTrace monitoredTrace = this.getMonitoredThread(originalEvent.getThreadId());
 
-			final AfterOperationEvent newEvent = new AfterOperationEvent(afterEvent.getTimestamp(),
-					monitoredTrace.identifier, afterEvent.getOrderIndex(), afterEvent.getOperationSignature(),
-					afterEvent.getClassSignature());
+			final AfterOperationEvent newEvent = new AfterOperationEvent(originalEvent.getTimestamp(),
+					monitoredTrace.identifier, originalEvent.getOrderIndex(), originalEvent.getOperationSignature(),
+					originalEvent.getClassSignature());
+			newEvent.setLoggingTimestamp(originalEvent.getLoggingTimestamp());
+			
 			super.deliver(OUTPUT_PORT_NAME_DEFAULT, newEvent);
 		} else if (event instanceof AfterFailedThreadBasedEvent) {
-			final AfterFailedThreadBasedEvent afterEvent = (AfterFailedThreadBasedEvent) event;
+			final AfterFailedThreadBasedEvent originalEvent = (AfterFailedThreadBasedEvent) event;
 
-			final MonitoredTrace monitoredTrace = this.getMonitoredThread(afterEvent.getThreadId());
+			final MonitoredTrace monitoredTrace = this.getMonitoredThread(originalEvent.getThreadId());
 
-			final AfterOperationFailedEvent newEvent = new AfterOperationFailedEvent(afterEvent.getTimestamp(),
-					monitoredTrace.identifier, afterEvent.getOrderIndex(), afterEvent.getOperationSignature(),
-					afterEvent.getClassSignature(), afterEvent.getCause());
+			final AfterOperationFailedEvent newEvent = new AfterOperationFailedEvent(originalEvent.getTimestamp(),
+					monitoredTrace.identifier, originalEvent.getOrderIndex(), originalEvent.getOperationSignature(),
+					originalEvent.getClassSignature(), originalEvent.getCause());
+			newEvent.setLoggingTimestamp(originalEvent.getLoggingTimestamp());
+			
 			super.deliver(OUTPUT_PORT_NAME_DEFAULT, newEvent);
-		} else if (event instanceof TraceMetadata) {
-			final TraceMetadata traceMetadata = (TraceMetadata) event;
+		} else if (event instanceof ThreadMetaData) {
+			final ThreadMetaData threadMetaData = (ThreadMetaData) event;
 
-			final long threadId = traceMetadata.getThreadId();
-			final String hostName = traceMetadata.getHostname();
+			final long threadId = threadMetaData.getThreadId();
+			final String hostName = threadMetaData.getHostName();
 			this.hostNames.put(threadId, hostName);
 		} else {
 			// pass through all other record types
@@ -97,7 +104,7 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	private MonitoredTrace getOrCreateMonitoredThread(final long threadId) {
+	private MonitoredTrace getOrCreateMonitoredThread(final long beforeEventLoggingTimestamp, final long threadId) {
 		final MonitoredTrace monitoredTrace;
 		if (!this.monitoredTraces.containsKey(threadId)) {
 			final int uniqueTraceId = this.currentTraceId++; // generates a unique trace id
@@ -105,9 +112,14 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 			monitoredTrace.currentStackSize = 0;
 			this.monitoredTraces.put(threadId, monitoredTrace);
 
+			// The synthesize logging timestamp for the trace meta data must smaller than the first before event.
+			// Hence, we subtract 1 from the before event.
+			final long synthesizedLoggingTimestamp = beforeEventLoggingTimestamp - 1;
 			final String hostName = this.hostNames.get(threadId);
 			final TraceMetadata traceMetadata = new TraceMetadata(monitoredTrace.identifier, threadId, "<NO SESSION>",
 					hostName, -1, -1);
+			traceMetadata.setLoggingTimestamp(synthesizedLoggingTimestamp);
+
 			super.deliver(OUTPUT_PORT_NAME_DEFAULT, traceMetadata);
 		} else {
 			monitoredTrace = this.monitoredTraces.get(threadId);
