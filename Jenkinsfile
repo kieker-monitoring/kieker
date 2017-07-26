@@ -1,30 +1,35 @@
-#!groovy
+#!/usr/bin/env groovy
 
 node('kieker-slave-docker') {
     
+    stage('Clean workspace'){
+	deleteDir()
+	sh 'ls -lah'
+    }  
+
     stage ('Checkout') {
         checkout scm
     }
 
-    stage ('1-compile logs') {
+    stage ('compile') {
         sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew -S compileJava compileTestJava"'
     }
 
-    stage ('2-unit-test logs') {
+    stage ('unit-test') {
         sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew -S test"'
     }
 
-    stage ('3-static-analysis logs') {
+    stage ('static-analysis') {
         sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew -S check"'    
     }
 
-    stage ('4-release-check-short logs') {
+    stage ('release-check-short') {
         sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew checkReleaseArchivesShort"'
 
         archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true
     }
 
-    stage ('5-release-check-extended logs') {
+    stage ('release-check-extended') {
         if (env.BRANCH_NAME == "master") {
             sh 'echo "We are in master - executing the extended release archive check."'
     
