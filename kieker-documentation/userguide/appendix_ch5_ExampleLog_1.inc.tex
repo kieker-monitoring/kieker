@@ -18,17 +18,17 @@ ProbeController: disabled
 WriterController:
         Number of Inserts: '0'
         Automatic assignment of logging timestamps: 'true'
-Writer: 'kieker.monitoring.writer.filesystem.AsyncFsWriter'
+Writer: 'kieker.monitoring.writer.filesystem.AsciiFileWriter'
         Configuration:
-                kieker.monitoring.writer.filesystem.AsyncFsWriter.flush='true'
-                kieker.monitoring.writer.filesystem.AsyncFsWriter.maxLogSize='-1'
-                kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueFullBehavior='0'
-                kieker.monitoring.writer.filesystem.AsyncFsWriter.MaxShutdownDelay='-1'
-                kieker.monitoring.writer.filesystem.AsyncFsWriter.maxEntriesInFile='25000'
-                kieker.monitoring.writer.filesystem.AsyncFsWriter.bufferSize='8192'
-                kieker.monitoring.writer.filesystem.AsyncFsWriter.maxLogFiles='-1'
-                kieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=''
-                kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize='10000'
+                kieker.monitoring.writer.filesystem.AsciiFileWriter.flush='true'
+                kieker.monitoring.writer.filesystem.AsciiFileWriter.maxLogSize='-1'
+                kieker.monitoring.writer.filesystem.AsciiFileWriter.QueueFullBehavior='0'
+                kieker.monitoring.writer.filesystem.AsciiFileWriter.MaxShutdownDelay='-1'
+                kieker.monitoring.writer.filesystem.AsciiFileWriter.maxEntriesInFile='25000'
+                kieker.monitoring.writer.filesystem.AsciiFileWriter.bufferSize='8192'
+                kieker.monitoring.writer.filesystem.AsciiFileWriter.maxLogFiles='-1'
+                kieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=''
+                kieker.monitoring.writer.filesystem.AsciiFileWriter.QueueSize='10000'
         Records lost: 0
         Writer Threads (1): 
                 Finished: 'false'; Writing to Directory: '/tmp/kieker-20140414-203504785-UTC-myHost-KIEKER'
