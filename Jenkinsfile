@@ -48,4 +48,7 @@ node('kieker-slave-docker') {
             sh 'echo "We are not in  master - skipping."'
         }
     }
+
+    // Clean workspace
+    step([$class: 'WsCleanup'])
 }
