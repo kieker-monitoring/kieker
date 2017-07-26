@@ -24,5 +24,5 @@ jar {
 task runMonitoring(type: JavaExec) {
 	main = mainClassName
 	classpath = sourceSets.main.runtimeClasspath
-	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=monitoring-logs']
+	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=monitoring-logs']
 }

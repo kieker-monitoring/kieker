@@ -34,7 +34,7 @@ task runExampleFlowEvents(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	args = [System.getProperty("analysis.directory", ".")]
 	jvmArgs = ["-javaagent:lib/kieker-1.13-SNAPSHOT-aspectj.jar",
-			   '-Dkieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize=30000',
+			   '-Dkieker.monitoring.writer.filesystem.AsciiFileWriter.QueueSize=30000',
 			   //'-Dorg.aspectj.weaver.showWeaveInfo=true', 
 			   '-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-event.xml'
 			   ]
