@@ -3,16 +3,16 @@
 node('kieker-slave-docker') {
     
     stage ('Checkout') {
-        step([$class: 'WsCleanup'])
+        // step([$class: 'WsCleanup'])
 
-        checkout scm
+        // checkout scm
 
-        // checkout([
-        //     $class: 'GitSCM',
-        //     branches: scm.branches,
-        //     extensions: scm.extensions + [[$class: 'CleanBeforeCheckout']],
-        //     userRemoteConfigs: scm.userRemoteConfigs
-        // ])
+        checkout([
+            $class: 'GitSCM',
+            branches: scm.branches,
+            extensions: scm.extensions + [[$class: 'CleanBeforeCheckout']],
+            userRemoteConfigs: scm.userRemoteConfigs
+        ])
     }
 
     stage ('1-compile logs') {
