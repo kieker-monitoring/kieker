@@ -116,10 +116,9 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		}
 
 		final String recordClassName = monitoringRecord.getClass().getName();
-		this.writerRegistry.register(recordClassName);
-
-		recordBuffer.putInt(this.writerRegistry.getId(recordClassName));
-		recordBuffer.putLong(monitoringRecord.getLoggingTimestamp());
+		
+		this.serializer.putString(recordClassName);
+		this.serializer.putLong(monitoringRecord.getLoggingTimestamp());
 		monitoringRecord.serialize(this.serializer);
 
 		if (this.flush) {
