@@ -48,7 +48,7 @@ node('kieker-slave-docker') {
         }
     }
 
-    stage ('Permission fixing') {
+    stage ('Fix permissions') {
 	sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker alpine /bin/sh -c "chmod -R ugo+rwx /opt/kieker"'
     }
 
