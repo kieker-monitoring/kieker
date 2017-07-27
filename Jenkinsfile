@@ -3,6 +3,8 @@
 node('kieker-slave-docker') {
     
     stage ('Checkout') {
+        sh 'echo "Checking out Workspace"'
+
         checkout([
             $class: 'GitSCM',
             branches: scm.branches,
