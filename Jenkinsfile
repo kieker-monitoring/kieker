@@ -4,7 +4,6 @@ node('kieker-slave-docker') {
     
     stage('Clean workspace'){
 	deleteDir()
-	sh 'ls -lah'
     }  
 
     stage ('Checkout') {
