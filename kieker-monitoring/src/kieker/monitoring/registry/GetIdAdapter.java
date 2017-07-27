@@ -43,6 +43,7 @@ public class GetIdAdapter<E> implements IRegistry<E> {
 
 	@Override
 	public int get(final E value) {
+		this.writerRegistry.register(value);
 		return this.writerRegistry.getId(value);
 	}
 

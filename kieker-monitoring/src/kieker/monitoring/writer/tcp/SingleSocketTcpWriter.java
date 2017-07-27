@@ -34,7 +34,6 @@ import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
 import kieker.monitoring.registry.IWriterRegistry;
-import kieker.monitoring.registry.RegisterAdapter;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.WriterUtil;
@@ -52,28 +51,37 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 	private static final String PREFIX = SingleSocketTcpWriter.class.getName() + ".";
 
 	/** configuration key for the hostname. */
-	public static final String CONFIG_HOSTNAME = PREFIX + "hostname"; // NOCS (afterPREFIX)
+	public static final String CONFIG_HOSTNAME = PREFIX + "hostname"; // NOCS
+																		// (afterPREFIX)
 	/** configuration key for the port. */
-	public static final String CONFIG_PORT = PREFIX + "port"; // NOCS (afterPREFIX)
+	public static final String CONFIG_PORT = PREFIX + "port"; // NOCS
+																// (afterPREFIX)
 	/** configuration key for the size of the {@link #buffer}. */
-	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
+	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS
+																			// (afterPREFIX)
 	/** configuration key for {@link #flush}. */
-	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
+	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS
+																// (afterPREFIX)
 
 	/** the channel which writes out monitoring and registry records. */
 	private final WritableByteChannel socketChannel;
-	/** the buffer used for buffering monitoring and registry records. */
+	/** the buffer used for buffering monitoring records. */
 	private final ByteBuffer buffer;
-	/** <code>true</code> if the {@link #buffer} should be flushed upon each new incoming monitoring record. */
+	/** the buffer used for buffering registry records. */
+	private final ByteBuffer registryBuffer;
+	/**
+	 * <code>true</code> if the {@link #buffer} should be flushed upon each new
+	 * incoming monitoring record.
+	 */
 	private final boolean flush;
 
 	/** the registry used to compress string fields in monitoring records. */
 	private final IWriterRegistry<String> writerRegistry;
-	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.registerStrings(..)}. */
-	private final RegisterAdapter<String> registerStringsAdapter;
 	/** the serializer to use for the incoming records */
 	private final IValueSerializer serializer;
 
+	// remove RegisterAdapter
+	
 	public SingleSocketTcpWriter(final Configuration configuration) throws IOException {
 		super(configuration);
 		final String hostname = configuration.getStringProperty(CONFIG_HOSTNAME);
@@ -83,11 +91,11 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		// TODO should we check for buffers too small for a single record?
 		final int bufferSize = this.configuration.getIntProperty(CONFIG_BUFFERSIZE);
 		this.buffer = ByteBuffer.allocateDirect(bufferSize);
+		this.registryBuffer = ByteBuffer.allocateDirect(bufferSize);
 		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
 
 		this.writerRegistry = new WriterRegistry(this);
-		this.registerStringsAdapter = new RegisterAdapter<String>(this.writerRegistry);
-		
+
 		this.serializer = DefaultValueSerializer.create(this.buffer, new GetIdAdapter<String>(this.writerRegistry));
 	}
 
@@ -98,10 +106,12 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		monitoringRecord.registerStrings(this.registerStringsAdapter);
-
 		final ByteBuffer recordBuffer = this.buffer;
 		if ((4 + 8 + monitoringRecord.getSize()) > recordBuffer.remaining()) {
+			// Always flush the registryBuffer before flushing the recordBuffer.
+			// Otherwise the monitoring records could arrive before their string
+			// records
+			WriterUtil.flushBuffer(this.registryBuffer, this.socketChannel, LOG);
 			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOG);
 		}
 
@@ -111,20 +121,24 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		recordBuffer.putInt(this.writerRegistry.getId(recordClassName));
 		recordBuffer.putLong(monitoringRecord.getLoggingTimestamp());
 		monitoringRecord.serialize(this.serializer);
-		// monitoringRecord.writeToBuffer(buffer, this.writerRegistry);
 
 		if (this.flush) {
+			// Always flush the registryBuffer before flushing the recordBuffer.
+			// Otherwise the monitoring records could arrive before their string
+			// records
+			WriterUtil.flushBuffer(this.registryBuffer, this.socketChannel, LOG);
 			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOG);
 		}
 	}
 
 	@Override
 	public void onNewRegistryEntry(final String value, final int id) {
-		final ByteBuffer registryBuffer = this.buffer;
+		final ByteBuffer registryBuffer = this.registryBuffer;
 
 		final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
 		// logging timestamp + class id + RegistryRecord.SIZE + bytes.length
-		final int requiredBufferSize = (2 * AbstractMonitoringRecord.TYPE_SIZE_INT) + RegistryRecord.SIZE + bytes.length;
+		final int requiredBufferSize = (2 * AbstractMonitoringRecord.TYPE_SIZE_INT) + RegistryRecord.SIZE
+				+ bytes.length;
 
 		if (registryBuffer.remaining() < requiredBufferSize) {
 			WriterUtil.flushBuffer(registryBuffer, this.socketChannel, LOG);
@@ -138,6 +152,10 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 	@Override
 	public void onTerminating() {
+		// Always flush the registryBuffer before flushing the recordBuffer.
+		// Otherwise the monitoring records could arrive before their string
+		// records
+		WriterUtil.flushBuffer(this.registryBuffer, this.socketChannel, LOG);
 		WriterUtil.flushBuffer(this.buffer, this.socketChannel, LOG);
 		WriterUtil.close(this.socketChannel, LOG);
 	}
