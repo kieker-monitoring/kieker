@@ -33,6 +33,7 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.filesystem.AsciiLogReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.writer.filesystem.AsciiFileWriter;
 
 /**
  * An integration test for AspectJ-based probes.
@@ -47,30 +48,24 @@ public class AbstractAspectTest { // NOCS (abstract class)
 
 	@Test
 	public void testMonitoring() throws Exception {
-		// final URL resource = this.getClass().getResource("/");
 		final URL resource = this.getClass().getResource("/kieker.monitoring.probe.aspectj.flow.operationExecution");
 		final File workingDirectory = new File(resource.toURI());
 
-		final AspectjMonitoring aspectjMonitoring = new AspectjMonitoring("BookstoreApplication.jar", "kieker.examples.monitoring.aspectj.BookstoreStarter");
-		aspectjMonitoring.addJmvArgument("-Dkieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=" + workingDirectory);
+		final AspectjMonitoringToAsciiFileLog aspectjMonitoring = new AspectjMonitoringToAsciiFileLog("BookstoreApplication.jar",
+				"kieker.examples.monitoring.aspectj.BookstoreStarter");
 		final int exitValue = aspectjMonitoring.runMonitoring(workingDirectory);
 
 		// check whether monitoring was successful
 		assertThat(exitValue, is(0));
 
-		this.assertEvents(workingDirectory);
-	}
-
-	private void assertEvents(final File workingDirectory)
-			throws IllegalStateException, AnalysisConfigurationException, IOException {
-		final AspectjAnalysis aspectjAnalysis = new AspectjAnalysis();
+		final AspectjAnalysisFromAsciiFileLog aspectjAnalysis = new AspectjAnalysisFromAsciiFileLog();
 		final List<IMonitoringRecord> records = aspectjAnalysis.runAnalysis(workingDirectory);
 
 		// -1 because AnalysisController absorbs the KiekerMetadataRecord
 		assertThat(records.size(), is(19 - 1));
 	}
 
-	private static class AspectjMonitoring {
+	private static class AspectjMonitoringToAsciiFileLog {
 
 		private final String javaCommand = "java"; // C:/Program Files/Java/jre7/bin/
 		private final String kiekerAspectjFileName = "kieker-1.13-SNAPSHOT-aspectj.jar";
@@ -81,7 +76,7 @@ public class AbstractAspectTest { // NOCS (abstract class)
 		private final List<String> arguments = new ArrayList<>();
 		private final List<String> jvmArguments = new ArrayList<>();
 
-		public AspectjMonitoring(final String appJarFilePath, final String appMainClassName) {
+		public AspectjMonitoringToAsciiFileLog(final String appJarFilePath, final String appMainClassName) {
 			this.appJarFilePath = appJarFilePath;
 			this.appMainClassName = appMainClassName;
 
@@ -92,10 +87,12 @@ public class AbstractAspectTest { // NOCS (abstract class)
 		}
 
 		public void addJmvArgument(String additionalJvmArg) {
-			this.jvmArguments.add(additionalJvmArg);
+			this.jvmArguments.add("-D" + additionalJvmArg);
 		}
 
 		public int runMonitoring(final File workingDirectory) throws IOException, InterruptedException {
+			this.addJmvArgument(AsciiFileWriter.CONFIG_PATH + "=" + workingDirectory);
+
 			final List<String> commandWithArgs = new ArrayList<>();
 			commandWithArgs.add(this.javaCommand);
 			commandWithArgs.addAll(this.jvmArguments);
@@ -103,8 +100,8 @@ public class AbstractAspectTest { // NOCS (abstract class)
 
 			final ProcessBuilder builder = new ProcessBuilder(commandWithArgs)
 					.directory(workingDirectory)
-					.redirectOutput(new File("output.txt"))
-					.redirectError(new File("error.txt"));
+					.redirectOutput(new File(workingDirectory, "output.txt"))
+					.redirectError(new File(workingDirectory, "error.txt"));
 			final Process process = builder.start();
 
 			final int exitValue = process.waitFor();
@@ -113,7 +110,7 @@ public class AbstractAspectTest { // NOCS (abstract class)
 
 	}
 
-	private static class AspectjAnalysis {
+	private static class AspectjAnalysisFromAsciiFileLog {
 
 		public List<IMonitoringRecord> runAnalysis(final File workingDirectory) throws IllegalStateException, AnalysisConfigurationException {
 			final AnalysisController analysisController = new AnalysisController();
