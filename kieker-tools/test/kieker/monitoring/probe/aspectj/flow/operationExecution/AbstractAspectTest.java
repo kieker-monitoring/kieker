@@ -16,6 +16,7 @@
 package kieker.monitoring.probe.aspectj.flow.operationExecution;
 
 import static org.hamcrest.CoreMatchers.is; // NOCS (static import)
+import static org.hamcrest.Matchers.hasSize; // NOCS (static import)
 import static org.junit.Assert.assertThat; // NOCS (static import)
 
 import java.io.File;
@@ -62,7 +63,7 @@ public class AbstractAspectTest { // NOCS (abstract class)
 		final List<IMonitoringRecord> records = aspectjAnalysis.runAnalysis(workingDirectory);
 
 		// -1 because AnalysisController absorbs the KiekerMetadataRecord
-		assertThat(records.size(), is(19 - 1));
+		assertThat(records, hasSize(19 - 1));
 	}
 
 	private static class AspectjMonitoringToAsciiFileLog {
