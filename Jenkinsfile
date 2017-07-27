@@ -3,9 +3,12 @@
 node('kieker-slave-docker') {
     
     stage ('Checkout') {
-        checkout scm
-
-        sh 'printenv'
+        checkout([
+            $class: 'GitSCM',
+            branches: scm.branches,
+            extensions: scm.extensions + [[$class: 'CleanBeforeCheckout']],
+            userRemoteConfigs: scm.userRemoteConfigs
+        ])
     }
 
     stage ('1-compile logs') {
