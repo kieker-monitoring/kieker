@@ -49,7 +49,7 @@ node('kieker-slave-docker') {
         }
     }
 
-    step(sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker alpine /bin/bash -c "chmod -R ugo+rwx /opt/kieker"'
+    step(sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker alpine /bin/bash -c "chmod -R ugo+rwx /opt/kieker"')
 
     // Clean workspace
     step([$class: 'WsCleanup'])
