@@ -15,9 +15,15 @@
  ***************************************************************************/
 package kieker.monitoring.probe.aspectj.flow.operationExecution;
 
+import static org.hamcrest.CoreMatchers.is; // NOCS (static import)
+import static org.junit.Assert.assertThat; // NOCS (static import)
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -28,9 +34,6 @@ import kieker.analysis.plugin.reader.filesystem.AsciiLogReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
-import static org.hamcrest.CoreMatchers.is; // NOCS (static import)
-import static org.junit.Assert.assertThat; // NOCS (static import)
-
 /**
  * An integration test for AspectJ-based probes.
  * 
@@ -40,26 +43,17 @@ import static org.junit.Assert.assertThat; // NOCS (static import)
  */
 public class AbstractAspectTest { // NOCS (abstract class)
 
-	public AbstractAspectTest() {
-	} // NOCS NOPMD (empty ctor)
+	public AbstractAspectTest() {} // NOCS NOPMD (empty ctor)
 
 	@Test
 	public void testMonitoring() throws Exception {
-		final String javaCommand = "java"; // C:/Program Files/Java/jre7/bin/
-		final String kiekerAspectjFileName = "kieker-1.13-SNAPSHOT-aspectj.jar";
-		// BookstoreApplication.jar from /kieker-examples/monitoring/probe-aspectj/build/libs/
-		// gradle uses the env. var. JAVA_HOME to build the bookstore example
-		final String appJarFilePath = "BookstoreApplication.jar";
-		final String mainClassName = "kieker.examples.monitoring.aspectj.BookstoreStarter";
-		final String[] commandWithArgs = { javaCommand, "-javaagent:" + kiekerAspectjFileName, "-cp",
-				".;" + appJarFilePath, mainClassName, };
-		final String workingDirectory = "test-resources/kieker.monitoring.probe.aspectj.flow.operationExecution";
+		// final URL resource = this.getClass().getResource("/");
+		final URL resource = this.getClass().getResource("/kieker.monitoring.probe.aspectj.flow.operationExecution");
+		final File workingDirectory = new File(resource.toURI());
 
-		final ProcessBuilder builder = new ProcessBuilder(commandWithArgs).directory(new File(workingDirectory))
-				.redirectOutput(new File("output.txt")).redirectError(new File("error.txt"));
-		final Process process = builder.start();
-		// do something in between
-		final int exitValue = process.waitFor();
+		final AspectjMonitoring aspectjMonitoring = new AspectjMonitoring("BookstoreApplication.jar", "kieker.examples.monitoring.aspectj.BookstoreStarter");
+		aspectjMonitoring.addJmvArgument("-Dkieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=" + workingDirectory);
+		final int exitValue = aspectjMonitoring.runMonitoring(workingDirectory);
 
 		// check whether monitoring was successful
 		assertThat(exitValue, is(0));
@@ -67,48 +61,101 @@ public class AbstractAspectTest { // NOCS (abstract class)
 		this.assertEvents(workingDirectory);
 	}
 
-	private void assertEvents(final String workingDirectory)
+	private void assertEvents(final File workingDirectory)
 			throws IllegalStateException, AnalysisConfigurationException, IOException {
-		final AnalysisController analysisController = new AnalysisController();
+		final AspectjAnalysis aspectjAnalysis = new AspectjAnalysis();
+		final List<IMonitoringRecord> records = aspectjAnalysis.runAnalysis(workingDirectory);
 
-		final Configuration conf = new Configuration();
-		final File[] directories = new File(workingDirectory).listFiles(new FileFilter() {
-			@Override
-			public boolean accept(final File pathname) {
-				return pathname.isDirectory() && !"META-INF".equals(pathname.getName());
-			}
-		});
-
-		try {
-			conf.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(directories));
-			final AsciiLogReader reader = new AsciiLogReader(conf, analysisController);
-
-			final ListCollectionFilter<IMonitoringRecord> collectionSink = new ListCollectionFilter<>(
-					new Configuration(), analysisController);
-
-			analysisController.connect(reader, AsciiLogReader.OUTPUT_PORT_NAME_RECORDS, collectionSink,
-					ListCollectionFilter.INPUT_PORT_NAME);
-
-			analysisController.run();
-
-			assertThat(collectionSink.getList().size(), is(19 - 1)); // -1 because AnalysisController absorbs the
-																		// KiekerMetadataRecord
-		} finally {
-			this.deleteTempoararyFiles(directories);
-		}
+		// -1 because AnalysisController absorbs the KiekerMetadataRecord
+		assertThat(records.size(), is(19 - 1));
 	}
 
-	private void deleteTempoararyFiles(final File[] directories) {
-		for (final File logDir : directories) {
-			for (final File file : logDir.listFiles()) {
-				final boolean deleted = file.delete();
-				if (!deleted) {
-					System.err.println("Could not delete temporary test file: " + file); // NOPMD (sysout)
+	private static class AspectjMonitoring {
+
+		private final String javaCommand = "java"; // C:/Program Files/Java/jre7/bin/
+		private final String kiekerAspectjFileName = "kieker-1.13-SNAPSHOT-aspectj.jar";
+		// BookstoreApplication.jar from /kieker-examples/monitoring/probe-aspectj/build/libs/
+		// gradle uses the env. var. JAVA_HOME to build the bookstore example
+		private final String appJarFilePath;
+		private final String appMainClassName;
+		private final List<String> arguments = new ArrayList<>();
+		private final List<String> jvmArguments = new ArrayList<>();
+
+		public AspectjMonitoring(final String appJarFilePath, final String appMainClassName) {
+			this.appJarFilePath = appJarFilePath;
+			this.appMainClassName = appMainClassName;
+
+			this.arguments.add("-javaagent:" + this.kiekerAspectjFileName);
+			this.arguments.add("-cp");
+			this.arguments.add(".;" + this.appJarFilePath);
+			this.arguments.add(this.appMainClassName);
+		}
+
+		public void addJmvArgument(String additionalJvmArg) {
+			this.jvmArguments.add(additionalJvmArg);
+		}
+
+		public int runMonitoring(final File workingDirectory) throws IOException, InterruptedException {
+			final List<String> commandWithArgs = new ArrayList<>();
+			commandWithArgs.add(this.javaCommand);
+			commandWithArgs.addAll(this.jvmArguments);
+			commandWithArgs.addAll(this.arguments);
+
+			final ProcessBuilder builder = new ProcessBuilder(commandWithArgs)
+					.directory(workingDirectory)
+					.redirectOutput(new File("output.txt"))
+					.redirectError(new File("error.txt"));
+			final Process process = builder.start();
+
+			final int exitValue = process.waitFor();
+			return exitValue;
+		}
+
+	}
+
+	private static class AspectjAnalysis {
+
+		public List<IMonitoringRecord> runAnalysis(final File workingDirectory) throws IllegalStateException, AnalysisConfigurationException {
+			final AnalysisController analysisController = new AnalysisController();
+
+			final Configuration conf = new Configuration();
+			final File[] directories = workingDirectory.listFiles(new FileFilter() {
+				@Override
+				public boolean accept(final File pathname) {
+					return pathname.isDirectory() && !"META-INF".equals(pathname.getName());
 				}
+			});
+
+			try {
+				conf.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(directories));
+				final AsciiLogReader reader = new AsciiLogReader(conf, analysisController);
+
+				final ListCollectionFilter<IMonitoringRecord> collectionSink = new ListCollectionFilter<>(
+						new Configuration(), analysisController);
+
+				analysisController.connect(reader, AsciiLogReader.OUTPUT_PORT_NAME_RECORDS, collectionSink,
+						ListCollectionFilter.INPUT_PORT_NAME);
+
+				analysisController.run();
+
+				return collectionSink.getList();
+			} finally {
+				this.deleteTempoararyFiles(directories);
 			}
-			final boolean deleted = logDir.delete();
-			if (!deleted) {
-				System.err.println("Could not delete temporary kieker test log directory: " + logDir); // NOPMD (sysout)
+		}
+
+		private void deleteTempoararyFiles(final File[] directories) {
+			for (final File logDir : directories) {
+				for (final File file : logDir.listFiles()) {
+					final boolean deleted = file.delete();
+					if (!deleted) {
+						System.err.println("Could not delete temporary test file: " + file); // NOPMD (sysout)
+					}
+				}
+				final boolean deleted = logDir.delete();
+				if (!deleted) {
+					System.err.println("Could not delete temporary kieker test log directory: " + logDir); // NOPMD (sysout)
+				}
 			}
 		}
 	}
