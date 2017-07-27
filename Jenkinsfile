@@ -7,6 +7,8 @@ node('kieker-slave-docker') {
 
         // checkout scm
 
+        sh 'echo "Checking out Workspace"'
+
         checkout([
             $class: 'GitSCM',
             branches: scm.branches,
