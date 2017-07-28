@@ -37,8 +37,7 @@ public class GetIdAdapter<E> implements IRegistry<E> {
 
 	@Override
 	public long getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return writerRegistry.getId();
 	}
 
 	@Override
