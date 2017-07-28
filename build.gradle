@@ -196,7 +196,9 @@ allprojects {
 
 		// moved to common to let Eclipse compile each module separately
 		testCompile "org.mockito:mockito-core:2.+"
-        testCompile 'junit:junit:4.11'
+        testCompile 'junit:junit:4.12'
+        // https://mvnrepository.com/artifact/org.hamcrest/hamcrest-library
+		testCompile group: 'org.hamcrest', name: 'hamcrest-library', version: '1.3'
     }
 
 }

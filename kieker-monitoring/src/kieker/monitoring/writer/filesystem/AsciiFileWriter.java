@@ -78,7 +78,8 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		}
 
 		if (!(new File(configPathName)).isDirectory()) {
-			throw new IllegalArgumentException("'" + configPathName + "' is not a directory.");
+			String currentWorkingDir = System.getProperty("user.dir");
+			throw new IllegalArgumentException("'" + configPathName + "' is not a directory. The current working directory was: " + currentWorkingDir);
 		}
 
 		this.logFolder = KiekerLogFolder.buildKiekerLogFolder(configPathName, configuration);
