@@ -88,4 +88,19 @@ public class DefaultValueSerializer implements IValueSerializer {
 		this.putInt(stringId);
 	}
 
+	@Override
+	public void putChar(char value) {
+		this.buffer.putChar(value);
+	}
+
+	@Override
+	public void putShort(short value) {
+		this.buffer.putShort(value);
+	}
+
+	@Override
+	public void putFloat(float value) {
+		this.buffer.putFloat(value);
+	}
+
 }

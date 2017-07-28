@@ -41,6 +41,22 @@ public interface IValueDeserializer {
 	public byte getByte();
 
 	/**
+	 * Retrieves a {@code byte} value from the underlying data source.
+	 *
+	 * @return The retrieved value
+	 * @since 1.13
+	 */
+	public char getChar();
+	
+	/**
+	 * Retrieves a {@code byte} value from the underlying data source.
+	 *
+	 * @return The retrieved value
+	 * @since 1.13
+	 */
+	public short getShort();
+	
+	/**
 	 * Retrieves an {@code int} value from the underlying data source.
 	 *
 	 * @return The retrieved value
@@ -56,6 +72,14 @@ public interface IValueDeserializer {
 	 */
 	public long getLong();
 
+	/**
+	 * Retrieves a {@code float} value from the underlying data source.
+	 *
+	 * @return The retrieved value
+	 * @since 1.13
+	 */
+	public float getFloat();
+	
 	/**
 	 * Retrieves a {@code double} value from the underlying data source.
 	 *
