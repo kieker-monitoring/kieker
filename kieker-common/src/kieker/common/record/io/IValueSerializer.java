@@ -58,7 +58,7 @@ public interface IValueSerializer {
 	 *            The value to store
 	 * @since 1.13
 	 */
-	public void putShort(short value);
+	public void putShort(short value); // NOPMD
 	
 	/**
 	 * Stores an {@code int} value in the underlying data store.

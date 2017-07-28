@@ -54,7 +54,7 @@ public interface IValueDeserializer {
 	 * @return The retrieved value
 	 * @since 1.13
 	 */
-	public short getShort();
+	public short getShort(); // NOPMD
 	
 	/**
 	 * Retrieves an {@code int} value from the underlying data source.

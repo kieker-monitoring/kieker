@@ -86,7 +86,7 @@ public class DefaultValueDeserializer implements IValueDeserializer {
 	}
 
 	@Override
-	public short getShort() {
+	public short getShort() { // NOPMD
 		return this.buffer.getShort();
 	}
 

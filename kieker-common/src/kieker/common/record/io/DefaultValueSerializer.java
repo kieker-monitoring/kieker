@@ -89,17 +89,17 @@ public class DefaultValueSerializer implements IValueSerializer {
 	}
 
 	@Override
-	public void putChar(char value) {
+	public void putChar(final char value) {
 		this.buffer.putChar(value);
 	}
 
 	@Override
-	public void putShort(short value) {
+	public void putShort(final short value) { // NOPMD
 		this.buffer.putShort(value);
 	}
 
 	@Override
-	public void putFloat(float value) {
+	public void putFloat(final float value) {
 		this.buffer.putFloat(value);
 	}
 
