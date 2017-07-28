@@ -360,12 +360,12 @@ example configuration file (see Appendix~\ref{sec:appdx:monitoringproperties}). 
 % \enlargethispage{1.2cm}
 
 Different writers can be used %
-to store monitoring records to filesystems and databases respectively (e.g., \class{AsyncFsWriter}, %
+to store monitoring records to filesystems and databases respectively (e.g., \class{AsciiFileWriter}, %
 \class{SyncFsWriter}, \class{AsyncDbWriter}, and \class{SyncDbWriter}). %
 The variants with the prefix \class{Async} are implemented using asynchronous %
 threads that decouple the I/O operations from the control flow of the %
 instrumented application. %
-The \class{AsyncFsWriter} is the default writer that has already been used in %
+The \class{AsciiFileWriter} is the default writer that has already been used in %
 Section~\ref{sec:example:monitoring}. %
 Please note that the database writers are currently in a prototype stage and
 that they should be used with care. %
