@@ -80,7 +80,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 	private final IWriterRegistry<String> writerRegistry;
 	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.serialize(..)}. */
 	private final GetIdAdapter<String> writeBytesAdapter;
-	/** serializes the monitoring records */
+	/** the serializer to use for the incoming records */
 	private final IValueSerializer serializer;
 
 	public DualSocketTcpWriter(final Configuration configuration) throws IOException {
