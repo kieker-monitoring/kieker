@@ -20,6 +20,9 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.IRegistryRecordReceiver;
 
 /**
+ * This adapter allows to use the new WriterRegistry with the legacy IRegistry in
+ * {@link AbstractMonitoringRecord.serialize(..)}.
+ *
  * @param <E>
  *            the type of the values in the passed registry
  *
@@ -37,7 +40,7 @@ public class GetIdAdapter<E> implements IRegistry<E> {
 
 	@Override
 	public long getId() {
-		return writerRegistry.getId();
+		return this.writerRegistry.getId();
 	}
 
 	@Override

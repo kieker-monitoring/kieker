@@ -31,7 +31,6 @@ import kieker.common.record.io.IValueSerializer;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
-import kieker.monitoring.registry.IWriterRegistry;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.WriterUtil;
@@ -58,13 +57,13 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
-	private static final String CONFIG_STRING_REGISTRY_BUFFERSIZE = PREFIX + "stringRegistryBufferSize"; // NOCS (afterPREFIX)
+	private static final String CONFIG_STRING_REGISTRY_BUFFERSIZE = PREFIX + "stringRegistryBufferSize"; // NOCS
+																											// (afterPREFIX)
 
 	private final boolean flush;
 	private final SocketChannel monitoringRecordChannel;
 	private final SocketChannel registryRecordChannel;
 	private final ByteBuffer recordBuffer;
-	private final IWriterRegistry<String> writerRegistry;
 	/** the buffer used for buffering registry records. */
 	private final ByteBuffer stringRegistryBuffer;
 	/** the serializer to use for the incoming records */
@@ -92,8 +91,8 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 		this.monitoringRecordChannel = SocketChannel.open(new InetSocketAddress(hostname, port1));
 		this.registryRecordChannel = SocketChannel.open(new InetSocketAddress(hostname, port2));
 
-		this.writerRegistry = new WriterRegistry(this);
-		this.serializer = DefaultValueSerializer.create(this.recordBuffer, new GetIdAdapter<String>(this.writerRegistry));
+		final WriterRegistry writerRegistry = new WriterRegistry(this);
+		this.serializer = DefaultValueSerializer.create(this.recordBuffer, new GetIdAdapter<>(writerRegistry));
 	}
 
 	@Override

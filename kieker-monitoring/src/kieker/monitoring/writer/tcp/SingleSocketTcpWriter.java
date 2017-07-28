@@ -33,7 +33,6 @@ import kieker.common.record.io.IValueSerializer;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
-import kieker.monitoring.registry.IWriterRegistry;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.WriterUtil;
@@ -70,18 +69,14 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 	/** the buffer used for buffering registry records. */
 	private final ByteBuffer registryBuffer;
 	/**
-	 * <code>true</code> if the {@link #buffer} should be flushed upon each new
-	 * incoming monitoring record.
+	 * <code>true</code> if the {@link #buffer} should be flushed upon each new incoming monitoring record.
 	 */
 	private final boolean flush;
-
-	/** the registry used to compress string fields in monitoring records. */
-	private final IWriterRegistry<String> writerRegistry;
 	/** the serializer to use for the incoming records */
 	private final IValueSerializer serializer;
 
 	// remove RegisterAdapter
-	
+
 	public SingleSocketTcpWriter(final Configuration configuration) throws IOException {
 		super(configuration);
 		final String hostname = configuration.getStringProperty(CONFIG_HOSTNAME);
@@ -94,9 +89,8 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		this.registryBuffer = ByteBuffer.allocateDirect(bufferSize);
 		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
 
-		this.writerRegistry = new WriterRegistry(this);
-
-		this.serializer = DefaultValueSerializer.create(this.buffer, new GetIdAdapter<String>(this.writerRegistry));
+		final WriterRegistry writerRegistry = new WriterRegistry(this);
+		this.serializer = DefaultValueSerializer.create(this.buffer, new GetIdAdapter<>(writerRegistry));
 	}
 
 	@Override
@@ -116,7 +110,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		}
 
 		final String recordClassName = monitoringRecord.getClass().getName();
-		
+
 		this.serializer.putString(recordClassName);
 		this.serializer.putLong(monitoringRecord.getLoggingTimestamp());
 		monitoringRecord.serialize(this.serializer);
@@ -132,21 +126,21 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 	@Override
 	public void onNewRegistryEntry(final String value, final int id) {
-		final ByteBuffer registryBuffer = this.registryBuffer;
+		final ByteBuffer localRegistryBuffer = this.registryBuffer;
 
 		final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
 		// logging timestamp + class id + RegistryRecord.SIZE + bytes.length
 		final int requiredBufferSize = (2 * AbstractMonitoringRecord.TYPE_SIZE_INT) + RegistryRecord.SIZE
 				+ bytes.length;
 
-		if (registryBuffer.remaining() < requiredBufferSize) {
-			WriterUtil.flushBuffer(registryBuffer, this.socketChannel, LOG);
+		if (localRegistryBuffer.remaining() < requiredBufferSize) {
+			WriterUtil.flushBuffer(localRegistryBuffer, this.socketChannel, LOG);
 		}
 
-		registryBuffer.putInt(RegistryRecord.CLASS_ID);
-		registryBuffer.putInt(id);
-		registryBuffer.putInt(value.length());
-		registryBuffer.put(bytes);
+		localRegistryBuffer.putInt(RegistryRecord.CLASS_ID);
+		localRegistryBuffer.putInt(id);
+		localRegistryBuffer.putInt(value.length());
+		localRegistryBuffer.put(bytes);
 	}
 
 	@Override

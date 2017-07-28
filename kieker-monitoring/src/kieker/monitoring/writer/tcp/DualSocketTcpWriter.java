@@ -31,8 +31,6 @@ import kieker.common.record.io.IValueSerializer;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
-import kieker.monitoring.registry.IWriterRegistry;
-import kieker.monitoring.registry.RegisterAdapter;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.WriterUtil;
@@ -62,7 +60,8 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 	/** configuration key for {@link #flush}. */
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 	/** configuration key for the size of the {@link #stringRegistryBuffer}. */
-	private static final String CONFIG_STRING_REGISTRY_BUFFERSIZE = PREFIX + "StringRegistryBufferSize"; // NOCS (afterPREFIX)
+	private static final String CONFIG_STRING_REGISTRY_BUFFERSIZE = PREFIX + "StringRegistryBufferSize"; // NOCS
+																											// (afterPREFIX)
 
 	/** <code>true</code> if the {@link #recordBuffer} should be flushed upon each new incoming monitoring record. */
 	private final boolean flush;
@@ -75,11 +74,6 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 	private final ByteBuffer recordBuffer;
 	/** the buffer used for buffering registry records. */
 	private final ByteBuffer stringRegistryBuffer;
-
-	/** the registry used to compress string fields in monitoring records. */
-	private final IWriterRegistry<String> writerRegistry;
-	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.serialize(..)}. */
-	private final GetIdAdapter<String> writeBytesAdapter;
 	/** the serializer to use for the incoming records */
 	private final IValueSerializer serializer;
 
@@ -92,7 +86,8 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		final int bufferSize = configuration.getIntProperty(CONFIG_BUFFERSIZE);
 		int stringRegistryBufferSize = configuration.getIntProperty(CONFIG_STRING_REGISTRY_BUFFERSIZE);
 		if (stringRegistryBufferSize <= 0) {
-			LOG.warn("Invalid buffer size passed for string registry records: " + stringRegistryBufferSize + ". Defaults to " + DEFAULT_STRING_REGISTRY_BUFFER_SIZE);
+			LOG.warn("Invalid buffer size passed for string registry records: " + stringRegistryBufferSize
+					+ ". Defaults to " + DEFAULT_STRING_REGISTRY_BUFFER_SIZE);
 			stringRegistryBufferSize = DEFAULT_STRING_REGISTRY_BUFFER_SIZE;
 		}
 
@@ -104,12 +99,12 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		this.monitoringRecordChannel = SocketChannel.open(new InetSocketAddress(hostname, monitoringPort));
 		this.registryRecordChannel = SocketChannel.open(new InetSocketAddress(hostname, registryPort));
 
-		this.writerRegistry = new WriterRegistry(this);
-		this.writeBytesAdapter = new GetIdAdapter<String>(this.writerRegistry);
-		this.serializer = DefaultValueSerializer.create(this.recordBuffer, this.writeBytesAdapter);
+		final WriterRegistry writerRegistry = new WriterRegistry(this);
+		final GetIdAdapter<String> writeBytesAdapter = new GetIdAdapter<>(writerRegistry);
+		this.serializer = DefaultValueSerializer.create(this.recordBuffer, writeBytesAdapter);
 
 		// this.encoder = StandardCharsets.UTF_8.newEncoder();
-		
+
 		// remove RegisterAdapter
 	}
 
