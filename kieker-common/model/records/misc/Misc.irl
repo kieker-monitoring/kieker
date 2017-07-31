@@ -28,3 +28,11 @@ entity KiekerMetadataRecord {
 entity TimestampRecord {
 	long timestamp = 0
 }
+
+@author 'Christian Wulf' @since '1.13'
+entity HostApplicationMetaData {
+	string systemName
+	string ipAddress
+	string hostName
+	string applicationName
+}

@@ -22,31 +22,26 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
-
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
- * Passes {@link IMonitoringRecord}s received via its input port {@link #INPUT_PORT_NAME_RECORD} to its own {@link IMonitoringController} instance,
+ * Passes {@link IMonitoringRecord}s received via its input port {@link #INPUT_PORT_NAME_RECORD} to its own {@link MonitoringController} instance,
  * which is created based on the {@link Configuration} file passed via the filter's property {@link #CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN}.
  * Additionally, incoming records are relayed via the output port {@link #OUTPUT_PORT_NAME_RELAYED_EVENTS}.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
-@Plugin(description = "A filter which passes received records to the configured monitoring controller",
-		outputPorts = {
-			@OutputPort(name = MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming monitoring record",
-					eventTypes = { IMonitoringRecord.class })
-		},
-		configuration = {
-			@Property(name = MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, defaultValue = "")
-		})
+@Plugin(description = "A filter which passes received records to the configured monitoring controller", outputPorts = {
+	@OutputPort(name = MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming monitoring record", eventTypes = {
+		IMonitoringRecord.class })
+}, configuration = {
+	@Property(name = MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, defaultValue = "")
+})
 public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 
 	/** This is the name of the input port receiving new records. */
@@ -58,9 +53,9 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN = "monitoringPropertiesFilename";
 
 	/**
-	 * The {@link IMonitoringController} the records received via {@link #inputIMonitoringRecord(IMonitoringRecord)} are passed to.
+	 * The {@link MonitoringController} the records received via {@link #inputIMonitoringRecord(IMonitoringRecord)} are passed to.
 	 */
-	private final IMonitoringController monitoringController;
+	private final MonitoringController monitoringController;
 
 	/**
 	 * Used to cache the configuration.
@@ -69,12 +64,12 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
+	 *
 	 * @since 1.7
 	 */
 	public MonitoringRecordLoggerFilter(final Configuration configuration, final IProjectContext projectContext) {
@@ -102,6 +97,13 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	@Override
 	public void terminate(final boolean error) {
 		this.monitoringController.terminateMonitoring();
+		try {
+			// we expect a waiting time of 10-100 ms.
+			// So, a timeout of 10,000 ms should be high enough.
+			this.monitoringController.waitForTermination(10000);
+		} catch (final InterruptedException e) {
+			LOG.warn("An exception occurred while waiting for the monitoring to terminate.", e);
+		}
 	}
 
 	/**
@@ -115,7 +117,7 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 
 	/**
 	 * This method represents the input port. The new records are send to the monitoring controller before they are delivered via the output port.
-	 * 
+	 *
 	 * @param record
 	 *            The next record.
 	 */
@@ -124,4 +126,11 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 		this.monitoringController.newMonitoringRecord(record);
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, record);
 	}
+
+	// /**
+	// * Used in tests only.
+	// */
+	// /* default */ MonitoringController getMonitoringController() { // NOPMD (default for tests)
+	// return this.monitoringController;
+	// }
 }

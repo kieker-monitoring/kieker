@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,38 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.flow.trace;
 
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
-
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
 
 import kieker.common.record.flow.AbstractEvent;
 import kieker.common.record.flow.ITraceRecord;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {
-		private static final long serialVersionUID = -3022261747819944031L;
-	
-	
-	/* user-defined constants */
-	/* default constants */
+	private static final long serialVersionUID = -3022261747819944031L;
+
+	/** default constants. */
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
-	/* property declarations */
-	private final long traceId;
-	private final int orderIndex;
-
+	
+		
+	/** property declarations. */
+	private long traceId;
+	private int orderIndex;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -58,10 +54,9 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		this.orderIndex = orderIndex;
 	}
 
-	
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -75,22 +70,23 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
+	 * @param deserializer
+	 *            The value deserializer to use.
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public AbstractTraceEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.traceId = buffer.getLong();
-		this.orderIndex = buffer.getInt();
+	public AbstractTraceEvent(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		super(deserializer);
+
+		this.traceId = deserializer.getLong();
+		this.orderIndex = deserializer.getInt();
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -101,38 +97,50 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
-		
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+
 		final AbstractTraceEvent castedRecord = (AbstractTraceEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
 		return true;
 	}
 
+	@Override
 	public final long getTraceId() {
 		return this.traceId;
+	}
+	
+	public final void setTraceId(long traceId) {
+		this.traceId = traceId;
 	}
 	
 	public final int getOrderIndex() {
 		return this.orderIndex;
 	}
 	
+	public final void setOrderIndex(int orderIndex) {
+		this.orderIndex = orderIndex;
+	}
+
 }

@@ -9,6 +9,7 @@ task buildStandaloneExamples(dependsOn: [
 					 'buildStandaloneExamplesUserguideAppendixSigar',
 					 'buildStandaloneExamplesUserguideAppendixJMS', 
 					 'buildStandaloneExamplesUserguideAppendixAMQP',
+					 'buildStandaloneExamplesUserguideAppendixKafka',
 					 'buildStandaloneExamplesMonitoringSigar',
 					 'buildStandaloneExamplesMonitoringJVM',
 					 'buildStandaloneExamplesMonitoringSpring',
@@ -23,7 +24,8 @@ task buildStandaloneExamples(dependsOn: [
 					 'replaceAbsoluteByRelativePathsEclipse']) {
 }
 
-task replaceHardCodedVersionNames() << {
+task replaceHardCodedVersionNames() {
+  doLast {
 	regexpReplaceInFiles(project.file("monitoring/custom-timesource/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
 	regexpReplaceInFiles(project.file("monitoring/probe-aspectj/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
 	regexpReplaceInFiles(project.file("monitoring/adaptive-monitoring/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
@@ -35,9 +37,11 @@ task replaceHardCodedVersionNames() << {
 	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/README.txt"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
 	regexpReplaceInFiles(project.file("userguide/ch3-4--custom-components/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
 	regexpReplaceInFiles(project.file("monitoring/probe-spring/.classpath"), "aspectjweaver-.*.jar", "aspectjweaver-${libAspectjVersion}.jar")
+  }
 }
 
-task replaceAbsoluteByRelativePathsEclipse << {
+task replaceAbsoluteByRelativePathsEclipse {
+  doLast {
     regexpReplaceInFiles(project.file("analysis/kax-files/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("analysis/opad-anomaly-detection/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("analysis/trace-analysis/.classpath"), "path=\".*/lib/", "path=\"lib/")
@@ -55,6 +59,7 @@ task replaceAbsoluteByRelativePathsEclipse << {
 	regexpReplaceInFiles(project.file("userguide/appendix-Sigar/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("userguide/ch3-4--custom-components/.classpath"), "path=\".*/lib/", "path=\"lib/")
+  }
 }
 
 task buildStandaloneExamplesUserguideCh2App(type: GradleBuild) {
@@ -141,6 +146,28 @@ task copyLibsStandaloneExamplesUserguideAppendixAMQP(type: Copy, dependsOn: [roo
 
 task buildStandaloneExamplesUserguideAppendixAMQP(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixAMQP') {
 	buildFile = 'userguide/appendix-AMQP/build.gradle'
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+}
+
+task copyLibsStandaloneExamplesUserguideAppendixKafka(type: Copy, dependsOn: [rootProject.emfJar]) {
+	from ('../build/libs') {
+		include "kieker-${version}.jar"
+	}
+	from ('../lib') {
+		include "commons-logging-*.jar"
+		include "guava-*.jar"
+		include "jctools-core-*.jar"
+		include "kafka-clients-*.jar"
+		include "kieker-*.jar"
+		include "lz4-*.jar"
+		include "slf4j-*.jar"
+		include "snappy-java-*.jar"
+	}
+	into 'userguide/appendix-Kafka/lib/'
+}
+
+task buildStandaloneExamplesUserguideAppendixKafka(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixKafka') {
+	buildFile = 'userguide/appendix-Kafka/build.gradle'
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 

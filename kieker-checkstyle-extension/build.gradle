@@ -1,6 +1,5 @@
-dependencies {
-	compile project(':kieker-common')
-	compile project(':kieker-analysis')
+apply plugin: 'eclipse'
 
+dependencies {
 	compile resolveLibrary('**/checkstyle-*/**/*.jar')
 }

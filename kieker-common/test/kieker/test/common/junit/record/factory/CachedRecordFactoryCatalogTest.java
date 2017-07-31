@@ -33,6 +33,8 @@ import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.factory.old.RecordFactoryWrapper;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEventFactory;
+import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
@@ -85,9 +87,9 @@ public class CachedRecordFactoryCatalogTest extends AbstractKiekerTest {
 		final long traceId = 666;
 		final long timestamp = 111;
 		final AfterOperationEvent expectedEvent = new AfterOperationEvent(timestamp, traceId, orderIndex, classSignature, operationSignature);
-		expectedEvent.writeBytes(this.buffer, this.stringRegistry);
+		expectedEvent.serialize(DefaultValueSerializer.create(this.buffer, this.stringRegistry));
 		this.buffer.flip();
-		final IMonitoringRecord event = recordFactory.create(this.buffer, this.stringRegistry);
+		final IMonitoringRecord event = recordFactory.create(DefaultValueDeserializer.create(this.buffer, this.stringRegistry));
 
 		Assert.assertEquals(expectedEvent.getClass(), event.getClass());
 		final AfterOperationEvent castedEvent = (AfterOperationEvent) event;
@@ -124,9 +126,9 @@ public class CachedRecordFactoryCatalogTest extends AbstractKiekerTest {
 		final double totalUtilization = 98.9;
 		final double idle = 0.666;
 		final CPUUtilizationRecord cpuRecord = new CPUUtilizationRecord(timestamp, hostname, cpuID, user, system, wait, nice, irq, totalUtilization, idle);
-		cpuRecord.writeBytes(this.buffer, this.stringRegistry);
+		cpuRecord.serialize(DefaultValueSerializer.create(this.buffer, this.stringRegistry));
 		this.buffer.flip();
-		final IMonitoringRecord record = recordFactory.create(this.buffer, this.stringRegistry);
+		final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.create(this.buffer, this.stringRegistry));
 		Assert.assertEquals(CPUUtilizationRecord.class, record.getClass());
 
 		// final String[] strings = this.stringRegistry.getAll(); // causes a ClassCastException => Bug; However, method is not used within Kieker
@@ -144,7 +146,7 @@ public class CachedRecordFactoryCatalogTest extends AbstractKiekerTest {
 		Assert.assertEquals(0, this.stringRegistry.getSize());
 
 		this.thrown.expect(RecordInstantiationException.class);
-		recordFactory.create(this.buffer, this.stringRegistry);
+		recordFactory.create(DefaultValueDeserializer.create(this.buffer, this.stringRegistry));
 	}
 
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,31 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.system;
 
-import java.nio.ByteBuffer;
-
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 public final class ResourceUtilizationRecordFactory implements IRecordFactory<ResourceUtilizationRecord> {
-	
+
 	@Override
-	public ResourceUtilizationRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new ResourceUtilizationRecord(buffer, stringRegistry);
+	public ResourceUtilizationRecord create(final IValueDeserializer deserializer) {
+		return new ResourceUtilizationRecord(deserializer);
 	}
-	
+
 	@Override
 	public ResourceUtilizationRecord create(final Object[] values) {
 		return new ResourceUtilizationRecord(values);
 	}
-	
+
+	@Override
 	public int getRecordSizeInBytes() {
 		return ResourceUtilizationRecord.SIZE;
 	}

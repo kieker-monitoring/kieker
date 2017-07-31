@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,31 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.jvm;
 
-import java.nio.ByteBuffer;
-
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public final class UptimeRecordFactory implements IRecordFactory<UptimeRecord> {
-	
+
 	@Override
-	public UptimeRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new UptimeRecord(buffer, stringRegistry);
+	public UptimeRecord create(final IValueDeserializer deserializer) {
+		return new UptimeRecord(deserializer);
 	}
-	
+
 	@Override
 	public UptimeRecord create(final Object[] values) {
 		return new UptimeRecord(values);
 	}
-	
+
+	@Override
 	public int getRecordSizeInBytes() {
 		return UptimeRecord.SIZE;
 	}
