@@ -43,6 +43,24 @@ public interface IValueSerializer {
 	public void putByte(byte value);
 
 	/**
+	 * Stores a {@code char} value in the underlying data store.
+	 *
+	 * @param value
+	 *            The value to store
+	 * @since 1.13
+	 */
+	public void putChar(char value);
+
+	/**
+	 * Stores a {@code short} value in the underlying data store.
+	 *
+	 * @param value
+	 *            The value to store
+	 * @since 1.13
+	 */
+	public void putShort(short value); // NOPMD
+	
+	/**
 	 * Stores an {@code int} value in the underlying data store.
 	 *
 	 * @param value
@@ -61,6 +79,15 @@ public interface IValueSerializer {
 	public void putLong(long value);
 
 	/**
+	 * Stores a {@code float} value in the underlying data store.
+	 *
+	 * @param value
+	 *            The value to store
+	 * @since 1.13
+	 */
+	public void putFloat(float value);
+	
+	/**
 	 * Stores a {@code double} value in the underlying data store.
 	 *
 	 * @param value
@@ -77,7 +104,7 @@ public interface IValueSerializer {
 	 * @since 1.13
 	 */
 	public void putBytes(byte[] value);
-
+	
 	/**
 	 * Stores a {@code String} value in the underlying data store.
 	 *
