@@ -22,7 +22,6 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeoutException;
 
 import com.rabbitmq.client.Channel;
@@ -35,6 +34,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.record.misc.RegistryRecord;
+import kieker.common.util.thread.DaemonThreadFactory;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
 import kieker.monitoring.registry.RegisterAdapter;
@@ -211,29 +211,4 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 		}
 	}
 
-	/**
-	 * A thread factory that creates daemon threads. The default thread parameters are based on
-	 * the default thread factory.
-	 *
-	 * @author Holger Knoche
-	 *
-	 * @since 1.12
-	 */
-	private static class DaemonThreadFactory implements ThreadFactory {
-
-		DaemonThreadFactory() {
-			// Do nothing
-		}
-
-		@Override
-		public Thread newThread(final Runnable runnable) {
-			final Thread thread = new Thread(runnable);
-
-			thread.setDaemon(true);
-			thread.setPriority(Thread.NORM_PRIORITY);
-
-			return thread;
-		}
-
-	}
 }
