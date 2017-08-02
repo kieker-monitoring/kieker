@@ -837,7 +837,7 @@ task jenkinsBuild(dependsOn: [mainJar, emfJar, aspectJJar]) {
     description = 'Builds and tests the JAR files of the Kieker Framework'
 }
 
-task jenkinsNightlyBuild(dependsOn: [startRServe, enableRTests, distribute, checkReleaseArchives, uploadArchives]) {
+task jenkinsNightlyBuild(dependsOn: [startRServe, enableRTests, distribute, checkReleaseArchives]) {
     description = 'Builds and tests the release of the Kieker Framework'
 }
 
