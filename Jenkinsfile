@@ -75,12 +75,12 @@ pipeline {
     }
    
     changed {
-      mail to: ci@kieker-monitoring.net, subject: 'Pipeline outcome has changed.'
+      mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline outcome has changed.'
     }
 
 
     failure {
-      mail to: ci@kieker-monitoring.net, subject: 'Pipeline build failed.'
+      mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline build failed.'
     }
   
     success {
