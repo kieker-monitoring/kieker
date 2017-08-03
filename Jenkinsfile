@@ -27,10 +27,10 @@ pipeline {
         echo "CHANGE_TARGET: " + env.CHANGE_TARGET
         echo "NODE_NAME: " + env.NODE_NAME
         echo "NODE_LABELS: " + env.NODE_LABELS
-        echo "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
-        script {
-          currentBuild.result = 'FAILURE'
-        }
+        error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
+        //script {
+        //  currentBuild.result = 'FAILURE'
+        //}
       }
     }
 
