@@ -20,7 +20,7 @@ TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 4 \* ${RECURSIONDEPTH}
 echo "Experiment will take circa ${TIME} seconds."
 
 echo "Removing and recreating '$RESULTSDIR'"
-(rm -rf ${RESULTSDIR}) && mkdir ${RESULTSDIR}
+(rm -rf ${RESULTSDIR}) && mkdir -p ${RESULTSDIR}
 #mkdir ${RESULTSDIR}stat/
 
 # Clear kieker.log and initialize logging
