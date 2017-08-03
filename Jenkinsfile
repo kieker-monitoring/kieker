@@ -28,7 +28,9 @@ pipeline {
         echo "NODE_NAME: " + env.NODE_NAME
         echo "NODE_LABELS: " + env.NODE_LABELS
         echo "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
-        currentBuild.result = "FAILURE"
+        script {
+          currentBuild.result = "FAILURE"
+        }
       }
     }
 
