@@ -53,6 +53,22 @@ pipeline {
       }
     }
   
+    stage('Parallel') {
+      steps {
+        parallel (
+          'Unit Test' : {
+            unstash 'everything'
+            sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S test"'
+          },
+          'Static Analysis' : {
+            unstash 'everything'
+            sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S check"'
+          }
+        )
+      }
+    }
+
+/**
     stage('Unit Test') {
       steps {
         sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S test"'
@@ -64,7 +80,7 @@ pipeline {
         sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S check"'
       }
     }
-
+**/
     stage('Release Check Short') {
       steps {
         sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew checkReleaseArchivesShort"'
@@ -78,7 +94,7 @@ pipeline {
       }
       steps {
         echo "We are in master - executing the extended release archive check."
-        sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew checkReleaseArchives"'
+        sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew checkReleaseArchives -x test -x check "'
       }
     }
 
@@ -101,6 +117,7 @@ pipeline {
   post {
     always {
       sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker alpine /bin/sh -c "chmod -R ugo+rwx /opt/kieker"'
+      deleteDir()
     }
    
     changed {
