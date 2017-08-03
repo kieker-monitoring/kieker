@@ -1,46 +1,139 @@
-#!groovy
+#!/usr/bin/env groovy
 
-node('kieker-slave-docker') {
+pipeline {
+  agent {
+    node {
+      label 'kieker-slave-docker'
+    }
+  }
+ 
+  environment {
+    DOCKER_BASE = "docker run --rm -v ${env.WORKSPACE}:/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "
+  }
+  
+  //triggers {
+  //  cron{}
+  //}
+
+  stages {
+    stage('Precheck') {
+      when {
+        expression {
+          (env.CHANGE_TARGET != null) && (env.CHANGE_TARGET == 'stable')
+        }
+      }
+      steps {
+        echo "BRANCH_NAME: " + env.BRANCH_NAME
+        echo "CHANGE_TARGET: " + env.CHANGE_TARGET
+        echo "NODE_NAME: " + env.NODE_NAME
+        echo "NODE_LABELS: " + env.NODE_LABELS
+        error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
+        //script {
+        //  currentBuild.result = 'FAILURE'
+        //}
+      }
+    }
+
+    stage('Clean workspace') {
+      steps {
+        deleteDir()
+      }
+    }
     
-    stage ('Checkout') {
+    stage('Checkout') {
+      steps {
         checkout scm
+      }
     }
 
-    stage ('1-compile logs') {
-        sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew -S compileJava compileTestJava"'
+    stage('Compile') {
+      steps {
+        sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S compileJava compileTestJava"'
+        //stash 'everything'
+      }
+    }
+  
+/**
+    stage('Parallel') {
+      steps {
+        parallel (
+          'Unit Test' : {
+            unstash 'everything'
+            sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S test"'
+          },
+          'Static Analysis' : {
+            unstash 'everything'
+            sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S check"'
+            stash 'everything'
+          }
+        )
+      }
+    }
+**/
+    stage('Unit Test') {
+      steps {
+        sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S test"'
+      }
     }
 
-    stage ('2-unit-test logs') {
-        sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew -S test"'
+    stage('Static Analysis') {
+      steps {
+        sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S check"'
+      }
     }
-
-    stage ('3-static-analysis logs') {
-        sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew -S check"'    
-    }
-
-    stage ('4-release-check-short logs') {
-        sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew checkReleaseArchivesShort"'
-
-        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true
-    }
-
-    stage ('5-release-check-extended logs') {
-        if (env.BRANCH_NAME == "master") {
-            sh 'echo "We are in master - executing the extended release archive check."'
     
-            sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew checkReleaseArchives"'
-        } else {
-            sh 'echo "We are not in master - skipping the extended release archive check."'
-        }
+    stage('Release Check Short') {
+      steps {
+        sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew checkReleaseArchivesShort"'
+        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true
+      }
     }
 
-    stage ('push-to-stable') {
-        if (env.BRANCH_NAME == "master") {
-            sh 'echo "We are in master - pushing to stable branch."'
-
-            sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
-        } else {
-            sh 'echo "We are not in  master - skipping."'
-        }
+    stage('Release Check Extended') {
+      when {
+        branch 'master'
+      }
+      steps {
+        echo "We are in master - executing the extended release archive check."
+        sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew checkReleaseArchives -x test -x check "'
+      }
     }
+
+    stage('Push Stable') {
+      when {
+        branch 'master'
+      }
+      steps {
+        echo "We are in master - pushing to stable branch."
+        sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+      }
+    }
+
+    //stage('Fix permissions') {
+    //  steps {         
+    //  }
+    //}
+  }
+
+  post {
+    always {
+      sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker alpine /bin/sh -c "chmod -R ugo+rwx /opt/kieker"'
+      deleteDir()
+    }
+   
+    changed {
+      mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline outcome has changed.', body: 'no text'
+    }
+
+
+    failure {
+      mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline build failed.', body: 'no text'
+    }
+  
+    //success {
+    //}
+
+    //unstable {
+    //}
+  }
 }

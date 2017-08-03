@@ -35,7 +35,9 @@ allprojects {
     apply plugin: 'java'
     sourceCompatibility = 1.7
     targetCompatibility = 1.7
-    
+   
+    task allDeps(type: DependencyReportTask) {}
+ 
     sourceSets {
         main {
             java {
@@ -98,7 +100,7 @@ allprojects {
      * */
     task wrapper(type: Wrapper) {
         description = 'Downloads the Gradle wrapper scripts.'
-        gradleVersion = '3.3'
+        gradleVersion = '4.0.1'
     }
 
     task integrationTest(type: Test) {
