@@ -9,9 +9,9 @@ pipeline {
     }
   }
   
-  #triggers {
-  #  cron{}
-  #}
+  //triggers {
+  //  cron{}
+  //}
 
   stages {
     stage('Precheck') {
@@ -100,8 +100,8 @@ pipeline {
   }
 
   post {
-    #always {
-    #}
+    //always {
+    //}
    
     changed {
       mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline outcome has changed.', body: 'no text'
@@ -112,10 +112,10 @@ pipeline {
       mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline build failed.', body: 'no text'
     }
   
-    #success {
-    #}
+    //success {
+    //}
 
-    #unstable {
-    #}
+    //unstable {
+    //}
   }
 }
