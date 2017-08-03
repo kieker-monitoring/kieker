@@ -49,10 +49,11 @@ pipeline {
     stage('Compile') {
       steps {
         sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S compileJava compileTestJava"'
-        stash 'everything'
+        //stash 'everything'
       }
     }
   
+/**
     stage('Parallel') {
       steps {
         parallel (
@@ -68,8 +69,7 @@ pipeline {
         )
       }
     }
-
-/**
+**/
     stage('Unit Test') {
       steps {
         sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S test"'
@@ -81,10 +81,9 @@ pipeline {
         sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S check"'
       }
     }
-**/
+    
     stage('Release Check Short') {
       steps {
-        unstash 'everything'
         sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew checkReleaseArchivesShort"'
         archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true
       }
