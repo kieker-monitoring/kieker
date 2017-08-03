@@ -9,9 +9,15 @@ pipeline {
 
   stages {
     def dockerBase = 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c '
+    
+
     stage('Precheck') {
+      print "BRANCH_NAME: " + env.BRANCH_NAME
+      print "CHANGE_TARGET: " + env.CHANGE_TARGET
+      print "NODE_NAME: " + env.NODE_NAME
+      print "NODE_LABELS: " + env.NODE_LABELS
       if((env.CHANGE_TARGET != null) && env.CHANGE_TARGET == 'stable') {
-        echo "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
+        print "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
         currentBuild.result = "FAILURE"
       }
     }
@@ -55,7 +61,7 @@ pipeline {
         print "We are in master - pushing to stable branch."
         sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
       } else {
-        print "We are not in master - skipping.
+        print "We are not in master - skipping."
       }
     }
 
