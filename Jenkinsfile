@@ -63,6 +63,7 @@ pipeline {
           'Static Analysis' : {
             unstash 'everything'
             sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S check"'
+            stash 'everything'
           }
         )
       }
@@ -83,6 +84,7 @@ pipeline {
 **/
     stage('Release Check Short') {
       steps {
+        unstash 'everything'
         sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew checkReleaseArchivesShort"'
         archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true
       }
