@@ -80,4 +80,19 @@ public class DefaultValueDeserializer implements IValueDeserializer {
 		return target;
 	}
 
+	@Override
+	public char getChar() {
+		return this.buffer.getChar();
+	}
+
+	@Override
+	public short getShort() { // NOPMD
+		return this.buffer.getShort();
+	}
+
+	@Override
+	public float getFloat() {
+		return this.buffer.getFloat();
+	}
+
 }

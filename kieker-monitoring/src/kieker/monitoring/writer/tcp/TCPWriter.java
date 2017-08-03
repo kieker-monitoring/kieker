@@ -27,11 +27,10 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.DefaultValueSerializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
-import kieker.monitoring.registry.IWriterRegistry;
-import kieker.monitoring.registry.RegisterAdapter;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.WriterUtil;
@@ -58,21 +57,17 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
-	private static final String CONFIG_STRING_REGISTRY_BUFFERSIZE = PREFIX + "StringRegistryBufferSize"; // NOCS (afterPREFIX)
+	private static final String CONFIG_STRING_REGISTRY_BUFFERSIZE = PREFIX + "stringRegistryBufferSize"; // NOCS
+																											// (afterPREFIX)
 
 	private final boolean flush;
-
 	private final SocketChannel monitoringRecordChannel;
 	private final SocketChannel registryRecordChannel;
-	private final ByteBuffer byteBuffer;
-
-	private final IWriterRegistry<String> writerRegistry;
-	private final RegisterAdapter<String> registerAdapter;
-	private final GetIdAdapter<String> readAdapter;
-
+	private final ByteBuffer recordBuffer;
+	/** the buffer used for buffering registry records. */
 	private final ByteBuffer stringRegistryBuffer;
-
-	// private final CharsetEncoder encoder;
+	/** the serializer to use for the incoming records */
+	private final IValueSerializer serializer;
 
 	public TCPWriter(final Configuration configuration) throws IOException {
 		super(configuration);
@@ -90,17 +85,14 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 
 		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
 
-		this.byteBuffer = ByteBuffer.allocateDirect(bufferSize);
+		this.recordBuffer = ByteBuffer.allocateDirect(bufferSize);
 		this.stringRegistryBuffer = ByteBuffer.allocateDirect(stringRegistryBufferSize);
 		// buffer size is available by byteBuffer.capacity()
 		this.monitoringRecordChannel = SocketChannel.open(new InetSocketAddress(hostname, port1));
 		this.registryRecordChannel = SocketChannel.open(new InetSocketAddress(hostname, port2));
 
-		this.writerRegistry = new WriterRegistry(this);
-		this.registerAdapter = new RegisterAdapter<String>(this.writerRegistry);
-		this.readAdapter = new GetIdAdapter<String>(this.writerRegistry);
-
-		// this.encoder = StandardCharsets.UTF_8.newEncoder();
+		final WriterRegistry writerRegistry = new WriterRegistry(this);
+		this.serializer = DefaultValueSerializer.create(this.recordBuffer, new GetIdAdapter<>(writerRegistry));
 	}
 
 	@Override
@@ -110,25 +102,17 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 
 	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		final ByteBuffer buffer = this.byteBuffer;
+		final ByteBuffer buffer = this.recordBuffer;
 		final int requiredBufferSize = 4 + 8 + monitoringRecord.getSize();
 		if (requiredBufferSize > buffer.remaining()) {
 			WriterUtil.flushBuffer(buffer, this.monitoringRecordChannel, LOG);
 		}
 
-		monitoringRecord.registerStrings(this.registerAdapter);
-
 		final String recordClassName = monitoringRecord.getClass().getName();
-		this.writerRegistry.register(recordClassName);
 
-		final int recordClassId = this.writerRegistry.getId(recordClassName);
-		final long loggingTimestamp = monitoringRecord.getLoggingTimestamp();
-
-		buffer.putInt(recordClassId);
-		buffer.putLong(loggingTimestamp);
-
-		monitoringRecord.serialize(DefaultValueSerializer.create(buffer, this.readAdapter));
-		// monitoringRecord.writeToBuffer(buffer, this.writerRegistry);
+		this.serializer.putString(recordClassName);
+		this.serializer.putLong(monitoringRecord.getLoggingTimestamp());
+		monitoringRecord.serialize(this.serializer);
 
 		if (this.flush) {
 			WriterUtil.flushBuffer(buffer, this.monitoringRecordChannel, LOG);
@@ -160,11 +144,11 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 
 	@Override
 	public void onTerminating() {
-		WriterUtil.flushBuffer(this.byteBuffer, this.monitoringRecordChannel, LOG);
-		WriterUtil.flushBuffer(this.byteBuffer, this.registryRecordChannel, LOG);
+		WriterUtil.flushBuffer(this.stringRegistryBuffer, this.registryRecordChannel, LOG);
+		WriterUtil.flushBuffer(this.recordBuffer, this.monitoringRecordChannel, LOG);
 
-		WriterUtil.close(this.monitoringRecordChannel, LOG);
 		WriterUtil.close(this.registryRecordChannel, LOG);
+		WriterUtil.close(this.monitoringRecordChannel, LOG);
 	}
 
 }
