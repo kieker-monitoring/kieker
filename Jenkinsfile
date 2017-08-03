@@ -11,7 +11,7 @@ pipeline {
 
   stages {
     stage('Precheck') {
-      step {
+      steps {
         echo "BRANCH_NAME: " + env.BRANCH_NAME
         echo "CHANGE_TARGET: " + env.CHANGE_TARGET
         echo "NODE_NAME: " + env.NODE_NAME
@@ -24,7 +24,9 @@ pipeline {
     }
 
     stage('Clean workspace') {
-      deleteDir()
+      steps {
+        deleteDir()
+      }
     }
     
     stage('Checkout') {
