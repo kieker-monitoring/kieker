@@ -9,9 +9,9 @@ pipeline {
     }
   }
   
-  triggers {
-    cron{}
-  }
+  #triggers {
+  #  cron{}
+  #}
 
   stages {
     stage('Precheck') {
@@ -62,7 +62,7 @@ pipeline {
     stage('Release Check Short') {
       steps {
         sh dockerBase + '"cd /opt/kieker; ./gradlew checkReleaseArchivesShort"'
-        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerecho: true
+        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true
       }
     }
 
@@ -100,22 +100,22 @@ pipeline {
   }
 
   post {
-    always {
-    }
+    #always {
+    #}
    
     changed {
-      mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline outcome has changed.'
+      mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline outcome has changed.', body: 'no text'
     }
 
 
     failure {
-      mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline build failed.'
+      mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline build failed.', body: 'no text'
     }
   
-    success {
-    }
+    #success {
+    #}
 
-    unstable {
-    }
+    #unstable {
+    #}
   }
 }
