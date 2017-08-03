@@ -8,7 +8,7 @@ REMOTE_NODE=jenkins@blade8
 BENCHMARKED_JAR=build/libs//kieker-1.13-SNAPSHOT-aspectj.jar 
 
 # The following constants specify location and name of the MooBench folder
-MOOBENCH_FOLDER=kieker-examples/OverheadEvaluationMicrobenchmark/MooBench
+MOOBENCH_FOLDER=$(dirname $0)/MooBench
 
 # The following constant specifies the name of the folder containing the results from MooBench
 RESULTS_FOLDER_NAME=results-kieker
