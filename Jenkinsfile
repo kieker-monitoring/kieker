@@ -1,54 +1,86 @@
 #!/usr/bin/env groovy
 
-node('kieker-slave-docker') {
+pipeline {
+  agent {
+    node {
+      label 'kieker-slave-docker'
+    }
+  }
+
+  stages {
+    def dockerBase = 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c '
+    stage('Precheck') {
+      if((env.CHANGE_TARGET != null) && env.CHANGE_TARGET == 'stable') {
+        echo "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
+        currentBuild.result = "FAILURE"
+      }
+    }
+
+    stage('Clean workspace') {
+      deleteDir()
+    }
     
-    stage('Clean workspace'){
-	deleteDir()
-    }  
-
-    stage ('Checkout') {
-        checkout scm
+    stage('Checkout') {
+      checkout scm
     }
 
-    stage ('compile') {
-        sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew -S compileJava compileTestJava"'
+    stage('Compile') {
+      sh dockerBase + '"cd /opt/kieker; ./gradlew -S compileJava compileTestJava"'
+    }
+  
+    stage('Unit Test') {
+      sh dockerBase + '"cd /opt/kieker; ./gradlew -S test"'
     }
 
-    stage ('unit-test') {
-        sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew -S test"'
+    stage('Static Analysis') {
+      sh dockerBase + '"cd /opt/kieker; ./gradlew -S check"'
     }
 
-    stage ('static-analysis') {
-        sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew -S check"'    
+    stage('Release Check Short') {
+      sh dockerBase + '"cd /opt/kieker; ./gradlew checkReleaseArchivesShort"'
+      archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true
     }
 
-    stage ('release-check-short') {
-        sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew checkReleaseArchivesShort"'
-
-        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true
+    stage('Release Check Extended') {
+      if (env.BRANCH_NAME == 'master') {
+        print "We are in master - executing the extended release archive check."
+	sh dockerBase + '"cd /opt/kieker; ./gradlew checkReleaseArchives"'
+      } else {
+        print "We are not in master - skipping the extended release archive check."
+      }
     }
 
-    stage ('release-check-extended') {
-        if (env.BRANCH_NAME == "master") {
-            sh 'echo "We are in master - executing the extended release archive check."'
-    
-            sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew checkReleaseArchives"'
-        } else {
-            sh 'echo "We are not in master - skipping the extended release archive check."'
-        }
+    stage('Push Stable') {
+      if (env.BRANCH_NAME == 'master') {
+        print "We are in master - pushing to stable branch."
+        sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+      } else {
+        print "We are not in master - skipping.
+      }
     }
 
-    stage ('push-to-stable') {
-        if (env.BRANCH_NAME == "master") {
-            sh 'echo "We are in master - pushing to stable branch."'
+    stage('Fix permissions') {
+      sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker alpine /bin/sh -c "chmod -R ugo+rwx /opt/kieker"'
+    }
+  }
 
-            sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
-        } else {
-            sh 'echo "We are not in  master - skipping."'
-        }
+  post {
+    always {
+    }
+   
+    changed {
+      mail to: ci@kieker-monitoring.net, subject: 'Pipeline outcome has changed.'
     }
 
-    stage ('Fix permissions') {
-	sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker alpine /bin/sh -c "chmod -R ugo+rwx /opt/kieker"'
+
+    failure {
+      mail to: ci@kieker-monitoring.net, subject: 'Pipeline build failed.'
     }
+  
+    success {
+    }
+
+    unstable {
+    }
+  }
 }
