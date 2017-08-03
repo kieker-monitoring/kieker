@@ -8,7 +8,7 @@ pipeline {
   }
  
   environment {
-    DOCKER_BASE = 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c '
+    DOCKER_BASE = "docker run --rm -v ${env.WORKSPACE}:/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "
   }
   
   //triggers {
