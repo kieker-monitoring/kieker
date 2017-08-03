@@ -11,13 +11,18 @@ pipeline {
 
   stages {
     stage('Precheck') {
-      echo "BRANCH_NAME: " + env.BRANCH_NAME
-      echo "CHANGE_TARGET: " + env.CHANGE_TARGET
-      echo "NODE_NAME: " + env.NODE_NAME
-      echo "NODE_LABELS: " + env.NODE_LABELS
-      if((env.CHANGE_TARGET != null) && env.CHANGE_TARGET == 'stable') {
-        echo "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
-        currentBuild.result = "FAILURE"
+      step {
+        echo "BRANCH_NAME: " + env.BRANCH_NAME
+        echo "CHANGE_TARGET: " + env.CHANGE_TARGET
+        echo "NODE_NAME: " + env.NODE_NAME
+        echo "NODE_LABELS: " + env.NODE_LABELS
+      }
+
+      step {
+        if((env.CHANGE_TARGET != null) && env.CHANGE_TARGET == 'stable') {
+          echo "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
+          currentBuild.result = "FAILURE"
+        }
       }
     }
 
