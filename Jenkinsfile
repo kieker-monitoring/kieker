@@ -17,17 +17,18 @@ pipeline {
 
   stages {
     stage('Precheck') {
+      when {
+        expression {
+          (env.CHANGE_TARGET != null) && (env.CHANGE_TARGET == 'stable')
+        }
+      }
       steps {
         echo "BRANCH_NAME: " + env.BRANCH_NAME
         echo "CHANGE_TARGET: " + env.CHANGE_TARGET
         echo "NODE_NAME: " + env.NODE_NAME
         echo "NODE_LABELS: " + env.NODE_LABELS
-        script {
-          if((env.CHANGE_TARGET != null) && env.CHANGE_TARGET == 'stable') {
-            echo "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
-            currentBuild.result = "FAILURE"
-          }
-        }
+        echo "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
+        currentBuild.result = "FAILURE"
       }
     }
 
@@ -37,15 +38,16 @@ pipeline {
       }
     }
     
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
-    }
+    //stage('Checkout') {
+    //  steps {
+    //    checkout scm
+    //  }
+    //}
 
     stage('Compile') {
       steps {
         sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S compileJava compileTestJava"'
+        stash 'everything'
       }
     }
   
@@ -69,28 +71,22 @@ pipeline {
     }
 
     stage('Release Check Extended') {
+      when {
+        branch 'master'
+      }
       steps {
-        script {
-          if (env.BRANCH_NAME == 'master') {
-            echo "We are in master - executing the extended release archive check."
-            sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew checkReleaseArchives"'
-          } else {
-            echo "We are not in master - skipping the extended release archive check."
-          }
-        }
+        echo "We are in master - executing the extended release archive check."
+        sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew checkReleaseArchives"'
       }
     }
 
     stage('Push Stable') {
+      when {
+        branch 'master'
+      }
       steps {
-        script {
-          if (env.BRANCH_NAME == 'master') {
-            echo "We are in master - pushing to stable branch."
-            sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
-          } else {
-            echo "We are not in master - skipping."
-          }
-        }
+        echo "We are in master - pushing to stable branch."
+        sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
       }
     }
 
