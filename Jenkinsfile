@@ -92,16 +92,16 @@ pipeline {
       }
     }
 
-    stage('Fix permissions') {
-      steps {      
-        sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker alpine /bin/sh -c "chmod -R ugo+rwx /opt/kieker"'
-      }
-    }
+    //stage('Fix permissions') {
+    //  steps {         
+    //  }
+    //}
   }
 
   post {
-    //always {
-    //}
+    always {
+      sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker alpine /bin/sh -c "chmod -R ugo+rwx /opt/kieker"'
+    }
    
     changed {
       mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline outcome has changed.', body: 'no text'
