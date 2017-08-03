@@ -1,12 +1,14 @@
 #!/usr/bin/env groovy
 
-def dockerBase = 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c '
-
 pipeline {
   agent {
     node {
       label 'kieker-slave-docker'
     }
+  }
+ 
+  environment {
+    DOCKER_BASE = 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c '
   }
   
   //triggers {
@@ -43,25 +45,25 @@ pipeline {
 
     stage('Compile') {
       steps {
-        sh dockerBase + '"cd /opt/kieker; ./gradlew -S compileJava compileTestJava"'
+        sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S compileJava compileTestJava"'
       }
     }
   
     stage('Unit Test') {
       steps {
-        sh dockerBase + '"cd /opt/kieker; ./gradlew -S test"'
+        sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S test"'
       }
     }
 
     stage('Static Analysis') {
       steps {
-        sh dockerBase + '"cd /opt/kieker; ./gradlew -S check"'
+        sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew -S check"'
       }
     }
 
     stage('Release Check Short') {
       steps {
-        sh dockerBase + '"cd /opt/kieker; ./gradlew checkReleaseArchivesShort"'
+        sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew checkReleaseArchivesShort"'
         archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true
       }
     }
@@ -71,7 +73,7 @@ pipeline {
         script {
           if (env.BRANCH_NAME == 'master') {
             echo "We are in master - executing the extended release archive check."
-            sh dockerBase + '"cd /opt/kieker; ./gradlew checkReleaseArchives"'
+            sh DOCKER_BASE + '"cd /opt/kieker; ./gradlew checkReleaseArchives"'
           } else {
             echo "We are not in master - skipping the extended release archive check."
           }
