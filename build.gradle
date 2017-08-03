@@ -35,7 +35,9 @@ allprojects {
     apply plugin: 'java'
     sourceCompatibility = 1.7
     targetCompatibility = 1.7
-    
+   
+    task allDeps(type: DependencyReportTask) {}
+ 
     sourceSets {
         main {
             java {
