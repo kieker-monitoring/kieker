@@ -5,7 +5,7 @@
 REMOTE_NODE=jenkins@blade8
 
 # The following constant specifies location and name of the benchmarked jar file relative to the workspace. 
-BENCHMARKED_JAR=build/libs//kieker-1.13-SNAPSHOT-aspectj.jar 
+BENCHMARKED_JAR=build/libs/kieker-1.13-SNAPSHOT-aspectj.jar 
 
 # The following constants specify location and name of the MooBench folder
 MOOBENCH_FOLDER=$(dirname $0)/MooBench
@@ -18,6 +18,7 @@ RESULTS_TARGET_FILE=plot.csv
 
 
 # Copy the benchmarked file and MooBench to the remote node
+ssh ${REMOTE_NODE} 'rm -rf MooBench; exit'
 scp -r ${MOOBENCH_FOLDER} ${REMOTE_NODE}:MooBench
 scp ${BENCHMARKED_JAR} ${REMOTE_NODE}:MooBench/lib
 
