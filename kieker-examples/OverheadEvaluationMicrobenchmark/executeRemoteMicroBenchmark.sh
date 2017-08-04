@@ -18,8 +18,8 @@ RESULTS_TARGET_FILE=plot.csv
 
 
 # Copy the benchmarked file and MooBench to the remote node
-ssh ${REMOTE_NODE} 'rm -rf MooBench; exit'
 scp -r ${MOOBENCH_FOLDER} ${REMOTE_NODE}:MooBench
+ssh ${REMOTE_NODE} 'mkdir MooBench/tmp; mkdir MooBench/lib; exit'
 scp ${BENCHMARKED_JAR} ${REMOTE_NODE}:MooBench/lib
 
 # Execute MooBench
