@@ -13,7 +13,7 @@ import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependenc
 import kieker.analysisteetime.dependencygraphs.dot.DotExportConfigurationFactory;
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexTypeMapper;
 import kieker.analysisteetime.model.ExecutionModelAssemblerStage;
-import kieker.analysisteetime.model.ModelObjectFromOperationCallAccesors;
+import kieker.analysisteetime.model.ModelObjectFromOperationCallAccessors;
 import kieker.analysisteetime.model.StaticModelsAssemblerStage;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyFactory;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyModel;
@@ -63,37 +63,47 @@ public class ExampleConfiguration extends Configuration {
 	public ExampleConfiguration(final File importDirectory, final File exportDirectory) {
 
 		final TemporalUnit timeUnitOfRecods = ChronoUnit.NANOS;
-		final Function<OperationCall, Object> statisticsObjectAccesor = ModelObjectFromOperationCallAccesors.DEPLOYED_OPERATION;
+		final Function<OperationCall, Object> statisticsObjectAccesor = ModelObjectFromOperationCallAccessors.DEPLOYED_OPERATION;
 		final DeploymentLevelOperationDependencyGraphBuilderFactory deploymentGraphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
-		final DotExportConfiguration dependencyGraphDotExportConfiguration = (new DotExportConfigurationFactory(NameBuilder.forJavaShortOperations(),
-				VertexTypeMapper.DEFAULT)).createForDeploymentLevelOperationDependencyGraph();
+		final DotExportConfiguration dependencyGraphDotExportConfiguration = (new DotExportConfigurationFactory(
+				NameBuilder.forJavaShortOperations(), VertexTypeMapper.TO_STRING))
+						.createForDeploymentLevelOperationDependencyGraph();
 
 		// Create the stages
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
 		// TODO consider if KiekerMetadataRecord has to be processed
-		// final DebugStage<IMonitoringRecord> debugRecordsStage = new DebugStage<>();
+		// final DebugStage<IMonitoringRecord> debugRecordsStage = new
+		// DebugStage<>();
 		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
-		final StaticModelsAssemblerStage staticModelsAssembler = new StaticModelsAssemblerStage(this.typeModel, this.assemblyModel, this.deploymentModel,
-				this.signatureExtractor);
-		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, false, timeUnitOfRecods); // TODO second parameter
+		final StaticModelsAssemblerStage staticModelsAssembler = new StaticModelsAssemblerStage(this.typeModel,
+				this.assemblyModel, this.deploymentModel, this.signatureExtractor);
+		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, false,
+				timeUnitOfRecods); // TODO second parameter
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
 
 		final OperationCallExtractorStage operationCallExtractor = new OperationCallExtractorStage();
-		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(this.executionModel);
-		final FullReponseTimeStatisticsStage fullStatisticsDecorator = new FullReponseTimeStatisticsStage(this.statisticsModel, statisticsObjectAccesor);
-		final CallStatisticsStage callStatisticsDecorator = new CallStatisticsStage(this.statisticsModel, this.executionModel);
+		final ExecutionModelAssemblerStage executionModelAssembler = new ExecutionModelAssemblerStage(
+				this.executionModel);
+		final FullReponseTimeStatisticsStage fullStatisticsDecorator = new FullReponseTimeStatisticsStage(
+				this.statisticsModel, statisticsObjectAccesor);
+		final CallStatisticsStage callStatisticsDecorator = new CallStatisticsStage(this.statisticsModel,
+				this.executionModel);
 
 		final TraceToGraphTransformerStage traceToGraphTransformer = new TraceToGraphTransformerStage();
-		final DotTraceGraphFileWriterStage dotTraceGraphFileWriter = DotTraceGraphFileWriterStage.create(exportDirectory);
-		final GraphMLFileWriterStage graphMLTraceGraphFileWriter = new GraphMLFileWriterStage(exportDirectory.getPath());
+		final DotTraceGraphFileWriterStage dotTraceGraphFileWriter = DotTraceGraphFileWriterStage
+				.create(exportDirectory);
+		final GraphMLFileWriterStage graphMLTraceGraphFileWriter = new GraphMLFileWriterStage(
+				exportDirectory.getPath());
 		final Distributor<Trace> traceDistributor = new Distributor<>(new CopyByReferenceStrategy());
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
 
-		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(this.executionModel, this.statisticsModel,
-				deploymentGraphBuilderFactory);
-		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory.getPath(), dependencyGraphDotExportConfiguration);
+		final DependencyGraphCreatorStage dependencyGraphCreator = new DependencyGraphCreatorStage(this.executionModel,
+				this.statisticsModel, deploymentGraphBuilderFactory);
+		final DotFileWriterStage dotDepGraphFileWriter = new DotFileWriterStage(exportDirectory.getPath(),
+				dependencyGraphDotExportConfiguration);
 
-		// final AbstractConsumerStage<Graph> debugStage = new GraphPrinterStage();
+		// final AbstractConsumerStage<Graph> debugStage = new
+		// GraphPrinterStage();
 
 		// Connect the stages
 		super.connectPorts(reader.getOutputPort(), allowedRecordsFilter.getInputPort());
@@ -103,20 +113,30 @@ public class ExampleConfiguration extends Configuration {
 		super.connectPorts(traceStatisticsDecorator.getOutputPort(), traceDistributor.getInputPort());
 		super.connectPorts(traceDistributor.getNewOutputPort(), traceToGraphTransformer.getInputPort());
 		super.connectPorts(traceToGraphTransformer.getOutputPort(), dotTraceGraphFileWriter.getInputPort());
-		// super.connectPorts(traceToGraphTransformer.getOutputPort(), graphMLTraceGraphFileWriter.getInputPort());
+		// super.connectPorts(traceToGraphTransformer.getOutputPort(),
+		// graphMLTraceGraphFileWriter.getInputPort());
 		super.connectPorts(traceDistributor.getNewOutputPort(), operationCallExtractor.getInputPort());
 		super.connectPorts(operationCallExtractor.getOutputPort(), executionModelAssembler.getInputPort());
 		super.connectPorts(executionModelAssembler.getOutputPort(), fullStatisticsDecorator.getInputPort());
 		super.connectPorts(fullStatisticsDecorator.getOutputPort(), callStatisticsDecorator.getInputPort());
 		super.connectPorts(callStatisticsDecorator.getOutputPort(), onTerminationTrigger.getInputPort());
 		super.connectPorts(onTerminationTrigger.getOutputPort(), dependencyGraphCreator.getInputPort());
-		// super.connectPorts(dependencyGraphCreator.getOutputPort(), debugStage.getInputPort());
+		// super.connectPorts(dependencyGraphCreator.getOutputPort(),
+		// debugStage.getInputPort());
 		super.connectPorts(dependencyGraphCreator.getOutputPort(), dotDepGraphFileWriter.getInputPort());
 
 	}
 
 	public DeploymentModel getDeploymentModel() {
 		return this.deploymentModel;
+	}
+
+	public ExecutionModel getExecutionModel() {
+		return executionModel;
+	}
+
+	public StatisticsModel getStatisticsModel() {
+		return statisticsModel;
 	}
 
 }

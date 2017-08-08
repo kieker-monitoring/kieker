@@ -48,7 +48,7 @@ public class ExecutionModelAssembler {
 
 	protected void addExecution(final DeployedOperation source, final DeployedOperation target) {
 		final ComposedKey<DeployedOperation, DeployedOperation> key = ComposedKey.of(source, target);
-		if (!this.executionModel.getAggregatedInvocations().contains(key)) {
+		if (!this.executionModel.getAggregatedInvocations().containsKey(key)) {
 			final AggregatedInvocation invocation = this.factory.createAggregatedInvocation();
 			invocation.setSource(source);
 			invocation.setTarget(target);

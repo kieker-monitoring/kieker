@@ -212,5 +212,10 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 		}
 		return super.eIsSet(featureID);
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s: [%s->%s]", this.getClass().getName(), source, target);
+	}
 
 } //AggregatedInvocationImpl

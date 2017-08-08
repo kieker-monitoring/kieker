@@ -51,6 +51,7 @@ public class DeploymentLevelOperationDependencyGraphBuilder extends AbstractDepe
 		contextVertex.setPropertyIfAbsent(PropertyKeys.NAME, context.getName());
 
 		final Graph contextSubgraph = contextVertex.addChildGraphIfAbsent();
+		contextSubgraph.setName(context.getName());
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final Vertex componentVertex = contextSubgraph.addVertexIfAbsent(componentId);
 		componentVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.DEPLOYED_COMPONENT);
@@ -58,6 +59,7 @@ public class DeploymentLevelOperationDependencyGraphBuilder extends AbstractDepe
 		componentVertex.setPropertyIfAbsent(PropertyKeys.PACKAGE_NAME, component.getAssemblyComponent().getComponentType().getPackage());
 
 		final Graph componentSubgraph = componentVertex.addChildGraphIfAbsent();
+		componentSubgraph.setName(component.getAssemblyComponent().getComponentType().getName());
 		final int operationId = this.identifierRegistry.getIdentifier(operation);
 		final Vertex operationVertex = componentSubgraph.addVertexIfAbsent(operationId);
 		operationVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.DEPLOYED_OPERATION);

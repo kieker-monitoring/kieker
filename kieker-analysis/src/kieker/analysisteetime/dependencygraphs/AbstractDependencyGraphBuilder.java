@@ -82,6 +82,7 @@ public abstract class AbstractDependencyGraphBuilder implements DependencyGraphB
 		final int id = this.identifierRegistry.getIdentifier(ENTRY_VERTEX_IDENTIFIER);
 		final Vertex vertex = this.graph.addVertexIfAbsent(id);
 		vertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.ENTRY);
+		vertex.setProperty(PropertyKeys.NAME, ENTRY_VERTEX_IDENTIFIER);
 		return vertex;
 	}
 

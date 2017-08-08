@@ -22,7 +22,7 @@ public class DependencyGraphConfigurationTest {
 		final File importDirectory = new File(projectDir.getFile(), "kieker-20170805-132418-9229368724068-UTC--KIEKER");
 		final File exportDirectory = new File(projectDir.getFile());
 		
-		DependencyGraphConfiguration configuration = new DependencyGraphConfiguration(importDirectory, ChronoUnit.MICROS, exportDirectory);
+		DependencyGraphConfiguration configuration = new DependencyGraphConfiguration(importDirectory, ChronoUnit.NANOS, exportDirectory);
 		Execution<DependencyGraphConfiguration> execution = new Execution<>(configuration);
 		execution.executeBlocking();
 	}

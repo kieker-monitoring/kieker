@@ -35,7 +35,6 @@ import kieker.analysisteetime.util.stage.trigger.TriggerOnTerminationStage;
 import teetime.framework.Configuration;
 import teetime.stage.basic.distributor.Distributor;
 import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
-import teetime.stage.basic.distributor.strategy.IDistributorStrategy;
 
 public class DependencyGraphConfiguration extends Configuration {
 

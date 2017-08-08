@@ -7,9 +7,9 @@ import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.util.ComposedKey;
 
-public final class ModelObjectFromOperationCallAccesors {
+public final class ModelObjectFromOperationCallAccessors {
 
-	private ModelObjectFromOperationCallAccesors() {}
+	private ModelObjectFromOperationCallAccessors() {}
 
 	public static final Function<OperationCall, Object> DEPLOYED_OPERATION = c -> c.getOperation();
 

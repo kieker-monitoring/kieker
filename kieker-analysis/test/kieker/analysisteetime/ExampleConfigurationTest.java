@@ -16,30 +16,44 @@
 package kieker.analysisteetime;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.net.URL;
 
+import org.eclipse.emf.common.util.EMap;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import kieker.analysisteetime.dependencygraphs.PropertyKeys;
 import kieker.analysisteetime.model.DeploymentModelPrinter;
+import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
+import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
+import kieker.analysisteetime.statistics.Properties;
+import kieker.analysisteetime.statistics.Statistic;
+import kieker.analysisteetime.statistics.Statistics;
+import kieker.analysisteetime.statistics.StatisticsModel;
+import kieker.analysisteetime.statistics.Units;
+import kieker.analysisteetime.util.ComposedKey;
 import teetime.framework.Execution;
 
 /**
- * Class that executes the {@link ExampleConfiguration}. This is, so far, for testing the current development only.
+ * Class that executes the {@link ExampleConfiguration}. This is, so far, for
+ * testing the current development only.
  *
  * @author Sören Henning
+ * 
+ * @since 1.13
  * 
  */
 public class ExampleConfigurationTest {
 
-	@Rule
-	public TemporaryFolder tempFolder = new TemporaryFolder();
+	// @Rule
+	// public TemporaryFolder tempFolder = new TemporaryFolder();
 
 	@Test
 	public void testCurrentStateOfDevelopment() throws FileNotFoundException {
@@ -63,7 +77,7 @@ public class ExampleConfigurationTest {
 		// File("../kieker-examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC");
 		// final File exportDirectory = new
 		// File("C:/Users/Soeren/Desktop/kieker-output");
-//		final File exportDirectory = tempFolder.getRoot();
+		// final File exportDirectory = tempFolder.getRoot();
 		final File exportDirectory = new File(projectDir.getFile());
 
 		final ExampleConfiguration configuration = new ExampleConfiguration(importDirectory, exportDirectory);
@@ -76,5 +90,12 @@ public class ExampleConfigurationTest {
 		// final DeploymentModelPrinter deploymentModelPrinter = new
 		// DeploymentModelPrinter(System.out);
 		deploymentModelPrinter.print(deploymentModel);
+
+//		StatisticsModel statisticsModel = configuration.getStatisticsModel();
+
+		EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations = configuration
+				.getExecutionModel().getAggregatedInvocations();
+		// contains [1, 1, 50] in any order
+		assertThat(aggregatedInvocations.values().size(), is(3));
 	}
 }

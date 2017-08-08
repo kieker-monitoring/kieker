@@ -25,6 +25,6 @@ import java.util.function.Function;
  */
 public interface VertexTypeMapper extends Function<VertexType, String> {
 
-	public static VertexTypeMapper DEFAULT = t -> t.toString();
+	public static VertexTypeMapper TO_STRING = t -> t.toString();
 
 }
