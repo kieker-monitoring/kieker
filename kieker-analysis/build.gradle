@@ -1,5 +1,6 @@
 apply plugin: 'eclipse'
-apply plugin: "com.github.hauner.jarTest"
+apply plugin: 'com.github.hauner.jarTest'
+apply plugin: 'java'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
