@@ -1,5 +1,9 @@
 apply plugin: 'eclipse'
-apply plugin: "com.github.hauner.jarTest"
+apply plugin: 'com.github.hauner.jarTest'
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
 	compile project(':kieker-common')
@@ -13,6 +17,7 @@ dependencies {
 	compile resolveLibrary('guava-18.0.jar')
 	compile resolveLibrary('kafka-clients-0.10.1.1.jar')
 	compile resolveLibrary('teetime-3.0-20161128.194027-256-jar-with-dependencies.jar')
+	compile resolveLibrary('blueprints-core-2.6.0.jar')
 	
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
