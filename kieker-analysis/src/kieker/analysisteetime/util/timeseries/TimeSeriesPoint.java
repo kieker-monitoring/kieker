@@ -25,28 +25,10 @@ import java.time.Instant;
  * @author Sören Henning
  *
  */
-public class TimeSeriesPoint {
+public interface TimeSeriesPoint {
 
-	private final Instant time;
+	public Instant getTime();
 
-	private final long value;
-
-	public TimeSeriesPoint(final Instant time, final long value) {
-		this.time = time;
-		this.value = value;
-	}
-
-	public Instant getTime() {
-		return time;
-	}
-
-	public long getValue() {
-		return value;
-	}
-
-	@Override
-	public String toString() {
-		return "[" + this.time + "=" + this.value + "]";
-	}
+//	public long getValue();
 
 }
