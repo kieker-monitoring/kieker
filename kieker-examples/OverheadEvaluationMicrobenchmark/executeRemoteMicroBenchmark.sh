@@ -19,7 +19,8 @@ RESULTS_TARGET_FILE=plot.csv
 
 # Copy the benchmarked file and MooBench to the remote node
 scp -r ${MOOBENCH_FOLDER} ${REMOTE_NODE}:MooBench
-ssh ${REMOTE_NODE} 'mkdir MooBench/tmp; mkdir MooBench/lib; exit'
+# fix for KIEKER-1559: create empty folders "tmp" and "lib"
+ssh ${REMOTE_NODE} 'mkdir -p MooBench/tmp; mkdir -p MooBench/lib; exit'
 scp ${BENCHMARKED_JAR} ${REMOTE_NODE}:MooBench/lib
 
 # Execute MooBench
