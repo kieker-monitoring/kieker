@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,8 @@ import com.puppycrawl.tools.checkstyle.api.Check;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
-import kieker.common.record.IMonitoringRecord;
-
 /**
- * This class extends checkstyle with a new check which makes sure that classes, which implement the {@link IMonitoringRecord.Factory} interface, supply the
+ * This class extends checkstyle with a new check which makes sure that classes, which implement the {@link kieker.common.record.IMonitoringRecord.Factory} interface, supply the
  * necessary static field (for the types) and the constructor (working with an array of {@link Object}) for the framework.<br>
  * </br>
  *
@@ -41,8 +39,8 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 	/** This field contains the (constant) tree to detect the type (this is necessary as this is a little bit more nested). */
 	private static final DetailAST TYPE_AST;
 
-	private static final String FACTORY_FST_NAME = IMonitoringRecord.class.getSimpleName();
-	private static final String FACTORY_SND_NAME = IMonitoringRecord.Factory.class.getSimpleName();
+	private static final String FACTORY_FST_NAME = "IMonitoringRecord";
+	private static final String FACTORY_SND_NAME = "Factory";
 	private static final String FIELD_TYPE_NAME = Class.class.getSimpleName();
 	private static final String FIELD_NAME = "TYPES";
 	private static final String CONSTRUCTOR_PARAMETER = Object.class.getSimpleName();

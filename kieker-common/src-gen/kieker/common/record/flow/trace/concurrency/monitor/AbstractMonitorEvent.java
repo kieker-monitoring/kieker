@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,35 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.flow.trace.concurrency.monitor;
 
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
-
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
 
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.8
  */
-public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
-		private static final long serialVersionUID = 8385865083415561635L;
-	
-	
-	/* user-defined constants */
-	/* default constants */
-	public static final int LOCK_ID = 0;
-	/* property declarations */
-	private final int lockId;
+public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
+	private static final long serialVersionUID = 8385865083415561635L;
 
+	
+	/** default constants. */
+	public static final int LOCK_ID = 0;
+	
+		
+	/** property declarations. */
+	private int lockId;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -56,10 +53,9 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 		this.lockId = lockId;
 	}
 
-	
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -72,21 +68,23 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
+	 * @param deserializer
+	 *            The deserializer to use
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public AbstractMonitorEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.lockId = buffer.getInt();
+	public AbstractMonitorEvent(final IValueDeserializer deserializer)
+			throws BufferUnderflowException {
+		super(deserializer);
+
+		this.lockId = deserializer.getInt();
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -97,30 +95,35 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
-		
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+
 		final AbstractMonitorEvent castedRecord = (AbstractMonitorEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (this.getLockId() != castedRecord.getLockId()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (this.getLockId() != castedRecord.getLockId()) {
+			return false;
+		}
 		return true;
 	}
 
@@ -128,4 +131,8 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 		return this.lockId;
 	}
 	
+	public final void setLockId(int lockId) {
+		this.lockId = lockId;
+	}
+
 }

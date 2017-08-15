@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,9 @@
  ***************************************************************************/
 
 package kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore;
+
+import javax.annotation.CheckReturnValue;
+import javax.annotation.meta.When;
 
 import org.springframework.stereotype.Service;
 
@@ -41,6 +44,7 @@ public class Catalog {
 	 * 
 	 * @return A new book.
 	 */
+	@CheckReturnValue(when = When.NEVER)
 	public Book getBook(final boolean complexQuery) {
 		return new Book("Kieker 1.5 User Guide");
 	}

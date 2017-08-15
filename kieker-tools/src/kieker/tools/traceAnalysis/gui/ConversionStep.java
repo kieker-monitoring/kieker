@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ import kieker.common.logging.LogFactory;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public class ConversionStep extends AbstractStep {
@@ -76,7 +76,7 @@ public class ConversionStep extends AbstractStep {
 	private final JButton graphvizDirectoryChooseButton = new JButton("Choose");
 	private final JButton pic2plotDirectoryChooseButton = new JButton("Choose");
 	private final JLabel outputFormat = new JLabel("Output Format: ");
-	private final JComboBox outputFormatField = new JComboBox(new String[] { "PNG", "JPEG", "SVG", "PDF", });
+	private final JComboBox<String> outputFormatField = new JComboBox<String>(new String[] { "PNG", "JPEG", "SVG", "PDF", });
 
 	public ConversionStep() {
 		this.addAndLayoutComponents();
@@ -217,8 +217,9 @@ public class ConversionStep extends AbstractStep {
 			final File outputDir = new File(outputDirectory);
 
 			final File[] dotFiles = outputDir.listFiles(new FileNameExtensionFilter(".dot"));
-			final File[] picFiles = outputDir.listFiles(new FileNameExtensionFilter(".pic"));
-
+			if (dotFiles == null) {
+				return;
+			}
 			for (final File dotFile : dotFiles) {
 				try {
 					final Process p = Runtime.getRuntime().exec(
@@ -233,6 +234,10 @@ public class ConversionStep extends AbstractStep {
 				}
 			}
 
+			final File[] picFiles = outputDir.listFiles(new FileNameExtensionFilter(".pic"));
+			if (picFiles == null) {
+				return;
+			}
 			for (final File picFile : picFiles) {
 				OutputStream writer = null;
 				try {
@@ -351,7 +356,7 @@ public class ConversionStep extends AbstractStep {
 
 	/**
 	 * @author Nils Christian Ehmke
-	 * 
+	 *
 	 * @since 1.10
 	 */
 	private static class ChooseDirectoryActionListener implements ActionListener {
@@ -378,7 +383,7 @@ public class ConversionStep extends AbstractStep {
 
 	/**
 	 * @author Nils Christian Ehmke
-	 * 
+	 *
 	 * @since 1.10
 	 */
 	private static class FileNameExtensionFilter implements FilenameFilter {

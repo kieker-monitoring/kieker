@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@ import kieker.common.logging.Log;
  */
 // TODO remove abstract and extract the method onBufferReceived() into an interface
 public abstract class AbstractTcpReader implements Runnable {
+
+	private static final int CONNECTION_CLOSED_BY_CLIENT = -1;
 
 	@SuppressWarnings({ "PMD.LoggerIsNotStaticFinal", "PMD.ProperLogger" })
 	protected final Log logger;
@@ -71,7 +73,7 @@ public abstract class AbstractTcpReader implements Runnable {
 			final SocketChannel socketChannel = serversocket.accept();
 			try {
 				final ByteBuffer buffer = ByteBuffer.allocateDirect(this.bufferCapacity);
-				while ((socketChannel.read(buffer) != -1) && !this.terminated) {
+				while ((socketChannel.read(buffer) != CONNECTION_CLOSED_BY_CLIENT) && !this.terminated) {
 					this.process(buffer);
 				}
 			} finally {

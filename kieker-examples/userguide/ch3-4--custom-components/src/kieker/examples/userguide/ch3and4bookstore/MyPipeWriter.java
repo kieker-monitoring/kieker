@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,44 +22,34 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 public class MyPipeWriter extends AbstractMonitoringWriter {
 
-	public static final String CONFIG_PROPERTY_NAME_PIPE_NAME =
-			MyPipeWriter.class.getName() + ".pipeName";
+	public static final String CONFIG_PROPERTY_NAME_PIPE_NAME = MyPipeWriter.class.getName() + ".pipeName";
 
 	private volatile MyPipe pipe;
 	private final String pipeName;
 
 	public MyPipeWriter(final Configuration configuration) {
 		super(configuration);
-		this.pipeName =
-				configuration.getStringProperty(CONFIG_PROPERTY_NAME_PIPE_NAME);
+		this.pipeName = configuration.getStringProperty(CONFIG_PROPERTY_NAME_PIPE_NAME);
 	}
 
 	@Override
-	public boolean newMonitoringRecord(final IMonitoringRecord record) {
+	public void onStarting() {
+		this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
+	}
+
+	@Override
+	public void writeMonitoringRecord(final IMonitoringRecord record) {
 		try {
 			// Just write the content of the record into the pipe.
 			this.pipe.put(new PipeData(record.getLoggingTimestamp(),
 					record.toArray(), record.getClass()));
 		} catch (final InterruptedException e) {
-			return false; // signal error
+			throw new IllegalStateException("Should not be thrown", e);
 		}
-		return true;
 	}
 
 	@Override
-	protected Configuration getDefaultConfiguration() {
-		final Configuration configuration = new Configuration(super.getDefaultConfiguration());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_PIPE_NAME, "kieker-pipe");
-		return configuration;
-	}
-
-	@Override
-	protected void init() throws Exception {
-		this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
-	}
-
-	@Override
-	public void terminate() {
+	public void onTerminating() {
 		// nothing to do
 	}
 }

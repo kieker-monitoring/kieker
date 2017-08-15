@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,23 +19,19 @@ package kieker.monitoring.core.controller;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.3
  */
 public abstract class AbstractController {
-	private static final Log LOG = LogFactory.getLog(AbstractController.class);
-
 	protected volatile MonitoringController monitoringController;
 	private final AtomicBoolean terminated = new AtomicBoolean(false);
 
 	/**
 	 * Default constructor.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this controller.
 	 */
@@ -45,7 +41,7 @@ public abstract class AbstractController {
 
 	/**
 	 * Sets and initializes the monitoring controller, if it has not been set yet.
-	 * 
+	 *
 	 * @param monitoringController
 	 *            The monitoring controller.
 	 */
@@ -62,9 +58,9 @@ public abstract class AbstractController {
 
 	/**
 	 * Permanently terminates this controller.
-	 * 
+	 *
 	 * @return true iff the controller was terminated.
-	 * 
+	 *
 	 * @see #isTerminated()
 	 */
 	protected final boolean terminate() {
@@ -80,7 +76,7 @@ public abstract class AbstractController {
 
 	/**
 	 * Returns whether this controller is terminated.
-	 * 
+	 *
 	 * @see #terminate()
 	 * @return true if terminated
 	 */
@@ -103,38 +99,20 @@ public abstract class AbstractController {
 
 	/**
 	 * This is a helper method trying to find, create and initialize the given class, using its public constructor which accepts a single {@link Configuration}.
-	 * 
+	 *
 	 * @param c
 	 *            This class defines the expected result of the method call.
 	 * @param classname
 	 *            The name of the class to be created.
 	 * @param configuration
 	 *            The configuration which will be used to initialize the class in question.
-	 * 
+	 *
 	 * @return A new and initializes class instance if everything went well.
-	 * 
+	 *
 	 * @param <C>
 	 *            The type of the returned class.
 	 */
-	@SuppressWarnings("unchecked")
 	protected static final <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration) {
-		C createdClass = null; // NOPMD (null)
-		try {
-			final Class<?> clazz = Class.forName(classname);
-			if (c.isAssignableFrom(clazz)) {
-				createdClass = (C) clazz.getConstructor(Configuration.class).newInstance(configuration.getPropertiesStartingWith(classname));
-			} else {
-				LOG.error("Class '" + classname + "' has to implement '" + c.getSimpleName() + "'");
-			}
-		} catch (final ClassNotFoundException e) {
-			LOG.error(c.getSimpleName() + ": Class '" + classname + "' not found", e);
-		} catch (final NoSuchMethodException e) {
-			LOG.error(c.getSimpleName() + ": Class '" + classname
-					+ "' has to implement a (public) constructor that accepts a single Configuration", e);
-		} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
-			LOG.error(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", e);
-		}
-		return createdClass;
+		return ControllerFactory.getInstance(configuration).createAndInitialize(c, classname, configuration);
 	}
 }

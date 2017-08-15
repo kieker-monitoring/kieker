@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,12 +47,18 @@ public interface IWriterController extends IMonitoringRecordReceiver {
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 
 	/**
-	 * Shows how many inserts have been performed since last restart of the
-	 * execution environment.
+	 * Waits for the termination of the monitoring controller. The termination must be previously triggered by {@link MonitoringController#terminateMonitoring()}.
 	 *
-	 * @return long
+	 * @param timeoutInMs
+	 *            timeout in milliseconds to wait (a timeout of 0 means to wait forever)
 	 *
-	 * @since 1.3
+	 * @throws InterruptedException
+	 *             if the calling thread was interrupted while waiting for the termination
+	 *
+	 * @author Christian Wulf
+	 *
+	 * @since 1.13
 	 */
-	public abstract long getNumberOfInserts();
+	void waitForTermination(long timeoutInMs) throws InterruptedException;
+
 }

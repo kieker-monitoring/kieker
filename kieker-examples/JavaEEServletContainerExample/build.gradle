@@ -14,6 +14,7 @@ dependencies {
   compile fileTree('livedemo-source/lib') {
     include '*.jar'
   }
+  compile files('../../build/libs/kieker-1.13-SNAPSHOT-aspectj.jar')
 }
 
 task unwar(type: Copy) {
@@ -22,5 +23,7 @@ task unwar(type: Copy) {
   rename '(.*).war', 'livedemo.war'
 }
 
-task buildExample(dependsOn: [war, unwar]) << {
+task buildExample(dependsOn: [war, unwar]) {
+  doLast {
+  }
 }

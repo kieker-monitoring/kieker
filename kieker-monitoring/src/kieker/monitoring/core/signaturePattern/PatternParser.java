@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import java.util.regex.PatternSyntaxException;
 
 /**
  * @author Bjoern Weissenfels, Jan Waller
- * 
+ *
  * @since 1.6
  */
 public final class PatternParser {
@@ -37,11 +37,11 @@ public final class PatternParser {
 
 	/**
 	 * Parses the given pattern string and converts it into a {@link Pattern} instance.
-	 * 
+	 *
 	 * @param strPattern
 	 *            The pattern string to parse.
 	 * @return A corresponding pattern to the given string.
-	 * 
+	 *
 	 * @throws InvalidPatternException
 	 *             If the given string is not a valid pattern.
 	 */
@@ -334,291 +334,320 @@ public final class PatternParser {
 		final int numberOfModifiers = modifierList.length;
 		// test whether modifiers are allowed and in the correct order
 		Integer old = -1;
-		Integer current;
 		for (int i = 0; i < numberOfModifiers; i++) {
-			current = allowedModifiersWithOrder.get(modifierList[i]);
+			final Integer current = allowedModifiersWithOrder.get(modifierList[i]);
 			if ((null == current) || (current < old)) {
 				throw new InvalidPatternException("Invalid modifier");
 			}
 			old = current;
 		}
 		final StringBuilder sb = new StringBuilder();
-		if (numberOfModifiers == 1) {
-			if ("public".equals(modifierList[0])) {
-				sb.append("public\\s(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
-			} else if ("private".equals(modifierList[0])) {
-				sb.append("private\\s(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
-			} else if ("protected".equals(modifierList[0])) {
-				sb.append("protected\\s(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
-			} else if ("package".equals(modifierList[0])) {
-				sb.append("(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
-			} else if ("abstract".equals(modifierList[0])) {
-				sb.append("((public|private|protected)\\s)?abstract\\s(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
-			} else if ("non_abstract".equals(modifierList[0])) {
-				sb.append("((public|private|protected)\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
-			} else if ("static".equals(modifierList[0])) {
-				sb.append("((public|private|protected)\\s)?(abstract\\s)?static\\s(final\\s)?(synchronized\\s)?(native\\s)?");
-			} else if ("non_static".equals(modifierList[0])) {
-				sb.append("((public|private|protected)\\s)?(abstract\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
-			} else if ("final".equals(modifierList[0])) {
-				sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?final\\s(synchronized\\s)?(native\\s)?");
-			} else if ("non_final".equals(modifierList[0])) {
-				sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(synchronized\\s)?(native\\s)?");
-			} else if ("synchronized".equals(modifierList[0])) {
-				sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?synchronized\\s(native\\s)?");
-			} else if ("non_synchronized".equals(modifierList[0])) {
-				sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(native\\s)?");
-			} else if ("native".equals(modifierList[0])) {
-				sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?native\\s");
-			} else if ("non_native".equals(modifierList[0])) {
-				sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?");
-			} else {
-				throw new InvalidPatternException("Invalid modifier.");
-			}
-		} else if (numberOfModifiers == 2) {
-			if ("public".equals(modifierList[0])) {
-				sb.append("public\\s");
-			} else if ("private".equals(modifierList[0])) {
-				sb.append("private\\s");
-			} else if ("protected".equals(modifierList[0])) {
-				sb.append("protected\\s");
-			} else if ("package".equals(modifierList[0])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("((public|private|protected)\\s)?");
-			}
-			if ("abstract".equals(modifierList[0]) || "abstract".equals(modifierList[1])) {
-				sb.append("abstract\\s");
-			} else if ("non_abstract".equals(modifierList[0]) || "non_abstract".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(abstract\\s)?");
-			}
-			if ("static".equals(modifierList[0]) || "static".equals(modifierList[1])) {
-				sb.append("static\\s");
-			} else if ("non_static".equals(modifierList[0]) || "non_static".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(static\\s)?");
-			}
-			if ("final".equals(modifierList[0]) || "final".equals(modifierList[1])) {
-				sb.append("final\\s");
-			} else if ("non_final".equals(modifierList[0]) || "non_final".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(final\\s)?");
-			}
-			if ("synchronized".equals(modifierList[0]) || "synchronized".equals(modifierList[1])) {
-				sb.append("synchronized\\s");
-			} else if ("non_synchronized".equals(modifierList[0]) || "non_synchronized".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(synchronized\\s)?");
-			}
-			if ("native".equals(modifierList[1])) {
-				sb.append("native\\s");
-			} else if ("non_native".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(native\\s)?");
-			}
-		} else if (numberOfModifiers == 3) {
-			if ("public".equals(modifierList[0])) {
-				sb.append("public\\s");
-			} else if ("private".equals(modifierList[0])) {
-				sb.append("private\\s");
-			} else if ("protected".equals(modifierList[0])) {
-				sb.append("protected\\s");
-			} else if ("package".equals(modifierList[0])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("((public|private|protected)\\s)?");
-			}
-			if ("abstract".equals(modifierList[0]) || "abstract".equals(modifierList[1])) {
-				sb.append("abstract\\s");
-			} else if ("non_abstract".equals(modifierList[0]) || "non_abstract".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(abstract\\s)?");
-			}
-			if ("static".equals(modifierList[0]) || "static".equals(modifierList[1]) || "static".equals(modifierList[2])) {
-				sb.append("static\\s");
-			} else if ("non_static".equals(modifierList[0]) || "non_static".equals(modifierList[1]) || "non_static".equals(modifierList[2])) { // NOCS NOPMD
-																																				// (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(static\\s)?");
-			}
-			if ("final".equals(modifierList[0]) || "final".equals(modifierList[1]) || "final".equals(modifierList[2])) {
-				sb.append("final\\s");
-			} else if ("non_final".equals(modifierList[0]) || "non_final".equals(modifierList[1]) || "non_final".equals(modifierList[2])) { // NOCS NOPMD
-																																			// (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(final\\s)?");
-			}
-			if ("synchronized".equals(modifierList[1]) || "synchronized".equals(modifierList[2])) {
-				sb.append("synchronized\\s");
-			} else if ("non_synchronized".equals(modifierList[1]) || "non_synchronized".equals(modifierList[2])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(synchronized\\s)?");
-			}
-			if ("native".equals(modifierList[2])) {
-				sb.append("native\\s");
-			} else if ("non_native".equals(modifierList[2])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(native\\s)?");
-			}
-		} else if (numberOfModifiers == 4) {
-			if ("public".equals(modifierList[0])) {
-				sb.append("public\\s");
-			} else if ("private".equals(modifierList[0])) {
-				sb.append("private\\s");
-			} else if ("protected".equals(modifierList[0])) {
-				sb.append("protected\\s");
-			} else if ("package".equals(modifierList[0])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("((public|private|protected)\\s)?");
-			}
-			if ("abstract".equals(modifierList[0]) || "abstract".equals(modifierList[1])) {
-				sb.append("abstract\\s");
-			} else if ("non_abstract".equals(modifierList[0]) || "non_abstract".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(abstract\\s)?");
-			}
-			if ("static".equals(modifierList[0]) || "static".equals(modifierList[1]) || "static".equals(modifierList[2])) {
-				sb.append("static\\s");
-			} else if ("non_static".equals(modifierList[0]) || "non_static".equals(modifierList[1]) || "non_static".equals(modifierList[2])) { // NOCS NOPMD
-																																				// (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(static\\s)?");
-			}
-			if ("final".equals(modifierList[1]) || "final".equals(modifierList[2]) || "final".equals(modifierList[3])) {
-				sb.append("final\\s");
-			} else if ("non_final".equals(modifierList[1]) || "non_final".equals(modifierList[2]) || "non_final".equals(modifierList[3])) { // NOCS NOPMD
-																																			// (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(final\\s)?");
-			}
-			if ("synchronized".equals(modifierList[2]) || "synchronized".equals(modifierList[3])) {
-				sb.append("synchronized\\s");
-			} else if ("non_synchronized".equals(modifierList[2]) || "non_synchronized".equals(modifierList[3])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(synchronized\\s)?");
-			}
-			if ("native".equals(modifierList[3])) {
-				sb.append("native\\s");
-			} else if ("non_native".equals(modifierList[3])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(native\\s)?");
-			}
-
-		} else if (numberOfModifiers == 5) {
-			if ("public".equals(modifierList[0])) {
-				sb.append("public\\s");
-			} else if ("private".equals(modifierList[0])) {
-				sb.append("private\\s");
-			} else if ("protected".equals(modifierList[0])) {
-				sb.append("protected\\s");
-			} else if ("package".equals(modifierList[0])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("((public|private|protected)\\s)?");
-			}
-			if ("abstract".equals(modifierList[0]) || "abstract".equals(modifierList[1])) {
-				sb.append("abstract\\s");
-			} else if ("non_abstract".equals(modifierList[0]) || "non_abstract".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(abstract\\s)?");
-			}
-			if ("static".equals(modifierList[1]) || "static".equals(modifierList[2])) {
-				sb.append("static\\s");
-			} else if ("non_static".equals(modifierList[1]) || "non_static".equals(modifierList[2])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(static\\s)?");
-			}
-			if ("final".equals(modifierList[2]) || "final".equals(modifierList[3])) {
-				sb.append("final\\s");
-			} else if ("non_final".equals(modifierList[2]) || "non_final".equals(modifierList[3])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(final\\s)?");
-			}
-			if ("synchronized".equals(modifierList[3]) || "synchronized".equals(modifierList[4])) {
-				sb.append("synchronized\\s");
-			} else if ("non_synchronized".equals(modifierList[3]) || "non_synchronized".equals(modifierList[4])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(synchronized\\s)?");
-			}
-			if ("native".equals(modifierList[4])) {
-				sb.append("native\\s");
-			} else if ("non_native".equals(modifierList[4])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				sb.append("(native\\s)?");
-			}
-		} else if (numberOfModifiers == 6) {
-			if ("public".equals(modifierList[0])) {
-				sb.append("public\\s");
-			} else if ("private".equals(modifierList[0])) {
-				sb.append("private\\s");
-			} else if ("protected".equals(modifierList[0])) {
-				sb.append("protected\\s");
-			} else if ("package".equals(modifierList[0])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				throw new InvalidPatternException("Invalid modifier.");
-			}
-			if ("abstract".equals(modifierList[1])) {
-				sb.append("abstract\\s");
-			} else if ("non_abstract".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				throw new InvalidPatternException("Invalid modifier.");
-			}
-			if ("static".equals(modifierList[2])) {
-				sb.append("static\\s");
-			} else if ("non_static".equals(modifierList[2])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				throw new InvalidPatternException("Invalid modifier.");
-			}
-			if ("final".equals(modifierList[3])) {
-				sb.append("final\\s");
-			} else if ("non_final".equals(modifierList[3])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				throw new InvalidPatternException("Invalid modifier.");
-			}
-			if ("synchronized".equals(modifierList[4])) {
-				sb.append("synchronized\\s");
-			} else if ("non_synchronized".equals(modifierList[4])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				throw new InvalidPatternException("Invalid modifier.");
-			}
-			if ("native".equals(modifierList[5])) {
-				sb.append("native\\s");
-			} else if ("non_native".equals(modifierList[5])) { // NOCS NOPMD (EmptyIfStmt)
-				// nothing to do
-			} else {
-				throw new InvalidPatternException("Invalid modifier.");
-			}
-		} else {
+		switch (numberOfModifiers) {
+		case 1:
+			PatternParser.onOneModifier(modifierList, sb);
+			break;
+		case 2:
+			PatternParser.onTwoModifiers(modifierList, sb);
+			break;
+		case 3:
+			PatternParser.onThreeModifiers(modifierList, sb);
+			break;
+		case 4:
+			PatternParser.onFourModifiers(modifierList, sb);
+			break;
+		case 5:
+			PatternParser.onFiveModifiers(modifierList, sb);
+			break;
+		case 6:
+			PatternParser.onSixModifiers(modifierList, sb);
+			break;
+		default:
 			throw new InvalidPatternException("Too many modifier.");
 		}
 		return sb.toString();
+	}
+
+	private static void onSixModifiers(final String[] modifierList, final StringBuilder sb) throws InvalidPatternException {
+		if ("public".equals(modifierList[0])) {
+			sb.append("public\\s");
+		} else if ("private".equals(modifierList[0])) {
+			sb.append("private\\s");
+		} else if ("protected".equals(modifierList[0])) {
+			sb.append("protected\\s");
+		} else if ("package".equals(modifierList[0])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			throw new InvalidPatternException("Invalid modifier.");
+		}
+		if ("abstract".equals(modifierList[1])) {
+			sb.append("abstract\\s");
+		} else if ("non_abstract".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			throw new InvalidPatternException("Invalid modifier.");
+		}
+		if ("static".equals(modifierList[2])) {
+			sb.append("static\\s");
+		} else if ("non_static".equals(modifierList[2])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			throw new InvalidPatternException("Invalid modifier.");
+		}
+		if ("final".equals(modifierList[3])) {
+			sb.append("final\\s");
+		} else if ("non_final".equals(modifierList[3])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			throw new InvalidPatternException("Invalid modifier.");
+		}
+		if ("synchronized".equals(modifierList[4])) {
+			sb.append("synchronized\\s");
+		} else if ("non_synchronized".equals(modifierList[4])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			throw new InvalidPatternException("Invalid modifier.");
+		}
+		if ("native".equals(modifierList[5])) {
+			sb.append("native\\s");
+		} else if ("non_native".equals(modifierList[5])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			throw new InvalidPatternException("Invalid modifier.");
+		}
+	}
+
+	private static void onFiveModifiers(final String[] modifierList, final StringBuilder sb) {
+		if ("public".equals(modifierList[0])) {
+			sb.append("public\\s");
+		} else if ("private".equals(modifierList[0])) {
+			sb.append("private\\s");
+		} else if ("protected".equals(modifierList[0])) {
+			sb.append("protected\\s");
+		} else if ("package".equals(modifierList[0])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("((public|private|protected)\\s)?");
+		}
+		if ("abstract".equals(modifierList[0]) || "abstract".equals(modifierList[1])) {
+			sb.append("abstract\\s");
+		} else if ("non_abstract".equals(modifierList[0]) || "non_abstract".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(abstract\\s)?");
+		}
+		if ("static".equals(modifierList[1]) || "static".equals(modifierList[2])) {
+			sb.append("static\\s");
+		} else if ("non_static".equals(modifierList[1]) || "non_static".equals(modifierList[2])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(static\\s)?");
+		}
+		if ("final".equals(modifierList[2]) || "final".equals(modifierList[3])) {
+			sb.append("final\\s");
+		} else if ("non_final".equals(modifierList[2]) || "non_final".equals(modifierList[3])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(final\\s)?");
+		}
+		if ("synchronized".equals(modifierList[3]) || "synchronized".equals(modifierList[4])) {
+			sb.append("synchronized\\s");
+		} else if ("non_synchronized".equals(modifierList[3]) || "non_synchronized".equals(modifierList[4])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(synchronized\\s)?");
+		}
+		if ("native".equals(modifierList[4])) {
+			sb.append("native\\s");
+		} else if ("non_native".equals(modifierList[4])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(native\\s)?");
+		}
+	}
+
+	private static void onFourModifiers(final String[] modifierList, final StringBuilder sb) {
+		if ("public".equals(modifierList[0])) {
+			sb.append("public\\s");
+		} else if ("private".equals(modifierList[0])) {
+			sb.append("private\\s");
+		} else if ("protected".equals(modifierList[0])) {
+			sb.append("protected\\s");
+		} else if ("package".equals(modifierList[0])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("((public|private|protected)\\s)?");
+		}
+		if ("abstract".equals(modifierList[0]) || "abstract".equals(modifierList[1])) {
+			sb.append("abstract\\s");
+		} else if ("non_abstract".equals(modifierList[0]) || "non_abstract".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(abstract\\s)?");
+		}
+		if ("static".equals(modifierList[0]) || "static".equals(modifierList[1]) || "static".equals(modifierList[2])) {
+			sb.append("static\\s");
+		} else if ("non_static".equals(modifierList[0]) || "non_static".equals(modifierList[1]) || "non_static".equals(modifierList[2])) { // NOCS NOPMD
+																																			// (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(static\\s)?");
+		}
+		if ("final".equals(modifierList[1]) || "final".equals(modifierList[2]) || "final".equals(modifierList[3])) {
+			sb.append("final\\s");
+		} else if ("non_final".equals(modifierList[1]) || "non_final".equals(modifierList[2]) || "non_final".equals(modifierList[3])) { // NOCS NOPMD
+																																		// (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(final\\s)?");
+		}
+		if ("synchronized".equals(modifierList[2]) || "synchronized".equals(modifierList[3])) {
+			sb.append("synchronized\\s");
+		} else if ("non_synchronized".equals(modifierList[2]) || "non_synchronized".equals(modifierList[3])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(synchronized\\s)?");
+		}
+		if ("native".equals(modifierList[3])) {
+			sb.append("native\\s");
+		} else if ("non_native".equals(modifierList[3])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(native\\s)?");
+		}
+	}
+
+	private static void onThreeModifiers(final String[] modifierList, final StringBuilder sb) {
+		if ("public".equals(modifierList[0])) {
+			sb.append("public\\s");
+		} else if ("private".equals(modifierList[0])) {
+			sb.append("private\\s");
+		} else if ("protected".equals(modifierList[0])) {
+			sb.append("protected\\s");
+		} else if ("package".equals(modifierList[0])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("((public|private|protected)\\s)?");
+		}
+		if ("abstract".equals(modifierList[0]) || "abstract".equals(modifierList[1])) {
+			sb.append("abstract\\s");
+		} else if ("non_abstract".equals(modifierList[0]) || "non_abstract".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(abstract\\s)?");
+		}
+		if ("static".equals(modifierList[0]) || "static".equals(modifierList[1]) || "static".equals(modifierList[2])) {
+			sb.append("static\\s");
+		} else if ("non_static".equals(modifierList[0]) || "non_static".equals(modifierList[1]) || "non_static".equals(modifierList[2])) { // NOCS NOPMD
+																																			// (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(static\\s)?");
+		}
+		if ("final".equals(modifierList[0]) || "final".equals(modifierList[1]) || "final".equals(modifierList[2])) {
+			sb.append("final\\s");
+		} else if ("non_final".equals(modifierList[0]) || "non_final".equals(modifierList[1]) || "non_final".equals(modifierList[2])) { // NOCS NOPMD
+																																		// (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(final\\s)?");
+		}
+		if ("synchronized".equals(modifierList[1]) || "synchronized".equals(modifierList[2])) {
+			sb.append("synchronized\\s");
+		} else if ("non_synchronized".equals(modifierList[1]) || "non_synchronized".equals(modifierList[2])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(synchronized\\s)?");
+		}
+		if ("native".equals(modifierList[2])) {
+			sb.append("native\\s");
+		} else if ("non_native".equals(modifierList[2])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(native\\s)?");
+		}
+	}
+
+	private static void onTwoModifiers(final String[] modifierList, final StringBuilder sb) {
+		if ("public".equals(modifierList[0])) {
+			sb.append("public\\s");
+		} else if ("private".equals(modifierList[0])) {
+			sb.append("private\\s");
+		} else if ("protected".equals(modifierList[0])) {
+			sb.append("protected\\s");
+		} else if ("package".equals(modifierList[0])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("((public|private|protected)\\s)?");
+		}
+		if ("abstract".equals(modifierList[0]) || "abstract".equals(modifierList[1])) {
+			sb.append("abstract\\s");
+		} else if ("non_abstract".equals(modifierList[0]) || "non_abstract".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(abstract\\s)?");
+		}
+		if ("static".equals(modifierList[0]) || "static".equals(modifierList[1])) {
+			sb.append("static\\s");
+		} else if ("non_static".equals(modifierList[0]) || "non_static".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(static\\s)?");
+		}
+		if ("final".equals(modifierList[0]) || "final".equals(modifierList[1])) {
+			sb.append("final\\s");
+		} else if ("non_final".equals(modifierList[0]) || "non_final".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(final\\s)?");
+		}
+		if ("synchronized".equals(modifierList[0]) || "synchronized".equals(modifierList[1])) {
+			sb.append("synchronized\\s");
+		} else if ("non_synchronized".equals(modifierList[0]) || "non_synchronized".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(synchronized\\s)?");
+		}
+		if ("native".equals(modifierList[1])) {
+			sb.append("native\\s");
+		} else if ("non_native".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
+			// nothing to do
+		} else {
+			sb.append("(native\\s)?");
+		}
+	}
+
+	private static void onOneModifier(final String[] modifierList, final StringBuilder sb) throws InvalidPatternException {
+		if ("public".equals(modifierList[0])) {
+			sb.append("public\\s(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
+		} else if ("private".equals(modifierList[0])) {
+			sb.append("private\\s(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
+		} else if ("protected".equals(modifierList[0])) {
+			sb.append("protected\\s(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
+		} else if ("package".equals(modifierList[0])) {
+			sb.append("(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
+		} else if ("abstract".equals(modifierList[0])) {
+			sb.append("((public|private|protected)\\s)?abstract\\s(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
+		} else if ("non_abstract".equals(modifierList[0])) {
+			sb.append("((public|private|protected)\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
+		} else if ("static".equals(modifierList[0])) {
+			sb.append("((public|private|protected)\\s)?(abstract\\s)?static\\s(final\\s)?(synchronized\\s)?(native\\s)?");
+		} else if ("non_static".equals(modifierList[0])) {
+			sb.append("((public|private|protected)\\s)?(abstract\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
+		} else if ("final".equals(modifierList[0])) {
+			sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?final\\s(synchronized\\s)?(native\\s)?");
+		} else if ("non_final".equals(modifierList[0])) {
+			sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(synchronized\\s)?(native\\s)?");
+		} else if ("synchronized".equals(modifierList[0])) {
+			sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?synchronized\\s(native\\s)?");
+		} else if ("non_synchronized".equals(modifierList[0])) {
+			sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(native\\s)?");
+		} else if ("native".equals(modifierList[0])) {
+			sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?native\\s");
+		} else if ("non_native".equals(modifierList[0])) {
+			sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?");
+		} else {
+			throw new InvalidPatternException("Invalid modifier.");
+		}
 	}
 
 	private static String parseThrowsPattern(final String throwsPattern) throws InvalidPatternException {

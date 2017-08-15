@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +26,12 @@ import java.util.Properties;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.controller.MonitoringController;
 
 /**
  * A ConfigurationFactory for kieker.monitoring.
- * 
+ *
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 public final class ConfigurationFactory implements Keys {
@@ -49,7 +48,7 @@ public final class ConfigurationFactory implements Keys {
 	 * Creates the configuration for the singleton controller instance. Note
 	 * that the {@link Properties} returned by this method are not a
 	 * singleton instance, i.e., each call returns an equal but not same set of {@link Properties}.
-	 * 
+	 *
 	 * @return the configuration for the singleton controller
 	 */
 	public static final Configuration createSingletonConfiguration() {
@@ -77,7 +76,7 @@ public final class ConfigurationFactory implements Keys {
 
 	/**
 	 * Returns an empty properties map with a fallback on the default configuration.
-	 * 
+	 *
 	 * @return default configuration
 	 */
 	public static final Configuration createDefaultConfiguration() {
@@ -88,10 +87,10 @@ public final class ConfigurationFactory implements Keys {
 	 * Creates a new configuration based on the given properties file with fallback on the default values.
 	 * If the file does not exists, a warning is logged and an empty configuration with fallback on
 	 * the default configuration is returned.
-	 * 
+	 *
 	 * @param configurationFile
 	 *            The file which contains the configuration.
-	 * 
+	 *
 	 * @return The created Configuration
 	 */
 	public static final Configuration createConfigurationFromFile(final String configurationFile) {
@@ -100,7 +99,7 @@ public final class ConfigurationFactory implements Keys {
 
 	/**
 	 * Returns a properties map with the default configuration.
-	 * 
+	 *
 	 * @return The created Configuration
 	 */
 	private static final Configuration defaultConfiguration() {
@@ -111,12 +110,12 @@ public final class ConfigurationFactory implements Keys {
 	 * Returns the properties loaded from file propertiesFn with fallback on the default values.
 	 * If the file does not exists, a warning is logged and an empty configuration with fallback on
 	 * the default configuration is returned.
-	 * 
+	 *
 	 * @param propertiesFn
 	 *            The file which contains the properties.
 	 * @param defaultValues
 	 *            The configuration containing the default values.
-	 * 
+	 *
 	 * @return The created Configuration
 	 */
 	private static final Configuration loadConfigurationFromFile(final String propertiesFn, final Configuration defaultValues) {
@@ -127,7 +126,7 @@ public final class ConfigurationFactory implements Keys {
 				is = new FileInputStream(propertiesFn);
 			} catch (final FileNotFoundException ex) {
 				// if not found as absolute path try within the classpath
-				is = MonitoringController.class.getClassLoader().getResourceAsStream(propertiesFn);
+				is = ConfigurationFactory.class.getClassLoader().getResourceAsStream(propertiesFn);
 				if (is == null) {
 					LOG.warn("File '" + propertiesFn + "' not found");
 					return new Configuration(defaultValues);
@@ -153,16 +152,16 @@ public final class ConfigurationFactory implements Keys {
 	 * Returns the properties loaded from the resource name with fallback on the default values.
 	 * If the file does not exists, a warning is logged and an empty configuration with fallback on
 	 * the default configuration is returned.
-	 * 
+	 *
 	 * @param propertiesFn
 	 *            The resource name which contains the properties.
 	 * @param defaultValues
 	 *            The configuration containing the default values.
-	 * 
+	 *
 	 * @return The created Configuration
 	 */
 	private static final Configuration loadConfigurationFromResource(final String propertiesFn, final Configuration defaultValues) {
-		final InputStream is = MonitoringController.class.getClassLoader().getResourceAsStream(propertiesFn);
+		final InputStream is = ConfigurationFactory.class.getClassLoader().getResourceAsStream(propertiesFn);
 		if (is == null) {
 			LOG.warn("File '" + propertiesFn + "' not found in classpath");
 		} else {
@@ -185,12 +184,12 @@ public final class ConfigurationFactory implements Keys {
 
 	/**
 	 * Returns the system properties starting with the given prefix.
-	 * 
+	 *
 	 * @param prefix
 	 *            The prefix to search for.
 	 * @param defaultValues
 	 *            The configuration containing the default values.
-	 * 
+	 *
 	 * @return The created Configuration
 	 */
 	private static final Configuration getSystemPropertiesStartingWith(final String prefix, final Configuration defaultValues) {

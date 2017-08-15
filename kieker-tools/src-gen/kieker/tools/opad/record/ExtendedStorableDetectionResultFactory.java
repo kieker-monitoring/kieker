@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,31 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.opad.record;
 
-import java.nio.ByteBuffer;
-
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Thomas Duellmann
- * 
+ *
  * @since 1.10
  */
 public final class ExtendedStorableDetectionResultFactory implements IRecordFactory<ExtendedStorableDetectionResult> {
-	
+
 	@Override
-	public ExtendedStorableDetectionResult create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new ExtendedStorableDetectionResult(buffer, stringRegistry);
+	public ExtendedStorableDetectionResult create(final IValueDeserializer deserializer) {
+		return new ExtendedStorableDetectionResult(deserializer);
 	}
-	
+
 	@Override
 	public ExtendedStorableDetectionResult create(final Object[] values) {
 		return new ExtendedStorableDetectionResult(values);
 	}
-	
+
+	@Override
 	public int getRecordSizeInBytes() {
 		return ExtendedStorableDetectionResult.SIZE;
 	}

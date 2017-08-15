@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -42,9 +43,9 @@ import kieker.common.util.filesystem.FSUtil;
 
 /**
  * Reads the contents of a single zip file and passes the records to the registered receiver of type {@link IMonitoringRecordReceiver}.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.7
  */
 public final class FSZipReader implements Runnable {
@@ -63,7 +64,7 @@ public final class FSZipReader implements Runnable {
 
 	/**
 	 * Creates a new instance of this class.
-	 * 
+	 *
 	 * @param zipFile
 	 *            The File object for the zip file.
 	 * @param recordReceiver
@@ -94,14 +95,14 @@ public final class FSZipReader implements Runnable {
 			}
 			if (null == zipEntry) {
 				LOG.error("The zip file does not contain a Kieker log: " + this.zipFile.toString());
-				this.recordReceiver.newMonitoringRecord(FSReader.EOF);
+				this.recordReceiver.newEndOfFileRecord();
 				return;
 			}
 			// read mapping file
 			this.readMappingFile(zipInputStream);
 		} catch (final IOException ex) {
 			LOG.error("Error accessing ZipInputStream", ex);
-			this.recordReceiver.newMonitoringRecord(FSReader.EOF);
+			this.recordReceiver.newEndOfFileRecord();
 			return;
 		} finally {
 			if (null != zipInputStream) {
@@ -143,7 +144,7 @@ public final class FSZipReader implements Runnable {
 			}
 		} catch (final IOException ex) {
 			LOG.error("Error accessing ZipInputStream", ex);
-			this.recordReceiver.newMonitoringRecord(FSReader.EOF);
+			this.recordReceiver.newEndOfFileRecord();
 			return;
 		} finally {
 			try {
@@ -166,7 +167,7 @@ public final class FSZipReader implements Runnable {
 				LOG.error("Failed to close ZipInputStream", ex);
 			}
 		}
-		this.recordReceiver.newMonitoringRecord(FSReader.EOF);
+		this.recordReceiver.newEndOfFileRecord();
 	}
 
 	private final void readBinaryFile(final DataInputStream input) {
@@ -313,7 +314,7 @@ public final class FSZipReader implements Runnable {
 
 	/**
 	 * Reads the mapping file located in the zip file.
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	private final void readMappingFile(final ZipInputStream zipInputStream) throws IOException {

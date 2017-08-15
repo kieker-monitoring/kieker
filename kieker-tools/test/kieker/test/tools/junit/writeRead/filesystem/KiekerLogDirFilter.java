@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,13 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 import kieker.common.util.filesystem.FSUtil;
+import kieker.common.util.filesystem.FileExtensionFilter;
 
 /**
  * Accepts Kieker file system monitoring logs.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 public class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
@@ -54,15 +55,10 @@ public class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassW
 			return false;
 		}
 
-		final String[] kiekerMapFiles = potentialDir.list(new FilenameFilter() {
-			/**
-			 * Accepts directories containing a `kieker.map` file.
-			 */
-			@Override
-			public boolean accept(final File dir, final String name) {
-				return name.equals(FSUtil.MAP_FILENAME);
-			}
-		});
+		final String[] kiekerMapFiles = potentialDir.list(FileExtensionFilter.MAP);
+		if (kiekerMapFiles == null) {
+			return false;
+		}
 		return kiekerMapFiles.length == 1;
 	}
 }

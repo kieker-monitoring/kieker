@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,16 +27,16 @@ import kieker.common.logging.LogFactory;
 
 /**
  * This class represents a configuration object within the Kieker project. Technically it is a property list with some additional methods and possibilities.<br/>
- * 
+ *
  * Some of the methods are marked as deprecated. This is not because they will be removed, but rather because they should not be used anymore (at least not directly
  * - they are still used in a valid way within this class). Normally we would remove them, but they are inherited from the class {@link Properties} and can neither
  * be removed nor get a lower visibility modificator.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
-public final class Configuration extends Properties {
+public class Configuration extends Properties {
 
 	private static final long serialVersionUID = 3364877592243422259L;
 	private static final Log LOG = LogFactory.getLog(Configuration.class);
@@ -50,7 +50,7 @@ public final class Configuration extends Properties {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param defaults
 	 *            The property object which delivers the default values for the new configuration.
 	 */
@@ -60,23 +60,38 @@ public final class Configuration extends Properties {
 
 	/**
 	 * Reads the given property from the configuration and interprets it as a string.
-	 * 
+	 *
 	 * @param key
 	 *            The key of the property.
-	 * 
-	 * @return A string with the value of the given property or null, if the property does not exist.
+	 *
+	 * @return A string with the value of the given property or the empty string, if the property does not exist.
 	 */
 	public final String getStringProperty(final String key) {
+		return this.getStringProperty(key, "");
+	}
+
+	/**
+	 * Reads the given property from the configuration and interprets it as a string.
+	 *
+	 * @param key
+	 *            The key of the property.
+	 *
+	 * @param defaultValue
+	 *            The default value for the given <code>key</code>
+	 *
+	 * @return A string with the value of the given property or the given <code>defaultValue</code>, if the property does not exist.
+	 */
+	public final String getStringProperty(final String key, final String defaultValue) {
 		final String s = super.getProperty(key);
-		return (s == null) ? "" : s.trim(); // NOCS
+		return (s == null) ? defaultValue : s.trim(); // NOCS
 	}
 
 	/**
 	 * Reads the given property from the configuration and interprets it as a boolean.
-	 * 
+	 *
 	 * @param key
 	 *            The key of the property.
-	 * 
+	 *
 	 * @return A boolean with the value of the given property or null, if the property does not exist.
 	 */
 	public final boolean getBooleanProperty(final String key) {
@@ -84,26 +99,91 @@ public final class Configuration extends Properties {
 	}
 
 	/**
-	 * Reads the given property from the configuration and interprets it as an integer.
-	 * 
+	 * Reads the given property from the configuration and interprets it as a boolean. If no value
+	 * exists for this property, the given default value is returned.
+	 *
 	 * @param key
 	 *            The key of the property.
-	 * 
-	 * @return An integer with the value of the given property or null, if the property does not exist.
+	 * @param defaultValue
+	 *            The default value for this property
+	 *
+	 * @return A boolean with the value of the given property or the default value
+	 */
+	public final boolean getBooleanProperty(final String key, final boolean defaultValue) {
+		final String s = this.getStringProperty(key);
+
+		if (s == null) {
+			return defaultValue;
+		}
+
+		return Boolean.parseBoolean(this.getStringProperty(key));
+	}
+
+	/**
+	 * Convenience method to set boolean-valued properties.
+	 *
+	 * @param key
+	 *            The key to be placed in this configuration
+	 * @param value
+	 *            The value to be stored for the given key
+	 */
+	public void setProperty(final String key, final boolean value) {
+		this.setProperty(key, String.valueOf(value));
+	}
+
+	/**
+	 * Reads the given property from the configuration and interprets it as an integer.
+	 *
+	 * @param key
+	 *            The key of the property.
+	 *
+	 * @return An integer with the value of the given property or zero, if the property does not exist.
 	 */
 	public final int getIntProperty(final String key) {
+		return this.getIntProperty(key, 0);
+	}
+
+	/**
+	 * Reads the given property from the configuration and interprets it as an integer. If no value
+	 * exists for this property, the given default value is returned.
+	 *
+	 * @param key
+	 *            The key of the property.
+	 * @param defaultValue
+	 *            The default value for this property
+	 *
+	 * @return An integer with the value of the given property or the default value
+	 */
+	public final int getIntProperty(final String key, final int defaultValue) {
 		final String s = this.getStringProperty(key);
+
+		if (s == null) {
+			return defaultValue;
+		}
+
 		try {
 			return Integer.parseInt(s);
 		} catch (final NumberFormatException ex) {
-			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0"); // ignore ex
-			return 0;
+			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value " + defaultValue); // ignore ex
+			return defaultValue;
 		}
 	}
 
 	/**
+	 * Convenience method to set int-valued properties.
+	 *
+	 * @param key
+	 *            The key to be placed in this configuration
+	 * @param value
+	 *            The value to be stored for the given key
+	 */
+	public void setProperty(final String key, final int value) {
+		this.setProperty(key, String.valueOf(value));
+	}
+
+	/**
 	 * Reads the given property from the configuration and interprets it as a long.
-	 * 
+	 *
 	 * @param key
 	 *            The key of the property.
 	 * @return A long with the value of the given property or null, if the property does not exist.
@@ -119,28 +199,98 @@ public final class Configuration extends Properties {
 	}
 
 	/**
+	 * Reads the given property from the configuration and interprets it as a long. If no value
+	 * exists for this property, the given default value is returned.
+	 *
+	 * @param key
+	 *            The key of the property.
+	 * @param defaultValue
+	 *            The default value for this property
+	 *
+	 * @return A long with the value of the given property or the default value
+	 */
+	public final long getLongProperty(final String key, final long defaultValue) {
+		final String s = this.getStringProperty(key);
+
+		if (s == null) {
+			return defaultValue;
+		}
+
+		try {
+			return Long.parseLong(s);
+		} catch (final NumberFormatException ex) {
+			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value " + defaultValue); // ignore ex
+			return defaultValue;
+		}
+	}
+
+	/**
+	 * Convenience method to set long-valued properties.
+	 *
+	 * @param key
+	 *            The key to be placed in this configuration
+	 * @param value
+	 *            The value to be stored for the given key
+	 */
+	public void setProperty(final String key, final long value) {
+		this.setProperty(key, String.valueOf(value));
+	}
+
+	/**
 	 * Reads the given property from the configuration and interprets it as a double.
-	 * 
+	 *
 	 * @param key
 	 *            The key of the property.
 	 * @return A long with the value of the given property or null, if the property does not exist.
 	 */
 	public final double getDoubleProperty(final String key) {
+		return this.getDoubleProperty(key, 0.0);
+	}
+
+	/**
+	 * Reads the given property from the configuration and interprets it as a double. If no value
+	 * exists for this property, the given default value is returned.
+	 *
+	 * @param key
+	 *            The key of the property.
+	 * @param defaultValue
+	 *            The default value for this property
+	 *
+	 * @return A double with the value of the given property or the default value
+	 */
+	public final double getDoubleProperty(final String key, final double defaultValue) {
 		final String s = this.getStringProperty(key);
+
+		if (s == null) {
+			return defaultValue;
+		}
+
 		try {
 			return Double.parseDouble(s);
 		} catch (final NumberFormatException ex) {
-			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0"); // ignore ex
-			return 0.0;
+			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value " + defaultValue); // ignore ex
+			return defaultValue;
 		}
 	}
 
 	/**
+	 * Convenience method to set double-valued properties.
+	 *
+	 * @param key
+	 *            The key to be placed in this configuration
+	 * @param value
+	 *            The value to be stored for the given key
+	 */
+	public void setProperty(final String key, final double value) {
+		this.setProperty(key, String.valueOf(value));
+	}
+
+	/**
 	 * Reads the given property from the configuration and interprets it as a path.
-	 * 
+	 *
 	 * @param key
 	 *            The key of the property.
-	 * 
+	 *
 	 * @return A string with the value of the given property or null, if the property does not exist.
 	 */
 	public final String getPathProperty(final String key) {
@@ -149,10 +299,10 @@ public final class Configuration extends Properties {
 
 	/**
 	 * Interprets the property (defined by the given key) as an array of values and transforms it into a real array. Property values have to be split by '|'.
-	 * 
+	 *
 	 * @param key
 	 *            The key of the property.
-	 * 
+	 *
 	 * @return A string array containing the single values of the properties.
 	 */
 	public final String[] getStringArrayProperty(final String key) {
@@ -162,26 +312,26 @@ public final class Configuration extends Properties {
 	/**
 	 * Sets a property to the given string array. Note that the values <b>must not</b> contain the
 	 * separator character '|'.
-	 * 
+	 *
 	 * @param key
 	 *            The key of the property to change
 	 * @param value
 	 *            The array to set
 	 */
-	public final void setStringArrayProperty(final String key, final String[] value) {
+	public void setStringArrayProperty(final String key, final String[] value) {
 		this.setProperty(key, Configuration.toProperty(value));
 	}
 
 	/**
 	 * Interprets the property (defined by the given key) as an array of values and transforms it into a real array. Property values have to be split by 'split'.
-	 * 
+	 *
 	 * @param split
 	 *            a regular expression
 	 * @param key
 	 *            The key of the property.
-	 * 
+	 *
 	 * @return A string array containing the single values of the properties.
-	 * 
+	 *
 	 * @see #toProperty(Object[])
 	 */
 	public final String[] getStringArrayProperty(final String key, final String split) {
@@ -195,12 +345,12 @@ public final class Configuration extends Properties {
 
 	/**
 	 * Converts the Object[] to a String split by '|'.
-	 * 
+	 *
 	 * @param values
 	 *            The values which will be transformed into a string.
-	 * 
+	 *
 	 * @return A string representation of the given values array.
-	 * 
+	 *
 	 * @see #getStringArrayProperty(String)
 	 * @see #getStringArrayProperty(String, String)
 	 */
@@ -219,7 +369,7 @@ public final class Configuration extends Properties {
 	 * Based upon Guava 14.0.1 (Chris Nokleberg, Colin Decker). Guava is licensed under "The Apache Software License, Version 2.0".<br>
 	 * </br>
 	 * Simplifies a given file system path.
-	 * 
+	 *
 	 * @param pathname
 	 *            The path to be simplified.
 	 * @return A simplified version of the given path.
@@ -290,10 +440,10 @@ public final class Configuration extends Properties {
 
 	/**
 	 * Flattens the Properties hierarchies and returns a Configuration object containing only keys starting with the prefix.
-	 * 
+	 *
 	 * @param prefix
 	 *            The prefix to be used during the flattening.
-	 * 
+	 *
 	 * @return A new configuration object with a flattened properties hierarchy.
 	 */
 	public final Configuration getPropertiesStartingWith(final String prefix) {
@@ -309,10 +459,10 @@ public final class Configuration extends Properties {
 
 	/**
 	 * Flattens the Properties hierarchies and returns a new Configuration object.
-	 * 
+	 *
 	 * @param defaultConfiguration
 	 *            The configuration which will be used as a base.
-	 * 
+	 *
 	 * @return A new configuration object with a flattened properties hierarchy.
 	 */
 	public final Configuration flatten(final Configuration defaultConfiguration) {
@@ -326,7 +476,7 @@ public final class Configuration extends Properties {
 
 	/**
 	 * Flattens the Properties hierarchies and returns a new Configuration object.
-	 * 
+	 *
 	 * @return A new configuration object with a flattened properties hierarchy.
 	 */
 	public final Configuration flatten() {
@@ -349,11 +499,11 @@ public final class Configuration extends Properties {
 	/**
 	 * You should know what you do if you use this method!
 	 * Currently it is used for a (dirty) hack to add default configurations to Writers or AnalysisPlugins.
-	 * 
+	 *
 	 * @param defaultConfiguration
 	 *            The default configuration for this configuration object.
 	 */
-	public final void setDefaultConfiguration(final Configuration defaultConfiguration) {
+	public void setDefaultConfiguration(final Configuration defaultConfiguration) {
 		Configuration conf = this;
 		while ((conf.defaults != null) && (conf.defaults instanceof Configuration)) {
 			conf = (Configuration) conf.defaults;
@@ -370,14 +520,14 @@ public final class Configuration extends Properties {
 	/**
 	 * Puts a given key value pair into the container. This method should never be used directly!
 	 * Use {@link #setProperty(String, String)} instead!
-	 * 
+	 *
 	 * @param key
 	 *            The key which will be used to store the given value.
 	 * @param value
 	 *            The value to store.
-	 * 
+	 *
 	 * @return The old object which was stored under the given key or null if there wasn't a value before.
-	 * 
+	 *
 	 * @deprecated This method will not be removed (as this is for technical reasons not possible), but should only be used within this class. Don't call this method
 	 *             directly.
 	 */
@@ -390,12 +540,12 @@ public final class Configuration extends Properties {
 	/**
 	 * Searches for a given key. This method should never be used directly!
 	 * Use {@link #getStringProperty(String)} instead!
-	 * 
+	 *
 	 * @param key
 	 *            The key for the value in question.
-	 * 
+	 *
 	 * @return The value for the specified key if available, null otherwise.
-	 * 
+	 *
 	 * @deprecated This method will not be removed (as this is for technical reasons not possible), but should only be used within this class. Don't call this method
 	 *             directly.
 	 */
@@ -408,12 +558,12 @@ public final class Configuration extends Properties {
 	/**
 	 * Searches for a given property key. This method should never be used directly!
 	 * Use {@link #getStringProperty(String)} instead!
-	 * 
+	 *
 	 * @param key
 	 *            The key for the property in question.
-	 * 
+	 *
 	 * @return The property for the specified key if available, null otherwise.
-	 * 
+	 *
 	 * @deprecated This method will not be removed (as this is for technical reasons not possible), but should only be used within this class. Don't call this method
 	 *             directly.
 	 */
@@ -425,14 +575,14 @@ public final class Configuration extends Properties {
 
 	/**
 	 * Searches for a given property key. This method should never be used directly!
-	 * 
+	 *
 	 * @param key
 	 *            The key for the property in question.
 	 * @param defaultValue
 	 *            The default value to be returned.
-	 * 
+	 *
 	 * @return The property for the specified key if available, the given default value otherwise.
-	 * 
+	 *
 	 * @deprecated This method will not be removed (as this is for technical reasons not possible), but should only be used within this class. Don't call this method
 	 *             directly.
 	 */

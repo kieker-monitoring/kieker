@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,31 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.flow.trace.operation.object;
 
-import java.nio.ByteBuffer;
-
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Florian Fittkau
- * 
+ *
  * @since 1.10
  */
 public final class BeforeOperationObjectInterfaceEventFactory implements IRecordFactory<BeforeOperationObjectInterfaceEvent> {
-	
+
 	@Override
-	public BeforeOperationObjectInterfaceEvent create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new BeforeOperationObjectInterfaceEvent(buffer, stringRegistry);
+	public BeforeOperationObjectInterfaceEvent create(final IValueDeserializer deserializer) {
+		return new BeforeOperationObjectInterfaceEvent(deserializer);
 	}
-	
+
 	@Override
 	public BeforeOperationObjectInterfaceEvent create(final Object[] values) {
 		return new BeforeOperationObjectInterfaceEvent(values);
 	}
-	
+
+	@Override
 	public int getRecordSizeInBytes() {
 		return BeforeOperationObjectInterfaceEvent.SIZE;
 	}

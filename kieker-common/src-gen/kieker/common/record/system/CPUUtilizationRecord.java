@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,39 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	private static final long serialVersionUID = -7851990890838902217L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // CPUUtilizationRecord.timestamp
-			 + TYPE_SIZE_STRING // CPUUtilizationRecord.hostname
-			 + TYPE_SIZE_STRING // CPUUtilizationRecord.cpuID
-			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.user
-			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.system
-			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.wait
-			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.nice
-			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.irq
-			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.totalUtilization
-			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.idle
+			+ TYPE_SIZE_STRING // CPUUtilizationRecord.hostname
+			+ TYPE_SIZE_STRING // CPUUtilizationRecord.cpuID
+			+ TYPE_SIZE_DOUBLE // CPUUtilizationRecord.user
+			+ TYPE_SIZE_DOUBLE // CPUUtilizationRecord.system
+			+ TYPE_SIZE_DOUBLE // CPUUtilizationRecord.wait
+			+ TYPE_SIZE_DOUBLE // CPUUtilizationRecord.nice
+			+ TYPE_SIZE_DOUBLE // CPUUtilizationRecord.irq
+			+ TYPE_SIZE_DOUBLE // CPUUtilizationRecord.totalUtilization
+			+ TYPE_SIZE_DOUBLE // CPUUtilizationRecord.idle
 	;
-	private static final long serialVersionUID = -7851990890838902217L;
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // CPUUtilizationRecord.timestamp
 		String.class, // CPUUtilizationRecord.hostname
@@ -59,8 +58,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		double.class, // CPUUtilizationRecord.idle
 	};
 	
-	/* user-defined constants */
-	/* default constants */
+	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String CPU_ID = "";
@@ -71,21 +69,36 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	public static final double IRQ = 0.0;
 	public static final double TOTAL_UTILIZATION = 0.0;
 	public static final double IDLE = 0.0;
-	/* property declarations */
-	private final long timestamp;
-	private final String hostname;
-	private final String cpuID;
-	private final double user;
-	private final double system;
-	private final double wait;
-	private final double nice;
-	private final double irq;
-	private final double totalUtilization;
-	private final double idle;
-
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"cpuID",
+		"user",
+		"system",
+		"wait",
+		"nice",
+		"irq",
+		"totalUtilization",
+		"idle",
+	};
+	
+	/** property declarations. */
+	private long timestamp;
+	private String hostname;
+	private String cpuID;
+	private double user;
+	private double system;
+	private double wait;
+	private double nice;
+	private double irq;
+	private double totalUtilization;
+	private double idle;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param hostname
@@ -107,10 +120,11 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 * @param idle
 	 *            idle
 	 */
-	public CPUUtilizationRecord(final long timestamp, final String hostname, final String cpuID, final double user, final double system, final double wait, final double nice, final double irq, final double totalUtilization, final double idle) {
+	public CPUUtilizationRecord(final long timestamp, final String hostname, final String cpuID, final double user, final double system, final double wait,
+			final double nice, final double irq, final double totalUtilization, final double idle) {
 		this.timestamp = timestamp;
-		this.hostname = hostname == null?HOSTNAME:hostname;
-		this.cpuID = cpuID == null?CPU_ID:cpuID;
+		this.hostname = hostname == null ? HOSTNAME : hostname;
+		this.cpuID = cpuID == null ? CPU_ID : cpuID;
 		this.user = user;
 		this.system = system;
 		this.wait = wait;
@@ -123,7 +137,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -140,10 +154,10 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		this.totalUtilization = (Double) values[8];
 		this.idle = (Double) values[9];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -165,26 +179,26 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
+	 * @param deserializer
+	 *            The deserializer to use
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public CPUUtilizationRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.cpuID = stringRegistry.get(buffer.getInt());
-		this.user = buffer.getDouble();
-		this.system = buffer.getDouble();
-		this.wait = buffer.getDouble();
-		this.nice = buffer.getDouble();
-		this.irq = buffer.getDouble();
-		this.totalUtilization = buffer.getDouble();
-		this.idle = buffer.getDouble();
+	public CPUUtilizationRecord(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		this.timestamp = deserializer.getLong();
+		this.hostname = deserializer.getString();
+		this.cpuID = deserializer.getString();
+		this.user = deserializer.getDouble();
+		this.system = deserializer.getDouble();
+		this.wait = deserializer.getDouble();
+		this.nice = deserializer.getDouble();
+		this.irq = deserializer.getDouble();
+		this.totalUtilization = deserializer.getDouble();
+		this.idle = deserializer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -208,7 +222,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getCpuID());
 	}
@@ -217,17 +231,17 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(stringRegistry.get(this.getCpuID()));
-		buffer.putDouble(this.getUser());
-		buffer.putDouble(this.getSystem());
-		buffer.putDouble(this.getWait());
-		buffer.putDouble(this.getNice());
-		buffer.putDouble(this.getIrq());
-		buffer.putDouble(this.getTotalUtilization());
-		buffer.putDouble(this.getIdle());
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp());
+		serializer.putString(this.getHostname());
+		serializer.putString(this.getCpuID());
+		serializer.putDouble(this.getUser());
+		serializer.putDouble(this.getSystem());
+		serializer.putDouble(this.getWait());
+		serializer.putDouble(this.getNice());
+		serializer.putDouble(this.getIrq());
+		serializer.putDouble(this.getTotalUtilization());
+		serializer.putDouble(this.getIdle());
 	}
 
 	/**
@@ -242,12 +256,21 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 * {@inheritDoc}
 	 */
 	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -258,36 +281,53 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
-		
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+
 		final CPUUtilizationRecord castedRecord = (CPUUtilizationRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getCpuID().equals(castedRecord.getCpuID())) return false;
-		if (isNotEqual(this.getUser(), castedRecord.getUser())) return false;
-		if (isNotEqual(this.getSystem(), castedRecord.getSystem())) return false;
-		if (isNotEqual(this.getWait(), castedRecord.getWait())) return false;
-		if (isNotEqual(this.getNice(), castedRecord.getNice())) return false;
-		if (isNotEqual(this.getIrq(), castedRecord.getIrq())) return false;
-		if (isNotEqual(this.getTotalUtilization(), castedRecord.getTotalUtilization())) return false;
-		if (isNotEqual(this.getIdle(), castedRecord.getIdle())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getCpuID().equals(castedRecord.getCpuID())) {
+			return false;
+		}
+		if (AbstractMonitoringRecord.isNotEqual(this.getUser(), castedRecord.getUser())) {
+			return false;
+		}
+		if (AbstractMonitoringRecord.isNotEqual(this.getSystem(), castedRecord.getSystem())) {
+			return false;
+		}
+		if (AbstractMonitoringRecord.isNotEqual(this.getWait(), castedRecord.getWait())) {
+			return false;
+		}
+		if (AbstractMonitoringRecord.isNotEqual(this.getNice(), castedRecord.getNice())) {
+			return false;
+		}
+		if (AbstractMonitoringRecord.isNotEqual(this.getIrq(), castedRecord.getIrq())) {
+			return false;
+		}
+		if (AbstractMonitoringRecord.isNotEqual(this.getTotalUtilization(), castedRecord.getTotalUtilization())) {
+			return false;
+		}
+		if (AbstractMonitoringRecord.isNotEqual(this.getIdle(), castedRecord.getIdle())) {
+			return false;
+		}
 		return true;
 	}
 
@@ -295,40 +335,80 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		return this.timestamp;
 	}
 	
+	public final void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+	
 	public final String getHostname() {
 		return this.hostname;
+	}
+	
+	public final void setHostname(String hostname) {
+		this.hostname = hostname;
 	}
 	
 	public final String getCpuID() {
 		return this.cpuID;
 	}
 	
+	public final void setCpuID(String cpuID) {
+		this.cpuID = cpuID;
+	}
+	
 	public final double getUser() {
 		return this.user;
+	}
+	
+	public final void setUser(double user) {
+		this.user = user;
 	}
 	
 	public final double getSystem() {
 		return this.system;
 	}
 	
+	public final void setSystem(double system) {
+		this.system = system;
+	}
+	
 	public final double getWait() {
 		return this.wait;
+	}
+	
+	public final void setWait(double wait) {
+		this.wait = wait;
 	}
 	
 	public final double getNice() {
 		return this.nice;
 	}
 	
+	public final void setNice(double nice) {
+		this.nice = nice;
+	}
+	
 	public final double getIrq() {
 		return this.irq;
+	}
+	
+	public final void setIrq(double irq) {
+		this.irq = irq;
 	}
 	
 	public final double getTotalUtilization() {
 		return this.totalUtilization;
 	}
 	
+	public final void setTotalUtilization(double totalUtilization) {
+		this.totalUtilization = totalUtilization;
+	}
+	
 	public final double getIdle() {
 		return this.idle;
 	}
 	
+	public final void setIdle(double idle) {
+		this.idle = idle;
+	}
+
 }

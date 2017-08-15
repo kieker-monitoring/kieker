@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,19 @@ package kieker.test.monitoring.junit.probe.adaptiveMonitoring.cxf;
 
 import java.util.List;
 
+import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
@@ -46,9 +46,9 @@ import kieker.test.monitoring.junit.probe.cxf.executions.bookstore.IBookstore;
 import kieker.test.monitoring.util.NamedListWriter;
 
 /**
- * 
+ *
  * @author Bjoern Weissenfels
- * 
+ *
  * @since 1.8
  */
 public class TestCXFClientServerInterceptors extends AbstractKiekerTest {
@@ -61,19 +61,16 @@ public class TestCXFClientServerInterceptors extends AbstractKiekerTest {
 	/** This constant is used as the hostname of the client. */
 	protected static final String CLIENT_HOSTNAME = "client";
 
-	private static final Log LOG = LogFactory.getLog(TestCXFClientServerInterceptors.class);
+	private static final String SERVICE_ADDRESS = "http://localhost:9093/bookstore";
+	private static final int TIMEOUT_IN_MS = 1000;
 
-	private volatile String serviceAddress = "http://localhost:9093/bookstore";
+	private List<IMonitoringRecord> recordListFilledByListWriter;
 
-	private volatile String listName;
-	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
+	private MonitoringController clientMonitoringController;
+	private MonitoringController serverMonitoringController;
 
-	private final JaxWsServerFactoryBean srvFactory = new JaxWsServerFactoryBean();
-
-	private volatile IMonitoringController clientMonitoringController;
-	private volatile IMonitoringController serverMonitoringController;
-
-	private volatile IBookstore client;
+	private Server server;
+	private IBookstore client;
 
 	/**
 	 * Default constructor.
@@ -84,83 +81,95 @@ public class TestCXFClientServerInterceptors extends AbstractKiekerTest {
 
 	@Before
 	public void prepare() throws Exception {
-		this.listName = TestCXFClientServerInterceptors.class.getName();
-		this.recordListFilledByListWriter = NamedListWriter.createNamedList(this.listName);
+		final String listName = TestCXFClientServerInterceptors.class.getName();
+		this.recordListFilledByListWriter = NamedListWriter.createNamedList(listName);
 
 		this.unsetKiekerThreadLocalData();
-		this.clientMonitoringController = this.createMonitoringController(CLIENT_HOSTNAME);
-		this.serverMonitoringController = this.createMonitoringController(SERVER_HOSTNAME);
-		this.startServer();
-		this.createClient();
+		this.clientMonitoringController = this.createMonitoringController(CLIENT_HOSTNAME, listName);
+		this.serverMonitoringController = this.createMonitoringController(SERVER_HOSTNAME, listName);
+		this.server = this.startServer();
+		this.client = this.createClient();
 	}
 
-	private IMonitoringController createMonitoringController(final String hostname) {
+	private MonitoringController createMonitoringController(final String hostname, final String listName) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
 		config.setProperty(ConfigurationFactory.METADATA, "false");
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
-		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
+		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, listName);
 		config.setProperty(ConfigurationFactory.HOST_NAME, hostname);
 		return MonitoringController.createInstance(config);
 	}
 
-	private void startServer() {
-		LOG.info("XX: " + this.serviceAddress);
-
-		final BookstoreImpl implementor = new BookstoreImpl();
-		this.srvFactory.setServiceClass(IBookstore.class);
-		this.srvFactory.setAddress(this.serviceAddress);
-		this.srvFactory.setServiceBean(implementor);
+	private Server startServer() {
+		final JaxWsServerFactoryBean srvFactory = new JaxWsServerFactoryBean();
+		srvFactory.setServiceClass(IBookstore.class);
+		srvFactory.setAddress(TestCXFClientServerInterceptors.SERVICE_ADDRESS);
+		srvFactory.setServiceBean(new BookstoreImpl());
 
 		// On the server-side, we only intercept incoming requests and outgoing responses.
-		this.srvFactory.getInInterceptors().add(new OperationExecutionSOAPRequestInInterceptor(this.serverMonitoringController));
-		this.srvFactory.getOutInterceptors().add(new OperationExecutionSOAPResponseOutInterceptor(this.serverMonitoringController));
-		this.srvFactory.create();
+		srvFactory.getInInterceptors().add(new OperationExecutionSOAPRequestInInterceptor(this.serverMonitoringController));
+		srvFactory.getOutInterceptors().add(new OperationExecutionSOAPResponseOutInterceptor(this.serverMonitoringController));
+		return srvFactory.create();
 	}
 
-	private void createClient() {
+	private IBookstore createClient() {
 		final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
 		// On the client-side, we only intercept outgoing requests and incoming responses.
 		factory.getOutInterceptors().add(new OperationExecutionSOAPRequestOutInterceptor(this.clientMonitoringController));
 		factory.getInInterceptors().add(new OperationExecutionSOAPResponseInInterceptor(this.clientMonitoringController));
 
 		factory.setServiceClass(IBookstore.class);
-		factory.setAddress(this.serviceAddress);
-		this.client = (IBookstore) factory.create();
+		factory.setAddress(TestCXFClientServerInterceptors.SERVICE_ADDRESS);
+		return factory.create(IBookstore.class);
 	}
 
 	@Test
 	public final void testIt() throws InterruptedException {
 		final String retVal = this.client.searchBook("any"); // produces a client and a server side record
 		Assert.assertEquals("Unexpected return value", "any", retVal);
-		Assert.assertEquals("Unexpected return value", 2, this.recordListFilledByListWriter.size());
+		NamedListWriter.awaitListSize(this.recordListFilledByListWriter, 2, TIMEOUT_IN_MS);
+		Assert.assertThat(this.recordListFilledByListWriter.get(0), CoreMatchers.is(CoreMatchers.instanceOf(OperationExecutionRecord.class)));
+		Assert.assertThat(this.recordListFilledByListWriter.get(1), CoreMatchers.is(CoreMatchers.instanceOf(OperationExecutionRecord.class)));
 
 		final String clientPattern = "public void "
 				+ "kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseInInterceptor.handleMessage(org.apache.cxf.message.Message)";
 		final String serverPattern = "public void "
 				+ "kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseOutInterceptor.handleMessage(org.apache.cxf.binding.soap.SoapMessage)";
 
-		this.clientMonitoringController.deactivateProbe(clientPattern);
-		this.client.searchBook("any"); // only the server side record should be monitored
-		Assert.assertEquals("Unexpected return value", 3, this.recordListFilledByListWriter.size());
+		MonitoringController monCtrl;
 
-		this.serverMonitoringController.deactivateProbe(serverPattern);
+		monCtrl = this.clientMonitoringController;
+		monCtrl.deactivateProbe(clientPattern);
+		this.client.searchBook("any"); // only the server side monitoring is active
+		NamedListWriter.awaitListSize(this.recordListFilledByListWriter, 3, TIMEOUT_IN_MS);
+		Assert.assertThat(this.recordListFilledByListWriter.get(2), CoreMatchers.is(CoreMatchers.instanceOf(OperationExecutionRecord.class)));
+
+		monCtrl = this.serverMonitoringController;
+		monCtrl.deactivateProbe(serverPattern);
 		this.client.searchBook("any"); // nothing should be monitored
-		Assert.assertEquals("Unexpected return value", 3, this.recordListFilledByListWriter.size());
+		NamedListWriter.awaitListSize(this.recordListFilledByListWriter, 3, TIMEOUT_IN_MS);
 
-		this.serverMonitoringController.activateProbe("*"); // this should also activate monitoring
-		this.client.searchBook("any"); // only the server side record should be monitored
-		Assert.assertEquals("Unexpected return value", 4, this.recordListFilledByListWriter.size());
+		monCtrl = this.serverMonitoringController;
+		Assert.assertThat(monCtrl.activateProbe("*"), CoreMatchers.is(true));
+		this.client.searchBook("any"); // only the server side monitoring is active
+		NamedListWriter.awaitListSize(this.recordListFilledByListWriter, 4, TIMEOUT_IN_MS);
+		Assert.assertThat(this.recordListFilledByListWriter.get(3), CoreMatchers.is(CoreMatchers.instanceOf(OperationExecutionRecord.class)));
 
-		this.clientMonitoringController.activateProbe(clientPattern);
-		this.client.searchBook("any");
-		Assert.assertEquals("Unexpected return value", 6, this.recordListFilledByListWriter.size());
+		monCtrl = this.clientMonitoringController;
+		Assert.assertThat(monCtrl.activateProbe(clientPattern), CoreMatchers.is(true));
+		this.client.searchBook("any"); // both the server side and the client side monitoring is active
+		NamedListWriter.awaitListSize(this.recordListFilledByListWriter, 6, TIMEOUT_IN_MS);
+		Assert.assertThat(this.recordListFilledByListWriter.get(4), CoreMatchers.is(CoreMatchers.instanceOf(OperationExecutionRecord.class)));
+		Assert.assertThat(this.recordListFilledByListWriter.get(5), CoreMatchers.is(CoreMatchers.instanceOf(OperationExecutionRecord.class)));
 	}
 
 	@After
 	public void cleanup() {
 		this.unsetKiekerThreadLocalData();
-		this.srvFactory.destroy();
+		this.server.destroy();
+		this.clientMonitoringController.terminateMonitoring();
+		this.serverMonitoringController.terminateMonitoring();
 	}
 
 	private void unsetKiekerThreadLocalData() {

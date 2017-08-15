@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,12 +80,12 @@ public class ForecastObjectives {
 	 * time series. The arithmetic mean strategy can
 	 * have a forecast accuracy below 1 and therefore
 	 * be better than a solely reactive approach
-	 * using implicitly the naïve strategy.
+	 * using implicitly the naive strategy.
 	 * This is only true in cases of nearly constant
 	 * base level of the arrivals rates.
 	 * These strategies should be executed as
 	 * frequently as possible every new time series point.
-	 * 2 = medium - CubicSmoothingSplines, ARIMA101, SimpleExponential Smoothing, Croston’s method for intermittent demands:
+	 * 2 = medium - CubicSmoothingSplines, ARIMA101, SimpleExponential Smoothing, Crostons method for intermittent demands:
 	 * The strengths of these strategies are the
 	 * low computational efforts below 100ms and their
 	 * ability to extrapolate the trend component.

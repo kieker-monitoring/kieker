@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,19 +30,11 @@ import kieker.common.configuration.Configuration;
 public final class JMSAnalysisStarter {
 
 	private static final String CONNECTION_FACTORY_TYPE__ACTIVEMQ = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
-	private static final String CONNECTION_FACTORY_TYPE__HORNETQ = "org.jnp.interfaces.NamingContextFactory";
-	private static final String CONNECTION_FACTORY_TYPE__OPENJMS = "org.exolab.jms.jndi.InitialContextFactory";
 
 	/** Default provider URL used by ActiveMQ */
 	private static final String PROVIDER_URL__ACTIVEMQ = "tcp://127.0.0.1:61616/";
-	/** Default provider URL used by HornetQ */
-	private static final String PROVIDER_URL__HORNETQ = "jnp://localhost:1099/";
-	/** Default provider URL used by OpenJMS */
-	private static final String PROVIDER_URL__OPENJMS = "tcp://127.0.0.1:3035/";
 
 	private static final String QUEUE_ACTIVEMQ = "queue1";
-	private static final String QUEUE_HORNETQ = "queue1";
-	private static final String QUEUE_OPENJMS = "queue1";
 
 	private static String connectionFactory;
 	private static String providerUrl;
@@ -104,9 +96,5 @@ public final class JMSAnalysisStarter {
 		System.out.println("Examples:");
 		System.out.println(" - ActiveMQ: " + CONNECTION_FACTORY_TYPE__ACTIVEMQ + " " + PROVIDER_URL__ACTIVEMQ + " "
 				+ QUEUE_ACTIVEMQ);
-		System.out.println(" - HornetQ:  " + CONNECTION_FACTORY_TYPE__HORNETQ + " " + PROVIDER_URL__HORNETQ + " "
-				+ QUEUE_HORNETQ);
-		System.out.println(" - OpenJMS:  " + CONNECTION_FACTORY_TYPE__OPENJMS + " " + PROVIDER_URL__OPENJMS + " "
-				+ QUEUE_OPENJMS);
 	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,34 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
-import kieker.common.record.jvm.AbstractJVMRecord;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
-public class ClassLoadingRecord extends AbstractJVMRecord  {
+public class ClassLoadingRecord extends AbstractJVMRecord {
+	private static final long serialVersionUID = -5955568375346711225L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
-			 + TYPE_SIZE_LONG // ClassLoadingRecord.totalLoadedClassCount
-			 + TYPE_SIZE_INT // ClassLoadingRecord.loadedClassCount
-			 + TYPE_SIZE_LONG // ClassLoadingRecord.unloadedClassCount
+			+ TYPE_SIZE_STRING // AbstractJVMRecord.hostname
+			+ TYPE_SIZE_STRING // AbstractJVMRecord.vmName
+			+ TYPE_SIZE_LONG // ClassLoadingRecord.totalLoadedClassCount
+			+ TYPE_SIZE_INT // ClassLoadingRecord.loadedClassCount
+			+ TYPE_SIZE_LONG // ClassLoadingRecord.unloadedClassCount
 	;
-	private static final long serialVersionUID = -5955568375346711225L;
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp
 		String.class, // AbstractJVMRecord.hostname
@@ -50,16 +48,24 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		long.class, // ClassLoadingRecord.unloadedClassCount
 	};
 	
-	/* user-defined constants */
-	/* default constants */
-	/* property declarations */
-	private final long totalLoadedClassCount;
-	private final int loadedClassCount;
-	private final long unloadedClassCount;
-
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"vmName",
+		"totalLoadedClassCount",
+		"loadedClassCount",
+		"unloadedClassCount",
+	};
+	
+	/** property declarations. */
+	private long totalLoadedClassCount;
+	private int loadedClassCount;
+	private long unloadedClassCount;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            timestamp
 	 * @param hostname
@@ -73,7 +79,8 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	 * @param unloadedClassCount
 	 *            unloadedClassCount
 	 */
-	public ClassLoadingRecord(final long timestamp, final String hostname, final String vmName, final long totalLoadedClassCount, final int loadedClassCount, final long unloadedClassCount) {
+	public ClassLoadingRecord(final long timestamp, final String hostname, final String vmName, final long totalLoadedClassCount, final int loadedClassCount,
+			final long unloadedClassCount) {
 		super(timestamp, hostname, vmName);
 		this.totalLoadedClassCount = totalLoadedClassCount;
 		this.loadedClassCount = loadedClassCount;
@@ -83,7 +90,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -93,10 +100,10 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		this.loadedClassCount = (Integer) values[4];
 		this.unloadedClassCount = (Long) values[5];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -111,20 +118,21 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
+	 *
+	 * @param deserializer
+	 *            The deserializer to use
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public ClassLoadingRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.totalLoadedClassCount = buffer.getLong();
-		this.loadedClassCount = buffer.getInt();
-		this.unloadedClassCount = buffer.getLong();
-	}
+	public ClassLoadingRecord(final IValueDeserializer deserializer) throws BufferUnderflowException {
+		super(deserializer);
 
+		this.totalLoadedClassCount = deserializer.getLong();
+		this.loadedClassCount = deserializer.getInt();
+		this.unloadedClassCount = deserializer.getLong();
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -144,7 +152,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getVmName());
 	}
@@ -153,13 +161,13 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(stringRegistry.get(this.getVmName()));
-		buffer.putLong(this.getTotalLoadedClassCount());
-		buffer.putInt(this.getLoadedClassCount());
-		buffer.putLong(this.getUnloadedClassCount());
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putLong(this.getTimestamp());
+		serializer.putString(this.getHostname());
+		serializer.putString(this.getVmName());
+		serializer.putLong(this.getTotalLoadedClassCount());
+		serializer.putInt(this.getLoadedClassCount());
+		serializer.putLong(this.getUnloadedClassCount());
 	}
 
 	/**
@@ -174,12 +182,21 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -190,32 +207,41 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
-		
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+
 		final ClassLoadingRecord castedRecord = (ClassLoadingRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getVmName().equals(castedRecord.getVmName())) return false;
-		if (this.getTotalLoadedClassCount() != castedRecord.getTotalLoadedClassCount()) return false;
-		if (this.getLoadedClassCount() != castedRecord.getLoadedClassCount()) return false;
-		if (this.getUnloadedClassCount() != castedRecord.getUnloadedClassCount()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getVmName().equals(castedRecord.getVmName())) {
+			return false;
+		}
+		if (this.getTotalLoadedClassCount() != castedRecord.getTotalLoadedClassCount()) {
+			return false;
+		}
+		if (this.getLoadedClassCount() != castedRecord.getLoadedClassCount()) {
+			return false;
+		}
+		if (this.getUnloadedClassCount() != castedRecord.getUnloadedClassCount()) {
+			return false;
+		}
 		return true;
 	}
 
@@ -223,12 +249,24 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		return this.totalLoadedClassCount;
 	}
 	
+	public final void setTotalLoadedClassCount(long totalLoadedClassCount) {
+		this.totalLoadedClassCount = totalLoadedClassCount;
+	}
+	
 	public final int getLoadedClassCount() {
 		return this.loadedClassCount;
+	}
+	
+	public final void setLoadedClassCount(int loadedClassCount) {
+		this.loadedClassCount = loadedClassCount;
 	}
 	
 	public final long getUnloadedClassCount() {
 		return this.unloadedClassCount;
 	}
 	
+	public final void setUnloadedClassCount(long unloadedClassCount) {
+		this.unloadedClassCount = unloadedClassCount;
+	}
+
 }
