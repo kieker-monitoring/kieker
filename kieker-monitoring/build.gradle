@@ -20,10 +20,12 @@ dependencies {
 	compile resolveLibrary('framework-libs/jersey/jersey-client-1.19.jar')
 	compile resolveLibrary('framework-libs/jersey/jersey-apache-client4-1.19.jar')
 	compile resolveLibrary('framework-libs/javax.servlet-*.jar')
-	compile resolveLibrary('framework-libs/spring/spring-context-*.jar')
-	compile resolveLibrary('framework-libs/spring/spring-web-*.jar')
-	compile resolveLibrary('framework-libs/spring/spring-core-*.jar')
 	compile resolveLibrary('framework-libs/spring/aopalliance-*.jar')
+        compile resolveLibrary('framework-libs/spring/spring-beans-*.jar')
+	compile resolveLibrary('framework-libs/spring/spring-context-*.jar')
+	compile resolveLibrary('framework-libs/spring/spring-core-*.jar')
+	compile resolveLibrary('framework-libs/spring/spring-web-*.jar')
+	compile resolveLibrary('framework-libs/spring/spring-webmvc-*.jar')
 
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
