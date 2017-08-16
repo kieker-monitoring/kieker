@@ -43,15 +43,18 @@ import kieker.monitoring.timer.ITimeSource;
  */
 public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 
-    private static final Log LOG = LogFactory.getLog(RestOutInterceptor.class);
+    private static final String SIGNATURE = "kieker.monitoring.probe.spring.flow.RestOutInterceptor.interceptOutgoingRequest()";
 
+    private static final Log LOG = LogFactory.getLog(RestOutInterceptor.class);
     private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
     private static final ITimeSource TIME = CTRLINST.getTimeSource();
     private static final String VMNAME = CTRLINST.getHostname();
     private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
     private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 
-    public static final String SIGNATURE = "public void com.example.intercept.out.RestOutInterceptor.interceptOutgoingRequest()";
+    public RestOutInterceptor() {
+        // default constructor
+    }
 
     @Override
     public ClientHttpResponse intercept(final HttpRequest request, final byte[] body, final ClientHttpRequestExecution execution) throws IOException {
