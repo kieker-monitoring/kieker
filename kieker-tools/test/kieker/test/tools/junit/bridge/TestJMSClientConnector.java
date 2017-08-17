@@ -15,11 +15,12 @@
  ***************************************************************************/
 package kieker.test.tools.junit.bridge;
 
+import org.junit.Test;
+
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.jms.JMSClientConnector;
-import org.junit.Test;
 
 /**
  *
