@@ -126,7 +126,7 @@ public final class ConfigurationFactory implements Keys {
 				is = new FileInputStream(propertiesFn);
 			} catch (final FileNotFoundException ex) {
 				// if not found as absolute path try within the classpath
-				is = ConfigurationFactory.class.getClassLoader().getResourceAsStream(propertiesFn);
+				is = ConfigurationFactory.class.getClass().getResourceAsStream(propertiesFn);
 				if (is == null) {
 					LOG.warn("File '" + propertiesFn + "' not found");
 					return new Configuration(defaultValues);
@@ -161,7 +161,7 @@ public final class ConfigurationFactory implements Keys {
 	 * @return The created Configuration
 	 */
 	private static final Configuration loadConfigurationFromResource(final String propertiesFn, final Configuration defaultValues) {
-		final InputStream is = ConfigurationFactory.class.getClassLoader().getResourceAsStream(propertiesFn);
+		final InputStream is = ConfigurationFactory.class.getClass().getResourceAsStream(propertiesFn);
 		if (is == null) {
 			LOG.warn("File '" + propertiesFn + "' not found in classpath");
 		} else {
