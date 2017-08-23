@@ -6,6 +6,12 @@ node('kieker-slave-docker') {
         checkout scm
     }
 
+    stage ('Credential-Test') {
+        sh "echo combined_${testcredentials}_"
+	sh "echo user_${testcredentials_USER}_"
+	sh "echo pass_${testcredentials_USER_PASSWORD}_"
+    } 
+
     stage ('1-compile logs') {
         sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew -S compileJava compileTestJava"'
     }
