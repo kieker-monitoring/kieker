@@ -8,7 +8,7 @@ node('kieker-slave-docker') {
 
     stage ('Credential-Test') {
         withCredentials([usernamePassword(credentialsId: 'testcredentials', usernameVariable: 'TEST_USERNAME', passwordVariable: 'TEST_PASSWORD')]) {
-	  sh "echo user_${TEST_USER}_"
+	  sh "echo user_${TEST_USERNAME}_"
 	  sh "echo pass_${TEST_PASSWORD}_"
 	}
     } 
