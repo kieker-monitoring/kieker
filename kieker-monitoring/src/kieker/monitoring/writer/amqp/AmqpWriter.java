@@ -190,11 +190,13 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 	}
 
 	private void publishBuffer(final ByteBuffer localBuffer) {
-		localBuffer.flip();
-		final int dataSize = localBuffer.limit();
-		final byte[] data = new byte[dataSize];
+		final int dataSize = localBuffer.position();
+		final byte[] data = new byte[dataSize];		
 		System.arraycopy(localBuffer.array(), localBuffer.arrayOffset(), data, 0, dataSize);
 
+		// Reset the buffer position
+		localBuffer.position(0);
+		
 		try {
 			this.channel.basicPublish(this.exchangeName, this.queueName, null, data);
 		} catch (final IOException e) {
