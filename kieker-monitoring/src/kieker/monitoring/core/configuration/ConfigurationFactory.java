@@ -40,14 +40,16 @@ public final class ConfigurationFactory implements Keys {
 	/**
 	 * Private constructor to avoid instantiation.
 	 */
-	private ConfigurationFactory() {}
+	private ConfigurationFactory() {
+	}
 
 	// factory methods
 
 	/**
 	 * Creates the configuration for the singleton controller instance. Note
-	 * that the {@link Properties} returned by this method are not a
-	 * singleton instance, i.e., each call returns an equal but not same set of {@link Properties}.
+	 * that the {@link Properties} returned by this method are not a singleton
+	 * instance, i.e., each call returns an equal but not same set of
+	 * {@link Properties}.
 	 *
 	 * @return the configuration for the singleton controller
 	 */
@@ -68,14 +70,16 @@ public final class ConfigurationFactory implements Keys {
 			// No JVM property; Trying to find configuration file in classpath
 			configurationFile = Keys.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
 			LOG.info("Loading properties from properties file in classpath: '" + configurationFile + "'");
-			loadConfiguration = ConfigurationFactory.loadConfigurationFromResource(configurationFile, defaultConfiguration);
+			loadConfiguration = ConfigurationFactory.loadConfigurationFromResource(configurationFile,
+					defaultConfiguration);
 		}
 		// 1.JVM-params -> 2.properties file -> 3.default properties file
 		return ConfigurationFactory.getSystemPropertiesStartingWith(Keys.PREFIX, loadConfiguration);
 	}
 
 	/**
-	 * Returns an empty properties map with a fallback on the default configuration.
+	 * Returns an empty properties map with a fallback on the default
+	 * configuration.
 	 *
 	 * @return default configuration
 	 */
@@ -84,9 +88,10 @@ public final class ConfigurationFactory implements Keys {
 	}
 
 	/**
-	 * Creates a new configuration based on the given properties file with fallback on the default values.
-	 * If the file does not exists, a warning is logged and an empty configuration with fallback on
-	 * the default configuration is returned.
+	 * Creates a new configuration based on the given properties file with
+	 * fallback on the default values. If the file does not exists, a warning is
+	 * logged and an empty configuration with fallback on the default
+	 * configuration is returned.
 	 *
 	 * @param configurationFile
 	 *            The file which contains the configuration.
@@ -94,7 +99,8 @@ public final class ConfigurationFactory implements Keys {
 	 * @return The created Configuration
 	 */
 	public static final Configuration createConfigurationFromFile(final String configurationFile) {
-		return ConfigurationFactory.loadConfigurationFromFile(configurationFile, ConfigurationFactory.defaultConfiguration());
+		return ConfigurationFactory.loadConfigurationFromFile(configurationFile,
+				ConfigurationFactory.defaultConfiguration());
 	}
 
 	/**
@@ -107,9 +113,10 @@ public final class ConfigurationFactory implements Keys {
 	}
 
 	/**
-	 * Returns the properties loaded from file propertiesFn with fallback on the default values.
-	 * If the file does not exists, a warning is logged and an empty configuration with fallback on
-	 * the default configuration is returned.
+	 * Returns the properties loaded from file propertiesFn with fallback on the
+	 * default values. If the file does not exists, a warning is logged and an
+	 * empty configuration with fallback on the default configuration is
+	 * returned.
 	 *
 	 * @param propertiesFn
 	 *            The file which contains the properties.
@@ -118,7 +125,8 @@ public final class ConfigurationFactory implements Keys {
 	 *
 	 * @return The created Configuration
 	 */
-	private static final Configuration loadConfigurationFromFile(final String propertiesFn, final Configuration defaultValues) {
+	private static final Configuration loadConfigurationFromFile(final String propertiesFn,
+			final Configuration defaultValues) {
 		final Configuration properties = new Configuration(defaultValues);
 		InputStream is = null; // NOPMD (null)
 		try {
@@ -126,7 +134,7 @@ public final class ConfigurationFactory implements Keys {
 				is = new FileInputStream(propertiesFn);
 			} catch (final FileNotFoundException ex) {
 				// if not found as absolute path try within the classpath
-				is = ConfigurationFactory.class.getClass().getResourceAsStream(propertiesFn);
+				is = loadKiekerPropertiesFileAsStream(propertiesFn);
 				if (is == null) {
 					LOG.warn("File '" + propertiesFn + "' not found");
 					return new Configuration(defaultValues);
@@ -149,9 +157,10 @@ public final class ConfigurationFactory implements Keys {
 	}
 
 	/**
-	 * Returns the properties loaded from the resource name with fallback on the default values.
-	 * If the file does not exists, a warning is logged and an empty configuration with fallback on
-	 * the default configuration is returned.
+	 * Returns the properties loaded from the resource name with fallback on the
+	 * default values. If the file does not exists, a warning is logged and an
+	 * empty configuration with fallback on the default configuration is
+	 * returned.
 	 *
 	 * @param propertiesFn
 	 *            The resource name which contains the properties.
@@ -160,8 +169,9 @@ public final class ConfigurationFactory implements Keys {
 	 *
 	 * @return The created Configuration
 	 */
-	private static final Configuration loadConfigurationFromResource(final String propertiesFn, final Configuration defaultValues) {
-		final InputStream is = ConfigurationFactory.class.getClass().getResourceAsStream(propertiesFn);
+	private static final Configuration loadConfigurationFromResource(final String propertiesFn,
+			final Configuration defaultValues) {
+		final InputStream is = loadKiekerPropertiesFileAsStream(propertiesFn);
 		if (is == null) {
 			LOG.warn("File '" + propertiesFn + "' not found in classpath");
 		} else {
@@ -182,6 +192,14 @@ public final class ConfigurationFactory implements Keys {
 		return new Configuration(defaultValues);
 	}
 
+	private static InputStream loadKiekerPropertiesFileAsStream(String propertiesFileName) {
+		if (!propertiesFileName.startsWith("/")) {
+			// Class.getResourceAsStream(..) requires a "/" at the beginning to load non-class resources
+			propertiesFileName = "/" + propertiesFileName;
+		}
+		return ConfigurationFactory.class.getClass().getResourceAsStream(propertiesFileName);
+	}
+
 	/**
 	 * Returns the system properties starting with the given prefix.
 	 *
@@ -192,7 +210,8 @@ public final class ConfigurationFactory implements Keys {
 	 *
 	 * @return The created Configuration
 	 */
-	private static final Configuration getSystemPropertiesStartingWith(final String prefix, final Configuration defaultValues) {
+	private static final Configuration getSystemPropertiesStartingWith(final String prefix,
+			final Configuration defaultValues) {
 		final Configuration configuration = new Configuration(defaultValues);
 		final Properties properties = System.getProperties();
 		final Enumeration<?> keys = properties.propertyNames();

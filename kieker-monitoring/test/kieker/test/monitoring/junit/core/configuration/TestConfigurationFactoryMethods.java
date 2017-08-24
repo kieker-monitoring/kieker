@@ -156,7 +156,7 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 		// check no config parameters are set
 		Assert.assertNull(System.getProperty(ConfigurationFactory.CUSTOM_PROPERTIES_LOCATION_JVM));
 		Assert.assertNull(System.getProperty(ConfigurationFactory.CONTROLLER_NAME));
-		Assert.assertNull(MonitoringController.class.getClassLoader().getResourceAsStream(ConfigurationFactory.CUSTOM_PROPERTIES_LOCATION_CLASSPATH));
+		Assert.assertNull(MonitoringController.class.getClass().getResourceAsStream("/" + ConfigurationFactory.CUSTOM_PROPERTIES_LOCATION_CLASSPATH));
 		{ // NOCS (Block to check the default singleton configuration)
 			final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
 			Assert.assertEquals("KIEKER-SINGLETON", configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME));
