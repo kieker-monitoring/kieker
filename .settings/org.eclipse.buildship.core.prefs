@@ -1,5 +1,6 @@
 build.commands=org.eclipse.jdt.core.javabuilder
 connection.arguments=
+connection.gradle.distribution=GRADLE_DISTRIBUTION(WRAPPER)
 connection.java.home=null
 connection.jvm.arguments=
 connection.project.dir=
