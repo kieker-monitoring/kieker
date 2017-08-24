@@ -20,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -46,9 +47,8 @@ public final class ConfigurationFactory implements Keys {
 	// factory methods
 
 	/**
-	 * Creates the configuration for the singleton controller instance. Note
-	 * that the {@link Properties} returned by this method are not a singleton
-	 * instance, i.e., each call returns an equal but not same set of
+	 * Creates the configuration for the singleton controller instance. Note that the {@link Properties} returned by
+	 * this method are not a singleton instance, i.e., each call returns an equal but not same set of
 	 * {@link Properties}.
 	 *
 	 * @return the configuration for the singleton controller
@@ -78,8 +78,7 @@ public final class ConfigurationFactory implements Keys {
 	}
 
 	/**
-	 * Returns an empty properties map with a fallback on the default
-	 * configuration.
+	 * Returns an empty properties map with a fallback on the default configuration.
 	 *
 	 * @return default configuration
 	 */
@@ -88,10 +87,9 @@ public final class ConfigurationFactory implements Keys {
 	}
 
 	/**
-	 * Creates a new configuration based on the given properties file with
-	 * fallback on the default values. If the file does not exists, a warning is
-	 * logged and an empty configuration with fallback on the default
-	 * configuration is returned.
+	 * Creates a new configuration based on the given properties file with fallback on the default values. If the file
+	 * does not exists, a warning is logged and an empty configuration with fallback on the default configuration is
+	 * returned.
 	 *
 	 * @param configurationFile
 	 *            The file which contains the configuration.
@@ -113,10 +111,8 @@ public final class ConfigurationFactory implements Keys {
 	}
 
 	/**
-	 * Returns the properties loaded from file propertiesFn with fallback on the
-	 * default values. If the file does not exists, a warning is logged and an
-	 * empty configuration with fallback on the default configuration is
-	 * returned.
+	 * Returns the properties loaded from file propertiesFn with fallback on the default values. If the file does not
+	 * exists, a warning is logged and an empty configuration with fallback on the default configuration is returned.
 	 *
 	 * @param propertiesFn
 	 *            The file which contains the properties.
@@ -134,15 +130,16 @@ public final class ConfigurationFactory implements Keys {
 				is = new FileInputStream(propertiesFn);
 			} catch (final FileNotFoundException ex) {
 				// if not found as absolute path try within the classpath
-				is = loadKiekerPropertiesFileAsStream(propertiesFn);
-				if (is == null) {
+				final URL resourceUrl = loadKiekerPropertiesFile(propertiesFn);
+				if (resourceUrl == null) {
 					LOG.warn("File '" + propertiesFn + "' not found");
 					return new Configuration(defaultValues);
 				}
+				is = resourceUrl.openStream();
 			}
 			properties.load(is);
 			return properties;
-		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
+		} catch (final IOException ex) {
 			LOG.error("Error reading file '" + propertiesFn + "'", ex);
 		} finally {
 			if (is != null) {
@@ -157,10 +154,8 @@ public final class ConfigurationFactory implements Keys {
 	}
 
 	/**
-	 * Returns the properties loaded from the resource name with fallback on the
-	 * default values. If the file does not exists, a warning is logged and an
-	 * empty configuration with fallback on the default configuration is
-	 * returned.
+	 * Returns the properties loaded from the resource name with fallback on the default values. If the file does not
+	 * exists, a warning is logged and an empty configuration with fallback on the default configuration is returned.
 	 *
 	 * @param propertiesFn
 	 *            The resource name which contains the properties.
@@ -171,33 +166,33 @@ public final class ConfigurationFactory implements Keys {
 	 */
 	private static final Configuration loadConfigurationFromResource(final String propertiesFn,
 			final Configuration defaultValues) {
-		final InputStream is = loadKiekerPropertiesFileAsStream(propertiesFn);
-		if (is == null) {
+		final URL resourceUrl = loadKiekerPropertiesFile(propertiesFn);
+		if (resourceUrl == null) {
 			LOG.warn("File '" + propertiesFn + "' not found in classpath");
 		} else {
-			try {
+			try (final InputStream is = resourceUrl.openStream()) {
 				final Configuration properties = new Configuration(defaultValues);
 				properties.load(is);
 				return properties;
-			} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
+			} catch (final IOException ex) {
 				LOG.error("Error reading file '" + propertiesFn + "'", ex);
-			} finally {
-				try {
-					is.close();
-				} catch (final IOException ex) {
-					LOG.warn("Failed to close RessourceInputStream", ex);
-				}
 			}
 		}
 		return new Configuration(defaultValues);
 	}
 
-	private static InputStream loadKiekerPropertiesFileAsStream(String propertiesFileName) {
-		if (!propertiesFileName.startsWith("/")) {
-			// Class.getResourceAsStream(..) requires a "/" at the beginning to load non-class resources
-			propertiesFileName = "/" + propertiesFileName;
+	/**
+	 * @param propertiesFileName
+	 *            the relative file name within the class path
+	 * @return A {@link java.net.URL} object or null if no resource with this name is found
+	 */
+	private static URL loadKiekerPropertiesFile(final String propertiesFileName) {
+		String resourceName = propertiesFileName;
+		if (!resourceName.startsWith("/")) {
+			// Class.getResource(..) requires a "/" at the beginning to load non-class resources
+			resourceName = "/" + resourceName;
 		}
-		return ConfigurationFactory.class.getClass().getResourceAsStream(propertiesFileName);
+		return ConfigurationFactory.class.getResource(resourceName);
 	}
 
 	/**
