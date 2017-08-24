@@ -95,6 +95,9 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	/** The name of the configuration property for the writer task interval. */
 	public static final String CONFIG_TASK_RUN_INTERVAL = PREFIX + "taskRunInterval"; // NOCS (afterPREFIX)
 
+	/** The time unit for the writer task interval. */
+	private static final TimeUnit TASK_RUN_INTERVAL_TIME_UNIT = TimeUnit.MILLISECONDS;
+	
 	private static final Log LOG = LogFactory.getLog(ChunkingCollector.class);
 
 	private final BlockingQueue<IMonitoringRecord> recordQueue;
@@ -130,7 +133,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 
 	@Override
 	public void onStarting() {
-		this.scheduledExecutor.scheduleAtFixedRate(this.writerTask, 0, this.taskRunInterval, TimeUnit.MILLISECONDS);		
+		this.scheduledExecutor.scheduleAtFixedRate(this.writerTask, 0, this.taskRunInterval, TASK_RUN_INTERVAL_TIME_UNIT);		
 		this.writerTask.initialize();
 	}
 
@@ -138,6 +141,14 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	public void onTerminating() {
 		// Terminate scheduled execution and write remaining chunks, if any
 		this.scheduledExecutor.shutdown();
+		
+		try {
+			// Wait for the executor to shut down
+			this.scheduledExecutor.awaitTermination(Long.MAX_VALUE, TASK_RUN_INTERVAL_TIME_UNIT);
+		} catch(final InterruptedException e) {
+			LOG.warn("Awaiting termination of the scheduled executor was interrupted.", e);
+		}
+		
 		this.writerTask.terminate();
 	}
 
