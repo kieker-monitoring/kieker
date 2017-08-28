@@ -3,7 +3,7 @@
 <aspectj>
 	<weaver options="-showWeaveInfo"> <!-- options="-verbose -showWeaveInfo -Xjoinpoints:synchronization" -->
 		<include within="kieker.examples..*" />
-		<include within="aspects.*" />
+		<include within="kieker.monitoring.probe.aspectj.beforeafter.onlycallee..*" />
 		<!-- <include within="*"/> -->
 
 		<exclude within="org.apache.commons.logging..*" />
@@ -16,9 +16,9 @@
 
 	<aspects>
 		<!-- <concrete-aspect name="MyTargetedAspect" extends="kieker.monitoring.probe.aspectj.beforeafter.onlycallee.AbstractAspect"> -->
-		<concrete-aspect name="aspects.MyTargetAspect"
-			extends="kieker.monitoring.probe.aspectj.beforeafter.onlycallee.AbstractAspectWithoutTraceRegistry">
-			<!-- <concrete-aspect name="MyTargetedAspect" extends="kieker.monitoring.probe.aspectj.flow.operationExecution.AbstractAspect"> -->
+		<concrete-aspect name="kieker.monitoring.probe.aspectj.beforeafter.onlycallee.MyTargetAspect"
+			extends="kieker.monitoring.probe.aspectj.flow.operationExecution.AbstractAspect">
+<!-- 			extends="kieker.monitoring.probe.aspectj.beforeafter.onlycallee.AbstractAspectWithoutTraceRegistry"> -->
 <!-- 			<pointcut name="monitoredOperation" expression="execution(* *.*(..))" /> -->
 <!-- 			<pointcut name="monitoredOperation" expression="call(* *.*(..))" /> -->
 			<pointcut name="noFieldAccess" expression="!set(* *) &amp;&amp; !get(* *)" />

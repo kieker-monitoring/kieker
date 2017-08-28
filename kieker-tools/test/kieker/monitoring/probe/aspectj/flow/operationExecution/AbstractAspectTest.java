@@ -63,7 +63,7 @@ public class AbstractAspectTest { // NOCS (abstract class)
 		final List<IMonitoringRecord> records = aspectjAnalysis.runAnalysis(workingDirectory);
 
 		// -1 because AnalysisController absorbs the KiekerMetadataRecord
-		assertThat(records, hasSize(19 - 1));
+		assertThat(records, hasSize(16 - 1));
 	}
 
 	private static class AspectjMonitoringToAsciiFileLog {
