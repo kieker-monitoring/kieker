@@ -1,6 +1,7 @@
 package kieker.analysisteetime.config;
 
 import java.io.File;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
 import kieker.analysisteetime.OperationCallExtractorStage;
@@ -32,7 +33,9 @@ import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.export.dot.DotFileWriterStage;
 import kieker.analysisteetime.util.graph.export.graphml.GraphMLFileWriterStage;
 import kieker.analysisteetime.util.stage.trigger.TriggerOnTerminationStage;
+
 import teetime.framework.Configuration;
+import teetime.framework.Execution;
 import teetime.stage.basic.distributor.Distributor;
 import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
 
@@ -91,5 +94,14 @@ public class DependencyGraphConfiguration extends Configuration {
 		super.connectPorts(dependencyGraphCreator.getOutputPort(), distributor.getInputPort());
 		super.connectPorts(distributor.getNewOutputPort(), dotFileWriterStage.getInputPort());
 		super.connectPorts(distributor.getNewOutputPort(), graphMLFileWriterStage.getInputPort());
+	}
+	
+	public static void main(String[] args) {
+		final File importDirectory = new File(args[0]);
+		final File exportDirectory = new File(args[1]);
+
+		DependencyGraphConfiguration configuration = new DependencyGraphConfiguration(importDirectory, ChronoUnit.NANOS, exportDirectory);
+		Execution<DependencyGraphConfiguration> execution = new Execution<>(configuration);
+		execution.executeBlocking();
 	}
 }

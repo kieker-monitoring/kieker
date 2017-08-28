@@ -600,6 +600,9 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
     from fileTree("lib/jctools-core-${libJctoolsVersion}.jar").collect { zipTree(it) }
     from file("lib/jctools-core-${libJctoolsVersion}.LICENSE")
 
+    from fileTree("lib/teetime-3.0-20161128.194027-256-jar-with-dependencies.jar").collect { zipTree(it) }
+    from file("lib/teetime-3.0-20161128.194027-256-jar-with-dependencies.LICENSE")
+
     manifest = project.manifest {
         from sharedManifest
     }
