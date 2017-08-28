@@ -88,7 +88,7 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 	
 	@Override
 	public String[] getValueNames() {
-		return new String[] { "timestamp", "traceId", "orderIndex" } ;
+		return new String[] { "timestamp", "traceId", "orderIndex" };
 	}
 
 	@Override
