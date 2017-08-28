@@ -89,7 +89,7 @@ public class AbstractAspectTest { // NOCS (abstract class)
 
 			this.arguments.add("-javaagent:" + KIEKER_ASPECTJ_FILE_NAME);
 			this.arguments.add("-cp");
-			this.arguments.add("." + File.pathSeparator + this.appJarFilePath);
+			this.arguments.add("." + File.pathSeparator + this.appJarFilePath); // NOPMD
 			this.arguments.add(this.appMainClassName);
 		}
 
