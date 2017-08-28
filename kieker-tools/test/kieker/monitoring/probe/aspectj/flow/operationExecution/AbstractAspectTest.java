@@ -80,8 +80,8 @@ public class AbstractAspectTest { // NOCS (abstract class)
 		// gradle uses the env. var. JAVA_HOME to build the bookstore example
 		private final String appJarFilePath;
 		private final String appMainClassName;
-		private final List<String> arguments = new ArrayList<>();
 		private final List<String> jvmArguments = new ArrayList<>();
+		private final List<String> arguments = new ArrayList<>();
 
 		public AspectjMonitoringToAsciiFileLog(final String appJarFilePath, final String appMainClassName) {
 			this.appJarFilePath = appJarFilePath;
@@ -112,8 +112,9 @@ public class AbstractAspectTest { // NOCS (abstract class)
 			commandWithArgs.addAll(this.arguments);
 
 			final ProcessBuilder builder = new ProcessBuilder(commandWithArgs).directory(workingDirectory)
-					.redirectOutput(new File(workingDirectory, "output.txt"))
-					.redirectError(new File(workingDirectory, "error.txt"));
+					// .redirectOutput(new File(workingDirectory, "output.txt"))
+					// .redirectError(new File(workingDirectory, "error.txt"))
+					.inheritIO();
 			final Process process = builder.start();
 
 			return process.waitFor();
