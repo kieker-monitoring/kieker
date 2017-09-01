@@ -29,6 +29,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.thread.DaemonThreadFactory;
 import kieker.monitoring.core.controller.ControllerFactory;
 import kieker.monitoring.core.controller.ReceiveUnfilteredConfiguration;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
@@ -114,7 +115,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		this.taskRunInterval = configuration.getIntProperty(CONFIG_TASK_RUN_INTERVAL, DEFAULT_TASK_RUN_INTERVAL);
 
 		this.recordQueue = new ArrayBlockingQueue<IMonitoringRecord>(queueSize);
-		this.scheduledExecutor = Executors.newScheduledThreadPool(NUMBER_OF_WORKERS);
+		this.scheduledExecutor = Executors.newScheduledThreadPool(NUMBER_OF_WORKERS, new DaemonThreadFactory());
 
 		// Instantiate serializer and writer
 		final ControllerFactory controllerFactory = ControllerFactory.getInstance(configuration);
@@ -122,7 +123,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		final IMonitoringRecordSerializer serializer = controllerFactory.createAndInitialize(IMonitoringRecordSerializer.class, serializerName, configuration);
 		final String writerName = configuration.getStringProperty(CONFIG_WRITER_CLASSNAME);
 		final IRawDataWriter writer = controllerFactory.createAndInitialize(IRawDataWriter.class, writerName, configuration);
-
+		
 		// Instantiate the writer task
 		final int deferredWriteDelayMs = configuration.getIntProperty(CONFIG_DEFERRED_WRITE_DELAY, DEFAULT_DEFERRED_WRITE_DELAY);
 		final int chunkSize = configuration.getIntProperty(CONFIG_CHUNK_SIZE, DEFAULT_CHUNK_SIZE);
