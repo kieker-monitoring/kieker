@@ -134,7 +134,7 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 
 		final PrintWriter fileWriter = this.fileWriterPool.getFileWriter();
 
-		this.buffer.rewind();
+		this.buffer.clear();
 
 		fileWriter.print('$');
 		fileWriter.print(this.writerRegistry.getId(recordClassName));

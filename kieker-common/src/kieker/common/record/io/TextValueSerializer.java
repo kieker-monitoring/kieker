@@ -83,7 +83,11 @@ public class TextValueSerializer implements IValueSerializer {
 
 	@Override
 	public void putString(final String value) {
-		this.buffer.put(";" + String.valueOf(value).replaceAll(";", "\\;"));
+		if (value != null) {
+			this.buffer.put(";" + value.replaceAll(";", "\\;"));
+		} else {
+			this.buffer.put(";");
+		}
 	}
 
 }
