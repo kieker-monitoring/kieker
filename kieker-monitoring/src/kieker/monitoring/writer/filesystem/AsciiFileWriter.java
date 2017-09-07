@@ -43,7 +43,10 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegistryListener<String>, IFileWriter {
 
 	public static final String PREFIX = AsciiFileWriter.class.getName() + ".";
-	/** The name of the configuration for the custom storage path if the writer is advised not to store in the temporary directory. */
+	/**
+	 * The name of the configuration for the custom storage path if the writer is advised not to store in the temporary
+	 * directory.
+	 */
 	public static final String CONFIG_PATH = PREFIX + "customStoragePath";
 	/** The name of the configuration for the charset name (e.g. "UTF-8") */
 	public static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
@@ -78,7 +81,9 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		}
 
 		if (!(new File(configPathName)).isDirectory()) {
-			throw new IllegalArgumentException("'" + configPathName + "' is not a directory.");
+			final String currentWorkingDir = System.getProperty("user.dir");
+			throw new IllegalArgumentException("'" + configPathName
+					+ "' is not a directory. The current working directory was: " + currentWorkingDir);
 		}
 
 		this.logFolder = KiekerLogFolder.buildKiekerLogFolder(configPathName, configuration);
@@ -104,7 +109,8 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		this.flushMapfile = configuration.getBooleanProperty(CONFIG_FLUSH_MAPFILE, true);
 
 		this.mappingFileWriter = new MappingFileWriter(this.logFolder, charsetName);
-		this.fileWriterPool = new AsciiFileWriterPool(LOG, this.logFolder, charsetName, maxEntriesPerFile, shouldCompress, maxAmountOfFiles, maxMegaBytesPerFile);
+		this.fileWriterPool = new AsciiFileWriterPool(LOG, this.logFolder, charsetName, maxEntriesPerFile,
+				shouldCompress, maxAmountOfFiles, maxMegaBytesPerFile);
 
 		this.writerRegistry = new WriterRegistry(this);
 	}

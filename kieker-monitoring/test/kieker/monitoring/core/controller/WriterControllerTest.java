@@ -29,6 +29,8 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.writer.dump.DumpWriter;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  *
  * @author Christian Wulf
@@ -45,10 +47,13 @@ public class WriterControllerTest {
 	}
 
 	@Test
+	@SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
+	// @SuppressFBWarnings("SIC")
 	public void testBlockOnFailedInsertBehavior() throws Exception {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DumpWriter.class.getName());
-		configuration.setProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_FQN, MpscArrayQueue.class.getName());
+		configuration.setProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_FQN,
+				MpscArrayQueue.class.getName());
 		configuration.setProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_SIZE, "1");
 		configuration.setProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
 
@@ -57,8 +62,10 @@ public class WriterControllerTest {
 		final Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				writerController.newMonitoringRecord(new EmptyRecord()); // the first element fits into the queue
-				writerController.newMonitoringRecord(new EmptyRecord()); // the second element exceeds the queue's capacity and triggers the blocking wait
+				// the first element fits into the queue
+				writerController.newMonitoringRecord(new EmptyRecord());
+				// the second element exceeds the queue's capacity and triggers the blocking wait
+				writerController.newMonitoringRecord(new EmptyRecord());
 			}
 		});
 		thread.start();

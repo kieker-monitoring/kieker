@@ -36,3 +36,10 @@ entity HostApplicationMetaData {
 	string hostName
 	string applicationName
 }
+
+@author 'Christian Wulf' @since '1.13'
+entity ThreadMetaData {
+	/** TODO map to appId, not to the host */
+	string hostName
+	long threadId
+}
