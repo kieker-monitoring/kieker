@@ -38,9 +38,9 @@ node('kieker-slave-docker') {
     }
 
     stage ('push-to-stable') {
-        //withCredentials([usernamePassword(credentialsId: 'artifactupload', usernameVariable: 'kiekerMavenUser', passwordVariable: 'kiekerMavenPassword')]) {
-	    sh 'docker run --rm ' + " -e kiekerMavenUser=mykiekerMavenUser -e kiekerMavenPassword=mykiekerMavenPassword" + ' -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew uploadArchives"'
-        //}
+        withCredentials([usernamePassword(credentialsId: 'artifactupload', usernameVariable: 'kiekerMavenUser', passwordVariable: 'kiekerMavenPassword')]) {
+	    sh 'docker run --rm -e kiekerMavenUser=$kiekerMavenUser -e kiekerMavenPassword=$kiekerMavenPassword -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew uploadArchives"'
+        }
 
         if (env.BRANCH_NAME == "master") {
             sh 'echo "We are in master - pushing to stable branch."'
