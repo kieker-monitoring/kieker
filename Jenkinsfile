@@ -38,14 +38,15 @@ node('kieker-slave-docker') {
     }
 
     stage ('push-to-stable') {
+        withCredentials([usernamePassword(credentialsId: 'artifactupload', usernameVariable: 'kiekerMavenUser', passwordVariable: 'kiekerMavenPassword')]) {
+	    sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew uploadArchives"'
+        }
+
         if (env.BRANCH_NAME == "master") {
             sh 'echo "We are in master - pushing to stable branch."'
 
             sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
             
-            withCredentials([usernamePassword(credentialsId: 'artifactupload', usernameVariable: 'kiekerMavenUser', passwordVariable: 'kiekerMavenPassword')]) {
-	      sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew uploadArchives"'
-            }
         } else {
             sh 'echo "We are not in  master - skipping."'
         }
