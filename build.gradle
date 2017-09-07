@@ -842,10 +842,11 @@ task jenkinsNightlyBuild(dependsOn: [startRServe, enableRTests, distribute, chec
 }
 
 // For signing, the following properties (e.g., provided in ~/.gradle/gradle.properties) are needed
-// signing.keyId=8E97E26A
-// signing.password=XXXXXXXXXXXX
-// signing.secretKeyRingFile=/home/USER/.gnupg/secring.gpg
+//signing.keyId=8E97E26A
+//signing.password=XXX
+//signing.secretKeyRingFile=/home/USER/.gnupg/secring.gpg
 //
+
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 signing {
     required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
@@ -952,15 +953,12 @@ uploadArchives {
             def mavenUser = "NoMavenUser"
             if (System.env.kiekerMavenUser != null) {
                 mavenUser = System.env.kiekerMavenUser 
-            } else {
-		println("Upload Archives: No username provided.")
-	    }
-            def mavenPassword = "NoMavenPassword"
+            }
+            
+	    def mavenPassword = "NoMavenPassword"
             if (System.env.kiekerMavenPassword != null) {
                 mavenPassword = System.env.kiekerMavenPassword
-            } else {
-                println("Upload Archives: No password provided.")
-	    }
+            }
 
 	    repository(url: project.releaseRepoUrl) {
                 authentication(userName: mavenUser, password: mavenPassword)
