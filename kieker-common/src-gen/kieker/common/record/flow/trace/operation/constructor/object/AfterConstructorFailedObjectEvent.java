@@ -17,16 +17,18 @@ package kieker.common.record.flow.trace.operation.constructor.object;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
 
-import kieker.common.record.flow.IObjectRecord;
 import kieker.common.record.flow.trace.operation.constructor.AfterConstructorFailedEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
+import kieker.common.record.flow.IObjectRecord;
+
 /**
  * @author Jan Waller
- *
+ * 
  * @since 1.6
  */
 public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEvent implements IObjectRecord {
@@ -34,14 +36,14 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			+ TYPE_SIZE_LONG // ITraceRecord.traceId
-			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
-			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			+ TYPE_SIZE_STRING // IClassSignature.classSignature
-			+ TYPE_SIZE_STRING // IExceptionRecord.cause
-			+ TYPE_SIZE_INT // IObjectRecord.objectId
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			 + TYPE_SIZE_STRING // IClassSignature.classSignature
+			 + TYPE_SIZE_STRING // IExceptionRecord.cause
+			 + TYPE_SIZE_INT // IObjectRecord.objectId
 	;
-
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -51,6 +53,7 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		String.class, // IExceptionRecord.cause
 		int.class, // IObjectRecord.objectId
 	};
+	
 	
 	/** default constants. */
 	public static final int OBJECT_ID = 0;
@@ -71,7 +74,7 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 *
+	 * 
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -87,8 +90,7 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	 * @param objectId
 	 *            objectId
 	 */
-	public AfterConstructorFailedObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature,
-			final String classSignature, final String cause, final int objectId) {
+	public AfterConstructorFailedObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String cause, final int objectId) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature, cause);
 		this.objectId = objectId;
 	}
@@ -96,10 +98,13 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 *
+	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #AfterConstructorFailedObjectEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public AfterConstructorFailedObjectEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
 		this.objectId = (Integer) values[6];
@@ -107,36 +112,37 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 *
+	 * 
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #AfterConstructorFailedObjectEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected AfterConstructorFailedObjectEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
 		this.objectId = (Integer) values[6];
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 *
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
 	 */
-	public AfterConstructorFailedObjectEvent(final IValueDeserializer deserializer) throws BufferUnderflowException {
+	public AfterConstructorFailedObjectEvent(final IValueDeserializer deserializer) {
 		super(deserializer);
-
 		this.objectId = deserializer.getInt();
 	}
 	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -148,22 +154,21 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 			this.getObjectId()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getOperationSignature());
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getCause());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
 		serializer.putLong(this.getTraceId());
 		serializer.putInt(this.getOrderIndex());
@@ -172,7 +177,6 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		serializer.putString(this.getCause());
 		serializer.putInt(this.getObjectId());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -180,7 +184,7 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -199,7 +203,7 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 
 	/**
 	 * {@inheritDoc}
-	 *
+	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -207,51 +211,28 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (obj == this) {
-			return true;
-		}
-		if (obj.getClass() != this.getClass()) {
-			return false;
-		}
-
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
 		final AfterConstructorFailedObjectEvent castedRecord = (AfterConstructorFailedObjectEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (this.getTraceId() != castedRecord.getTraceId()) {
-			return false;
-		}
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
-			return false;
-		}
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
-			return false;
-		}
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
-			return false;
-		}
-		if (!this.getCause().equals(castedRecord.getCause())) {
-			return false;
-		}
-		if (this.getObjectId() != castedRecord.getObjectId()) {
-			return false;
-		}
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (this.getTraceId() != castedRecord.getTraceId()) return false;
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
+		if (!this.getCause().equals(castedRecord.getCause())) return false;
+		if (this.getObjectId() != castedRecord.getObjectId()) return false;
 		return true;
 	}
-
-	@Override
+	
 	public final int getObjectId() {
 		return this.objectId;
 	}
@@ -259,5 +240,4 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	public final void setObjectId(int objectId) {
 		this.objectId = objectId;
 	}
-
 }

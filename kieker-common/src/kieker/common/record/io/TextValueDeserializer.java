@@ -37,25 +37,8 @@ public class TextValueDeserializer implements IValueDeserializer {
 		return new TextValueDeserializer(buffer);
 	}
 
-	private String readValue() {
-		String result = "";
-		char ch;
-		boolean escape = false;
-		do {
-			escape = false;
-			ch = this.buffer.get();
-			if ((ch == '\\') && !escape) {
-				escape = true;
-			}
-			if (escape || (ch != ';')) {
-				result += ch;
-			}
-		} while (escape || (ch != ';'));
-		return result;
-	}
-
 	@Override
-	public boolean getBoolean() {
+	public boolean getBoolean() { // NOPMD
 		return Boolean.parseBoolean(this.readValue());
 	}
 
@@ -72,7 +55,7 @@ public class TextValueDeserializer implements IValueDeserializer {
 	}
 
 	@Override
-	public short getShort() {
+	public short getShort() { // NOPMD
 		return Short.parseShort(this.readValue());
 	}
 
@@ -107,6 +90,23 @@ public class TextValueDeserializer implements IValueDeserializer {
 		this.buffer.get(charTarget);
 		ByteBuffer.wrap(target).asCharBuffer().put(charTarget);
 		return target;
+	}
+
+	private String readValue() {
+		String result = "";
+		char ch;
+		boolean escape = false;
+		do {
+			escape = false;
+			ch = this.buffer.get();
+			if ((ch == '\\') && !escape) {
+				escape = true;
+			}
+			if (escape || (ch != ';')) {
+				result += ch;
+			}
+		} while (escape || (ch != ';'));
+		return result;
 	}
 
 }

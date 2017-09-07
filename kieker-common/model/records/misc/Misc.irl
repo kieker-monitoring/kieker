@@ -33,7 +33,7 @@ entity TimestampRecord {
 entity HostApplicationMetaData {
 	string systemName
 	string ipAddress
-	string hostName
+	string hostname
 	string applicationName
 }
 

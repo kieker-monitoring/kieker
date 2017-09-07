@@ -1,7 +1,23 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.misc;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -9,36 +25,39 @@ import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
+
 /**
  * @author Christian Wulf
  * 
  * @since 1.13
  */
-public class ThreadMetaData extends AbstractMonitoringRecord
-		implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	private static final long serialVersionUID = 3010881635494258512L;
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // ThreadMetaData.hostName
-			+ TYPE_SIZE_LONG // ThreadMetaData.threadId
+			 + TYPE_SIZE_LONG // ThreadMetaData.threadId
 	;
-
-	public static final Class<?>[] TYPES = { String.class, // ThreadMetaData.hostName
-			long.class, // ThreadMetaData.threadId
+	
+	public static final Class<?>[] TYPES = {
+		String.class, // ThreadMetaData.hostName
+		long.class, // ThreadMetaData.threadId
 	};
-
-	/** user-defined constants */
-
-	/** default constants */
+	
+	
+	/** default constants. */
 	public static final String HOST_NAME = "";
-
+	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = { "hostName", "threadId", };
-
-	/** property declarations */
-	private final String hostName;
-	private final long threadId;
-
+	private static final String[] PROPERTY_NAMES = {
+		"hostName",
+		"threadId",
+	};
+	
+	/** property declarations. */
+	private String hostName;
+	private long threadId;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -48,17 +67,20 @@ public class ThreadMetaData extends AbstractMonitoringRecord
 	 *            threadId
 	 */
 	public ThreadMetaData(final String hostName, final long threadId) {
-		this.hostName = hostName == null ? "" : hostName;
+		this.hostName = hostName == null?"":hostName;
 		this.threadId = threadId;
 	}
 
 	/**
-	 * This constructor converts the given array into a record. It is recommended to use the array which is the result
-	 * of a call to {@link #toArray()}.
+	 * This constructor converts the given array into a record.
+	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
 	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #ThreadMetaData(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public ThreadMetaData(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.hostName = (String) values[0];
@@ -72,50 +94,55 @@ public class ThreadMetaData extends AbstractMonitoringRecord
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #ThreadMetaData(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected ThreadMetaData(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
 		this.hostName = (String) values[0];
 		this.threadId = (Long) values[1];
 	}
 
+	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 *
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
 	 */
-	public ThreadMetaData(final IValueDeserializer deserializer) throws BufferUnderflowException {
+	public ThreadMetaData(final IValueDeserializer deserializer) {
 		this.hostName = deserializer.getString();
 		this.threadId = deserializer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
-		return new Object[] { this.getHostName(), this.getThreadId() };
+		return new Object[] {
+			this.getHostName(),
+			this.getThreadId()
+		};
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getHostName());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
 		serializer.putString(this.getHostName());
 		serializer.putLong(this.getThreadId());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -123,7 +150,15 @@ public class ThreadMetaData extends AbstractMonitoringRecord
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -135,15 +170,14 @@ public class ThreadMetaData extends AbstractMonitoringRecord
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this
-	 *             method is not implemented.
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -152,24 +186,27 @@ public class ThreadMetaData extends AbstractMonitoringRecord
 		if (obj == null) return false;
 		if (obj == this) return true;
 		if (obj.getClass() != this.getClass()) return false;
-
+		
 		final ThreadMetaData castedRecord = (ThreadMetaData) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
 		if (!this.getHostName().equals(castedRecord.getHostName())) return false;
 		if (this.getThreadId() != castedRecord.getThreadId()) return false;
 		return true;
 	}
-
+	
 	public final String getHostName() {
 		return this.hostName;
 	}
-
+	
+	public final void setHostName(String hostName) {
+		this.hostName = hostName;
+	}
+	
 	public final long getThreadId() {
 		return this.threadId;
 	}
-
-	@Override
-	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+	
+	public final void setThreadId(long threadId) {
+		this.threadId = threadId;
 	}
 }

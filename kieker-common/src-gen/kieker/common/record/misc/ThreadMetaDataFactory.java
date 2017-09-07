@@ -15,8 +15,11 @@
  ***************************************************************************/
 package kieker.common.record.misc;
 
+import java.nio.ByteBuffer;
+
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Christian Wulf
@@ -24,17 +27,18 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.13
  */
 public final class ThreadMetaDataFactory implements IRecordFactory<ThreadMetaData> {
-
+	
+	
 	@Override
 	public ThreadMetaData create(final IValueDeserializer deserializer) {
 		return new ThreadMetaData(deserializer);
 	}
-
+	
 	@Override
 	public ThreadMetaData create(final Object[] values) {
 		return new ThreadMetaData(values);
 	}
-
+	
 	public int getRecordSizeInBytes() {
 		return ThreadMetaData.SIZE;
 	}

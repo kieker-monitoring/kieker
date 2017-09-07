@@ -16,19 +16,25 @@
 package kieker.common.record.flow.trace;
 
 import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.AbstractEvent;
-import kieker.common.record.flow.ITraceRecord;
 import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
+
+import kieker.common.record.flow.ITraceRecord;
 
 /**
  * @author Jan Waller
- *
+ * 
  * @since 1.5
  */
 public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {
 	private static final long serialVersionUID = -3022261747819944031L;
 
+	
+	
 	/** default constants. */
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
@@ -40,7 +46,7 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 *
+	 * 
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -54,39 +60,39 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		this.orderIndex = orderIndex;
 	}
 
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 *
+	 * 
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #AbstractTraceEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected AbstractTraceEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
 		this.traceId = (Long) values[1];
 		this.orderIndex = (Integer) values[2];
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 *
 	 * @param deserializer
-	 *            The value deserializer to use.
-	 *
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
+	 *            The deserializer to use
 	 */
-	public AbstractTraceEvent(final IValueDeserializer deserializer) throws BufferUnderflowException {
+	public AbstractTraceEvent(final IValueDeserializer deserializer) {
 		super(deserializer);
-
 		this.traceId = deserializer.getLong();
 		this.orderIndex = deserializer.getInt();
 	}
+	
 
 	/**
 	 * {@inheritDoc}
-	 *
+	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -94,39 +100,24 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (obj == this) {
-			return true;
-		}
-		if (obj.getClass() != this.getClass()) {
-			return false;
-		}
-
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
 		final AbstractTraceEvent castedRecord = (AbstractTraceEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (this.getTraceId() != castedRecord.getTraceId()) {
-			return false;
-		}
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
-			return false;
-		}
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (this.getTraceId() != castedRecord.getTraceId()) return false;
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
 		return true;
 	}
-
-	@Override
+	
 	public final long getTraceId() {
 		return this.traceId;
 	}
@@ -142,5 +133,4 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	public final void setOrderIndex(int orderIndex) {
 		this.orderIndex = orderIndex;
 	}
-
 }

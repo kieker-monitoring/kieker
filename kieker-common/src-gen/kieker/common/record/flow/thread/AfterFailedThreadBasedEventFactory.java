@@ -15,8 +15,11 @@
  ***************************************************************************/
 package kieker.common.record.flow.thread;
 
+import java.nio.ByteBuffer;
+
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Christian Wulf
@@ -24,6 +27,7 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.13
  */
 public final class AfterFailedThreadBasedEventFactory implements IRecordFactory<AfterFailedThreadBasedEvent> {
+	
 	
 	@Override
 	public AfterFailedThreadBasedEvent create(final IValueDeserializer deserializer) {

@@ -38,42 +38,42 @@ public class TextValueSerializer implements IValueSerializer {
 
 	@Override
 	public void putBoolean(final boolean value) {
-		this.buffer.put(";" + String.valueOf(value));
+		this.buffer.put(";" + value);
 	}
 
 	@Override
 	public void putByte(final byte value) {
-		this.buffer.put(";" + String.valueOf(value));
+		this.buffer.put(";" + value);
 	}
 
 	@Override
 	public void putChar(final char value) {
-		this.buffer.put(";" + String.valueOf(value));
+		this.buffer.put(";" + value);
 	}
 
 	@Override
-	public void putShort(final short value) {
-		this.buffer.put(";" + String.valueOf(value));
+	public void putShort(final short value) { // NOPMD
+		this.buffer.put(";" + value);
 	}
 
 	@Override
 	public void putInt(final int value) {
-		this.buffer.put(";" + String.valueOf(value));
+		this.buffer.put(";" + value);
 	}
 
 	@Override
 	public void putLong(final long value) {
-		this.buffer.put(";" + String.valueOf(value));
+		this.buffer.put(";" + value);
 	}
 
 	@Override
 	public void putFloat(final float value) {
-		this.buffer.put(";" + String.valueOf(value));
+		this.buffer.put(";" + value);
 	}
 
 	@Override
 	public void putDouble(final double value) {
-		this.buffer.put(";" + String.valueOf(value));
+		this.buffer.put(";" + value);
 	}
 
 	@Override

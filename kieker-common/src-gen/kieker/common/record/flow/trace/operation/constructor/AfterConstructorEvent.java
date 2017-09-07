@@ -17,16 +17,18 @@ package kieker.common.record.flow.trace.operation.constructor;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
 
-import kieker.common.record.flow.IConstructorRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
+import kieker.common.record.flow.IConstructorRecord;
+
 /**
  * @author Jan Waller
- *
+ * 
  * @since 1.6
  */
 public class AfterConstructorEvent extends AfterOperationEvent implements IConstructorRecord {
@@ -34,12 +36,12 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			+ TYPE_SIZE_LONG // ITraceRecord.traceId
-			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
-			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			+ TYPE_SIZE_STRING // IClassSignature.classSignature
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
+			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 	;
-
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
@@ -47,6 +49,8 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 		String.class, // IOperationSignature.operationSignature
 		String.class, // IClassSignature.classSignature
 	};
+	
+	
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -57,9 +61,10 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 		"classSignature",
 	};
 	
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 *
+	 * 
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -78,45 +83,48 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 *
+	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #AfterConstructorEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public AfterConstructorEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
 	}
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 *
+	 * 
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #AfterConstructorEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected AfterConstructorEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 *
 	 * @param deserializer
-	 *            The value deserializer to use.
-	 * @param buffer
-	 *            The bytes for the record.
-	 *
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
+	 *            The deserializer to use
 	 */
-	public AfterConstructorEvent(final IValueDeserializer deserializer) throws BufferUnderflowException {
+	public AfterConstructorEvent(final IValueDeserializer deserializer) {
 		super(deserializer);
 	}
 	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -126,28 +134,26 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 			this.getClassSignature()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getOperationSignature());
 		stringRegistry.get(this.getClassSignature());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
 		serializer.putLong(this.getTraceId());
 		serializer.putInt(this.getOrderIndex());
 		serializer.putString(this.getOperationSignature());
 		serializer.putString(this.getClassSignature());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -155,7 +161,7 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -174,7 +180,7 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 
 	/**
 	 * {@inheritDoc}
-	 *
+	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -182,42 +188,24 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (obj == this) {
-			return true;
-		}
-		if (obj.getClass() != this.getClass()) {
-			return false;
-		}
-
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
 		final AfterConstructorEvent castedRecord = (AfterConstructorEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (this.getTraceId() != castedRecord.getTraceId()) {
-			return false;
-		}
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
-			return false;
-		}
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
-			return false;
-		}
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
-			return false;
-		}
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (this.getTraceId() != castedRecord.getTraceId()) return false;
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
 		return true;
 	}
-
+	
 }
