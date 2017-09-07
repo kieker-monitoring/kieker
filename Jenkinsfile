@@ -39,7 +39,7 @@ node('kieker-slave-docker') {
 
     stage ('push-to-stable') {
         withCredentials([usernamePassword(credentialsId: 'artifactupload', usernameVariable: 'kiekerMavenUser', passwordVariable: 'kiekerMavenPassword')]) {
-	    sh 'docker run --rm ' + " -DkiekerMavenUser=$kiekerMavenUser -DkiekerMavenPassword=$kiekerMavenPassword" + '  -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew uploadArchives"'
+	    sh 'docker run --rm ' + " -e kiekerMavenUser=$kiekerMavenUser -e kiekerMavenPassword=$kiekerMavenPassword" + ' -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew uploadArchives"'
         }
 
         if (env.BRANCH_NAME == "master") {
