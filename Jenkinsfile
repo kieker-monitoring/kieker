@@ -7,9 +7,6 @@ node('kieker-slave-docker') {
         sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "java -version"'
     }
 
-    stage ('Credential-Test') {
-    } 
-
     stage ('1-compile logs') {
         sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew -S compileJava compileTestJava"'
     }
