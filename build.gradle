@@ -951,10 +951,12 @@ uploadArchives {
             // The following properties should be defined in ~/.gradle/gradle.properties (neede only for Maven upload)
             def mavenUser = "NoMavenUser"
             if (project.hasProperty("kiekerMavenUser")) {
+		println("kiekerMavenUser is available.")
                 mavenUser = project.property("kiekerMavenUser")
             }
             def mavenPassword = "NoMavenPassword"
             if (project.hasProperty("kiekerMavenPassword")) {
+		println("kiekerMavenPassword is available.")
                 mavenPassword = project.property("kiekerMavenPassword")
             }
 
