@@ -52,6 +52,9 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		int.class, // TraceMetadata.parentOrderId
 	};
 	
+	/** user-defined constants. */
+	public static final long NO_PARENT_TRACEID = -1L;
+	public static final int NO_PARENT_ORDER_INDEX = -1;
 	
 	/** default constants. */
 	public static final long TRACE_ID = 0L;

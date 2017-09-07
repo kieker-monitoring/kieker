@@ -16,6 +16,9 @@ entity ConstructionEvent extends AbstractTraceEvent {
 @author 'Jan Waller'
 @since '1.5'
 entity TraceMetadata : IFlowRecord {
+	const long NO_PARENT_TRACEID = -1
+	const int NO_PARENT_ORDER_INDEX = -1
+	
  	changeable long traceId = 0
  	long threadId = 0
  	string sessionId = ""
