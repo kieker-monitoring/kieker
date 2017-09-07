@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.jvm.AbstractJVMRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -27,6 +25,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Nils Christian Ehmke
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.10
  */
@@ -67,10 +66,10 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	};
 	
 	/** property declarations. */
-	private long threadCount;
-	private long daemonThreadCount;
-	private long peakThreadCount;
-	private long totalStartedThreadCount;
+	private final long threadCount;
+	private final long daemonThreadCount;
+	private final long peakThreadCount;
+	private final long totalStartedThreadCount;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -248,31 +247,19 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		return this.threadCount;
 	}
 	
-	public final void setThreadCount(long threadCount) {
-		this.threadCount = threadCount;
-	}
 	
 	public final long getDaemonThreadCount() {
 		return this.daemonThreadCount;
 	}
 	
-	public final void setDaemonThreadCount(long daemonThreadCount) {
-		this.daemonThreadCount = daemonThreadCount;
-	}
 	
 	public final long getPeakThreadCount() {
 		return this.peakThreadCount;
 	}
 	
-	public final void setPeakThreadCount(long peakThreadCount) {
-		this.peakThreadCount = peakThreadCount;
-	}
 	
 	public final long getTotalStartedThreadCount() {
 		return this.totalStartedThreadCount;
 	}
 	
-	public final void setTotalStartedThreadCount(long totalStartedThreadCount) {
-		this.totalStartedThreadCount = totalStartedThreadCount;
-	}
 }

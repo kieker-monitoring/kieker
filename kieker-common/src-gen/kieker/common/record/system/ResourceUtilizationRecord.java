@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -28,6 +26,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.3
  */
@@ -64,10 +63,10 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	};
 	
 	/** property declarations. */
-	private long timestamp;
-	private String hostname;
-	private String resourceName;
-	private double utilization;
+	private final long timestamp;
+	private final String hostname;
+	private final String resourceName;
+	private final double utilization;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -228,31 +227,19 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		return this.timestamp;
 	}
 	
-	public final void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
 	
 	public final String getHostname() {
 		return this.hostname;
 	}
 	
-	public final void setHostname(String hostname) {
-		this.hostname = hostname;
-	}
 	
 	public final String getResourceName() {
 		return this.resourceName;
 	}
 	
-	public final void setResourceName(String resourceName) {
-		this.resourceName = resourceName;
-	}
 	
 	public final double getUtilization() {
 		return this.utilization;
 	}
 	
-	public final void setUtilization(double utilization) {
-		this.utilization = utilization;
-	}
 }

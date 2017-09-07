@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,16 @@
  ***************************************************************************/
 package kieker.common.record.flow;
 
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
-import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.IEventRecord;
 
 /**
  * @author Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.5
  */
@@ -41,7 +38,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	
 		
 	/** property declarations. */
-	private long timestamp;
+	private final long timestamp;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -110,7 +107,4 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		return this.timestamp;
 	}
 	
-	public final void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
 }

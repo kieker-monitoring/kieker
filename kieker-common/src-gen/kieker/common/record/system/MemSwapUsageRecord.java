@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -28,6 +26,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.3
  */
@@ -80,14 +79,14 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	};
 	
 	/** property declarations. */
-	private long timestamp;
-	private String hostname;
-	private long memTotal;
-	private long memUsed;
-	private long memFree;
-	private long swapTotal;
-	private long swapUsed;
-	private long swapFree;
+	private final long timestamp;
+	private final String hostname;
+	private final long memTotal;
+	private final long memUsed;
+	private final long memFree;
+	private final long swapTotal;
+	private final long swapUsed;
+	private final long swapFree;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -283,63 +282,39 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		return this.timestamp;
 	}
 	
-	public final void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
 	
 	public final String getHostname() {
 		return this.hostname;
 	}
 	
-	public final void setHostname(String hostname) {
-		this.hostname = hostname;
-	}
 	
 	public final long getMemTotal() {
 		return this.memTotal;
 	}
 	
-	public final void setMemTotal(long memTotal) {
-		this.memTotal = memTotal;
-	}
 	
 	public final long getMemUsed() {
 		return this.memUsed;
 	}
 	
-	public final void setMemUsed(long memUsed) {
-		this.memUsed = memUsed;
-	}
 	
 	public final long getMemFree() {
 		return this.memFree;
 	}
 	
-	public final void setMemFree(long memFree) {
-		this.memFree = memFree;
-	}
 	
 	public final long getSwapTotal() {
 		return this.swapTotal;
 	}
 	
-	public final void setSwapTotal(long swapTotal) {
-		this.swapTotal = swapTotal;
-	}
 	
 	public final long getSwapUsed() {
 		return this.swapUsed;
 	}
 	
-	public final void setSwapUsed(long swapUsed) {
-		this.swapUsed = swapUsed;
-	}
 	
 	public final long getSwapFree() {
 		return this.swapFree;
 	}
 	
-	public final void setSwapFree(long swapFree) {
-		this.swapFree = swapFree;
-	}
 }

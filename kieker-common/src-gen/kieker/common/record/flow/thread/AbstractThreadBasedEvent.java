@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,9 @@
  ***************************************************************************/
 package kieker.common.record.flow.thread;
 
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.AbstractEvent;
 import kieker.common.record.io.IValueDeserializer;
-import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.IThreadBasedRecord;
 import kieker.common.record.flow.IOperationSignature;
@@ -29,6 +25,7 @@ import kieker.common.record.flow.IClassSignature;
 
 /**
  * @author Christian Wulf
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.13
  */
@@ -45,10 +42,10 @@ public abstract class AbstractThreadBasedEvent extends AbstractEvent implements 
 	
 		
 	/** property declarations. */
-	private long threadId;
-	private int orderIndex;
-	private String operationSignature;
-	private String classSignature;
+	private final long threadId;
+	private final int orderIndex;
+	private final String operationSignature;
+	private final String classSignature;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -140,31 +137,19 @@ public abstract class AbstractThreadBasedEvent extends AbstractEvent implements 
 		return this.threadId;
 	}
 	
-	public final void setThreadId(long threadId) {
-		this.threadId = threadId;
-	}
 	
 	public final int getOrderIndex() {
 		return this.orderIndex;
 	}
 	
-	public final void setOrderIndex(int orderIndex) {
-		this.orderIndex = orderIndex;
-	}
 	
 	public final String getOperationSignature() {
 		return this.operationSignature;
 	}
 	
-	public final void setOperationSignature(String operationSignature) {
-		this.operationSignature = operationSignature;
-	}
 	
 	public final String getClassSignature() {
 		return this.classSignature;
 	}
 	
-	public final void setClassSignature(String classSignature) {
-		this.classSignature = classSignature;
-	}
 }

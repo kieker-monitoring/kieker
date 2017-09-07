@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package kieker.common.record.flow.trace.concurrency;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueDeserializer;
@@ -27,6 +25,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.8
  */
@@ -60,7 +59,7 @@ public class JoinEvent extends AbstractTraceEvent  {
 	};
 	
 	/** property declarations. */
-	private long joinedTraceId;
+	private final long joinedTraceId;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -209,7 +208,4 @@ public class JoinEvent extends AbstractTraceEvent  {
 		return this.joinedTraceId;
 	}
 	
-	public final void setJoinedTraceId(long joinedTraceId) {
-		this.joinedTraceId = joinedTraceId;
-	}
 }

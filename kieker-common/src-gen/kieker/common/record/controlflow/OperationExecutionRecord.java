@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package kieker.common.record.controlflow;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -28,6 +26,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 0.91
  */
@@ -87,14 +86,14 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	};
 	
 	/** property declarations. */
-	private String operationSignature;
-	private String sessionId;
-	private long traceId;
-	private long tin;
-	private long tout;
-	private String hostname;
-	private int eoi;
-	private int ess;
+	private final String operationSignature;
+	private final String sessionId;
+	private final long traceId;
+	private final long tin;
+	private final long tout;
+	private final String hostname;
+	private final int eoi;
+	private final int ess;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -292,63 +291,39 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		return this.operationSignature;
 	}
 	
-	public final void setOperationSignature(String operationSignature) {
-		this.operationSignature = operationSignature;
-	}
 	
 	public final String getSessionId() {
 		return this.sessionId;
 	}
 	
-	public final void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
-	}
 	
 	public final long getTraceId() {
 		return this.traceId;
 	}
 	
-	public final void setTraceId(long traceId) {
-		this.traceId = traceId;
-	}
 	
 	public final long getTin() {
 		return this.tin;
 	}
 	
-	public final void setTin(long tin) {
-		this.tin = tin;
-	}
 	
 	public final long getTout() {
 		return this.tout;
 	}
 	
-	public final void setTout(long tout) {
-		this.tout = tout;
-	}
 	
 	public final String getHostname() {
 		return this.hostname;
 	}
 	
-	public final void setHostname(String hostname) {
-		this.hostname = hostname;
-	}
 	
 	public final int getEoi() {
 		return this.eoi;
 	}
 	
-	public final void setEoi(int eoi) {
-		this.eoi = eoi;
-	}
 	
 	public final int getEss() {
 		return this.ess;
 	}
 	
-	public final void setEss(int ess) {
-		this.ess = ess;
-	}
 }

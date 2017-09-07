@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.jvm.AbstractJVMRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -27,6 +25,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Nils Christian Ehmke
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.10
  */
@@ -82,15 +81,15 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	};
 	
 	/** property declarations. */
-	private long heapMaxBytes;
-	private long heapUsedBytes;
-	private long heapCommittedBytes;
-	private long heapInitBytes;
-	private long nonHeapMaxBytes;
-	private long nonHeapUsedBytes;
-	private long nonHeapCommittedBytes;
-	private long nonHeapInitBytes;
-	private int objectPendingFinalizationCount;
+	private final long heapMaxBytes;
+	private final long heapUsedBytes;
+	private final long heapCommittedBytes;
+	private final long heapInitBytes;
+	private final long nonHeapMaxBytes;
+	private final long nonHeapUsedBytes;
+	private final long nonHeapCommittedBytes;
+	private final long nonHeapInitBytes;
+	private final int objectPendingFinalizationCount;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -313,71 +312,44 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		return this.heapMaxBytes;
 	}
 	
-	public final void setHeapMaxBytes(long heapMaxBytes) {
-		this.heapMaxBytes = heapMaxBytes;
-	}
 	
 	public final long getHeapUsedBytes() {
 		return this.heapUsedBytes;
 	}
 	
-	public final void setHeapUsedBytes(long heapUsedBytes) {
-		this.heapUsedBytes = heapUsedBytes;
-	}
 	
 	public final long getHeapCommittedBytes() {
 		return this.heapCommittedBytes;
 	}
 	
-	public final void setHeapCommittedBytes(long heapCommittedBytes) {
-		this.heapCommittedBytes = heapCommittedBytes;
-	}
 	
 	public final long getHeapInitBytes() {
 		return this.heapInitBytes;
 	}
 	
-	public final void setHeapInitBytes(long heapInitBytes) {
-		this.heapInitBytes = heapInitBytes;
-	}
 	
 	public final long getNonHeapMaxBytes() {
 		return this.nonHeapMaxBytes;
 	}
 	
-	public final void setNonHeapMaxBytes(long nonHeapMaxBytes) {
-		this.nonHeapMaxBytes = nonHeapMaxBytes;
-	}
 	
 	public final long getNonHeapUsedBytes() {
 		return this.nonHeapUsedBytes;
 	}
 	
-	public final void setNonHeapUsedBytes(long nonHeapUsedBytes) {
-		this.nonHeapUsedBytes = nonHeapUsedBytes;
-	}
 	
 	public final long getNonHeapCommittedBytes() {
 		return this.nonHeapCommittedBytes;
 	}
 	
-	public final void setNonHeapCommittedBytes(long nonHeapCommittedBytes) {
-		this.nonHeapCommittedBytes = nonHeapCommittedBytes;
-	}
 	
 	public final long getNonHeapInitBytes() {
 		return this.nonHeapInitBytes;
 	}
 	
-	public final void setNonHeapInitBytes(long nonHeapInitBytes) {
-		this.nonHeapInitBytes = nonHeapInitBytes;
-	}
 	
 	public final int getObjectPendingFinalizationCount() {
 		return this.objectPendingFinalizationCount;
 	}
 	
-	public final void setObjectPendingFinalizationCount(int objectPendingFinalizationCount) {
-		this.objectPendingFinalizationCount = objectPendingFinalizationCount;
-	}
 }

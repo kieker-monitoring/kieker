@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,9 @@
  ***************************************************************************/
 package kieker.common.record.system;
 
-import java.nio.ByteBuffer;
 
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Teerat Pitakrat
@@ -35,6 +33,7 @@ public final class NetworkUtilizationRecordFactory implements IRecordFactory<Net
 	}
 	
 	@Override
+	@Deprecated
 	public NetworkUtilizationRecord create(final Object[] values) {
 		return new NetworkUtilizationRecord(values);
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.jvm.AbstractJVMRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -27,6 +25,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Nils Christian Ehmke
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.10
  */
@@ -66,9 +65,9 @@ public class GCRecord extends AbstractJVMRecord  {
 	};
 	
 	/** property declarations. */
-	private String gcName;
-	private long collectionCount;
-	private long collectionTimeMS;
+	private final String gcName;
+	private final long collectionCount;
+	private final long collectionTimeMS;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -238,23 +237,14 @@ public class GCRecord extends AbstractJVMRecord  {
 		return this.gcName;
 	}
 	
-	public final void setGcName(String gcName) {
-		this.gcName = gcName;
-	}
 	
 	public final long getCollectionCount() {
 		return this.collectionCount;
 	}
 	
-	public final void setCollectionCount(long collectionCount) {
-		this.collectionCount = collectionCount;
-	}
 	
 	public final long getCollectionTimeMS() {
 		return this.collectionTimeMS;
 	}
 	
-	public final void setCollectionTimeMS(long collectionTimeMS) {
-		this.collectionTimeMS = collectionTimeMS;
-	}
 }

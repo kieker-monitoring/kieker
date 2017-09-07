@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package kieker.common.record.misc;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -28,6 +26,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Christian Wulf
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.13
  */
@@ -64,10 +63,10 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 	};
 	
 	/** property declarations. */
-	private String systemName;
-	private String ipAddress;
-	private String hostName;
-	private String applicationName;
+	private final String systemName;
+	private final String ipAddress;
+	private final String hostName;
+	private final String applicationName;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -230,31 +229,19 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 		return this.systemName;
 	}
 	
-	public final void setSystemName(String systemName) {
-		this.systemName = systemName;
-	}
 	
 	public final String getIpAddress() {
 		return this.ipAddress;
 	}
 	
-	public final void setIpAddress(String ipAddress) {
-		this.ipAddress = ipAddress;
-	}
 	
 	public final String getHostName() {
 		return this.hostName;
 	}
 	
-	public final void setHostName(String hostName) {
-		this.hostName = hostName;
-	}
 	
 	public final String getApplicationName() {
 		return this.applicationName;
 	}
 	
-	public final void setApplicationName(String applicationName) {
-		this.applicationName = applicationName;
-	}
 }

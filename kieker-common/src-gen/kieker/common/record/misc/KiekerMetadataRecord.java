@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package kieker.common.record.misc;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -28,6 +26,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.7
  */
@@ -85,14 +84,14 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	};
 	
 	/** property declarations. */
-	private String version;
-	private String controllerName;
-	private String hostname;
-	private int experimentId;
-	private boolean debugMode;
-	private long timeOffset;
-	private String timeUnit;
-	private long numberOfRecords;
+	private final String version;
+	private final String controllerName;
+	private final String hostname;
+	private final int experimentId;
+	private final boolean debugMode;
+	private final long timeOffset;
+	private final String timeUnit;
+	private final long numberOfRecords;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -291,63 +290,39 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 		return this.version;
 	}
 	
-	public final void setVersion(String version) {
-		this.version = version;
-	}
 	
 	public final String getControllerName() {
 		return this.controllerName;
 	}
 	
-	public final void setControllerName(String controllerName) {
-		this.controllerName = controllerName;
-	}
 	
 	public final String getHostname() {
 		return this.hostname;
 	}
 	
-	public final void setHostname(String hostname) {
-		this.hostname = hostname;
-	}
 	
 	public final int getExperimentId() {
 		return this.experimentId;
 	}
 	
-	public final void setExperimentId(int experimentId) {
-		this.experimentId = experimentId;
-	}
 	
 	public final boolean isDebugMode() {
 		return this.debugMode;
 	}
 	
-	public final void setDebugMode(boolean debugMode) {
-		this.debugMode = debugMode;
-	}
 	
 	public final long getTimeOffset() {
 		return this.timeOffset;
 	}
 	
-	public final void setTimeOffset(long timeOffset) {
-		this.timeOffset = timeOffset;
-	}
 	
 	public final String getTimeUnit() {
 		return this.timeUnit;
 	}
 	
-	public final void setTimeUnit(String timeUnit) {
-		this.timeUnit = timeUnit;
-	}
 	
 	public final long getNumberOfRecords() {
 		return this.numberOfRecords;
 	}
 	
-	public final void setNumberOfRecords(long numberOfRecords) {
-		this.numberOfRecords = numberOfRecords;
-	}
 }

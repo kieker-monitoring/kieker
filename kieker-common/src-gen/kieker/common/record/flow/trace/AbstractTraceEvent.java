@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,15 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace;
 
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.AbstractEvent;
 import kieker.common.record.io.IValueDeserializer;
-import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.ITraceRecord;
 
 /**
  * @author Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.5
  */
@@ -41,8 +38,8 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	
 		
 	/** property declarations. */
-	private long traceId;
-	private int orderIndex;
+	private final long traceId;
+	private final int orderIndex;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -122,15 +119,9 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		return this.traceId;
 	}
 	
-	public final void setTraceId(long traceId) {
-		this.traceId = traceId;
-	}
 	
 	public final int getOrderIndex() {
 		return this.orderIndex;
 	}
 	
-	public final void setOrderIndex(int orderIndex) {
-		this.orderIndex = orderIndex;
-	}
 }

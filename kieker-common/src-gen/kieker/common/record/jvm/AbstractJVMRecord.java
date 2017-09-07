@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,15 @@
  ***************************************************************************/
 package kieker.common.record.jvm;
 
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
-import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Nils Christian Ehmke
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.10
  */
@@ -41,9 +38,9 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	
 		
 	/** property declarations. */
-	private long timestamp;
-	private String hostname;
-	private String vmName;
+	private final long timestamp;
+	private final String hostname;
+	private final String vmName;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -124,23 +121,14 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 		return this.timestamp;
 	}
 	
-	public final void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
 	
 	public final String getHostname() {
 		return this.hostname;
 	}
 	
-	public final void setHostname(String hostname) {
-		this.hostname = hostname;
-	}
 	
 	public final String getVmName() {
 		return this.vmName;
 	}
 	
-	public final void setVmName(String vmName) {
-		this.vmName = vmName;
-	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -28,6 +26,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Teerat Pitakrat
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.12
  */
@@ -68,11 +67,11 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	};
 	
 	/** property declarations. */
-	private long timestamp;
-	private String hostname;
-	private double oneMinLoadAverage;
-	private double fiveMinLoadAverage;
-	private double fifteenMinLoadAverage;
+	private final long timestamp;
+	private final String hostname;
+	private final double oneMinLoadAverage;
+	private final double fiveMinLoadAverage;
+	private final double fifteenMinLoadAverage;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -241,39 +240,24 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		return this.timestamp;
 	}
 	
-	public final void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
 	
 	public final String getHostname() {
 		return this.hostname;
 	}
 	
-	public final void setHostname(String hostname) {
-		this.hostname = hostname;
-	}
 	
 	public final double getOneMinLoadAverage() {
 		return this.oneMinLoadAverage;
 	}
 	
-	public final void setOneMinLoadAverage(double oneMinLoadAverage) {
-		this.oneMinLoadAverage = oneMinLoadAverage;
-	}
 	
 	public final double getFiveMinLoadAverage() {
 		return this.fiveMinLoadAverage;
 	}
 	
-	public final void setFiveMinLoadAverage(double fiveMinLoadAverage) {
-		this.fiveMinLoadAverage = fiveMinLoadAverage;
-	}
 	
 	public final double getFifteenMinLoadAverage() {
 		return this.fifteenMinLoadAverage;
 	}
 	
-	public final void setFifteenMinLoadAverage(double fifteenMinLoadAverage) {
-		this.fifteenMinLoadAverage = fifteenMinLoadAverage;
-	}
 }

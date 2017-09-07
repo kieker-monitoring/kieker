@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package kieker.common.record.flow.trace.operation;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.io.IValueDeserializer;
@@ -28,6 +26,7 @@ import kieker.common.record.flow.IExceptionRecord;
 
 /**
  * @author Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.5
  */
@@ -67,7 +66,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	};
 	
 	/** property declarations. */
-	private String cause;
+	private final String cause;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -229,7 +228,4 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		return this.cause;
 	}
 	
-	public final void setCause(String cause) {
-		this.cause = cause;
-	}
 }

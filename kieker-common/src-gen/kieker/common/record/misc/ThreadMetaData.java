@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package kieker.common.record.misc;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -28,6 +26,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Christian Wulf
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.13
  */
@@ -55,8 +54,8 @@ public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitor
 	};
 	
 	/** property declarations. */
-	private String hostName;
-	private long threadId;
+	private final String hostName;
+	private final long threadId;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -198,15 +197,9 @@ public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitor
 		return this.hostName;
 	}
 	
-	public final void setHostName(String hostName) {
-		this.hostName = hostName;
-	}
 	
 	public final long getThreadId() {
 		return this.threadId;
 	}
 	
-	public final void setThreadId(long threadId) {
-		this.threadId = threadId;
-	}
 }

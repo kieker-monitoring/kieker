@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package kieker.common.record.flow.trace.operation.object;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
 import kieker.common.record.io.IValueDeserializer;
@@ -28,6 +26,7 @@ import kieker.common.record.flow.ICallObjectRecord;
 
 /**
  * @author Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.6
  */
@@ -77,8 +76,8 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	};
 	
 	/** property declarations. */
-	private int objectId;
-	private int calleeObjectId;
+	private final int objectId;
+	private final int calleeObjectId;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -260,23 +259,14 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		return this.objectId;
 	}
 	
-	public final void setObjectId(int objectId) {
-		this.objectId = objectId;
-	}
 	
 	public final int getCallerObjectId() {
 		return this.getObjectId();
 	}
 	
-	public final void setCallerObjectId(int callerObjectId) {
-		setObjectId(callerObjectId);
-	}
 	
 	public final int getCalleeObjectId() {
 		return this.calleeObjectId;
 	}
 	
-	public final void setCalleeObjectId(int calleeObjectId) {
-		this.calleeObjectId = calleeObjectId;
-	}
 }

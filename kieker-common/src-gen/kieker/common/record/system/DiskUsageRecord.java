@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -28,6 +26,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Teerat Pitakrat
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.12
  */
@@ -84,15 +83,15 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	};
 	
 	/** property declarations. */
-	private long timestamp;
-	private String hostname;
-	private String deviceName;
-	private double queue;
-	private double readBytesPerSecond;
-	private double readsPerSecond;
-	private double serviceTime;
-	private double writeBytesPerSecond;
-	private double writesPerSecond;
+	private final long timestamp;
+	private final String hostname;
+	private final String deviceName;
+	private final double queue;
+	private final double readBytesPerSecond;
+	private final double readsPerSecond;
+	private final double serviceTime;
+	private final double writeBytesPerSecond;
+	private final double writesPerSecond;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -298,71 +297,44 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		return this.timestamp;
 	}
 	
-	public final void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
 	
 	public final String getHostname() {
 		return this.hostname;
 	}
 	
-	public final void setHostname(String hostname) {
-		this.hostname = hostname;
-	}
 	
 	public final String getDeviceName() {
 		return this.deviceName;
 	}
 	
-	public final void setDeviceName(String deviceName) {
-		this.deviceName = deviceName;
-	}
 	
 	public final double getQueue() {
 		return this.queue;
 	}
 	
-	public final void setQueue(double queue) {
-		this.queue = queue;
-	}
 	
 	public final double getReadBytesPerSecond() {
 		return this.readBytesPerSecond;
 	}
 	
-	public final void setReadBytesPerSecond(double readBytesPerSecond) {
-		this.readBytesPerSecond = readBytesPerSecond;
-	}
 	
 	public final double getReadsPerSecond() {
 		return this.readsPerSecond;
 	}
 	
-	public final void setReadsPerSecond(double readsPerSecond) {
-		this.readsPerSecond = readsPerSecond;
-	}
 	
 	public final double getServiceTime() {
 		return this.serviceTime;
 	}
 	
-	public final void setServiceTime(double serviceTime) {
-		this.serviceTime = serviceTime;
-	}
 	
 	public final double getWriteBytesPerSecond() {
 		return this.writeBytesPerSecond;
 	}
 	
-	public final void setWriteBytesPerSecond(double writeBytesPerSecond) {
-		this.writeBytesPerSecond = writeBytesPerSecond;
-	}
 	
 	public final double getWritesPerSecond() {
 		return this.writesPerSecond;
 	}
 	
-	public final void setWritesPerSecond(double writesPerSecond) {
-		this.writesPerSecond = writesPerSecond;
-	}
 }

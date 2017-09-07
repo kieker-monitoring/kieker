@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package kieker.common.record.controlflow;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -28,6 +26,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.2
  */
@@ -60,9 +59,9 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	};
 	
 	/** property declarations. */
-	private long timestamp;
-	private int branchID;
-	private int branchingOutcome;
+	private final long timestamp;
+	private final int branchID;
+	private final int branchingOutcome;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -212,23 +211,14 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 		return this.timestamp;
 	}
 	
-	public final void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
 	
 	public final int getBranchID() {
 		return this.branchID;
 	}
 	
-	public final void setBranchID(int branchID) {
-		this.branchID = branchID;
-	}
 	
 	public final int getBranchingOutcome() {
 		return this.branchingOutcome;
 	}
 	
-	public final void setBranchingOutcome(int branchingOutcome) {
-		this.branchingOutcome = branchingOutcome;
-	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 iObserve Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -28,6 +26,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.3
  */
@@ -88,16 +87,16 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	};
 	
 	/** property declarations. */
-	private long timestamp;
-	private String hostname;
-	private String cpuID;
-	private double user;
-	private double system;
-	private double wait;
-	private double nice;
-	private double irq;
-	private double totalUtilization;
-	private double idle;
+	private final long timestamp;
+	private final String hostname;
+	private final String cpuID;
+	private final double user;
+	private final double system;
+	private final double wait;
+	private final double nice;
+	private final double irq;
+	private final double totalUtilization;
+	private final double idle;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -312,79 +311,49 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		return this.timestamp;
 	}
 	
-	public final void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
 	
 	public final String getHostname() {
 		return this.hostname;
 	}
 	
-	public final void setHostname(String hostname) {
-		this.hostname = hostname;
-	}
 	
 	public final String getCpuID() {
 		return this.cpuID;
 	}
 	
-	public final void setCpuID(String cpuID) {
-		this.cpuID = cpuID;
-	}
 	
 	public final double getUser() {
 		return this.user;
 	}
 	
-	public final void setUser(double user) {
-		this.user = user;
-	}
 	
 	public final double getSystem() {
 		return this.system;
 	}
 	
-	public final void setSystem(double system) {
-		this.system = system;
-	}
 	
 	public final double getWait() {
 		return this.wait;
 	}
 	
-	public final void setWait(double wait) {
-		this.wait = wait;
-	}
 	
 	public final double getNice() {
 		return this.nice;
 	}
 	
-	public final void setNice(double nice) {
-		this.nice = nice;
-	}
 	
 	public final double getIrq() {
 		return this.irq;
 	}
 	
-	public final void setIrq(double irq) {
-		this.irq = irq;
-	}
 	
 	public final double getTotalUtilization() {
 		return this.totalUtilization;
 	}
 	
-	public final void setTotalUtilization(double totalUtilization) {
-		this.totalUtilization = totalUtilization;
-	}
 	
 	public final double getIdle() {
 		return this.idle;
 	}
 	
-	public final void setIdle(double idle) {
-		this.idle = idle;
-	}
 }
