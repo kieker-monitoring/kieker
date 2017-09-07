@@ -960,7 +960,13 @@ uploadArchives {
                 mavenPassword = project.property("kiekerMavenPassword")
             }
 
-            repository(url: project.releaseRepoUrl) {
+            if (System.env.kiekerMavenUser != null) {
+		println("maven_user is set.")
+	    } else {
+		println("maven_user is NOT set.")
+	    }
+
+	    repository(url: project.releaseRepoUrl) {
                 authentication(userName: mavenUser, password: mavenPassword)
             }
             snapshotRepository(url: project.snapshotRepoUrl) {
