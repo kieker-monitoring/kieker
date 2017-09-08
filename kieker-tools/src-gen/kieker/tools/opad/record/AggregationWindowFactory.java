@@ -15,27 +15,29 @@
  ***************************************************************************/
 package kieker.tools.opad.record;
 
+
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Thomas Duellmann
- *
+ * 
  * @since 1.10
  */
 public final class AggregationWindowFactory implements IRecordFactory<AggregationWindow> {
-
+	
+	
 	@Override
 	public AggregationWindow create(final IValueDeserializer deserializer) {
 		return new AggregationWindow(deserializer);
 	}
-
+	
 	@Override
+	@Deprecated
 	public AggregationWindow create(final Object[] values) {
 		return new AggregationWindow(values);
 	}
-
-	@Override
+	
 	public int getRecordSizeInBytes() {
 		return AggregationWindow.SIZE;
 	}
