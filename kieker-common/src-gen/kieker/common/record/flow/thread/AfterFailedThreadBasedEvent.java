@@ -1,16 +1,32 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.flow.thread;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
 
 import kieker.common.record.flow.thread.AbstractThreadBasedEvent;
-import kieker.common.record.io.*;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.IExceptionRecord;
 
 /**
  * @author Christian Wulf
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.13
  */
@@ -35,9 +51,8 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		String.class, // IExceptionRecord.cause
 	};
 	
-	/** user-defined constants */
 	
-	/** default constants */
+	/** default constants. */
 	public static final String CAUSE = "";
 	
 	/** property name array. */
@@ -50,7 +65,7 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		"cause",
 	};
 	
-	/** property declarations */
+	/** property declarations. */
 	private final String cause;
 	
 	/**
@@ -80,7 +95,10 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #AfterFailedThreadBasedEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public AfterFailedThreadBasedEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
 		this.cause = (String) values[5];
@@ -93,28 +111,32 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #AfterFailedThreadBasedEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected AfterFailedThreadBasedEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
 		this.cause = (String) values[5];
 	}
 
+	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 *
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
 	 */
-	public AfterFailedThreadBasedEvent(final IValueDeserializer deserializer) throws BufferUnderflowException {
+	public AfterFailedThreadBasedEvent(final IValueDeserializer deserializer) {
 		super(deserializer);
 		this.cause = deserializer.getString();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -125,7 +147,6 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 			this.getCause()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -135,22 +156,33 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getCause());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		super.serialize(serializer);
+		//super.serialize(serializer);
+		serializer.putLong(this.getTimestamp());
+		serializer.putLong(this.getThreadId());
+		serializer.putInt(this.getOrderIndex());
+		serializer.putString(this.getOperationSignature());
+		serializer.putString(this.getClassSignature());
 		serializer.putString(this.getCause());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**
@@ -195,9 +227,5 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 	public final String getCause() {
 		return this.cause;
 	}
-
-	@Override
-	public String[] getValueNames() {
-		return PROPERTY_NAMES;	// NOPMD
-	}	
+	
 }

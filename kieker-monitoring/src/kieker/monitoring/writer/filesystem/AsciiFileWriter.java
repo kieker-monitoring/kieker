@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.CharBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -27,6 +28,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.TextValueSerializer;
 import kieker.common.util.filesystem.FileExtensionFilter;
 import kieker.monitoring.core.controller.ReceiveUnfilteredConfiguration;
 import kieker.monitoring.registry.IRegistryListener;
@@ -72,8 +74,13 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	private final boolean flush;
 	private final boolean flushMapfile;
 
+	private final CharBuffer buffer = CharBuffer.allocate(65535);
+	private final TextValueSerializer serializer;
+
 	public AsciiFileWriter(final Configuration configuration) {
 		super(configuration);
+
+		this.serializer = TextValueSerializer.create(this.buffer);
 
 		String configPathName = configuration.getStringProperty(CONFIG_PATH);
 		if (configPathName.isEmpty()) { // if the property does not exist or if the path is empty
@@ -127,15 +134,17 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 
 		final PrintWriter fileWriter = this.fileWriterPool.getFileWriter();
 
+		this.buffer.clear();
+
 		fileWriter.print('$');
 		fileWriter.print(this.writerRegistry.getId(recordClassName));
 		fileWriter.print(';');
 		fileWriter.print(record.getLoggingTimestamp());
-		// IMPROVE performance: provide and use a method Record.writeBytes(CharBuffer, ..) instead
-		for (final Object recordField : record.toArray()) {
-			fileWriter.print(';');
-			fileWriter.print(String.valueOf(recordField));
-		}
+
+		record.serialize(this.serializer);
+
+		this.buffer.flip();
+		fileWriter.print(this.buffer.toString());
 		fileWriter.println();
 
 		if (this.flush) {

@@ -15,27 +15,29 @@
  ***************************************************************************/
 package kieker.tools.opad.record;
 
+
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Tillmann Carlos Bielefeld
- *
+ * 
  * @since 1.10
  */
 public final class NamedTSPointFactory implements IRecordFactory<NamedTSPoint> {
-
+	
+	
 	@Override
 	public NamedTSPoint create(final IValueDeserializer deserializer) {
 		return new NamedTSPoint(deserializer);
 	}
-
+	
 	@Override
+	@Deprecated
 	public NamedTSPoint create(final Object[] values) {
 		return new NamedTSPoint(values);
 	}
-
-	@Override
+	
 	public int getRecordSizeInBytes() {
 		return NamedTSPoint.SIZE;
 	}

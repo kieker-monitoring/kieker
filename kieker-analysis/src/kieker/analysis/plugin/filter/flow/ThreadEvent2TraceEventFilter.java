@@ -40,8 +40,8 @@ import kieker.common.record.misc.ThreadMetaData;
  * @since 1.13
  */
 @Plugin(name = "Thread Event to Trace Event Filter (Event)", description = "Filter to transform threadId-based events to traceId-based events", outputPorts = {
-		@OutputPort(name = ThreadEvent2TraceEventFilter.OUTPUT_PORT_NAME_DEFAULT, description = "Outputs monitoring records", eventTypes = {
-				IMonitoringRecord.class }) })
+	@OutputPort(name = ThreadEvent2TraceEventFilter.OUTPUT_PORT_NAME_DEFAULT, description = "Outputs monitoring records", eventTypes = {
+		IMonitoringRecord.class }) })
 public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_DEFAULT = "defaultInputPort";
@@ -56,7 +56,7 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_DEFAULT, description = "Input port for a threadId-based event", eventTypes = {
-			IMonitoringRecord.class })
+		IMonitoringRecord.class })
 	public void readInput(final IMonitoringRecord event) {
 		if (event instanceof BeforeThreadBasedEvent) {
 			final BeforeThreadBasedEvent originalEvent = (BeforeThreadBasedEvent) event;
@@ -68,7 +68,7 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 					monitoredTrace.identifier, originalEvent.getOrderIndex(), originalEvent.getOperationSignature(),
 					originalEvent.getClassSignature());
 			newEvent.setLoggingTimestamp(originalEvent.getLoggingTimestamp());
-			
+
 			super.deliver(OUTPUT_PORT_NAME_DEFAULT, newEvent);
 		} else if (event instanceof AfterThreadBasedEvent) {
 			final AfterThreadBasedEvent originalEvent = (AfterThreadBasedEvent) event;
@@ -79,7 +79,7 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 					monitoredTrace.identifier, originalEvent.getOrderIndex(), originalEvent.getOperationSignature(),
 					originalEvent.getClassSignature());
 			newEvent.setLoggingTimestamp(originalEvent.getLoggingTimestamp());
-			
+
 			super.deliver(OUTPUT_PORT_NAME_DEFAULT, newEvent);
 		} else if (event instanceof AfterFailedThreadBasedEvent) {
 			final AfterFailedThreadBasedEvent originalEvent = (AfterFailedThreadBasedEvent) event;
@@ -90,13 +90,13 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 					monitoredTrace.identifier, originalEvent.getOrderIndex(), originalEvent.getOperationSignature(),
 					originalEvent.getClassSignature(), originalEvent.getCause());
 			newEvent.setLoggingTimestamp(originalEvent.getLoggingTimestamp());
-			
+
 			super.deliver(OUTPUT_PORT_NAME_DEFAULT, newEvent);
 		} else if (event instanceof ThreadMetaData) {
 			final ThreadMetaData threadMetaData = (ThreadMetaData) event;
 
 			final long threadId = threadMetaData.getThreadId();
-			final String hostName = threadMetaData.getHostName();
+			final String hostName = threadMetaData.getHostname();
 			this.hostNames.put(threadId, hostName);
 		} else {
 			// pass through all other record types

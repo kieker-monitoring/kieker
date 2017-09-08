@@ -1,15 +1,31 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.flow.thread;
 
-import java.nio.*;
 
 import kieker.common.record.flow.AbstractEvent;
+import kieker.common.record.io.IValueDeserializer;
+
 import kieker.common.record.flow.IThreadBasedRecord;
-import kieker.common.record.io.*;
 import kieker.common.record.flow.IOperationSignature;
 import kieker.common.record.flow.IClassSignature;
 
 /**
  * @author Christian Wulf
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.13
  */
@@ -17,15 +33,15 @@ public abstract class AbstractThreadBasedEvent extends AbstractEvent implements 
 	private static final long serialVersionUID = -4756765331556509113L;
 
 	
-	/** user-defined constants */
 	
-	/** default constants */
+	/** default constants. */
 	public static final long THREAD_ID = -1L;
 	public static final int ORDER_INDEX = -1;
 	public static final String OPERATION_SIGNATURE = "";
 	public static final String CLASS_SIGNATURE = "";
 	
-	/** property declarations */
+		
+	/** property declarations. */
 	private final long threadId;
 	private final int orderIndex;
 	private final String operationSignature;
@@ -61,7 +77,10 @@ public abstract class AbstractThreadBasedEvent extends AbstractEvent implements 
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #AbstractThreadBasedEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected AbstractThreadBasedEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
 		this.threadId = (Long) values[1];
@@ -70,16 +89,12 @@ public abstract class AbstractThreadBasedEvent extends AbstractEvent implements 
 		this.classSignature = (String) values[4];
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 *
 	 * @param deserializer
-	 *            The value deserializer to use.
-	 *
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
+	 *            The deserializer to use
 	 */
-	public AbstractThreadBasedEvent(final IValueDeserializer deserializer) throws BufferUnderflowException {
+	public AbstractThreadBasedEvent(final IValueDeserializer deserializer) {
 		super(deserializer);
 		this.threadId = deserializer.getLong();
 		this.orderIndex = deserializer.getInt();
@@ -87,18 +102,6 @@ public abstract class AbstractThreadBasedEvent extends AbstractEvent implements 
 		this.classSignature = deserializer.getString();
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-//		super.serialize(serializer);
-		serializer.putLong(this.getTimestamp());
-		serializer.putLong(this.getThreadId());
-		serializer.putInt(this.getOrderIndex());
-		serializer.putString(this.getOperationSignature());
-		serializer.putString(this.getClassSignature());
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -132,17 +135,21 @@ public abstract class AbstractThreadBasedEvent extends AbstractEvent implements 
 	
 	public final long getThreadId() {
 		return this.threadId;
-	}	
+	}
+	
 	
 	public final int getOrderIndex() {
 		return this.orderIndex;
-	}	
+	}
+	
 	
 	public final String getOperationSignature() {
 		return this.operationSignature;
-	}	
+	}
+	
 	
 	public final String getClassSignature() {
 		return this.classSignature;
-	}	
+	}
+	
 }

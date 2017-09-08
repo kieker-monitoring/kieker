@@ -16,17 +16,18 @@
 package kieker.common.record.flow.trace;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
+import kieker.common.record.flow.IFlowRecord;
+
 /**
  * @author Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.5
  */
@@ -52,18 +53,16 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	};
 	
 	/** user-defined constants. */
-	public static final String NO_SESSION_ID = "<no-session-id>";
-	public static final String NO_HOSTNAME = "<default-host>";
 	public static final long NO_PARENT_TRACEID = -1L;
 	public static final int NO_PARENT_ORDER_INDEX = -1;
 	
 	/** default constants. */
 	public static final long TRACE_ID = 0L;
 	public static final long THREAD_ID = 0L;
-	public static final String SESSION_ID = NO_SESSION_ID;
-	public static final String HOSTNAME = NO_HOSTNAME;
-	public static final long PARENT_TRACE_ID = NO_PARENT_TRACEID;
-	public static final int PARENT_ORDER_ID = NO_PARENT_ORDER_INDEX;
+	public static final String SESSION_ID = "<no-session-id>";
+	public static final String HOSTNAME = "<default-host>";
+	public static final long PARENT_TRACE_ID = 0L;
+	public static final int PARENT_ORDER_ID = 0;
 	public static final int NEXT_ORDER_ID = 0;
 	
 	/** property name array. */
@@ -78,12 +77,12 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	
 	/** property declarations. */
 	private long traceId;
-	private long threadId;
-	private String sessionId;
-	private String hostname;
-	private long parentTraceId;
-	private int parentOrderId;
-	private int nextOrderId;
+	private final long threadId;
+	private final String sessionId;
+	private final String hostname;
+	private final long parentTraceId;
+	private final int parentOrderId;
+	private int nextOrderId = 0;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -104,8 +103,8 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	public TraceMetadata(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId) {
 		this.traceId = traceId;
 		this.threadId = threadId;
-		this.sessionId = sessionId == null?NO_SESSION_ID:sessionId;
-		this.hostname = hostname == null?NO_HOSTNAME:hostname;
+		this.sessionId = sessionId == null?SESSION_ID:sessionId;
+		this.hostname = hostname == null?HOSTNAME:hostname;
 		this.parentTraceId = parentTraceId;
 		this.parentOrderId = parentOrderId;
 	}
@@ -116,7 +115,10 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #TraceMetadata(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public TraceMetadata(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.traceId = (Long) values[0];
@@ -134,7 +136,10 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #TraceMetadata(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected TraceMetadata(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
 		this.traceId = (Long) values[0];
@@ -145,18 +150,12 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		this.parentOrderId = (Integer) values[5];
 	}
 
+	
 	/**
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
+	 * @param deserializer
+	 *            The deserializer to use
 	 */
-	public TraceMetadata(final IValueDeserializer deserializer) throws BufferUnderflowException {
+	public TraceMetadata(final IValueDeserializer deserializer) {
 		this.traceId = deserializer.getLong();
 		this.threadId = deserializer.getLong();
 		this.sessionId = deserializer.getString();
@@ -167,8 +166,11 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTraceId(),
@@ -192,6 +194,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
 		serializer.putLong(this.getTraceId());
 		serializer.putLong(this.getThreadId());
 		serializer.putString(this.getSessionId());
@@ -233,7 +236,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-		
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -267,47 +270,29 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		return this.threadId;
 	}
 	
-	public final void setThreadId(long threadId) {
-		this.threadId = threadId;
-	}
 	
 	public final String getSessionId() {
 		return this.sessionId;
 	}
 	
-	public final void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
-	}
 	
 	public final String getHostname() {
 		return this.hostname;
 	}
 	
-	public final void setHostname(String hostname) {
-		this.hostname = hostname;
-	}
 	
 	public final long getParentTraceId() {
 		return this.parentTraceId;
 	}
 	
-	public final void setParentTraceId(long parentTraceId) {
-		this.parentTraceId = parentTraceId;
-	}
 	
 	public final int getParentOrderId() {
 		return this.parentOrderId;
 	}
 	
-	public final void setParentOrderId(int parentOrderId) {
-		this.parentOrderId = parentOrderId;
-	}
 	
 	public final int getNextOrderId() {
 		return this.nextOrderId++;
 	}
 	
-	public final void setNextOrderId(int nextOrderId) {
-		this.nextOrderId = nextOrderId;
-	}
 }
