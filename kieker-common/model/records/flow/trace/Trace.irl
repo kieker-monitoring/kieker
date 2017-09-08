@@ -21,8 +21,8 @@ entity TraceMetadata : IFlowRecord {
 	
  	changeable long traceId = 0
  	long threadId = 0
- 	string sessionId = ""
- 	string hostname = "<nohost>"
+ 	string sessionId = "<no-session-id>"
+ 	string hostname = "<default-host>"
  	long parentTraceId = 0
  	int parentOrderId = 0
  	transient auto-increment int nextOrderId = 0 

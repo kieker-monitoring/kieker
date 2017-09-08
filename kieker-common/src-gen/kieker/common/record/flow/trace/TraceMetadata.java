@@ -59,8 +59,8 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	/** default constants. */
 	public static final long TRACE_ID = 0L;
 	public static final long THREAD_ID = 0L;
-	public static final String SESSION_ID = "";
-	public static final String HOSTNAME = "<nohost>";
+	public static final String SESSION_ID = "<no-session-id>";
+	public static final String HOSTNAME = "<default-host>";
 	public static final long PARENT_TRACE_ID = 0L;
 	public static final int PARENT_ORDER_ID = 0;
 	public static final int NEXT_ORDER_ID = 0;

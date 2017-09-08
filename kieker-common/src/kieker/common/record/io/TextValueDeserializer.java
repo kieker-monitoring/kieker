@@ -93,9 +93,10 @@ public class TextValueDeserializer implements IValueDeserializer {
 	}
 
 	private String readValue() {
-		String result = "";
+		final char[] charArray = new char[this.buffer.capacity()];
 		char ch;
 		boolean escape = false;
+		int i = 0;
 		do {
 			escape = false;
 			ch = this.buffer.get();
@@ -103,10 +104,10 @@ public class TextValueDeserializer implements IValueDeserializer {
 				escape = true;
 			}
 			if (escape || (ch != ';')) {
-				result += ch;
+				charArray[i++] = ch;
 			}
 		} while (escape || (ch != ';'));
-		return result;
+		return new String(charArray);
 	}
 
 }

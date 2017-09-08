@@ -31,42 +31,42 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.13
  */
 public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = 3010881635494258512L;
+	private static final long serialVersionUID = 4284309919791475271L;
 
 	/** Descriptive definition of the serialization size of the record. */
-	public static final int SIZE = TYPE_SIZE_STRING // ThreadMetaData.hostName
+	public static final int SIZE = TYPE_SIZE_STRING // ThreadMetaData.hostname
 			 + TYPE_SIZE_LONG // ThreadMetaData.threadId
 	;
 	
 	public static final Class<?>[] TYPES = {
-		String.class, // ThreadMetaData.hostName
+		String.class, // ThreadMetaData.hostname
 		long.class, // ThreadMetaData.threadId
 	};
 	
 	
 	/** default constants. */
-	public static final String HOST_NAME = "";
+	public static final String HOSTNAME = "";
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
-		"hostName",
+		"hostname",
 		"threadId",
 	};
 	
 	/** property declarations. */
-	private final String hostName;
+	private final String hostname;
 	private final long threadId;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
-	 * @param hostName
-	 *            hostName
+	 * @param hostname
+	 *            hostname
 	 * @param threadId
 	 *            threadId
 	 */
-	public ThreadMetaData(final String hostName, final long threadId) {
-		this.hostName = hostName == null?"":hostName;
+	public ThreadMetaData(final String hostname, final long threadId) {
+		this.hostname = hostname == null?"":hostname;
 		this.threadId = threadId;
 	}
 
@@ -82,7 +82,7 @@ public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitor
 	@Deprecated
 	public ThreadMetaData(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.hostName = (String) values[0];
+		this.hostname = (String) values[0];
 		this.threadId = (Long) values[1];
 	}
 
@@ -99,7 +99,7 @@ public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitor
 	@Deprecated
 	protected ThreadMetaData(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.hostName = (String) values[0];
+		this.hostname = (String) values[0];
 		this.threadId = (Long) values[1];
 	}
 
@@ -109,7 +109,7 @@ public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitor
 	 *            The deserializer to use
 	 */
 	public ThreadMetaData(final IValueDeserializer deserializer) {
-		this.hostName = deserializer.getString();
+		this.hostname = deserializer.getString();
 		this.threadId = deserializer.getLong();
 	}
 	
@@ -122,7 +122,7 @@ public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitor
 	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
-			this.getHostName(),
+			this.getHostname(),
 			this.getThreadId()
 		};
 	}
@@ -131,7 +131,7 @@ public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitor
 	 */
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getHostName());
+		stringRegistry.get(this.getHostname());
 	}
 	/**
 	 * {@inheritDoc}
@@ -139,7 +139,7 @@ public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitor
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		//super.serialize(serializer);
-		serializer.putString(this.getHostName());
+		serializer.putString(this.getHostname());
 		serializer.putLong(this.getThreadId());
 	}
 	/**
@@ -188,13 +188,13 @@ public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitor
 		
 		final ThreadMetaData castedRecord = (ThreadMetaData) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (!this.getHostName().equals(castedRecord.getHostName())) return false;
+		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
 		if (this.getThreadId() != castedRecord.getThreadId()) return false;
 		return true;
 	}
 	
-	public final String getHostName() {
-		return this.hostName;
+	public final String getHostname() {
+		return this.hostname;
 	}
 	
 	
