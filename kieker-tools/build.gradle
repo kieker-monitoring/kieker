@@ -6,7 +6,7 @@ dependencies {
 	compile project(':kieker-monitoring')
 	
 	compile "com.beust:jcommander:1.60"
-
+    
 	compile resolveLibrary('commons-cli-*.jar')
 	compile resolveLibrary('jgraphx-*.jar')
 	compile resolveLibrary('commons-math3-*.jar')

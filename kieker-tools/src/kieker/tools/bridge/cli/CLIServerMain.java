@@ -248,7 +248,7 @@ public final class CLIServerMain {
 	 * @param connector
 	 *
 	 * @throws ConnectorDataTransmissionException
-	 *             if an error occured during connector operations
+	 *             if an error occurred during connector operations
 	 */
 	private void runService(final Configuration configuration, final IServiceConnector connector)
 			throws ConnectorDataTransmissionException {
@@ -459,18 +459,21 @@ public final class CLIServerMain {
 	 * Print out the server usage and an additional message describing the cause of
 	 * the failure. Finally terminate the server.
 	 *
-	 * @param i
+	 * @param exitCode
+	 *            exit code
 	 * @param commander
+	 *            jcommander
 	 *
 	 * @param message
 	 *            the message to be printed
 	 * @param code
 	 *            the exit code
 	 */
-	private void usage(final JCommander commander, final int i, final String message) {
+	private void usage(final JCommander commander, final int exitCode, final String message) {
 		final StringBuilder out = new StringBuilder();
 		commander.usage(out, message);
 		CLIServerMain.getLog().error(out.toString());
+		System.exit(exitCode);
 	}
 
 	/**
