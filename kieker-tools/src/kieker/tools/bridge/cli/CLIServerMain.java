@@ -57,13 +57,15 @@ import kieker.tools.bridge.connector.tcp.TCPClientConnector;
 import kieker.tools.bridge.connector.tcp.TCPMultiServerConnector;
 import kieker.tools.bridge.connector.tcp.TCPSingleServerConnector;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * The command line server of the KDB.
  *
  * @author Reiner Jung
  * @since 1.8
  */
-public final class CLIServerMain {
+public final class CLIServerMain { // NOPMD
 
 	/**
 	 * The logger used in the server.
@@ -132,10 +134,9 @@ public final class CLIServerMain {
 			"--daemon" }, description = "detach from console; TCP server allows multiple connections", converter = BooleanConverter.class)
 	private boolean daemonMode;
 
-	private static long startTime;
-	private static long deltaTime;
+	private long startTime;
+	private long deltaTime;
 
-	private URLClassLoader classLoader;
 	private ServiceContainer container;
 
 	private CLIServerMain() {
@@ -155,7 +156,7 @@ public final class CLIServerMain {
 			commander.parse(args);
 			main.execute(commander);
 		} catch (final ParameterException e) {
-			System.err.println(e.getLocalizedMessage());
+			System.err.println(e.getLocalizedMessage()); // NOPMD
 			commander.usage();
 		}
 	}
@@ -238,8 +239,6 @@ public final class CLIServerMain {
 		} catch (final ConnectorDataTransmissionException e) {
 			this.usage(commander, 3, "Communication error: " + e.getMessage());
 		}
-
-		System.exit(0);
 	}
 
 	/**
@@ -256,8 +255,7 @@ public final class CLIServerMain {
 		this.container = new ServiceContainer(configuration, connector, false);
 
 		if (this.verbose != null) {
-			this.container.setListenerUpdateInterval(
-					(this.verbose != null) ? this.verbose : ServiceContainer.DEFAULT_LISTENER_UPDATE_INTERVAL); // NOCS
+			this.container.setListenerUpdateInterval(this.verbose); // NOCS
 			this.container.addListener(new IServiceListener() {
 				@Override
 				public void handleEvent(final long count, final String message) {
@@ -267,7 +265,7 @@ public final class CLIServerMain {
 		}
 
 		if (this.statistics) {
-			CLIServerMain.startTime = System.nanoTime();
+			this.startTime = System.nanoTime();
 		}
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -286,23 +284,23 @@ public final class CLIServerMain {
 		this.container.run();
 
 		if (this.statistics) {
-			CLIServerMain.deltaTime = System.nanoTime() - CLIServerMain.startTime;
+			this.deltaTime = System.nanoTime() - this.startTime;
 		}
 		if (this.verbose != null) {
 			CLIServerMain.getLog().info("Server stopped.");
 		}
 		if (this.statistics) {
-			CLIServerMain.getLog().info("Execution time: " + CLIServerMain.deltaTime + " ns  "
-					+ TimeUnit.SECONDS.convert(CLIServerMain.deltaTime, TimeUnit.NANOSECONDS) + " s");
+			CLIServerMain.getLog().info("Execution time: " + this.deltaTime + " ns  "
+					+ TimeUnit.SECONDS.convert(this.deltaTime, TimeUnit.NANOSECONDS) + " s");
 			CLIServerMain.getLog()
-					.info("Time per records: " + (CLIServerMain.deltaTime / this.container.getRecordCount()) + " ns/r");
+					.info("Time per records: " + (this.deltaTime / this.container.getRecordCount()) + " ns/r");
 			CLIServerMain.getLog().info("Records per second: " + (this.container.getRecordCount()
-					/ (double) TimeUnit.SECONDS.convert(CLIServerMain.deltaTime, TimeUnit.NANOSECONDS)));
+					/ (double) TimeUnit.SECONDS.convert(this.deltaTime, TimeUnit.NANOSECONDS)));
 		}
 	}
 
 	/**
-	 * Hook for the shutdwon thread so it can access the container's shutdown
+	 * Hook for the shutdown thread so it can access the container's shutdown
 	 * routine.
 	 *
 	 * @throws ConnectorDataTransmissionException
@@ -421,7 +419,7 @@ public final class CLIServerMain {
 		}
 
 		final PrivilegedClassLoaderAction action = new PrivilegedClassLoaderAction(urls);
-		this.classLoader = AccessController.doPrivileged(action);
+		final URLClassLoader classLoader = AccessController.doPrivileged(action);
 
 		BufferedReader in = null;
 		try {
@@ -439,7 +437,7 @@ public final class CLIServerMain {
 							 * suppressed by the SuppressWarning annotation.
 							 */
 							map.put(Integer.parseInt(pair[0]),
-									(Class<IMonitoringRecord>) this.classLoader.loadClass(pair[1]));
+									(Class<IMonitoringRecord>) classLoader.loadClass(pair[1]));
 						}
 					}
 				} catch (final ClassNotFoundException e) {
@@ -469,6 +467,7 @@ public final class CLIServerMain {
 	 * @param code
 	 *            the exit code
 	 */
+	@SuppressFBWarnings(justification = "exit necessary here to indicate cause to shell")
 	private void usage(final JCommander commander, final int exitCode, final String message) {
 		final StringBuilder out = new StringBuilder();
 		commander.usage(out, message);
