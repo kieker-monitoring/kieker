@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 	
 	@Override
 	public String[] getValueNames() {
-		return new String[] { "timestamp", "traceId", "orderIndex" } ;
+		return new String[] { "timestamp", "traceId", "orderIndex" };
 	}
 
 	@Override

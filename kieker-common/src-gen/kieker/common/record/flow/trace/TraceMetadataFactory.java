@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.common.record.flow.trace;
 
+
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
@@ -25,12 +26,14 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class TraceMetadataFactory implements IRecordFactory<TraceMetadata> {
 	
+	
 	@Override
 	public TraceMetadata create(final IValueDeserializer deserializer) {
 		return new TraceMetadata(deserializer);
 	}
 	
 	@Override
+	@Deprecated
 	public TraceMetadata create(final Object[] values) {
 		return new TraceMetadata(values);
 	}

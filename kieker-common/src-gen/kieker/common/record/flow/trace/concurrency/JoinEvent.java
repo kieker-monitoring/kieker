@@ -16,34 +16,36 @@
 package kieker.common.record.flow.trace.concurrency;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
 
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
+
 /**
  * @author Jan Waller
- *
+ * API compatibility: Kieker 1.13.0
+ * 
  * @since 1.8
  */
-public class JoinEvent extends AbstractTraceEvent {
+public class JoinEvent extends AbstractTraceEvent  {
 	private static final long serialVersionUID = -7303666475064047694L;
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			+ TYPE_SIZE_LONG // ITraceRecord.traceId
-			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
-			+ TYPE_SIZE_LONG // JoinEvent.joinedTraceId
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_LONG // JoinEvent.joinedTraceId
 	;
-
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
 		int.class, // ITraceRecord.orderIndex
 		long.class, // JoinEvent.joinedTraceId
 	};
+	
 	
 	/** default constants. */
 	public static final long JOINED_TRACE_ID = 0L;
@@ -57,11 +59,11 @@ public class JoinEvent extends AbstractTraceEvent {
 	};
 	
 	/** property declarations. */
-	private long joinedTraceId;
+	private final long joinedTraceId;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 *
+	 * 
 	 * @param timestamp
 	 *            timestamp
 	 * @param traceId
@@ -79,10 +81,13 @@ public class JoinEvent extends AbstractTraceEvent {
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 *
+	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #JoinEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public JoinEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
 		this.joinedTraceId = (Long) values[3];
@@ -90,36 +95,37 @@ public class JoinEvent extends AbstractTraceEvent {
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 *
+	 * 
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #JoinEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected JoinEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
 		this.joinedTraceId = (Long) values[3];
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 *
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
 	 */
-	public JoinEvent(final IValueDeserializer deserializer) throws BufferUnderflowException {
+	public JoinEvent(final IValueDeserializer deserializer) {
 		super(deserializer);
-
 		this.joinedTraceId = deserializer.getLong();
 	}
 	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -132,20 +138,19 @@ public class JoinEvent extends AbstractTraceEvent {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
 		serializer.putLong(this.getTraceId());
 		serializer.putInt(this.getOrderIndex());
 		serializer.putLong(this.getJoinedTraceId());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -153,7 +158,7 @@ public class JoinEvent extends AbstractTraceEvent {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -172,7 +177,7 @@ public class JoinEvent extends AbstractTraceEvent {
 
 	/**
 	 * {@inheritDoc}
-	 *
+	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -180,47 +185,27 @@ public class JoinEvent extends AbstractTraceEvent {
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (obj == this) {
-			return true;
-		}
-		if (obj.getClass() != this.getClass()) {
-			return false;
-		}
-
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
 		final JoinEvent castedRecord = (JoinEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (this.getTraceId() != castedRecord.getTraceId()) {
-			return false;
-		}
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
-			return false;
-		}
-		if (this.getJoinedTraceId() != castedRecord.getJoinedTraceId()) {
-			return false;
-		}
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (this.getTraceId() != castedRecord.getTraceId()) return false;
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
+		if (this.getJoinedTraceId() != castedRecord.getJoinedTraceId()) return false;
 		return true;
 	}
-
+	
 	public final long getJoinedTraceId() {
 		return this.joinedTraceId;
 	}
 	
-	public final void setJoinedTraceId(long joinedTraceId) {
-		this.joinedTraceId = joinedTraceId;
-	}
-
 }

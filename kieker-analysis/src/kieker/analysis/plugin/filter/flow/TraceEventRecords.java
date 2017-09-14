@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,12 @@ public final class TraceEventRecords {
 	 *            The trace events to be stored in this object.
 	 */
 	public TraceEventRecords(final TraceMetadata trace, final AbstractTraceEvent[] traceEvents) { // NOPMD (stored directly)
+//		if (null == trace) {
+//			throw new NullPointerException("trace is null");
+//		}
+		if (null == traceEvents) {
+			throw new NullPointerException("traceEvents is null");
+		}
 		this.trace = trace;
 		this.traceEvents = traceEvents;
 	}
@@ -79,7 +85,7 @@ public final class TraceEventRecords {
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(64);
 		sb.append(super.toString());
-		sb.append("\n\tTrace (");
+		sb.append("\n\tTrace (count=");
 		sb.append(this.count);
 		sb.append("): ");
 		sb.append(this.trace);

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	/** store the parent Trace. */
 	private final WeakHashMap<Thread, TracePoint> parentTrace = new WeakHashMap<Thread, TracePoint>();
 
-	private final long getId() {
+	private final long getNewId() {
 		return this.unique | this.nextTraceId.getAndIncrement();
 	}
 
@@ -59,7 +59,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	 * Gets a Trace for the current thread. If no trace is active, null is returned.
 	 * 
 	 * @return
-	 *         Trace object or null
+	 * 		Trace object or null
 	 */
 	public final TraceMetadata getTrace() {
 		return this.traceStorage.get();
@@ -69,10 +69,10 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	 * This creates a new unique Trace object and registers it.
 	 * 
 	 * @return
-	 *         Trace object
+	 * 		Trace object
 	 */
 	public final TraceMetadata registerTrace() {
-		final TraceMetadata enclosingTrace = this.traceStorage.get();
+		final TraceMetadata enclosingTrace = this.getTrace();
 		if (enclosingTrace != null) { // we create a subtrace
 			Stack<TraceMetadata> localTraceStack = this.enclosingTraceStack.get();
 			if (localTraceStack == null) {
@@ -83,7 +83,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 		}
 		final Thread thread = Thread.currentThread();
 		final TracePoint tp = this.getAndRemoveParentTraceId(thread);
-		final long traceId = this.getId();
+		final long traceId = this.getNewId();
 		final long parentTraceId;
 		final int parentOrderId;
 		if (tp != null) { // we have a known split point

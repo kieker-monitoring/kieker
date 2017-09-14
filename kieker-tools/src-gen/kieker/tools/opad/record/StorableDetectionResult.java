@@ -16,7 +16,6 @@
 package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -24,9 +23,11 @@ import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
+
 /**
  * @author Tom Frotscher, Thomas Duellmann
- *
+ * API compatibility: Kieker 1.13.0
+ * 
  * @since 1.10
  */
 public class StorableDetectionResult extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
@@ -34,10 +35,10 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // StorableDetectionResult.applicationName
-			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.value
-			+ TYPE_SIZE_LONG // StorableDetectionResult.timestamp
-			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.forecast
-			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.score
+			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.value
+			 + TYPE_SIZE_LONG // StorableDetectionResult.timestamp
+			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.forecast
+			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.score
 	;
 	
 	public static final Class<?>[] TYPES = {
@@ -47,6 +48,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		double.class, // StorableDetectionResult.forecast
 		double.class, // StorableDetectionResult.score
 	};
+	
 	
 	/** default constants. */
 	public static final String APPLICATION_NAME = "";
@@ -61,15 +63,15 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	};
 	
 	/** property declarations. */
-	private String applicationName;
-	private double value;
-	private long timestamp;
-	private double forecast;
-	private double score;
+	private final String applicationName;
+	private final double value;
+	private final long timestamp;
+	private final double forecast;
+	private final double score;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 *
+	 * 
 	 * @param applicationName
 	 *            applicationName
 	 * @param value
@@ -82,7 +84,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 *            score
 	 */
 	public StorableDetectionResult(final String applicationName, final double value, final long timestamp, final double forecast, final double score) {
-		this.applicationName = applicationName == null ? "" : applicationName;
+		this.applicationName = applicationName == null?"":applicationName;
 		this.value = value;
 		this.timestamp = timestamp;
 		this.forecast = forecast;
@@ -92,10 +94,13 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 *
+	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #StorableDetectionResult(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public StorableDetectionResult(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.applicationName = (String) values[0];
@@ -107,12 +112,15 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 *
+	 * 
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #StorableDetectionResult(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected StorableDetectionResult(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
 		this.applicationName = (String) values[0];
@@ -122,16 +130,12 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		this.score = (Double) values[4];
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 *
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
 	 */
-	public StorableDetectionResult(final IValueDeserializer deserializer) throws BufferUnderflowException {
+	public StorableDetectionResult(final IValueDeserializer deserializer) {
 		this.applicationName = deserializer.getString();
 		this.value = deserializer.getDouble();
 		this.timestamp = deserializer.getLong();
@@ -141,8 +145,11 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
 			this.getApplicationName(),
@@ -156,7 +163,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getApplicationName());
 	}
 	/**
@@ -164,6 +171,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
 		serializer.putString(this.getApplicationName());
 		serializer.putDouble(this.getValue());
 		serializer.putLong(this.getTimestamp());
@@ -196,7 +204,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 
 	/**
 	 * {@inheritDoc}
-	 *
+	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -210,35 +218,17 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (obj == this) {
-			return true;
-		}
-		if (obj.getClass() != this.getClass()) {
-			return false;
-		}
-
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
 		final StorableDetectionResult castedRecord = (StorableDetectionResult) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) {
-			return false;
-		}
-		if (AbstractMonitoringRecord.isNotEqual(this.getValue(), castedRecord.getValue())) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (AbstractMonitoringRecord.isNotEqual(this.getForecast(), castedRecord.getForecast())) {
-			return false;
-		}
-		if (AbstractMonitoringRecord.isNotEqual(this.getScore(), castedRecord.getScore())) {
-			return false;
-		}
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) return false;
+		if (isNotEqual(this.getValue(), castedRecord.getValue())) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (isNotEqual(this.getForecast(), castedRecord.getForecast())) return false;
+		if (isNotEqual(this.getScore(), castedRecord.getScore())) return false;
 		return true;
 	}
 	
@@ -246,40 +236,24 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		return this.applicationName;
 	}
 	
-	public final void setApplicationName(String applicationName) {
-		this.applicationName = applicationName;
-	}
 	
 	public final double getValue() {
 		return this.value;
 	}
 	
-	public final void setValue(double value) {
-		this.value = value;
-	}
 	
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
 	
-	public final void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
 	
 	public final double getForecast() {
 		return this.forecast;
 	}
 	
-	public final void setForecast(double forecast) {
-		this.forecast = forecast;
-	}
 	
 	public final double getScore() {
 		return this.score;
 	}
 	
-	public final void setScore(double score) {
-		this.score = score;
-	}
-
 }

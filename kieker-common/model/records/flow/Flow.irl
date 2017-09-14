@@ -69,3 +69,10 @@ template ITraceRecord : IFlowRecord {
 template IInterfaceRecord : IFlowRecord {
 	string interface
 }
+
+@author 'Christian Wulf' @since '1.13'
+template IThreadBasedRecord : IFlowRecord {
+	long threadId = -1
+	int orderIndex = -1
+}
+

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,9 +33,10 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
 
 /**
- * Provides factory methods for {@link MonitoringController}s configured to write to a {@link Pipe} and a convenient collector facility to access the records
- * received in a {@link List}. Note that, in contrast to the similar class {@link NamedPipeFactory}, doesn't use the {@link PipeWriter} directly, but uses an *
- * {@link MonitoringController}. Also, the {@link kieker.analysis.plugin.reader.namedRecordPipe.PipeReader} is used.
+ * Provides factory methods for {@link MonitoringController}s configured to write to a {@link Pipe} and a convenient
+ * collector facility to access the records received in a {@link List}. Note that, in contrast to the similar class
+ * {@link NamedPipeFactory}, doesn't use the {@link PipeWriter} directly, but uses an * {@link MonitoringController}.
+ * Also, the {@link kieker.analysis.plugin.reader.namedRecordPipe.PipeReader} is used.
  *
  * @author Andre van Hoorn
  *
@@ -46,11 +47,13 @@ public final class NamedPipeFactory {
 	private static final AtomicInteger NEXT_PIPE_ID = new AtomicInteger(0);
 	private static final String PIPE_NAME_PREFIX = "pipeName_" + NamedPipeFactory.class.getName() + "_";
 
-	private NamedPipeFactory() {}
+	private NamedPipeFactory() {
+		// utility class
+	}
 
 	/**
-	 * This method should be used in tests to generate unique names for {@link Configuration}s with {@link PipeWriter}s and {@link java.io.PipedReader}s
-	 * in order to avoid naming conflicts.
+	 * This method should be used in tests to generate unique names for {@link Configuration}s with {@link PipeWriter}s
+	 * and {@link java.io.PipedReader}s in order to avoid naming conflicts.
 	 *
 	 * @return a unique name
 	 */
@@ -59,8 +62,8 @@ public final class NamedPipeFactory {
 	}
 
 	/**
-	 * Creates a new {@link MonitoringController} instance with the writer
-	 * being a {@link PipeWriter} with the given name.
+	 * Creates a new {@link MonitoringController} instance with the writer being a {@link PipeWriter} with the given
+	 * name.
 	 *
 	 * @param pipeName
 	 *            The name of the pipe to use.
@@ -71,9 +74,8 @@ public final class NamedPipeFactory {
 	}
 
 	/**
-	 * Creates a new {@link MonitoringController} instance with the writer
-	 * being a {@link PipeWriter} with the given name. Additional configuration
-	 * properties can be passed.
+	 * Creates a new {@link MonitoringController} instance with the writer being a {@link PipeWriter} with the given
+	 * name. Additional configuration properties can be passed.
 	 *
 	 * @param pipeName
 	 *            The name of the pipe to use.
@@ -81,7 +83,8 @@ public final class NamedPipeFactory {
 	 *            additional configuration properties; null is allowed
 	 * @return the created IMonitoringController instance
 	 */
-	public static MonitoringController createMonitoringControllerWithNamedPipe(final String pipeName, final Properties additionalProperties) {
+	public static MonitoringController createMonitoringControllerWithNamedPipe(final String pipeName,
+			final Properties additionalProperties) {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 		configuration.setProperty(ConfigurationFactory.METADATA, "false");
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PipeWriter.class.getName());
@@ -98,26 +101,29 @@ public final class NamedPipeFactory {
 	}
 
 	/**
-	 * Creates an {@link IPipeReader} that collects records from a {@link Pipe} and collects these in the returned {@link List}.
+	 * Creates an {@link kieker.common.namedRecordPipe.IPipeReader IPipeReader} that collects records from a
+	 * {@link Pipe} and collects these in the returned {@link List}.
 	 *
 	 * @param pipeName
 	 *            The name of the pipe to use.
-	 * @return a list which contains the collected records
+	 * @return a synchronized list which contains the collected records
 	 */
 	public static List<IMonitoringRecord> createAndRegisterNamedPipeRecordCollector(final String pipeName) {
-		final List<IMonitoringRecord> receivedRecords = Collections.synchronizedList(new ArrayList<IMonitoringRecord>());
+		final List<IMonitoringRecord> receivedRecords = Collections
+				.synchronizedList(new ArrayList<IMonitoringRecord>());
 		final Pipe namedPipe = Broker.INSTANCE.acquirePipe(pipeName);
 		namedPipe.setPipeReader(new IPipeReader() {
+
+			@Override
+			public void notifyPipeClosed() {
+				// do nothing
+			}
 
 			@Override
 			public boolean newMonitoringRecord(final IMonitoringRecord record) {
 				return receivedRecords.add(record);
 			}
 
-			@Override
-			public void notifyPipeClosed() {
-				// do nothing
-			}
 		});
 		return receivedRecords;
 	}

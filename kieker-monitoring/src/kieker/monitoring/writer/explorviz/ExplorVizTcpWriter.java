@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -190,13 +190,13 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 			final HostApplicationMetaData record = (HostApplicationMetaData) kiekerRecord;
 			this.writerRegistry.register(record.getSystemName());
 			this.writerRegistry.register(record.getIpAddress());
-			this.writerRegistry.register(record.getHostName());
+			this.writerRegistry.register(record.getHostname());
 			this.writerRegistry.register(record.getApplicationName());
 
 			buffer.put(HOST_APPLICATION_META_DATA_CLAZZ_ID);
 			buffer.putInt(this.writerRegistry.getId(record.getSystemName()));
 			buffer.putInt(this.writerRegistry.getId(record.getIpAddress()));
-			buffer.putInt(this.writerRegistry.getId(record.getHostName()));
+			buffer.putInt(this.writerRegistry.getId(record.getHostname()));
 			buffer.putInt(this.writerRegistry.getId(record.getApplicationName()));
 		}
 	}

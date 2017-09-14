@@ -196,7 +196,9 @@ allprojects {
 
 		// moved to common to let Eclipse compile each module separately
 		testCompile "org.mockito:mockito-core:2.+"
-        testCompile 'junit:junit:4.11'
+        testCompile 'junit:junit:4.12'
+        // https://mvnrepository.com/artifact/org.hamcrest/hamcrest-library
+		testCompile group: 'org.hamcrest', name: 'hamcrest-library', version: '1.3'
     }
 
 }
@@ -447,7 +449,7 @@ task updateLicenseHeaderYear() {
   doLast {
     FileTree tree = fileTree(dir: '.', include: '**/*.java')
     tree.each { File file ->
-        regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2015 Kieker Project')
+        regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2017 Kieker Project')
     }
   }
 }
@@ -842,10 +844,11 @@ task jenkinsNightlyBuild(dependsOn: [startRServe, enableRTests, distribute, chec
 }
 
 // For signing, the following properties (e.g., provided in ~/.gradle/gradle.properties) are needed
-// signing.keyId=8E97E26A
-// signing.password=XXXXXXXXXXXX
-// signing.secretKeyRingFile=/home/USER/.gnupg/secring.gpg
+//signing.keyId=8E97E26A
+//signing.password=XXX
+//signing.secretKeyRingFile=/home/USER/.gnupg/secring.gpg
 //
+
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 signing {
     required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
@@ -950,15 +953,16 @@ uploadArchives {
 
             // The following properties should be defined in ~/.gradle/gradle.properties (neede only for Maven upload)
             def mavenUser = "NoMavenUser"
-            if (project.hasProperty("kiekerMavenUser")) {
-                mavenUser = project.property("kiekerMavenUser")
+            if (System.env.kiekerMavenUser != null) {
+                mavenUser = System.env.kiekerMavenUser 
             }
-            def mavenPassword = "NoMavenPassword"
-            if (project.hasProperty("kiekerMavenPassword")) {
-                mavenPassword = project.property("kiekerMavenPassword")
+            
+	    def mavenPassword = "NoMavenPassword"
+            if (System.env.kiekerMavenPassword != null) {
+                mavenPassword = System.env.kiekerMavenPassword
             }
 
-            repository(url: project.releaseRepoUrl) {
+	    repository(url: project.releaseRepoUrl) {
                 authentication(userName: mavenUser, password: mavenPassword)
             }
             snapshotRepository(url: project.snapshotRepoUrl) {
