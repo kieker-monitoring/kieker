@@ -18,11 +18,10 @@ package kieker.common.record.io;
 import java.nio.CharBuffer;
 
 /**
- * Text value deserializer implementation.
+ * Text value serializer implementation.
  *
  * @author Reiner Jung
  * @since 1.13
- *
  */
 public class TextValueSerializer implements IValueSerializer {
 
