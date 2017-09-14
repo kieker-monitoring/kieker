@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.analysis.plugin.reader.newio;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,7 +35,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Holger Knoche
  * 
- * @since 1.13
+ * @since 1.14
  *
  */
 @Plugin(description = "Generic reader plugin for raw data.", outputPorts = {
@@ -70,13 +85,13 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 			final Class<?> clazz = Class.forName(className);
 			
 			// Check whether the class is a subtype of the expected type
-			if(!(expectedType.isAssignableFrom(clazz))) {
+			if (!(expectedType.isAssignableFrom(clazz))) {
 				LOG.error("Class " + className + " must implement " + expectedType.getSimpleName() + ".");
 			}
 			
 			// Actually create the instance
 			createdInstance = (C) this.instantiateReader(clazz, configuration);			
-		} catch(final ClassNotFoundException e) {
+		} catch (final ClassNotFoundException e) {
 			LOG.error("Class '" + className + "' not found.");
 		} catch (final NoSuchMethodException e) {
 			LOG.error("Class " + className + " must implement a (public) constructor that accepts a Configuration.");
@@ -101,13 +116,13 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 			final Class<?> clazz = Class.forName(className);
 			
 			// Check whether the class is a subtype of the expected type
-			if(!(expectedType.isAssignableFrom(clazz))) {
+			if (!(expectedType.isAssignableFrom(clazz))) {
 				LOG.error("Class " + className + " must implement " + expectedType.getSimpleName() + ".");
 			}
 			
 			// Actually create the instance
 			createdInstance = (C) this.instantiateDeserializer(clazz, configuration, context);			
-		} catch(final ClassNotFoundException e) {
+		} catch (final ClassNotFoundException e) {
 			LOG.error("Class '" + className + "' not found.");
 		} catch (final NoSuchMethodException e) {
 			LOG.error("Class " + className + " must implement a (public) constructor that accepts a Configuration.");
@@ -138,13 +153,13 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 	public boolean init() {
 		// Invoke super init
 		final boolean superInitSuccessful = super.init();		
-		if(!superInitSuccessful) {
+		if (!superInitSuccessful) {
 			return false;
 		}
 		
 		// Initialize the reader
 		final Outcome readerInitOutcome = this.initReader();
-		if(readerInitOutcome != Outcome.SUCCESS) {
+		if (readerInitOutcome != Outcome.SUCCESS) {
 			return false;
 		}
 		
@@ -181,7 +196,7 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 		final List<IMonitoringRecord> records = this.deserializer.deserializeRecords(rawData, dataSize);
 		
 		// Deliver the records
-		for(final IMonitoringRecord record : records) {
+		for (final IMonitoringRecord record : records) {
 			this.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 		}
 	}

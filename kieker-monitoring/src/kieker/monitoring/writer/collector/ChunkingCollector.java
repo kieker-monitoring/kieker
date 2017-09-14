@@ -139,10 +139,13 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	}
 	
 	private Queue<IMonitoringRecord> createQueue(final String queueType, final int queueSize) {
-		switch(queueType) {
-		case "MPSC":
+		if (queueType == null) {
+			return new ArrayBlockingQueue<>(queueSize);
+		}
+		
+		if ("MPSC".equals(queueType)) {
 			return new MpscArrayQueue<>(queueSize);
-		default:
+		} else {
 			return new ArrayBlockingQueue<>(queueSize);
 		}
 	}
@@ -161,7 +164,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		try {
 			// Wait for the executor to shut down
 			this.scheduledExecutor.awaitTermination(Long.MAX_VALUE, TASK_RUN_INTERVAL_TIME_UNIT);
-		} catch(final InterruptedException e) {
+		} catch (final InterruptedException e) {
 			LOG.warn("Awaiting termination of the scheduled executor was interrupted.", e);
 		}
 		
@@ -172,7 +175,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		for (int tryNumber = 0; tryNumber < 10; tryNumber++) { // try up to 10 times to enqueue a record
 			final boolean recordEnqueued = this.recordQueue.offer(record);
 			
-			if(recordEnqueued) {
+			if (recordEnqueued) {
 				return true;
 			}
 		}

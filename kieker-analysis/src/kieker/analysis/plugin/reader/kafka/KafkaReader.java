@@ -107,7 +107,7 @@ public class KafkaReader extends AbstractRawDataReader {
 		configuration.setProperty(CONFIG_PROPERTY_TOPIC_NAME, this.topicName);
 		configuration.setProperty(CONFIG_PROPERTY_BOOTSTRAP_SERVERS, this.bootstrapServers);
 		
-		if(this.groupId != null) {
+		if (this.groupId != null) {
 			configuration.setProperty(CONFIG_PROPERTY_GROUP_ID, this.groupId);
 		}
 		

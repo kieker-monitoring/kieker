@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,11 @@ package kieker.monitoring.writer.raw;
 import java.nio.ByteBuffer;
 
 /**
+ * Interface for raw data writers.
+ * 
  * @author Holger Knoche
  *
- * @since 1.13
+ * @since 1.14
  */
 public interface IRawDataWriter {
 
@@ -34,21 +36,21 @@ public interface IRawDataWriter {
 	 *            The offset in the buffer where the data starts
 	 * @param length
 	 *            The length of the data to write
-	 * @since 1.13
+	 * @since 1.14
 	 */
 	public void writeData(ByteBuffer data, int offset, int length);
 
 	/**
 	 * Called by the collector during initialization (before any records are written).
 	 * 
-	 * @since 1.13
+	 * @since 1.14
 	 */
 	public void onInitialization();
 
 	/**
 	 * Called by the collector upon termination (after remaining records have been flushed).
 	 * 
-	 * @since 1.13
+	 * @since 1.14
 	 */
 	public void onTermination();
 
