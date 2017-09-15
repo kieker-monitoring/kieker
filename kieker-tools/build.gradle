@@ -8,9 +8,9 @@ dependencies {
 	compile "com.beust:jcommander:1.60"
     
 	compile resolveLibrary('commons-cli-*.jar')
-	compile resolveLibrary('jgraphx-*.jar')
-	compile resolveLibrary('commons-math3-*.jar')
-	compile resolveLibrary('commons-lang3-*.jar')
+	compile resolveLibrary('jgraphx-*.jar')				// this artifact is not available on our repositories
+	compile 'org.apache.commons:commons-math3:3.6.1'	// used by OPAD
+	compile 'org.apache.commons:commons-lang3:3.6'		// used by OPAD
 	compile resolveLibrary('Rsession-*.jar')
 	compile resolveLibrary('Rserve-*.jar')
 	compile resolveLibrary('REngine-*.jar')
