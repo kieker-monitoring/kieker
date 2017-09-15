@@ -16,6 +16,8 @@
 
 package kieker.monitoring.writer.collector;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +26,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import org.jctools.queues.MpscArrayQueue;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -138,16 +138,26 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		this.writerTask = new ChunkWriterTask(chunkSize, deferredWriteDelayMs, outputBufferSize, serializer, writer);
 	}
 	
-	private Queue<IMonitoringRecord> createQueue(final String queueType, final int queueSize) {
-		if (queueType == null) {
-			return new ArrayBlockingQueue<>(queueSize);
+	@SuppressWarnings("unchecked")
+	private Queue<IMonitoringRecord> createQueue(final String queueTypeName, final int queueSize) {
+		if (queueTypeName == null) {
+			return this.createDefaultQueue(queueSize);
 		}
 		
-		if ("MPSC".equals(queueType)) {
-			return new MpscArrayQueue<>(queueSize);
-		} else {
-			return new ArrayBlockingQueue<>(queueSize);
+		try {
+			// Instantiate the queue of the given type. We assume that the queue has a constructor that takes the size as its only parameter.
+			final Class<?> queueClass = Class.forName(queueTypeName);
+			final Constructor<?> constructor = queueClass.getConstructor(int.class);
+			return (Queue<IMonitoringRecord>) constructor.newInstance(queueSize);
+		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			// Instantiate default queue type if the desired queue type cannot be instantiated
+			LOG.error("Error instantiating queue type " + queueTypeName + ". Using default queue type instead.", e);
+			return this.createDefaultQueue(queueSize);
 		}
+	}
+	
+	private Queue<IMonitoringRecord> createDefaultQueue(final int queueSize) {
+		return new ArrayBlockingQueue<>(queueSize);
 	}
 
 	@Override
@@ -287,6 +297,8 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 			final List<IMonitoringRecord> chunk = new ArrayList<IMonitoringRecord>(chunkSize);
 
 			for (int recordIndex = 0; recordIndex < chunkSize; recordIndex++) {
+				// Due to checks at the call sites, writeChunk is only called with a chunk size
+				// not smaller than the queue's length to avoid poll() returning null values.
 				final IMonitoringRecord record = queue.poll();
 				chunk.add(record);
 			}
