@@ -35,7 +35,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Holger Knoche
  * 
- * @since 1.14
+ * @since 1.13
  *
  */
 @Plugin(description = "Generic reader plugin for raw data.", outputPorts = {

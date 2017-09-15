@@ -18,7 +18,7 @@ package kieker.analysis.plugin.reader.newio;
 /**
  * Enumeration for outcomes of event handlers and other operations.
  * @author Holger Knoche
- * @since 1.14
+ * @since 1.13
  */
 public enum Outcome {
 	/**

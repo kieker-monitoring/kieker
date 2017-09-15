@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
  * 
  * @author Holger Knoche
  *
- * @since 1.14
+ * @since 1.13
  */
 public interface IRawDataWriter {
 
@@ -36,21 +36,21 @@ public interface IRawDataWriter {
 	 *            The offset in the buffer where the data starts
 	 * @param length
 	 *            The length of the data to write
-	 * @since 1.14
+	 * @since 1.13
 	 */
 	public void writeData(ByteBuffer data, int offset, int length);
 
 	/**
 	 * Called by the collector during initialization (before any records are written).
 	 * 
-	 * @since 1.14
+	 * @since 1.13
 	 */
 	public void onInitialization();
 
 	/**
 	 * Called by the collector upon termination (after remaining records have been flushed).
 	 * 
-	 * @since 1.14
+	 * @since 1.13
 	 */
 	public void onTermination();
 

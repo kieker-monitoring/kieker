@@ -24,7 +24,7 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  * workers.
  *  
  * @author Holger Knoche
- * @since 1.14
+ * @since 1.13
  */
 public class BypassQueueBehavior implements InsertBehavior<IMonitoringRecord> {
 

@@ -23,7 +23,7 @@ import java.util.concurrent.ThreadFactory;
  *
  * @author Holger Knoche
  *
- * @since 1.14
+ * @since 1.13
  */
 public class DaemonThreadFactory implements ThreadFactory {
 

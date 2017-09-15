@@ -19,28 +19,28 @@ package kieker.analysis.plugin.reader.newio;
  * Interface for raw data readers.
  * 
  * @author Holger Knoche
- * @since 1.14
+ * @since 1.13
  */
 public interface IRawDataReader {
 	
 	/**
 	 * Event handler that is called before any records are read.
 	 * @return The outcome of the initialization
-	 * @since 1.14
+	 * @since 1.13
 	 */
 	public Outcome onInitialization();
 	
 	/**
 	 * Starts the read operation.
 	 * @return The outcome of the read operation
-	 * @since 1.14
+	 * @since 1.13
 	 */
 	public Outcome read();
 	
 	/**
 	 * Event handler that is called when the reader is supposed to terminate.
 	 * @return The outcome of the termination
-	 * @since 1.14
+	 * @since 1.13
 	 */
 	public Outcome onTermination();
 

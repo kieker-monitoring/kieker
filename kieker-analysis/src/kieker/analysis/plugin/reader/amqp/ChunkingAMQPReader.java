@@ -38,7 +38,7 @@ import kieker.common.logging.LogFactory;
  * 
  * @author Holger Knoche
  *
- * @since 1.14
+ * @since 1.13
  */
 public class ChunkingAMQPReader implements IRawDataReader {
 	

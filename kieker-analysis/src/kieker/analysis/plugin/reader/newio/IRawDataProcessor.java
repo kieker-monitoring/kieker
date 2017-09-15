@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
  * 
  * @author Holger Knoche
  *
- * @since 1.14
+ * @since 1.13
  */
 public interface IRawDataProcessor {
 	
@@ -33,7 +33,7 @@ public interface IRawDataProcessor {
 	 * @param rawData
 	 *            The raw data to decode
 	 *            
-	 * @since 1.14
+	 * @since 1.13
 	 */
 	public void decodeAndDeliverRecords(byte[] rawData);
 	
@@ -45,7 +45,7 @@ public interface IRawDataProcessor {
 	 * @param dataSize
 	 *            The size of the contained data
 	 *            
-	 * @since 1.14
+	 * @since 1.13
 	 */
 	public void decodeAndDeliverRecords(final ByteBuffer rawData, final int dataSize);
 
