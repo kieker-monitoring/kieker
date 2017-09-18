@@ -102,9 +102,9 @@ import kieker.tools.util.LoggingTimestampConverter;
  * monitoring data that comes from the instrumented system, or from a file that contains Kieker monitoring data. The
  * Kieker TraceAnalysisTool can produce output such as sequence diagrams, dependency graphs on demand. Alternatively it
  * can be used continuously for online performance analysis, anomaly detection or live visualization of system behavior.
- * 
+ *
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke
- * 
+ *
  * @since 0.95a
  */
 public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD (long class)
@@ -144,10 +144,9 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	protected void addAdditionalOptions(final Options options) {
 		// Remember the inherited options for the help formatter
-		final List<Option> inheritedOptions = new ArrayList<Option>();
+		final List<Option> inheritedOptions = new ArrayList<>();
 		inheritedOptions.addAll(options.getOptions());
 
 		for (final Object option : Constants.CMDL_OPTIONS.getOptions()) {
@@ -185,9 +184,9 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 
 	/**
 	 * This method uses the (already parsed and stored) command line arguments to initialize the tool.
-	 * 
+	 *
 	 * @param commandLine
-	 * 
+	 *
 	 * @return true if and only if the tool has been initialized correctly.
 	 */
 	private boolean initFromArgs(final CommandLine commandLine) {
@@ -209,7 +208,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 																									// operator)
 							: Constants.CMD_OPT_NAME_SELECTTRACES);
 
-			this.selectedTraces = new TreeSet<Long>();
+			this.selectedTraces = new TreeSet<>();
 
 			final int numSelectedTraces = traceIdList.length;
 			try {
@@ -287,7 +286,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	/**
 	 * Returns if the specified output directory {@link #outputDir} exists. If the directory does not exist, an error
 	 * message is printed to stderr.
-	 * 
+	 *
 	 * @return true if {@link #outputDir} is exists and is a directory; false otherwise
 	 */
 	private boolean assertOutputDirExists() {
@@ -361,7 +360,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	/**
 	 * Returns if the specified input directories {@link #inputDirs} exist and that each one is a monitoring log. If
 	 * this is not the case for one of the directories, an error message is printed to stderr.
-	 * 
+	 *
 	 * @return true if {@link #outputDir} is exists and is a directory; false otherwise
 	 */
 	private boolean assertInputDirsExistsAndAreMonitoringLogs() {
@@ -408,7 +407,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	}
 
 	/**
-	 * 
+	 *
 	 * @return false iff an error occurred
 	 */
 	private boolean dispatchTasks() {
@@ -600,8 +599,8 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
 			}
 
-			final List<AbstractTraceProcessingFilter> allTraceProcessingComponents = new ArrayList<AbstractTraceProcessingFilter>();
-			final List<AbstractGraphProducingFilter<?>> allGraphProducers = new ArrayList<AbstractGraphProducingFilter<?>>();
+			final List<AbstractTraceProcessingFilter> allTraceProcessingComponents = new ArrayList<>();
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers = new ArrayList<>();
 
 			final Configuration traceAllocationEquivClassFilterConfig = new Configuration();
 			traceAllocationEquivClassFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
@@ -1173,7 +1172,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 
 	/**
 	 * Attaches a graph writer plugin to the given plugin.
-	 * 
+	 *
 	 * @param plugin
 	 *            The plugin which delivers the graph to write
 	 * @param producer
@@ -1184,7 +1183,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	 *             If the connection of the plugins is not possible at the moment
 	 * @throws AnalysisConfigurationException
 	 *             If the plugins cannot be connected
-	 * 
+	 *
 	 * @param <P>
 	 *            The type of the plugin.
 	 */
@@ -1242,14 +1241,14 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 
 	/**
 	 * Attaches graph processors and a writer to the given graph producers depending on the given command line.
-	 * 
+	 *
 	 * @param graphProducers
 	 *            The graph producers to connect processors to
 	 * @param controller
 	 *            The analysis controller to use for the connection of the plugins
 	 * @param commandLine
 	 *            The command line to determine the desired processors
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If the connection of plugins is not possible at the moment
 	 * @throws AnalysisConfigurationException
@@ -1323,7 +1322,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 		return retVal;
 	}
 
-	private static class OptionComparator implements Comparator<Object>, Serializable {
+	private static class OptionComparator implements Comparator<Option>, Serializable {
 
 		private static final long serialVersionUID = 1L;
 
@@ -1332,7 +1331,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 		}
 
 		@Override
-		public int compare(final Object o1, final Object o2) {
+		public int compare(final Option o1, final Option o2) {
 			if (o1 == o2) { // NOPMD
 				return 0;
 			}
