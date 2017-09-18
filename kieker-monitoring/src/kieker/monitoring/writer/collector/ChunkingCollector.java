@@ -16,11 +16,13 @@
 
 package kieker.monitoring.writer.collector;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +31,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.thread.DaemonThreadFactory;
 import kieker.monitoring.core.controller.ControllerFactory;
 import kieker.monitoring.core.controller.ReceiveUnfilteredConfiguration;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
@@ -58,7 +61,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	private static final int NUMBER_OF_WORKERS = 1;
 
 	// Default size for the input queue (in records)
-	private static final int DEFAULT_QUEUE_SIZE = 2048;
+	private static final int DEFAULT_QUEUE_SIZE = 16384;
 
 	// Default deferred write delay (in milliseconds)
 	private static final int DEFAULT_DEFERRED_WRITE_DELAY = 500;
@@ -67,7 +70,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	private static final int DEFAULT_CHUNK_SIZE = 16;
 
 	// Default output buffer size (in bytes)
-	private static final int DEFAULT_OUTPUT_BUFFER_SIZE = 32768;
+	private static final int DEFAULT_OUTPUT_BUFFER_SIZE = 65536;
 
 	// Default run task run interval (in milliseconds)
 	private static final int DEFAULT_TASK_RUN_INTERVAL = 20;
@@ -94,10 +97,16 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 
 	/** The name of the configuration property for the writer task interval. */
 	public static final String CONFIG_TASK_RUN_INTERVAL = PREFIX + "taskRunInterval"; // NOCS (afterPREFIX)
+	
+	/** The type of queue to use. */
+	public static final String CONFIG_QUEUE_TYPE = PREFIX + "queueType"; // NOCS (afterPREFIX)
 
+	/** The time unit for the writer task interval. */
+	private static final TimeUnit TASK_RUN_INTERVAL_TIME_UNIT = TimeUnit.MILLISECONDS;
+	
 	private static final Log LOG = LogFactory.getLog(ChunkingCollector.class);
 
-	private final BlockingQueue<IMonitoringRecord> recordQueue;
+	private final Queue<IMonitoringRecord> recordQueue;
 
 	private final ScheduledExecutorService scheduledExecutor;
 	private final int taskRunInterval;
@@ -108,10 +117,11 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 
 		// Initialize the queue and the executor service
 		final int queueSize = configuration.getIntProperty(CONFIG_QUEUE_SIZE, DEFAULT_QUEUE_SIZE);
+		final String queueType = configuration.getStringProperty(CONFIG_QUEUE_TYPE, "");
 		this.taskRunInterval = configuration.getIntProperty(CONFIG_TASK_RUN_INTERVAL, DEFAULT_TASK_RUN_INTERVAL);
 
-		this.recordQueue = new ArrayBlockingQueue<IMonitoringRecord>(queueSize);
-		this.scheduledExecutor = Executors.newScheduledThreadPool(NUMBER_OF_WORKERS);
+		this.recordQueue = this.createQueue(queueType, queueSize);
+		this.scheduledExecutor = Executors.newScheduledThreadPool(NUMBER_OF_WORKERS, new DaemonThreadFactory());
 
 		// Instantiate serializer and writer
 		final ControllerFactory controllerFactory = ControllerFactory.getInstance(configuration);
@@ -119,7 +129,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		final IMonitoringRecordSerializer serializer = controllerFactory.createAndInitialize(IMonitoringRecordSerializer.class, serializerName, configuration);
 		final String writerName = configuration.getStringProperty(CONFIG_WRITER_CLASSNAME);
 		final IRawDataWriter writer = controllerFactory.createAndInitialize(IRawDataWriter.class, writerName, configuration);
-
+				
 		// Instantiate the writer task
 		final int deferredWriteDelayMs = configuration.getIntProperty(CONFIG_DEFERRED_WRITE_DELAY, DEFAULT_DEFERRED_WRITE_DELAY);
 		final int chunkSize = configuration.getIntProperty(CONFIG_CHUNK_SIZE, DEFAULT_CHUNK_SIZE);
@@ -127,10 +137,32 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 
 		this.writerTask = new ChunkWriterTask(chunkSize, deferredWriteDelayMs, outputBufferSize, serializer, writer);
 	}
+	
+	@SuppressWarnings("unchecked")
+	private Queue<IMonitoringRecord> createQueue(final String queueTypeName, final int queueSize) {
+		if (queueTypeName == null) {
+			return this.createDefaultQueue(queueSize);
+		}
+		
+		try {
+			// Instantiate the queue of the given type. We assume that the queue has a constructor that takes the size as its only parameter.
+			final Class<?> queueClass = Class.forName(queueTypeName);
+			final Constructor<?> constructor = queueClass.getConstructor(int.class);
+			return (Queue<IMonitoringRecord>) constructor.newInstance(queueSize);
+		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			// Instantiate default queue type if the desired queue type cannot be instantiated
+			LOG.error("Error instantiating queue type " + queueTypeName + ". Using default queue type instead.", e);
+			return this.createDefaultQueue(queueSize);
+		}
+	}
+	
+	private Queue<IMonitoringRecord> createDefaultQueue(final int queueSize) {
+		return new ArrayBlockingQueue<>(queueSize);
+	}
 
 	@Override
 	public void onStarting() {
-		this.scheduledExecutor.scheduleAtFixedRate(this.writerTask, 0, this.taskRunInterval, TimeUnit.MILLISECONDS);		
+		this.scheduledExecutor.scheduleAtFixedRate(this.writerTask, 0, this.taskRunInterval, TASK_RUN_INTERVAL_TIME_UNIT);		
 		this.writerTask.initialize();
 	}
 
@@ -138,20 +170,26 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	public void onTerminating() {
 		// Terminate scheduled execution and write remaining chunks, if any
 		this.scheduledExecutor.shutdown();
+		
+		try {
+			// Wait for the executor to shut down
+			this.scheduledExecutor.awaitTermination(Long.MAX_VALUE, TASK_RUN_INTERVAL_TIME_UNIT);
+		} catch (final InterruptedException e) {
+			LOG.warn("Awaiting termination of the scheduled executor was interrupted.", e);
+		}
+		
 		this.writerTask.terminate();
 	}
 
 	private boolean enqueueRecord(final IMonitoringRecord record) {
-		for (int tryNumber = 0; tryNumber < 10; tryNumber++) { // drop out if more than 10 times interrupted
-			try {
-				this.recordQueue.put(record);
+		for (int tryNumber = 0; tryNumber < 10; tryNumber++) { // try up to 10 times to enqueue a record
+			final boolean recordEnqueued = this.recordQueue.offer(record);
+			
+			if (recordEnqueued) {
 				return true;
-			} catch (final InterruptedException ignore) {
-				// The interrupt status has been reset by the put method when throwing the exception.
-				// We will not propagate the interrupt because the error is reported by returning false.
-				LOG.warn("Interrupted when adding new monitoring record to queue. Try: " + tryNumber);
 			}
 		}
+		
 		LOG.error("Failed to add new monitoring record to queue (maximum number of attempts reached).");
 		return false;
 	}
@@ -195,7 +233,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		@Override
 		@SuppressWarnings("synthetic-access")
 		public void run() {
-			final BlockingQueue<IMonitoringRecord> queue = ChunkingCollector.this.recordQueue;
+			final Queue<IMonitoringRecord> queue = ChunkingCollector.this.recordQueue;
 			int numberOfPendingRecords = queue.size();
 			final int chunkSize = this.outputChunkSize;
 
@@ -236,7 +274,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 
 		@SuppressWarnings("synthetic-access")
 		public void flush() {
-			final BlockingQueue<IMonitoringRecord> queue = ChunkingCollector.this.recordQueue;
+			final Queue<IMonitoringRecord> queue = ChunkingCollector.this.recordQueue;
 			final int chunkSize = this.outputChunkSize;
 			int numberOfPendingRecords = queue.size();
 
@@ -255,10 +293,12 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 			}
 		}
 
-		private void writeChunk(final BlockingQueue<IMonitoringRecord> queue, final int chunkSize) {
+		private void writeChunk(final Queue<IMonitoringRecord> queue, final int chunkSize) {
 			final List<IMonitoringRecord> chunk = new ArrayList<IMonitoringRecord>(chunkSize);
 
 			for (int recordIndex = 0; recordIndex < chunkSize; recordIndex++) {
+				// Due to checks at the call sites, writeChunk is only called with a chunk size
+				// not smaller than the queue's length to avoid poll() returning null values.
 				final IMonitoringRecord record = queue.poll();
 				chunk.add(record);
 			}

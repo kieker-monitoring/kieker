@@ -13,45 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.monitoring.writer.raw;
-
-import java.nio.ByteBuffer;
+package kieker.analysis.plugin.reader.newio;
 
 /**
- * Interface for raw data writers.
- * 
+ * Enumeration for outcomes of event handlers and other operations.
  * @author Holger Knoche
- *
  * @since 1.13
  */
-public interface IRawDataWriter {
-
+public enum Outcome {
 	/**
-	 * Writes raw data contained in the given byte buffer.
-	 *
-	 * @param data
-	 *            The buffer containing the data
-	 * @param offset
-	 *            The offset in the buffer where the data starts
-	 * @param length
-	 *            The length of the data to write
-	 * @since 1.13
+	 * Denotes that the operation has completed successfully.
 	 */
-	public void writeData(ByteBuffer data, int offset, int length);
-
+	SUCCESS,
 	/**
-	 * Called by the collector during initialization (before any records are written).
-	 * 
-	 * @since 1.13
+	 * Denotes that the operation has failed.
 	 */
-	public void onInitialization();
-
-	/**
-	 * Called by the collector upon termination (after remaining records have been flushed).
-	 * 
-	 * @since 1.13
-	 */
-	public void onTermination();
-
+	FAILURE;
 }
