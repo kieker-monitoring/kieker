@@ -13,45 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+package kieker.monitoring.queue.behavior;
 
-package kieker.monitoring.writer.raw;
-
-import java.nio.ByteBuffer;
+import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 /**
- * Interface for raw data writers.
- * 
+ * Insert behavior that bypasses the writer controller's queue and thus calls the writer synchronously. This
+ * behavior is useful for writers such as the chunking collector which have their own queues and asynchronous
+ * workers.
+ *  
  * @author Holger Knoche
- *
  * @since 1.13
  */
-public interface IRawDataWriter {
+public class BypassQueueBehavior implements InsertBehavior<IMonitoringRecord> {
 
-	/**
-	 * Writes raw data contained in the given byte buffer.
-	 *
-	 * @param data
-	 *            The buffer containing the data
-	 * @param offset
-	 *            The offset in the buffer where the data starts
-	 * @param length
-	 *            The length of the data to write
-	 * @since 1.13
-	 */
-	public void writeData(ByteBuffer data, int offset, int length);
-
-	/**
-	 * Called by the collector during initialization (before any records are written).
-	 * 
-	 * @since 1.13
-	 */
-	public void onInitialization();
-
-	/**
-	 * Called by the collector upon termination (after remaining records have been flushed).
-	 * 
-	 * @since 1.13
-	 */
-	public void onTermination();
+	private final AbstractMonitoringWriter writer;
+	
+	public BypassQueueBehavior(final AbstractMonitoringWriter writer) {
+		this.writer = writer;
+	}
+	
+	@Override
+	public boolean insert(final IMonitoringRecord element) {
+		this.writer.writeMonitoringRecord(element);
+		return true;
+	}
 
 }

@@ -13,45 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+package kieker.common.util.thread;
 
-package kieker.monitoring.writer.raw;
-
-import java.nio.ByteBuffer;
+import java.util.concurrent.ThreadFactory;
 
 /**
- * Interface for raw data writers.
- * 
+ * A thread factory that creates daemon threads. The default thread parameters are based on
+ * the default thread factory.
+ *
  * @author Holger Knoche
  *
  * @since 1.13
  */
-public interface IRawDataWriter {
+public class DaemonThreadFactory implements ThreadFactory {
 
 	/**
-	 * Writes raw data contained in the given byte buffer.
-	 *
-	 * @param data
-	 *            The buffer containing the data
-	 * @param offset
-	 *            The offset in the buffer where the data starts
-	 * @param length
-	 *            The length of the data to write
-	 * @since 1.13
+	 * Creates a new daemon thread factory. 
 	 */
-	public void writeData(ByteBuffer data, int offset, int length);
+	public DaemonThreadFactory() {
+		// Do nothing
+	}
 
-	/**
-	 * Called by the collector during initialization (before any records are written).
-	 * 
-	 * @since 1.13
-	 */
-	public void onInitialization();
+	@Override
+	public Thread newThread(final Runnable runnable) {
+		final Thread thread = new Thread(runnable);
 
-	/**
-	 * Called by the collector upon termination (after remaining records have been flushed).
-	 * 
-	 * @since 1.13
-	 */
-	public void onTermination();
+		thread.setDaemon(true);
+		thread.setPriority(Thread.NORM_PRIORITY);
 
+		return thread;
+	}
+	
 }
