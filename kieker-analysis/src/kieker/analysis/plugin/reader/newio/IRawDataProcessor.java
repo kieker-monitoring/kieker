@@ -13,45 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.monitoring.writer.raw;
+package kieker.analysis.plugin.reader.newio;
 
 import java.nio.ByteBuffer;
 
 /**
- * Interface for raw data writers.
+ * Interface for raw data processors, i.e. classes which decode raw data to
+ * records and feed them into a processing pipeline.
  * 
  * @author Holger Knoche
  *
  * @since 1.13
  */
-public interface IRawDataWriter {
-
+public interface IRawDataProcessor {
+	
 	/**
-	 * Writes raw data contained in the given byte buffer.
-	 *
-	 * @param data
-	 *            The buffer containing the data
-	 * @param offset
-	 *            The offset in the buffer where the data starts
-	 * @param length
-	 *            The length of the data to write
-	 * @since 1.13
-	 */
-	public void writeData(ByteBuffer data, int offset, int length);
-
-	/**
-	 * Called by the collector during initialization (before any records are written).
+	 * Decodes the given raw data and delivers the decoded records.
 	 * 
+	 * @param rawData
+	 *            The raw data to decode
+	 *            
 	 * @since 1.13
 	 */
-	public void onInitialization();
-
+	public void decodeAndDeliverRecords(byte[] rawData);
+	
 	/**
-	 * Called by the collector upon termination (after remaining records have been flushed).
+	 * Decodes the given raw data and delivers the decoded records.
 	 * 
+	 * @param rawData
+	 *            The raw data to decode
+	 * @param dataSize
+	 *            The size of the contained data
+	 *            
 	 * @since 1.13
 	 */
-	public void onTermination();
+	public void decodeAndDeliverRecords(final ByteBuffer rawData, final int dataSize);
 
 }
