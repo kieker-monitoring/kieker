@@ -28,8 +28,9 @@ eclipse {
 // We have multiple subprojects - but we do not want all of them in our JAR files.
 def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
 
-def pmdAndCpdVersion = '5.0.5'	// works with 0 PMD errors and 0 PMD warnings
+//def pmdAndCpdVersion = '5.0.5'	// works with 0 PMD errors and 0 PMD warnings
 //def pmdAndCpdVersion = '5.1.3'	// causes many new PMD errors and PMD warnings
+def pmdAndCpdVersion = '5.2.2'
 //def pmdAndCpdVersion = '5.5.0'	// causes many new PMD errors and PMD warnings
 
 // better use subprojects to avoid if-then-else in sourceSets
@@ -192,8 +193,9 @@ allprojects {
 }
 
 // gradle-cpd-plugin support only CPD 5.2.2 and above
+// CPD works only within the main project, not within the subprojects as we have configured PMD etc.
 cpd {
-//    toolVersion = '5.2.2' // pmdAndCpdVersion
+	toolVersion = pmdAndCpdVersion
 }
 cpdCheck {
     // don't fail build if duplicates are found
@@ -205,6 +207,7 @@ cpdCheck {
     }
     // only java, groovy and scala classes in 'main' sourceSets
     source = subprojects*.sourceSets*.main*.allJava
+    //source = sourceSets.main.java
 }
 
 def parseCheckstyleReport(File reportFile) {
@@ -295,6 +298,22 @@ def parsePmdReport(File reportFile) {
     return [errors, warnings, infos]
 }
 
+def parseCpdReport(File reportFile) {
+    def errors = 0
+    def warnings = 0
+    def infos = 0
+
+    if (reportFile.exists()) {
+        def xmlFile = (new XmlParser()).parse(reportFile)
+        xmlFile.'duplication'.each { issue ->
+			errors++
+        }
+    } else {
+    	println 'Could not find CPD report file at ' + reportFile
+    }
+    return [errors, warnings, infos]
+}
+
 task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) {
   doLast {
     def reportTypes = ['main', 'test']
@@ -350,6 +369,19 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) {
     // End PMD report parsing
 
 
+    // Begin CPD report parsing
+    def cpdErrors = 0
+/*
+    allprojects.each { Project p ->
+        reportTypes.each { String type ->
+            def reportFile = file(p.projectDir.path + '/build/reports/cpd/cpdCheck.xml')
+            def reportResults = parseCpdReport(reportFile)
+            cpdErrors += reportResults[0]
+        }
+    }
+    // End CPD report parsing
+*/
+
     // Print results
     println("Static analysis results:")
     println()
@@ -367,6 +399,9 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) {
     println("  Errors: " + pmdErrors + " (Threshold: " + pmdErrorThreshold + ")")
     println("  Warnings: " + pmdWarnings + " (Threshold: " + pmdWarningThreshold + ")")
     println("  Info: " + pmdInfos)
+    println()
+    println(" CPD:")
+    println("  Errors: " + cpdErrors + " (Threshold: " + cpdErrorThreshold + ")")
 
 
     // Fail build if Checkstyle thresholds are violated
@@ -388,7 +423,6 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) {
         throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + fbErrors + " Threshold: " + findbugsErrorThreshold)
     }
 
-
     // Fail build if PMD thresholds are violated
     if (pmdWarnings > Integer.valueOf(pmdWarningThreshold)) {
         throw new GradleException("There were pmd warnings exceeding the warning threshold! Warnings: " + pmdWarnings + " Threshold: " + pmdWarningThreshold)
@@ -396,6 +430,11 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) {
 
     if (pmdErrors > Integer.valueOf(pmdErrorThreshold)) {
         throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + pmdErrors + " Threshold: " + pmdErrorThreshold)
+    }
+
+	// Fail build if CPD thresholds are violated
+    if (cpdErrors > Integer.valueOf(cpdErrorThreshold)) {
+        throw new GradleException("There were cpd errors exceeding the error threshold! Errors: " + cpdErrors + " Threshold: " + cpdErrorThreshold)
     }
   }
 }
