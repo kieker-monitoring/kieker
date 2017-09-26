@@ -5,7 +5,7 @@ dependencies {
 	compile project(':kieker-analysis')
 	compile project(':kieker-monitoring')
 	
-	compile "com.beust:jcommander:1.60"
+	compile "com.beust:jcommander:1.27"
     
 	compile resolveLibrary('commons-cli-*.jar')
 	compile resolveLibrary('jgraphx-*.jar')
