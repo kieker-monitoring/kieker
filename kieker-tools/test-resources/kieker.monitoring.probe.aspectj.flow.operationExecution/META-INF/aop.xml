@@ -1,0 +1,33 @@
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.aspectj.org/dtd/aspectj_1_5_0.dtd">
+
+<aspectj>
+	<weaver options="-showWeaveInfo"> <!-- options="-verbose -showWeaveInfo -Xjoinpoints:synchronization" -->
+		<include within="kieker.examples..*" />
+		<include within="kieker.monitoring.probe.aspectj.beforeafter.onlycallee..*" />
+		<!-- <include within="*"/> -->
+
+		<exclude within="org.apache.commons.logging..*" />
+		<exclude within="org.slf4j..*" />
+		<exclude within="java.util.logging..*" />
+		<exclude within="org.apache.log4j..*" />
+
+		<!-- <exclude within="org.jctools..*" /> -->
+	</weaver>
+
+	<aspects>
+		<!-- <concrete-aspect name="MyTargetedAspect" extends="kieker.monitoring.probe.aspectj.beforeafter.onlycallee.AbstractAspect"> -->
+		<concrete-aspect name="kieker.monitoring.probe.aspectj.beforeafter.onlycallee.MyTargetAspect"
+			extends="kieker.monitoring.probe.aspectj.flow.operationExecution.AbstractAspect">
+<!-- 			extends="kieker.monitoring.probe.aspectj.beforeafter.onlycallee.AbstractAspectWithoutTraceRegistry"> -->
+<!-- 			<pointcut name="monitoredOperation" expression="execution(* *.*(..))" /> -->
+<!-- 			<pointcut name="monitoredOperation" expression="call(* *.*(..))" /> -->
+			<pointcut name="noFieldAccess" expression="!set(* *) &amp;&amp; !get(* *)" />
+			<pointcut name="monitoredOperation" expression="cflow(execution(* *.main(..))) &amp;&amp; (execution(new(..)) || execution(* *(..))) &amp;&amp; noFieldAccess() &amp;&amp; !adviceexecution()" />
+		</concrete-aspect>
+
+	</aspects>
+</aspectj>
+<!-- within(kieker..*) -->
+<!-- !call(* *(..)) &amp;&amp; !handler(*) &amp;&amp; !staticinitialization(*) &amp;&amp; !initialization(new(..)) &amp;&amp; !preinitialization(new(..)) -->
+<!-- &amp;&amp; !call(* *(..)) -->
+<!-- &amp;&amp; execution(* *(..)) -->

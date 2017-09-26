@@ -15,27 +15,29 @@
  ***************************************************************************/
 package kieker.tools.opad.record;
 
+
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Thomas Duellmann
- *
+ * 
  * @since 1.10
  */
 public final class ExtendedStorableDetectionResultFactory implements IRecordFactory<ExtendedStorableDetectionResult> {
-
+	
+	
 	@Override
 	public ExtendedStorableDetectionResult create(final IValueDeserializer deserializer) {
 		return new ExtendedStorableDetectionResult(deserializer);
 	}
-
+	
 	@Override
+	@Deprecated
 	public ExtendedStorableDetectionResult create(final Object[] values) {
 		return new ExtendedStorableDetectionResult(values);
 	}
-
-	@Override
+	
 	public int getRecordSizeInBytes() {
 		return ExtendedStorableDetectionResult.SIZE;
 	}
