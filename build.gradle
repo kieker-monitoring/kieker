@@ -12,7 +12,7 @@ buildscript {
 }
 
 plugins {
-    //id 'de.aaschmid.cpd' version '1.0'	// cpd plugin
+    id 'de.aaschmid.cpd' version '1.0'	// cpd plugin
 }
 
 apply plugin: 'eclipse'
@@ -27,6 +27,10 @@ eclipse {
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
 def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
+
+def pmdAndCpdVersion = '5.0.5'	// works with 0 PMD errors and 0 PMD warnings
+//def pmdAndCpdVersion = '5.1.3'	// causes many new PMD errors and PMD warnings
+//def pmdAndCpdVersion = '5.5.0'	// causes many new PMD errors and PMD warnings
 
 // better use subprojects to avoid if-then-else in sourceSets
 allprojects {
@@ -112,9 +116,6 @@ allprojects {
 	    maxHeapSize = "2g" // Set limit to prevent Travis-CI build to crash
     }
 
-	def pmdAndCpdVersion = '5.0.5'	// works with 0 PMD errors and 0 PMD warnings
-//	def pmdAndCpdVersion = '5.1.3'	// causes many new PMD errors and PMD warnings
-//	def pmdAndCpdVersion = '5.5.0'	// causes many new PMD errors and PMD warnings
     apply plugin: 'pmd'
     pmd {
     	// the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
@@ -125,11 +126,6 @@ allprojects {
         ruleSets = []
         ruleSetFiles = files(resolveRelativeToParent(dirConfig, 'pmdrules.xml'))
     }
-
-	/*apply plugin: 'cpd'
-	cpd {
-	    //toolVersion = pmdAndCpdVersion
-	}*/
 
     apply plugin: 'checkstyle'
     checkstyle {
@@ -156,14 +152,6 @@ allprojects {
             html.enabled = false
         }
     }
-
-    /*tasks.withType(de.aaschmid.gradle.plugins.cpd.Cpd) {                                                                                                                                       
-		reports {
-		    xml.enabled = true
-		    text.enabled = false
-		}
-		source = files('src')
-	}*/
 
     tasks.withType(FindBugs) {
         reports {
@@ -201,6 +189,22 @@ allprojects {
 		testCompile group: 'org.hamcrest', name: 'hamcrest-library', version: '1.3'
     }
 
+}
+
+// gradle-cpd-plugin support only CPD 5.2.2 and above
+cpd {
+//    toolVersion = '5.2.2' // pmdAndCpdVersion
+}
+cpdCheck {
+    // don't fail build if duplicates are found
+    ignoreFailures = true
+    // report as xml
+    reports {
+        text.enabled = false
+        xml.enabled = true
+    }
+    // only java, groovy and scala classes in 'main' sourceSets
+    source = subprojects*.sourceSets*.main*.allJava
 }
 
 def parseCheckstyleReport(File reportFile) {
