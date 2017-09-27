@@ -771,23 +771,17 @@ def exampleJavaEEContent = project.copySpec {
     into kiekerPackagenamebase + "-" + kiekerVersion + "/examples/JavaEEServletContainerExample/jetty"
 }
 
-task docs(type: Javadoc) {
-    source subprojects.collect { project -> project.sourceSets.main.allJava }
-    classpath = files(subprojects.collect { project -> project.sourceSets.main.compileClasspath })
-    destinationDir = new File(projectDir, 'javadoc')
-}
-
 task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandaloneExamples']) {
   doLast {
   }
 }
 
-task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
+task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
     classifier = 'binaries'
     with binaryContent, manualContent, exampleContent, exampleJavaEEContent
 }
 
-task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
+task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
     classifier = 'binaries'
     with binaryContent, manualContent, exampleContent, exampleJavaEEContent
 
