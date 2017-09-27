@@ -25,7 +25,7 @@ import kieker.common.record.IMonitoringRecord;
  *
  * @since 1.5
  *
- * @deprecated since 2.0. Use {@link PipeWriter} instead.
+ * @deprecated since 1.13 (to be removed in 1.14) Use {@link PipeWriter} instead.
  */
 @Deprecated
 public interface IPipeWriter {
