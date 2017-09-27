@@ -952,30 +952,28 @@ uploadArchives {
 
                 developers {
                     developer {
-                        id = 'avh'
+                        id = 'thomas.duellmann'
+                        name = 'Thomas F. Duellmann'
+                        email = 'duellmann@informatik.uni-stuttgart.de'
+                    }
+                    developer {
+                        id = 'andre.van.hoorn'
                         name = 'Andre van Hoorn'
                         email = 'van.hoorn@informatik.uni-stuttgart.de'
                     }
                     developer {
-                        id = 'jwa'
-                        name = 'Jan Waller'
-                        email = 'jwa@informatik.uni-kiel.de'
+                        id = 'reiner.jung'
+                        name = 'Reiner Jung'
+                        email = 'reiner.jung@email.uni-kiel.de'
                     }
                     developer {
-                        id = 'nie'
-                        name = 'Nils Christian Ehmke'
-                        email = 'nie@informatik.uni-kiel.de'
+                        id = 'christian.wulf'
+                        name = 'Christian Wulf'
+                        email = 'christian.wulf@email.uni-kiel.de'
                     }
                 }
 
                 mailingLists {
-                    mailingList {
-                        name = 'Kieker-users'
-                        subscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-users'
-                        unsubscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-users'
-                        post = 'kieker-users@lists.sourceforge.net'
-                        archive = 'http://sourceforge.net/mailarchive/forum.php?forum_name=kieker-users'
-                    }
                     mailingList {
                         name = 'Kieker-developers'
                         subscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-developers'
@@ -983,22 +981,36 @@ uploadArchives {
                         post = 'kieker-developers@lists.sourceforge.net'
                         archive = 'http://sourceforge.net/mailarchive/forum.php?forum_name=kieker-developers'
                     }
+                    mailingList {
+                        name = 'Kieker-tickets'
+                        subscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-tickets'
+                        unsubscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-tickets'
+                        post = 'kieker-tickets@lists.sourceforge.net'
+                        archive = 'http://sourceforge.net/mailarchive/forum.php?forum_name=kieker-tickets'
+                    }
+                    mailingList {
+                        name = 'Kieker-users'
+                        subscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-users'
+                        unsubscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-users'
+                        post = 'kieker-users@lists.sourceforge.net'
+                        archive = 'http://sourceforge.net/mailarchive/forum.php?forum_name=kieker-users'
+                    }
                 }
 
                 scm {
-                    connection = 'scm:git:http://git.kieker-monitoring.net/kieker.git'
-                    developerConnection 'scm:git:ssh://gitlab@git.kieker-monitoring.net:kieker/kieker.git'
-                    url = 'http://trac.kieker-monitoring.net/browser/kieker-git'
+                    connection = 'scm:git:https://github.com/kieker-monitoring/kieker.git'
+                    developerConnection 'scm:git:git@github.com:kieker-monitoring/kieker.git'
+                    url = 'https://github.com/kieker-monitoring/kieker'
                 }
 
                 issueManagement {
-                    system = 'Trac'
-                    url = 'http://trac.kieker-monitoring.net'
+                    system = 'Jira'
+                    url = 'https://kieker-monitoring.atlassian.net/'
                 }
 
                 ciManagement {
                     system = 'Jenkins'
-                    url = 'http://build.kieker-monitoring.net'
+                    url = 'https://build.se.informatik.uni-kiel.de/jenkins/job/kieker-monitoring/'
                 }
             }
 
