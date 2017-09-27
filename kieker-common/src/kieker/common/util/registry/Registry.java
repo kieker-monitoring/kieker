@@ -174,7 +174,7 @@ public final class Registry<E> implements IRegistry<E> {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @deprecated As of 1.13. Do not iterate through the registry.
+	 * @deprecated since 1.13 (to be removed in 1.14): Do not iterate through the registry.
 	 */
 	@Deprecated
 	@Override
