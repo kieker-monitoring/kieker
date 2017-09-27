@@ -738,6 +738,7 @@ def manualContent = project.copySpec {
 }
 
 def exampleContent = project.copySpec {
+    
     from('kieker-examples') {
         include '**'
 
@@ -814,6 +815,13 @@ def sourceContent = project.copySpec {
         exclude 'build-eclipse/'
         exclude '**/.gradle/**'
         exclude '**/*.log'
+        // Exclude all JAR-files in the 'kieker-examples' folder except for the opencsv JAR and the JARs in the JavaEEServletContainerExample directory
+	exclude {
+	  jars -> jars.file.path.contains('kieker-examples') &&
+		  jars.file.name.endsWith('.jar') &&
+		  !jars.file.name.startsWith('opencsv-') &&
+		  !jars.file.path.contains('JavaEEServletContainerExample')
+	  }
     }
     from('kieker-documentation') {
         include 'README-src'
