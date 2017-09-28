@@ -70,7 +70,7 @@ function check_src_archive {
 
 	# check bytecode version of classes contained in jar
 	echo "Making sure that bytecode version of class in jar is $javaVersion"
-	MAIN_JAR=$(ls "${DIST_JAR_DIR}/kieker-"*".jar" | grep -v emf | grep -v aspectj)
+	MAIN_JAR=$(ls "${DIST_JAR_DIR}/kieker-"*".jar" | grep -E "kieker-[^-]*(-SNAPSHOT)?.jar")
 	assert_file_exists_regular ${MAIN_JAR}
 
 	VERSION_CLASS=$(find kieker-common/build -name "Version.class")
@@ -98,7 +98,7 @@ function check_bin_archive {
 
 	# check bytecode version of classes contained in jar
 	echo "Making sure that bytecode version of class in jar is $javaVersion"
-	MAIN_JAR=$(ls "${DIST_JAR_DIR}/kieker-"*".jar" | grep -v emf | grep -v aspectj)
+	MAIN_JAR=$(ls "${DIST_JAR_DIR}/kieker-"*".jar" | grep -E "kieker-[^-]*(-SNAPSHOT)?.jar")
 	assert_file_exists_regular ${MAIN_JAR}
 	VERSION_CLASS_IN_JAR=$(unzip -l	 ${MAIN_JAR} | grep Version.class | awk '{ print $4 }')
 	unzip "${MAIN_JAR}" "${VERSION_CLASS_IN_JAR}"
