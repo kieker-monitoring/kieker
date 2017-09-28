@@ -13,16 +13,19 @@ entity ConstructionEvent extends AbstractTraceEvent {
 	int objectId = 0
 }
 
-/** requires realization of auto-increment feature.
 @author 'Jan Waller'
 @since '1.5'
 entity TraceMetadata : IFlowRecord {
- 	long traceId = 0
+	const long NO_PARENT_TRACEID = -1
+	const int NO_PARENT_ORDER_INDEX = -1
+	const string NO_SESSION_ID = "<no-session-id>"
+	const string NO_HOSTNAME = "<default-host>"
+	
+ 	changeable long traceId = 0
  	long threadId = 0
- 	string sessionId = ""
- 	string hostname = "<nohost>"
- 	long parentTraceId = 0
- 	int parentOrderId = 0
- 	transient auto-increment long nextOrderId = 0 
+ 	string sessionId = NO_SESSION_ID
+ 	string hostname = NO_HOSTNAME
+ 	long parentTraceId = NO_PARENT_TRACEID
+ 	int parentOrderId = NO_PARENT_ORDER_INDEX
+ 	transient auto-increment int nextOrderId = 0 
 }
-*/

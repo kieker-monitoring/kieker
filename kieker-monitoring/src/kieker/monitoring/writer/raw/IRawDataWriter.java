@@ -19,6 +19,8 @@ package kieker.monitoring.writer.raw;
 import java.nio.ByteBuffer;
 
 /**
+ * Interface for raw data writers.
+ * 
  * @author Holger Knoche
  *
  * @since 1.13

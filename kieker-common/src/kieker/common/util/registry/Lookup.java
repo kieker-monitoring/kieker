@@ -139,7 +139,7 @@ public final class Lookup<E> implements ILookup<E> {
 	}
 
 	/**
-	 * @deprecated This method is not supported by this implementation.
+	 * @deprecated (won't be removed) This method is not supported by this implementation.
 	 *
 	 * @param recordReceiver
 	 *            has no special property.

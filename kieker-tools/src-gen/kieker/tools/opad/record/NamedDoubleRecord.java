@@ -16,7 +16,6 @@
 package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -24,9 +23,11 @@ import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
+
 /**
  * @author Tom Frotscher
- *
+ * API compatibility: Kieker 1.13.0
+ * 
  * @since 1.10
  */
 public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
@@ -34,8 +35,8 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // NamedDoubleRecord.applicationName
-			+ TYPE_SIZE_LONG // NamedDoubleRecord.timestamp
-			+ TYPE_SIZE_DOUBLE // NamedDoubleRecord.responseTime
+			 + TYPE_SIZE_LONG // NamedDoubleRecord.timestamp
+			 + TYPE_SIZE_DOUBLE // NamedDoubleRecord.responseTime
 	;
 	
 	public static final Class<?>[] TYPES = {
@@ -56,13 +57,13 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	};
 	
 	/** property declarations. */
-	private String applicationName;
-	private long timestamp;
-	private double responseTime;
+	private final String applicationName;
+	private final long timestamp;
+	private final double responseTime;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 *
+	 * 
 	 * @param applicationName
 	 *            applicationName
 	 * @param timestamp
@@ -71,7 +72,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	 *            responseTime
 	 */
 	public NamedDoubleRecord(final String applicationName, final long timestamp, final double responseTime) {
-		this.applicationName = applicationName == null ? "" : applicationName;
+		this.applicationName = applicationName == null?"":applicationName;
 		this.timestamp = timestamp;
 		this.responseTime = responseTime;
 	}
@@ -79,10 +80,13 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 *
+	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #NamedDoubleRecord(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public NamedDoubleRecord(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.applicationName = (String) values[0];
@@ -92,12 +96,15 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 *
+	 * 
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #NamedDoubleRecord(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected NamedDoubleRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
 		this.applicationName = (String) values[0];
@@ -105,16 +112,12 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		this.responseTime = (Double) values[2];
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 *
 	 * @param deserializer
 	 *            The deserializer to use
-	 *
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
 	 */
-	public NamedDoubleRecord(final IValueDeserializer deserializer) throws BufferUnderflowException {
+	public NamedDoubleRecord(final IValueDeserializer deserializer) {
 		this.applicationName = deserializer.getString();
 		this.timestamp = deserializer.getLong();
 		this.responseTime = deserializer.getDouble();
@@ -122,8 +125,11 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
 			this.getApplicationName(),
@@ -135,7 +141,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getApplicationName());
 	}
 	/**
@@ -143,6 +149,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
 		serializer.putString(this.getApplicationName());
 		serializer.putLong(this.getTimestamp());
 		serializer.putDouble(this.getResponseTime());
@@ -173,7 +180,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 
 	/**
 	 * {@inheritDoc}
-	 *
+	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -187,29 +194,15 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (obj == this) {
-			return true;
-		}
-		if (obj.getClass() != this.getClass()) {
-			return false;
-		}
-
+		if (obj == null) return false;
+		if (obj == this) return true;
+		if (obj.getClass() != this.getClass()) return false;
+		
 		final NamedDoubleRecord castedRecord = (NamedDoubleRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) {
-			return false;
-		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
-			return false;
-		}
-		if (AbstractMonitoringRecord.isNotEqual(this.getResponseTime(), castedRecord.getResponseTime())) {
-			return false;
-		}
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) return false;
+		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (isNotEqual(this.getResponseTime(), castedRecord.getResponseTime())) return false;
 		return true;
 	}
 	
@@ -217,24 +210,14 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		return this.applicationName;
 	}
 	
-	public final void setApplicationName(String applicationName) {
-		this.applicationName = applicationName;
-	}
 	
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
 	
-	public final void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
 	
 	public final double getResponseTime() {
 		return this.responseTime;
 	}
 	
-	public final void setResponseTime(double responseTime) {
-		this.responseTime = responseTime;
-	}
-
 }

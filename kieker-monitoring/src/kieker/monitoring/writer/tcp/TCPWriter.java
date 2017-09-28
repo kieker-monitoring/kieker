@@ -38,7 +38,7 @@ import kieker.monitoring.writer.WriterUtil;
 /**
  * @author "Christian Wulf"
  *
- * @deprecated 1.13. Use {@link DualSocketTcpWriter} instead.
+ * @deprecated since 1.13 (to be removed in 1.14) Use {@link DualSocketTcpWriter} instead.
  *
  * @since unknown
  */

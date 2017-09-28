@@ -29,6 +29,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.queue.BlockingQueueDecorator;
 import kieker.monitoring.queue.behavior.BlockOnFailedInsertBehavior;
+import kieker.monitoring.queue.behavior.BypassQueueBehavior;
 import kieker.monitoring.queue.behavior.CountOnFailedInsertBehavior;
 import kieker.monitoring.queue.behavior.DoNotInsertBehavior;
 import kieker.monitoring.queue.behavior.InsertBehavior;
@@ -111,7 +112,7 @@ public final class WriterController extends AbstractController implements IWrite
 		this.monitoringWriterThread = new MonitoringWriterThread(this.monitoringWriter, this.writerQueue);
 
 		int recordQueueInsertBehavior = configuration.getIntProperty(PREFIX + RECORD_QUEUE_INSERT_BEHAVIOR);
-		if ((recordQueueInsertBehavior < 0) || (recordQueueInsertBehavior > 4)) {
+		if ((recordQueueInsertBehavior < 0) || (recordQueueInsertBehavior > 5)) {
 			if (LOG.isWarnEnabled()) {
 				LOG.warn("Unknown value '" + recordQueueInsertBehavior + "' for " + PREFIX + RECORD_QUEUE_INSERT_BEHAVIOR
 						+ "; using default value 0");
@@ -136,6 +137,9 @@ public final class WriterController extends AbstractController implements IWrite
 			// throw new IllegalStateException(e);
 			// }
 			// this.insertBehavior = new DisruptorInsertBehavior<IMonitoringRecord>(this.ringBuffer);
+			break;
+		case 5:
+			this.insertBehavior = new BypassQueueBehavior(this.monitoringWriter);			
 			break;
 		default:
 			this.insertBehavior = new TerminateOnFailedInsertBehavior<IMonitoringRecord>(this.writerQueue);
