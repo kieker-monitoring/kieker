@@ -26,7 +26,7 @@ node('kieker-slave-docker') {
     }
 
     stage ('5-release-check-extended logs') {
-        if (env.BRANCH_NAME == "master") {
+        if (env.BRANCH_NAME == "master" || env.CHANGE_TARGET != null) {
             sh 'echo "We are in master - executing the extended release archive check."'
     
             sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7-small /bin/bash -c "cd /opt/kieker; ./gradlew checkReleaseArchives"'
