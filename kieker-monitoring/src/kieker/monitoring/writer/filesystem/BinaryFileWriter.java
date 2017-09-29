@@ -179,4 +179,17 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 	public FilenameFilter getFileNameFilter() {
 		return FileExtensionFilter.BIN;
 	}
+
+	@Override
+	public String toString() {
+		final String configInfo = super.toString();
+		final StringBuilder builder = new StringBuilder()
+			.append(configInfo)
+			.append("\n\t")
+			.append("Internal properties:")
+			.append("\n\t\t")
+			.append("Log location: ")
+			.append(this.logFolder);
+		return builder.toString();
+	}
 }

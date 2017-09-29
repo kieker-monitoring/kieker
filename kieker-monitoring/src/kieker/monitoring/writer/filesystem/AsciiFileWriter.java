@@ -186,13 +186,13 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	@Override
 	public String toString() {
 		final String configInfo = super.toString();
-		final StringBuilder builder = new StringBuilder();
-		builder.append(configInfo);
-		builder.append("\n\t");
-		builder.append("Internal properties:");
-		builder.append("\n\t\t");
-		builder.append("Log location: ");
-		builder.append(this.logFolder);
+		final StringBuilder builder = new StringBuilder()
+			.append(configInfo)
+			.append("\n\t")
+			.append("Internal properties:")
+			.append("\n\t\t")
+			.append("Log location: ")
+			.append(this.logFolder);
 		return builder.toString();
 	}
 
