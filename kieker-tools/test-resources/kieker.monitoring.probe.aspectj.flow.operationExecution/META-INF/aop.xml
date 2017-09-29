@@ -17,12 +17,13 @@
 	<aspects>
 		<!-- <concrete-aspect name="MyTargetedAspect" extends="kieker.monitoring.probe.aspectj.beforeafter.onlycallee.AbstractAspect"> -->
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.beforeafter.onlycallee.MyTargetAspect"
-			extends="kieker.monitoring.probe.aspectj.flow.operationExecution.AbstractAspect">
+			extends="kieker.monitoring.probe.aspectj.beforeafter.onlycallee.AbstractAspect">
+<!-- 			extends="kieker.monitoring.probe.aspectj.flow.operationExecution.AbstractAspect"> -->
 <!-- 			extends="kieker.monitoring.probe.aspectj.beforeafter.onlycallee.AbstractAspectWithoutTraceRegistry"> -->
 <!-- 			<pointcut name="monitoredOperation" expression="execution(* *.*(..))" /> -->
 <!-- 			<pointcut name="monitoredOperation" expression="call(* *.*(..))" /> -->
 			<pointcut name="noFieldAccess" expression="!set(* *) &amp;&amp; !get(* *)" />
-			<pointcut name="monitoredOperation" expression="cflow(execution(* *.main(..))) &amp;&amp; (execution(new(..)) || execution(* *(..))) &amp;&amp; noFieldAccess() &amp;&amp; !adviceexecution()" />
+			<pointcut name="monitoredOperation" expression="cflow(execution(* *.main(..))) &amp;&amp; noGetterAndSetter() &amp;&amp; (execution(new(..)) || execution(* *(..))) &amp;&amp; noFieldAccess() &amp;&amp; !adviceexecution()" />
 		</concrete-aspect>
 
 	</aspects>

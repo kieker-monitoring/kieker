@@ -1,3 +1,32 @@
+configurations {
+	jms
+	amqp
+	kafka
+	spring
+	opad
+}
+
+dependencies {
+	jms 'commons-logging:commons-logging:1.2'
+
+	amqp 'commons-logging:commons-logging:1.2'
+	amqp 'com.rabbitmq:amqp-client:4.2.1'
+
+	kafka 'commons-logging:commons-logging:1.2'
+	kafka 'com.google.guava:guava:20.0'
+	kafka 'org.jctools:jctools-core:2.1.0'
+	kafka 'org.apache.kafka:kafka-clients:0.11.0.1'
+	// the following dependencies are transitive dependencies from kafka-clients
+	//kafka 'org.slf4j:slf4j-api:1.7.25'
+	//kafka files('../lib/kafka/lz4-*.jar')
+	//kafka files('../lib/kafka/snappy-java-*.jar')
+
+	spring 'commons-logging:commons-logging:1.2'
+
+	opad 'org.apache.commons:commons-math3:3.6.1'
+	opad 'org.apache.commons:commons-lang3:3.6'
+}
+
 defaultTasks 'cleanStandaloneExamples', 'buildStandaloneExamples'
 
 task buildStandaloneExamples(dependsOn: [
@@ -122,9 +151,8 @@ task copyLibsStandaloneExamplesUserguideAppendixJMS(type: Copy, dependsOn: [root
 	from ('../build/libs') {
 		include "kieker-${version}-emf.jar"
 	}
-	from ('../lib') {
-		include "commons-logging-*.jar"
-	}
+	from configurations.jms
+
 	into 'userguide/appendix-JMS/lib/'
 }
 
@@ -137,10 +165,8 @@ task copyLibsStandaloneExamplesUserguideAppendixAMQP(type: Copy, dependsOn: [roo
 	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}
-	from ('../lib') {
-		include "commons-logging-*.jar"
-		include "amqp-client-*.jar"
-	}
+	from configurations.amqp
+
 	into 'userguide/appendix-AMQP/lib/'
 }
 
@@ -153,16 +179,8 @@ task copyLibsStandaloneExamplesUserguideAppendixKafka(type: Copy, dependsOn: [ro
 	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}
-	from ('../lib') {
-		include "commons-logging-*.jar"
-		include "guava-*.jar"
-		include "jctools-core-*.jar"
-		include "kafka-clients-*.jar"
-		include "kieker-*.jar"
-		include "lz4-*.jar"
-		include "slf4j-*.jar"
-		include "snappy-java-*.jar"
-	}
+	from configurations.kafka
+
 	into 'userguide/appendix-Kafka/lib/'
 }
 
@@ -229,9 +247,9 @@ task copyLibsStandaloneExamplesMonitoringSpring(type: Copy, dependsOn: [rootProj
 	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}
+	from configurations.spring
 	from ('../lib') {
 		include "aspectjweaver-*.jar"
-		include "commons-logging-*.jar"
 	}
 	from ('../lib/framework-libs/spring/') {
 		include "aopalliance-*.jar"
@@ -313,13 +331,11 @@ task copyLibsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProject.
 	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}
+	from configurations.opad
 	from ('../lib') {
-		include 'commons-lang3-*.jar'
-		include 'commons-math3-*.jar'
 		include 'REngine-*.jar'
 		include 'Rserve-*.jar'
 		include 'Rsession-*.jar'
-		include 'opencsv-2.4-SNAPSHOT.jar'
 	}
 	into 'analysis/opad-anomaly-detection/lib/'
 }
