@@ -1,6 +1,12 @@
 apply plugin: 'eclipse'
 
+configurations {
+	resultJar
+}
+
 dependencies {
+	resultJar 'commons-cli:commons-cli:1.4'
+
 	compile project(':kieker-common')
 	compile project(':kieker-analysis')
 	compile project(':kieker-monitoring')
@@ -10,7 +16,7 @@ dependencies {
 	compile resolveLibrary('jgraphx-*.jar')				// this artifact is not available on our repositories
 	compile 'org.apache.commons:commons-math3:3.6.1'	// used by OPAD
 	compile 'org.apache.commons:commons-lang3:3.6'		// used by OPAD
-	compile 'commons-cli:commons-cli:1.4'
+	compile configurations.resultJar
 	compile resolveLibrary('Rsession-*.jar')
 	compile resolveLibrary('Rserve-*.jar')
 	compile resolveLibrary('REngine-*.jar')

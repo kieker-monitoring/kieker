@@ -641,6 +641,8 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
         include "org.eclipse.emf.ecore.xmi_${libEmfVersion}.LICENSE"
     }
 
+	from project(':kieker-tools').configurations.resultJar
+
     def emfJarsTree = fileTree(dir: 'lib', include: '*emf*.jar').collect {
         zipTree(it)
     }
