@@ -25,6 +25,15 @@ eclipse {
 	}
 }
 
+configurations {
+	resultJar
+}
+
+dependencies {
+	resultJar project(path: ':kieker-tools', configuration: 'resultJar')	// project(':kieker-tools').configurations.resultJar does not work
+	resultJar 'org.jctools:jctools-core:2.1.0'
+}
+
 // We have multiple subprojects - but we do not want all of them in our JAR files.
 def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
 
@@ -620,8 +629,7 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
     configure licence
     configure aopxml
 
-    from fileTree("lib/jctools-core-${libJctoolsVersion}.jar").collect { zipTree(it) }
-    from file("lib/jctools-core-${libJctoolsVersion}.LICENSE")
+    from configurations.resultJar.collect { it.isDirectory() ? it : zipTree(it) }
 
     manifest = project.manifest {
         from sharedManifest
@@ -641,7 +649,7 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
         include "org.eclipse.emf.ecore.xmi_${libEmfVersion}.LICENSE"
     }
 
-	from project(':kieker-tools').configurations.resultJar
+	from configurations.resultJar.collect { it.isDirectory() ? it : zipTree(it) }
 
     def emfJarsTree = fileTree(dir: 'lib', include: '*emf*.jar').collect {
         zipTree(it)
@@ -655,9 +663,6 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
         exclude "about.*"
         exclude "modeling32.png"
     }
-
-    from fileTree("lib/jctools-core-${libJctoolsVersion}.jar").collect { zipTree(it) }
-    from file("lib/jctools-core-${libJctoolsVersion}.LICENSE")
 
     manifest = project.manifest {
         from sharedManifest
@@ -676,8 +681,7 @@ task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
     }
     from file("lib/aspectjweaver-${libAspectjVersion}.LICENSE")
 
-    from fileTree("lib/jctools-core-${libJctoolsVersion}.jar").collect { zipTree(it) }
-    from file("lib/jctools-core-${libJctoolsVersion}.LICENSE")
+    from configurations.resultJar.collect { it.isDirectory() ? it : zipTree(it) }
 
     manifest = project.manifest {
         from sharedManifest
