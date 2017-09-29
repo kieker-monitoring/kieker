@@ -82,7 +82,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * Registers the string attributes of the record at the given <code>stringRegistry</code>.
 	 *
 	 * @since 1.11
-	 * @deprecated Is unnecessary when using the new, serializer-based output.
+	 * @deprecated since 1.13 (to be removed in 1.14): Is unnecessary when using the new, serializer-based output.
 	 */
 	@Deprecated
 	public void registerStrings(final IRegistry<String> stringRegistry);
@@ -136,7 +136,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * @return The size.
 	 *
 	 * @since 1.8
-	 * @deprecated With the introduction of value serializers, this method has become obsolete.
+	 * @deprecated since 1.13 (to be removed in 1.14) With the introduction of value serializers, this method has become obsolete.
 	 */
 	public int getSize();
 

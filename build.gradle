@@ -12,7 +12,7 @@ buildscript {
 }
 
 plugins {
-    //id 'de.aaschmid.cpd' version '1.0'	// cpd plugin
+    id 'de.aaschmid.cpd' version '1.0'	// cpd plugin
 }
 
 apply plugin: 'eclipse'
@@ -27,6 +27,11 @@ eclipse {
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
 def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
+
+//def pmdAndCpdVersion = '5.0.5'	// works with 0 PMD errors and 0 PMD warnings
+//def pmdAndCpdVersion = '5.1.3'	// causes many new PMD errors and PMD warnings
+def pmdAndCpdVersion = '5.2.2'
+//def pmdAndCpdVersion = '5.5.0'	// causes many new PMD errors and PMD warnings
 
 // better use subprojects to avoid if-then-else in sourceSets
 allprojects {
@@ -112,9 +117,6 @@ allprojects {
 	    maxHeapSize = "2g" // Set limit to prevent Travis-CI build to crash
     }
 
-	def pmdAndCpdVersion = '5.0.5'	// works with 0 PMD errors and 0 PMD warnings
-//	def pmdAndCpdVersion = '5.1.3'	// causes many new PMD errors and PMD warnings
-//	def pmdAndCpdVersion = '5.5.0'	// causes many new PMD errors and PMD warnings
     apply plugin: 'pmd'
     pmd {
     	// the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
@@ -125,11 +127,6 @@ allprojects {
         ruleSets = []
         ruleSetFiles = files(resolveRelativeToParent(dirConfig, 'pmdrules.xml'))
     }
-
-	/*apply plugin: 'cpd'
-	cpd {
-	    //toolVersion = pmdAndCpdVersion
-	}*/
 
     apply plugin: 'checkstyle'
     checkstyle {
@@ -156,14 +153,6 @@ allprojects {
             html.enabled = false
         }
     }
-
-    /*tasks.withType(de.aaschmid.gradle.plugins.cpd.Cpd) {                                                                                                                                       
-		reports {
-		    xml.enabled = true
-		    text.enabled = false
-		}
-		source = files('src')
-	}*/
 
     tasks.withType(FindBugs) {
         reports {
@@ -203,6 +192,35 @@ allprojects {
 		testCompile 'org.hamcrest:hamcrest-library:1.3'
     }
 
+	check.dependsOn(':cpdCheck')
+}
+
+/*subprojects {
+    plugins.withType(JavaBasePlugin) { // <- if 'JavaBasePlugin' plugin is not applied to all subprojects
+        check.dependsOn(rootProject.cpdCheck)
+    }
+}*/
+
+// gradle-cpd-plugin support only CPD 5.2.2 and above
+// CPD works only within the main project, not within the subprojects as we have configured PMD etc.
+cpd {
+	toolVersion = pmdAndCpdVersion
+	//excludeRoots =	// TODO exclude src-gen folders 
+}
+cpdCheck {
+    // don't fail build if duplicates are found
+    ignoreFailures = true
+    // report as xml
+    reports {
+        text.enabled = false
+        xml {
+        	enabled = true
+        	encoding = 'UTF-8'
+        }
+    }
+    // only java, groovy and scala classes in 'main' sourceSets
+    source = subprojects*.sourceSets*.main*.allJava
+    //source = sourceSets.main.java
 }
 
 def parseCheckstyleReport(File reportFile) {
@@ -293,6 +311,22 @@ def parsePmdReport(File reportFile) {
     return [errors, warnings, infos]
 }
 
+def parseCpdReport(File reportFile) {
+    def errors = 0
+    def warnings = 0
+    def infos = 0
+
+    if (reportFile.exists()) {
+        def xmlFile = (new XmlParser()).parse(reportFile)
+        xmlFile.'duplication'.each { issue ->
+			errors++
+        }
+    } else {
+    	println 'Could not find CPD report file at ' + reportFile
+    }
+    return [errors, warnings, infos]
+}
+
 task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) {
   doLast {
     def reportTypes = ['main', 'test']
@@ -348,6 +382,19 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) {
     // End PMD report parsing
 
 
+    // Begin CPD report parsing
+    def cpdErrors = 0
+
+	def projects = [rootProject]
+    projects.each { Project p ->
+    	// cpd only produces one single file in the root project without any report types, such as main and test.
+        def reportFile = file(p.projectDir.path + '/build/reports/cpd/cpdCheck.xml')
+        def reportResults = parseCpdReport(reportFile)
+        cpdErrors += reportResults[0]
+    }
+    // End CPD report parsing
+
+
     // Print results
     println("Static analysis results:")
     println()
@@ -365,6 +412,9 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) {
     println("  Errors: " + pmdErrors + " (Threshold: " + pmdErrorThreshold + ")")
     println("  Warnings: " + pmdWarnings + " (Threshold: " + pmdWarningThreshold + ")")
     println("  Info: " + pmdInfos)
+    println()
+    println(" CPD:")
+    println("  Errors: " + cpdErrors + " (Threshold: " + cpdErrorThreshold + ")")
 
 
     // Fail build if Checkstyle thresholds are violated
@@ -386,7 +436,6 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) {
         throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + fbErrors + " Threshold: " + findbugsErrorThreshold)
     }
 
-
     // Fail build if PMD thresholds are violated
     if (pmdWarnings > Integer.valueOf(pmdWarningThreshold)) {
         throw new GradleException("There were pmd warnings exceeding the warning threshold! Warnings: " + pmdWarnings + " Threshold: " + pmdWarningThreshold)
@@ -394,6 +443,11 @@ task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) {
 
     if (pmdErrors > Integer.valueOf(pmdErrorThreshold)) {
         throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + pmdErrors + " Threshold: " + pmdErrorThreshold)
+    }
+
+	// Fail build if CPD thresholds are violated
+    if (cpdErrors > Integer.valueOf(cpdErrorThreshold)) {
+        throw new GradleException("There were cpd errors exceeding the error threshold! Errors: " + cpdErrors + " Threshold: " + cpdErrorThreshold)
     }
   }
 }
@@ -697,6 +751,7 @@ def manualContent = project.copySpec {
 }
 
 def exampleContent = project.copySpec {
+    
     from('kieker-examples') {
         include '**'
 
@@ -730,23 +785,17 @@ def exampleJavaEEContent = project.copySpec {
     into kiekerPackagenamebase + "-" + kiekerVersion + "/examples/JavaEEServletContainerExample/jetty"
 }
 
-task docs(type: Javadoc) {
-    source subprojects.collect { project -> project.sourceSets.main.allJava }
-    classpath = files(subprojects.collect { project -> project.sourceSets.main.compileClasspath })
-    destinationDir = new File(projectDir, 'javadoc')
-}
-
 task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandaloneExamples']) {
   doLast {
   }
 }
 
-task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
+task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
     classifier = 'binaries'
     with binaryContent, manualContent, exampleContent, exampleJavaEEContent
 }
 
-task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
+task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
     classifier = 'binaries'
     with binaryContent, manualContent, exampleContent, exampleJavaEEContent
 
@@ -773,6 +822,13 @@ def sourceContent = project.copySpec {
         exclude 'build-eclipse/'
         exclude '**/.gradle/**'
         exclude '**/*.log'
+        // Exclude all JAR-files in the 'kieker-examples' folder except for the opencsv JAR and the JARs in the JavaEEServletContainerExample directory
+	exclude {
+	  jars -> jars.file.path.contains('kieker-examples') &&
+		  jars.file.name.endsWith('.jar') &&
+		  !jars.file.name.startsWith('opencsv-') &&
+		  !jars.file.path.contains('JavaEEServletContainerExample')
+	  }
     }
     from('kieker-documentation') {
         include 'README-src'
@@ -903,30 +959,28 @@ uploadArchives {
 
                 developers {
                     developer {
-                        id = 'avh'
+                        id = 'thomas.duellmann'
+                        name = 'Thomas F. Duellmann'
+                        email = 'duellmann@informatik.uni-stuttgart.de'
+                    }
+                    developer {
+                        id = 'andre.van.hoorn'
                         name = 'Andre van Hoorn'
                         email = 'van.hoorn@informatik.uni-stuttgart.de'
                     }
                     developer {
-                        id = 'jwa'
-                        name = 'Jan Waller'
-                        email = 'jwa@informatik.uni-kiel.de'
+                        id = 'reiner.jung'
+                        name = 'Reiner Jung'
+                        email = 'reiner.jung@email.uni-kiel.de'
                     }
                     developer {
-                        id = 'nie'
-                        name = 'Nils Christian Ehmke'
-                        email = 'nie@informatik.uni-kiel.de'
+                        id = 'christian.wulf'
+                        name = 'Christian Wulf'
+                        email = 'christian.wulf@email.uni-kiel.de'
                     }
                 }
 
                 mailingLists {
-                    mailingList {
-                        name = 'Kieker-users'
-                        subscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-users'
-                        unsubscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-users'
-                        post = 'kieker-users@lists.sourceforge.net'
-                        archive = 'http://sourceforge.net/mailarchive/forum.php?forum_name=kieker-users'
-                    }
                     mailingList {
                         name = 'Kieker-developers'
                         subscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-developers'
@@ -934,22 +988,36 @@ uploadArchives {
                         post = 'kieker-developers@lists.sourceforge.net'
                         archive = 'http://sourceforge.net/mailarchive/forum.php?forum_name=kieker-developers'
                     }
+                    mailingList {
+                        name = 'Kieker-tickets'
+                        subscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-tickets'
+                        unsubscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-tickets'
+                        post = 'kieker-tickets@lists.sourceforge.net'
+                        archive = 'http://sourceforge.net/mailarchive/forum.php?forum_name=kieker-tickets'
+                    }
+                    mailingList {
+                        name = 'Kieker-users'
+                        subscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-users'
+                        unsubscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-users'
+                        post = 'kieker-users@lists.sourceforge.net'
+                        archive = 'http://sourceforge.net/mailarchive/forum.php?forum_name=kieker-users'
+                    }
                 }
 
                 scm {
-                    connection = 'scm:git:http://git.kieker-monitoring.net/kieker.git'
-                    developerConnection 'scm:git:ssh://gitlab@git.kieker-monitoring.net:kieker/kieker.git'
-                    url = 'http://trac.kieker-monitoring.net/browser/kieker-git'
+                    connection = 'scm:git:https://github.com/kieker-monitoring/kieker.git'
+                    developerConnection 'scm:git:git@github.com:kieker-monitoring/kieker.git'
+                    url = 'https://github.com/kieker-monitoring/kieker'
                 }
 
                 issueManagement {
-                    system = 'Trac'
-                    url = 'http://trac.kieker-monitoring.net'
+                    system = 'Jira'
+                    url = 'https://kieker-monitoring.atlassian.net/'
                 }
 
                 ciManagement {
                     system = 'Jenkins'
-                    url = 'http://build.kieker-monitoring.net'
+                    url = 'https://build.se.informatik.uni-kiel.de/jenkins/job/kieker-monitoring/'
                 }
             }
 

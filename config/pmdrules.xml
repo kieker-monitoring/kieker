@@ -65,6 +65,8 @@
 			<property name="violationSuppressXPath"
 				value="//ClassOrInterfaceBodyDeclaration/MethodDeclaration/MethodDeclarator[matches(@Image,'(get|is|set)[\p{Lu}].*') and not(FormalParameters/FormalParameter)]" />
 			<property name="fieldCommentRequirement" value="Ignored" />
+			<property name="protectedMethodCommentRequirement" value="Ignored" />
+			<property name="publicMethodCommentRequirement" value="Ignored" />
 		</properties>
 	</rule>
 
