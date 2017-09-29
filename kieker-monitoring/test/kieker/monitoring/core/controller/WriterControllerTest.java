@@ -46,7 +46,7 @@ public class WriterControllerTest {
 		super();
 	}
 
-	@Test(expected = ClassNotFoundException.class)
+	@Test(expected = IllegalStateException.class)
 	public void testInvalidWriterQueueConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, "invalid writer queue fully qualified name");
