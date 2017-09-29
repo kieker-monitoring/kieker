@@ -4,7 +4,6 @@ node('kieker-slave-docker') {
     
     stage ('Checkout') {
         checkout scm
-        sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "java -version"'
     }
 
     stage ('1-compile logs') {
