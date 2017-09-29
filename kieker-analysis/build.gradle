@@ -21,7 +21,7 @@ dependencies {
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
 	
-	testRuntime 'org.apache.derby:derby:10.13.1.1'
+	testRuntime 'org.apache.derby:derby:10.12.1.1'	// (10.13.1.1 and above require Java 8)
 }
 
 eclipse {
