@@ -166,13 +166,13 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 		private final Pattern pattern;
 		private final List<File> files;
 
-		public RecursiveFileVisitor(String postfixRegexNamePattern) {
+		public RecursiveFileVisitor(final String postfixRegexNamePattern) {
 			this.pattern = Pattern.compile(postfixRegexNamePattern);
 			this.files = new ArrayList<>();
 		}
 
 		@Override
-		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+		public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
 			if (this.pattern.matcher(file.toString()).matches()) {
 				this.files.add(file.toFile());
 			}

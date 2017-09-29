@@ -6,9 +6,8 @@ apply plugin: 'com.github.hauner.jarTest'
 
 dependencies {
 	compile project(':kieker-common')
-	
+
 	compile resolveLibrary('javax.jms-*.jar')				// old library; not available via maven repo
-	//compile resolveLibrary('framework-libs/cxf/cxf-*.jar')
 	compile 'org.apache.cxf:cxf:2.6.17'							// cxf-bundle
 	compile resolveLibrary('org.eclipse.emf.common_*.jar')
 	compile resolveLibrary('org.eclipse.emf.ecore.xmi_*.jar')
