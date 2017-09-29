@@ -1,8 +1,8 @@
 apply plugin: 'eclipse'
 apply plugin: 'com.github.hauner.jarTest'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+//sourceCompatibility = 1.8
+//targetCompatibility = 1.8
 
 dependencies {
 	compile project(':kieker-common')
@@ -15,7 +15,7 @@ dependencies {
 	compile resolveLibrary('org.eclipse.emf.ecore_*.jar')
 	compile 'com.rabbitmq:amqp-client:4.2.1'	// 4.2.1, 3.5.3
 
-	compile 'com.google.guava:guava:23.0'				// (22.0 and above require java 8) used by StringRegistryCache for amqp reader
+	compile 'com.google.guava:guava:20.0'				// (21.0 and above require java 8) used by StringRegistryCache for amqp reader
 	compile 'org.apache.kafka:kafka-clients:0.11.0.1'
 
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
