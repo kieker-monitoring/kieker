@@ -25,6 +25,15 @@ eclipse {
 	}
 }
 
+configurations {
+	resultJar
+}
+
+dependencies {
+	resultJar project(path: ':kieker-tools', configuration: 'resultJar')	// project(':kieker-tools').configurations.resultJar does not work
+	resultJar 'org.jctools:jctools-core:2.1.0'
+}
+
 // We have multiple subprojects - but we do not want all of them in our JAR files.
 def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
 
@@ -173,7 +182,7 @@ allprojects {
     	jcenter() // for mockito
     }
 
-    // Those are some dependencies which are needed by all submodules
+    // Those are some dependencies which are needed by all subprojects
     dependencies {
         checkstyle resolveLibrary('**/checkstyle-*/**/*.jar')
         checkstyle project(':kieker-checkstyle-extension')
@@ -183,11 +192,12 @@ allprojects {
         // compile-time dependency due to the annotation SuppressFBWarnings()
         compile resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
 
-		// moved to common to let Eclipse compile each module separately
-		testCompile "org.mockito:mockito-core:2.+"
+		compile 'commons-logging:commons-logging:1.2'
+		compile 'org.slf4j:slf4j-api:1.7.25'
+
+		testCompile 'org.mockito:mockito-core:2.+'
         testCompile 'junit:junit:4.12'
-        // https://mvnrepository.com/artifact/org.hamcrest/hamcrest-library
-		testCompile group: 'org.hamcrest', name: 'hamcrest-library', version: '1.3'
+		testCompile 'org.hamcrest:hamcrest-library:1.3'
     }
 
 	check.dependsOn(':cpdCheck')
@@ -619,8 +629,7 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
     configure licence
     configure aopxml
 
-    from fileTree("lib/jctools-core-${libJctoolsVersion}.jar").collect { zipTree(it) }
-    from file("lib/jctools-core-${libJctoolsVersion}.LICENSE")
+    from configurations.resultJar.collect { it.isDirectory() ? it : zipTree(it) }
 
     manifest = project.manifest {
         from sharedManifest
@@ -640,6 +649,8 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
         include "org.eclipse.emf.ecore.xmi_${libEmfVersion}.LICENSE"
     }
 
+	from configurations.resultJar.collect { it.isDirectory() ? it : zipTree(it) }
+
     def emfJarsTree = fileTree(dir: 'lib', include: '*emf*.jar').collect {
         zipTree(it)
     }
@@ -652,9 +663,6 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
         exclude "about.*"
         exclude "modeling32.png"
     }
-
-    from fileTree("lib/jctools-core-${libJctoolsVersion}.jar").collect { zipTree(it) }
-    from file("lib/jctools-core-${libJctoolsVersion}.LICENSE")
 
     manifest = project.manifest {
         from sharedManifest
@@ -673,8 +681,7 @@ task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
     }
     from file("lib/aspectjweaver-${libAspectjVersion}.LICENSE")
 
-    from fileTree("lib/jctools-core-${libJctoolsVersion}.jar").collect { zipTree(it) }
-    from file("lib/jctools-core-${libJctoolsVersion}.LICENSE")
+    from configurations.resultJar.collect { it.isDirectory() ? it : zipTree(it) }
 
     manifest = project.manifest {
         from sharedManifest

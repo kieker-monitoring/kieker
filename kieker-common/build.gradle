@@ -2,9 +2,7 @@ apply plugin: 'eclipse'
 apply plugin: "com.github.hauner.jarTest"
 
 dependencies {
-	compile resolveLibrary('commons-logging-*.jar')
-	compile resolveLibrary('slf4j-api-*.jar')
-	compile resolveLibrary('framework-libs/cxf/cxf-*.jar')
+	// no project-specific dependencies
 }
 
 eclipse {

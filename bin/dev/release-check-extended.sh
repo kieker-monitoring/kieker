@@ -104,18 +104,18 @@ function check_bin_archive {
 	unzip "${MAIN_JAR}" "${VERSION_CLASS_IN_JAR}"
 	assert_file_exists_regular "${VERSION_CLASS_IN_JAR}"
 
-	bytecodeVersion="$(javap -verbose ${VERSION_CLASS_IN_JAR} | grep -q "${javaVersion}")"
-	echo "Found ${bytecodeVersion}"
+	bytecodeVersion=$(javap -verbose ${VERSION_CLASS_IN_JAR} | grep -q "${javaVersion}")
+	echo "Found bytecode version ${bytecodeVersion}"
 
 	if ! javap -verbose ${VERSION_CLASS_IN_JAR} | grep -q "${javaVersion}"; then
 		echo "Unexpected bytecode version: ${bytecodeVersion}"
 		exit 1
 	fi
-	echo "OK"
+	echo "Bytecode version is OK"
 
 	# some basic tests with the tools
 	if ! (bin/convertLoggingTimestamp.sh --timestamps 1283156545581511026 1283156546127117246 | grep "Mon, 30 Aug 2010 08:22:25.581 +0000 (UTC)"); then
-		echo "Unexpected result executinǵ bin/convertLoggingTimestamp.sh"
+		echo "Unexpected result executing bin/convertLoggingTimestamp.sh"
 		exit 1
 	fi
 

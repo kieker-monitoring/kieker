@@ -1,18 +1,27 @@
 apply plugin: 'application'
 apply plugin: 'eclipse'
 
+repositories {
+	mavenCentral() 
+}
+
 dependencies {
+	// you need to ensure by yourself that the following jars are in the lib folder
 	compile fileTree('lib') {
 		include "kieker-*.jar"
-		include 'opencsv-*.jar'
+		include "opencsv-*.jar"
 	}
+
+	//compile 'com.opencsv:opencsv:4.0'
+
 	runtime fileTree('lib') {
-		include 'commons-lang3-*.jar'
-		include 'commons-math3-*.jar'
 		include 'REngine-*.jar'
 		include 'Rserve-*.jar'
 		include 'Rsession-*.jar'
 	}
+
+	runtime 'org.apache.commons:commons-math3:3.6.1'
+	runtime 'org.apache.commons:commons-lang3:3.6'
 }
 
 // Simplify the JAR's file name

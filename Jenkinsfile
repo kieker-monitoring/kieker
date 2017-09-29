@@ -4,7 +4,6 @@ node('kieker-slave-docker') {
     
     stage ('Checkout') {
         checkout scm
-        sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "java -version"'
     }
 
     stage ('1-compile logs') {
@@ -26,12 +25,12 @@ node('kieker-slave-docker') {
     }
 
     stage ('5-release-check-extended logs') {
-        if (env.BRANCH_NAME == "master") {
-            sh 'echo "We are in master - executing the extended release archive check."'
+        if (env.BRANCH_NAME == "master" || env.CHANGE_TARGET != null) {
+            sh 'echo "We are in master or in a PR - executing the extended release archive check."'
     
             sh 'docker run --rm -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7-small /bin/bash -c "cd /opt/kieker; ./gradlew checkReleaseArchives"'
         } else {
-            sh 'echo "We are not in master - skipping the extended release archive check."'
+            sh 'echo "We are not in master or in a PR - skipping the extended release archive check."'
         }
     }
 
@@ -44,7 +43,7 @@ node('kieker-slave-docker') {
 
 	    sh 'echo "Uploading snapshot archives to oss.sonatype.org."'
             withCredentials([usernamePassword(credentialsId: 'artifactupload', usernameVariable: 'kiekerMavenUser', passwordVariable: 'kiekerMavenPassword')]) {
-                sh 'docker run --rm -e kiekerMavenUser=$kiekerMavenUser -e kiekerMavenPassword=$kiekerMavenPassword -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7 /bin/bash -c "cd /opt/kieker; ./gradlew uploadArchives"'
+                sh 'docker run --rm -e kiekerMavenUser=$kiekerMavenUser -e kiekerMavenPassword=$kiekerMavenPassword -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7-small /bin/bash -c "cd /opt/kieker; ./gradlew uploadArchives"'
             }
         } else {
             sh 'echo "We are not in  master - skipping."'

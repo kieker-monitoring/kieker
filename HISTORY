@@ -5,6 +5,30 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
+* 1.13 (October 4, 2017)
+- New features (selection)
+  - Kafka writer and reader
+  - Records provide API access to property names
+  - SpringBoot REST interceptors
+- Improvements and refactorings
+  - Performance improvements in the monitoring component (including 
+    API changes to the writers)
+  - Refined architecture including minor (internal) API changes 
+    to records
+  - Library updates
+- Dropped features
+  - Database (SQL) writer and reader
+  - Explicit support for HornetQ and OpenJMS 
+    (may be still be used via the JMS API)
+- Java 7 (or higher) required
+- Infrastructure 
+  - Migration to Atlassian Cloud (Confluence and Jira)
+  - Jenkins-based continuous delivery pipeline integrated with GitHub
+  - Docker containers for examples (JPetStore livedemo, RSS example),
+    build containers
+- Bug fixes and improvements to code, performance, tests, 
+  documentation, examples
+
 * 1.12 (October 1, 2015)
 - New features (selection)
   - Monitoring of system-level statistics based on the Sigar API:

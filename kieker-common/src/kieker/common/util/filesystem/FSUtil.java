@@ -16,6 +16,18 @@
 
 package kieker.common.util.filesystem;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.regex.Pattern;
+
 /**
  * @author Jan Waller
  *
@@ -52,7 +64,8 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 	}
 
 	/**
-	 * Encodes the given line (replaces {@code \\} with {@code \\\\}, {@code \r} with {@code \\r} and {@code \n} with {@code \\n}).
+	 * Encodes the given line (replaces {@code \\} with {@code \\\\}, {@code \r} with {@code \\r} and {@code \n} with
+	 * {@code \\n}).
 	 *
 	 * @param str
 	 *            The string to encode.
@@ -89,7 +102,8 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 	}
 
 	/**
-	 * Decodes the given line (replaces {@code \\\\} with {@code \\}, {@code \\r} with {@code \r} and {@code \\n} with {@code \n}).
+	 * Decodes the given line (replaces {@code \\\\} with {@code \\}, {@code \\r} with {@code \r} and {@code \\n} with
+	 * {@code \n}).
 	 *
 	 * @param str
 	 *            The string to decode.
@@ -126,6 +140,47 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 			return sb.toString();
 		} else {
 			return str;
+		}
+	}
+
+	/**
+	 * @param startDirectory
+	 * @param postfixRegexNamePattern	to be used for the matching
+	 * @return all matching files within the given <code>startDirectory</code> and all its subdirectories
+	 */
+	public static Collection<File> listFilesRecursively(final Path startDirectory, final String postfixRegexNamePattern) {
+		final RecursiveFileVisitor visitor = new RecursiveFileVisitor(postfixRegexNamePattern);
+		try {
+			Files.walkFileTree(startDirectory, visitor);
+		} catch (final IOException e) {
+			throw new IllegalStateException(e);
+		}
+		return visitor.getFiles();
+	}
+
+	/**
+	 * @author Christian Wulf
+	 * @since 1.13
+	 */
+	static class RecursiveFileVisitor extends SimpleFileVisitor<Path> {
+		private final Pattern pattern;
+		private final List<File> files;
+
+		public RecursiveFileVisitor(final String postfixRegexNamePattern) {
+			this.pattern = Pattern.compile(postfixRegexNamePattern);
+			this.files = new ArrayList<>();
+		}
+
+		@Override
+		public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+			if (this.pattern.matcher(file.toString()).matches()) {
+				this.files.add(file.toFile());
+			}
+			return FileVisitResult.CONTINUE;
+		}
+
+		public List<File> getFiles() {
+			return this.files;
 		}
 	}
 }

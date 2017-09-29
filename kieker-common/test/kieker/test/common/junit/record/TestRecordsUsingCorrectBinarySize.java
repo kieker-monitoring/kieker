@@ -42,7 +42,6 @@ public class TestRecordsUsingCorrectBinarySize extends AbstractDynamicKiekerTest
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void test() throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		final Collection<Class<?>> availableClasses = super.deliverAllAvailableClassesFromSourceDirectory();
 		final Collection<Class<?>> notAbstractClasses = super.filterOutAbstractClasses(availableClasses);
