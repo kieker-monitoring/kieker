@@ -46,6 +46,14 @@ public class WriterControllerTest {
 		super();
 	}
 
+	@Test(expected = ClassNotFoundException.class)
+	public void testInvalidWriterQueueConfiguration() {
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, "invalid writer queue fully qualified name");
+
+		new WriterController(configuration);
+	}
+
 	@Test
 	@SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
 	// @SuppressFBWarnings("SIC")
@@ -64,7 +72,8 @@ public class WriterControllerTest {
 			public void run() {
 				// the first element fits into the queue
 				writerController.newMonitoringRecord(new EmptyRecord());
-				// the second element exceeds the queue's capacity and triggers the blocking wait
+				// the second element exceeds the queue's capacity and triggers
+				// the blocking wait
 				writerController.newMonitoringRecord(new EmptyRecord());
 			}
 		});
@@ -76,7 +85,8 @@ public class WriterControllerTest {
 
 		Await.awaitThreadState(thread, State.TERMINATED, THREAD_STATE_CHANGE_TIMEOUT_IN_MS);
 
-		writerController.cleanup(); // triggers the termination of the queue consumer
+		writerController.cleanup(); // triggers the termination of the queue
+									// consumer
 
 		writerController.waitForTermination(CONTROLLER_TIMEOUT_IN_MS);
 
