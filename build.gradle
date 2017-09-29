@@ -183,9 +183,8 @@ allprojects {
         // compile-time dependency due to the annotation SuppressFBWarnings()
         compile resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
 
-		compile group: 'commons-logging', name: 'commons-logging', version: '1.2'
-		compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-		compile resolveLibrary('framework-libs/cxf/cxf-*.jar')
+		compile 'commons-logging:commons-logging:1.2'
+		compile 'org.slf4j:slf4j-api:1.7.25'
 
 		testCompile 'org.mockito:mockito-core:2.+'
         testCompile 'junit:junit:4.12'

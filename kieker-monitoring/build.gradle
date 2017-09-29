@@ -4,7 +4,7 @@ apply plugin: "com.github.hauner.jarTest"
 dependencies {
 	compile project(':kieker-common')
 	
-	compile 'com.rabbitmq:amqp-client:4.2.1'	// 4.2.1, 3.5.3
+	compile 'com.rabbitmq:amqp-client:4.2.1'
 	compile resolveLibrary('javax.jms-*.jar')
 	compile 'org.jctools:jctools-core:2.1.0'
 	compile resolveLibrary('aspectjweaver-*.jar')
@@ -13,7 +13,6 @@ dependencies {
 
 	compile 'org.apache.kafka:kafka-clients:0.11.0.1'
 
-	//compile resolveLibrary('framework-libs/cxf/cxf-*.jar')
 	compile 'org.apache.cxf:cxf-bundle-minimal:2.6.15'
 	compile resolveLibrary('framework-libs/jsr311-api-1.1.1.jar')
 	compile resolveLibrary('framework-libs/javax.ws.rs-api-2.0.1.jar')
@@ -31,13 +30,6 @@ dependencies {
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
 	testCompile resolveLibrary('framework-libs/spring/spring-beans-*.jar')
-	
-	//testRuntime resolveLibrary('framework-libs/cxf/wsdl4j-*.jar')
-	//testRuntime resolveLibrary('framework-libs/cxf/xmlschema-core-*.jar')
-	//testRuntime resolveLibrary('framework-libs/cxf/neethi-*.jar')
-	//testRuntime resolveLibrary('framework-libs/cxf/woodstox-core-asl-*.jar')
-	//testRuntime resolveLibrary('framework-libs/cxf/stax2-api-*.jar')
-	//testRuntime 'org.apache.cxf:cxf-rt:2.6.17'
 
 	testRuntime resolveLibrary('framework-libs/spring/spring-expression-*.jar')
 
