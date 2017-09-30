@@ -1,22 +1,22 @@
 apply plugin: 'eclipse'
 
 configurations {
-	resultJar
+	resultJar	// all dependencies in this config are included into all jars. This is necessary for the scripts in bin/ to work, e.g., convertLoggingTimestamp.
 }
 
 dependencies {
 	resultJar 'commons-cli:commons-cli:1.4'
+	resultJar 'com.beust:jcommander:1.27'
 
 	compile project(':kieker-common')
 	compile project(':kieker-analysis')
-	compile project(':kieker-monitoring')
-	
-	compile "com.beust:jcommander:1.27"
-    
-	compile resolveLibrary('jgraphx-*.jar')				// this artifact is not available on our repositories
+	compile project(':kieker-monitoring')	
+
 	compile 'org.apache.commons:commons-math3:3.6.1'	// used by OPAD
 	compile 'org.apache.commons:commons-lang3:3.6'		// used by OPAD
 	compile configurations.resultJar
+
+	compile resolveLibrary('jgraphx-*.jar')				// this artifact is not available on our repositories
 	compile resolveLibrary('Rsession-*.jar')
 	compile resolveLibrary('Rserve-*.jar')
 	compile resolveLibrary('REngine-*.jar')
