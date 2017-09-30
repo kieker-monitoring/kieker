@@ -89,15 +89,13 @@ public final class WriterController extends AbstractController implements IWrite
 		this.queueCapacity = configuration.getIntProperty(PREFIX + RECORD_QUEUE_SIZE);
 		final String queueFqn = configuration.getStringProperty(PREFIX + RECORD_QUEUE_FQN);
 
-		LOG.info("Initializing writer queue '" + queueFqn + "' with a capacity of (at least) " + this.queueCapacity);
-
 		final Queue<IMonitoringRecord> queue = this.newQueue(queueFqn, this.queueCapacity);
 		if (queue instanceof BlockingQueue) {
 			this.writerQueue = (BlockingQueue<IMonitoringRecord>) queue;
 		} else {
 			final PutStrategy putStrategy = new SPBlockingPutStrategy();
 			final TakeStrategy takeStrategy = new SCBlockingTakeStrategy();
-			this.writerQueue = new BlockingQueueDecorator<IMonitoringRecord>(queue, putStrategy, takeStrategy);
+			this.writerQueue = new BlockingQueueDecorator<>(queue, putStrategy, takeStrategy);
 		}
 
 		final String writerClassName = configuration.getStringProperty(ConfigurationFactory.WRITER_CLASSNAME);
@@ -122,13 +120,13 @@ public final class WriterController extends AbstractController implements IWrite
 
 		switch (recordQueueInsertBehavior) {
 		case 1:
-			this.insertBehavior = new BlockOnFailedInsertBehavior<IMonitoringRecord>(this.writerQueue);
+			this.insertBehavior = new BlockOnFailedInsertBehavior<>(this.writerQueue);
 			break;
 		case 2:
-			this.insertBehavior = new CountOnFailedInsertBehavior<IMonitoringRecord>(this.writerQueue);
+			this.insertBehavior = new CountOnFailedInsertBehavior<>(this.writerQueue);
 			break;
 		case 3:
-			this.insertBehavior = new DoNotInsertBehavior<IMonitoringRecord>();
+			this.insertBehavior = new DoNotInsertBehavior<>();
 			break;
 		case 4:
 			// try {
@@ -139,10 +137,10 @@ public final class WriterController extends AbstractController implements IWrite
 			// this.insertBehavior = new DisruptorInsertBehavior<IMonitoringRecord>(this.ringBuffer);
 			break;
 		case 5:
-			this.insertBehavior = new BypassQueueBehavior(this.monitoringWriter);			
+			this.insertBehavior = new BypassQueueBehavior(this.monitoringWriter);
 			break;
 		default:
-			this.insertBehavior = new TerminateOnFailedInsertBehavior<IMonitoringRecord>(this.writerQueue);
+			this.insertBehavior = new TerminateOnFailedInsertBehavior<>(this.writerQueue);
 			break;
 		}
 	}
@@ -244,6 +242,8 @@ public final class WriterController extends AbstractController implements IWrite
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder(256) // NOPMD (consecutive calls of append with string literals)
 				.append("WriterController:")
+				.append("\n\tQueue type: ")
+				.append(this.writerQueue)
 				.append("\n\tQueue capacity: ")
 				.append(this.queueCapacity)
 				.append("\n\tInsert behavior (a.k.a. QueueFullBehavior): ")
