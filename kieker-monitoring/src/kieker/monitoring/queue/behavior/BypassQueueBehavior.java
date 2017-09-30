@@ -40,4 +40,10 @@ public class BypassQueueBehavior implements InsertBehavior<IMonitoringRecord> {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder()
+			.append(this.getClass());
+		return builder.toString();
+	}
 }

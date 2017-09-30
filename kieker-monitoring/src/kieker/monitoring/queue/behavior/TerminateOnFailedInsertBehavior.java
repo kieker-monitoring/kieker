@@ -51,4 +51,11 @@ public class TerminateOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 		}
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder()
+			.append(this.getClass());
+		return builder.toString();
+	}
+
 }

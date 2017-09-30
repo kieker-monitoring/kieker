@@ -36,5 +36,12 @@ public class DoNotInsertBehavior<E> implements InsertBehavior<E> {
 		// absorb each element
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder()
+			.append(this.getClass());
+		return builder.toString();
+	}
 
 }

@@ -131,4 +131,9 @@ public class BlockingQueueDecorator<E> extends AbstractQueue<E> implements Block
 		return this.q.size();
 	}
 
+	@Override
+	public String toString() {
+		return this.q.toString();
+	}
+
 }

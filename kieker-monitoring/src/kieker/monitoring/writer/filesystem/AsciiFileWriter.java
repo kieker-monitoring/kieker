@@ -183,4 +183,17 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		return FileExtensionFilter.DAT;
 	}
 
+	@Override
+	public String toString() {
+		final String configInfo = super.toString();
+		final StringBuilder builder = new StringBuilder()
+			.append(configInfo)
+			.append("\n\t")
+			.append("Internal properties:")
+			.append("\n\t\t")
+			.append("Log location: ")
+			.append(this.logFolder);
+		return builder.toString();
+	}
+
 }

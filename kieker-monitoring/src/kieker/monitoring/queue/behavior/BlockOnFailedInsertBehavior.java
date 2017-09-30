@@ -65,7 +65,12 @@ public class BlockOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 
 	@Override
 	public String toString() {
-		return "numBlocked: " + this.numBlocked;
+		final StringBuilder builder = new StringBuilder()
+			.append(this.getClass())
+			.append("\n\t\t")
+			.append("numBlocked: ")
+			.append(this.numBlocked);
+		return builder.toString();
 	}
 
 }
