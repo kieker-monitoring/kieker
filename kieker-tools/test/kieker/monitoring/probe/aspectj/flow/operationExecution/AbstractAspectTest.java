@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
@@ -54,6 +55,7 @@ public class AbstractAspectTest { // NOCS (abstract class)
 	}
 
 	@Test
+	@Ignore
 	@SuppressFBWarnings(value = "UI_INHERITANCE_UNSAFE_GETRESOURCE", justification = "no problem since we use getResource without package name prefix")
 	public void testMonitoring() throws Exception { // NOPMD (rules/java/junit.html#JUnitTestContainsTooManyAsserts)
 		final URL resource = this.getClass().getResource("/kieker.monitoring.probe.aspectj.flow.operationExecution");
