@@ -50,23 +50,23 @@ import kieker.common.record.IMonitoringRecord;
  */
 @Plugin(description = "A reader which reads records from a JMX queue",
 		outputPorts = {
-			@OutputPort(name = JMXReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMXReader")
+			@OutputPort(name = JmxReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JmxReader")
 		},
 		configuration = {
-			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_SERVER, defaultValue = "localhost",
+			@Property(name = JmxReader.CONFIG_PROPERTY_NAME_SERVER, defaultValue = "localhost",
 					description = "The address of the server used for the JMX connection."),
-			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_PORT, defaultValue = "59999",
+			@Property(name = JmxReader.CONFIG_PROPERTY_NAME_PORT, defaultValue = "59999",
 					description = "The port of the server used for the JMX connection."),
-			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_SERVICEURL, defaultValue = "",
+			@Property(name = JmxReader.CONFIG_PROPERTY_NAME_SERVICEURL, defaultValue = "",
 					description = "As an alternative to specifiying server and port, a service URL can be given. This value is ignored if port > 0."),
-			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_DOMAIN, defaultValue = "kieker.monitoring",
+			@Property(name = JmxReader.CONFIG_PROPERTY_NAME_DOMAIN, defaultValue = "kieker.monitoring",
 					description = "The JMX domain used by the JMXWriter."),
-			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_LOGNAME, defaultValue = "MonitoringLog",
+			@Property(name = JmxReader.CONFIG_PROPERTY_NAME_LOGNAME, defaultValue = "MonitoringLog",
 					description = "The logname used by the JMXWriter."),
-			@Property(name = JMXReader.CONFIG_PROPERTY_NAME_SILENT, defaultValue = "false",
-					description = "Whether the JMXReader should silently reconnect on any errors. This prevents termination of the reader!")
+			@Property(name = JmxReader.CONFIG_PROPERTY_NAME_SILENT, defaultValue = "false",
+					description = "Whether the JmxReader should silently reconnect on any errors. This prevents termination of the reader!")
 		})
-public final class JMXReader extends AbstractReaderPlugin {
+public final class JmxReader extends AbstractReaderPlugin {
 
 	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
@@ -104,7 +104,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 	 * @throws IllegalArgumentException
 	 *             If the arguments are invalid.
 	 */
-	public JMXReader(final Configuration configuration, final IProjectContext projectContext) throws IllegalArgumentException {
+	public JmxReader(final Configuration configuration, final IProjectContext projectContext) throws IllegalArgumentException {
 		super(configuration, projectContext);
 
 		this.server = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_SERVER);
@@ -118,7 +118,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 		this.domain = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_DOMAIN);
 		this.logname = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_LOGNAME);
 		if (tmpServiceURL.length() == 0) {
-			throw new IllegalArgumentException("JMXReader has not sufficient parameters. Set either port or serviceURL");
+			throw new IllegalArgumentException("JmxReader has not sufficient parameters. Set either port or serviceURL");
 		}
 		try {
 			this.serviceURL = new JMXServiceURL(tmpServiceURL);
@@ -136,7 +136,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutdown of JMXReader requested.");
+		this.log.info("Shutdown of JmxReader requested.");
 		this.unblock();
 	}
 
@@ -175,7 +175,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 			this.block();
 
 			// Shutdown
-			this.log.info("Shutting down JMXReader");
+			this.log.info("Shutting down JmxReader");
 		} catch (final InstanceNotFoundException ex) {
 			this.log.error("No monitoring log found: " + this.monitoringLog.toString()); // ok to ignore ex here
 			ret = false;
@@ -239,7 +239,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 				this.block();
 
 				// Shutdown
-				this.log.info("Shutting down JMXReader");
+				this.log.info("Shutting down JmxReader");
 
 			} catch (final InstanceNotFoundException e) { // NOPMD (ignore this)
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
@@ -273,7 +273,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 
 			@Override
 			public final void run() {
-				JMXReader.this.unblock();
+				JmxReader.this.unblock();
 			}
 		});
 		try {
@@ -322,7 +322,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
-			JMXReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, notification.getUserData());
+			JmxReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, notification.getUserData());
 		}
 	}
 
@@ -342,19 +342,19 @@ public final class JMXReader extends AbstractReaderPlugin {
 		public final void handleNotification(final Notification notification, final Object handback) {
 			final String notificationType = notification.getType();
 			if (notificationType.equals(JMXConnectionNotification.CLOSED)) {
-				if (!JMXReader.this.silentreconnect) {
-					JMXReader.this.getLog().info("JMX connection closed.");
+				if (!JmxReader.this.silentreconnect) {
+					JmxReader.this.getLog().info("JMX connection closed.");
 				}
-				JMXReader.this.unblock();
+				JmxReader.this.unblock();
 			} else if (notificationType.equals(JMXConnectionNotification.FAILED)) {
-				if (!JMXReader.this.silentreconnect) {
-					JMXReader.this.getLog().info("JMX connection lost.");
+				if (!JmxReader.this.silentreconnect) {
+					JmxReader.this.getLog().info("JMX connection lost.");
 				}
-				JMXReader.this.unblock();
+				JmxReader.this.unblock();
 			} else if (notificationType.equals(JMXConnectionNotification.NOTIFS_LOST)) {
-				JMXReader.this.getLog().error("Monitoring record lost: " + notification.getMessage());
+				JmxReader.this.getLog().error("Monitoring record lost: " + notification.getMessage());
 			} else { // unknown message
-				JMXReader.this.getLog().info(notificationType + ": " + notification.getMessage());
+				JmxReader.this.getLog().info(notificationType + ": " + notification.getMessage());
 			}
 		}
 	}

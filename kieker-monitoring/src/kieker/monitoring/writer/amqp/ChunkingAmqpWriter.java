@@ -39,11 +39,11 @@ import kieker.monitoring.writer.raw.IRawDataWriter;
  *
  * @since 1.13
  */
-public class ChunkingAMQPWriter implements IRawDataWriter {
+public class ChunkingAmqpWriter implements IRawDataWriter {
 	
-	private static final Log LOG = LogFactory.getLog(ChunkingAMQPWriter.class);
+	private static final Log LOG = LogFactory.getLog(ChunkingAmqpWriter.class);
 	
-	private static final String PREFIX = ChunkingAMQPWriter.class.getName() + ".";
+	private static final String PREFIX = ChunkingAmqpWriter.class.getName() + ".";
 
 	/** The name of the configuration property for the server URI. */
 	public static final String CONFIG_URI = PREFIX + "uri"; // NOCS (afterPREFIX)
@@ -67,7 +67,7 @@ public class ChunkingAMQPWriter implements IRawDataWriter {
 	private final Connection connection;
 	private final Channel channel;
 	
-	public ChunkingAMQPWriter(final Configuration configuration) throws KeyManagementException, NoSuchAlgorithmException, URISyntaxException, IOException, TimeoutException {
+	public ChunkingAmqpWriter(final Configuration configuration) throws KeyManagementException, NoSuchAlgorithmException, URISyntaxException, IOException, TimeoutException {
 		// Read configuration parameters from configuration
 		this.uri = configuration.getStringProperty(CONFIG_URI);
 		this.exchangeName = configuration.getStringProperty(CONFIG_EXCHANGENAME);

@@ -373,7 +373,7 @@ The \class{PrintStreamWriter} simply sends the String representation of incoming
 records to the standard output or standard error streams, which can be helpful %
 for debugging purposes.
 
-The \class{AsyncJMSWriter} and \class{JMXWriter} write records to a JMS %
+The \class{AsyncJmsWriter} and \class{JmxWriter} write records to a JMS %
 (Java Messaging Service~\cite{JMS-WebSite}) queue and JMX (Java Management %
 Extensions~\cite{JMX-Website}) queue respectively. The \class{PipeWriter} %
 allows to pass records via in-memory record streams (named pipes). %
@@ -381,8 +381,6 @@ These writers allow to implement on-the-fly analysis in distributed systems, i.e
 continuously receiving new monitoring data from an instrumented application potentially %
 running on another machine. A more detailed description of how to use the \class{AsyncJMSWriter} %
 can be found in Appendix~\ref{appendix:usingJMS}. %
-
-\enlargethispage{1.5cm}
 
 % This is the diagram with the hierarchy of the writers.
 \begin{figure}[H]

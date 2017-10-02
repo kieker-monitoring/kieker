@@ -40,7 +40,7 @@ import kieker.common.logging.LogFactory;
  *
  * @since 1.13
  */
-public class ChunkingAMQPReader implements IRawDataReader {
+public class ChunkingAmqpReader implements IRawDataReader {
 	
 	/** The name of the configuration property for the server URI. */
 	public static final String CONFIG_PROPERTY_URI = "uri";
@@ -49,7 +49,7 @@ public class ChunkingAMQPReader implements IRawDataReader {
 	/** The name of the configuration property for the heartbeat timeout. */
 	public static final String CONFIG_PROPERTY_HEARTBEAT = "heartbeat";
 	
-	private static final Log LOG = LogFactory.getLog(ChunkingAMQPReader.class);
+	private static final Log LOG = LogFactory.getLog(ChunkingAmqpReader.class);
 	
 	private final String uri;
 	private final String queueName;
@@ -63,7 +63,7 @@ public class ChunkingAMQPReader implements IRawDataReader {
 	
 	private volatile boolean terminated;
 	
-	public ChunkingAMQPReader(final Configuration configuration, final IRawDataProcessor processor) {
+	public ChunkingAmqpReader(final Configuration configuration, final IRawDataProcessor processor) {
 		this.uri = configuration.getStringProperty(CONFIG_PROPERTY_URI);
 		this.queueName = configuration.getStringProperty(CONFIG_PROPERTY_QUEUENAME);
 		this.heartbeat = configuration.getIntProperty(CONFIG_PROPERTY_HEARTBEAT);

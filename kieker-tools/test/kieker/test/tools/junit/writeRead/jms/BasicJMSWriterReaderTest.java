@@ -26,7 +26,7 @@ import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
-import kieker.analysis.plugin.reader.jms.JMSReader;
+import kieker.analysis.plugin.reader.jms.JmsReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
@@ -57,12 +57,12 @@ public class BasicJMSWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 		final MonitoringController ctrl = MonitoringController.createInstance(config);
 		Thread.sleep(1000);
 		final Configuration jmsReaderConfig = new Configuration();
-		jmsReaderConfig.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, FakeInitialContextFactory.class.getName());
+		jmsReaderConfig.setProperty(JmsReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, FakeInitialContextFactory.class.getName());
 
-		final JMSReader jmsReader = new JMSReader(jmsReaderConfig, analysisController);
+		final JmsReader jmsReader = new JmsReader(jmsReaderConfig, analysisController);
 		this.sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
 
-		analysisController.connect(jmsReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
+		analysisController.connect(jmsReader, JmsReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysisController);
 		analysisThread.start();
 		Thread.sleep(1000);
@@ -97,15 +97,15 @@ public class BasicJMSWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	}
 
 	/**
-	 * This test makes sure that the read method of the JMSReader returns true (this was a bug, reported in #758).
+	 * This test makes sure that the read method of the JmsReader returns true (this was a bug, reported in #758).
 	 */
 	@Test
 	public void testReadReturnsTrue() {
 		final IAnalysisController ac = new AnalysisController();
 
 		final Configuration jmsReaderConfig = new Configuration();
-		jmsReaderConfig.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, FakeInitialContextFactory.class.getName());
-		final JMSReader jmsReader = new JMSReader(jmsReaderConfig, ac);
+		jmsReaderConfig.setProperty(JmsReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, FakeInitialContextFactory.class.getName());
+		final JmsReader jmsReader = new JmsReader(jmsReaderConfig, ac);
 
 		jmsReader.terminate(false);
 

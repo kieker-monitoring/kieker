@@ -27,12 +27,12 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @since 1.4
  */
-public final class KiekerJMXMonitoringLog extends NotificationBroadcasterSupport implements KiekerJMXMonitoringLogMBean {
+public final class KiekerJmxMonitoringLog extends NotificationBroadcasterSupport implements KiekerJmxMonitoringLogMBean {
 
 	private static final String MESSAGE_TYPE = null;
 	private final ObjectName kiekerMonitoringLogName;
 
-	public KiekerJMXMonitoringLog(final ObjectName kiekerMonitoringLogName) {
+	public KiekerJmxMonitoringLog(final ObjectName kiekerMonitoringLogName) {
 		this.kiekerMonitoringLogName = kiekerMonitoringLogName;
 	}
 

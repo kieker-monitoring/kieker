@@ -45,15 +45,15 @@ import kieker.common.record.IMonitoringRecord;
  * @since 1.12
  */
 @Plugin(description = "A plugin that reads monitoring records from an AMQP queue", outputPorts = {
-	@OutputPort(name = AMQPReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
+	@OutputPort(name = AmqpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
 		IMonitoringRecord.class }, description = "Output port of the AMQP reader") }, configuration = {
-			@Property(name = AMQPReader.CONFIG_PROPERTY_URI, defaultValue = "amqp://localhost", description = "Server URI of the AMQP server"),
-			@Property(name = AMQPReader.CONFIG_PROPERTY_QUEUENAME, defaultValue = "kieker", description = "AMQP queue name"),
-			@Property(name = AMQPReader.CONFIG_PROPERTY_HEARTBEAT, defaultValue = "60", description = "Heartbeat interval (in seconds)"),
-			@Property(name = AMQPReader.CONFIG_PROPERTY_CACHE_DURATION, defaultValue = "60", description = "Cache duration (in seconds) for string registries")
+			@Property(name = AmqpReader.CONFIG_PROPERTY_URI, defaultValue = "amqp://localhost", description = "Server URI of the AMQP server"),
+			@Property(name = AmqpReader.CONFIG_PROPERTY_QUEUENAME, defaultValue = "kieker", description = "AMQP queue name"),
+			@Property(name = AmqpReader.CONFIG_PROPERTY_HEARTBEAT, defaultValue = "60", description = "Heartbeat interval (in seconds)"),
+			@Property(name = AmqpReader.CONFIG_PROPERTY_CACHE_DURATION, defaultValue = "60", description = "Cache duration (in seconds) for string registries")
 
 })
-public final class AMQPReader extends AbstractStringRegistryReaderPlugin {
+public final class AmqpReader extends AbstractStringRegistryReaderPlugin {
 
 	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
@@ -92,7 +92,7 @@ public final class AMQPReader extends AbstractStringRegistryReaderPlugin {
 	 * @param projectContext
 	 *            The project context for this component
 	 */
-	public AMQPReader(final Configuration configuration, final IProjectContext projectContext) {
+	public AmqpReader(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext, CONFIG_PROPERTY_CACHE_DURATION, TimeUnit.SECONDS);
 
 		this.uri = this.configuration.getStringProperty(CONFIG_PROPERTY_URI);
