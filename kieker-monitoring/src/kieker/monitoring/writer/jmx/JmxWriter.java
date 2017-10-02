@@ -44,7 +44,7 @@ public class JmxWriter extends AbstractMonitoringWriter {
 	private final String configDomain;
 	private final String configLogname;
 
-	private KiekerJMXMonitoringLog kiekerJMXMonitoringLog;
+	private KiekerJmxMonitoringLog kiekerJmxMonitoringLog;
 	private ObjectName monitoringLogName;
 
 	public JmxWriter(final Configuration configuration) {
@@ -65,9 +65,9 @@ public class JmxWriter extends AbstractMonitoringWriter {
 			throw new IllegalArgumentException("The generated ObjectName is not correct! Check the following configuration values '" + CONFIG_DOMAIN
 					+ "=" + this.configDomain + "' and '" + CONFIG_LOGNAME + "=" + this.configLogname + "'", ex);
 		}
-		this.kiekerJMXMonitoringLog = new KiekerJMXMonitoringLog(this.monitoringLogName);
+		this.kiekerJmxMonitoringLog = new KiekerJmxMonitoringLog(this.monitoringLogName);
 		try {
-			ManagementFactory.getPlatformMBeanServer().registerMBean(this.kiekerJMXMonitoringLog, this.monitoringLogName);
+			ManagementFactory.getPlatformMBeanServer().registerMBean(this.kiekerJmxMonitoringLog, this.monitoringLogName);
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			throw new IllegalStateException("Failed to inititialize JmxWriter.", ex);
 		}
@@ -75,7 +75,7 @@ public class JmxWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord record) {
-		this.kiekerJMXMonitoringLog.newMonitoringRecord(record);
+		this.kiekerJmxMonitoringLog.newMonitoringRecord(record);
 	}
 
 	@Override

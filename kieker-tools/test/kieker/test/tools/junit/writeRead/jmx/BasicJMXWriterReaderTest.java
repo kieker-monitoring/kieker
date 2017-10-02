@@ -29,7 +29,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.plugin.reader.jmx.JMXReader;
+import kieker.analysis.plugin.reader.jmx.JmxReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
@@ -67,7 +67,7 @@ public class BasicJMXWriterReaderTest {
 		analysis.startInNewThread();
 		// TO_DO wait until jmx reader has registered its notification handler
 		// via: MBeanServerConnection.isRegistered(monitoringLog)
-		// from JMXReader: this.monitoringLog = new ObjectName(this.domain, "type", this.logname);
+		// from JmxReader: this.monitoringLog = new ObjectName(this.domain, "type", this.logname);
 		Thread.sleep(1000);
 
 		// 3. define analysis config
@@ -112,14 +112,14 @@ public class BasicJMXWriterReaderTest {
 
 	private TestAnalysis createAnalysis() throws Exception {
 		final Configuration jmxReaderConfig = new Configuration();
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_DOMAIN, BasicJMXWriterReaderTest.DOMAIN);
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_LOGNAME, BasicJMXWriterReaderTest.LOGNAME);
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SERVER, "localhost");
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_PORT, BasicJMXWriterReaderTest.PORT);
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SERVICEURL, "");
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT, "false");
+		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_DOMAIN, BasicJMXWriterReaderTest.DOMAIN);
+		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_LOGNAME, BasicJMXWriterReaderTest.LOGNAME);
+		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_SERVER, "localhost");
+		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_PORT, BasicJMXWriterReaderTest.PORT);
+		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_SERVICEURL, "");
+		jmxReaderConfig.setProperty(JmxReader.CONFIG_PROPERTY_NAME_SILENT, "false");
 
-		return new TestAnalysis(jmxReaderConfig, JMXReader.class);
+		return new TestAnalysis(jmxReaderConfig, JmxReader.class);
 	}
 
 	private void checkControllerStateBeforeRecordsPassedToController(final IMonitoringController monitoringController)

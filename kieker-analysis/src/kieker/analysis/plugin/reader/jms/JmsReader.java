@@ -54,14 +54,14 @@ import kieker.common.record.IMonitoringRecord;
 @Plugin(description = "A reader which reads records from a (remove or local) JMS queue",
 		dependencies = "This plugin needs the file 'javax.jms-*.jar'.",
 		outputPorts = {
-			@OutputPort(name = JMSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JMSReader")
+			@OutputPort(name = JmsReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JmsReader")
 		},
 		configuration = {
-			@Property(name = JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, defaultValue = "tcp://127.0.0.1:61616/"),
-			@Property(name = JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, defaultValue = "queue1"),
-			@Property(name = JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, defaultValue = "org.apache.activemq.jndi.ActiveMQInitialContextFactory")
+			@Property(name = JmsReader.CONFIG_PROPERTY_NAME_PROVIDERURL, defaultValue = "tcp://127.0.0.1:61616/"),
+			@Property(name = JmsReader.CONFIG_PROPERTY_NAME_DESTINATION, defaultValue = "queue1"),
+			@Property(name = JmsReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, defaultValue = "org.apache.activemq.jndi.ActiveMQInitialContextFactory")
 		})
-public final class JMSReader extends AbstractReaderPlugin {
+public final class JmsReader extends AbstractReaderPlugin {
 
 	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
@@ -94,7 +94,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 	 * @throws IllegalArgumentException
 	 *             If one of the properties is empty.
 	 */
-	public JMSReader(final Configuration configuration, final IProjectContext projectContext) throws IllegalArgumentException {
+	public JmsReader(final Configuration configuration, final IProjectContext projectContext) throws IllegalArgumentException {
 		super(configuration, projectContext);
 
 		// Initialize the reader bases on the given configuration.
@@ -103,7 +103,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 		this.jmsFactoryLookupName = configuration.getStringProperty(CONFIG_PROPERTY_NAME_FACTORYLOOKUP);
 		// simple sanity check
 		if ((this.jmsProviderUrl.length() == 0) || (this.jmsDestination.length() == 0) || (this.jmsFactoryLookupName.length() == 0)) {
-			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('" + this.jmsProviderUrl + "'), jmsDestination ('"
+			throw new IllegalArgumentException("JmsReader has not sufficient parameters. jmsProviderUrl ('" + this.jmsProviderUrl + "'), jmsDestination ('"
 					+ this.jmsDestination + "'), or factoryLookupName ('" + this.jmsFactoryLookupName + "') is null");
 		}
 	}
@@ -148,7 +148,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 			// start the connection to enable message delivery
 			connection.start();
 
-			this.log.info("JMSReader started and waits for incoming monitoring events!");
+			this.log.info("JmsReader started and waits for incoming monitoring events!");
 			this.block();
 			this.log.info("Woke up by shutdown");
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
@@ -171,7 +171,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 
 			@Override
 			public final void run() {
-				JMSReader.this.unblock();
+				JmsReader.this.unblock();
 			}
 		});
 		try {
@@ -193,7 +193,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutdown of JMSReader requested.");
+		this.log.info("Shutdown of JmsReader requested.");
 		this.unblock();
 	}
 
@@ -227,24 +227,24 @@ public final class JMSReader extends AbstractReaderPlugin {
 		@Override
 		public void onMessage(final Message jmsMessage) {
 			if (jmsMessage == null) {
-				JMSReader.this.getLog().warn("Received null message");
+				JmsReader.this.getLog().warn("Received null message");
 			} else {
 				if (jmsMessage instanceof ObjectMessage) {
 					try {
 						final ObjectMessage om = (ObjectMessage) jmsMessage;
 						final Serializable omo = om.getObject();
-						if ((omo instanceof IMonitoringRecord) && (!JMSReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, omo))) {
-							JMSReader.this.getLog().error("deliverRecord returned false");
+						if ((omo instanceof IMonitoringRecord) && (!JmsReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, omo))) {
+							JmsReader.this.getLog().error("deliverRecord returned false");
 						}
 					} catch (final MessageFormatException ex) {
-						JMSReader.this.getLog().error("Error delivering record", ex);
+						JmsReader.this.getLog().error("Error delivering record", ex);
 					} catch (final JMSException ex) {
-						JMSReader.this.getLog().error("Error delivering record", ex);
+						JmsReader.this.getLog().error("Error delivering record", ex);
 					} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
-						JMSReader.this.getLog().error("Error delivering record", ex);
+						JmsReader.this.getLog().error("Error delivering record", ex);
 					}
 				} else {
-					JMSReader.this.getLog().warn("Received message of invalid type: " + jmsMessage.getClass().getName());
+					JmsReader.this.getLog().warn("Received message of invalid type: " + jmsMessage.getClass().getName());
 				}
 			}
 		}

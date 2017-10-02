@@ -21,5 +21,5 @@ package kieker.monitoring.writer.jmx;
  * 
  * @since 1.4
  */
-public interface KiekerJMXMonitoringLogMBean { // NOCS
+public interface KiekerJmxMonitoringLogMBean { // NOCS
 }

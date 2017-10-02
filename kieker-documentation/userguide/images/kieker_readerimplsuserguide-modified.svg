@@ -26,7 +26,7 @@
    height="111.80887"
    font-weight="normal"
    id="svg2"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="kieker_readerimplsuserguide-modified.svg"
    style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
   <g
@@ -75,15 +75,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="949"
+     inkscape:window-width="1887"
+     inkscape:window-height="1176"
      id="namedview490"
      showgrid="false"
-     inkscape:zoom="0.99628178"
-     inkscape:cx="432.14764"
-     inkscape:cy="-26.446905"
-     inkscape:window-x="-9"
-     inkscape:window-y="-9"
+     inkscape:zoom="1.9925636"
+     inkscape:cx="380.87895"
+     inkscape:cy="-24.241078"
+     inkscape:window-x="1953"
+     inkscape:window-y="24"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      fit-margin-top="0"
@@ -975,9 +975,9 @@
          font-weight="bold"
          xml:space="preserve"
          id="text348"
-         style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;stroke:none"
          transform="translate(-111.25441,-79.46875)"
-         sodipodi:linespacing="125%">JMSReader</text>
+         sodipodi:linespacing="125%">JmsReader</text>
       <rect
          x="566"
          y="286"
@@ -1075,9 +1075,9 @@
          font-weight="bold"
          xml:space="preserve"
          id="text348-0"
-         style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
          transform="translate(-12.890007,-79.9223)"
-         sodipodi:linespacing="125%">JMXReader</text>
+         sodipodi:linespacing="125%">JmxReader</text>
       <rect
          x="566"
          y="286"
@@ -1110,55 +1110,6 @@
          clip-path="url(#clipPath50-9)"
          points="601,248 606,258 596,258 "
          id="polygon466-9"
-         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.09290004;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
-         transform="translate(-16.242057,-79.9223)" />
-    </g>
-  </g>
-  <g
-     id="g3193"
-     transform="translate(76.817902,-0.06829625)">
-    <text
-       sodipodi:linespacing="125%"
-       transform="translate(-25.748002,-195.496)"
-       style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-       id="text348-0-1"
-       xml:space="preserve"
-       font-weight="bold"
-       clip-path="url(#clipPath28-9-7)"
-       y="301"
-       x="577">DBReader</text>
-    <rect
-       transform="matrix(0.79265854,0,0,1,94.412328,-195.496)"
-       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.2275449;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
-       id="rect366-4-3"
-       height="20"
-       width="89"
-       clip-path="url(#clipPath27-7-0)"
-       y="286"
-       x="566" />
-    <g
-       transform="translate(-6.4275763,-115.5737)"
-       id="g3323-9"
-       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
-      <line
-         clip-path="url(#clipPath41-7-2)"
-         x1="601"
-         x2="601"
-         y1="286"
-         y2="248"
-         id="line462-1-9"
-         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.09290004;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
-         transform="translate(-16.242057,-79.9223)" />
-      <polygon
-         clip-path="url(#clipPath50-9-2)"
-         points="606,258 596,258 601,248 "
-         id="polygon464-7-1"
-         style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Dialog"
-         transform="translate(-16.242057,-79.9223)" />
-      <polygon
-         clip-path="url(#clipPath50-9-2)"
-         points="606,258 596,258 601,248 "
-         id="polygon466-9-4"
          style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.09290004;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
          transform="translate(-16.242057,-79.9223)" />
     </g>
