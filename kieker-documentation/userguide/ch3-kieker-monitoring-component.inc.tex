@@ -352,6 +352,15 @@ controller passes the received records to the writer by calling the method %
 \method{newMonitoringRecord}. Writers can use the methods to serialize the %
 record contents, as described in Section~\ref{sec:componentsMonitoring:monitoringRecords}.
 
+% This is the diagram with the hierarchy of the writers.
+\begin{figure}[b]%[H]
+	\begin{centering}
+		\includegraphics[scale=0.7]{images/kieker_writerimplsuserguide-modified}
+		\caption{Interface \class{IMonitoringWriter} and  the implementing classes}
+		\label{figure:monitoringLogWritersHierarchy}
+	\end{centering}
+\end{figure}
+
 Figure~\ref{figure:monitoringLogWritersHierarchy} shows the monitoring writers %
 already implemented in \KiekerMonitoringPart{}. The available properties for the %
 included writers are well-documented in the %
@@ -373,33 +382,20 @@ The \class{PrintStreamWriter} simply sends the String representation of incoming
 records to the standard output or standard error streams, which can be helpful %
 for debugging purposes.
 
-The \class{AsyncJmsWriter} and \class{JmxWriter} write records to a JMS %
+The \class{JmsWriter} and \class{JmxWriter} write records to a JMS %
 (Java Messaging Service~\cite{JMS-WebSite}) queue and JMX (Java Management %
 Extensions~\cite{JMX-Website}) queue respectively. The \class{PipeWriter} %
 allows to pass records via in-memory record streams (named pipes). %
 These writers allow to implement on-the-fly analysis in distributed systems, i.e., analysis while %
 continuously receiving new monitoring data from an instrumented application potentially %
-running on another machine. A more detailed description of how to use the \class{AsyncJMSWriter} %
+running on another machine. A more detailed description of how to use the \class{JmsWriter} %
 can be found in Appendix~\ref{appendix:usingJMS}. %
-
-% This is the diagram with the hierarchy of the writers.
-\begin{figure}[H]
-\begin{centering}
-\includegraphics[scale=0.7]{images/kieker_writerimplsuserguide-modified}
-\caption{Interface \class{IMonitoringWriter} and  the implementing classes}
-\label{figure:monitoringLogWritersHierarchy}
-\end{centering}
-\end{figure}
 
 \noindent Listing~\ref{listing:MyWriter} %on page~\pageref{listing:MyWriter} 
 shows %
 a custom writer \class{MyPipeWriter} which uses a named pipe to %
 write the given records into a buffer located in the memory. The source code of %
 the class \class{MyPipe} is listed in Appendix~\ref{appendix:pipeListings}. %
-
-%\enlargethispage{1cm}
-
-\pagebreak
 
 \setJavaCodeListing
 \lstinputlisting[caption=MyPipeWriter.java, label=listing:MyWriter,firstline=23,firstnumber=23]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeWriter.java}
