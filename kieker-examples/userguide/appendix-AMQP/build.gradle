@@ -1,11 +1,22 @@
 apply plugin: 'application'
 apply plugin: 'eclipse'
 
+repositories {
+        mavenCentral()
+        maven {
+      		url "https://plugins.gradle.org/m2/"
+   	}
+}
+
 dependencies {
+
+	compile 'com.google.guava:guava:20.0'				// (21.0 and above require java 8) used by StringRegistryCache for amqp reader
+
 	compile fileTree('lib') {
 		include "kieker-*.jar"
 		include "commons-logging-*.jar"
 		include "amqp-client-*.jar"
+		include "slf4j-api-*.jar"
   }
 }
 
