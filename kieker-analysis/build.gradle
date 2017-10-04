@@ -15,7 +15,6 @@ dependencies {
 	compile 'com.rabbitmq:amqp-client:4.2.1'
 
 	compile 'com.google.guava:guava:20.0'				// (21.0 and above require java 8) used by StringRegistryCache for amqp reader
-	compile 'org.apache.kafka:kafka-clients:0.11.0.1'
 
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
