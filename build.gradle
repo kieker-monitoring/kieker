@@ -795,12 +795,12 @@ task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandalone
   }
 }
 
-task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
+task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
     classifier = 'binaries'
     with binaryContent, manualContent, exampleContent, exampleJavaEEContent
 }
 
-task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
+task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
     classifier = 'binaries'
     with binaryContent, manualContent, exampleContent, exampleJavaEEContent
 
