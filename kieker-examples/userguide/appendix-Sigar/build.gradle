@@ -19,6 +19,7 @@ sourceSets.main.java.srcDirs = ['src']
 task runMonitoring(type: JavaExec) {
 	main = 'kieker.examples.userguide.appendixSigar.MonitoringStarter'
 	classpath = sourceSets.main.runtimeClasspath
+	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.AsciiFileWriter.flush=true']
 }
 
 task runAnalysis(type: JavaExec) {

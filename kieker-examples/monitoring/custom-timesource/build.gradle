@@ -2,7 +2,10 @@ apply plugin: 'application'
 apply plugin: 'eclipse'
 
 dependencies {
-	compile files('../../../build/libs/kieker-1.13-SNAPSHOT-aspectj.jar')
+        // you need to ensure by yourself that the following jars are in the lib folder
+        compile fileTree('lib') {
+                include "kieker-*.jar"
+        }
 }
 
 // Simplify the JAR's file name
@@ -24,7 +27,7 @@ task runMonitoring(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=monitoring-logs',
 			   '-Dkieker.monitoring.timer=kieker.monitoring.timer.CustomTimeSource',
-	           "-javaagent:lib/kieker-1.13-SNAPSHOT-aspectj.jar",
+	           "-javaagent:lib/kieker-1.13-aspectj.jar",
 			   '-Dorg.aspectj.weaver.showWeaveInfo=true',
 			   '-Daj.weaving.verbose=true']
 }
