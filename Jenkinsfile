@@ -1,7 +1,7 @@
 #!groovy
 
 node('kieker-slave-docker') {
-    
+  try {    
     stage ('Checkout') {
         checkout scm
     }
@@ -49,9 +49,8 @@ node('kieker-slave-docker') {
             sh 'echo "We are not in  master - skipping."'
         }
     }
-
-    stage ('Cleanup')
-    {
-	deleteDir()
-    }
+  }
+  finally {
+    deleteDir()
+  }
 }
