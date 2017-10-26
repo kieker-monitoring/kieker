@@ -15,4 +15,10 @@ include 'api'
 include 'services:webservice'
 */
 
+include ':kieker-monitoring'
+project(':kieker-monitoring').projectDir = new File('../kieker-monitoring')
+
+include ':kieker-analysis'
+project(':kieker-analysis').projectDir = new File('../kieker-analysis')
+
 rootProject.name = 'kieker-extension-kafka'

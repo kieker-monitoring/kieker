@@ -31,8 +31,11 @@ repositories {
 }
 
 dependencies {
+	api project(':kieker-monitoring')
+	api project(':kieker-analysis')
+
     // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api 'net.kieker-monitoring:kieker:1.13-SNAPSHOT'
+    //api 'net.kieker-monitoring:kieker:1.13-SNAPSHOT'
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'org.apache.kafka:kafka-clients:0.11.0.1'
