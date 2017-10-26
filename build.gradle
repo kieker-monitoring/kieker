@@ -480,10 +480,11 @@ task htmlQualityReport() {
             def pmdReportsFolder = "${reports}/pmd"
 
             doLast {
-		p.javaexec {
-			main = '-jar'
-			args = ["$scautilJar", "${findbugsReportsFolder}/${type}.xml", "${checkstyleReportsFolder}/${type}.xml", "${pmdReportsFolder}/${type}.xml", "${reports}/${type}ReportSummary.html"]
-		}
+				p.javaexec {
+					main = '-jar'
+					args = ["$scautilJar", "${findbugsReportsFolder}/${type}.xml", "${checkstyleReportsFolder}/${type}.xml", 
+							"${pmdReportsFolder}/${type}.xml", "${reports}/${type}ReportSummary.html"]
+				}
                 println("The report summary for \'${type}\' can be found at ${reports}/${type}ReportSummary.html")
             }
         }
