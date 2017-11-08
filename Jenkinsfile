@@ -57,6 +57,7 @@ node('kieker-slave-docker') {
     }
   }
   finally {
+    junit '**/build/test-results/test/*.xml'
     deleteDir()
   }
 }
