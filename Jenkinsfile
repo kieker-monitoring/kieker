@@ -12,6 +12,7 @@ node('kieker-slave-docker') {
 
     stage ('2-unit-test logs') {
         sh 'docker run --rm -u `id -u` -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7-small /bin/bash -c "cd /opt/kieker; ./gradlew -S test"'
+        junit '**/build/test-results/test/*.xml'
     }
 
     stage ('3-static-analysis logs') {
@@ -57,7 +58,6 @@ node('kieker-slave-docker') {
     }
   }
   finally {
-    junit '**/build/test-results/test/*.xml'
     deleteDir()
   }
 }
