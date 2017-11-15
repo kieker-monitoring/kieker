@@ -15,7 +15,7 @@ import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
 /**
- * @author Christian Zirkelbach API compatibility: Kieker 1.10.0
+ * @author Christian Zirkelbach (czi@informatik.uni-kiel.de) API compatibility: Kieker 1.10.0
  * 
  * @since 1.14
  */

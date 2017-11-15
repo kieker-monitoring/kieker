@@ -4,7 +4,7 @@ import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
- * @author Christian Zirkelbach
+ * @author Christian Zirkelbach (czi@informatik.uni-kiel.de)
  * 
  * @since 1.14
  */
