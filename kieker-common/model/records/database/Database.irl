@@ -1,0 +1,16 @@
+package kieker.common.record.database
+
+import kieker.common.record.flow.IOperationRecord
+import kieker.common.record.flow.ITraceRecord
+
+@author 'Christian Zirkelbach' @since '1.14'
+entity BeforeDatabaseEventRecord : IOperationRecord, ITraceRecord {
+	string parameters
+	string technology = "<default-technology>"
+}
+
+@author 'Christian Zirkelbach' @since '1.14'
+entity AfterDatabaseEventRecord : IOperationRecord, ITraceRecord {
+	string returnType
+	string returnValue
+}
