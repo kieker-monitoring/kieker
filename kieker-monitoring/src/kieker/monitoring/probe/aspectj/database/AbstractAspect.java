@@ -27,6 +27,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.database.AfterDatabaseEvent;
 import kieker.common.record.database.BeforeDatabaseEvent;
 import kieker.common.record.flow.trace.TraceMetadata;
@@ -59,6 +61,7 @@ import kieker.monitoring.timer.ITimeSource;
 @Aspect
 public abstract class AbstractAspect extends AbstractAspectJProbe {
 
+	private static final Log LOG = LogFactory.getLog(AbstractAspect.class);
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
@@ -77,6 +80,10 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			return new Counter();
 		}
 	};
+
+	public AbstractAspect() {
+		// default constructor
+	}
 
 	/**
 	 * The pointcut for the monitored operations. Inheriting classes should extend
@@ -132,8 +139,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 		final TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final String typeName = joinPoint.getSignature().getDeclaringTypeName(); // called classname
-		final String returnType = getReturnType(typeName);
-		final String returnValue = getReturnValue(joinPoint, typeName, returnType);
+		final String returnType = this.getReturnType(typeName);
+		final String returnValue = this.getReturnValue(joinPoint, typeName, returnType);
 
 		CTRLINST.newMonitoringRecord(new AfterDatabaseEvent(TIME.getTime(), typeName, operationSignature,
 				trace.getTraceId(), trace.getNextOrderId(), returnType, returnValue));
@@ -181,13 +188,17 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	 * @return
 	 */
 	public String getParameters(final JoinPoint joinPoint) {
-		Object[] joinPointArgs = joinPoint.getArgs();
-		String returnValue = new String();
+		final Object[] joinPointArgs = joinPoint.getArgs();
+		String returnValue = "";
+		final StringBuilder sb = new StringBuilder();
 
 		if (joinPointArgs != null) {
 			for (final Object obj : joinPointArgs) {
-				returnValue += obj + ";";
+				sb.append(obj);
+				sb.append(';');
 			}
+
+			returnValue = sb.toString();
 			// remove duplicate white spaces + leading and trailing ones
 			returnValue = returnValue.replaceAll("\\s+", " ");
 			returnValue = returnValue.trim();
@@ -203,7 +214,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	 */
 	public String getReturnType(final String typeName) {
 		final String[] splittedTypeName = typeName.split(" ");
-		return splittedTypeName.length > 0 ? splittedTypeName[0] : new String();
+		return splittedTypeName.length > 0 ? splittedTypeName[0] : "<undefined>"; //NOCS
 	}
 
 	/**
@@ -215,10 +226,10 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	 * @param typeName
 	 * @return
 	 */
-	private String getReturnValue(final JoinPoint joinPoint, String typeName, String returnType) {
+	private String getReturnValue(final JoinPoint joinPoint, final String typeName, final String returnType) {
 
 		final Object rawReturnValue = joinPoint.getThis();
-		String returnValue = new String();
+		String returnValue = "<undefined>";
 
 		if ((!typeName.isEmpty()) && (rawReturnValue != null)) {
 			int numberOfRows = 0;
@@ -233,20 +244,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 				returnValue = String.valueOf(numberOfRows);
 				break;
 			case "RESULTSET":
-				try {
-					numberOfRows = 0;
-					final ResultSet rs = (ResultSet) rawReturnValue;
-					while (rs.next()) {
-						numberOfRows++;
-					}
-					rs.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-					System.out.println(e.getMessage());
-				}
-				returnValue = String.valueOf(numberOfRows);
+				returnValue = this.getNumberOfNumbers(rawReturnValue);
 				break;
-
 			// TO-DO Further relevant return types? (czi)
 			case "STATEMENT":
 				break;
@@ -260,6 +259,22 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 				break;
 			}
 		}
+		return returnValue;
+	}
+
+	private String getNumberOfNumbers(final Object rawReturnValue) {
+		String returnValue;
+		int numberOfRows = 0;
+		try {
+			try (final ResultSet rs = (ResultSet) rawReturnValue) {
+				while (rs.next()) {
+					numberOfRows++;
+				}
+			}
+		} catch (SQLException e) {
+			LOG.error("DatabaseAbstract: getReturnValue: SQL-Exception: " + e.getMessage()); // NOPMD
+		}
+		returnValue = String.valueOf(numberOfRows);
 		return returnValue;
 	}
 
