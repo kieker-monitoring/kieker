@@ -624,7 +624,9 @@ configurations.archives.artifacts.with { archives ->
     remove(jarArtifact)
 }
 
-task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
+task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
+		description: "Assembles a jar archive containing all of Kieker's components, the user guide examples, the documentation etc."
+	) {
     // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
     configure allArtifacts
     configure licence
@@ -637,7 +639,9 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
     }
 }
 
-task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
+task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
+		description: "Assembles a jar archive containing the contents of the mainJar task and additionally the Eclipse Modeling Framework (EMF). The resulting jar can directly be used for analyzing Kieker logs."
+	) {
     // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
     classifier = 'emf'
     configure allArtifacts
@@ -670,7 +674,9 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
     }
 }
 
-task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
+task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
+		description: "Assembles a jar archive containing the contents of the mainJar task and additionally the aspect-oriented framework AspectJ. The resulting jar can directly be used for monitoring as javaagent."
+	) {
     // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
     classifier = 'aspectj'
     configure allArtifacts
