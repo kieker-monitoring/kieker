@@ -45,13 +45,9 @@ import kieker.monitoring.timer.ITimeSource;
  * Instead, it uses before and after advices only so that "cflow" can be used
  * when specifying its pointcut.
  * 
- * This implementation uses <code>JoinPoint.StaticPart</code> instead of
- * <code>JoinPoint</code> in the advices for performance reasons: <blockquote>If
- * you only need the static information about the join point, you may access the
- * static part of the join point directly with the special variable
- * thisJoinPointStaticPart. Using thisJoinPointStaticPart will avoid the
- * run-time creation of the join point object that may be necessary when using
- * thisJoinPoint directly. </blockquote>
+ * <blockquote> This aspect is based on the new
+ * kieker.monitoring.probe.aspectj.beforeafter.onlycallee.AbstractAspect
+ * </blockquote>
  * 
  * @author Christian Zirkelbach (czi@informatik.uni-kiel.de)
  * 
@@ -67,13 +63,6 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 	private static final String TECHNOLOGY = "JDBC"; // Hardcoded technology atm, as we use currently JDBC only (czi)
 
-	// private final ThreadLocal<Counter> currentOrderIndex = new
-	// ThreadLocal<Counter>() {
-	// @Override
-	// protected Counter initialValue() {
-	// return new Counter();
-	// }
-	// };
 	private final ThreadLocal<Counter> currentStackIndex = new ThreadLocal<Counter>() {
 		@Override
 		protected Counter initialValue() {
@@ -112,9 +101,6 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			CTRLINST.newMonitoringRecord(trace);
 		}
 
-		// long threadId = Thread.currentThread().getId();
-		// int orderIndex = currentOrderIndex.get().incrementValue();
-		// int stackIndex =
 		this.currentStackIndex.get().incrementValue();
 
 		final long traceId = trace.getTraceId();
@@ -126,8 +112,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 				trace.getNextOrderId(), parameters, TECHNOLOGY));
 	}
 
-	@AfterReturning("monitoredOperation() && notWithinKieker()")
-	public void afterReturningOperation(final JoinPoint joinPoint) {
+	@AfterReturning(pointcut = "monitoredOperation() && notWithinKieker()", returning = "returningObject")
+	public void afterReturningOperation(final JoinPoint joinPoint, final Object returningObject) {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
@@ -140,7 +126,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final String typeName = joinPoint.getSignature().getDeclaringTypeName(); // called classname
 		final String returnType = this.getReturnType(typeName);
-		final String returnValue = this.getReturnValue(joinPoint, typeName, returnType);
+		final String returnValue = this.getReturnValue(returningObject, typeName, returnType);
 
 		CTRLINST.newMonitoringRecord(new AfterDatabaseEvent(TIME.getTime(), typeName, operationSignature,
 				trace.getTraceId(), trace.getNextOrderId(), returnType, returnValue));
@@ -214,47 +200,48 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	 */
 	public String getReturnType(final String typeName) {
 		final String[] splittedTypeName = typeName.split(" ");
-		return splittedTypeName.length > 0 ? splittedTypeName[0] : "<undefined>"; //NOCS
+		return splittedTypeName.length > 0 ? splittedTypeName[0] : "<undefined>"; // NOCS
 	}
 
 	/**
 	 * Processes the return value of the called method based on the type and returns
 	 * a formatted string afterwards
 	 * 
-	 * @param joinPoint
+	 * @param returningObject
 	 * @param returnType
 	 * @param typeName
 	 * @return
 	 */
-	private String getReturnValue(final JoinPoint joinPoint, final String typeName, final String returnType) {
+	private String getReturnValue(final Object returningObject, final String typeName, final String returnType) {
 
-		final Object rawReturnValue = joinPoint.getThis();
 		String returnValue = "<undefined>";
 
-		if ((!typeName.isEmpty()) && (rawReturnValue != null)) {
+		if ((!typeName.isEmpty()) && (returningObject != null)) {
 			int numberOfRows = 0;
 
 			switch (returnType) {
 			case "STRING":
+				returnValue = returningObject.toString();
+				break;
 			case "BOOLEAN":
-				returnValue = rawReturnValue.toString();
+				returnValue = returningObject.toString();
 				break;
 			case "INT":
-				numberOfRows = (int) rawReturnValue;
+				numberOfRows = (int) returningObject;
 				returnValue = String.valueOf(numberOfRows);
 				break;
 			case "RESULTSET":
-				returnValue = this.getNumberOfNumbers(rawReturnValue);
+				returnValue = this.getNumberOfNumbers(returningObject);
 				break;
 			// TO-DO Further relevant return types? (czi)
-			case "STATEMENT":
-				break;
-			case "PREPAREDSTATEMENT":
-				break;
-			case "INT[]":
-				break;
-			case "CALLABLESTATEMENT":
-				break;
+			// case "STATEMENT":
+			// break;
+			// case "PREPAREDSTATEMENT":
+			// break;
+			// case "INT[]":
+			// break;
+			// case "CALLABLESTATEMENT":
+			// break;
 			default:
 				break;
 			}
