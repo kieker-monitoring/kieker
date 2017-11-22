@@ -9,23 +9,24 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.IEventRecord;
-import kieker.common.record.flow.IOperationRecord;
+import kieker.common.record.flow.IFlowRecord;
+import kieker.common.record.flow.IClassSignature;
 import kieker.common.record.flow.ITraceRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
 /**
- * @author Christian Zirkelbach (czi@informatik.uni-kiel.de) API compatibility: Kieker 1.10.0
+ * @author Christian Zirkelbach (czi@informatik.uni-kiel.de) API compatibility:
+ *         Kieker 1.10.0
  * 
  * @since 1.14
  */
 public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory,
-		IMonitoringRecord.BinaryFactory, IEventRecord, IOperationRecord, ITraceRecord {
-	private static final long serialVersionUID = -4230332039195540410L;
+		IMonitoringRecord.BinaryFactory, IEventRecord, IFlowRecord, IClassSignature, ITraceRecord {
+	private static final long serialVersionUID = -3115006839098290523L;
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			+ TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			+ TYPE_SIZE_STRING // IClassSignature.classSignature
 			+ TYPE_SIZE_LONG // ITraceRecord.traceId
 			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
@@ -34,7 +35,6 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 	;
 
 	public static final Class<?>[] TYPES = { long.class, // IEventRecord.timestamp
-			String.class, // IOperationSignature.operationSignature
 			String.class, // IClassSignature.classSignature
 			long.class, // ITraceRecord.traceId
 			int.class, // ITraceRecord.orderIndex
@@ -44,7 +44,6 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
-	public static final String OPERATION_SIGNATURE = "";
 	public static final String CLASS_SIGNATURE = "";
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
@@ -52,12 +51,11 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 	public static final String RETURN_VALUE = "";
 
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = { "timestamp", "operationSignature", "classSignature", "traceId",
-			"orderIndex", "returnType", "returnValue", };
+	private static final String[] PROPERTY_NAMES = { "timestamp", "classSignature", "traceId", "orderIndex",
+			"returnType", "returnValue", };
 
 	/** property declarations. */
 	private final long timestamp;
-	private final String operationSignature;
 	private final String classSignature;
 	private final long traceId;
 	private final int orderIndex;
@@ -69,8 +67,6 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 	 * 
 	 * @param timestamp
 	 *            timestamp
-	 * @param operationSignature
-	 *            operationSignature
 	 * @param classSignature
 	 *            classSignature
 	 * @param traceId
@@ -82,10 +78,9 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 	 * @param returnValue
 	 *            returnValue
 	 */
-	public AfterDatabaseEvent(final long timestamp, final String operationSignature, final String classSignature,
-			final long traceId, final int orderIndex, final String returnType, final String returnValue) {
+	public AfterDatabaseEvent(final long timestamp, final String classSignature, final long traceId,
+			final int orderIndex, final String returnType, final String returnValue) {
 		this.timestamp = timestamp;
-		this.operationSignature = operationSignature == null ? OPERATION_SIGNATURE : operationSignature;
 		this.classSignature = classSignature == null ? CLASS_SIGNATURE : classSignature;
 		this.traceId = traceId;
 		this.orderIndex = orderIndex;
@@ -107,12 +102,11 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 	public AfterDatabaseEvent(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.timestamp = (Long) values[0];
-		this.operationSignature = (String) values[1];
-		this.classSignature = (String) values[2];
-		this.traceId = (Long) values[3];
-		this.orderIndex = (Integer) values[4];
-		this.returnType = (String) values[5];
-		this.returnValue = (String) values[6];
+		this.classSignature = (String) values[1];
+		this.traceId = (Long) values[2];
+		this.orderIndex = (Integer) values[3];
+		this.returnType = (String) values[4];
+		this.returnValue = (String) values[5];
 	}
 
 	/**
@@ -131,12 +125,11 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 	protected AfterDatabaseEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
 		this.timestamp = (Long) values[0];
-		this.operationSignature = (String) values[1];
-		this.classSignature = (String) values[2];
-		this.traceId = (Long) values[3];
-		this.orderIndex = (Integer) values[4];
-		this.returnType = (String) values[5];
-		this.returnValue = (String) values[6];
+		this.classSignature = (String) values[1];
+		this.traceId = (Long) values[2];
+		this.orderIndex = (Integer) values[3];
+		this.returnType = (String) values[4];
+		this.returnValue = (String) values[5];
 	}
 
 	/**
@@ -157,7 +150,6 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 	public AfterDatabaseEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry)
 			throws BufferUnderflowException {
 		this.timestamp = buffer.getLong();
-		this.operationSignature = stringRegistry.get(buffer.getInt());
 		this.classSignature = stringRegistry.get(buffer.getInt());
 		this.traceId = buffer.getLong();
 		this.orderIndex = buffer.getInt();
@@ -174,8 +166,8 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 	@Override
 	@Deprecated
 	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getOperationSignature(), this.getClassSignature(),
-				this.getTraceId(), this.getOrderIndex(), this.getReturnType(), this.getReturnValue() };
+		return new Object[] { this.getTimestamp(), this.getClassSignature(), this.getTraceId(), this.getOrderIndex(),
+				this.getReturnType(), this.getReturnValue() };
 	}
 
 	/**
@@ -183,7 +175,6 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 	 */
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
-		stringRegistry.get(this.getOperationSignature());
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getReturnType());
 		stringRegistry.get(this.getReturnValue());
@@ -243,8 +234,6 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 			return false;
 		if (this.getTimestamp() != castedRecord.getTimestamp())
 			return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature()))
-			return false;
 		if (!this.getClassSignature().equals(castedRecord.getClassSignature()))
 			return false;
 		if (this.getTraceId() != castedRecord.getTraceId())
@@ -260,10 +249,6 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 
 	public final long getTimestamp() {
 		return this.timestamp;
-	}
-
-	public final String getOperationSignature() {
-		return this.operationSignature;
 	}
 
 	public final String getClassSignature() {
@@ -292,7 +277,6 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 	 */
 	public AfterDatabaseEvent(final IValueDeserializer deserializer) {
 		this.timestamp = deserializer.getLong();
-		this.operationSignature = deserializer.getString();
 		this.classSignature = deserializer.getString();
 		this.traceId = deserializer.getLong();
 		this.orderIndex = deserializer.getInt();
@@ -303,8 +287,7 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 	@Override
 	public void serialize(IValueSerializer serializer) throws BufferOverflowException {
 		serializer.putLong(this.getTimestamp());
-		serializer.putLong(this.getTraceId());
-		serializer.putInt(this.getOrderIndex());
+		serializer.putString(this.getClassSignature());
 		serializer.putLong(this.getTraceId());
 		serializer.putInt(this.getOrderIndex());
 		serializer.putString(this.getReturnType());

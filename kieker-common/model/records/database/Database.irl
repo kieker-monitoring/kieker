@@ -3,15 +3,22 @@ package kieker.common.record.database
 import kieker.common.record.flow.IEventRecord
 import kieker.common.record.flow.IOperationRecord
 import kieker.common.record.flow.ITraceRecord
+import kieker.common.record.flow.IFlowRecord
+import kieker.common.record.flow.IClassSignature
+import kieker.common.record.flow.IExceptionRecord
 
 @author 'Christian Zirkelbach (czi@informatik.uni-kiel.de)' @since '1.14'
-entity BeforeDatabaseEvent : IEventRecord, IOperationRecord, ITraceRecord {
+entity BeforeDatabaseEvent : IEventRecord, IFlowRecord, IClassSignature, ITraceRecord {
 	string parameters
-	string technology = "<default-technology>"
+	string technology
 }
 
 @author 'Christian Zirkelbach (czi@informatik.uni-kiel.de)' @since '1.14'
-entity AfterDatabaseEvent : IEventRecord, IOperationRecord, ITraceRecord {
+entity AfterDatabaseEvent : IEventRecord, IFlowRecord, IClassSignature, ITraceRecord {
 	string returnType
 	string returnValue
+}
+
+@author 'Christian Zirkelbach (czi@informatik.uni-kiel.de)' @since '1.14'
+entity DatabaseFailedEvent : IEventRecord, IFlowRecord, IClassSignature, ITraceRecord, IExceptionRecord {
 }
