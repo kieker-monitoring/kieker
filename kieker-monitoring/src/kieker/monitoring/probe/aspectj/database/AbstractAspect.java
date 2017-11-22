@@ -17,6 +17,7 @@ package kieker.monitoring.probe.aspectj.database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -237,17 +238,17 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	 * 
 	 * @param returningObject
 	 * @param returnType
-	 * @param returnType
 	 * @return
 	 */
 	private String getReturnedValue(final Object returningObject, final String returnType) {
 
+		final String upperReturnType = returnType.toUpperCase(Locale.getDefault());
 		String returnValue = UNDEFINED_VALUE;
 
-		if ((!returnType.isEmpty()) && (returningObject != null)) {
+		if ((!returnType.equals(UNDEFINED_VALUE)) && (returningObject != null)) {
 			int numberOfRows = 0;
 
-			switch (returnType) {
+			switch (upperReturnType) {
 			case "STRING":
 				returnValue = returningObject.toString();
 				break;
