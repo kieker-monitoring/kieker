@@ -5,7 +5,7 @@ configurations {
 	ajc
 }
 
-def aspectjVersion = '1.8.2'
+def aspectjVersion = '1.9.0'
 
 dependencies {
 	compile project(':kieker-common')
