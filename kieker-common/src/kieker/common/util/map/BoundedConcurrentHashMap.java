@@ -137,12 +137,22 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	@Generated("eclipse")
 	@SuppressWarnings("PMD")
 	public boolean equals(final Object obj) {
-		if (this == obj) { return true; }
-		if (!super.equals(obj)) { return false; }
-		if (getClass() != obj.getClass()) { return false; }
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
 		final BoundedConcurrentHashMap<?, ?> other = (BoundedConcurrentHashMap<?, ?>) obj;
-		if (this.boundedCacheBehaviour != other.boundedCacheBehaviour) { return false; }
-		if (this.maxCacheSize != other.maxCacheSize) { return false; }
+		if (this.boundedCacheBehaviour != other.boundedCacheBehaviour) {
+			return false;
+		}
+		if (this.maxCacheSize != other.maxCacheSize) {
+			return false;
+		}
 		return true;
 	}
 
