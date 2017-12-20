@@ -23,6 +23,6 @@ import kieker.common.record.IMonitoringRecord;
  * @since 1.10
  */
 public interface IOperationSignature extends IMonitoringRecord {
-	public String getOperationSignature() ;
+	public String getOperationSignature();
 	
 }

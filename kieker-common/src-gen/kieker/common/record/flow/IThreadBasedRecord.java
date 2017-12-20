@@ -22,8 +22,8 @@ package kieker.common.record.flow;
  * @since 1.13
  */
 public interface IThreadBasedRecord extends IFlowRecord {
-	public long getThreadId() ;
+	public long getThreadId();
 	
-	public int getOrderIndex() ;
+	public int getOrderIndex();
 	
 }

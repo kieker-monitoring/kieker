@@ -22,6 +22,6 @@ package kieker.common.record.flow;
  * @since 1.6
  */
 public interface IEventRecord extends IFlowRecord {
-	public long getTimestamp() ;
+	public long getTimestamp();
 	
 }

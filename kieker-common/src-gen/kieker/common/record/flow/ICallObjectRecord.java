@@ -22,8 +22,8 @@ package kieker.common.record.flow;
  * @since 1.6
  */
 public interface ICallObjectRecord extends ICallRecord, IObjectRecord {
-	public int getCallerObjectId() ;
+	public int getCallerObjectId();
 	
-	public int getCalleeObjectId() ;
+	public int getCalleeObjectId();
 	
 }

@@ -22,6 +22,6 @@ package kieker.common.record.flow;
  * @since 1.6
  */
 public interface IObjectRecord extends IFlowRecord, IClassSignature {
-	public int getObjectId() ;
+	public int getObjectId();
 	
 }
