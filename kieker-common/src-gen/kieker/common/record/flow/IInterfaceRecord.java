@@ -22,6 +22,6 @@ package kieker.common.record.flow;
  * @since 1.10
  */
 public interface IInterfaceRecord extends IFlowRecord {
-	public String getInterface() ;
+	public String getInterface();
 	
 }

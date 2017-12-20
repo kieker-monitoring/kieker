@@ -23,6 +23,6 @@ import kieker.common.record.IMonitoringRecord;
  * @since 1.10
  */
 public interface IClassSignature extends IMonitoringRecord {
-	public String getClassSignature() ;
+	public String getClassSignature();
 	
 }
