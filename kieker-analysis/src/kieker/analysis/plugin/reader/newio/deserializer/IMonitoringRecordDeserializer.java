@@ -17,8 +17,10 @@
 package kieker.analysis.plugin.reader.newio.deserializer;
 
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.util.List;
 
+import kieker.analysis.plugin.reader.newio.IRawDataUnwrapper;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -41,9 +43,49 @@ public interface IMonitoringRecordDeserializer {
 	 * @throws InvalidFormatException
 	 *             If an invalid data format is detected
 	 * @since 1.13
+	 * @deprecated Was replaced by {@link #deserializeRecordsFromByteBuffer(ByteBuffer, int)}.
 	 */
+	@Deprecated
 	public List<IMonitoringRecord> deserializeRecords(ByteBuffer buffer, int dataSize) throws InvalidFormatException;
+	
+	/**
+	 * Deserializes the records contained in the given byte buffer.
+	 *
+	 * @param buffer
+	 *            The buffer to decode the data from
+	 * @param dataSize
+	 *            The size of the record data in bytes
+	 * @return The deserialized records
+	 * @throws InvalidFormatException
+	 *             If an invalid data format is detected
+	 * @since 2.0
+	 */
+	public List<IMonitoringRecord> deserializeRecordsFromByteBuffer(ByteBuffer buffer, int dataSize) throws InvalidFormatException;
+	
+	/**
+	 * Deserializes the records contained in the given character buffer.
+	 *
+	 * @param buffer
+	 *            The buffer to decode the data from
+	 * @param dataSize
+	 *            The size of the record data in characters
+	 * @return The deserialized records
+	 * @throws InvalidFormatException
+	 *             If an invalid data format is detected
+	 * @since 2.0
+	 */
+	public List<IMonitoringRecord> deserializeRecordsFromCharBuffer(CharBuffer buffer, int dataSize) throws InvalidFormatException;
 
+	/**
+	 * Returns the unwrapper type required by this deserializer, if any. This method returns {@code null} if wrapping is
+	 * unsupported by this deserializer.
+	 * 
+	 * @return An unwrapper type, or {@code null} if wrapping is not supported
+	 * 
+	 * @since 2.0
+	 */
+	public Class<? extends IRawDataUnwrapper> getUnwrapperType();
+	
 	/**
 	 * Lifecycle event, is called before data is read.
 	 * 

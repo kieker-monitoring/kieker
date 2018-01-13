@@ -17,6 +17,7 @@
 package kieker.analysis.plugin.reader.newio.deserializer;
 
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.util.List;
 
 import kieker.analysis.IProjectContext;
@@ -47,9 +48,9 @@ public abstract class AbstractContainerFormatDeserializer extends AbstractMonito
 	public AbstractContainerFormatDeserializer(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
-
+	
 	@Override
-	public List<IMonitoringRecord> deserializeRecords(final ByteBuffer buffer, final int dataSize) {
+	public List<IMonitoringRecord> deserializeRecordsFromByteBuffer(final ByteBuffer buffer, final int dataSize) {
 		// Check the container identifier
 		final int magic = buffer.getInt();
 		if (magic != CONTAINER_IDENTIFIER) {
@@ -63,6 +64,11 @@ public abstract class AbstractContainerFormatDeserializer extends AbstractMonito
 		}
 
 		return this.decodeRecords(buffer, (dataSize - HEADER_SIZE));
+	}
+	
+	@Override
+	public List<IMonitoringRecord> deserializeRecordsFromCharBuffer(CharBuffer buffer, int dataSize) throws InvalidFormatException {
+		throw new UnsupportedOperationException("Character data is unsupported by this reader.");
 	}
 
 	/**

@@ -48,10 +48,9 @@ public class TestRawDataWriter implements IRawDataWriter {
 	}
 
 	@Override
-	public void writeData(final ByteBuffer data, final int offset, final int length) {
-		final byte[] dataArray = new byte[length];
-		data.position(0);
-		data.get(dataArray, offset, length);
+	public void writeData(final ByteBuffer data) {
+		final byte[] dataArray = new byte[data.limit()];
+		data.get(dataArray);
 
 		try {
 			this.dataStorage.appendData(this.testId, dataArray);
@@ -61,6 +60,12 @@ public class TestRawDataWriter implements IRawDataWriter {
 		}
 	}
 
+	@Override
+	public boolean requiresWrappedData() {
+		// TODO Actually, this writer requires wrapped data
+		return false;
+	}
+	
 	@Override
 	public void onInitialization() {
 		// Nothing to do

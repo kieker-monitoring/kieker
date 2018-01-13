@@ -97,6 +97,11 @@ public class ChunkingAmqpWriter implements IRawDataWriter {
 	}
 
 	@Override
+	public boolean requiresWrappedData() {
+		return false;
+	}
+	
+	@Override
 	public void onInitialization() {
 		// Do nothing
 	}
@@ -111,9 +116,8 @@ public class ChunkingAmqpWriter implements IRawDataWriter {
 	}
 	
 	@Override
-	public void writeData(final ByteBuffer buffer, final int offset, final int length) {
-		buffer.position(offset);
-		final byte[] rawData = new byte[length];
+	public void writeData(final ByteBuffer buffer) {
+		final byte[] rawData = new byte[buffer.limit()];
 		buffer.get(rawData);
 		
 		try {

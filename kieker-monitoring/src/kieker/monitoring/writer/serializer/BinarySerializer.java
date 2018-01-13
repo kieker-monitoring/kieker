@@ -51,6 +51,8 @@ public class BinarySerializer extends AbstractContainerFormatSerializer {
 	 *
 	 * @param configuration
 	 *            The configuration to use
+	 * @param wrappingRequired
+	 *            Flag whether wrapping of the encoded data is required
 	 */
 	public BinarySerializer(final Configuration configuration) {
 		super(configuration);
@@ -62,7 +64,7 @@ public class BinarySerializer extends AbstractContainerFormatSerializer {
 	}
 
 	@Override
-	protected int writeRecords(final Collection<IMonitoringRecord> records, final ByteBuffer buffer) {
+	protected void writeRecords(final Collection<IMonitoringRecord> records, final ByteBuffer buffer) {
 		final SerializerStringRegistry stringRegistry = new SerializerStringRegistry();
 
 		// Write the record data into the buffer and collect the strings in the
@@ -70,13 +72,10 @@ public class BinarySerializer extends AbstractContainerFormatSerializer {
 		final int recordDataSize = this.encodeRecords(records, buffer, stringRegistry);
 
 		// Encode the string registry
-		final int stringDataSize = this.encodeStringRegistry(stringRegistry, buffer);
+		this.encodeStringRegistry(stringRegistry, buffer);
 
 		// Append both lengths to the chunk
 		buffer.putInt(recordDataSize);
-
-		// Return the total data size
-		return (recordDataSize + stringDataSize) + 4;
 	}
 
 	private int encodeRecords(final Collection<IMonitoringRecord> records, final ByteBuffer buffer, final IRegistry<String> stringRegistry) {

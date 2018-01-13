@@ -26,7 +26,7 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
-import kieker.analysis.plugin.reader.newio.AbstractRawDataReader;
+import kieker.analysis.plugin.reader.newio.AbstractRawDataReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
@@ -53,7 +53,7 @@ import kieker.common.record.IMonitoringRecord;
 				@Property(name = KafkaReader.CONFIG_PROPERTY_SESSION_TIMEOUT_MS, defaultValue = "30000", description = "Session timeout interval in milliseconds")
 		}
 		)
-public class KafkaReader extends AbstractRawDataReader {
+public class KafkaReader extends AbstractRawDataReaderPlugin {
 	
 	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";

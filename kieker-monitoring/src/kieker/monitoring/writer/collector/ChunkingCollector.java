@@ -18,7 +18,10 @@ package kieker.monitoring.writer.collector;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -35,8 +38,11 @@ import kieker.common.util.thread.DaemonThreadFactory;
 import kieker.monitoring.core.controller.ControllerFactory;
 import kieker.monitoring.core.controller.ReceiveUnfilteredConfiguration;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
+import kieker.monitoring.writer.raw.IRawDataWrapper;
 import kieker.monitoring.writer.raw.IRawDataWriter;
 import kieker.monitoring.writer.serializer.IMonitoringRecordSerializer;
+import kieker.monitoring.writer.serializer.NopBinaryWrapper;
+import kieker.monitoring.writer.serializer.NopCharacterWrapper;
 
 /**
  * Chunking collector for monitoring records. The collected records are written if a chunk is
@@ -104,13 +110,15 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	/** The time unit for the writer task interval. */
 	private static final TimeUnit TASK_RUN_INTERVAL_TIME_UNIT = TimeUnit.MILLISECONDS;
 	
+	private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+	
 	private static final Log LOG = LogFactory.getLog(ChunkingCollector.class);
 
 	private final Queue<IMonitoringRecord> recordQueue;
 
 	private final ScheduledExecutorService scheduledExecutor;
 	private final int taskRunInterval;
-	private final ChunkWriterTask writerTask;
+	private final ChunkWriterTask<?> writerTask;
 
 	public ChunkingCollector(final Configuration configuration) {
 		super(configuration);
@@ -135,12 +143,12 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		final int chunkSize = configuration.getIntProperty(CONFIG_CHUNK_SIZE, DEFAULT_CHUNK_SIZE);
 		final int outputBufferSize = configuration.getIntProperty(CONFIG_OUTPUT_BUFFER_SIZE, DEFAULT_OUTPUT_BUFFER_SIZE);
 
-		this.writerTask = new ChunkWriterTask(chunkSize, deferredWriteDelayMs, outputBufferSize, serializer, writer);
+		this.writerTask = this.createWriterTask(chunkSize, deferredWriteDelayMs, outputBufferSize, serializer, writer);
 	}
 	
 	@SuppressWarnings("unchecked")
 	private Queue<IMonitoringRecord> createQueue(final String queueTypeName, final int queueSize) {
-		if (queueTypeName == null) {
+		if (queueTypeName == null || queueTypeName.isEmpty()) {
 			return this.createDefaultQueue(queueSize);
 		}
 		
@@ -153,6 +161,50 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 			// Instantiate default queue type if the desired queue type cannot be instantiated
 			LOG.error("Error instantiating queue type " + queueTypeName + ". Using default queue type instead.", e);
 			return this.createDefaultQueue(queueSize);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private <B extends Buffer> IRawDataWrapper<B> createWrapperForSerializer(final IMonitoringRecordSerializer serializer, final IRawDataWriter writer, final int bufferSize) {
+		final Class<? extends IRawDataWrapper<?>> wrapperType = serializer.getWrapperType();
+
+		// Create a no-op wrapper if no wrapper type is given  
+		if (wrapperType == null) {
+			if (writer.requiresWrappedData()) {
+				LOG.error("Writer " + writer.getClass().getName() + " requires wrapped data, but serializer " + serializer.getClass().getName() + " does not provide a wrapper.");
+			}
+			
+			return this.createNoOpWrapperForSerializer(serializer);
+		}
+
+		try {
+			return (IRawDataWrapper<B>) wrapperType.getConstructor(int.class).newInstance(bufferSize);
+		} catch (final NoSuchMethodException e) {
+			LOG.error("Wrapper type " + wrapperType.getName() + " does not provide an appropriate constructor.");
+			return this.createNoOpWrapperForSerializer(serializer);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
+			LOG.error("Error instantiating wrapper " + wrapperType.getClass().getName() + " for serializer " + wrapperType.getClass().getName() + ".", e);
+			return this.createNoOpWrapperForSerializer(serializer);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private <B extends Buffer> IRawDataWrapper<B> createNoOpWrapperForSerializer(final IMonitoringRecordSerializer serializer) {
+		if (serializer.producesBinaryData()) {
+			return (IRawDataWrapper<B>) new NopBinaryWrapper();
+		} else {
+			return (IRawDataWrapper<B>) new NopCharacterWrapper();
+		}
+	}
+	
+	private ChunkWriterTask<?> createWriterTask(final int outputChunkSize, final int deferredWriteDelayMs, final int outputBufferSize, final IMonitoringRecordSerializer serializer, final IRawDataWriter writer) {
+		// Create a suitable wrapper and writer task depending on the data format employed by the serializer
+		if (serializer.producesBinaryData()) {
+			final IRawDataWrapper<ByteBuffer> wrapper = this.createWrapperForSerializer(serializer, writer, outputBufferSize);			
+			return new BinaryChunkWriterTask(outputChunkSize, deferredWriteDelayMs, outputBufferSize, serializer, writer, wrapper);
+		} else {
+			final IRawDataWrapper<CharBuffer> wrapper = this.createWrapperForSerializer(serializer, writer, outputBufferSize);
+			return new CharacterChunkWriterTask(outputChunkSize, deferredWriteDelayMs, outputBufferSize, serializer, writer, wrapper);
 		}
 	}
 	
@@ -205,13 +257,15 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	 * @since 1.13
 	 *
 	 */
-	class ChunkWriterTask implements Runnable {
+	abstract class ChunkWriterTask<T extends Buffer> implements Runnable {
 
-		private final ByteBuffer buffer;
+		private final T buffer;
 
-		private final IMonitoringRecordSerializer serializer;
+		protected final IMonitoringRecordSerializer serializer;
 
-		private final IRawDataWriter writer;
+		protected final IRawDataWriter writer;
+		
+		protected final IRawDataWrapper<T> wrapper;
 
 		private final int outputChunkSize;
 
@@ -220,16 +274,19 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		private volatile long nextWriteTime;
 
 		public ChunkWriterTask(final int outputChunkSize, final int deferredWriteDelayMs, final int outputBufferSize, final IMonitoringRecordSerializer serializer,
-				final IRawDataWriter writer) {
+				final IRawDataWriter writer, final IRawDataWrapper<T> wrapper) {
 			this.serializer = serializer;
 			this.writer = writer;
+			this.wrapper = wrapper;
 			this.outputChunkSize = outputChunkSize;
 			this.deferredWriteDelayNs = deferredWriteDelayMs * 1000000L;
-			this.buffer = ByteBuffer.allocate(outputBufferSize);
+			this.buffer = this.allocateOutputBuffer(outputBufferSize);
 
 			this.updateNextWriteTime();
 		}
 
+		protected abstract T allocateOutputBuffer(int outputBufferSize);
+		
 		@Override
 		@SuppressWarnings("synthetic-access")
 		public void run() {
@@ -304,12 +361,13 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 			}
 
 			// Serialize and write the data
-			final ByteBuffer outputBuffer = this.buffer;
+			final T outputBuffer = this.buffer;
 			outputBuffer.rewind();
-			final int bytesWritten = this.serializer.serializeRecords(chunk, outputBuffer);
-			this.writer.writeData(outputBuffer, 0, bytesWritten);
+			this.serializeAndWriteChunk(chunk, outputBuffer);
 		}
 
+		protected abstract void serializeAndWriteChunk(List<IMonitoringRecord> chunk, T outputBuffer);
+		
 		private void updateNextWriteTime() {
 			this.updateNextWriteTime(System.nanoTime());
 		}
@@ -317,7 +375,79 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		private void updateNextWriteTime(final long currentTime) {
 			this.nextWriteTime = (currentTime + this.deferredWriteDelayNs);
 		}
-
 	}
+	
+	/**
+	 * Specialized writer task for binary data.
+	 * 
+	 * @author Holger Knoche
+	 * @since 2.0
+	 */
+	class BinaryChunkWriterTask extends ChunkWriterTask<ByteBuffer> {
 
+		public BinaryChunkWriterTask(final int outputChunkSize, final int deferredWriteDelayMs, final int outputBufferSize, final IMonitoringRecordSerializer serializer, final IRawDataWriter writer, final IRawDataWrapper<ByteBuffer> wrapper) {
+			super(outputChunkSize, deferredWriteDelayMs, outputBufferSize, serializer, writer, wrapper);
+		}
+
+		@Override
+		protected ByteBuffer allocateOutputBuffer(final int outputBufferSize) {
+			return ByteBuffer.allocate(outputBufferSize);
+		}
+
+		@Override
+		protected void serializeAndWriteChunk(final List<IMonitoringRecord> chunk, final ByteBuffer outputBuffer) {
+			// Serialize the data to the buffer and flip it afterwards
+			this.serializer.serializeRecordsToByteBuffer(chunk, outputBuffer);
+			outputBuffer.flip();
+			
+			// Wrap the output buffer and flip it, if necessary
+			final ByteBuffer wrappedBuffer = this.wrapper.wrap(outputBuffer);
+			// No-op wrappers return the same buffer, which is already flipped
+			if (wrappedBuffer != outputBuffer) {
+				wrappedBuffer.flip();
+			}
+						
+			this.writer.writeData(wrappedBuffer);
+		}
+		
+	}
+	
+	/**
+	 * Specialized writer task for character data.
+	 * 
+	 * @author Holger Knoche
+	 * @since 2.0
+	 */
+	class CharacterChunkWriterTask extends ChunkWriterTask<CharBuffer> {		
+		
+		public CharacterChunkWriterTask(final int outputChunkSize, final int deferredWriteDelayMs, final int outputBufferSize, final IMonitoringRecordSerializer serializer, final IRawDataWriter writer, final IRawDataWrapper<CharBuffer> wrapper) {
+			super(outputChunkSize, deferredWriteDelayMs, outputBufferSize, serializer, writer, wrapper);
+		}
+
+		@Override
+		protected CharBuffer allocateOutputBuffer(final int outputBufferSize) {
+			return CharBuffer.allocate(outputBufferSize);
+		}
+
+		@Override
+		protected void serializeAndWriteChunk(final List<IMonitoringRecord> chunk, final CharBuffer outputBuffer) {
+			// Serialize the data to the buffer and flip it afterwards
+			this.serializer.serializeRecordsToCharBuffer(chunk, outputBuffer);
+			outputBuffer.flip();
+			
+			// Wrap the output buffer and flip it, if necessary
+			final CharBuffer wrappedBuffer = this.wrapper.wrap(outputBuffer);
+			// No-op wrappers return the same buffer, which is already flipped
+			if (wrappedBuffer != outputBuffer) {
+				wrappedBuffer.flip();
+			}
+			
+			// Encode the contents of the char buffer
+			final ByteBuffer byteBuffer = DEFAULT_CHARSET.encode(wrappedBuffer);
+			
+			this.writer.writeData(byteBuffer);
+		}		
+		
+	}
+	
 }

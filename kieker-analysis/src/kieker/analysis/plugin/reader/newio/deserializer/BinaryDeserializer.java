@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kieker.analysis.IProjectContext;
+import kieker.analysis.plugin.reader.newio.IRawDataUnwrapper;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
@@ -66,6 +67,11 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 		return FORMAT_IDENTIFIER;
 	}
 
+	@Override
+	public Class<? extends IRawDataUnwrapper> getUnwrapperType() {
+		return BinaryChunkLengthUnwrapper.class;
+	}
+	
 	@Override
 	protected List<IMonitoringRecord> decodeRecords(final ByteBuffer buffer, final int dataSize) throws InvalidFormatException {
 		final int baseOffset = buffer.position();

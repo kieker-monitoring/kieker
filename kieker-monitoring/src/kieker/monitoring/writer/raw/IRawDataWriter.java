@@ -28,17 +28,14 @@ import java.nio.ByteBuffer;
 public interface IRawDataWriter {
 
 	/**
-	 * Writes raw data contained in the given byte buffer.
+	 * Writes raw data contained in the given byte buffer. The buffer is expected to be "flipped", i.e. the
+	 * data resides between offset 0 and the buffer limit.
 	 *
 	 * @param data
 	 *            The buffer containing the data
-	 * @param offset
-	 *            The offset in the buffer where the data starts
-	 * @param length
-	 *            The length of the data to write
 	 * @since 1.13
 	 */
-	public void writeData(ByteBuffer data, int offset, int length);
+	public void writeData(ByteBuffer data);
 
 	/**
 	 * Called by the collector during initialization (before any records are written).
@@ -54,4 +51,12 @@ public interface IRawDataWriter {
 	 */
 	public void onTermination();
 
+	/**
+	 * Denotes whether this writer requires data chunks to be wrapped (see {@link}).
+	 * @return see above
+	 * 
+	 * @since 2.0
+	 */
+	public boolean requiresWrappedData();
+	
 }

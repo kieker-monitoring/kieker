@@ -16,8 +16,13 @@
 
 package kieker.analysis.plugin.reader.newio.deserializer;
 
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.util.List;
+
 import kieker.analysis.IProjectContext;
 import kieker.common.configuration.Configuration;
+import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author holger
@@ -36,6 +41,21 @@ public abstract class AbstractMonitoringRecordDeserializer implements IMonitorin
 	 */
 	public AbstractMonitoringRecordDeserializer(final Configuration configuration, final IProjectContext projectContext) { // NOPMD Constructor template for deserializers
 		// Constructor template
+	}	
+	
+	@Override
+	public final List<IMonitoringRecord> deserializeRecords(ByteBuffer buffer, int dataSize) throws InvalidFormatException {
+		return this.deserializeRecordsFromByteBuffer(buffer, dataSize);
 	}
-
+	
+	@Override
+	public List<IMonitoringRecord> deserializeRecordsFromByteBuffer(ByteBuffer buffer, int dataSize) throws InvalidFormatException {
+		throw new UnsupportedOperationException("Reading binary data is unsupported by this reader.");
+	}
+	
+	@Override
+	public List<IMonitoringRecord> deserializeRecordsFromCharBuffer(CharBuffer buffer, int dataSize) throws InvalidFormatException {
+		throw new UnsupportedOperationException("Reading character data is unsupported by this reader.");
+	}
+	
 }

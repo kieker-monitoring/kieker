@@ -31,12 +31,10 @@ import kieker.common.util.dataformat.FormatIdentifier;
  *
  * @since 1.13
  */
-public abstract class AbstractContainerFormatSerializer extends AbstractMonitoringRecordSerializer {
+public abstract class AbstractContainerFormatSerializer extends AbstractBinaryRecordSerializer {
 
 	/** Container format identifier. */
 	public static final int CONTAINER_IDENTIFIER = FormatIdentifier.CONTAINER_FORMAT.getIdentifierValue();
-
-	private static final int HEADER_SIZE = 8;
 
 	/**
 	 * Creates a new serializer using the given configuration.
@@ -49,20 +47,18 @@ public abstract class AbstractContainerFormatSerializer extends AbstractMonitori
 	}
 
 	@Override
-	public final int serializeRecord(final IMonitoringRecord record, final ByteBuffer buffer) {
+	public final void serializeRecordToByteBuffer(final IMonitoringRecord record, final ByteBuffer buffer) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public final int serializeRecords(final Collection<IMonitoringRecord> records, final ByteBuffer buffer) {
+	public final void serializeRecordsToByteBuffer(final Collection<IMonitoringRecord> records, final ByteBuffer buffer) {
 		// Put the container header into the file
 		buffer.putInt(CONTAINER_IDENTIFIER);
 		buffer.putInt(this.getFormatIdentifier());
 
 		// Write the actual payload
-		final int bytesInPayload = this.writeRecords(records, buffer);
-
-		return bytesInPayload + HEADER_SIZE;
+		this.writeRecords(records, buffer);
 	}
 
 	/**
@@ -72,9 +68,8 @@ public abstract class AbstractContainerFormatSerializer extends AbstractMonitori
 	 *            The records to write
 	 * @param buffer
 	 *            The buffer to write to
-	 * @return The size of the written data in bytes
 	 */
-	protected abstract int writeRecords(final Collection<IMonitoringRecord> records, final ByteBuffer buffer);
+	protected abstract void writeRecords(final Collection<IMonitoringRecord> records, final ByteBuffer buffer);
 
 	/**
 	 * Returns the format identifier for the contained data format.

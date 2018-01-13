@@ -16,7 +16,11 @@
 
 package kieker.monitoring.writer.serializer;
 
+import java.nio.ByteBuffer;
+import java.util.Collection;
+
 import kieker.common.configuration.Configuration;
+import kieker.common.record.IMonitoringRecord;
 
 /**
  * Abstract superclass for monitoring record serializers.
@@ -35,6 +39,18 @@ public abstract class AbstractMonitoringRecordSerializer implements IMonitoringR
 	 */
 	public AbstractMonitoringRecordSerializer(final Configuration configuration) { // NOPMD
 		// Empty constructor template
+	}
+	
+	@Override
+	public final int serializeRecord(final IMonitoringRecord record, final ByteBuffer buffer) {
+		this.serializeRecordToByteBuffer(record, buffer);		
+		return 0;
+	}
+	
+	@Override
+	public final int serializeRecords(final Collection<IMonitoringRecord> records, final ByteBuffer buffer) {
+		this.serializeRecordsToByteBuffer(records, buffer);
+		return 0;
 	}
 
 }
