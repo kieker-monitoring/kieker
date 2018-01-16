@@ -320,8 +320,8 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public final String getJMXDomain() {
-		return this.jmxController.getJMXDomain();
+	public final String getControllerDomain() {
+		return this.jmxController.getControllerDomain();
 	}
 
 	@Override

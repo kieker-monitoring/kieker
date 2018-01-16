@@ -22,7 +22,7 @@ package kieker.monitoring.core.controller;
  * @since 1.3
  */
 public interface IMonitoringController extends
-		IJMXController,
+		IRemoteController,
 		IProbeController,
 		ISamplingController,
 		IStateController,

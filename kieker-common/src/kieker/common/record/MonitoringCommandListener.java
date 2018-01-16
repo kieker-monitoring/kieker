@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.plugin.reader.util;
 
-import kieker.common.record.IMonitoringRecord;
+package kieker.common.record;
 
 /**
- * Represents a listener which is informed upon a new monitored record.
+ * @author Marc Adolf
  *
- * @author Christian Wulf (chw)
- *
- * @since 1.13
  */
-public interface IRecordReceivedListener {
+public class MonitoringCommandListener implements IRecordReceivedListener {
 
-	/**
-	 * @since 1.13
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see kieker.common.record.IRecordReceivedListener#onRecordReceived(kieker.common.record.IMonitoringRecord)
 	 */
-	void onRecordReceived(IMonitoringRecord record);
+	@Override
+	public void onRecordReceived(final IMonitoringRecord record) {
+		// TODO Auto-generated method stub
+
+	}
 
 }
