@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.util.List;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.util.dataformat.FormatIdentifier;
 import kieker.common.util.dataformat.VariableLengthEncoding;
 import kieker.common.util.registry.IRegistry;
@@ -41,10 +42,10 @@ public class BinarySerializer extends AbstractContainerFormatSerializer {
 
 	/** Encoding to use for Strings. */
 	private static final String ENCODING_NAME = "UTF-8";
-	
+
 	/** Charset to use for Strings. */
 	private static final Charset CHARSET = Charset.forName(ENCODING_NAME);
-	
+
 	/**
 	 * Creates a new serializer using the given configuration.
 	 *
@@ -90,7 +91,7 @@ public class BinarySerializer extends AbstractContainerFormatSerializer {
 			buffer.putInt(typeNameId);
 			buffer.putLong(record.getLoggingTimestamp());
 
-			record.writeBytes(buffer, stringRegistry);
+			record.serialize(DefaultValueSerializer.create(buffer, stringRegistry));
 		}
 
 		final int offsetAfter = buffer.position();

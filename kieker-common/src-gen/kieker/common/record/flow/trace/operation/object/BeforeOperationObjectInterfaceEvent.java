@@ -1,16 +1,32 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.flow.trace.operation.object;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectEvent;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.IInterfaceRecord;
 
 /**
  * @author Florian Fittkau
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.10
  */
@@ -37,12 +53,22 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		String.class, // IInterfaceRecord.interface
 	};
 	
-	/** user-defined constants */
 	
-	/** default constants */
+	/** default constants. */
 	public static final String INTERFACE = "";
 	
-	/** property declarations */
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"operationSignature",
+		"classSignature",
+		"objectId",
+		"interface",
+	};
+	
+	/** property declarations. */
 	private final String _interface;
 	
 	/**
@@ -74,7 +100,10 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #BeforeOperationObjectInterfaceEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public BeforeOperationObjectInterfaceEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
 		this._interface = (String) values[6];
@@ -87,30 +116,32 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #BeforeOperationObjectInterfaceEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected BeforeOperationObjectInterfaceEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
 		this._interface = (String) values[6];
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
+	 * @param deserializer
+	 *            The deserializer to use
 	 */
-	public BeforeOperationObjectInterfaceEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this._interface = stringRegistry.get(buffer.getInt());
+	public BeforeOperationObjectInterfaceEvent(final IValueDeserializer deserializer) {
+		super(deserializer);
+		this._interface = deserializer.getString();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -122,7 +153,6 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 			this.getInterface()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -132,27 +162,34 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getInterface());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putLong(this.getTraceId());
-		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
-		buffer.putInt(stringRegistry.get(this.getClassSignature()));
-		buffer.putInt(this.getObjectId());
-		buffer.putInt(stringRegistry.get(this.getInterface()));
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
+		serializer.putLong(this.getTimestamp());
+		serializer.putLong(this.getTraceId());
+		serializer.putInt(this.getOrderIndex());
+		serializer.putString(this.getOperationSignature());
+		serializer.putString(this.getClassSignature());
+		serializer.putInt(this.getObjectId());
+		serializer.putString(this.getInterface());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**
@@ -171,17 +208,6 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -208,5 +234,6 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	
 	public final String getInterface() {
 		return this._interface;
-	}	
+	}
+	
 }

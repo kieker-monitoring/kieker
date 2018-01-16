@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeoutException;
 
 import com.rabbitmq.client.Channel;
@@ -33,7 +32,9 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.record.misc.RegistryRecord;
+import kieker.common.util.thread.DaemonThreadFactory;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
 import kieker.monitoring.registry.RegisterAdapter;
@@ -161,7 +162,7 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 		// serialized monitoringRecord
 		recordBuffer.putInt(this.writerRegistry.getId(recordClassName));
 		recordBuffer.putLong(monitoringRecord.getLoggingTimestamp());
-		monitoringRecord.writeBytes(recordBuffer, this.writeBytesAdapter);
+		monitoringRecord.serialize(DefaultValueSerializer.create(recordBuffer, this.writeBytesAdapter));
 
 		this.publishBuffer(recordBuffer);
 	}
@@ -189,11 +190,13 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 	}
 
 	private void publishBuffer(final ByteBuffer localBuffer) {
-		localBuffer.flip();
-		final int dataSize = localBuffer.limit();
-		final byte[] data = new byte[dataSize];
+		final int dataSize = localBuffer.position();
+		final byte[] data = new byte[dataSize];		
 		System.arraycopy(localBuffer.array(), localBuffer.arrayOffset(), data, 0, dataSize);
 
+		// Reset the buffer position
+		localBuffer.position(0);
+		
 		try {
 			this.channel.basicPublish(this.exchangeName, this.queueName, null, data);
 		} catch (final IOException e) {
@@ -210,29 +213,4 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 		}
 	}
 
-	/**
-	 * A thread factory that creates daemon threads. The default thread parameters are based on
-	 * the default thread factory.
-	 *
-	 * @author Holger Knoche
-	 *
-	 * @since 1.12
-	 */
-	private static class DaemonThreadFactory implements ThreadFactory {
-
-		DaemonThreadFactory() {
-			// Do nothing
-		}
-
-		@Override
-		public Thread newThread(final Runnable runnable) {
-			final Thread thread = new Thread(runnable);
-
-			thread.setDaemon(true);
-			thread.setPriority(Thread.NORM_PRIORITY);
-
-			return thread;
-		}
-
-	}
 }

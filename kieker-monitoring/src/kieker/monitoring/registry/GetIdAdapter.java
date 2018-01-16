@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,9 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.IRegistryRecordReceiver;
 
 /**
+ * This adapter allows to use the new WriterRegistry with the legacy IRegistry in
+ * {@link AbstractMonitoringRecord.serialize(..)}.
+ *
  * @param <E>
  *            the type of the values in the passed registry
  *
@@ -37,12 +40,12 @@ public class GetIdAdapter<E> implements IRegistry<E> {
 
 	@Override
 	public long getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.writerRegistry.getId();
 	}
 
 	@Override
 	public int get(final E value) {
+		this.writerRegistry.register(value);
 		return this.writerRegistry.getId(value);
 	}
 

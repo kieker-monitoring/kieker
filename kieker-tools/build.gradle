@@ -1,14 +1,22 @@
 apply plugin: 'eclipse'
 
+configurations {
+	resultJar	// all dependencies in this config are included into all jars. This is necessary for the scripts in bin/ to work, e.g., convertLoggingTimestamp.
+}
+
 dependencies {
+	resultJar 'commons-cli:commons-cli:1.4'
+	resultJar 'com.beust:jcommander:1.27'
+
 	compile project(':kieker-common')
 	compile project(':kieker-analysis')
-	compile project(':kieker-monitoring')
+	compile project(':kieker-monitoring')	
 
-	compile resolveLibrary('commons-cli-*.jar')
-	compile resolveLibrary('jgraphx-*.jar')
-	compile resolveLibrary('commons-math3-*.jar')
-	compile resolveLibrary('commons-lang3-*.jar')
+	compile 'org.apache.commons:commons-math3:3.6.1'	// used by OPAD
+	compile 'org.apache.commons:commons-lang3:3.6'		// used by OPAD
+	compile configurations.resultJar
+
+	compile resolveLibrary('jgraphx-*.jar')				// this artifact is not available on our repositories
 	compile resolveLibrary('Rsession-*.jar')
 	compile resolveLibrary('Rserve-*.jar')
 	compile resolveLibrary('REngine-*.jar')
@@ -26,7 +34,7 @@ dependencies {
 	// this project depends on the tests of kieker-analysis, e.g., it requires the class NamedListWriter
 	testCompile project (path: ':kieker-monitoring', configuration: 'testArchives')
 
-	testRuntime resolveLibrary('derby-*.jar')
+	//testRuntime org.apache.derby:derby:10.13.1.1
 	testRuntime resolveLibrary('geronimo-j2ee-management_1.1_spec-*.jar')
 	testRuntime resolveLibrary('kahadb-*.jar')
 	testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')

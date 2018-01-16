@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,12 @@
 
 package kieker.common.record.factory.old;
 
-import java.nio.ByteBuffer;
-
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * Represents a record factory for a record that does not have a dedicated record factory.
@@ -40,11 +38,10 @@ public final class RecordFactoryWrapper implements IRecordFactory<IMonitoringRec
 		this.recordClassName = recordClassName;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public IMonitoringRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+	public IMonitoringRecord create(final IValueDeserializer deserializer) {
 		try {
-			return AbstractMonitoringRecord.createFromByteBuffer(this.recordClassName, buffer, stringRegistry);
+			return AbstractMonitoringRecord.createFromDeserializer(this.recordClassName, deserializer);
 		} catch (final MonitoringRecordException e) {
 			throw new RecordInstantiationException(e);
 		}

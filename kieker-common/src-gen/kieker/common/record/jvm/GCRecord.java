@@ -1,15 +1,31 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.jvm.AbstractJVMRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Nils Christian Ehmke
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.10
  */
@@ -34,12 +50,21 @@ public class GCRecord extends AbstractJVMRecord  {
 		long.class, // GCRecord.collectionTimeMS
 	};
 	
-	/** user-defined constants */
 	
-	/** default constants */
+	/** default constants. */
 	public static final String GC_NAME = "";
 	
-	/** property declarations */
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"vmName",
+		"gcName",
+		"collectionCount",
+		"collectionTimeMS",
+	};
+	
+	/** property declarations. */
 	private final String gcName;
 	private final long collectionCount;
 	private final long collectionTimeMS;
@@ -73,7 +98,10 @@ public class GCRecord extends AbstractJVMRecord  {
 	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #GCRecord(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public GCRecord(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
 		this.gcName = (String) values[3];
@@ -88,7 +116,10 @@ public class GCRecord extends AbstractJVMRecord  {
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #GCRecord(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected GCRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
 		this.gcName = (String) values[3];
@@ -96,26 +127,25 @@ public class GCRecord extends AbstractJVMRecord  {
 		this.collectionTimeMS = (Long) values[5];
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
+	 * @param deserializer
+	 *            The deserializer to use
 	 */
-	public GCRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.gcName = stringRegistry.get(buffer.getInt());
-		this.collectionCount = buffer.getLong();
-		this.collectionTimeMS = buffer.getLong();
+	public GCRecord(final IValueDeserializer deserializer) {
+		super(deserializer);
+		this.gcName = deserializer.getString();
+		this.collectionCount = deserializer.getLong();
+		this.collectionTimeMS = deserializer.getLong();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -126,7 +156,6 @@ public class GCRecord extends AbstractJVMRecord  {
 			this.getCollectionTimeMS()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -136,26 +165,33 @@ public class GCRecord extends AbstractJVMRecord  {
 		stringRegistry.get(this.getVmName());
 		stringRegistry.get(this.getGcName());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(stringRegistry.get(this.getVmName()));
-		buffer.putInt(stringRegistry.get(this.getGcName()));
-		buffer.putLong(this.getCollectionCount());
-		buffer.putLong(this.getCollectionTimeMS());
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
+		serializer.putLong(this.getTimestamp());
+		serializer.putString(this.getHostname());
+		serializer.putString(this.getVmName());
+		serializer.putString(this.getGcName());
+		serializer.putLong(this.getCollectionCount());
+		serializer.putLong(this.getCollectionTimeMS());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**
@@ -174,17 +210,6 @@ public class GCRecord extends AbstractJVMRecord  {
 	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 	
@@ -210,13 +235,16 @@ public class GCRecord extends AbstractJVMRecord  {
 	
 	public final String getGcName() {
 		return this.gcName;
-	}	
+	}
+	
 	
 	public final long getCollectionCount() {
 		return this.collectionCount;
-	}	
+	}
+	
 	
 	public final long getCollectionTimeMS() {
 		return this.collectionTimeMS;
-	}	
+	}
+	
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,15 @@ package kieker.test.common.junit;
 
 import java.io.File;
 import java.lang.reflect.Modifier;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import org.apache.cxf.helpers.FileUtils;
+import kieker.common.util.filesystem.FSUtil;
 
 /**
- * This abstract class is the base for all other dynamic JUnit tests within the system. Those are tests which search for example for specific classes in the soure
- * directory.
+ * This abstract class is the base for all other dynamic JUnit tests within the system. Those are tests which search for
+ * example for specific classes in the source directory.
  * 
  * @author Nils Christian Ehmke
  * 
@@ -35,29 +36,34 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 
 	private static final String DIR_NAME_TESTS = "test";
 	private static final String DIR_NAME_SOURCES = "src";
-	private static final String PATTERN_JAVA_SOURCE_FILES = ".*java";
-	private static final String PATTERN_JAVA_TEST_FILES = ".*Test.*java";
-	private static final String PATTERN_JUNIT_PACKAGE_NAME = ".*junit.*";
+	private static final String REGEX_PATTERN_JAVA_SOURCE_FILES = ".*java";
+	private static final String REGEX_PATTERN_JAVA_TEST_FILES = ".*Test.*java";
+	private static final String REGEX_PATTERN_JUNIT_PACKAGE_NAME = ".*junit.*";
 
 	protected Collection<Class<?>> deliverAllAvailableClassesFromSourceDirectory() throws ClassNotFoundException {
 		final String dirNameSourcesNormalized = super.modulePathToWorkingPath(DIR_NAME_SOURCES);
 
-		return this.transformClassNameToClasses(this.transformFilesToClassNames(this.listSourceFiles(dirNameSourcesNormalized, PATTERN_JAVA_SOURCE_FILES)));
+		final Collection<File> javaFiles = this.listSourceFiles(dirNameSourcesNormalized,
+				REGEX_PATTERN_JAVA_SOURCE_FILES);
+		return this.transformClassNameToClasses(this.transformFilesToClassNames(javaFiles));
 	}
 
-	protected Collection<Class<?>> deliverAllAvailableClassesFromTestDirectoryInJUnitPackage() throws ClassNotFoundException {
+	protected Collection<Class<?>> deliverAllAvailableClassesFromTestDirectoryInJUnitPackage()
+			throws ClassNotFoundException {
 		final String dirNameTestsNormalized = super.modulePathToWorkingPath(DIR_NAME_TESTS);
 
-		return this.transformClassNameToClasses(this.transformFilesToClassNames(
-				AbstractDynamicKiekerTest.filterOutFilesNotMatchingFullQualifiedPathName(PATTERN_JUNIT_PACKAGE_NAME,
-						this.listSourceFiles(dirNameTestsNormalized, PATTERN_JAVA_TEST_FILES))));
+		final Collection<File> javaTestFiles = this.listSourceFiles(dirNameTestsNormalized,
+				REGEX_PATTERN_JAVA_TEST_FILES);
+		return this.transformClassNameToClasses(this.transformFilesToClassNames(AbstractDynamicKiekerTest
+				.filterOutFilesNotMatchingFullQualifiedPathName(REGEX_PATTERN_JUNIT_PACKAGE_NAME, javaTestFiles)));
 	}
 
-	private static Collection<File> filterOutFilesNotMatchingFullQualifiedPathName(final String pattern, final Collection<File> files) {
+	private static Collection<File> filterOutFilesNotMatchingFullQualifiedPathName(final String regExPattern,
+			final Collection<File> files) {
 		final Collection<File> result = new LinkedList<File>();
 
 		for (final File file : files) {
-			if (file.getAbsolutePath().matches(pattern)) {
+			if (file.getAbsolutePath().matches(regExPattern)) {
 				result.add(file);
 			}
 		}
@@ -65,8 +71,8 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 		return result;
 	}
 
-	private Collection<File> listSourceFiles(final String directoryName, final String filePattern) {
-		return FileUtils.getFilesRecurse(new File(directoryName), filePattern);
+	private Collection<File> listSourceFiles(final String directoryName, final String regexFilePattern) {
+		return FSUtil.listFilesRecursively(Paths.get(directoryName), regexFilePattern);
 	}
 
 	private Collection<String> transformFilesToClassNames(final Collection<File> files) {
@@ -84,7 +90,8 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 		return result;
 	}
 
-	private Collection<Class<?>> transformClassNameToClasses(final Collection<String> classNames) throws ClassNotFoundException {
+	private Collection<Class<?>> transformClassNameToClasses(final Collection<String> classNames)
+			throws ClassNotFoundException {
 		final Collection<Class<?>> result = new LinkedList<Class<?>>();
 
 		for (final String className : classNames) {
@@ -106,7 +113,8 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 		return result;
 	}
 
-	protected Collection<Class<?>> filterOutClassesNotExtending(final Class<?> superClass, final Collection<Class<?>> classes) {
+	protected Collection<Class<?>> filterOutClassesNotExtending(final Class<?> superClass,
+			final Collection<Class<?>> classes) {
 		final Collection<Class<?>> result = new LinkedList<Class<?>>();
 
 		for (final Class<?> clazz : classes) {
@@ -118,7 +126,8 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 		return result;
 	}
 
-	public Collection<Class<?>> filterOutClassesExtending(final Class<AbstractKiekerTest> superClass, final Collection<Class<?>> classes) {
+	public Collection<Class<?>> filterOutClassesExtending(final Class<AbstractKiekerTest> superClass,
+			final Collection<Class<?>> classes) {
 		final Collection<Class<?>> result = new LinkedList<Class<?>>();
 
 		for (final Class<?> clazz : classes) {
@@ -130,7 +139,8 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 		return result;
 	}
 
-	protected Collection<Class<?>> filterOutClassesNotMatchingFullQualifiedClassNamePattern(final String pattern, final Collection<Class<?>> classes) {
+	protected Collection<Class<?>> filterOutClassesNotMatchingFullQualifiedClassNamePattern(final String pattern,
+			final Collection<Class<?>> classes) {
 		final Collection<Class<?>> result = new LinkedList<Class<?>>();
 
 		for (final Class<?> clazz : classes) {

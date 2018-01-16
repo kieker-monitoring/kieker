@@ -106,7 +106,11 @@ public class KafkaReader extends AbstractRawDataReader {
 		
 		configuration.setProperty(CONFIG_PROPERTY_TOPIC_NAME, this.topicName);
 		configuration.setProperty(CONFIG_PROPERTY_BOOTSTRAP_SERVERS, this.bootstrapServers);
-		configuration.setProperty(CONFIG_PROPERTY_GROUP_ID, this.groupId);
+		
+		if (this.groupId != null) {
+			configuration.setProperty(CONFIG_PROPERTY_GROUP_ID, this.groupId);
+		}
+		
 		configuration.setProperty(CONFIG_PROPERTY_AUTO_COMMIT, this.enableAutoCommit);
 		configuration.setProperty(CONFIG_PROPERTY_AUTO_COMMIT_INTERVAL_MS, this.autoCommitIntervalMs);
 		configuration.setProperty(CONFIG_PROPERTY_SESSION_TIMEOUT_MS, this.sessionTimeoutMs);
@@ -121,7 +125,7 @@ public class KafkaReader extends AbstractRawDataReader {
 		if (!superInitSuccessful) {
 			return false;
 		}
-		
+				
 		final Properties properties = new Properties();
 		
 		properties.put("bootstrap.servers", this.bootstrapServers);

@@ -1,0 +1,21 @@
+package kieker.common.record.flow.thread
+
+import kieker.common.record.flow.AbstractEvent
+import kieker.common.record.flow.IThreadBasedRecord
+import kieker.common.record.flow.IOperationSignature
+import kieker.common.record.flow.IClassSignature
+import kieker.common.record.flow.IExceptionRecord
+
+@author 'Christian Wulf' @since '1.13'
+abstract entity AbstractThreadBasedEvent extends AbstractEvent : IThreadBasedRecord, IOperationSignature, IClassSignature 
+
+@author 'Christian Wulf' @since '1.13'
+entity BeforeThreadBasedEvent extends AbstractThreadBasedEvent
+
+@author 'Christian Wulf' @since '1.13'
+entity AfterThreadBasedEvent extends AbstractThreadBasedEvent
+
+@author 'Christian Wulf' @since '1.13'
+entity AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent : IExceptionRecord
+
+

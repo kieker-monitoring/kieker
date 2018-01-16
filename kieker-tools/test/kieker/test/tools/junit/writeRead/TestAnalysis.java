@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ public class TestAnalysis {
 
 		this.analysisController.connect(reader, outputPortName, this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 
-		this.thread = new Thread() {
+		this.thread = new Thread("TestAnalysis thread") {
 			@Override
 			public void run() {
 				try {

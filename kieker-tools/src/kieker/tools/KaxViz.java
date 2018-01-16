@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -264,7 +264,7 @@ public final class KaxViz extends AbstractCommandLineTool {
 			graphComponent.setConnectable(false); // Inhibit edge creation in the graph.
 			graphComponent.setGridVisible(true); // Show the grid
 			graphComponent.setFoldingEnabled(false); // prevent folding of vertexes
-			new com.mxgraph.swing.handler.mxRubberband(graphComponent).isEnabled(); // add rubberband selection
+			new com.mxgraph.swing.handler.mxRubberband(graphComponent); // add rubberband selection
 			this.getContentPane().add(graphComponent);
 
 			// add the actual graph

@@ -208,7 +208,7 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.analysis.plugin.reader.jms.JMSReader" />
+		<Class name="kieker.analysis.plugin.reader.jms.JmsReader" />
 		<Method name="read" params="" returns="boolean" />
 		<Bug pattern="REC_CATCH_EXCEPTION" />
 	</Match>
@@ -220,7 +220,7 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.analysis.plugin.reader.jmx.JMXReader" />
+		<Class name="kieker.analysis.plugin.reader.jmx.JmxReader" />
 		<Method name="read2" params="" returns="boolean" />
 		<Bug pattern="DE_MIGHT_IGNORE" />
 	</Match>

@@ -1,16 +1,32 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.3
  */
@@ -31,15 +47,22 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		double.class, // ResourceUtilizationRecord.utilization
 	};
 	
-	/** user-defined constants */
 	
-	/** default constants */
+	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String RESOURCE_NAME = "";
 	public static final double UTILIZATION = 0.0;
 	
-	/** property declarations */
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"resourceName",
+		"utilization",
+	};
+	
+	/** property declarations. */
 	private final long timestamp;
 	private final String hostname;
 	private final String resourceName;
@@ -70,7 +93,10 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #ResourceUtilizationRecord(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public ResourceUtilizationRecord(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.timestamp = (Long) values[0];
@@ -86,7 +112,10 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #ResourceUtilizationRecord(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected ResourceUtilizationRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
 		this.timestamp = (Long) values[0];
@@ -95,26 +124,25 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		this.utilization = (Double) values[3];
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
+	 * @param deserializer
+	 *            The deserializer to use
 	 */
-	public ResourceUtilizationRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.resourceName = stringRegistry.get(buffer.getInt());
-		this.utilization = buffer.getDouble();
+	public ResourceUtilizationRecord(final IValueDeserializer deserializer) {
+		this.timestamp = deserializer.getLong();
+		this.hostname = deserializer.getString();
+		this.resourceName = deserializer.getString();
+		this.utilization = deserializer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -123,7 +151,6 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 			this.getUtilization()
 		};
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -132,24 +159,31 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getResourceName());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(stringRegistry.get(this.getResourceName()));
-		buffer.putDouble(this.getUtilization());
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
+		serializer.putLong(this.getTimestamp());
+		serializer.putString(this.getHostname());
+		serializer.putString(this.getResourceName());
+		serializer.putDouble(this.getUtilization());
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
 	}
 	
 	/**
@@ -173,17 +207,6 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-	
-	/**
-	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object obj) {
@@ -202,17 +225,21 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	
 	public final long getTimestamp() {
 		return this.timestamp;
-	}	
+	}
+	
 	
 	public final String getHostname() {
 		return this.hostname;
-	}	
+	}
+	
 	
 	public final String getResourceName() {
 		return this.resourceName;
-	}	
+	}
+	
 	
 	public final double getUtilization() {
 		return this.utilization;
-	}	
+	}
+	
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,6 +60,11 @@ public class CountOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 
 	@Override
 	public String toString() {
-		return "Number of failed inserts: " + this.getNumFailedInserts();
+		final StringBuilder builder = new StringBuilder()
+			.append(this.getClass())
+			.append("\n\t\t")
+			.append("Number of failed inserts: ")
+			.append(this.getNumFailedInserts());
+		return builder.toString();
 	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,13 @@ public class TerminateOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 		} else {
 			return true;
 		}
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder()
+			.append(this.getClass());
+		return builder.toString();
 	}
 
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,14 @@
 package kieker.test.tools.junit.writeRead.explorviz;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Micky Singh Multani
- * 
+ *
  * @since 1.11
  */
 public class CustomAfterOperationEvent implements IMonitoringRecord {
@@ -73,12 +72,7 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 	}
 
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		// No code necessary
-	}
-
-	@Override
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		// No code necessary
 	}
 
@@ -90,6 +84,11 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 	@Override
 	public Class<?>[] getValueTypes() { // NOPMD (not used method)
 		return (Class<?>[]) this.toArray();
+	}
+	
+	@Override
+	public String[] getValueNames() {
+		return new String[] { "timestamp", "traceId", "orderIndex" };
 	}
 
 	@Override

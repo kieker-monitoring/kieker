@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
-
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
 
 import kieker.tools.opad.record.StorableDetectionResult;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
+
 
 /**
  * @author Thomas Duellmann
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.10
  */
 public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
+	private static final long serialVersionUID = 3489846495430494003L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // StorableDetectionResult.applicationName
 			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.value
@@ -39,7 +40,6 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.score
 			 + TYPE_SIZE_DOUBLE // ExtendedStorableDetectionResult.anomalyThreshold
 	;
-	private static final long serialVersionUID = 3489846495430494003L;
 	
 	public static final Class<?>[] TYPES = {
 		String.class, // StorableDetectionResult.applicationName
@@ -50,11 +50,21 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		double.class, // ExtendedStorableDetectionResult.anomalyThreshold
 	};
 	
-	/* user-defined constants */
-	/* default constants */
-	/* property declarations */
+	
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"applicationName",
+		"value",
+		"timestamp",
+		"forecast",
+		"score",
+		"anomalyThreshold",
+	};
+	
+	/** property declarations. */
 	private final double anomalyThreshold;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -82,12 +92,15 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #ExtendedStorableDetectionResult(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public ExtendedStorableDetectionResult(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
 		this.anomalyThreshold = (Double) values[5];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -95,30 +108,32 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #ExtendedStorableDetectionResult(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected ExtendedStorableDetectionResult(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
 		this.anomalyThreshold = (Double) values[5];
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
+	 * @param deserializer
+	 *            The deserializer to use
 	 */
-	public ExtendedStorableDetectionResult(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.anomalyThreshold = buffer.getDouble();
+	public ExtendedStorableDetectionResult(final IValueDeserializer deserializer) {
+		super(deserializer);
+		this.anomalyThreshold = deserializer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
 			this.getApplicationName(),
@@ -129,7 +144,6 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 			this.getAnomalyThreshold()
 		};
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -137,20 +151,19 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getApplicationName());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putInt(stringRegistry.get(this.getApplicationName()));
-		buffer.putDouble(this.getValue());
-		buffer.putLong(this.getTimestamp());
-		buffer.putDouble(this.getForecast());
-		buffer.putDouble(this.getScore());
-		buffer.putDouble(this.getAnomalyThreshold());
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
+		serializer.putString(this.getApplicationName());
+		serializer.putDouble(this.getValue());
+		serializer.putLong(this.getTimestamp());
+		serializer.putDouble(this.getForecast());
+		serializer.putDouble(this.getScore());
+		serializer.putDouble(this.getAnomalyThreshold());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -158,7 +171,15 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -166,6 +187,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -176,18 +198,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -207,7 +218,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		if (isNotEqual(this.getAnomalyThreshold(), castedRecord.getAnomalyThreshold())) return false;
 		return true;
 	}
-
+	
 	public final double getAnomalyThreshold() {
 		return this.anomalyThreshold;
 	}

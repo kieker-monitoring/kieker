@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.collector.ChunkingCollector;
 import kieker.monitoring.writer.serializer.BinarySerializer;
+
 import kieker.test.monitoring.junit.writer.collector.TestRawDataStorage; // NOCS
 import kieker.test.monitoring.junit.writer.collector.TestRawDataWriter; // NOCS
 
