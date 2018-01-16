@@ -17,7 +17,6 @@
 package kieker.test.analysisteetime.junit.plugin.filter.select;
 
 import java.nio.BufferOverflowException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +26,7 @@ import org.junit.Test;
 import kieker.analysisteetime.plugin.filter.select.timestampfilter.TimestampFilter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -57,8 +57,13 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		}
 
 		@Override
-		public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-			// not used here
+		public void serialize(IValueSerializer serializer) throws BufferOverflowException {
+			throw new UnsupportedOperationException("not used in this test");
+		}
+
+		@Override
+		public String[] getValueNames() {
+			throw new UnsupportedOperationException("not used in this test");
 		}
 
 		@Override
@@ -68,8 +73,10 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 
 		@Override
 		public void registerStrings(final IRegistry<String> stringRegistry) {
-			// not needed for this test}
+			throw new UnsupportedOperationException("not used in this test");
 		}
+
+		
 	};
 
 	/**
