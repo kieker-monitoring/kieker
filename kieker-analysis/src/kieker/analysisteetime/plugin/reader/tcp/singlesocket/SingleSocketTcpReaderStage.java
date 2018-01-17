@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kieker.analysisteetime.plugin.reader.tcp;
+package kieker.analysisteetime.plugin.reader.tcp.singlesocket;
 
-import kieker.analysisteetime.plugin.reader.tcp.util.IRecordReceivedListener;
-import kieker.analysisteetime.plugin.reader.tcp.util.SingleSocketRecordReader;
+import kieker.analysisteetime.plugin.reader.IRecordReceivedListener;
 import kieker.common.record.IMonitoringRecord;
 
 import teetime.framework.AbstractProducerStage;
@@ -47,7 +46,7 @@ public final class SingleSocketTcpReaderStage extends AbstractProducerStage<IMon
 	 *            capacity of the receiving buffer
 	 */
 	public SingleSocketTcpReaderStage(final int port, final int bufferCapacity) {
-		this.tcpStreamReader = new SingleSocketRecordReader(port, bufferCapacity, logger, this);
+		this.tcpStreamReader = new SingleSocketTcpLogic(port, bufferCapacity, logger, this);
 	}
 
 	@Override

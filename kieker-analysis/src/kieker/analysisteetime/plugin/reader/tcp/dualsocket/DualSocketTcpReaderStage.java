@@ -13,37 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kieker.analysisteetime.plugin.reader.tcp;
+package kieker.analysisteetime.plugin.reader.tcp.dualsocket;
 
 import java.nio.ByteBuffer;
 
-import teetime.framework.AbstractProducerStage;
-import teetime.util.io.network.AbstractTcpReader;
-
-import kieker.analysisteetime.plugin.reader.tcp.util.AbstractRecordTcpReader;
+import kieker.analysisteetime.plugin.reader.tcp.singlesocket.SingleSocketTcpReaderStage;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.registry.ILookup;
 import kieker.common.util.registry.Lookup;
 
+import teetime.framework.AbstractProducerStage;
+import teetime.util.stage.io.network.AbstractTcpReader;
+
 /**
- * This is a reader which reads the records from a TCP port.
+ * This is a reader which reads the records from two TCP ports.
  *
  * @author Jan Waller, Nils Christian Ehmke, Christian Wulf
  *
+ * @deprecated Since 1.13. Use {@link SingleSocketTcpReaderStage} instead. This {@link DualSocketTcpReaderStage} will be
+ *             kept for research purposes.
  */
-public final class TcpReaderStage extends AbstractProducerStage<IMonitoringRecord> {
+@Deprecated
+public final class DualSocketTcpReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 
 	private final ILookup<String> stringRegistry = new Lookup<String>();
-	private final AbstractRecordTcpReader tcpMonitoringRecordReader;
+	private final AbstractTcpReader tcpMonitoringRecordReader;
 	private final AbstractTcpReader tcpStringRecordReader;
 
 	private Thread tcpStringRecordReaderThread;
 
 	/**
-	 * Default constructor with <code>port1=10133</code>, <code>bufferCapacity=65535</code>, and <code>port2=10134</code>
+	 * Default constructor with <code>port1=10133</code>, <code>bufferCapacity=65535</code>, and
+	 * <code>port2=10134</code>
 	 */
-	public TcpReaderStage() {
+	public DualSocketTcpReaderStage() {
 		this(10133, 65535, 10134);
 	}
 
@@ -56,17 +60,13 @@ public final class TcpReaderStage extends AbstractProducerStage<IMonitoringRecor
 	 * @param bufferCapacity
 	 *            capacity of the receiving buffer
 	 */
-	public TcpReaderStage(final int port1, final int bufferCapacity, final int port2) {
+	public DualSocketTcpReaderStage(final int port1, final int bufferCapacity, final int port2) {
 		super();
 
-		this.tcpMonitoringRecordReader = new AbstractRecordTcpReader(port1, bufferCapacity, logger, stringRegistry) {
-			@Override
-			protected void onRecordReceived(final IMonitoringRecord record) {
-				outputPort.send(record);
-			}
-		};
+		this.tcpMonitoringRecordReader = new DualSocketTcpLogic(port1, bufferCapacity, this.logger, stringRegistry,
+				this.outputPort);
 
-		this.tcpStringRecordReader = new AbstractTcpReader(port2, bufferCapacity, logger) {
+		this.tcpStringRecordReader = new AbstractTcpReader(port2, bufferCapacity, this.logger) {
 			@Override
 			protected boolean onBufferReceived(final ByteBuffer buffer) {
 				RegistryRecord.registerRecordInRegistry(buffer, stringRegistry);

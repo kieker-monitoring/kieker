@@ -9,7 +9,7 @@ import org.hamcrest.core.IsEqual;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import kieker.analysisteetime.plugin.reader.tcp.TcpReaderStage;
+import kieker.analysisteetime.plugin.reader.tcp.dualsocket.DualSocketTcpReaderStage;
 import kieker.common.record.IMonitoringRecord;
 
 import teetime.framework.test.StageTester;
@@ -21,7 +21,7 @@ public class TcpReaderStageTest {
 	public void testNonStringRecordTransmission() throws Exception {
 		final List<IMonitoringRecord> receivedRecords = new ArrayList<IMonitoringRecord>();
 
-		final TcpReaderStage stage = new TcpReaderStage();
+		final DualSocketTcpReaderStage stage = new DualSocketTcpReaderStage();
 		StageTester.test(stage).and()
 				.receive(receivedRecords).from(stage.getOutputPort())
 				.start();

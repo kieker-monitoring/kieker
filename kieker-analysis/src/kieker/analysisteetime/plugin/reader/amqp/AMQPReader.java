@@ -53,6 +53,8 @@ public class AMQPReader extends AbstractProducerStage<IMonitoringRecord> {
 
 	/**
 	 * Terminates the reader logic by returning from read method and terminates the execution of the stage.
+	 * <p>
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void terminateStage() {

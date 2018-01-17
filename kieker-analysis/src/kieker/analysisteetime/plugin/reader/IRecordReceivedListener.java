@@ -1,4 +1,4 @@
-package kieker.analysisteetime.plugin.reader.tcp.util;
+package kieker.analysisteetime.plugin.reader;
 
 import kieker.common.record.IMonitoringRecord;
 
