@@ -4,6 +4,10 @@ configurations {
 	resultJar	// all dependencies in this config are included into all jars. This is necessary for the scripts in bin/ to work, e.g., convertLoggingTimestamp.
 }
 
+// Since the analysis component requires JRE 1.8, this tools component requires JRE 1.8, too.
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 dependencies {
 	resultJar 'commons-cli:commons-cli:1.4'
 	resultJar 'com.beust:jcommander:1.27'

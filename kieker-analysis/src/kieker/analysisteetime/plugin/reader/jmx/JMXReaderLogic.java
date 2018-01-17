@@ -33,7 +33,6 @@ import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
 import kieker.common.logging.Log;
-import kieker.common.record.IMonitoringRecord;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -52,7 +51,7 @@ public class JMXReaderLogic {
 	private final CountDownLatch cdLatch = new CountDownLatch(1);
 
 	private final Log log;
-	private final JMXReader jmxReaderStage;
+	private final NotificationListener listener;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -74,8 +73,9 @@ public class JMXReaderLogic {
 	 * @param jmxReaderStage
 	 *            The actual teetime stage which uses this class.
 	 */
-	public JMXReaderLogic(final boolean silentreconnect, final JMXServiceURL serviceURL, final String domain, final String logname,
-			final int port, final String server, final Log log, final JMXReader jmxReaderStage) {
+	public JMXReaderLogic(final boolean silentreconnect, final JMXServiceURL serviceURL, final String domain,
+			final String logname, final int port, final String server, final Log log,
+			final NotificationListener listener) {
 		final String tmpServiceURL;
 		if (port > 0) {
 			tmpServiceURL = "service:jmx:rmi:///jndi/rmi://" + server + ":" + port + "/jmxrmi";
@@ -83,7 +83,8 @@ public class JMXReaderLogic {
 			tmpServiceURL = serviceURL.toString();
 		}
 		if (tmpServiceURL.length() == 0) {
-			throw new IllegalArgumentException("JMXReader has not sufficient parameters. Set either port or serviceURL");
+			throw new IllegalArgumentException(
+					"JMXReader has not sufficient parameters. Set either port or serviceURL");
 		}
 		try {
 			this.serviceURL = new JMXServiceURL(tmpServiceURL);
@@ -96,7 +97,7 @@ public class JMXReaderLogic {
 		this.silentreconnect = silentreconnect;
 
 		this.log = log;
-		this.jmxReaderStage = jmxReaderStage;
+		this.listener = listener;
 	}
 
 	public void terminate() {
@@ -110,9 +111,9 @@ public class JMXReaderLogic {
 		}
 		boolean ret = true;
 		JMXConnector jmx = null;
-		MBeanServerConnection mbServer = null;
+		MBeanServerConnection connection = null;
 		ServerNotificationListener serverNotificationListener = null;
-		LogNotificationListener logNotificationListener = null;
+		NotificationListener logNotificationListener = null;
 		try {
 			// Connect to the Server
 			try {
@@ -126,9 +127,10 @@ public class JMXReaderLogic {
 			}
 			serverNotificationListener = new ServerNotificationListener();
 			jmx.addConnectionNotificationListener(serverNotificationListener, null, null);
-			mbServer = jmx.getMBeanServerConnection();
-			logNotificationListener = new LogNotificationListener();
-			mbServer.addNotificationListener(this.monitoringLog, logNotificationListener, null, null);
+			connection = jmx.getMBeanServerConnection();
+
+			logNotificationListener = this.listener;
+			connection.addNotificationListener(this.monitoringLog, logNotificationListener, null, null);
 			this.log.info("Connected to JMX Server, ID: " + jmx.getConnectionId());
 
 			// Waiting
@@ -145,7 +147,7 @@ public class JMXReaderLogic {
 		} finally {
 			try {
 				if (logNotificationListener != null) {
-					mbServer.removeNotificationListener(this.monitoringLog, logNotificationListener);
+					connection.removeNotificationListener(this.monitoringLog, logNotificationListener);
 				}
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 				if (this.log.isDebugEnabled()) {
@@ -180,7 +182,7 @@ public class JMXReaderLogic {
 			JMXConnector jmx = null;
 			MBeanServerConnection mbServer = null;
 			ServerNotificationListener serverNotificationListener = null;
-			LogNotificationListener logNotificationListener = null;
+			NotificationListener logNotificationListener = null;
 			try {
 				// Connect to the Server
 				try {
@@ -192,7 +194,7 @@ public class JMXReaderLogic {
 				serverNotificationListener = new ServerNotificationListener();
 				jmx.addConnectionNotificationListener(serverNotificationListener, null, null);
 				mbServer = jmx.getMBeanServerConnection();
-				logNotificationListener = new LogNotificationListener();
+				logNotificationListener = this.listener;
 				mbServer.addNotificationListener(this.monitoringLog, logNotificationListener, null, null);
 				this.log.info("Connected to JMX Server, ID: " + jmx.getConnectionId());
 
@@ -247,30 +249,8 @@ public class JMXReaderLogic {
 		this.cdLatch.countDown();
 	}
 
-	final void deliverIndirect(final IMonitoringRecord record) { // NOPMD (package visible for inner class)
-		this.jmxReaderStage.deliverRecord(record);
-	}
-
 	protected Log getLog() {
 		return this.log;
-	}
-
-	/**
-	 * @author Jan waller
-	 */
-	private final class LogNotificationListener implements NotificationListener {
-
-		public LogNotificationListener() {
-			// nothing to do
-		}
-
-		@Override
-		public final void handleNotification(final Notification notification, final Object handback) {
-			final Object data = notification.getUserData();
-			if (data instanceof IMonitoringRecord) {
-				JMXReaderLogic.this.deliverIndirect((IMonitoringRecord) data);
-			}
-		}
 	}
 
 	/**

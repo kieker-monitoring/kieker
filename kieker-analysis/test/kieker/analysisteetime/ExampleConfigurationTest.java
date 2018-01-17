@@ -15,37 +15,31 @@
  ***************************************************************************/
 package kieker.analysisteetime;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.eclipse.emf.common.util.EMap;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
-import kieker.analysisteetime.dependencygraphs.PropertyKeys;
 import kieker.analysisteetime.model.DeploymentModelPrinter;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentModel;
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
-import kieker.analysisteetime.statistics.Properties;
-import kieker.analysisteetime.statistics.Statistic;
-import kieker.analysisteetime.statistics.Statistics;
-import kieker.analysisteetime.statistics.StatisticsModel;
-import kieker.analysisteetime.statistics.Units;
 import kieker.analysisteetime.util.ComposedKey;
+
 import teetime.framework.Execution;
 
 /**
  * Class that executes the {@link ExampleConfiguration}. This is, so far, for
  * testing the current development only.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  * 
  * @since 1.13
  * 
@@ -56,18 +50,25 @@ public class ExampleConfigurationTest {
 	// public TemporaryFolder tempFolder = new TemporaryFolder();
 
 	@Test
-	public void testCurrentStateOfDevelopment() throws FileNotFoundException {
+	public void testCurrentStateOfDevelopment() throws FileNotFoundException, URISyntaxException {
+		// use the classloader to identify resources in a location-independent way
+		// from: https://stackoverflow.com/questions/24499692/access-resources-in-unit-tests
+		// => works with Eclipse and Gradle
+		final ClassLoader classLoader = ExampleConfigurationTest.class.getClassLoader();
+
 		// from within Eclipse:
 		// . = <absolute
 		// path>/kieker/kieker-analysis/build-eclipse/kieker/analysisteetime/
 		// / = <absolute path>/kieker/kieker-analysis/build-eclipse/
-		URL projectDir = ExampleConfigurationTest.class.getResource("/.");
+		final URL projectDir = ExampleConfigurationTest.class.getResource("/");
 		// final File importDirectory = new
 		// File("C:/Users/Soeren/Desktop/jedit-records/kieker-20170115-163405515-UTC-Leonard-KIEKER");
 		// final File importDirectory = new
 		// File("C:/Users/Soeren/Desktop/jedit-records/kieker-20170505-083525426-UTC-DESKTOP-UTJ4LDE-KIEKER");
-		final File importDirectory = new File(projectDir.getFile(),
-				"kieker-20170805-132412153-UTC-Nogge-PC-KIEKER-SINGLETON");
+//		final File importDirectory = new File(projectDir.getFile(),
+//				"kieker-20170805-132412153-UTC-Nogge-PC-KIEKER-SINGLETON");
+		final URL importDirectoryURL = classLoader.getResource("kieker-20170805-132412153-UTC-Nogge-PC-KIEKER-SINGLETON");
+		final File importDirectory = new File(importDirectoryURL.toURI());
 		// final File importDirectory = new
 		// File("../kieker-examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141008-101258768-UTC");
 		// final File importDirectory = new File("C:/Users/Soeren/Desktop/Neuer

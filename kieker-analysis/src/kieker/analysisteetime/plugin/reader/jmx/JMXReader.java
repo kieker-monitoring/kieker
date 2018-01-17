@@ -16,6 +16,8 @@
 
 package kieker.analysisteetime.plugin.reader.jmx;
 
+import javax.management.Notification;
+import javax.management.NotificationListener;
 import javax.management.remote.JMXServiceURL;
 
 import kieker.common.logging.LogFactory;
@@ -30,7 +32,7 @@ import teetime.framework.AbstractProducerStage;
  *
  * @since 1.4
  */
-public class JMXReader extends AbstractProducerStage<IMonitoringRecord> {
+public class JMXReader extends AbstractProducerStage<IMonitoringRecord> implements NotificationListener {
 
 	private final JMXReaderLogic readerLogic;
 
@@ -50,33 +52,33 @@ public class JMXReader extends AbstractProducerStage<IMonitoringRecord> {
 	 * @param server
 	 *            Determines the JMX server.
 	 */
-	public JMXReader(final boolean silentreconnect, final JMXServiceURL serviceURL, final String domain, final String logname,
-			final int port, final String server) {
-		this.readerLogic = new JMXReaderLogic(silentreconnect, serviceURL, domain, logname, port, server, LogFactory.getLog(JMXReader.class), this);
+	public JMXReader(final boolean silentreconnect, final JMXServiceURL serviceURL, final String domain,
+			final String logname, final int port, final String server) {
+		this.readerLogic = new JMXReaderLogic(silentreconnect, serviceURL, domain, logname, port, server,
+				LogFactory.getLog(JMXReader.class), this);
 	}
 
 	@Override
 	protected void execute() {
 		this.readerLogic.read();
+		this.terminateStage();
 	}
 
-	/**
-	 * Terminates the reader logic by returning from read method and terminates the execution of the stage.
-	 */
 	@Override
-	public void terminateStage() {
+	public void onTerminating() throws Exception {
 		this.readerLogic.terminate();
-		super.terminateStage();
+		super.onTerminating();
 	}
 
-	/**
-	 * Called from reader logic to send the read records to the output port.
-	 *
-	 * @param monitoringRecord
-	 *            The record to deliver.
-	 */
-	public void deliverRecord(final IMonitoringRecord monitoringRecord) {
+	@Override
+	public void handleNotification(Notification notification, Object handback) {
+		final Object data = notification.getUserData();
+		if (data instanceof IMonitoringRecord) {
+			this.deliverRecord((IMonitoringRecord) data);
+		}
+	}
+
+	private void deliverRecord(final IMonitoringRecord monitoringRecord) {
 		this.outputPort.send(monitoringRecord);
 	}
-
 }
