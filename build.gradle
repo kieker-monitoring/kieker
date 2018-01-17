@@ -120,7 +120,7 @@ allprojects {
     }
 
     task integrationTest(type: Test) {
-        testClassesDir = project.sourceSets.integrationTest.output.classesDir
+        testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
         classpath = project.sourceSets.integrationTest.runtimeClasspath
     }
     check.dependsOn integrationTest
