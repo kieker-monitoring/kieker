@@ -34,8 +34,9 @@ import kieker.common.util.dataformat.VariableLengthEncoding;
 import kieker.common.util.registry.IRegistry;
 
 /**
- * @author Holger Knoche
+ * Deserializer for Kieker's default binary format.
  *
+ * @author Holger Knoche
  * @since 1.13
  */
 public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
