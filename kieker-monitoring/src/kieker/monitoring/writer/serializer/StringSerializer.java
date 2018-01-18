@@ -21,6 +21,7 @@ import java.util.Collection;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.TextValueSerializer;
 import kieker.monitoring.writer.raw.IRawDataWrapper;
 
 /**
@@ -31,6 +32,8 @@ import kieker.monitoring.writer.raw.IRawDataWrapper;
  * @since 1.13
  */
 public class StringSerializer extends AbstractCharacterRecordSerializer {
+	
+	private static final char FIELD_SEPARATOR = ';';
 	
 	/**
 	 * Creates a new serializer using the given configuration.
@@ -49,11 +52,15 @@ public class StringSerializer extends AbstractCharacterRecordSerializer {
 	}
 
 	private void appendSingleRecord(final IMonitoringRecord record, final CharBuffer buffer) {
+		final TextValueSerializer serializer = TextValueSerializer.create(buffer);
+		
 		buffer.append(record.getClass().getName());
-		buffer.append(';');
+		buffer.append(FIELD_SEPARATOR);
 		buffer.append(String.valueOf(record.getLoggingTimestamp()));
-		buffer.append(';');
-		buffer.append(record.toString());
+		buffer.append(FIELD_SEPARATOR);
+		
+		record.serialize(serializer);
+		
 		buffer.append('\n');
 	}
 
@@ -67,7 +74,7 @@ public class StringSerializer extends AbstractCharacterRecordSerializer {
 
 	@Override
 	public Class<? extends IRawDataWrapper<?>> getWrapperType() {
-		// No additional wrapping required (linebreaks) 
+		// No additional wrapping required (linebreaks are already added)
 		return NopCharacterWrapper.class;
 	}
 	
