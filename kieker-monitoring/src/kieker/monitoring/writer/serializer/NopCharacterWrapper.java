@@ -10,6 +10,10 @@ import java.nio.CharBuffer;
  */
 public class NopCharacterWrapper extends AbstractCharacterDataWrapper {
 
+	public NopCharacterWrapper(final int bufferSize) {
+		// Do nothing
+	}
+	
 	@Override
 	public CharBuffer wrap(final CharBuffer data) {
 		return data;

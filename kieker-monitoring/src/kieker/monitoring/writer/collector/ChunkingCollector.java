@@ -174,26 +174,26 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 				LOG.error("Writer " + writer.getClass().getName() + " requires wrapped data, but serializer " + serializer.getClass().getName() + " does not provide a wrapper.");
 			}
 			
-			return this.createNoOpWrapperForSerializer(serializer);
+			return this.createNoOpWrapperForSerializer(serializer, bufferSize);
 		}
 
 		try {
 			return (IRawDataWrapper<B>) wrapperType.getConstructor(int.class).newInstance(bufferSize);
 		} catch (final NoSuchMethodException e) {
 			LOG.error("Wrapper type " + wrapperType.getName() + " does not provide an appropriate constructor.");
-			return this.createNoOpWrapperForSerializer(serializer);
+			return this.createNoOpWrapperForSerializer(serializer, bufferSize);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
 			LOG.error("Error instantiating wrapper " + wrapperType.getClass().getName() + " for serializer " + wrapperType.getClass().getName() + ".", e);
-			return this.createNoOpWrapperForSerializer(serializer);
+			return this.createNoOpWrapperForSerializer(serializer, bufferSize);
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	private <B extends Buffer> IRawDataWrapper<B> createNoOpWrapperForSerializer(final IMonitoringRecordSerializer serializer) {
+	private <B extends Buffer> IRawDataWrapper<B> createNoOpWrapperForSerializer(final IMonitoringRecordSerializer serializer, final int bufferSize) {
 		if (serializer.producesBinaryData()) {
-			return (IRawDataWrapper<B>) new NopBinaryWrapper();
+			return (IRawDataWrapper<B>) new NopBinaryWrapper(bufferSize);
 		} else {
-			return (IRawDataWrapper<B>) new NopCharacterWrapper();
+			return (IRawDataWrapper<B>) new NopCharacterWrapper(bufferSize);
 		}
 	}
 	

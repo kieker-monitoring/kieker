@@ -10,6 +10,10 @@ import java.nio.ByteBuffer;
  */
 public class NopBinaryWrapper extends AbstractBinaryDataWrapper {
 
+	public NopBinaryWrapper(final int bufferSize) {
+		// Do nothing
+	}
+	
 	@Override
 	public ByteBuffer wrap(final ByteBuffer data) {
 		return data;
