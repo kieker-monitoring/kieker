@@ -26,11 +26,12 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.dataformat.FormatIdentifier;
 
 /**
- * @author holger
+ * Abstract superclass for deserializers which use Kieker's binary container format.
  *
+ * @author Holger Knoche
  * @since 1.13
  */
-public abstract class AbstractContainerFormatDeserializer extends AbstractMonitoringRecordDeserializer {
+public abstract class AbstractContainerFormatDeserializer extends AbstractBinaryFormatDeserializer {
 
 	/** Container format identifier. */
 	public static final int CONTAINER_IDENTIFIER = FormatIdentifier.CONTAINER_FORMAT.getIdentifierValue();
@@ -48,7 +49,7 @@ public abstract class AbstractContainerFormatDeserializer extends AbstractMonito
 	public AbstractContainerFormatDeserializer(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
-	
+
 	@Override
 	public List<IMonitoringRecord> deserializeRecordsFromByteBuffer(final ByteBuffer buffer, final int dataSize) {
 		// Check the container identifier
@@ -65,9 +66,9 @@ public abstract class AbstractContainerFormatDeserializer extends AbstractMonito
 
 		return this.decodeRecords(buffer, (dataSize - HEADER_SIZE));
 	}
-	
+
 	@Override
-	public List<IMonitoringRecord> deserializeRecordsFromCharBuffer(CharBuffer buffer, int dataSize) throws InvalidFormatException {
+	public List<IMonitoringRecord> deserializeRecordsFromCharBuffer(final CharBuffer buffer, final int dataSize) throws InvalidFormatException {
 		throw new UnsupportedOperationException("Character data is unsupported by this reader.");
 	}
 

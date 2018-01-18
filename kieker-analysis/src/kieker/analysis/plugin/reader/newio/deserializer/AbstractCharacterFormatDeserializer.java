@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysis.plugin.reader.newio.deserializer;
 
 import java.nio.ByteBuffer;
@@ -24,27 +23,20 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * @author holger
+ * Abstract superclass for deserializers using character-based formats.
  *
- * @since 1.13
+ * @author Holger Knoche
+ * @since 2.0
  */
-public abstract class AbstractMonitoringRecordDeserializer implements IMonitoringRecordDeserializer {
+public abstract class AbstractCharacterFormatDeserializer extends AbstractMonitoringRecordDeserializer {
 
-	/**
-	 * Creates a new record deserializer.
-	 *
-	 * @param configuration
-	 *            The configuration to use
-	 * @param projectContext
-	 *            The project context to use
-	 */
-	public AbstractMonitoringRecordDeserializer(final Configuration configuration, final IProjectContext projectContext) { // NOPMD Constructor template for deserializers
-		// Constructor template
+	public AbstractCharacterFormatDeserializer(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
 
 	@Override
-	public final List<IMonitoringRecord> deserializeRecords(final ByteBuffer buffer, final int dataSize) throws InvalidFormatException {
-		return this.deserializeRecordsFromByteBuffer(buffer, dataSize);
+	public List<IMonitoringRecord> deserializeRecordsFromByteBuffer(final ByteBuffer buffer, final int dataSize) throws InvalidFormatException {
+		throw new UnsupportedOperationException("Reading binary data is unsupported by this reader.");
 	}
 
 }
