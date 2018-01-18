@@ -18,6 +18,7 @@ package kieker.common.record.io;
 
 import java.nio.ByteBuffer;
 
+import kieker.common.util.dataformat.VariableLengthEncoding;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -68,9 +69,14 @@ public class DefaultValueDeserializer implements IValueDeserializer {
 		return this.buffer.getDouble();
 	}
 
+	private int getTableIndex() {
+		// Use variable-length encoding for indexes into the string table
+		return VariableLengthEncoding.decodeInt(this.buffer);
+	}
+	
 	@Override
 	public String getString() {
-		final int stringId = this.getInt();
+		final int stringId = this.getTableIndex();
 		return this.stringRegistry.get(stringId);
 	}
 

@@ -18,6 +18,7 @@ package kieker.common.record.io;
 
 import java.nio.ByteBuffer;
 
+import kieker.common.util.dataformat.VariableLengthEncoding;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -85,9 +86,14 @@ public class DefaultValueSerializer implements IValueSerializer {
 	@Override
 	public void putString(final String value) {
 		final int stringId = this.stringRegistry.get(value);
-		this.putInt(stringId);
+		this.putTableIndex(stringId);
 	}
 
+	private void putTableIndex(final int index) {
+		// Use variable-length encoding for indexes into the string table
+		VariableLengthEncoding.encodeInt(index, this.buffer);
+	}
+	
 	@Override
 	public void putChar(final char value) {
 		this.buffer.putChar(value);
