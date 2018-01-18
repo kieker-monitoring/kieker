@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.io;
 
-import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
 /**
@@ -27,6 +26,10 @@ import java.nio.CharBuffer;
  */
 public class TextValueDeserializer implements IValueDeserializer {
 
+	private static final char ESCAPE_CHAR = '\\';
+	
+	private static final char FIELD_SEPARATOR = ';';
+	
 	private final CharBuffer buffer;
 
 	protected TextValueDeserializer(final CharBuffer buffer) {
@@ -86,28 +89,32 @@ public class TextValueDeserializer implements IValueDeserializer {
 
 	@Override
 	public byte[] getBytes(final byte[] target) {
-		final char[] charTarget = new char[target.length];
-		this.buffer.get(charTarget);
-		ByteBuffer.wrap(target).asCharBuffer().put(charTarget);
-		return target;
+		throw new UnsupportedOperationException("Reading binary data is not supported by this deserializer.");
 	}
 
 	private String readValue() {
-		final char[] charArray = new char[this.buffer.capacity()];
-		char ch;
-		boolean escape = false;
-		int i = 0;
-		do {
-			escape = false;
-			ch = this.buffer.get();
-			if ((ch == '\\') && !escape) {
-				escape = true;
+		final StringBuilder builder = new StringBuilder();
+		final CharBuffer charBuffer = this.buffer;
+
+		// Read characters until the next field separator is found or
+		// the end of the buffer is reached
+		characterLoop: while (charBuffer.position() < charBuffer.limit()) {
+			final char currentChar = charBuffer.get();
+
+			switch (currentChar) {
+			case ESCAPE_CHAR:
+				final char escapedChar = charBuffer.get();
+				builder.append(escapedChar);
+				break;
+			case FIELD_SEPARATOR:
+				break characterLoop;
+			default:
+				builder.append(currentChar);
+				break;
 			}
-			if (escape || (ch != ';')) {
-				charArray[i++] = ch;
-			}
-		} while (escape || (ch != ';'));
-		return new String(charArray);
+		}
+
+		return builder.toString();
 	}
 
 }

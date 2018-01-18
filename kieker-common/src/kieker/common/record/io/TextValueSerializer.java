@@ -25,6 +25,8 @@ import java.nio.CharBuffer;
  */
 public class TextValueSerializer implements IValueSerializer {
 
+	private static final char FIELD_SEPARATOR = ';';
+	
 	private final CharBuffer buffer;
 
 	protected TextValueSerializer(final CharBuffer buffer) {
@@ -35,58 +37,70 @@ public class TextValueSerializer implements IValueSerializer {
 		return new TextValueSerializer(buffer);
 	}
 
+	private void appendSeparator() {
+		this.buffer.put(FIELD_SEPARATOR);
+	}
+	
 	@Override
 	public void putBoolean(final boolean value) {
-		this.buffer.put(";" + value);
+		this.buffer.put(String.valueOf(value));
+		this.appendSeparator();
 	}
 
 	@Override
 	public void putByte(final byte value) {
-		this.buffer.put(";" + value);
+		this.buffer.put(String.valueOf(value));
+		this.appendSeparator();
 	}
 
 	@Override
 	public void putChar(final char value) {
-		this.buffer.put(";" + value);
+		this.buffer.put(value);
+		this.appendSeparator();
 	}
 
 	@Override
 	public void putShort(final short value) { // NOPMD
-		this.buffer.put(";" + value);
+		this.buffer.put(String.valueOf(value));
+		this.appendSeparator();
 	}
 
 	@Override
 	public void putInt(final int value) {
-		this.buffer.put(";" + value);
+		this.buffer.put(String.valueOf(value));
+		this.appendSeparator();
 	}
 
 	@Override
 	public void putLong(final long value) {
-		this.buffer.put(";" + value);
+		this.buffer.put(String.valueOf(value));
+		this.appendSeparator();
 	}
 
 	@Override
 	public void putFloat(final float value) {
-		this.buffer.put(";" + value);
+		this.buffer.put(String.valueOf(value));
+		this.appendSeparator();
 	}
 
 	@Override
 	public void putDouble(final double value) {
-		this.buffer.put(";" + value);
+		this.buffer.put(String.valueOf(value));
+		this.appendSeparator();
 	}
 
 	@Override
 	public void putBytes(final byte[] value) {
-		this.buffer.put(";" + String.valueOf(value));
+		throw new UnsupportedOperationException("Writing binary data is not supported by this serializer.");
 	}
 
 	@Override
 	public void putString(final String value) {
 		if (value != null) {
-			this.buffer.put(";" + value.replaceAll(";", "\\;"));
-		} else {
-			this.buffer.put(";");
+			this.buffer.put(value.replaceAll(";", "\\;"));
 		}
+		
+		this.appendSeparator();
 	}
 
 }
