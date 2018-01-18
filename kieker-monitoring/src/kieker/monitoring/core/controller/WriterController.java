@@ -243,7 +243,7 @@ public final class WriterController extends AbstractController implements IWrite
 		final StringBuilder sb = new StringBuilder(256) // NOPMD (consecutive calls of append with string literals)
 				.append("WriterController:")
 				.append("\n\tQueue type: ")
-				.append(this.writerQueue)
+				.append(this.writerQueue.getClass())
 				.append("\n\tQueue capacity: ")
 				.append(this.queueCapacity)
 				.append("\n\tInsert behavior (a.k.a. QueueFullBehavior): ")
