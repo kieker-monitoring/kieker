@@ -84,12 +84,13 @@ public class TestCXFClientServerInterceptorsNoSessionRegisteredBefore extends Ab
 		assertThat(recordFromServerSide.getOperationSignature(),
 				is(equalTo(OperationExecutionSOAPResponseOutInterceptor.SIGNATURE)));
 		assertThat(recordFromServerSide.getTraceId(), is(not(equalTo(OperationExecutionRecord.NO_TRACE_ID))));
-		assertThat(recordFromServerSide.getSessionId(), is(equalTo(OperationExecutionSOAPRequestOutInterceptor.SESSION_ID_ASYNC_TRACE)));
+		assertThat(recordFromServerSide.getSessionId(),
+				is(equalTo(OperationExecutionSOAPRequestOutInterceptor.SESSION_ID_ASYNC_TRACE)));
 
 		final long traceId = recordFromServerSide.getTraceId();
 
 		// second record
-		OperationExecutionRecord recordFromClientSide = (OperationExecutionRecord) records.get((index) + 1 % 2);
+		OperationExecutionRecord recordFromClientSide = (OperationExecutionRecord) records.get((index + 1) % 2);
 		Assert.assertEquals("Unexpected eoi", 0, recordFromClientSide.getEoi());
 		Assert.assertEquals("Unexpected ess", 0, recordFromClientSide.getEss());
 		Assert.assertEquals("Unexpected hostname", CLIENT_HOSTNAME, recordFromClientSide.getHostname());
