@@ -4,7 +4,7 @@ configurations {
 	resultJar	// all dependencies in this config are included into all jars. This is necessary for the scripts in bin/ to work, e.g., convertLoggingTimestamp.
 }
 
-// Since the analysis component requires JRE 1.8, this tools component requires JRE 1.8, too.
+// Since the analysis component requires JRE 1.8, this "tools component" requires JRE 1.8, too.
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -29,8 +29,9 @@ dependencies {
 	//compile group: 'org.eclipse.jetty',	name: 'jetty-server', version: '8.1.16.v20140903'
 	
 	// Some dependencies for the HTTP connector of the KDB
-	compile fileTree(dir: 'lib/jetty', include: 'jetty-*.jar')
-	
+	//compile fileTree(dir: 'lib/jetty', include: 'jetty-*.jar')
+	compile fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
+
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
 	// this project depends on the tests of kieker-analysis, e.g., it requires the class BookstoreEventRecordFactory
@@ -39,9 +40,9 @@ dependencies {
 	testCompile project (path: ':kieker-monitoring', configuration: 'testArchives')
 
 	//testRuntime org.apache.derby:derby:10.13.1.1
-	testRuntime resolveLibrary('geronimo-j2ee-management_1.1_spec-*.jar')
-	testRuntime resolveLibrary('kahadb-*.jar')
-	testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
+	//testRuntime resolveLibrary('geronimo-j2ee-management_1.1_spec-*.jar')
+	//testRuntime resolveLibrary('kahadb-*.jar')
+	//testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
 }
 
 eclipse {

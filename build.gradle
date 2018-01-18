@@ -58,28 +58,26 @@ allprojects {
         main {
             java {
             	if (project != rootProject) {
-	                srcDir 'src'
-					srcDir 'src-gen'
+	                srcDirs = ['src', 'src-gen']
 				}
             }
             resources {
-                srcDir 'src-resources'
+                srcDirs = ['src-resources']
             }
         }
         test {
             java {
             	if (project != rootProject) {
-	                srcDir 'test'
-	                srcDir 'test-gen'
+	                srcDirs = ['test', 'test-gen']
 				}
             }
             resources {
-                srcDir 'test-resources'
+                srcDirs = ['test-resources']
             }
         }
         integrationTest {
             java {
-                srcDir 'test-integration'
+                srcDirs = ['test-integration']
 
                 compileClasspath += main.output + test.output
                 runtimeClasspath += main.output + test.output

@@ -34,12 +34,13 @@ import teetime.stage.basic.AbstractFilter;
  */
 public class MonitoringRecordLoggerFilter extends AbstractFilter<IMonitoringRecord> {
 
-	public static final String CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN = "monitoringPropertiesFilename";
+	private static final String CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN = "monitoringPropertiesFilename";
+	private static final int WAIT_TIMEOUT_IN_MS = 1000;
 
 	/**
 	 * The {@link IMonitoringController} the received records are passed to.
 	 */
-	private IMonitoringController monitoringController;
+	private final IMonitoringController monitoringController;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -47,33 +48,40 @@ public class MonitoringRecordLoggerFilter extends AbstractFilter<IMonitoringReco
 	 * @param monitoringConfigurationFile
 	 *            The name of the {@code monitoring.properties} file.
 	 * @param keepOriginalLoggingTimestamps
-	 *            Determines whether the original logging timestamps will be used of whether the timestamps will be modified.
+	 *            Determines whether the original logging timestamps will be used of whether the timestamps will be
+	 *            modified.
 	 *
 	 * @since 1.7
 	 */
-	public MonitoringRecordLoggerFilter(final String monitoringConfigurationFile, final boolean keepOriginalLoggingTimestamps) {
+	public MonitoringRecordLoggerFilter(final String monitoringConfigurationFile,
+			final boolean keepOriginalLoggingTimestamps) {
+		if (monitoringConfigurationFile == null) {
+			throw new IllegalArgumentException("Parameter 'monitoringConfigurationFile' is null, but may not be null.");
+		}
+
 		// Initialize a "traditional" Configuration for initializing a monitoring controller later
 		final Configuration configuration = new Configuration();
-		if (monitoringConfigurationFile != null) {
-			configuration.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, monitoringConfigurationFile);
-			configuration.setProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(!keepOriginalLoggingTimestamps));
+		configuration.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN,
+				monitoringConfigurationFile);
+		configuration.setProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP,
+				Boolean.toString(!keepOriginalLoggingTimestamps));
 
-			final Configuration controllerConfiguration;
-			if (monitoringConfigurationFile.length() > 0) {
-				controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(monitoringConfigurationFile);
-			} else {
-				this.logger.info("No path to a 'monitoring.properties' file passed; using default configuration");
-				controllerConfiguration = ConfigurationFactory.createDefaultConfiguration();
-			}
-			// flatten submitted properties
-			final Configuration flatConfiguration = configuration.flatten();
-			flatConfiguration.setDefaultConfiguration(controllerConfiguration);
-			this.monitoringController = MonitoringController.createInstance(flatConfiguration);
+		final Configuration controllerConfiguration;
+		if (monitoringConfigurationFile.length() > 0) {
+			controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(monitoringConfigurationFile);
+		} else {
+			this.logger.info("No path to a 'monitoring.properties' file passed; using default configuration");
+			controllerConfiguration = ConfigurationFactory.createDefaultConfiguration();
 		}
+		// flatten submitted properties
+		final Configuration flatConfiguration = configuration.flatten();
+		flatConfiguration.setDefaultConfiguration(controllerConfiguration);
+		this.monitoringController = MonitoringController.createInstance(flatConfiguration);
 	}
 
 	/**
-	 * This method represents the input port. The new records are send to the monitoring controller before they are delivered via the output port.
+	 * This method represents the input port. The new records are send to the monitoring controller before they are
+	 * delivered via the output port.
 	 *
 	 * @param record
 	 *            The next record.
@@ -81,6 +89,13 @@ public class MonitoringRecordLoggerFilter extends AbstractFilter<IMonitoringReco
 	@Override
 	protected void execute(final IMonitoringRecord record) {
 		this.monitoringController.newMonitoringRecord(record);
-		this.getOutputPort().send(record);
+		this.outputPort.send(record);
+	}
+
+	@Override
+	public void onTerminating() throws Exception {
+		this.monitoringController.terminateMonitoring();
+		this.monitoringController.waitForTermination(WAIT_TIMEOUT_IN_MS);
+		super.onTerminating();
 	}
 }

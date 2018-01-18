@@ -172,7 +172,8 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 
 		@Override
 		public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-			if (this.pattern.matcher(file.toString()).matches()) {
+			final String fileName = file.getFileName().toString();
+			if (this.pattern.matcher(fileName).matches()) {
 				this.files.add(file.toFile());
 			}
 			return FileVisitResult.CONTINUE;

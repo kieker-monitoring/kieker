@@ -99,7 +99,7 @@ public abstract class AbstractLogReplayer {
 
 		final AbstractProducerStage<IMonitoringRecord> reader = this.createReader();
 
-		final MonitoringRecordLoggerFilter recordLogger = new MonitoringRecordLoggerFilter(this.monitoringConfigurationFile, !this.keepOriginalLoggingTimestamps);
+		final MonitoringRecordLoggerFilter recordLogger = new MonitoringRecordLoggerFilter(this.monitoringConfigurationFile, this.keepOriginalLoggingTimestamps);
 
 		if (this.isAtLeastOneTimestampGiven() && !this.realtimeMode) {
 			final TimestampFilter timestampFilter = new TimestampFilter(this.ignoreRecordsBeforeTimestamp, this.ignoreRecordsAfterTimestamp);
@@ -115,7 +115,7 @@ public abstract class AbstractLogReplayer {
 			configuration = new LogReplayerConfiguration(reader, recordLogger);
 		}
 
-		final Execution<LogReplayerConfiguration> execution = new Execution<LogReplayerConfiguration>(configuration);
+		final Execution<LogReplayerConfiguration> execution = new Execution<>(configuration);
 		execution.executeBlocking();
 	}
 

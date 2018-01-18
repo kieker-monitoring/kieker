@@ -203,7 +203,6 @@ public final class WriterController extends AbstractController implements IWrite
 		}
 	}
 
-	@SuppressWarnings("PMD.DefaultPackage")
 	// default
 	boolean isLogMetadataRecord() {
 		return this.logMetadataRecord;
@@ -279,7 +278,7 @@ public final class WriterController extends AbstractController implements IWrite
 	/**
 	 * Used in tests only.
 	 */
-	@SuppressWarnings({ "PMD.DefaultPackage", "PMD.CommentDefaultAccessModifier" })
+	// default
 	State getStateOfMonitoringWriterThread() {
 		return this.monitoringWriterThread.getState();
 	}
