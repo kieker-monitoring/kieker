@@ -28,6 +28,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.dataformat.FormatIdentifier;
 import kieker.common.util.dataformat.VariableLengthEncoding;
 import kieker.common.util.registry.IRegistry;
@@ -71,7 +72,7 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 	public Class<? extends IRawDataUnwrapper> getUnwrapperType() {
 		return BinaryChunkLengthUnwrapper.class;
 	}
-	
+
 	@Override
 	protected List<IMonitoringRecord> decodeRecords(final ByteBuffer buffer, final int dataSize) throws InvalidFormatException {
 		final int baseOffset = buffer.position();
@@ -94,7 +95,7 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 
 	private IRegistry<String> decodeStringRegistry(final ByteBuffer buffer) {
 		final int numberOfEntries = VariableLengthEncoding.decodeInt(buffer);
-		final List<String> values = new ArrayList<String>(numberOfEntries);
+		final List<String> values = new ArrayList<>(numberOfEntries);
 
 		for (int entryIndex = 0; entryIndex < numberOfEntries; entryIndex++) {
 			final int entryLength = VariableLengthEncoding.decodeInt(buffer);
@@ -109,7 +110,8 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 	}
 
 	private List<IMonitoringRecord> decodeMonitoringRecords(final ByteBuffer buffer, final IRegistry<String> stringRegistry, final int endOffset) {
-		final List<IMonitoringRecord> records = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> records = new ArrayList<>();
+		final IValueDeserializer deserializer = DefaultValueDeserializer.create(buffer, stringRegistry);
 		int currentOffset = buffer.position();
 
 		final CachedRecordFactoryCatalog recordFactoryCatalog = this.cachedRecordFactoryCatalog;
@@ -120,7 +122,7 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 			final long loggingTimestamp = buffer.getLong();
 
 			final IRecordFactory<? extends IMonitoringRecord> recordFactory = recordFactoryCatalog.get(recordTypeName);
-			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.create(buffer, stringRegistry));
+			final IMonitoringRecord record = recordFactory.create(deserializer);
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			records.add(record);
