@@ -52,9 +52,7 @@ public class BinaryChunkLengthUnwrapper extends AbstractBinaryDataUnwrapper {
 
 	@Override
 	public ByteBuffer fetchBinaryData() throws IOException {
-		final DataInputStream dataStream = this.inputStream;
 		final byte[] bytes = this.returnBytes;
-		final ByteBuffer buffer = this.returnBuffer;
 
 		// Retrieves the size of the next valid chunk, and skips
 		// invalid chunks in between
@@ -64,9 +62,11 @@ public class BinaryChunkLengthUnwrapper extends AbstractBinaryDataUnwrapper {
 			return null;
 		}
 
+		final DataInputStream dataStream = this.inputStream;
 		dataStream.readFully(bytes, 0, chunkLength);
 
 		// Reset the buffer according to the received data
+		final ByteBuffer buffer = this.returnBuffer;
 		buffer.rewind();
 		buffer.limit(chunkLength);
 
@@ -97,7 +97,10 @@ public class BinaryChunkLengthUnwrapper extends AbstractBinaryDataUnwrapper {
 			// Check if there is enough space for the data
 			if (chunkSize > bufferCapacity) {
 				// If there is insufficient capacity, try to skip until a right-sized chunk is encountered
-				LOG.warn("Insufficient buffer capacity to read chunk of size " + chunkSize + ", skipping.");
+				if (LOG.isWarnEnabled()) {
+					LOG.warn("Insufficient buffer capacity to read chunk of size " + chunkSize + ", skipping.");
+				}
+
 				this.skipChunk(chunkSize);
 				invalidChunk = true;
 			}

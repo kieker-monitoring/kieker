@@ -26,7 +26,11 @@ import kieker.monitoring.writer.raw.IRawDataWrapper;
  * @since 2.0
  */
 public abstract class AbstractBinaryDataWrapper implements IRawDataWrapper<ByteBuffer> {
-				
+			
+	public AbstractBinaryDataWrapper() {
+		// Do nothing
+	}
+	
 	@Override
 	public final boolean supportsBinaryData() {
 		return true;

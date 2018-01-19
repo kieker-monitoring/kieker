@@ -25,7 +25,7 @@ import java.nio.ByteBuffer;
  */
 public class NopBinaryWrapper extends AbstractBinaryDataWrapper {
 
-	public NopBinaryWrapper(final int bufferSize) {
+	public NopBinaryWrapper(final int bufferSize) { // NOPMD Unused constructor parameter
 		// Do nothing
 	}
 	

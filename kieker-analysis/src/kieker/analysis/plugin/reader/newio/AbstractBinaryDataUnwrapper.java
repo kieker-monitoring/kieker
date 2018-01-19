@@ -25,6 +25,10 @@ import java.nio.CharBuffer;
  */
 public abstract class AbstractBinaryDataUnwrapper implements IRawDataUnwrapper {
 
+	public AbstractBinaryDataUnwrapper() {
+		// Do nothing
+	}
+
 	@Override
 	public final boolean supportsBinaryData() {
 		return true;

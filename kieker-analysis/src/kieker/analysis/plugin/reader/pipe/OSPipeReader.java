@@ -47,11 +47,9 @@ public class OSPipeReader extends AbstractRawDataReader {
 
 	private static final Log LOG = LogFactory.getLog(OSPipeReader.class);
 
-	private final boolean inputStreamInitialized;
-
 	private final IRawDataUnwrapper dataUnwrapper;
 
-	private volatile boolean terminated = false;
+	private volatile boolean terminated;
 
 	/**
 	 * Creates a new OS pipe reader with the given configuration, sending the data to the given processor.
@@ -70,15 +68,9 @@ public class OSPipeReader extends AbstractRawDataReader {
 			LOG.info("No input pipe name given, stdin assumed.");
 		}
 
+		// Open input stream and instantiate an appropriate unwrapper
 		final InputStream inputStream = this.openInputStream(pipeName);
-
-		if (inputStream != null) {
-			this.inputStreamInitialized = true;
-			this.dataUnwrapper = this.instantiateUnwrapper(unwrapperType, inputStream);
-		} else {
-			this.inputStreamInitialized = false;
-			this.dataUnwrapper = null;
-		}
+		this.dataUnwrapper = this.instantiateUnwrapper(unwrapperType, inputStream);
 	}
 
 	private InputStream openInputStream(final String inputStreamName) throws AnalysisConfigurationException {
@@ -116,13 +108,7 @@ public class OSPipeReader extends AbstractRawDataReader {
 
 	@Override
 	public Outcome onInitialization() {
-		// Check whether the input stream was successfully initialized during construction
-		if (this.inputStreamInitialized) {
-			return Outcome.SUCCESS;
-		} else {
-			return Outcome.FAILURE;
-		}
-
+		return Outcome.SUCCESS;
 	}
 
 	@Override

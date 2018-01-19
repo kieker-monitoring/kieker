@@ -25,7 +25,7 @@ import java.nio.CharBuffer;
  */
 public class NopCharacterWrapper extends AbstractCharacterDataWrapper {
 
-	public NopCharacterWrapper(final int bufferSize) {
+	public NopCharacterWrapper(final int bufferSize) { // NOPMD Unused constructor parameter
 		// Do nothing
 	}
 	

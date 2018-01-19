@@ -403,7 +403,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 			// Wrap the output buffer and flip it, if necessary
 			final ByteBuffer wrappedBuffer = this.wrapper.wrap(outputBuffer);
 			// No-op wrappers return the same buffer, which is already flipped
-			if (wrappedBuffer != outputBuffer) {
+			if (wrappedBuffer != outputBuffer) { // NOPMD Identity check (instead of equals)
 				wrappedBuffer.flip();
 			}
 						
@@ -438,7 +438,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 			// Wrap the output buffer and flip it, if necessary
 			final CharBuffer wrappedBuffer = this.wrapper.wrap(outputBuffer);
 			// No-op wrappers return the same buffer, which is already flipped
-			if (wrappedBuffer != outputBuffer) {
+			if (wrappedBuffer != outputBuffer) { // NOPMD Identity check (instead of equals)
 				wrappedBuffer.flip();
 			}
 			

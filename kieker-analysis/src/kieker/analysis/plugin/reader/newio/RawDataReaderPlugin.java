@@ -105,14 +105,9 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 	}
 
 	private <C> C instantiateReader(final Class<C> clazz, final Configuration configuration, final IMonitoringRecordDeserializer recordDeserializer) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException, AnalysisConfigurationException {
-		final Configuration configurationToPass = configuration.flatten();
-
 		// Determine which constructors are provided by the reader
 		final Constructor<C> constructorWithUnwrapper = this.getConstructor(clazz, Configuration.class, Class.class, IRawDataProcessor.class);
 		final Constructor<C> constructorWithoutUnwrapper = this.getConstructor(clazz, Configuration.class, IRawDataProcessor.class);
-
-		// Get the unwrapper type from the deserializer, if any
-		final Class<? extends IRawDataUnwrapper> unwrapperType = recordDeserializer.getUnwrapperType();
 
 		// Check whether the required constructor is available
 		if (constructorWithUnwrapper == null && constructorWithoutUnwrapper == null) {
@@ -121,6 +116,9 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 			return null;
 		}
 
+		// Get the unwrapper type from the deserializer, if any
+		final Class<? extends IRawDataUnwrapper> unwrapperType = recordDeserializer.getUnwrapperType();
+
 		if (constructorWithoutUnwrapper == null && unwrapperType == null) {
 			// Reader requires unwrapper, but none is provided
 			this.handleConfigurationError("Reader " + clazz.getName() + " requires an unwrapper, but serializer " + recordDeserializer.getClass().getName() + " does not provide one.");
@@ -128,6 +126,7 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 		}
 
 		C instantiatedReader;
+		final Configuration configurationToPass = configuration.flatten();
 
 		// Execute the appropriate constructor
 		if (constructorWithUnwrapper != null && unwrapperType != null) {
@@ -144,7 +143,7 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 	private <C> Constructor<C> getConstructor(final Class<C> clazz, final Class<?>... parameterTypes) {
 		try {
 			return clazz.getConstructor(parameterTypes);
-		} catch (NoSuchMethodException e) {
+		} catch (final NoSuchMethodException e) {
 			return null;
 		}
 	}
@@ -234,7 +233,7 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 
 	@Override
 	public void decodeAndDeliverRecords(final ByteBuffer rawData, final int dataSize) {
-		this.decodeAndDeliverRecords(rawData, dataSize);
+		this.decodeBytesAndDeliverRecords(rawData, dataSize);
 	}
 
 	@Override
@@ -264,7 +263,7 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 	}
 
 	private void deliver(final List<IMonitoringRecord> records) {
-		for (IMonitoringRecord record : records) {
+		for (final IMonitoringRecord record : records) {
 			this.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 		}
 	}

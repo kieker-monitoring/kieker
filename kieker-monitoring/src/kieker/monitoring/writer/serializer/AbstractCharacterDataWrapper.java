@@ -27,6 +27,10 @@ import kieker.monitoring.writer.raw.IRawDataWrapper;
  */
 public abstract class AbstractCharacterDataWrapper implements IRawDataWrapper<CharBuffer> {
 
+	public AbstractCharacterDataWrapper() {
+		// Do nothing
+	}
+	
 	@Override
 	public final boolean supportsBinaryData() {
 		return false;
