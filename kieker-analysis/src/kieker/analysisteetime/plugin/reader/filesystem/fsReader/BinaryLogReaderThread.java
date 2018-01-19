@@ -36,7 +36,8 @@ import kieker.common.util.filesystem.FileExtensionFilter;
 import kieker.common.util.registry.reader.ReaderRegistry;
 
 /**
- * Reads the contents of a single file system log directory and passes the records to the registered receiver of type {@link IMonitoringRecordReceiver}.
+ * Reads the contents of a single file system log directory and passes the records to the registered receiver of type
+ * {@link IMonitoringRecordReceiver}.
  *
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  *
@@ -64,7 +65,8 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 	 * @param shouldDecompress
 	 *            <code>true</code> if each log file is compressed, otherwise <code>false</code>
 	 */
-	public BinaryLogReaderThread(final File inputDir, final IMonitoringRecordReceiver recordReceiver, final boolean shouldDecompress) {
+	public BinaryLogReaderThread(final File inputDir, final IMonitoringRecordReceiver recordReceiver,
+			final boolean shouldDecompress) {
 		super(LOG, inputDir);
 		if ((inputDir == null) || !inputDir.isDirectory()) {
 			throw new IllegalArgumentException("Invalid or empty inputDir");
@@ -91,8 +93,8 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 			// No mapping file found. Check whether we find a legacy tpmon.map file!
 			mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + FSUtil.LEGACY_MAP_FILENAME);
 			if (mappingFile.exists()) {
-				LOG.info("Directory '" + this.inputDir + "' contains no file '" + FSUtil.MAP_FILENAME + "'. Found '" + FSUtil.LEGACY_MAP_FILENAME
-						+ "' ... switching to legacy mode");
+				LOG.info("Directory '" + this.inputDir + "' contains no file '" + FSUtil.MAP_FILENAME + "'. Found '"
+						+ FSUtil.LEGACY_MAP_FILENAME + "' ... switching to legacy mode");
 			} else {
 				// no {kieker|tpmon}.map exists. This is valid for very old monitoring logs. Hence, only dump a log.warn
 				if (LOG.isWarnEnabled()) {
@@ -115,8 +117,10 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 				}
 				final int split = line.indexOf('=');
 				if (split == -1) {
-					LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath()
-							+ ". Each line must contain ID=VALUE pairs.");
+					final String message = String.format(
+							"Failed to parse line: {%s} from file %s. Each line must contain ID=VALUE pairs.", line,
+							mappingFile.getAbsolutePath());
+					LOG.error(message); // NOPMD (guard not necessary for error level)
 					continue; // continue on errors
 				}
 				final String key = line.substring(0, split);
@@ -131,11 +135,12 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 				}
 				final String prevVal = this.readerRegistry.register(id, value);
 				if (prevVal != null) {
-					LOG.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
+					LOG.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '"
+							+ value + "'");
 				}
 			}
 		} catch (final IOException e) {
-			LOG.error("Error reading " + mappingFile, e);
+			LOG.error("Error reading " + mappingFile, e);// NOPMD (guard not necessary for error level)
 		} finally {
 			if (in != null) {
 				try {

@@ -28,7 +28,7 @@ public class RecordDeserializer {
 	private final IRegistry<String> registry;
 	private final CachedRecordFactoryCatalog recordFactories;
 
-	public RecordDeserializer(final IRecordReceivedListener listener, IRegistry<String> registry) {
+	public RecordDeserializer(final IRecordReceivedListener listener, final IRegistry<String> registry) {
 		this.listener = listener;
 		this.registry = registry;
 		this.recordFactories = CachedRecordFactoryCatalog.getInstance();
@@ -60,7 +60,7 @@ public class RecordDeserializer {
 
 			this.listener.onRecordReceived(record);
 		} catch (final RecordInstantiationException ex) {
-			LOGGER.error("Failed to create: " + recordClassName, ex);
+			LOGGER.error("Failed to create: " + recordClassName, ex); // NOPMD (guard not necessary for error level)
 		}
 
 		return true;

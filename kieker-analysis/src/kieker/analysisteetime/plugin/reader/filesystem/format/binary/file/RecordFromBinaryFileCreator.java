@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistry;
 import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryRepository;
@@ -35,26 +36,27 @@ import kieker.common.record.IMonitoringRecord;
  */
 public class RecordFromBinaryFileCreator {
 
-	private final Logger logger;
+	private static final Logger LOGGER = LoggerFactory.getLogger(RecordFromBinaryFileCreator.class);
+
 	private final ClassNameRegistryRepository classNameRegistryRepository;
 
-	public RecordFromBinaryFileCreator(final Logger logger, final ClassNameRegistryRepository classNameRegistryRepository) {
-		this.logger = logger;
+	public RecordFromBinaryFileCreator(final ClassNameRegistryRepository classNameRegistryRepository) {
 		this.classNameRegistryRepository = classNameRegistryRepository;
 	}
 
-	public IMonitoringRecord createRecordFromBinaryFile(final File binaryFile, final DataInputStream inputStream) throws IOException, MonitoringRecordException {
-		final ClassNameRegistry classNameRegistry = this.classNameRegistryRepository.get(binaryFile.getParentFile());
-
+	public IMonitoringRecord createRecordFromBinaryFile(final File binaryFile, final DataInputStream inputStream)
+			throws IOException, MonitoringRecordException {
 		final Integer id;
 		try {
 			id = inputStream.readInt();
 		} catch (final EOFException eof) {
 			return null; // we are finished
 		}
+
+		final ClassNameRegistry classNameRegistry = this.classNameRegistryRepository.get(binaryFile.getParentFile());
 		final String classname = classNameRegistry.get(id);
 		if (classname == null) {
-			this.logger.error("Missing classname mapping for record type id " + "'" + id + "'");
+			LOGGER.error("Missing classname mapping for record type id '{}'", id);
 			return null; // we can't easily recover on errors
 		}
 
@@ -78,13 +80,14 @@ public class RecordFromBinaryFileCreator {
 		return record;
 	}
 
-	private boolean writeToObjectArray(final DataInputStream inputStream, final ClassNameRegistry classNameRegistry, final Class<? extends IMonitoringRecord> clazz,
-			final Object[] objectArray, final int idx, final Class<?> type) throws IOException {
+	private boolean writeToObjectArray(final DataInputStream inputStream, final ClassNameRegistry classNameRegistry,
+			final Class<? extends IMonitoringRecord> clazz, final Object[] objectArray, final int idx,
+			final Class<?> type) throws IOException {
 		if (type == String.class) {
 			final Integer strId = inputStream.readInt();
 			final String str = classNameRegistry.get(strId);
 			if (str == null) {
-				this.logger.error("No String mapping found for id " + strId.toString());
+				LOGGER.error("No String mapping found for id {}", strId.toString());
 				objectArray[idx] = "";
 			} else {
 				objectArray[idx] = str;
@@ -105,10 +108,10 @@ public class RecordFromBinaryFileCreator {
 			objectArray[idx] = inputStream.readBoolean();
 		} else {
 			if (inputStream.readByte() != 0) {
-				this.logger.error("Unexpected value for unsupported type: " + clazz.getName());
+				LOGGER.error("Unexpected value for unsupported type: {}", clazz.getName());
 				return false; // breaking error (break would not terminate the correct loop)
 			}
-			this.logger.warn("Unsupported type: " + clazz.getName());
+			LOGGER.warn("Unsupported type: {}", clazz.getName());
 			objectArray[idx] = null;
 		}
 

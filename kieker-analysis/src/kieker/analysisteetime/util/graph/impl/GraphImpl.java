@@ -22,25 +22,28 @@ public class GraphImpl extends ElementImpl implements Graph {
 
 	protected VertexImpl parentVertex = null;
 
-	public GraphImpl() {}
+	public GraphImpl() {
+		super();
+	}
 
 	protected GraphImpl(final VertexImpl parentVertex) {
 		this.parentVertex = parentVertex;
 	}
 
 	@Override
-	public Vertex addVertex(Object id) {
-		if (id == null) {
+	public Vertex addVertex(final Object id) {
+		Object freeId = id;
+		if (freeId == null) {
 			do {
-				id = this.getDefaultId();
-			} while (this.vertices.containsKey(id));
+				freeId = this.getDefaultId();
+			} while (this.vertices.containsKey(freeId));
 		} else {
-			if (this.vertices.containsKey(id)) {
-				throw ExceptionFactory.vertexWithIdAlreadyExists(id);
+			if (this.vertices.containsKey(freeId)) {
+				throw ExceptionFactory.vertexWithIdAlreadyExists(freeId);
 			}
 		}
 
-		final Vertex vertex = new VertexImpl(id, this);
+		final Vertex vertex = new VertexImpl(freeId, this);
 		this.vertices.put(vertex.getId(), vertex);
 		return vertex;
 	}
@@ -117,18 +120,19 @@ public class GraphImpl extends ElementImpl implements Graph {
 		return edge;
 	}
 
-	protected Edge addEdgeChecked(Object id, final Vertex outVertex, final Vertex inVertex) {
-		if (id == null) {
+	protected Edge addEdgeChecked(final Object id, final Vertex outVertex, final Vertex inVertex) {
+		Object freeId = id;
+		if (freeId == null) {
 			do {
-				id = this.getDefaultId();
-			} while (this.edges.containsKey(id));
+				freeId = this.getDefaultId();
+			} while (this.edges.containsKey(freeId));
 		} else {
-			if (this.edges.containsKey(id)) {
-				throw ExceptionFactory.edgeWithIdAlreadyExists(id);
+			if (this.edges.containsKey(freeId)) {
+				throw ExceptionFactory.edgeWithIdAlreadyExists(freeId);
 			}
 		}
 
-		final Edge edge = new EdgeImpl(id, outVertex, inVertex, this);
+		final Edge edge = new EdgeImpl(freeId, outVertex, inVertex, this);
 		this.edges.put(edge.getId(), edge);
 		((VertexImpl) outVertex).addOutEdge(edge);
 		((VertexImpl) inVertex).addInEdge(edge);
