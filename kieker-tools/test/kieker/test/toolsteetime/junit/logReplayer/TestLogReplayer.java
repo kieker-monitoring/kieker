@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -58,14 +57,20 @@ public class TestLogReplayer extends AbstractKiekerTest {
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
-	private volatile File monitoringConfigurationFile;
-	private List<IMonitoringRecord> recordListFilledByListWriter;
-	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
+	private final String listName = TestLogReplayer.class.getName();
+
+	private List<IMonitoringRecord> replayList;
+	private File monitoringConfigurationFile;
 
 	/**
-	 * Creates a new instance of this class.
+	 * Performs an initial test setup.
+	 *
+	 * @throws IOException
+	 *             If the setup failed.
 	 */
-	public TestLogReplayer() {
+	@Before
+	public void init() throws IOException {
+		this.replayList = new ArrayList<IMonitoringRecord>();
 		// Adding arbitrary records
 		this.replayList.add(new EmptyRecord());
 		this.replayList.add(new MemSwapUsageRecord(1, "myHost", 17, // memTotal
@@ -76,26 +81,13 @@ public class TestLogReplayer extends AbstractKiekerTest {
 				100 // swapFree
 		));
 		this.replayList.add(new EmptyRecord());
-	}
 
-	/**
-	 * Performs an initial test setup.
-	 *
-	 * @throws IOException
-	 *             If the setup failed.
-	 */
-	@Before
-	public void init() throws IOException {
-		this.tmpFolder.create();
 		// declare configuration
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.METADATA, "false");
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
+		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
 
-		final String listName = NamedListWriter.FALLBACK_LIST_NAME;
-		this.recordListFilledByListWriter = NamedListWriter.createNamedList(listName);
-		// Doesn't work because property not known to Kieker:
-		// System.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
 		this.monitoringConfigurationFile = this.tmpFolder.newFile("monitoring.properties");
 		final FileOutputStream fos = new FileOutputStream(this.monitoringConfigurationFile);
 		try {
@@ -107,8 +99,7 @@ public class TestLogReplayer extends AbstractKiekerTest {
 
 	@Test
 	public void testIt() {
-		final ListReplayer replayer = new ListReplayer(this.monitoringConfigurationFile.getAbsolutePath(), 
-				false, // realtimeMode
+		final ListReplayer replayer = new ListReplayer(this.monitoringConfigurationFile.getAbsolutePath(), false, // realtimeMode
 				TimeUnit.MILLISECONDS, // realtimeTimeunit
 				1.0, // realtimeAccelerationFactor
 				true, // keepOriginalLoggingTimestamps
@@ -118,18 +109,10 @@ public class TestLogReplayer extends AbstractKiekerTest {
 
 		replayer.replay();
 
-		Assert.assertEquals(this.replayList.get(0), this.recordListFilledByListWriter.get(0));
-		Assert.assertEquals(this.replayList.get(1), this.recordListFilledByListWriter.get(1));
-		Assert.assertEquals(this.replayList.get(2), this.recordListFilledByListWriter.get(2));
-		
-//		Assert.assertEquals("Unexpected list replayed", this.replayList, this.recordListFilledByListWriter);
-		Assert.assertThat(this.replayList, is(this.recordListFilledByListWriter));
+		final List<IMonitoringRecord> recordListFilledByListWriter = NamedListWriter.getNamedList(this.listName);
+		Assert.assertThat(recordListFilledByListWriter, is(this.replayList));
 	}
 
-	@After
-	public void cleanup() {
-		this.tmpFolder.delete();
-	}
 }
 
 /**

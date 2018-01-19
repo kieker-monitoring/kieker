@@ -54,27 +54,10 @@ public class TestLogReplayer extends AbstractKiekerTest {
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
-	private volatile File monitoringConfigurationFile;
-	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
-	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
+	private final String listName = TestLogReplayer.class.getName();
 
-	/**
-	 * Creates a new instance of this class.
-	 */
-	public TestLogReplayer() {
-		// Adding arbitrary records
-		this.replayList.add(new EmptyRecord());
-		this.replayList.add(
-				new MemSwapUsageRecord(1, "myHost",
-						17, // memTotal
-						3, // memUsed
-						14, // memFree
-						100, // swapTotal
-						0, // swapUsed
-						100 // swapFree
-				));
-		this.replayList.add(new EmptyRecord());
-	}
+	private File monitoringConfigurationFile;
+	private List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
 
 	/**
 	 * Performs an initial test setup.
@@ -84,12 +67,22 @@ public class TestLogReplayer extends AbstractKiekerTest {
 	 */
 	@Before
 	public void init() throws IOException {
+		// Adding arbitrary records
+		this.replayList.add(new EmptyRecord());
+		this.replayList.add(new MemSwapUsageRecord(1, "myHost", 17, // memTotal
+				3, // memUsed
+				14, // memFree
+				100, // swapTotal
+				0, // swapUsed
+				100 // swapFree
+		));
+		this.replayList.add(new EmptyRecord());
+
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.METADATA, "false");
-		final String listName = NamedListWriter.FALLBACK_LIST_NAME;
-		this.recordListFilledByListWriter = NamedListWriter.createNamedList(listName);
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
-		// Doesn't work because property not known to Kieker: System.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
+		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
+
 		this.monitoringConfigurationFile = this.tmpFolder.newFile("moitoring.properties");
 		final FileOutputStream fos = new FileOutputStream(this.monitoringConfigurationFile);
 		try {
@@ -102,8 +95,7 @@ public class TestLogReplayer extends AbstractKiekerTest {
 
 	@Test
 	public void testIt() {
-		final ListReplayer replayer = new ListReplayer(this.monitoringConfigurationFile.getAbsolutePath(),
-				false, // realtimeMode
+		final ListReplayer replayer = new ListReplayer(this.monitoringConfigurationFile.getAbsolutePath(), false, // realtimeMode
 				1.0, // realtimeAccelerationFactor
 				true, // keepOriginalLoggingTimestamps
 				1, // numRealtimeWorkerThreads
@@ -112,7 +104,8 @@ public class TestLogReplayer extends AbstractKiekerTest {
 				this.replayList);
 		Assert.assertTrue(replayer.replay());
 
-		Assert.assertEquals("Unexpected list replayed", this.replayList, this.recordListFilledByListWriter);
+		final List<IMonitoringRecord> recordListFilledByListWriter = NamedListWriter.getNamedList(this.listName);
+		Assert.assertEquals("Unexpected list replayed", this.replayList, recordListFilledByListWriter);
 	}
 }
 
@@ -124,13 +117,12 @@ public class TestLogReplayer extends AbstractKiekerTest {
 class ListReplayer extends AbstractLogReplayer { // NOPMD
 	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
 
-	public ListReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final double realtimeAccelerationFactor,
-			final boolean keepOriginalLoggingTimestamps,
-			final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp,
-			final List<IMonitoringRecord> replayList) {
-		super(monitoringConfigurationFile, realtimeMode, realtimeAccelerationFactor, keepOriginalLoggingTimestamps, numRealtimeWorkerThreads,
-				ignoreRecordsBeforeTimestamp,
-				ignoreRecordsAfterTimestamp);
+	public ListReplayer(final String monitoringConfigurationFile, final boolean realtimeMode,
+			final double realtimeAccelerationFactor, final boolean keepOriginalLoggingTimestamps,
+			final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp,
+			final long ignoreRecordsAfterTimestamp, final List<IMonitoringRecord> replayList) {
+		super(monitoringConfigurationFile, realtimeMode, realtimeAccelerationFactor, keepOriginalLoggingTimestamps,
+				numRealtimeWorkerThreads, ignoreRecordsBeforeTimestamp, ignoreRecordsAfterTimestamp);
 		this.replayList.addAll(replayList);
 	}
 
@@ -142,8 +134,10 @@ class ListReplayer extends AbstractLogReplayer { // NOPMD
 	@Override
 	protected AbstractReaderPlugin createReader(final IAnalysisController analysisController) {
 		final Configuration listReaderConfig = new Configuration();
-		listReaderConfig.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.toString(Boolean.FALSE));
-		final ListReader<IMonitoringRecord> listReader = new ListReader<IMonitoringRecord>(listReaderConfig, analysisController);
+		listReaderConfig.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION,
+				Boolean.toString(Boolean.FALSE));
+		final ListReader<IMonitoringRecord> listReader = new ListReader<IMonitoringRecord>(listReaderConfig,
+				analysisController);
 		listReader.addAllObjects(this.replayList);
 		return listReader;
 	}
