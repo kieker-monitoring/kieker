@@ -1,0 +1,15 @@
+package kieker.common.record.remotecontrol
+
+@author 'Marc Adolf' @since '1.14'
+abstract entity RemoteControlEvent {
+	string pattern
+}
+
+
+@author 'Marc Adolf' @since '1.14'
+abstract entity DeactivationEvent extends RemoteControlEvent {
+}
+
+@author 'Marc Adolf' @since '1.14'
+abstract entity ActivationEvent extends RemoteControlEvent {
+} 
