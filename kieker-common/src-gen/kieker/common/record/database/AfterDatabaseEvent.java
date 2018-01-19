@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.common.record.flow.trace;
+package kieker.common.record.database;
 
 import java.nio.BufferOverflowException;
 
@@ -23,68 +23,88 @@ import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
+import kieker.common.record.flow.IEventRecord;
+import kieker.common.record.flow.IFlowRecord;
+import kieker.common.record.flow.IClassSignature;
+import kieker.common.record.flow.ITraceRecord;
 
 /**
- * @author Felix Eichhorst
+ * @author Christian Zirkelbach (czi@informatik.uni-kiel.de)
  * API compatibility: Kieker 1.13.0
  * 
  * @since 1.14
  */
-public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = 1817999525650163947L;
+public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IEventRecord, IFlowRecord, IClassSignature, ITraceRecord {
+	private static final long serialVersionUID = -3115006839098290523L;
 
 	/** Descriptive definition of the serialization size of the record. */
-	public static final int SIZE = TYPE_SIZE_LONG // BeforeSentRemoteEvent.timestamp
-			 + TYPE_SIZE_LONG // BeforeSentRemoteEvent.traceId
-			 + TYPE_SIZE_INT // BeforeSentRemoteEvent.orderIndex
-			 + TYPE_SIZE_STRING // BeforeSentRemoteEvent.technology
+	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+			 + TYPE_SIZE_STRING // IClassSignature.classSignature
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // AfterDatabaseEvent.returnType
+			 + TYPE_SIZE_STRING // AfterDatabaseEvent.returnValue
 	;
 	
 	public static final Class<?>[] TYPES = {
-		long.class, // BeforeSentRemoteEvent.timestamp
-		long.class, // BeforeSentRemoteEvent.traceId
-		int.class, // BeforeSentRemoteEvent.orderIndex
-		String.class, // BeforeSentRemoteEvent.technology
+		long.class, // IEventRecord.timestamp
+		String.class, // IClassSignature.classSignature
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
+		String.class, // AfterDatabaseEvent.returnType
+		String.class, // AfterDatabaseEvent.returnValue
 	};
 	
 	
 	/** default constants. */
-	public static final long TIMESTAMP = -1L;
+	public static final long TIMESTAMP = 0L;
+	public static final String CLASS_SIGNATURE = "";
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
-	public static final String TECHNOLOGY = "<default-technology>";
+	public static final String RETURN_TYPE = "";
+	public static final String RETURN_VALUE = "";
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
 		"timestamp",
+		"classSignature",
 		"traceId",
 		"orderIndex",
-		"technology",
+		"returnType",
+		"returnValue",
 	};
 	
 	/** property declarations. */
 	private final long timestamp;
-	private final long traceId;
+	private final String classSignature;
+	private long traceId;
 	private final int orderIndex;
-	private final String technology;
+	private final String returnType;
+	private final String returnValue;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
 	 * @param timestamp
 	 *            timestamp
+	 * @param classSignature
+	 *            classSignature
 	 * @param traceId
 	 *            traceId
 	 * @param orderIndex
 	 *            orderIndex
-	 * @param technology
-	 *            technology
+	 * @param returnType
+	 *            returnType
+	 * @param returnValue
+	 *            returnValue
 	 */
-	public BeforeSentRemoteEvent(final long timestamp, final long traceId, final int orderIndex, final String technology) {
+	public AfterDatabaseEvent(final long timestamp, final String classSignature, final long traceId, final int orderIndex, final String returnType, final String returnValue) {
 		this.timestamp = timestamp;
+		this.classSignature = classSignature == null?CLASS_SIGNATURE:classSignature;
 		this.traceId = traceId;
 		this.orderIndex = orderIndex;
-		this.technology = technology == null?TECHNOLOGY:technology;
+		this.returnType = returnType == null?"":returnType;
+		this.returnValue = returnValue == null?"":returnValue;
 	}
 
 	/**
@@ -94,15 +114,17 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements I
 	 * @param values
 	 *            The values for the record.
 	 *
-	 * @deprecated since 1.13. Use {@link #BeforeSentRemoteEvent(IValueDeserializer)} instead.
+	 * @deprecated since 1.13. Use {@link #AfterDatabaseEvent(IValueDeserializer)} instead.
 	 */
 	@Deprecated
-	public BeforeSentRemoteEvent(final Object[] values) { // NOPMD (direct store of values)
+	public AfterDatabaseEvent(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.timestamp = (Long) values[0];
-		this.traceId = (Long) values[1];
-		this.orderIndex = (Integer) values[2];
-		this.technology = (String) values[3];
+		this.classSignature = (String) values[1];
+		this.traceId = (Long) values[2];
+		this.orderIndex = (Integer) values[3];
+		this.returnType = (String) values[4];
+		this.returnValue = (String) values[5];
 	}
 
 	/**
@@ -113,15 +135,17 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements I
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
 	 *
-	 * @deprecated since 1.13. Use {@link #BeforeSentRemoteEvent(IValueDeserializer)} instead.
+	 * @deprecated since 1.13. Use {@link #AfterDatabaseEvent(IValueDeserializer)} instead.
 	 */
 	@Deprecated
-	protected BeforeSentRemoteEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
+	protected AfterDatabaseEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
 		this.timestamp = (Long) values[0];
-		this.traceId = (Long) values[1];
-		this.orderIndex = (Integer) values[2];
-		this.technology = (String) values[3];
+		this.classSignature = (String) values[1];
+		this.traceId = (Long) values[2];
+		this.orderIndex = (Integer) values[3];
+		this.returnType = (String) values[4];
+		this.returnValue = (String) values[5];
 	}
 
 	
@@ -129,11 +153,13 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements I
 	 * @param deserializer
 	 *            The deserializer to use
 	 */
-	public BeforeSentRemoteEvent(final IValueDeserializer deserializer) {
+	public AfterDatabaseEvent(final IValueDeserializer deserializer) {
 		this.timestamp = deserializer.getLong();
+		this.classSignature = deserializer.getString();
 		this.traceId = deserializer.getLong();
 		this.orderIndex = deserializer.getInt();
-		this.technology = deserializer.getString();
+		this.returnType = deserializer.getString();
+		this.returnValue = deserializer.getString();
 	}
 	
 	/**
@@ -146,9 +172,11 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements I
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
+			this.getClassSignature(),
 			this.getTraceId(),
 			this.getOrderIndex(),
-			this.getTechnology()
+			this.getReturnType(),
+			this.getReturnValue()
 		};
 	}
 	/**
@@ -156,7 +184,9 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements I
 	 */
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getTechnology());
+		stringRegistry.get(this.getClassSignature());
+		stringRegistry.get(this.getReturnType());
+		stringRegistry.get(this.getReturnValue());
 	}
 	/**
 	 * {@inheritDoc}
@@ -165,9 +195,11 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements I
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
+		serializer.putString(this.getClassSignature());
 		serializer.putLong(this.getTraceId());
 		serializer.putInt(this.getOrderIndex());
-		serializer.putString(this.getTechnology());
+		serializer.putString(this.getReturnType());
+		serializer.putString(this.getReturnValue());
 	}
 	/**
 	 * {@inheritDoc}
@@ -213,12 +245,14 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements I
 		if (obj == this) return true;
 		if (obj.getClass() != this.getClass()) return false;
 		
-		final BeforeSentRemoteEvent castedRecord = (BeforeSentRemoteEvent) obj;
+		final AfterDatabaseEvent castedRecord = (AfterDatabaseEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
 		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
 		if (this.getTraceId() != castedRecord.getTraceId()) return false;
 		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getTechnology().equals(castedRecord.getTechnology())) return false;
+		if (!this.getReturnType().equals(castedRecord.getReturnType())) return false;
+		if (!this.getReturnValue().equals(castedRecord.getReturnValue())) return false;
 		return true;
 	}
 	
@@ -227,18 +261,31 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements I
 	}
 	
 	
+	public final String getClassSignature() {
+		return this.classSignature;
+	}
+	
+	
 	public final long getTraceId() {
 		return this.traceId;
 	}
 	
+	public final void setTraceId(long traceId) {
+		this.traceId = traceId;
+	}
 	
 	public final int getOrderIndex() {
 		return this.orderIndex;
 	}
 	
 	
-	public final String getTechnology() {
-		return this.technology;
+	public final String getReturnType() {
+		return this.returnType;
+	}
+	
+	
+	public final String getReturnValue() {
+		return this.returnValue;
 	}
 	
 }

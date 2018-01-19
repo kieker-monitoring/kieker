@@ -38,6 +38,8 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.WriterUtil;
 
 /**
+ * Represents a monitoring writer which serializes records via TCP to a given host:port.
+ * 
  * @author Christian Wulf
  *
  * @since 1.13
@@ -46,7 +48,8 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 	/** the logger for this class. */
 	private static final Log LOG = LogFactory.getLog(SingleSocketTcpWriter.class);
-	/** prefix for all configuration keys. */
+	/** This writer can be configured by the configuration file "kieker.properties".
+	 * For this purpose, it uses this prefix for all configuration keys. */
 	private static final String PREFIX = SingleSocketTcpWriter.class.getName() + ".";
 
 	/** configuration key for the hostname. */

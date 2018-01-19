@@ -13,15 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.common.record.flow;
+package kieker.common.record.database;
 
+
+import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
- * @author Florian Fittkau
+ * @author Christian Zirkelbach (czi@informatik.uni-kiel.de)
  * 
- * @since 1.10
+ * @since 1.14
  */
-public interface IInterfaceRecord extends IFlowRecord {
-	public String getInterface();
+public final class AfterDatabaseEventFactory implements IRecordFactory<AfterDatabaseEvent> {
 	
+	
+	@Override
+	public AfterDatabaseEvent create(final IValueDeserializer deserializer) {
+		return new AfterDatabaseEvent(deserializer);
+	}
+	
+	@Override
+	@Deprecated
+	public AfterDatabaseEvent create(final Object[] values) {
+		return new AfterDatabaseEvent(values);
+	}
+	
+	public int getRecordSizeInBytes() {
+		return AfterDatabaseEvent.SIZE;
+	}
 }
