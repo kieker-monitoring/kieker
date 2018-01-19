@@ -30,7 +30,6 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.collector.ChunkingCollector;
 import kieker.monitoring.writer.serializer.BinarySerializer;
-
 import kieker.test.monitoring.junit.writer.collector.TestRawDataStorage; // NOCS
 import kieker.test.monitoring.junit.writer.collector.TestRawDataWriter; // NOCS
 
@@ -71,9 +70,9 @@ public class BinarySerializerTest {
 		// Check some basic numbers, since full decoding is not yet supported
 		final ByteBuffer dataBuffer = ByteBuffer.wrap(data);
 
-		// Read the string table offset (last four bytes), plus 8 bytes for the container header
+		// Read the string table offset (last four bytes), plus 8 bytes for the container header and 4 bytes for the size info
 		dataBuffer.position(data.length - 4);
-		final int stringTableOffset = dataBuffer.getInt() + 8;
+		final int stringTableOffset = dataBuffer.getInt() + 12;
 
 		// Read the number of strings in the string table
 		dataBuffer.position(stringTableOffset);
@@ -107,9 +106,9 @@ public class BinarySerializerTest {
 		// Check some basic numbers, since full decoding is not yet supported
 		final ByteBuffer dataBuffer = ByteBuffer.wrap(data);
 
-		// Read the string table offset (last four bytes), plus 8 bytes for the container header
+		// Read the string table offset (last four bytes), plus 8 bytes for the container header and 4 bytes for the size info
 		dataBuffer.position(data.length - 4);
-		final int stringTableOffset = dataBuffer.getInt() + 8;
+		final int stringTableOffset = dataBuffer.getInt() + 12;
 
 		// Read the number of strings in the string table
 		dataBuffer.position(stringTableOffset);

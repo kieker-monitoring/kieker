@@ -28,7 +28,6 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.filesystem.FileExtensionFilter;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 
@@ -187,8 +186,8 @@ public class AsciiFileWriterTest {
 
 	@Test
 	public void testMaxLogSize() throws Exception {
-		// size = $ + compressed record class name (=0) + ; + record.toString + newLine (\n or \n\r)
-		final int recordSizeInBytes = 1 + 1 + 1 + new EmptyRecord().toString().length() + System.lineSeparator().length(); // 7=3+2+1/2
+		// size = $ + compressed record class name (=0) + ; + logging timestamp (=-1) + newLine (\n or \n\r)
+		final int recordSizeInBytes = 2 + 1 + 2 + System.lineSeparator().length(); // 7=3+2+1/2
 
 		// semantics of the tuple: (maxMegaBytesPerFile, megaBytesToWrite, expectedNumRecordFiles)
 		final int[][] testInputTuples = {

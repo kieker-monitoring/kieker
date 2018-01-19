@@ -25,6 +25,7 @@ import org.junit.Test;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.IProjectContext;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -37,9 +38,9 @@ import kieker.test.common.junit.AbstractDynamicKiekerTest;
 /**
  * This JUnit test makes sure that all plugins handle their configurations correctly. To be more precise: The listed properties in the annotation of each plugin has
  * to be in the configuration map of the {@code getCurrentConfiguration} method.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 public class TestPluginConfigurationRetention extends AbstractDynamicKiekerTest {
@@ -52,19 +53,26 @@ public class TestPluginConfigurationRetention extends AbstractDynamicKiekerTest 
 
 	@Test
 	public void test() throws ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-			NoSuchMethodException, SecurityException {
+	NoSuchMethodException, SecurityException {
 		final Collection<Class<?>> availableClasses = super.deliverAllAvailableClassesFromSourceDirectory();
 		final Collection<Class<?>> notAbstractClasses = super.filterOutAbstractClasses(availableClasses);
 		final Collection<Class<?>> filteredClasses = super.filterOutClassesNotExtending(AbstractPlugin.class, notAbstractClasses);
 
 		for (final Class<?> clazz : filteredClasses) {
-			LOG.info("Testing '" + clazz.getSimpleName() + "'...");
-			Assert.assertTrue(clazz.getSimpleName() + "' doesn't export all of its properties.", this.isConfigurationCorrect(clazz));
+			try {
+				LOG.info("Testing '" + clazz.getSimpleName() + "'...");
+				Assert.assertTrue(clazz.getSimpleName() + "' doesn't export all of its properties.", this.isConfigurationCorrect(clazz));
+			} catch (final InvocationTargetException e) {
+				// Ignore exceptions due to plugins not working with an empty configuration
+				if (e.getCause() instanceof AnalysisConfigurationException) {
+					LOG.info(clazz.getSimpleName() + " does not accept an empty configuration. Ignoring.");
+				}
+			}
 		}
 	}
 
 	private boolean isConfigurationCorrect(final Class<?> clazz) throws InstantiationException, IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException, NoSuchMethodException, SecurityException {
+	InvocationTargetException, NoSuchMethodException, SecurityException {
 		final IAnalysisController ac = new AnalysisController();
 		final AbstractPlugin pluginInstance = (AbstractPlugin) clazz.getConstructor(Configuration.class, IProjectContext.class).newInstance(new Configuration(), ac);
 
