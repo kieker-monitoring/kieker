@@ -118,7 +118,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 
 	private final ScheduledExecutorService scheduledExecutor;
 	private final int taskRunInterval;
-	private final ChunkWriterTask<?> writerTask;
+	private final AbstractChunkWriterTask<?> writerTask;
 
 	public ChunkingCollector(final Configuration configuration) {
 		super(configuration);
@@ -197,7 +197,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		}
 	}
 	
-	private ChunkWriterTask<?> createWriterTask(final int outputChunkSize, final int deferredWriteDelayMs, final int outputBufferSize, final IMonitoringRecordSerializer serializer, final IRawDataWriter writer) {
+	private AbstractChunkWriterTask<?> createWriterTask(final int outputChunkSize, final int deferredWriteDelayMs, final int outputBufferSize, final IMonitoringRecordSerializer serializer, final IRawDataWriter writer) {
 		// Create a suitable wrapper and writer task depending on the data format employed by the serializer
 		if (serializer.producesBinaryData()) {
 			final IRawDataWrapper<ByteBuffer> wrapper = this.createWrapperForSerializer(serializer, writer, outputBufferSize);			
@@ -257,9 +257,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	 * @since 1.13
 	 *
 	 */
-	abstract class ChunkWriterTask<T extends Buffer> implements Runnable {
-
-		private final T buffer;
+	abstract class AbstractChunkWriterTask<T extends Buffer> implements Runnable {
 
 		protected final IMonitoringRecordSerializer serializer;
 
@@ -267,13 +265,15 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		
 		protected final IRawDataWrapper<T> wrapper;
 
+		private final T buffer;
+		
 		private final int outputChunkSize;
 
 		private final long deferredWriteDelayNs;
 
 		private volatile long nextWriteTime;
 
-		public ChunkWriterTask(final int outputChunkSize, final int deferredWriteDelayMs, final int outputBufferSize, final IMonitoringRecordSerializer serializer,
+		public AbstractChunkWriterTask(final int outputChunkSize, final int deferredWriteDelayMs, final int outputBufferSize, final IMonitoringRecordSerializer serializer,
 				final IRawDataWriter writer, final IRawDataWrapper<T> wrapper) {
 			this.serializer = serializer;
 			this.writer = writer;
@@ -383,7 +383,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	 * @author Holger Knoche
 	 * @since 2.0
 	 */
-	class BinaryChunkWriterTask extends ChunkWriterTask<ByteBuffer> {
+	class BinaryChunkWriterTask extends AbstractChunkWriterTask<ByteBuffer> {
 
 		public BinaryChunkWriterTask(final int outputChunkSize, final int deferredWriteDelayMs, final int outputBufferSize, final IMonitoringRecordSerializer serializer, final IRawDataWriter writer, final IRawDataWrapper<ByteBuffer> wrapper) {
 			super(outputChunkSize, deferredWriteDelayMs, outputBufferSize, serializer, writer, wrapper);
@@ -418,7 +418,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	 * @author Holger Knoche
 	 * @since 2.0
 	 */
-	class CharacterChunkWriterTask extends ChunkWriterTask<CharBuffer> {		
+	class CharacterChunkWriterTask extends AbstractChunkWriterTask<CharBuffer> {		
 		
 		public CharacterChunkWriterTask(final int outputChunkSize, final int deferredWriteDelayMs, final int outputBufferSize, final IMonitoringRecordSerializer serializer, final IRawDataWriter writer, final IRawDataWrapper<CharBuffer> wrapper) {
 			super(outputChunkSize, deferredWriteDelayMs, outputBufferSize, serializer, writer, wrapper);

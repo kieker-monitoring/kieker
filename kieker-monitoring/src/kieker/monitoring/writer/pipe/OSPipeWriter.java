@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.monitoring.writer.pipe;
 
 import java.io.FileNotFoundException;
@@ -11,12 +26,18 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.monitoring.writer.raw.IRawDataWriter;
 
+/**
+ * A writer that writes data to a OS pipe, such as {@code stdout} or a named pipe.
+ *
+ * @author Holger Knoche
+ * @since 2.0
+ */
 public class OSPipeWriter implements IRawDataWriter {
 
 	private static final String PREFIX = OSPipeWriter.class.getName() + ".";
 	
 	/** The name of the configuration property for the output pipe name. */
-	public static final String CONFIG_PROPERTY_PIPE_NAME = PREFIX + "pipeName";
+	public static final String CONFIG_PROPERTY_PIPE_NAME = PREFIX + "pipeName"; // NOCS Declaration order
 		
 	private static final String SYMBOLIC_NAME_STDOUT = "-";
 		

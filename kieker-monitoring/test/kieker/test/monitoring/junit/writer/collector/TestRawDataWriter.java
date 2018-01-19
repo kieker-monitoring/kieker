@@ -62,7 +62,6 @@ public class TestRawDataWriter implements IRawDataWriter {
 
 	@Override
 	public boolean requiresWrappedData() {
-		// TODO Actually, this writer requires wrapped data
 		return false;
 	}
 	

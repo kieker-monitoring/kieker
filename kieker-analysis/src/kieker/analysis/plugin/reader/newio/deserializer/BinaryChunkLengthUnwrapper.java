@@ -52,13 +52,13 @@ public class BinaryChunkLengthUnwrapper extends AbstractBinaryDataUnwrapper {
 
 	@Override
 	public ByteBuffer fetchBinaryData() throws IOException {
-		DataInputStream dataStream = this.inputStream;
-		byte[] bytes = this.returnBytes;
-		ByteBuffer buffer = this.returnBuffer;
+		final DataInputStream dataStream = this.inputStream;
+		final byte[] bytes = this.returnBytes;
+		final ByteBuffer buffer = this.returnBuffer;
 
 		// Retrieves the size of the next valid chunk, and skips
 		// invalid chunks in between
-		int chunkLength = this.getNextValidChunkSize(bytes.length);
+		final int chunkLength = this.getNextValidChunkSize(bytes.length);
 
 		if (chunkLength < 0) {
 			return null;
@@ -74,7 +74,7 @@ public class BinaryChunkLengthUnwrapper extends AbstractBinaryDataUnwrapper {
 	}
 
 	private int getNextValidChunkSize(final int bufferCapacity) throws IOException {
-		DataInputStream dataStream = this.inputStream;
+		final DataInputStream dataStream = this.inputStream;
 
 		boolean invalidChunk;
 		int chunkSize;
@@ -84,7 +84,7 @@ public class BinaryChunkLengthUnwrapper extends AbstractBinaryDataUnwrapper {
 
 			try {
 				chunkSize = dataStream.readInt();
-			} catch (EOFException e) {
+			} catch (final EOFException e) {
 				// If an EOF occurs at this position, the stream is considered to have ended gracefully
 				return -1;
 			}
@@ -107,15 +107,15 @@ public class BinaryChunkLengthUnwrapper extends AbstractBinaryDataUnwrapper {
 	}
 
 	private void skipChunk(final int chunkSize) throws IOException {
-		DataInputStream dataStream = this.inputStream;
+		final DataInputStream dataStream = this.inputStream;
 		long remainingBytes = chunkSize;
 
 		while (remainingBytes > 0) {
-			long bytesSkipped = dataStream.skip(remainingBytes);
+			final long bytesSkipped = dataStream.skip(remainingBytes);
 
 			// If no bytes were skipped, check for EOF
 			if (bytesSkipped == 0) {
-				int probeValue = inputStream.read();
+				final int probeValue = dataStream.read();
 
 				// If EOF is (prematurely) encountered, throw an exception as to avoid an infinite loop
 				if (probeValue < 0) {

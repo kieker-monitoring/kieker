@@ -41,7 +41,7 @@ public class NewlineUnwrapper extends AbstractCharacterDataUnwrapper {
 
 	@Override
 	public CharBuffer fetchCharacterData() throws IOException {
-		String nextLine = this.reader.readLine();
+		final String nextLine = this.reader.readLine();
 
 		if (nextLine != null) {
 			return CharBuffer.wrap(nextLine);

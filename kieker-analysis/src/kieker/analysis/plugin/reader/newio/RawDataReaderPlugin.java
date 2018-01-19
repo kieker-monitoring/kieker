@@ -35,134 +35,134 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * Generic reader plugin for the new raw data I/O infrastructure.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.13
  *
  */
 @Plugin(description = "Generic reader plugin for raw data.", outputPorts = {
 		@OutputPort(name = RawDataReaderPlugin.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
-			IMonitoringRecord.class }, description = "Output port for the decoded records") }, configuration = {
-				@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_DESERIALIZER, defaultValue = "", description = "Class name of the deserializer to use"),
-				@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_READER, defaultValue = "", description = "Class name of the reader to use")
-	})
+				IMonitoringRecord.class }, description = "Output port for the decoded records") }, configuration = {
+						@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_DESERIALIZER, defaultValue = "", description = "Class name of the deserializer to use"),
+						@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_READER, defaultValue = "", description = "Class name of the reader to use")
+})
 public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDataProcessor {
-	
+
 	/** The name of the output port for the decoded records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
-	
+
 	/** The name of the configuration property for the deserializer class name. */
 	public static final String CONFIG_PROPERTY_DESERIALIZER = "deserializer";
-	
+
 	/** The name of the configuration property for the reader class name. */
 	public static final String CONFIG_PROPERTY_READER = "reader";
 
 	private static final Log LOG = LogFactory.getLog(RawDataReaderPlugin.class);
-	
+
 	private final String deserializerClassName;
-	
+
 	private final String readerClassName;
-	
+
 	private final IRawDataReader reader;
-	
+
 	private final IMonitoringRecordDeserializer deserializer;
-	
+
 	public RawDataReaderPlugin(final Configuration configuration, final IProjectContext projectContext) throws AnalysisConfigurationException {
 		super(configuration, projectContext);
-		
+
 		final String deserializerName = configuration.getStringProperty(CONFIG_PROPERTY_DESERIALIZER);
 		this.deserializerClassName = deserializerName;
 		this.deserializer = this.createAndInitializeDeserializer(deserializerName, configuration, projectContext, IMonitoringRecordDeserializer.class);
-		
+
 		final String readerName = configuration.getStringProperty(CONFIG_PROPERTY_READER);
 		this.readerClassName = readerName;
-		this.reader = this.createAndInitializeReader(readerName, configuration, this.deserializer, IRawDataReader.class);				
+		this.reader = this.createAndInitializeReader(readerName, configuration, this.deserializer, IRawDataReader.class);
 	}
 
 	@SuppressWarnings("unchecked")
-	private <C> C createAndInitializeReader(final String className, final Configuration configuration, IMonitoringRecordDeserializer recordDeserializer, final Class<C> expectedType) throws AnalysisConfigurationException {
+	private <C> C createAndInitializeReader(final String className, final Configuration configuration, final IMonitoringRecordDeserializer recordDeserializer, final Class<C> expectedType) throws AnalysisConfigurationException {
 		C createdInstance = null;
-		
+
 		try {
 			final Class<?> clazz = Class.forName(className);
-			
+
 			// Check whether the class is a subtype of the expected type
 			if (!(expectedType.isAssignableFrom(clazz))) {
-				String message = "Class " + className + " must implement " + expectedType.getSimpleName() + "."; 
+				final String message = "Class " + className + " must implement " + expectedType.getSimpleName() + ".";
 				this.handleConfigurationError(message);
 			}
-			
+
 			// Actually create the instance
-			createdInstance = (C) this.instantiateReader(clazz, configuration, recordDeserializer);			
+			createdInstance = (C) this.instantiateReader(clazz, configuration, recordDeserializer);
 		} catch (final ClassNotFoundException e) {
 			this.handleConfigurationError("Class '" + className + "' not found.");
 		} catch (final IllegalAccessException | InstantiationException | InvocationTargetException e) {
 			this.handleConfigurationError("Unable to instantiate class " + className + ".", e);
 		}
-		
+
 		return createdInstance;
 	}
-	
-	private <C> C instantiateReader(final Class<C> clazz, final Configuration configuration, IMonitoringRecordDeserializer recordDeserializer) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException, AnalysisConfigurationException {
+
+	private <C> C instantiateReader(final Class<C> clazz, final Configuration configuration, final IMonitoringRecordDeserializer recordDeserializer) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException, AnalysisConfigurationException {
 		final Configuration configurationToPass = configuration.flatten();
-		
+
 		// Determine which constructors are provided by the reader
-		Constructor<C> constructorWithUnwrapper = this.getConstructor(clazz, Configuration.class, Class.class, IRawDataProcessor.class);
-		Constructor<C> constructorWithoutUnwrapper = this.getConstructor(clazz, Configuration.class, IRawDataProcessor.class);
+		final Constructor<C> constructorWithUnwrapper = this.getConstructor(clazz, Configuration.class, Class.class, IRawDataProcessor.class);
+		final Constructor<C> constructorWithoutUnwrapper = this.getConstructor(clazz, Configuration.class, IRawDataProcessor.class);
 
 		// Get the unwrapper type from the deserializer, if any
-		Class<? extends IRawDataUnwrapper> unwrapperType = recordDeserializer.getUnwrapperType();
-		
+		final Class<? extends IRawDataUnwrapper> unwrapperType = recordDeserializer.getUnwrapperType();
+
 		// Check whether the required constructor is available
 		if (constructorWithUnwrapper == null && constructorWithoutUnwrapper == null) {
 			// No suitable constructor at all
 			this.handleConfigurationError("Class " + clazz.getName() + " does not provide a suitable constructor.");
 			return null;
 		}
-		
+
 		if (constructorWithoutUnwrapper == null && unwrapperType == null) {
 			// Reader requires unwrapper, but none is provided
 			this.handleConfigurationError("Reader " + clazz.getName() + " requires an unwrapper, but serializer " + recordDeserializer.getClass().getName() + " does not provide one.");
 			return null;
 		}
 
-		C reader;
-		
+		C instantiatedReader;
+
 		// Execute the appropriate constructor
 		if (constructorWithUnwrapper != null && unwrapperType != null) {
 			// If a constructor with unwrapper as well as an unwrapper type are available, use this constructor
-			reader = constructorWithUnwrapper.newInstance(configurationToPass, unwrapperType, this);
+			instantiatedReader = constructorWithUnwrapper.newInstance(configurationToPass, unwrapperType, this);
 		} else {
 			// Otherwise use the no-unwrapper constructor
-			reader = constructorWithoutUnwrapper.newInstance(configurationToPass, this);
+			instantiatedReader = constructorWithoutUnwrapper.newInstance(configurationToPass, this);
 		}
-		
-		return reader;
+
+		return instantiatedReader;
 	}
-	
-	private <C> Constructor<C> getConstructor(Class<C> clazz, Class<?>... parameterTypes) {
+
+	private <C> Constructor<C> getConstructor(final Class<C> clazz, final Class<?>... parameterTypes) {
 		try {
 			return clazz.getConstructor(parameterTypes);
 		} catch (NoSuchMethodException e) {
 			return null;
 		}
 	}
-		
+
 	@SuppressWarnings("unchecked")
 	private <C> C createAndInitializeDeserializer(final String className, final Configuration configuration, final IProjectContext context, final Class<C> expectedType) throws AnalysisConfigurationException {
 		C createdInstance = null;
-		
+
 		try {
 			final Class<?> clazz = Class.forName(className);
-			
+
 			// Check whether the class is a subtype of the expected type
 			if (!(expectedType.isAssignableFrom(clazz))) {
 				this.handleConfigurationError("Class " + className + " must implement " + expectedType.getSimpleName() + ".");
 			}
-			
+
 			// Actually create the instance
-			createdInstance = (C) this.instantiateDeserializer(clazz, configuration, context);			
+			createdInstance = (C) this.instantiateDeserializer(clazz, configuration, context);
 		} catch (final ClassNotFoundException e) {
 			this.handleConfigurationError("Class '" + className + "' not found.");
 		} catch (final NoSuchMethodException e) {
@@ -170,51 +170,51 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 		} catch (final IllegalAccessException | InstantiationException | InvocationTargetException e) {
 			this.handleConfigurationError("Unable to instantiate class " + className + ".", e);
 		}
-		
+
 		return createdInstance;
 	}
-	
+
 	private <C> C instantiateDeserializer(final Class<C> clazz, final Configuration configuration, final IProjectContext context) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		final Configuration configurationToPass = configuration.flatten();
-		
+
 		return clazz.getConstructor(Configuration.class, IProjectContext.class).newInstance(configurationToPass, context);
 	}
-	
+
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		
+
 		configuration.setProperty(CONFIG_PROPERTY_DESERIALIZER, this.deserializerClassName);
 		configuration.setProperty(CONFIG_PROPERTY_READER, this.readerClassName);
-		
+
 		return configuration;
 	}
-	
+
 	@Override
 	public boolean init() {
 		// Invoke super init
-		final boolean superInitSuccessful = super.init();		
+		final boolean superInitSuccessful = super.init();
 		if (!superInitSuccessful) {
 			return false;
 		}
-		
+
 		// Initialize the reader
 		final Outcome readerInitOutcome = this.initReader();
 		if (readerInitOutcome != Outcome.SUCCESS) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	private Outcome initReader() {
 		return this.reader.onInitialization();
 	}
-	
+
 	@Override
 	public boolean read() {
 		final Outcome readOutcome = this.reader.read();
-		
+
 		return (readOutcome == Outcome.SUCCESS);
 	}
 
@@ -222,21 +222,21 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 	public void terminate(final boolean error) {
 		this.terminateReader();
 	}
-	
+
 	private Outcome terminateReader() {
 		return this.reader.onTermination();
 	}
 
 	@Override
-	public void decodeAndDeliverRecords(byte[] rawData) {
+	public void decodeAndDeliverRecords(final byte[] rawData) {
 		this.decodeBytesAndDeliverRecords(rawData);
 	}
-	
+
 	@Override
-	public void decodeAndDeliverRecords(ByteBuffer rawData, int dataSize) {
+	public void decodeAndDeliverRecords(final ByteBuffer rawData, final int dataSize) {
 		this.decodeAndDeliverRecords(rawData, dataSize);
 	}
-	
+
 	@Override
 	public void decodeBytesAndDeliverRecords(final byte[] rawData) {
 		this.decodeAndDeliverRecords(ByteBuffer.wrap(rawData), rawData.length);
@@ -245,35 +245,35 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 	@Override
 	public void decodeBytesAndDeliverRecords(final ByteBuffer rawData, final int dataSize) {
 		final List<IMonitoringRecord> records = this.deserializer.deserializeRecordsFromByteBuffer(rawData, dataSize);
-		
+
 		// Deliver the records
 		this.deliver(records);
 	}
-	
+
 	@Override
-	public void decodeCharactersAndDeliverRecords(char[] rawData) {
+	public void decodeCharactersAndDeliverRecords(final char[] rawData) {
 		this.decodeCharactersAndDeliverRecords(CharBuffer.wrap(rawData), rawData.length);
 	}
-	
+
 	@Override
-	public void decodeCharactersAndDeliverRecords(CharBuffer rawData, int dataSize) {
+	public void decodeCharactersAndDeliverRecords(final CharBuffer rawData, final int dataSize) {
 		final List<IMonitoringRecord> records = this.deserializer.deserializeRecordsFromCharBuffer(rawData, dataSize);
-		
+
 		// Deliver the records
 		this.deliver(records);
 	}
-	
-	private void deliver(List<IMonitoringRecord> records) {
-		for (IMonitoringRecord record : records) {			
+
+	private void deliver(final List<IMonitoringRecord> records) {
+		for (IMonitoringRecord record : records) {
 			this.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 		}
 	}
-		
-	private void handleConfigurationError(String message) throws AnalysisConfigurationException {
+
+	private void handleConfigurationError(final String message) throws AnalysisConfigurationException {
 		this.handleConfigurationError(message, null);
 	}
-	
-	private void handleConfigurationError(String message, Throwable cause) throws AnalysisConfigurationException {
+
+	private void handleConfigurationError(final String message, final Throwable cause) throws AnalysisConfigurationException {
 		if (cause != null) {
 			LOG.error(message, cause);
 			throw new AnalysisConfigurationException(message, cause);
@@ -282,5 +282,5 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 			throw new AnalysisConfigurationException(message);
 		}
 	}
-	
+
 }
