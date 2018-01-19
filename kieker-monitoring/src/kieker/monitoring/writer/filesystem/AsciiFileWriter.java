@@ -131,20 +131,29 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	public void writeMonitoringRecord(final IMonitoringRecord record) {
 		final String recordClassName = record.getClass().getName();
 		this.writerRegistry.register(recordClassName);
-
+		final CharBuffer recordBuffer = this.buffer;
+		
 		final PrintWriter fileWriter = this.fileWriterPool.getFileWriter();
 
-		this.buffer.clear();
+		recordBuffer.clear();
 
 		fileWriter.print('$');
 		fileWriter.print(this.writerRegistry.getId(recordClassName));
 		fileWriter.print(';');
-		fileWriter.print(record.getLoggingTimestamp());
-
+		fileWriter.print(record.getLoggingTimestamp());		
+		
 		record.serialize(this.serializer);
 
-		this.buffer.flip();
-		fileWriter.print(this.buffer.toString());
+		final int currentPosition = recordBuffer.position();
+		if (currentPosition > 0) {
+			// If data from the record has been written, insert a semicolon after the logging timestamp
+			// and remove the trailing semicolon written by the serializer
+			fileWriter.print(';');
+			recordBuffer.position(currentPosition - 1);
+		}
+		
+		recordBuffer.flip();
+		fileWriter.print(recordBuffer.toString());
 		fileWriter.println();
 
 		if (this.flush) {
