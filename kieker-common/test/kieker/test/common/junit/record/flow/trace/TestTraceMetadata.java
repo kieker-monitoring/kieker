@@ -59,7 +59,7 @@ public class TestTraceMetadata extends AbstractKiekerTest {
 	@Test
 	public void testSerializeDeserializeEquals() {
 
-		final TraceMetadata trace1 = new TraceMetadata(TRACE_ID, THREAD_ID, SESSION_ID, HOSTNAME, PARENT_TRACE_ID, PARENT_ORDER_ID);
+		final TraceMetadata trace1 = new TraceMetadata(TRACE_ID, THREAD_ID, SESSION_ID, HOSTNAME, PARENT_TRACE_ID, PARENT_ORDER_ID, 0);
 
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, trace1.getTraceId());
 		Assert.assertEquals("Unexpected thread ID", THREAD_ID, trace1.getThreadId());
@@ -82,7 +82,7 @@ public class TestTraceMetadata extends AbstractKiekerTest {
 	@Test
 	public void testSerializeDeserializeBinaryEquals() {
 
-		final TraceMetadata trace1 = new TraceMetadata(TRACE_ID, THREAD_ID, SESSION_ID, HOSTNAME, PARENT_TRACE_ID, PARENT_ORDER_ID);
+		final TraceMetadata trace1 = new TraceMetadata(TRACE_ID, THREAD_ID, SESSION_ID, HOSTNAME, PARENT_TRACE_ID, PARENT_ORDER_ID, 0);
 
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, trace1.getTraceId());
 		Assert.assertEquals("Unexpected thread ID", THREAD_ID, trace1.getThreadId());

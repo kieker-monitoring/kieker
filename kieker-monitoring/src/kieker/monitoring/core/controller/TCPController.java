@@ -1,15 +1,12 @@
 package kieker.monitoring.core.controller;
 
-import java.io.IOException;
-
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IRecordReceivedListener;
-import kieker.common.record.MonitoringCommandListener;
 import kieker.common.record.tcp.SingleSocketRecordReader;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.writer.tcp.SingleSocketTcpWriter;
+import kieker.monitoring.listener.MonitoringCommandListener;
 
 /**
  *
@@ -21,47 +18,56 @@ public class TCPController extends AbstractController implements IRemoteControll
 
 	private static final int MESSAGE_BUFFER_SIZE = 65535;
 	/** The log for this component. */
-	protected final Log log;
-	private final SingleSocketTcpWriter tcpWriter;
+	private final Log log;
+	// maybe not necessary
 	private final String domain;
 	private final int port;
 	private final IRecordReceivedListener listener;
 	private final SingleSocketRecordReader tcpReader;
+	private final boolean tcpEnabled;
 
-	protected TCPController(final Configuration configuration) throws IOException {
+	protected TCPController(final Configuration configuration) {
 		super(configuration);
 
-		this.tcpWriter = new SingleSocketTcpWriter(configuration);
 		this.log = LogFactory.getLog(this.getClass());
-		this.listener = new MonitoringCommandListener();
+		this.listener = new MonitoringCommandListener(this.monitoringController);
 		this.domain = configuration.getStringProperty(ConfigurationFactory.ACTIVATE_TCP_DOMAIN);
 		this.port = Integer.parseInt(configuration.getStringProperty(ConfigurationFactory.ACTIVATE_TCP_REMOTE_PORT));
+		this.tcpEnabled = configuration.getBooleanProperty(ConfigurationFactory.ACTIVATE_TCP);
 		this.tcpReader = new SingleSocketRecordReader(this.port, MESSAGE_BUFFER_SIZE, this.log, this.listener);
 
 	}
 
 	@Override
 	public String getControllerDomain() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.domain;
 	}
 
 	@Override
 	protected void init() {
-		// TODO Auto-generated method stub
+		if (this.tcpEnabled) {
+			this.tcpReader.run();
+		}
 
 	}
 
 	@Override
 	protected void cleanup() {
-		// TODO Auto-generated method stub
-
+		this.tcpReader.terminate();
 	}
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+		final StringBuilder sb = new StringBuilder(255);
+		sb.append("TCPController: ");
+		if (this.tcpEnabled) {
+			sb.append("TCP enabled (Domain: '");
+			sb.append(this.domain);
+			sb.append("')\n");
+		} else {
+			sb.append("TCP disabled\n");
+		}
+		return sb.toString();
 	}
 
 }

@@ -1,18 +1,18 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
+* Copyright 2018 Kieker Project (http://www.iobserve-devops.net)
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+***************************************************************************/
 package kieker.common.record.flow.trace;
 
 import java.nio.BufferOverflowException;
@@ -102,7 +102,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * @param parentOrderId
 	 *            parentOrderId
 	 */
-	public TraceMetadata(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId) {
+	public TraceMetadata(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId, final int nextOrderId) {
 		this.traceId = traceId;
 		this.threadId = threadId;
 		this.sessionId = sessionId == null?NO_SESSION_ID:sessionId;
@@ -129,6 +129,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		this.hostname = (String) values[3];
 		this.parentTraceId = (Long) values[4];
 		this.parentOrderId = (Integer) values[5];
+		this.nextOrderId = (Integer) values[6];
 	}
 
 	/**
@@ -150,6 +151,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		this.hostname = (String) values[3];
 		this.parentTraceId = (Long) values[4];
 		this.parentOrderId = (Integer) values[5];
+		this.nextOrderId = (Integer) values[6];
 	}
 
 	
@@ -164,6 +166,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		this.hostname = deserializer.getString();
 		this.parentTraceId = deserializer.getLong();
 		this.parentOrderId = deserializer.getInt();
+		this.nextOrderId = 0;
 	}
 	
 	/**
