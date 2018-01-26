@@ -26,6 +26,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.reader.GetValueAdapter;
 import kieker.common.util.registry.reader.ReaderRegistry;
@@ -40,10 +41,12 @@ import kieker.common.util.registry.reader.ReaderRegistry;
 public class SingleSocketRecordReader extends AbstractTcpReader {
 
 	private static final int INT_BYTES = AbstractMonitoringRecord.TYPE_SIZE_INT;
-	private static final int LONG_BYTES = AbstractMonitoringRecord.TYPE_SIZE_LONG;
 	private static final Charset ENCODING = Charset.forName("UTF-8");
 
-	private final ReaderRegistry<String> readerRegistry = new ReaderRegistry<String>();
+	/** Entry ID for a registry entry. */
+	private static final byte REGISTRY_ENTRY_ID = (byte) 0xFF;
+
+	private final ReaderRegistry<String> readerRegistry = new ReaderRegistry<>();
 	private final IRegistry<String> stringRegistryWrapper;
 	private final IRecordReceivedListener listener;
 	private final CachedRecordFactoryCatalog recordFactories = new CachedRecordFactoryCatalog();
@@ -51,21 +54,19 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 	public SingleSocketRecordReader(final int port, final int bufferCapacity, final Log logger, final IRecordReceivedListener listener) {
 		super(port, bufferCapacity, logger);
 		this.listener = listener;
-		this.stringRegistryWrapper = new GetValueAdapter<String>(this.readerRegistry);
+		this.stringRegistryWrapper = new GetValueAdapter<>(this.readerRegistry);
 	}
 
 	@Override
 	protected boolean onBufferReceived(final ByteBuffer buffer) {
-		// identify record class
-		if (buffer.remaining() < INT_BYTES) {
-			return false;
-		}
-		final int clazzId = buffer.getInt();
+		final IValueDeserializer deserializer = DefaultValueDeserializer.create(buffer, this.stringRegistryWrapper);
 
-		if (clazzId == -1) {
+		final byte entryId = deserializer.getByte();
+
+		if (entryId == REGISTRY_ENTRY_ID) {
 			return this.registerRegistryEntry(buffer);
 		} else {
-			return this.deserializeRecord(clazzId, buffer);
+			return this.deserializeRecord(deserializer);
 		}
 	}
 
@@ -90,22 +91,15 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 		return true;
 	}
 
-	private boolean deserializeRecord(final int clazzId, final ByteBuffer buffer) {
-		// identify logging timestamp
-		if (buffer.remaining() < LONG_BYTES) {
-			return false;
-		}
-		final long loggingTimestamp = buffer.getLong(); // NOPMD (timestamp must be read before checking the buffer for record size)
+	private boolean deserializeRecord(final IValueDeserializer deserializer) {
+		final String recordClassName = deserializer.getString();
+		final long loggingTimestamp = deserializer.getLong(); // NOPMD (timestamp must be read before checking the buffer for record size)
 
-		final String recordClassName = this.readerRegistry.get(clazzId);
 		// identify record data
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
-		if (buffer.remaining() < recordFactory.getRecordSizeInBytes()) {
-			return false;
-		}
 
 		try {
-			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.create(buffer, this.stringRegistryWrapper));
+			final IMonitoringRecord record = recordFactory.create(deserializer);
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			this.listener.onRecordReceived(record);

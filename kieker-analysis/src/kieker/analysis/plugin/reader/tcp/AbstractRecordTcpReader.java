@@ -25,6 +25,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.registry.ILookup;
 
 /**
@@ -65,19 +66,20 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 
 	@Override
 	protected final boolean onBufferReceived(final ByteBuffer buffer) {
+		final IValueDeserializer deserializer = DefaultValueDeserializer.create(buffer, this.stringRegistry);
+
 		// identify record class
 		if (buffer.remaining() < INT_BYTES) {
 			return false;
 		}
-		final int clazzId = buffer.getInt(); // NOPMD (clazzId must be read before reading timestamp)
+		final String recordClassName = deserializer.getString(); // NOPMD (clazzId must be read before reading timestamp)
 
 		// identify logging timestamp
 		if (buffer.remaining() < LONG_BYTES) {
 			return false;
 		}
-		final long loggingTimestamp = buffer.getLong(); // NOPMD (timestamp must be read before checking the buffer for record size)
+		final long loggingTimestamp = deserializer.getLong(); // NOPMD (timestamp must be read before checking the buffer for record size)
 
-		final String recordClassName = this.stringRegistry.get(clazzId);
 		// identify record data
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
 		if (buffer.remaining() < recordFactory.getRecordSizeInBytes()) { // includes the case where size is -1
@@ -85,7 +87,7 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 		}
 
 		try {
-			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.create(buffer, this.stringRegistry));
+			final IMonitoringRecord record = recordFactory.create(deserializer);
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			this.onRecordReceived(record);

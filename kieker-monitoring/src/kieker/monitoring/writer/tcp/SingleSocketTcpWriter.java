@@ -65,6 +65,12 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS
 																// (afterPREFIX)
 
+	/** Entry ID for a registry entry. */
+	private static final byte REGISTRY_ENTRY_ID = (byte) 0xFF;
+	
+	/** Entry ID for a record entry. */
+	private static final byte RECORD_ENTRY_ID = (byte) 0x01;
+	
 	/** the channel which writes out monitoring and registry records. */
 	private final WritableByteChannel socketChannel;
 	/** the buffer used for buffering monitoring records. */
@@ -75,9 +81,10 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 	 * <code>true</code> if the {@link #buffer} should be flushed upon each new incoming monitoring record.
 	 */
 	private final boolean flush;
+		
 	/** the serializer to use for the incoming records */
 	private final IValueSerializer serializer;
-
+	
 	// remove RegisterAdapter
 
 	public SingleSocketTcpWriter(final Configuration configuration) throws IOException {
@@ -93,7 +100,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
 
 		final WriterRegistry writerRegistry = new WriterRegistry(this);
-		this.serializer = DefaultValueSerializer.create(this.buffer, new GetIdAdapter<>(writerRegistry));
+		this.serializer = DefaultValueSerializer.create(this.buffer, new GetIdAdapter<>(writerRegistry));		
 	}
 
 	@Override
@@ -104,14 +111,19 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		final ByteBuffer recordBuffer = this.buffer;
-		if ((4 + 8 + monitoringRecord.getSize()) > recordBuffer.remaining()) {
+		if ((5 + 8 + monitoringRecord.getSize()) > recordBuffer.remaining()) {
 			// Always flush the registryBuffer before flushing the recordBuffer.
 			// Otherwise the monitoring records could arrive before their string
 			// records
 			WriterUtil.flushBuffer(this.registryBuffer, this.socketChannel, LOG);
 			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOG);
 		}
-
+		
+		// Immediately prepend the required entry ID. This ID is written immediately
+		// to the buffer to ensure that it is encoded the same way as the registry
+		// record (see below)
+		recordBuffer.put(RECORD_ENTRY_ID);
+		
 		final String recordClassName = monitoringRecord.getClass().getName();
 
 		this.serializer.putString(recordClassName);
@@ -140,7 +152,8 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 			WriterUtil.flushBuffer(localRegistryBuffer, this.socketChannel, LOG);
 		}
 
-		localRegistryBuffer.putInt(RegistryRecord.CLASS_ID);
+		// Prepend the registry entry ID
+		localRegistryBuffer.put(REGISTRY_ENTRY_ID);
 		localRegistryBuffer.putInt(id);
 		localRegistryBuffer.putInt(value.length());
 		localRegistryBuffer.put(bytes);
