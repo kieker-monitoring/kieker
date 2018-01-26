@@ -66,12 +66,12 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 
 	@Override
 	protected final boolean onBufferReceived(final ByteBuffer buffer) {
-		final IValueDeserializer deserializer = DefaultValueDeserializer.create(buffer, this.stringRegistry);
-
 		// identify record class
 		if (buffer.remaining() < INT_BYTES) {
 			return false;
 		}
+		
+		final IValueDeserializer deserializer = DefaultValueDeserializer.create(buffer, this.stringRegistry);
 		final String recordClassName = deserializer.getString(); // NOPMD (clazzId must be read before reading timestamp)
 
 		// identify logging timestamp
