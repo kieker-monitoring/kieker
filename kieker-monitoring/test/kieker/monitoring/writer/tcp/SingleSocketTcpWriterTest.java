@@ -1,13 +1,8 @@
 package kieker.monitoring.writer.tcp;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,13 +12,16 @@ import kieker.common.configuration.Configuration;
 
 public class SingleSocketTcpWriterTest {
 
+	private static final String HOSTNAME = "localhost";
+	private static final int PORT = 15469;
+
 	private Configuration configuration;
 
 	@Before
 	public void before() throws IOException {
 		this.configuration = new Configuration();
-		this.configuration.setProperty(SingleSocketTcpWriter.CONFIG_HOSTNAME, "localhost");
-		this.configuration.setProperty(SingleSocketTcpWriter.CONFIG_PORT, 15469);
+		this.configuration.setProperty(SingleSocketTcpWriter.CONFIG_HOSTNAME, HOSTNAME);
+		this.configuration.setProperty(SingleSocketTcpWriter.CONFIG_PORT, PORT);
 	}
 
 	@After
@@ -31,7 +29,7 @@ public class SingleSocketTcpWriterTest {
 		// do nothing
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test(expected = ConnectionTimeoutException.class)
 	public void shouldFailConnectingWithDefault() throws Exception {
 		final SingleSocketTcpWriter writer = new SingleSocketTcpWriter(this.configuration);
 
@@ -44,12 +42,29 @@ public class SingleSocketTcpWriterTest {
 
 	@Test
 	public void shouldConnectWithDefault() throws Exception {
-//		final ServerSocketChannel serverSocketChannel = ServerSocketChannel.open()
-//				.bind(new InetSocketAddress("localhost", 15469));
-//		serverSocketChannel.accept();
+		final ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+		try {
+			serverSocketChannel.bind(new InetSocketAddress(HOSTNAME, PORT));
+			serverSocketChannel.configureBlocking(false);
+			serverSocketChannel.accept();// non-blocking accept
+
+			final SingleSocketTcpWriter writer = new SingleSocketTcpWriter(this.configuration);
+			try {
+				writer.onStarting();
+			} finally {
+				writer.onTerminating();
+			}
+
+		} finally {
+			serverSocketChannel.close();
+		}
+	}
+
+	@Test(expected = ConnectionTimeoutException.class)
+	public void reconnectingShouldFail() throws Exception {
+		this.configuration.setProperty(SingleSocketTcpWriter.CONFIG_CONN_TIMEOUT_IN_MS, 500);
 
 		final SingleSocketTcpWriter writer = new SingleSocketTcpWriter(this.configuration);
-
 		try {
 			writer.onStarting();
 		} finally {
@@ -58,28 +73,42 @@ public class SingleSocketTcpWriterTest {
 	}
 
 	@Test
-	public void shouldReconnect() throws Exception {
-		this.configuration.setProperty(SingleSocketTcpWriter.CONFIG_CONN_TIMEOUT_IN_MS, 1000);
+	public void reconnectingShouldWork() throws Exception {
+		final long configTimeoutInMs = 1000;
 
-		final SingleSocketTcpWriter writer = new SingleSocketTcpWriter(this.configuration);
+		final Thread serverThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(configTimeoutInMs / 2);
+				} catch (InterruptedException e) {
+					throw new IllegalStateException(e);
+				}
+
+				try {
+					final ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+					serverSocketChannel.bind(new InetSocketAddress(HOSTNAME, PORT));
+					serverSocketChannel.accept();// blocking accept
+				} catch (IOException e) {
+					throw new IllegalStateException(e);
+				}
+			}
+		});
+		serverThread.start();
 
 		try {
-			writer.onStarting();
+			this.configuration.setProperty(SingleSocketTcpWriter.CONFIG_CONN_TIMEOUT_IN_MS, configTimeoutInMs);
+
+			final SingleSocketTcpWriter writer = new SingleSocketTcpWriter(this.configuration);
+			try {
+				writer.onStarting();
+			} finally {
+				writer.onTerminating();
+			}
+
 		} finally {
-			writer.onTerminating();
+			serverThread.join();
 		}
 	}
 
-	@Test
-	public void shouldFailReconnection() throws Exception {
-		this.configuration.setProperty(SingleSocketTcpWriter.CONFIG_CONN_TIMEOUT_IN_MS, 1000);
-
-		final SingleSocketTcpWriter writer = new SingleSocketTcpWriter(this.configuration);
-
-		try {
-			writer.onStarting();
-		} finally {
-			writer.onTerminating();
-		}
-	}
 }

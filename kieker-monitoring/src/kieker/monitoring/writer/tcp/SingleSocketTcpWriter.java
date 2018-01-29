@@ -135,7 +135,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 		if (diffInMs > this.connectionTimeoutInMs) {
 			String message = String.format("Connection timeout of %d ms exceeded.", this.connectionTimeoutInMs);
-			throw new IllegalStateException(message);
+			throw new ConnectionTimeoutException(message);
 		}
 
 		try {
