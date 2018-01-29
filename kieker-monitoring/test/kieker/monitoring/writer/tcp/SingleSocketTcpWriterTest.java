@@ -105,9 +105,8 @@ public class SingleSocketTcpWriterTest {
 			} finally {
 				writer.onTerminating();
 			}
-
 		} finally {
-			serverThread.join();
+			serverThread.join(10000);
 		}
 	}
 
