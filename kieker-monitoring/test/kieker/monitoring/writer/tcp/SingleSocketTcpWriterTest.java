@@ -13,7 +13,7 @@ import kieker.common.configuration.Configuration;
 public class SingleSocketTcpWriterTest {
 
 	private static final String HOSTNAME = "localhost";
-	private static final int PORT = 15469;
+	private static final int PORT = 10444;
 
 	private Configuration configuration;
 
@@ -74,13 +74,14 @@ public class SingleSocketTcpWriterTest {
 
 	@Test
 	public void reconnectingShouldWork() throws Exception {
-		final long configTimeoutInMs = 1000;
+		final int configTimeoutInMs = 1000;
 
 		final Thread serverThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					Thread.sleep(configTimeoutInMs / 2);
+					// give the writer time to fail some connection attempts
+					Thread.sleep(configTimeoutInMs / 3);
 				} catch (InterruptedException e) {
 					throw new IllegalStateException(e);
 				}
