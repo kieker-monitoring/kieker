@@ -70,14 +70,21 @@ public class SocketChannelTest {
 		socket.connect(socketAddress, timeout);
 	}
 
-	@Test(expected = SocketTimeoutException.class)
+	@Test
 	public void connectShouldFailDueToCustomTimeoutBelow1000() throws Exception {
 		final SocketAddress socketAddress = new InetSocketAddress(this.hostname, this.port);
 		final int timeout = 1;
 
 		final Socket socket = this.createSocket();
 
-		socket.connect(socketAddress, timeout);
+		try {
+			socket.connect(socketAddress, timeout);
+		} catch (SocketTimeoutException | ConnectException e) { // NOPMD (empty catch block)
+			// throws a SocketTimeoutException on windows
+			// throws a ConnectException on unix
+		}
+
+		assertThat(socket.isClosed(), is(true)); // NOPMD (JUnit message is not necessary)
 	}
 
 	@Test(expected = ConnectException.class)
