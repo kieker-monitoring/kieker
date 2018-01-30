@@ -28,7 +28,7 @@ public class SingleSocketTcpWriterTest {
 	public void after() {
 		// do nothing
 	}
-
+	
 	@Test(expected = ConnectionTimeoutException.class)
 	public void shouldFailConnectingWithDefault() throws Exception {
 		final SingleSocketTcpWriter writer = new SingleSocketTcpWriter(this.configuration);
@@ -110,5 +110,5 @@ public class SingleSocketTcpWriterTest {
 			serverThread.join(10000);
 		}
 	}
-
+	
 }
