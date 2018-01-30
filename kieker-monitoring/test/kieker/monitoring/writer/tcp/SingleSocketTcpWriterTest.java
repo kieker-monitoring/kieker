@@ -16,6 +16,10 @@
 
 package kieker.monitoring.writer.tcp;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
@@ -78,10 +82,11 @@ public class SingleSocketTcpWriterTest {
 			} finally {
 				writer.onTerminating();
 			}
-
 		} finally {
 			serverSocketChannel.close();
 		}
+
+		assertTrue(true); // NOPMD (this test should not throw any exception)
 	}
 
 	@Test(expected = ConnectionTimeoutException.class)
@@ -133,6 +138,8 @@ public class SingleSocketTcpWriterTest {
 		} finally {
 			serverThread.join(2000);
 		}
+
+		assertThat(serverThread.isAlive(), is(false)); // NOPMD (JUnit message is not necessary)
 	}
 
 }

@@ -135,7 +135,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 	private void tryConnect(final TimeoutCountdown timeoutCountdown) throws ConnectionTimeoutException {
 		final Socket socket = this.socketChannel.socket();
 
-		final long startTimestampInNs = System.nanoTime();
+		final long startTimestampInNs = System.nanoTime(); // NOPMD (PrematureDeclaration)
 
 		if (this.connectOrTimeout(socket, timeoutCountdown.getCurrentTimeoutinMs())) {
 			return;

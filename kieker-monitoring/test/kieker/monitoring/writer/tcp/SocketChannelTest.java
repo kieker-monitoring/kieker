@@ -17,7 +17,6 @@ package kieker.monitoring.writer.tcp;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -100,13 +99,14 @@ public class SocketChannelTest {
 		final Socket socket = SocketChannel.open().socket();
 		try {
 			socket.connect(socketAddress, timeout);
-			fail("The previous connect should throw an exception.");
 		} catch (SocketTimeoutException | ConnectException e) { // NOPMD (empty catch block)
 			// both of the exceptions indicate a connection timeout
 			// => ignore to reconnect
 		}
 
-		assertThat(socket.isClosed(), is(true));
+		// The connect from above throws an exception so that the socket is closed.
+		// isClosed includes isConnected=false.
+		assertThat(socket.isClosed(), is(true)); // NOPMD (JUnit message is not necessary)
 
 		final ServerSocketChannel serverSocketChannel = ServerSocketChannel.open().bind(socketAddress);
 		try {
@@ -136,15 +136,23 @@ public class SocketChannelTest {
 		final Socket socket = socketChannel.socket();
 		try {
 			socket.connect(socketAddress, timeout);
-			fail("The previous connect should throw an exception.");
 		} catch (SocketTimeoutException | ConnectException e) { // NOPMD (empty catch block)
 			// both of the exceptions indicate a connection timeout
 			// => ignore to reconnect
 		}
 
+		// The previous connect should throw an exception
+		assertThat(socket.isConnected(), is(false)); // NOPMD (JUnit message is not necessary)
+	}
+
+	@Test
+	public void channelShouldAlwaysReturnTheSameSocket() throws Exception {
+		final SocketChannel socketChannel = SocketChannel.open();
+
+		final Socket socket = socketChannel.socket();
 		final Socket anotherSocket = socketChannel.socket();
 
-		assertThat(anotherSocket, is(sameInstance(socket)));
+		assertThat(socket, is(sameInstance(anotherSocket))); // NOPMD (JUnit message is not necessary)
 	}
 
 	/**
