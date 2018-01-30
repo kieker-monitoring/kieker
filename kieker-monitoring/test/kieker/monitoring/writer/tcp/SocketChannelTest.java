@@ -97,9 +97,7 @@ public class SocketChannelTest {
 		final SocketAddress socketAddress = new InetSocketAddress(this.hostname, this.port);
 		final int timeout = 1;
 
-		final SocketChannel socketChannel = SocketChannel.open();
-
-		final Socket socket = socketChannel.socket();
+		final Socket socket = SocketChannel.open().socket();
 		try {
 			socket.connect(socketAddress, timeout);
 			fail("The previous connect should throw an exception.");
@@ -116,8 +114,8 @@ public class SocketChannelTest {
 			serverSocketChannel.configureBlocking(false);
 			serverSocketChannel.accept();
 
-			// connect to the server
-			final Socket anotherSocket = socketChannel.socket();
+			// reconnect to the server (requires a new channel)
+			final Socket anotherSocket = SocketChannel.open().socket();
 			try {
 				anotherSocket.connect(socketAddress);
 			} finally {
@@ -149,6 +147,13 @@ public class SocketChannelTest {
 		assertThat(anotherSocket, is(sameInstance(socket)));
 	}
 
+	/**
+	 * Creates a new channel and returns the associated socket.
+	 *
+	 * @return a new socket
+	 * @throws IOException
+	 *             If an I/O error occurs while opening a new channel
+	 */
 	private Socket createSocket() throws IOException {
 		final SocketChannel socketChannel = SocketChannel.open();
 		return socketChannel.socket();

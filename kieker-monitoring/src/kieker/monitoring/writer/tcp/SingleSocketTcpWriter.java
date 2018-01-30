@@ -119,7 +119,6 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 	@Override
 	public void onStarting() {
-		final long startTimestampInNs = System.nanoTime();
 		final TimeoutCountdown timeoutCountdown = new TimeoutCountdown(this.connectionTimeoutInMs);
 
 		do {
@@ -129,28 +128,42 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 				throw new IllegalStateException(e);
 			}
 
-			this.tryConnect(startTimestampInNs, timeoutCountdown);
+			this.tryConnect(timeoutCountdown);
 		} while (!this.socketChannel.isConnected());
 	}
 
-	private void tryConnect(final long startTimestampInNs, final TimeoutCountdown timeoutCountdown)
-			throws ConnectionTimeoutException {
+	private void tryConnect(final TimeoutCountdown timeoutCountdown) throws ConnectionTimeoutException {
 		final Socket socket = this.socketChannel.socket();
+
+		final long startTimestampInNs = System.nanoTime();
+
+		if (this.connectOrTimeout(socket, timeoutCountdown.getCurrentTimeoutinMs())) {
+			return;
+		}
+
+		final long currentTimestampInNs = System.nanoTime();
+
+		final long elapsedTimeInNs = currentTimestampInNs - startTimestampInNs;
+		final long elapsedTimeInMs = TimeUnit.NANOSECONDS.toMillis(elapsedTimeInNs);
+		timeoutCountdown.countdown(elapsedTimeInMs);
+
+		if (timeoutCountdown.getCurrentTimeoutinMs() <= 0) {
+			final String message = String.format("Connection timeout of %d ms exceeded.", this.connectionTimeoutInMs);
+			throw new ConnectionTimeoutException(message);
+		}
+	}
+
+	/**
+	 * @return <code>true</code> if connected, <code>false</code> if not connected due to a timeout.
+	 */
+	private boolean connectOrTimeout(final Socket socket, final int timeoutInMs) {
 		try {
-			socket.connect(this.socketAddress, timeoutCountdown.getCurrentTimeoutinMs());
+			socket.connect(this.socketAddress, timeoutInMs);
+			return true;
 		} catch (SocketTimeoutException | ConnectException e) {
 			// both of the exceptions indicate a connection timeout
 			// => ignore to reconnect
-
-			final long waitingTimeInNs = System.nanoTime() - startTimestampInNs;
-			final long elapsedTimeInMs = TimeUnit.NANOSECONDS.toMillis(waitingTimeInNs);
-			timeoutCountdown.countdown(elapsedTimeInMs);
-
-			if (timeoutCountdown.getCurrentTimeoutinMs() <= 0) {
-				final String message = String.format("Connection timeout of %d ms exceeded.",
-						this.connectionTimeoutInMs);
-				throw new ConnectionTimeoutException(message, e);
-			}
+			return false;
 		} catch (final IOException e) {
 			throw new IllegalStateException(e);
 		}

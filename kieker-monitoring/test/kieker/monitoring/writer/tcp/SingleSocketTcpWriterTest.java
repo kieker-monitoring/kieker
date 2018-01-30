@@ -111,8 +111,7 @@ public class SingleSocketTcpWriterTest {
 					throw new IllegalStateException(e);
 				}
 
-				try {
-					final ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+				try (final ServerSocketChannel serverSocketChannel = ServerSocketChannel.open()) {
 					serverSocketChannel.bind(bindAddress);
 					serverSocketChannel.accept(); // blocking accept
 				} catch (final IOException e) {
