@@ -34,7 +34,7 @@ import kieker.monitoring.core.controller.MonitoringController;
  */
 public class MonitoringCommandListener implements IRecordReceivedListener {
 
-	private static final Log LOG = LogFactory.getLog(MonitoringCommandListener.class); // NOPMD (enum logger)
+	private static final Log LOG = LogFactory.getLog(MonitoringCommandListener.class);
 	private final MonitoringController monitoringController;
 
 	/**
@@ -55,7 +55,9 @@ public class MonitoringCommandListener implements IRecordReceivedListener {
 	@Override
 	public void onRecordReceived(final IMonitoringRecord record) {
 
-		LOG.debug("Received new record: " + record.getClass().getName());
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Received new record: " + record.getClass().getName());
+		}
 		if (!(record instanceof RemoteControlEvent)) {
 			LOG.info("Received an event for the TCP monitoring controller, which is no remote control event");
 		}
@@ -65,7 +67,7 @@ public class MonitoringCommandListener implements IRecordReceivedListener {
 		} else if (record instanceof ActivationEvent) {
 			this.monitoringController.activateProbe(pattern);
 		} else {
-			LOG.info("Received unknown remote control event: " + record.getClass().getName());
+			LOG.info("Received unknown remote control event: " + record.getClass().getName()); // NOPMD
 		}
 	}
 
