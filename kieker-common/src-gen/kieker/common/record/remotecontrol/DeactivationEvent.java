@@ -15,9 +15,12 @@
 ***************************************************************************/
 package kieker.common.record.remotecontrol;
 
+import java.nio.BufferOverflowException;
 
 import kieker.common.record.remotecontrol.RemoteControlEvent;
 import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
 
 
 /**
@@ -26,13 +29,24 @@ import kieker.common.record.io.IValueDeserializer;
  * 
  * @since 1.14
  */
-public abstract class DeactivationEvent extends RemoteControlEvent  {
-	private static final long serialVersionUID = -5333262085397327129L;
+public class DeactivationEvent extends RemoteControlEvent  {
+	private static final long serialVersionUID = 7668531141811837152L;
 
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_STRING // RemoteControlEvent.pattern
+	;
+	
+	public static final Class<?>[] TYPES = {
+		String.class, // RemoteControlEvent.pattern
+	};
 	
 	
 	
-		
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"pattern",
+	};
+	
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -44,6 +58,19 @@ public abstract class DeactivationEvent extends RemoteControlEvent  {
 		super(pattern);
 	}
 
+	/**
+	 * This constructor converts the given array into a record.
+	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #DeactivationEvent(IValueDeserializer)} instead.
+	 */
+	@Deprecated
+	public DeactivationEvent(final Object[] values) { // NOPMD (direct store of values)
+		super(values, TYPES);
+	}
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
@@ -69,6 +96,56 @@ public abstract class DeactivationEvent extends RemoteControlEvent  {
 		super(deserializer);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
+	 */
+	@Override
+	@Deprecated
+	public Object[] toArray() {
+		return new Object[] {
+			this.getPattern()
+		};
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+		stringRegistry.get(this.getPattern());
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
+		serializer.putString(this.getPattern());
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?>[] getValueTypes() {
+		return TYPES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize() {
+		return SIZE;
+	}
 
 	/**
 	 * {@inheritDoc}

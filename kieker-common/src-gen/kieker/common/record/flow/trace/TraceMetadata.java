@@ -102,7 +102,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * @param parentOrderId
 	 *            parentOrderId
 	 */
-	public TraceMetadata(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId, final int nextOrderId) {
+	public TraceMetadata(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId) {
 		this.traceId = traceId;
 		this.threadId = threadId;
 		this.sessionId = sessionId == null?NO_SESSION_ID:sessionId;
@@ -129,7 +129,6 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		this.hostname = (String) values[3];
 		this.parentTraceId = (Long) values[4];
 		this.parentOrderId = (Integer) values[5];
-		this.nextOrderId = (Integer) values[6];
 	}
 
 	/**
@@ -151,7 +150,6 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		this.hostname = (String) values[3];
 		this.parentTraceId = (Long) values[4];
 		this.parentOrderId = (Integer) values[5];
-		this.nextOrderId = (Integer) values[6];
 	}
 
 	

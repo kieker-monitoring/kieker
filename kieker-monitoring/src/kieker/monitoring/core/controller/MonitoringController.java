@@ -61,7 +61,7 @@ public final class MonitoringController extends AbstractController implements IM
 		this.stateController = new StateController(configuration);
 		this.samplingController = new SamplingController(configuration);
 		this.jmxController = new JMXController(configuration);
-		this.tcpController = new TCPController(configuration);
+		this.tcpController = new TCPController(configuration, this);
 		this.writerController = new WriterController(configuration);
 		this.stateController.setStateListener(this);
 		this.timeSourceController = new TimeSourceController(configuration);

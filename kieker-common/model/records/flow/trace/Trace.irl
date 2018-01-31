@@ -27,7 +27,7 @@ entity TraceMetadata : IFlowRecord {
  	string hostname = NO_HOSTNAME
  	long parentTraceId = NO_PARENT_TRACEID
  	int parentOrderId = NO_PARENT_ORDER_INDEX
- 	transient auto-increment int nextOrderId = 0 
+ 	transient auto-increment int nextOrderId = 0
 }
  
 @author 'Felix Eichhorst'

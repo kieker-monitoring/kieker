@@ -7,9 +7,9 @@ abstract entity RemoteControlEvent {
 
 
 @author 'Marc Adolf' @since '1.14'
-abstract entity DeactivationEvent extends RemoteControlEvent {
+entity DeactivationEvent extends RemoteControlEvent {
 }
 
 @author 'Marc Adolf' @since '1.14'
-abstract entity ActivationEvent extends RemoteControlEvent {
+entity ActivationEvent extends RemoteControlEvent {
 } 

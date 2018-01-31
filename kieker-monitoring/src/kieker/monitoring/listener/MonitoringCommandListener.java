@@ -29,6 +29,7 @@ import kieker.monitoring.core.controller.MonitoringController;
  * Represents a listener which is informed upon a event is received, which should .
  *
  * @author Marc Adolf
+ * @since 1.13
  *
  */
 public class MonitoringCommandListener implements IRecordReceivedListener {
@@ -36,6 +37,12 @@ public class MonitoringCommandListener implements IRecordReceivedListener {
 	private static final Log LOG = LogFactory.getLog(MonitoringCommandListener.class); // NOPMD (enum logger)
 	private final MonitoringController monitoringController;
 
+	/**
+	 * Creates a new listener for {@link RemoteControlEvent RemoteControlEvents}. Relies on an existing {@link MonitoringController} to transfer messages like the
+	 * (de-)activation of probes.
+	 *
+	 * @param monitoringController
+	 */
 	public MonitoringCommandListener(final MonitoringController monitoringController) {
 		this.monitoringController = monitoringController;
 	}
