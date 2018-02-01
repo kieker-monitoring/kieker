@@ -164,6 +164,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		this.hostname = deserializer.getString();
 		this.parentTraceId = deserializer.getLong();
 		this.parentOrderId = deserializer.getInt();
+		this.nextOrderId = 0;
 	}
 	
 	/**

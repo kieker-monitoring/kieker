@@ -23,12 +23,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.flow.trace.ApplicationTraceMetadata;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public enum TraceRegistry { // Singleton (Effective Java #3)
@@ -57,7 +58,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 
 	/**
 	 * Gets a Trace for the current thread. If no trace is active, null is returned.
-	 * 
+	 *
 	 * @return
 	 * 		Trace object or null
 	 */
@@ -67,11 +68,11 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 
 	/**
 	 * This creates a new unique Trace object and registers it.
-	 * 
+	 *
 	 * @return
 	 * 		Trace object
 	 */
-	public final TraceMetadata registerTrace() {
+	public final ApplicationTraceMetadata registerTrace() {
 		final TraceMetadata enclosingTrace = this.getTrace();
 		if (enclosingTrace != null) { // we create a subtrace
 			Stack<TraceMetadata> localTraceStack = this.enclosingTraceStack.get();
@@ -100,14 +101,16 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 			parentOrderId = -1;
 		}
 		final String sessionId = SessionRegistry.INSTANCE.recallThreadLocalSessionId();
-		final TraceMetadata trace = new TraceMetadata(traceId, thread.getId(), sessionId, this.hostname, parentTraceId, parentOrderId);
+		final String applicationName = MonitoringController.getInstance().getApplicationName();
+		final ApplicationTraceMetadata trace = new ApplicationTraceMetadata(traceId, thread.getId(), sessionId, this.hostname, parentTraceId, parentOrderId,
+				applicationName);
 		this.traceStorage.set(trace);
 		return trace;
 	}
 
 	/**
 	 * Unregisters the current Trace object.
-	 * 
+	 *
 	 * Future calls of getTrace() will either return null or the enclosing trace object.
 	 */
 	public final void unregisterTrace() {
@@ -133,7 +136,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	/**
 	 * Sets the parent for the next created trace inside this thread.
 	 * This method should be used by probes in connection with SpliEvents.
-	 * 
+	 *
 	 * @param t
 	 *            the thread the new trace belongs to
 	 * @param traceId
