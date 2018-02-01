@@ -17,22 +17,20 @@ package kieker.common.record.flow.trace;
 
 import java.nio.BufferOverflowException;
 
-import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
-import kieker.common.record.flow.IFlowRecord;
 
 /**
- * @author Jan Waller
+ * @author Christian Zirkelbach
  * API compatibility: Kieker 1.13.0
  * 
- * @since 1.5
+ * @since 1.14
  */
-public class TraceMetadata extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IFlowRecord {
-	private static final long serialVersionUID = 2517933148667588979L;
+public class ApplicationTraceMetadata extends TraceMetadata  {
+	private static final long serialVersionUID = 7720995073835113293L;
 
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // TraceMetadata.traceId
@@ -41,6 +39,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 			 + TYPE_SIZE_STRING // TraceMetadata.hostname
 			 + TYPE_SIZE_LONG // TraceMetadata.parentTraceId
 			 + TYPE_SIZE_INT // TraceMetadata.parentOrderId
+			 + TYPE_SIZE_STRING // ApplicationTraceMetadata.applicationName
 	;
 	
 	public static final Class<?>[] TYPES = {
@@ -50,22 +49,14 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		String.class, // TraceMetadata.hostname
 		long.class, // TraceMetadata.parentTraceId
 		int.class, // TraceMetadata.parentOrderId
+		String.class, // ApplicationTraceMetadata.applicationName
 	};
 	
 	/** user-defined constants. */
-	public static final long NO_PARENT_TRACEID = -1L;
-	public static final int NO_PARENT_ORDER_INDEX = -1;
-	public static final String NO_SESSION_ID = "<no-session-id>";
-	public static final String NO_HOSTNAME = "<default-host>";
+	public static final String NO_APPLICATION_NAME = "<no-application-name>";
 	
 	/** default constants. */
-	public static final long TRACE_ID = 0L;
-	public static final long THREAD_ID = 0L;
-	public static final String SESSION_ID = NO_SESSION_ID;
-	public static final String HOSTNAME = NO_HOSTNAME;
-	public static final long PARENT_TRACE_ID = NO_PARENT_TRACEID;
-	public static final int PARENT_ORDER_ID = NO_PARENT_ORDER_INDEX;
-	public static final int NEXT_ORDER_ID = 0;
+	public static final String APPLICATION_NAME = NO_APPLICATION_NAME;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -75,16 +66,11 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		"hostname",
 		"parentTraceId",
 		"parentOrderId",
+		"applicationName",
 	};
 	
 	/** property declarations. */
-	private long traceId;
-	private final long threadId;
-	private final String sessionId;
-	private final String hostname;
-	private final long parentTraceId;
-	private final int parentOrderId;
-	private int nextOrderId = 0;
+	private final String applicationName;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -101,14 +87,12 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 *            parentTraceId
 	 * @param parentOrderId
 	 *            parentOrderId
+	 * @param applicationName
+	 *            applicationName
 	 */
-	public TraceMetadata(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId) {
-		this.traceId = traceId;
-		this.threadId = threadId;
-		this.sessionId = sessionId == null?NO_SESSION_ID:sessionId;
-		this.hostname = hostname == null?NO_HOSTNAME:hostname;
-		this.parentTraceId = parentTraceId;
-		this.parentOrderId = parentOrderId;
+	public ApplicationTraceMetadata(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId, final String applicationName) {
+		super(traceId, threadId, sessionId, hostname, parentTraceId, parentOrderId);
+		this.applicationName = applicationName == null?NO_APPLICATION_NAME:applicationName;
 	}
 
 	/**
@@ -118,17 +102,12 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * @param values
 	 *            The values for the record.
 	 *
-	 * @deprecated since 1.13. Use {@link #TraceMetadata(IValueDeserializer)} instead.
+	 * @deprecated since 1.13. Use {@link #ApplicationTraceMetadata(IValueDeserializer)} instead.
 	 */
 	@Deprecated
-	public TraceMetadata(final Object[] values) { // NOPMD (direct store of values)
-		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.traceId = (Long) values[0];
-		this.threadId = (Long) values[1];
-		this.sessionId = (String) values[2];
-		this.hostname = (String) values[3];
-		this.parentTraceId = (Long) values[4];
-		this.parentOrderId = (Integer) values[5];
+	public ApplicationTraceMetadata(final Object[] values) { // NOPMD (direct store of values)
+		super(values, TYPES);
+		this.applicationName = (String) values[7];
 	}
 
 	/**
@@ -139,17 +118,12 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
 	 *
-	 * @deprecated since 1.13. Use {@link #TraceMetadata(IValueDeserializer)} instead.
+	 * @deprecated since 1.13. Use {@link #ApplicationTraceMetadata(IValueDeserializer)} instead.
 	 */
 	@Deprecated
-	protected TraceMetadata(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.traceId = (Long) values[0];
-		this.threadId = (Long) values[1];
-		this.sessionId = (String) values[2];
-		this.hostname = (String) values[3];
-		this.parentTraceId = (Long) values[4];
-		this.parentOrderId = (Integer) values[5];
+	protected ApplicationTraceMetadata(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
+		super(values, valueTypes);
+		this.applicationName = (String) values[7];
 	}
 
 	
@@ -157,14 +131,9 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * @param deserializer
 	 *            The deserializer to use
 	 */
-	public TraceMetadata(final IValueDeserializer deserializer) {
-		this.traceId = deserializer.getLong();
-		this.threadId = deserializer.getLong();
-		this.sessionId = deserializer.getString();
-		this.hostname = deserializer.getString();
-		this.parentTraceId = deserializer.getLong();
-		this.parentOrderId = deserializer.getInt();
-		this.nextOrderId = 0;
+	public ApplicationTraceMetadata(final IValueDeserializer deserializer) {
+		super(deserializer);
+		this.applicationName = deserializer.getString();
 	}
 	
 	/**
@@ -181,7 +150,8 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 			this.getSessionId(),
 			this.getHostname(),
 			this.getParentTraceId(),
-			this.getParentOrderId()
+			this.getParentOrderId(),
+			this.getApplicationName()
 		};
 	}
 	/**
@@ -191,6 +161,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getSessionId());
 		stringRegistry.get(this.getHostname());
+		stringRegistry.get(this.getApplicationName());
 	}
 	/**
 	 * {@inheritDoc}
@@ -204,6 +175,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		serializer.putString(this.getHostname());
 		serializer.putLong(this.getParentTraceId());
 		serializer.putInt(this.getParentOrderId());
+		serializer.putString(this.getApplicationName());
 	}
 	/**
 	 * {@inheritDoc}
@@ -249,7 +221,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		if (obj == this) return true;
 		if (obj.getClass() != this.getClass()) return false;
 		
-		final TraceMetadata castedRecord = (TraceMetadata) obj;
+		final ApplicationTraceMetadata castedRecord = (ApplicationTraceMetadata) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
 		if (this.getTraceId() != castedRecord.getTraceId()) return false;
 		if (this.getThreadId() != castedRecord.getThreadId()) return false;
@@ -258,44 +230,12 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		if (this.getParentTraceId() != castedRecord.getParentTraceId()) return false;
 		if (this.getParentOrderId() != castedRecord.getParentOrderId()) return false;
 		if (this.getNextOrderId() != castedRecord.getNextOrderId()) return false;
+		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) return false;
 		return true;
 	}
 	
-	public final long getTraceId() {
-		return this.traceId;
-	}
-	
-	public final void setTraceId(long traceId) {
-		this.traceId = traceId;
-	}
-	
-	public final long getThreadId() {
-		return this.threadId;
-	}
-	
-	
-	public final String getSessionId() {
-		return this.sessionId;
-	}
-	
-	
-	public final String getHostname() {
-		return this.hostname;
-	}
-	
-	
-	public final long getParentTraceId() {
-		return this.parentTraceId;
-	}
-	
-	
-	public final int getParentOrderId() {
-		return this.parentOrderId;
-	}
-	
-	
-	public final int getNextOrderId() {
-		return this.nextOrderId++;
+	public final String getApplicationName() {
+		return this.applicationName;
 	}
 	
 }
