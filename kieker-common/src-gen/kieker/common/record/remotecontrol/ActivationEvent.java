@@ -1,5 +1,5 @@
 /***************************************************************************
-* Copyright 2018 Kieker Project (http://www.iobserve-devops.net)
+* Copyright 2018 Kieker Project (http://kieker-monitoring.net)
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -17,11 +17,13 @@ package kieker.common.record.remotecontrol;
 
 import java.nio.BufferOverflowException;
 
-import kieker.common.record.remotecontrol.RemoteControlEvent;
+import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
+import kieker.common.record.remotecontrol.IRemoteControlEvent;
 
 /**
  * @author Marc Adolf
@@ -29,24 +31,28 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.14
  */
-public class ActivationEvent extends RemoteControlEvent  {
-	private static final long serialVersionUID = -6653291769911368579L;
+public class ActivationEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IRemoteControlEvent {
+	private static final long serialVersionUID = 6888923121890229913L;
 
 	/** Descriptive definition of the serialization size of the record. */
-	public static final int SIZE = TYPE_SIZE_STRING // RemoteControlEvent.pattern
+	public static final int SIZE = TYPE_SIZE_STRING // IRemoteControlEvent.pattern
 	;
 	
 	public static final Class<?>[] TYPES = {
-		String.class, // RemoteControlEvent.pattern
+		String.class, // IRemoteControlEvent.pattern
 	};
 	
 	
+	/** default constants. */
+	public static final String PATTERN = "";
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
 		"pattern",
 	};
 	
+	/** property declarations. */
+	private final String pattern;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -55,7 +61,7 @@ public class ActivationEvent extends RemoteControlEvent  {
 	 *            pattern
 	 */
 	public ActivationEvent(final String pattern) {
-		super(pattern);
+		this.pattern = pattern == null?"":pattern;
 	}
 
 	/**
@@ -69,7 +75,8 @@ public class ActivationEvent extends RemoteControlEvent  {
 	 */
 	@Deprecated
 	public ActivationEvent(final Object[] values) { // NOPMD (direct store of values)
-		super(values, TYPES);
+		AbstractMonitoringRecord.checkArray(values, TYPES);
+		this.pattern = (String) values[0];
 	}
 
 	/**
@@ -84,7 +91,8 @@ public class ActivationEvent extends RemoteControlEvent  {
 	 */
 	@Deprecated
 	protected ActivationEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		super(values, valueTypes);
+		AbstractMonitoringRecord.checkArray(values, valueTypes);
+		this.pattern = (String) values[0];
 	}
 
 	
@@ -93,7 +101,7 @@ public class ActivationEvent extends RemoteControlEvent  {
 	 *            The deserializer to use
 	 */
 	public ActivationEvent(final IValueDeserializer deserializer) {
-		super(deserializer);
+		this.pattern = deserializer.getString();
 	}
 	
 	/**
@@ -171,6 +179,10 @@ public class ActivationEvent extends RemoteControlEvent  {
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
 		if (!this.getPattern().equals(castedRecord.getPattern())) return false;
 		return true;
+	}
+	
+	public final String getPattern() {
+		return this.pattern;
 	}
 	
 }

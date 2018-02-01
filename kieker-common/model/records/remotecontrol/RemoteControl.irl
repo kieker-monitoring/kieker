@@ -1,15 +1,15 @@
 package kieker.common.record.remotecontrol
 
 @author 'Marc Adolf' @since '1.14'
-abstract entity RemoteControlEvent {
+template IRemoteControlEvent {
 	string pattern
 }
 
 
 @author 'Marc Adolf' @since '1.14'
-entity DeactivationEvent extends RemoteControlEvent {
+entity DeactivationEvent : IRemoteControlEvent {
 }
 
 @author 'Marc Adolf' @since '1.14'
-entity ActivationEvent extends RemoteControlEvent {
+entity ActivationEvent : IRemoteControlEvent {
 } 

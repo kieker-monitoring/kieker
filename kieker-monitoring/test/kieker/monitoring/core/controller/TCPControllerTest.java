@@ -26,7 +26,7 @@ import org.junit.Test;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.remotecontrol.ActivationEvent;
 import kieker.common.record.remotecontrol.DeactivationEvent;
-import kieker.common.record.remotecontrol.RemoteControlEvent;
+import kieker.common.record.remotecontrol.IRemoteControlEvent;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.timer.SystemNanoTimer;
 import kieker.monitoring.writer.dump.DumpWriter;
@@ -105,7 +105,7 @@ public class TCPControllerTest {
 		this.tcpWriter.onTerminating();
 	}
 
-	private void sendTCPEvent(final RemoteControlEvent event) {
+	private void sendTCPEvent(final IRemoteControlEvent event) {
 		this.tcpWriter.writeMonitoringRecord(event);
 	}
 }

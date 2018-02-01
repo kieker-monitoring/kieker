@@ -22,7 +22,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IRecordReceivedListener;
 import kieker.common.record.remotecontrol.ActivationEvent;
 import kieker.common.record.remotecontrol.DeactivationEvent;
-import kieker.common.record.remotecontrol.RemoteControlEvent;
+import kieker.common.record.remotecontrol.IRemoteControlEvent;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
@@ -58,10 +58,10 @@ public class MonitoringCommandListener implements IRecordReceivedListener {
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Received new record: " + record.getClass().getName());
 		}
-		if (!(record instanceof RemoteControlEvent)) {
+		if (!(record instanceof IRemoteControlEvent)) {
 			LOG.info("Received an event for the TCP monitoring controller, which is no remote control event");
 		}
-		final String pattern = ((RemoteControlEvent) record).getPattern();
+		final String pattern = ((IRemoteControlEvent) record).getPattern();
 		if (record instanceof DeactivationEvent) {
 			this.monitoringController.deactivateProbe(pattern);
 		} else if (record instanceof ActivationEvent) {
