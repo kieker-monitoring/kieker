@@ -17,11 +17,14 @@
 package kieker.monitoring.writer.tcp;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.nio.channels.WritableByteChannel;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeUnit;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -38,16 +41,19 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.WriterUtil;
 
 /**
+ * Represents a monitoring writer which serializes records via TCP to a given host:port.
+ *
  * @author Christian Wulf
  *
  * @since 1.13
  */
 public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
 
-	/** the logger for this class. */
-	private static final Log LOG = LogFactory.getLog(SingleSocketTcpWriter.class);
-	/** prefix for all configuration keys. */
-	private static final String PREFIX = SingleSocketTcpWriter.class.getName() + ".";
+	/**
+	 * This writer can be configured by the configuration file "kieker.properties". For this purpose, it uses this
+	 * prefix for all configuration keys.
+	 */
+	public static final String PREFIX = SingleSocketTcpWriter.class.getName() + ".";
 
 	/** configuration key for the hostname. */
 	public static final String CONFIG_HOSTNAME = PREFIX + "hostname"; // NOCS
@@ -60,10 +66,20 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 																			// (afterPREFIX)
 	/** configuration key for {@link #flush}. */
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS
-																// (afterPREFIX)
 
+	/** configuration key for {@link #connectionTimeoutInMs}. */
+	public static final String CONFIG_CONN_TIMEOUT_IN_MS = PREFIX + "connectionTimeoutInMs";
+
+	/** the logger for this class. */
+	private static final Log LOG = LogFactory.getLog(SingleSocketTcpWriter.class);
+
+	// (afterPREFIX)
+	/** the host name and the port of the record reader. */
+	private final InetSocketAddress socketAddress;
+	/** the connection timeout for the initial connect. */
+	private final int connectionTimeoutInMs;
 	/** the channel which writes out monitoring and registry records. */
-	private final WritableByteChannel socketChannel;
+	private SocketChannel socketChannel;
 	/** the buffer used for buffering monitoring records. */
 	private final ByteBuffer buffer;
 	/** the buffer used for buffering registry records. */
@@ -72,7 +88,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 	 * <code>true</code> if the {@link #buffer} should be flushed upon each new incoming monitoring record.
 	 */
 	private final boolean flush;
-	/** the serializer to use for the incoming records */
+	/** the serializer to use for the incoming records. */
 	private final IValueSerializer serializer;
 
 	// remove RegisterAdapter
@@ -81,8 +97,16 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		super(configuration);
 		final String hostname = configuration.getStringProperty(CONFIG_HOSTNAME);
 		final int port = configuration.getIntProperty(CONFIG_PORT);
+		this.socketAddress = new InetSocketAddress(hostname, port);
+
+		final int configConnectionTimeoutInMs = configuration.getIntProperty(CONFIG_CONN_TIMEOUT_IN_MS, 1);
+		if (configConnectionTimeoutInMs > 0) {
+			this.connectionTimeoutInMs = configConnectionTimeoutInMs;
+		} else {
+			this.connectionTimeoutInMs = 1;
+		}
+
 		// buffer size is available by byteBuffer.capacity()
-		this.socketChannel = SocketChannel.open(new InetSocketAddress(hostname, port));
 		// TODO should we check for buffers too small for a single record?
 		final int bufferSize = this.configuration.getIntProperty(CONFIG_BUFFERSIZE);
 		this.buffer = ByteBuffer.allocateDirect(bufferSize);
@@ -95,7 +119,54 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 	@Override
 	public void onStarting() {
-		// do nothing
+		final TimeoutCountdown timeoutCountdown = new TimeoutCountdown(this.connectionTimeoutInMs);
+
+		do {
+			try {
+				this.socketChannel = SocketChannel.open();
+			} catch (final IOException e) {
+				throw new IllegalStateException(e);
+			}
+
+			this.tryConnect(timeoutCountdown);
+		} while (!this.socketChannel.isConnected());
+	}
+
+	private void tryConnect(final TimeoutCountdown timeoutCountdown) throws ConnectionTimeoutException {
+		final Socket socket = this.socketChannel.socket();
+
+		final long startTimestampInNs = System.nanoTime(); // NOPMD (PrematureDeclaration)
+
+		if (this.connectOrTimeout(socket, timeoutCountdown.getCurrentTimeoutinMs())) {
+			return;
+		}
+
+		final long currentTimestampInNs = System.nanoTime();
+
+		final long elapsedTimeInNs = currentTimestampInNs - startTimestampInNs;
+		final long elapsedTimeInMs = TimeUnit.NANOSECONDS.toMillis(elapsedTimeInNs);
+		timeoutCountdown.countdown(elapsedTimeInMs);
+
+		if (timeoutCountdown.getCurrentTimeoutinMs() <= 0) {
+			final String message = String.format("Connection timeout of %d ms exceeded.", this.connectionTimeoutInMs);
+			throw new ConnectionTimeoutException(message);
+		}
+	}
+
+	/**
+	 * @return <code>true</code> if connected, <code>false</code> if not connected due to a timeout.
+	 */
+	private boolean connectOrTimeout(final Socket socket, final int timeoutInMs) {
+		try {
+			socket.connect(this.socketAddress, timeoutInMs);
+			return true;
+		} catch (SocketTimeoutException | ConnectException e) {
+			// both of the exceptions indicate a connection timeout
+			// => ignore to reconnect
+			return false;
+		} catch (final IOException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 	@Override

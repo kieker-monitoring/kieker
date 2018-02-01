@@ -622,7 +622,7 @@
         <!-- Checks that there are no import statements that use the * notation. !-->
         <!-- See http://checkstyle.sf.net/config_import.html !-->
         <module name="AvoidStarImport">
-            <property name="excludes"                 value=""/>
+            <property name="excludes"                 value="java.lang.Math,org.junit.Assert,org.hamcrest.MatcherAssert,org.hamcrest.Matchers"/>
             <property name="allowClassImports"        value="false"/>
             <property name="allowStaticMemberImports" value="false"/>
         </module>
@@ -630,16 +630,13 @@
         <!-- Checks that there are no static import statements. !-->
         <!-- See http://checkstyle.sourceforge.net/config_imports.html#AvoidStaticImport !-->
         <module name="AvoidStaticImport">
-            <property name="excludes" value=""/>
+            <property name="excludes" value="java.lang.Math.*,org.junit.Assert.*,org.hamcrest.MatcherAssert.*,org.hamcrest.Matchers.*"/>
         </module>
 
         <!-- Checks for imports from a set of illegal packages. !-->
         <!-- See http://checkstyle.sf.net/config_import.html !-->
         <module name="IllegalImport">
-            <property name="illegalPkgs" value="junit.framework"/>
-            <property name="illegalPkgs" value="sun"/>
-            <property name="illegalPkgs" value="org.apache.commons.logging"/>
-            <property name="illegalPkgs" value="java.util.logging"/>
+            <property name="illegalPkgs" value="junit.framework,sun,org.apache.commons.logging,java.util.logging"/>
         </module>
 
         <!-- Controls what can be imported in each package. Useful for ensuring that application layering rules !-->
@@ -655,7 +652,7 @@
         <!-- Checks the ordering/grouping of imports. !-->
         <!-- See http://checkstyle.sf.net/config_import.html !-->
         <module name="ImportOrder">
-            <property name="option"        value="under"/>
+            <property name="option"        value="top"/>
             <property name="groups"        value="java,javax,junit,org,com,ch,de,kieker,kieker.test"/>
             <property name="ordered"       value="true"/>
             <property name="separated"     value="true"/>
