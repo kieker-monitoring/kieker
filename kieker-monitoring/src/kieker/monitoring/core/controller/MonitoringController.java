@@ -281,6 +281,11 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
+	public String getApplicationName() {
+		return this.stateController.getApplicationName();
+	}
+
+	@Override
 	public final int incExperimentId() {
 		return this.stateController.incExperimentId();
 	}

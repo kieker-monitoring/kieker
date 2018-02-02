@@ -50,4 +50,13 @@ public interface IMonitoringController extends
 	 * @since 1.7
 	 */
 	public boolean sendMetadataAsRecord();
+
+	/**
+	 * This method returns the application name stored in the controller.
+	 *
+	 * @return the application name
+	 *
+	 * @since 1.14
+	 */
+	public String getApplicationName();
 }
