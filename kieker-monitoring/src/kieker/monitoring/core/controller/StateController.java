@@ -35,6 +35,7 @@ public final class StateController extends AbstractController implements IStateC
 	private volatile boolean monitoringEnabled;
 	private final String name;
 	private final String hostname;
+	private final String applicationName;
 	private final AtomicInteger experimentId = new AtomicInteger(0);
 	private final boolean debug;
 
@@ -50,6 +51,7 @@ public final class StateController extends AbstractController implements IStateC
 		super(configuration);
 		this.name = configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME);
 		this.experimentId.set(configuration.getIntProperty(ConfigurationFactory.EXPERIMENT_ID));
+		this.applicationName = configuration.getStringProperty(ConfigurationFactory.APPLICATION_NAME);
 		this.monitoringEnabled = configuration.getBooleanProperty(ConfigurationFactory.MONITORING_ENABLED);
 		this.debug = configuration.getBooleanProperty(ConfigurationFactory.DEBUG);
 		String hostnameTmp = configuration.getStringProperty(ConfigurationFactory.HOST_NAME);
@@ -187,5 +189,9 @@ public final class StateController extends AbstractController implements IStateC
 
 	public void setStateListener(final IStateListener stateListener) {
 		this.stateListener = stateListener;
+	}
+
+	public String getApplicationName() {
+		return this.applicationName;
 	}
 }

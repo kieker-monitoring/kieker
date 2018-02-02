@@ -26,7 +26,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * This class represents a configuration object within the Kieker project. Technically it is a property list with some additional methods and possibilities.<br/>
+ * This class represents a configuration object within the Kieker project. Technically it is a property list with some additional methods and possibilities.
  *
  * Some of the methods are marked as deprecated. This is not because they will be removed, but rather because they should not be used anymore (at least not directly
  * - they are still used in a valid way within this class). Normally we would remove them, but they are inherited from the class {@link Properties} and can neither
@@ -366,8 +366,8 @@ public class Configuration extends Properties {
 	}
 
 	/**
-	 * Based upon Guava 14.0.1 (Chris Nokleberg, Colin Decker). Guava is licensed under "The Apache Software License, Version 2.0".<br>
-	 * </br>
+	 * Based upon Guava 14.0.1 (Chris Nokleberg, Colin Decker). Guava is licensed under "The Apache Software License, Version 2.0".
+	 *
 	 * Simplifies a given file system path.
 	 *
 	 * @param pathname
