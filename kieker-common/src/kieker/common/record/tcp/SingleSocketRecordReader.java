@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.plugin.reader.tcp.util;
+package kieker.common.record.tcp;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
-import kieker.analysis.plugin.reader.util.IRecordReceivedListener;
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.logging.Log;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.IRecordReceivedListener;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.DefaultValueDeserializer;
