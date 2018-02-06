@@ -32,7 +32,9 @@ import kieker.common.util.filesystem.FSUtil;
  */
 public class ZipCompressionFilter implements ICompressionFilter {
 
-	public ZipCompressionFilter() {}
+	public ZipCompressionFilter() {
+		// Empty constructor. No initialization necessary.
+	}
 
 	@Override
 	public OutputStream chain(final OutputStream outputStream, final Path fileName) throws IOException {

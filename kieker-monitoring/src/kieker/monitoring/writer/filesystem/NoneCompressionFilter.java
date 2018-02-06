@@ -28,7 +28,9 @@ import java.nio.file.Path;
  */
 public class NoneCompressionFilter implements ICompressionFilter {
 
-	public NoneCompressionFilter() {}
+	public NoneCompressionFilter() {
+		// Empty constructor. No initialization necessary.
+	}
 
 	@Override
 	public OutputStream chain(final OutputStream outputStream, final Path fileName) throws IOException {

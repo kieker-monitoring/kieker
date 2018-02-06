@@ -33,7 +33,9 @@ import org.tukaani.xz.XZOutputStream;
  */
 public class XZCompressionFilter implements ICompressionFilter {
 
-	public XZCompressionFilter() {}
+	public XZCompressionFilter() {
+		// Empty constructor. No initialization necessary.
+	}
 
 	@Override
 	public OutputStream chain(final OutputStream outputStream, final Path fileName) throws IOException {
