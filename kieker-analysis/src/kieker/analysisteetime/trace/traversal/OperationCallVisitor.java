@@ -23,10 +23,10 @@ import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
  *
  * @since 1.13
  */
-public abstract class OperationCallVisitor {
+public interface OperationCallVisitor {
 
 	// TODO Make this generic for aggregated traces
 
-	public abstract void visit(OperationCall operationCall);
+	public void visit(OperationCall operationCall);
 
 }

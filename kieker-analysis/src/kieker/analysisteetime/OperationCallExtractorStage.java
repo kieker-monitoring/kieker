@@ -48,7 +48,7 @@ public class OperationCallExtractorStage extends AbstractTransformation<Trace, O
 	/**
 	 * Sends visited {@link OperationCall}s to the parents class' output port.
 	 */
-	private class Extractor extends OperationCallVisitor {
+	private class Extractor implements OperationCallVisitor {
 
 		public Extractor() {
 			super();

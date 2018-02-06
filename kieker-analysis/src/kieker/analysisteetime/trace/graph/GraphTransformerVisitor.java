@@ -31,7 +31,7 @@ import kieker.analysisteetime.util.graph.Vertex;
  *
  * @since 1.13
  */
-public class GraphTransformerVisitor extends OperationCallVisitor {
+public class GraphTransformerVisitor implements OperationCallVisitor {
 
 	private final Graph graph;
 	private final ObjectIdentifierRegistry objectIdentifierRegistry = new ObjectIdentifierRegistry();

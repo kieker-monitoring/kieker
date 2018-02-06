@@ -70,7 +70,7 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 				.forEach(this.printStream::println);
 	}
 
-	private class Visitor extends OperationCallVisitor {
+	private class Visitor implements OperationCallVisitor {
 
 		@Override
 		public void visit(final OperationCall operationCall) {

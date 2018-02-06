@@ -24,7 +24,7 @@ import kieker.analysisteetime.trace.traversal.OperationCallVisitor;
  *
  * @since 1.13
  */
-public class DurRatioToParentCalculator extends OperationCallVisitor {
+public class DurRatioToParentCalculator implements OperationCallVisitor {
 
 	public DurRatioToParentCalculator() {}
 
