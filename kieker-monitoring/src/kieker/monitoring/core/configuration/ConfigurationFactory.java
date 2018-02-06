@@ -41,8 +41,7 @@ public final class ConfigurationFactory implements Keys {
 	/**
 	 * Private constructor to avoid instantiation.
 	 */
-	private ConfigurationFactory() {
-	}
+	private ConfigurationFactory() {}
 
 	// factory methods
 
@@ -130,7 +129,7 @@ public final class ConfigurationFactory implements Keys {
 				is = new FileInputStream(propertiesFn);
 			} catch (final FileNotFoundException ex) {
 				// if not found as absolute path try within the classpath
-				final URL resourceUrl = loadKiekerPropertiesFile(propertiesFn);
+				final URL resourceUrl = ConfigurationFactory.loadKiekerPropertiesFile(propertiesFn);
 				if (resourceUrl == null) {
 					LOG.warn("File '" + propertiesFn + "' not found");
 					return new Configuration(defaultValues);
@@ -166,7 +165,7 @@ public final class ConfigurationFactory implements Keys {
 	 */
 	private static final Configuration loadConfigurationFromResource(final String propertiesFn,
 			final Configuration defaultValues) {
-		final URL resourceUrl = loadKiekerPropertiesFile(propertiesFn);
+		final URL resourceUrl = ConfigurationFactory.loadKiekerPropertiesFile(propertiesFn);
 		if (resourceUrl == null) {
 			LOG.warn("File '" + propertiesFn + "' not found in classpath");
 		} else {
