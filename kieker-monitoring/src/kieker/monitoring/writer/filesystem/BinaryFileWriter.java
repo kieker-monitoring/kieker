@@ -39,6 +39,7 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 /**
  * @author Jan Waller, Christian Wulf
+ * @author Henning Schnoor - added XZ compression instead of zip (1.13)
  *
  * @since 1.9
  */
@@ -56,8 +57,8 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 	public static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles";
 	/** The name of the configuration key for the charset name of the mapping file */
 	public static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
-	/** The name of the configuration key determining to enable/disable compression of the record log files */
-	public static final String CONFIG_SHOULD_COMPRESS = PREFIX + "shouldCompress";
+	/** The name of the configuration key to select a compression for the record log files */
+	public static final String CONFIG_COMPRESSION_METHOD = PREFIX + "compression";
 	/** The name of the configuration key determining the buffer size of the output file stream */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize";
 	/** The name of the configuration key determining to always flush the output file stream after writing each record */
@@ -108,17 +109,17 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME, "UTF-8");
 		// TODO should we check for buffers too small for a single record?
 		final int bufferSize = this.configuration.getIntProperty(CONFIG_BUFFERSIZE);
-		final boolean shouldCompress = configuration.getBooleanProperty(CONFIG_SHOULD_COMPRESS);
+		final ECompression compressionMethod = ECompression.findCompressionMethod(configuration.getStringProperty(CONFIG_COMPRESSION_METHOD));
 		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH, false);
 		this.flushMapfile = configuration.getBooleanProperty(CONFIG_FLUSH_MAPFILE, true);
 
 		this.buffer = ByteBuffer.allocateDirect(bufferSize);
 		this.mappingFileWriter = new MappingFileWriter(this.logFolder, charsetName);
-		this.fileWriterPool = new BinaryFileWriterPool(LOG, this.logFolder, maxEntriesPerFile, shouldCompress, maxAmountOfFiles, maxMegaBytesPerFile);
+		this.fileWriterPool = new BinaryFileWriterPool(LOG, this.logFolder, maxEntriesPerFile, compressionMethod, maxAmountOfFiles, maxMegaBytesPerFile);
 
 		this.writerRegistry = new WriterRegistry(this);
-		this.registerStringsAdapter = new RegisterAdapter<String>(this.writerRegistry);
-		this.writeBytesAdapter = new GetIdAdapter<String>(this.writerRegistry);
+		this.registerStringsAdapter = new RegisterAdapter<>(this.writerRegistry);
+		this.writeBytesAdapter = new GetIdAdapter<>(this.writerRegistry);
 	}
 
 	@Override
@@ -184,12 +185,12 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 	public String toString() {
 		final String configInfo = super.toString();
 		final StringBuilder builder = new StringBuilder()
-			.append(configInfo)
-			.append("\n\t")
-			.append("Internal properties:")
-			.append("\n\t\t")
-			.append("Log location: ")
-			.append(this.logFolder);
+				.append(configInfo)
+				.append("\n\t")
+				.append("Internal properties:")
+				.append("\n\t\t")
+				.append("Log location: ")
+				.append(this.logFolder);
 		return builder.toString();
 	}
 }

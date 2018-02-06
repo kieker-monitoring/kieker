@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.common.record.flow;
+package kieker.monitoring.writer.filesystem;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Path;
+import java.util.zip.GZIPOutputStream;
 
 /**
- * @author Florian Fittkau
- * 
- * @since 1.10
+ * Zip compression filter for the writer pool.
+ *
+ * @author Reiner Jung
+ *
+ * @since 1.14
  */
-public interface IInterfaceRecord extends IFlowRecord {
-	public String getInterface();
-	
+public class GZipCompressionFilter implements ICompressionFilter {
+
+	@Override
+	public OutputStream chain(final OutputStream outputStream, final Path fileName) throws IOException {
+		return new GZIPOutputStream(outputStream);
+	}
+
 }

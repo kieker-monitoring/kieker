@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.common.record.flow;
+package kieker.monitoring.writer.filesystem;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Path;
 
 /**
- * @author Florian Fittkau
- * 
- * @since 1.10
+ * This class does not provide any compressing filter. It exists only to minimize implementation complexity.
+ *
+ * @author Reiner Jung
+ *
+ * @since 1.14
  */
-public interface IInterfaceRecord extends IFlowRecord {
-	public String getInterface();
-	
+public class NoneCompressionFilter implements ICompressionFilter {
+
+	@Override
+	public OutputStream chain(final OutputStream outputStream, final Path fileName) throws IOException {
+		return outputStream;
+	}
+
 }

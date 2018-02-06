@@ -54,8 +54,8 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	public static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
 	/** The name of the configuration determining the maximal number of entries in a file. */
 	public static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
-	/** The name of the configuration key determining to enable/disable compression of the record log files */
-	public static final String CONFIG_SHOULD_COMPRESS = PREFIX + "shouldCompress";
+	/** The name of the configuration key to select a compression for the record log files */
+	public static final String CONFIG_COMPRESSION_METHOD = PREFIX + "compression";
 	/** The name of the configuration determining the maximal size of the files in MiB. */
 	public static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
 	/** The name of the configuration determining the maximal number of log files. */
@@ -110,14 +110,14 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		maxAmountOfFiles = (maxAmountOfFiles <= 0) ? Integer.MAX_VALUE : maxAmountOfFiles; // NOCS
 
 		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME, "UTF-8");
-		final boolean shouldCompress = configuration.getBooleanProperty(CONFIG_SHOULD_COMPRESS);
+		final ECompression compressionMethod = ECompression.findCompressionMethod(configuration.getStringProperty(CONFIG_COMPRESSION_METHOD));
 
 		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH, false);
 		this.flushMapfile = configuration.getBooleanProperty(CONFIG_FLUSH_MAPFILE, true);
 
 		this.mappingFileWriter = new MappingFileWriter(this.logFolder, charsetName);
 		this.fileWriterPool = new AsciiFileWriterPool(LOG, this.logFolder, charsetName, maxEntriesPerFile,
-				shouldCompress, maxAmountOfFiles, maxMegaBytesPerFile);
+				compressionMethod, maxAmountOfFiles, maxMegaBytesPerFile);
 
 		this.writerRegistry = new WriterRegistry(this);
 	}
@@ -187,12 +187,12 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 	public String toString() {
 		final String configInfo = super.toString();
 		final StringBuilder builder = new StringBuilder()
-			.append(configInfo)
-			.append("\n\t")
-			.append("Internal properties:")
-			.append("\n\t\t")
-			.append("Log location: ")
-			.append(this.logFolder);
+				.append(configInfo)
+				.append("\n\t")
+				.append("Internal properties:")
+				.append("\n\t\t")
+				.append("Log location: ")
+				.append(this.logFolder);
 		return builder.toString();
 	}
 

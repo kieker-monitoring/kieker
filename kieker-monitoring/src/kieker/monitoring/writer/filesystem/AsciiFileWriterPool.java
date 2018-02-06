@@ -27,14 +27,11 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import kieker.common.logging.Log;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.writer.WriterUtil;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * @author Christian Wulf (chw)
@@ -50,7 +47,7 @@ class AsciiFileWriterPool extends WriterPool {
 	// private final int maxAmountOfFiles;
 	// private int currentAmountOfFiles;
 
-	private final boolean shouldCompress;
+	private final ECompression compressionMethod;
 	private final String fileExtensionWithDot;
 	private final int maxAmountOfFiles;
 	private final long maxBytesPerFile;
@@ -60,8 +57,24 @@ class AsciiFileWriterPool extends WriterPool {
 
 	private int currentFileNumber;
 
+	/**
+	 * Create an ASCII writer pool.
+	 *
+	 * @param writerLog
+	 *            logger for the pool
+	 * @param folder
+	 *            path where all files go
+	 * @param maxEntriesPerFile
+	 *            max entries per file
+	 * @param compressionMethod
+	 *            compression method
+	 * @param maxAmountOfFiles
+	 *            upper limit for the number of files
+	 * @param maxMegaBytesPerFile
+	 *            upper limit for the file size
+	 */
 	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
-	public AsciiFileWriterPool(final Log writerLog, final Path folder, final String charsetName, final int maxEntriesInFile, final boolean shouldCompress,
+	public AsciiFileWriterPool(final Log writerLog, final Path folder, final String charsetName, final int maxEntriesInFile, final ECompression compressionMethod,
 			final int maxAmountOfFiles, final int maxMegaBytesPerFile) {
 		super(writerLog, folder);
 		this.maxAmountOfFiles = maxAmountOfFiles;
@@ -69,12 +82,12 @@ class AsciiFileWriterPool extends WriterPool {
 		this.charset = Charset.forName(charsetName);
 		this.maxEntriesInFile = maxEntriesInFile;
 		this.numEntriesInCurrentFile = maxEntriesInFile; // triggers file creation
-		this.shouldCompress = shouldCompress;
+		this.compressionMethod = compressionMethod;
 
 		// this.currentFileWriter = Channels.newChannel(new ByteArrayOutputStream()); // NullObject design pattern
 		// final CharBuffer charBuffer = this.buffer.asCharBuffer();
 		this.currentFileWriter = new PrintWriter(new ByteArrayOutputStream()); // NullObject design pattern
-		this.fileExtensionWithDot = (shouldCompress) ? FSUtil.ZIP_FILE_EXTENSION : FSUtil.NORMAL_FILE_EXTENSION; // NOCS
+		this.fileExtensionWithDot = (this.compressionMethod == ECompression.NONE) ? FSUtil.BINARY_FILE_EXTENSION : this.compressionMethod.getExtension(); // NOCS
 	}
 
 	public PrintWriter getFileWriter() {
@@ -109,13 +122,7 @@ class AsciiFileWriterPool extends WriterPool {
 			// use CREATE_NEW to fail if the file already exists
 			OutputStream outputStream = Files.newOutputStream(newFile, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
 
-			if (this.shouldCompress) {
-				// final GZIPOutputStream compressedOutputStream = new GZIPOutputStream(outputStream);
-				final ZipOutputStream compressedOutputStream = new ZipOutputStream(outputStream);
-				final ZipEntry newZipEntry = new ZipEntry(newFile.toString() + FSUtil.NORMAL_FILE_EXTENSION);
-				compressedOutputStream.putNextEntry(newZipEntry);
-				outputStream = compressedOutputStream;
-			}
+			outputStream = this.compressionMethod.chainOutputStream(outputStream, newFile);
 
 			// this.currentFileWriter = Channels.newChannel(outputStream);
 

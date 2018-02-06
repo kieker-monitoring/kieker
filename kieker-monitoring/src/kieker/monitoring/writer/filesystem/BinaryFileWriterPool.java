@@ -24,8 +24,6 @@ import java.nio.channels.Channels;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import kieker.common.logging.Log;
 import kieker.common.util.filesystem.FSUtil;
@@ -42,24 +40,41 @@ class BinaryFileWriterPool extends WriterPool {
 	// private int currentAmountOfFiles;
 	private final long maxBytesPerFile;
 
-	private final boolean shouldCompress;
+	private final ECompression compressionMethod;
 	private final String fileExtensionWithDot;
 	private final int maxAmountOfFiles;
 
 	private PooledFileChannel currentChannel;
 	private int currentFileNumber;
 
-	public BinaryFileWriterPool(final Log writerLog, final Path folder, final int maxEntriesPerFile, final boolean shouldCompress, final int maxAmountOfFiles,
+	/**
+	 * Create a binary writer pool.
+	 *
+	 * @param writerLog
+	 *            logger for the pool
+	 * @param folder
+	 *            path where all files go
+	 * @param maxEntriesPerFile
+	 *            max entries per file
+	 * @param compressionMethod
+	 *            compression method
+	 * @param maxAmountOfFiles
+	 *            upper limit for the number of files
+	 * @param maxMegaBytesPerFile
+	 *            upper limit for the file size
+	 */
+	public BinaryFileWriterPool(final Log writerLog, final Path folder, final int maxEntriesPerFile, final ECompression compressionMethod,
+			final int maxAmountOfFiles,
 			final int maxMegaBytesPerFile) {
 		super(writerLog, folder);
 		this.maxEntriesPerFile = maxEntriesPerFile;
 		this.numEntriesInCurrentFile = maxEntriesPerFile; // triggers file creation
-		this.shouldCompress = shouldCompress;
+		this.compressionMethod = compressionMethod;
 		this.maxAmountOfFiles = maxAmountOfFiles;
 		this.maxBytesPerFile = maxMegaBytesPerFile * 1024L * 1024L; // conversion from MB to Bytes
 
 		this.currentChannel = new PooledFileChannel(Channels.newChannel(new ByteArrayOutputStream())); // NullObject design pattern
-		this.fileExtensionWithDot = (shouldCompress) ? FSUtil.ZIP_FILE_EXTENSION : FSUtil.BINARY_FILE_EXTENSION; // NOCS
+		this.fileExtensionWithDot = (this.compressionMethod == ECompression.NONE) ? FSUtil.BINARY_FILE_EXTENSION : this.compressionMethod.getExtension(); // NOCS
 	}
 
 	public PooledFileChannel getFileWriter(final ByteBuffer buffer) {
@@ -93,13 +108,7 @@ class BinaryFileWriterPool extends WriterPool {
 			OutputStream outputStream = Files.newOutputStream(newFile, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
 			// stream is not buffered, since the byte buffer itself is the buffer
 
-			if (this.shouldCompress) {
-				// final GZIPOutputStream compressedOutputStream = new GZIPOutputStream(outputStream);
-				final ZipOutputStream compressedOutputStream = new ZipOutputStream(outputStream);
-				final ZipEntry newZipEntry = new ZipEntry(newFile.toString() + FSUtil.NORMAL_FILE_EXTENSION);
-				compressedOutputStream.putNextEntry(newZipEntry);
-				outputStream = compressedOutputStream;
-			}
+			outputStream = this.compressionMethod.chainOutputStream(outputStream, newFile);
 
 			this.currentChannel = new PooledFileChannel(Channels.newChannel(outputStream));
 		} catch (final IOException e) {
