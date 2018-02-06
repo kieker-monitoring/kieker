@@ -34,6 +34,12 @@ public final class RecordFactoryWrapper implements IRecordFactory<IMonitoringRec
 
 	private final String recordClassName;
 
+	/**
+	 * Create a record factory wrapper for the given record type.
+	 *
+	 * @param recordClassName
+	 *            fully qualified class name of a record type
+	 */
 	public RecordFactoryWrapper(final String recordClassName) {
 		this.recordClassName = recordClassName;
 	}

@@ -18,29 +18,48 @@ package kieker.common.record.io;
 
 import java.nio.ByteBuffer;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.util.registry.IRegistry;
 
 /**
  * Default value deserializer implementation.
  *
  * @author Holger Knoche
+ * @author Reiner Jung - enumeration support
  * @since 1.13
  *
  */
-public class DefaultValueDeserializer implements IValueDeserializer {
+public class BinaryValueDeserializer extends AbstractValueDeserializer implements IValueDeserializer {
 
 	private static final byte TRUE_VALUE = (byte) 1;
 
 	private final ByteBuffer buffer;
 	private final IRegistry<String> stringRegistry;
 
-	protected DefaultValueDeserializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+	/**
+	 * Create a binary value deserializer.
+	 *
+	 * @param buffer
+	 *            buffer for the deserializer
+	 * @param stringRegistry
+	 *            the string registry used for the deserializer
+	 */
+	protected BinaryValueDeserializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
 		this.buffer = buffer;
 		this.stringRegistry = stringRegistry;
 	}
 
-	public static DefaultValueDeserializer create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new DefaultValueDeserializer(buffer, stringRegistry);
+	/**
+	 * Factory method to create a binary value deserializer.
+	 *
+	 * @param buffer
+	 *            serialization buffer
+	 * @param stringRegistry
+	 *            the string registry used for the deserializer
+	 * @return the value deserializer
+	 */
+	public static BinaryValueDeserializer create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new BinaryValueDeserializer(buffer, stringRegistry);
 	}
 
 	@Override
@@ -72,6 +91,12 @@ public class DefaultValueDeserializer implements IValueDeserializer {
 	public String getString() {
 		final int stringId = this.getInt();
 		return this.stringRegistry.get(stringId);
+	}
+
+	@Override
+	public <T extends Enum<T>> T getEnumeration(final Class<T> clazz) throws RecordInstantiationException {
+		final int value = this.buffer.getInt();
+		return this.enumerationValueOf(clazz, value);
 	}
 
 	@Override

@@ -118,7 +118,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * @since 1.2
 	 */
 	public Class<?>[] getValueTypes();
-	
+
 	/**
 	 * This method delivers an array containing the value names of the record.
 	 *
@@ -138,6 +138,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * @since 1.8
 	 * @deprecated since 1.13 (to be removed in 1.14) With the introduction of value serializers, this method has become obsolete.
 	 */
+	@Deprecated
 	public int getSize();
 
 	/**

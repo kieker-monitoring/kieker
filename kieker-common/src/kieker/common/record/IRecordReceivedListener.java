@@ -25,6 +25,11 @@ package kieker.common.record;
 public interface IRecordReceivedListener {
 
 	/**
+	 * Listener method.
+	 *
+	 * @param record
+	 *            record to be processed
+	 *
 	 * @since 1.13
 	 */
 	void onRecordReceived(IMonitoringRecord record);
