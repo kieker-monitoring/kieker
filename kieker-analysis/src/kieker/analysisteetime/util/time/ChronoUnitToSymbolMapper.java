@@ -27,12 +27,12 @@ import java.util.function.Function;
  *
  * @since 1.13
  */
-public final class ChronoUnitToSymbolMapper implements Function<ChronoUnit, String> {
+public final class ChronoUnitToSymbolMapper implements Function<ChronoUnit, String> { // NOPMD (switch statement leads to long class)
 
 	private ChronoUnitToSymbolMapper() {}
 
 	@Override
-	public String apply(final ChronoUnit chronoUnit) {
+	public String apply(final ChronoUnit chronoUnit) { // NOPMD (switch statement leads to long method)
 		switch (chronoUnit) {
 		case NANOS:
 			return "ns";

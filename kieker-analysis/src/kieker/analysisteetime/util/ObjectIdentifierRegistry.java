@@ -26,8 +26,12 @@ import java.util.Map;
  */
 public class ObjectIdentifierRegistry {
 
-	private final Map<Object, Integer> identifiers = new HashMap<>();
-	private int counter = 0;
+	private final Map<Object, Integer> identifiers = new HashMap<>(); // NOPMD (class not designed for concurrent access)
+	private int counter; // is 0 per default
+
+	public ObjectIdentifierRegistry() {
+		// Create an empty registry
+	}
 
 	public int getIdentifier(final Object object) {
 		final Integer identifier = this.identifiers.putIfAbsent(object, this.counter);

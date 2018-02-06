@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class StatisticsModel {
 
-	private final Map<Object, Statistics> model = new HashMap<>();
+	private final Map<Object, Statistics> model = new HashMap<>(); // NOPMD (no concurrent access intended)
 
 	public StatisticsModel() {}
 

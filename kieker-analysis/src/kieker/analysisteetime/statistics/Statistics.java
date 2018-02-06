@@ -30,7 +30,7 @@ public class Statistics {
 
 	private static final int DEFAULT_INITIAL_CAPACITY = 4;
 
-	private final Map<Unit, Statistic> statistics = new HashMap<>(DEFAULT_INITIAL_CAPACITY);
+	private final Map<Unit, Statistic> statistics = new HashMap<>(DEFAULT_INITIAL_CAPACITY); // NOPMD (no concurrent access intended)
 
 	public Statistics() {}
 

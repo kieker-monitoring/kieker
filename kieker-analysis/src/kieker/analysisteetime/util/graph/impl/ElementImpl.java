@@ -9,7 +9,7 @@ import kieker.analysisteetime.util.graph.Element;
 
 abstract class ElementImpl implements Element {
 
-	protected Map<String, Object> properties = new HashMap<String, Object>();
+	protected Map<String, Object> properties = new HashMap<>(); // NOPMD (no concurrent access intended)
 
 	@Override
 	@SuppressWarnings("unchecked")

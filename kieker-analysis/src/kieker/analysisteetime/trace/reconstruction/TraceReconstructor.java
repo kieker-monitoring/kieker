@@ -39,17 +39,26 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 final class TraceReconstructor {
 
 	private final DeploymentModel deploymentModel;
-	private final Map<Long, TraceReconstructionBuffer> traceBuffers = new HashMap<>();
+	private final Map<Long, TraceReconstructionBuffer> traceBuffers = new HashMap<>(); // NOPMD (no concurrent access intended)
 	private final List<TraceReconstructionBuffer> faultyTraceBuffers = new ArrayList<>();
-	private final boolean activateAdditionalLogChecks;
+	// private final boolean activateAdditionalLogChecks;
 	private int danglingRecords;
 	private final TemporalUnit temporalUnit; // BETTER get this value by KiekerMetadataRecord
 
-	public TraceReconstructor(final DeploymentModel deploymentRoot, final boolean activateAdditionalLogChecks, final TemporalUnit temporalUnit) {
+	public TraceReconstructor(final DeploymentModel deploymentRoot, final TemporalUnit temporalUnit) {
 		this.deploymentModel = deploymentRoot;
-		this.activateAdditionalLogChecks = activateAdditionalLogChecks;
 		this.temporalUnit = temporalUnit;
 	}
+
+	/*
+	 * "activateAdditionalLogChecks" not yet implemented
+	 *
+	 * public TraceReconstructor(final DeploymentModel deploymentRoot, final boolean activateAdditionalLogChecks, final TemporalUnit temporalUnit) {
+	 * this.deploymentModel = deploymentRoot;
+	 * this.activateAdditionalLogChecks = activateAdditionalLogChecks;
+	 * this.temporalUnit = temporalUnit;
+	 * }
+	 */
 
 	public int countIncompleteTraces() {
 		return this.traceBuffers.size() + this.faultyTraceBuffers.size();

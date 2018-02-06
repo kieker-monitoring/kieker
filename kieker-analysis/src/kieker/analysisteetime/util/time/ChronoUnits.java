@@ -26,7 +26,9 @@ import java.util.concurrent.TimeUnit;
  *
  * @since 1.13
  */
-public class ChronoUnits {
+public final class ChronoUnits {
+
+	private ChronoUnits() {}
 
 	/**
 	 * Will be obsolete in Java 9 and can be replaced by {@code TimeUnit.toChronoUnit()}.

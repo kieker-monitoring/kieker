@@ -32,14 +32,17 @@ public class DotExportConfiguration {
 	 * want to iterate over the map and do not perform any lookups etc. A more efficient
 	 * way would be to use a List of Pairs of constant size.
 	 */
-	final protected Map<DotGraphAttribute, Function<Graph, String>> graphAttributes = new EnumMap<>(DotGraphAttribute.class);
-	final protected Map<DotNodeAttribute, Function<Graph, String>> defaultNodeAttributes = new EnumMap<>(DotNodeAttribute.class);
-	final protected Map<DotEdgeAttribute, Function<Graph, String>> defaultEdgeAttributes = new EnumMap<>(DotEdgeAttribute.class);
-	final protected Map<DotNodeAttribute, Function<Vertex, String>> nodeAttributes = new EnumMap<>(DotNodeAttribute.class);
-	final protected Map<DotEdgeAttribute, Function<Edge, String>> edgeAttributes = new EnumMap<>(DotEdgeAttribute.class);
-	final protected Map<DotClusterAttribute, Function<Vertex, String>> clusterAttributes = new EnumMap<>(DotClusterAttribute.class);
+	// PMD: No concurrent access intended for the following attributes
+	final protected Map<DotGraphAttribute, Function<Graph, String>> graphAttributes = new EnumMap<>(DotGraphAttribute.class); // NOPMD (see above)
+	final protected Map<DotNodeAttribute, Function<Graph, String>> defaultNodeAttributes = new EnumMap<>(DotNodeAttribute.class); // NOPMD (see above)
+	final protected Map<DotEdgeAttribute, Function<Graph, String>> defaultEdgeAttributes = new EnumMap<>(DotEdgeAttribute.class); // NOPMD (see above)
+	final protected Map<DotNodeAttribute, Function<Vertex, String>> nodeAttributes = new EnumMap<>(DotNodeAttribute.class); // NOPMD (see above)
+	final protected Map<DotEdgeAttribute, Function<Edge, String>> edgeAttributes = new EnumMap<>(DotEdgeAttribute.class); // NOPMD (see above)
+	final protected Map<DotClusterAttribute, Function<Vertex, String>> clusterAttributes = new EnumMap<>(DotClusterAttribute.class); // NOPMD (see above)
 
-	protected DotExportConfiguration() {}
+	protected DotExportConfiguration() {
+		// Create an empty export configuration
+	}
 
 	public Set<Map.Entry<DotGraphAttribute, Function<Graph, String>>> getGraphAttributes() {
 		return Collections.unmodifiableSet(this.graphAttributes.entrySet());

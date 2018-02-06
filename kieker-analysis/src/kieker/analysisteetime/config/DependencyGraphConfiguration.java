@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.analysisteetime.config;
 
 import java.io.File;
@@ -39,8 +55,15 @@ import teetime.framework.Execution;
 import teetime.stage.basic.distributor.Distributor;
 import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
 
+/**
+ * This is an executable TeeTime {@link Configuration} to create dependency graphs.
+ *
+ * @author Sören Henning
+ *
+ * @since 1.13
+ *
+ */
 public class DependencyGraphConfiguration extends Configuration {
-
 	private static final DotExportConfigurationFactory DOT_EXPORT_CONFIGURATION_FACTORY = new DotExportConfigurationFactory(
 			NameBuilder.forJavaShortOperations());
 
@@ -51,15 +74,14 @@ public class DependencyGraphConfiguration extends Configuration {
 	private final StatisticsModel statisticsModel = new StatisticsModel();
 	private final SignatureExtractor signatureExtractor = SignatureExtractor.forJava();
 
-	public DependencyGraphConfiguration(File importDirectory, TemporalUnit timeUnitOfRecods, File exportDirectory) {
-		DependencyGraphBuilderFactory graphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
+	public DependencyGraphConfiguration(final File importDirectory, final TemporalUnit timeUnitOfRecods, final File exportDirectory) {
+		final DependencyGraphBuilderFactory graphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
 
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
 		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final StaticModelsAssemblerStage staticModelsAssembler = new StaticModelsAssemblerStage(this.typeModel,
 				this.assemblyModel, this.deploymentModel, this.signatureExtractor);
-		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, false,
-				timeUnitOfRecods);
+		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, timeUnitOfRecods);
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
 
 		final OperationCallExtractorStage operationCallExtractor = new OperationCallExtractorStage();
@@ -75,10 +97,10 @@ public class DependencyGraphConfiguration extends Configuration {
 				this.statisticsModel, graphBuilderFactory);
 
 		// graph export stages
-		Distributor<Graph> distributor = new Distributor<>(new CopyByReferenceStrategy());
-		DotFileWriterStage dotFileWriterStage = new DotFileWriterStage(exportDirectory.getPath(),
+		final Distributor<Graph> distributor = new Distributor<>(new CopyByReferenceStrategy());
+		final DotFileWriterStage dotFileWriterStage = new DotFileWriterStage(exportDirectory.getPath(),
 				DOT_EXPORT_CONFIGURATION_FACTORY.createForDeploymentLevelOperationDependencyGraph());
-		GraphMLFileWriterStage graphMLFileWriterStage = new GraphMLFileWriterStage(exportDirectory.getPath());
+		final GraphMLFileWriterStage graphMLFileWriterStage = new GraphMLFileWriterStage(exportDirectory.getPath());
 
 		super.connectPorts(reader.getOutputPort(), allowedRecordsFilter.getInputPort());
 		super.connectPorts(allowedRecordsFilter.getOutputPort(), staticModelsAssembler.getInputPort());
@@ -95,13 +117,13 @@ public class DependencyGraphConfiguration extends Configuration {
 		super.connectPorts(distributor.getNewOutputPort(), dotFileWriterStage.getInputPort());
 		super.connectPorts(distributor.getNewOutputPort(), graphMLFileWriterStage.getInputPort());
 	}
-	
-	public static void main(String[] args) {
+
+	public static void main(final String[] args) {
 		final File importDirectory = new File(args[0]);
 		final File exportDirectory = new File(args[1]);
 
-		DependencyGraphConfiguration configuration = new DependencyGraphConfiguration(importDirectory, ChronoUnit.NANOS, exportDirectory);
-		Execution<DependencyGraphConfiguration> execution = new Execution<>(configuration);
+		final DependencyGraphConfiguration configuration = new DependencyGraphConfiguration(importDirectory, ChronoUnit.NANOS, exportDirectory);
+		final Execution<DependencyGraphConfiguration> execution = new Execution<>(configuration);
 		execution.executeBlocking();
 	}
 }

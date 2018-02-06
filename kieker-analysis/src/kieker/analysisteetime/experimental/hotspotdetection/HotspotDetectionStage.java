@@ -34,7 +34,7 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 	private static final PrintStream DEFAULT_PRINT_STREAM = System.out;
 
 	private final TraceTraverser traceTraverser = new TraceTraverser();
-	private final Map<OperationCall, Duration> durationsWithoutChild = new HashMap<>();
+	private final Map<OperationCall, Duration> durationsWithoutChild = new HashMap<>(); // NOPMD (no concurrent access intended)
 	private final int maxOutput;
 	private final PrintStream printStream;
 
@@ -85,7 +85,7 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 
 	// BETTER Put to some kind of MapUtil class
 	public static <K, V extends Comparable<? super V>> Map<K, V> sortMapByValue(final Map<K, V> map) {
-		final List<Map.Entry<K, V>> list = new LinkedList<Map.Entry<K, V>>(map.entrySet());
+		final List<Map.Entry<K, V>> list = new LinkedList<>(map.entrySet());
 		Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
 			@Override
 			public int compare(final Map.Entry<K, V> o1, final Map.Entry<K, V> o2) {
@@ -93,7 +93,7 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 			}
 		});
 
-		final Map<K, V> result = new LinkedHashMap<K, V>();
+		final Map<K, V> result = new LinkedHashMap<>(); // NOPMD (no concurrent access intended)
 		for (final Map.Entry<K, V> entry : list) {
 			result.put(entry.getKey(), entry.getValue());
 		}

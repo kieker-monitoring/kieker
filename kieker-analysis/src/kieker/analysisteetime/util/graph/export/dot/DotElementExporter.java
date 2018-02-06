@@ -69,7 +69,7 @@ class DotElementExporter extends AbstractTransformer<Void> {
 	}
 
 	protected Map<String, String> getAttributes(final Edge edge) {
-		final Map<String, String> attributes = new HashMap<>();
+		final Map<String, String> attributes = new HashMap<>(); // NOPMD (no concurrent access intended)
 		for (final Entry<DotEdgeAttribute, Function<Edge, String>> entry : this.configuration.getEdgeAttributes()) {
 			final String value = entry.getValue().apply(edge);
 			if (value != null) {
@@ -80,7 +80,7 @@ class DotElementExporter extends AbstractTransformer<Void> {
 	}
 
 	protected Map<String, String> getAttributes(final Vertex vertex) {
-		final Map<String, String> attributes = new HashMap<>();
+		final Map<String, String> attributes = new HashMap<>(); // NOPMD (no concurrent access intended)
 		for (final Entry<DotNodeAttribute, Function<Vertex, String>> entry : this.configuration.getNodeAttributes()) {
 			final String value = entry.getValue().apply(vertex);
 			if (value != null) {

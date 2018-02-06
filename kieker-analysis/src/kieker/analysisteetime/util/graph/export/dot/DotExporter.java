@@ -32,13 +32,13 @@ public class DotExporter extends DotElementExporter {
 				this.dotGraphWriter.addGraphAttribute(attribute.getKey().toString(), attribute.getValue().apply(this.graph));
 			}
 
-			final Map<String, String> defaultNodeAttributes = new HashMap<>();
+			final Map<String, String> defaultNodeAttributes = new HashMap<>(); // NOPMD (no concurrent access intended)
 			for (final Entry<DotNodeAttribute, Function<Graph, String>> attribute : this.configuration.getDefaultNodeAttributes()) {
 				defaultNodeAttributes.put(attribute.getKey().toString(), attribute.getValue().apply(this.graph));
 			}
 			this.dotGraphWriter.addDefaultNodeAttributes(defaultNodeAttributes);
 
-			final Map<String, String> defaultEdgeAttributes = new HashMap<>();
+			final Map<String, String> defaultEdgeAttributes = new HashMap<>(); // NOPMD (no concurrent access intended)
 			for (final Entry<DotEdgeAttribute, Function<Graph, String>> attribute : this.configuration.getDefaultEdgeAttributes()) {
 				defaultEdgeAttributes.put(attribute.getKey().toString(), attribute.getValue().apply(this.graph));
 			}

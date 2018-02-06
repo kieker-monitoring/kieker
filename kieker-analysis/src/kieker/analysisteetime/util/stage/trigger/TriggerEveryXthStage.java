@@ -27,7 +27,7 @@ import teetime.stage.basic.AbstractTransformation;
  */
 public class TriggerEveryXthStage extends AbstractTransformation<Object, Trigger> {
 
-	private int counter = 0;
+	private int counter; // = 0
 	private final int threshold;
 	private final Trigger trigger = new Trigger();
 

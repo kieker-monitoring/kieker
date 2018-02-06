@@ -5,7 +5,9 @@ package kieker.analysisteetime.util.graph.impl;
  *
  * @author Sören Henning
  */
-class ExceptionFactory {
+final class ExceptionFactory {
+
+	private ExceptionFactory() {}
 
 	// Graph related exceptions
 

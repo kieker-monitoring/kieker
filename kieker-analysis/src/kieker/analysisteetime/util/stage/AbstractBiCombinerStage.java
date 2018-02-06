@@ -37,6 +37,10 @@ public abstract class AbstractBiCombinerStage<I, J> extends AbstractStage {
 	private final Queue<I> elements1 = new LinkedList<>();
 	private final Queue<J> elements2 = new LinkedList<>();
 
+	public AbstractBiCombinerStage() {
+		super();
+	}
+
 	public final InputPort<I> getInputPort1() {
 		return this.inputPort1;
 	}

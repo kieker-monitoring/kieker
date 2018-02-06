@@ -38,7 +38,6 @@ import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
 import kieker.analysisteetime.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.analysisteetime.util.graph.export.dot.DotExportConfiguration;
 import kieker.analysisteetime.util.graph.export.dot.DotFileWriterStage;
-import kieker.analysisteetime.util.graph.export.graphml.GraphMLFileWriterStage;
 import kieker.analysisteetime.util.stage.trigger.TriggerOnTerminationStage;
 
 import teetime.framework.Configuration;
@@ -65,8 +64,8 @@ public class ExampleConfiguration extends Configuration {
 		final TemporalUnit timeUnitOfRecods = ChronoUnit.NANOS;
 		final Function<OperationCall, Object> statisticsObjectAccesor = ModelObjectFromOperationCallAccessors.DEPLOYED_OPERATION;
 		final DeploymentLevelOperationDependencyGraphBuilderFactory deploymentGraphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
-		final DotExportConfiguration dependencyGraphDotExportConfiguration = (new DotExportConfigurationFactory(
-				NameBuilder.forJavaShortOperations(), VertexTypeMapper.TO_STRING))
+		final DotExportConfiguration dependencyGraphDotExportConfiguration = new DotExportConfigurationFactory(
+				NameBuilder.forJavaShortOperations(), VertexTypeMapper.TO_STRING)
 						.createForDeploymentLevelOperationDependencyGraph();
 
 		// Create the stages
@@ -77,8 +76,7 @@ public class ExampleConfiguration extends Configuration {
 		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final StaticModelsAssemblerStage staticModelsAssembler = new StaticModelsAssemblerStage(this.typeModel,
 				this.assemblyModel, this.deploymentModel, this.signatureExtractor);
-		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, false,
-				timeUnitOfRecods); // TODO second parameter
+		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, timeUnitOfRecods);
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
 
 		final OperationCallExtractorStage operationCallExtractor = new OperationCallExtractorStage();
@@ -92,8 +90,7 @@ public class ExampleConfiguration extends Configuration {
 		final TraceToGraphTransformerStage traceToGraphTransformer = new TraceToGraphTransformerStage();
 		final DotTraceGraphFileWriterStage dotTraceGraphFileWriter = DotTraceGraphFileWriterStage
 				.create(exportDirectory);
-		final GraphMLFileWriterStage graphMLTraceGraphFileWriter = new GraphMLFileWriterStage(
-				exportDirectory.getPath());
+		// final GraphMLFileWriterStage graphMLTraceGraphFileWriter = new GraphMLFileWriterStage(exportDirectory.getPath());
 		final Distributor<Trace> traceDistributor = new Distributor<>(new CopyByReferenceStrategy());
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
 
@@ -132,11 +129,11 @@ public class ExampleConfiguration extends Configuration {
 	}
 
 	public ExecutionModel getExecutionModel() {
-		return executionModel;
+		return this.executionModel;
 	}
 
 	public StatisticsModel getStatisticsModel() {
-		return statisticsModel;
+		return this.statisticsModel;
 	}
 
 }

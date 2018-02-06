@@ -37,7 +37,7 @@ public class MappingFileParser {
 	@SuppressWarnings("PMD.LoggerIsNotStaticFinal")
 	protected Logger logger;
 
-	private static final Map<String, String> FILE_PREFIX_REGISTRY = new HashMap<String, String>();
+	private static final Map<String, String> FILE_PREFIX_REGISTRY = new HashMap<>(); // NOPMD (no concurrent access intended)
 
 	static {
 		FILE_PREFIX_REGISTRY.put(FSUtil.MAP_FILENAME, FSUtil.FILE_PREFIX);
@@ -50,7 +50,7 @@ public class MappingFileParser {
 
 	/**
 	 * Closes the stream after reading.
-	 * 
+	 *
 	 * @param inputStream
 	 * @return
 	 */

@@ -38,7 +38,8 @@ public class TraceAggregator {
 	private final TraceFactory traceFactory = TraceFactory.eINSTANCE;
 	private final boolean considerFailed;
 	private final TraceEquivalence traceEquivalence;
-	private final Map<Equivalence.Wrapper<Trace>, Trace> aggregatedTraces = new HashMap<>(); // BETTER use own class for aggregated traces
+	// BETTER use own class for aggregated traces
+	private final Map<Equivalence.Wrapper<Trace>, Trace> aggregatedTraces = new HashMap<>(); // NOPMD (class not designed for concurrent access)
 
 	public TraceAggregator(final boolean considerFailed) {
 		this.considerFailed = considerFailed;

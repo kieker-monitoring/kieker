@@ -14,8 +14,8 @@ import kieker.analysisteetime.util.graph.Vertex;
 
 class VertexImpl extends GraphElementImpl implements Vertex {
 
-	protected Map<Object, Edge> outEdges = new HashMap<>();
-	protected Map<Object, Edge> inEdges = new HashMap<>();
+	protected Map<Object, Edge> outEdges = new HashMap<>(); // NOPMD (no concurrent access intended)
+	protected Map<Object, Edge> inEdges = new HashMap<>(); // NOPMD (no concurrent access intended)
 	private Graph childGraph;
 
 	protected VertexImpl(final Object id, final GraphImpl graph) {

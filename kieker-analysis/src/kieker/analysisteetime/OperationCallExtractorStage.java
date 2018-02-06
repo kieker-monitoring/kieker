@@ -36,14 +36,23 @@ public class OperationCallExtractorStage extends AbstractTransformation<Trace, O
 	private final TraceTraverser traceTraverser = new TraceTraverser();
 	private final Extractor extractor = new Extractor();
 
-	public OperationCallExtractorStage() {}
+	public OperationCallExtractorStage() {
+		super();
+	}
 
 	@Override
 	protected void execute(final Trace trace) {
 		this.traceTraverser.traverse(trace, this.extractor);
 	}
 
+	/**
+	 * Sends visited {@link OperationCall}s to the parents class' output port.
+	 */
 	private class Extractor extends OperationCallVisitor {
+
+		public Extractor() {
+			super();
+		}
 
 		@Override
 		public void visit(final OperationCall operationCall) {

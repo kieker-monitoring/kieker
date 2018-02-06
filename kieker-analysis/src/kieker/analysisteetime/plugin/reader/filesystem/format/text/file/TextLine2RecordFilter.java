@@ -18,16 +18,16 @@ package kieker.analysisteetime.plugin.reader.filesystem.format.text.file;
 import java.util.HashSet;
 import java.util.Set;
 
-import teetime.framework.AbstractConsumerStage;
-import teetime.framework.OutputPort;
-import teetime.stage.util.TextLineContainer;
-
 import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryRepository;
 import kieker.analysisteetime.plugin.reader.filesystem.util.MappingException;
 import kieker.common.exception.IllegalRecordFormatException;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.exception.UnknownRecordTypeException;
 import kieker.common.record.IMonitoringRecord;
+
+import teetime.framework.AbstractConsumerStage;
+import teetime.framework.OutputPort;
+import teetime.stage.util.TextLineContainer;
 
 /**
  * @author Christian Wulf
@@ -38,11 +38,11 @@ public class TextLine2RecordFilter extends AbstractConsumerStage<TextLineContain
 
 	private final OutputPort<IMonitoringRecord> outputPort = this.createOutputPort();
 
-	private final Set<String> unknownTypesObserved = new HashSet<String>();
+	private final Set<String> unknownTypesObserved = new HashSet<>();
 
 	private boolean ignoreUnknownRecordTypes;
 
-	private boolean abortDueToUnknownRecordType;
+	// private boolean abortDueToUnknownRecordType; // TODO currently not used
 
 	private RecordFromTextLineCreator recordFromTextLineCreator;
 
@@ -80,7 +80,7 @@ public class TextLine2RecordFilter extends AbstractConsumerStage<TextLineContain
 	protected void execute(final TextLineContainer textLine) {
 		try {
 			final IMonitoringRecord record = this.recordFromTextLineCreator.createRecordFromLine(textLine.getTextFile(), textLine.getTextLine());
-			outputPort.send(record);
+			this.outputPort.send(record);
 		} catch (final MonitoringRecordException e) {
 			this.logger.error("Could not create record from text line: '" + textLine + "'", e);
 		} catch (final IllegalRecordFormatException e) {
@@ -90,7 +90,7 @@ public class TextLine2RecordFilter extends AbstractConsumerStage<TextLineContain
 		} catch (final UnknownRecordTypeException e) {
 			final String classname = e.getClassName();
 			if (!this.ignoreUnknownRecordTypes) {
-				this.abortDueToUnknownRecordType = true;
+				// this.abortDueToUnknownRecordType = true; // TODO currently not used
 				this.logger.error("Failed to load record type " + classname, e);
 			} else if (!this.unknownTypesObserved.contains(classname)) {
 				this.unknownTypesObserved.add(classname);

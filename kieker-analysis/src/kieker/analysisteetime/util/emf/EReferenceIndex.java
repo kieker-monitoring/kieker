@@ -53,7 +53,7 @@ public class EReferenceIndex<K, V extends EObject> {
 		this.observedReferenceAttributes = observedReferenceAttributes;
 		this.keyCreator = keyCreator;
 
-		if ((values == null) || (values.size() == 0)) {
+		if ((values == null) || values.isEmpty()) {
 			this.index = HashBiMap.create();
 		} else {
 			this.index = values.stream().collect(Collectors.toMap(

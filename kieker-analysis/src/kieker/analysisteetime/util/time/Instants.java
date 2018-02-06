@@ -26,7 +26,9 @@ import java.time.temporal.TemporalUnit;
  *
  * @since 1.13
  */
-public class Instants {
+public final class Instants {
+
+	private Instants() {}
 
 	public static Instant createFromEpochTimestamp(final long timestamp, final TemporalUnit temporalUnit) {
 		return Instant.EPOCH.plus(timestamp, temporalUnit);

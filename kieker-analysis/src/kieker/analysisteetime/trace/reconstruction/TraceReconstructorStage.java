@@ -34,17 +34,25 @@ import teetime.stage.basic.AbstractTransformation;
  * instances are supported.
  *
  * @author Nils Christian Ehmke, Sören Henning
- * 
+ *
  * @since 1.13
- * 
+ *
  */
 public class TraceReconstructorStage extends AbstractTransformation<IFlowRecord, Trace> {
 
 	private final TraceReconstructor traceReconstructor;
 
-	public TraceReconstructorStage(final DeploymentModel deploymentModel, final boolean activateAdditionalLogChecks, final TemporalUnit temporalUnit) {
-		this.traceReconstructor = new TraceReconstructor(deploymentModel, activateAdditionalLogChecks, temporalUnit);
+	public TraceReconstructorStage(final DeploymentModel deploymentModel, final TemporalUnit temporalUnit) {
+		this.traceReconstructor = new TraceReconstructor(deploymentModel, temporalUnit);
 	}
+
+	/*
+	 * "activateAdditionalLogChecks" not yet implemented
+	 *
+	 * public TraceReconstructorStage(final DeploymentModel deploymentModel, final boolean activateAdditionalLogChecks, final TemporalUnit temporalUnit) {
+	 * this.traceReconstructor = new TraceReconstructor(deploymentModel, activateAdditionalLogChecks, temporalUnit);
+	 * }
+	 */
 
 	@Override
 	protected void execute(final IFlowRecord record) {

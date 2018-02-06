@@ -48,7 +48,7 @@ public class HotspotDetectionConfiguration extends Configuration {
 				new JavaOperationSignatureExtractor());
 		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(typeModel, assemblyModel);
 		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(assemblyModel, deploymentModel);
-		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(deploymentModel, false, ChronoUnit.NANOS); // TODO second parameter
+		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(deploymentModel, ChronoUnit.NANOS);
 		final HotspotDetectionStage hotspotDetector = new HotspotDetectionStage();
 
 		// Connect the stages

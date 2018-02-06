@@ -36,6 +36,10 @@ public final class TraceStatisticsDecoratorStage extends AbstractFilter<Trace> {
 	private final TraceTraverser traverser = new TraceTraverser();
 	private final OperationCallVisitor durRatioToParentCalculator = new DurRatioToParentCalculator();
 
+	public TraceStatisticsDecoratorStage() {
+		super();
+	}
+
 	@Override
 	public void execute(final Trace trace) {
 		final OperationCallVisitor durRatioToRootParentCalculator = new DurRatioToRootParentCalculator(trace.getRootOperationCall());

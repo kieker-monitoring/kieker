@@ -15,16 +15,24 @@ import teetime.framework.Execution;
  */
 public final class HotspotDetection {
 
-	public static void main(final String[] args) {
+	private final Execution<HotspotDetectionConfiguration> execution;
 
-		// TODO Temp
-		final String path = "C:/Users/Soeren/Desktop/jedit-records/kieker-20170115-163405515-UTC-Leonard-KIEKER";
-		final File importDirectory = new File(path);
-
+	public HotspotDetection(final File importDirectory) {
 		final HotspotDetectionConfiguration configuration = new HotspotDetectionConfiguration(importDirectory);
-		final Execution<HotspotDetectionConfiguration> analysis = new Execution<>(configuration);
-		analysis.executeBlocking();
+		this.execution = new Execution<>(configuration);
+	}
 
+	public void run() {
+		this.execution.executeBlocking();
+	}
+
+	public static void main(final String[] args) {
+		if (args.length < 1) {
+			throw new IllegalArgumentException("No input directory specified.");
+		}
+
+		final File path = new File(args[0]);
+		new HotspotDetection(path).run();
 	}
 
 }

@@ -23,6 +23,8 @@ package kieker.analysisteetime.util.stage.trigger;
  */
 public class Trigger {
 
-	public Trigger() {}
+	public Trigger() {
+		// constructs a trigger
+	}
 
 }

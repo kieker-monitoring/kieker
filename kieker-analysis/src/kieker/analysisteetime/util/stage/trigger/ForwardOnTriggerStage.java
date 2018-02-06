@@ -29,11 +29,11 @@ public class ForwardOnTriggerStage<T> extends AbstractStage implements ITransfor
 	protected void execute() {
 		final T element = this.getInputPort().receive();
 		if (element != null) {
-			handleElement(element);
+			this.handleElement(element);
 		}
 		final Trigger trigger = this.getTriggerInputPort().receive();
 		if (trigger != null) {
-			handleTrigger(trigger);
+			this.handleTrigger();
 		}
 	}
 
@@ -41,7 +41,7 @@ public class ForwardOnTriggerStage<T> extends AbstractStage implements ITransfor
 		this.deque.addLast(element);
 	}
 
-	private void handleTrigger(final Trigger trigger) {
+	private void handleTrigger() {
 		while (this.deque.size() > 0) {
 			final T element;
 			switch (this.sendStrategy) {

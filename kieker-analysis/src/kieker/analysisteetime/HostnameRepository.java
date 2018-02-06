@@ -38,9 +38,11 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
  */
 public class HostnameRepository {
 
-	private final Map<Long, Entry> repository = new HashMap<>();
+	private final Map<Long, Entry> repository = new HashMap<>(); // NOPMD (Class not designed for concurrent use)
 
-	public HostnameRepository() {}
+	public HostnameRepository() {
+		// Create an empty repository
+	}
 
 	public void addEntry(final long traceId, final String hostname) {
 		this.repository.put(traceId, new Entry(hostname));
@@ -67,8 +69,11 @@ public class HostnameRepository {
 		}
 	}
 
+	/**
+	 * Repository entries
+	 */
 	private static class Entry {
-		protected int size = 0;
+		protected int size; // size = 0
 		protected String hostname;
 
 		protected Entry(final String hostname) {

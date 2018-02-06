@@ -15,12 +15,12 @@ public class GraphImpl extends ElementImpl implements Graph {
 
 	protected String name = "G";
 
-	protected Map<Object, Vertex> vertices = new HashMap<>();
-	protected Map<Object, Edge> edges = new HashMap<>();
+	protected Map<Object, Vertex> vertices = new HashMap<>(); // NOPMD (no concurrent access intended)
+	protected Map<Object, Edge> edges = new HashMap<>(); // NOPMD (no concurrent access intended)
 
-	protected long currentDefaultId = 0l;
+	protected long currentDefaultId; // = 0l
 
-	protected VertexImpl parentVertex = null;
+	protected VertexImpl parentVertex; // intended to be "null" per default
 
 	public GraphImpl() {
 		super();
