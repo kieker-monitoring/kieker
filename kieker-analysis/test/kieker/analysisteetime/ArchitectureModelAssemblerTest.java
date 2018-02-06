@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.analysisteetime.junit;
+package kieker.analysisteetime;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,6 +51,10 @@ public class ArchitectureModelAssemblerTest {
 	private final BeforeOperationEvent beforeOperationEvent3 = new BeforeOperationEvent(0, 0, 0, EXAMPLE_OPERATION_SIGNATURE_3, EXAMPLE_CLASS_SIGNATURE_2);
 
 	private final TypeFactory factory = TypeFactory.eINSTANCE;
+
+	public ArchitectureModelAssemblerTest() {
+		// default empty constructor
+	}
 
 	/**
 	 * Test method for {@link kieker.analysisteetime.model.TypeModelAssembler#addRecord(kieker.common.record.flow.IOperationRecord)}.

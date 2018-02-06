@@ -23,7 +23,6 @@ import org.junit.Test;
 
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
-import kieker.analysisteetime.signature.JavaComponentSignatureExtractor;
 
 /**
  * @author Sören Henning
@@ -34,6 +33,10 @@ public class JavaComponentSignatureExtractorTest {
 
 	private JavaComponentSignatureExtractor signatureExtractor;
 
+	public JavaComponentSignatureExtractorTest() {
+		// empty default constructor
+	}
+
 	@Before
 	public void setUp() throws Exception {
 		this.signatureExtractor = new JavaComponentSignatureExtractor();
@@ -41,14 +44,15 @@ public class JavaComponentSignatureExtractorTest {
 
 	@After
 	public void tearDown() throws Exception {
-		this.signatureExtractor = null;
+		this.signatureExtractor = null; // NOPMD (resetting to null intended)
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.signature.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
+	 * Test method for
+	 * {@link kieker.analysisteetime.signature.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
 	 */
 	@Test
-	public void testExtractWithNonNestedPackage() {
+	public void testExtractWithNonNestedPackage() { // NOPMD (assert is placed in separate method)
 		final String packageName = "package";
 		final String componentName = "MyClass";
 
@@ -56,10 +60,11 @@ public class JavaComponentSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.signature.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
+	 * Test method for
+	 * {@link kieker.analysisteetime.signature.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
 	 */
 	@Test
-	public void testExtractWithNestedPackage() {
+	public void testExtractWithNestedPackage() { // NOPMD (assert is placed in separate method)
 		final String packageName = "com.company.package";
 		final String componentName = "MyClass";
 
@@ -67,10 +72,11 @@ public class JavaComponentSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.signature.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
+	 * Test method for
+	 * {@link kieker.analysisteetime.signature.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
 	 */
 	@Test
-	public void testExtractWithoutPackage() {
+	public void testExtractWithoutPackage() { // NOPMD (assert is placed in separate method)
 		final String packageName = "";
 		final String componentName = "MyClass";
 
@@ -78,10 +84,11 @@ public class JavaComponentSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.signature.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
+	 * Test method for
+	 * {@link kieker.analysisteetime.signature.JavaComponentSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.ComponentType)}.
 	 */
 	@Test
-	public void testExtractWithInnerClass() {
+	public void testExtractWithInnerClass() { // NOPMD (assert is placed in separate method)
 		final String packageName = "com.company.package";
 		final String componentName = "MyClass$InnerClass";
 

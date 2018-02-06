@@ -5,13 +5,21 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+/**
+ * @author Sören Henning
+ *
+ */
 public class RunningMedianTest {
 
 	@Rule
 	public ExpectedException exceptions = ExpectedException.none();
 
+	public RunningMedianTest() {
+		// empty default constructor
+	}
+
 	@Test
-	public void testEmptySet() {
+	public void testEmptySet() { // NOPMD expect exception
 		this.exceptions.expect(IllegalStateException.class);
 
 		final RunningMedian<Long> runningMedian = RunningMedian.forLong();

@@ -14,14 +14,12 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.analysisteetime.junit;
+package kieker.analysisteetime;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import kieker.analysisteetime.HostnameRepository;
 
 /**
  * @author Sören Henning
@@ -35,6 +33,10 @@ public class HostnameRepositoryTest {
 	private final static long EXAMPLE_TRACE_ID = 1234;
 	private final static String EXAMPLE_HOSTNAME = "Host123";
 
+	public HostnameRepositoryTest() {
+		// default empty constructor
+	}
+
 	@Before
 	public void setUp() throws Exception {
 		this.hostnameRepository = new HostnameRepository();
@@ -42,7 +44,7 @@ public class HostnameRepositoryTest {
 
 	@After
 	public void tearDown() throws Exception {
-		this.hostnameRepository = null;
+		this.hostnameRepository = null; // NOPMD (resetting to null intended)
 	}
 
 	/**

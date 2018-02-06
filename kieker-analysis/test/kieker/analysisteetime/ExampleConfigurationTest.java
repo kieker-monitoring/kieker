@@ -48,6 +48,10 @@ public class ExampleConfigurationTest {
 	// @Rule
 	// public TemporaryFolder tempFolder = new TemporaryFolder();
 
+	public ExampleConfigurationTest() {
+		// default empty constructor
+	}
+
 	@Test
 	public void testCurrentStateOfDevelopment() throws FileNotFoundException, URISyntaxException {
 		// use the classloader to identify resources in a location-independent way

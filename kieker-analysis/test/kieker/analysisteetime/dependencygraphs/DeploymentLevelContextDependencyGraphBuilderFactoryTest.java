@@ -47,7 +47,7 @@ public class DeploymentLevelContextDependencyGraphBuilderFactoryTest {
 
 	@After
 	public void tearDown() throws Exception {
-		this.factory = null;
+		this.factory = null;// NOPMD (resetting to null intended)
 	}
 
 	/**

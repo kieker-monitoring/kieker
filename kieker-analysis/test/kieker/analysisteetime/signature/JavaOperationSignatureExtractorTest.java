@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
-import kieker.analysisteetime.signature.JavaOperationSignatureExtractor;
 
 /**
  * @author Sören Henning
@@ -39,6 +38,10 @@ public class JavaOperationSignatureExtractorTest {
 
 	private JavaOperationSignatureExtractor signatureExtractor;
 
+	public JavaOperationSignatureExtractorTest() {
+		// empty default constructor
+	}
+
 	@Before
 	public void setUp() throws Exception {
 		this.signatureExtractor = new JavaOperationSignatureExtractor();
@@ -46,14 +49,15 @@ public class JavaOperationSignatureExtractorTest {
 
 	@After
 	public void tearDown() throws Exception {
-		this.signatureExtractor = null;
+		this.signatureExtractor = null; // NOPMD (resetting to null intended)
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * Test method for
+	 * {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
-	public void testExtractWithoutModifiersAndParameters() {
+	public void testExtractWithoutModifiersAndParameters() { // NOPMD (assert is placed in separate method)
 		final List<String> modifiers = Collections.emptyList();
 		final String returnType = "void";
 		final String name = "methodName";
@@ -63,10 +67,11 @@ public class JavaOperationSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * Test method for
+	 * {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
-	public void testExtractWithoutModifiersWithParameters() {
+	public void testExtractWithoutModifiersWithParameters() { // NOPMD (assert is placed in separate method)
 		final List<String> modifiers = Collections.emptyList();
 		final String returnType = "void";
 		final String name = "methodName";
@@ -76,10 +81,11 @@ public class JavaOperationSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * Test method for
+	 * {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
-	public void testExtractWithoutModifiersWithFullQualifiedParameters() {
+	public void testExtractWithoutModifiersWithFullQualifiedParameters() {// NOPMD (assert is placed in separate method)
 		final List<String> modifiers = Collections.emptyList();
 		final String returnType = "ReturnType";
 		final String name = "methodName";
@@ -89,10 +95,11 @@ public class JavaOperationSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * Test method for
+	 * {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
-	public void testExtractWithMultipleModifiersWithoutParameters() {
+	public void testExtractWithMultipleModifiersWithoutParameters() {// NOPMD (assert is placed in separate method)
 		final List<String> modifiers = Arrays.asList("public", "static", "final");
 		final String returnType = "ReturnType";
 		final String name = "methodName";
@@ -102,10 +109,11 @@ public class JavaOperationSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * Test method for
+	 * {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
-	public void testExtractFullQualifiedReturnType() {
+	public void testExtractFullQualifiedReturnType() {// NOPMD (assert is placed in separate method)
 		final List<String> modifiers = Arrays.asList("public");
 		final String returnType = "org.organi.sation.SimpleClass";
 		final String name = "methodName";
@@ -115,10 +123,11 @@ public class JavaOperationSignatureExtractorTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
+	 * Test method for
+	 * {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
-	public void testExtractNestedFullQualifiedReturnType() {
+	public void testExtractNestedFullQualifiedReturnType() {// NOPMD (assert is placed in separate method)
 		final List<String> modifiers = Arrays.asList("public");
 		final String returnType = "org.organi.sation.OuterClass$InnerClass";
 		final String name = "methodName";
@@ -151,14 +160,14 @@ public class JavaOperationSignatureExtractorTest {
 
 	private OperationType buildComponentTypeByNames(final List<String> modifiers, final String returnType, final String name, final List<String> parameters) {
 		final StringBuilder signature = new StringBuilder();
-		signature.append(modifiers.stream().collect(Collectors.joining(" ")));
-		signature.append(' ');
-		signature.append(returnType);
-		signature.append(' ');
-		signature.append(name);
-		signature.append('(');
-		signature.append(parameters.stream().collect(Collectors.joining(", ")));
-		signature.append(')');
+		signature.append(modifiers.stream().collect(Collectors.joining(" ")))
+				.append(' ')
+				.append(returnType)
+				.append(' ')
+				.append(name)
+				.append('(')
+				.append(parameters.stream().collect(Collectors.joining(", ")))
+				.append(')');
 		return this.buildOperationTypeBySiganture(signature.toString());
 	}
 
