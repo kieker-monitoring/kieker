@@ -29,16 +29,20 @@ import java.util.stream.Collectors;
  */
 public class JavaFullOperationNameBuilder implements OperationNameBuilder {
 
+	public JavaFullOperationNameBuilder() {
+		// create builder
+	}
+
 	@Override
 	public String build(final Collection<String> modifiers, final String returnType, final String name, final Collection<String> parameterTypes) {
 		final StringBuilder builder = new StringBuilder();
 		if (!modifiers.isEmpty()) {
 			builder.append(modifiers.stream().collect(Collectors.joining(" ", "", " ")));
 		}
-		builder.append(returnType);
-		builder.append(' ');
-		builder.append(name);
-		builder.append(parameterTypes.stream().collect(Collectors.joining(" ,", "(", ")")));
+		builder.append(returnType)
+				.append(' ')
+				.append(name)
+				.append(parameterTypes.stream().collect(Collectors.joining(" ,", "(", ")")));
 		return builder.toString();
 	}
 

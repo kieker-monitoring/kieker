@@ -7,9 +7,12 @@ import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.util.ComposedKey;
 
+/**
+ * Utility class for functions ({@link Function}) to access the model objects from operation calls.
+ *
+ * @author Sören Henning
+ */
 public final class ModelObjectFromOperationCallAccessors {
-
-	private ModelObjectFromOperationCallAccessors() {}
 
 	public static final Function<OperationCall, Object> DEPLOYED_OPERATION = c -> c.getOperation();
 
@@ -34,5 +37,7 @@ public final class ModelObjectFromOperationCallAccessors {
 			return executionModel.getAggregatedInvocations().get(key);
 		};
 	}
+
+	private ModelObjectFromOperationCallAccessors() {}
 
 }

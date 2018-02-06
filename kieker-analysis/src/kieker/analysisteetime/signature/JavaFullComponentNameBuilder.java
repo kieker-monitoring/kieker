@@ -26,6 +26,10 @@ package kieker.analysisteetime.signature;
  */
 public class JavaFullComponentNameBuilder implements ComponentNameBuilder {
 
+	public JavaFullComponentNameBuilder() {
+		// create builder
+	}
+
 	@Override
 	public String build(final String packageName, final String name) {
 		return packageName + '.' + name;

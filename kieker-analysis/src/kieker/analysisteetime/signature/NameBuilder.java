@@ -41,7 +41,7 @@ public final class NameBuilder {
 		return this.componentNameBuilder;
 	}
 
-	public static NameBuilder of(final OperationNameBuilder operationNameBuilder, final ComponentNameBuilder componentNameBuilder) {
+	public static NameBuilder of(final OperationNameBuilder operationNameBuilder, final ComponentNameBuilder componentNameBuilder) { // NOPMD
 		return new NameBuilder(operationNameBuilder, componentNameBuilder);
 	}
 

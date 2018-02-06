@@ -46,7 +46,7 @@ public class GraphTransformerVisitor implements OperationCallVisitor {
 		this.addVertex(operationCall);
 
 		if (operationCall.getParent() != null) {
-			this.addEdge(operationCall, operationCall.getParent());
+			this.addEdge(operationCall);
 		} else {
 			this.addRootVertex(operationCall);
 		}
@@ -73,7 +73,7 @@ public class GraphTransformerVisitor implements OperationCallVisitor {
 		return vertex;
 	}
 
-	private Edge addEdge(final OperationCall operationCall, final OperationCall parentOperationCall) {
+	private Edge addEdge(final OperationCall operationCall) {
 
 		final int thisVertexId = this.objectIdentifierRegistry.getIdentifier(operationCall);
 		final Vertex thisVertex = this.graph.getVertex(thisVertexId);

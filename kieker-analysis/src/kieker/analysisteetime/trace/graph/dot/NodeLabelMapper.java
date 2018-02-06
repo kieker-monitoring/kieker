@@ -30,7 +30,6 @@ public class NodeLabelMapper implements Function<Vertex, String> {
 		}
 
 		final Collection<String> modifiers;
-		final Collection<String> parameters;
 
 		// BETTER consider check if properties exists
 
@@ -41,6 +40,9 @@ public class NodeLabelMapper implements Function<Vertex, String> {
 		} else {
 			throw new IllegalArgumentException("Vertex property 'modifiers' is not a collection.");
 		}
+
+		final Collection<String> parameters;
+
 		if (vertex.getProperty("parameterTypes") instanceof Collection) {
 			@SuppressWarnings("unchecked")
 			final Collection<String> castedParameters = (Collection<String>) vertex.getProperty("parameterTypes");
@@ -51,24 +53,24 @@ public class NodeLabelMapper implements Function<Vertex, String> {
 
 		// TODO this could be extracted
 		final StringBuilder signature = new StringBuilder();
-		signature.append(modifiers.stream().collect(Collectors.joining(" ")));
-		signature.append(' ');
-		signature.append(vertex.getProperty("returnType").toString());
-		signature.append(' ');
-		signature.append(vertex.getProperty("name").toString());
-		signature.append('(');
-		signature.append(parameters.stream().collect(Collectors.joining(", ")));
-		signature.append(')');
+		signature.append(modifiers.stream().collect(Collectors.joining(" ")))
+				.append(' ')
+				.append(vertex.getProperty("returnType").toString())
+				.append(' ')
+				.append(vertex.getProperty("name").toString())
+				.append('(')
+				.append(parameters.stream().collect(Collectors.joining(", ")))
+				.append(')');
 
-		final StringBuilder label = new StringBuilder();
-		label.append(vertex.getProperty("deploymentContext").toString());
-		label.append("::\\n");
-		label.append('@');
-		label.append(vertex.getProperty("stackDepth").toString());
-		label.append(':');
-		label.append(vertex.getProperty("component").toString());
-		label.append("\\n");
-		label.append(signature);
+		final StringBuilder label = new StringBuilder() // NOPMD (.append(<>.toString() + "...") does not make sense)
+				.append(vertex.getProperty("deploymentContext").toString())
+				.append("::\\n")
+				.append('@')
+				.append(vertex.getProperty("stackDepth").toString())
+				.append(':')
+				.append(vertex.getProperty("component").toString())
+				.append("\\n")
+				.append(signature);
 
 		return label.toString();
 	}

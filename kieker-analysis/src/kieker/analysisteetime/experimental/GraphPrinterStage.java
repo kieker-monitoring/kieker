@@ -9,6 +9,12 @@ import kieker.analysisteetime.util.graph.Vertex;
 
 import teetime.framework.AbstractConsumerStage;
 
+/**
+ * This stage prints {@link Graph}s to a given {@link PrintStream} or {@code System.out} if no one specified.
+ *
+ * @author Sören Henning
+ *
+ */
 public class GraphPrinterStage extends AbstractConsumerStage<Graph> {
 
 	private final PrintStream printStream;
@@ -18,6 +24,7 @@ public class GraphPrinterStage extends AbstractConsumerStage<Graph> {
 	}
 
 	public GraphPrinterStage(final PrintStream printStream) {
+		super();
 		this.printStream = printStream;
 	}
 

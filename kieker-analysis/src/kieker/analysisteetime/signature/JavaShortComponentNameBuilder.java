@@ -18,12 +18,16 @@ package kieker.analysisteetime.signature;
 
 /**
  * This {@link ComponentNameBuilder} creates a component names in a short Java style by just returning the actual name.
- * 
+ *
  * @author Sören Henning
  *
  * @since 1.13
  */
 public class JavaShortComponentNameBuilder implements ComponentNameBuilder {
+
+	public JavaShortComponentNameBuilder() {
+		// create builder
+	}
 
 	@Override
 	public String build(final String packageName, final String name) {

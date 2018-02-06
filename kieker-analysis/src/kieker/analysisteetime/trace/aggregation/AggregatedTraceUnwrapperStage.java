@@ -31,6 +31,10 @@ import teetime.stage.basic.AbstractTransformation;
  */
 public class AggregatedTraceUnwrapperStage extends AbstractTransformation<AggregatedTraceWrapper, Trace> {
 
+	public AggregatedTraceUnwrapperStage() {
+		super();
+	}
+
 	@Override
 	protected void execute(final AggregatedTraceWrapper wrapper) {
 		if (wrapper.isFirst()) {

@@ -41,7 +41,7 @@ public final class SignatureExtractor {
 		return this.componentSignatureExtractor;
 	}
 
-	public static SignatureExtractor of(final OperationSignatureExtractor operationSignatureExtractor,
+	public static SignatureExtractor of(final OperationSignatureExtractor operationSignatureExtractor, // NOPMD
 			final ComponentSignatureExtractor componentSignatureExtractor) {
 		return new SignatureExtractor(operationSignatureExtractor, componentSignatureExtractor);
 	}

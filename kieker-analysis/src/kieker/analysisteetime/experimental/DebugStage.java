@@ -9,6 +9,10 @@ import teetime.stage.basic.AbstractFilter;
  */
 public class DebugStage<T> extends AbstractFilter<T> {
 
+	public DebugStage() {
+		super();
+	}
+
 	@Override
 	protected void execute(final T element) {
 		this.outputPort.send(element);

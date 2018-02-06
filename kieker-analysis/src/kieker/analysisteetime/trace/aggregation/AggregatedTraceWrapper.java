@@ -34,7 +34,7 @@ public final class AggregatedTraceWrapper {
 
 	private final Trace aggregatedTrace; // BETTER use own class for aggregated traces
 	private final Trace trace;
-	private final boolean isFirst;
+	private final boolean isFirst; // NOPMD (attribute name is intended)
 
 	public AggregatedTraceWrapper(final Trace aggregatedTrace, final Trace trace, final boolean isFirst) {
 		this.aggregatedTrace = aggregatedTrace;

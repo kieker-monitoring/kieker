@@ -49,4 +49,6 @@ public final class PropertyKeys {
 
 	public static final String TIME_UNIT = "time unit";
 
+	private PropertyKeys() {}
+
 }

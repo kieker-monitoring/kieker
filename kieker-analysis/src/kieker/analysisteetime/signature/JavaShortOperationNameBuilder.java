@@ -29,6 +29,10 @@ import java.util.Collection;
  */
 public class JavaShortOperationNameBuilder implements OperationNameBuilder {
 
+	public JavaShortOperationNameBuilder() {
+		// create builder
+	}
+
 	@Override
 	public String build(final Collection<String> modifiers, final String returnType, final String name, final Collection<String> parameterTypes) {
 		return name + '(' + (!parameterTypes.isEmpty() ? ".." : "") + ')';

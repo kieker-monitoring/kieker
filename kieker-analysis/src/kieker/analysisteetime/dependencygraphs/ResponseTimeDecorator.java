@@ -9,6 +9,11 @@ import kieker.analysisteetime.statistics.Units;
 import kieker.analysisteetime.util.graph.Vertex;
 import kieker.analysisteetime.util.time.ChronoUnitToSymbolMapper;
 
+/**
+ * This class adds corresponding statistics to vertices.
+ *
+ * @author Sören Henning
+ */
 public class ResponseTimeDecorator {
 
 	private final StatisticsModel statisticsModel;

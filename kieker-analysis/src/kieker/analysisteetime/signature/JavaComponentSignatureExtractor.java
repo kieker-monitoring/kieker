@@ -27,6 +27,10 @@ import kieker.analysisteetime.model.analysismodel.type.ComponentType;
  */
 public class JavaComponentSignatureExtractor implements ComponentSignatureExtractor {
 
+	public JavaComponentSignatureExtractor() {
+		// create extractor
+	}
+
 	@Override
 	public void extract(final ComponentType componentType) {
 		// TODO code clean up, copied from old kieker analysis

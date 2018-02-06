@@ -44,7 +44,7 @@ public class DotExportConfigurationFactory {
 
 	/**
 	 * Uses TO_STRING of {@link kieker.analysisteetime.dependencygraphs.vertextypes.VertexTypeMapper} as second default argument.
-	 * 
+	 *
 	 * @param nameBuilder
 	 */
 	public DotExportConfigurationFactory(final NameBuilder nameBuilder) {
@@ -268,13 +268,12 @@ public class DotExportConfigurationFactory {
 	private StringBuilder createStatistics(final String timeUnit, final String minResponseTime,
 			final String maxResponseTime, final String totalResponseTime, final String meanResponseTime,
 			final String medianResponseTime) {
-		final StringBuilder builder = new StringBuilder();
-		builder.append("min: ").append(minResponseTime).append(' ').append(timeUnit).append(", ");
-		builder.append("max: ").append(maxResponseTime).append(' ').append(timeUnit).append(", ");
-		builder.append("total: ").append(totalResponseTime).append(' ').append(timeUnit).append(",\\n");
-		builder.append("avg: ").append(meanResponseTime).append(' ').append(timeUnit).append(", ");
-		builder.append("median: ").append(medianResponseTime).append(' ').append(timeUnit);
-		return builder;
+		return new StringBuilder()
+				.append("min: ").append(minResponseTime).append(' ').append(timeUnit).append(", ")
+				.append("max: ").append(maxResponseTime).append(' ').append(timeUnit).append(", ")
+				.append("total: ").append(totalResponseTime).append(' ').append(timeUnit).append(",\\n")
+				.append("avg: ").append(meanResponseTime).append(' ').append(timeUnit).append(", ")
+				.append("median: ").append(medianResponseTime).append(' ').append(timeUnit);
 	}
 
 	// BETTER This could be moved to the graph library

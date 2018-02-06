@@ -30,6 +30,10 @@ public class TraceToGraphTransformerStage extends AbstractTransformation<Trace, 
 
 	private final TraceToGraphTransformer transformer = new TraceToGraphTransformer();
 
+	public TraceToGraphTransformerStage() {
+		super();
+	}
+
 	@Override
 	protected void execute(final Trace trace) {
 		final Graph graph = this.transformer.transform(trace);

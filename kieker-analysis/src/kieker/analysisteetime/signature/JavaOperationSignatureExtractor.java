@@ -29,6 +29,10 @@ import kieker.common.util.signature.Signature;
  */
 public class JavaOperationSignatureExtractor implements OperationSignatureExtractor {
 
+	public JavaOperationSignatureExtractor() {
+		// create extractor
+	}
+
 	@Override
 	public void extract(final OperationType operationType) {
 		// TODO migrate directly

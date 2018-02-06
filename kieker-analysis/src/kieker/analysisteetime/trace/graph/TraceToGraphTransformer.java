@@ -33,6 +33,10 @@ public class TraceToGraphTransformer {
 
 	private final TraceTraverser traceTraverser = new TraceTraverser();
 
+	public TraceToGraphTransformer() {
+		// Create a transformer
+	}
+
 	public Graph transform(final Trace trace) {
 		final Graph graph = new GraphImpl();
 		graph.setName("trace-" + trace.getTraceID());
