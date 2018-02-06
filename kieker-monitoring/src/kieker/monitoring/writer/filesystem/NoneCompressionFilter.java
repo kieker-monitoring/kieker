@@ -28,6 +28,8 @@ import java.nio.file.Path;
  */
 public class NoneCompressionFilter implements ICompressionFilter {
 
+	public NoneCompressionFilter() {}
+
 	@Override
 	public OutputStream chain(final OutputStream outputStream, final Path fileName) throws IOException {
 		return outputStream;

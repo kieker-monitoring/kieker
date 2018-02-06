@@ -28,10 +28,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import kieker.common.logging.Log;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.writer.WriterUtil;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * @author Christian Wulf (chw)
@@ -87,7 +88,7 @@ class AsciiFileWriterPool extends WriterPool {
 		// this.currentFileWriter = Channels.newChannel(new ByteArrayOutputStream()); // NullObject design pattern
 		// final CharBuffer charBuffer = this.buffer.asCharBuffer();
 		this.currentFileWriter = new PrintWriter(new ByteArrayOutputStream()); // NullObject design pattern
-		this.fileExtensionWithDot = (this.compressionMethod == ECompression.NONE) ? FSUtil.BINARY_FILE_EXTENSION : this.compressionMethod.getExtension(); // NOCS
+		this.fileExtensionWithDot = (this.compressionMethod == ECompression.NONE) ? FSUtil.NORMAL_FILE_EXTENSION : this.compressionMethod.getExtension(); // NOCS
 	}
 
 	public PrintWriter getFileWriter() {

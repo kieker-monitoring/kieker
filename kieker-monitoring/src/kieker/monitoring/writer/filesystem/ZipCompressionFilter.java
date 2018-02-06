@@ -32,6 +32,8 @@ import kieker.common.util.filesystem.FSUtil;
  */
 public class ZipCompressionFilter implements ICompressionFilter {
 
+	public ZipCompressionFilter() {}
+
 	@Override
 	public OutputStream chain(final OutputStream outputStream, final Path fileName) throws IOException {
 		final ZipOutputStream compressedOutputStream = new ZipOutputStream(outputStream);

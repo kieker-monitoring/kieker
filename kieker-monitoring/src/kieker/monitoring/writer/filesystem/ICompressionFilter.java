@@ -40,6 +40,8 @@ public interface ICompressionFilter {
 	 *
 	 * @throws IOException
 	 *             on file or stream errors
+	 *
+	 * @since 1.14
 	 */
 	OutputStream chain(OutputStream outputStream, Path fileName) throws IOException;
 

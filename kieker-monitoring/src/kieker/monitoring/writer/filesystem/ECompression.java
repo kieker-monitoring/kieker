@@ -56,8 +56,9 @@ public enum ECompression {
 
 	public static ECompression findCompressionMethod(final String methodName) {
 		for (final ECompression selected : ECompression.values()) {
-			if (selected.getMethodName().equals(methodName))
+			if (selected.getMethodName().equals(methodName)) {
 				return selected;
+			}
 		}
 		return NONE;
 	}

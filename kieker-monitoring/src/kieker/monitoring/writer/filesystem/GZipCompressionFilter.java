@@ -29,6 +29,8 @@ import java.util.zip.GZIPOutputStream;
  */
 public class GZipCompressionFilter implements ICompressionFilter {
 
+	public GZipCompressionFilter() {}
+
 	@Override
 	public OutputStream chain(final OutputStream outputStream, final Path fileName) throws IOException {
 		return new GZIPOutputStream(outputStream);

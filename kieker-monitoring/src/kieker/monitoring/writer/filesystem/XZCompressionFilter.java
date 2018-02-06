@@ -33,6 +33,8 @@ import org.tukaani.xz.XZOutputStream;
  */
 public class XZCompressionFilter implements ICompressionFilter {
 
+	public XZCompressionFilter() {}
+
 	@Override
 	public OutputStream chain(final OutputStream outputStream, final Path fileName) throws IOException {
 		final FilterOptions filterOptions = new LZMA2Options(LZMA2Options.PRESET_MAX);
