@@ -148,9 +148,9 @@ public class TeeFilter extends AbstractFilter<Object> {
 	@Override
 	protected void execute(final Object object) {
 		if (this.active) {
-			final StringBuilder sb = new StringBuilder(128);
-			sb.append(this.getId());
-			sb.append('(').append(object.getClass().getSimpleName()).append(") ").append(object.toString());
+			final StringBuilder sb = new StringBuilder(128)
+					.append(this.getId())
+					.append('(').append(object.getClass().getSimpleName()).append(") ").append(object.toString());
 			final String record = sb.toString();
 			if (this.printStream != null) {
 				this.printStream.println(record);

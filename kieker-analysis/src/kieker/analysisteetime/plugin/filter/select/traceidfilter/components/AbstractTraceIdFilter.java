@@ -51,17 +51,14 @@ public abstract class AbstractTraceIdFilter<T> extends AbstractConsumerStage<T> 
 	public AbstractTraceIdFilter(final boolean acceptAllTraces, final Long[] selectedTraceIds) {
 
 		this.acceptAllTraces = acceptAllTraces;
-		this.selectedTraceIds = new TreeSet<Long>();
+		this.selectedTraceIds = new TreeSet<>();
 		for (final Long id : selectedTraceIds) {
 			this.selectedTraceIds.add(id);
 		}
 	}
 
 	private final boolean acceptId(final long traceId) {
-		if (this.acceptAllTraces || this.selectedTraceIds.contains(traceId)) {
-			return true;
-		}
-		return false;
+		return this.acceptAllTraces || this.selectedTraceIds.contains(traceId);
 	}
 
 	@Override

@@ -26,7 +26,7 @@ import kieker.common.record.jvm.ThreadsStatusRecord;
 import teetime.framework.AbstractConsumerStage;
 
 /**
- * @author Nils Christian Ehmke, Lars Bluemke
+ * @author Nils Christian Ehmke, Lars Bluemke, Sören Henning
  *
  * @since 1.10
  */
@@ -39,8 +39,6 @@ public class ThreadsStatusDisplayFilter extends AbstractConsumerStage<ThreadsSta
 
 	private final XYPlot xyplot;
 
-	private final int numberOfEntries;
-
 	private final TimeUnit recordsTimeUnit;
 
 	/**
@@ -52,11 +50,10 @@ public class ThreadsStatusDisplayFilter extends AbstractConsumerStage<ThreadsSta
 	 *            Time unit to interpret the timestamp of a record passed to the input port
 	 */
 	public ThreadsStatusDisplayFilter(final int numberOfEntries, final TimeUnit recordsTimeUnit) {
-		this.numberOfEntries = numberOfEntries;
 		this.recordsTimeUnit = recordsTimeUnit;
 
 		// Create the display objects
-		this.xyplot = new XYPlot(this.numberOfEntries);
+		this.xyplot = new XYPlot(numberOfEntries);
 	}
 
 	/**

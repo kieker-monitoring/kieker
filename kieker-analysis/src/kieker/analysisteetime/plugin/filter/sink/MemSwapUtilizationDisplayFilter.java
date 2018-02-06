@@ -46,8 +46,6 @@ public class MemSwapUtilizationDisplayFilter extends AbstractConsumerStage<MemSw
 	private final PieChart memPieChart;
 	private final PieChart swapPieChart;
 
-	private final int numberOfEntries;
-
 	private final TimeUnit recordsTimeUnit;
 
 	/**
@@ -59,11 +57,10 @@ public class MemSwapUtilizationDisplayFilter extends AbstractConsumerStage<MemSw
 	 *            Time unit to interpret the timestamp of a record passed to the input port
 	 */
 	public MemSwapUtilizationDisplayFilter(final int numberOfEntries, final TimeUnit recordsTimeUnit) {
-		this.numberOfEntries = numberOfEntries;
 		this.recordsTimeUnit = recordsTimeUnit;
 
 		// Create the display objects
-		this.xyplot = new XYPlot(this.numberOfEntries);
+		this.xyplot = new XYPlot(numberOfEntries);
 		this.memPieChart = new PieChart();
 		this.swapPieChart = new PieChart();
 	}

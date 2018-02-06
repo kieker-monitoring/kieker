@@ -26,7 +26,7 @@ import teetime.framework.AbstractConsumerStage;
 /**
  * This is a filter which accepts {@link OperationExecutionRecord} instances and provides different views to visualize them.
  *
- * @author Nils Christian Ehmke, Lars Bluemke
+ * @author Nils Christian Ehmke, Lars Bluemke, Sören Henning
  *
  * @since 1.8
  */
@@ -63,9 +63,7 @@ public class MethodAndComponentFlowDisplayFilter extends AbstractConsumerStage<O
 	private String extractMethodName(final String operationSignature) {
 		final String operationSignatureWithoutParameters = operationSignature.replaceAll("\\(.*\\)", "");
 		final int lastPointPos = operationSignatureWithoutParameters.lastIndexOf('.');
-		final String methodName = operationSignatureWithoutParameters.substring(lastPointPos + 1);
-
-		return methodName;
+		return operationSignatureWithoutParameters.substring(lastPointPos + 1);
 	}
 
 	/**

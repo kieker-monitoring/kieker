@@ -32,26 +32,26 @@ public abstract class AbstractRecordFileReader extends AbstractConsumerStage<Fil
 
 	public AbstractRecordFileReader(final ClassNameRegistryRepository classNameRegistryRepository) {
 		this.classNameRegistryRepository = classNameRegistryRepository;
-		this.mappingFileParser = new MappingFileParser(logger);
+		this.mappingFileParser = new MappingFileParser(this.logger);
 	}
 
 	@Override
 	protected void execute(final File recordFile) {
-		ClassNameRegistry classNameRegistry = getClassNameRegistry(recordFile);
-		reconstructRecords(classNameRegistry);
+		final ClassNameRegistry classNameRegistry = this.getClassNameRegistry(recordFile);
+		this.reconstructRecords(classNameRegistry);
 	}
 
 	private ClassNameRegistry getClassNameRegistry(final File recordFile) {
-		final File mapFile = mappingFileParser.findMappingFile(recordFile.getParentFile());
+		final File mapFile = this.mappingFileParser.findMappingFile(recordFile.getParentFile());
 
-		ClassNameRegistry classNameRegistry = classNameRegistryRepository.get(mapFile);
+		ClassNameRegistry classNameRegistry = this.classNameRegistryRepository.get(mapFile);
 		if (null == classNameRegistry) {
 			try {
 				final FileInputStream inputStream = new FileInputStream(mapFile);
-				classNameRegistry = mappingFileParser.parseFromStream(inputStream);
-				classNameRegistryRepository.put(mapFile, classNameRegistry);
-			} catch (FileNotFoundException e) {
-				logger.error("", e);
+				classNameRegistry = this.mappingFileParser.parseFromStream(inputStream);
+				this.classNameRegistryRepository.put(mapFile, classNameRegistry);
+			} catch (final FileNotFoundException e) {
+				this.logger.error("", e);
 			}
 		}
 

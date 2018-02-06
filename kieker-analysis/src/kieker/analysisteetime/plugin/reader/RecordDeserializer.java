@@ -15,7 +15,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * Represents a deserializer that deserializes records based on their id and a byte buffer.
- * 
+ *
  * @author Christian Wulf
  *
  * @since 1.13
@@ -39,7 +39,6 @@ public class RecordDeserializer {
 		if (buffer.remaining() < AbstractMonitoringRecord.TYPE_SIZE_LONG) {
 			return false;
 		}
-		final long loggingTimestamp = buffer.getLong();
 
 		final String recordClassName = this.registry.get(clazzId);
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
@@ -51,6 +50,8 @@ public class RecordDeserializer {
 		if (buffer.remaining() < recordFactory.getRecordSizeInBytes()) {
 			return false;
 		}
+
+		final long loggingTimestamp = buffer.getLong();
 
 		// PERFORMANCE ISSUE declare as field instead, as soon as possible
 		final IValueDeserializer deserializer = DefaultValueDeserializer.create(buffer, this.registry);

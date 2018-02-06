@@ -66,12 +66,12 @@ public class AnalysisThroughputFilter extends AbstractStage {
 		final Long timestampInNs = this.timestampsInputPort.receive();
 		if (timestampInNs != null) {
 			final long duration = timestampInNs - this.lastTimestampInNs;
-			final StringBuilder sb = new StringBuilder(256);
-			sb.append(this.numPassedElements);
-			sb.append(" objects within ");
-			sb.append(duration);
-			sb.append(' ');
-			sb.append(TimeUnit.NANOSECONDS.toString());
+			final StringBuilder sb = new StringBuilder(256)
+					.append(this.numPassedElements)
+					.append(" objects within ")
+					.append(duration)
+					.append(' ')
+					.append(TimeUnit.NANOSECONDS.toString());
 			this.plainTextDisplayObject.setText(sb.toString());
 			this.recordsCountOutputPort.send(this.numPassedElements);
 			this.resetTimestamp(timestampInNs);
