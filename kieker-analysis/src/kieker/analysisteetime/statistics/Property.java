@@ -17,7 +17,10 @@
 package kieker.analysisteetime.statistics;
 
 /**
+ *
  * @author Sören Henning
+ *
+ * @since 1.13
  *
  */
 public interface Property {

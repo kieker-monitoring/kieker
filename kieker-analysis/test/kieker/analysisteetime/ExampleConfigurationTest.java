@@ -15,9 +15,6 @@
  ***************************************************************************/
 package kieker.analysisteetime;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -25,6 +22,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.eclipse.emf.common.util.EMap;
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysisteetime.model.DeploymentModelPrinter;
@@ -39,10 +38,10 @@ import teetime.framework.Execution;
  * Class that executes the {@link ExampleConfiguration}. This is, so far, for
  * testing the current development only.
  *
- * @author SÃ¶ren Henning
- * 
+ * @author Sören Henning
+ *
  * @since 1.13
- * 
+ *
  */
 public class ExampleConfigurationTest {
 
@@ -65,8 +64,8 @@ public class ExampleConfigurationTest {
 		// File("C:/Users/Soeren/Desktop/jedit-records/kieker-20170115-163405515-UTC-Leonard-KIEKER");
 		// final File importDirectory = new
 		// File("C:/Users/Soeren/Desktop/jedit-records/kieker-20170505-083525426-UTC-DESKTOP-UTJ4LDE-KIEKER");
-//		final File importDirectory = new File(projectDir.getFile(),
-//				"kieker-20170805-132412153-UTC-Nogge-PC-KIEKER-SINGLETON");
+		// final File importDirectory = new File(projectDir.getFile(),
+		// "kieker-20170805-132412153-UTC-Nogge-PC-KIEKER-SINGLETON");
 		final URL importDirectoryURL = classLoader.getResource("kieker-20170805-132412153-UTC-Nogge-PC-KIEKER-SINGLETON");
 		final File importDirectory = new File(importDirectoryURL.toURI());
 		// final File importDirectory = new
@@ -92,11 +91,11 @@ public class ExampleConfigurationTest {
 		// DeploymentModelPrinter(System.out);
 		deploymentModelPrinter.print(deploymentModel);
 
-//		StatisticsModel statisticsModel = configuration.getStatisticsModel();
+		// StatisticsModel statisticsModel = configuration.getStatisticsModel();
 
-		EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations = configuration
+		final EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> aggregatedInvocations = configuration
 				.getExecutionModel().getAggregatedInvocations();
 		// contains [1, 1, 50] in any order
-		assertThat(aggregatedInvocations.values().size(), is(3));
+		Assert.assertThat(aggregatedInvocations.values().size(), CoreMatchers.is(3));
 	}
 }

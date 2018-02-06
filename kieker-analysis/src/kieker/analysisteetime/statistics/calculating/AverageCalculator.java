@@ -20,19 +20,28 @@ import kieker.analysisteetime.statistics.Properties;
 import kieker.analysisteetime.statistics.Property;
 import kieker.analysisteetime.statistics.Statistic;
 
+/**
+ *
+ * @author Sören Henning
+ *
+ * @since 1.13
+ *
+ */
 public class AverageCalculator<T> implements Calculator<T> {
 
 	private final static Property TOTAL_PROPERTY = Properties.TOTAL;
 	private final static Property COUNT_PROPERTY = Properties.COUNT;
 	private final static Property AVERAGE_PROPERTY = Properties.AVERAGE;
 
-	public AverageCalculator() {}
+	public AverageCalculator() {
+		// Create Calculator
+	}
 
 	@Override
 	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
 		final Long total = statistic.getProperty(TOTAL_PROPERTY);
 		final Long count = statistic.getProperty(COUNT_PROPERTY);
-		if (total != null || count != null) {
+		if ((total != null) || (count != null)) {
 			final long avg = total / count;
 			statistic.setProperty(AVERAGE_PROPERTY, avg);
 		}

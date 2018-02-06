@@ -18,6 +18,13 @@ package kieker.analysisteetime.statistics.calculating;
 
 import kieker.analysisteetime.statistics.Statistic;
 
+/**
+ *
+ * @author Sören Henning
+ *
+ * @since 1.13
+ *
+ */
 @FunctionalInterface
 public interface Calculator<I> {
 

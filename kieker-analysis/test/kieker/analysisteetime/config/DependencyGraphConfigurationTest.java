@@ -10,10 +10,19 @@ import kieker.analysisteetime.ExampleConfigurationTest;
 
 import teetime.framework.Execution;
 
+/**
+ * @author Christian Wulf, Sören Henning
+ *
+ * @since 1.13
+ */
 public class DependencyGraphConfigurationTest {
 
+	public DependencyGraphConfigurationTest() {
+		// empty default constructor
+	}
+
 	@Test
-	public void testWithLargeInputLog() throws Exception {
+	public void testWithLargeInputLog() throws Exception { // NOPMD (nothing to assert)
 		// from within Eclipse:
 		// . = <absolute path>/kieker/kieker-analysis/build-eclipse/kieker/analysisteetime/
 		// / = <absolute path>/kieker/kieker-analysis/build-eclipse/

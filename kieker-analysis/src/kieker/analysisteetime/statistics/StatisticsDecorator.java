@@ -20,6 +20,13 @@ import java.util.function.Function;
 
 import kieker.analysisteetime.statistics.calculating.Calculator;
 
+/**
+ *
+ * @author Sören Henning
+ *
+ * @since 1.13
+ *
+ */
 public class StatisticsDecorator<T> {
 
 	private final StatisticsModel statisticsModel;

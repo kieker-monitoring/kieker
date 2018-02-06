@@ -4,11 +4,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ *
+ * @author Sören Henning
+ *
+ * @since 1.13
+ *
+ */
 public class StatisticsModel {
 
 	private final Map<Object, Statistics> model = new HashMap<>(); // NOPMD (no concurrent access intended)
 
-	public StatisticsModel() {}
+	public StatisticsModel() {
+		// Create statistics model
+	}
 
 	public Statistics get(final Object key) {
 		Objects.requireNonNull(key, "Key must not be null");

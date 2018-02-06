@@ -22,6 +22,13 @@ import kieker.analysisteetime.statistics.Properties;
 import kieker.analysisteetime.statistics.Property;
 import kieker.analysisteetime.statistics.Statistic;
 
+/**
+ *
+ * @author Sören Henning
+ *
+ * @since 1.13
+ *
+ */
 public class TotalCalculator<T> implements Calculator<T> {
 
 	private final static Property TOTAL_PROPERTY = Properties.TOTAL;

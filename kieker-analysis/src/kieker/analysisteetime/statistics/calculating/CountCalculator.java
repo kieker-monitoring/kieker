@@ -20,11 +20,20 @@ import kieker.analysisteetime.statistics.Properties;
 import kieker.analysisteetime.statistics.Property;
 import kieker.analysisteetime.statistics.Statistic;
 
+/**
+ *
+ * @author Sören Henning
+ *
+ * @since 1.13
+ *
+ */
 public class CountCalculator<T> implements Calculator<T> {
 
 	private final static Property COUNT_PROPERTY = Properties.COUNT;
 
-	public CountCalculator() {}
+	public CountCalculator() {
+		// Create Calculator
+	}
 
 	@Override
 	public void calculate(final Statistic statistic, final T input, final Object modelObject) {

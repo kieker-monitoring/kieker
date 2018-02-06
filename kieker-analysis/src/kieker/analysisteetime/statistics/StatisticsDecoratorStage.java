@@ -22,6 +22,13 @@ import kieker.analysisteetime.statistics.calculating.Calculator;
 
 import teetime.stage.basic.AbstractFilter;
 
+/**
+ *
+ * @author Sören Henning
+ *
+ * @since 1.13
+ *
+ */
 public class StatisticsDecoratorStage<T> extends AbstractFilter<T> {
 
 	private final StatisticsDecorator<T> statisticsDecorator;

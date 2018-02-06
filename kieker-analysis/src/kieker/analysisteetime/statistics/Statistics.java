@@ -23,7 +23,10 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
+ *
  * @author Sören Henning
+ *
+ * @since 1.13
  *
  */
 public class Statistics {
@@ -32,7 +35,9 @@ public class Statistics {
 
 	private final Map<Unit, Statistic> statistics = new HashMap<>(DEFAULT_INITIAL_CAPACITY); // NOPMD (no concurrent access intended)
 
-	public Statistics() {}
+	public Statistics() {
+		// Create statistics
+	}
 
 	public Statistic getStatistic(final Unit unit) {
 		Objects.requireNonNull(unit, "Unit must not be null");

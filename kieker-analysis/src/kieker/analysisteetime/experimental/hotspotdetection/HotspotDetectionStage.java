@@ -34,7 +34,7 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 	private static final PrintStream DEFAULT_PRINT_STREAM = System.out;
 
 	private final TraceTraverser traceTraverser = new TraceTraverser();
-	private final Map<OperationCall, Duration> durationsWithoutChild = new HashMap<>(); // NOPMD (no concurrent access intended)
+	final Map<OperationCall, Duration> durationsWithoutChild = new HashMap<>(); // NOPMD (no concurrent access intended)
 	private final int maxOutput;
 	private final PrintStream printStream;
 
@@ -70,7 +70,14 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 				.forEach(this.printStream::println);
 	}
 
+	/**
+	 *
+	 */
 	private class Visitor implements OperationCallVisitor {
+
+		Visitor() {
+			// Create new visitor
+		}
 
 		@Override
 		public void visit(final OperationCall operationCall) {

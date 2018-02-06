@@ -5,6 +5,13 @@ import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.statistics.calculating.CountCalculator;
 
+/**
+ *
+ * @author Sören Henning
+ *
+ * @since 1.13
+ *
+ */
 public class CallStatisticsStage extends StatisticsDecoratorStage<OperationCall> {
 
 	public CallStatisticsStage(final StatisticsModel statisticsModel, final ExecutionModel executionModel) {

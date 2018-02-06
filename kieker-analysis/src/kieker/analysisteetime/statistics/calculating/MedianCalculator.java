@@ -25,6 +25,13 @@ import kieker.analysisteetime.statistics.Property;
 import kieker.analysisteetime.statistics.Statistic;
 import kieker.analysisteetime.util.RunningMedian;
 
+/**
+ *
+ * @author Sören Henning
+ *
+ * @since 1.13
+ *
+ */
 public class MedianCalculator<T> implements Calculator<T> {
 
 	private final static Property MEDIAN_PROPERTY = Properties.MEDIAN;

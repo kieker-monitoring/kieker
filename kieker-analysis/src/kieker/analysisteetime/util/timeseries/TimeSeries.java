@@ -54,6 +54,7 @@ public class TimeSeries<T extends TimeSeriesPoint> implements Iterable<T>, Backw
 	public void appendBegin(final T timeSeriesPoint) {
 		if (!this.timeSeriesPoints.isEmpty() && !timeSeriesPoint.getTime().isBefore(this.timeSeriesPoints.getFirst().getTime())) {
 			// TODO throw expection
+			throw new IllegalArgumentException("Time series point to append is not before current earliest point.");
 		}
 
 		this.timeSeriesPoints.addFirst(timeSeriesPoint);
@@ -66,6 +67,7 @@ public class TimeSeries<T extends TimeSeriesPoint> implements Iterable<T>, Backw
 	public void appendEnd(final T timeSeriesPoint) {
 		if (!this.timeSeriesPoints.isEmpty() && !timeSeriesPoint.getTime().isAfter(this.timeSeriesPoints.getLast().getTime())) {
 			// TODO throw expection
+			throw new IllegalArgumentException("Time series point to append is not after current latest point.");
 		}
 
 		this.timeSeriesPoints.addLast(timeSeriesPoint);

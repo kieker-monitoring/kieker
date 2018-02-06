@@ -23,6 +23,13 @@ import kieker.analysisteetime.statistics.Properties;
 import kieker.analysisteetime.statistics.Property;
 import kieker.analysisteetime.statistics.Statistic;
 
+/**
+ *
+ * @author Sören Henning
+ *
+ * @since 1.13
+ *
+ */
 public class MinCalculator<T> implements Calculator<T> {
 
 	private final static Property MIN_PROPERTY = Properties.MIN;
@@ -37,7 +44,7 @@ public class MinCalculator<T> implements Calculator<T> {
 	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
 		final long value = this.valueAccessor.apply(input);
 		final Optional<Long> oldMin = Optional.ofNullable(statistic.getProperty(MIN_PROPERTY));
-		if (!oldMin.isPresent() || value < oldMin.get()) {
+		if (!oldMin.isPresent() || (value < oldMin.get())) {
 			statistic.setProperty(MIN_PROPERTY, value);
 		}
 	}

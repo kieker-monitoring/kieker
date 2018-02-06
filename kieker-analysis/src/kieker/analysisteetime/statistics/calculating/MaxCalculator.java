@@ -23,6 +23,13 @@ import kieker.analysisteetime.statistics.Properties;
 import kieker.analysisteetime.statistics.Property;
 import kieker.analysisteetime.statistics.Statistic;
 
+/**
+ *
+ * @author Sören Henning
+ *
+ * @since 1.13
+ *
+ */
 public class MaxCalculator<T> implements Calculator<T> {
 
 	private final static Property MAX_PROPERTY = Properties.MAX;
@@ -37,7 +44,7 @@ public class MaxCalculator<T> implements Calculator<T> {
 	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
 		final long value = this.valueAccessor.apply(input);
 		final Optional<Long> oldMax = Optional.ofNullable(statistic.getProperty(MAX_PROPERTY));
-		if (!oldMax.isPresent() || value > oldMax.get()) {
+		if (!oldMax.isPresent() || (value > oldMax.get())) {
 			statistic.setProperty(MAX_PROPERTY, value);
 		}
 	}

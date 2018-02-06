@@ -23,7 +23,10 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
+ *
  * @author Sören Henning
+ *
+ * @since 1.13
  *
  */
 public class Statistic {
@@ -32,7 +35,9 @@ public class Statistic {
 
 	private final Map<Property, Long> properties = new HashMap<>(DEFAULT_INITIAL_CAPACITY); // NOPMD (no concurrent access intended)
 
-	protected Statistic() {}
+	protected Statistic() {
+		// Create statistic
+	}
 
 	public void setProperty(final Property property, final Long value) {
 		Objects.requireNonNull(property, "Property must not be null");
