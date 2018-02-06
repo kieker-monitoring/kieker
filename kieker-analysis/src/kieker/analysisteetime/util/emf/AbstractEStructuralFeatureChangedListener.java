@@ -27,21 +27,20 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  *
  * @since 1.13
  */
-public abstract class EStructuralFeatureChangedListener<T> extends AdapterImpl {
+public abstract class AbstractEStructuralFeatureChangedListener<T> extends AdapterImpl {
 
 	private final Collection<EStructuralFeature> listenedFeatures;
 
-	public EStructuralFeatureChangedListener(final Collection<EStructuralFeature> listenedFeatures) {
+	public AbstractEStructuralFeatureChangedListener(final Collection<EStructuralFeature> listenedFeatures) {
 		this.listenedFeatures = listenedFeatures;
 	}
 
 	@Override
 	final public void notifyChanged(final Notification notification) {
 
-		if (this.listenedFeatures.contains(notification.getFeature())) {
-			if ((notification.getEventType() == Notification.SET) || (notification.getEventType() == Notification.UNSET)) {
-				this.notifyChangedIntern(notification.getNotifier());
-			}
+		if (this.listenedFeatures.contains(notification.getFeature())
+				&& ((notification.getEventType() == Notification.SET) || (notification.getEventType() == Notification.UNSET))) {
+			this.notifyChangedIntern(notification.getNotifier());
 		}
 
 		super.notifyChanged(notification);

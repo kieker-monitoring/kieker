@@ -16,6 +16,11 @@ import kieker.analysisteetime.util.graph.util.dot.attributes.DotClusterAttribute
 import kieker.analysisteetime.util.graph.util.dot.attributes.DotEdgeAttribute;
 import kieker.analysisteetime.util.graph.util.dot.attributes.DotNodeAttribute;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 class DotElementExporter extends AbstractTransformer<Void> {
 
 	protected final DotGraphWriter dotGraphWriter;

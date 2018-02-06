@@ -27,11 +27,11 @@ import org.eclipse.emf.ecore.EReference;
  *
  * @since 1.13
  */
-public abstract class EReferenceChangedListener<T> extends AdapterImpl {
+public abstract class AbstractEReferenceChangedListener<T> extends AdapterImpl {
 
 	private final EReference listenedFeature;
 
-	public EReferenceChangedListener(final EReference listenedFeature) {
+	public AbstractEReferenceChangedListener(final EReference listenedFeature) {
 		this.listenedFeature = listenedFeature;
 	}
 

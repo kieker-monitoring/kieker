@@ -11,6 +11,11 @@ import kieker.analysisteetime.util.graph.Edge;
 import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.Vertex;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 public class GraphImpl extends ElementImpl implements Graph {
 
 	protected String name = "G";

@@ -2,6 +2,11 @@ package kieker.analysisteetime.util.graph;
 
 import java.util.Set;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 public interface Element {
 
 	public <T> T getProperty(String key);

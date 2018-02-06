@@ -2,7 +2,12 @@ package kieker.analysisteetime.util.graph.impl;
 
 import kieker.analysisteetime.util.graph.GraphElement;
 
-abstract class GraphElementImpl extends ElementImpl implements GraphElement {
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
+abstract class GraphElementImpl extends ElementImpl implements GraphElement { // NOPMD (GraphElement is in this context the abstraction of Vertex and Edge))
 
 	protected final Object id;
 	protected final GraphImpl graph;

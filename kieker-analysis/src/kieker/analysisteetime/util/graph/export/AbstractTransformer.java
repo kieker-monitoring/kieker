@@ -3,14 +3,19 @@ package kieker.analysisteetime.util.graph.export;
 import kieker.analysisteetime.util.graph.Edge;
 import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.traversal.AbstractGraphTraverser;
 import kieker.analysisteetime.util.graph.traversal.EdgeVisitor;
 import kieker.analysisteetime.util.graph.traversal.FlatGraphTraverser;
-import kieker.analysisteetime.util.graph.traversal.GraphTraverser;
 import kieker.analysisteetime.util.graph.traversal.VertexVisitor;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 public abstract class AbstractTransformer<O> implements VertexVisitor, EdgeVisitor {
 
-	private final GraphTraverser graphTraverser = new FlatGraphTraverser(this, this);
+	private final AbstractGraphTraverser graphTraverser = new FlatGraphTraverser(this, this);
 
 	protected Graph graph;
 
@@ -20,13 +25,13 @@ public abstract class AbstractTransformer<O> implements VertexVisitor, EdgeVisit
 
 	public final O transform() {
 
-		beforeTransformation();
+		this.beforeTransformation();
 
-		graphTraverser.traverse(graph);
+		this.graphTraverser.traverse(this.graph);
 
-		afterTransformation();
+		this.afterTransformation();
 
-		return getTransformation();
+		return this.getTransformation();
 	}
 
 	protected abstract void beforeTransformation();
@@ -41,12 +46,12 @@ public abstract class AbstractTransformer<O> implements VertexVisitor, EdgeVisit
 
 	@Override
 	public void visitVertex(final Vertex vertex) {
-		transformVertex(vertex);
+		this.transformVertex(vertex);
 	}
 
 	@Override
 	public void visitEdge(final Edge edge) {
-		transformEdge(edge);
+		this.transformEdge(edge);
 	}
 
 }

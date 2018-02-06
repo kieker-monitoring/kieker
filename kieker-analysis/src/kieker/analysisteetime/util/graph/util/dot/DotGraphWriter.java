@@ -12,12 +12,13 @@ import kieker.analysisteetime.util.graph.util.IndentWriter;
  *
  * @author Sören Henning
  *
+ * @since 1.13
  */
 public class DotGraphWriter {
 
 	private final IndentWriter writer;
 	private DotWriterState state = DotWriterState.CREATED;
-	private int openSubgraphs = 0;
+	private int openSubgraphs; // = 0
 
 	private DotGraphType graphType = DotGraphType.DIRECTED;
 
@@ -171,6 +172,9 @@ public class DotGraphWriter {
 		return key + DotGraph.ATTR_CONNECTOR + '"' + value + '"';
 	}
 
+	/**
+	 * States of Dot graph writer
+	 */
 	private enum DotWriterState {
 		CREATED, STARTED, FINISHED
 	}

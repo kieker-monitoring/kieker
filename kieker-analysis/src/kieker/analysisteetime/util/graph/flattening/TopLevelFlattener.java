@@ -21,7 +21,7 @@ import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.Vertex;
 import kieker.analysisteetime.util.graph.traversal.EdgeVisitor;
 import kieker.analysisteetime.util.graph.traversal.FlatGraphTraverser;
-import kieker.analysisteetime.util.graph.traversal.GraphTraverser;
+import kieker.analysisteetime.util.graph.traversal.AbstractGraphTraverser;
 import kieker.analysisteetime.util.graph.traversal.VertexVisitor;
 
 /**
@@ -31,7 +31,11 @@ import kieker.analysisteetime.util.graph.traversal.VertexVisitor;
  */
 public class TopLevelFlattener implements GraphFlattener, VertexVisitor, EdgeVisitor {
 
-	private final GraphTraverser traverser = new FlatGraphTraverser(this, this);
+	private final AbstractGraphTraverser traverser = new FlatGraphTraverser(this, this);
+
+	public TopLevelFlattener() {
+		// create flattener
+	}
 
 	@Override
 	public void flatten(final Graph graph) {

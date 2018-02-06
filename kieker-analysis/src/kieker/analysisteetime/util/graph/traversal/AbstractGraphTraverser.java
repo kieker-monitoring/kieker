@@ -5,29 +5,34 @@ import java.util.List;
 
 import kieker.analysisteetime.util.graph.Graph;
 
-public abstract class GraphTraverser {
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
+public abstract class AbstractGraphTraverser {
 
 	protected List<VertexVisitor> vertexVisitors;
 	protected List<EdgeVisitor> edgeVisitors;
 
-	public GraphTraverser() {
+	public AbstractGraphTraverser() {
 		this.vertexVisitors = new ArrayList<>();
 		this.edgeVisitors = new ArrayList<>();
 	}
 
-	public GraphTraverser(final VertexVisitor vertexVisitor, final EdgeVisitor edgeVisitor) {
+	public AbstractGraphTraverser(final VertexVisitor vertexVisitor, final EdgeVisitor edgeVisitor) {
 		this();
-		vertexVisitors.add(vertexVisitor);
-		edgeVisitors.add(edgeVisitor);
+		this.vertexVisitors.add(vertexVisitor);
+		this.edgeVisitors.add(edgeVisitor);
 	}
 
-	public GraphTraverser(final List<VertexVisitor> vertexVisitors, final List<EdgeVisitor> edgeVisitors) {
+	public AbstractGraphTraverser(final List<VertexVisitor> vertexVisitors, final List<EdgeVisitor> edgeVisitors) {
 		this.vertexVisitors = vertexVisitors;
 		this.edgeVisitors = edgeVisitors;
 	}
 
 	public List<VertexVisitor> getVertexVisitors() {
-		return vertexVisitors;
+		return this.vertexVisitors;
 	}
 
 	public void setVertexVisitors(final List<VertexVisitor> vertexVisitors) {
@@ -35,11 +40,11 @@ public abstract class GraphTraverser {
 	}
 
 	public void addVertexVisitor(final VertexVisitor vertexVisitor) {
-		vertexVisitors.add(vertexVisitor);
+		this.vertexVisitors.add(vertexVisitor);
 	}
 
 	public List<EdgeVisitor> getEdgeVisitors() {
-		return edgeVisitors;
+		return this.edgeVisitors;
 	}
 
 	public void setEdgeVisitors(final List<EdgeVisitor> edgeVisitors) {
@@ -47,7 +52,7 @@ public abstract class GraphTraverser {
 	}
 
 	public void addEdgeVisitor(final EdgeVisitor edgeVisitor) {
-		edgeVisitors.add(edgeVisitor);
+		this.edgeVisitors.add(edgeVisitor);
 	}
 
 	public abstract void traverse(final Graph graph);

@@ -14,6 +14,11 @@ import teetime.framework.InputPort;
 import teetime.stage.basic.distributor.Distributor;
 import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 public class GraphMLWriterStage extends CompositeStage {
 
 	private final InputPort<Graph> inputPort;

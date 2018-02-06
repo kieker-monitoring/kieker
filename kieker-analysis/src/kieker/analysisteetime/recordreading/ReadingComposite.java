@@ -29,18 +29,17 @@ import teetime.stage.InitialElementProducer;
 /**
  * This is a composite stage which deserializes monitoring records from a specific directory and forwards them to the output port.
  *
- * @author Nils Christian Ehmke
+ * @author Nils Christian Ehmke, Sören Henning
  */
 public final class ReadingComposite extends CompositeStage {
 
-	private final InitialElementProducer<File> producer;
 	private final Dir2RecordsFilter reader;
 
 	public ReadingComposite(final File importDirectory) {
-		this.producer = new InitialElementProducer<>(importDirectory);
+		final InitialElementProducer<File> producer = new InitialElementProducer<>(importDirectory);
 		this.reader = new Dir2RecordsFilter(new ClassNameRegistryRepository());
 
-		super.connectPorts(this.producer.getOutputPort(), this.reader.getInputPort());
+		super.connectPorts(producer.getOutputPort(), this.reader.getInputPort());
 	}
 
 	public OutputPort<IMonitoringRecord> getOutputPort() {

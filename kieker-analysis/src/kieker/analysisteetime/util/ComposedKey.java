@@ -18,6 +18,11 @@ package kieker.analysisteetime.util;
 
 import com.google.common.base.Objects;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 public final class ComposedKey<F, S> {
 
 	private final F first;

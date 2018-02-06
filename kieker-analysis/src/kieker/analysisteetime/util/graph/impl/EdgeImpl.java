@@ -4,6 +4,11 @@ import kieker.analysisteetime.util.graph.Direction;
 import kieker.analysisteetime.util.graph.Edge;
 import kieker.analysisteetime.util.graph.Vertex;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 class EdgeImpl extends GraphElementImpl implements Edge {
 
 	private final Vertex outVertex;

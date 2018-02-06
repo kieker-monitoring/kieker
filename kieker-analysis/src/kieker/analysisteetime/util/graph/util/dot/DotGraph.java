@@ -36,4 +36,6 @@ public final class DotGraph {
 
 	public static final String UNDIRECTED_EDGE_CONNECTOR = "--";
 
+	private DotGraph() {}
+
 }

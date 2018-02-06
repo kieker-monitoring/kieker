@@ -11,6 +11,11 @@ import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.Vertex;
 import kieker.analysisteetime.util.graph.export.AbstractTransformer;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 public class BlueprintsTransformer extends AbstractTransformer<com.tinkerpop.blueprints.Graph> {
 
 	private final com.tinkerpop.blueprints.Graph transformedGraph = new TinkerGraph();

@@ -10,6 +10,7 @@ import kieker.analysisteetime.util.graph.Element;
  *
  * @author Sören Henning
  *
+ * @since 1.13
  */
 public final class DirectPropertyMapper<T extends Element> implements Function<T, String> {
 
@@ -24,8 +25,8 @@ public final class DirectPropertyMapper<T extends Element> implements Function<T
 		return element.getProperty(this.propertyKey);
 	}
 
-	public static <T extends Element> DirectPropertyMapper<T> of(final String propertyKey) {
-		return new DirectPropertyMapper<T>(propertyKey);
+	public static <T extends Element> DirectPropertyMapper<T> of(final String propertyKey) { // NOPMD (method name is declarative)
+		return new DirectPropertyMapper<>(propertyKey);
 	}
 
 }

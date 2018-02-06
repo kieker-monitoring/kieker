@@ -12,6 +12,11 @@ import kieker.analysisteetime.util.graph.Edge;
 import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.Vertex;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 class VertexImpl extends GraphElementImpl implements Vertex {
 
 	protected Map<Object, Edge> outEdges = new HashMap<>(); // NOPMD (no concurrent access intended)
@@ -45,7 +50,8 @@ class VertexImpl extends GraphElementImpl implements Vertex {
 
 	@Override
 	public void removeChildGraph() {
-		this.childGraph = null;
+		// BETTER could be refactored to a dummy (null) object
+		this.childGraph = null; // NOPMD (setting to null intended by data structure)
 	}
 
 	@Override

@@ -10,6 +10,11 @@ import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.mapping.SimpleFileNameMapper;
 import kieker.analysisteetime.util.graph.util.FileExtension;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 public class DotFileWriterStage extends DotWriterStage {
 
 	public DotFileWriterStage(final Function<Graph, String> fileNameMapper) {

@@ -6,7 +6,12 @@ import kieker.analysisteetime.util.graph.Edge;
 import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.Vertex;
 
-public class DeepGraphTraverser extends GraphTraverser {
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
+public class DeepGraphTraverser extends AbstractGraphTraverser {
 
 	public DeepGraphTraverser() {
 		super();
@@ -23,16 +28,16 @@ public class DeepGraphTraverser extends GraphTraverser {
 	@Override
 	public void traverse(final Graph graph) {
 		for (final Vertex vertex : graph.getVertices()) {
-			for (final VertexVisitor visitor : vertexVisitors) {
+			for (final VertexVisitor visitor : this.vertexVisitors) {
 				visitor.visitVertex(vertex);
 			}
 			if (vertex.hasChildGraph()) {
-				traverse(vertex.getChildGraph());
+				this.traverse(vertex.getChildGraph());
 			}
 		}
 
 		for (final Edge edge : graph.getEdges()) {
-			for (final EdgeVisitor visitor : edgeVisitors) {
+			for (final EdgeVisitor visitor : this.edgeVisitors) {
 				visitor.visitEdge(edge);
 			}
 		}

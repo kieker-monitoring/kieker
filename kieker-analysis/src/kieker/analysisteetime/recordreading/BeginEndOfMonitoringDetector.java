@@ -21,12 +21,16 @@ import kieker.common.record.IMonitoringRecord;
 import teetime.stage.basic.AbstractTransformation;
 
 /**
- * @author Nils Christian Ehmke
+ * @author Nils Christian Ehmke, Sören Henning
  */
 public final class BeginEndOfMonitoringDetector extends AbstractTransformation<IMonitoringRecord, IMonitoringRecord> {
 
 	private long beginTimestamp = Long.MAX_VALUE;
-	private long endTimestamp = 0;
+	private long endTimestamp; // = 0
+
+	public BeginEndOfMonitoringDetector() {
+		super();
+	}
 
 	@Override
 	protected void execute(final IMonitoringRecord record) {

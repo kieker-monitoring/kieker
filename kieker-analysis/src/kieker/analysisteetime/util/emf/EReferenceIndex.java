@@ -38,8 +38,6 @@ public class EReferenceIndex<K, V extends EObject> {
 
 	protected final BiMap<K, V> index;
 
-	private final EObject object;
-
 	protected final EReference reference;
 
 	protected final Collection<EStructuralFeature> observedReferenceAttributes;
@@ -48,7 +46,6 @@ public class EReferenceIndex<K, V extends EObject> {
 
 	private EReferenceIndex(final EObject object, final EReference reference, final Collection<EStructuralFeature> observedReferenceAttributes,
 			final Function<V, K> keyCreator, final Collection<V> values) {
-		this.object = object;
 		this.reference = reference;
 		this.observedReferenceAttributes = observedReferenceAttributes;
 		this.keyCreator = keyCreator;
@@ -61,7 +58,7 @@ public class EReferenceIndex<K, V extends EObject> {
 		}
 
 		final Adapter changedListener = new ChangedListener();
-		this.object.eAdapters().add(changedListener);
+		object.eAdapters().add(changedListener);
 	}
 
 	public boolean contains(final K key) {
@@ -72,7 +69,10 @@ public class EReferenceIndex<K, V extends EObject> {
 		return this.index.get(key);
 	}
 
-	private class ChangedListener extends EReferenceChangedListener<V> {
+	/**
+	 *
+	 */
+	private class ChangedListener extends AbstractEReferenceChangedListener<V> {
 
 		private final ElementChangedListener elementChangedListener = new ElementChangedListener();
 
@@ -99,7 +99,10 @@ public class EReferenceIndex<K, V extends EObject> {
 		}
 	}
 
-	private class ElementChangedListener extends EStructuralFeatureChangedListener<V> {
+	/**
+	 *
+	 */
+	private class ElementChangedListener extends AbstractEStructuralFeatureChangedListener<V> {
 
 		public ElementChangedListener() {
 			super(EReferenceIndex.this.observedReferenceAttributes);

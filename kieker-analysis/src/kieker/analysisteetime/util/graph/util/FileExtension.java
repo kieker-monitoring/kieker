@@ -1,5 +1,11 @@
 package kieker.analysisteetime.util.graph.util;
 
+/**
+ * Enumeration for file extensions.
+ *
+ * @author Sören Henning
+ *
+ */
 public enum FileExtension {
 
 	GRAPHML("graphml"), DOT("dot");

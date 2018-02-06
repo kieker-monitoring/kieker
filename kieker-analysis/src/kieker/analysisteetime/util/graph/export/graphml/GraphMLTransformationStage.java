@@ -6,7 +6,16 @@ import kieker.analysisteetime.util.graph.Graph;
 
 import teetime.stage.basic.AbstractTransformation;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 public class GraphMLTransformationStage extends AbstractTransformation<Graph, GraphmlType> {
+
+	public GraphMLTransformationStage() {
+		super();
+	}
 
 	@Override
 	protected void execute(final Graph graph) {

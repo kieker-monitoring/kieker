@@ -6,7 +6,12 @@ import kieker.analysisteetime.util.graph.Edge;
 import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.Vertex;
 
-public class FlatGraphTraverser extends GraphTraverser {
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
+public class FlatGraphTraverser extends AbstractGraphTraverser {
 
 	public FlatGraphTraverser() {
 		super();
@@ -23,14 +28,14 @@ public class FlatGraphTraverser extends GraphTraverser {
 	@Override
 	public void traverse(final Graph graph) {
 
-		for (Vertex vertex : graph.getVertices()) {
-			for (VertexVisitor visitor : vertexVisitors) {
+		for (final Vertex vertex : graph.getVertices()) {
+			for (final VertexVisitor visitor : this.vertexVisitors) {
 				visitor.visitVertex(vertex);
 			}
 		}
 
-		for (Edge edge : graph.getEdges()) {
-			for (EdgeVisitor visitor : edgeVisitors) {
+		for (final Edge edge : graph.getEdges()) {
+			for (final EdgeVisitor visitor : this.edgeVisitors) {
 				visitor.visitEdge(edge);
 			}
 		}

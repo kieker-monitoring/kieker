@@ -21,7 +21,7 @@ import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.Vertex;
 import kieker.analysisteetime.util.graph.traversal.DeepGraphTraverser;
 import kieker.analysisteetime.util.graph.traversal.EdgeVisitor;
-import kieker.analysisteetime.util.graph.traversal.GraphTraverser;
+import kieker.analysisteetime.util.graph.traversal.AbstractGraphTraverser;
 import kieker.analysisteetime.util.graph.traversal.VertexVisitor;
 
 /**
@@ -34,7 +34,11 @@ import kieker.analysisteetime.util.graph.traversal.VertexVisitor;
 // TODO not implemented so far
 public class SubgraphVertexRenamingFlatter implements GraphFlattener, VertexVisitor, EdgeVisitor {
 
-	private final GraphTraverser traverser = new DeepGraphTraverser(this, this);
+	private final AbstractGraphTraverser traverser = new DeepGraphTraverser(this, this);
+
+	public SubgraphVertexRenamingFlatter() {
+		// create Flattener
+	}
 
 	@Override
 	public void flatten(final Graph graph) {

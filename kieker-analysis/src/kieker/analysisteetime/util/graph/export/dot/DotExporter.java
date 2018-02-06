@@ -13,6 +13,11 @@ import kieker.analysisteetime.util.graph.util.dot.attributes.DotEdgeAttribute;
 import kieker.analysisteetime.util.graph.util.dot.attributes.DotGraphAttribute;
 import kieker.analysisteetime.util.graph.util.dot.attributes.DotNodeAttribute;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 public class DotExporter extends DotElementExporter {
 
 	public DotExporter(final Graph graph, final Writer writer) {

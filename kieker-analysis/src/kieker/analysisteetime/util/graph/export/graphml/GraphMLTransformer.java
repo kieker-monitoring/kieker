@@ -20,6 +20,11 @@ import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.Vertex;
 import kieker.analysisteetime.util.graph.export.AbstractTransformer;
 
+/**
+ * @author Sören Henning
+ *
+ * @since 1.13
+ */
 public class GraphMLTransformer extends AbstractTransformer<GraphmlType> {
 
 	private final GraphType graphType;
@@ -28,36 +33,36 @@ public class GraphMLTransformer extends AbstractTransformer<GraphmlType> {
 
 	public GraphMLTransformer(final Graph graph) {
 		super(graph);
-		graphType = new GraphType();
-		graphType.setEdgedefault(GraphEdgedefaultType.DIRECTED);
-		graphType.setId(graph.getName());
+		this.graphType = new GraphType();
+		this.graphType.setEdgedefault(GraphEdgedefaultType.DIRECTED);
+		this.graphType.setId(graph.getName());
 	}
 
 	@Override
 	protected void transformVertex(final Vertex vertex) {
 
-		NodeType nodeType = new NodeType();
+		final NodeType nodeType = new NodeType();
 		nodeType.setId(vertex.getId().toString());
-		List<Object> dataOrPort = nodeType.getDataOrPort();
+		final List<Object> dataOrPort = nodeType.getDataOrPort();
 		for (final String propertyKey : vertex.getPropertyKeys()) {
-			DataType dataType = new DataType();
+			final DataType dataType = new DataType();
 			dataType.setKey(propertyKey);
 			dataType.setContent(vertex.getProperty(propertyKey).toString());
 			dataOrPort.add(dataType);
-			nodeKeys.add(propertyKey);
+			this.nodeKeys.add(propertyKey);
 		}
 
 		if (vertex.hasChildGraph()) {
-			Graph childGraph = vertex.getChildGraph();
-			GraphMLTransformer graphmlTypeTransformer = new GraphMLTransformer(childGraph);
-			GraphmlType childGraphmlType = graphmlTypeTransformer.transform();
-			for (Object childGraphType : childGraphmlType.getGraphOrData()) {
+			final Graph childGraph = vertex.getChildGraph();
+			final GraphMLTransformer graphmlTypeTransformer = new GraphMLTransformer(childGraph);
+			final GraphmlType childGraphmlType = graphmlTypeTransformer.transform();
+			for (final Object childGraphType : childGraphmlType.getGraphOrData()) {
 				if (childGraphType instanceof GraphType) {
 					nodeType.setGraph((GraphType) childGraphType);
 				}
 			}
-			for (KeyType keyType : childGraphmlType.getKey()) {
-				KeyForType keyForType = keyType.getFor();
+			for (final KeyType keyType : childGraphmlType.getKey()) {
+				final KeyForType keyForType = keyType.getFor();
 				switch (keyForType) {
 				case NODE:
 					this.nodeKeys.add(keyType.getAttrName());
@@ -71,40 +76,40 @@ public class GraphMLTransformer extends AbstractTransformer<GraphmlType> {
 			}
 		}
 
-		graphType.getDataOrNodeOrEdge().add(nodeType);
+		this.graphType.getDataOrNodeOrEdge().add(nodeType);
 	}
 
 	@Override
 	protected void transformEdge(final Edge edge) {
-		EdgeType edgeType = new EdgeType();
+		final EdgeType edgeType = new EdgeType();
 		edgeType.setId(edge.getId().toString());
 		edgeType.setSource(edge.getVertex(Direction.OUT).getId().toString());
 		edgeType.setTarget(edge.getVertex(Direction.IN).getId().toString());
-		List<DataType> data = edgeType.getData();
+		final List<DataType> data = edgeType.getData();
 		for (final String propertyKey : edge.getPropertyKeys()) {
-			DataType dataType = new DataType();
+			final DataType dataType = new DataType();
 			dataType.setKey(propertyKey);
 			dataType.setContent(edge.getProperty(propertyKey).toString());
 			data.add(dataType);
 			this.edgeKeys.add(propertyKey);
 		}
 
-		graphType.getDataOrNodeOrEdge().add(edgeType);
+		this.graphType.getDataOrNodeOrEdge().add(edgeType);
 	}
 
 	@Override
 	protected GraphmlType getTransformation() {
-		GraphmlType graphmlType = new GraphmlType();
-		for (String key : this.nodeKeys) {
-			KeyType keyType = new KeyType();
+		final GraphmlType graphmlType = new GraphmlType();
+		for (final String key : this.nodeKeys) {
+			final KeyType keyType = new KeyType();
 			keyType.setId(key);
 			keyType.setFor(KeyForType.NODE);
 			keyType.setAttrName(key);
 			keyType.setAttrType(KeyTypeType.STRING);
 			graphmlType.getKey().add(keyType);
 		}
-		for (String key : this.edgeKeys) {
-			KeyType keyType = new KeyType();
+		for (final String key : this.edgeKeys) {
+			final KeyType keyType = new KeyType();
 			keyType.setId(key);
 			keyType.setFor(KeyForType.EDGE);
 			keyType.setAttrName(key);
