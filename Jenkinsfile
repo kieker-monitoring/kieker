@@ -7,7 +7,7 @@ node('kieker-slave-docker') {
     	echo "target branch: ${env.CHANGE_TARGET}"
     	echo "is PR: ${isPRMergeBuild()}"
 
-		timeout(time: 10, unit: 'MINUTES') {
+		timeout(time: 2, unit: 'MINUTES') {	// typically finished in 36 sec
         	checkout scm
         }
     }
