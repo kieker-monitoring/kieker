@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ public class BinaryLogReader extends AbstractProducerStage<IMonitoringRecord> im
 			this.logger.warn("The list of input dirs passed to the " + BinaryLogReader.class.getSimpleName() + " is empty");
 			nDirs = 1;
 		}
-		this.recordQueue = new PriorityQueue<IMonitoringRecord>(nDirs);
+		this.recordQueue = new PriorityQueue<>(nDirs);
 
 		this.shouldDecompress = shouldDecompress;
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 
 	private final double accelerationFactor;
 
-	private final List<IMonitoringRecord> inputRecords = new ArrayList<IMonitoringRecord>();
+	private final List<IMonitoringRecord> inputRecords = new ArrayList<>();
 
 	private InitialElementProducer<IMonitoringRecord> recordProducer; // NOPMD (could be replaced by a local variable)
 	private Counter<IMonitoringRecord> preDelayCounter;
@@ -98,17 +98,17 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 		}
 
 		// Initialize stages and test configuration
-		this.recordProducer = new InitialElementProducer<IMonitoringRecord>(this.inputRecords);
-		this.preDelayCounter = new Counter<IMonitoringRecord>();
+		this.recordProducer = new InitialElementProducer<>(this.inputRecords);
+		this.preDelayCounter = new Counter<>();
 		this.delayFilter = new RealtimeRecordDelayFilter(TimeUnit.NANOSECONDS, this.accelerationFactor);
 		this.clock = new Clock();
 		this.clock.setInitialDelayInMs(5000);
 		this.clock.setIntervalDelayInMs(5000);
 		this.throughputStage = new AnalysisThroughputFilter();
 		this.throughputStage.declareActive();
-		this.postDelayCounter = new Counter<IMonitoringRecord>();
-		this.recordCollectorSink = new CollectorSink<IMonitoringRecord>();
-		this.throughputCollectorSink = new CollectorSink<Long>();
+		this.postDelayCounter = new Counter<>();
+		this.recordCollectorSink = new CollectorSink<>();
+		this.throughputCollectorSink = new CollectorSink<>();
 
 		this.testConfig = new RealtimeRecordDelayFilterConfig(this.recordProducer, this.preDelayCounter, this.delayFilter, this.clock,
 				this.throughputStage,

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,12 +57,12 @@ public final class FSZipReader implements Runnable {
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final boolean ignoreUnknownRecordTypes;
 
-	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>(); // NOPMD (no synchronization needed)
+	private final Map<Integer, String> stringRegistry = new HashMap<>(); // NOPMD (no synchronization needed)
 
 	private boolean terminated;
 
 	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
-	private final Set<String> unknownTypesObserved = new HashSet<String>();
+	private final Set<String> unknownTypesObserved = new HashSet<>();
 
 	/**
 	 * Creates a new instance of this class.

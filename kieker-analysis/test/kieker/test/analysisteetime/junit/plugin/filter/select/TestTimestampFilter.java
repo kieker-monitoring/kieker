@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		}
 
 		@Override
-		public void serialize(IValueSerializer serializer) throws BufferOverflowException {
+		public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 			throw new UnsupportedOperationException("not used in this test");
 		}
 
@@ -76,7 +76,6 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 			throw new UnsupportedOperationException("not used in this test");
 		}
 
-		
 	};
 
 	/**
@@ -96,8 +95,8 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		final long rightBorder = leftBorder + 1;
 		final TimestampFilter timestampStage = new TimestampFilter(leftBorder, rightBorder);
 		final AbstractStage owningStage = timestampStage.getMonitoringRecordsCombinedInputPort().getOwningStage();
-		final List<IMonitoringRecord> withinTimestampOutputs = new ArrayList<IMonitoringRecord>();
-		final List<IMonitoringRecord> outsideTimestampOutputs = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> withinTimestampOutputs = new ArrayList<>();
+		final List<IMonitoringRecord> outsideTimestampOutputs = new ArrayList<>();
 
 		StageTester.test(owningStage)
 				.and().send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
@@ -120,8 +119,8 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		final long leftBorder = rightBorder - 1;
 		final TimestampFilter timestampStage = new TimestampFilter(leftBorder, rightBorder);
 		final AbstractStage owningStage = timestampStage.getMonitoringRecordsCombinedInputPort().getOwningStage();
-		final List<IMonitoringRecord> withinTimestampOutputs = new ArrayList<IMonitoringRecord>();
-		final List<IMonitoringRecord> outsideTimestampOutputs = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> withinTimestampOutputs = new ArrayList<>();
+		final List<IMonitoringRecord> outsideTimestampOutputs = new ArrayList<>();
 
 		StageTester.test(owningStage)
 				.and().send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
@@ -143,8 +142,8 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		final long rightBorder = leftBorder + 1;
 		final TimestampFilter timestampStage = new TimestampFilter(leftBorder, rightBorder);
 		final AbstractStage owningStage = timestampStage.getMonitoringRecordsCombinedInputPort().getOwningStage();
-		final List<IMonitoringRecord> withinTimestampOutputs = new ArrayList<IMonitoringRecord>();
-		final List<IMonitoringRecord> outsideTimestampOutputs = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> withinTimestampOutputs = new ArrayList<>();
+		final List<IMonitoringRecord> outsideTimestampOutputs = new ArrayList<>();
 
 		StageTester.test(owningStage)
 				.and().send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
@@ -170,8 +169,8 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		final long leftBorder = rightBorder - 1;
 		final TimestampFilter timestampStage = new TimestampFilter(leftBorder, rightBorder);
 		final AbstractStage owningStage = timestampStage.getMonitoringRecordsCombinedInputPort().getOwningStage();
-		final List<IMonitoringRecord> withinTimestampOutputs = new ArrayList<IMonitoringRecord>();
-		final List<IMonitoringRecord> outsideTimestampOutputs = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> withinTimestampOutputs = new ArrayList<>();
+		final List<IMonitoringRecord> outsideTimestampOutputs = new ArrayList<>();
 
 		StageTester.test(owningStage)
 				.and().send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
@@ -197,8 +196,8 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		final long rightBorder = TestTimestampFilter.EVENT.getTimestamp() + 1;
 		final TimestampFilter timestampStage = new TimestampFilter(leftBorder, rightBorder);
 		final AbstractStage owningStage = timestampStage.getMonitoringRecordsCombinedInputPort().getOwningStage();
-		final List<IMonitoringRecord> withinTimestampOutputs = new ArrayList<IMonitoringRecord>();
-		final List<IMonitoringRecord> outsideTimestampOutputs = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> withinTimestampOutputs = new ArrayList<>();
+		final List<IMonitoringRecord> outsideTimestampOutputs = new ArrayList<>();
 
 		StageTester.test(owningStage)
 				.and().send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())

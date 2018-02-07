@@ -1,18 +1,19 @@
-/**
- * Copyright (C) 2015 Christian Wulf, Nelson Tavares de Sousa (http://teetime-framework.github.io)
+/***************************************************************************
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ ***************************************************************************/
+
 package kieker.test.analysisteetime.junit.plugin.reader.filesystem;
 
 import java.io.File;
@@ -37,7 +38,7 @@ public class Dir2RecordsFilterTest {
 
 		public TestConfiguration() {
 			final ReadingComposite reader = new ReadingComposite(new File("."));
-			final Printer<IMonitoringRecord> printer = new Printer<IMonitoringRecord>();
+			final Printer<IMonitoringRecord> printer = new Printer<>();
 
 			this.connectPorts(reader.getOutputPort(), printer.getInputPort());
 		}
@@ -49,7 +50,7 @@ public class Dir2RecordsFilterTest {
 		private final Dir2RecordsFilter reader;
 
 		public ReadingComposite(final File importDirectory) {
-			this.producer = new InitialElementProducer<File>(importDirectory);
+			this.producer = new InitialElementProducer<>(importDirectory);
 			this.reader = new Dir2RecordsFilter(new ClassNameRegistryRepository());
 
 			this.connectPorts(this.producer.getOutputPort(), this.reader.getInputPort());
@@ -67,6 +68,6 @@ public class Dir2RecordsFilterTest {
 
 	@Test
 	public void shouldNotThrowAnyException() {
-		new Execution<TestConfiguration>(new TestConfiguration()).executeBlocking();
+		new Execution<>(new TestConfiguration()).executeBlocking();
 	}
 }

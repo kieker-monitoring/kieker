@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ public class RunningMedian<T extends Comparable<T>> {
 	}
 
 	private void insertToHeap(final T element) {
-		if (this.maxHeap.peek() == null || element.compareTo(this.maxHeap.peek()) < 0) {
+		if ((this.maxHeap.peek() == null) || (element.compareTo(this.maxHeap.peek()) < 0)) {
 			// element < maxHeap.peek
 			this.maxHeap.add(element);
 		} else {
@@ -54,10 +54,10 @@ public class RunningMedian<T extends Comparable<T>> {
 	}
 
 	private void balanceHeaps() {
-		if (this.maxHeap.size() - this.minHeap.size() > 1) {
+		if ((this.maxHeap.size() - this.minHeap.size()) > 1) {
 			final T maxHeapRoot = this.maxHeap.poll();
 			this.minHeap.add(maxHeapRoot);
-		} else if (this.minHeap.size() - this.maxHeap.size() > 1) {
+		} else if ((this.minHeap.size() - this.maxHeap.size()) > 1) {
 			final T minHeapRoot = this.minHeap.poll();
 			this.maxHeap.add(minHeapRoot);
 		}

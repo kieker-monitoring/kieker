@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,9 +53,9 @@ public class TestTypeFilter extends AbstractKiekerTest {
 	@Test
 	public void testFiltering() {
 		final TypeFilter typeFilter = new TypeFilter(ALLOWED_TYPES);
-		final List<Object> inputElements = new ArrayList<Object>();
-		final List<Object> validOutputElements = new ArrayList<Object>();
-		final List<Object> invalidOutputElements = new ArrayList<Object>();
+		final List<Object> inputElements = new ArrayList<>();
+		final List<Object> validOutputElements = new ArrayList<>();
+		final List<Object> invalidOutputElements = new ArrayList<>();
 
 		// Make sure that the reader sends valid and invalid objects interleaved
 		for (int i = 0; i < Math.min(MATCHING_OBJECTS.length, MISMATCHING_OBJECTS.length); i++) {

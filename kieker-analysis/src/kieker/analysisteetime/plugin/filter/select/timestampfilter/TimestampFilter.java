@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,12 +61,12 @@ public class TimestampFilter extends CompositeStage {
 	public TimestampFilter(final long ignoreBeforeTimestamp, final long ignoreAfterTimestamp) {
 
 		// Instantiate internal stages
-		final InstanceOfFilter<IMonitoringRecord, OperationExecutionRecord> instanceOfOperationExecutionRecordFilter = new InstanceOfFilter<IMonitoringRecord, OperationExecutionRecord>(
+		final InstanceOfFilter<IMonitoringRecord, OperationExecutionRecord> instanceOfOperationExecutionRecordFilter = new InstanceOfFilter<>(
 				OperationExecutionRecord.class);
-		final InstanceOfFilter<IMonitoringRecord, TraceMetadata> instanceOfTraceMetadataFilter = new InstanceOfFilter<IMonitoringRecord, TraceMetadata>(
+		final InstanceOfFilter<IMonitoringRecord, TraceMetadata> instanceOfTraceMetadataFilter = new InstanceOfFilter<>(
 				TraceMetadata.class);
-		final InstanceOfFilter<IMonitoringRecord, IEventRecord> instanceOfIEventFilter = new InstanceOfFilter<IMonitoringRecord, IEventRecord>(IEventRecord.class);
-		final InstanceOfFilter<IMonitoringRecord, IMonitoringRecord> instanceOfIMonitoringRecord = new InstanceOfFilter<IMonitoringRecord, IMonitoringRecord>(
+		final InstanceOfFilter<IMonitoringRecord, IEventRecord> instanceOfIEventFilter = new InstanceOfFilter<>(IEventRecord.class);
+		final InstanceOfFilter<IMonitoringRecord, IMonitoringRecord> instanceOfIMonitoringRecord = new InstanceOfFilter<>(
 				IMonitoringRecord.class);
 
 		final EventRecordTimestampFilter eventRecordTimestampStage = new EventRecordTimestampFilter(ignoreBeforeTimestamp, ignoreAfterTimestamp);
@@ -75,8 +75,8 @@ public class TimestampFilter extends CompositeStage {
 		final TraceMetadataTimestampFilter traceMetadataTimestampStage = new TraceMetadataTimestampFilter(ignoreBeforeTimestamp, ignoreAfterTimestamp);
 		final MonitioringRecordTimestampFilter monitoringRecordTimestampStage = new MonitioringRecordTimestampFilter(ignoreBeforeTimestamp, ignoreAfterTimestamp);
 
-		final Merger<IMonitoringRecord> recordsWithinTimePeriodMerger = new Merger<IMonitoringRecord>();
-		final Merger<IMonitoringRecord> recordsOutsideTimePeriodMerger = new Merger<IMonitoringRecord>();
+		final Merger<IMonitoringRecord> recordsWithinTimePeriodMerger = new Merger<>();
+		final Merger<IMonitoringRecord> recordsOutsideTimePeriodMerger = new Merger<>();
 
 		// Define input and output ports of composite stage
 		this.monitoringRecordsCombinedInputPort = instanceOfOperationExecutionRecordFilter.getInputPort();

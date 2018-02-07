@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 
 	private static final Log LOG = LogFactory.getLog(BinaryLogReaderThread.class);
 
-	private final ReaderRegistry<String> readerRegistry = new ReaderRegistry<String>();
+	private final ReaderRegistry<String> readerRegistry = new ReaderRegistry<>();
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
 	private final boolean shouldDecompress;

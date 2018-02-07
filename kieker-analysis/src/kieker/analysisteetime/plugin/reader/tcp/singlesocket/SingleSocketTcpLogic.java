@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.analysisteetime.plugin.reader.tcp.singlesocket;
 
 import java.nio.ByteBuffer;
@@ -19,14 +35,14 @@ class SingleSocketTcpLogic extends AbstractTcpReader {
 	private static final int INT_BYTES = AbstractMonitoringRecord.TYPE_SIZE_INT;
 	private static final Charset ENCODING = StandardCharsets.UTF_8;
 
-	private final ReaderRegistry<String> readerRegistry = new ReaderRegistry<String>();
-	private RecordDeserializer recordDeserializer;
+	private final ReaderRegistry<String> readerRegistry = new ReaderRegistry<>();
+	private final RecordDeserializer recordDeserializer;
 
 	public SingleSocketTcpLogic(final int port, final int bufferCapacity, final Logger logger,
 			final IRecordReceivedListener listener) {
 		super(port, bufferCapacity, logger);
 
-		final GetValueAdapter<String> stringRegistryWrapper = new GetValueAdapter<String>(this.readerRegistry);
+		final GetValueAdapter<String> stringRegistryWrapper = new GetValueAdapter<>(this.readerRegistry);
 		this.recordDeserializer = new RecordDeserializer(listener, stringRegistryWrapper);
 	}
 

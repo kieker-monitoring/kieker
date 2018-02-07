@@ -1,18 +1,19 @@
-/**
- * Copyright (C) 2015 Christian Wulf, Nelson Tavares de Sousa (http://teetime-framework.github.io)
+/***************************************************************************
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ ***************************************************************************/
+
 package kieker.analysisteetime.plugin.reader.database;
 
 import java.sql.Connection;
@@ -21,11 +22,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import teetime.framework.AbstractProducerStage;
-
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+
+import teetime.framework.AbstractProducerStage;
 
 /**
  * A very simple database reader that probably only works for small data sets.
@@ -59,7 +60,7 @@ public class DbReader extends AbstractProducerStage<IMonitoringRecord> {
 		try {
 			Class.forName(this.driverClassname).newInstance();
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			logger.error("DB driver registration failed. Perhaps the driver jar is missing?", ex);
+			this.logger.error("DB driver registration failed. Perhaps the driver jar is missing?", ex);
 			throw ex;
 		}
 	}
@@ -172,7 +173,7 @@ public class DbReader extends AbstractProducerStage<IMonitoringRecord> {
 					}
 					final IMonitoringRecord record = AbstractMonitoringRecord.createFromArray(clazz, recordValues);
 					record.setLoggingTimestamp(records.getLong(2));
-					outputPort.send(record);
+					this.outputPort.send(record);
 				}
 			} finally {
 				if (records != null) {

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,13 +57,13 @@ public class TraceIdFilter extends CompositeStage {
 	 */
 	public TraceIdFilter(final boolean acceptAllTraces, final Long[] selectedTraceIds) {
 		// Initializing the internal filters
-		final MultipleInstanceOfFilter<IMonitoringRecord> instanceOfFilter = new MultipleInstanceOfFilter<IMonitoringRecord>();
+		final MultipleInstanceOfFilter<IMonitoringRecord> instanceOfFilter = new MultipleInstanceOfFilter<>();
 		final TraceMetadataTraceIdFilter traceMetadataFilter = new TraceMetadataTraceIdFilter(acceptAllTraces, selectedTraceIds);
 		final TraceEventTraceIdFilter traceEventFilter = new TraceEventTraceIdFilter(acceptAllTraces, selectedTraceIds);
 		final OperationExecutionTraceIdFilter operationExecutionFilter = new OperationExecutionTraceIdFilter(acceptAllTraces, selectedTraceIds);
 
-		final Merger<IMonitoringRecord> matchingMerger = new Merger<IMonitoringRecord>();
-		final Merger<IMonitoringRecord> mismatchingMerger = new Merger<IMonitoringRecord>();
+		final Merger<IMonitoringRecord> matchingMerger = new Merger<>();
+		final Merger<IMonitoringRecord> mismatchingMerger = new Merger<>();
 
 		this.monitoringRecordsCombinedInputPort = instanceOfFilter.getInputPort();
 		this.matchingTraceIdOutputPort = matchingMerger.getOutputPort();

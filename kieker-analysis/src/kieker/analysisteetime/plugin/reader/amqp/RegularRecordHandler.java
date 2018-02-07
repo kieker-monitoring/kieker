@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ public class RegularRecordHandler implements Runnable, IRecordReceivedListener {
 	private final AMQPReaderLogic readerLogic;
 	private final RecordDeserializer recordDeserializer;
 
-	private final BlockingQueue<ByteBuffer> queue = new ArrayBlockingQueue<ByteBuffer>(DEFAULT_QUEUE_SIZE);
+	private final BlockingQueue<ByteBuffer> queue = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
 
 	/**
 	 * Creates a new regular record handler.
@@ -89,7 +89,7 @@ public class RegularRecordHandler implements Runnable, IRecordReceivedListener {
 	}
 
 	@Override
-	public void onRecordReceived(IMonitoringRecord record) {
+	public void onRecordReceived(final IMonitoringRecord record) {
 		this.readerLogic.deliverRecord(record);
 	}
 

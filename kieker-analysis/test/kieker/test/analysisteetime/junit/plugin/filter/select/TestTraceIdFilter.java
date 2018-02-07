@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,14 +61,14 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		final long firstTimestamp = 42353; // any number fits
 		final long traceIdNotToPass = 11L; // (must NOT be element of idsToPass)
 
-		final SortedSet<Long> idsToPass = new TreeSet<Long>();
+		final SortedSet<Long> idsToPass = new TreeSet<>();
 		idsToPass.add(1 + traceIdNotToPass);
 		idsToPass.add(2 + traceIdNotToPass);
 
 		final TraceIdFilter traceidFilter = new TraceIdFilter(false, idsToPass.toArray(new Long[idsToPass.size()]));
 		final AbstractStage owningStage = traceidFilter.getMonitoringRecordsCombinedInputPort().getOwningStage();
-		final List<IMonitoringRecord> acceptedTraceidOutputs = new ArrayList<IMonitoringRecord>();
-		final List<IMonitoringRecord> notAcceptedTraceidOutputs = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> acceptedTraceidOutputs = new ArrayList<>();
+		final List<IMonitoringRecord> notAcceptedTraceidOutputs = new ArrayList<>();
 
 		final AbstractTraceEvent[] traceEvents = BookstoreEventRecordFactory
 				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass, TestTraceIdFilter.SESSION_ID, TestTraceIdFilter.HOSTNAME)
@@ -102,14 +102,14 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		final long firstTimestamp = 53222; // any number fits
 		final long traceIdToPass = 11L; // (must be element of idsToPass)
 
-		final SortedSet<Long> idsToPass = new TreeSet<Long>();
+		final SortedSet<Long> idsToPass = new TreeSet<>();
 		idsToPass.add(0 + traceIdToPass);
 		idsToPass.add(1 + traceIdToPass);
 
 		final TraceIdFilter traceidFilter = new TraceIdFilter(false, idsToPass.toArray(new Long[idsToPass.size()]));
 		final AbstractStage owningStage = traceidFilter.getMonitoringRecordsCombinedInputPort().getOwningStage();
-		final List<IMonitoringRecord> acceptedTraceidOutputs = new ArrayList<IMonitoringRecord>();
-		final List<IMonitoringRecord> notAcceptedTraceidOutputs = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> acceptedTraceidOutputs = new ArrayList<>();
+		final List<IMonitoringRecord> notAcceptedTraceidOutputs = new ArrayList<>();
 
 		final AbstractTraceEvent[] traceEvents = BookstoreEventRecordFactory
 				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID, TestTraceIdFilter.HOSTNAME)
@@ -145,8 +145,8 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 
 		final TraceIdFilter traceidFilter = new TraceIdFilter(true, new Long[0]); // i.e. pass all
 		final AbstractStage owningStage = traceidFilter.getMonitoringRecordsCombinedInputPort().getOwningStage();
-		final List<IMonitoringRecord> acceptedTraceidOutputs = new ArrayList<IMonitoringRecord>();
-		final List<IMonitoringRecord> notAcceptedTraceidOutputs = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> acceptedTraceidOutputs = new ArrayList<>();
+		final List<IMonitoringRecord> notAcceptedTraceidOutputs = new ArrayList<>();
 
 		final AbstractTraceEvent[] traceEvents = BookstoreEventRecordFactory
 				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID, TestTraceIdFilter.HOSTNAME)

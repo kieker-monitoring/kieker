@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,9 +61,9 @@ public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 	@Before
 	public void before() {
 		this.monitoringThroughputFilter = new MonitoringThroughputFilter(10L);
-		this.outputThroughputs = new ArrayList<Long>();
-		this.outputRelayedRecords = new ArrayList<IMonitoringRecord>();
-		this.outputUncountedRecords = new ArrayList<IMonitoringRecord>();
+		this.outputThroughputs = new ArrayList<>();
+		this.outputRelayedRecords = new ArrayList<>();
+		this.outputUncountedRecords = new ArrayList<>();
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 	@SuppressWarnings("PMD") // JUnit tests should include assert() or fail()
 	public void testNormal() {
 
-		final List<EmptyRecord> inputRecords = new ArrayList<EmptyRecord>();
+		final List<EmptyRecord> inputRecords = new ArrayList<>();
 
 		// adding 20 records with timestamps from 10 to 29
 		for (long i = 10; i < 30; i++) {

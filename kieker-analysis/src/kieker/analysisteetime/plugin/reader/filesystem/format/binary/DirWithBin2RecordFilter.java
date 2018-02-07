@@ -1,31 +1,32 @@
-/**
- * Copyright (C) 2015 Christian Wulf, Nelson Tavares de Sousa (http://teetime-framework.github.io)
+/***************************************************************************
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ ***************************************************************************/
+
 package kieker.analysisteetime.plugin.reader.filesystem.format.binary;
 
 import java.io.File;
-
-import teetime.framework.CompositeStage;
-import teetime.framework.InputPort;
-import teetime.framework.OutputPort;
-import teetime.framework.AbstractStage;
 
 import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryCreationFilter;
 import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryRepository;
 import kieker.analysisteetime.plugin.reader.filesystem.format.binary.file.BinaryFile2RecordFilter;
 import kieker.common.record.IMonitoringRecord;
+
+import teetime.framework.AbstractStage;
+import teetime.framework.CompositeStage;
+import teetime.framework.InputPort;
+import teetime.framework.OutputPort;
 
 public class DirWithBin2RecordFilter extends CompositeStage {
 
@@ -41,8 +42,8 @@ public class DirWithBin2RecordFilter extends CompositeStage {
 	public DirWithBin2RecordFilter(final ClassNameRegistryRepository classNameRegistryRepository) {
 		this.classNameRegistryRepository = classNameRegistryRepository;
 
-		classNameRegistryCreationFilter = new ClassNameRegistryCreationFilter(classNameRegistryRepository);
-		binaryFile2RecordFilter = new BinaryFile2RecordFilter(classNameRegistryRepository);
+		this.classNameRegistryCreationFilter = new ClassNameRegistryCreationFilter(classNameRegistryRepository);
+		this.binaryFile2RecordFilter = new BinaryFile2RecordFilter(classNameRegistryRepository);
 	}
 
 	public ClassNameRegistryRepository getClassNameRegistryRepository() {
@@ -54,7 +55,7 @@ public class DirWithBin2RecordFilter extends CompositeStage {
 	}
 
 	protected AbstractStage getFirstStage() {
-		return classNameRegistryCreationFilter;
+		return this.classNameRegistryCreationFilter;
 	}
 
 	public InputPort<File> getInputPort() {

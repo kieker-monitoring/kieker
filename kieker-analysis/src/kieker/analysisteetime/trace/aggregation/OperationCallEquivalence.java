@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,11 +51,11 @@ public class OperationCallEquivalence extends Equivalence<OperationCall> {
 	protected boolean doEquivalent(final OperationCall operationCallA, final OperationCall operationCallB) {
 		// A and B are not the same object and are not nulls.
 		final boolean equalsWithoutFailed = Objects.equals(operationCallA.getOperation(), operationCallB.getOperation())
-				&& operationCallA.getChildren().size() == operationCallB.getChildren().size()
+				&& (operationCallA.getChildren().size() == operationCallB.getChildren().size())
 				&& this.equivalent(operationCallA.getChildren(), operationCallB.getChildren());
 		if (this.considerFailed) {
 			return equalsWithoutFailed
-					&& operationCallA.isFailed() == operationCallB.isFailed()
+					&& (operationCallA.isFailed() == operationCallB.isFailed())
 					&& Objects.equals(operationCallA.getFailedCause(), operationCallB.getFailedCause());
 		} else {
 			return equalsWithoutFailed;

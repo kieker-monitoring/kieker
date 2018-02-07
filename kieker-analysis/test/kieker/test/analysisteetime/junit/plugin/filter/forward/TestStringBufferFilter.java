@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,8 +49,8 @@ public class TestStringBufferFilter extends AbstractKiekerTest {
 	@Test
 	public void testRecordsWithStringEqualButNeverSame() {
 		final StringBufferFilter stringBufferFilter = new StringBufferFilter();
-		final List<IMonitoringRecord> inputElements = new ArrayList<IMonitoringRecord>();
-		final List<Object> outputElements = new ArrayList<Object>();
+		final List<IMonitoringRecord> inputElements = new ArrayList<>();
+		final List<Object> outputElements = new ArrayList<>();
 
 		long timestamp = 3268936L;
 		final IMonitoringRecord recordIn1 = TestStringBufferFilter.createOperationExecutionRecord(timestamp);
@@ -76,8 +76,8 @@ public class TestStringBufferFilter extends AbstractKiekerTest {
 	@Test
 	public void testRecordsWithoutStringSame() {
 		final StringBufferFilter stringBufferFilter = new StringBufferFilter();
-		final List<IMonitoringRecord> inputElements = new ArrayList<IMonitoringRecord>();
-		final List<Object> outputElements = new ArrayList<Object>();
+		final List<IMonitoringRecord> inputElements = new ArrayList<>();
+		final List<Object> outputElements = new ArrayList<>();
 
 		final IMonitoringRecord recordIn1 = new EmptyRecord();
 		inputElements.add(recordIn1);
@@ -95,8 +95,8 @@ public class TestStringBufferFilter extends AbstractKiekerTest {
 	@Test
 	public void testObjects() {
 		final StringBufferFilter stringBufferFilter = new StringBufferFilter();
-		final List<Object> inputElements = new ArrayList<Object>();
-		final List<Object> outputElements = new ArrayList<Object>();
+		final List<Object> inputElements = new ArrayList<>();
+		final List<Object> outputElements = new ArrayList<>();
 
 		final Object objectIn = new Object();
 		final String stringIn1 = "In-String";
@@ -127,8 +127,8 @@ public class TestStringBufferFilter extends AbstractKiekerTest {
 	@Test
 	public void testStringInRecord() {
 		final StringBufferFilter stringBufferFilter = new StringBufferFilter();
-		final List<OperationExecutionRecord> inputElements = new ArrayList<OperationExecutionRecord>();
-		final List<Object> outputElements = new ArrayList<Object>();
+		final List<OperationExecutionRecord> inputElements = new ArrayList<>();
+		final List<Object> outputElements = new ArrayList<>();
 
 		final String inString1a = "inString1a";
 		final String inString1b = "inString1b";

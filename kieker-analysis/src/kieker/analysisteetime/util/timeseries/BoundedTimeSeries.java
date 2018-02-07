@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class BoundedTimeSeries<T extends TimeSeriesPoint> extends TimeSeries<T> 
 	public BoundedTimeSeries(final Duration capacity, final TimeSeries<T> timeSeries) {
 		super(timeSeries);
 		this.capacity = capacity;
-		removeOverflow();
+		this.removeOverflow();
 	}
 
 	public BoundedTimeSeries(final BoundedTimeSeries<T> timeSeries) {
@@ -48,13 +48,13 @@ public class BoundedTimeSeries<T extends TimeSeriesPoint> extends TimeSeries<T> 
 	@Override
 	public void appendBegin(final T timeSeriesPoint) {
 		super.appendBegin(timeSeriesPoint);
-		removeOverflow();
+		this.removeOverflow();
 	}
 
 	@Override
 	public void appendEnd(final T timeSeriesPoint) {
 		super.appendEnd(timeSeriesPoint);
-		removeOverflow();
+		this.removeOverflow();
 	}
 
 	public Duration getCapacity() {
@@ -62,11 +62,11 @@ public class BoundedTimeSeries<T extends TimeSeriesPoint> extends TimeSeries<T> 
 	}
 
 	private void removeOverflow() {
-		if (size() == 0) {
+		if (this.size() == 0) {
 			return;
 		}
 		final Instant limit = super.getEnd().getTime().minus(this.capacity);
-		while (size() > 0 && super.getBegin().getTime().isBefore(limit)) {
+		while ((this.size() > 0) && super.getBegin().getTime().isBefore(limit)) {
 			super.removeBegin();
 		}
 	}

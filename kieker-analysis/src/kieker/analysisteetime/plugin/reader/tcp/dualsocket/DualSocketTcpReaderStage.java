@@ -1,18 +1,19 @@
-/**
- * Copyright (C) 2015 Christian Wulf, Nelson Tavares de Sousa (http://teetime-framework.github.io)
+/***************************************************************************
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ ***************************************************************************/
+
 package kieker.analysisteetime.plugin.reader.tcp.dualsocket;
 
 import java.nio.ByteBuffer;
@@ -37,7 +38,7 @@ import teetime.util.stage.io.network.AbstractTcpReader;
 @Deprecated
 public final class DualSocketTcpReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 
-	private final ILookup<String> stringRegistry = new Lookup<String>();
+	private final ILookup<String> stringRegistry = new Lookup<>();
 	private final AbstractTcpReader tcpMonitoringRecordReader;
 	private final AbstractTcpReader tcpStringRecordReader;
 
@@ -63,13 +64,13 @@ public final class DualSocketTcpReaderStage extends AbstractProducerStage<IMonit
 	public DualSocketTcpReaderStage(final int port1, final int bufferCapacity, final int port2) {
 		super();
 
-		this.tcpMonitoringRecordReader = new DualSocketTcpLogic(port1, bufferCapacity, this.logger, stringRegistry,
+		this.tcpMonitoringRecordReader = new DualSocketTcpLogic(port1, bufferCapacity, this.logger, this.stringRegistry,
 				this.outputPort);
 
 		this.tcpStringRecordReader = new AbstractTcpReader(port2, bufferCapacity, this.logger) {
 			@Override
 			protected boolean onBufferReceived(final ByteBuffer buffer) {
-				RegistryRecord.registerRecordInRegistry(buffer, stringRegistry);
+				RegistryRecord.registerRecordInRegistry(buffer, DualSocketTcpReaderStage.this.stringRegistry);
 				return true;
 			}
 		};
@@ -78,14 +79,14 @@ public final class DualSocketTcpReaderStage extends AbstractProducerStage<IMonit
 	@Override
 	public void onStarting() throws Exception {
 		super.onStarting();
-		this.tcpStringRecordReaderThread = new Thread(tcpStringRecordReader);
+		this.tcpStringRecordReaderThread = new Thread(this.tcpStringRecordReader);
 		this.tcpStringRecordReaderThread.start();
 	}
 
 	@Override
 	protected void execute() {
-		tcpMonitoringRecordReader.run();
-		terminateStage();
+		this.tcpMonitoringRecordReader.run();
+		this.terminateStage();
 	}
 
 	@Override
@@ -96,11 +97,11 @@ public final class DualSocketTcpReaderStage extends AbstractProducerStage<IMonit
 	}
 
 	public int getPort1() {
-		return tcpMonitoringRecordReader.getPort();
+		return this.tcpMonitoringRecordReader.getPort();
 	}
 
 	public int getPort2() {
-		return tcpStringRecordReader.getPort();
+		return this.tcpStringRecordReader.getPort();
 	}
 
 }
