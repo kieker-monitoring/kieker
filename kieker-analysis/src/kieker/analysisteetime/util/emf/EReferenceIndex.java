@@ -69,6 +69,23 @@ public class EReferenceIndex<K, V extends EObject> {
 		return this.index.get(key);
 	}
 
+	public static <K, V extends EObject> EReferenceIndex<K, V> createEmpty(final EObject object, final EReference reference,
+			final Collection<EStructuralFeature> observedReferenceAttributes, final Function<V, K> keyCreator) {
+		return new EReferenceIndex<>(object, reference, observedReferenceAttributes, keyCreator, null);
+	}
+
+	public static <K, V extends EObject> EReferenceIndex<K, V> create(final EObject object, final EReference reference,
+			final Collection<EStructuralFeature> observedReferenceAttributes, final Function<V, K> keyCreator) {
+		@SuppressWarnings("unchecked")
+		final EList<V> values = (EList<V>) object.eGet(reference);
+		return new EReferenceIndex<>(object, reference, observedReferenceAttributes, keyCreator, values);
+	}
+
+	public static <K, V extends EObject> EReferenceIndex<K, V> create(final EObject object, final EReference reference,
+			final Collection<EStructuralFeature> observedReferenceAttributes, final Function<V, K> keyCreator, final Collection<V> values) {
+		return new EReferenceIndex<>(object, reference, observedReferenceAttributes, keyCreator, values);
+	}
+
 	/**
 	 *
 	 */
@@ -115,22 +132,4 @@ public class EReferenceIndex<K, V extends EObject> {
 		}
 
 	}
-
-	public static <K, V extends EObject> EReferenceIndex<K, V> createEmpty(final EObject object, final EReference reference,
-			final Collection<EStructuralFeature> observedReferenceAttributes, final Function<V, K> keyCreator) {
-		return new EReferenceIndex<>(object, reference, observedReferenceAttributes, keyCreator, null);
-	}
-
-	public static <K, V extends EObject> EReferenceIndex<K, V> create(final EObject object, final EReference reference,
-			final Collection<EStructuralFeature> observedReferenceAttributes, final Function<V, K> keyCreator) {
-		@SuppressWarnings("unchecked")
-		final EList<V> values = (EList<V>) object.eGet(reference);
-		return new EReferenceIndex<>(object, reference, observedReferenceAttributes, keyCreator, values);
-	}
-
-	public static <K, V extends EObject> EReferenceIndex<K, V> create(final EObject object, final EReference reference,
-			final Collection<EStructuralFeature> observedReferenceAttributes, final Function<V, K> keyCreator, final Collection<V> values) {
-		return new EReferenceIndex<>(object, reference, observedReferenceAttributes, keyCreator, values);
-	}
-
 }

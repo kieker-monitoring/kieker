@@ -25,7 +25,7 @@ import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
  */
 public interface OperationCallVisitor {
 
-	// TODO Make this generic for aggregated traces
+	// BETTER Make this generic for aggregated traces
 
 	public void visit(OperationCall operationCall);
 

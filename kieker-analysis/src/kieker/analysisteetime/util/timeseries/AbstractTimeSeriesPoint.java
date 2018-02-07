@@ -2,6 +2,10 @@ package kieker.analysisteetime.util.timeseries;
 
 import java.time.Instant;
 
+/**
+ * @author Sören Henning
+ *
+ */
 public abstract class AbstractTimeSeriesPoint implements TimeSeriesPoint {
 
 	private final Instant time;

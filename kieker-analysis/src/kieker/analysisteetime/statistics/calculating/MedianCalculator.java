@@ -34,7 +34,7 @@ import kieker.analysisteetime.util.RunningMedian;
  */
 public class MedianCalculator<T> implements Calculator<T> {
 
-	private final static Property MEDIAN_PROPERTY = Properties.MEDIAN;
+	private static final Property MEDIAN_PROPERTY = Properties.MEDIAN;
 
 	private final Map<Object, RunningMedian<Long>> runningMedians = new HashMap<>(); // NOPMD (class not designed for concurrent access)
 	private final Function<T, Long> valueAccessor;

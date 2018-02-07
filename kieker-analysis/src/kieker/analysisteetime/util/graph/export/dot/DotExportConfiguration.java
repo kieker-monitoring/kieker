@@ -33,12 +33,12 @@ public class DotExportConfiguration {
 	 * way would be to use a List of Pairs of constant size.
 	 */
 	// PMD: No concurrent access intended for the following attributes
-	final protected Map<DotGraphAttribute, Function<Graph, String>> graphAttributes = new EnumMap<>(DotGraphAttribute.class); // NOPMD (see above)
-	final protected Map<DotNodeAttribute, Function<Graph, String>> defaultNodeAttributes = new EnumMap<>(DotNodeAttribute.class); // NOPMD (see above)
-	final protected Map<DotEdgeAttribute, Function<Graph, String>> defaultEdgeAttributes = new EnumMap<>(DotEdgeAttribute.class); // NOPMD (see above)
-	final protected Map<DotNodeAttribute, Function<Vertex, String>> nodeAttributes = new EnumMap<>(DotNodeAttribute.class); // NOPMD (see above)
-	final protected Map<DotEdgeAttribute, Function<Edge, String>> edgeAttributes = new EnumMap<>(DotEdgeAttribute.class); // NOPMD (see above)
-	final protected Map<DotClusterAttribute, Function<Vertex, String>> clusterAttributes = new EnumMap<>(DotClusterAttribute.class); // NOPMD (see above)
+	protected final Map<DotGraphAttribute, Function<Graph, String>> graphAttributes = new EnumMap<>(DotGraphAttribute.class); // NOPMD (see above)
+	protected final Map<DotNodeAttribute, Function<Graph, String>> defaultNodeAttributes = new EnumMap<>(DotNodeAttribute.class); // NOPMD (see above)
+	protected final Map<DotEdgeAttribute, Function<Graph, String>> defaultEdgeAttributes = new EnumMap<>(DotEdgeAttribute.class); // NOPMD (see above)
+	protected final Map<DotNodeAttribute, Function<Vertex, String>> nodeAttributes = new EnumMap<>(DotNodeAttribute.class); // NOPMD (see above)
+	protected final Map<DotEdgeAttribute, Function<Edge, String>> edgeAttributes = new EnumMap<>(DotEdgeAttribute.class); // NOPMD (see above)
+	protected final Map<DotClusterAttribute, Function<Vertex, String>> clusterAttributes = new EnumMap<>(DotClusterAttribute.class); // NOPMD (see above)
 
 	protected DotExportConfiguration() {
 		// Create an empty export configuration
@@ -68,9 +68,16 @@ public class DotExportConfiguration {
 		return Collections.unmodifiableSet(this.clusterAttributes.entrySet());
 	}
 
+	/**
+	 *
+	 */
 	public static class Builder {
 
 		private final DotExportConfiguration configuration = new DotExportConfiguration();
+
+		public Builder() {
+			// create a new builder
+		}
 
 		public void addGraphAttribute(final DotGraphAttribute attribute, final Function<Graph, String> function) {
 			this.configuration.graphAttributes.put(attribute, function);

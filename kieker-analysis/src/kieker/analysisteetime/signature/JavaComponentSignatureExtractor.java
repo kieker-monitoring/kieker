@@ -33,11 +33,11 @@ public class JavaComponentSignatureExtractor implements ComponentSignatureExtrac
 
 	@Override
 	public void extract(final ComponentType componentType) {
-		// TODO code clean up, copied from old kieker analysis
+		// BETTER code clean up, copied from old kieker analysis
 		final String signature = componentType.getSignature();
 
-		String packageName;
-		String name;
+		final String packageName;
+		final String name;
 		if (signature.indexOf('.') != -1) {
 			final String tmpComponentName = signature;
 			int index = 0;

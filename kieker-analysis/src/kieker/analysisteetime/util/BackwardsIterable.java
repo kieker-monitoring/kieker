@@ -38,11 +38,11 @@ public interface BackwardsIterable<T> {
 	 * Returns an Iterable that iterates the elements backwards using the
 	 * Iterator returned by {@code backwardsIterator()}.
 	 */
-	default public Iterable<T> backwards() {
+	public default Iterable<T> backwards() {
 		return new Iterable<T>() {
 			@Override
 			public Iterator<T> iterator() {
-				return backwardsIterator();
+				return BackwardsIterable.this.backwardsIterator();
 			}
 		};
 	}

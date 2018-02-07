@@ -19,9 +19,9 @@ package kieker.analysisteetime.util.graph.flattening;
 import kieker.analysisteetime.util.graph.Edge;
 import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.traversal.AbstractGraphTraverser;
 import kieker.analysisteetime.util.graph.traversal.EdgeVisitor;
 import kieker.analysisteetime.util.graph.traversal.FlatGraphTraverser;
-import kieker.analysisteetime.util.graph.traversal.AbstractGraphTraverser;
 import kieker.analysisteetime.util.graph.traversal.VertexVisitor;
 
 /**

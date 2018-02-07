@@ -15,9 +15,9 @@ import kieker.analysisteetime.util.graph.traversal.VertexVisitor;
  */
 public abstract class AbstractTransformer<O> implements VertexVisitor, EdgeVisitor {
 
-	private final AbstractGraphTraverser graphTraverser = new FlatGraphTraverser(this, this);
-
 	protected Graph graph;
+
+	private final AbstractGraphTraverser graphTraverser = new FlatGraphTraverser(this, this);
 
 	protected AbstractTransformer(final Graph graph) {
 		this.graph = graph;

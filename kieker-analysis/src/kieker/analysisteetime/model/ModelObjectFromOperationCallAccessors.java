@@ -28,6 +28,8 @@ public final class ModelObjectFromOperationCallAccessors {
 
 	public static final Function<OperationCall, Object> COMPONENT_TYPE = c -> c.getOperation().getAssemblyOperation().getOperationType().getComponentType();
 
+	private ModelObjectFromOperationCallAccessors() {}
+
 	public static final Function<OperationCall, Object> createForAggregatedInvocation(final ExecutionModel executionModel) {
 		return operationCall -> {
 			// Check if operationCall is an entry operation call. If so than source is null
@@ -37,7 +39,5 @@ public final class ModelObjectFromOperationCallAccessors {
 			return executionModel.getAggregatedInvocations().get(key);
 		};
 	}
-
-	private ModelObjectFromOperationCallAccessors() {}
 
 }

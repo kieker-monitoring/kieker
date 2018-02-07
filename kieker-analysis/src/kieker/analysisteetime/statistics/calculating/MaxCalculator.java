@@ -32,7 +32,7 @@ import kieker.analysisteetime.statistics.Statistic;
  */
 public class MaxCalculator<T> implements Calculator<T> {
 
-	private final static Property MAX_PROPERTY = Properties.MAX;
+	private static final Property MAX_PROPERTY = Properties.MAX;
 
 	private final Function<T, Long> valueAccessor;
 

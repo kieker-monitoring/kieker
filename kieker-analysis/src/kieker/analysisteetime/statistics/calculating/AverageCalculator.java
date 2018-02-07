@@ -29,9 +29,9 @@ import kieker.analysisteetime.statistics.Statistic;
  */
 public class AverageCalculator<T> implements Calculator<T> {
 
-	private final static Property TOTAL_PROPERTY = Properties.TOTAL;
-	private final static Property COUNT_PROPERTY = Properties.COUNT;
-	private final static Property AVERAGE_PROPERTY = Properties.AVERAGE;
+	private static final Property TOTAL_PROPERTY = Properties.TOTAL;
+	private static final Property COUNT_PROPERTY = Properties.COUNT;
+	private static final Property AVERAGE_PROPERTY = Properties.AVERAGE;
 
 	public AverageCalculator() {
 		// Create Calculator

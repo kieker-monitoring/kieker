@@ -18,10 +18,10 @@ import kieker.analysisteetime.util.graph.export.AbstractTransformer;
  */
 public class BlueprintsTransformer extends AbstractTransformer<com.tinkerpop.blueprints.Graph> {
 
+	private static final String LABEL_PROPERTY = "label";
+
 	private final com.tinkerpop.blueprints.Graph transformedGraph = new TinkerGraph();
 	private final Map<Vertex, com.tinkerpop.blueprints.Vertex> mappedVertices = new HashMap<>(); // NOPMD (no concurrent access intended)
-
-	private static final String LABEL_PROPERTY = "label";
 
 	public BlueprintsTransformer(final Graph graph) {
 		super(graph);

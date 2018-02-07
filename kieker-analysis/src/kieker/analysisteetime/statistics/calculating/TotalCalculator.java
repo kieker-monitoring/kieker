@@ -31,7 +31,7 @@ import kieker.analysisteetime.statistics.Statistic;
  */
 public class TotalCalculator<T> implements Calculator<T> {
 
-	private final static Property TOTAL_PROPERTY = Properties.TOTAL;
+	private static final Property TOTAL_PROPERTY = Properties.TOTAL;
 
 	private final Function<T, Long> valueAccessor;
 

@@ -7,7 +7,7 @@ import kieker.analysisteetime.util.graph.GraphElement;
  *
  * @since 1.13
  */
-abstract class GraphElementImpl extends ElementImpl implements GraphElement { // NOPMD (GraphElement is in this context the abstraction of Vertex and Edge))
+abstract class GraphElementImpl extends ElementImpl implements GraphElement { // NOPMD NOCS (GraphElement is in this context the abstraction of Vertex and Edge))
 
 	protected final Object id;
 	protected final GraphImpl graph;
@@ -19,7 +19,7 @@ abstract class GraphElementImpl extends ElementImpl implements GraphElement { //
 	}
 
 	@Override
-	abstract public void remove();
+	public abstract void remove();
 
 	@Override
 	public Object getId() {

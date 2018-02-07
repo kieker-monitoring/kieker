@@ -10,14 +10,14 @@ import java.io.Writer;
  */
 public class IndentWriter extends Writer {
 
+	public static final char DEFAULT_INDENT_CHAR = '\t';
+	public static final int DEFAULT_INDENT_LENGTH = 1;
+
 	private final Writer writer;
 
 	private int indented; // = 0
 	private char indentChar = DEFAULT_INDENT_CHAR;
 	private int indentLength = DEFAULT_INDENT_LENGTH;
-
-	public static final char DEFAULT_INDENT_CHAR = '\t';
-	public static final int DEFAULT_INDENT_LENGTH = 1;
 
 	public IndentWriter(final Writer writer) {
 		super();

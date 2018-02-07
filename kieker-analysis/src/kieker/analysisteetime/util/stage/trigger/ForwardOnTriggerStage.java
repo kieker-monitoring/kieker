@@ -72,6 +72,9 @@ public class ForwardOnTriggerStage<T> extends AbstractStage implements ITransfor
 		return this.outputPort;
 	}
 
+	/**
+	 *
+	 */
 	public static enum SendStrategy {
 		FIFO, LIFO;
 	}

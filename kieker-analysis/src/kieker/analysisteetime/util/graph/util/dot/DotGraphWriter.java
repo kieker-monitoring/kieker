@@ -103,7 +103,7 @@ public class DotGraphWriter {
 	public void addEdge(final String sourceId, final String targetId, final Map<String, String> attributes) throws IOException {
 		this.checkState(DotWriterState.STARTED);
 
-		String edgeConnector;
+		final String edgeConnector;
 		if (this.graphType == DotGraphType.UNDIRECTED) {
 			edgeConnector = DotGraph.UNDIRECTED_EDGE_CONNECTOR;
 		} else {

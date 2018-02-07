@@ -18,6 +18,15 @@ package kieker.analysisteetime.util.timeseries;
 
 import java.time.Instant;
 
+/**
+ * {@link TimeSeriesPoint} wrapper for any type.
+ *
+ * @author Sören Henning
+ *
+ * @param <X>
+ *            Type of this time series point value
+ *
+ */
 public class ObjectTimeSeriesPoint<X> extends AbstractTimeSeriesPoint {
 
 	private final X value;

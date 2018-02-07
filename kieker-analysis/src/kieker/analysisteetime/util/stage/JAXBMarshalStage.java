@@ -48,7 +48,7 @@ public class JAXBMarshalStage<T> extends AbstractBiCombinerStage<JAXBElement<T>,
 			this.marshaller = JAXBContext.newInstance(elementsClass).createMarshaller();
 			this.marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, formattedOutput);
 		} catch (final JAXBException e) {
-			// TODO Exception
+			// BETTER Consider exception handling
 			throw new IllegalStateException(e);
 		}
 	}
@@ -59,7 +59,6 @@ public class JAXBMarshalStage<T> extends AbstractBiCombinerStage<JAXBElement<T>,
 		try {
 			this.marshaller.marshal(jaxbElement, outputStream);
 		} catch (final JAXBException e) {
-			// TODO Exception
 			throw new IllegalStateException("The received element could not be marshalled.", e);
 		}
 	}

@@ -29,7 +29,7 @@ import kieker.analysisteetime.statistics.Statistic;
  */
 public class CountCalculator<T> implements Calculator<T> {
 
-	private final static Property COUNT_PROPERTY = Properties.COUNT;
+	private static final Property COUNT_PROPERTY = Properties.COUNT;
 
 	public CountCalculator() {
 		// Create Calculator

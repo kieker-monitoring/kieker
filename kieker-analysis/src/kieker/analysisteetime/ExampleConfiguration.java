@@ -1,6 +1,3 @@
-/**
- *
- */
 package kieker.analysisteetime;
 
 import java.io.File;
@@ -70,7 +67,7 @@ public class ExampleConfiguration extends Configuration {
 
 		// Create the stages
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
-		// TODO consider if KiekerMetadataRecord has to be processed
+		// BETTER consider if KiekerMetadataRecord has to be processed
 		// final DebugStage<IMonitoringRecord> debugRecordsStage = new
 		// DebugStage<>();
 		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();

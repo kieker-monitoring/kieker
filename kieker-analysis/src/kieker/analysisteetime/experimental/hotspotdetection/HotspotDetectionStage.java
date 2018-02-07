@@ -33,8 +33,9 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 	private static final int DEFAULT_MAX_OUTPUT = 10;
 	private static final PrintStream DEFAULT_PRINT_STREAM = System.out;
 
+	final Map<OperationCall, Duration> durationsWithoutChild = new HashMap<>(); // NOPMD (no concurrent access intended) // NOCS contradicts PMD
+
 	private final TraceTraverser traceTraverser = new TraceTraverser();
-	final Map<OperationCall, Duration> durationsWithoutChild = new HashMap<>(); // NOPMD (no concurrent access intended)
 	private final int maxOutput;
 	private final PrintStream printStream;
 
@@ -70,6 +71,23 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 				.forEach(this.printStream::println);
 	}
 
+	// BETTER Put to some kind of MapUtil class
+	public static <K, V extends Comparable<? super V>> Map<K, V> sortMapByValue(final Map<K, V> map) {
+		final List<Map.Entry<K, V>> list = new LinkedList<>(map.entrySet());
+		Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
+			@Override
+			public int compare(final Map.Entry<K, V> o1, final Map.Entry<K, V> o2) {
+				return o2.getValue().compareTo(o1.getValue());
+			}
+		});
+
+		final Map<K, V> result = new LinkedHashMap<>(); // NOPMD (no concurrent access intended)
+		for (final Map.Entry<K, V> entry : list) {
+			result.put(entry.getKey(), entry.getValue());
+		}
+		return result;
+	}
+
 	/**
 	 *
 	 */
@@ -88,23 +106,6 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 			HotspotDetectionStage.this.durationsWithoutChild.put(operationCall, durationWithoutChildren);
 		}
 
-	}
-
-	// BETTER Put to some kind of MapUtil class
-	public static <K, V extends Comparable<? super V>> Map<K, V> sortMapByValue(final Map<K, V> map) {
-		final List<Map.Entry<K, V>> list = new LinkedList<>(map.entrySet());
-		Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
-			@Override
-			public int compare(final Map.Entry<K, V> o1, final Map.Entry<K, V> o2) {
-				return o2.getValue().compareTo(o1.getValue());
-			}
-		});
-
-		final Map<K, V> result = new LinkedHashMap<>(); // NOPMD (no concurrent access intended)
-		for (final Map.Entry<K, V> entry : list) {
-			result.put(entry.getKey(), entry.getValue());
-		}
-		return result;
 	}
 
 }

@@ -18,6 +18,10 @@ package kieker.analysisteetime.util.timeseries;
 
 import java.time.Instant;
 
+/**
+ * @author Sören Henning
+ *
+ */
 public class LongTimeSeriesPoint extends AbstractTimeSeriesPoint {
 
 	private final long value;

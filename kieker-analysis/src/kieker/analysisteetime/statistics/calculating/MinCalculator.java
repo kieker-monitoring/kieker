@@ -32,7 +32,7 @@ import kieker.analysisteetime.statistics.Statistic;
  */
 public class MinCalculator<T> implements Calculator<T> {
 
-	private final static Property MIN_PROPERTY = Properties.MIN;
+	private static final Property MIN_PROPERTY = Properties.MIN;
 
 	private final Function<T, Long> valueAccessor;
 
