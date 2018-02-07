@@ -93,7 +93,7 @@ public class BinaryWriterReaderTest {
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(BinaryLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
 		readerConfiguration.setProperty(BinaryLogReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
-		readerConfiguration.setProperty(BinaryLogReader.CONFIG_SHOULD_DECOMPRESS, (compressionMethod == ECompression.NONE) ? false : true);
+		readerConfiguration.setProperty(BinaryLogReader.CONFIG_SHOULD_DECOMPRESS, (compressionMethod == ECompression.NONE) ? false : true); // NOCS
 		final TestAnalysis analysis = new TestAnalysis(readerConfiguration, BinaryLogReader.class);
 
 		// 4. trigger records

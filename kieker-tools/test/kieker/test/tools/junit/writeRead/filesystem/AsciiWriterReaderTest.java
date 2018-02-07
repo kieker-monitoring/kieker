@@ -93,7 +93,7 @@ public class AsciiWriterReaderTest {
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
 		readerConfiguration.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
-		readerConfiguration.setProperty(AsciiLogReader.CONFIG_SHOULD_DECOMPRESS, (compressionMethod == ECompression.NONE) ? false : true);
+		readerConfiguration.setProperty(AsciiLogReader.CONFIG_SHOULD_DECOMPRESS, (compressionMethod == ECompression.NONE) ? false : true); // NOCS
 		final TestAnalysis analysis = new TestAnalysis(readerConfiguration, AsciiLogReader.class);
 
 		// 4. trigger records
