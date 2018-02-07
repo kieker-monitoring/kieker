@@ -28,10 +28,10 @@ import org.junit.Test;
  */
 public class HostnameRepositoryTest {
 
-	private HostnameRepository hostnameRepository;
+	private static final long EXAMPLE_TRACE_ID = 1234;
+	private static final String EXAMPLE_HOSTNAME = "Host123";
 
-	private final static long EXAMPLE_TRACE_ID = 1234;
-	private final static String EXAMPLE_HOSTNAME = "Host123";
+	private HostnameRepository hostnameRepository;
 
 	public HostnameRepositoryTest() {
 		// default empty constructor

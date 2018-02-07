@@ -85,7 +85,7 @@ public class JavaOperationSignatureExtractorTest {
 	 * {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
-	public void testExtractWithoutModifiersWithFullQualifiedParameters() {// NOPMD (assert is placed in separate method)
+	public void testExtractWithoutModifiersWithFullQualifiedParameters() { // NOPMD (assert is placed in separate method)
 		final List<String> modifiers = Collections.emptyList();
 		final String returnType = "ReturnType";
 		final String name = "methodName";
@@ -99,7 +99,7 @@ public class JavaOperationSignatureExtractorTest {
 	 * {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
-	public void testExtractWithMultipleModifiersWithoutParameters() {// NOPMD (assert is placed in separate method)
+	public void testExtractWithMultipleModifiersWithoutParameters() { // NOPMD (assert is placed in separate method)
 		final List<String> modifiers = Arrays.asList("public", "static", "final");
 		final String returnType = "ReturnType";
 		final String name = "methodName";
@@ -113,7 +113,7 @@ public class JavaOperationSignatureExtractorTest {
 	 * {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
-	public void testExtractFullQualifiedReturnType() {// NOPMD (assert is placed in separate method)
+	public void testExtractFullQualifiedReturnType() { // NOPMD (assert is placed in separate method)
 		final List<String> modifiers = Arrays.asList("public");
 		final String returnType = "org.organi.sation.SimpleClass";
 		final String name = "methodName";
@@ -127,7 +127,7 @@ public class JavaOperationSignatureExtractorTest {
 	 * {@link kieker.analysisteetime.signature.JavaOperationSignatureExtractor#extract(kieker.analysisteetime.model.analysismodel.type.OperationType)}.
 	 */
 	@Test
-	public void testExtractNestedFullQualifiedReturnType() {// NOPMD (assert is placed in separate method)
+	public void testExtractNestedFullQualifiedReturnType() { // NOPMD (assert is placed in separate method)
 		final List<String> modifiers = Arrays.asList("public");
 		final String returnType = "org.organi.sation.OuterClass$InnerClass";
 		final String name = "methodName";

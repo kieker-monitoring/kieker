@@ -39,9 +39,9 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
  */
 public class ArchitectureModelAssemblerTest {
 
-	private final static String EXAMPLE_OPERATION_SIGNATURE_1 = "public void doSomething()";
-	private final static String EXAMPLE_OPERATION_SIGNATURE_2 = "private void doSomethingDifferent()";
-	private final static String EXAMPLE_OPERATION_SIGNATURE_3 = "public String getSomeString()";
+	private static final String EXAMPLE_OPERATION_SIGNATURE_1 = "public void doSomething()";
+	private static final String EXAMPLE_OPERATION_SIGNATURE_2 = "private void doSomethingDifferent()";
+	private static final String EXAMPLE_OPERATION_SIGNATURE_3 = "public String getSomeString()";
 
 	private static final String EXAMPLE_CLASS_SIGNATURE_1 = "org.package.FirstClass";
 	private static final String EXAMPLE_CLASS_SIGNATURE_2 = "org.package.SecondClass";
