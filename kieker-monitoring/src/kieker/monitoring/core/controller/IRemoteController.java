@@ -17,18 +17,18 @@
 package kieker.monitoring.core.controller;
 
 /**
- * This controller publishes all interface methods of IMonitoringController as a MBean.
- * 
+ * This controller publishes the interface methods of IMonitoringController for remote access.
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.4
  */
-public interface IJMXController {
+public interface IRemoteController {
 
 	/**
-	 * @return the JMX domain used
-	 * 
+	 * @return the domain used by the controller
+	 *
 	 * @since 1.4
 	 */
-	public String getJMXDomain();
+	public String getControllerDomain();
 }
