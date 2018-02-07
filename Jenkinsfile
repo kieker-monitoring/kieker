@@ -3,7 +3,13 @@
 node('kieker-slave-docker') {
   try {    
     stage ('Checkout') {
-        checkout scm
+    	echo "branch name: ${env.BRANCH_NAME}"
+    	echo "target branch: ${env.CHANGE_TARGET}"
+    	echo "is PR: ${isPRMergeBuild()}"
+
+		timeout(time: 2, unit: 'MINUTES') {	// typically finished in 36 sec
+        	checkout scm
+        }
     }
 
     stage ('1-compile logs') {
@@ -43,21 +49,28 @@ node('kieker-slave-docker') {
 
     stage ('push-to-stable') {
         if (env.BRANCH_NAME == "master") {
-            sh 'echo "We are in master branch."'
+	        sh 'echo "We are in master branch."'
 
-	    sh 'echo "Pushing to stable branch."'
-            sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
-
-	    sh 'echo "Uploading snapshot archives to oss.sonatype.org."'
-            withCredentials([usernamePassword(credentialsId: 'artifactupload', usernameVariable: 'kiekerMavenUser', passwordVariable: 'kiekerMavenPassword')]) {
-                sh 'docker run --rm -u `id -u` -e kiekerMavenUser=$kiekerMavenUser -e kiekerMavenPassword=$kiekerMavenPassword -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7-small /bin/bash -c "cd /opt/kieker; ./gradlew uploadArchives"'
-            }
-        } else {
-            sh 'echo "We are not in  master - skipping."'
-        }
-    }
+		    sh 'echo "Pushing to stable branch."'
+	            sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+	
+		    sh 'echo "Uploading snapshot archives to oss.sonatype.org."'
+	            withCredentials([usernamePassword(credentialsId: 'artifactupload', usernameVariable: 'kiekerMavenUser', passwordVariable: 'kiekerMavenPassword')]) {
+	                sh 'docker run --rm -u `id -u` -e kiekerMavenUser=$kiekerMavenUser -e kiekerMavenPassword=$kiekerMavenPassword -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7-small /bin/bash -c "cd /opt/kieker; ./gradlew uploadArchives"'
+	            }
+	        } else {
+	            sh 'echo "We are not in  master - skipping."'
+	        }
+		}
   }
   finally {
     deleteDir()
   }
+}
+
+// pull request merge builds look like "PR-XXX" where XXX is the pull request number.
+def isPRMergeBuild() {
+    //return (env.BRANCH_NAME ==~ /^PR-\d+$/)
+    //env.CHANGE_ID	// represents the pull request number if not null
+    return env.BRANCH_NAME.startsWith('PR-')
 }
