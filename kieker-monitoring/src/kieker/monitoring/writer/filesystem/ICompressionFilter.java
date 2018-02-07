@@ -43,6 +43,15 @@ public interface ICompressionFilter {
 	 *
 	 * @since 1.14
 	 */
-	OutputStream chain(OutputStream outputStream, Path fileName) throws IOException;
+	OutputStream chainOutputStream(OutputStream outputStream, Path fileName) throws IOException;
+
+	/**
+	 * Return the extension with leading dot.
+	 *
+	 * @return return the extension
+	 * 
+	 * @since 1.14
+	 */
+	String getExtension();
 
 }

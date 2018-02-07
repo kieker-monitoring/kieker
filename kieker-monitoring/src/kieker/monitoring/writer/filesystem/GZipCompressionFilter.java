@@ -20,6 +20,8 @@ import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.zip.GZIPOutputStream;
 
+import kieker.common.util.filesystem.FSUtil;
+
 /**
  * Zip compression filter for the writer pool.
  *
@@ -34,8 +36,13 @@ public class GZipCompressionFilter implements ICompressionFilter {
 	}
 
 	@Override
-	public OutputStream chain(final OutputStream outputStream, final Path fileName) throws IOException {
+	public OutputStream chainOutputStream(final OutputStream outputStream, final Path fileName) throws IOException {
 		return new GZIPOutputStream(outputStream);
+	}
+
+	@Override
+	public String getExtension() {
+		return FSUtil.GZIP_FILE_EXTENSION;
 	}
 
 }

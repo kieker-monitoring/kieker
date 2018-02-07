@@ -23,6 +23,8 @@ import org.tukaani.xz.FilterOptions;
 import org.tukaani.xz.LZMA2Options;
 import org.tukaani.xz.XZOutputStream;
 
+import kieker.common.util.filesystem.FSUtil;
+
 /**
  * XZ compression filter for the writer pool.
  *
@@ -38,11 +40,14 @@ public class XZCompressionFilter implements ICompressionFilter {
 	}
 
 	@Override
-	public OutputStream chain(final OutputStream outputStream, final Path fileName) throws IOException {
+	public OutputStream chainOutputStream(final OutputStream outputStream, final Path fileName) throws IOException {
 		final FilterOptions filterOptions = new LZMA2Options(LZMA2Options.PRESET_MAX);
-		final XZOutputStream compressedXZOutputStream = new XZOutputStream(outputStream, filterOptions);
+		return new XZOutputStream(outputStream, filterOptions);
+	}
 
-		return compressedXZOutputStream;
+	@Override
+	public String getExtension() {
+		return FSUtil.XZ_FILE_EXTENSION;
 	}
 
 }

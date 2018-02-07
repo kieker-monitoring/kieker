@@ -40,7 +40,7 @@ class BinaryFileWriterPool extends WriterPool {
 	// private int currentAmountOfFiles;
 	private final long maxBytesPerFile;
 
-	private final ECompression compressionMethod;
+	private final ICompressionFilter compressionFilter;
 	private final String fileExtensionWithDot;
 	private final int maxAmountOfFiles;
 
@@ -56,25 +56,25 @@ class BinaryFileWriterPool extends WriterPool {
 	 *            path where all files go
 	 * @param maxEntriesPerFile
 	 *            max entries per file
-	 * @param compressionMethod
+	 * @param compressionFilter
 	 *            compression method
 	 * @param maxAmountOfFiles
 	 *            upper limit for the number of files
 	 * @param maxMegaBytesPerFile
 	 *            upper limit for the file size
 	 */
-	public BinaryFileWriterPool(final Log writerLog, final Path folder, final int maxEntriesPerFile, final ECompression compressionMethod,
+	public BinaryFileWriterPool(final Log writerLog, final Path folder, final int maxEntriesPerFile, final ICompressionFilter compressionFilter,
 			final int maxAmountOfFiles,
 			final int maxMegaBytesPerFile) {
 		super(writerLog, folder);
 		this.maxEntriesPerFile = maxEntriesPerFile;
 		this.numEntriesInCurrentFile = maxEntriesPerFile; // triggers file creation
-		this.compressionMethod = compressionMethod;
+		this.compressionFilter = compressionFilter;
 		this.maxAmountOfFiles = maxAmountOfFiles;
 		this.maxBytesPerFile = maxMegaBytesPerFile * 1024L * 1024L; // conversion from MB to Bytes
 
 		this.currentChannel = new PooledFileChannel(Channels.newChannel(new ByteArrayOutputStream())); // NullObject design pattern
-		this.fileExtensionWithDot = (this.compressionMethod == ECompression.NONE) ? FSUtil.BINARY_FILE_EXTENSION : this.compressionMethod.getExtension(); // NOCS
+		this.fileExtensionWithDot = (this.compressionFilter instanceof NoneCompressionFilter) ? FSUtil.BINARY_FILE_EXTENSION : this.compressionFilter.getExtension(); // NOCS
 	}
 
 	public PooledFileChannel getFileWriter(final ByteBuffer buffer) {
@@ -108,7 +108,7 @@ class BinaryFileWriterPool extends WriterPool {
 			OutputStream outputStream = Files.newOutputStream(newFile, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
 			// stream is not buffered, since the byte buffer itself is the buffer
 
-			outputStream = this.compressionMethod.chainOutputStream(outputStream, newFile);
+			outputStream = this.compressionFilter.chainOutputStream(outputStream, newFile);
 
 			this.currentChannel = new PooledFileChannel(Channels.newChannel(outputStream));
 		} catch (final IOException e) {

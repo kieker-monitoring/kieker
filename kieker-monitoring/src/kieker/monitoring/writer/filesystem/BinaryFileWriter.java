@@ -30,6 +30,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.DefaultValueSerializer;
 import kieker.common.util.filesystem.FileExtensionFilter;
+import kieker.monitoring.core.controller.ControllerFactory;
 import kieker.monitoring.core.controller.ReceiveUnfilteredConfiguration;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
@@ -58,7 +59,7 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 	/** The name of the configuration key for the charset name of the mapping file */
 	public static final String CONFIG_CHARSET_NAME = PREFIX + "charsetName";
 	/** The name of the configuration key to select a compression for the record log files */
-	public static final String CONFIG_COMPRESSION_METHOD = PREFIX + "compression";
+	public static final String CONFIG_COMPRESSION_FILTER = PREFIX + "compression";
 	/** The name of the configuration key determining the buffer size of the output file stream */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize";
 	/** The name of the configuration key determining to always flush the output file stream after writing each record */
@@ -109,13 +110,17 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME, "UTF-8");
 		// TODO should we check for buffers too small for a single record?
 		final int bufferSize = this.configuration.getIntProperty(CONFIG_BUFFERSIZE);
-		final ECompression compressionMethod = ECompression.findCompressionMethod(configuration.getStringProperty(CONFIG_COMPRESSION_METHOD));
+
+		final String compressionFilterClassName = configuration.getStringProperty(CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
+		final ICompressionFilter compressionFilter = ControllerFactory.getInstance(configuration).create(ICompressionFilter.class,
+				compressionFilterClassName);
+
 		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH, false);
 		this.flushMapfile = configuration.getBooleanProperty(CONFIG_FLUSH_MAPFILE, true);
 
 		this.buffer = ByteBuffer.allocateDirect(bufferSize);
 		this.mappingFileWriter = new MappingFileWriter(this.logFolder, charsetName);
-		this.fileWriterPool = new BinaryFileWriterPool(LOG, this.logFolder, maxEntriesPerFile, compressionMethod, maxAmountOfFiles, maxMegaBytesPerFile);
+		this.fileWriterPool = new BinaryFileWriterPool(LOG, this.logFolder, maxEntriesPerFile, compressionFilter, maxAmountOfFiles, maxMegaBytesPerFile);
 
 		this.writerRegistry = new WriterRegistry(this);
 		this.registerStringsAdapter = new RegisterAdapter<>(this.writerRegistry);

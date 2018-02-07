@@ -66,7 +66,7 @@ public class BinaryFileWriterTest {
 	public void shouldCreateLogFolder() {
 		// test preparation
 		this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXENTRIESINFILE, "1");
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_COMPRESSION_METHOD, ECompression.NONE.getMethodName());
+		this.configuration.setProperty(BinaryFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 
 		// test execution
 		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
@@ -79,7 +79,7 @@ public class BinaryFileWriterTest {
 	public void shouldCreateMappingAndRecordFiles() {
 		// test preparation
 		this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXENTRIESINFILE, "1");
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_COMPRESSION_METHOD, ECompression.NONE.getMethodName());
+		this.configuration.setProperty(BinaryFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
 
 		// test execution
@@ -101,7 +101,7 @@ public class BinaryFileWriterTest {
 	public void shouldCreateMultipleRecordFiles() {
 		// test preparation
 		this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXENTRIESINFILE, "2");
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_COMPRESSION_METHOD, ECompression.NONE.getMethodName());
+		this.configuration.setProperty(BinaryFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
 
 		// test execution
@@ -124,7 +124,7 @@ public class BinaryFileWriterTest {
 	public void shouldCreateMultipleCompressedRecordFiles() {
 		// test preparation
 		this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXENTRIESINFILE, "2");
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_COMPRESSION_METHOD, ECompression.ZIP.getMethodName());
+		this.configuration.setProperty(BinaryFileWriter.CONFIG_COMPRESSION_FILTER, ZipCompressionFilter.class.getName());
 		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
 
 		// test execution

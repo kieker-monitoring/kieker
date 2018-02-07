@@ -31,7 +31,8 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.writer.filesystem.AsciiFileWriter;
-import kieker.monitoring.writer.filesystem.ECompression;
+import kieker.monitoring.writer.filesystem.NoneCompressionFilter;
+import kieker.monitoring.writer.filesystem.ZipCompressionFilter;
 
 import kieker.test.tools.junit.writeRead.TestAnalysis;
 import kieker.test.tools.junit.writeRead.TestDataRepository;
@@ -59,7 +60,7 @@ public class AsciiWriterReaderTest {
 		// 1. define records to be triggered by the test probe
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestRecords();
 
-		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, ECompression.NONE);
+		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, NoneCompressionFilter.class.getName());
 
 		// 8. compare actual and expected records
 		Assert.assertThat(analyzedRecords, CoreMatchers.is(CoreMatchers.equalTo(records)));
@@ -70,21 +71,21 @@ public class AsciiWriterReaderTest {
 		// 1. define records to be triggered by the test probe
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestRecords();
 
-		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, ECompression.ZIP);
+		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, ZipCompressionFilter.class.getName());
 
 		// 8. compare actual and expected records
 		Assert.assertThat(analyzedRecords, CoreMatchers.is(CoreMatchers.equalTo(records)));
 	}
 
 	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
-	private List<IMonitoringRecord> testAsciiCommunication(final List<IMonitoringRecord> records, final ECompression compressionMethod) throws Exception {
+	private List<IMonitoringRecord> testAsciiCommunication(final List<IMonitoringRecord> records, final String compressionMethod) throws Exception {
 		// 2. define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
 		config.setProperty(WriterController.RECORD_QUEUE_SIZE, "128");
 		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
 		config.setProperty(AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
-		config.setProperty(AsciiFileWriter.CONFIG_COMPRESSION_METHOD, compressionMethod.getMethodName());
+		config.setProperty(AsciiFileWriter.CONFIG_COMPRESSION_FILTER, compressionMethod);
 		final MonitoringController monitoringController = MonitoringController.createInstance(config);
 
 		// 3. define analysis config
@@ -93,7 +94,7 @@ public class AsciiWriterReaderTest {
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
 		readerConfiguration.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
-		readerConfiguration.setProperty(AsciiLogReader.CONFIG_SHOULD_DECOMPRESS, (compressionMethod == ECompression.NONE) ? false : true); // NOCS
+		readerConfiguration.setProperty(AsciiLogReader.CONFIG_SHOULD_DECOMPRESS, !compressionMethod.equals(NoneCompressionFilter.class.getName())); // NOCS
 		final TestAnalysis analysis = new TestAnalysis(readerConfiguration, AsciiLogReader.class);
 
 		// 4. trigger records

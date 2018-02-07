@@ -31,7 +31,9 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.writer.filesystem.BinaryFileWriter;
-import kieker.monitoring.writer.filesystem.ECompression;
+import kieker.monitoring.writer.filesystem.ICompressionFilter;
+import kieker.monitoring.writer.filesystem.NoneCompressionFilter;
+import kieker.monitoring.writer.filesystem.ZipCompressionFilter;
 
 import kieker.test.tools.junit.writeRead.TestAnalysis;
 import kieker.test.tools.junit.writeRead.TestDataRepository;
@@ -59,7 +61,7 @@ public class BinaryWriterReaderTest {
 		// 1. define records to be triggered by the test probe
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestRecords();
 
-		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, ECompression.NONE);
+		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, new NoneCompressionFilter());
 
 		// 8. compare actual and expected records
 		Assert.assertThat(analyzedRecords, CoreMatchers.is(CoreMatchers.equalTo(records)));
@@ -70,21 +72,22 @@ public class BinaryWriterReaderTest {
 		// 1. define records to be triggered by the test probe
 		final List<IMonitoringRecord> records = TEST_DATA_REPOSITORY.newTestRecords();
 
-		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, ECompression.ZIP);
+		final List<IMonitoringRecord> analyzedRecords = this.testAsciiCommunication(records, new ZipCompressionFilter());
 
 		// 8. compare actual and expected records
 		Assert.assertThat(analyzedRecords, CoreMatchers.is(CoreMatchers.equalTo(records)));
 	}
 
 	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
-	private List<IMonitoringRecord> testAsciiCommunication(final List<IMonitoringRecord> records, final ECompression compressionMethod) throws Exception {
+	private List<IMonitoringRecord> testAsciiCommunication(final List<IMonitoringRecord> records, final ICompressionFilter compressionFilter) throws Exception {
 		// 2. define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
+
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, BinaryFileWriter.class.getName());
 		config.setProperty(WriterController.RECORD_QUEUE_SIZE, "128");
 		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
 		config.setProperty(BinaryFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
-		config.setProperty(BinaryFileWriter.CONFIG_COMPRESSION_METHOD, compressionMethod.getMethodName());
+		config.setProperty(BinaryFileWriter.CONFIG_COMPRESSION_FILTER, compressionFilter.getClass().getName());
 		final MonitoringController monitoringController = MonitoringController.createInstance(config);
 
 		// 3. define analysis config
@@ -93,7 +96,7 @@ public class BinaryWriterReaderTest {
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(BinaryLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
 		readerConfiguration.setProperty(BinaryLogReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
-		readerConfiguration.setProperty(BinaryLogReader.CONFIG_SHOULD_DECOMPRESS, (compressionMethod == ECompression.NONE) ? false : true); // NOCS
+		readerConfiguration.setProperty(BinaryLogReader.CONFIG_SHOULD_DECOMPRESS, !(compressionFilter instanceof NoneCompressionFilter)); // NOCS
 		final TestAnalysis analysis = new TestAnalysis(readerConfiguration, BinaryLogReader.class);
 
 		// 4. trigger records

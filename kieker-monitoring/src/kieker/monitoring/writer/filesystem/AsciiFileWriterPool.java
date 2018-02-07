@@ -48,7 +48,7 @@ class AsciiFileWriterPool extends WriterPool {
 	// private final int maxAmountOfFiles;
 	// private int currentAmountOfFiles;
 
-	private final ECompression compressionMethod;
+	private final ICompressionFilter compressionFilter;
 	private final String fileExtensionWithDot;
 	private final int maxAmountOfFiles;
 	private final long maxBytesPerFile;
@@ -75,7 +75,8 @@ class AsciiFileWriterPool extends WriterPool {
 	 *            upper limit for the file size
 	 */
 	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
-	public AsciiFileWriterPool(final Log writerLog, final Path folder, final String charsetName, final int maxEntriesInFile, final ECompression compressionMethod,
+	public AsciiFileWriterPool(final Log writerLog, final Path folder, final String charsetName, final int maxEntriesInFile,
+			final ICompressionFilter compressionFilter,
 			final int maxAmountOfFiles, final int maxMegaBytesPerFile) {
 		super(writerLog, folder);
 		this.maxAmountOfFiles = maxAmountOfFiles;
@@ -83,12 +84,12 @@ class AsciiFileWriterPool extends WriterPool {
 		this.charset = Charset.forName(charsetName);
 		this.maxEntriesInFile = maxEntriesInFile;
 		this.numEntriesInCurrentFile = maxEntriesInFile; // triggers file creation
-		this.compressionMethod = compressionMethod;
+		this.compressionFilter = compressionFilter;
 
 		// this.currentFileWriter = Channels.newChannel(new ByteArrayOutputStream()); // NullObject design pattern
 		// final CharBuffer charBuffer = this.buffer.asCharBuffer();
 		this.currentFileWriter = new PrintWriter(new ByteArrayOutputStream()); // NullObject design pattern
-		this.fileExtensionWithDot = (this.compressionMethod == ECompression.NONE) ? FSUtil.NORMAL_FILE_EXTENSION : this.compressionMethod.getExtension(); // NOCS
+		this.fileExtensionWithDot = (this.compressionFilter instanceof NoneCompressionFilter) ? FSUtil.NORMAL_FILE_EXTENSION : this.compressionFilter.getExtension(); // NOCS
 	}
 
 	public PrintWriter getFileWriter() {
@@ -123,7 +124,7 @@ class AsciiFileWriterPool extends WriterPool {
 			// use CREATE_NEW to fail if the file already exists
 			OutputStream outputStream = Files.newOutputStream(newFile, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
 
-			outputStream = this.compressionMethod.chainOutputStream(outputStream, newFile);
+			outputStream = this.compressionFilter.chainOutputStream(outputStream, newFile);
 
 			// this.currentFileWriter = Channels.newChannel(outputStream);
 

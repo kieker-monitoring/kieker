@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Path;
 
+import kieker.common.util.filesystem.FSUtil;
+
 /**
  * This class does not provide any compressing filter. It exists only to minimize implementation complexity.
  *
@@ -33,8 +35,14 @@ public class NoneCompressionFilter implements ICompressionFilter {
 	}
 
 	@Override
-	public OutputStream chain(final OutputStream outputStream, final Path fileName) throws IOException {
+	public OutputStream chainOutputStream(final OutputStream outputStream, final Path fileName) throws IOException {
 		return outputStream;
+
+	}
+
+	@Override
+	public String getExtension() {
+		return FSUtil.BINARY_FILE_EXTENSION;
 	}
 
 }
