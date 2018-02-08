@@ -144,6 +144,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 				break;
 			default:
 				Assert.fail("Record with unexpected eoi" + opRec);
+				break;
 			}
 		}
 	}

@@ -27,9 +27,9 @@ import kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseOutInterceptor;
 
 /**
  * Tests the CXF interceptors with a previously registered Session ID.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 public class TestCXFClientServerInterceptorsSessionRegisteredBefore extends AbstractTestCXFClientServerInterceptors {
@@ -88,6 +88,7 @@ public class TestCXFClientServerInterceptorsSessionRegisteredBefore extends Abst
 				break;
 			default:
 				Assert.fail("Unexpected record" + opRec);
+				break;
 			}
 		}
 	}

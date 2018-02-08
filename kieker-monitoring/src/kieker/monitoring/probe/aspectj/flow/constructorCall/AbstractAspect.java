@@ -33,11 +33,11 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 @Aspect
-public abstract class AbstractAspect extends AbstractAspectJProbe {
+public abstract class AbstractAspect extends AbstractAspectJProbe { // NOPMD
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
@@ -51,16 +51,16 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	/**
 	 * This is an advice used around calls from members to constructors.
-	 * 
+	 *
 	 * @param thisObject
 	 *            The caller object.
 	 * @param thisJoinPoint
 	 *            The joint point of the callee.
 	 * @param thisEnclosingJoinPoint
 	 *            The joint point of the caller.
-	 * 
+	 *
 	 * @return The result of {@code proceed method} of the given joint point.
-	 * 
+	 *
 	 * @throws Throwable
 	 */
 	@Around("monitoredConstructor() && this(thisObject) && notWithinKieker()")
@@ -104,14 +104,14 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	/**
 	 * This is an advice used around calls from static elements to constructors.
-	 * 
+	 *
 	 * @param thisJoinPoint
 	 *            The joint point of the callee.
 	 * @param thisEnclosingJoinPoint
 	 *            The joint point of the caller.
-	 * 
+	 *
 	 * @return The result of {@code proceed method} of the given joint point.
-	 * 
+	 *
 	 * @throws Throwable
 	 */
 	@Around("monitoredConstructor() && !this(java.lang.Object) && notWithinKieker()")
