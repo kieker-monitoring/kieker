@@ -31,7 +31,7 @@ package kieker.analysisteetime.util.graph.util.dot.attributes;
  */
 public enum DotSubgraphAttribute {
 
-	;
+	; // NOCS No implemented attributes so far
 
 	private final String attribute;
 
