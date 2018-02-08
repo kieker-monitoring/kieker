@@ -64,7 +64,7 @@ public class AsciiFileWriterTest {
 	public void shouldCreateLogFolder() {
 		// test preparation
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "1");
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, "false");
+		this.configuration.setProperty(AsciiFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 
 		// test execution
 		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
@@ -77,7 +77,7 @@ public class AsciiFileWriterTest {
 	public void shouldCreateMappingAndRecordFiles() {
 		// test preparation
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "1");
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, "false");
+		this.configuration.setProperty(AsciiFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 
 		// test execution
 		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
@@ -103,7 +103,7 @@ public class AsciiFileWriterTest {
 	public void shouldCreateMultipleRecordFiles() {
 		// test preparation
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, "false");
+		this.configuration.setProperty(AsciiFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 
 		// test execution
 		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
@@ -130,7 +130,7 @@ public class AsciiFileWriterTest {
 	public void shouldCreateMultipleCompressedRecordFiles() {
 		// test preparation
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, "true");
+		this.configuration.setProperty(AsciiFileWriter.CONFIG_COMPRESSION_FILTER, ZipCompressionFilter.class.getName());
 
 		// test execution
 		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);

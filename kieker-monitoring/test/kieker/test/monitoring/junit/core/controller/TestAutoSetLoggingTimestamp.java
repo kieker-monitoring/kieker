@@ -77,8 +77,6 @@ public class TestAutoSetLoggingTimestamp extends AbstractKiekerTest { // NOCS //
 		Assert.assertEquals("Test invalid: exactly one record should have been received", 1, receivedRecords.size());
 
 		// Note, that rSent and rReceived are actually the same, but since this is implementation knowledge, we'll fetch the logged record from the list
-		final EmptyRecord rReceived = (EmptyRecord) receivedRecords.get(0);
-
-		return rReceived;
+		return (EmptyRecord) receivedRecords.get(0);
 	}
 }
