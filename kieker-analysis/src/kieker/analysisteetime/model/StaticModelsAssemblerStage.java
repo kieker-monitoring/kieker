@@ -29,6 +29,10 @@ import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 
+/**
+ * @author Sören Henning
+ *
+ */
 public class StaticModelsAssemblerStage extends CompositeStage {
 
 	private final TypeModel typeModel;

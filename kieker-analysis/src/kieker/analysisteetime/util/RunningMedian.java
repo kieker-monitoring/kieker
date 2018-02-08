@@ -20,9 +20,12 @@ import java.util.PriorityQueue;
 import java.util.function.BiFunction;
 
 /**
+ * This class represents a median that changes in the course of time. Whenever a new element is added the median changes.
+ *
  * @author Sören Henning
  *
- * @since 1.13
+ * @param <T>
+ *            Type of elements the median should be calculated for
  */
 public class RunningMedian<T extends Comparable<T>> {
 

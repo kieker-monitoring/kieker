@@ -27,7 +27,8 @@ import kieker.analysisteetime.util.graph.traversal.VertexVisitor;
 /**
  * @author Sören Henning
  *
- * @since 1.13
+ * @param <O>
+ *            Output format of the transformation
  */
 public abstract class AbstractTransformer<O> implements VertexVisitor, EdgeVisitor {
 

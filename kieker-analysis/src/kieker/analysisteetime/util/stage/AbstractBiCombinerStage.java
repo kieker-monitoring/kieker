@@ -27,7 +27,10 @@ import teetime.framework.InputPort;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @param <I>
+ *            Type of elements at first input port
+ * @param <J>
+ *            Type of elements at second input port
  */
 public abstract class AbstractBiCombinerStage<I, J> extends AbstractStage {
 

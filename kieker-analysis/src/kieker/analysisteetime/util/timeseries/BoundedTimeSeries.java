@@ -20,9 +20,13 @@ import java.time.Duration;
 import java.time.Instant;
 
 /**
- *
+ * A {@link TimeSeries} with a maximum time span. If something is added to this time series and the time span between earliest and latest point in this time series
+ * is larger than the allowed time span, the earliest points are discarded.
  *
  * @author Sören Henning
+ *
+ * @param <T>
+ *            Type of the elements in this time series.
  *
  */
 public class BoundedTimeSeries<T extends TimeSeriesPoint> extends TimeSeries<T> {

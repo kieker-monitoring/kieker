@@ -54,7 +54,7 @@ public class HotspotDetectionConfiguration extends Configuration {
 
 		// Create the stages
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
-		// TODO consider if KiekerMetadataRecord has to be processed
+		// BETTER consider if KiekerMetadataRecord has to be processed
 		// final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final InstanceOfFilter<IMonitoringRecord, IFlowRecord> instanceOfFilter = new InstanceOfFilter<>(IFlowRecord.class);
 		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(typeModel, new JavaComponentSignatureExtractor(),

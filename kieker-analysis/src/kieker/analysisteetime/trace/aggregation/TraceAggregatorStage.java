@@ -34,8 +34,8 @@ public class TraceAggregatorStage extends CompositeStage implements ITransformat
 	private final OutputPort<Trace> outputPort;
 
 	public TraceAggregatorStage() {
-		final AggregatedTraceCreatorStage aggregatedTraceCreator = new AggregatedTraceCreatorStage(true); // TODO temp
-		// TODO Statistics stages here
+		final AggregatedTraceCreatorStage aggregatedTraceCreator = new AggregatedTraceCreatorStage(true);
+		// BETTER Statistics stages here
 		final AggregatedTraceUnwrapperStage aggregatedTraceUnwrapper = new AggregatedTraceUnwrapperStage();
 
 		this.inputPort = aggregatedTraceCreator.getInputPort();

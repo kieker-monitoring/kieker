@@ -27,7 +27,8 @@ import kieker.analysisteetime.statistics.Statistic;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @param <T>
+ *            Type of elements
  *
  */
 public class MinCalculator<T> implements Calculator<T> {

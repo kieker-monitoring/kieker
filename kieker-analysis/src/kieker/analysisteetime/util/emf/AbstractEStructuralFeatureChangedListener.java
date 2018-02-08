@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 /**
  * @author Sören Henning
  *
- * @since 1.13
+ * @param <T>
  */
 public abstract class AbstractEStructuralFeatureChangedListener<T> extends AdapterImpl {
 

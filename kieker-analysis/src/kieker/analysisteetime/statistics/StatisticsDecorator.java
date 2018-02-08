@@ -24,7 +24,8 @@ import kieker.analysisteetime.statistics.calculating.Calculator;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @param <T>
+ *            Type of elements
  *
  */
 public class StatisticsDecorator<T> {

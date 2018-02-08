@@ -24,6 +24,14 @@ import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 import teetime.stage.basic.ITransformation;
 
+/**
+ * Stage that queues all incoming elements and forwards them when receiving {@link Trigger}.
+ *
+ * @author Sören Henning
+ *
+ * @param <T>
+ *            Type of elements
+ */
 public class ForwardOnTriggerStage<T> extends AbstractStage implements ITransformation<T, T> {
 
 	private final SendStrategy sendStrategy;

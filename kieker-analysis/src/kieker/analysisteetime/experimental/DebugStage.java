@@ -22,6 +22,9 @@ import teetime.stage.basic.AbstractFilter;
  * A simple stage that can be used to place breakpoints to debugging.
  *
  * @author Sören Henning
+ *
+ * @param <T>
+ *            Type of elements to process
  */
 public class DebugStage<T> extends AbstractFilter<T> {
 

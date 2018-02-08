@@ -29,7 +29,7 @@ import kieker.analysisteetime.util.graph.impl.GraphImpl;
  */
 public class TraceToGraphTransformer {
 
-	// TODO integrate GraphTransformerVisitor in this?
+	// BETTER integrate GraphTransformerVisitor in this?
 
 	private final TraceTraverser traceTraverser = new TraceTraverser();
 

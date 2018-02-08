@@ -16,12 +16,19 @@
 
 package kieker.analysisteetime.util;
 
+import java.util.Map;
+
 import com.google.common.base.Objects;
 
 /**
+ * Class representing a key (e.g., for a {@link Map}) that consists of two elements.
+ *
  * @author Sören Henning
  *
- * @since 1.13
+ * @param <F>
+ *            First element's type
+ * @param <S>
+ *            Second elements type
  */
 public final class ComposedKey<F, S> {
 

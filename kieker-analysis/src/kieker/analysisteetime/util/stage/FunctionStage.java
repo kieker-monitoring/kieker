@@ -25,7 +25,10 @@ import teetime.stage.basic.AbstractTransformation;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @param <I>
+ *            Type of input elements
+ * @param <O>
+ *            Type of output elements
  */
 public class FunctionStage<I, O> extends AbstractTransformation<I, O> {
 

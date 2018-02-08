@@ -22,7 +22,8 @@ import kieker.analysisteetime.statistics.Statistic;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @param <I>
+ *            Type of elements
  *
  */
 @FunctionalInterface

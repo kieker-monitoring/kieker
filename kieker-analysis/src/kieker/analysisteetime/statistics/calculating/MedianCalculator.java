@@ -29,7 +29,8 @@ import kieker.analysisteetime.util.RunningMedian;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @param <T>
+ *            Type of elements
  *
  */
 public class MedianCalculator<T> implements Calculator<T> {

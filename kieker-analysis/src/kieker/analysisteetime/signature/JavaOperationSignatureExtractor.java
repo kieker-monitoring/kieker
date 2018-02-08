@@ -35,7 +35,7 @@ public class JavaOperationSignatureExtractor implements OperationSignatureExtrac
 
 	@Override
 	public void extract(final OperationType operationType) {
-		// TODO migrate directly
+		// BETTER Implement new and do not rely on the class in kieker.common
 		final ClassOperationSignaturePair classSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(operationType.getSignature());
 		final Signature signature = classSignaturePair.getSignature();
 

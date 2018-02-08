@@ -32,7 +32,8 @@ import javax.xml.bind.Marshaller;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @param <T>
+ *            Type of elements
  */
 public class JAXBMarshalStage<T> extends AbstractBiCombinerStage<JAXBElement<T>, OutputStream> {
 

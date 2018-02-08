@@ -46,13 +46,13 @@ public class DotGraphWriter {
 		this.start(DotGraphType.DIRECTED, name);
 	}
 
-	public void start(final DotGraphType graphType, final String name) throws IOException {
+	public void start(final DotGraphType newGraphType, final String name) throws IOException {
 		this.checkState(DotWriterState.CREATED);
 
-		this.graphType = graphType;
+		this.graphType = newGraphType;
 
-		String openToken;
-		if (graphType == DotGraphType.UNDIRECTED) {
+		final String openToken;
+		if (this.graphType == DotGraphType.UNDIRECTED) {
 			openToken = DotGraph.UNDIRECTED_START_TOKEN;
 		} else {
 			openToken = DotGraph.DIRECTED_START_TOKEN;

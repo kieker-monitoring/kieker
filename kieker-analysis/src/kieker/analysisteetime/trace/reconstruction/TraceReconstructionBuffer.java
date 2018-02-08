@@ -95,7 +95,7 @@ public class TraceReconstructionBuffer {
 
 		this.current = this.current.getParent();
 
-		// TODO
+		// BETTER handle additional log checks
 		/*
 		 * if (TraceReconstructor.this.activateAdditionalLogChecks) {
 		 * if (!beforeEvent.getOperationSignature().equals(record.getOperationSignature())) {

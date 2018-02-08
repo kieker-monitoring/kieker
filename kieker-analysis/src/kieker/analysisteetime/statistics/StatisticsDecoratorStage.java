@@ -26,7 +26,8 @@ import teetime.stage.basic.AbstractFilter;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @param <T>
+ *            Type of elements
  *
  */
 public class StatisticsDecoratorStage<T> extends AbstractFilter<T> {

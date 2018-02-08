@@ -33,7 +33,8 @@ import teetime.framework.OutputPort;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @param <T>
+ *            Type of elements
  *
  */
 public class FullStatisticsDecoratorStage<T> extends CompositeStage {

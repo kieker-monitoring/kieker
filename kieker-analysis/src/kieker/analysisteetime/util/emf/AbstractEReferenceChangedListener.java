@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.EReference;
 /**
  * @author Sören Henning
  *
- * @since 1.13
+ * @param <T>
  */
 public abstract class AbstractEReferenceChangedListener<T> extends AdapterImpl {
 

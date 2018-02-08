@@ -32,17 +32,19 @@ import com.google.common.collect.HashBiMap;
 /**
  * @author Sören Henning
  *
- * @since 1.13
+ * @param <K>
+ *
+ * @param <V>
  */
-public class EReferenceIndex<K, V extends EObject> {
+public final class EReferenceIndex<K, V extends EObject> {
 
-	protected final BiMap<K, V> index;
+	protected final BiMap<K, V> index; // NOPMD (default visibility contradicts checkstyle)
 
-	protected final EReference reference;
+	protected final EReference reference; // NOPMD (default visibility contradicts checkstyle)
 
-	protected final Collection<EStructuralFeature> observedReferenceAttributes;
+	protected final Collection<EStructuralFeature> observedReferenceAttributes; // NOPMD (default visibility contradicts checkstyle)
 
-	protected final Function<V, K> keyCreator;
+	protected final Function<V, K> keyCreator; // NOPMD (default visibility contradicts checkstyle)
 
 	private EReferenceIndex(final EObject object, final EReference reference, final Collection<EStructuralFeature> observedReferenceAttributes,
 			final Function<V, K> keyCreator, final Collection<V> values) {
