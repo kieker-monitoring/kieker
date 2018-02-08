@@ -35,9 +35,9 @@ import teetime.framework.OutputPort;
  */
 public class BinaryFile2RecordFilter extends AbstractConsumerStage<File> {
 
-	private final OutputPort<IMonitoringRecord> outputPort = this.createOutputPort();
-
 	private static final int MB = 1024 * 1024;
+
+	private final OutputPort<IMonitoringRecord> outputPort = this.createOutputPort();
 
 	private RecordFromBinaryFileCreator recordFromBinaryFileCreator;
 

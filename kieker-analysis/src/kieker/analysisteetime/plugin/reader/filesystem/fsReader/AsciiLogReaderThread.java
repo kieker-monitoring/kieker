@@ -52,7 +52,7 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 	private static final Log LOG = LogFactory.getLog(AsciiLogReaderThread.class);
 
 	private final Map<Integer, String> stringRegistry = new HashMap<>(); // NOPMD (no synchronization
-																						// needed)
+																			// needed)
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
 	private final boolean ignoreUnknownRecordTypes;
@@ -186,7 +186,7 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 				try {
 					if (recordFields[0].charAt(0) == '$') { // modern record
 						if (recordFields.length < 2) {
-							LOG.error("Illegal record format: " + line);// NOPMD (guard not necessary for error level)
+							LOG.error("Illegal record format: " + line); // NOPMD (guard not necessary for error level)
 							continue; // skip this record
 						}
 						final Integer id = Integer.valueOf(recordFields[0].substring(1));
@@ -194,7 +194,7 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 						if (classname == null) {
 							final String message = String.format("Missing classname mapping for record type id '%s'",
 									id);
-							LOG.error(message);// NOPMD (guard not necessary for error level)
+							LOG.error(message); // NOPMD (guard not necessary for error level)
 							continue; // skip this record
 						}
 						Class<? extends IMonitoringRecord> clazz = null;

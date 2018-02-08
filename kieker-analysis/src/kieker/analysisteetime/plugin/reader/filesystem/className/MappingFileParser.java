@@ -35,10 +35,10 @@ import kieker.common.util.filesystem.FSUtil;
  */
 public class MappingFileParser {
 
+	private static final Map<String, String> FILE_PREFIX_REGISTRY = new HashMap<>(); // NOPMD (no concurrent access intended)
+
 	@SuppressWarnings("PMD.LoggerIsNotStaticFinal")
 	protected Logger logger;
-
-	private static final Map<String, String> FILE_PREFIX_REGISTRY = new HashMap<>(); // NOPMD (no concurrent access intended)
 
 	static {
 		FILE_PREFIX_REGISTRY.put(FSUtil.MAP_FILENAME, FSUtil.FILE_PREFIX);

@@ -34,6 +34,11 @@ import teetime.stage.io.Printer;
 
 public class Dir2RecordsFilterTest {
 
+	@Test
+	public void shouldNotThrowAnyException() {
+		new Execution<>(new TestConfiguration()).executeBlocking();
+	}
+
 	class TestConfiguration extends Configuration {
 
 		public TestConfiguration() {
@@ -66,8 +71,4 @@ public class Dir2RecordsFilterTest {
 
 	}
 
-	@Test
-	public void shouldNotThrowAnyException() {
-		new Execution<>(new TestConfiguration()).executeBlocking();
-	}
 }

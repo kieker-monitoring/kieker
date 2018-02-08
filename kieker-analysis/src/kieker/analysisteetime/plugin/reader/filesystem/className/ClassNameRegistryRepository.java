@@ -34,6 +34,10 @@ public class ClassNameRegistryRepository {
 
 	private final ConcurrentHashMap<String, ClassNameRegistry> classNameRegistryRepository = new ConcurrentHashMap<>();
 
+	public ClassNameRegistryRepository() {
+		// create repository
+	}
+
 	/**
 	 * @since 1.10
 	 */

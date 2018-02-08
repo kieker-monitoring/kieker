@@ -140,7 +140,7 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 				}
 			}
 		} catch (final IOException e) {
-			LOG.error("Error reading " + mappingFile, e);// NOPMD (guard not necessary for error level)
+			LOG.error("Error reading " + mappingFile, e); // NOPMD (guard not necessary for error level)
 		} finally {
 			if (in != null) {
 				try {

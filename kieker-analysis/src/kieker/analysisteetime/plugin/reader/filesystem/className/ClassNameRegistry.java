@@ -27,4 +27,8 @@ public class ClassNameRegistry extends HashMap<Integer, String> {
 
 	private static final long serialVersionUID = -7254550212115937463L;
 
+	public ClassNameRegistry() {
+		// create registry
+	}
+
 }

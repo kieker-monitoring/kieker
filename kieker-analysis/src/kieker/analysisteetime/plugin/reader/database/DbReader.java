@@ -55,6 +55,10 @@ public class DbReader extends AbstractProducerStage<IMonitoringRecord> {
 
 	private volatile boolean running = true;
 
+	public DbReader() {
+		// create reader
+	}
+
 	@Override
 	public void onStarting() throws Exception {
 		try {
