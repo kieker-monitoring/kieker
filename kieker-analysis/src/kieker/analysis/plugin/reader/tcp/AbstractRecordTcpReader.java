@@ -17,7 +17,6 @@ package kieker.analysis.plugin.reader.tcp;
 
 import java.nio.ByteBuffer;
 
-import kieker.analysis.plugin.reader.tcp.util.AbstractTcpReader;
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.logging.Log;
 import kieker.common.record.AbstractMonitoringRecord;
@@ -25,6 +24,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.tcp.AbstractTcpReader;
 import kieker.common.util.registry.ILookup;
 
 /**

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.plugin.reader.tcp.util;
+package kieker.common.record.tcp;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

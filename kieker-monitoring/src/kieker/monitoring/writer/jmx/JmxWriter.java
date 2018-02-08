@@ -58,7 +58,7 @@ public class JmxWriter extends AbstractMonitoringWriter {
 		try {
 			String domain = this.configDomain;
 			if ("".equals(domain)) {
-				domain = MonitoringController.getInstance().getJMXDomain();
+				domain = MonitoringController.getInstance().getControllerDomain();
 			}
 			this.monitoringLogName = new ObjectName(domain, "type", this.configLogname);
 		} catch (final MalformedObjectNameException ex) {
