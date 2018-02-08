@@ -1,13 +1,19 @@
 #!groovy
 
 node('kieker-slave-docker') {
-  try {    
-    stage ('Checkout') {
-    	echo "branch name: ${env.BRANCH_NAME}"
-    	echo "target branch: ${env.CHANGE_TARGET}"
-    	echo "is PR: ${isPRMergeBuild()}"
+  try {
+  	stage('Pull Request Check') {
+    	if ( isPRMergeBuild() ) {
+    		echo "This build is a pull request from branch '${env.BRANCH_NAME}' to branch '${env.CHANGE_TARGET}'."
 
-		timeout(time: 2, unit: 'MINUTES') {	// typically finished in 36 sec
+	    	if ( env.CHANGE_TARGET == 'stable' ) {
+	    		error "Pull requests are not allowed to target to the 'stable' branch."
+	    	}
+    	}
+  	}
+
+    stage ('Checkout') {
+		timeout(time: 3, unit: 'MINUTES') {	// typically finished in 36 sec
         	checkout scm
         }
     }
