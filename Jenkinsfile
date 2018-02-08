@@ -58,18 +58,23 @@ node('kieker-slave-docker') {
 	        sh 'echo "We are in master branch."'
 
 		    sh 'echo "Pushing to stable branch."'
-	            sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+	        sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+        } else {
+            sh 'echo "We are not in master - skipping."'
+	    }
+	}
+
+	stage ('Upload Snapshot Version') {
+		if (env.BRANCH_NAME == "master") {
+			withCredentials([usernamePassword(credentialsId: 'artifactupload', usernameVariable: 'kiekerMavenUser', passwordVariable: 'kiekerMavenPassword')]) {
+            	sh 'docker run --rm -u `id -u` -e kiekerMavenUser=$kiekerMavenUser -e kiekerMavenPassword=$kiekerMavenPassword -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7-small /bin/bash -c "cd /opt/kieker; ./gradlew uploadArchives"'
+            }
+		} else {
+            sh 'echo "We are not in master - skipping."'
+	    }
+	}
 	
-		    sh 'echo "Uploading snapshot archives to oss.sonatype.org."'
-	            withCredentials([usernamePassword(credentialsId: 'artifactupload', usernameVariable: 'kiekerMavenUser', passwordVariable: 'kiekerMavenPassword')]) {
-	                sh 'docker run --rm -u `id -u` -e kiekerMavenUser=$kiekerMavenUser -e kiekerMavenPassword=$kiekerMavenPassword -v ' + env.WORKSPACE + ':/opt/kieker kieker/kieker-build:openjdk7-small /bin/bash -c "cd /opt/kieker; ./gradlew uploadArchives"'
-	            }
-	        } else {
-	            sh 'echo "We are not in  master - skipping."'
-	        }
-		}
-  }
-  finally {
+  } finally {
     deleteDir()
   }
 }
@@ -78,5 +83,6 @@ node('kieker-slave-docker') {
 def isPRMergeBuild() {
     //return (env.BRANCH_NAME ==~ /^PR-\d+$/)
     //env.CHANGE_ID	// represents the pull request number if not null
+    //return env.CHANGE_TARGET != null
     return env.BRANCH_NAME.startsWith('PR-')
 }
