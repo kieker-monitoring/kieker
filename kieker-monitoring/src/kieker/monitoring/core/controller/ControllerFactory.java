@@ -41,7 +41,7 @@ public final class ControllerFactory {
 
 	/**
 	 * Get an instance of the controller factory for the given configuration.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use
 	 * @return A controller factory instance
@@ -51,7 +51,7 @@ public final class ControllerFactory {
 		// factory is implemented
 		return INSTANCE;
 	}
-	
+
 	/**
 	 * This is a helper method trying to find, create and initialize the given class, using its public constructor which accepts a single {@link Configuration}.
 	 *
@@ -89,6 +89,66 @@ public final class ControllerFactory {
 		return createdClass;
 	}
 
+	/**
+	 * This is a helper method trying to find and create the given class, using its public constructor which accepts no parameter.
+	 *
+	 * @param c
+	 *            This class defines the expected result of the method call.
+	 * @param classname
+	 *            The name of the class to be created.
+	 * @param configuration
+	 *            The configuration which will be used to initialize the class in question.
+	 *
+	 * @return A new and initializes class instance if everything went well.
+	 *
+	 * @param <C>
+	 *            The type of the returned class.
+	 */
+	@SuppressWarnings("unchecked")
+	public <C> C create(final Class<C> c, final String className) {
+		C createdClass = null; // NOPMD (null)
+		try {
+			final Class<?> clazz = Class.forName(className);
+			if (c.isAssignableFrom(clazz)) {
+				createdClass = (C) clazz.getConstructor().newInstance();
+			} else {
+				LOG.error("Class '" + className + "' has to implement '" + c.getSimpleName() + "'");
+			}
+		} catch (final ClassNotFoundException e) {
+			LOG.error(c.getSimpleName() + ": Class '" + className + "' not found", e);
+		} catch (final NoSuchMethodException e) {
+			LOG.error(c.getSimpleName() + ": Class '" + className
+					+ "' has to implement a (public) constructor without any parameter", e);
+		} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
+			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
+			LOG.error(c.getSimpleName() + ": Failed to load class for name '" + className + "'", e);
+		}
+		return createdClass;
+	}
+
+	/**
+	 * Instantiate a class with one configuration parameter.
+	 *
+	 * @param clazz
+	 *            the class type
+	 * @param className
+	 *            the class name
+	 * @param configuration
+	 *            kieker configuration
+	 * @return the instantiated class
+	 * @throws InstantiationException
+	 *             when instantiation fails
+	 * @throws IllegalAccessException
+	 *             when the class cannot be accessed
+	 * @throws IllegalArgumentException
+	 *             when there is no zero parameter constructor
+	 * @throws InvocationTargetException
+	 *             when the invocation fails
+	 * @throws NoSuchMethodException
+	 *             when there is no constructor
+	 * @throws SecurityException
+	 *             when the security setup prohibits access
+	 */
 	private <C> C instantiate(final Class<C> clazz, final String className, final Configuration configuration)
 			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 

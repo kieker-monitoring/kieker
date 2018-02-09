@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,33 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.common.record.remotecontrol;
+package kieker.monitoring.writer.filesystem;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Path;
+import java.util.zip.GZIPOutputStream;
 
-import kieker.common.exception.RecordInstantiationException;
-import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.io.IValueDeserializer;
+import kieker.common.util.filesystem.FSUtil;
 
 /**
- * @author Marc Adolf
- * 
+ * Zip compression filter for the writer pool.
+ *
+ * @author Reiner Jung
+ *
  * @since 1.14
  */
-public final class ActivationEventFactory implements IRecordFactory<ActivationEvent> {
-	
-	
+public class GZipCompressionFilter implements ICompressionFilter {
+
+	public GZipCompressionFilter() {
+		// Empty constructor. No initialization necessary.
+	}
+
 	@Override
-	public ActivationEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
-		return new ActivationEvent(deserializer);
+	public OutputStream chainOutputStream(final OutputStream outputStream, final Path fileName) throws IOException {
+		return new GZIPOutputStream(outputStream);
 	}
-	
+
 	@Override
-	@Deprecated
-	public ActivationEvent create(final Object[] values) {
-		return new ActivationEvent(values);
+	public String getExtension() {
+		return FSUtil.GZIP_FILE_EXTENSION;
 	}
-	
-	public int getRecordSizeInBytes() {
-		return ActivationEvent.SIZE;
-	}
+
 }
