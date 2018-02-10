@@ -8,12 +8,7 @@
     <!-- KIEKER default is warning instead of error -->
     <property name="severity" value="error"/>
     
-    <!-- KIEKER Filter -->
-    <module name="SuppressWithNearbyCommentFilter">
-        <property name="commentFormat" value="NOCS"/>
-        <property name="checkFormat" value=".*"/>
-        <property name="influenceFormat" value="0"/>
-    </module>
+
 
     <!--
       If you set the basedir property below, then all reported file
@@ -169,8 +164,14 @@
     -->
 
     <module name="TreeWalker">
-        <!-- KIEKER -->
         <property name="tabWidth" value="4"/>
+
+		<module name="SuppressWithNearbyCommentFilter">
+			<property name="commentFormat" value="NOCS"/>
+			<property name="checkFormat" value=".*"/>
+			<property name="influenceFormat" value="0"/>
+		</module>
+
         <!-- KIEKER -->
         <module name="kieker.checkstyle.AnalysisComponentConstructorCheck">
             <property name="ignoreAbstractClasses" value="true"/>
