@@ -15,7 +15,7 @@ node('kieker-slave-docker') {
   	}
 
     stage ('Checkout') {
-		timeout(time: 3, unit: 'MINUTES') {	// typically finished in 36 sec
+		timeout(time: 3, unit: 'MINUTES') {	// typically finished in under 1 min.
         	checkout scm
         }
     }
