@@ -182,12 +182,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 		// ensure a deterministic order in n.getChildEdges() varies among multiple runs
 		final List<WeightedDirectedCallTreeEdge<?>> sortedChildren = new ArrayList<WeightedDirectedCallTreeEdge<?>>(n.getChildEdges());
-		final Comparator<? super WeightedDirectedCallTreeEdge<?>> comparator = new Comparator<WeightedDirectedCallTreeEdge<?>>() {
-			@Override
-			public int compare(WeightedDirectedCallTreeEdge<?> o1, WeightedDirectedCallTreeEdge<?> o2) {
-				return Integer.compare(o1.getTarget().getId(), o2.getTarget().getId());
-			}
-		};
+		final Comparator<? super WeightedDirectedCallTreeEdge<?>> comparator = new CallTreeEdgeComparator();
 		Collections.sort(sortedChildren, comparator);
 
 		for (final WeightedDirectedCallTreeEdge<?> child : sortedChildren) {
@@ -312,7 +307,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		for (final AbstractMessage m : msgTraceVec) {
 			if (m instanceof SynchronousCallMessage) {
 				curNode = curStack.peek();
-				AbstractCallTreeNode<T> child;
+				final AbstractCallTreeNode<T> child;
 				child = curNode.newCall(pairFactory.createPair((SynchronousCallMessage) m), t, NoOriginRetentionPolicy.createInstance());
 				curNode = child;
 				curStack.push(curNode);
