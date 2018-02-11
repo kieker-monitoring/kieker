@@ -20,12 +20,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -176,16 +172,18 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 		strBuild.append(newNodeId)
 				.append("[label =\"")
-				.append(labelText) // NOCS
+				.append(labelText)
 				.append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
 		ps.println(strBuild.toString());
 
-		// ensure a deterministic order in n.getChildEdges() varies among multiple runs
-		final List<WeightedDirectedCallTreeEdge<?>> sortedChildren = new ArrayList<WeightedDirectedCallTreeEdge<?>>(n.getChildEdges());
-		final Comparator<? super WeightedDirectedCallTreeEdge<?>> comparator = new CallTreeEdgeComparator();
-		Collections.sort(sortedChildren, comparator);
+		// ensure a deterministic order in n.getChildEdges()
+		// final List<WeightedDirectedCallTreeEdge<?>> sortedChildren;
+		// sortedChildren = n.getChildEdges();
+		// sortedChildren = new ArrayList<WeightedDirectedCallTreeEdge<?>>(n.getChildEdges());
+		// final Comparator<? super WeightedDirectedCallTreeEdge<?>> comparator = new CallTreeEdgeComparator();
+		// Collections.sort(sortedChildren, comparator);
 
-		for (final WeightedDirectedCallTreeEdge<?> child : sortedChildren) {
+		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
 			final AbstractCallTreeNode<?> targetNode = child.getTarget();
 			AbstractCallTreeFilter.dotEdgesFromSubTree(targetNode, nodeIds, nextNodeId, ps, shortLabels);
 		}
