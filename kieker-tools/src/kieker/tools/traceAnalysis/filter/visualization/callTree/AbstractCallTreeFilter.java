@@ -20,8 +20,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -162,14 +166,33 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	 */
 	private static void dotEdgesFromSubTree(final AbstractCallTreeNode<?> n,
 			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final AtomicInteger nextNodeId, final PrintStream ps, final boolean shortLabels) {
+		final int newNodeId = nextNodeId.getAndIncrement();
+		nodeIds.put(n, newNodeId);
+
 		final StringBuilder strBuild = new StringBuilder(64);
-		nodeIds.put(n, nextNodeId.get());
-		strBuild.append(nextNodeId.getAndIncrement()).append("[label =\"").append(n.isRootNode() ? SystemModelRepository.ROOT_NODE_LABEL // NOCS
-				: AbstractCallTreeFilter.nodeLabel(n, shortLabels)) // NOCS
+
+		final String labelText = n.isRootNode() ? SystemModelRepository.ROOT_NODE_LABEL // NOCS
+				: AbstractCallTreeFilter.nodeLabel(n, shortLabels); // NOCS
+
+		strBuild.append(newNodeId)
+				.append("[label =\"")
+				.append(labelText) // NOCS
 				.append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
 		ps.println(strBuild.toString());
-		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
-			AbstractCallTreeFilter.dotEdgesFromSubTree(child.getTarget(), nodeIds, nextNodeId, ps, shortLabels);
+
+		// ensure a deterministic order in n.getChildEdges() varies among multiple runs
+		final List<WeightedDirectedCallTreeEdge<?>> sortedChildren = new ArrayList<WeightedDirectedCallTreeEdge<?>>(n.getChildEdges());
+		final Comparator<? super WeightedDirectedCallTreeEdge<?>> comparator = new Comparator<WeightedDirectedCallTreeEdge<?>>() {
+			@Override
+			public int compare(WeightedDirectedCallTreeEdge<?> o1, WeightedDirectedCallTreeEdge<?> o2) {
+				return Integer.compare(o1.getTarget().getId(), o2.getTarget().getId());
+			}
+		};
+		Collections.sort(sortedChildren, comparator);
+
+		for (final WeightedDirectedCallTreeEdge<?> child : sortedChildren) {
+			final AbstractCallTreeNode<?> targetNode = child.getTarget();
+			AbstractCallTreeFilter.dotEdgesFromSubTree(targetNode, nodeIds, nextNodeId, ps, shortLabels);
 		}
 	}
 
@@ -308,7 +331,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 			final String outputFilename, final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException, TraceProcessingException,
 			UnsupportedEncodingException {
 
-		AbstractCallTreeFilter.<T>addTraceToTree(root, msgTrace, pairFactory, false); // false: no aggregation
+		AbstractCallTreeFilter.<T> addTraceToTree(root, msgTrace, pairFactory, false); // false: no aggregation
 		AbstractCallTreeFilter.saveTreeToDotFile(root, outputFilename, includeWeights, true, shortLabels); // includeEois
 	}
 
