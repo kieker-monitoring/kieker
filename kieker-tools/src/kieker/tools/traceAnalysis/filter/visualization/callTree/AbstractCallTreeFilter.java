@@ -301,14 +301,15 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 			throws TraceProcessingException {
 		final Stack<AbstractCallTreeNode<T>> curStack = new Stack<AbstractCallTreeNode<T>>();
 
-		final Collection<AbstractMessage> msgTraceVec = t.getSequenceAsVector();
+		final Collection<AbstractMessage> traceMessages = t.getSequenceAsVector();
 		AbstractCallTreeNode<T> curNode = root;
 		curStack.push(curNode);
-		for (final AbstractMessage m : msgTraceVec) {
+		for (final AbstractMessage m : traceMessages) {
 			if (m instanceof SynchronousCallMessage) {
 				curNode = curStack.peek();
+				final T pair = pairFactory.createPair((SynchronousCallMessage) m);
 				final AbstractCallTreeNode<T> child;
-				child = curNode.newCall(pairFactory.createPair((SynchronousCallMessage) m), t, NoOriginRetentionPolicy.createInstance());
+				child = curNode.newCall(pair, t, NoOriginRetentionPolicy.createInstance());
 				curNode = child;
 				curStack.push(curNode);
 			} else if (m instanceof SynchronousReplyMessage) {

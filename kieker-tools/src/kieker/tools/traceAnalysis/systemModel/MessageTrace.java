@@ -58,6 +58,9 @@ public class MessageTrace extends AbstractTrace {
 	 */
 	public MessageTrace(final long traceId, final String sessionId, final List<AbstractMessage> seq) {
 		super(traceId, sessionId);
+
+		Collections.sort(seq, new MessageComparator());
+
 		this.messages = seq;
 
 		// Calculate start and end timestamp
