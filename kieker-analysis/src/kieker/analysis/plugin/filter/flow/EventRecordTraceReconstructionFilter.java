@@ -17,12 +17,16 @@
 package kieker.analysis.plugin.filter.flow;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -278,7 +282,10 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	@Override
 	public void terminate(final boolean error) {
 		synchronized (this) {
-			for (final Entry<Long, TraceBuffer> entry : this.traceId2trace.entrySet()) {
+			final Set<Entry<Long, TraceBuffer>> bufferByTraceId = this.traceId2trace.entrySet();
+			final List<Entry<Long, TraceBuffer>> entries = getSortedEntriesByTraceId(bufferByTraceId);
+
+			for (final Entry<Long, TraceBuffer> entry : entries) {
 				final TraceBuffer traceBuffer = entry.getValue();
 				if (this.repairEventBasedTracesEnabled && !traceBuffer.getEventStack().isEmpty()) {
 					traceBuffer.repairAllBeforeEventsLeftInStackAtTermination();
@@ -297,7 +304,11 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	private void processTimeoutQueue(final long timestamp) {
 		final long duration = timestamp - this.maxTraceDuration;
 		final long traceTimeout = timestamp - this.maxTraceTimeout;
-		for (final Iterator<Entry<Long, TraceBuffer>> iterator = this.traceId2trace.entrySet().iterator(); iterator.hasNext();) {
+		final Set<Entry<Long, TraceBuffer>> bufferByTraceId = this.traceId2trace.entrySet();
+
+		final List<Entry<Long, TraceBuffer>> entries = getSortedEntriesByTraceId(bufferByTraceId);
+
+		for (final Iterator<Entry<Long, TraceBuffer>> iterator = entries.iterator(); iterator.hasNext();) {
 			final TraceBuffer traceBuffer = iterator.next().getValue();
 			if ((traceBuffer.getMaxLoggingTimestamp() <= traceTimeout) // long time no see
 					|| (traceBuffer.getMinLoggingTimestamp() <= duration)) { // max duration is gone
@@ -309,6 +320,19 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				iterator.remove();
 			}
 		}
+	}
+
+	private List<Entry<Long, TraceBuffer>> getSortedEntriesByTraceId(final Set<Entry<Long, TraceBuffer>> bufferByTraceId) {
+		final List<Entry<Long, TraceBuffer>> entries = new ArrayList<>(bufferByTraceId);
+		Collections.sort(entries, new Comparator<Entry<Long, TraceBuffer>>() {
+			@Override
+			public int compare(final Entry<Long, TraceBuffer> o1, final Entry<Long, TraceBuffer> o2) {
+				final Long traceId0 = o1.getKey();
+				final Long traceId1 = o2.getKey();
+				return traceId0.compareTo(traceId1);
+			}
+		});
+		return entries;
 	}
 
 	/**

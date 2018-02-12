@@ -155,7 +155,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	/**
 	 * Traverse tree recursively and generate dot code for edges.
 	 *
-	 * @param n
+	 * @param node
 	 *            The root node to start with.
 	 * @param nodeIds
 	 *            The map containing the node IDs.
@@ -166,16 +166,16 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	 * @param shortLabels
 	 *            Determines whether to use short labels or not.
 	 */
-	private static void dotEdgesFromSubTree(final AbstractCallTreeNode<?> n,
+	private static void dotEdgesFromSubTree(final AbstractCallTreeNode<?> node,
 			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final AtomicInteger nextNodeId, final PrintStream ps,
 			final boolean shortLabels) {
 		final int newNodeId = nextNodeId.getAndIncrement();
-		nodeIds.put(n, newNodeId);
+		nodeIds.put(node, newNodeId);
 
 		// final StringBuilder strBuild = new StringBuilder(64);
 
-		final String labelText = n.isRootNode() ? SystemModelRepository.ROOT_NODE_LABEL // NOCS
-				: AbstractCallTreeFilter.nodeLabel(n, shortLabels); // NOCS
+		final String labelText = node.isRootNode() ? SystemModelRepository.ROOT_NODE_LABEL // NOCS
+				: AbstractCallTreeFilter.nodeLabel(node, shortLabels); // NOCS
 
 		// strBuild.append(newNodeId).append("[label =\"").append(labelText)
 		// .append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
@@ -193,7 +193,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		// Collections.sort(sortedChildren, comparator);
 
 		// n.getChildEdges() are in a non-deterministic order
-		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
+		for (final WeightedDirectedCallTreeEdge<?> child : node.getChildEdges()) {
 			final AbstractCallTreeNode<?> targetNode = child.getTarget();
 			AbstractCallTreeFilter.dotEdgesFromSubTree(targetNode, nodeIds, nextNodeId, ps, shortLabels);
 		}
@@ -207,7 +207,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	 * @param eoiCounter
 	 *            The counter for the execution order index.
 	 * @param nodeIds
-	 *            The map containing the node IDs.
+	 *            (read-only access) The map containing the node IDs.
 	 * @param ps
 	 *            The stream on which the generated code will be printed.
 	 * @param includeWeights
@@ -216,23 +216,26 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	private static void dotVerticesFromSubTree(final AbstractCallTreeNode<?> n, final AtomicInteger eoiCounter,
 			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final PrintStream ps, final boolean includeWeights) {
 		final int thisId = nodeIds.get(n);
-		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
-			final StringBuilder strBuild = new StringBuilder(1024);
-			final int childId = nodeIds.get(child.getTarget());
 
+		for (final WeightedDirectedCallTreeEdge<?> outgoingEdge : n.getChildEdges()) {
+			final int childId = nodeIds.get(outgoingEdge.getTarget());
+
+			final StringBuilder strBuild = new StringBuilder(1024);
 			strBuild.append('\n');
 			final String encodedEdge = String.format("%d->%d[style=solid,arrowhead=none", thisId, childId);
 			// strBuild.append('\n').append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
 			strBuild.append(encodedEdge);
 
 			if (includeWeights) {
-				strBuild.append(",label=\"").append(child.getTargetWeight().get()).append('"');
+				strBuild.append(",label=\"").append(outgoingEdge.getTargetWeight().get()).append('"');
 			} else if (eoiCounter != null) {
 				strBuild.append(",label=\"").append(eoiCounter.getAndIncrement()).append(".\"");
 			}
 			strBuild.append(" ]");
 			ps.println(strBuild.toString());
-			AbstractCallTreeFilter.dotVerticesFromSubTree(child.getTarget(), eoiCounter, nodeIds, ps, includeWeights);
+
+			AbstractCallTreeFilter.dotVerticesFromSubTree(outgoingEdge.getTarget(), eoiCounter, nodeIds, ps,
+					includeWeights);
 		}
 	}
 

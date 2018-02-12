@@ -16,7 +16,9 @@
 
 package kieker.tools.traceAnalysis.systemModel;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * This class is a container for a whole trace of messages (represented as actual instances of {@link AbstractMessage}).
@@ -57,8 +59,9 @@ public class MessageTrace extends AbstractTrace {
 	public MessageTrace(final long traceId, final String sessionId, final List<AbstractMessage> seq) {
 		super(traceId, sessionId);
 
-		// no need to sort: seq is already sorted
-		Collections.sort(seq, new MessageComparator());
+		// no need to sort: seq is already sorted - actually
+		// however, the reply message has the same timestamp as its associated call message
+		//		Collections.sort(seq, new MessageComparator());
 
 		this.messages = seq;
 
