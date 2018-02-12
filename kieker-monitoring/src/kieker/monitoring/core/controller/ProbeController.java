@@ -45,7 +45,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.util.map.BoundedConcurrentHashMap;
 import kieker.common.util.map.BoundedConcurrentHashMap.BoundedCacheBehaviour;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.signaturePattern.InvalidPatternException;
 import kieker.monitoring.core.signaturePattern.PatternEntry;
 import kieker.monitoring.core.signaturePattern.PatternParser;
@@ -69,7 +69,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 	private final ConfigFileReader configFileReader;
 
 	private final ConcurrentMap<String, Boolean> signatureCache;
-	private final List<PatternEntry> patternList = new ArrayList<PatternEntry>(); // only accessed synchronized
+	private final List<PatternEntry> patternList = new ArrayList<>(); // only accessed synchronized
 
 	/**
 	 * Creates a new instance of this class using the given configuration to initialize the class.
@@ -79,13 +79,13 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 */
 	protected ProbeController(final Configuration configuration) {
 		super(configuration);
-		this.enabled = configuration.getBooleanProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED);
+		this.enabled = configuration.getBooleanProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED);
 		if (this.enabled) {
-			this.configFilePathname = configuration.getPathProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE);
-			this.configFileUpdate = configuration.getBooleanProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE);
-			this.configFileReadIntervall = configuration.getIntProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL);
-			this.maxCacheSize = configuration.getIntProperty(ConfigurationFactory.ADAPTIVE_MONITORING_MAX_CACHE_SIZE);
-			this.boundedCacheBehaviour = configuration.getIntProperty(ConfigurationFactory.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR);
+			this.configFilePathname = configuration.getPathProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE);
+			this.configFileUpdate = configuration.getBooleanProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE);
+			this.configFileReadIntervall = configuration.getIntProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL);
+			this.maxCacheSize = configuration.getIntProperty(ConfigurationKeys.ADAPTIVE_MONITORING_MAX_CACHE_SIZE);
+			this.boundedCacheBehaviour = configuration.getIntProperty(ConfigurationKeys.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR);
 			if (this.maxCacheSize >= 0) {
 				// Bounded cache
 				final BoundedConcurrentHashMap.BoundedCacheBehaviour behaviour;
@@ -101,7 +101,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 					break;
 				default:
 					if (LOG.isWarnEnabled()) {
-						LOG.warn("Unexpected value for property '" + ConfigurationFactory.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR + "'. Using default value 0.");
+						LOG.warn("Unexpected value for property '" + ConfigurationKeys.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR + "'. Using default value 0.");
 					}
 					behaviour = BoundedCacheBehaviour.IGNORE_NEW_ENTRIES;
 					break;
@@ -111,14 +111,14 @@ public class ProbeController extends AbstractController implements IProbeControl
 					cacheSize = this.maxCacheSize;
 				} else {
 					if (LOG.isWarnEnabled()) {
-						LOG.warn("Invalid value for property '" + ConfigurationFactory.ADAPTIVE_MONITORING_MAX_CACHE_SIZE + "'. Using default value 100.");
+						LOG.warn("Invalid value for property '" + ConfigurationKeys.ADAPTIVE_MONITORING_MAX_CACHE_SIZE + "'. Using default value 100.");
 					}
 					cacheSize = 100;
 				}
-				this.signatureCache = new BoundedConcurrentHashMap<String, Boolean>(behaviour, cacheSize);
+				this.signatureCache = new BoundedConcurrentHashMap<>(behaviour, cacheSize);
 			} else {
 				// Unbounded cache
-				this.signatureCache = new ConcurrentHashMap<String, Boolean>();
+				this.signatureCache = new ConcurrentHashMap<>();
 			}
 			this.configFileReader = new ConfigFileReader(this.configFilePathname);
 			// run once to get the initial file contents
@@ -130,7 +130,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 			this.maxCacheSize = 0;
 			this.boundedCacheBehaviour = 0;
 			this.configFileReader = null; // NOPMD (null)
-			this.signatureCache = new ConcurrentHashMap<String, Boolean>();
+			this.signatureCache = new ConcurrentHashMap<>();
 		}
 	}
 
@@ -145,7 +145,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 			} else {
 				if ((this.configFileReadIntervall > 0) && (null == scheduler)) {
 					LOG.warn("Failed to enable regular reading of adaptive monitoring config file. '"
-							+ ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE
+							+ ConfigurationKeys.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE
 							+ "' must be > 0!");
 				}
 			}
@@ -290,10 +290,10 @@ public class ProbeController extends AbstractController implements IProbeControl
 	public List<String> getProbePatternList() {
 		if (!this.enabled) {
 			LOG.warn("Adapative Monitoring is disabled!");
-			return new ArrayList<String>(0);
+			return new ArrayList<>(0);
 		}
 		synchronized (this) {
-			final List<String> list = new ArrayList<String>(this.patternList.size());
+			final List<String> list = new ArrayList<>(this.patternList.size());
 			for (final PatternEntry entry : this.patternList) {
 				final String strPattern;
 				if (entry.isActivated()) {
@@ -392,7 +392,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 		}
 
 		private List<String> readConfigFile(final BufferedReader reader) throws IOException {
-			final List<String> strPatternList = new LinkedList<String>();
+			final List<String> strPatternList = new LinkedList<>();
 			String line;
 			while ((line = reader.readLine()) != null) { // NOPMD (assign)
 				strPatternList.add(line);

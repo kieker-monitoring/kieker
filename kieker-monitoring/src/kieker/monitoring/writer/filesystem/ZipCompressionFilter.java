@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.util.filesystem.FSUtil;
 
 /**
@@ -32,7 +33,13 @@ import kieker.common.util.filesystem.FSUtil;
  */
 public class ZipCompressionFilter implements ICompressionFilter {
 
-	public ZipCompressionFilter() {
+	/**
+	 * Initialize ZipCompression with parameter to adhere Kieker configuration system.
+	 *
+	 * @param configuration
+	 *            Kieker configuration object
+	 */
+	public ZipCompressionFilter(final Configuration configuration) { // NOPMD block warning of unused configuration parameter
 		// Empty constructor. No initialization necessary.
 	}
 

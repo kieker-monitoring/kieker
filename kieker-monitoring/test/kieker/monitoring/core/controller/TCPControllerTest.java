@@ -27,7 +27,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.remotecontrol.ActivationEvent;
 import kieker.common.record.remotecontrol.DeactivationEvent;
 import kieker.common.record.remotecontrol.IRemoteControlEvent;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.timer.SystemNanoTimer;
 import kieker.monitoring.writer.dump.DumpWriter;
 import kieker.monitoring.writer.tcp.SingleSocketTcpWriter;
@@ -52,21 +52,21 @@ public class TCPControllerTest {
 	public static void init() throws IOException {
 
 		// setup for other depending parts
-		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, true);
-		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DumpWriter.class.getName());
+		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, true);
+		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, DumpWriter.class.getName());
 		configuration.setProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_FQN,
 				MpscArrayQueue.class.getName());
 		configuration.setProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_SIZE, "1");
 		configuration.setProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
 		// setup for TCP test
-		configuration.setProperty(ConfigurationFactory.ACTIVATE_TCP_DOMAIN, "kieker.tcp");
-		configuration.setProperty(ConfigurationFactory.ACTIVATE_TCP_REMOTE_PORT, port);
-		configuration.setProperty(ConfigurationFactory.ACTIVATE_TCP, true);
+		configuration.setProperty(ConfigurationKeys.ACTIVATE_TCP_DOMAIN, "kieker.tcp");
+		configuration.setProperty(ConfigurationKeys.ACTIVATE_TCP_REMOTE_PORT, port);
+		configuration.setProperty(ConfigurationKeys.ACTIVATE_TCP, true);
 		configuration.setProperty(SingleSocketTcpWriter.CONFIG_PORT, port);
 		configuration.setProperty(SingleSocketTcpWriter.CONFIG_BUFFERSIZE, 65535);
 		configuration.setProperty(SingleSocketTcpWriter.CONFIG_FLUSH, true);
-		configuration.setProperty(ConfigurationFactory.ACTIVATE_TCP, true);
-		configuration.setProperty(ConfigurationFactory.TIMER_CLASSNAME, SystemNanoTimer.class.getName());
+		configuration.setProperty(ConfigurationKeys.ACTIVATE_TCP, true);
+		configuration.setProperty(ConfigurationKeys.TIMER_CLASSNAME, SystemNanoTimer.class.getName());
 		configuration.setProperty(SingleSocketTcpWriter.CONFIG_CONN_TIMEOUT_IN_MS, timeoutInMs);
 		@SuppressWarnings("PMD.AvoidUsingHardCodedIP")
 		final String address = "127.0.0.1";

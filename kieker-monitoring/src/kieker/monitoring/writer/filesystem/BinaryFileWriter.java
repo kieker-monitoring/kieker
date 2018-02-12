@@ -112,8 +112,8 @@ public class BinaryFileWriter extends AbstractMonitoringWriter implements IRegis
 		final int bufferSize = this.configuration.getIntProperty(CONFIG_BUFFERSIZE);
 
 		final String compressionFilterClassName = configuration.getStringProperty(CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
-		final ICompressionFilter compressionFilter = ControllerFactory.getInstance(configuration).create(ICompressionFilter.class,
-				compressionFilterClassName);
+		final ICompressionFilter compressionFilter = ControllerFactory.getInstance(configuration).createAndInitialize(ICompressionFilter.class,
+				compressionFilterClassName, configuration);
 
 		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH, false);
 		this.flushMapfile = configuration.getBooleanProperty(CONFIG_FLUSH_MAPFILE, true);

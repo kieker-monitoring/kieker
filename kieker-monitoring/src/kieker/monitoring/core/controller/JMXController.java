@@ -34,11 +34,11 @@ import javax.management.remote.JMXServiceURL;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.4
  */
 public final class JMXController extends AbstractController implements IRemoteController {
@@ -61,7 +61,7 @@ public final class JMXController extends AbstractController implements IRemoteCo
 	/**
 	 * Create a new JMX controller.
 	 * Note: The error handling in this block is correct, see ticket #293
-	 * 
+	 *
 	 * @param configuration
 	 *            the Kieker configuration facitlity
 	 */
@@ -73,12 +73,12 @@ public final class JMXController extends AbstractController implements IRemoteCo
 		ServerNotificationListener serverNotificationListenerTmp = null;
 		String portTmp = "0";
 		JMXImplementation usedJMXImplementationTmp = JMXImplementation.Fallback;
-		this.domain = configuration.getStringProperty(ConfigurationFactory.ACTIVATE_JMX_DOMAIN);
-		this.jmxEnabled = configuration.getBooleanProperty(ConfigurationFactory.ACTIVATE_JMX);
+		this.domain = configuration.getStringProperty(ConfigurationKeys.ACTIVATE_JMX_DOMAIN);
+		this.jmxEnabled = configuration.getBooleanProperty(ConfigurationKeys.ACTIVATE_JMX);
 		if (this.jmxEnabled) {
-			if (configuration.getBooleanProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE)) {
+			if (configuration.getBooleanProperty(ConfigurationKeys.ACTIVATE_JMX_REMOTE)) {
 				try {
-					portTmp = configuration.getStringProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_PORT);
+					portTmp = configuration.getStringProperty(ConfigurationKeys.ACTIVATE_JMX_REMOTE_PORT);
 					try {
 						// Try using the "secret" SUN implementation
 						// Reflection to suppress compiler warnings
@@ -87,7 +87,7 @@ public final class JMXController extends AbstractController implements IRemoteCo
 								.getMethod("initialize", String.class, Properties.class).invoke(null, portTmp, jmxProperties);
 						usedJMXImplementationTmp = JMXImplementation.Sun;
 					} catch (final Exception ignoreErrors) { // NOPMD NOCS (IllegalCatchCheck)
-						if (configuration.getBooleanProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_FALLBACK)) { // NOCS (NestedIf)
+						if (configuration.getBooleanProperty(ConfigurationKeys.ACTIVATE_JMX_REMOTE_FALLBACK)) { // NOCS (NestedIf)
 							LOG.warn("Failed to initialize remote JMX server, falling back to default implementation");
 							// Fallback to default Implementation
 							final JMXServiceURL url = new JMXServiceURL("rmi", null, Integer.parseInt(portTmp));
@@ -100,17 +100,17 @@ public final class JMXController extends AbstractController implements IRemoteCo
 					}
 					if ((serverTmp != null) && (serverTmp.isActive())) { // NOCS (NestedIf)
 						serverObjectNameTmp = new ObjectName(this.domain, "type",
-								configuration.getStringProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_NAME));
+								configuration.getStringProperty(ConfigurationKeys.ACTIVATE_JMX_REMOTE_NAME));
 						serverNotificationListenerTmp = new ServerNotificationListener();
 					}
 				} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 					LOG.warn("Failed to initialize remote JMX server", e);
 				}
 			}
-			if (configuration.getBooleanProperty(ConfigurationFactory.ACTIVATE_JMX_CONTROLLER)) {
+			if (configuration.getBooleanProperty(ConfigurationKeys.ACTIVATE_JMX_CONTROLLER)) {
 				try {
 					controllerObjectNameTmp = new ObjectName(this.domain, "type",
-							configuration.getStringProperty(ConfigurationFactory.ACTIVATE_JMX_CONTROLLER_NAME));
+							configuration.getStringProperty(ConfigurationKeys.ACTIVATE_JMX_CONTROLLER_NAME));
 				} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 					LOG.warn("Failed to initialize MonitoringController MBean", e);
 				}

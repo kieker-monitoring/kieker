@@ -90,43 +90,6 @@ public final class ControllerFactory {
 	}
 
 	/**
-	 * This is a helper method trying to find and create the given class, using its public constructor which accepts no parameter.
-	 *
-	 * @param c
-	 *            This class defines the expected result of the method call.
-	 * @param classname
-	 *            The name of the class to be created.
-	 * @param configuration
-	 *            The configuration which will be used to initialize the class in question.
-	 *
-	 * @return A new and initializes class instance if everything went well.
-	 *
-	 * @param <C>
-	 *            The type of the returned class.
-	 */
-	@SuppressWarnings("unchecked")
-	public <C> C create(final Class<C> c, final String className) {
-		C createdClass = null; // NOPMD (null)
-		try {
-			final Class<?> clazz = Class.forName(className);
-			if (c.isAssignableFrom(clazz)) {
-				createdClass = (C) clazz.getConstructor().newInstance();
-			} else {
-				LOG.error("Class '" + className + "' has to implement '" + c.getSimpleName() + "'");
-			}
-		} catch (final ClassNotFoundException e) {
-			LOG.error(c.getSimpleName() + ": Class '" + className + "' not found", e);
-		} catch (final NoSuchMethodException e) {
-			LOG.error(c.getSimpleName() + ": Class '" + className
-					+ "' has to implement a (public) constructor without any parameter", e);
-		} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
-			LOG.error(c.getSimpleName() + ": Failed to load class for name '" + className + "'", e);
-		}
-		return createdClass;
-	}
-
-	/**
 	 * Instantiate a class with one configuration parameter.
 	 *
 	 * @param clazz

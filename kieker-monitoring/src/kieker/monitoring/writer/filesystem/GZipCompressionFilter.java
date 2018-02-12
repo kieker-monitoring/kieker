@@ -20,6 +20,7 @@ import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.zip.GZIPOutputStream;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.util.filesystem.FSUtil;
 
 /**
@@ -31,7 +32,13 @@ import kieker.common.util.filesystem.FSUtil;
  */
 public class GZipCompressionFilter implements ICompressionFilter {
 
-	public GZipCompressionFilter() {
+	/**
+	 * Initialize GZipCompression with parameter to adhere Kieker configuration system.
+	 *
+	 * @param configuration
+	 *            Kieker configuration object
+	 */
+	public GZipCompressionFilter(final Configuration configuration) { // NOPMD block warning of unused configuration parameter
 		// Empty constructor. No initialization necessary.
 	}
 

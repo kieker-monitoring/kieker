@@ -113,8 +113,8 @@ public class AsciiFileWriter extends AbstractMonitoringWriter implements IRegist
 		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME, "UTF-8");
 
 		final String compressionFilterClassName = configuration.getStringProperty(CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
-		final ICompressionFilter compressionFilter = ControllerFactory.getInstance(configuration).create(ICompressionFilter.class,
-				compressionFilterClassName);
+		final ICompressionFilter compressionFilter = ControllerFactory.getInstance(configuration).createAndInitialize(ICompressionFilter.class,
+				compressionFilterClassName, configuration);
 
 		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH, false);
 		this.flushMapfile = configuration.getBooleanProperty(CONFIG_FLUSH_MAPFILE, true);

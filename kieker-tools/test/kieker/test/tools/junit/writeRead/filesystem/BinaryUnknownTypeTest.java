@@ -32,6 +32,7 @@ import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.LogImplJUnit;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.writer.filesystem.BinaryFileWriter;
@@ -97,7 +98,7 @@ public class BinaryUnknownTypeTest {
 			throws Exception {
 		// 2. define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, BinaryFileWriter.class.getName());
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, BinaryFileWriter.class.getName());
 		config.setProperty(WriterController.RECORD_QUEUE_SIZE, "128");
 		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
 		config.setProperty(BinaryFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());

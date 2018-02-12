@@ -31,7 +31,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.common.util.filesystem.FileExtensionFilter;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 
 /**
  * @author Christian Wulf
@@ -52,8 +52,8 @@ public class BinaryFileWriterTest {
 	@Before
 	public void before() {
 		this.configuration = new Configuration();
-		this.configuration.setProperty(ConfigurationFactory.HOST_NAME, "testHostName");
-		this.configuration.setProperty(ConfigurationFactory.CONTROLLER_NAME, "testControllerName");
+		this.configuration.setProperty(ConfigurationKeys.HOST_NAME, "testHostName");
+		this.configuration.setProperty(ConfigurationKeys.CONTROLLER_NAME, "testControllerName");
 		this.configuration.setProperty(BinaryFileWriter.CONFIG_BUFFERSIZE, "8192");
 		this.configuration.setProperty(BinaryFileWriter.CONFIG_CHARSET_NAME, "UTF-8");
 		this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXENTRIESINFILE, "-1");
@@ -249,8 +249,8 @@ public class BinaryFileWriterTest {
 	public void testValidLogFolderFileName() throws Exception {
 		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
 
-		final String hostName = this.configuration.getStringProperty(ConfigurationFactory.HOST_NAME);
-		final String controllerName = this.configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME);
+		final String hostName = this.configuration.getStringProperty(ConfigurationKeys.HOST_NAME);
+		final String controllerName = this.configuration.getStringProperty(ConfigurationKeys.CONTROLLER_NAME);
 		Assert.assertThat(writer.getLogFolder().getFileName().toString(), CoreMatchers.startsWith(FSUtil.FILE_PREFIX));
 		Assert.assertThat(writer.getLogFolder().getFileName().toString(), CoreMatchers.endsWith(hostName + "-" + controllerName));
 	}

@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Path;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.util.filesystem.FSUtil;
 
 /**
@@ -30,7 +31,13 @@ import kieker.common.util.filesystem.FSUtil;
  */
 public class NoneCompressionFilter implements ICompressionFilter {
 
-	public NoneCompressionFilter() {
+	/**
+	 * Initialize pass through "compression" with parameter to adhere Kieker configuration system.
+	 *
+	 * @param configuration
+	 *            Kieker configuration object
+	 */
+	public NoneCompressionFilter(final Configuration configuration) { // NOPMD block warning of unused configuration parameter
 		// Empty constructor. No initialization necessary.
 	}
 

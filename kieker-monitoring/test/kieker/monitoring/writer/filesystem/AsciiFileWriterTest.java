@@ -30,7 +30,7 @@ import org.junit.rules.TemporaryFolder;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.filesystem.FileExtensionFilter;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 
 /**
  * @author Christian Wulf
@@ -51,8 +51,8 @@ public class AsciiFileWriterTest {
 	@Before
 	public void before() {
 		this.configuration = new Configuration();
-		this.configuration.setProperty(ConfigurationFactory.HOST_NAME, "testHostName");
-		this.configuration.setProperty(ConfigurationFactory.CONTROLLER_NAME, "testControllerName");
+		this.configuration.setProperty(ConfigurationKeys.HOST_NAME, "testHostName");
+		this.configuration.setProperty(ConfigurationKeys.CONTROLLER_NAME, "testControllerName");
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_CHARSET_NAME, "UTF-8");
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, String.valueOf(Integer.MAX_VALUE));
