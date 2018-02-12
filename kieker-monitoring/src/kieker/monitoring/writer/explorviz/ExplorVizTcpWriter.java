@@ -95,7 +95,7 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 
 		this.writerRegistry = new WriterRegistry(this);
 		this.writerRegistry.register(EMPTY_STRING);
-		this.registerStringsAdapter = new RegisterAdapter<String>(this.writerRegistry);
+		this.registerStringsAdapter = new RegisterAdapter<>(this.writerRegistry);
 	}
 
 	@Override

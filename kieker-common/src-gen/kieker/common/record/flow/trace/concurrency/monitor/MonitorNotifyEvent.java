@@ -17,6 +17,7 @@ package kieker.common.record.flow.trace.concurrency.monitor;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.concurrency.monitor.AbstractMonitorEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
@@ -106,8 +107,9 @@ public class MonitorNotifyEvent extends AbstractMonitorEvent  {
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public MonitorNotifyEvent(final IValueDeserializer deserializer) {
+	public MonitorNotifyEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 	}
 	

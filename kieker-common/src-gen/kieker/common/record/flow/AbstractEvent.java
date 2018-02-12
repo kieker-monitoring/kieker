@@ -16,6 +16,7 @@
 package kieker.common.record.flow;
 
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -71,8 +72,9 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public AbstractEvent(final IValueDeserializer deserializer) {
+	public AbstractEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
 	}
 	

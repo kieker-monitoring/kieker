@@ -16,6 +16,7 @@
 package kieker.common.record.database;
 
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
@@ -28,7 +29,7 @@ public final class AfterDatabaseEventFactory implements IRecordFactory<AfterData
 	
 	
 	@Override
-	public AfterDatabaseEvent create(final IValueDeserializer deserializer) {
+	public AfterDatabaseEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new AfterDatabaseEvent(deserializer);
 	}
 	

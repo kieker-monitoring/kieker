@@ -17,6 +17,7 @@ package kieker.common.record.misc;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -87,8 +88,9 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public EmptyRecord(final IValueDeserializer deserializer) {
+	public EmptyRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 	}
 	
 	/**

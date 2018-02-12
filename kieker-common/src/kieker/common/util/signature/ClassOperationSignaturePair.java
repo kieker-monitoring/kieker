@@ -126,12 +126,13 @@ public class ClassOperationSignaturePair {
 	public static ClassOperationSignaturePair splitOperationSignatureStr(final String operationSignatureStr, final boolean javaConstructor) {
 		final String fqClassname;
 		final String returnType;
-		String name;
-		String opName;
-		String[] paramTypeList;
-		String[] modifierList;
+		final String name;
+		final String opName;
+		final String[] paramTypeList;
+		final String[] modifierList;
 		final int openParenIdx = operationSignatureStr.indexOf('(');
 		final String modRetName;
+		
 		if (openParenIdx == -1) { // no parameter list
 			paramTypeList = new String[] {};
 			modRetName = operationSignatureStr;

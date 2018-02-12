@@ -16,6 +16,7 @@
 package kieker.common.record.system;
 
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
@@ -28,7 +29,7 @@ public final class ResourceUtilizationRecordFactory implements IRecordFactory<Re
 	
 	
 	@Override
-	public ResourceUtilizationRecord create(final IValueDeserializer deserializer) {
+	public ResourceUtilizationRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new ResourceUtilizationRecord(deserializer);
 	}
 	

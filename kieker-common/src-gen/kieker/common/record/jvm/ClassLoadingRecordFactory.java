@@ -16,6 +16,7 @@
 package kieker.common.record.jvm;
 
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
@@ -28,7 +29,7 @@ public final class ClassLoadingRecordFactory implements IRecordFactory<ClassLoad
 	
 	
 	@Override
-	public ClassLoadingRecord create(final IValueDeserializer deserializer) {
+	public ClassLoadingRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new ClassLoadingRecord(deserializer);
 	}
 	

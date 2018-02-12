@@ -17,6 +17,7 @@ package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -178,8 +179,9 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public DiskUsageRecord(final IValueDeserializer deserializer) {
+	public DiskUsageRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
 		this.hostname = deserializer.getString();
 		this.deviceName = deserializer.getString();

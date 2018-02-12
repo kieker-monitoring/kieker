@@ -13,22 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+package kieker.common.record.flow.trace;
 
-package kieker.monitoring.core.controller;
+
+import kieker.common.exception.RecordInstantiationException;
+import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
- * This controller publishes all interface methods of IMonitoringController as a MBean.
+ * @author Christian Zirkelbach
  * 
- * @author Jan Waller
- * 
- * @since 1.4
+ * @since 1.14
  */
-public interface IJMXController {
-
-	/**
-	 * @return the JMX domain used
-	 * 
-	 * @since 1.4
-	 */
-	public String getJMXDomain();
+public final class ApplicationTraceMetadataFactory implements IRecordFactory<ApplicationTraceMetadata> {
+	
+	
+	@Override
+	public ApplicationTraceMetadata create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		return new ApplicationTraceMetadata(deserializer);
+	}
+	
+	@Override
+	@Deprecated
+	public ApplicationTraceMetadata create(final Object[] values) {
+		return new ApplicationTraceMetadata(values);
+	}
+	
+	public int getRecordSizeInBytes() {
+		return ApplicationTraceMetadata.SIZE;
+	}
 }

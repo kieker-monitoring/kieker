@@ -17,6 +17,7 @@ package kieker.common.record.flow.trace;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
@@ -123,8 +124,9 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public ConstructionEvent(final IValueDeserializer deserializer) {
+	public ConstructionEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.classSignature = deserializer.getString();
 		this.objectId = deserializer.getInt();

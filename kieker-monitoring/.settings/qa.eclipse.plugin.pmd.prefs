@@ -1,4 +1,4 @@
 customRulesJars=
 eclipse.preferences.version=1
-enabled=false
-ruleSetFilePath=invalid/ruleset/file/path
+enabled=true
+ruleSetFilePath=../config/pmdrules.xml

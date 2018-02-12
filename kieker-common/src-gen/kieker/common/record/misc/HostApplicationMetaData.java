@@ -17,6 +17,7 @@ package kieker.common.record.misc;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -128,8 +129,9 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public HostApplicationMetaData(final IValueDeserializer deserializer) {
+	public HostApplicationMetaData(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.systemName = deserializer.getString();
 		this.ipAddress = deserializer.getString();
 		this.hostName = deserializer.getString();

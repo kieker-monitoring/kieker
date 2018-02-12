@@ -16,6 +16,7 @@
 package kieker.common.record.misc;
 
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
@@ -28,7 +29,7 @@ public final class KiekerMetadataRecordFactory implements IRecordFactory<KiekerM
 	
 	
 	@Override
-	public KiekerMetadataRecord create(final IValueDeserializer deserializer) {
+	public KiekerMetadataRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new KiekerMetadataRecord(deserializer);
 	}
 	

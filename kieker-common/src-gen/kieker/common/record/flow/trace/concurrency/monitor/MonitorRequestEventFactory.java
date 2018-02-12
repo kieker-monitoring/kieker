@@ -16,6 +16,7 @@
 package kieker.common.record.flow.trace.concurrency.monitor;
 
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
@@ -28,7 +29,7 @@ public final class MonitorRequestEventFactory implements IRecordFactory<MonitorR
 	
 	
 	@Override
-	public MonitorRequestEvent create(final IValueDeserializer deserializer) {
+	public MonitorRequestEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new MonitorRequestEvent(deserializer);
 	}
 	

@@ -17,6 +17,7 @@ package kieker.common.record.database;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -143,8 +144,9 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IMo
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public DatabaseFailedEvent(final IValueDeserializer deserializer) {
+	public DatabaseFailedEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
 		this.classSignature = deserializer.getString();
 		this.traceId = deserializer.getLong();

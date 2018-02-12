@@ -16,6 +16,7 @@
 package kieker.common.record.flow.trace.operation;
 
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueDeserializer;
 
@@ -83,8 +84,9 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public AbstractOperationEvent(final IValueDeserializer deserializer) {
+	public AbstractOperationEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.operationSignature = deserializer.getString();
 		this.classSignature = deserializer.getString();

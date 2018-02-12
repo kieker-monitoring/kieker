@@ -50,6 +50,8 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 	public static final String ZIP_FILE_EXTENSION = ".zip";
 	/** The extension of Kieker's gzipped record files. */
 	public static final String GZIP_FILE_EXTENSION = ".gz";
+	/** The extension of Kieker's xz record files. */
+	public static final String XZ_FILE_EXTENSION = ".xz";
 	/** The extension of Kieker's binary record files. */
 	public static final String BINARY_FILE_EXTENSION = ".bin";
 	/** The extension of Kieker's mapping files. */
@@ -144,7 +146,8 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 
 	/**
 	 * @param startDirectory
-	 * @param postfixRegexNamePattern	to be used for the matching
+	 * @param postfixRegexNamePattern
+	 *            to be used for the matching
 	 * @return all matching files within the given <code>startDirectory</code> and all its subdirectories
 	 */
 	public static List<File> listFilesRecursively(final Path startDirectory, final String postfixRegexNamePattern) {

@@ -13,22 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.plugin.reader.util;
-
-import kieker.common.record.IMonitoringRecord;
+package kieker.monitoring.writer.tcp;
 
 /**
- * Represents a listener which is informed upon a new monitored record.
+ * @author Christian Wulf
  *
- * @author Christian Wulf (chw)
- *
- * @since 1.13
+ * @since 1.14
  */
-public interface IRecordReceivedListener {
+class TimeoutCountdown {
 
-	/**
-	 * @since 1.13
-	 */
-	void onRecordReceived(IMonitoringRecord record);
+	private int currentTimeoutInMs;
 
+	public TimeoutCountdown(final int initialTimeoutInMs) {
+		this.currentTimeoutInMs = initialTimeoutInMs;
+	}
+
+	public void countdown(final long substractor) {
+		this.currentTimeoutInMs -= substractor;
+	}
+
+	public int getCurrentTimeoutinMs() {
+		return this.currentTimeoutInMs;
+	}
 }

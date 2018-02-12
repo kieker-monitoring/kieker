@@ -16,6 +16,7 @@
 package kieker.common.record.flow.trace.operation.object;
 
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
@@ -28,7 +29,7 @@ public final class AfterOperationObjectEventFactory implements IRecordFactory<Af
 	
 	
 	@Override
-	public AfterOperationObjectEvent create(final IValueDeserializer deserializer) {
+	public AfterOperationObjectEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new AfterOperationObjectEvent(deserializer);
 	}
 	

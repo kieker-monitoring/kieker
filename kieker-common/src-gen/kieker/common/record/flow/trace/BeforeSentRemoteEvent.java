@@ -17,6 +17,7 @@ package kieker.common.record.flow.trace;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -128,8 +129,9 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements I
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public BeforeSentRemoteEvent(final IValueDeserializer deserializer) {
+	public BeforeSentRemoteEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
 		this.traceId = deserializer.getLong();
 		this.orderIndex = deserializer.getInt();

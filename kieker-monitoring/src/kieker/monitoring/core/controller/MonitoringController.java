@@ -48,6 +48,7 @@ public final class MonitoringController extends AbstractController implements IM
 	private final StateController stateController;
 	private final SamplingController samplingController;
 	private final JMXController jmxController;
+	private final TCPController tcpController;
 	private final WriterController writerController;
 	private final TimeSourceController timeSourceController;
 	private final ProbeController probeController;
@@ -60,6 +61,7 @@ public final class MonitoringController extends AbstractController implements IM
 		this.stateController = new StateController(configuration);
 		this.samplingController = new SamplingController(configuration);
 		this.jmxController = new JMXController(configuration);
+		this.tcpController = new TCPController(configuration, this);
 		this.writerController = new WriterController(configuration);
 		this.stateController.setStateListener(this);
 		this.timeSourceController = new TimeSourceController(configuration);
@@ -97,6 +99,10 @@ public final class MonitoringController extends AbstractController implements IM
 		}
 		monitoringController.jmxController.setMonitoringController(monitoringController);
 		if (monitoringController.jmxController.isTerminated()) {
+			monitoringController.terminate();
+		}
+		monitoringController.tcpController.setMonitoringController(monitoringController);
+		if (monitoringController.tcpController.isTerminated()) {
 			monitoringController.terminate();
 		}
 		monitoringController.writerController.setMonitoringController(monitoringController);
@@ -183,6 +189,7 @@ public final class MonitoringController extends AbstractController implements IM
 		this.timeSourceController.terminate();
 		this.writerController.terminate();
 		this.jmxController.terminate();
+		this.tcpController.terminate();
 		this.samplingController.terminate();
 		this.stateController.terminate();
 	}
@@ -274,6 +281,11 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
+	public String getApplicationName() {
+		return this.stateController.getApplicationName();
+	}
+
+	@Override
 	public final int incExperimentId() {
 		return this.stateController.incExperimentId();
 	}
@@ -320,8 +332,8 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public final String getJMXDomain() {
-		return this.jmxController.getJMXDomain();
+	public final String getControllerDomain() {
+		return this.jmxController.getControllerDomain();
 	}
 
 	@Override

@@ -41,7 +41,7 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
  * 
  * @since 1.4
  */
-public final class JMXController extends AbstractController implements IJMXController {
+public final class JMXController extends AbstractController implements IRemoteController {
 	static final Log LOG = LogFactory.getLog(JMXController.class); // NOPMD package for inner class
 
 	private final boolean jmxEnabled;
@@ -191,7 +191,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 	}
 
 	@Override
-	public final String getJMXDomain() {
+	public final String getControllerDomain() {
 		return this.domain;
 	}
 

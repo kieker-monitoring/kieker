@@ -16,19 +16,20 @@
 
 package kieker.checkstyle;
 
-import com.puppycrawl.tools.checkstyle.api.AnnotationUtility;
-import com.puppycrawl.tools.checkstyle.api.Check;
+import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
+import com.puppycrawl.tools.checkstyle.utils.AnnotationUtility;
 
 /**
- * This is an additional checkstyle check which makes sure that JUnit tests do not use the {@code @ignore} annotation.
+ * This is an additional checkstyle check which makes sure that JUnit tests do
+ * not use the {@code @ignore} annotation.
  *
  * @author Nils Christian Ehmke
  *
  * @since 1.10
  */
-public class NotAllowedIgnoreAnnotationCheck extends Check {
+public class NotAllowedIgnoreAnnotationCheck extends AbstractCheck {
 
 	/**
 	 * Creates a new instance of this class.
@@ -59,4 +60,13 @@ public class NotAllowedIgnoreAnnotationCheck extends Check {
 		return AnnotationUtility.containsAnnotation(ast, "Ignore");
 	}
 
+	@Override
+	public int[] getAcceptableTokens() {
+		return getDefaultTokens();
+	}
+
+	@Override
+	public int[] getRequiredTokens() {
+		return getDefaultTokens();
+	}
 }

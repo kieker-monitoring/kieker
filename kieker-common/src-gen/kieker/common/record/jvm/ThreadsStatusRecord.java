@@ -17,6 +17,7 @@ package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.jvm.AbstractJVMRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
@@ -138,8 +139,9 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public ThreadsStatusRecord(final IValueDeserializer deserializer) {
+	public ThreadsStatusRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.threadCount = deserializer.getLong();
 		this.daemonThreadCount = deserializer.getLong();

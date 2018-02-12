@@ -31,9 +31,9 @@ import kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseOutInterceptor;
 
 /**
  * Tests the CXF interceptors with no Session ID being registered before.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 public class TestCXFClientServerInterceptorsNoSessionRegisteredBefore extends AbstractTestCXFClientServerInterceptors {
@@ -66,14 +66,36 @@ public class TestCXFClientServerInterceptorsNoSessionRegisteredBefore extends Ab
 		 * </ol>
 		 */
 
-		// The records were inserted asynchronously.
-		// Therefore, the server record (...ResponseOutInterceptor) can either be at index 0 or 1.
-		int index;
-		final OperationExecutionRecord record = (OperationExecutionRecord) records.get(0);
-		if (record.getOperationSignature().equals(OperationExecutionSOAPResponseOutInterceptor.SIGNATURE)) {
-			index = 0;
-		} else {
-			index = 1;
+		int curIdx = -1;
+		long traceId = OperationExecutionRecord.NO_TRACE_ID;
+		String sessionID = OperationExecutionRecord.NO_SESSION_ID;
+		for (final IMonitoringRecord record : records) {
+			final OperationExecutionRecord opRec = (OperationExecutionRecord) record;
+			curIdx += 1;
+			switch (curIdx) {
+			case 0:
+				Assert.assertEquals("Unexpected eoi", 1, opRec.getEoi());
+				Assert.assertEquals("Unexpected ess", 1, opRec.getEss());
+				Assert.assertEquals("Unexpected hostname", SERVER_HOSTNAME, opRec.getHostname());
+				Assert.assertEquals("Unexpected signature", OperationExecutionSOAPResponseOutInterceptor.SIGNATURE, opRec.getOperationSignature());
+				traceId = opRec.getTraceId();
+				Assert.assertTrue("Unexpected traceId: " + traceId, traceId != OperationExecutionRecord.NO_TRACE_ID);
+				sessionID = opRec.getSessionId();
+				Assert.assertFalse("Unexpected session ID: " + sessionID, OperationExecutionRecord.NO_SESSION_ID.equals(sessionID)); // do not use == here, because
+																																		// of SOAP transformations
+				break;
+			case 1:
+				Assert.assertEquals("Unexpected eoi", 0, opRec.getEoi());
+				Assert.assertEquals("Unexpected ess", 0, opRec.getEss());
+				Assert.assertEquals("Unexpected hostname", CLIENT_HOSTNAME, opRec.getHostname());
+				Assert.assertEquals("Unexpected signature", OperationExecutionSOAPResponseInInterceptor.SIGNATURE, opRec.getOperationSignature());
+				Assert.assertEquals("Unexpected traceId", traceId, opRec.getTraceId());
+				Assert.assertEquals("Unexpected session ID", OperationExecutionSOAPRequestOutInterceptor.SESSION_ID_ASYNC_TRACE, opRec.getSessionId());
+				break;
+			default:
+				Assert.fail("Unexpected record" + opRec);
+				break;
+			}
 		}
 
 		// first record

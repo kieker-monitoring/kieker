@@ -19,9 +19,9 @@ package kieker.monitoring.core.configuration;
 /**
  * If this file changes, the default config file has to be adjusted!
  * Ideally it would be created using this file! (#151)
- * 
+ *
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 interface Keys { // NOPMD NOCS (static list)
@@ -43,6 +43,7 @@ interface Keys { // NOPMD NOCS (static list)
 	public static final String CONTROLLER_NAME = PREFIX + "name";
 	public static final String HOST_NAME = PREFIX + "hostname";
 	public static final String EXPERIMENT_ID = PREFIX + "initialExperimentId";
+	public static final String APPLICATION_NAME = PREFIX + "applicationName";
 	public static final String USE_SHUTDOWN_HOOK = PREFIX + "useShutdownHook";
 	public static final String DEBUG = PREFIX + "debug";
 	public static final String METADATA = PREFIX + "metadata";
@@ -56,6 +57,12 @@ interface Keys { // NOPMD NOCS (static list)
 	public static final String ACTIVATE_JMX_REMOTE_PORT = PREFIX + "jmx.remote.port";
 	public static final String ACTIVATE_JMX_REMOTE_NAME = PREFIX + "jmx.remote.name";
 	public static final String ACTIVATE_JMX_REMOTE_FALLBACK = PREFIX + "jmx.remote.fallback";
+
+	// TCP Controller
+	public static final String ACTIVATE_TCP = PREFIX + "tcp";
+	public static final String ACTIVATE_TCP_DOMAIN = PREFIX + "tcp.domain";
+	public static final String ACTIVATE_TCP_REMOTE = PREFIX + "tcp.remote";
+	public static final String ACTIVATE_TCP_REMOTE_PORT = PREFIX + "tcp.remote.port";
 
 	// Writer Controller
 	public static final String AUTO_SET_LOGGINGTSTAMP = PREFIX + "setLoggingTimestamp";
