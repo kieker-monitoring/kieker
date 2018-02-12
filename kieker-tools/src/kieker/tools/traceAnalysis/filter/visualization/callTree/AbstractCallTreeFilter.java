@@ -177,9 +177,6 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		final String labelText = n.isRootNode() ? SystemModelRepository.ROOT_NODE_LABEL // NOCS
 				: AbstractCallTreeFilter.nodeLabel(n, shortLabels); // NOCS
 
-		// comment for debugging purposes
-		ps.println("//" + n.getDescription());
-
 		strBuild.append(newNodeId).append("[label =\"").append(labelText)
 				.append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
 		final String textLine = strBuild.toString();
@@ -196,6 +193,11 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
 			final AbstractCallTreeNode<?> targetNode = child.getTarget();
 			AbstractCallTreeFilter.dotEdgesFromSubTree(targetNode, nodeIds, nextNodeId, ps, shortLabels);
+		}
+		
+		if (n.isRootNode()) {
+			// comment for debugging purposes
+			ps.println("//" + n.getDescription());
 		}
 	}
 
@@ -314,7 +316,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 		final Collection<AbstractMessage> traceMessages = t.getSequenceAsVector();
 		final String description = traceMessages.toString();
-		root.setDescription(description); // for debugging purposes
+		root.setDescription(description); // for debugging purposes (chw)
 
 		AbstractCallTreeNode<T> curNode = root;
 		curStack.push(curNode);
