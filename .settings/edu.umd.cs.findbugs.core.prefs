@@ -1,5 +1,5 @@
 #FindBugs User Preferences
-#Mon Feb 12 11:02:34 CET 2018
+#Wed Feb 01 15:50:27 CET 2017
 cloud_id=edu.umd.cs.findbugs.cloud.doNothingCloud
 detectorAppendingToAnObjectOutputStream=AppendingToAnObjectOutputStream|true
 detectorAtomicityProblem=AtomicityProblem|true
@@ -138,9 +138,7 @@ detectorWrongMapIterator=WrongMapIterator|true
 detectorXMLFactoryBypass=XMLFactoryBypass|true
 detector_threshold=3
 effort=max
-excludefilter0=../../new-workspace/kieker/config/fb-filter.xml|true
-excludefilter1=build-config/static-analysis/fb-filter.xml|false
+excludefilter0=build-config/static-analysis/fb-filter.xml|true
 filter_settings=Low|BAD_PRACTICE,CORRECTNESS,EXPERIMENTAL,I18N,MALICIOUS_CODE,MT_CORRECTNESS,PERFORMANCE,SECURITY,STYLE|false|20
 filter_settings_neg=NOISE|
-includefilter0=../../new-workspace/kieker/config/fb-filter.xml|false
 run_at_full_build=false
