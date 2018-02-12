@@ -23,10 +23,7 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
-import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
-import kieker.tools.traceAnalysis.systemModel.MessageTrace;
-import kieker.tools.traceAnalysis.systemModel.Operation;
-import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
+import kieker.tools.traceAnalysis.systemModel.*;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AssemblyComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -37,11 +34,10 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * 
  * @since 1.1
  */
-@Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated assembly component operation call tree",
-		repositoryPorts = {
-			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
-		})
-public class AggregatedAssemblyComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AssemblyComponentOperationPair> {
+@Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated assembly component operation call tree", repositoryPorts = {
+		@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
+public class AggregatedAssemblyComponentOperationCallTreeFilter
+		extends AbstractAggregatedCallTreeFilter<AssemblyComponentOperationPair> {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -51,7 +47,8 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter extends Abstract
 	 * @param projectContext
 	 *            The project context for this component.
 	 */
-	public AggregatedAssemblyComponentOperationCallTreeFilter(final Configuration configuration, final IProjectContext projectContext) {
+	public AggregatedAssemblyComponentOperationCallTreeFilter(final Configuration configuration,
+			final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
 
@@ -62,8 +59,10 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter extends Abstract
 	public boolean init() {
 		final boolean success = super.init();
 		if (success) {
-			super.setRoot(new AggregatedAssemblyComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
-					AssemblyComponentOperationPairFactory.ROOT_PAIR, true, null, NoOriginRetentionPolicy.createInstance()));
+			final AggregatedAssemblyComponentOperationCallTreeNode root = new AggregatedAssemblyComponentOperationCallTreeNode(
+					AbstractSystemSubRepository.ROOT_ELEMENT_ID, AssemblyComponentOperationPairFactory.ROOT_PAIR, true,
+					null, NoOriginRetentionPolicy.createInstance());
+			super.setRoot(root);
 		}
 		return success;
 	}
@@ -73,8 +72,9 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter extends Abstract
 	 */
 	@Override
 	protected AssemblyComponentOperationPair concreteCreatePair(final SynchronousCallMessage callMsg) {
-		final AssemblyComponent assemblyComponent = callMsg.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
-		final Operation op = callMsg.getReceivingExecution().getOperation();
+		final Execution execution = callMsg.getReceivingExecution();
+		final AssemblyComponent assemblyComponent = execution.getAllocationComponent().getAssemblyComponent();
+		final Operation op = execution.getOperation();
 		return this.getSystemEntityFactory().getAssemblyPairFactory().getPairInstanceByPair(assemblyComponent, op);
 	}
 }
@@ -84,16 +84,17 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter extends Abstract
  * 
  * @since 1.1
  */
-class AggregatedAssemblyComponentOperationCallTreeNode extends AbstractAggregatedCallTreeNode<AssemblyComponentOperationPair> {
+class AggregatedAssemblyComponentOperationCallTreeNode
+		extends AbstractAggregatedCallTreeNode<AssemblyComponentOperationPair> {
 
-	public AggregatedAssemblyComponentOperationCallTreeNode(final int id, final AssemblyComponentOperationPair entity, final boolean rootNode,
-			final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
+	public AggregatedAssemblyComponentOperationCallTreeNode(final int id, final AssemblyComponentOperationPair entity,
+			final boolean rootNode, final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
 		super(id, entity, rootNode, origin, originPolicy);
 	}
 
 	@Override
-	public AbstractCallTreeNode<AssemblyComponentOperationPair> newCall(final AssemblyComponentOperationPair dstObj, final MessageTrace origin,
-			final IOriginRetentionPolicy originPolicy) {
+	public AbstractCallTreeNode<AssemblyComponentOperationPair> newCall(final AssemblyComponentOperationPair dstObj,
+			final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
 		final AssemblyComponentOperationPair destination = dstObj;
 		WeightedDirectedCallTreeEdge<AssemblyComponentOperationPair> e = this.childMap.get(destination.getId());
 		AbstractCallTreeNode<AssemblyComponentOperationPair> n;
@@ -102,7 +103,8 @@ class AggregatedAssemblyComponentOperationCallTreeNode extends AbstractAggregate
 			originPolicy.handleOrigin(e, origin);
 			originPolicy.handleOrigin(n, origin);
 		} else {
-			n = new AggregatedAssemblyComponentOperationCallTreeNode(destination.getId(), destination, false, origin, originPolicy); // !rootNode
+			n = new AggregatedAssemblyComponentOperationCallTreeNode(destination.getId(), destination, false, origin,
+					originPolicy); // !rootNode
 			e = new WeightedDirectedCallTreeEdge<AssemblyComponentOperationPair>(this, n, origin, originPolicy);
 			this.childMap.put(destination.getId(), e);
 			super.appendChildEdge(e);
