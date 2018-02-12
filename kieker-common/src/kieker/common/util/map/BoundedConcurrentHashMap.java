@@ -18,6 +18,8 @@ package kieker.common.util.map;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * @author Nils Christian Ehmke
  * 
@@ -28,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @param <V>
  *            The type of the values.
  */
+@SuppressFBWarnings(value = "EQ_DOESNT_OVERRIDE_EQUALS") // inherit equals to follow Map's definition of equality 
 public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 
 	private static final long serialVersionUID = 1L;
