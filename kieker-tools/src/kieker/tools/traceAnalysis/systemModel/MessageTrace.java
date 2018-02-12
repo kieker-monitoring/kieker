@@ -16,15 +16,13 @@
 
 package kieker.tools.traceAnalysis.systemModel;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class is a container for a whole trace of messages (represented as actual instances of {@link AbstractMessage}).
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public class MessageTrace extends AbstractTrace {
@@ -36,7 +34,7 @@ public class MessageTrace extends AbstractTrace {
 
 	/**
 	 * Creates a new message trace from the given data.
-	 * 
+	 *
 	 * @param traceId
 	 *            The ID for this message trace
 	 * @param seq
@@ -48,7 +46,7 @@ public class MessageTrace extends AbstractTrace {
 
 	/**
 	 * Creates a new message trace from the given data.
-	 * 
+	 *
 	 * @param traceId
 	 *            The ID for this trace.
 	 * @param sessionId
@@ -60,7 +58,7 @@ public class MessageTrace extends AbstractTrace {
 		super(traceId, sessionId);
 
 		// no need to sort: seq is already sorted
-		// Collections.sort(seq, new MessageComparator());
+		Collections.sort(seq, new MessageComparator());
 
 		this.messages = seq;
 
@@ -82,7 +80,7 @@ public class MessageTrace extends AbstractTrace {
 
 	/**
 	 * Returns the message sequence contained in this trace as an (unmodifiable) list.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public final List<AbstractMessage> getSequenceAsVector() {
