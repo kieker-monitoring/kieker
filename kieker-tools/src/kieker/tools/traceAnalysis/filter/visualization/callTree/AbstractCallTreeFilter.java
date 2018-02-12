@@ -197,7 +197,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		
 		if (n.isRootNode()) {
 			// comment for debugging purposes
-			ps.println("//" + n.getDescription());
+			ps.println("5->6//" + n.getDescription());
 		}
 	}
 
