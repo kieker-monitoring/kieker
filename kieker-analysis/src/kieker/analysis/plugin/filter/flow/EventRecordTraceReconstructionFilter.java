@@ -18,6 +18,7 @@ package kieker.analysis.plugin.filter.flow;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
@@ -264,7 +265,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	@Override
 	public void terminate(final boolean error) {
 		synchronized (this) {
-			final List<Long> sortedTraceIds = getSortedTraceIds(this.traceId2trace);
+			final Collection<Long> sortedTraceIds = getSortedTraceIds(this.traceId2trace.keySet());
 
 			for (final Long traceId : sortedTraceIds) {
 				final TraceBuffer traceBuffer = this.traceId2trace.get(traceId);
@@ -288,7 +289,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		final long duration = timestamp - this.maxTraceDuration;
 		final long traceTimeout = timestamp - this.maxTraceTimeout;
 
-		final List<Long> sortedTraceIds = getSortedTraceIds(this.traceId2trace);
+		final Collection<Long> sortedTraceIds = getSortedTraceIds(this.traceId2trace.keySet());
 
 		for (final Long traceId : sortedTraceIds) {
 			final TraceBuffer traceBuffer = this.traceId2trace.get(traceId);
@@ -306,13 +307,17 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		}
 	}
 
-	private List<Long> getSortedTraceIds(final Map<Long, TraceBuffer> traceId2trace) {
-		final Set<Long> keys = traceId2trace.keySet();
-
+	/**
+	 * HACK: We sort the trace ids to get a deterministic result when plotting the traces to the dot format.
+	 * <p>
+	 * In future, we should better sort according to the start timestamp of each trace.
+	 */
+	private Collection<Long> getSortedTraceIds(final Set<Long> keys) {
 		final List<Long> copiedKeys = new ArrayList<>(keys);
 		Collections.sort(copiedKeys);
 
 		return copiedKeys;
+//		return keys;
 	}
 
 	/**
