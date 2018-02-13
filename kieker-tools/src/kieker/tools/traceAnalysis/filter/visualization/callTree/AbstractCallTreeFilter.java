@@ -57,7 +57,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * @since 1.1
  */
 @Plugin(repositoryPorts = {
-		@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
 public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProcessingFilter {
 
 	private static final String ENCODING = "UTF-8";
@@ -291,11 +291,10 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	 */
 	protected static void saveTreeToDotFile(final AbstractCallTreeNode<?> root, final String outputFn,
 			final boolean includeWeights, final boolean includeEois, final boolean shortLabels)
-					throws FileNotFoundException, UnsupportedEncodingException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFn), false, ENCODING);
-		AbstractCallTreeFilter.dotFromCallingTree(root, ps, includeWeights, includeEois, shortLabels);
-		ps.flush();
-		ps.close();
+			throws FileNotFoundException, UnsupportedEncodingException {
+		try (final PrintStream ps = new PrintStream(new FileOutputStream(outputFn), false, ENCODING)) {
+			AbstractCallTreeFilter.dotFromCallingTree(root, ps, includeWeights, includeEois, shortLabels);
+		}
 	}
 
 	/**
@@ -350,7 +349,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	public static <T> void writeDotForMessageTrace(final AbstractCallTreeNode<T> root,
 			final IPairFactory<T> pairFactory, final MessageTrace msgTrace, final String outputFilename,
 			final boolean includeWeights, final boolean shortLabels)
-					throws FileNotFoundException, TraceProcessingException, UnsupportedEncodingException {
+			throws FileNotFoundException, TraceProcessingException, UnsupportedEncodingException {
 
 		AbstractCallTreeFilter.<T> addTraceToTree(root, msgTrace, pairFactory, false); // false: no aggregation
 		AbstractCallTreeFilter.saveTreeToDotFile(root, outputFilename, includeWeights, true, shortLabels); // includeEois
