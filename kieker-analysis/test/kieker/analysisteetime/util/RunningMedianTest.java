@@ -24,6 +24,7 @@ import org.junit.rules.ExpectedException;
 /**
  * @author Sören Henning
  *
+ * @since 1.14
  */
 public class RunningMedianTest {
 
