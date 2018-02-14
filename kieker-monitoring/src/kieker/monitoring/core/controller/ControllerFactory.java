@@ -126,4 +126,44 @@ public final class ControllerFactory {
 		return clazz.getConstructor(Configuration.class).newInstance(configurationToPass);
 	}
 
+	/**
+	 * This is a helper method .
+	 *
+	 * @param c
+	 *            This class defines the expected result of the method call.
+	 * @param classname
+	 *            The name of the class to be created.
+	 * @param parameters
+	 *            parameter for the constructor
+	 *
+	 * @return A new and initializes class instance if everything went well.
+	 *
+	 * @param <C>
+	 *            The type of the returned class.
+	 */
+	@SuppressWarnings("unchecked")
+	public <C> C create(final Class<C> c, final String className, final Class<?>[] parameterTypes, final Object... parameters) {
+		C createdClass = null; // NOPMD (null)
+		try {
+			final Class<?> clazz = Class.forName(className);
+			if (c.isAssignableFrom(clazz)) {
+				createdClass = (C) clazz.getConstructor(parameterTypes).newInstance(parameters);
+			} else {
+				LOG.error("Class '" + className + "' has to implement '" + c.getSimpleName() + "'");
+			}
+		} catch (final ClassNotFoundException e) {
+			LOG.error(c.getSimpleName() + ": Class '" + className + "' not found", e);
+		} catch (final NoSuchMethodException e) {
+			String parameterTypeNames = "";
+			for (final Object parameter : parameters) {
+				parameterTypeNames += "," + parameter.getClass().getName();
+			}
+			LOG.error(c.getSimpleName() + ": Class '" + className
+					+ "' has to implement a (public) constructor that accepts " + parameterTypeNames, e);
+		} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
+			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
+			LOG.error(c.getSimpleName() + ": Failed to load class for name '" + className + "'", e);
+		}
+		return createdClass;
+	}
 }

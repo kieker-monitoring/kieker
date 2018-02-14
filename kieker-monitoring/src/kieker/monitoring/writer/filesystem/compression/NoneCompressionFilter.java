@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.monitoring.writer.filesystem;
+package kieker.monitoring.writer.filesystem.compression;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Path;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.util.filesystem.FSUtil;
 
 /**
  * This class does not provide any compressing filter. It exists only to minimize implementation complexity.
@@ -49,7 +48,7 @@ public class NoneCompressionFilter implements ICompressionFilter {
 
 	@Override
 	public String getExtension() {
-		return FSUtil.BINARY_FILE_EXTENSION;
+		return null;
 	}
 
 }

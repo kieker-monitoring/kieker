@@ -15,43 +15,39 @@
  ***************************************************************************/
 package kieker.monitoring.writer.filesystem;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Path;
+import java.nio.Buffer;
+
+import kieker.common.logging.Log;
 
 /**
- * Common interface for compression filter used in the binary writer.
- *
  * @author Reiner Jung
  *
  * @since 1.14
+ *
  */
-public interface ICompressionFilter {
+public abstract class AbstractPooledFileChannel<T extends Buffer> {
+
+	private T buffer;
+
+	public AbstractPooledFileChannel(final T buffer) {
+		this.buffer = buffer;
+	}
+
+	abstract public long getBytesWritten();
+
+	abstract public void flush(Log log);
 
 	/**
-	 * Create an output stream with compression support and use the normal output stream as source.
-	 *
-	 * @param outputStream
-	 *            uncompressed output stream
-	 * @param fileName
-	 *            file name used in compression system, which also use an internal directory structure.
-	 *
-	 * @return the compression output stream
-	 *
-	 * @throws IOException
-	 *             on file or stream errors
-	 *
-	 * @since 1.14
+	 * Flushes the buffer and closes the channel afterwards.
 	 */
-	OutputStream chainOutputStream(OutputStream outputStream, Path fileName) throws IOException;
+	abstract public void close(Log writerLog);
 
-	/**
-	 * Return the extension with leading dot.
-	 *
-	 * @return return the extension
-	 * 
-	 * @since 1.14
-	 */
-	String getExtension();
+	protected T getBuffer() {
+		return this.buffer;
+	}
+
+	protected void setBuffer(final T buffer) {
+		this.buffer = buffer;
+	}
 
 }

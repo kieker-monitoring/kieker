@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.monitoring.writer.filesystem;
 
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 
 /**
- * Only used within tests (hence, declared package-private).
- * Note: It is not a good idea to have a test only interface. However, in the present test setup it cannot be avoided.
  *
- * @author Christian Wulf
+ * @author Reiner Jung
  *
- * @since 1.13
- *
- * @deprecated 1.14 should be removed after fixing tests.
  */
-@Deprecated
-interface IFileWriter {
+public interface IMapFileHandler {
+
 	/**
-	 * @since 1.13
+	 * Create a map file with the given name and location adhering to the given charset.
+	 *
+	 * @param location
+	 *            complete path for the map file including its name
+	 * @param charset
+	 *            character set to be used for the file
 	 */
-	Path getLogFolder();
+	void create(Path location, Charset charset);
+
+	/**
+	 * Close the mapping file.
+	 */
+	void close();
+
+	/**
+	 * Add a key value pair to the file.
+	 *
+	 * @param id
+	 *            class id
+	 * @param eventClassName
+	 *            name of the event class
+	 */
+	void add(int id, String eventClassName);
+
 }

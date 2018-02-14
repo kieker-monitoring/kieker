@@ -49,4 +49,8 @@ public class FileExtensionFilter implements FilenameFilter {
 		return name.endsWith(this.fileExtension);
 	}
 
+	public String getExtensionName() {
+		return this.fileExtension;
+	}
+
 }

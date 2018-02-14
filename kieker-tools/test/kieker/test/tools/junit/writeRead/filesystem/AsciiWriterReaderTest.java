@@ -32,8 +32,8 @@ import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.writer.filesystem.AsciiFileWriter;
-import kieker.monitoring.writer.filesystem.NoneCompressionFilter;
-import kieker.monitoring.writer.filesystem.ZipCompressionFilter;
+import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
+import kieker.monitoring.writer.filesystem.compression.ZipCompressionFilter;
 
 import kieker.test.tools.junit.writeRead.TestAnalysis;
 import kieker.test.tools.junit.writeRead.TestDataRepository;

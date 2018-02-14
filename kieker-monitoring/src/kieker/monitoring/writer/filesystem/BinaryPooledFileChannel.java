@@ -16,7 +16,9 @@
 
 package kieker.monitoring.writer.filesystem;
 
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 
 import kieker.common.logging.Log;
@@ -27,30 +29,30 @@ import kieker.monitoring.writer.WriterUtil;
  *
  * @since 1.13
  */
-class PooledFileChannel {
+class BinaryPooledFileChannel extends AbstractPooledFileChannel<ByteBuffer> {
 
 	private final WritableByteChannel channel;
 
 	private long bytesWritten;
 
-	public PooledFileChannel(final WritableByteChannel channel) {
-		super();
-		this.channel = channel;
+	public BinaryPooledFileChannel(final OutputStream outputStream, final ByteBuffer buffer) {
+		super(buffer);
+		this.channel = Channels.newChannel(outputStream);
 	}
 
+	@Override
 	public long getBytesWritten() {
 		return this.bytesWritten;
 	}
 
-	public void flush(final ByteBuffer buffer, final Log log) {
-		this.bytesWritten += WriterUtil.flushBuffer(buffer, this.channel, log);
+	@Override
+	public void flush(final Log log) {
+		this.bytesWritten += WriterUtil.flushBuffer(this.getBuffer(), this.channel, log);
 	}
 
-	/**
-	 * Flushes the buffer and closes the channel afterwards.
-	 */
-	public void close(final ByteBuffer buffer, final Log log) {
-		this.bytesWritten += WriterUtil.flushBuffer(buffer, this.channel, log);
+	@Override
+	public void close(final Log log) {
+		this.flush(log);
 		WriterUtil.close(this.channel, log);
 	}
 }
