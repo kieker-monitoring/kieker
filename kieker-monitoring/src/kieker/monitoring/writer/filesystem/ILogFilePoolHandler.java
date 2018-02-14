@@ -18,23 +18,22 @@ package kieker.monitoring.writer.filesystem;
 import java.nio.file.Path;
 
 /**
+ * An {@link ILogFilePoolHandler} is used to manage log data files in Kieker.
+ * After construction, each request of a new file path will return a new file path.
+ *
+ * The corresponding constructor must have the following signature:
+ * - Path location
+ * - String file extension prefixed by a dot
+ * - Integer with the max amount of files
+ *
  * @author Reiner Jung
  *
+ * @since 1.14
  */
 public interface ILogFilePoolHandler {
 
 	/**
-	 * Initialize the file pool.
-	 *
-	 * @param location
-	 *            location of the folder for the file pool
-	 * @param filenameFilter
-	 *            provides the file extension used to create files.
-	 */
-	void initialize(Path location, String extension);
-
-	/**
-	 * Create a new output stream connected to a file.
+	 * Create a new path for a log file.
 	 *
 	 * @return return a proper stream
 	 */

@@ -34,6 +34,7 @@ import kieker.common.util.filesystem.FSUtil;
  *
  * @author Reiner Jung
  *
+ * @since 1.14
  */
 public class RotatingLogFilePoolHandler implements ILogFilePoolHandler {
 
@@ -46,20 +47,16 @@ public class RotatingLogFilePoolHandler implements ILogFilePoolHandler {
 
 	private final SimpleDateFormat dateFormatter;
 
-	private Path location;
+	private final Path location;
 	private int counter;
-	private String fileExtensionWithDot;
+	private final String fileExtensionWithDot;
 	private final int maxAmountOfFiles;
 
-	public RotatingLogFilePoolHandler(final Integer maxAmountOfFiles) {
+	public RotatingLogFilePoolHandler(final Path location, final String extension, final Integer maxAmountOfFiles) {
 		this.dateFormatter = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", LOCALE);
 		this.dateFormatter.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
 
 		this.maxAmountOfFiles = maxAmountOfFiles;
-	}
-
-	@Override
-	public void initialize(final Path location, final String extension) {
 		this.location = location;
 		this.fileExtensionWithDot = extension;
 	}

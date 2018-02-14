@@ -30,8 +30,12 @@ import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
 import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
 
 /**
+ * Handler for the map file used in Kieker.
+ * Note: This version does not support compression for the map file right now.
+ *
  * @author Reiner Jung
  *
+ * @since 1.14
  */
 @ReceiveUnfilteredConfiguration
 public class TextMapFileHandler implements IMapFileHandler {

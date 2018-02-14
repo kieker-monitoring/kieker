@@ -32,7 +32,10 @@ import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
  * @author Henning Schnoor - added XZ compression instead of zip (1.13)
  *
  * @since 1.9
+ *
+ * @deprecated 1.14 should be removed in 1.15 replaced by new FileWriter API
  */
+@Deprecated
 @ReceiveUnfilteredConfiguration // required for using class KiekerLogFolder
 public class BinaryFileWriter extends AbstractFileWriter<ByteBuffer, DefaultValueSerializer> {
 

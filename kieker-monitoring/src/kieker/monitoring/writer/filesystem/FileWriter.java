@@ -35,6 +35,9 @@ import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
 import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
 
 /**
+ * Generic file writer which can be used to write any type of serialization.
+ * Presently, two serialization methods exist.
+ *
  * @author Reiner Jung
  *
  * @since 1.14
@@ -72,7 +75,7 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 
 	private final IMapFileHandler mapFileHandler;
 	private final ILogFilePoolHandler logFilePoolHandler;
-	private final ILogStreamHandler logStreamHandler;
+	private final AbstractLogStreamHandler logStreamHandler;
 	private final long maxBytesInFile;
 	private final WriterRegistry writerRegistry;
 
@@ -136,19 +139,18 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 				mapFileHandlerClassName, configuration);
 		this.mapFileHandler.create(logFolder.resolve(FSUtil.MAP_FILENAME), Charset.forName(charsetName));
 
-		/** get log file handler. */
-		final String logFilePoolHandlerClassName = configuration.getStringProperty(CONFIG_LOG_POOL_FILE_HANDLER, RotatingLogFilePoolHandler.class.getName());
-		final Class<?>[] logFilePoolHandlerSignature = { Integer.class, };
-		this.logFilePoolHandler = ControllerFactory.getInstance(configuration).create(ILogFilePoolHandler.class,
-				logFilePoolHandlerClassName, logFilePoolHandlerSignature, maxAmountOfFiles);
-
-		/** get log handler. */
+		/** get log stream handler. */
 		final String logHandlerClassName = configuration.getStringProperty(CONFIG_LOG_STREAM_HANDLER, TextLogStreamHandler.class.getName());
 		final Class<?>[] logHandlerSignature = { Boolean.class, Integer.class, Charset.class, ICompressionFilter.class, WriterRegistry.class };
-		this.logStreamHandler = ControllerFactory.getInstance(configuration).create(ILogStreamHandler.class, logHandlerClassName, logHandlerSignature, flushLogFile,
+		this.logStreamHandler = ControllerFactory.getInstance(configuration).create(AbstractLogStreamHandler.class, logHandlerClassName, logHandlerSignature,
+				flushLogFile,
 				bufferSize, charset, compressionFilter, this.writerRegistry);
 
-		this.logFilePoolHandler.initialize(logFolder, this.logStreamHandler.getFileExtension());
+		/** get log file handler. */
+		final String logFilePoolHandlerClassName = configuration.getStringProperty(CONFIG_LOG_POOL_FILE_HANDLER, RotatingLogFilePoolHandler.class.getName());
+		final Class<?>[] logFilePoolHandlerSignature = { Path.class, String.class, Integer.class, };
+		this.logFilePoolHandler = ControllerFactory.getInstance(configuration).create(ILogFilePoolHandler.class,
+				logFilePoolHandlerClassName, logFilePoolHandlerSignature, logFolder, this.logStreamHandler.getFileExtension(), maxAmountOfFiles);
 
 		final Path outputFile = this.logFilePoolHandler.requestFile();
 

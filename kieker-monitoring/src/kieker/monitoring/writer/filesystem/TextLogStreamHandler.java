@@ -16,12 +16,8 @@
 package kieker.monitoring.writer.filesystem;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.CharBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
-import java.nio.file.Path;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -32,28 +28,22 @@ import kieker.monitoring.writer.WriterUtil;
 import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
 
 /**
+ * Create log files following the Kieker DAT format of semicolon separated values.
+ * The handler supports compression.
+ *
  * @author Reiner Jung
  *
  * @since 1.14
  *
  */
-public class TextLogStreamHandler implements ILogStreamHandler {
+public class TextLogStreamHandler extends AbstractLogStreamHandler {
 
 	/** line separator string. */
 	private static final String LINE_SEPARATOR = System.lineSeparator();
 
 	private static final Log LOGGER = LogFactory.getLog(TextLogStreamHandler.class);
 
-	private final boolean flushLogFile;
-	private final ICompressionFilter compressionFilter;
-	private int numOfEntries;
 	private final CharBuffer buffer;
-	private final TextValueSerializer serializer;
-	private final Charset charset;
-	private WritableByteChannel outputChannel;
-
-	private int numOfBytes;
-	private OutputStream serializedStream;
 
 	/**
 	 * Create a text log stream handler.
@@ -71,34 +61,10 @@ public class TextLogStreamHandler implements ILogStreamHandler {
 	 */
 	public TextLogStreamHandler(final Boolean flushLogFile, final Integer bufferSize, final Charset charset, final ICompressionFilter compressionFilter,
 			final WriterRegistry writerRegistry) { // NOPMD writerRegistry is API and not used for text serialization
-		this.flushLogFile = flushLogFile;
+		super(flushLogFile, bufferSize, charset, compressionFilter, writerRegistry);
+
 		this.buffer = CharBuffer.allocate(bufferSize);
-		this.charset = charset;
-
-		this.compressionFilter = compressionFilter;
 		this.serializer = TextValueSerializer.create(this.buffer);
-	}
-
-	@Override
-	public void initialize(final OutputStream serializedStream, final Path fileName) throws IOException {
-		this.serializedStream = serializedStream;
-		this.outputChannel = Channels.newChannel(this.compressionFilter.chainOutputStream(serializedStream, fileName));
-		this.numOfEntries = 0;
-	}
-
-	@Override
-	public void close() throws IOException {
-		this.outputChannel.close();
-	}
-
-	@Override
-	public int getNumOfEntries() {
-		return this.numOfEntries;
-	}
-
-	@Override
-	public long getNumOfBytes() {
-		return this.numOfBytes;
 	}
 
 	@Override
@@ -126,16 +92,6 @@ public class TextLogStreamHandler implements ILogStreamHandler {
 		} catch (final IOException e) {
 			LOGGER.error("Caught exception while writing to the channel.", e);
 			WriterUtil.close(this.outputChannel, LOGGER);
-		}
-	}
-
-	@Override
-	public String getFileExtension() {
-		final String extension = this.compressionFilter.getExtension();
-		if (extension == null) {
-			return this.serializer.getFileExtension();
-		} else {
-			return extension;
 		}
 	}
 

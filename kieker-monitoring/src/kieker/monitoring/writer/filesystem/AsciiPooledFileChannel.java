@@ -30,7 +30,10 @@ import kieker.common.logging.Log;
  * @author Reiner Jung
  *
  * @since 1.14
+ *
+ * @deprecated 1.14 should be removed in 1.15 replaced by new FileWriter API
  */
+@Deprecated
 public class AsciiPooledFileChannel extends AbstractPooledFileChannel<CharBuffer> {
 
 	private final PrintWriter printWriter;

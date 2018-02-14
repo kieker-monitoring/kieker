@@ -16,12 +16,8 @@
 package kieker.monitoring.writer.filesystem;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.WritableByteChannel;
 import java.nio.charset.Charset;
-import java.nio.file.Path;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -33,24 +29,18 @@ import kieker.monitoring.writer.WriterUtil;
 import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
 
 /**
+ * Binary log stream handler.
+ *
  * @author Reiner Jung
  *
  * @since 1.14
  *
  */
-public class BinaryLogStreamHandler implements ILogStreamHandler {
+public class BinaryLogStreamHandler extends AbstractLogStreamHandler {
 
 	private static final Log LOGGER = LogFactory.getLog(BinaryLogStreamHandler.class);
 
-	private final boolean flushLogFile;
-	private final ICompressionFilter compressionFilter;
-	private int numOfEntries;
 	private final ByteBuffer buffer;
-	private final DefaultValueSerializer serializer;
-	private WritableByteChannel outputChannel;
-
-	private int numOfBytes;
-	private OutputStream serializedStream;
 
 	/**
 	 * Create a binary log stream handler.
@@ -68,33 +58,9 @@ public class BinaryLogStreamHandler implements ILogStreamHandler {
 	 */
 	public BinaryLogStreamHandler(final Boolean flushLogFile, final Integer bufferSize, final Charset charset, // NOPMD charset not used in binary
 			final ICompressionFilter compressionFilter, final WriterRegistry writerRegistry) {
-		this.flushLogFile = flushLogFile;
-		this.buffer = ByteBuffer.allocate(bufferSize);
-
-		this.compressionFilter = compressionFilter;
+		super(flushLogFile, bufferSize, charset, compressionFilter, writerRegistry);
+		this.buffer = ByteBuffer.allocateDirect(bufferSize);
 		this.serializer = DefaultValueSerializer.create(this.buffer, new GetIdAdapter<>(writerRegistry));
-	}
-
-	@Override
-	public void initialize(final OutputStream serializedStream, final Path fileName) throws IOException {
-		this.serializedStream = serializedStream;
-		this.outputChannel = Channels.newChannel(this.compressionFilter.chainOutputStream(serializedStream, fileName));
-		this.numOfEntries = 0;
-	}
-
-	@Override
-	public void close() throws IOException {
-		this.outputChannel.close();
-	}
-
-	@Override
-	public int getNumOfEntries() {
-		return this.numOfEntries;
-	}
-
-	@Override
-	public long getNumOfBytes() {
-		return this.numOfBytes;
 	}
 
 	@Override
@@ -119,16 +85,6 @@ public class BinaryLogStreamHandler implements ILogStreamHandler {
 		} catch (final IOException e) {
 			LOGGER.error("Caught exception while writing to the channel.", e);
 			WriterUtil.close(this.outputChannel, LOGGER);
-		}
-	}
-
-	@Override
-	public String getFileExtension() {
-		final String extension = this.compressionFilter.getExtension();
-		if (extension == null) {
-			return this.serializer.getFileExtension();
-		} else {
-			return extension;
 		}
 	}
 

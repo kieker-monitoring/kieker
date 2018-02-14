@@ -39,7 +39,9 @@ import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
  *
  * @since 1.14
  *
+ * @deprecated 1.14 should be removed in 1.15 replaced by new FileWriter API
  */
+@Deprecated
 public abstract class AbstractFileWriterPool<T extends Buffer> {
 
 	private static final String TIME_ZONE = "UTC";
@@ -117,7 +119,7 @@ public abstract class AbstractFileWriterPool<T extends Buffer> {
 			this.onThresholdExceeded();
 		}
 
-		if (this.logFiles.size() > this.maxAmountOfFiles && this.maxAmountOfFiles > 0) {
+		if ((this.logFiles.size() > this.maxAmountOfFiles) && (this.maxAmountOfFiles > 0)) {
 			this.onMaxLogFilesExceeded();
 		}
 
