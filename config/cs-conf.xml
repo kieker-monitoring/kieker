@@ -8,7 +8,11 @@
     <!-- KIEKER default is warning instead of error -->
     <property name="severity" value="error"/>
     
-
+<!--     http://checkstyle.sourceforge.net/config_filters.html#SuppressionFilter -->
+	<module name="SuppressionFilter">
+	  <property name="file" value="config/cs-suppressions.xml"/>
+	  <property name="optional" value="false"/>
+	</module>
 
     <!--
       If you set the basedir property below, then all reported file

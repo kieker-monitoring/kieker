@@ -171,12 +171,9 @@ allprojects {
     }
 
     // CS is a little bit weird, when it comes to dependencies.
-    checkstyleTest.classpath += sourceSets.main.runtimeClasspath
     checkstyleMain.classpath += configurations.compile
-    // This part makes sure that CS does not check the classes inside src-gen and test-gen
-    checkstyleMain.source = 'src'
-    checkstyleTest.source = 'test'
-    
+    checkstyleTest.classpath += sourceSets.main.runtimeClasspath
+
     repositories {
     	mavenCentral() 
     	jcenter() // for mockito
