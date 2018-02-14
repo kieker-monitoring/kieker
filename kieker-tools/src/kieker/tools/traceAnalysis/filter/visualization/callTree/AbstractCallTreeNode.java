@@ -112,4 +112,9 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 	public Collection<WeightedDirectedCallTreeEdge<T>> getOutgoingEdges() {
 		return this.getChildEdges();
 	}
+
+	@Override
+	public String toString() {
+		return this.getClass().getName() + "[" + this.entity + "]";
+	}
 }

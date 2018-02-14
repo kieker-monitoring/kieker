@@ -35,7 +35,8 @@ public class SynchronousReplyMessage extends AbstractMessage {
 	 * @param receivingExecution
 	 *            The {@link Execution} object which received the message.
 	 */
-	public SynchronousReplyMessage(final long timestamp, final Execution sendingExecution, final Execution receivingExecution) {
+	public SynchronousReplyMessage(final long timestamp, final Execution sendingExecution,
+			final Execution receivingExecution) {
 		super(timestamp, sendingExecution, receivingExecution);
 	}
 
@@ -49,12 +50,18 @@ public class SynchronousReplyMessage extends AbstractMessage {
 		}
 		final SynchronousReplyMessage other = (SynchronousReplyMessage) obj;
 
-		return (this.getTimestamp() == other.getTimestamp()) && this.getSendingExecution().equals(other.getSendingExecution())
+		return (this.getTimestamp() == other.getTimestamp())
+				&& this.getSendingExecution().equals(other.getSendingExecution())
 				&& this.getReceivingExecution().equals(other.getReceivingExecution());
 	}
 
 	@Override
 	public int hashCode() { // NOPMD (forward hashcode)
 		return super.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return "SYNC-RPLY " + super.toString();
 	}
 }

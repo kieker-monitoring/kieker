@@ -422,7 +422,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 		EventRecordTraceReconstructionFilter eventTraceReconstructionFilter = null;
 		TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter = null;
 		try {
-			FSReader reader;
+			final FSReader reader;
 			{ // NOCS (NestedBlock)
 				final Configuration conf = new Configuration(null);
 				conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
@@ -548,7 +548,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(
 						configurationEventRecordTraceGenerationFilter, this.analysisController);
 
-				String outputPortName;
+				final String outputPortName;
 				if (this.invertTraceIdFilter) {
 					outputPortName = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH;
 				} else {
@@ -906,27 +906,9 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)) {
 				numRequestedTasks++;
 
-				final Configuration componentPlotTraceCallTreesConfig = new Configuration();
+				componentPlotTraceCallTrees = createTraceCallTreeFilter(systemEntityFactory, mtReconstrFilter,
+						traceEvents2ExecutionAndMessageTraceFilter);
 
-				componentPlotTraceCallTreesConfig.setProperty(TraceCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME,
-						new File(this.outputDir + File.separator + this.outputFnPrefix + Constants.CALL_TREE_FN_PREFIX)
-								.getCanonicalPath());
-				componentPlotTraceCallTreesConfig.setProperty(TraceCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
-						Boolean.toString(this.shortLabels));
-				componentPlotTraceCallTreesConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-						Constants.PLOTCALLTREE_COMPONENT_NAME);
-				componentPlotTraceCallTrees = new TraceCallTreeFilter(componentPlotTraceCallTreesConfig,
-						this.analysisController);
-
-				this.analysisController.connect(mtReconstrFilter,
-						TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, componentPlotTraceCallTrees,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotTraceCallTrees,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(componentPlotTraceCallTrees,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
 				allTraceProcessingComponents.add(componentPlotTraceCallTrees);
 			}
 			AggregatedAllocationComponentOperationCallTreeFilter componentPlotAggregatedCallTree = null;
@@ -958,33 +940,14 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
 				allTraceProcessingComponents.add(componentPlotAggregatedCallTree);
 			}
+
 			AggregatedAssemblyComponentOperationCallTreeFilter componentPlotAssemblyCallTree = null;
 			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE)) {
 				numRequestedTasks++;
-				final Configuration componentPlotAssemblyCallTreeConfig = new Configuration();
-				componentPlotAssemblyCallTreeConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-						Constants.PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME);
-				componentPlotAssemblyCallTreeConfig.setProperty(
-						AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
-				componentPlotAssemblyCallTreeConfig.setProperty(
-						AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
-						Boolean.toString(this.shortLabels));
-				componentPlotAssemblyCallTreeConfig.setProperty(
-						AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME,
-						this.outputDir + File.separator + this.outputFnPrefix
-								+ Constants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX + ".dot");
-				componentPlotAssemblyCallTree = new AggregatedAssemblyComponentOperationCallTreeFilter(
-						componentPlotAssemblyCallTreeConfig, this.analysisController);
 
-				this.analysisController.connect(mtReconstrFilter,
-						TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, componentPlotAssemblyCallTree,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyCallTree,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(componentPlotAssemblyCallTree,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+				componentPlotAssemblyCallTree = createAggrAssemblyCompOpCallTreeFilter(systemEntityFactory,
+						mtReconstrFilter, traceEvents2ExecutionAndMessageTraceFilter);
+
 				allTraceProcessingComponents.add(componentPlotAssemblyCallTree);
 			}
 			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
@@ -1077,6 +1040,94 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 		}
 
 		return retVal;
+	}
+
+	/**
+	 * 
+	 * @param systemEntityFactory
+	 *            the consumer filter
+	 * @param traceReconstructionFilter
+	 *            one of the producer filters
+	 * @param traceEvents2ExecutionAndMessageTraceFilter
+	 *            one of the producer filters
+	 * @return
+	 * @throws AnalysisConfigurationException
+	 */
+	private AggregatedAssemblyComponentOperationCallTreeFilter createAggrAssemblyCompOpCallTreeFilter(
+			final SystemModelRepository systemEntityFactory, final TraceReconstructionFilter traceReconstructionFilter,
+			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter)
+			throws AnalysisConfigurationException {
+		// build configuration
+		final Configuration componentPlotAssemblyCallTreeConfig = new Configuration();
+		componentPlotAssemblyCallTreeConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+				Constants.PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME);
+		componentPlotAssemblyCallTreeConfig.setProperty(
+				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
+		componentPlotAssemblyCallTreeConfig.setProperty(
+				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
+		componentPlotAssemblyCallTreeConfig.setProperty(
+				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, this.outputDir + File.separator
+						+ this.outputFnPrefix + Constants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX + ".dot");
+
+		// create filter
+		final AggregatedAssemblyComponentOperationCallTreeFilter componentPlotAssemblyCallTree = new AggregatedAssemblyComponentOperationCallTreeFilter(
+				componentPlotAssemblyCallTreeConfig, this.analysisController);
+
+		// connect filter
+		// the input port of this filter is connected with two source filters
+		final String inputPort = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES;
+
+		this.analysisController.connect(traceReconstructionFilter,
+				TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, componentPlotAssemblyCallTree, inputPort);
+		this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+				TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+				componentPlotAssemblyCallTree, inputPort);
+		this.analysisController.connect(componentPlotAssemblyCallTree,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+
+		return componentPlotAssemblyCallTree;
+	}
+
+	/**
+	 * @param systemEntityFactory
+	 *            the consumer filter
+	 * @param mtReconstrFilter
+	 *            one of the producer filters
+	 * @param traceEvents2ExecutionAndMessageTraceFilter
+	 *            one of the producer filters
+	 * @return
+	 * @throws IOException
+	 * @throws AnalysisConfigurationException
+	 */
+	private TraceCallTreeFilter createTraceCallTreeFilter(final SystemModelRepository systemEntityFactory,
+			final TraceReconstructionFilter mtReconstrFilter,
+			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter)
+			throws IOException, AnalysisConfigurationException {
+		// build config
+		final Configuration componentPlotTraceCallTreesConfig = new Configuration();
+
+		componentPlotTraceCallTreesConfig.setProperty(TraceCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME,
+				new File(this.outputDir + File.separator + this.outputFnPrefix + Constants.CALL_TREE_FN_PREFIX)
+						.getCanonicalPath());
+		componentPlotTraceCallTreesConfig.setProperty(TraceCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
+				Boolean.toString(this.shortLabels));
+		componentPlotTraceCallTreesConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+				Constants.PLOTCALLTREE_COMPONENT_NAME);
+
+		// create filter
+		final TraceCallTreeFilter componentPlotTraceCallTrees = new TraceCallTreeFilter(componentPlotTraceCallTreesConfig,
+				this.analysisController);
+
+		// connect filter
+		this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+				componentPlotTraceCallTrees, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+				TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+				componentPlotTraceCallTrees, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(componentPlotTraceCallTrees,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+
+		return componentPlotTraceCallTrees;
 	}
 
 	/**

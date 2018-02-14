@@ -8,12 +8,7 @@
     <!-- KIEKER default is warning instead of error -->
     <property name="severity" value="error"/>
     
-    <!-- KIEKER Filter -->
-    <module name="SuppressWithNearbyCommentFilter">
-        <property name="commentFormat" value="NOCS"/>
-        <property name="checkFormat" value=".*"/>
-        <property name="influenceFormat" value="0"/>
-    </module>
+
 
     <!--
       If you set the basedir property below, then all reported file
@@ -169,8 +164,14 @@
     -->
 
     <module name="TreeWalker">
-        <!-- KIEKER -->
         <property name="tabWidth" value="4"/>
+
+		<module name="SuppressWithNearbyCommentFilter">
+			<property name="commentFormat" value="NOCS"/>
+			<property name="checkFormat" value=".*"/>
+			<property name="influenceFormat" value="0"/>
+		</module>
+
         <!-- KIEKER -->
         <module name="kieker.checkstyle.AnalysisComponentConstructorCheck">
             <property name="ignoreAbstractClasses" value="true"/>
@@ -192,7 +193,7 @@
 		<module name="kieker.checkstyle.NotAllowedIgnoreAnnotationCheck">
             <property name="severity" value="error" default="ignore"/>
         </module>
-        <module name="FileContentsHolder"/>
+        <!-- <module name="FileContentsHolder"/>  -->  <!-- was removed as of 8.2 -->
 
         <!--
          !________________________________________________________________________________________
@@ -251,19 +252,13 @@
 
         <!-- Checks for empty blocks. !-->
         <!-- See http://checkstyle.sf.net/config_blocks.html !-->
-        <!-- KIEKER removed LITERAL_CATCH !-->
         <module name="EmptyBlock">
-            <property name="option" value="stmt"/>
-            <property name="tokens" value="LITERAL_DO,
-                                           LITERAL_ELSE, LITERAL_FINALLY, LITERAL_IF, LITERAL_FOR,
-                                           LITERAL_TRY, LITERAL_WHILE, INSTANCE_INIT, STATIC_INIT"/>
         </module>
 
         <!-- Checks for the placement of left curly braces ('{') for code blocks. !-->
         <!-- See http://checkstyle.sf.net/config_blocks.html !-->
         <module name="LeftCurly">
             <property name="option"        value="eol"/>
-            <property name="maxLineLength" value="165"/>
             <property name="tokens"        value="CLASS_DEF, CTOR_DEF,
                                                   INTERFACE_DEF, LITERAL_CATCH, LITERAL_DO, LITERAL_ELSE,
                                                   LITERAL_FINALLY, LITERAL_FOR, LITERAL_IF, LITERAL_SWITCH,
@@ -362,7 +357,6 @@
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
         <module name="DeclarationOrder">
             <property name="ignoreConstructors" value="false"/>
-            <property name="ignoreMethods"      value="false"/>
             <property name="ignoreModifiers"    value="false"/>
         </module>
 
@@ -481,11 +475,6 @@
                                            SR_ASSIGN, STAR_ASSIGN"/>
         </module>
 
-        <!-- Ensures that the setUp(), tearDown()methods are named correctly, have no arguments, !-->
-        <!-- return void and are either public or protected. !-->
-        <!-- See http://checkstyle.sf.net/config_coding.html !-->
-        <module name="JUnitTestCase"/>
-
         <!-- Checks that there are no "magic numbers", where a magic number is a numeric literal !-->
         <!-- that is not defined as a constant. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
@@ -556,22 +545,11 @@
         <!-- Ensure a class has a package declaration. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
         <module name="PackageDeclaration">
-            <property name="ignoreDirectoryName" value="false"/>
         </module>
 
         <!-- Disallow assignment of parameters. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
         <module name="ParameterAssignment"/>
-
-        <!-- Checks for redundant exceptions declared in throws clause such as duplicates, !-->
-        <!-- unchecked exceptions or subclasses of another declared exception. !-->
-        <!-- See http://checkstyle.sf.net/config_coding.html !-->
-        <module name="RedundantThrows">
-            <property name="allowUnchecked"     value="true"/>
-            <property name="allowSubclasses"    value="false"/>
-            <property name="logLoadErrors"      value="true"/>
-            <property name="suppressLoadErrors" value="false"/>
-        </module>
 
         <!-- Checks that code doesn't rely on the "this." default. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
@@ -965,7 +943,7 @@
         <!-- See http://checkstyle.sf.net/config_naming.html !-->
         <module name="LocalVariableName">
             <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
-            <property name="tokens" value="PARAMETER_DEF"/>
+            <property name="allowOneCharVarInForLoop" value="true"/>
         </module>
 
         <!-- Checks for member variable name naming conventions. !-->
@@ -1198,7 +1176,7 @@
         <!-- See http://checkstyle.sf.net/config_whitespace.html !-->
         <module name="ParenPad">
             <property name="option" value="nospace"/>
-            <property name="tokens" value="CTOR_CALL, LPAREN, METHOD_CALL, RPAREN, SUPER_CTOR_CALL"/>
+<!--             <property name="tokens" value="CTOR_CALL, LPAREN, METHOD_CALL, RPAREN, SUPER_CTOR_CALL"/> -->
         </module>
 
         <!-- Checks the policy on the padding of parentheses for typecasts. !-->

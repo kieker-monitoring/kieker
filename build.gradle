@@ -184,7 +184,7 @@ allprojects {
 
     // Those are some dependencies which are needed by all subprojects
     dependencies {
-        checkstyle resolveLibrary('**/checkstyle-*/**/*.jar')
+        //checkstyle resolveLibrary('**/checkstyle-*/**/*.jar')
         checkstyle project(':kieker-checkstyle-extension')
 
         findbugs resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
