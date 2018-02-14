@@ -19,9 +19,9 @@ package kieker.analysisteetime.signature;
 /**
  * This is a wrapper class around a {@link OperationNameBuilder} and a {@link ComponentNameBuilder}.
  *
- * @author SÃ¶ren Henning
+ * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  *
  */
 public final class NameBuilder {

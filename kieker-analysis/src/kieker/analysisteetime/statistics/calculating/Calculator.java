@@ -20,10 +20,12 @@ import kieker.analysisteetime.statistics.Statistic;
 
 /**
  *
- * @author Sören Henning
- *
  * @param <I>
  *            Type of elements
+ *
+ * @author Sören Henning
+ *
+ * @since 1.14
  *
  */
 @FunctionalInterface

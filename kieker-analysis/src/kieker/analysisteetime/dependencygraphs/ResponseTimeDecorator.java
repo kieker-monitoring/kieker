@@ -29,6 +29,8 @@ import kieker.analysisteetime.util.time.ChronoUnitToSymbolMapper;
  * This class adds corresponding statistics to vertices.
  *
  * @author Sören Henning
+ *
+ * @since 1.14
  */
 public class ResponseTimeDecorator {
 

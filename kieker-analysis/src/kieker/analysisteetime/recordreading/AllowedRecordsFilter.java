@@ -27,6 +27,8 @@ import teetime.stage.InstanceOfFilter;
 
 /**
  * @author Sören Henning
+ *
+ * @since 1.14
  */
 public final class AllowedRecordsFilter extends CompositeStage {
 

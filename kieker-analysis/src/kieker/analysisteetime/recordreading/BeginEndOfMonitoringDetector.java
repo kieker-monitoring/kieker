@@ -22,6 +22,8 @@ import teetime.stage.basic.AbstractTransformation;
 
 /**
  * @author Nils Christian Ehmke, Sören Henning
+ *
+ * @since 1.14
  */
 public final class BeginEndOfMonitoringDetector extends AbstractTransformation<IMonitoringRecord, IMonitoringRecord> {
 

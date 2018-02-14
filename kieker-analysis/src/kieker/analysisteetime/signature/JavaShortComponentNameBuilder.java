@@ -21,7 +21,7 @@ package kieker.analysisteetime.signature;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public class JavaShortComponentNameBuilder implements ComponentNameBuilder {
 

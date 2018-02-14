@@ -20,7 +20,7 @@ package kieker.analysisteetime.statistics;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  *
  */
 public enum Properties implements Property {

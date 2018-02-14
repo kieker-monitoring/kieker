@@ -37,7 +37,7 @@ import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public class OperationCallEquivalence extends Equivalence<OperationCall> {
 

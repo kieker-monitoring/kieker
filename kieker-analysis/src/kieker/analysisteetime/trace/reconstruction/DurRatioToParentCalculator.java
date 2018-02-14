@@ -22,7 +22,7 @@ import kieker.analysisteetime.trace.traversal.OperationCallVisitor;
 /**
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public class DurRatioToParentCalculator implements OperationCallVisitor {
 

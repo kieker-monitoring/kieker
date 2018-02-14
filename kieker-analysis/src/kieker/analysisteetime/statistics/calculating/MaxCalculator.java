@@ -25,10 +25,12 @@ import kieker.analysisteetime.statistics.Statistic;
 
 /**
  *
- * @author Sören Henning
- *
  * @param <T>
  *            Type of elements
+ *
+ * @author Sören Henning
+ *
+ * @since 1.14
  *
  */
 public class MaxCalculator<T> implements Calculator<T> {

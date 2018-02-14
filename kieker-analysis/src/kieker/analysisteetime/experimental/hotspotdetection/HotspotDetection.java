@@ -25,6 +25,7 @@ import teetime.framework.Execution;
  *
  * @author Sören Henning, Stephan Lenga
  *
+ * @since 1.14
  */
 public final class HotspotDetection {
 

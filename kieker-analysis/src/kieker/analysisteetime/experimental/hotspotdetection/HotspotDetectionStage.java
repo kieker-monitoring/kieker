@@ -43,6 +43,7 @@ import teetime.framework.AbstractConsumerStage;
  *
  * @author Sören Henning, Stephan Lenga
  *
+ * @since 1.14
  */
 public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 

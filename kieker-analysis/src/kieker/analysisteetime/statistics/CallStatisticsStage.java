@@ -25,7 +25,7 @@ import kieker.analysisteetime.statistics.calculating.CountCalculator;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  *
  */
 public class CallStatisticsStage extends StatisticsDecoratorStage<OperationCall> {

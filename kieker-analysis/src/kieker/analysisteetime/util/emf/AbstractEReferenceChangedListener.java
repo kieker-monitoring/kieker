@@ -23,9 +23,13 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EReference;
 
 /**
+ *
+ * 
+ * @param <T>
+ *
  * @author Sören Henning
  *
- * @param <T>
+ * @since 1.14
  */
 public abstract class AbstractEReferenceChangedListener<T> extends AdapterImpl {
 

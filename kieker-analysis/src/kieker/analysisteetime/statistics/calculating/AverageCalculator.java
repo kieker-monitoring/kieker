@@ -21,12 +21,12 @@ import kieker.analysisteetime.statistics.Property;
 import kieker.analysisteetime.statistics.Statistic;
 
 /**
- *
- * @author Sören Henning
- *
  * @param <T>
  *            Type of elements
  *
+ * @author Sören Henning
+ *
+ * @since 1.14
  */
 public class AverageCalculator<T> implements Calculator<T> {
 

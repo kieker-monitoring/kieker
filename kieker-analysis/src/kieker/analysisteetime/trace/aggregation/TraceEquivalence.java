@@ -33,7 +33,7 @@ import kieker.analysisteetime.model.analysismodel.trace.Trace;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public class TraceEquivalence extends Equivalence<Trace> {
 

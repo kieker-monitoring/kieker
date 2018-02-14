@@ -30,11 +30,13 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 /**
- * @author Sören Henning
- *
  * @param <K>
  *
  * @param <V>
+ *
+ * @author Sören Henning
+ *
+ * @since 1.14
  */
 public final class EReferenceIndex<K, V extends EObject> {
 

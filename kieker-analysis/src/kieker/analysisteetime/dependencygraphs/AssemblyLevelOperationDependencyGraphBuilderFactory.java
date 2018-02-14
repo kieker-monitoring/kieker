@@ -22,7 +22,7 @@ import kieker.analysisteetime.statistics.StatisticsModel;
 /**
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public class AssemblyLevelOperationDependencyGraphBuilderFactory implements DependencyGraphBuilderFactory {
 

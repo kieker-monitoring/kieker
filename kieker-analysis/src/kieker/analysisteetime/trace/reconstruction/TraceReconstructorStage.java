@@ -35,7 +35,7 @@ import teetime.stage.basic.AbstractTransformation;
  *
  * @author Nils Christian Ehmke, Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  *
  */
 public class TraceReconstructorStage extends AbstractTransformation<IFlowRecord, Trace> {

@@ -23,9 +23,12 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 /**
- * @author Sören Henning
  *
  * @param <T>
+ *
+ * @author Sören Henning
+ *
+ * @since 1.14
  */
 public abstract class AbstractEStructuralFeatureChangedListener<T> extends AdapterImpl {
 

@@ -25,7 +25,7 @@ import java.util.Collection;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public class JavaShortOperationNameBuilder implements OperationNameBuilder {
 

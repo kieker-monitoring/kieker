@@ -30,6 +30,8 @@ import teetime.stage.basic.AbstractFilter;
  * The traces are forwarded to the output port.
  *
  * @author Nils Christian Ehmke, Sören Henning
+ *
+ * @since 1.14
  */
 public final class TraceStatisticsDecoratorStage extends AbstractFilter<Trace> {
 

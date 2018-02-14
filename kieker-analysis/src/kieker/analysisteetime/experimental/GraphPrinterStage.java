@@ -30,6 +30,7 @@ import teetime.framework.AbstractConsumerStage;
  *
  * @author Sören Henning
  *
+ * @since 1.14
  */
 public class GraphPrinterStage extends AbstractConsumerStage<Graph> {
 

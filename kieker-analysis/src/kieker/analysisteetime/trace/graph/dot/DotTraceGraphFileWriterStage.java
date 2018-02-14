@@ -26,7 +26,7 @@ import kieker.analysisteetime.util.graph.util.dot.attributes.DotNodeAttribute;
 /**
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public class DotTraceGraphFileWriterStage extends DotFileWriterStage { // NOPMD (class serves only as constructor)
 

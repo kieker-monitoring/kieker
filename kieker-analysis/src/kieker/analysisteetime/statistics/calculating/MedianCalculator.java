@@ -27,11 +27,12 @@ import kieker.analysisteetime.util.RunningMedian;
 
 /**
  *
- * @author Sören Henning
- *
  * @param <T>
  *            Type of elements
  *
+ * @author Sören Henning
+ *
+ * @since 1.14
  */
 public class MedianCalculator<T> implements Calculator<T> {
 

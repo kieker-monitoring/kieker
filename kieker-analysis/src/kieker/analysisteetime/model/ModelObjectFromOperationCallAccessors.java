@@ -27,6 +27,8 @@ import kieker.analysisteetime.util.ComposedKey;
  * Utility class for functions ({@link Function}) to access the model objects from operation calls.
  *
  * @author Sören Henning
+ *
+ * @since 1.14
  */
 public final class ModelObjectFromOperationCallAccessors {
 

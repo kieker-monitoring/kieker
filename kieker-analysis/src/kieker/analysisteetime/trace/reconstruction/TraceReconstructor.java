@@ -35,6 +35,8 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
  * instances are supported.
  *
  * @author Nils Christian Ehmke, Sören Henning
+ *
+ * @since 1.14
  */
 final class TraceReconstructor {
 

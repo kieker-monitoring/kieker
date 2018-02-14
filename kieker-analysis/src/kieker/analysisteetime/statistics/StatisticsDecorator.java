@@ -22,11 +22,12 @@ import kieker.analysisteetime.statistics.calculating.Calculator;
 
 /**
  *
- * @author Sören Henning
- *
  * @param <T>
  *            Type of elements
  *
+ * @author Sören Henning
+ *
+ * @since 1.14
  */
 public class StatisticsDecorator<T> {
 
