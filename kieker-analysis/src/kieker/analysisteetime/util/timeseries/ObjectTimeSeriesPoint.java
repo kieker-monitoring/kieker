@@ -21,11 +21,12 @@ import java.time.Instant;
 /**
  * {@link TimeSeriesPoint} wrapper for any type.
  *
- * @author Sören Henning
- *
  * @param <X>
  *            Type of this time series point value
  *
+ * @author Sören Henning
+ *
+ * @since 1.14
  */
 public class ObjectTimeSeriesPoint<X> extends AbstractTimeSeriesPoint {
 

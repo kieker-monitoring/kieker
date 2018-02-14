@@ -23,10 +23,12 @@ import teetime.stage.basic.AbstractFilter;
 /**
  * This stage filters incoming objects and forwards only those which meet the given predicate.
  *
- * @author Nils Christian Ehmke, Sören Henning
- *
  * @param <T>
  *            The precise type of the incoming and outgoing object.
+ *
+ * @author Nils Christian Ehmke, Sören Henning
+ *
+ * @since 1.14
  */
 public final class FilterStage<T> extends AbstractFilter<T> {
 

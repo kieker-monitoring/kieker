@@ -26,7 +26,7 @@ import kieker.analysisteetime.util.graph.Element;
 /**
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 abstract class ElementImpl implements Element { // NOPMD NOCS (Element is in this context the abstraction of Graph, Vertex, and Edge)
 

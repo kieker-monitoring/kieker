@@ -21,7 +21,7 @@ package kieker.analysisteetime.util.graph.impl;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 final class ExceptionFactory {
 

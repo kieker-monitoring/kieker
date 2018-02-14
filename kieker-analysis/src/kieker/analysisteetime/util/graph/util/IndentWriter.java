@@ -22,7 +22,7 @@ import java.io.Writer;
 /**
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public class IndentWriter extends Writer {
 

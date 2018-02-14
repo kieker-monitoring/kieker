@@ -23,7 +23,7 @@ import teetime.stage.basic.AbstractFilter;
 /**
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public class GraphFlattenerStage extends AbstractFilter<Graph> {
 

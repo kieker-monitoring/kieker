@@ -21,6 +21,7 @@ package kieker.analysisteetime.util.graph.util;
  *
  * @author Sören Henning
  *
+ * @since 1.14
  */
 public enum FileExtension {
 

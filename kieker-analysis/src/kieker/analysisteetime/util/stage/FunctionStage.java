@@ -23,12 +23,14 @@ import teetime.stage.basic.AbstractTransformation;
 /**
  * Stage that maps the elements from its input port to its output port by using a {@link Function}.
  *
- * @author Sören Henning
- *
  * @param <I>
  *            Type of input elements
  * @param <O>
  *            Type of output elements
+ *
+ * @author Sören Henning
+ *
+ * @since 1.14
  */
 public class FunctionStage<I, O> extends AbstractTransformation<I, O> {
 

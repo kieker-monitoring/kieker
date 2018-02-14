@@ -21,6 +21,7 @@ import java.time.Instant;
 /**
  * @author Sören Henning
  *
+ * @since 1.14
  */
 public abstract class AbstractTimeSeriesPoint implements TimeSeriesPoint {
 

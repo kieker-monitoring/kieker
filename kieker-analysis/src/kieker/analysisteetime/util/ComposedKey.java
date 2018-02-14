@@ -23,12 +23,14 @@ import com.google.common.base.Objects;
 /**
  * Class representing a key (e.g., for a {@link Map}) that consists of two elements.
  *
- * @author Sören Henning
- *
  * @param <F>
  *            First element's type
  * @param <S>
  *            Second elements type
+ *
+ * @author Sören Henning
+ *
+ * @since 1.14
  */
 public final class ComposedKey<F, S> {
 

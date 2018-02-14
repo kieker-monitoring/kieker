@@ -29,11 +29,13 @@ import javax.xml.bind.Marshaller;
  *
  * A class object has to be passed at creation. Only elements of this type
  * wrapped in a {@code JAXBElement} could be marshaled.
+ * 
+ * @param <T>
+ *            Type of elements
  *
  * @author Sören Henning
  *
- * @param <T>
- *            Type of elements
+ * @since 1.14
  */
 public class JAXBMarshalStage<T> extends AbstractBiCombinerStage<JAXBElement<T>, OutputStream> {
 

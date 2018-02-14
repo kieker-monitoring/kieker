@@ -25,11 +25,13 @@ import kieker.analysisteetime.util.BackwardsIterable;
 
 /**
  *
- * @author Sören Henning
  *
  * @param <T>
  *            Type of the elements in this time series.
  *
+ * @author Sören Henning
+ *
+ * @since 1.14
  */
 public class TimeSeries<T extends TimeSeriesPoint> implements Iterable<T>, BackwardsIterable<T> {
 

@@ -27,10 +27,12 @@ import teetime.stage.basic.ITransformation;
 /**
  * Stage that queues all incoming elements and forwards them when receiving {@link Trigger}.
  *
- * @author Sören Henning
- *
  * @param <T>
  *            Type of elements
+ *
+ * @author Sören Henning
+ *
+ * @since 1.14
  */
 public class ForwardOnTriggerStage<T> extends AbstractStage implements ITransformation<T, T> {
 
@@ -97,7 +99,9 @@ public class ForwardOnTriggerStage<T> extends AbstractStage implements ITransfor
 	}
 
 	/**
+	 * @author Sören Henning
 	 *
+	 * @since 1.14
 	 */
 	public static enum SendStrategy {
 		FIFO, LIFO;

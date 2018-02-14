@@ -27,7 +27,7 @@ import kieker.analysisteetime.util.graph.traversal.VertexVisitor;
 /**
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public class TopLevelFlattener implements GraphFlattener, VertexVisitor, EdgeVisitor {
 

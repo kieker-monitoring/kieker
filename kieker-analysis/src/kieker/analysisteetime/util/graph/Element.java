@@ -21,18 +21,32 @@ import java.util.Set;
 /**
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public interface Element {
-
+	/**
+	 * @since 1.14
+	 */
 	public <T> T getProperty(String key);
 
+	/**
+	 * @since 1.14
+	 */
 	public Set<String> getPropertyKeys();
 
+	/**
+	 * @since 1.14
+	 */
 	public void setProperty(String key, Object value);
 
+	/**
+	 * @since 1.14
+	 */
 	public void setPropertyIfAbsent(String key, Object value);
 
+	/**
+	 * @since 1.14
+	 */
 	public <T> T removeProperty(String key);
 
 }

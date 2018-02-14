@@ -19,11 +19,16 @@ package kieker.analysisteetime.util.graph;
 /**
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public interface GraphElement extends Element {
-
+	/**
+	 * @since 1.14
+	 */
 	public void remove();
 
+	/**
+	 * @since 1.14
+	 */
 	public Object getId();
 }

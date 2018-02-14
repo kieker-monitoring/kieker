@@ -19,11 +19,13 @@ package kieker.analysisteetime.util.graph;
 /**
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  *
  */
 public interface Edge extends GraphElement {
-
+	/**
+	 * @since 1.14
+	 */
 	public Vertex getVertex(Direction direction) throws IllegalArgumentException;
 
 }

@@ -19,32 +19,67 @@ package kieker.analysisteetime.util.graph;
 /**
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public interface Graph extends Element {
-
+	/**
+	 * @since 1.14
+	 */
 	public String getName();
 
+	/**
+	 * @since 1.14
+	 */
 	public void setName(String name);
 
+	/**
+	 * @since 1.14
+	 */
 	public Vertex addVertex(Object id);
 
+	/**
+	 * @since 1.14
+	 */
 	public Vertex addVertexIfAbsent(Object id);
 
+	/**
+	 * @since 1.14
+	 */
 	public Vertex getVertex(Object id);
 
+	/**
+	 * @since 1.14
+	 */
 	public void removeVertex(Vertex vertex);
 
+	/**
+	 * @since 1.14
+	 */
 	public Iterable<Vertex> getVertices();
 
+	/**
+	 * @since 1.14
+	 */
 	public Edge addEdge(Object id, Vertex outVertex, Vertex inVertex);
 
+	/**
+	 * @since 1.14
+	 */
 	public Edge addEdgeIfAbsent(Object id, Vertex outVertex, Vertex inVertex);
 
+	/**
+	 * @since 1.14
+	 */
 	public Edge getEdge(Object id);
 
+	/**
+	 * @since 1.14
+	 */
 	public void removeEdge(Edge edge);
 
+	/**
+	 * @since 1.14
+	 */
 	public Iterable<Edge> getEdges();
 
 }

@@ -24,10 +24,12 @@ import kieker.analysisteetime.util.graph.Element;
  * This function maps a graph element by a passed property key to the
  * corresponding property value and returns it as string.
  *
- * @author Sören Henning
- *
  * @param <T>
  *            Type of elements
+ *
+ * @author Sören Henning
+ *
+ * @since 1.14
  */
 public final class DirectPropertyMapper<T extends Element> implements Function<T, String> {
 

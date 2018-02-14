@@ -34,7 +34,7 @@ import teetime.framework.AbstractConsumerStage;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public class DotWriterStage extends AbstractConsumerStage<Graph> {
 

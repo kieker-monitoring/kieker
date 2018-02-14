@@ -25,7 +25,7 @@ import java.util.function.Function;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public final class ChronoUnitToSymbolMapper implements Function<ChronoUnit, String> { // NOPMD (switch statement leads to long class)
 

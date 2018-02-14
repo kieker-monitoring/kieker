@@ -22,10 +22,12 @@ import java.util.function.BiFunction;
 /**
  * This class represents a median that changes in the course of time. Whenever a new element is added the median changes.
  *
- * @author Sören Henning
- *
  * @param <T>
  *            Type of elements the median should be calculated for
+ *
+ * @author Sören Henning
+ *
+ * @since 1.14
  */
 public class RunningMedian<T extends Comparable<T>> {
 
