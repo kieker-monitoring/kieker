@@ -31,6 +31,9 @@ import kieker.analysisteetime.statistics.Statistic;
 @FunctionalInterface
 public interface Calculator<I> {
 
+	/**
+	 * @since 1.14
+	 */
 	public void calculate(final Statistic statistic, final I input, final Object modelObject);
 
 }

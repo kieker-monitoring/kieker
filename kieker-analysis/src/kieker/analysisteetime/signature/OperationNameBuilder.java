@@ -30,8 +30,14 @@ import kieker.analysisteetime.model.analysismodel.type.OperationType;
  */
 public interface OperationNameBuilder {
 
+	/**
+	 * @since 1.14
+	 */
 	public String build(final Collection<String> modifiers, final String returnType, final String name, final Collection<String> parameterTypes);
 
+	/**
+	 * @since 1.14
+	 */
 	public default String build(final OperationType operationType) {
 		return this.build(operationType.getModifiers(), operationType.getReturnType(), operationType.getName(), operationType.getParameterTypes());
 	}

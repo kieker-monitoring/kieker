@@ -24,7 +24,9 @@ import kieker.analysisteetime.util.graph.Edge;
  * @since 1.14
  */
 public interface EdgeVisitor {
-
+	/**
+	 * @since 1.14
+	 */
 	public void visitEdge(Edge edge);
 
 }

@@ -46,13 +46,11 @@ public class TraceReconstructorStage extends AbstractTransformation<IFlowRecord,
 		this.traceReconstructor = new TraceReconstructor(deploymentModel, temporalUnit);
 	}
 
-	/*
-	 * "activateAdditionalLogChecks" not yet implemented
-	 *
-	 * public TraceReconstructorStage(final DeploymentModel deploymentModel, final boolean activateAdditionalLogChecks, final TemporalUnit temporalUnit) {
-	 * this.traceReconstructor = new TraceReconstructor(deploymentModel, activateAdditionalLogChecks, temporalUnit);
-	 * }
-	 */
+	// "activateAdditionalLogChecks" not yet implemented
+	//
+	// public TraceReconstructorStage(final DeploymentModel deploymentModel, final boolean activateAdditionalLogChecks, final TemporalUnit temporalUnit) {
+	// this.traceReconstructor = new TraceReconstructor(deploymentModel, activateAdditionalLogChecks, temporalUnit);
+	// }
 
 	@Override
 	protected void execute(final IFlowRecord record) {

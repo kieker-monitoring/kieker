@@ -25,6 +25,9 @@ package kieker.analysisteetime.statistics;
  */
 public interface Unit {
 
+	/**
+	 * @since 1.14
+	 */
 	public String getName();
 
 }

@@ -25,6 +25,9 @@ import kieker.analysisteetime.util.graph.Graph;
  */
 public interface DependencyGraphBuilder {
 
+	/**
+	 * @since 1.14
+	 */
 	public Graph build();
 
 }

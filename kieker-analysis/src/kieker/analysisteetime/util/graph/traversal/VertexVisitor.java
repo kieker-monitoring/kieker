@@ -24,7 +24,9 @@ import kieker.analysisteetime.util.graph.Vertex;
  * @since 1.14
  */
 public interface VertexVisitor {
-
+	/**
+	 * @since 1.14
+	 */
 	public void visitVertex(Vertex vertex);
 
 }

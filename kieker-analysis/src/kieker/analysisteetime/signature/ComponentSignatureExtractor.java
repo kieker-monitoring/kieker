@@ -27,6 +27,9 @@ import kieker.analysisteetime.model.analysismodel.type.ComponentType;
  */
 public interface ComponentSignatureExtractor {
 
+	/**
+	 * @since 1.14
+	 */
 	public void extract(final ComponentType componentType);
 
 }

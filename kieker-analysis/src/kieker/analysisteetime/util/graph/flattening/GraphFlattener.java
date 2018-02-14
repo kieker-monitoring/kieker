@@ -25,6 +25,9 @@ import kieker.analysisteetime.util.graph.Graph;
  */
 public interface GraphFlattener {
 
+	/**
+	 * @since 1.14
+	 */
 	public void flatten(Graph graph);
 
 }

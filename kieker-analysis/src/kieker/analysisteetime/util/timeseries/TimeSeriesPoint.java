@@ -28,6 +28,9 @@ import java.time.Instant;
  */
 public interface TimeSeriesPoint {
 
+	/**
+	 * @since 1.14
+	 */
 	public Instant getTime();
 
 	// public long getValue();

@@ -27,6 +27,9 @@ public interface OperationCallVisitor {
 
 	// BETTER Make this generic for aggregated traces
 
+	/**
+	 * @since 1.14
+	 */
 	public void visit(OperationCall operationCall);
 
 }

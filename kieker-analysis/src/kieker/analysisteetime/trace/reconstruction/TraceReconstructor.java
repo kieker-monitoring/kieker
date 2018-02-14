@@ -52,15 +52,13 @@ final class TraceReconstructor {
 		this.temporalUnit = temporalUnit;
 	}
 
-	/*
-	 * "activateAdditionalLogChecks" not yet implemented
-	 *
-	 * public TraceReconstructor(final DeploymentModel deploymentRoot, final boolean activateAdditionalLogChecks, final TemporalUnit temporalUnit) {
-	 * this.deploymentModel = deploymentRoot;
-	 * this.activateAdditionalLogChecks = activateAdditionalLogChecks;
-	 * this.temporalUnit = temporalUnit;
-	 * }
-	 */
+	// "activateAdditionalLogChecks" not yet implemented
+	//
+	// public TraceReconstructor(final DeploymentModel deploymentRoot, final boolean activateAdditionalLogChecks, final TemporalUnit temporalUnit) {
+	// this.deploymentModel = deploymentRoot;
+	// this.activateAdditionalLogChecks = activateAdditionalLogChecks;
+	// this.temporalUnit = temporalUnit;
+	// }
 
 	public int countIncompleteTraces() {
 		return this.traceBuffers.size() + this.faultyTraceBuffers.size();

@@ -28,6 +28,9 @@ import kieker.analysisteetime.model.analysismodel.type.OperationType;
  */
 public interface OperationSignatureExtractor {
 
+	/**
+	 * @since 1.14
+	 */
 	public void extract(final OperationType operationType);
 
 }

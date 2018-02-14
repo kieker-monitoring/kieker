@@ -26,6 +26,9 @@ import kieker.analysisteetime.statistics.StatisticsModel;
  */
 public interface DependencyGraphBuilderFactory {
 
+	/**
+	 * @since 1.14
+	 */
 	public DependencyGraphBuilder createDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel);
 
 }

@@ -96,14 +96,14 @@ public class TraceReconstructionBuffer {
 		this.current = this.current.getParent();
 
 		// BETTER handle additional log checks
-		/*
-		 * if (TraceReconstructor.this.activateAdditionalLogChecks) {
-		 * if (!beforeEvent.getOperationSignature().equals(record.getOperationSignature())) {
-		 * TraceReconstructor.this.faultyTraceBuffers.add(this);
-		 * TraceReconstructor.this.traceBuffers.remove(this.traceID);
-		 * }
-		 * }
-		 */
+		//
+		// if (TraceReconstructor.this.activateAdditionalLogChecks) {
+		// if (!beforeEvent.getOperationSignature().equals(record.getOperationSignature())) {
+		// TraceReconstructor.this.faultyTraceBuffers.add(this);
+		// TraceReconstructor.this.traceBuffers.remove(this.traceID);
+		// }
+		// }
+		//
 	}
 
 	public Trace reconstructTrace() {
