@@ -34,6 +34,13 @@ import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
 import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
 
 /**
+ * Abstract file writer.
+ *
+ * @param <T>
+ *            buffer type
+ * @param <S>
+ *            serializer type
+ *
  * @author Reiner Jung
  *
  * @since 1.14
@@ -123,9 +130,9 @@ public abstract class AbstractFileWriter<T extends Buffer, S extends IValueSeria
 		this.serializer = this.createSerializer();
 	}
 
-	abstract protected IValueSerializer createSerializer();
+	protected abstract IValueSerializer createSerializer();
 
-	abstract protected AbstractFileWriterPool<T> createFilePoolHandler(String charsetName, int maxEntriesInFile, ICompressionFilter compressionFilter,
+	protected abstract AbstractFileWriterPool<T> createFilePoolHandler(String charsetName, int maxEntriesInFile, ICompressionFilter compressionFilter,
 			int maxAmountOfFiles, int maxMegaBytesInFile);
 
 	@Override

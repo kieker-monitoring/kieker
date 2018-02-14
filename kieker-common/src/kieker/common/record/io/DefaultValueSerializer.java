@@ -18,7 +18,6 @@ package kieker.common.record.io;
 
 import java.nio.ByteBuffer;
 
-import kieker.common.util.filesystem.FSUtil;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -102,11 +101,6 @@ public class DefaultValueSerializer implements IValueSerializer {
 	@Override
 	public void putFloat(final float value) {
 		this.buffer.putFloat(value);
-	}
-
-	@Override
-	public String getFileExtension() {
-		return FSUtil.BINARY_FILE_EXTENSION;
 	}
 
 }

@@ -50,6 +50,8 @@ public abstract class AbstractLogStreamHandler {
 	protected WritableByteChannel outputChannel;
 	protected int numOfBytes;
 
+	protected String extension;
+
 	/**
 	 * Create an abstract log stream handler.
 	 *
@@ -75,7 +77,7 @@ public abstract class AbstractLogStreamHandler {
 	/**
 	 * Initialize a new stream.
 	 *
-	 * @param serializedStream
+	 * @param serializedOutputStream
 	 *            stream to be used
 	 * @param fileName
 	 *            file name of the stream, this is used by some compression filters
@@ -83,9 +85,9 @@ public abstract class AbstractLogStreamHandler {
 	 * @throws IOException
 	 *             when the creation of the channel fails
 	 */
-	public void initialize(final OutputStream serializedStream, final Path fileName) throws IOException {
-		this.serializedStream = serializedStream;
-		this.outputChannel = Channels.newChannel(this.compressionFilter.chainOutputStream(serializedStream, fileName));
+	public void initialize(final OutputStream serializedOutputStream, final Path fileName) throws IOException {
+		this.serializedStream = serializedOutputStream;
+		this.outputChannel = Channels.newChannel(this.compressionFilter.chainOutputStream(serializedOutputStream, fileName));
 		this.numOfEntries = 0;
 	}
 
@@ -123,11 +125,11 @@ public abstract class AbstractLogStreamHandler {
 	 * @return return the file extension
 	 */
 	public String getFileExtension() {
-		final String extension = this.compressionFilter.getExtension();
-		if (extension == null) {
-			return this.serializer.getFileExtension();
+		final String compressExtension = this.compressionFilter.getExtension();
+		if (compressExtension == null) {
+			return this.extension;
 		} else {
-			return extension;
+			return compressExtension;
 		}
 	}
 

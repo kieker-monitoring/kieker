@@ -22,6 +22,7 @@ import java.nio.file.Path;
  *
  * @author Reiner Jung
  *
+ * @since 1.14
  */
 public interface IMapFileHandler {
 
@@ -32,11 +33,15 @@ public interface IMapFileHandler {
 	 *            complete path for the map file including its name
 	 * @param charset
 	 *            character set to be used for the file
+	 *
+	 * @since 1.14
 	 */
 	void create(Path location, Charset charset);
 
 	/**
 	 * Close the mapping file.
+	 *
+	 * @since 1.14
 	 */
 	void close();
 
@@ -47,6 +52,8 @@ public interface IMapFileHandler {
 	 *            class id
 	 * @param eventClassName
 	 *            name of the event class
+	 *
+	 * @since 1.14
 	 */
 	void add(int id, String eventClassName);
 

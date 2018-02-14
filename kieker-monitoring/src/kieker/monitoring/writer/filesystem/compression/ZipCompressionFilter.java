@@ -46,7 +46,7 @@ public class ZipCompressionFilter implements ICompressionFilter {
 	@Override
 	public OutputStream chainOutputStream(final OutputStream outputStream, final Path fileName) throws IOException {
 		final ZipOutputStream compressedOutputStream = new ZipOutputStream(outputStream);
-		final ZipEntry newZipEntry = new ZipEntry(fileName.toString() + FSUtil.NORMAL_FILE_EXTENSION);
+		final ZipEntry newZipEntry = new ZipEntry(fileName.toString() + FSUtil.DAT_FILE_EXTENSION);
 		compressedOutputStream.putNextEntry(newZipEntry);
 
 		return compressedOutputStream;

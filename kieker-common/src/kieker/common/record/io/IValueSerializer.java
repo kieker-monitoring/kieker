@@ -114,11 +114,4 @@ public interface IValueSerializer {
 	 */
 	public void putString(String value);
 
-	/**
-	 * Return the standard file suffix for the given serialization.
-	 *
-	 * @return returns the file suffix
-	 */
-	public String getFileExtension();
-
 }

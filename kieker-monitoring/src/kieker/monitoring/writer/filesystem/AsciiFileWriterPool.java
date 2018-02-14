@@ -19,7 +19,6 @@ package kieker.monitoring.writer.filesystem;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.CharBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -60,14 +59,13 @@ class AsciiFileWriterPool extends AbstractFileWriterPool<CharBuffer> {
 	 *            upper limit for the file size
 	 * @param bufferSize
 	 *            size of the writing buffer
-	 * @throws UnsupportedEncodingException
 	 */
 	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	public AsciiFileWriterPool(final Log writerLog, final Path folder, final String charsetName, final int maxEntriesInFile,
 			final ICompressionFilter compressionFilter,
 			final int maxAmountOfFiles, final int maxMegaBytesInFile, final CharBuffer buffer) {
 
-		super(writerLog, folder, charsetName, maxEntriesInFile, compressionFilter, maxAmountOfFiles, maxMegaBytesInFile, FSUtil.NORMAL_FILE_EXTENSION);
+		super(writerLog, folder, charsetName, maxEntriesInFile, compressionFilter, maxAmountOfFiles, maxMegaBytesInFile, FSUtil.DAT_FILE_EXTENSION);
 
 		this.buffer = buffer;
 

@@ -154,12 +154,13 @@ public final class ControllerFactory {
 		} catch (final ClassNotFoundException e) {
 			LOG.error(c.getSimpleName() + ": Class '" + className + "' not found", e);
 		} catch (final NoSuchMethodException e) {
-			String parameterTypeNames = "";
+			final StringBuilder parameterTypeNames = new StringBuilder();
 			for (final Object parameter : parameters) {
-				parameterTypeNames += "," + parameter.getClass().getName();
+				parameterTypeNames.append(", ");
+				parameterTypeNames.append(parameter.getClass().getName());
 			}
 			LOG.error(c.getSimpleName() + ": Class '" + className
-					+ "' has to implement a (public) constructor that accepts " + parameterTypeNames, e);
+					+ "' has to implement a (public) constructor that accepts " + parameterTypeNames.toString(), e);
 		} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
 			LOG.error(c.getSimpleName() + ": Failed to load class for name '" + className + "'", e);

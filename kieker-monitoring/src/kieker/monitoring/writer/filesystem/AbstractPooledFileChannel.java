@@ -20,6 +20,9 @@ import java.nio.Buffer;
 import kieker.common.logging.Log;
 
 /**
+ * @param <T>
+ *            buffer type
+ *
  * @author Reiner Jung
  *
  * @since 1.14
@@ -35,14 +38,14 @@ public abstract class AbstractPooledFileChannel<T extends Buffer> {
 		this.buffer = buffer;
 	}
 
-	abstract public long getBytesWritten();
+	public abstract long getBytesWritten();
 
-	abstract public void flush(Log log);
+	public abstract void flush(Log log);
 
 	/**
 	 * Flushes the buffer and closes the channel afterwards.
 	 */
-	abstract public void close(Log writerLog);
+	public abstract void close(Log writerLog);
 
 	protected T getBuffer() {
 		return this.buffer;

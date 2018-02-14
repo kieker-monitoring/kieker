@@ -199,13 +199,10 @@ public class GenericBinaryFileWriterTest {
 
 		// semantics of the tuple: (maxMegaBytesPerFile, megaBytesToWrite, expectedNumRecordFiles)
 		final int[][] testInputTuples = {
-			/*
-			 * { -1, 0, 1 }, { -1, 1, 1 },
-			 * { 0, 0, 1 }, { 0, 1, 1 },
-			 * { 1, 0, 1 },
-			 */ { 1, 1, 1 },/*
-							 * { 1, 2, 2 }, { 1, 3, 2 },
-							 */
+			{ -1, 0, 1 }, { -1, 1, 1 },
+			{ 0, 0, 1 }, { 0, 1, 1 },
+			{ 1, 0, 1 }, { 1, 1, 1 },
+			{ 1, 2, 2 }, { 1, 3, 2 },
 		};
 
 		for (final int[] testInputTuple : testInputTuples) {

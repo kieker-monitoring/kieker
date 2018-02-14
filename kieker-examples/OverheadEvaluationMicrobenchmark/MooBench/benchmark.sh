@@ -1,10 +1,14 @@
 #!/bin/bash
 
+# internal parameter configuration
+
 JAVABIN=""
 
 RSCRIPTDIR=r/
 BASEDIR=./
 RESULTSDIR="${BASEDIR}tmp/results-kieker/"
+AGENT="${BASEDIR}lib/kieker-1.14-SNAPSHOT-aspectj.jar"
+AOP="META-INF/kieker.aop.xml"
 
 SLEEPTIME=30            ## 30
 NUM_LOOPS=10            ## 10
@@ -12,6 +16,16 @@ THREADS=1               ## 1
 RECURSIONDEPTH=10       ## 10
 TOTALCALLS=2000000      ## 2000000
 METHODTIME=0       ## 500000
+
+# test input parameters and configuration
+if [ ! -d "${BASEDIR}" ] ; then
+	echo "Base directory ${BASEDIR} does not exist."
+	exit 1
+fi
+if [ ! -f "${AGENT}" ] ; then
+	echo "Kieker agent for AspectJ ${AGENT} is missing."
+	exit 1
+fi
 
 MOREPARAMS="--quickstart"
 MOREPARAMS="${MOREPARAMS} -r kieker.Logger"
@@ -29,6 +43,7 @@ touch ${BASEDIR}kieker.log
 
 RAWFN="${RESULTSDIR}raw"
 
+# general server arguments
 JAVAARGS="-server"
 JAVAARGS="${JAVAARGS} -d64"
 JAVAARGS="${JAVAARGS} -Xms1G -Xmx4G"
@@ -38,12 +53,17 @@ JAVAARGS="${JAVAARGS} -Xms1G -Xmx4G"
 #JAVAARGS="${JAVAARGS} -Djava.compiler=NONE"
 JAR="-jar MooBench.jar -a mooBench.monitoredApplication.MonitoredClassSimple"
 
+JAVAARGS_LTW="${JAVAARGS} -javaagent:${AGENT} -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false -Dkieker.monitoring.skipDefaultAOPConfiguration=true -Dorg.aspectj.weaver.loadtime.configuration=${AOP}"
+
+# configure different experiments
 JAVAARGS_NOINSTR="${JAVAARGS}"
-JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/kieker-1.14-SNAPSHOT-aspectj.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false -Dkieker.monitoring.skipDefaultAOPConfiguration=true -Dorg.aspectj.weaver.loadtime.configuration=META-INF/kieker.aop.xml"
+
 JAVAARGS_KIEKER_DEACTV="${JAVAARGS_LTW} -Dkieker.monitoring.enabled=false -Dkieker.monitoring.writer=kieker.monitoring.writer.dump.DumpWriter"
 JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.dump.DumpWriter"
 JAVAARGS_KIEKER_LOGGING_ASCII="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsciiFileWriter -Dkieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=${BASEDIR}tmp"
 JAVAARGS_KIEKER_LOGGING_BIN="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.BinaryFileWriter -Dkieker.monitoring.writer.filesystem.BinaryFileWriter.customStoragePath=${BASEDIR}tmp"
+JAVAARGS_KIEKER_LOGGING_GENERIC_TEXT="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter -Dkieker.monitoring.writer.filesystem.FileWriter.logStreamHandler=kieker.monitoring.writer.filesystem.TextLogStreamHandler -Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=${BASEDIR}tmp"
+JAVAARGS_KIEKER_LOGGING_GENERIC_BIN="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter -Dkieker.monitoring.writer.filesystem.FileWriter.logStreamHandler=kieker.monitoring.writer.filesystem.BinaryLogStreamHandler -Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=${BASEDIR}tmp"
 JAVAARGS_KIEKER_LOGGING_TCP="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.tcp.TCPWriter"
 
 ## Write configuration
@@ -61,131 +81,71 @@ echo "THREADS=${THREADS}" >>${RESULTSDIR}configuration.txt
 echo "RECURSIONDEPTH=${RECURSIONDEPTH}" >>${RESULTSDIR}configuration.txt
 sync
 
+#################################
+# function: execute an experiment
+#
+# $1 = i iterator
+# $2 = j iterator
+# $3 = k iterator
+# $4 = title
+# $5 = writer parameters
+function execute-experiment() {
+    i="$1"
+    j="$2"
+    k="$3"
+    title="$4"
+    writer_parameters="$5"
+
+    echo " # ${i}.${j}.${k} ${title}"
+    echo " # ${i}.${j}.${k} ${title}" >>${BASEDIR}kieker.log
+    #sar -o ${RESULTSDIR}stat/sar-${i}-${j}-${k}.data 5 2000 1>/dev/null 2>&1 &
+    ${JAVABIN}java  ${writer_parameters} ${JAR} \
+        --output-filename ${RAWFN}-${i}-${j}-${k}.csv \
+        --totalcalls ${TOTALCALLS} \
+        --methodtime ${METHODTIME} \
+        --totalthreads ${THREADS} \
+        --recursiondepth ${j} \
+        ${MOREPARAMS}
+    #kill %sar
+    [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-${k}.log
+    echo >>${BASEDIR}kieker.log
+    echo >>${BASEDIR}kieker.log
+    sync
+    sleep ${SLEEPTIME}
+}
+
 ## Execute Benchmark
 for ((i=1;i<=${NUM_LOOPS};i+=1)); do
     j=${RECURSIONDEPTH}
-    k=0
+    
     echo "## Starting iteration ${i}/${NUM_LOOPS}"
     echo "## Starting iteration ${i}/${NUM_LOOPS}" >>${BASEDIR}kieker.log
 
     # No instrumentation
-    k=`expr ${k} + 1`
-    echo " # ${i}.${j}.${k} No instrumentation"
-    echo " # ${i}.${j}.${k} No instrumentation" >>${BASEDIR}kieker.log
-   # sar -o ${RESULTSDIR}stat/sar-${i}-${j}-${k}.data 5 2000 1>/dev/null 2>&1 &
-    ${JAVABIN}java  ${JAVAARGS_NOINSTR} ${JAR} \
-        --output-filename ${RAWFN}-${i}-${j}-${k}.csv \
-        --totalcalls ${TOTALCALLS} \
-        --methodtime ${METHODTIME} \
-        --totalthreads ${THREADS} \
-        --recursiondepth ${j} \
-        ${MOREPARAMS}
-    #kill %sar
-    [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-${k}.log
-    echo >>${BASEDIR}kieker.log
-    echo >>${BASEDIR}kieker.log
-    sync
-    sleep ${SLEEPTIME}
+    execute-experiment "$i" "$j" "1" "No instrumentation" "${JAVAARGS_NOINSTR}"
 
     # Deactivated probe
-    k=`expr ${k} + 1`
-    echo " # ${i}.${j}.${k} Deactivated probe"
-    echo " # ${i}.${j}.${k} Deactivated probe" >>${BASEDIR}kieker.log
-    #sar -o ${RESULTSDIR}stat/sar-${i}-${j}-${k}.data 5 2000 1>/dev/null 2>&1 &
-    ${JAVABIN}java  ${JAVAARGS_KIEKER_DEACTV} ${JAR} \
-        --output-filename ${RAWFN}-${i}-${j}-${k}.csv \
-        --totalcalls ${TOTALCALLS} \
-        --methodtime ${METHODTIME} \
-        --totalthreads ${THREADS} \
-        --recursiondepth ${j} \
-        ${MOREPARAMS}
-    #kill %sar
-    [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-${k}.log
-    echo >>${BASEDIR}kieker.log
-    echo >>${BASEDIR}kieker.log
-    sync
-    sleep ${SLEEPTIME}
+    execute-experiment "$i" "$j" "2" "Deactivated probe" "${JAVAARGS_KIEKER_DEACTV}"
 
     # No logging
-    k=`expr ${k} + 1`
-    echo " # ${i}.${j}.${k} No logging (null writer)"
-    echo " # ${i}.${j}.${k} No logging (null writer)" >>${BASEDIR}kieker.log
-  #  sar -o ${RESULTSDIR}stat/sar-${i}-${j}-${k}.data 5 2000 1>/dev/null 2>&1 &
-    ${JAVABIN}java  ${JAVAARGS_KIEKER_NOLOGGING} ${JAR} \
-        --output-filename ${RAWFN}-${i}-${j}-${k}.csv \
-        --totalcalls ${TOTALCALLS} \
-        --methodtime ${METHODTIME} \
-        --totalthreads ${THREADS} \
-        --recursiondepth ${j} \
-        ${MOREPARAMS}
-   # kill %sar
-    [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-${k}.log
-    echo >>${BASEDIR}kieker.log
-    echo >>${BASEDIR}kieker.log
-    sync
-    sleep ${SLEEPTIME}
+    execute-experiment "$i" "$j" "3" "No logging (null writer)" "${JAVAARGS_KIEKER_NOLOGGING}"
+    
+    # Old ASCII writer
+    execute-experiment "$i" "$j" "4" "Logging (ASCII)" "${JAVAARGS_KIEKER_LOGGING_ASCII}"
+    
+    # New Text writer
+    execute-experiment "$i" "$j" "5" "Logging (Generic Text)" "${JAVAARGS_KIEKER_LOGGING_GENERIC_TEXT}"
 
-    # Logging
-    k=`expr ${k} + 1`
-    echo " # ${i}.${j}.${k} Logging (ASCII)"
-    echo " # ${i}.${j}.${k} Logging (ASCII)" >>${BASEDIR}kieker.log
-	#  sar -o ${RESULTSDIR}stat/sar-${i}-${j}-${k}.data 5 2000 1>/dev/null 2>&1 &
-    ${JAVABIN}java  ${JAVAARGS_KIEKER_LOGGING_ASCII} ${JAR} \
-        --output-filename ${RAWFN}-${i}-${j}-${k}.csv \
-        --totalcalls ${TOTALCALLS} \
-        --methodtime ${METHODTIME} \
-        --totalthreads ${THREADS} \
-        --recursiondepth ${j} \
-        ${MOREPARAMS}
-    #pkill sar
-	du -h ${BASEDIR}tmp/kieker-*
-    rm -rf ${BASEDIR}tmp/kieker-*
-    [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-${k}.log
-    echo >>${BASEDIR}kieker.log
-    echo >>${BASEDIR}kieker.log
-    sync
-    sleep ${SLEEPTIME}
-
-	k=`expr ${k} + 1`
-    echo " # ${i}.${j}.${k} Logging (Bin)"
-    echo " # ${i}.${j}.${k} Logging (Bin)" >>${BASEDIR}kieker.log
-	#  sar -o ${RESULTSDIR}stat/sar-${i}-${j}-${k}.data 5 2000 1>/dev/null 2>&1 &
-    ${JAVABIN}java  ${JAVAARGS_KIEKER_LOGGING_BIN} ${JAR} \
-        --output-filename ${RAWFN}-${i}-${j}-${k}.csv \
-        --totalcalls ${TOTALCALLS} \
-        --methodtime ${METHODTIME} \
-        --totalthreads ${THREADS} \
-        --recursiondepth ${j} \
-        ${MOREPARAMS}
-    #pkill sar
-	du -h ${BASEDIR}tmp/kieker-*
-    rm -rf ${BASEDIR}tmp/kieker-*
-    [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-${k}.log
-    echo >>${BASEDIR}kieker.log
-    echo >>${BASEDIR}kieker.log
-    sync
-    sleep ${SLEEPTIME}
-	
-	k=`expr ${k} + 1`
-    echo " # ${i}.${j}.${k} Logging (TCP)"
-    echo " # ${i}.${j}.${k} Logging (TCP)" >>${BASEDIR}kieker.log
-	#  sar -o ${RESULTSDIR}stat/sar-${i}-${j}-${k}.data 5 2000 1>/dev/null 2>&1 &
+    # Old bin writer
+	execute-experiment "$i" "$j" "6" "Logging (Bin)" "${JAVAARGS_KIEKER_LOGGING_BIN}"
+    
+    # New bin writer
+    execute-experiment "$i" "$j" "7" "Logging (Generic  Bin)" "${JAVAARGS_KIEKER_LOGGING_GENERIC_BIN}" 
+    	
+    # TCP writer
 	${JAVABIN}java -classpath MooBench.jar kieker.tcp.TestExperiment0 >> ${BASEDIR}kieker.tcp.log &
-    ${JAVABIN}java  ${JAVAARGS_KIEKER_LOGGING_TCP} ${JAR} \
-        --output-filename ${RAWFN}-${i}-${j}-${k}.csv \
-        --totalcalls ${TOTALCALLS} \
-        --methodtime ${METHODTIME} \
-        --totalthreads ${THREADS} \
-        --recursiondepth ${j} \
-        ${MOREPARAMS}
-    #pkill sar
-    [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-${k}.log
-    echo >>${BASEDIR}kieker.log
-    echo >>${BASEDIR}kieker.log
-    sync
-    sleep ${SLEEPTIME}
-	
-	
+	execute-experiment "$i" "$j" "8" "Logging (TCP)" ${JAVAARGS_KIEKER_LOGGING_TCP}
+ 	
 done
 #zip -jqr ${RESULTSDIR}stat.zip ${RESULTSDIR}stat
 #rm -rf ${RESULTSDIR}stat/

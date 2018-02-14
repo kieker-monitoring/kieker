@@ -17,8 +17,6 @@ package kieker.common.record.io;
 
 import java.nio.CharBuffer;
 
-import kieker.common.util.filesystem.FSUtil;
-
 /**
  * Text value serializer implementation.
  *
@@ -89,11 +87,6 @@ public class TextValueSerializer implements IValueSerializer {
 		} else {
 			this.buffer.put(";");
 		}
-	}
-
-	@Override
-	public String getFileExtension() {
-		return FSUtil.NORMAL_FILE_EXTENSION;
 	}
 
 }

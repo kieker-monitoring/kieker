@@ -33,6 +33,10 @@ import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
 import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
 
 /**
+ * Abstract file writer pool.
+ *
+ * @param <T>
+ *            buffer type
  *
  * @author Christian Wulf
  * @author Reiner Jung
@@ -47,8 +51,6 @@ public abstract class AbstractFileWriterPool<T extends Buffer> {
 	private static final String TIME_ZONE = "UTC";
 	private static final Locale LOCALE = Locale.US;
 
-	private final List<Path> logFiles = new ArrayList<>();
-
 	protected final Log writerLog; // NOPMD (logger passed by caller)
 	protected final Path folder;
 
@@ -61,9 +63,12 @@ public abstract class AbstractFileWriterPool<T extends Buffer> {
 
 	protected final String fileExtensionWithDot;
 
-	private int currentFileNumber;
 	protected T buffer;
 	protected AbstractPooledFileChannel<T> currentChannel;
+
+	private final List<Path> logFiles = new ArrayList<>();
+
+	private int currentFileNumber;
 
 	private final SimpleDateFormat dateFormatter;
 
@@ -135,18 +140,18 @@ public abstract class AbstractFileWriterPool<T extends Buffer> {
 		}
 	}
 
-	abstract protected void onThresholdExceeded();
+	protected abstract void onThresholdExceeded();
 
 	public T getBuffer() {
 		return this.buffer;
 	}
 
-	public Path getNextFileName(final int counter, final String fileExtensionWithDot) {
+	public Path getNextFileName(final int counter, final String extensionWithDot) {
 		final Date now = new Date();
 
 		// "%1$s-%2$tY%2$tm%2$td-%2$tH%2$tM%2$tS%2$tL-UTC-%3$03d-%4$s.%5$s"
 		final String fileName = String.format(LOCALE, "%s-%s-%s-%03d%s",
-				FSUtil.FILE_PREFIX, this.dateFormatter.format(now), TIME_ZONE, counter, fileExtensionWithDot);
+				FSUtil.FILE_PREFIX, this.dateFormatter.format(now), TIME_ZONE, counter, extensionWithDot);
 
 		final Path logFile = this.folder.resolve(fileName);
 		this.logFiles.add(logFile);

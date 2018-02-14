@@ -65,7 +65,7 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 	/** The name of the configuration key determining to always flush the output file stream after writing each record. */
 	public static final String CONFIG_FLUSH = PREFIX + "flush";
 	/** The name of the configuration key to select a compression for the record log files. */
-	public static final String CONFIG_COMPRESSION_FILTER = PREFIX + "logCompression";
+	public static final String CONFIG_COMPRESSION_FILTER = PREFIX + "compression";
 	/** The name of the configuration key for the buffer size. */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize";
 
@@ -117,11 +117,11 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 
 		final Charset charset = Charset.forName(configuration.getStringProperty(FileWriter.CONFIG_CHARSET_NAME, "UTF-8"));
 
-		final long maxBytesInFile = configuration.getIntProperty(CONFIG_MAXLOGSIZE) * 1024 * 1024;
-
-		this.maxEntriesInFile = (configuration.getIntProperty(CONFIG_MAXENTRIESINFILE) <= 0) ? Integer.MAX_VALUE
+		this.maxEntriesInFile = (configuration.getIntProperty(CONFIG_MAXENTRIESINFILE) <= 0) ? Integer.MAX_VALUE // NOCS
 				: configuration.getIntProperty(CONFIG_MAXENTRIESINFILE); // NOCS
-		this.maxBytesInFile = (maxBytesInFile <= 0) ? Integer.MAX_VALUE : maxBytesInFile; // NOCS
+
+		final long maxMegaBytesInFile = configuration.getIntProperty(CONFIG_MAXLOGSIZE);
+		this.maxBytesInFile = (maxMegaBytesInFile <= 0) ? Integer.MAX_VALUE : maxMegaBytesInFile * 1024 * 1024; // NOCS
 
 		int maxAmountOfFiles = configuration.getIntProperty(FileWriter.CONFIG_MAXLOGFILES);
 		maxAmountOfFiles = (maxAmountOfFiles <= 0) ? Integer.MAX_VALUE : maxAmountOfFiles; // NOCS

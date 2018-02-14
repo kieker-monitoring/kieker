@@ -23,6 +23,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.TextValueSerializer;
+import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.WriterUtil;
 import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
@@ -65,6 +66,7 @@ public class TextLogStreamHandler extends AbstractLogStreamHandler {
 
 		this.buffer = CharBuffer.allocate(bufferSize);
 		this.serializer = TextValueSerializer.create(this.buffer);
+		this.extension = FSUtil.DAT_FILE_EXTENSION;
 	}
 
 	@Override

@@ -36,6 +36,8 @@ public interface ILogFilePoolHandler {
 	 * Create a new path for a log file.
 	 *
 	 * @return return a proper stream
+	 *
+	 * @since 1.14
 	 */
 	Path requestFile();
 

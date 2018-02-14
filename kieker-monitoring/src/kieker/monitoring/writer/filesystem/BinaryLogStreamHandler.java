@@ -23,6 +23,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.DefaultValueSerializer;
+import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.WriterUtil;
@@ -61,6 +62,7 @@ public class BinaryLogStreamHandler extends AbstractLogStreamHandler {
 		super(flushLogFile, bufferSize, charset, compressionFilter, writerRegistry);
 		this.buffer = ByteBuffer.allocateDirect(bufferSize);
 		this.serializer = DefaultValueSerializer.create(this.buffer, new GetIdAdapter<>(writerRegistry));
+		this.extension = FSUtil.BINARY_FILE_EXTENSION;
 	}
 
 	@Override
