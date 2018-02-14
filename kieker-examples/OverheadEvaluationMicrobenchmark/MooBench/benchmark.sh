@@ -140,7 +140,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
 	execute-experiment "$i" "$j" "6" "Logging (Bin)" "${JAVAARGS_KIEKER_LOGGING_BIN}"
     
     # New bin writer
-    execute-experiment "$i" "$j" "7" "Logging (Generic  Bin)" "${JAVAARGS_KIEKER_LOGGING_GENERIC_BIN}" 
+    execute-experiment "$i" "$j" "7" "Logging (Generic Bin)" "${JAVAARGS_KIEKER_LOGGING_GENERIC_BIN}" 
     	
     # TCP writer
 	${JAVABIN}java -classpath MooBench.jar kieker.tcp.TestExperiment0 >> ${BASEDIR}kieker.tcp.log &
