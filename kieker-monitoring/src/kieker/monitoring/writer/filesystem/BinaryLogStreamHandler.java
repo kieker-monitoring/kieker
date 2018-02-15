@@ -67,27 +67,58 @@ public class BinaryLogStreamHandler extends AbstractLogStreamHandler {
 
 	@Override
 	public void serialize(final IMonitoringRecord record, final int id) throws IOException {
+
+		this.requestBufferSpace(4 + 8 + record.getSize());
+
 		this.buffer.putInt(id);
 		this.buffer.putLong(record.getLoggingTimestamp());
 
 		record.serialize(this.serializer);
+		this.numOfEntries++;
+	}
 
+	@Override
+	public void close() throws IOException {
 		this.buffer.flip();
-
 		try {
 			while (this.buffer.hasRemaining()) {
 				this.numOfBytes += this.outputChannel.write(this.buffer);
 			}
-			this.numOfEntries++;
-
 			this.buffer.clear();
-			if (this.flushLogFile) {
-				this.serializedStream.flush();
-			}
 		} catch (final IOException e) {
 			LOGGER.error("Caught exception while writing to the channel.", e);
 			WriterUtil.close(this.outputChannel, LOGGER);
 		}
+
+		this.serializedStream.flush();
+		super.close();
 	}
 
+	/**
+	 * Request space in the buffer, if necessary flush the buffer.
+	 *
+	 * @param bufferSpace
+	 *            requested size
+	 * @param log
+	 * @throws IOException
+	 */
+	private void requestBufferSpace(final int bufferSpace) throws IOException {
+		if (bufferSpace > this.buffer.remaining()) {
+			this.buffer.flip();
+
+			try {
+				while (this.buffer.hasRemaining()) {
+					this.numOfBytes += this.outputChannel.write(this.buffer);
+				}
+				this.buffer.clear();
+			} catch (final IOException e) {
+				LOGGER.error("Caught exception while writing to the channel.", e);
+				WriterUtil.close(this.outputChannel, LOGGER);
+			}
+
+			if (this.flushLogFile) {
+				this.serializedStream.flush();
+			}
+		}
+	}
 }
