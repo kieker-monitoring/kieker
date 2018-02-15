@@ -37,11 +37,6 @@ dependencies {
 // We have multiple subprojects - but we do not want all of them in our JAR files.
 def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
 
-//def pmdAndCpdVersion = '5.0.5'	// works with 0 PMD errors and 0 PMD warnings
-//def pmdAndCpdVersion = '5.1.3'	// causes many new PMD errors and PMD warnings
-def pmdAndCpdVersion = '5.2.2'
-//def pmdAndCpdVersion = '5.5.0'	// causes many new PMD errors and PMD warnings
-
 // better use subprojects to avoid if-then-else in sourceSets
 allprojects {
     version = kiekerVersion
@@ -139,13 +134,13 @@ allprojects {
 
     apply plugin: 'checkstyle'
     checkstyle {
+    	toolVersion = checkstyleVersion
         ignoreFailures = true
         showViolations = false
 
         configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
     }
 
-    def fbVersion = '3.0.1'
     apply plugin: 'findbugs'
     findbugs {	
         toolVersion = fbVersion
@@ -170,13 +165,6 @@ allprojects {
         }
     }
 
-    // CS is a little bit weird, when it comes to dependencies.
-    checkstyleTest.classpath += sourceSets.main.runtimeClasspath
-    checkstyleMain.classpath += configurations.compile
-    // This part makes sure that CS does not check the classes inside src-gen and test-gen
-    checkstyleMain.source = 'src'
-    checkstyleTest.source = 'test'
-    
     repositories {
     	mavenCentral() 
     	jcenter() // for mockito
@@ -184,13 +172,10 @@ allprojects {
 
     // Those are some dependencies which are needed by all subprojects
     dependencies {
-        //checkstyle resolveLibrary('**/checkstyle-*/**/*.jar')
         checkstyle project(':kieker-checkstyle-extension')
 
-        findbugs resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
-        
         // compile-time dependency due to the annotation SuppressFBWarnings()
-        compile resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
+		compile "com.google.code.findbugs:findbugs:${fbVersion}"
 
 		compile 'commons-logging:commons-logging:1.2'
 		compile 'org.slf4j:slf4j-api:1.7.25'
