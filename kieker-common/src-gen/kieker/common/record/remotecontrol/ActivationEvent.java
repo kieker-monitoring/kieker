@@ -17,7 +17,6 @@ package kieker.common.record.remotecontrol;
 
 import java.nio.BufferOverflowException;
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -100,9 +99,8 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IMonito
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
 	 */
-	public ActivationEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public ActivationEvent(final IValueDeserializer deserializer) {
 		this.pattern = deserializer.getString();
 	}
 	

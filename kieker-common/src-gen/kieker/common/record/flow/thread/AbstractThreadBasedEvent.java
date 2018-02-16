@@ -16,7 +16,6 @@
 package kieker.common.record.flow.thread;
 
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.AbstractEvent;
 import kieker.common.record.io.IValueDeserializer;
 
@@ -94,9 +93,8 @@ public abstract class AbstractThreadBasedEvent extends AbstractEvent implements 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
 	 */
-	public AbstractThreadBasedEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public AbstractThreadBasedEvent(final IValueDeserializer deserializer) {
 		super(deserializer);
 		this.threadId = deserializer.getLong();
 		this.orderIndex = deserializer.getInt();

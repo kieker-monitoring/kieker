@@ -17,7 +17,6 @@ package kieker.common.record.controlflow;
 
 import java.nio.BufferOverflowException;
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -176,9 +175,8 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
 	 */
-	public OperationExecutionRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public OperationExecutionRecord(final IValueDeserializer deserializer) {
 		this.operationSignature = deserializer.getString();
 		this.sessionId = deserializer.getString();
 		this.traceId = deserializer.getLong();

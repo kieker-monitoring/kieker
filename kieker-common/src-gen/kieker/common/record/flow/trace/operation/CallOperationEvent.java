@@ -17,7 +17,6 @@ package kieker.common.record.flow.trace.operation;
 
 import java.nio.BufferOverflowException;
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
@@ -135,9 +134,8 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
 	 */
-	public CallOperationEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public CallOperationEvent(final IValueDeserializer deserializer) {
 		super(deserializer);
 		this.calleeOperationSignature = deserializer.getString();
 		this.calleeClassSignature = deserializer.getString();

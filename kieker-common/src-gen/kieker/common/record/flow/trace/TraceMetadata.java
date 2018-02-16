@@ -17,7 +17,6 @@ package kieker.common.record.flow.trace;
 
 import java.nio.BufferOverflowException;
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -157,9 +156,8 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
 	 */
-	public TraceMetadata(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public TraceMetadata(final IValueDeserializer deserializer) {
 		this.traceId = deserializer.getLong();
 		this.threadId = deserializer.getLong();
 		this.sessionId = deserializer.getString();
