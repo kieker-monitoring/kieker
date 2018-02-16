@@ -46,7 +46,7 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 	public static final String LEGACY_MAP_FILENAME = "tpmon.map";
 
 	/** The usual extension of Kieker's record files. */
-	public static final String NORMAL_FILE_EXTENSION = ".dat";
+	public static final String DAT_FILE_EXTENSION = ".dat";
 	/** The extension of Kieker's zipped record files. */
 	public static final String ZIP_FILE_EXTENSION = ".zip";
 	/** The extension of Kieker's gzipped record files. */

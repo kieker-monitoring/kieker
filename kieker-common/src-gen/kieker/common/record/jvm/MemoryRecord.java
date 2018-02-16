@@ -17,7 +17,6 @@ package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.jvm.AbstractJVMRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
@@ -184,9 +183,8 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
 	 */
-	public MemoryRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public MemoryRecord(final IValueDeserializer deserializer) {
 		super(deserializer);
 		this.heapMaxBytes = deserializer.getLong();
 		this.heapUsedBytes = deserializer.getLong();

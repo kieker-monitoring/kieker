@@ -21,10 +21,11 @@ package kieker.monitoring.core.configuration;
  * Ideally it would be created using this file! (#151)
  *
  * @author Andre van Hoorn, Jan Waller
+ * @author Reiner Jung -- changed to ConfigurationKeys
  *
  * @since 1.3
  */
-interface Keys { // NOPMD NOCS (static list)
+public final class ConfigurationKeys {
 	/** prefix used for all kieker.monitoring components. */
 	public static final String PREFIX = "kieker.monitoring.";
 
@@ -46,7 +47,7 @@ interface Keys { // NOPMD NOCS (static list)
 	public static final String APPLICATION_NAME = PREFIX + "applicationName";
 	public static final String USE_SHUTDOWN_HOOK = PREFIX + "useShutdownHook";
 	public static final String DEBUG = PREFIX + "debug";
-	public static final String METADATA = PREFIX + "metadata";
+	public static final String META_DATA = PREFIX + "metadata";
 
 	// JMX Controller
 	public static final String ACTIVATE_JMX = PREFIX + "jmx";
@@ -82,4 +83,8 @@ interface Keys { // NOPMD NOCS (static list)
 	public static final String ADAPTIVE_MONITORING_MAX_CACHE_SIZE = PREFIX + "adaptiveMonitoring.maxCacheSize";
 	public static final String ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR = PREFIX + "adaptiveMonitoring.boundedCacheBehaviour";
 
+	/**
+	 * Factory class. Avoid instantiation.
+	 */
+	private ConfigurationKeys() {}
 }

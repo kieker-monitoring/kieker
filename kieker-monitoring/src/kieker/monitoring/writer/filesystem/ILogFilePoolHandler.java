@@ -15,34 +15,30 @@
  ***************************************************************************/
 package kieker.monitoring.writer.filesystem;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Path;
-import java.util.zip.GZIPOutputStream;
-
-import kieker.common.util.filesystem.FSUtil;
 
 /**
- * Zip compression filter for the writer pool.
+ * An {@link ILogFilePoolHandler} is used to manage log data files in Kieker.
+ * After construction, each request of a new file path will return a new file path.
+ *
+ * The corresponding constructor must have the following signature:
+ * - Path location
+ * - String file extension prefixed by a dot
+ * - Integer with the max amount of files
  *
  * @author Reiner Jung
  *
  * @since 1.14
  */
-public class GZipCompressionFilter implements ICompressionFilter {
+public interface ILogFilePoolHandler {
 
-	public GZipCompressionFilter() {
-		// Empty constructor. No initialization necessary.
-	}
-
-	@Override
-	public OutputStream chainOutputStream(final OutputStream outputStream, final Path fileName) throws IOException {
-		return new GZIPOutputStream(outputStream);
-	}
-
-	@Override
-	public String getExtension() {
-		return FSUtil.GZIP_FILE_EXTENSION;
-	}
+	/**
+	 * Create a new path for a log file.
+	 *
+	 * @return return a proper stream
+	 *
+	 * @since 1.14
+	 */
+	Path requestFile();
 
 }

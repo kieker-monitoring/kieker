@@ -26,6 +26,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.common.util.Version;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 import kieker.monitoring.timer.ITimeSource;
@@ -66,7 +67,7 @@ public final class MonitoringController extends AbstractController implements IM
 		this.stateController.setStateListener(this);
 		this.timeSourceController = new TimeSourceController(configuration);
 		this.probeController = new ProbeController(configuration);
-		this.autoSetLoggingTimestamp = configuration.getBooleanProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP);
+		this.autoSetLoggingTimestamp = configuration.getBooleanProperty(ConfigurationKeys.AUTO_SET_LOGGINGTSTAMP);
 	}
 
 	// FACTORY
@@ -127,7 +128,7 @@ public final class MonitoringController extends AbstractController implements IM
 			monitoringController.enableMonitoring(); // notifies the listener
 		}
 
-		if (configuration.getBooleanProperty(ConfigurationFactory.USE_SHUTDOWN_HOOK)) {
+		if (configuration.getBooleanProperty(ConfigurationKeys.USE_SHUTDOWN_HOOK)) {
 			// This ensures that the terminateMonitoring() method is always called before shutting down the JVM. This method ensures that necessary cleanup steps are
 			// finished and no information is lost due to asynchronous writers.
 			try {

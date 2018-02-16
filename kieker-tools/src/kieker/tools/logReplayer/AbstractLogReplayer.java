@@ -26,15 +26,15 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.tools.logReplayer.filter.MonitoringRecordLoggerFilter;
 
 /**
  * Replays a monitoring log to a {@link kieker.monitoring.core.controller.IMonitoringController} with a given {@link Configuration}.
  * The {@link AbstractLogReplayer} can filter by timestamp and replay in real-time.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 public abstract class AbstractLogReplayer {
@@ -91,7 +91,7 @@ public abstract class AbstractLogReplayer {
 
 	/**
 	 * Replays the monitoring log terminates after the last record was passed to the configured {@link kieker.monitoring.core.controller.IMonitoringController}.
-	 * 
+	 *
 	 * @return true on success; false otherwise
 	 */
 	public boolean replay() {
@@ -152,7 +152,7 @@ public abstract class AbstractLogReplayer {
 				recordLoggerConfig.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, this.monitoringConfigurationFile);
 			}
 			recordLoggerConfig.setProperty(
-					ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP,
+					ConfigurationKeys.AUTO_SET_LOGGINGTSTAMP,
 					Boolean.toString(!this.keepOriginalLoggingTimestamps));
 			final MonitoringRecordLoggerFilter recordLogger = new MonitoringRecordLoggerFilter(recordLoggerConfig, analysisInstance);
 
@@ -171,17 +171,17 @@ public abstract class AbstractLogReplayer {
 
 	/**
 	 * Implementing classes returns the name of the reader's output port which provides the {@link kieker.common.record.IMonitoringRecord}s from the monitoring log.
-	 * 
+	 *
 	 * @return The name of the reader's output port.
 	 */
 	protected abstract String readerOutputPortName();
 
 	/**
 	 * Implementing classes return the reader to be used for reading the monitoring log.
-	 * 
+	 *
 	 * @param analysisInstance
 	 *            The analysis controller which will be the parent of the reader.
-	 * 
+	 *
 	 * @return The reader which can be used to read the monitoring log.
 	 */
 	protected abstract AbstractReaderPlugin createReader(final IAnalysisController analysisInstance);

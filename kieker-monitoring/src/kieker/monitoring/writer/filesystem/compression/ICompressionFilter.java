@@ -13,41 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.monitoring.writer.filesystem;
+package kieker.monitoring.writer.filesystem.compression;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Path;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
-import kieker.common.util.filesystem.FSUtil;
 
 /**
- * Zip compression filter for the writer pool.
+ * Common interface for compression filter used in the binary writer.
  *
  * @author Reiner Jung
  *
  * @since 1.14
  */
-public class ZipCompressionFilter implements ICompressionFilter {
+public interface ICompressionFilter {
 
-	public ZipCompressionFilter() {
-		// Empty constructor. No initialization necessary.
-	}
+	/**
+	 * Create an output stream with compression support and use the normal output stream as source.
+	 *
+	 * @param outputStream
+	 *            uncompressed output stream
+	 * @param fileName
+	 *            file name used in compression system, which also use an internal directory structure.
+	 *
+	 * @return the compression output stream
+	 *
+	 * @throws IOException
+	 *             on file or stream errors
+	 *
+	 * @since 1.14
+	 */
+	OutputStream chainOutputStream(OutputStream outputStream, Path fileName) throws IOException;
 
-	@Override
-	public OutputStream chainOutputStream(final OutputStream outputStream, final Path fileName) throws IOException {
-		final ZipOutputStream compressedOutputStream = new ZipOutputStream(outputStream);
-		final ZipEntry newZipEntry = new ZipEntry(fileName.toString() + FSUtil.NORMAL_FILE_EXTENSION);
-		compressedOutputStream.putNextEntry(newZipEntry);
-
-		return compressedOutputStream;
-	}
-
-	@Override
-	public String getExtension() {
-		return FSUtil.ZIP_FILE_EXTENSION;
-	}
+	/**
+	 * Return the extension with leading dot.
+	 *
+	 * @return return the extension
+	 * 
+	 * @since 1.14
+	 */
+	String getExtension();
 
 }

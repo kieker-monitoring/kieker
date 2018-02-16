@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.monitoring.writer.filesystem;
+package kieker.monitoring.writer.filesystem.compression;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -23,6 +23,7 @@ import org.tukaani.xz.FilterOptions;
 import org.tukaani.xz.LZMA2Options;
 import org.tukaani.xz.XZOutputStream;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.util.filesystem.FSUtil;
 
 /**
@@ -35,7 +36,13 @@ import kieker.common.util.filesystem.FSUtil;
  */
 public class XZCompressionFilter implements ICompressionFilter {
 
-	public XZCompressionFilter() {
+	/**
+	 * Initialize XZCompression with parameter to adhere Kieker configuration system.
+	 *
+	 * @param configuration
+	 *            Kieker configuration object
+	 */
+	public XZCompressionFilter(final Configuration configuration) { // NOPMD block warning of unused configuration parameter
 		// Empty constructor. No initialization necessary.
 	}
 
