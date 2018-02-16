@@ -16,7 +16,6 @@
 package kieker.common.record.controlflow;
 
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
@@ -29,7 +28,7 @@ public final class OperationExecutionRecordFactory implements IRecordFactory<Ope
 	
 	
 	@Override
-	public OperationExecutionRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public OperationExecutionRecord create(final IValueDeserializer deserializer) {
 		return new OperationExecutionRecord(deserializer);
 	}
 	

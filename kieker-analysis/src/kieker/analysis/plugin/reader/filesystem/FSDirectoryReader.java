@@ -96,7 +96,7 @@ final class FSDirectoryReader implements Runnable {
 				final String name = pathname.getName();
 				return pathname.isFile()
 						&& name.startsWith(FSDirectoryReader.this.filePrefix)
-						&& (name.endsWith(FSUtil.NORMAL_FILE_EXTENSION) || BinaryCompressionMethod.hasValidFileExtension(name));
+						&& (name.endsWith(FSUtil.DAT_FILE_EXTENSION) || BinaryCompressionMethod.hasValidFileExtension(name));
 			}
 		});
 		if (inputFiles == null) {
@@ -119,7 +119,7 @@ final class FSDirectoryReader implements Runnable {
 					break;
 				}
 				LOG.info("< Loading " + inputFile.getAbsolutePath());
-				if (inputFile.getName().endsWith(FSUtil.NORMAL_FILE_EXTENSION)) {
+				if (inputFile.getName().endsWith(FSUtil.DAT_FILE_EXTENSION)) {
 					this.processNormalInputFile(inputFile);
 				} else {
 					if (this.ignoreUnknownRecordTypes && ignoreUnknownRecordTypesWarningAlreadyShown) {

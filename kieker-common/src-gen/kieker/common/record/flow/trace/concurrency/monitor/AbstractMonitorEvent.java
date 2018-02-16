@@ -16,7 +16,6 @@
 package kieker.common.record.flow.trace.concurrency.monitor;
 
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueDeserializer;
 
@@ -77,9 +76,8 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
 	 */
-	public AbstractMonitorEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public AbstractMonitorEvent(final IValueDeserializer deserializer) {
 		super(deserializer);
 		this.lockId = deserializer.getInt();
 	}

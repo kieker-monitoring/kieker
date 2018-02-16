@@ -31,6 +31,8 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.filesystem.FileExtensionFilter;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
+import kieker.monitoring.writer.filesystem.compression.ZipCompressionFilter;
 
 /**
  * @author Christian Wulf
@@ -55,6 +57,7 @@ public class AsciiFileWriterTest {
 		this.configuration.setProperty(ConfigurationKeys.CONTROLLER_NAME, "testControllerName");
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_CHARSET_NAME, "UTF-8");
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
+		this.configuration.setProperty(AsciiFileWriter.CONFIG_BUFFERSIZE, "32768");
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, String.valueOf(Integer.MAX_VALUE));
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGSIZE, String.valueOf(Integer.MAX_VALUE));
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
@@ -178,7 +181,7 @@ public class AsciiFileWriterTest {
 
 				// test assertion
 				final String reasonMessage = "Passed arguments: maxLogFiles=" + maxLogFiles + ", numRecordsToWrite=" + numRecordsToWrite;
-				final File[] recordFiles = storePath.listFiles(writer.getFileNameFilter());
+				final File[] recordFiles = storePath.listFiles(FileExtensionFilter.DAT);
 				Assert.assertNotNull(recordFiles);
 				Assert.assertThat(reasonMessage, recordFiles.length, CoreMatchers.is(expectedNumRecordFiles));
 			}
@@ -194,7 +197,8 @@ public class AsciiFileWriterTest {
 		final int[][] testInputTuples = {
 			{ -1, 0, 0 }, { -1, 1, 1 },
 			{ 0, 0, 0 }, { 0, 1, 1 },
-			{ 1, 0, 0 }, { 1, 1, 1 }, { 1, 2, 2 }, { 1, 3, 2 },
+			{ 1, 0, 0 }, { 1, 1, 1 },
+			{ 1, 2, 2 }, { 1, 3, 2 },
 		};
 
 		for (final int[] testInputTuple : testInputTuples) {
@@ -214,7 +218,7 @@ public class AsciiFileWriterTest {
 
 			// test assertion
 			final String reasonMessage = "Passed arguments: maxMegaBytesPerFile=" + maxMegaBytesPerFile + ", megaBytesToWrite=" + megaBytesToWrite;
-			final File[] recordFiles = storePath.listFiles(writer.getFileNameFilter());
+			final File[] recordFiles = storePath.listFiles(FileExtensionFilter.DAT);
 			Assert.assertNotNull(recordFiles);
 			Assert.assertThat(reasonMessage, recordFiles.length, CoreMatchers.is(expectedNumRecordFiles));
 		}

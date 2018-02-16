@@ -17,7 +17,6 @@ package kieker.common.record.flow.trace.concurrency;
 
 import java.nio.BufferOverflowException;
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
@@ -114,9 +113,8 @@ public class JoinEvent extends AbstractTraceEvent  {
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
 	 */
-	public JoinEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public JoinEvent(final IValueDeserializer deserializer) {
 		super(deserializer);
 		this.joinedTraceId = deserializer.getLong();
 	}

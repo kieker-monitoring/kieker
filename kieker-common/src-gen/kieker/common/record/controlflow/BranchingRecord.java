@@ -17,7 +17,6 @@ package kieker.common.record.controlflow;
 
 import java.nio.BufferOverflowException;
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -119,9 +118,8 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
 	 */
-	public BranchingRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public BranchingRecord(final IValueDeserializer deserializer) {
 		this.timestamp = deserializer.getLong();
 		this.branchID = deserializer.getInt();
 		this.branchingOutcome = deserializer.getInt();

@@ -32,6 +32,8 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.common.util.filesystem.FileExtensionFilter;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
+import kieker.monitoring.writer.filesystem.compression.ZipCompressionFilter;
 
 /**
  * @author Christian Wulf
@@ -167,7 +169,7 @@ public class BinaryFileWriterTest {
 
 				// test assertion
 				final String reasonMessage = "Passed arguments: maxLogFiles=" + maxLogFiles + ", numRecordsToWrite=" + numRecordsToWrite;
-				final File[] recordFiles = storePath.listFiles(writer.getFileNameFilter());
+				final File[] recordFiles = storePath.listFiles(FileExtensionFilter.BIN);
 				Assert.assertNotNull(recordFiles);
 				Assert.assertThat(reasonMessage, recordFiles.length, CoreMatchers.is(expectedNumRecordFiles));
 			}
@@ -202,7 +204,7 @@ public class BinaryFileWriterTest {
 
 			// test assertion
 			final String reasonMessage = "Passed arguments: maxMegaBytesPerFile=" + maxMegaBytesPerFile + ", megaBytesToWrite=" + megaBytesToWrite;
-			final File[] recordFiles = storePath.listFiles(writer.getFileNameFilter());
+			final File[] recordFiles = storePath.listFiles(FileExtensionFilter.BIN);
 			Assert.assertNotNull(recordFiles);
 			Assert.assertThat(reasonMessage, recordFiles.length, CoreMatchers.is(expectedNumRecordFiles));
 		}

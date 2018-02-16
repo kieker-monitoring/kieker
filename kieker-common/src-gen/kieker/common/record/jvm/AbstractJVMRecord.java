@@ -16,7 +16,6 @@
 package kieker.common.record.jvm;
 
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -82,9 +81,8 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
 	 */
-	public AbstractJVMRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public AbstractJVMRecord(final IValueDeserializer deserializer) {
 		this.timestamp = deserializer.getLong();
 		this.hostname = deserializer.getString();
 		this.vmName = deserializer.getString();

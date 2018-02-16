@@ -16,7 +16,6 @@
 package kieker.common.record.flow.trace;
 
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.AbstractEvent;
 import kieker.common.record.io.IValueDeserializer;
 
@@ -80,9 +79,8 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
 	 */
-	public AbstractTraceEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public AbstractTraceEvent(final IValueDeserializer deserializer) {
 		super(deserializer);
 		this.traceId = deserializer.getLong();
 		this.orderIndex = deserializer.getInt();

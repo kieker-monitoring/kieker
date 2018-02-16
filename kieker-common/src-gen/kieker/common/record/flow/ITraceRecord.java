@@ -23,7 +23,6 @@ package kieker.common.record.flow;
  */
 public interface ITraceRecord extends IFlowRecord {
 	public long getTraceId();
-	public void setTraceId(long traceId);
 	
 	public int getOrderIndex();
 	

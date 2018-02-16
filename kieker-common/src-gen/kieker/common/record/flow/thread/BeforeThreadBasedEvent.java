@@ -17,7 +17,6 @@ package kieker.common.record.flow.thread;
 
 import java.nio.BufferOverflowException;
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.thread.AbstractThreadBasedEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
@@ -112,9 +111,8 @@ public class BeforeThreadBasedEvent extends AbstractThreadBasedEvent  {
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
 	 */
-	public BeforeThreadBasedEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public BeforeThreadBasedEvent(final IValueDeserializer deserializer) {
 		super(deserializer);
 	}
 	
