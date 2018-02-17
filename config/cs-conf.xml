@@ -4,7 +4,6 @@
     "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 
 <module name="Checker">
-
 	<!-- for KIEKER: default is warning instead of error -->
 	<property name="severity" value="error" />
 
