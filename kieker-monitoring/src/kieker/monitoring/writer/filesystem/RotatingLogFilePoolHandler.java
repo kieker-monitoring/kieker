@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.monitoring.writer.filesystem;
 
 import java.io.IOException;
@@ -27,50 +26,64 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.util.filesystem.FSUtil;
 
 /**
- * @author Christian Wulf
+ * Rotating log file pool handler, there is a maximum limit on files.
  *
- * @since 1.13
+ * @author Reiner Jung
+ *
+ * @since 1.14
  */
-class WriterPool {
+public class RotatingLogFilePoolHandler implements ILogFilePoolHandler {
+
+	private static final Log LOGGER = LogFactory.getLog(RotatingLogFilePoolHandler.class);
 
 	private static final String TIME_ZONE = "UTC";
 	private static final Locale LOCALE = Locale.US;
 
-	protected final List<Path> logFiles = new ArrayList<>();
-	protected final Log writerLog; // NOPMD (logger passed by caller)
-	protected final Path folder;
+	private final List<Path> logFiles = new ArrayList<>();
 
 	private final SimpleDateFormat dateFormatter;
 
-	protected WriterPool(final Log writerLog, final Path folder) {
-		this.writerLog = writerLog;
-		this.folder = folder;
+	private final Path location;
+	private int counter;
+	private final String fileExtensionWithDot;
+	private final int maxAmountOfFiles;
+
+	public RotatingLogFilePoolHandler(final Path location, final String extension, final Integer maxAmountOfFiles) {
 		this.dateFormatter = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", LOCALE);
 		this.dateFormatter.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
+
+		this.maxAmountOfFiles = maxAmountOfFiles;
+		this.location = location;
+		this.fileExtensionWithDot = extension;
 	}
 
-	public void onMaxLogFilesExceeded() {
-		final Path oldestFile = this.logFiles.remove(0);
-		try {
-			Files.delete(oldestFile);
-		} catch (final IOException e) {
-			this.writerLog.warn("Cannot delete oldest file.", e);
+	@Override
+	public Path requestFile() {
+		this.counter++;
+
+		if (this.counter > this.maxAmountOfFiles) {
+			final Path oldestFile = this.logFiles.remove(0);
+			try {
+				Files.delete(oldestFile);
+			} catch (final IOException e) {
+				LOGGER.warn("Cannot delete oldest file.", e);
+			}
 		}
-	}
 
-	public Path getNextFileName(final int counter, final String fileExtensionWithDot) {
 		final Date now = new Date();
 
 		// "%1$s-%2$tY%2$tm%2$td-%2$tH%2$tM%2$tS%2$tL-UTC-%3$03d-%4$s.%5$s"
 		final String fileName = String.format(LOCALE, "%s-%s-%s-%03d%s",
-				FSUtil.FILE_PREFIX, this.dateFormatter.format(now), TIME_ZONE, counter, fileExtensionWithDot);
+				FSUtil.FILE_PREFIX, this.dateFormatter.format(now), TIME_ZONE, this.counter, this.fileExtensionWithDot);
 
-		final Path logFile = this.folder.resolve(fileName);
+		final Path logFile = this.location.resolve(fileName);
 		this.logFiles.add(logFile);
 
 		return logFile;
 	}
+
 }

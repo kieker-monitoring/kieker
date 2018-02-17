@@ -17,7 +17,6 @@ package kieker.common.record.flow.trace;
 
 import java.nio.BufferOverflowException;
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
@@ -131,9 +130,8 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
 	 */
-	public ApplicationTraceMetadata(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public ApplicationTraceMetadata(final IValueDeserializer deserializer) {
 		super(deserializer);
 		this.applicationName = deserializer.getString();
 	}

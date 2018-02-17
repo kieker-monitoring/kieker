@@ -15,43 +15,46 @@
  ***************************************************************************/
 package kieker.monitoring.writer.filesystem;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 
 /**
- * Common interface for compression filter used in the binary writer.
  *
  * @author Reiner Jung
  *
  * @since 1.14
  */
-public interface ICompressionFilter {
+public interface IMapFileHandler {
 
 	/**
-	 * Create an output stream with compression support and use the normal output stream as source.
+	 * Create a map file with the given name and location adhering to the given charset.
 	 *
-	 * @param outputStream
-	 *            uncompressed output stream
-	 * @param fileName
-	 *            file name used in compression system, which also use an internal directory structure.
-	 *
-	 * @return the compression output stream
-	 *
-	 * @throws IOException
-	 *             on file or stream errors
+	 * @param location
+	 *            complete path for the map file including its name
+	 * @param charset
+	 *            character set to be used for the file
 	 *
 	 * @since 1.14
 	 */
-	OutputStream chainOutputStream(OutputStream outputStream, Path fileName) throws IOException;
+	void create(Path location, Charset charset);
 
 	/**
-	 * Return the extension with leading dot.
+	 * Close the mapping file.
 	 *
-	 * @return return the extension
-	 * 
 	 * @since 1.14
 	 */
-	String getExtension();
+	void close();
+
+	/**
+	 * Add a key value pair to the file.
+	 *
+	 * @param id
+	 *            class id
+	 * @param eventClassName
+	 *            name of the event class
+	 *
+	 * @since 1.14
+	 */
+	void add(int id, String eventClassName);
 
 }

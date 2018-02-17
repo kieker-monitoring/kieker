@@ -29,6 +29,7 @@ import kieker.common.namedRecordPipe.IPipeReader;
 import kieker.common.namedRecordPipe.Pipe;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
 
@@ -86,8 +87,8 @@ public final class NamedPipeFactory {
 	public static MonitoringController createMonitoringControllerWithNamedPipe(final String pipeName,
 			final Properties additionalProperties) {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
-		configuration.setProperty(ConfigurationFactory.METADATA, "false");
-		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PipeWriter.class.getName());
+		configuration.setProperty(ConfigurationKeys.META_DATA, "false");
+		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, PipeWriter.class.getName());
 		configuration.setProperty(PipeWriter.CONFIG_PIPENAME, pipeName);
 
 		if (additionalProperties != null) {

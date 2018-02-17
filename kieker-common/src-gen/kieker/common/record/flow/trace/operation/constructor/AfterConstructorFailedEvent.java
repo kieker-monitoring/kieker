@@ -17,7 +17,6 @@ package kieker.common.record.flow.trace.operation.constructor;
 
 import java.nio.BufferOverflowException;
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
@@ -118,9 +117,8 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
 	 */
-	public AfterConstructorFailedEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public AfterConstructorFailedEvent(final IValueDeserializer deserializer) {
 		super(deserializer);
 	}
 	

@@ -16,7 +16,6 @@
 package kieker.common.record.system;
 
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
@@ -29,7 +28,7 @@ public final class MemSwapUsageRecordFactory implements IRecordFactory<MemSwapUs
 	
 	
 	@Override
-	public MemSwapUsageRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+	public MemSwapUsageRecord create(final IValueDeserializer deserializer) {
 		return new MemSwapUsageRecord(deserializer);
 	}
 	

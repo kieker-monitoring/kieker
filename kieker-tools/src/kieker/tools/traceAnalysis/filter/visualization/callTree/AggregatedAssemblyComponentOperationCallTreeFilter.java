@@ -35,14 +35,13 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
 
 /**
  * @author Andre van Hoorn
- *
+ *~/Projects/Kieker/kieker/
  * @since 1.1
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated assembly component operation call tree", repositoryPorts = {
 		@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
 public class AggregatedAssemblyComponentOperationCallTreeFilter
 extends AbstractAggregatedCallTreeFilter<AssemblyComponentOperationPair> {
-
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *

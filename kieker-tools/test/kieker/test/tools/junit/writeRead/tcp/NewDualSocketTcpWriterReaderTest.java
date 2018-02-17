@@ -28,6 +28,7 @@ import kieker.analysis.plugin.reader.tcp.DualSocketTcpReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.tcp.TCPWriter;
@@ -65,7 +66,7 @@ public class NewDualSocketTcpWriterReaderTest extends AbstractWriterReaderTest {
 		Thread.sleep(1000);
 
 		final Configuration monitoringConfig = ConfigurationFactory.createDefaultConfiguration();
-		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, TCPWriter.class.getName());
+		monitoringConfig.setProperty(ConfigurationKeys.WRITER_CLASSNAME, TCPWriter.class.getName());
 		monitoringConfig.setProperty(TCPWriter.CONFIG_PORT1, NewDualSocketTcpWriterReaderTest.PORT1);
 		monitoringConfig.setProperty(TCPWriter.CONFIG_PORT2, NewDualSocketTcpWriterReaderTest.PORT2);
 		return MonitoringController.createInstance(monitoringConfig);

@@ -15,34 +15,44 @@
  ***************************************************************************/
 package kieker.monitoring.writer.filesystem;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Path;
+import java.nio.Buffer;
 
-import kieker.common.util.filesystem.FSUtil;
+import kieker.common.logging.Log;
 
 /**
- * This class does not provide any compressing filter. It exists only to minimize implementation complexity.
+ * @param <T>
+ *            buffer type
  *
  * @author Reiner Jung
  *
  * @since 1.14
+ *
+ * @deprecated 1.14 should be removed in 1.15 replaced by new FileWriter API
  */
-public class NoneCompressionFilter implements ICompressionFilter {
+@Deprecated
+public abstract class AbstractPooledFileChannel<T extends Buffer> {
 
-	public NoneCompressionFilter() {
-		// Empty constructor. No initialization necessary.
+	private T buffer;
+
+	public AbstractPooledFileChannel(final T buffer) {
+		this.buffer = buffer;
 	}
 
-	@Override
-	public OutputStream chainOutputStream(final OutputStream outputStream, final Path fileName) throws IOException {
-		return outputStream;
+	public abstract long getBytesWritten();
 
+	public abstract void flush(Log log);
+
+	/**
+	 * Flushes the buffer and closes the channel afterwards.
+	 */
+	public abstract void close(Log writerLog);
+
+	protected T getBuffer() {
+		return this.buffer;
 	}
 
-	@Override
-	public String getExtension() {
-		return FSUtil.BINARY_FILE_EXTENSION;
+	protected void setBuffer(final T buffer) {
+		this.buffer = buffer;
 	}
 
 }

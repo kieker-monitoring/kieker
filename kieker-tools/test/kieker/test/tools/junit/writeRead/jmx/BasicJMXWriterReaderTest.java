@@ -33,6 +33,7 @@ import kieker.analysis.plugin.reader.jmx.JmxReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.jmx.JmxWriter;
@@ -96,15 +97,15 @@ public class BasicJMXWriterReaderTest {
 
 	private MonitoringController createMonitoringController() {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX, "true");
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_CONTROLLER, "true");
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_DOMAIN, BasicJMXWriterReaderTest.DOMAIN);
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_CONTROLLER_NAME, BasicJMXWriterReaderTest.CONTROLLER);
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE, "true");
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_FALLBACK, "false");
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_NAME, "JMXServer");
-		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_REMOTE_PORT, BasicJMXWriterReaderTest.PORT);
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, JmxWriter.class.getName());
+		config.setProperty(ConfigurationKeys.ACTIVATE_JMX, "true");
+		config.setProperty(ConfigurationKeys.ACTIVATE_JMX_CONTROLLER, "true");
+		config.setProperty(ConfigurationKeys.ACTIVATE_JMX_DOMAIN, BasicJMXWriterReaderTest.DOMAIN);
+		config.setProperty(ConfigurationKeys.ACTIVATE_JMX_CONTROLLER_NAME, BasicJMXWriterReaderTest.CONTROLLER);
+		config.setProperty(ConfigurationKeys.ACTIVATE_JMX_REMOTE, "true");
+		config.setProperty(ConfigurationKeys.ACTIVATE_JMX_REMOTE_FALLBACK, "false");
+		config.setProperty(ConfigurationKeys.ACTIVATE_JMX_REMOTE_NAME, "JMXServer");
+		config.setProperty(ConfigurationKeys.ACTIVATE_JMX_REMOTE_PORT, BasicJMXWriterReaderTest.PORT);
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, JmxWriter.class.getName());
 		config.setProperty(JmxWriter.CONFIG_DOMAIN, "");
 		config.setProperty(JmxWriter.CONFIG_LOGNAME, BasicJMXWriterReaderTest.LOGNAME);
 		return MonitoringController.createInstance(config);

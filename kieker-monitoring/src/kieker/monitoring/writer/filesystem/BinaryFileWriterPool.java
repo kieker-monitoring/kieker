@@ -20,32 +20,24 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
 import kieker.common.logging.Log;
 import kieker.common.util.filesystem.FSUtil;
+import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
 
 /**
  * @author Christian Wulf (chw)
+ * @author Reiner Jung
  *
  * @since 1.13
+ *
+ * @deprecated 1.14 should be removed in 1.15 replaced by new FileWriter API
  */
-class BinaryFileWriterPool extends WriterPool {
-
-	private final int maxEntriesPerFile;
-	private int numEntriesInCurrentFile;
-	// private int currentAmountOfFiles;
-	private final long maxBytesPerFile;
-
-	private final ICompressionFilter compressionFilter;
-	private final String fileExtensionWithDot;
-	private final int maxAmountOfFiles;
-
-	private PooledFileChannel currentChannel;
-	private int currentFileNumber;
+@Deprecated
+class BinaryFileWriterPool extends AbstractFileWriterPool<ByteBuffer> {
 
 	/**
 	 * Create a binary writer pool.
@@ -54,72 +46,52 @@ class BinaryFileWriterPool extends WriterPool {
 	 *            logger for the pool
 	 * @param folder
 	 *            path where all files go
-	 * @param maxEntriesPerFile
+	 * @param charsetName
+	 *            identifier for the char set used for string serialization
+	 * @param maxEntriesInFile
 	 *            max entries per file
 	 * @param compressionFilter
-	 *            compression method
+	 *            compression filter
 	 * @param maxAmountOfFiles
 	 *            upper limit for the number of files
-	 * @param maxMegaBytesPerFile
+	 * @param maxMegaBytesInFile
 	 *            upper limit for the file size
+	 * @param bufferSize
+	 *            size of the writing buffer
 	 */
-	public BinaryFileWriterPool(final Log writerLog, final Path folder, final int maxEntriesPerFile, final ICompressionFilter compressionFilter,
-			final int maxAmountOfFiles,
-			final int maxMegaBytesPerFile) {
-		super(writerLog, folder);
-		this.maxEntriesPerFile = maxEntriesPerFile;
-		this.numEntriesInCurrentFile = maxEntriesPerFile; // triggers file creation
-		this.compressionFilter = compressionFilter;
-		this.maxAmountOfFiles = maxAmountOfFiles;
-		this.maxBytesPerFile = maxMegaBytesPerFile * 1024L * 1024L; // conversion from MB to Bytes
+	public BinaryFileWriterPool(final Log writerLog, final Path folder, final String charsetName, final int maxEntriesInFile,
+			final ICompressionFilter compressionFilter,
+			final int maxAmountOfFiles, final int maxMegaBytesInFile, final ByteBuffer buffer) {
+		super(writerLog, folder, charsetName, maxEntriesInFile, compressionFilter, maxAmountOfFiles, maxMegaBytesInFile, FSUtil.BINARY_FILE_EXTENSION);
 
-		this.currentChannel = new PooledFileChannel(Channels.newChannel(new ByteArrayOutputStream())); // NullObject design pattern
-		this.fileExtensionWithDot = (this.compressionFilter instanceof NoneCompressionFilter) ? FSUtil.BINARY_FILE_EXTENSION : this.compressionFilter.getExtension(); // NOCS
+		this.buffer = buffer;
+
+		this.currentChannel = new BinaryPooledFileChannel(new ByteArrayOutputStream(), this.buffer); // NullObject design pattern
 	}
 
-	public PooledFileChannel getFileWriter(final ByteBuffer buffer) {
-		this.numEntriesInCurrentFile++;
-
-		// (buffer overflow aware comparison) means: numEntriesInCurrentFile > maxEntriesPerFile
-		if ((this.numEntriesInCurrentFile - this.maxEntriesPerFile) > 0) {
-			this.onThresholdExceeded(buffer);
-		}
-
-		if (this.currentChannel.getBytesWritten() > this.maxBytesPerFile) {
-			this.onThresholdExceeded(buffer);
-		}
-
-		if (this.logFiles.size() > this.maxAmountOfFiles) {
-			this.onMaxLogFilesExceeded();
-		}
-
-		return this.currentChannel;
-	}
-
-	private void onThresholdExceeded(final ByteBuffer buffer) {
-		this.currentChannel.close(buffer, this.writerLog);
+	@Override
+	protected void onThresholdExceeded() {
+		this.currentChannel.close(this.writerLog);
 		// we expect this.folder to exist
 
-		this.currentFileNumber++;
+		this.setCurrentFileNumber(this.getCurrentFileNumber() + 1);
 
-		final Path newFile = this.getNextFileName(this.currentFileNumber, this.fileExtensionWithDot);
+		final Path newFile = this.getNextFileName(this.getCurrentFileNumber(), this.fileExtensionWithDot);
 		try {
+			Files.createDirectories(this.folder);
+
 			// use CREATE_NEW to fail if the file already exists
 			OutputStream outputStream = Files.newOutputStream(newFile, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
 			// stream is not buffered, since the byte buffer itself is the buffer
 
 			outputStream = this.compressionFilter.chainOutputStream(outputStream, newFile);
 
-			this.currentChannel = new PooledFileChannel(Channels.newChannel(outputStream));
+			this.currentChannel = new BinaryPooledFileChannel(outputStream, this.buffer);
 		} catch (final IOException e) {
 			throw new IllegalStateException("This exception should not have been thrown.", e);
 		}
 
 		this.numEntriesInCurrentFile = 1;
-	}
-
-	public void close(final ByteBuffer buffer) {
-		this.currentChannel.close(buffer, this.writerLog);
 	}
 
 }

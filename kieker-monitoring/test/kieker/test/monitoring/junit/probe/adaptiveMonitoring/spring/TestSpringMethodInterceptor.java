@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.probe.spring.executions.jetty.UrlUtil;
@@ -75,11 +75,11 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		// We must use System.setProperty (and not a new custom Configuration instance)
 		// because the probe for the spring intercepter uses the singleton instance of the monitoring controller
 		// which reads its properties by configuration file and system properties
-		System.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
-		System.setProperty(ConfigurationFactory.METADATA, "false");
-		System.setProperty(ConfigurationFactory.HOST_NAME, HOSTNAME);
-		System.setProperty(ConfigurationFactory.CONTROLLER_NAME, CTRLNAME);
-		System.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
+		System.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, "true");
+		System.setProperty(ConfigurationKeys.META_DATA, "false");
+		System.setProperty(ConfigurationKeys.HOST_NAME, HOSTNAME);
+		System.setProperty(ConfigurationKeys.CONTROLLER_NAME, CTRLNAME);
+		System.setProperty(ConfigurationKeys.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		// Doesn't work because the property does not start with kieker.monitoring:
 		// System.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, listName);
 
@@ -96,7 +96,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	}
 
 	@Test
-	public void testDummy() {	// to avoid PMD issues
+	public void testDummy() { // to avoid PMD issues
 		Assert.assertNotNull(BOOKSTORE_SEARCH_ANY_URL);
 	}
 
@@ -139,10 +139,10 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	@After
 	public void cleanup() throws InterruptedException {
 		this.ctx.destroy();
-		System.clearProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED);
-		System.clearProperty(ConfigurationFactory.METADATA);
-		System.clearProperty(ConfigurationFactory.CONTROLLER_NAME);
-		System.clearProperty(ConfigurationFactory.WRITER_CLASSNAME);
-		System.clearProperty(ConfigurationFactory.HOST_NAME);
+		System.clearProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED);
+		System.clearProperty(ConfigurationKeys.META_DATA);
+		System.clearProperty(ConfigurationKeys.CONTROLLER_NAME);
+		System.clearProperty(ConfigurationKeys.WRITER_CLASSNAME);
+		System.clearProperty(ConfigurationKeys.HOST_NAME);
 	}
 }
