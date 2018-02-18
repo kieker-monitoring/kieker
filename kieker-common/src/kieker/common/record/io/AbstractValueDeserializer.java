@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,13 @@ import kieker.common.exception.RecordInstantiationException;
  *
  * @author Reiner Jung
  *
+ * @since 1.14
  */
-abstract public class AbstractValueDeserializer {
+public abstract class AbstractValueDeserializer { // NOPMD no abstract methods, as they are defined by the corresponding IValueDeserializer interface
+	
+	public AbstractValueDeserializer() {
+		// empty constructor
+	}
 
 	/**
 	 * Compute the correct enumeration value for the given {@code enumType} and {@code ordinal} value.
