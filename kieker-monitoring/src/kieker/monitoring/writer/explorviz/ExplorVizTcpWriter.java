@@ -69,7 +69,10 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 
 	private static final String EMPTY_STRING = "";
 
-	/** <code>true</code> if the {@link #byteBuffer} should be flushed upon each new incoming monitoring record */
+	/**
+	 * <code>true</code> if the {@link #byteBuffer} should be flushed upon each new
+	 * incoming monitoring record
+	 */
 	private final boolean flush;
 	/** the buffer used for buffering monitoring and registry records */
 	private final ByteBuffer byteBuffer;
@@ -77,7 +80,10 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 	private final WritableByteChannel socketChannel;
 	/** the registry used to compress string fields in monitoring records */
 	private final IWriterRegistry<String> writerRegistry;
-	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.registerStrings(..)} */
+	/**
+	 * this adapter allows to use the new WriterRegistry with the legacy IRegistry
+	 * in {@link AbstractMonitoringRecord.registerStrings(..)}
+	 */
 	private final RegisterAdapter<String> registerStringsAdapter;
 
 	public ExplorVizTcpWriter(final Configuration configuration) throws IOException {
@@ -103,10 +109,8 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 		final IMonitoringController monitoringController = MonitoringController.getInstance();
 
 		try {
-			final HostApplicationMetaData record = new HostApplicationMetaData(
-					"Default System",
-					InetAddress.getLocalHost().getHostAddress(),
-					monitoringController.getHostname(),
+			final HostApplicationMetaData record = new HostApplicationMetaData("Default System",
+					InetAddress.getLocalHost().getHostAddress(), monitoringController.getHostname(),
 					monitoringController.getName());
 
 			this.writeMonitoringRecord(record);
@@ -190,13 +194,13 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 			final HostApplicationMetaData record = (HostApplicationMetaData) kiekerRecord;
 			this.writerRegistry.register(record.getSystemName());
 			this.writerRegistry.register(record.getIpAddress());
-			this.writerRegistry.register(record.getHostname());
+			this.writerRegistry.register(record.getHostName());
 			this.writerRegistry.register(record.getApplicationName());
 
 			buffer.put(HOST_APPLICATION_META_DATA_CLAZZ_ID);
 			buffer.putInt(this.writerRegistry.getId(record.getSystemName()));
 			buffer.putInt(this.writerRegistry.getId(record.getIpAddress()));
-			buffer.putInt(this.writerRegistry.getId(record.getHostname()));
+			buffer.putInt(this.writerRegistry.getId(record.getHostName()));
 			buffer.putInt(this.writerRegistry.getId(record.getApplicationName()));
 		}
 	}

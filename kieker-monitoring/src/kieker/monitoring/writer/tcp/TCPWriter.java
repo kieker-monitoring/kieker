@@ -26,7 +26,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.io.DefaultValueSerializer;
+import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.registry.GetIdAdapter;
@@ -92,7 +92,7 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 		this.registryRecordChannel = SocketChannel.open(new InetSocketAddress(hostname, port2));
 
 		final WriterRegistry writerRegistry = new WriterRegistry(this);
-		this.serializer = DefaultValueSerializer.create(this.recordBuffer, new GetIdAdapter<>(writerRegistry));
+		this.serializer = BinaryValueSerializer.create(this.recordBuffer, new GetIdAdapter<>(writerRegistry));
 	}
 
 	@Override
