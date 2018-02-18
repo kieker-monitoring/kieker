@@ -78,7 +78,7 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 	/** property declarations. */
 	private final long timestamp;
 	private final String classSignature;
-	private long traceId;
+	private final long traceId;
 	private final int orderIndex;
 	private final String returnType;
 	private final String returnValue;
@@ -272,9 +272,6 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 		return this.traceId;
 	}
 	
-	public final void setTraceId(long traceId) {
-		this.traceId = traceId;
-	}
 	
 	public final int getOrderIndex() {
 		return this.orderIndex;
