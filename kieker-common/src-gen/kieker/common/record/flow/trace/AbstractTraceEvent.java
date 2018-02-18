@@ -39,7 +39,7 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	
 		
 	/** property declarations. */
-	private final long traceId;
+	private long traceId;
 	private final int orderIndex;
 	
 	/**
@@ -121,6 +121,9 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		return this.traceId;
 	}
 	
+	public final void setTraceId(long traceId) {
+		this.traceId = traceId;
+	}
 	
 	public final int getOrderIndex() {
 		return this.orderIndex;
