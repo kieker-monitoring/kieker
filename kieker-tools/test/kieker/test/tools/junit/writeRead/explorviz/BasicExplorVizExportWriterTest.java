@@ -30,6 +30,7 @@ import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.explorviz.ExplorVizTcpWriter;
 
@@ -66,7 +67,7 @@ public class BasicExplorVizExportWriterTest {
 
 		// define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, ExplorVizTcpWriter.class.getName());
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, ExplorVizTcpWriter.class.getName());
 		config.setProperty(ExplorVizTcpWriter.CONFIG_HOSTNAME, hostname);
 		config.setProperty(ExplorVizTcpWriter.CONFIG_PORT, port);
 

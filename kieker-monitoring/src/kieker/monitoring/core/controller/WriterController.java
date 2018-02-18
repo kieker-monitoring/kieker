@@ -26,7 +26,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.queue.BlockingQueueDecorator;
 import kieker.monitoring.queue.behavior.BlockOnFailedInsertBehavior;
 import kieker.monitoring.queue.behavior.BypassQueueBehavior;
@@ -84,7 +84,7 @@ public final class WriterController extends AbstractController implements IWrite
 	 */
 	public WriterController(final Configuration configuration) {
 		super(configuration);
-		this.logMetadataRecord = configuration.getBooleanProperty(ConfigurationFactory.METADATA);
+		this.logMetadataRecord = configuration.getBooleanProperty(ConfigurationKeys.META_DATA);
 
 		this.queueCapacity = configuration.getIntProperty(PREFIX + RECORD_QUEUE_SIZE);
 		final String queueFqn = configuration.getStringProperty(PREFIX + RECORD_QUEUE_FQN);
@@ -98,7 +98,7 @@ public final class WriterController extends AbstractController implements IWrite
 			this.writerQueue = new BlockingQueueDecorator<>(queue, putStrategy, takeStrategy);
 		}
 
-		final String writerClassName = configuration.getStringProperty(ConfigurationFactory.WRITER_CLASSNAME);
+		final String writerClassName = configuration.getStringProperty(ConfigurationKeys.WRITER_CLASSNAME);
 		this.monitoringWriter = AbstractController.createAndInitialize(AbstractMonitoringWriter.class, writerClassName,
 				configuration);
 		if (this.monitoringWriter == null) {

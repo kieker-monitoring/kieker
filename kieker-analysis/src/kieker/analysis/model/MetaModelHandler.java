@@ -315,7 +315,7 @@ public final class MetaModelHandler {
 			final List<AbstractPlugin> plugins = new ArrayList<AbstractPlugin>(readers);
 			plugins.addAll(filters);
 			for (final AbstractPlugin plugin : plugins) {
-				MIPlugin mPlugin;
+				final MIPlugin mPlugin;
 				if (plugin instanceof AbstractReaderPlugin) {
 					mPlugin = factory.createReader();
 				} else {

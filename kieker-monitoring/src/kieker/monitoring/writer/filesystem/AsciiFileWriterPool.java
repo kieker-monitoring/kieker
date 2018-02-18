@@ -16,23 +16,17 @@
 
 package kieker.monitoring.writer.filesystem;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.nio.charset.Charset;
+import java.nio.CharBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import kieker.common.logging.Log;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.writer.WriterUtil;
+import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -40,98 +34,68 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @author Christian Wulf (chw)
  *
  * @since 1.13
+ *
+ * @deprecated 1.14 should be removed in 1.15 replaced by new FileWriter API
  */
-class AsciiFileWriterPool extends WriterPool {
+@Deprecated
+class AsciiFileWriterPool extends AbstractFileWriterPool<CharBuffer> {
 
-	private final Charset charset;
-
-	private final int maxEntriesInFile;
-	private int numEntriesInCurrentFile;
-	// private final int maxAmountOfFiles;
-	// private int currentAmountOfFiles;
-
-	private final boolean shouldCompress;
-	private final String fileExtensionWithDot;
-	private final int maxAmountOfFiles;
-	private final long maxBytesPerFile;
-
-	private PrintWriter currentFileWriter;
-	private MeasuringWriter currentMeasuringWriter;
-
-	private int currentFileNumber;
-
+	/**
+	 * Create an ASCII writer pool.
+	 *
+	 * @param writerLog
+	 *            logger for the pool
+	 * @param folder
+	 *            path where all files go
+	 * @param charsetName
+	 *            identifier for the char set used for string serialization
+	 * @param maxEntriesInFile
+	 *            max entries per file
+	 * @param compressionFilter
+	 *            compression filter
+	 * @param maxAmountOfFiles
+	 *            upper limit for the number of files
+	 * @param maxMegaBytesInFile
+	 *            upper limit for the file size
+	 * @param bufferSize
+	 *            size of the writing buffer
+	 */
 	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
-	public AsciiFileWriterPool(final Log writerLog, final Path folder, final String charsetName, final int maxEntriesInFile, final boolean shouldCompress,
-			final int maxAmountOfFiles, final int maxMegaBytesPerFile) {
-		super(writerLog, folder);
-		this.maxAmountOfFiles = maxAmountOfFiles;
-		this.maxBytesPerFile = maxMegaBytesPerFile * 1024L * 1024L; // conversion from MB to Bytes
-		this.charset = Charset.forName(charsetName);
-		this.maxEntriesInFile = maxEntriesInFile;
-		this.numEntriesInCurrentFile = maxEntriesInFile; // triggers file creation
-		this.shouldCompress = shouldCompress;
+	public AsciiFileWriterPool(final Log writerLog, final Path folder, final String charsetName, final int maxEntriesInFile,
+			final ICompressionFilter compressionFilter,
+			final int maxAmountOfFiles, final int maxMegaBytesInFile, final CharBuffer buffer) {
 
-		// this.currentFileWriter = Channels.newChannel(new ByteArrayOutputStream()); // NullObject design pattern
-		// final CharBuffer charBuffer = this.buffer.asCharBuffer();
-		this.currentFileWriter = new PrintWriter(new ByteArrayOutputStream()); // NullObject design pattern
-		this.fileExtensionWithDot = (shouldCompress) ? FSUtil.ZIP_FILE_EXTENSION : FSUtil.NORMAL_FILE_EXTENSION; // NOCS
+		super(writerLog, folder, charsetName, maxEntriesInFile, compressionFilter, maxAmountOfFiles, maxMegaBytesInFile, FSUtil.DAT_FILE_EXTENSION);
+
+		this.buffer = buffer;
+
+		this.currentChannel = new AsciiPooledFileChannel(new ByteArrayOutputStream(), this.charset, this.buffer);
 	}
 
-	public PrintWriter getFileWriter() {
-		this.numEntriesInCurrentFile++;
+	@Override
+	protected void onThresholdExceeded() {
+		this.currentChannel.close(this.writerLog);
+		// we expect this.folder to exist
 
-		// (buffer overflow aware comparison) means: numEntriesInCurrentFile > maxEntriesInFile
-		if ((this.numEntriesInCurrentFile - this.maxEntriesInFile) > 0) {
-			this.onThresholdExceeded();
-		}
+		this.setCurrentFileNumber(this.getCurrentFileNumber() + 1);
 
-		// IMPROVE correctness: replace the property maxBytesPerFile by maxCharactersPerFile
-		if (this.currentMeasuringWriter.getCharactersWritten() > this.maxBytesPerFile) {
-			this.onThresholdExceeded();
-		}
-
-		if (this.logFiles.size() > this.maxAmountOfFiles) {
-			this.onMaxLogFilesExceeded();
-		}
-
-		return this.currentFileWriter;
-	}
-
-	private void onThresholdExceeded() {
-		WriterUtil.close(this.currentFileWriter, this.writerLog);
-
-		this.currentFileNumber++;
-
-		final Path newFile = this.getNextFileName(this.currentFileNumber, this.fileExtensionWithDot);
+		final Path newFile = this.getNextFileName(this.getCurrentFileNumber(), this.fileExtensionWithDot);
 		try {
 			Files.createDirectories(this.folder);
 
 			// use CREATE_NEW to fail if the file already exists
 			OutputStream outputStream = Files.newOutputStream(newFile, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+			// stream is not buffered, since the byte buffer itself is the buffer
 
-			if (this.shouldCompress) {
-				// final GZIPOutputStream compressedOutputStream = new GZIPOutputStream(outputStream);
-				final ZipOutputStream compressedOutputStream = new ZipOutputStream(outputStream);
-				final ZipEntry newZipEntry = new ZipEntry(newFile.toString() + FSUtil.NORMAL_FILE_EXTENSION);
-				compressedOutputStream.putNextEntry(newZipEntry);
-				outputStream = compressedOutputStream;
-			}
+			outputStream = this.compressionFilter.chainOutputStream(outputStream, newFile);
 
-			// this.currentFileWriter = Channels.newChannel(outputStream);
+			this.currentChannel = new AsciiPooledFileChannel(outputStream, this.charset, this.buffer);
 
-			Writer writer = new OutputStreamWriter(outputStream, this.charset);
-			writer = new BufferedWriter(writer);
-			this.currentMeasuringWriter = new MeasuringWriter(writer);
-			this.currentFileWriter = new PrintWriter(this.currentMeasuringWriter);
 		} catch (final IOException e) {
 			throw new IllegalStateException("This exception should not have been thrown.", e);
 		}
 
 		this.numEntriesInCurrentFile = 1;
-	}
-
-	public void close() {
-		WriterUtil.close(this.currentFileWriter, this.writerLog);
 	}
 
 }

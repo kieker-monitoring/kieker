@@ -81,6 +81,9 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	/**
 	 * Registers the string attributes of the record at the given <code>stringRegistry</code>.
 	 *
+	 * @param stringRegistry
+	 *            string registry
+	 *
 	 * @since 1.11
 	 * @deprecated since 1.13 (to be removed in 1.14): Is unnecessary when using the new, serializer-based output.
 	 */

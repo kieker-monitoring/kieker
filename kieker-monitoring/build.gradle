@@ -22,6 +22,8 @@ dependencies {
 	compile resolveLibrary('sigar/sigar-*.jar')
 
 	compile 'org.apache.kafka:kafka-clients:0.11.0.1'
+	
+	compile 'org.tukaani:xz:1.6'
 
 	compile 'org.apache.cxf:cxf-bundle-minimal:2.6.15'
 	compile resolveLibrary('framework-libs/jsr311-api-1.1.1.jar')

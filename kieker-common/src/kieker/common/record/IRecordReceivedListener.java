@@ -28,7 +28,7 @@ public interface IRecordReceivedListener {
 	 * Listener method.
 	 *
 	 * @param record
-	 *            record to be processed
+	 *            received record
 	 *
 	 * @since 1.13
 	 */

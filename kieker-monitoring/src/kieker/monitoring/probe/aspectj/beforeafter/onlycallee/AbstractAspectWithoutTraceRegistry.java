@@ -35,30 +35,30 @@ import kieker.monitoring.timer.ITimeSource;
 /**
  * This aspect spawns before and after events by foregoing an around advice. Instead, it uses before and after advices
  * only so that "cflow" can be used when specifying its pointcut.
- * 
+ *
  * This implementation uses <code>JoinPoint.StaticPart</code> instead of <code>JoinPoint</code> in the advices for
  * performance reasons: <blockquote>If you only need the static information about the join point, you may access the
  * static part of the join point directly with the special variable thisJoinPointStaticPart. Using
  * thisJoinPointStaticPart will avoid the run-time creation of the join point object that may be necessary when using
  * thisJoinPoint directly. </blockquote>
- * 
+ *
  * This implementation avoids the usage of a trace id. Instead, it passes the thread id to the event records. The
  * combination of the before/after events, the thread id, and the order index is sufficient to reconstruct different
  * traces of the same thread.
- * 
+ *
  * @author Christian Wulf (chw)
- * 
+ *
  * @since 1.13
  *
  */
 @Aspect
-public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJProbe {
+public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJProbe { // NOPMD
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 
 	private final IdGenerator idGenerator = new IdGenerator();
-	private final ThreadLocal<Long> threadLocalId = new ThreadLocal<Long>();
+	private final ThreadLocal<Long> threadLocalId = new ThreadLocal<>();
 	private final ThreadLocal<Counter> currentOrderIndex = new ThreadLocal<Counter>() {
 		@Override
 		protected Counter initialValue() {
@@ -88,7 +88,7 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 			threadId = this.idGenerator.getNewId();
 			this.threadLocalId.set(threadId);
 
-//			CTRLINST.newMonitoringRecord(new TraceMetadata(-1, threadId, "<NO SESSION ID>", CTRLINST.getHostname(), -1, -1));
+			// CTRLINST.newMonitoringRecord(new TraceMetadata(-1, threadId, "<NO SESSION ID>", CTRLINST.getHostname(), -1, -1));
 			CTRLINST.newMonitoringRecord(new ThreadMetaData(CTRLINST.getHostname(), threadId));
 		}
 
@@ -98,7 +98,7 @@ public abstract class AbstractAspectWithoutTraceRegistry extends AbstractAspectJ
 		CTRLINST.newMonitoringRecord(
 				new BeforeThreadBasedEvent(TIME.getTime(), threadId, orderIndex, operationSignature, typeName));
 	}
-	
+
 	@AfterReturning("monitoredOperation() && notWithinKieker()")
 	public void afterReturningOperation(final StaticPart jpStaticPart) {
 		if (!CTRLINST.isMonitoringEnabled()) {

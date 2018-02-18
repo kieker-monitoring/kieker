@@ -22,7 +22,7 @@ import kieker.monitoring.core.controller.MonitoringController;
 
 /**
  * Generates unique identifiers in a thread-safe way.
- * 
+ *
  * @author Christian Wulf
  *
  * @since 1.13
@@ -31,7 +31,10 @@ import kieker.monitoring.core.controller.MonitoringController;
 public class IdGenerator {
 
 	private final AtomicInteger nextIdentifier = new AtomicInteger(0);
-	/** Represents a unique id prefix to distinguish identifiers used by other JVMs/hosts */
+	/**
+	 * Represents a unique id prefix to distinguish identifiers used by other
+	 * JVMs/hosts.
+	 */
 	private final long uniqueIdentifierPrefix;
 
 	/**
@@ -47,7 +50,7 @@ public class IdGenerator {
 
 	/**
 	 * (<i>thread-safe</i>)
-	 * 
+	 *
 	 * @return a unique identifier
 	 */
 	public long getNewId() {

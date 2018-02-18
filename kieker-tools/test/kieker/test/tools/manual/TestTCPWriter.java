@@ -19,6 +19,7 @@ package kieker.test.tools.manual;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
@@ -37,7 +38,7 @@ public final class TestTCPWriter {
 
 	public static void main(final String[] args) {
 		final Configuration monitoringConfig = ConfigurationFactory.createDefaultConfiguration();
-		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, TCPWriter.class.getName());
+		monitoringConfig.setProperty(ConfigurationKeys.WRITER_CLASSNAME, TCPWriter.class.getName());
 		monitoringConfig.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
 		final IMonitoringController ctrl = MonitoringController.createInstance(monitoringConfig);
 
