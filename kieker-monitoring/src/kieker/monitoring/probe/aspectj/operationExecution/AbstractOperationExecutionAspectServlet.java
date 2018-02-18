@@ -30,7 +30,7 @@ import kieker.monitoring.core.registry.SessionRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 @Aspect
@@ -44,20 +44,22 @@ public abstract class AbstractOperationExecutionAspectServlet extends AbstractOp
 
 	@Around("monitoredServlet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) && notWithinKieker()")
 	public Object servlet(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
-		if (!CTRLINST.isMonitoringEnabled()) {
+		if (!AbstractOperationExecutionAspectServlet.CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
-		if (!CTRLINST.isProbeActivated(this.signatureToLongString(thisJoinPoint.getSignature()))) {
+		if (!AbstractOperationExecutionAspectServlet.CTRLINST
+				.isProbeActivated(this.signatureToLongString(thisJoinPoint.getSignature()))) {
 			return thisJoinPoint.proceed();
 		}
 		final HttpServletRequest req = (HttpServletRequest) thisJoinPoint.getArgs()[0];
-		final String sessionId = (req != null) ? req.getSession(true).getId() : null; // NOPMD (assign null) // NOCS (inline cond)
-		SESSIONREGISTRY.storeThreadLocalSessionId(sessionId);
-		Object retVal;
+		final String sessionId = (req != null) ? req.getSession(true).getId() : null; // NOPMD (assign null) // NOCS
+																						// (inline cond)
+		AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.storeThreadLocalSessionId(sessionId);
+		final Object retVal;
 		try {
 			retVal = thisJoinPoint.proceed();
 		} finally {
-			SESSIONREGISTRY.unsetThreadLocalSessionId();
+			AbstractOperationExecutionAspectServlet.SESSIONREGISTRY.unsetThreadLocalSessionId();
 		}
 		return retVal;
 	}

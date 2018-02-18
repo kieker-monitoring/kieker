@@ -64,7 +64,7 @@ public class BinaryValueDeserializer extends AbstractValueDeserializer implement
 
 	@Override
 	public boolean getBoolean() { // NOPMD
-		return (this.getByte() == TRUE_VALUE);
+		return (this.getByte() == BinaryValueDeserializer.TRUE_VALUE);
 	}
 
 	@Override

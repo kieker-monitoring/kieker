@@ -21,9 +21,6 @@ import kieker.common.exception.RecordInstantiationException;
 /**
  * Interface for value deserializers for use by monitoring records.
  *
- * @param <T>
- *            for the expected enumeration type
- *
  * @author Holger Knoche
  * @author Reiner Jung - added enumeration support
  *

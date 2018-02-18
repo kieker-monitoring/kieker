@@ -69,7 +69,7 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 	/** The name of the configuration key for the buffer size. */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize";
 
-	private static final Log LOGGER = LogFactory.getLog(FileWriter.class);
+	private static final Log LOGGER = LogFactory.getLog(FileWriter.class); // NOPMD use of "wrong" logger class
 
 	private final int maxEntriesInFile;
 

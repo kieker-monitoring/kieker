@@ -39,7 +39,7 @@ import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
  */
 public class BinaryLogStreamHandler extends AbstractLogStreamHandler {
 
-	private static final Log LOGGER = LogFactory.getLog(BinaryLogStreamHandler.class);
+	private static final Log LOGGER = LogFactory.getLog(BinaryLogStreamHandler.class); // NOPMD use of "wrong" logger class
 
 	private final ByteBuffer buffer;
 

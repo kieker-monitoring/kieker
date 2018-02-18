@@ -38,7 +38,7 @@ import kieker.common.util.filesystem.FSUtil;
  */
 public class RotatingLogFilePoolHandler implements ILogFilePoolHandler {
 
-	private static final Log LOGGER = LogFactory.getLog(RotatingLogFilePoolHandler.class);
+	private static final Log LOGGER = LogFactory.getLog(RotatingLogFilePoolHandler.class); // NOPMD use of "wrong" logger class
 
 	private static final String TIME_ZONE = "UTC";
 	private static final Locale LOCALE = Locale.US;

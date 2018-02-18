@@ -19,9 +19,6 @@ package kieker.common.record.io;
 /**
  * Interface for value serializers for use by monitoring records.
  *
- * @param <T>
- *            for the expected enumeration type
- *
  * @author Holger Knoche
  * @author Reiner Jung - added enumeration support
  *
