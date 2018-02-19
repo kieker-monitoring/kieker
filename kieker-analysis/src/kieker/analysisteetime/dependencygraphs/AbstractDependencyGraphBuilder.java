@@ -42,7 +42,7 @@ import kieker.analysisteetime.util.graph.impl.GraphImpl;
  * @since 1.14
  */
 
-public abstract class AbstractDependencyGraphBuilder implements DependencyGraphBuilder {
+public abstract class AbstractDependencyGraphBuilder implements IDependencyGraphBuilder {
 
 	private static final Object ENTRY_VERTEX_IDENTIFIER = "entry";
 

@@ -55,7 +55,7 @@ public class AssemblyLevelOperationDependencyGraphBuilderFactoryTest {
 	 */
 	@Test
 	public void testCreateDependencyGraphBuilder() {
-		final DependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(this.executionModel, this.statisticsModel);
+		final IDependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(this.executionModel, this.statisticsModel);
 		Assert.assertTrue(graphBuilder instanceof AssemblyLevelOperationDependencyGraphBuilder);
 	}
 

@@ -20,7 +20,7 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
-import kieker.analysisteetime.trace.traversal.OperationCallVisitor;
+import kieker.analysisteetime.trace.traversal.IOperationCallVisitor;
 import kieker.analysisteetime.util.ObjectIdentifierRegistry;
 import kieker.analysisteetime.util.graph.Edge;
 import kieker.analysisteetime.util.graph.Graph;
@@ -31,7 +31,7 @@ import kieker.analysisteetime.util.graph.Vertex;
  *
  * @since 1.14
  */
-public class GraphTransformerVisitor implements OperationCallVisitor {
+public class GraphTransformerVisitor implements IOperationCallVisitor {
 
 	private final Graph graph;
 	private final ObjectIdentifierRegistry objectIdentifierRegistry = new ObjectIdentifierRegistry();

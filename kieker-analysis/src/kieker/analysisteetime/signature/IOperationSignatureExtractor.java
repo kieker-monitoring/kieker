@@ -14,15 +14,23 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.statistics;
+package kieker.analysisteetime.signature;
+
+import kieker.analysisteetime.model.analysismodel.type.OperationType;
 
 /**
+ * A {@link IOperationSignatureExtractor} sets the list of modifiers, the return type, the name and
+ * the parameters of a {@link OperationType} based on its signature.
  *
  * @author Sören Henning
  *
  * @since 1.14
- *
  */
-public interface Property {
+public interface IOperationSignatureExtractor {
+
+	/**
+	 * @since 1.14
+	 */
+	public void extract(final OperationType operationType);
 
 }

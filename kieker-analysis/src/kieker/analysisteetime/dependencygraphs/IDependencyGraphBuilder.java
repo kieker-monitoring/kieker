@@ -16,19 +16,18 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
-import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.statistics.StatisticsModel;
+import kieker.analysisteetime.util.graph.Graph;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-public interface DependencyGraphBuilderFactory {
+public interface IDependencyGraphBuilder {
 
 	/**
 	 * @since 1.14
 	 */
-	public DependencyGraphBuilder createDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel);
+	public Graph build();
 
 }

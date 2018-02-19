@@ -14,17 +14,29 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.dependencygraphs.vertextypes;
+package kieker.analysisteetime.signature;
 
-import java.util.function.Function;
+import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 
 /**
+ * A {@link IComponentNameBuilder} can be used to create the component name from a package name and a component name.
+ *
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
-public interface VertexTypeMapper extends Function<VertexType, String> {
+public interface IComponentNameBuilder {
 
-	public static VertexTypeMapper TO_STRING = t -> t.toString(); // NOPMD (Default interface implementation)
+	/**
+	 * @since 1.14
+	 */
+	public String build(final String packageName, final String name);
+
+	/**
+	 * @since 1.14
+	 */
+	public default String build(final ComponentType componentType) {
+		return this.build(componentType.getPackage(), componentType.getName());
+	}
 
 }

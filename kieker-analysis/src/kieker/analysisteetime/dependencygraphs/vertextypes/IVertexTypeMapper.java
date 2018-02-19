@@ -14,20 +14,17 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.dependencygraphs;
+package kieker.analysisteetime.dependencygraphs.vertextypes;
 
-import kieker.analysisteetime.util.graph.Graph;
+import java.util.function.Function;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-public interface DependencyGraphBuilder {
+public interface IVertexTypeMapper extends Function<VertexType, String> { // NOCS (marker interface)
 
-	/**
-	 * @since 1.14
-	 */
-	public Graph build();
+	public static IVertexTypeMapper TO_STRING = t -> t.toString(); // NOPMD (Default interface implementation)
 
 }

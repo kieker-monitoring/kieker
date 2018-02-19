@@ -18,7 +18,7 @@ package kieker.analysisteetime.statistics;
 
 import java.util.function.Function;
 
-import kieker.analysisteetime.statistics.calculating.Calculator;
+import kieker.analysisteetime.statistics.calculating.ICalculator;
 
 /**
  *
@@ -32,11 +32,11 @@ import kieker.analysisteetime.statistics.calculating.Calculator;
 public class StatisticsDecorator<T> {
 
 	private final StatisticsModel statisticsModel;
-	private final Unit unit;
-	private final Calculator<T> statisticCalculator;
+	private final IUnit unit;
+	private final ICalculator<T> statisticCalculator;
 	private final Function<T, Object> objectAccesor;
 
-	public StatisticsDecorator(final StatisticsModel statisticsModel, final Unit unit, final Calculator<T> statisticCalculator,
+	public StatisticsDecorator(final StatisticsModel statisticsModel, final IUnit unit, final ICalculator<T> statisticCalculator,
 			final Function<T, Object> objectAccesor) {
 		this.statisticsModel = statisticsModel;
 		this.unit = unit;

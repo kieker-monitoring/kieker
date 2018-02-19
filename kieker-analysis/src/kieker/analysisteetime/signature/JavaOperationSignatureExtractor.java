@@ -21,13 +21,13 @@ import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.common.util.signature.Signature;
 
 /**
- * A {@link OperationSignatureExtractor} that uses the Java signature style.
+ * A {@link IOperationSignatureExtractor} that uses the Java signature style.
  *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class JavaOperationSignatureExtractor implements OperationSignatureExtractor {
+public class JavaOperationSignatureExtractor implements IOperationSignatureExtractor {
 
 	public JavaOperationSignatureExtractor() {
 		// create extractor

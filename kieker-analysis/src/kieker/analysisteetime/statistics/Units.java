@@ -23,7 +23,7 @@ package kieker.analysisteetime.statistics;
  * @since 1.14
  *
  */
-public enum Units implements Unit {
+public enum Units implements IUnit {
 
 	RESPONSE_TIME("response time"), CPU_UTIL("CPU utilization");
 

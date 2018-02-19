@@ -44,7 +44,7 @@ public class FullStatisticsDecoratorStage<T> extends CompositeStage {
 	private final StatisticsDecoratorStage<T> countStatistics;
 	private final StatisticsDecoratorStage<T> medianStatistics;
 
-	public FullStatisticsDecoratorStage(final StatisticsModel statisticsModel, final Unit unit, final Function<T, Long> valueAccessor,
+	public FullStatisticsDecoratorStage(final StatisticsModel statisticsModel, final IUnit unit, final Function<T, Long> valueAccessor,
 			final Function<T, Object> objectAccesor) {
 
 		this.countStatistics = new StatisticsDecoratorStage<>(statisticsModel, unit, new CountCalculator<>(), objectAccesor);

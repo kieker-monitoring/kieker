@@ -14,23 +14,43 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.signature;
+package kieker.analysisteetime.util;
 
-import kieker.analysisteetime.model.analysismodel.type.OperationType;
+import java.util.Iterator;
 
 /**
- * A {@link OperationSignatureExtractor} sets the list of modifiers, the return type, the name and
- * the parameters of a {@link OperationType} based on its signature.
+ * Implementing this interface allows an object to get iterated backwards. The
+ * object returned by {@code backwards()} can be used by a "foreach" statement.
+ *
+ * @param <T>
+ *            the type of elements returned by the iterator
  *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public interface OperationSignatureExtractor {
+public interface IBackwardsIterable<T> {
 
 	/**
+	 * Returns an Iterator that iterates the elements backwards.
+	 *
 	 * @since 1.14
 	 */
-	public void extract(final OperationType operationType);
+	public Iterator<T> backwardsIterator();
+
+	/**
+	 * Returns an Iterable that iterates the elements backwards using the
+	 * Iterator returned by {@code backwardsIterator()}.
+	 *
+	 * @since 1.14
+	 */
+	public default Iterable<T> backwards() {
+		return new Iterable<T>() {
+			@Override
+			public Iterator<T> iterator() {
+				return IBackwardsIterable.this.backwardsIterator();
+			}
+		};
+	}
 
 }

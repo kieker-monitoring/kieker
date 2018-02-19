@@ -14,22 +14,20 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.trace.traversal;
-
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
+package kieker.analysisteetime.statistics;
 
 /**
+ *
  * @author Sören Henning
  *
  * @since 1.14
+ *
  */
-public interface OperationCallVisitor {
-
-	// BETTER Make this generic for aggregated traces
+public interface IUnit {
 
 	/**
 	 * @since 1.14
 	 */
-	public void visit(OperationCall operationCall);
+	public String getName();
 
 }

@@ -16,8 +16,8 @@
 
 package kieker.analysisteetime.statistics.calculating;
 
+import kieker.analysisteetime.statistics.IProperty;
 import kieker.analysisteetime.statistics.Properties;
-import kieker.analysisteetime.statistics.Property;
 import kieker.analysisteetime.statistics.Statistic;
 
 /**
@@ -29,9 +29,9 @@ import kieker.analysisteetime.statistics.Statistic;
  *
  * @since 1.14
  */
-public class CountCalculator<T> implements Calculator<T> {
+public class CountCalculator<T> implements ICalculator<T> {
 
-	private static final Property COUNT_PROPERTY = Properties.COUNT;
+	private static final IProperty COUNT_PROPERTY = Properties.COUNT;
 
 	public CountCalculator() {
 		// Create Calculator

@@ -17,7 +17,7 @@
 package kieker.analysisteetime.signature;
 
 /**
- * This is a wrapper class around a {@link OperationNameBuilder} and a {@link ComponentNameBuilder}.
+ * This is a wrapper class around a {@link IOperationNameBuilder} and a {@link IComponentNameBuilder}.
  *
  * @author Sören Henning
  *
@@ -26,23 +26,23 @@ package kieker.analysisteetime.signature;
  */
 public final class NameBuilder {
 
-	private final OperationNameBuilder operationNameBuilder;
-	private final ComponentNameBuilder componentNameBuilder;
+	private final IOperationNameBuilder operationNameBuilder;
+	private final IComponentNameBuilder componentNameBuilder;
 
-	private NameBuilder(final OperationNameBuilder operationNameBuilder, final ComponentNameBuilder componentNameBuilder) {
+	private NameBuilder(final IOperationNameBuilder operationNameBuilder, final IComponentNameBuilder componentNameBuilder) {
 		this.operationNameBuilder = operationNameBuilder;
 		this.componentNameBuilder = componentNameBuilder;
 	}
 
-	public OperationNameBuilder getOperationNameBuilder() {
+	public IOperationNameBuilder getOperationNameBuilder() {
 		return this.operationNameBuilder;
 	}
 
-	public ComponentNameBuilder getComponentNameBuilder() {
+	public IComponentNameBuilder getComponentNameBuilder() {
 		return this.componentNameBuilder;
 	}
 
-	public static NameBuilder of(final OperationNameBuilder operationNameBuilder, final ComponentNameBuilder componentNameBuilder) { // NOPMD
+	public static NameBuilder of(final IOperationNameBuilder operationNameBuilder, final IComponentNameBuilder componentNameBuilder) { // NOPMD
 		return new NameBuilder(operationNameBuilder, componentNameBuilder);
 	}
 

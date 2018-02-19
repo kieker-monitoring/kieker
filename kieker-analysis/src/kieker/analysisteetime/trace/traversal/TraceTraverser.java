@@ -23,7 +23,7 @@ import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
 
 /**
- * A class that traverses {@link Trace}s along with one or multiple {@link OperationCallVisitor}s. It calls the visitor(s) for every {@link OperationCall} within the
+ * A class that traverses {@link Trace}s along with one or multiple {@link IOperationCallVisitor}s. It calls the visitor(s) for every {@link OperationCall} within the
  * trace.
  *
  * @author Sören Henning
@@ -38,17 +38,17 @@ public class TraceTraverser {
 		// Create an empty traverser
 	}
 
-	public void traverse(final Trace trace, final OperationCallVisitor visitor) {
-		final Collection<OperationCallVisitor> visitors = Collections.singleton(visitor);
+	public void traverse(final Trace trace, final IOperationCallVisitor visitor) {
+		final Collection<IOperationCallVisitor> visitors = Collections.singleton(visitor);
 		this.handleOperationCallsRecursively(trace.getRootOperationCall(), visitors);
 	}
 
-	public void traverse(final Trace trace, final Collection<OperationCallVisitor> visitors) {
+	public void traverse(final Trace trace, final Collection<IOperationCallVisitor> visitors) {
 		this.handleOperationCallsRecursively(trace.getRootOperationCall(), visitors);
 	}
 
-	private void handleOperationCallsRecursively(final OperationCall operationCall, final Collection<OperationCallVisitor> visitors) {
-		for (final OperationCallVisitor visitor : visitors) {
+	private void handleOperationCallsRecursively(final OperationCall operationCall, final Collection<IOperationCallVisitor> visitors) {
+		for (final IOperationCallVisitor visitor : visitors) {
 			visitor.visit(operationCall);
 		}
 

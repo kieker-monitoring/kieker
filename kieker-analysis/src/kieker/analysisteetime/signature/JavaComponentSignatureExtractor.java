@@ -19,13 +19,13 @@ package kieker.analysisteetime.signature;
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 
 /**
- * A {@link ComponentSignatureExtractor} that uses the Java signature style.
+ * A {@link IComponentSignatureExtractor} that uses the Java signature style.
  *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class JavaComponentSignatureExtractor implements ComponentSignatureExtractor {
+public class JavaComponentSignatureExtractor implements IComponentSignatureExtractor {
 
 	public JavaComponentSignatureExtractor() {
 		// create extractor

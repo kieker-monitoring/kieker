@@ -24,14 +24,14 @@ import kieker.analysisteetime.statistics.StatisticsModel;
  *
  * @since 1.14
  */
-public class AssemblyLevelOperationDependencyGraphBuilderFactory implements DependencyGraphBuilderFactory {
+public class AssemblyLevelOperationDependencyGraphBuilderFactory implements IDependencyGraphBuilderFactory {
 
 	public AssemblyLevelOperationDependencyGraphBuilderFactory() {
 		super();
 	}
 
 	@Override
-	public DependencyGraphBuilder createDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel) {
+	public IDependencyGraphBuilder createDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel) {
 		return new AssemblyLevelOperationDependencyGraphBuilder(executionModel, statisticsModel);
 	}
 

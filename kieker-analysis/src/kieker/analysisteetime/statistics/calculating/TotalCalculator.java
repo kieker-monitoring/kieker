@@ -18,22 +18,22 @@ package kieker.analysisteetime.statistics.calculating;
 
 import java.util.function.Function;
 
+import kieker.analysisteetime.statistics.IProperty;
 import kieker.analysisteetime.statistics.Properties;
-import kieker.analysisteetime.statistics.Property;
 import kieker.analysisteetime.statistics.Statistic;
 
 /**
  *
  * @param <T>
  *            Type of elements
- * 
+ *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class TotalCalculator<T> implements Calculator<T> {
+public class TotalCalculator<T> implements ICalculator<T> {
 
-	private static final Property TOTAL_PROPERTY = Properties.TOTAL;
+	private static final IProperty TOTAL_PROPERTY = Properties.TOTAL;
 
 	private final Function<T, Long> valueAccessor;
 

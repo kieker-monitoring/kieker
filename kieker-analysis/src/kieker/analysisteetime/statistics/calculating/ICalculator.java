@@ -14,22 +14,26 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.signature;
+package kieker.analysisteetime.statistics.calculating;
 
-import kieker.analysisteetime.model.analysismodel.type.ComponentType;
+import kieker.analysisteetime.statistics.Statistic;
 
 /**
- * A {@link ComponentSignatureExtractor} sets the package name and the name of a {@link ComponentType} based on its signature.
+ *
+ * @param <I>
+ *            Type of elements
  *
  * @author Sören Henning
  *
  * @since 1.14
+ *
  */
-public interface ComponentSignatureExtractor {
+@FunctionalInterface
+public interface ICalculator<I> {
 
 	/**
 	 * @since 1.14
 	 */
-	public void extract(final ComponentType componentType);
+	public void calculate(final Statistic statistic, final I input, final Object modelObject);
 
 }

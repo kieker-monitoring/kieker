@@ -14,25 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.util.timeseries;
+package kieker.analysisteetime.trace.traversal;
 
-import java.time.Instant;
+import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 
 /**
- * {@link TimeSeriesPoint}s are the elements of {@link TimeSeries}. They
- * consists of an instantaneous time stamp and a value.
- *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public interface TimeSeriesPoint {
+public interface IOperationCallVisitor {
+
+	// BETTER Make this generic for aggregated traces
 
 	/**
 	 * @since 1.14
 	 */
-	public Instant getTime();
-
-	// public long getValue();
+	public void visit(OperationCall operationCall);
 
 }

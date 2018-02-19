@@ -14,43 +14,25 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.util;
+package kieker.analysisteetime.util.timeseries;
 
-import java.util.Iterator;
+import java.time.Instant;
 
 /**
- * Implementing this interface allows an object to get iterated backwards. The
- * object returned by {@code backwards()} can be used by a "foreach" statement.
- *
- * @param <T>
- *            the type of elements returned by the iterator
+ * {@link ITimeSeriesPoint}s are the elements of {@link TimeSeries}. They
+ * consists of an instantaneous time stamp and a value.
  *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public interface BackwardsIterable<T> {
+public interface ITimeSeriesPoint {
 
 	/**
-	 * Returns an Iterator that iterates the elements backwards.
-	 *
 	 * @since 1.14
 	 */
-	public Iterator<T> backwardsIterator();
+	public Instant getTime();
 
-	/**
-	 * Returns an Iterable that iterates the elements backwards using the
-	 * Iterator returned by {@code backwardsIterator()}.
-	 *
-	 * @since 1.14
-	 */
-	public default Iterable<T> backwards() {
-		return new Iterable<T>() {
-			@Override
-			public Iterator<T> iterator() {
-				return BackwardsIterable.this.backwardsIterator();
-			}
-		};
-	}
+	// public long getValue();
 
 }

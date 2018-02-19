@@ -33,26 +33,26 @@ public class Statistic {
 
 	private static final int DEFAULT_INITIAL_CAPACITY = 5;
 
-	private final Map<Property, Long> properties = new HashMap<>(DEFAULT_INITIAL_CAPACITY); // NOPMD (no concurrent access intended)
+	private final Map<IProperty, Long> properties = new HashMap<>(DEFAULT_INITIAL_CAPACITY); // NOPMD (no concurrent access intended)
 
 	protected Statistic() {
 		// Create statistic
 	}
 
-	public void setProperty(final Property property, final Long value) {
+	public void setProperty(final IProperty property, final Long value) {
 		Objects.requireNonNull(property, "Property must not be null");
 		this.properties.put(property, value);
 	}
 
-	public Long getProperty(final Property property) {
+	public Long getProperty(final IProperty property) {
 		return this.properties.get(property);
 	}
 
-	public boolean hasProperty(final Property property) {
+	public boolean hasProperty(final IProperty property) {
 		return this.properties.containsKey(property);
 	}
 
-	public Set<Property> getProperties() {
+	public Set<IProperty> getProperties() {
 		return Collections.unmodifiableSet(this.properties.keySet());
 	}
 

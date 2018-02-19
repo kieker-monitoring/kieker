@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import kieker.analysisteetime.statistics.IProperty;
 import kieker.analysisteetime.statistics.Properties;
-import kieker.analysisteetime.statistics.Property;
 import kieker.analysisteetime.statistics.Statistic;
 import kieker.analysisteetime.util.RunningMedian;
 
@@ -34,9 +34,9 @@ import kieker.analysisteetime.util.RunningMedian;
  *
  * @since 1.14
  */
-public class MedianCalculator<T> implements Calculator<T> {
+public class MedianCalculator<T> implements ICalculator<T> {
 
-	private static final Property MEDIAN_PROPERTY = Properties.MEDIAN;
+	private static final IProperty MEDIAN_PROPERTY = Properties.MEDIAN;
 
 	private final Map<Object, RunningMedian<Long>> runningMedians = new HashMap<>(); // NOPMD (class not designed for concurrent access)
 	private final Function<T, Long> valueAccessor;

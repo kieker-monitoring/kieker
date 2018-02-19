@@ -33,7 +33,7 @@ public class DependencyGraphCreatorStage extends AbstractTransformation<Trigger,
 	private final DependencyGraphCreator graphCreator;
 
 	public DependencyGraphCreatorStage(final ExecutionModel executionModel, final StatisticsModel statisticsModel,
-			final DependencyGraphBuilderFactory graphBuilderFactory) {
+			final IDependencyGraphBuilderFactory graphBuilderFactory) {
 		this.graphCreator = new DependencyGraphCreator(executionModel, statisticsModel, graphBuilderFactory);
 	}
 

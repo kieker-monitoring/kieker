@@ -23,7 +23,7 @@ import java.time.Instant;
  *
  * @since 1.14
  */
-public abstract class AbstractTimeSeriesPoint implements TimeSeriesPoint {
+public abstract class AbstractTimeSeriesPoint implements ITimeSeriesPoint {
 
 	private final Instant time;
 

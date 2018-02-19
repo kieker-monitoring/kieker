@@ -21,7 +21,7 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
-import kieker.analysisteetime.util.BackwardsIterable;
+import kieker.analysisteetime.util.IBackwardsIterable;
 
 /**
  *
@@ -33,7 +33,7 @@ import kieker.analysisteetime.util.BackwardsIterable;
  *
  * @since 1.14
  */
-public class TimeSeries<T extends TimeSeriesPoint> implements Iterable<T>, BackwardsIterable<T> {
+public class TimeSeries<T extends ITimeSeriesPoint> implements Iterable<T>, IBackwardsIterable<T> {
 
 	private final Deque<T> timeSeriesPoints;
 
@@ -79,7 +79,7 @@ public class TimeSeries<T extends TimeSeriesPoint> implements Iterable<T>, Backw
 	 * Returns the first/earliest point of this time series, or {@Code null}
 	 * if this time series is empty.
 	 */
-	public TimeSeriesPoint getBegin() {
+	public ITimeSeriesPoint getBegin() {
 		return this.timeSeriesPoints.peekFirst();
 	}
 
@@ -87,7 +87,7 @@ public class TimeSeries<T extends TimeSeriesPoint> implements Iterable<T>, Backw
 	 * Returns the last/latest point of this time series, or {@Code null}
 	 * if this time series is empty.
 	 */
-	public TimeSeriesPoint getEnd() {
+	public ITimeSeriesPoint getEnd() {
 		return this.timeSeriesPoints.peekLast();
 	}
 
@@ -95,7 +95,7 @@ public class TimeSeries<T extends TimeSeriesPoint> implements Iterable<T>, Backw
 	 * Retrieves and removes the first/earliest point of this time series, or returns
 	 * {@Code null} if this time series is empty.
 	 */
-	public TimeSeriesPoint removeBegin() {
+	public ITimeSeriesPoint removeBegin() {
 		return this.timeSeriesPoints.pollFirst();
 	}
 
@@ -103,7 +103,7 @@ public class TimeSeries<T extends TimeSeriesPoint> implements Iterable<T>, Backw
 	 * Retrieves and removes the last/latest point of this time series, or returns
 	 * {@Code null} if this time series is empty.
 	 */
-	public TimeSeriesPoint removeEnd() {
+	public ITimeSeriesPoint removeEnd() {
 		return this.timeSeriesPoints.pollLast();
 	}
 

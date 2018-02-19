@@ -16,8 +16,8 @@
 
 package kieker.analysisteetime.statistics.calculating;
 
+import kieker.analysisteetime.statistics.IProperty;
 import kieker.analysisteetime.statistics.Properties;
-import kieker.analysisteetime.statistics.Property;
 import kieker.analysisteetime.statistics.Statistic;
 
 /**
@@ -28,11 +28,11 @@ import kieker.analysisteetime.statistics.Statistic;
  *
  * @since 1.14
  */
-public class AverageCalculator<T> implements Calculator<T> {
+public class AverageCalculator<T> implements ICalculator<T> {
 
-	private static final Property TOTAL_PROPERTY = Properties.TOTAL;
-	private static final Property COUNT_PROPERTY = Properties.COUNT;
-	private static final Property AVERAGE_PROPERTY = Properties.AVERAGE;
+	private static final IProperty TOTAL_PROPERTY = Properties.TOTAL;
+	private static final IProperty COUNT_PROPERTY = Properties.COUNT;
+	private static final IProperty AVERAGE_PROPERTY = Properties.AVERAGE;
 
 	public AverageCalculator() {
 		// Create Calculator

@@ -19,8 +19,8 @@ package kieker.analysisteetime.dependencygraphs.dot;
 import java.util.Collection;
 
 import kieker.analysisteetime.dependencygraphs.PropertyKeys;
+import kieker.analysisteetime.dependencygraphs.vertextypes.IVertexTypeMapper;
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
-import kieker.analysisteetime.dependencygraphs.vertextypes.VertexTypeMapper;
 import kieker.analysisteetime.signature.NameBuilder;
 import kieker.analysisteetime.util.graph.Element;
 import kieker.analysisteetime.util.graph.Vertex;
@@ -33,25 +33,25 @@ import kieker.analysisteetime.util.graph.util.dot.attributes.DotNodeAttribute;
 /**
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public class DotExportConfigurationFactory {
 
 	private static final String ENTRY_LABEL = "'Entry'";
 
 	private final NameBuilder nameBuilder;
-	private final VertexTypeMapper vertexTypeMapper;
+	private final IVertexTypeMapper vertexTypeMapper;
 
 	/**
-	 * Uses TO_STRING of {@link kieker.analysisteetime.dependencygraphs.vertextypes.VertexTypeMapper} as second default argument.
+	 * Uses TO_STRING of {@link kieker.analysisteetime.dependencygraphs.vertextypes.IVertexTypeMapper} as second default argument.
 	 *
 	 * @param nameBuilder
 	 */
 	public DotExportConfigurationFactory(final NameBuilder nameBuilder) {
-		this(nameBuilder, VertexTypeMapper.TO_STRING);
+		this(nameBuilder, IVertexTypeMapper.TO_STRING);
 	}
 
-	public DotExportConfigurationFactory(final NameBuilder nameBuilder, final VertexTypeMapper vertexTypeMapper) {
+	public DotExportConfigurationFactory(final NameBuilder nameBuilder, final IVertexTypeMapper vertexTypeMapper) {
 		this.nameBuilder = nameBuilder;
 		this.vertexTypeMapper = vertexTypeMapper;
 	}

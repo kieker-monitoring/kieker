@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
-import kieker.analysisteetime.trace.traversal.OperationCallVisitor;
+import kieker.analysisteetime.trace.traversal.IOperationCallVisitor;
 import kieker.analysisteetime.trace.traversal.TraceTraverser;
 
 import teetime.stage.basic.AbstractFilter;
@@ -36,7 +36,7 @@ import teetime.stage.basic.AbstractFilter;
 public final class TraceStatisticsDecoratorStage extends AbstractFilter<Trace> {
 
 	private final TraceTraverser traverser = new TraceTraverser();
-	private final OperationCallVisitor durRatioToParentCalculator = new DurRatioToParentCalculator();
+	private final IOperationCallVisitor durRatioToParentCalculator = new DurRatioToParentCalculator();
 
 	public TraceStatisticsDecoratorStage() {
 		super();
@@ -44,8 +44,8 @@ public final class TraceStatisticsDecoratorStage extends AbstractFilter<Trace> {
 
 	@Override
 	public void execute(final Trace trace) {
-		final OperationCallVisitor durRatioToRootParentCalculator = new DurRatioToRootParentCalculator(trace.getRootOperationCall());
-		final List<OperationCallVisitor> visitors = Arrays.asList(this.durRatioToParentCalculator, durRatioToRootParentCalculator);
+		final IOperationCallVisitor durRatioToRootParentCalculator = new DurRatioToRootParentCalculator(trace.getRootOperationCall());
+		final List<IOperationCallVisitor> visitors = Arrays.asList(this.durRatioToParentCalculator, durRatioToRootParentCalculator);
 
 		this.traverser.traverse(trace, visitors);
 

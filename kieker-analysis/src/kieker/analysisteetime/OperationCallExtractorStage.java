@@ -18,7 +18,7 @@ package kieker.analysisteetime;
 
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
-import kieker.analysisteetime.trace.traversal.OperationCallVisitor;
+import kieker.analysisteetime.trace.traversal.IOperationCallVisitor;
 import kieker.analysisteetime.trace.traversal.TraceTraverser;
 
 import teetime.stage.basic.AbstractTransformation;
@@ -48,7 +48,7 @@ public class OperationCallExtractorStage extends AbstractTransformation<Trace, O
 	/**
 	 * Sends visited {@link OperationCall}s to the parents class' output port.
 	 */
-	private class Extractor implements OperationCallVisitor {
+	private class Extractor implements IOperationCallVisitor {
 
 		public Extractor() {
 			super();

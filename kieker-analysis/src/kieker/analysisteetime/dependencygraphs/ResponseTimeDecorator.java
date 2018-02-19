@@ -18,8 +18,8 @@ package kieker.analysisteetime.dependencygraphs;
 
 import java.time.temporal.ChronoUnit;
 
+import kieker.analysisteetime.statistics.IProperty;
 import kieker.analysisteetime.statistics.Properties;
-import kieker.analysisteetime.statistics.Property;
 import kieker.analysisteetime.statistics.StatisticsModel;
 import kieker.analysisteetime.statistics.Units;
 import kieker.analysisteetime.util.graph.Vertex;
@@ -51,7 +51,7 @@ public class ResponseTimeDecorator {
 		vertex.setPropertyIfAbsent(PropertyKeys.TIME_UNIT, this.timeUnit);
 	}
 
-	private long getStatisticValue(final Object object, final Property property) {
+	private long getStatisticValue(final Object object, final IProperty property) {
 		if (this.statisticsModel.has(object)) {
 			final Long value = this.statisticsModel.get(object).getStatistic(Units.RESPONSE_TIME).getProperty(property);
 			if (value != null) {

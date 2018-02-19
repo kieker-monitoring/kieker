@@ -20,14 +20,14 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
- * This {@link OperationNameBuilder} creates a operation names in a full Java style. That means, it returns
+ * This {@link IOperationNameBuilder} creates a operation names in a full Java style. That means, it returns
  * the name in the form of {@code private final MyReturnType doSomething(MyParameter, MyNextParameter)}.
  *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class JavaFullOperationNameBuilder implements OperationNameBuilder {
+public class JavaFullOperationNameBuilder implements IOperationNameBuilder {
 
 	public JavaFullOperationNameBuilder() {
 		// create builder

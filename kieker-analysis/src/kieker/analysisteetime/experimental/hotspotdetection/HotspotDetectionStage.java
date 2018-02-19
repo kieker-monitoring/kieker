@@ -28,7 +28,7 @@ import java.util.Map;
 
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
-import kieker.analysisteetime.trace.traversal.OperationCallVisitor;
+import kieker.analysisteetime.trace.traversal.IOperationCallVisitor;
 import kieker.analysisteetime.trace.traversal.TraceTraverser;
 
 import teetime.framework.AbstractConsumerStage;
@@ -68,7 +68,7 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 
 	@Override
 	protected void execute(final Trace trace) {
-		final OperationCallVisitor visitor = new Visitor();
+		final IOperationCallVisitor visitor = new Visitor();
 		this.traceTraverser.traverse(trace, visitor);
 	}
 
@@ -108,7 +108,7 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 	/**
 	 *
 	 */
-	private class Visitor implements OperationCallVisitor {
+	private class Visitor implements IOperationCallVisitor {
 
 		Visitor() {
 			// Create new visitor

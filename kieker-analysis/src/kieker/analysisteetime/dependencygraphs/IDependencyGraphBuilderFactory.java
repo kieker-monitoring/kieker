@@ -14,32 +14,21 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.signature;
+package kieker.analysisteetime.dependencygraphs;
 
-import java.util.Collection;
-
-import kieker.analysisteetime.model.analysismodel.type.OperationType;
+import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
+import kieker.analysisteetime.statistics.StatisticsModel;
 
 /**
- * A {@link OperationNameBuilder} can be used to create the operation name from a list of
- * modifiers, a return type, the actual name and a list of parameter types.
- *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public interface OperationNameBuilder {
+public interface IDependencyGraphBuilderFactory {
 
 	/**
 	 * @since 1.14
 	 */
-	public String build(final Collection<String> modifiers, final String returnType, final String name, final Collection<String> parameterTypes);
-
-	/**
-	 * @since 1.14
-	 */
-	public default String build(final OperationType operationType) {
-		return this.build(operationType.getModifiers(), operationType.getReturnType(), operationType.getName(), operationType.getParameterTypes());
-	}
+	public IDependencyGraphBuilder createDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel);
 
 }

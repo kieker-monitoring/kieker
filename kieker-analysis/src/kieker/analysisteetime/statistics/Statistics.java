@@ -33,23 +33,23 @@ public class Statistics {
 
 	private static final int DEFAULT_INITIAL_CAPACITY = 4;
 
-	private final Map<Unit, Statistic> statistics = new HashMap<>(DEFAULT_INITIAL_CAPACITY); // NOPMD (no concurrent access intended)
+	private final Map<IUnit, Statistic> statistics = new HashMap<>(DEFAULT_INITIAL_CAPACITY); // NOPMD (no concurrent access intended)
 
 	public Statistics() {
 		// Create statistics
 	}
 
-	public Statistic getStatistic(final Unit unit) {
+	public Statistic getStatistic(final IUnit unit) {
 		Objects.requireNonNull(unit, "Unit must not be null");
 		return this.statistics.computeIfAbsent(unit, x -> new Statistic());
 	}
 
-	public boolean hasStatistic(final Unit unit) {
+	public boolean hasStatistic(final IUnit unit) {
 		Objects.requireNonNull(unit, "Unit must not be null");
 		return this.statistics.containsKey(unit);
 	}
 
-	public Set<Unit> getUnits() {
+	public Set<IUnit> getUnits() {
 		return Collections.unmodifiableSet(this.statistics.keySet());
 	}
 

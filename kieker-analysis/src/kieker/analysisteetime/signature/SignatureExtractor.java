@@ -17,7 +17,7 @@
 package kieker.analysisteetime.signature;
 
 /**
- * This is a wrapper class around a {@link OperationSignatureExtractor} and a {@link ComponentSignatureExtractor}.
+ * This is a wrapper class around a {@link IOperationSignatureExtractor} and a {@link IComponentSignatureExtractor}.
  *
  * @author Sören Henning
  *
@@ -26,24 +26,24 @@ package kieker.analysisteetime.signature;
  */
 public final class SignatureExtractor {
 
-	private final OperationSignatureExtractor operationSignatureExtractor;
-	private final ComponentSignatureExtractor componentSignatureExtractor;
+	private final IOperationSignatureExtractor operationSignatureExtractor;
+	private final IComponentSignatureExtractor componentSignatureExtractor;
 
-	private SignatureExtractor(final OperationSignatureExtractor operationSignatureExtractor, final ComponentSignatureExtractor componentSignatureExtractor) {
+	private SignatureExtractor(final IOperationSignatureExtractor operationSignatureExtractor, final IComponentSignatureExtractor componentSignatureExtractor) {
 		this.operationSignatureExtractor = operationSignatureExtractor;
 		this.componentSignatureExtractor = componentSignatureExtractor;
 	}
 
-	public OperationSignatureExtractor getOperationSignatureExtractor() {
+	public IOperationSignatureExtractor getOperationSignatureExtractor() {
 		return this.operationSignatureExtractor;
 	}
 
-	public ComponentSignatureExtractor getComponentSignatureExtractor() {
+	public IComponentSignatureExtractor getComponentSignatureExtractor() {
 		return this.componentSignatureExtractor;
 	}
 
-	public static SignatureExtractor of(final OperationSignatureExtractor operationSignatureExtractor, // NOPMD
-			final ComponentSignatureExtractor componentSignatureExtractor) {
+	public static SignatureExtractor of(final IOperationSignatureExtractor operationSignatureExtractor, // NOPMD
+			final IComponentSignatureExtractor componentSignatureExtractor) {
 		return new SignatureExtractor(operationSignatureExtractor, componentSignatureExtractor);
 	}
 

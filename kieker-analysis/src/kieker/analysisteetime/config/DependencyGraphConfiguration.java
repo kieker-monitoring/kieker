@@ -21,9 +21,9 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
 import kieker.analysisteetime.OperationCallExtractorStage;
-import kieker.analysisteetime.dependencygraphs.DependencyGraphBuilderFactory;
 import kieker.analysisteetime.dependencygraphs.DependencyGraphCreatorStage;
 import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependencyGraphBuilderFactory;
+import kieker.analysisteetime.dependencygraphs.IDependencyGraphBuilderFactory;
 import kieker.analysisteetime.dependencygraphs.dot.DotExportConfigurationFactory;
 import kieker.analysisteetime.model.ExecutionModelAssemblerStage;
 import kieker.analysisteetime.model.ModelObjectFromOperationCallAccessors;
@@ -75,7 +75,7 @@ public class DependencyGraphConfiguration extends Configuration {
 	private final SignatureExtractor signatureExtractor = SignatureExtractor.forJava();
 
 	public DependencyGraphConfiguration(final File importDirectory, final TemporalUnit timeUnitOfRecods, final File exportDirectory) {
-		final DependencyGraphBuilderFactory graphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
+		final IDependencyGraphBuilderFactory graphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
 
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
 		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();

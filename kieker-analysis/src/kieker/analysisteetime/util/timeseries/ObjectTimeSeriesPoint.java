@@ -19,7 +19,7 @@ package kieker.analysisteetime.util.timeseries;
 import java.time.Instant;
 
 /**
- * {@link TimeSeriesPoint} wrapper for any type.
+ * {@link ITimeSeriesPoint} wrapper for any type.
  *
  * @param <X>
  *            Type of this time series point value

@@ -16,27 +16,30 @@
 
 package kieker.analysisteetime.signature;
 
-import kieker.analysisteetime.model.analysismodel.type.ComponentType;
+import java.util.Collection;
+
+import kieker.analysisteetime.model.analysismodel.type.OperationType;
 
 /**
- * A {@link ComponentNameBuilder} can be used to create the component name from a package name and a component name.
+ * A {@link IOperationNameBuilder} can be used to create the operation name from a list of
+ * modifiers, a return type, the actual name and a list of parameter types.
  *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public interface ComponentNameBuilder {
+public interface IOperationNameBuilder {
 
 	/**
 	 * @since 1.14
 	 */
-	public String build(final String packageName, final String name);
+	public String build(final Collection<String> modifiers, final String returnType, final String name, final Collection<String> parameterTypes);
 
 	/**
 	 * @since 1.14
 	 */
-	public default String build(final ComponentType componentType) {
-		return this.build(componentType.getPackage(), componentType.getName());
+	public default String build(final OperationType operationType) {
+		return this.build(operationType.getModifiers(), operationType.getReturnType(), operationType.getName(), operationType.getParameterTypes());
 	}
 
 }

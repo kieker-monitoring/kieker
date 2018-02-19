@@ -20,8 +20,8 @@ import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 import kieker.analysisteetime.model.analysismodel.type.TypeModel;
-import kieker.analysisteetime.signature.ComponentSignatureExtractor;
-import kieker.analysisteetime.signature.OperationSignatureExtractor;
+import kieker.analysisteetime.signature.IComponentSignatureExtractor;
+import kieker.analysisteetime.signature.IOperationSignatureExtractor;
 import kieker.common.record.flow.IOperationRecord;
 
 /**
@@ -32,13 +32,13 @@ import kieker.common.record.flow.IOperationRecord;
 public class TypeModelAssembler {
 
 	private final TypeFactory factory = TypeFactory.eINSTANCE;
-	private final ComponentSignatureExtractor componentSignatureExtractor;
-	private final OperationSignatureExtractor operationSignatureExtractor;
+	private final IComponentSignatureExtractor componentSignatureExtractor;
+	private final IOperationSignatureExtractor operationSignatureExtractor;
 
 	private final TypeModel typeModel;
 
-	public TypeModelAssembler(final TypeModel typeModel, final ComponentSignatureExtractor componentSignatureExtractor,
-			final OperationSignatureExtractor operationSignatureExtractor) {
+	public TypeModelAssembler(final TypeModel typeModel, final IComponentSignatureExtractor componentSignatureExtractor,
+			final IOperationSignatureExtractor operationSignatureExtractor) {
 		this.typeModel = typeModel;
 		this.componentSignatureExtractor = componentSignatureExtractor;
 		this.operationSignatureExtractor = operationSignatureExtractor;

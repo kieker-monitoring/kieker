@@ -29,10 +29,10 @@ public class DependencyGraphCreator {
 
 	private final ExecutionModel executionModel;
 	private final StatisticsModel statisticsModel;
-	private final DependencyGraphBuilderFactory graphBuilderFactory;
+	private final IDependencyGraphBuilderFactory graphBuilderFactory;
 
 	public DependencyGraphCreator(final ExecutionModel executionModel, final StatisticsModel statisticsModel,
-			final DependencyGraphBuilderFactory graphBuilderFactory) {
+			final IDependencyGraphBuilderFactory graphBuilderFactory) {
 		this.executionModel = executionModel;
 		this.statisticsModel = statisticsModel;
 		this.graphBuilderFactory = graphBuilderFactory;

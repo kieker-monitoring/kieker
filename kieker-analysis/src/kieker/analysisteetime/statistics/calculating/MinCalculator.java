@@ -19,8 +19,8 @@ package kieker.analysisteetime.statistics.calculating;
 import java.util.Optional;
 import java.util.function.Function;
 
+import kieker.analysisteetime.statistics.IProperty;
 import kieker.analysisteetime.statistics.Properties;
-import kieker.analysisteetime.statistics.Property;
 import kieker.analysisteetime.statistics.Statistic;
 
 /**
@@ -33,9 +33,9 @@ import kieker.analysisteetime.statistics.Statistic;
  * @since 1.14
  *
  */
-public class MinCalculator<T> implements Calculator<T> {
+public class MinCalculator<T> implements ICalculator<T> {
 
-	private static final Property MIN_PROPERTY = Properties.MIN;
+	private static final IProperty MIN_PROPERTY = Properties.MIN;
 
 	private final Function<T, Long> valueAccessor;
 

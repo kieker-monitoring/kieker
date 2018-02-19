@@ -24,7 +24,7 @@ import java.util.function.Function;
 import kieker.analysisteetime.dependencygraphs.DependencyGraphCreatorStage;
 import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependencyGraphBuilderFactory;
 import kieker.analysisteetime.dependencygraphs.dot.DotExportConfigurationFactory;
-import kieker.analysisteetime.dependencygraphs.vertextypes.VertexTypeMapper;
+import kieker.analysisteetime.dependencygraphs.vertextypes.IVertexTypeMapper;
 import kieker.analysisteetime.model.ExecutionModelAssemblerStage;
 import kieker.analysisteetime.model.ModelObjectFromOperationCallAccessors;
 import kieker.analysisteetime.model.StaticModelsAssemblerStage;
@@ -80,7 +80,7 @@ public class ExampleConfiguration extends Configuration {
 		final Function<OperationCall, Object> statisticsObjectAccesor = ModelObjectFromOperationCallAccessors.DEPLOYED_OPERATION;
 		final DeploymentLevelOperationDependencyGraphBuilderFactory deploymentGraphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
 		final DotExportConfiguration dependencyGraphDotExportConfiguration = new DotExportConfigurationFactory(
-				NameBuilder.forJavaShortOperations(), VertexTypeMapper.TO_STRING)
+				NameBuilder.forJavaShortOperations(), IVertexTypeMapper.TO_STRING)
 						.createForDeploymentLevelOperationDependencyGraph();
 
 		// Create the stages

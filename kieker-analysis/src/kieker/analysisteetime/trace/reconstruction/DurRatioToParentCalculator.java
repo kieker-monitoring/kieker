@@ -17,14 +17,14 @@
 package kieker.analysisteetime.trace.reconstruction;
 
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
-import kieker.analysisteetime.trace.traversal.OperationCallVisitor;
+import kieker.analysisteetime.trace.traversal.IOperationCallVisitor;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class DurRatioToParentCalculator implements OperationCallVisitor {
+public class DurRatioToParentCalculator implements IOperationCallVisitor {
 
 	public DurRatioToParentCalculator() {
 		// create calculator

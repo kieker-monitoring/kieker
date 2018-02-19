@@ -30,7 +30,7 @@ import java.time.Instant;
  *
  * @since 1.14
  */
-public class BoundedTimeSeries<T extends TimeSeriesPoint> extends TimeSeries<T> {
+public class BoundedTimeSeries<T extends ITimeSeriesPoint> extends TimeSeries<T> {
 
 	private final Duration capacity;
 
