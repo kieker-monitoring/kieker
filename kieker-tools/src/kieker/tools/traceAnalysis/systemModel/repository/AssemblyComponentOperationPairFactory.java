@@ -16,9 +16,13 @@
 
 package kieker.tools.traceAnalysis.systemModel.repository;
 
-import java.util.*;
 
-import kieker.tools.traceAnalysis.systemModel.*;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.Map;
+
+import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
+import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPair;
 
 /**
