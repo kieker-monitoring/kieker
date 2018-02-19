@@ -26,6 +26,9 @@ import kieker.analysisteetime.plugin.reader.filesystem.className.MappingFilePars
 
 import teetime.framework.AbstractConsumerStage;
 
+/**
+ * @since 1.14
+ */
 public abstract class AbstractRecordFileReader extends AbstractConsumerStage<File> {
 
 	private final ClassNameRegistryRepository classNameRegistryRepository;

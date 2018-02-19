@@ -19,10 +19,13 @@ package kieker.analysisteetime.plugin.reader;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- *
+ * @since 1.14
  */
 public interface IRecordReceivedListener {
 
+	/**
+	 * @since 1.14
+	 */
 	void onRecordReceived(IMonitoringRecord record);
 
 }

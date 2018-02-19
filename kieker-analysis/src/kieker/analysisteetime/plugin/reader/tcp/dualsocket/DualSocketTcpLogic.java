@@ -29,6 +29,9 @@ import kieker.common.util.registry.ILookup;
 import teetime.framework.OutputPort;
 import teetime.util.stage.io.network.AbstractTcpReader;
 
+/**
+ * @since 1.14
+ */
 class DualSocketTcpLogic extends AbstractTcpReader implements IRecordReceivedListener {
 
 	private final OutputPort<IMonitoringRecord> outputPort;

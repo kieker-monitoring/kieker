@@ -30,6 +30,10 @@ import kieker.common.util.registry.reader.ReaderRegistry;
 
 import teetime.util.io.network.AbstractTcpReader;
 
+/**
+ * @since 1.14
+ *
+ */
 class SingleSocketTcpLogic extends AbstractTcpReader {
 
 	private static final int INT_BYTES = AbstractMonitoringRecord.TYPE_SIZE_INT;

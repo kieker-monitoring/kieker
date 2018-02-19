@@ -32,6 +32,8 @@ import teetime.util.stage.io.network.AbstractTcpReader;
  *
  * @author Jan Waller, Nils Christian Ehmke, Christian Wulf
  *
+ * @since 1.14
+ *
  * @deprecated Since 1.13. Use {@link SingleSocketTcpReaderStage} instead. This {@link DualSocketTcpReaderStage} will be
  *             kept for research purposes.
  */

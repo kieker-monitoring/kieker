@@ -32,35 +32,26 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ClassNameRegistryRepository {
 
-	private final ConcurrentHashMap<String, ClassNameRegistry> classNameRegistryRepository = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<String, ClassNameRegistry> repository = new ConcurrentHashMap<>();
 
 	public ClassNameRegistryRepository() {
 		// create repository
 	}
 
-	/**
-	 * @since 1.10
-	 */
 	public ClassNameRegistry get(final File directory) {
-		return this.classNameRegistryRepository.get(directory.getAbsolutePath());
+		return this.repository.get(directory.getAbsolutePath());
 	}
 
-	/**
-	 * @since 1.10
-	 */
 	public void put(final File directory, final ClassNameRegistry classNameRegistry) {
-		this.classNameRegistryRepository.put(directory.getAbsolutePath(), classNameRegistry);
+		this.repository.put(directory.getAbsolutePath(), classNameRegistry);
 	}
 
-	/**
-	 * @since 1.10
-	 */
 	public int size() {
-		return this.classNameRegistryRepository.size();
+		return this.repository.size();
 	}
 
 	@Override
 	public String toString() {
-		return this.classNameRegistryRepository.toString();
+		return this.repository.toString();
 	}
 }

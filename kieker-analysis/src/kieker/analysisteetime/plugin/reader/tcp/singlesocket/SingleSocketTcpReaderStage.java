@@ -27,6 +27,8 @@ import teetime.util.io.network.AbstractTcpReader;
  *
  * @author Christian Wulf
  *
+ * @since 1.14
+ *
  */
 public final class SingleSocketTcpReaderStage extends AbstractProducerStage<IMonitoringRecord> implements IRecordReceivedListener {
 

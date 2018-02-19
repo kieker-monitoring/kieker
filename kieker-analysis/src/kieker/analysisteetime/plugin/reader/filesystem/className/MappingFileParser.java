@@ -90,7 +90,6 @@ public class MappingFileParser {
 			return; // continue on errors
 		}
 		final String key = line.substring(0, split);
-		final String value = FSUtil.decodeNewline(line.substring(split + 1));
 		// the leading $ is optional
 		final Integer id;
 		try {
@@ -99,15 +98,13 @@ public class MappingFileParser {
 			this.logger.error("Error reading mapping file, id must be integer", ex);
 			return; // continue on errors
 		}
+		final String value = FSUtil.decodeNewline(line.substring(split + 1));
 		final String prevVal = stringRegistry.put(id, value);
 		if (prevVal != null) {
 			this.logger.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
 		}
 	}
 
-	/**
-	 * @since 1.10
-	 */
 	public File findMappingFile(final File dirPath) {
 		File mappingFile = new File(dirPath, FSUtil.MAP_FILENAME);
 		if (!mappingFile.exists()) {
@@ -128,7 +125,6 @@ public class MappingFileParser {
 
 	/**
 	 * @return <code>null</code> if a file prefix for the given <code>mappingFile</code> is not registered.
-	 * @since 1.10
 	 */
 	public String getFilePrefixFromMappingFile(final File mappingFile) {
 		return MappingFileParser.FILE_PREFIX_REGISTRY.get(mappingFile.getName());

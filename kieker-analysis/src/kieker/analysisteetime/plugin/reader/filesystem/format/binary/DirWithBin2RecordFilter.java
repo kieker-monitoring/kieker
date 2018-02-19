@@ -28,6 +28,9 @@ import teetime.framework.CompositeStage;
 import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 
+/**
+ * @since 1.14
+ */
 public class DirWithBin2RecordFilter extends CompositeStage {
 
 	private final ClassNameRegistryCreationFilter classNameRegistryCreationFilter;

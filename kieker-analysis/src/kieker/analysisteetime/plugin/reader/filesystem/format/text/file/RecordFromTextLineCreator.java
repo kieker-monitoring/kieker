@@ -45,9 +45,6 @@ public class RecordFromTextLineCreator {
 		this.classNameRegistryRepository = classNameRegistryRepository;
 	}
 
-	/**
-	 * @since 1.10
-	 */
 	public IMonitoringRecord createRecordFromLine(final File textFile, final String line) throws MonitoringRecordException, IllegalRecordFormatException,
 			MappingException,
 			UnknownRecordTypeException {
@@ -94,9 +91,6 @@ public class RecordFromTextLineCreator {
 		return record;
 	}
 
-	/**
-	 * @since 1.10
-	 */
 	private Class<? extends IMonitoringRecord> getClassByName(final String classname) throws MonitoringRecordException, UnknownRecordTypeException {
 		try {
 			return AbstractMonitoringRecord.classForName(classname);
@@ -105,9 +99,6 @@ public class RecordFromTextLineCreator {
 		}
 	}
 
-	/**
-	 * @since 1.10
-	 */
 	private IMonitoringRecord createLegacyRecordFromRecordFiels(final String[] recordFields) throws MonitoringRecordException {
 		final String[] recordFieldsReduced = new String[recordFields.length - 1];
 		System.arraycopy(recordFields, 1, recordFieldsReduced, 0, recordFields.length - 1);
