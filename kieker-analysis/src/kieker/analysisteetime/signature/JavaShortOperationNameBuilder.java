@@ -35,7 +35,7 @@ public class JavaShortOperationNameBuilder implements OperationNameBuilder {
 
 	@Override
 	public String build(final Collection<String> modifiers, final String returnType, final String name, final Collection<String> parameterTypes) {
-		return name + '(' + (!parameterTypes.isEmpty() ? ".." : "") + ')';
+		return name + '(' + (!parameterTypes.isEmpty() ? ".." : "") + ')'; // NOCS (declarative)
 	}
 
 }

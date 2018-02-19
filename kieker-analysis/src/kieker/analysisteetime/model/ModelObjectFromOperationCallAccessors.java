@@ -51,7 +51,7 @@ public final class ModelObjectFromOperationCallAccessors {
 	public static final Function<OperationCall, Object> createForAggregatedInvocation(final ExecutionModel executionModel) {
 		return operationCall -> {
 			// Check if operationCall is an entry operation call. If so than source is null
-			final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null;
+			final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null; // NOCS (declarative)
 			final DeployedOperation target = operationCall.getOperation();
 			final ComposedKey<DeployedOperation, DeployedOperation> key = ComposedKey.of(source, target);
 			return executionModel.getAggregatedInvocations().get(key);

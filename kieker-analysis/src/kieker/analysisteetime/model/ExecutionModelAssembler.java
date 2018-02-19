@@ -40,7 +40,7 @@ public class ExecutionModelAssembler {
 
 	public void addOperationCall(final OperationCall operationCall) {
 		// Check if operationCall is an entry operation call. If so than source is null
-		final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null;
+		final DeployedOperation source = operationCall.getParent() != null ? operationCall.getParent().getOperation() : null; // NOCS (declarative)
 		final DeployedOperation target = operationCall.getOperation();
 
 		this.addExecution(source, target);

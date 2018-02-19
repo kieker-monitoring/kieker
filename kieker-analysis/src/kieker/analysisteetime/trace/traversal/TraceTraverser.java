@@ -28,11 +28,11 @@ import kieker.analysisteetime.model.analysismodel.trace.Trace;
  *
  * @author Sören Henning
  *
- * @since 1.13
+ * @since 1.14
  */
 public class TraceTraverser {
 
-	// TODO Make this generic for aggregated traces
+	// BETTER Make this generic for aggregated traces
 
 	public TraceTraverser() {
 		// Create an empty traverser

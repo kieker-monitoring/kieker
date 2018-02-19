@@ -53,7 +53,8 @@ public final class ComposedKey<F, S> {
 
 	@Override
 	public int hashCode() {
-		return (this.first == null ? 0 : this.first.hashCode()) ^ (this.second == null ? 0 : this.second.hashCode());
+		// see Map.Entry API specification
+		return (this.first == null ? 0 : this.first.hashCode()) ^ (this.second == null ? 0 : this.second.hashCode()); // NOCS (see Map.Entry API specification)
 	}
 
 	public static <F, S> ComposedKey<F, S> of(final F first, final S second) { // NOPMD (method name is declarative)

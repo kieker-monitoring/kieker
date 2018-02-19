@@ -70,7 +70,7 @@ public abstract class AbstractDependencyGraphBuilder implements DependencyGraphB
 	}
 
 	private void handleInvocation(final AggregatedInvocation invocation) {
-		final Vertex sourceVertex = invocation.getSource() != null ? this.addVertex(invocation.getSource()) : this.addVertexForEntry();
+		final Vertex sourceVertex = invocation.getSource() != null ? this.addVertex(invocation.getSource()) : this.addVertexForEntry(); // NOCS (declarative)
 		final Vertex targetVertex = this.addVertex(invocation.getTarget());
 		final long calls = this.statisticsModel.get(invocation).getStatistic(Units.RESPONSE_TIME).getProperty(Properties.COUNT);
 		this.addEdge(sourceVertex, targetVertex, calls);

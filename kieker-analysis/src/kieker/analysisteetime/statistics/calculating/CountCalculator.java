@@ -24,7 +24,7 @@ import kieker.analysisteetime.statistics.Statistic;
  *
  * @param <T>
  *            Type of elements
- * 
+ *
  * @author Sören Henning
  *
  * @since 1.14
@@ -40,7 +40,7 @@ public class CountCalculator<T> implements Calculator<T> {
 	@Override
 	public void calculate(final Statistic statistic, final T input, final Object modelObject) {
 		final Long oldCount = statistic.getProperty(COUNT_PROPERTY);
-		final long newCount = oldCount != null ? oldCount + 1 : 1;
+		final long newCount = oldCount != null ? oldCount + 1 : 1; // NOCS (declarative)
 		statistic.setProperty(COUNT_PROPERTY, newCount);
 	}
 

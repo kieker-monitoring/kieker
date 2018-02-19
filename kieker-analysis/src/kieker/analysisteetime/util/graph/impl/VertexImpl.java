@@ -51,7 +51,7 @@ class VertexImpl extends GraphElementImpl implements Vertex {
 
 	@Override
 	public Graph addChildGraphIfAbsent() {
-		return this.childGraph != null ? this.childGraph : this.addChildGraph();
+		return this.childGraph != null ? this.childGraph : this.addChildGraph(); // NOCS (declarative)
 	}
 
 	@Override
