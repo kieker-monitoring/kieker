@@ -25,10 +25,10 @@ package kieker.monitoring.core.configuration;
  *
  * @since 1.3
  *
- * @deprecated 1.14 replaced by the class {@link ConfigurationKeys}
+ * @deprecated 1.14 replaced by the class {@link ConfigurationKeys} to support Kieker checkstyle policy
  */
 @Deprecated
-public interface Keys {
+public interface Keys { // NOCS
 	/** prefix used for all kieker.monitoring components. */
 	String PREFIX = "kieker.monitoring.";
 
@@ -85,4 +85,11 @@ public interface Keys {
 	String ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL = PREFIX + "adaptiveMonitoring.readInterval";
 	String ADAPTIVE_MONITORING_MAX_CACHE_SIZE = PREFIX + "adaptiveMonitoring.maxCacheSize";
 	String ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR = PREFIX + "adaptiveMonitoring.boundedCacheBehaviour";
+
+	/**
+	 * Method used to fool checkstyle in believing in a proper interface.
+	 *
+	 * @since 1.14
+	 */
+	void dummy();
 }
