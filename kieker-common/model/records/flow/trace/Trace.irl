@@ -11,7 +11,7 @@ abstract entity AbstractTraceEvent extends AbstractEvent : ITraceRecord
 entity ConstructionEvent extends AbstractTraceEvent {
 	string classSignature = ""
 	int objectId = 0
-} 
+}
 
 @author 'Jan Waller'
 @since '1.5'

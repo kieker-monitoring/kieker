@@ -22,9 +22,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
- * 
+ *
  * @param <K>
  *            The type of the keys.
  * @param <V>
@@ -40,7 +40,7 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 
 	/**
 	 * Initialize a bounded concurrent hash map.
-	 * 
+	 *
 	 * @param boundedCacheBehaviour
 	 *            set the cache behavior
 	 * @param maxCacheSize
@@ -56,12 +56,12 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	/**
 	 * Works like the overriden method, except that {@code null} is returned, if the given element could not be added
 	 * due to map limitations.
-	 * 
+	 *
 	 * @param key
 	 *            key-value
 	 * @param value
 	 *            the associated value
-	 * 
+	 *
 	 * @return the previous value associated with key, or null if there was no mapping for key, or null if the bounds
 	 *         limit was reached
 	 */
@@ -77,12 +77,12 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	/**
 	 * Works like the overriden method, except that {@code null} is returned, if the given element could not be added
 	 * due to map limitations.
-	 * 
+	 *
 	 * @param key
 	 *            key-value
 	 * @param value
 	 *            the associated value
-	 * 
+	 *
 	 * @return the previous value or null
 	 */
 	@Override
@@ -124,7 +124,7 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 
 	/**
 	 * @author Nils Christian Ehmke
-	 * 
+	 *
 	 * @since 1.10
 	 */
 	public enum BoundedCacheBehaviour {

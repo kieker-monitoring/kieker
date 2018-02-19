@@ -22,7 +22,7 @@ import java.nio.charset.Charset;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.io.DefaultValueSerializer;
+import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.WriterRegistry;
@@ -39,7 +39,7 @@ import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
  */
 public class BinaryLogStreamHandler extends AbstractLogStreamHandler {
 
-	private static final Log LOGGER = LogFactory.getLog(BinaryLogStreamHandler.class);
+	private static final Log LOGGER = LogFactory.getLog(BinaryLogStreamHandler.class); // NOPMD use of "wrong" logger class
 
 	private final ByteBuffer buffer;
 
@@ -61,7 +61,7 @@ public class BinaryLogStreamHandler extends AbstractLogStreamHandler {
 			final ICompressionFilter compressionFilter, final WriterRegistry writerRegistry) {
 		super(flushLogFile, bufferSize, charset, compressionFilter, writerRegistry);
 		this.buffer = ByteBuffer.allocateDirect(bufferSize);
-		this.serializer = DefaultValueSerializer.create(this.buffer, new GetIdAdapter<>(writerRegistry));
+		this.serializer = BinaryValueSerializer.create(this.buffer, new GetIdAdapter<>(writerRegistry));
 		this.extension = FSUtil.BINARY_FILE_EXTENSION;
 	}
 

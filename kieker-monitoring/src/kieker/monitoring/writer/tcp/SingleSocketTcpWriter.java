@@ -31,7 +31,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.io.DefaultValueSerializer;
+import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.registry.GetIdAdapter;
@@ -114,7 +114,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
 
 		final WriterRegistry writerRegistry = new WriterRegistry(this);
-		this.serializer = DefaultValueSerializer.create(this.buffer, new GetIdAdapter<>(writerRegistry));
+		this.serializer = BinaryValueSerializer.create(this.buffer, new GetIdAdapter<>(writerRegistry));
 	}
 
 	@Override

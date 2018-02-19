@@ -34,6 +34,9 @@ public final class CachedRecordFactoryCatalog {
 	private final ConcurrentMap<String, IRecordFactory<? extends IMonitoringRecord>> cachedRecordFactories;
 	private final RecordFactoryResolver recordFactoryResolver;
 
+	/**
+	 * Create an {@link CachedRecordFactoryCatalog}.
+	 */
 	public CachedRecordFactoryCatalog() {
 		this(new RecordFactoryResolver());
 	}
@@ -45,6 +48,8 @@ public final class CachedRecordFactoryCatalog {
 
 	/**
 	 * Returns the only instance of this class.
+	 *
+	 * @return returns an factory catalog instance.
 	 */
 	public static CachedRecordFactoryCatalog getInstance() {
 		return INSTANCE;
@@ -54,6 +59,7 @@ public final class CachedRecordFactoryCatalog {
 	 * Hint: This method uses convention over configuration when searching for a record factory class.
 	 *
 	 * @param recordClassName
+	 *            the record class name of the record class for which the factory is returned
 	 * @return a cached record factory instance of the record class indicated by <code>recordClassName</code>.
 	 *         <ul>
 	 *         <li>If the cache does not contain a record factory instance, a new one is searched and instantiated via class path resolution.

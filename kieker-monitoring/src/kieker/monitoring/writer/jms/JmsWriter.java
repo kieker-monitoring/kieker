@@ -155,14 +155,11 @@ public class JmsWriter extends AbstractMonitoringWriter {
 	@Override
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder(128);
-		sb.append(super.toString());
-		sb.append("; Session: '");
-		sb.append(this.session.toString());
-		sb.append("'; Connection: '");
-		sb.append(this.connection.toString());
-		sb.append("'; MessageProducer: '");
-		sb.append(this.sender.toString());
-		sb.append('\'');
+		sb.append(super.toString()).
+			append("; Session: '").append(this.session.toString()).
+			append("'; Connection: '").append(this.connection.toString()).
+			append("'; MessageProducer: '").append(this.sender.toString()).
+			append('\'');
 		return sb.toString();
 	}
 

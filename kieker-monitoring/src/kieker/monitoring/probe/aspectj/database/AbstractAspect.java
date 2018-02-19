@@ -44,13 +44,13 @@ import kieker.monitoring.timer.ITimeSource;
  * This aspect spawns before and after events by foregoing an around advice.
  * Instead, it uses before and after advices only so that "cflow" can be used
  * when specifying its pointcut.
- * 
+ *
  * <blockquote> This aspect is based on the new
  * kieker.monitoring.probe.aspectj.beforeafter.onlycallee.AbstractAspect
  * </blockquote>
- * 
+ *
  * @author Christian Zirkelbach (czi@informatik.uni-kiel.de)
- * 
+ *
  * @since 1.14
  *
  */
@@ -59,7 +59,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	private static final Log LOG = LogFactory.getLog(AbstractAspect.class);
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
-	private static final ITimeSource TIME = CTRLINST.getTimeSource();
+	private static final ITimeSource TIME = AbstractAspect.CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 	private static final String TECHNOLOGY = "JDBC"; // Hardcoded technology atm, as we use currently only JDBC (czi)
 	private static final String LOGGING_PREFIX = "database.AbstractAspect: ";
@@ -87,20 +87,21 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Before("monitoredOperation() && notWithinKieker()")
 	public void beforeOperation(final JoinPoint joinPoint) {
 
-		if (!CTRLINST.isMonitoringEnabled()) {
+		if (!AbstractAspect.CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
 		final String classSignature = this.getJoinPointClassName(joinPoint);
 
-		if (!CTRLINST.isProbeActivated(classSignature)) {
+		if (!AbstractAspect.CTRLINST.isProbeActivated(classSignature)) {
 			return;
 		}
 
-		TraceMetadata trace = TRACEREGISTRY.getTrace();
+		TraceMetadata trace = AbstractAspect.TRACEREGISTRY.getTrace();
 		final boolean newTrace = trace == null;
 		if (newTrace) {
-			trace = TRACEREGISTRY.registerTrace(); // TO-DO parent trace is never used, so reduce impl. (chw)
-			CTRLINST.newMonitoringRecord(trace);
+			trace = AbstractAspect.TRACEREGISTRY.registerTrace(); // TO-DO parent trace is never used, so reduce impl.
+																	// (chw)
+			AbstractAspect.CTRLINST.newMonitoringRecord(trace);
 		}
 
 		this.currentStackIndex.get().incrementValue();
@@ -109,100 +110,100 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String operationParameters = this.getJoinPointArguments(joinPoint);
 
 		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeDatabaseEvent(TIME.getTime(), classSignature, traceId,
-				trace.getNextOrderId(), operationParameters, TECHNOLOGY));
+		AbstractAspect.CTRLINST.newMonitoringRecord(new BeforeDatabaseEvent(AbstractAspect.TIME.getTime(),
+				classSignature, traceId, trace.getNextOrderId(), operationParameters, AbstractAspect.TECHNOLOGY));
 	}
 
 	@AfterReturning(pointcut = "monitoredOperation() && notWithinKieker()", returning = "returningObject")
 	public void afterReturningOperation(final JoinPoint joinPoint, final Object returningObject) {
-		if (!CTRLINST.isMonitoringEnabled()) {
+		if (!AbstractAspect.CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
 
 		final String classSignature = this.getJoinPointClassName(joinPoint);
 
-		if (!CTRLINST.isProbeActivated(classSignature)) {
+		if (!AbstractAspect.CTRLINST.isProbeActivated(classSignature)) {
 			return;
 		}
 
-		final TraceMetadata trace = TRACEREGISTRY.getTrace();
+		final TraceMetadata trace = AbstractAspect.TRACEREGISTRY.getTrace();
 		final String operationReturnType = this.getJoinPointReturnType(classSignature);
 		final String returnedValue = this.getReturnedValue(returningObject, operationReturnType);
 
-		CTRLINST.newMonitoringRecord(new AfterDatabaseEvent(TIME.getTime(), classSignature, trace.getTraceId(),
-				trace.getNextOrderId(), operationReturnType, returnedValue));
+		AbstractAspect.CTRLINST.newMonitoringRecord(new AfterDatabaseEvent(AbstractAspect.TIME.getTime(),
+				classSignature, trace.getTraceId(), trace.getNextOrderId(), operationReturnType, returnedValue));
 	}
 
 	@AfterThrowing(pointcut = "monitoredOperation() && notWithinKieker()", throwing = "th")
 	public void afterThrowing(final JoinPoint joinPoint, final Throwable th) {
-		if (!CTRLINST.isMonitoringEnabled()) {
+		if (!AbstractAspect.CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
 
 		final String classSignature = this.getJoinPointClassName(joinPoint);
 
-		if (!CTRLINST.isProbeActivated(classSignature)) {
+		if (!AbstractAspect.CTRLINST.isProbeActivated(classSignature)) {
 			return;
 		}
 
-		final TraceMetadata trace = TRACEREGISTRY.getTrace();
+		final TraceMetadata trace = AbstractAspect.TRACEREGISTRY.getTrace();
 
-		CTRLINST.newMonitoringRecord(new DatabaseFailedEvent(TIME.getTime(), classSignature, trace.getTraceId(),
-				trace.getNextOrderId(), th.toString()));
+		AbstractAspect.CTRLINST.newMonitoringRecord(new DatabaseFailedEvent(AbstractAspect.TIME.getTime(),
+				classSignature, trace.getTraceId(), trace.getNextOrderId(), th.toString()));
 	}
 
 	@After("monitoredOperation() && notWithinKieker()")
 	public void afterOperation(final JoinPoint joinPoint) {
-		if (!CTRLINST.isMonitoringEnabled()) {
+		if (!AbstractAspect.CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
 
 		final String operationSignature = this.getJoinPointClassName(joinPoint);
 
-		if (!CTRLINST.isProbeActivated(operationSignature)) {
+		if (!AbstractAspect.CTRLINST.isProbeActivated(operationSignature)) {
 			return;
 		}
 
 		final int stackIndex = this.currentStackIndex.get().decrementValue();
 		if (stackIndex == 1) {
-			TRACEREGISTRY.unregisterTrace();
+			AbstractAspect.TRACEREGISTRY.unregisterTrace();
 		}
 	}
 
 	/**
 	 * Retrieves the className of the called method
-	 * 
+	 *
 	 * @param currentJoinPoint
 	 * @return
 	 */
 	public String getJoinPointClassName(final JoinPoint currentJoinPoint) {
 		final String className = currentJoinPoint.getSignature().toString();
-		return className.length() > 0 ? className : UNDEFINED_VALUE; // NOCS
+		return className.length() > 0 ? className : AbstractAspect.UNDEFINED_VALUE; // NOCS
 	}
 
 	/**
 	 * Retrieves the return type of the called method
-	 * 
+	 *
 	 * @param className
 	 * @return
 	 */
 	private String getJoinPointReturnType(final String className) {
 		final String[] splittedTypeName = className.split(" ");
-		return splittedTypeName.length > 0 ? splittedTypeName[0] : UNDEFINED_VALUE; // NOCS
+		return splittedTypeName.length > 0 ? splittedTypeName[0] : AbstractAspect.UNDEFINED_VALUE; // NOCS
 	}
 
 	/**
 	 * Retrieves the passed arguments of the JoinPoint
-	 * 
+	 *
 	 * @param currentJoinPoint
 	 * @return
 	 */
 	public String getJoinPointArguments(final JoinPoint currentJoinPoint) {
 
-		String joinPointArgsString = UNDEFINED_VALUE;
+		String joinPointArgsString = AbstractAspect.UNDEFINED_VALUE;
 		final Object[] joinPointArgs = currentJoinPoint.getArgs();
 
-		if ((joinPointArgs != null) && joinPointArgs.length != 0) {
+		if ((joinPointArgs != null) && (joinPointArgs.length != 0)) {
 			joinPointArgsString = this.convertParametersToString(joinPointArgs);
 		}
 		return joinPointArgsString;
@@ -210,12 +211,12 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	/**
 	 * Retrieves the parameters of the called method
-	 * 
+	 *
 	 * @param joinPointArgs
 	 * @return
 	 */
 	private String convertParametersToString(final Object[] joinPointArgs) {
-		String parametersString = UNDEFINED_VALUE;
+		String parametersString = AbstractAspect.UNDEFINED_VALUE;
 		final StringBuilder sb = new StringBuilder();
 
 		if (joinPointArgs != null) {
@@ -235,7 +236,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	/**
 	 * Processes the return value of the called method based on the type and returns
 	 * a formatted string afterwards
-	 * 
+	 *
 	 * @param returningObject
 	 * @param returnType
 	 * @return
@@ -243,9 +244,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private String getReturnedValue(final Object returningObject, final String returnType) {
 
 		final String upperReturnType = returnType.toUpperCase(Locale.getDefault());
-		String returnValue = UNDEFINED_VALUE;
+		String returnValue = AbstractAspect.UNDEFINED_VALUE;
 
-		if ((!returnType.equals(UNDEFINED_VALUE)) && (returningObject != null)) {
+		if ((!returnType.equals(AbstractAspect.UNDEFINED_VALUE)) && (returningObject != null)) {
 			int numberOfRows = 0;
 
 			switch (upperReturnType) {
@@ -279,14 +280,13 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	}
 
 	/**
-	 * In case of a resultset we are interessted in the number of rows (affected
+	 * In case of a result set we are interested in the number of rows (affected
 	 * rows) by the executed statement
-	 * 
+	 *
 	 * @param rawReturnValue
 	 * @return
 	 */
 	private String getReturnedNumberOfRows(final Object rawReturnValue) {
-		String returnValue;
 		int numberOfRows = 0;
 		try {
 			try (final ResultSet rs = (ResultSet) rawReturnValue) {
@@ -294,11 +294,11 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 					numberOfRows++;
 				}
 			}
-		} catch (SQLException e) {
-			LOG.error(LOGGING_PREFIX + "getReturnValue: SQL-Exception: " + e.getMessage()); // NOPMD
+		} catch (final SQLException e) {
+			AbstractAspect.LOG
+					.error(AbstractAspect.LOGGING_PREFIX + "getReturnValue: SQL-Exception: " + e.getMessage()); // NOPMD
 		}
-		returnValue = String.valueOf(numberOfRows);
-		return returnValue;
+		return String.valueOf(numberOfRows);
 	}
 
 }

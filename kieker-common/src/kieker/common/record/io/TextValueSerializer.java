@@ -27,10 +27,23 @@ public class TextValueSerializer implements IValueSerializer {
 
 	private final CharBuffer buffer;
 
+	/**
+	 * Create a text value serializer.
+	 *
+	 * @param buffer
+	 *            buffer for the serializer
+	 */
 	protected TextValueSerializer(final CharBuffer buffer) {
 		this.buffer = buffer;
 	}
 
+	/**
+	 * Factory method to create a text value serializer.
+	 *
+	 * @param buffer
+	 *            serialization buffer
+	 * @return the value serializer
+	 */
 	public static TextValueSerializer create(final CharBuffer buffer) {
 		return new TextValueSerializer(buffer);
 	}
@@ -87,6 +100,11 @@ public class TextValueSerializer implements IValueSerializer {
 		} else {
 			this.buffer.put(";");
 		}
+	}
+
+	@Override
+	public <T extends Enum<T>> void putEnumeration(final T value) {
+		this.buffer.put(";" + value.ordinal());
 	}
 
 }

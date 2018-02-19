@@ -20,6 +20,8 @@ package kieker.common.record.io;
  * Interface for value serializers for use by monitoring records.
  *
  * @author Holger Knoche
+ * @author Reiner Jung - added enumeration support
+ *
  * @since 1.13
  */
 public interface IValueSerializer {
@@ -95,6 +97,15 @@ public interface IValueSerializer {
 	 * @since 1.13
 	 */
 	public void putDouble(double value);
+
+	/**
+	 * Stores a {@code Enumeration} value in the underlying data store.
+	 *
+	 * @param value
+	 *            The value to store
+	 * @since 1.14
+	 */
+	public <T extends Enum<T>> void putEnumeration(T value);
 
 	/**
 	 * Stores raw data in the underlying data store.

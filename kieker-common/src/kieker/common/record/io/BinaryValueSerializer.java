@@ -27,7 +27,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.13
  *
  */
-public class DefaultValueSerializer implements IValueSerializer {
+public class BinaryValueSerializer implements IValueSerializer {
 
 	private static final byte TRUE_VALUE = (byte) 1;
 	private static final byte FALSE_VALUE = (byte) 0;
@@ -35,13 +35,30 @@ public class DefaultValueSerializer implements IValueSerializer {
 	private final ByteBuffer buffer;
 	private final IRegistry<String> stringRegistry;
 
-	protected DefaultValueSerializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+	/**
+	 * Create a binary value serializer.
+	 *
+	 * @param buffer
+	 *            buffer for the serializer
+	 * @param stringRegistry
+	 *            the string registry used for the serializer
+	 */
+	protected BinaryValueSerializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
 		this.buffer = buffer;
 		this.stringRegistry = stringRegistry;
 	}
 
-	public static DefaultValueSerializer create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new DefaultValueSerializer(buffer, stringRegistry);
+	/**
+	 * Factory method to create a binary value serializer.
+	 *
+	 * @param buffer
+	 *            serialization buffer
+	 * @param stringRegistry
+	 *            the string registry used for the serializer
+	 * @return the value serializer
+	 */
+	public static BinaryValueSerializer create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new BinaryValueSerializer(buffer, stringRegistry);
 	}
 
 	@Override
@@ -101,6 +118,11 @@ public class DefaultValueSerializer implements IValueSerializer {
 	@Override
 	public void putFloat(final float value) {
 		this.buffer.putFloat(value);
+	}
+
+	@Override
+	public <T extends Enum<T>> void putEnumeration(final T value) {
+		this.buffer.putInt(value.ordinal());
 	}
 
 }

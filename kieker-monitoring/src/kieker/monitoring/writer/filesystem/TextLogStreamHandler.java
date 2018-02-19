@@ -42,7 +42,7 @@ public class TextLogStreamHandler extends AbstractLogStreamHandler {
 	/** line separator string. */
 	private static final String LINE_SEPARATOR = System.lineSeparator();
 
-	private static final Log LOGGER = LogFactory.getLog(TextLogStreamHandler.class);
+	private static final Log LOGGER = LogFactory.getLog(TextLogStreamHandler.class); // NOPMD use of "wrong" logger class
 
 	private final CharBuffer buffer;
 

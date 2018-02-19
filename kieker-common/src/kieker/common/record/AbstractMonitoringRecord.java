@@ -70,6 +70,16 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		CACHED_KIEKERRECORDS.put("kieker.common.record.flow.trace.Trace", kieker.common.record.flow.trace.TraceMetadata.class);
 	}
 
+	/**
+	 * Checks whether two double values are equal or not.
+	 *
+	 * @param x
+	 *            first value
+	 * @param y
+	 *            second values
+	 *
+	 * @return returns true if the values differ
+	 */
 	protected static boolean isNotEqual(final double x, final double y) {
 		final double diff = x - y;
 		// if (diff <= 0.0D) {
@@ -80,6 +90,16 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		return (diff < (0.0D - VALID_VARIANCE_DOUBLE)) || (diff > VALID_VARIANCE_DOUBLE);
 	}
 
+	/**
+	 * Checks whether two float values are equal or not.
+	 *
+	 * @param x
+	 *            first value
+	 * @param y
+	 *            second values
+	 *
+	 * @return returns true if the values differ
+	 */
 	protected static boolean isNotEqual(final float x, final float y) {
 		final float diff = x - y;
 		// if (diff <= 0.0F) {
@@ -477,11 +497,35 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
+	/**
+	 * Create monitoring record based on class name and a given value deserializer.
+	 *
+	 * @param recordClassName
+	 *            record class name
+	 * @param deserializer
+	 *            the derserializer
+	 * @return a monitoring record
+	 * @throws BufferUnderflowException
+	 *             on buffer read errors
+	 * @throws MonitoringRecordException
+	 *             when no record could be constructed
+	 */
 	public static final IMonitoringRecord createFromDeserializer(final String recordClassName, final IValueDeserializer deserializer)
 			throws BufferUnderflowException, MonitoringRecordException {
 		return AbstractMonitoringRecord.createFromDeserializerChw(recordClassName, deserializer);
 	}
 
+	/**
+	 * Create monitoring record based on an value array and a given record class name.
+	 *
+	 * @param recordClassName
+	 *            record class name
+	 * @param values
+	 *            the value array
+	 * @return a monitoring record
+	 * @throws MonitoringRecordException
+	 *             when no record could be constructed
+	 */
 	public static final IMonitoringRecord createFromArray(final String recordClassName, final Object[] values) throws MonitoringRecordException {
 		final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(recordClassName);
 		return AbstractMonitoringRecord.createFromArray(clazz, values);
