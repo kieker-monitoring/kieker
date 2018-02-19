@@ -30,6 +30,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.jms.JmsWriter;
@@ -59,7 +60,7 @@ public class BasicJMSWriterReaderTest {
 
 		// Create monitoring controller for JMSWriter
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, JmsWriter.class.getName());
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, JmsWriter.class.getName());
 		config.setProperty(JmsWriter.CONFIG_CONTEXTFACTORYTYPE, FakeInitialContextFactory.class.getName());
 		config.setProperty(JmsWriter.CONFIG_FACTORYLOOKUPNAME, "ConnectionFactory");
 		final MonitoringController monCtrl = MonitoringController.createInstance(config);

@@ -36,6 +36,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.record.system.MemSwapUsageRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.tools.logReplayer.AbstractLogReplayer;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -88,8 +89,8 @@ public class TestLogReplayer extends AbstractKiekerTest {
 
 		// declare configuration
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.METADATA, "false");
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
+		config.setProperty(ConfigurationKeys.META_DATA, "false");
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
 
 		this.monitoringConfigurationFile = this.tmpFolder.newFile("monitoring.properties");
