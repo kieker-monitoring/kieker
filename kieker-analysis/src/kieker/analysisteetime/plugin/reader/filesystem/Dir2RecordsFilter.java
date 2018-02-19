@@ -37,6 +37,7 @@ import teetime.stage.io.Directory2FilesFilter;
 /**
  * @author Christian Wulf
  *
+ * @since 1.14
  */
 public final class Dir2RecordsFilter extends CompositeStage {
 
@@ -68,14 +69,14 @@ public final class Dir2RecordsFilter extends CompositeStage {
 		this.recordMerger = new Merger<>();
 
 		// store ports due to readability reasons
-		final OutputPort<File> normalFileOutputPort = fileExtensionSwitch.addFileExtension(FSUtil.NORMAL_FILE_EXTENSION);
+		final OutputPort<File> datFileOutputPort = fileExtensionSwitch.addFileExtension(FSUtil.DAT_FILE_EXTENSION);
 		final OutputPort<File> binFileOutputPort = fileExtensionSwitch.addFileExtension(BinaryCompressionMethod.NONE.getFileExtension());
 
 		// connect ports by pipes
 		this.connectPorts(classNameRegistryCreationFilter.getOutputPort(), directory2FilesFilter.getInputPort());
 		this.connectPorts(directory2FilesFilter.getOutputPort(), fileExtensionSwitch.getInputPort());
 
-		this.connectPorts(normalFileOutputPort, datFile2RecordFilter.getInputPort());
+		this.connectPorts(datFileOutputPort, datFile2RecordFilter.getInputPort());
 		this.connectPorts(binFileOutputPort, binaryFile2RecordFilter.getInputPort());
 
 		this.connectPorts(datFile2RecordFilter.getOutputPort(), this.recordMerger.getNewInputPort());
