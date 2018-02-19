@@ -41,7 +41,7 @@ import kieker.common.util.registry.Lookup;
  *
  * @since 1.12
  */
-public final class AMQPReaderLogic {
+final class AMQPReaderLogic {
 
 	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
@@ -197,7 +197,7 @@ public final class AMQPReaderLogic {
 		}
 	}
 
-	protected void deliverRecord(final IMonitoringRecord monitoringRecord) {
+	public void deliverRecord(final IMonitoringRecord monitoringRecord) {
 		this.amqpReaderStage.deliverRecord(monitoringRecord);
 	}
 

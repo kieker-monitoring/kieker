@@ -59,24 +59,25 @@ class SingleSocketTcpLogic extends AbstractTcpReader {
 		final int clazzId = buffer.getInt();
 
 		if (clazzId == -1) {
-			return this.registerRegistryEntry(clazzId, buffer);
+			return this.registerRegistryEntry(buffer);
 		} else {
 			return this.recordDeserializer.deserializeRecord(clazzId, buffer);
 		}
 	}
 
-	private boolean registerRegistryEntry(final int clazzId, final ByteBuffer buffer) {
+	private boolean registerRegistryEntry(final ByteBuffer buffer) {
 		// identify string identifier and string length
 		if (buffer.remaining() < (INT_BYTES + INT_BYTES)) {
 			return false;
 		}
 
-		final int id = buffer.getInt();
 		final int stringLength = buffer.getInt();
 
 		if (buffer.remaining() < stringLength) {
 			return false;
 		}
+
+		final int id = buffer.getInt();
 
 		final byte[] strBytes = new byte[stringLength];
 		buffer.get(strBytes);

@@ -44,7 +44,7 @@ import kieker.common.record.IMonitoringRecord;
  *
  * @since 0.95a
  */
-public final class JMSReaderLogic {
+final class JMSReaderLogic {
 
 	private final String jmsProviderUrl;
 	private final String jmsDestination;
@@ -185,7 +185,7 @@ public final class JMSReaderLogic {
 		this.unblock();
 	}
 
-	protected Log getLog() {
+	public Log getLog() {
 		return this.log;
 	}
 

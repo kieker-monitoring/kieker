@@ -44,7 +44,6 @@ public class TextLine2MappingRegistryFilter extends AbstractConsumerStage<String
 		}
 		final String key = textLine.substring(0, split);
 		// BETTER execute split instead of checking it before with multiple string operations
-		final String value = FSUtil.decodeNewline(textLine.substring(split + 1));
 		// the leading $ is optional
 		final Integer id;
 		try {
@@ -53,6 +52,7 @@ public class TextLine2MappingRegistryFilter extends AbstractConsumerStage<String
 			this.logger.error("Error reading mapping file, id must be integer", ex);
 			return; // continue on errors
 		}
+		final String value = FSUtil.decodeNewline(textLine.substring(split + 1));
 		final String prevVal = this.stringRegistry.put(id, value);
 		if (prevVal != null) {
 			this.logger.error("Found additional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
