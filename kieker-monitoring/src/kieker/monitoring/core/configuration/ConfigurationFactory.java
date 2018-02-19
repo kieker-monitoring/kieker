@@ -35,14 +35,13 @@ import kieker.common.logging.LogFactory;
  *
  * @since 1.3
  */
-public final class ConfigurationFactory implements Keys {
+public final class ConfigurationFactory {
 	private static final Log LOG = LogFactory.getLog(ConfigurationFactory.class);
 
 	/**
 	 * Private constructor to avoid instantiation.
 	 */
-	private ConfigurationFactory() {
-	}
+	private ConfigurationFactory() {}
 
 	// factory methods
 
@@ -55,26 +54,26 @@ public final class ConfigurationFactory implements Keys {
 	 */
 	public static final Configuration createSingletonConfiguration() {
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("Searching for JVM argument '" + Keys.CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
+			LOG.debug("Searching for JVM argument '" + ConfigurationKeys.CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
 		}
 		final Configuration defaultConfiguration = ConfigurationFactory.defaultConfiguration();
 		// ignore default default-name and set to KIEKER-SINGLETON
-		defaultConfiguration.setProperty(Keys.CONTROLLER_NAME, "KIEKER-SINGLETON");
+		defaultConfiguration.setProperty(ConfigurationKeys.CONTROLLER_NAME, "KIEKER-SINGLETON");
 		// Searching for configuration file location passed to JVM
-		String configurationFile = System.getProperty(Keys.CUSTOM_PROPERTIES_LOCATION_JVM);
+		String configurationFile = System.getProperty(ConfigurationKeys.CUSTOM_PROPERTIES_LOCATION_JVM);
 		final Configuration loadConfiguration;
 		if (configurationFile != null) {
 			LOG.info("Loading configuration from JVM-specified location: '" + configurationFile + "'");
 			loadConfiguration = ConfigurationFactory.loadConfigurationFromFile(configurationFile, defaultConfiguration);
 		} else {
 			// No JVM property; Trying to find configuration file in classpath
-			configurationFile = Keys.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
+			configurationFile = ConfigurationKeys.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
 			LOG.info("Loading properties from properties file in classpath: '" + configurationFile + "'");
 			loadConfiguration = ConfigurationFactory.loadConfigurationFromResource(configurationFile,
 					defaultConfiguration);
 		}
 		// 1.JVM-params -> 2.properties file -> 3.default properties file
-		return ConfigurationFactory.getSystemPropertiesStartingWith(Keys.PREFIX, loadConfiguration);
+		return ConfigurationFactory.getSystemPropertiesStartingWith(ConfigurationKeys.PREFIX, loadConfiguration);
 	}
 
 	/**
@@ -107,7 +106,7 @@ public final class ConfigurationFactory implements Keys {
 	 * @return The created Configuration
 	 */
 	private static final Configuration defaultConfiguration() {
-		return ConfigurationFactory.loadConfigurationFromResource(Keys.DEFAULT_PROPERTIES_LOCATION_CLASSPATH, null);
+		return ConfigurationFactory.loadConfigurationFromResource(ConfigurationKeys.DEFAULT_PROPERTIES_LOCATION_CLASSPATH, null);
 	}
 
 	/**
@@ -130,7 +129,7 @@ public final class ConfigurationFactory implements Keys {
 				is = new FileInputStream(propertiesFn);
 			} catch (final FileNotFoundException ex) {
 				// if not found as absolute path try within the classpath
-				final URL resourceUrl = loadKiekerPropertiesFile(propertiesFn);
+				final URL resourceUrl = ConfigurationFactory.loadKiekerPropertiesFile(propertiesFn);
 				if (resourceUrl == null) {
 					LOG.warn("File '" + propertiesFn + "' not found");
 					return new Configuration(defaultValues);
@@ -166,7 +165,7 @@ public final class ConfigurationFactory implements Keys {
 	 */
 	private static final Configuration loadConfigurationFromResource(final String propertiesFn,
 			final Configuration defaultValues) {
-		final URL resourceUrl = loadKiekerPropertiesFile(propertiesFn);
+		final URL resourceUrl = ConfigurationFactory.loadKiekerPropertiesFile(propertiesFn);
 		if (resourceUrl == null) {
 			LOG.warn("File '" + propertiesFn + "' not found in classpath");
 		} else {

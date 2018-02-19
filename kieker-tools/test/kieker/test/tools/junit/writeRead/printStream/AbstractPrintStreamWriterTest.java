@@ -24,6 +24,7 @@ import org.junit.Assert;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.print.PrintStreamWriter;
@@ -50,7 +51,7 @@ public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReader
 	@Override
 	protected MonitoringController createController(final int numRecordsWritten) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PrintStreamWriter.class.getName());
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, PrintStreamWriter.class.getName());
 		config.setProperty(PrintStreamWriter.STREAM, this.provideStreamName());
 		return MonitoringController.createInstance(config);
 	}

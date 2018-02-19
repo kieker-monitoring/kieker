@@ -53,8 +53,7 @@ public class TraceCallTreeNode extends AbstractCallTreeNode<AllocationComponentO
 			final IOriginRetentionPolicy originPolicy) {
 		final AllocationComponentOperationPair destPair = destination;
 		final TraceCallTreeNode destNode = new TraceCallTreeNode(destPair.getId(), destPair, false, origin, originPolicy);
-		final WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e = new WeightedDirectedCallTreeEdge<AllocationComponentOperationPair>(this, destNode,
-				origin, originPolicy);
+		final WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e = new WeightedDirectedCallTreeEdge<>(this, destNode, origin, originPolicy);
 		super.appendChildEdge(e);
 		return destNode;
 	}

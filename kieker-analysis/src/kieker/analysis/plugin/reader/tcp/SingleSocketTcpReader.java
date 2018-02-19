@@ -21,10 +21,10 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
-import kieker.analysis.plugin.reader.tcp.util.SingleSocketRecordReader;
-import kieker.analysis.plugin.reader.util.IRecordReceivedListener;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.IRecordReceivedListener;
+import kieker.common.record.tcp.SingleSocketRecordReader;
 
 /**
  * This is a reader which reads the records from a TCP port.

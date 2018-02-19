@@ -26,6 +26,8 @@
 		<exclude within="org.slf4j..*" /> 
 		<exclude within="java.util.logging..*" /> 
 		<exclude within="org.apache.log4j..*" />
+		<!-- excludes the queue implementation used internally by Kieker's monitoring component -->
+		<exclude within="org.jctools..*" />
 
 		<!-- Instrument all kieker.tests: -->
 		<!-- <include within="kieker.tests..*" /> -->

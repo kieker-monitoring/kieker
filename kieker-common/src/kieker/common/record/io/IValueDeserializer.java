@@ -16,10 +16,14 @@
 
 package kieker.common.record.io;
 
+import kieker.common.exception.RecordInstantiationException;
+
 /**
  * Interface for value deserializers for use by monitoring records.
  *
  * @author Holger Knoche
+ * @author Reiner Jung - added enumeration support
+ *
  * @since 1.13
  */
 public interface IValueDeserializer {
@@ -47,7 +51,7 @@ public interface IValueDeserializer {
 	 * @since 1.13
 	 */
 	public char getChar();
-	
+
 	/**
 	 * Retrieves a {@code short} value from the underlying data source.
 	 *
@@ -55,7 +59,7 @@ public interface IValueDeserializer {
 	 * @since 1.13
 	 */
 	public short getShort(); // NOPMD
-	
+
 	/**
 	 * Retrieves an {@code int} value from the underlying data source.
 	 *
@@ -79,7 +83,7 @@ public interface IValueDeserializer {
 	 * @since 1.13
 	 */
 	public float getFloat();
-	
+
 	/**
 	 * Retrieves a {@code double} value from the underlying data source.
 	 *
@@ -95,6 +99,19 @@ public interface IValueDeserializer {
 	 * @since 1.13
 	 */
 	public String getString();
+
+	/**
+	 * Retrieves a {@code Enumeration} value from the underlying data source.
+	 *
+	 * @param clazz
+	 *            enumeration type to be used
+	 * @return The retrieved value
+	 *
+	 * @throws RecordInstantiationException
+	 *             in case the received ordinal does not exist in the specified enumeration type
+	 * @since 1.14
+	 */
+	public <T extends Enum<T>> T getEnumeration(Class<T> clazz) throws RecordInstantiationException;
 
 	/**
 	 * Retrieves raw data from the underlying data source.

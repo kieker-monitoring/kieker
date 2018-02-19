@@ -31,6 +31,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
@@ -93,11 +94,11 @@ public class TestCXFClientServerInterceptors extends AbstractKiekerTest {
 
 	private MonitoringController createMonitoringController(final String hostname, final String listName) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
-		config.setProperty(ConfigurationFactory.METADATA, "false");
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
+		config.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, "true");
+		config.setProperty(ConfigurationKeys.META_DATA, "false");
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, listName);
-		config.setProperty(ConfigurationFactory.HOST_NAME, hostname);
+		config.setProperty(ConfigurationKeys.HOST_NAME, hostname);
 		return MonitoringController.createInstance(config);
 	}
 

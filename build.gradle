@@ -43,8 +43,6 @@ def mainSubprojects = [
 	project(':kieker-extension-kafka')
 ]
 
-def pmdAndCpdVersion = '5.2.2'
-
 subprojects {
 	apply plugin: 'java'
 
@@ -121,13 +119,13 @@ subprojects {
 
     apply plugin: 'checkstyle'
     checkstyle {
+    	toolVersion = checkstyleVersion
         ignoreFailures = true
         showViolations = false
 
         configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
     }
 
-    def fbVersion = '3.0.1'
     apply plugin: 'findbugs'
     findbugs {	
         toolVersion = fbVersion
@@ -160,22 +158,17 @@ subprojects {
         }
     }
 
-    // CS is a little bit weird, when it comes to dependencies.
-    checkstyleTest.classpath += sourceSets.main.runtimeClasspath
-    checkstyleMain.classpath += configurations.compile
-    // This part makes sure that CS does not check the classes inside src-gen and test-gen
-    checkstyleMain.source = 'src'
-    checkstyleTest.source = 'test'
-    
-	// Those are some dependencies which are needed by all subprojects
+    repositories {
+    	mavenCentral() 
+    	jcenter() // for mockito
+    }
+
+    // Those are some dependencies which are needed by all subprojects
     dependencies {
-        checkstyle resolveLibrary('**/checkstyle-*/**/*.jar')
         checkstyle project(':kieker-checkstyle-extension')
 
-        findbugs resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
-        
         // compile-time dependency due to the annotation SuppressFBWarnings()
-        compile resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
+		compile "com.google.code.findbugs:findbugs:${fbVersion}"
 
 		compile 'commons-logging:commons-logging:1.2'
 		compile 'org.slf4j:slf4j-api:1.7.25'
@@ -340,138 +333,137 @@ def parseCpdReport(File reportFile) {
     return [errors, warnings, infos]
 }
 
-task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) {
-  doLast {
-    def reportTypes = ['main', 'test']
+mainSubprojects.each { project ->
+	configure(project) {
 
-    // Begin Checkstyle report parsing
-    def csErrors = 0
-    def csWarnings = 0
-    def csInfos = 0
+		task checkThresholds(dependsOn: ["build"]) {
+		  doLast {
+		    def reportTypes = ['main', 'test']
+		
+		    // Begin Checkstyle report parsing
+		    def csErrors = 0
+		    def csWarnings = 0
+		    def csInfos = 0
+		
+			def p = project
+			
+		        reportTypes.each { String type ->
+		            def reportFile = file(p.projectDir.path + '/build/reports/checkstyle/' + type + '.xml')
+		            def reportResults = parseCheckstyleReport(reportFile)
+		            csErrors += reportResults[0]
+		            csWarnings += reportResults[1]
+		            csInfos += reportResults[2]
+		        }
+		    // End Checkstyle report parsing
+		
+		
+		    // Begin Findbugs report parsing
+		    def fbErrors = 0
+		    def fbWarnings = 0
+		    def fbInfos = 0
+		
+		        reportTypes.each { String type ->
+		            def reportFile = file(p.projectDir.path + '/build/reports/findbugs/' + type + '.xml')
+		            def reportResults = parseFindbugsReport(reportFile)
+		            fbErrors += reportResults[0]
+		            fbWarnings += reportResults[1]
+		            fbInfos += reportResults[2]
+		        }
+		    // End Findbugs report parsing
+		
+		
+		    // Begin PMD report parsing
+		    def pmdErrors = 0
+		    def pmdWarnings = 0
+		    def pmdInfos = 0
+		
+		        reportTypes.each { String type ->
+		            def reportFile = file(p.projectDir.path + '/build/reports/pmd/' + type + '.xml')
+		            def reportResults = parsePmdReport(reportFile)
+		            pmdErrors += reportResults[0]
+		            pmdWarnings += reportResults[1]
+		            pmdInfos += reportResults[2]
+		        }
+		    // End PMD report parsing
+		
+		
+		    // Begin CPD report parsing
+		    def cpdErrors = 0
+		
+			p = rootProject
+		    	// cpd only produces one single file in the root project without any report types, such as main and test.
+		        def reportFile = file(p.projectDir.path + '/build/reports/cpd/cpdCheck.xml')
+		        def reportResults = parseCpdReport(reportFile)
+		        cpdErrors += reportResults[0]
+		    // End CPD report parsing
+		
+		
+		    // Print results
+		    println("Static analysis results:")
+		    println()
+		    println(" Checkstyle:")
+		    println("  Errors: " + csErrors + " (Threshold: " + checkstyleErrorThreshold + ")")
+		    println("  Warnings: " + csWarnings + " (Threshold: " + checkstyleWarningThreshold + ")")
+		    println("  Info: " + csInfos)
+		    println()
+		    println(" Findbugs:")
+		    println("  Errors: " + fbErrors + " (Threshold: " + findbugsErrorThreshold + ")")
+		    println("  Warnings: " + fbWarnings + " (Threshold: " + findbugsWarningThreshold + ")")
+		    println("  Info: " + fbInfos)
+		    println()
+		    println(" PMD:")
+		    println("  Errors: " + pmdErrors + " (Threshold: " + pmdErrorThreshold + ")")
+		    println("  Warnings: " + pmdWarnings + " (Threshold: " + pmdWarningThreshold + ")")
+		    println("  Info: " + pmdInfos)
+		    println()
+		    println(" CPD (counts for all Kieker components):")
+		    println("  Errors: " + cpdErrors + " (Threshold: " + cpdErrorThreshold + ")")
+		
+		
+		    // Fail build if Checkstyle thresholds are violated
+		    if (csWarnings > Integer.valueOf(checkstyleWarningThreshold)) {
+		        throw new GradleException("There were checkstyle warnings exceeding the warning threshold! Warnings: " + csWarnings + " Threshold: " + checkstyleWarningThreshold)
+		    }
+		
+		    if (csErrors > Integer.valueOf(checkstyleErrorThreshold)) {
+		        throw new GradleException("There were checkstyle errors exceeding the error threshold! Errors: " + csErrors + " Threshold: " + checkstyleErrorThreshold)
+		    }
+		
+		    // Fail build if Findbugs thresholds are violated
+		    if (fbWarnings > Integer.valueOf(findbugsWarningThreshold)) {
+		        throw new GradleException("There were findbugs warnings exceeding the warning threshold! Warnings: " + fbWarnings + " Threshold: " + findbugsWarningThreshold)
+		    }
+		
+		    if (fbErrors > Integer.valueOf(findbugsErrorThreshold)) {
+		        throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + fbErrors + " Threshold: " + findbugsErrorThreshold)
+		    }
+		
+		    // Fail build if PMD thresholds are violated
+		    if (pmdWarnings > Integer.valueOf(pmdWarningThreshold)) {
+		        throw new GradleException("There were pmd warnings exceeding the warning threshold! Warnings: " + pmdWarnings + " Threshold: " + pmdWarningThreshold)
+		    }
+		
+		    if (pmdErrors > Integer.valueOf(pmdErrorThreshold)) {
+		        throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + pmdErrors + " Threshold: " + pmdErrorThreshold)
+		    }
+		
+			// Fail build if CPD thresholds are violated
+		    if (cpdErrors > Integer.valueOf(cpdErrorThreshold)) {
+		        throw new GradleException("There were cpd errors exceeding the error threshold! Errors: " + cpdErrors + " Threshold: " + cpdErrorThreshold)
+		    }
+		  }
+		}
 
-    mainSubprojects.each { Project p ->
-        reportTypes.each { String type ->
-            def reportFile = file(p.projectDir.path + '/build/reports/checkstyle/' + type + '.xml')
-            def reportResults = parseCheckstyleReport(reportFile)
-            csErrors += reportResults[0]
-            csWarnings += reportResults[1]
-            csInfos += reportResults[2]
-        }
-    }
-    // End Checkstyle report parsing
-
-
-    // Begin Findbugs report parsing
-    def fbErrors = 0
-    def fbWarnings = 0
-    def fbInfos = 0
-
-    mainSubprojects.each { Project p ->
-        reportTypes.each { String type ->
-            def reportFile = file(p.projectDir.path + '/build/reports/findbugs/' + type + '.xml')
-            def reportResults = parseFindbugsReport(reportFile)
-            fbErrors += reportResults[0]
-            fbWarnings += reportResults[1]
-            fbInfos += reportResults[2]
-        }
-    }
-    // End Findbugs report parsing
-
-
-    // Begin PMD report parsing
-    def pmdErrors = 0
-    def pmdWarnings = 0
-    def pmdInfos = 0
-
-    mainSubprojects.each { Project p ->
-        reportTypes.each { String type ->
-            def reportFile = file(p.projectDir.path + '/build/reports/pmd/' + type + '.xml')
-            def reportResults = parsePmdReport(reportFile)
-            pmdErrors += reportResults[0]
-            pmdWarnings += reportResults[1]
-            pmdInfos += reportResults[2]
-        }
-    }
-    // End PMD report parsing
-
-
-    // Begin CPD report parsing
-    def cpdErrors = 0
-
-	def projects = [rootProject]
-    projects.each { Project p ->
-    	// cpd only produces one single file in the root project without any report types, such as main and test.
-        def reportFile = file(p.projectDir.path + '/build/reports/cpd/cpdCheck.xml')
-        def reportResults = parseCpdReport(reportFile)
-        cpdErrors += reportResults[0]
-    }
-    // End CPD report parsing
-
-
-    // Print results
-    println("Static analysis results:")
-    println()
-    println(" Checkstyle:")
-    println("  Errors: " + csErrors + " (Threshold: " + checkstyleErrorThreshold + ")")
-    println("  Warnings: " + csWarnings + " (Threshold: " + checkstyleWarningThreshold + ")")
-    println("  Info: " + csInfos)
-    println()
-    println(" Findbugs:")
-    println("  Errors: " + fbErrors + " (Threshold: " + findbugsErrorThreshold + ")")
-    println("  Warnings: " + fbWarnings + " (Threshold: " + findbugsWarningThreshold + ")")
-    println("  Info: " + fbInfos)
-    println()
-    println(" PMD:")
-    println("  Errors: " + pmdErrors + " (Threshold: " + pmdErrorThreshold + ")")
-    println("  Warnings: " + pmdWarnings + " (Threshold: " + pmdWarningThreshold + ")")
-    println("  Info: " + pmdInfos)
-    println()
-    println(" CPD:")
-    println("  Errors: " + cpdErrors + " (Threshold: " + cpdErrorThreshold + ")")
-
-
-    // Fail build if Checkstyle thresholds are violated
-    if (csWarnings > Integer.valueOf(checkstyleWarningThreshold)) {
-        throw new GradleException("There were checkstyle warnings exceeding the warning threshold! Warnings: " + csWarnings + " Threshold: " + checkstyleWarningThreshold)
-    }
-
-    if (csErrors > Integer.valueOf(checkstyleErrorThreshold)) {
-        throw new GradleException("There were checkstyle errors exceeding the error threshold! Errors: " + csErrors + " Threshold: " + checkstyleErrorThreshold)
-    }
-
-
-    // Fail build if Findbugs thresholds are violated
-    if (fbWarnings > Integer.valueOf(findbugsWarningThreshold)) {
-        throw new GradleException("There were findbugs warnings exceeding the warning threshold! Warnings: " + fbWarnings + " Threshold: " + findbugsWarningThreshold)
-    }
-
-    if (fbErrors > Integer.valueOf(findbugsErrorThreshold)) {
-        throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + fbErrors + " Threshold: " + findbugsErrorThreshold)
-    }
-
-    // Fail build if PMD thresholds are violated
-    if (pmdWarnings > Integer.valueOf(pmdWarningThreshold)) {
-        throw new GradleException("There were pmd warnings exceeding the warning threshold! Warnings: " + pmdWarnings + " Threshold: " + pmdWarningThreshold)
-    }
-
-    if (pmdErrors > Integer.valueOf(pmdErrorThreshold)) {
-        throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + pmdErrors + " Threshold: " + pmdErrorThreshold)
-    }
-
-	// Fail build if CPD thresholds are violated
-    if (cpdErrors > Integer.valueOf(cpdErrorThreshold)) {
-        throw new GradleException("There were cpd errors exceeding the error threshold! Errors: " + cpdErrors + " Threshold: " + cpdErrorThreshold)
-    }
-  }
+		tasks.check.finalizedBy(checkThresholds)
+	}
 }
 
 // Execute 'checkThresholds' after all check tasks in the subprojects have been executed
-mainSubprojects.tasks.check*.finalizedBy(checkThresholds)
+//mainSubprojects.tasks.check*.finalizedBy(checkThresholds)
 
+task checkThresholds(dependsOn: mainSubprojects.tasks["checkThresholds"])
 
-
-
-
+/*
 task htmlQualityReport() {
     def javaVersion = JavaVersion.current()
     def reportTypes = ['main', 'test']
@@ -485,10 +477,11 @@ task htmlQualityReport() {
             def pmdReportsFolder = "${reports}/pmd"
 
             doLast {
-		p.javaexec {
-			main = '-jar'
-			args = ["$scautilJar", "${findbugsReportsFolder}/${type}.xml", "${checkstyleReportsFolder}/${type}.xml", "${pmdReportsFolder}/${type}.xml", "${reports}/${type}ReportSummary.html"]
-		}
+				p.javaexec {
+					main = '-jar'
+					args = ["$scautilJar", "${findbugsReportsFolder}/${type}.xml", "${checkstyleReportsFolder}/${type}.xml", 
+							"${pmdReportsFolder}/${type}.xml", "${reports}/${type}ReportSummary.html"]
+				}
                 println("The report summary for \'${type}\' can be found at ${reports}/${type}ReportSummary.html")
             }
         }
@@ -496,8 +489,7 @@ task htmlQualityReport() {
 }
 mainSubprojects.tasks.check*.finalizedBy(htmlQualityReport)
 htmlQualityReport.onlyIf { reportingCompatibleJavaVersionPresent() }
-
-
+*/
 
 
 
@@ -629,7 +621,9 @@ configurations.archives.artifacts.with { archives ->
     remove(jarArtifact)
 }
 
-task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
+task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
+		description: "Assembles a jar archive containing all of Kieker's components, the user guide examples, the documentation etc."
+	) {
     // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
     configure allArtifacts
     configure licence
@@ -642,7 +636,9 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
     }
 }
 
-task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
+task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
+		description: "Assembles a jar archive containing the contents of the mainJar task and additionally the Eclipse Modeling Framework (EMF). The resulting jar can directly be used for analyzing Kieker logs."
+	) {
     // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
     classifier = 'emf'
     configure allArtifacts
@@ -675,7 +671,9 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
     }
 }
 
-task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"]) {
+task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
+		description: "Assembles a jar archive containing the contents of the mainJar task and additionally the aspect-oriented framework AspectJ. The resulting jar can directly be used for monitoring as javaagent."
+	) {
     // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
     classifier = 'aspectj'
     configure allArtifacts
@@ -801,12 +799,12 @@ task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandalone
   }
 }
 
-task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
+task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
     classifier = 'binaries'
     with binaryContent, manualContent, exampleContent, exampleJavaEEContent
 }
 
-task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
+task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
     classifier = 'binaries'
     with binaryContent, manualContent, exampleContent, exampleJavaEEContent
 

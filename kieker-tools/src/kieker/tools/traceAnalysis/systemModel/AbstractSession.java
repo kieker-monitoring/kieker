@@ -23,11 +23,11 @@ import java.util.TreeSet;
 
 /**
  * Sessions group traces which belong to the same high-level user interaction.
- * 
- * 
+ *
+ *
  * @author Holger Knoche
  * @since 1.10
- * 
+ *
  * @param <T>
  *            The concrete type of trace this session is based on
  */
@@ -43,7 +43,7 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 
 	/**
 	 * Creates a new abstract session with the given session ID.
-	 * 
+	 *
 	 * @param sessionId
 	 *            The session ID for this session
 	 */
@@ -54,7 +54,7 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 
 	/**
 	 * Returns this session's session ID.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public String getSessionId() {
@@ -63,7 +63,7 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 
 	/**
 	 * Adds a trace to this session.
-	 * 
+	 *
 	 * @param trace
 	 *            The trace to add.
 	 */
@@ -73,16 +73,16 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 
 	/**
 	 * Returns the traces contained in this session.
-	 * 
+	 *
 	 * @return See above
 	 */
-	public SortedSet<T> getContainedTraces() {
+	public SortedSet<T> getStateContainedTraces() {
 		return this.state.getContainedTraces();
 	}
 
 	/**
 	 * Returns this trace's start timestamp.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public long getStartTimestamp() {
@@ -91,11 +91,35 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 
 	/**
 	 * Returns this trace's end timestamp.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public long getEndTimestamp() {
 		return this.state.getEndTimestamp();
+	}
+
+	protected long getStartTime() {
+		return this.startTime;
+	}
+
+	protected long getEndTime() {
+		return this.endTime;
+	}
+
+	protected void setStartTime(final long startTime) {
+		this.startTime = startTime;
+	}
+
+	protected void setEndTime(final long endTime) {
+		this.endTime = endTime;
+	}
+
+	protected void setState(final ISessionState<T> state) {
+		this.state = state;
+	}
+
+	protected SortedSet<T> getContainedTraces() {
+		return this.containedTraces;
 	}
 
 	/**
@@ -130,55 +154,55 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 		}
 
 		// Access to startTime and endTime emulated by synthetic accessor method
-		@SuppressWarnings("synthetic-access")
+		// @SuppressWarnings("synthetic-access")
 		@Override
 		public synchronized void addTrace(final T trace) { // NOPMD (AvoidSynchronizedAtMethodLevel)
-			if (!AbstractSession.this.containedTraces.add(trace)) {
+			if (!AbstractSession.this.getContainedTraces().add(trace)) {
 				return;
 			}
 
-			if (trace.getStartTimestamp() < AbstractSession.this.startTime) {
-				AbstractSession.this.startTime = trace.getStartTimestamp();
+			if (trace.getStartTimestamp() < AbstractSession.this.getStartTime()) {
+				AbstractSession.this.setStartTime(trace.getStartTimestamp());
 			}
-			if (trace.getEndTimestamp() > AbstractSession.this.endTime) {
-				AbstractSession.this.endTime = trace.getEndTimestamp();
+			if (trace.getEndTimestamp() > AbstractSession.this.getEndTime()) {
+				AbstractSession.this.setEndTime(trace.getEndTimestamp());
 			}
 		}
 
 		// Access to containedTraces emulated by synthetic accessor method
-		@SuppressWarnings("synthetic-access")
+		// @SuppressWarnings("synthetic-access")
 		@Override
 		public synchronized SortedSet<T> getContainedTraces() { // NOPMD (AvoidSynchronizedAtMethodLevel)
-			return Collections.unmodifiableSortedSet(AbstractSession.this.containedTraces);
+			return Collections.unmodifiableSortedSet(AbstractSession.this.getContainedTraces());
 		}
 
 		// Access to startTime and containedTraces emulated by synthetic accessor method
-		@SuppressWarnings("synthetic-access")
+		// @SuppressWarnings("synthetic-access")
 		@Override
 		public synchronized long getStartTimestamp() { // NOPMD (AvoidSynchronizedAtMethodLevel)
-			if (AbstractSession.this.containedTraces.isEmpty()) {
+			if (AbstractSession.this.getContainedTraces().isEmpty()) {
 				return 0;
 			} else {
-				return AbstractSession.this.startTime;
+				return AbstractSession.this.getStartTime();
 			}
 		}
 
 		// Access to endTime and containedTraces emulated by synthetic accessor method
-		@SuppressWarnings("synthetic-access")
+		// @SuppressWarnings("synthetic-access")
 		@Override
 		public synchronized long getEndTimestamp() { // NOPMD (AvoidSynchronizedAtMethodLevel)
-			if (AbstractSession.this.containedTraces.isEmpty()) {
+			if (AbstractSession.this.getContainedTraces().isEmpty()) {
 				return 0;
 			} else {
-				return AbstractSession.this.endTime;
+				return AbstractSession.this.getEndTime();
 			}
 		}
 
 		// Access to state emulated by synthetic accessor method
-		@SuppressWarnings("synthetic-access")
+		// @SuppressWarnings("synthetic-access")
 		@Override
 		public synchronized void setCompleted() { // NOPMD (AvoidSynchronizedAtMethodLevel)
-			AbstractSession.this.state = new UnmodifiableState();
+			AbstractSession.this.setState(new UnmodifiableState());
 		}
 
 	}
@@ -195,31 +219,31 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 		}
 
 		// Access to containedTraces emulated by synthetic accessor method
-		@SuppressWarnings("synthetic-access")
+		// @SuppressWarnings("synthetic-access")
 		@Override
 		public SortedSet<T> getContainedTraces() {
-			return Collections.unmodifiableSortedSet(AbstractSession.this.containedTraces);
+			return Collections.unmodifiableSortedSet(AbstractSession.this.getContainedTraces());
 		}
 
 		// Access to startTime and containedTraces emulated by synthetic accessor method
-		@SuppressWarnings("synthetic-access")
+		// @SuppressWarnings("synthetic-access")
 		@Override
 		public long getStartTimestamp() {
-			if (AbstractSession.this.containedTraces.isEmpty()) {
+			if (AbstractSession.this.getContainedTraces().isEmpty()) {
 				return 0;
 			} else {
-				return AbstractSession.this.startTime;
+				return AbstractSession.this.getStartTime();
 			}
 		}
 
 		// Access to endTime and containedTraces emulated by synthetic accessor method
-		@SuppressWarnings("synthetic-access")
+		// @SuppressWarnings("synthetic-access")
 		@Override
 		public long getEndTimestamp() {
-			if (AbstractSession.this.containedTraces.isEmpty()) {
+			if (AbstractSession.this.getContainedTraces().isEmpty()) {
 				return 0;
 			} else {
-				return AbstractSession.this.endTime;
+				return AbstractSession.this.getEndTime();
 			}
 		}
 

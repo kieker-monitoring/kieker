@@ -1,15 +1,29 @@
 apply plugin: 'eclipse'
 apply plugin: "com.github.hauner.jarTest"
 
+configurations {
+	ajc
+}
+
+def aspectjVersion = '1.8.2'
+
 dependencies {
 	compile project(':kieker-common')
 	
 	compile 'com.rabbitmq:amqp-client:4.2.1'
 	compile resolveLibrary('javax.jms-*.jar')
 	compile 'org.jctools:jctools-core:2.1.0'
-	compile resolveLibrary('aspectjweaver-*.jar')
+	
+	ajc "org.aspectj:aspectjtools:$aspectjVersion"
+	compile "org.aspectj:aspectjrt:$aspectjVersion"
+	compile "org.aspectj:aspectjweaver:$aspectjVersion"	// for our custom AspectJ weaver (class: AspectJLoader)
+
 	compile resolveLibrary('disl-2.0/disl-server.jar')
 	compile resolveLibrary('sigar/sigar-*.jar')
+
+	//compile 'org.apache.kafka:kafka-clients:0.11.0.1'
+	
+	compile 'org.tukaani:xz:1.6'	// compression algorithms used by the file writers
 
 	compile 'org.apache.cxf:cxf-bundle-minimal:2.6.15'
 	compile resolveLibrary('framework-libs/jsr311-api-1.1.1.jar')
@@ -42,29 +56,27 @@ eclipse {
 
 task iajc(dependsOn: classes) {
     doLast {
-        ant.taskdef(resource: 'org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties') {
-            classpath {
-                fileset(dir: '../lib', includes: "aspectjtools-*.jar")
-            }
-        }
-        ant.iajc(XlintFile: 'aspectjXlint.properties', X: 'joinpoints:synchronization', source: sourceCompatibility, target: targetCompatibility, debug: 'true', destdir: sourceSets.main.output.classesDir) {
+        ant.taskdef(
+        	resource: 'org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties',
+            classpath: configurations.ajc.asPath
+        )
+        ant.iajc(
+        	XlintFile: 'aspectjXlint.properties', 
+        	X: 'joinpoints:synchronization', 
+        	source: sourceCompatibility, 
+        	target: targetCompatibility, 
+        	debug: 'true', 
+        	destdir: sourceSets.main.output.classesDir) {
+
+        	classpath {
+        		pathElement(location: configurations.compile.asPath)
+        		pathElement(location: sourceSets.main.output.classesDir)
+        	}
+
             sourceroots {
                 pathElement(location: 'src/kieker/monitoring/probe/aspectj')
             }
            
-            classpath {
-                fileset(dir: '../lib', includes: "aspectjweaver-*.jar")
-                fileset(dir: '../lib', includes: "aspectjrt-*.jar")
-				fileset(dir: '../lib/framework-libs', includes: "javax.servlet-*.jar")
-                fileset(dir: '../lib/framework-libs', includes: "jsr311-api-1.1.1.jar")
-                fileset(dir: '../lib/framework-libs', includes: "javax.ws.rs-api-2.0.1.jar")
-                fileset(dir: '../lib/framework-libs/jersey', includes: "jersey-server-1.19.jar")
-                fileset(dir: '../lib/framework-libs/jersey', includes: "jersey-client-1.19.jar")
-                fileset(dir: '../lib/framework-libs/jersey', includes: "jersey-apache-client4-1.19.jar")
-				
-				pathElement(location: project(':kieker-common').sourceSets.main.output.classesDir)
-                pathElement(location: sourceSets.main.output.classesDir)
-            }
         }
     }   
 }

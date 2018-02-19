@@ -55,7 +55,7 @@ public class ExecutionTraceBasedSession extends AbstractSession<ExecutionTrace> 
 			strBuild.append("); endTime=").append(this.getEndTimestamp());
 			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.getEndTimestamp()));
 			strBuild.append("):\n");
-			for (final ExecutionTrace t : this.getContainedTraces()) {
+			for (final ExecutionTrace t : this.getStateContainedTraces()) {
 				strBuild.append('{');
 				strBuild.append(t.toString()).append("}\n");
 			}

@@ -27,7 +27,7 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.reader.GetValueAdapter;
 import kieker.common.util.registry.reader.ReaderRegistry;
@@ -104,7 +104,7 @@ public class ByteBufferDeserializer {
 		}
 
 		try {
-			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.create(buffer, this.stringRegistry));
+			final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(buffer, this.stringRegistry));
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			this.recordReceiver.newMonitoringRecord(record);

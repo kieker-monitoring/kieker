@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.jvm.AbstractJVMRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
@@ -111,8 +112,9 @@ public class UptimeRecord extends AbstractJVMRecord  {
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public UptimeRecord(final IValueDeserializer deserializer) {
+	public UptimeRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.uptimeMS = deserializer.getLong();
 	}

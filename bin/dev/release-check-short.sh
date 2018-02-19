@@ -3,7 +3,7 @@
 # include common variables and functions
 source "$(dirname $0)/release-check-common.sh"
 
-KIEKER_VERSION="1.13-SNAPSHOT"
+KIEKER_VERSION="1.14-SNAPSHOT"
 
 # lists the files included in an archive without extracting it
 function cat_archive_content {

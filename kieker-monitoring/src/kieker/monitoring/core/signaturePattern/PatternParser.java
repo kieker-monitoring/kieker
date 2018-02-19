@@ -36,7 +36,8 @@ public final class PatternParser {
 	}
 
 	/**
-	 * Parses the given pattern string and converts it into a {@link Pattern} instance.
+	 * Parses the given pattern string and converts it into a {@link Pattern}
+	 * instance.
 	 *
 	 * @param strPattern
 	 *            The pattern string to parse.
@@ -60,13 +61,15 @@ public final class PatternParser {
 		} else {
 			final int openingParenthesis = trimPattern.indexOf('(');
 			final int closingParenthesis = trimPattern.indexOf(')');
-			if ((openingParenthesis == -1) || (closingParenthesis == -1) || (openingParenthesis != trimPattern.lastIndexOf('('))
-					|| (closingParenthesis != trimPattern.lastIndexOf(')')) || (openingParenthesis > closingParenthesis)) {
+			if ((openingParenthesis == -1) || (closingParenthesis == -1)
+					|| (openingParenthesis != trimPattern.lastIndexOf('('))
+					|| (closingParenthesis != trimPattern.lastIndexOf(')'))
+					|| (openingParenthesis > closingParenthesis)) {
 				throw new InvalidPatternException("Invalid parentheses");
 			}
 
-			String retType;
-			String fqName;
+			final String retType;
+			final String fqName;
 			String[] modifierList = null;
 			final String[] array = trimPattern.substring(0, openingParenthesis).trim().split("\\s+"); // NOPMD
 			switch (array.length) {
@@ -312,11 +315,13 @@ public final class PatternParser {
 		}
 	}
 
-	private static final String parseModifierConstraintList(final String[] modifierList) throws InvalidPatternException {
+	private static final String parseModifierConstraintList(final String[] modifierList)
+			throws InvalidPatternException {
 		if (modifierList == null) {
 			return "((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?";
 		}
-		final Map<String, Integer> allowedModifiersWithOrder = new HashMap<String, Integer>(); // NOPMD (no conc. access)
+		final Map<String, Integer> allowedModifiersWithOrder = new HashMap<>(); // NOPMD (no conc.
+																				// access)
 		allowedModifiersWithOrder.put("public", 0);
 		allowedModifiersWithOrder.put("private", 0);
 		allowedModifiersWithOrder.put("protected", 0);
@@ -367,7 +372,8 @@ public final class PatternParser {
 		return sb.toString();
 	}
 
-	private static void onSixModifiers(final String[] modifierList, final StringBuilder sb) throws InvalidPatternException {
+	private static void onSixModifiers(final String[] modifierList, final StringBuilder sb)
+			throws InvalidPatternException {
 		if ("public".equals(modifierList[0])) {
 			sb.append("public\\s");
 		} else if ("private".equals(modifierList[0])) {
@@ -430,28 +436,33 @@ public final class PatternParser {
 		}
 		if ("abstract".equals(modifierList[0]) || "abstract".equals(modifierList[1])) {
 			sb.append("abstract\\s");
-		} else if ("non_abstract".equals(modifierList[0]) || "non_abstract".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
+		} else if ("non_abstract".equals(modifierList[0]) || "non_abstract".equals(modifierList[1])) { // NOCS NOPMD
+																										// (EmptyIfStmt)
 			// nothing to do
 		} else {
 			sb.append("(abstract\\s)?");
 		}
 		if ("static".equals(modifierList[1]) || "static".equals(modifierList[2])) {
 			sb.append("static\\s");
-		} else if ("non_static".equals(modifierList[1]) || "non_static".equals(modifierList[2])) { // NOCS NOPMD (EmptyIfStmt)
+		} else if ("non_static".equals(modifierList[1]) || "non_static".equals(modifierList[2])) { // NOCS NOPMD
+																									// (EmptyIfStmt)
 			// nothing to do
 		} else {
 			sb.append("(static\\s)?");
 		}
 		if ("final".equals(modifierList[2]) || "final".equals(modifierList[3])) {
 			sb.append("final\\s");
-		} else if ("non_final".equals(modifierList[2]) || "non_final".equals(modifierList[3])) { // NOCS NOPMD (EmptyIfStmt)
+		} else if ("non_final".equals(modifierList[2]) || "non_final".equals(modifierList[3])) { // NOCS NOPMD
+																									// (EmptyIfStmt)
 			// nothing to do
 		} else {
 			sb.append("(final\\s)?");
 		}
 		if ("synchronized".equals(modifierList[3]) || "synchronized".equals(modifierList[4])) {
 			sb.append("synchronized\\s");
-		} else if ("non_synchronized".equals(modifierList[3]) || "non_synchronized".equals(modifierList[4])) { // NOCS NOPMD (EmptyIfStmt)
+		} else if ("non_synchronized".equals(modifierList[3]) || "non_synchronized".equals(modifierList[4])) { // NOCS
+																												// NOPMD
+																												// (EmptyIfStmt)
 			// nothing to do
 		} else {
 			sb.append("(synchronized\\s)?");
@@ -479,30 +490,35 @@ public final class PatternParser {
 		}
 		if ("abstract".equals(modifierList[0]) || "abstract".equals(modifierList[1])) {
 			sb.append("abstract\\s");
-		} else if ("non_abstract".equals(modifierList[0]) || "non_abstract".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
+		} else if ("non_abstract".equals(modifierList[0]) || "non_abstract".equals(modifierList[1])) { // NOCS NOPMD
+																										// (EmptyIfStmt)
 			// nothing to do
 		} else {
 			sb.append("(abstract\\s)?");
 		}
 		if ("static".equals(modifierList[0]) || "static".equals(modifierList[1]) || "static".equals(modifierList[2])) {
 			sb.append("static\\s");
-		} else if ("non_static".equals(modifierList[0]) || "non_static".equals(modifierList[1]) || "non_static".equals(modifierList[2])) { // NOCS NOPMD
-																																			// (EmptyIfStmt)
+		} else if ("non_static".equals(modifierList[0]) || "non_static".equals(modifierList[1])
+				|| "non_static".equals(modifierList[2])) { // NOCS NOPMD
+															// (EmptyIfStmt)
 			// nothing to do
 		} else {
 			sb.append("(static\\s)?");
 		}
 		if ("final".equals(modifierList[1]) || "final".equals(modifierList[2]) || "final".equals(modifierList[3])) {
 			sb.append("final\\s");
-		} else if ("non_final".equals(modifierList[1]) || "non_final".equals(modifierList[2]) || "non_final".equals(modifierList[3])) { // NOCS NOPMD
-																																		// (EmptyIfStmt)
+		} else if ("non_final".equals(modifierList[1]) || "non_final".equals(modifierList[2])
+				|| "non_final".equals(modifierList[3])) { // NOCS NOPMD
+															// (EmptyIfStmt)
 			// nothing to do
 		} else {
 			sb.append("(final\\s)?");
 		}
 		if ("synchronized".equals(modifierList[2]) || "synchronized".equals(modifierList[3])) {
 			sb.append("synchronized\\s");
-		} else if ("non_synchronized".equals(modifierList[2]) || "non_synchronized".equals(modifierList[3])) { // NOCS NOPMD (EmptyIfStmt)
+		} else if ("non_synchronized".equals(modifierList[2]) || "non_synchronized".equals(modifierList[3])) { // NOCS
+																												// NOPMD
+																												// (EmptyIfStmt)
 			// nothing to do
 		} else {
 			sb.append("(synchronized\\s)?");
@@ -530,30 +546,35 @@ public final class PatternParser {
 		}
 		if ("abstract".equals(modifierList[0]) || "abstract".equals(modifierList[1])) {
 			sb.append("abstract\\s");
-		} else if ("non_abstract".equals(modifierList[0]) || "non_abstract".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
+		} else if ("non_abstract".equals(modifierList[0]) || "non_abstract".equals(modifierList[1])) { // NOCS NOPMD
+																										// (EmptyIfStmt)
 			// nothing to do
 		} else {
 			sb.append("(abstract\\s)?");
 		}
 		if ("static".equals(modifierList[0]) || "static".equals(modifierList[1]) || "static".equals(modifierList[2])) {
 			sb.append("static\\s");
-		} else if ("non_static".equals(modifierList[0]) || "non_static".equals(modifierList[1]) || "non_static".equals(modifierList[2])) { // NOCS NOPMD
-																																			// (EmptyIfStmt)
+		} else if ("non_static".equals(modifierList[0]) || "non_static".equals(modifierList[1])
+				|| "non_static".equals(modifierList[2])) { // NOCS NOPMD
+															// (EmptyIfStmt)
 			// nothing to do
 		} else {
 			sb.append("(static\\s)?");
 		}
 		if ("final".equals(modifierList[0]) || "final".equals(modifierList[1]) || "final".equals(modifierList[2])) {
 			sb.append("final\\s");
-		} else if ("non_final".equals(modifierList[0]) || "non_final".equals(modifierList[1]) || "non_final".equals(modifierList[2])) { // NOCS NOPMD
-																																		// (EmptyIfStmt)
+		} else if ("non_final".equals(modifierList[0]) || "non_final".equals(modifierList[1])
+				|| "non_final".equals(modifierList[2])) { // NOCS NOPMD
+															// (EmptyIfStmt)
 			// nothing to do
 		} else {
 			sb.append("(final\\s)?");
 		}
 		if ("synchronized".equals(modifierList[1]) || "synchronized".equals(modifierList[2])) {
 			sb.append("synchronized\\s");
-		} else if ("non_synchronized".equals(modifierList[1]) || "non_synchronized".equals(modifierList[2])) { // NOCS NOPMD (EmptyIfStmt)
+		} else if ("non_synchronized".equals(modifierList[1]) || "non_synchronized".equals(modifierList[2])) { // NOCS
+																												// NOPMD
+																												// (EmptyIfStmt)
 			// nothing to do
 		} else {
 			sb.append("(synchronized\\s)?");
@@ -581,28 +602,33 @@ public final class PatternParser {
 		}
 		if ("abstract".equals(modifierList[0]) || "abstract".equals(modifierList[1])) {
 			sb.append("abstract\\s");
-		} else if ("non_abstract".equals(modifierList[0]) || "non_abstract".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
+		} else if ("non_abstract".equals(modifierList[0]) || "non_abstract".equals(modifierList[1])) { // NOCS NOPMD
+																										// (EmptyIfStmt)
 			// nothing to do
 		} else {
 			sb.append("(abstract\\s)?");
 		}
 		if ("static".equals(modifierList[0]) || "static".equals(modifierList[1])) {
 			sb.append("static\\s");
-		} else if ("non_static".equals(modifierList[0]) || "non_static".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
+		} else if ("non_static".equals(modifierList[0]) || "non_static".equals(modifierList[1])) { // NOCS NOPMD
+																									// (EmptyIfStmt)
 			// nothing to do
 		} else {
 			sb.append("(static\\s)?");
 		}
 		if ("final".equals(modifierList[0]) || "final".equals(modifierList[1])) {
 			sb.append("final\\s");
-		} else if ("non_final".equals(modifierList[0]) || "non_final".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
+		} else if ("non_final".equals(modifierList[0]) || "non_final".equals(modifierList[1])) { // NOCS NOPMD
+																									// (EmptyIfStmt)
 			// nothing to do
 		} else {
 			sb.append("(final\\s)?");
 		}
 		if ("synchronized".equals(modifierList[0]) || "synchronized".equals(modifierList[1])) {
 			sb.append("synchronized\\s");
-		} else if ("non_synchronized".equals(modifierList[0]) || "non_synchronized".equals(modifierList[1])) { // NOCS NOPMD (EmptyIfStmt)
+		} else if ("non_synchronized".equals(modifierList[0]) || "non_synchronized".equals(modifierList[1])) { // NOCS
+																												// NOPMD
+																												// (EmptyIfStmt)
 			// nothing to do
 		} else {
 			sb.append("(synchronized\\s)?");
@@ -616,7 +642,8 @@ public final class PatternParser {
 		}
 	}
 
-	private static void onOneModifier(final String[] modifierList, final StringBuilder sb) throws InvalidPatternException {
+	private static void onOneModifier(final String[] modifierList, final StringBuilder sb)
+			throws InvalidPatternException {
 		if ("public".equals(modifierList[0])) {
 			sb.append("public\\s(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
 		} else if ("private".equals(modifierList[0])) {
@@ -626,23 +653,28 @@ public final class PatternParser {
 		} else if ("package".equals(modifierList[0])) {
 			sb.append("(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
 		} else if ("abstract".equals(modifierList[0])) {
-			sb.append("((public|private|protected)\\s)?abstract\\s(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
+			sb.append(
+					"((public|private|protected)\\s)?abstract\\s(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
 		} else if ("non_abstract".equals(modifierList[0])) {
 			sb.append("((public|private|protected)\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
 		} else if ("static".equals(modifierList[0])) {
-			sb.append("((public|private|protected)\\s)?(abstract\\s)?static\\s(final\\s)?(synchronized\\s)?(native\\s)?");
+			sb.append(
+					"((public|private|protected)\\s)?(abstract\\s)?static\\s(final\\s)?(synchronized\\s)?(native\\s)?");
 		} else if ("non_static".equals(modifierList[0])) {
 			sb.append("((public|private|protected)\\s)?(abstract\\s)?(final\\s)?(synchronized\\s)?(native\\s)?");
 		} else if ("final".equals(modifierList[0])) {
-			sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?final\\s(synchronized\\s)?(native\\s)?");
+			sb.append(
+					"((public|private|protected)\\s)?(abstract\\s)?(static\\s)?final\\s(synchronized\\s)?(native\\s)?");
 		} else if ("non_final".equals(modifierList[0])) {
 			sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(synchronized\\s)?(native\\s)?");
 		} else if ("synchronized".equals(modifierList[0])) {
-			sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?synchronized\\s(native\\s)?");
+			sb.append(
+					"((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?synchronized\\s(native\\s)?");
 		} else if ("non_synchronized".equals(modifierList[0])) {
 			sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(native\\s)?");
 		} else if ("native".equals(modifierList[0])) {
-			sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?native\\s");
+			sb.append(
+					"((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?native\\s");
 		} else if ("non_native".equals(modifierList[0])) {
 			sb.append("((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?");
 		} else {

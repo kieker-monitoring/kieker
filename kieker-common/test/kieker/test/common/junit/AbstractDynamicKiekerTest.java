@@ -27,16 +27,16 @@ import kieker.common.util.filesystem.FSUtil;
 /**
  * This abstract class is the base for all other dynamic JUnit tests within the system. Those are tests which search for
  * example for specific classes in the source directory.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
  */
 public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 
 	private static final String DIR_NAME_TESTS = "test";
 	private static final String DIR_NAME_SOURCES = "src";
-	private static final String REGEX_PATTERN_JAVA_SOURCE_FILES = ".*java";
+	private static final String REGEX_PATTERN_JAVA_SOURCE_FILES = "[A-Z].*\\.java";
 	private static final String REGEX_PATTERN_JAVA_TEST_FILES = ".*Test.*java";
 	private static final String REGEX_PATTERN_JUNIT_PACKAGE_NAME = ".*junit.*";
 
