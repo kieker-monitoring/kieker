@@ -62,6 +62,10 @@ public class TestLogReplayer extends AbstractKiekerTest {
 	private List<IMonitoringRecord> replayList;
 	private File monitoringConfigurationFile;
 
+	public TestLogReplayer() {
+		//create test
+	}
+	
 	/**
 	 * Performs an initial test setup.
 	 *

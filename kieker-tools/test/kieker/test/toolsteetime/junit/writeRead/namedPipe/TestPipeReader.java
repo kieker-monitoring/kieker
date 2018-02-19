@@ -38,8 +38,12 @@ import teetime.framework.test.StageTester;
  *
  * @since 1.4
  */
-public class TestPipeReader extends AbstractKiekerTest { // NOCS (MissingCtorCheck)
+public class TestPipeReader extends AbstractKiekerTest {
 
+	public TestPipeReader() {
+		super();
+	}
+	
 	@Test
 	public void testNamedPipeReaderReceivesFromPipe() throws InterruptedException {
 		// the pipe

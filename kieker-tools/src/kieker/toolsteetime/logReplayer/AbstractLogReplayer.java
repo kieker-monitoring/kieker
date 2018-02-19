@@ -95,7 +95,7 @@ public abstract class AbstractLogReplayer {
 	 * Replays the monitoring log terminates after the last record was passed to the configured {@link kieker.monitoring.core.controller.IMonitoringController}.
 	 */
 	public void replay() {
-		LogReplayerConfiguration configuration;
+		final LogReplayerConfiguration configuration;
 
 		final AbstractProducerStage<IMonitoringRecord> reader = this.createReader();
 

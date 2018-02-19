@@ -122,8 +122,8 @@ public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest {
 	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents,
 			final boolean rawTimestamp) {
 
-		List<TimestampRecord> recordOutputs;
-		List<Long> timestampOutputs;
+		final List<TimestampRecord> recordOutputs;
+		final List<Long> timestampOutputs;
 
 		// Create a Configuration with CurrentTimeEventGenerationFilter which takes raw timestamps or monitoring records as input
 		if (rawTimestamp) {
