@@ -25,7 +25,7 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.registry.IRegistry;
 
@@ -70,7 +70,7 @@ public class RecordDeserializer {
 		final long loggingTimestamp = buffer.getLong();
 
 		// PERFORMANCE ISSUE declare as field instead, as soon as possible
-		final IValueDeserializer deserializer = DefaultValueDeserializer.create(buffer, this.registry);
+		final IValueDeserializer deserializer = BinaryValueDeserializer.create(buffer, this.registry);
 		try {
 			final IMonitoringRecord record = recordFactory.create(deserializer);
 			record.setLoggingTimestamp(loggingTimestamp);

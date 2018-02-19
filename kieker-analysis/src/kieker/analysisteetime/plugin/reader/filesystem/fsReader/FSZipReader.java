@@ -131,7 +131,7 @@ public final class FSZipReader implements Runnable {
 				}
 				final String filename = zipEntry.getName();
 				if (filename.startsWith(FSUtil.FILE_PREFIX)) {
-					if (filename.endsWith(FSUtil.NORMAL_FILE_EXTENSION)) {
+					if (filename.endsWith(FSUtil.DAT_FILE_EXTENSION)) {
 						LOG.info("< Loading " + filename);
 						this.readAsciiFile(reader);
 					} else if (filename.endsWith(".bin")) {
