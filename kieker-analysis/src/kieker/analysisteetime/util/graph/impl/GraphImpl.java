@@ -28,6 +28,8 @@ import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.Vertex;
 
 /**
+ * Default implementation of a {@link Graph}. Instances can be created using the {@link Graph} {@code create()} method.
+ *
  * @author Sören Henning
  *
  * @since 1.14
@@ -43,7 +45,7 @@ public class GraphImpl extends ElementImpl implements Graph {
 
 	protected VertexImpl parentVertex; // intended to be "null" per default
 
-	public GraphImpl() {
+	protected GraphImpl() {
 		super();
 	}
 

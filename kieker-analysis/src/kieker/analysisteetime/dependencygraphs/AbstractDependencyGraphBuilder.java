@@ -30,7 +30,6 @@ import kieker.analysisteetime.util.ObjectIdentifierRegistry;
 import kieker.analysisteetime.util.graph.Edge;
 import kieker.analysisteetime.util.graph.Graph;
 import kieker.analysisteetime.util.graph.Vertex;
-import kieker.analysisteetime.util.graph.impl.GraphImpl;
 
 /**
  * Abstract template class for dependency graph builders. To use this abstract builder,
@@ -54,7 +53,7 @@ public abstract class AbstractDependencyGraphBuilder implements IDependencyGraph
 	protected final StatisticsModel statisticsModel;
 
 	public AbstractDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel) {
-		this.graph = new GraphImpl();
+		this.graph = Graph.create();
 		this.identifierRegistry = new ObjectIdentifierRegistry();
 		this.responseTimeDecorator = new ResponseTimeDecorator(statisticsModel, ChronoUnit.NANOS);
 		this.executionModel = executionModel;

@@ -16,12 +16,26 @@
 
 package kieker.analysisteetime.util.graph;
 
+import kieker.analysisteetime.util.graph.impl.GraphImpl;
+
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
 public interface Graph extends Element {
+
+	/**
+	 * Factory method to create a new graph using the default implementation.
+	 *
+	 * @since 1.14
+	 */
+	public static Graph create() {
+		// Create an anonymous subclass of GraphImpl to access its protected constructor
+		return new GraphImpl() {
+		};
+	}
+
 	/**
 	 * @since 1.14
 	 */
