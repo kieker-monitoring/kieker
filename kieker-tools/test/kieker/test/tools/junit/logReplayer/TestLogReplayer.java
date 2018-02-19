@@ -55,9 +55,8 @@ public class TestLogReplayer extends AbstractKiekerTest {
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
-	private final String listName = TestLogReplayer.class.getName();
-
 	private File monitoringConfigurationFile;
+	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
 	private List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
 
 	/**
@@ -106,7 +105,6 @@ public class TestLogReplayer extends AbstractKiekerTest {
 				this.replayList);
 		Assert.assertTrue(replayer.replay());
 
-		final List<IMonitoringRecord> recordListFilledByListWriter = NamedListWriter.getNamedList(this.listName);
 		Assert.assertEquals("Unexpected list replayed", this.replayList, recordListFilledByListWriter);
 	}
 }
