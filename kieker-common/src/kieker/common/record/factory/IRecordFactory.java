@@ -16,6 +16,7 @@
 
 package kieker.common.record.factory;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
@@ -28,21 +29,26 @@ import kieker.common.record.io.IValueDeserializer;
 public interface IRecordFactory<T> {
 
 	/**
-	 * Represents the size of a record whose size is unknown in advance
+	 * Represents the size of a record whose size is unknown in advance.
 	 */
 	public static final int UNKNOWN_RECORD_SIZE = -1;
 
 	/**
+	 * Create a record of type T utilizing a @{link {@link IValueDeserializer}.
 	 *
 	 * @param deserializer
 	 *            The deserializer to use for decoding the values
 	 *
 	 * @return a new instance of the declared record type
+	 *
+	 * @throws RecordInstantiationException
+	 *             on issues deserializing records, e.g., during enumeration deserialization
 	 * @since 1.11
 	 */
-	T create(IValueDeserializer deserializer);
+	T create(IValueDeserializer deserializer) throws RecordInstantiationException;
 
 	/**
+	 * Create a record of type T utilizing an object array.
 	 *
 	 * @param values
 	 *            the values used to fill the new instance

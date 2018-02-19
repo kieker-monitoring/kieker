@@ -23,9 +23,9 @@ import javax.annotation.Generated;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
- * 
+ *
  * @param <K>
  *            The type of the keys.
  * @param <V>
@@ -40,7 +40,7 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 
 	/**
 	 * Initialize a bounded concurrent hash map.
-	 * 
+	 *
 	 * @param boundedCacheBehaviour
 	 *            set the cache behavior
 	 * @param maxCacheSize
@@ -56,12 +56,12 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	/**
 	 * Works like the overriden method, except that {@code null} is returned, if the given element could not be added
 	 * due to map limitations.
-	 * 
+	 *
 	 * @param key
 	 *            key-value
 	 * @param value
 	 *            the associated value
-	 * 
+	 *
 	 * @return the previous value associated with key, or null if there was no mapping for key, or null if the bounds
 	 *         limit was reached
 	 */
@@ -77,12 +77,12 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	/**
 	 * Works like the overriden method, except that {@code null} is returned, if the given element could not be added
 	 * due to map limitations.
-	 * 
+	 *
 	 * @param key
 	 *            key-value
 	 * @param value
 	 *            the associated value
-	 * 
+	 *
 	 * @return the previous value or null
 	 */
 	@Override
@@ -124,26 +124,24 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 
 	@Override
 	@Generated("eclipse")
-	@SuppressWarnings("PMD")
-	public int hashCode() {
+	public int hashCode() { // NOPMD unknown
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + Objects.hashCode(this.boundedCacheBehaviour);
-		result = prime * result + this.maxCacheSize;
+		result = (prime * result) + Objects.hashCode(this.boundedCacheBehaviour);
+		result = (prime * result) + this.maxCacheSize;
 		return result;
 	}
 
 	@Override
 	@Generated("eclipse")
-	@SuppressWarnings("PMD")
-	public boolean equals(final Object obj) {
+	public boolean equals(final Object obj) { // NOPMD unknown
 		if (this == obj) {
 			return true;
 		}
 		if (!super.equals(obj)) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
+		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
 		final BoundedConcurrentHashMap<?, ?> other = (BoundedConcurrentHashMap<?, ?>) obj;
@@ -158,7 +156,7 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 
 	/**
 	 * @author Nils Christian Ehmke
-	 * 
+	 *
 	 * @since 1.10
 	 */
 	public enum BoundedCacheBehaviour {

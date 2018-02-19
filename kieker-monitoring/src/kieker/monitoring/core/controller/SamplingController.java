@@ -26,13 +26,13 @@ import java.util.concurrent.TimeUnit;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 public final class SamplingController extends AbstractController implements ISamplingController {
@@ -43,13 +43,13 @@ public final class SamplingController extends AbstractController implements ISam
 
 	/**
 	 * Creates a new instance of this class using the given configuration to initialize the class.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration used to initialize this controller.
 	 */
 	protected SamplingController(final Configuration configuration) {
 		super(configuration);
-		final int threadPoolSize = configuration.getIntProperty(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
+		final int threadPoolSize = configuration.getIntProperty(ConfigurationKeys.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
 		if (threadPoolSize > 0) {
 			this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize, new DaemonThreadFactory(), new RejectedExecutionHandler());
 			// this.periodicSensorsPoolExecutor.setMaximumPoolSize(threadPoolSize); // not used in this class
@@ -145,9 +145,9 @@ public final class SamplingController extends AbstractController implements ISam
 
 	/**
 	 * A thread factory to create daemon threads.
-	 * 
+	 *
 	 * @see java.util.concurrent.Executors.DefaultThreadFactory
-	 * 
+	 *
 	 * @author Jan Waller
 	 */
 	private static final class DaemonThreadFactory implements ThreadFactory {

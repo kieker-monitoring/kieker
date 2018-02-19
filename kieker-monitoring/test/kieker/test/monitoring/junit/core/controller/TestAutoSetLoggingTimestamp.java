@@ -25,7 +25,7 @@ import org.junit.Test;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.MonitoringController;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -63,7 +63,7 @@ public class TestAutoSetLoggingTimestamp extends AbstractKiekerTest { // NOCS //
 
 		// We will pass the property Configuration.AUTO_SET_LOGGINGTSTAMP as an additional configuration property
 		final Properties additionalConfigurationProperties = new Properties();
-		additionalConfigurationProperties.put(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(autoSetLoggingTimestamp));
+		additionalConfigurationProperties.put(ConfigurationKeys.AUTO_SET_LOGGINGTSTAMP, Boolean.toString(autoSetLoggingTimestamp));
 		final MonitoringController monitoringController = NamedPipeFactory.createMonitoringControllerWithNamedPipe(pipeName, additionalConfigurationProperties);
 
 		// We will now register a custom IPipeReader which receives records through the pipe and collects these in a list. On purpose, we are not using the

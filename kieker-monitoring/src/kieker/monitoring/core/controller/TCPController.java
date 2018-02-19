@@ -21,7 +21,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IRecordReceivedListener;
 import kieker.common.record.tcp.SingleSocketRecordReader;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.listener.MonitoringCommandListener;
 
 /**
@@ -58,16 +58,16 @@ public class TCPController extends AbstractController implements IRemoteControll
 		super(configuration);
 
 		final IRecordReceivedListener listener = new MonitoringCommandListener(monitoringController);
-		this.domain = configuration.getStringProperty(ConfigurationFactory.ACTIVATE_TCP_DOMAIN);
+		this.domain = configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_DOMAIN);
 		try {
-			final int port = Integer.parseInt(configuration.getStringProperty(ConfigurationFactory.ACTIVATE_TCP_REMOTE_PORT));
-			this.tcpEnabled = configuration.getBooleanProperty(ConfigurationFactory.ACTIVATE_TCP);
+			final int port = Integer.parseInt(configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_REMOTE_PORT));
+			this.tcpEnabled = configuration.getBooleanProperty(ConfigurationKeys.ACTIVATE_TCP);
 			this.tcpReader = new SingleSocketRecordReader(port, BUFFER_SIZE, TCPController.LOG, listener);
 
 		} catch (final NumberFormatException e) {
 			this.tcpEnabled = false;
 			TCPController.LOG.error("Could not parse port for the TCPController, deactivating this option. Received string was: " // NOPMD
-					+ configuration.getStringProperty(ConfigurationFactory.ACTIVATE_TCP_REMOTE_PORT));
+					+ configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_REMOTE_PORT));
 		}
 		this.thread = new Thread(this.tcpReader);
 
