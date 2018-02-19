@@ -19,6 +19,7 @@ package kieker.toolsteetime.logReplayer.filter;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
@@ -63,7 +64,7 @@ public class MonitoringRecordLoggerFilter extends AbstractFilter<IMonitoringReco
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN,
 				monitoringConfigurationFile);
-		configuration.setProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP,
+		configuration.setProperty(ConfigurationKeys.AUTO_SET_LOGGINGTSTAMP,
 				Boolean.toString(!keepOriginalLoggingTimestamps));
 
 		final Configuration controllerConfiguration;
