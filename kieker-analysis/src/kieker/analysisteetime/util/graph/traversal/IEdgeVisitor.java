@@ -14,20 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.util.graph.flattening;
+package kieker.analysisteetime.util.graph.traversal;
 
-import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.graph.IEdge;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-public interface GraphFlattener {
-
+public interface IEdgeVisitor {
 	/**
 	 * @since 1.14
 	 */
-	public void flatten(Graph graph);
+	public void visitEdge(IEdge edge);
 
 }

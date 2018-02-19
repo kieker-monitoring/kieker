@@ -22,7 +22,7 @@ import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.statistics.StatisticsModel;
-import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.IVertex;
 
 /**
  * Dependency graph builder for <strong>deployment context</strong> dependency graphs
@@ -41,13 +41,13 @@ class DeploymentLevelContextDependencyGraphBuilder extends AbstractDependencyGra
 	}
 
 	@Override
-	protected Vertex addVertex(final DeployedOperation deployedOperation) {
+	protected IVertex addVertex(final DeployedOperation deployedOperation) {
 		final DeployedOperation operation = deployedOperation;
 		final DeployedComponent component = operation.getComponent();
 		final DeploymentContext context = component.getDeploymentContext();
 
 		final int contextId = this.identifierRegistry.getIdentifier(context);
-		final Vertex contextVertex = this.graph.addVertexIfAbsent(contextId);
+		final IVertex contextVertex = this.graph.addVertexIfAbsent(contextId);
 		contextVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.DEPLOYMENT_CONTEXT);
 		contextVertex.setPropertyIfAbsent(PropertyKeys.NAME, context.getName());
 		this.responseTimeDecorator.decorate(contextVertex, context);

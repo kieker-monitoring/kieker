@@ -20,62 +20,12 @@ package kieker.analysisteetime.util.graph;
  * @author Sören Henning
  *
  * @since 1.14
+ *
  */
-public interface Vertex extends GraphElement {
-
+public interface IEdge extends IGraphElement {
 	/**
 	 * @since 1.14
 	 */
-	public Graph addChildGraph();
-
-	/**
-	 * @since 1.14
-	 */
-	public Graph addChildGraphIfAbsent();
-
-	/**
-	 * @since 1.14
-	 */
-	public boolean hasChildGraph();
-
-	/**
-	 * @since 1.14
-	 */
-	public Graph getChildGraph();
-
-	/**
-	 * @since 1.14
-	 */
-	public void removeChildGraph();
-
-	/**
-	 * @since 1.14
-	 */
-	public int getDepth();
-
-	/**
-	 * @since 1.14
-	 */
-	public Iterable<Edge> getEdges(Direction direction);
-
-	/**
-	 * @since 1.14
-	 */
-	public Iterable<Vertex> getVertices(Direction direction);
-
-	/**
-	 * @since 1.14
-	 */
-	public Edge addEdge(Vertex inVertex);
-
-	/**
-	 * @since 1.14
-	 */
-	public Edge addEdge(Object id, Vertex inVertex);
-
-	/**
-	 * @since 1.14
-	 */
-	public Edge addEdgeIfAbsent(Object id, Vertex inVertex);
+	public IVertex getVertex(Direction direction) throws IllegalArgumentException;
 
 }

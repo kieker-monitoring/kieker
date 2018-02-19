@@ -14,19 +14,39 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.util.graph.traversal;
+package kieker.analysisteetime.util.graph;
 
-import kieker.analysisteetime.util.graph.Vertex;
+import java.util.Set;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-public interface VertexVisitor {
+public interface IElement {
 	/**
 	 * @since 1.14
 	 */
-	public void visitVertex(Vertex vertex);
+	public <T> T getProperty(String key);
+
+	/**
+	 * @since 1.14
+	 */
+	public Set<String> getPropertyKeys();
+
+	/**
+	 * @since 1.14
+	 */
+	public void setProperty(String key, Object value);
+
+	/**
+	 * @since 1.14
+	 */
+	public void setPropertyIfAbsent(String key, Object value);
+
+	/**
+	 * @since 1.14
+	 */
+	public <T> T removeProperty(String key);
 
 }

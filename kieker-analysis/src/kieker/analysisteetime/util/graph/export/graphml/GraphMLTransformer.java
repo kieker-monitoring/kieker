@@ -31,9 +31,9 @@ import org.graphdrawing.graphml.KeyTypeType;
 import org.graphdrawing.graphml.NodeType;
 
 import kieker.analysisteetime.util.graph.Direction;
-import kieker.analysisteetime.util.graph.Edge;
-import kieker.analysisteetime.util.graph.Graph;
-import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.IEdge;
+import kieker.analysisteetime.util.graph.IGraph;
+import kieker.analysisteetime.util.graph.IVertex;
 import kieker.analysisteetime.util.graph.export.AbstractTransformer;
 
 /**
@@ -47,7 +47,7 @@ public class GraphMLTransformer extends AbstractTransformer<GraphmlType> {
 	private final Set<String> nodeKeys = new HashSet<>();
 	private final Set<String> edgeKeys = new HashSet<>();
 
-	public GraphMLTransformer(final Graph graph) {
+	public GraphMLTransformer(final IGraph graph) {
 		super(graph);
 		this.graphType = new GraphType();
 		this.graphType.setEdgedefault(GraphEdgedefaultType.DIRECTED);
@@ -55,7 +55,7 @@ public class GraphMLTransformer extends AbstractTransformer<GraphmlType> {
 	}
 
 	@Override
-	protected void transformVertex(final Vertex vertex) {
+	protected void transformVertex(final IVertex vertex) {
 
 		final NodeType nodeType = new NodeType();
 		nodeType.setId(vertex.getId().toString());
@@ -69,7 +69,7 @@ public class GraphMLTransformer extends AbstractTransformer<GraphmlType> {
 		}
 
 		if (vertex.hasChildGraph()) {
-			final Graph childGraph = vertex.getChildGraph();
+			final IGraph childGraph = vertex.getChildGraph();
 			final GraphMLTransformer graphmlTypeTransformer = new GraphMLTransformer(childGraph);
 			final GraphmlType childGraphmlType = graphmlTypeTransformer.transform();
 			for (final Object childGraphType : childGraphmlType.getGraphOrData()) {
@@ -96,7 +96,7 @@ public class GraphMLTransformer extends AbstractTransformer<GraphmlType> {
 	}
 
 	@Override
-	protected void transformEdge(final Edge edge) {
+	protected void transformEdge(final IEdge edge) {
 		final EdgeType edgeType = new EdgeType();
 		edgeType.setId(edge.getId().toString());
 		edgeType.setSource(edge.getVertex(Direction.OUT).getId().toString());

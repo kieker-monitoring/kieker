@@ -19,12 +19,12 @@ package kieker.analysisteetime.util.graph.export.dot;
 import java.io.Writer;
 import java.util.function.Function;
 
-import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.graph.IGraph;
 
 import teetime.framework.AbstractConsumerStage;
 
 /**
- * This stage writes a {@link Graph} to given {@link Writer} in the dot file format. The writer
+ * This stage writes a {@link IGraph} to given {@link Writer} in the dot file format. The writer
  * can be configured by a {@link Function}, which maps the graph to a writer. For example, this
  * allows one write the graph to a file with the name of the graph. For a non generic writer
  * simply use something like {@code x -> new MyWriter()}.
@@ -36,26 +36,26 @@ import teetime.framework.AbstractConsumerStage;
  *
  * @since 1.14
  */
-public class DotWriterStage extends AbstractConsumerStage<Graph> {
+public class DotWriterStage extends AbstractConsumerStage<IGraph> {
 
-	protected final Function<Graph, Writer> writerMapper;
+	protected final Function<IGraph, Writer> writerMapper;
 
 	protected final DotExportConfiguration exportConfiguration;
 
-	public DotWriterStage(final Function<Graph, Writer> writerMapper) {
+	public DotWriterStage(final Function<IGraph, Writer> writerMapper) {
 		super();
 		this.writerMapper = writerMapper;
 		this.exportConfiguration = new SimpleDotExportConfiguration();
 	}
 
-	public DotWriterStage(final Function<Graph, Writer> writerMapper, final DotExportConfiguration exportConfiguration) {
+	public DotWriterStage(final Function<IGraph, Writer> writerMapper, final DotExportConfiguration exportConfiguration) {
 		super();
 		this.writerMapper = writerMapper;
 		this.exportConfiguration = exportConfiguration;
 	}
 
 	@Override
-	protected final void execute(final Graph graph) {
+	protected final void execute(final IGraph graph) {
 		final DotExporter dotExporter = new DotExporter(graph, this.writerMapper.apply(graph), this.exportConfiguration);
 		dotExporter.transform();
 	}

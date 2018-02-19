@@ -16,37 +16,66 @@
 
 package kieker.analysisteetime.util.graph;
 
-import java.util.Set;
-
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-public interface Element {
-	/**
-	 * @since 1.14
-	 */
-	public <T> T getProperty(String key);
+public interface IVertex extends IGraphElement {
 
 	/**
 	 * @since 1.14
 	 */
-	public Set<String> getPropertyKeys();
+	public IGraph addChildGraph();
 
 	/**
 	 * @since 1.14
 	 */
-	public void setProperty(String key, Object value);
+	public IGraph addChildGraphIfAbsent();
 
 	/**
 	 * @since 1.14
 	 */
-	public void setPropertyIfAbsent(String key, Object value);
+	public boolean hasChildGraph();
 
 	/**
 	 * @since 1.14
 	 */
-	public <T> T removeProperty(String key);
+	public IGraph getChildGraph();
+
+	/**
+	 * @since 1.14
+	 */
+	public void removeChildGraph();
+
+	/**
+	 * @since 1.14
+	 */
+	public int getDepth();
+
+	/**
+	 * @since 1.14
+	 */
+	public Iterable<IEdge> getEdges(Direction direction);
+
+	/**
+	 * @since 1.14
+	 */
+	public Iterable<IVertex> getVertices(Direction direction);
+
+	/**
+	 * @since 1.14
+	 */
+	public IEdge addEdge(IVertex inVertex);
+
+	/**
+	 * @since 1.14
+	 */
+	public IEdge addEdge(Object id, IVertex inVertex);
+
+	/**
+	 * @since 1.14
+	 */
+	public IEdge addEdgeIfAbsent(Object id, IVertex inVertex);
 
 }

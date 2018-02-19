@@ -18,7 +18,7 @@ package kieker.analysisteetime.dependencygraphs;
 
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.statistics.StatisticsModel;
-import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.graph.IGraph;
 import kieker.analysisteetime.util.stage.trigger.Trigger;
 
 import teetime.stage.basic.AbstractTransformation;
@@ -28,7 +28,7 @@ import teetime.stage.basic.AbstractTransformation;
  *
  * @since 1.14
  */
-public class DependencyGraphCreatorStage extends AbstractTransformation<Trigger, Graph> {
+public class DependencyGraphCreatorStage extends AbstractTransformation<Trigger, IGraph> {
 
 	private final DependencyGraphCreator graphCreator;
 
@@ -39,7 +39,7 @@ public class DependencyGraphCreatorStage extends AbstractTransformation<Trigger,
 
 	@Override
 	protected void execute(final Trigger trigger) {
-		final Graph graph = this.graphCreator.create();
+		final IGraph graph = this.graphCreator.create();
 		this.outputPort.send(graph);
 	}
 

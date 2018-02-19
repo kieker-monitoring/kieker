@@ -18,9 +18,9 @@ package kieker.analysisteetime.util.graph.traversal;
 
 import java.util.List;
 
-import kieker.analysisteetime.util.graph.Edge;
-import kieker.analysisteetime.util.graph.Graph;
-import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.IEdge;
+import kieker.analysisteetime.util.graph.IGraph;
+import kieker.analysisteetime.util.graph.IVertex;
 
 /**
  * @author Sören Henning
@@ -33,18 +33,18 @@ public class DeepGraphTraverser extends AbstractGraphTraverser {
 		super();
 	}
 
-	public DeepGraphTraverser(final List<VertexVisitor> vertexVisitors, final List<EdgeVisitor> edgeVisitors) {
+	public DeepGraphTraverser(final List<IVertexVisitor> vertexVisitors, final List<IEdgeVisitor> edgeVisitors) {
 		super(vertexVisitors, edgeVisitors);
 	}
 
-	public DeepGraphTraverser(final VertexVisitor vertexVisitor, final EdgeVisitor edgeVisitor) {
+	public DeepGraphTraverser(final IVertexVisitor vertexVisitor, final IEdgeVisitor edgeVisitor) {
 		super(vertexVisitor, edgeVisitor);
 	}
 
 	@Override
-	public void traverse(final Graph graph) {
-		for (final Vertex vertex : graph.getVertices()) {
-			for (final VertexVisitor visitor : this.vertexVisitors) {
+	public void traverse(final IGraph graph) {
+		for (final IVertex vertex : graph.getVertices()) {
+			for (final IVertexVisitor visitor : this.vertexVisitors) {
 				visitor.visitVertex(vertex);
 			}
 			if (vertex.hasChildGraph()) {
@@ -52,8 +52,8 @@ public class DeepGraphTraverser extends AbstractGraphTraverser {
 			}
 		}
 
-		for (final Edge edge : graph.getEdges()) {
-			for (final EdgeVisitor visitor : this.edgeVisitors) {
+		for (final IEdge edge : graph.getEdges()) {
+			for (final IEdgeVisitor visitor : this.edgeVisitors) {
 				visitor.visitEdge(edge);
 			}
 		}

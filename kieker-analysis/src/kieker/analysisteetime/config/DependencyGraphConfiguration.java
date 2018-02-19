@@ -45,7 +45,7 @@ import kieker.analysisteetime.statistics.FullReponseTimeStatisticsStage;
 import kieker.analysisteetime.statistics.StatisticsModel;
 import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
 import kieker.analysisteetime.trace.reconstruction.TraceStatisticsDecoratorStage;
-import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.graph.IGraph;
 import kieker.analysisteetime.util.graph.export.dot.DotFileWriterStage;
 import kieker.analysisteetime.util.graph.export.graphml.GraphMLFileWriterStage;
 import kieker.analysisteetime.util.stage.trigger.TriggerOnTerminationStage;
@@ -97,7 +97,7 @@ public class DependencyGraphConfiguration extends Configuration {
 				this.statisticsModel, graphBuilderFactory);
 
 		// graph export stages
-		final Distributor<Graph> distributor = new Distributor<>(new CopyByReferenceStrategy());
+		final Distributor<IGraph> distributor = new Distributor<>(new CopyByReferenceStrategy());
 		final DotFileWriterStage dotFileWriterStage = new DotFileWriterStage(exportDirectory.getPath(),
 				DOT_EXPORT_CONFIGURATION_FACTORY.createForDeploymentLevelOperationDependencyGraph());
 		final GraphMLFileWriterStage graphMLFileWriterStage = new GraphMLFileWriterStage(exportDirectory.getPath());

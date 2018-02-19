@@ -18,7 +18,7 @@ package kieker.analysisteetime.util.graph.mapping;
 
 import java.util.function.Function;
 
-import kieker.analysisteetime.util.graph.Element;
+import kieker.analysisteetime.util.graph.IElement;
 
 /**
  * This function maps a graph element by a passed property key to the
@@ -31,7 +31,7 @@ import kieker.analysisteetime.util.graph.Element;
  *
  * @since 1.14
  */
-public final class DirectPropertyMapper<T extends Element> implements Function<T, String> {
+public final class DirectPropertyMapper<T extends IElement> implements Function<T, String> {
 
 	private final String propertyKey;
 
@@ -44,7 +44,7 @@ public final class DirectPropertyMapper<T extends Element> implements Function<T
 		return element.getProperty(this.propertyKey);
 	}
 
-	public static <T extends Element> DirectPropertyMapper<T> of(final String propertyKey) { // NOPMD (method name is declarative)
+	public static <T extends IElement> DirectPropertyMapper<T> of(final String propertyKey) { // NOPMD (method name is declarative)
 		return new DirectPropertyMapper<>(propertyKey);
 	}
 

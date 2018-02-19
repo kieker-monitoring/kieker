@@ -14,19 +14,21 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.util.graph.traversal;
-
-import kieker.analysisteetime.util.graph.Edge;
+package kieker.analysisteetime.util.graph;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-public interface EdgeVisitor {
+public interface IGraphElement extends IElement {
 	/**
 	 * @since 1.14
 	 */
-	public void visitEdge(Edge edge);
+	public void remove();
 
+	/**
+	 * @since 1.14
+	 */
+	public Object getId();
 }

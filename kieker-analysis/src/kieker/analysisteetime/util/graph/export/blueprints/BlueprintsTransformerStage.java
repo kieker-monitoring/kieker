@@ -16,7 +16,7 @@
 
 package kieker.analysisteetime.util.graph.export.blueprints;
 
-import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.graph.IGraph;
 
 import teetime.stage.basic.AbstractTransformation;
 
@@ -25,14 +25,14 @@ import teetime.stage.basic.AbstractTransformation;
  *
  * @since 1.14
  */
-public class BlueprintsTransformerStage extends AbstractTransformation<Graph, com.tinkerpop.blueprints.Graph> {
+public class BlueprintsTransformerStage extends AbstractTransformation<IGraph, com.tinkerpop.blueprints.Graph> {
 
 	public BlueprintsTransformerStage() {
 		super();
 	}
 
 	@Override
-	protected void execute(final Graph graph) {
+	protected void execute(final IGraph graph) {
 		final BlueprintsTransformer transformer = new BlueprintsTransformer(graph);
 		this.getOutputPort().send(transformer.transform());
 	}

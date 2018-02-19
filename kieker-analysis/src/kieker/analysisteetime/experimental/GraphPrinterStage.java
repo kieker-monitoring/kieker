@@ -19,20 +19,20 @@ package kieker.analysisteetime.experimental;
 import java.io.PrintStream;
 
 import kieker.analysisteetime.util.graph.Direction;
-import kieker.analysisteetime.util.graph.Edge;
-import kieker.analysisteetime.util.graph.Graph;
-import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.IEdge;
+import kieker.analysisteetime.util.graph.IGraph;
+import kieker.analysisteetime.util.graph.IVertex;
 
 import teetime.framework.AbstractConsumerStage;
 
 /**
- * This stage prints {@link Graph}s to a given {@link PrintStream} or {@code System.out} if no one specified.
+ * This stage prints {@link IGraph}s to a given {@link PrintStream} or {@code System.out} if no one specified.
  *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class GraphPrinterStage extends AbstractConsumerStage<Graph> {
+public class GraphPrinterStage extends AbstractConsumerStage<IGraph> {
 
 	private final PrintStream printStream;
 
@@ -46,29 +46,29 @@ public class GraphPrinterStage extends AbstractConsumerStage<Graph> {
 	}
 
 	@Override
-	protected void execute(final Graph graph) {
-		for (final Vertex vertex : graph.getVertices()) {
+	protected void execute(final IGraph graph) {
+		for (final IVertex vertex : graph.getVertices()) {
 			this.printStream.println("Vertices:");
 			this.printStream.println(vertex.getId());
 			this.printStream.println("    Vertices:");
-			for (final Vertex vertex1 : vertex.getChildGraph().getVertices()) {
+			for (final IVertex vertex1 : vertex.getChildGraph().getVertices()) {
 				this.printStream.println("    " + vertex1.getId());
 				this.printStream.println("        Vertices:");
-				for (final Vertex vertex2 : vertex1.getChildGraph().getVertices()) {
+				for (final IVertex vertex2 : vertex1.getChildGraph().getVertices()) {
 					this.printStream.println("        " + vertex2.getId());
 				}
 				this.printStream.println("        Edges:");
-				for (final Edge edge2 : vertex1.getChildGraph().getEdges()) {
+				for (final IEdge edge2 : vertex1.getChildGraph().getEdges()) {
 					this.printStream.println("        " + edge2.getVertex(Direction.OUT).getId() + "->" + edge2.getVertex(Direction.IN).getId());
 				}
 			}
 			this.printStream.println("    Edges:");
-			for (final Edge edge1 : vertex.getChildGraph().getEdges()) {
+			for (final IEdge edge1 : vertex.getChildGraph().getEdges()) {
 				this.printStream.println("    " + edge1.getVertex(Direction.OUT).getId() + "->" + edge1.getVertex(Direction.IN).getId());
 			}
 		}
 		this.printStream.println("Edges:");
-		for (final Edge edge : graph.getEdges()) {
+		for (final IEdge edge : graph.getEdges()) {
 			this.printStream.println(edge.getVertex(Direction.OUT).getId() + "->" + edge.getVertex(Direction.IN).getId());
 		}
 	}

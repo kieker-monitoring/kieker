@@ -14,18 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.util.graph;
+package kieker.analysisteetime.util.graph.traversal;
+
+import kieker.analysisteetime.util.graph.IVertex;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
- *
  */
-public interface Edge extends GraphElement {
+public interface IVertexVisitor {
 	/**
 	 * @since 1.14
 	 */
-	public Vertex getVertex(Direction direction) throws IllegalArgumentException;
+	public void visitVertex(IVertex vertex);
 
 }

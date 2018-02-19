@@ -24,33 +24,33 @@ import java.util.Map;
 import com.google.common.collect.Iterables;
 
 import kieker.analysisteetime.util.graph.Direction;
-import kieker.analysisteetime.util.graph.Edge;
-import kieker.analysisteetime.util.graph.Graph;
-import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.IEdge;
+import kieker.analysisteetime.util.graph.IGraph;
+import kieker.analysisteetime.util.graph.IVertex;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-class VertexImpl extends GraphElementImpl implements Vertex {
+class VertexImpl extends GraphElementImpl implements IVertex {
 
-	protected Map<Object, Edge> outEdges = new HashMap<>(); // NOPMD (no concurrent access intended)
-	protected Map<Object, Edge> inEdges = new HashMap<>(); // NOPMD (no concurrent access intended)
-	private Graph childGraph;
+	protected Map<Object, IEdge> outEdges = new HashMap<>(); // NOPMD (no concurrent access intended)
+	protected Map<Object, IEdge> inEdges = new HashMap<>(); // NOPMD (no concurrent access intended)
+	private IGraph childGraph;
 
 	protected VertexImpl(final Object id, final GraphImpl graph) {
 		super(id, graph);
 	}
 
 	@Override
-	public Graph addChildGraph() {
+	public IGraph addChildGraph() {
 		this.childGraph = new GraphImpl(this);
 		return this.getChildGraph();
 	}
 
 	@Override
-	public Graph addChildGraphIfAbsent() {
+	public IGraph addChildGraphIfAbsent() {
 		return this.childGraph != null ? this.childGraph : this.addChildGraph(); // NOCS (declarative)
 	}
 
@@ -60,7 +60,7 @@ class VertexImpl extends GraphElementImpl implements Vertex {
 	}
 
 	@Override
-	public Graph getChildGraph() {
+	public IGraph getChildGraph() {
 		return this.childGraph;
 	}
 
@@ -82,7 +82,7 @@ class VertexImpl extends GraphElementImpl implements Vertex {
 	}
 
 	@Override
-	public Iterable<Edge> getEdges(final Direction direction) {
+	public Iterable<IEdge> getEdges(final Direction direction) {
 		if (direction.equals(Direction.OUT)) {
 			return Iterables.unmodifiableIterable(this.outEdges.values());
 		} else if (direction.equals(Direction.IN)) {
@@ -93,16 +93,16 @@ class VertexImpl extends GraphElementImpl implements Vertex {
 	}
 
 	@Override
-	public Iterable<Vertex> getVertices(final Direction direction) {
+	public Iterable<IVertex> getVertices(final Direction direction) {
 
 		if (direction.equals(Direction.BOTH)) {
-			final List<Vertex> vertices = (List<Vertex>) this.getVertices(Direction.IN);
-			vertices.addAll((List<Vertex>) this.getVertices(Direction.OUT));
+			final List<IVertex> vertices = (List<IVertex>) this.getVertices(Direction.IN);
+			vertices.addAll((List<IVertex>) this.getVertices(Direction.OUT));
 			return vertices;
 		}
 
-		final List<Vertex> vertices = new ArrayList<>();
-		for (final Edge edge : this.getEdges(direction)) {
+		final List<IVertex> vertices = new ArrayList<>();
+		for (final IEdge edge : this.getEdges(direction)) {
 			vertices.add(edge.getVertex(direction.opposite()));
 		}
 		return vertices;
@@ -114,33 +114,33 @@ class VertexImpl extends GraphElementImpl implements Vertex {
 	}
 
 	@Override
-	public Edge addEdge(final Vertex inVertex) {
+	public IEdge addEdge(final IVertex inVertex) {
 		return this.addEdge(null, inVertex);
 	}
 
 	@Override
-	public Edge addEdge(final Object id, final Vertex inVertex) {
+	public IEdge addEdge(final Object id, final IVertex inVertex) {
 		return this.graph.addEdge(id, this, inVertex);
 	}
 
 	@Override
-	public Edge addEdgeIfAbsent(final Object id, final Vertex inVertex) {
+	public IEdge addEdgeIfAbsent(final Object id, final IVertex inVertex) {
 		return this.graph.addEdgeIfAbsent(id, this, inVertex);
 	}
 
-	protected void addOutEdge(final Edge edge) {
+	protected void addOutEdge(final IEdge edge) {
 		this.outEdges.put(edge.getId(), edge);
 	}
 
-	protected void addInEdge(final Edge edge) {
+	protected void addInEdge(final IEdge edge) {
 		this.inEdges.put(edge.getId(), edge);
 	}
 
-	protected void removeInEdge(final Edge edge) {
+	protected void removeInEdge(final IEdge edge) {
 		this.inEdges.remove(edge.getId());
 	}
 
-	protected void removeOutEdge(final Edge edge) {
+	protected void removeOutEdge(final IEdge edge) {
 		this.outEdges.remove(edge.getId());
 	}
 

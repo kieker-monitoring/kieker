@@ -23,23 +23,23 @@ import java.util.Stack;
 import com.google.common.collect.Iterables;
 
 import kieker.analysisteetime.util.graph.Direction;
-import kieker.analysisteetime.util.graph.Edge;
-import kieker.analysisteetime.util.graph.Graph;
-import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.IEdge;
+import kieker.analysisteetime.util.graph.IGraph;
+import kieker.analysisteetime.util.graph.IVertex;
 
 /**
- * Default implementation of a {@link Graph}. Instances can be created using the {@link Graph} {@code create()} method.
+ * Default implementation of a {@link IGraph}. Instances can be created using the {@link IGraph} {@code create()} method.
  *
  * @author Sören Henning
  *
  * @since 1.14
  */
-public class GraphImpl extends ElementImpl implements Graph {
+public class GraphImpl extends ElementImpl implements IGraph {
 
 	protected String name = "G";
 
-	protected Map<Object, Vertex> vertices = new HashMap<>(); // NOPMD (no concurrent access intended)
-	protected Map<Object, Edge> edges = new HashMap<>(); // NOPMD (no concurrent access intended)
+	protected Map<Object, IVertex> vertices = new HashMap<>(); // NOPMD (no concurrent access intended)
+	protected Map<Object, IEdge> edges = new HashMap<>(); // NOPMD (no concurrent access intended)
 
 	protected long currentDefaultId; // = 0l
 
@@ -54,7 +54,7 @@ public class GraphImpl extends ElementImpl implements Graph {
 	}
 
 	@Override
-	public Vertex addVertex(final Object id) {
+	public IVertex addVertex(final Object id) {
 		Object freeId = id;
 		if (freeId == null) {
 			do {
@@ -66,14 +66,14 @@ public class GraphImpl extends ElementImpl implements Graph {
 			}
 		}
 
-		final Vertex vertex = new VertexImpl(freeId, this);
+		final IVertex vertex = new VertexImpl(freeId, this);
 		this.vertices.put(vertex.getId(), vertex);
 		return vertex;
 	}
 
 	@Override
-	public Vertex addVertexIfAbsent(final Object id) {
-		Vertex vertex = this.getVertex(id);
+	public IVertex addVertexIfAbsent(final Object id) {
+		IVertex vertex = this.getVertex(id);
 		if (vertex == null) {
 			vertex = this.addVertex(id);
 		}
@@ -81,7 +81,7 @@ public class GraphImpl extends ElementImpl implements Graph {
 	}
 
 	@Override
-	public Vertex getVertex(final Object id) {
+	public IVertex getVertex(final Object id) {
 		if (id == null) {
 			throw ExceptionFactory.vertexIdCanNotBeNull();
 		}
@@ -89,20 +89,20 @@ public class GraphImpl extends ElementImpl implements Graph {
 	}
 
 	@Override
-	public Iterable<Vertex> getVertices() {
+	public Iterable<IVertex> getVertices() {
 		return Iterables.unmodifiableIterable(this.vertices.values());
 	}
 
 	@Override
-	public void removeVertex(final Vertex vertex) {
+	public void removeVertex(final IVertex vertex) {
 		if (!this.vertices.containsKey(vertex.getId())) {
 			throw ExceptionFactory.vertexWithIdDoesNotExist(vertex.getId());
 		}
 
-		for (final Edge edge : vertex.getEdges(Direction.IN)) {
+		for (final IEdge edge : vertex.getEdges(Direction.IN)) {
 			this.removeEdge(edge);
 		}
-		for (final Edge edge : vertex.getEdges(Direction.OUT)) {
+		for (final IEdge edge : vertex.getEdges(Direction.OUT)) {
 			this.removeEdge(edge);
 		}
 
@@ -110,7 +110,7 @@ public class GraphImpl extends ElementImpl implements Graph {
 	}
 
 	@Override
-	public Edge addEdge(final Object id, final Vertex outVertex, final Vertex inVertex) {
+	public IEdge addEdge(final Object id, final IVertex outVertex, final IVertex inVertex) {
 
 		// BETTER Throw Exception if Vertices are null
 
@@ -135,15 +135,15 @@ public class GraphImpl extends ElementImpl implements Graph {
 	}
 
 	@Override
-	public Edge addEdgeIfAbsent(final Object id, final Vertex outVertex, final Vertex inVertex) {
-		Edge edge = this.getEdge(id);
+	public IEdge addEdgeIfAbsent(final Object id, final IVertex outVertex, final IVertex inVertex) {
+		IEdge edge = this.getEdge(id);
 		if (edge == null) {
 			edge = this.addEdge(id, outVertex, inVertex);
 		}
 		return edge;
 	}
 
-	protected Edge addEdgeChecked(final Object id, final Vertex outVertex, final Vertex inVertex) {
+	protected IEdge addEdgeChecked(final Object id, final IVertex outVertex, final IVertex inVertex) {
 		Object freeId = id;
 		if (freeId == null) {
 			do {
@@ -155,7 +155,7 @@ public class GraphImpl extends ElementImpl implements Graph {
 			}
 		}
 
-		final Edge edge = new EdgeImpl(freeId, outVertex, inVertex, this);
+		final IEdge edge = new EdgeImpl(freeId, outVertex, inVertex, this);
 		this.edges.put(edge.getId(), edge);
 		((VertexImpl) outVertex).addOutEdge(edge);
 		((VertexImpl) inVertex).addInEdge(edge);
@@ -164,7 +164,7 @@ public class GraphImpl extends ElementImpl implements Graph {
 	}
 
 	@Override
-	public Edge getEdge(final Object id) {
+	public IEdge getEdge(final Object id) {
 		if (id == null) {
 			throw ExceptionFactory.edgeIdCanNotBeNull();
 		}
@@ -172,12 +172,12 @@ public class GraphImpl extends ElementImpl implements Graph {
 	}
 
 	@Override
-	public Iterable<Edge> getEdges() {
+	public Iterable<IEdge> getEdges() {
 		return Iterables.unmodifiableIterable(this.edges.values());
 	}
 
 	@Override
-	public void removeEdge(final Edge edge) {
+	public void removeEdge(final IEdge edge) {
 		if (!this.edges.containsKey(edge.getId())) {
 			throw ExceptionFactory.edgeWithIdDoesNotExist(edge.getId());
 		}

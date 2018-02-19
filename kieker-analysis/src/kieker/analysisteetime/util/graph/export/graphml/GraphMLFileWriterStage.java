@@ -20,7 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.function.Function;
 
-import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.graph.IGraph;
 import kieker.analysisteetime.util.graph.mapping.SimpleFileNameMapper;
 import kieker.analysisteetime.util.graph.util.FileExtension;
 
@@ -31,7 +31,7 @@ import kieker.analysisteetime.util.graph.util.FileExtension;
  */
 public class GraphMLFileWriterStage extends GraphMLWriterStage {
 
-	public GraphMLFileWriterStage(final Function<Graph, String> fileNameMapper) {
+	public GraphMLFileWriterStage(final Function<IGraph, String> fileNameMapper) {
 		super(fileNameMapper.andThen(fileName -> {
 			try {
 				return new FileOutputStream(fileName);

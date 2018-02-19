@@ -22,8 +22,8 @@ import kieker.analysisteetime.dependencygraphs.PropertyKeys;
 import kieker.analysisteetime.dependencygraphs.vertextypes.IVertexTypeMapper;
 import kieker.analysisteetime.dependencygraphs.vertextypes.VertexType;
 import kieker.analysisteetime.signature.NameBuilder;
-import kieker.analysisteetime.util.graph.Element;
-import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.IElement;
+import kieker.analysisteetime.util.graph.IVertex;
 import kieker.analysisteetime.util.graph.export.dot.DotExportConfiguration;
 import kieker.analysisteetime.util.graph.util.dot.attributes.DotClusterAttribute;
 import kieker.analysisteetime.util.graph.util.dot.attributes.DotEdgeAttribute;
@@ -224,7 +224,7 @@ public class DotExportConfigurationFactory {
 		return new StringBuilder().append("<<").append(this.vertexTypeMapper.apply(type)).append(">>");
 	}
 
-	private StringBuilder createOperationLabelFromVertex(final Vertex vertex) {
+	private StringBuilder createOperationLabelFromVertex(final IVertex vertex) {
 
 		@SuppressWarnings("unchecked")
 		final Collection<String> modifiers = this.getProperty(vertex, PropertyKeys.MODIFIERS, Collection.class);
@@ -238,7 +238,7 @@ public class DotExportConfigurationFactory {
 				this.nameBuilder.getOperationNameBuilder().build(modifiers, returnType, name, parameterTypes));
 	}
 
-	private StringBuilder createComponentLabelFromVertex(final Vertex vertex) {
+	private StringBuilder createComponentLabelFromVertex(final IVertex vertex) {
 		final VertexType type = this.getProperty(vertex, PropertyKeys.TYPE, VertexType.class);
 		final String name = this.getProperty(vertex, PropertyKeys.NAME, String.class);
 		final String packageName = this.getProperty(vertex, PropertyKeys.PACKAGE_NAME, String.class);
@@ -247,14 +247,14 @@ public class DotExportConfigurationFactory {
 				.append(this.nameBuilder.getComponentNameBuilder().build(packageName, name));
 	}
 
-	private StringBuilder createContextLabelFromVertex(final Vertex vertex) {
+	private StringBuilder createContextLabelFromVertex(final IVertex vertex) {
 		final VertexType type = this.getProperty(vertex, PropertyKeys.TYPE, VertexType.class);
 		final String name = this.getProperty(vertex, PropertyKeys.NAME, String.class);
 
 		return new StringBuilder().append(this.createType(type)).append("\\n").append(name);
 	}
 
-	private StringBuilder createStatisticsFromVertex(final Vertex vertex) {
+	private StringBuilder createStatisticsFromVertex(final IVertex vertex) {
 		final String timeUnit = this.getProperty(vertex, PropertyKeys.TIME_UNIT).toString();
 		final String minResponseTime = this.getProperty(vertex, PropertyKeys.MIN_REPSONSE_TIME).toString();
 		final String maxResponseTime = this.getProperty(vertex, PropertyKeys.MAX_REPSONSE_TIME).toString();
@@ -277,7 +277,7 @@ public class DotExportConfigurationFactory {
 	}
 
 	// BETTER This could be moved to the graph library
-	private Object getProperty(final Element element, final String key) {
+	private Object getProperty(final IElement element, final String key) {
 		final Object object = element.getProperty(key);
 		if (object == null) {
 			throw new IllegalArgumentException("There is no key '" + key + "' for element '" + element + "'");
@@ -286,7 +286,7 @@ public class DotExportConfigurationFactory {
 	}
 
 	// BETTER This could be moved to the graph library
-	private <T> T getProperty(final Element element, final String key, final Class<T> clazz) {
+	private <T> T getProperty(final IElement element, final String key, final Class<T> clazz) {
 		final Object object = this.getProperty(element, key);
 		if (!clazz.isInstance(object)) {
 			throw new IllegalArgumentException("Object with key '" + key + "' is not of type '" + clazz + "'");

@@ -16,7 +16,7 @@
 
 package kieker.analysisteetime.util.graph.flattening;
 
-import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.graph.IGraph;
 
 import teetime.stage.basic.AbstractFilter;
 
@@ -25,17 +25,17 @@ import teetime.stage.basic.AbstractFilter;
  *
  * @since 1.14
  */
-public class GraphFlattenerStage extends AbstractFilter<Graph> {
+public class GraphFlattenerStage extends AbstractFilter<IGraph> {
 
-	private final GraphFlattener flattener;
+	private final IGraphFlattener flattener;
 
-	public GraphFlattenerStage(final GraphFlattener flattener) {
+	public GraphFlattenerStage(final IGraphFlattener flattener) {
 		super();
 		this.flattener = flattener;
 	}
 
 	@Override
-	protected void execute(final Graph graph) {
+	protected void execute(final IGraph graph) {
 		this.flattener.flatten(graph);
 		this.getOutputPort().send(graph);
 	}

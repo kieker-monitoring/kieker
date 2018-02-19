@@ -23,14 +23,14 @@ import kieker.analysisteetime.util.graph.impl.GraphImpl;
  *
  * @since 1.14
  */
-public interface Graph extends Element {
+public interface IGraph extends IElement {
 
 	/**
 	 * Factory method to create a new graph using the default implementation.
 	 *
 	 * @since 1.14
 	 */
-	public static Graph create() {
+	public static IGraph create() {
 		// Create an anonymous subclass of GraphImpl to access its protected constructor
 		return new GraphImpl() {
 		};
@@ -49,51 +49,51 @@ public interface Graph extends Element {
 	/**
 	 * @since 1.14
 	 */
-	public Vertex addVertex(Object id);
+	public IVertex addVertex(Object id);
 
 	/**
 	 * @since 1.14
 	 */
-	public Vertex addVertexIfAbsent(Object id);
+	public IVertex addVertexIfAbsent(Object id);
 
 	/**
 	 * @since 1.14
 	 */
-	public Vertex getVertex(Object id);
+	public IVertex getVertex(Object id);
 
 	/**
 	 * @since 1.14
 	 */
-	public void removeVertex(Vertex vertex);
+	public void removeVertex(IVertex vertex);
 
 	/**
 	 * @since 1.14
 	 */
-	public Iterable<Vertex> getVertices();
+	public Iterable<IVertex> getVertices();
 
 	/**
 	 * @since 1.14
 	 */
-	public Edge addEdge(Object id, Vertex outVertex, Vertex inVertex);
+	public IEdge addEdge(Object id, IVertex outVertex, IVertex inVertex);
 
 	/**
 	 * @since 1.14
 	 */
-	public Edge addEdgeIfAbsent(Object id, Vertex outVertex, Vertex inVertex);
+	public IEdge addEdgeIfAbsent(Object id, IVertex outVertex, IVertex inVertex);
 
 	/**
 	 * @since 1.14
 	 */
-	public Edge getEdge(Object id);
+	public IEdge getEdge(Object id);
 
 	/**
 	 * @since 1.14
 	 */
-	public void removeEdge(Edge edge);
+	public void removeEdge(IEdge edge);
 
 	/**
 	 * @since 1.14
 	 */
-	public Iterable<Edge> getEdges();
+	public Iterable<IEdge> getEdges();
 
 }

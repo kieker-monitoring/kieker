@@ -19,7 +19,7 @@ package kieker.analysisteetime.util.graph.traversal;
 import java.util.ArrayList;
 import java.util.List;
 
-import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.graph.IGraph;
 
 /**
  * @author Sören Henning
@@ -28,49 +28,49 @@ import kieker.analysisteetime.util.graph.Graph;
  */
 public abstract class AbstractGraphTraverser {
 
-	protected List<VertexVisitor> vertexVisitors;
-	protected List<EdgeVisitor> edgeVisitors;
+	protected List<IVertexVisitor> vertexVisitors;
+	protected List<IEdgeVisitor> edgeVisitors;
 
 	public AbstractGraphTraverser() {
 		this.vertexVisitors = new ArrayList<>();
 		this.edgeVisitors = new ArrayList<>();
 	}
 
-	public AbstractGraphTraverser(final VertexVisitor vertexVisitor, final EdgeVisitor edgeVisitor) {
+	public AbstractGraphTraverser(final IVertexVisitor vertexVisitor, final IEdgeVisitor edgeVisitor) {
 		this();
 		this.vertexVisitors.add(vertexVisitor);
 		this.edgeVisitors.add(edgeVisitor);
 	}
 
-	public AbstractGraphTraverser(final List<VertexVisitor> vertexVisitors, final List<EdgeVisitor> edgeVisitors) {
+	public AbstractGraphTraverser(final List<IVertexVisitor> vertexVisitors, final List<IEdgeVisitor> edgeVisitors) {
 		this.vertexVisitors = vertexVisitors;
 		this.edgeVisitors = edgeVisitors;
 	}
 
-	public List<VertexVisitor> getVertexVisitors() {
+	public List<IVertexVisitor> getVertexVisitors() {
 		return this.vertexVisitors;
 	}
 
-	public void setVertexVisitors(final List<VertexVisitor> vertexVisitors) {
+	public void setVertexVisitors(final List<IVertexVisitor> vertexVisitors) {
 		this.vertexVisitors = vertexVisitors;
 	}
 
-	public void addVertexVisitor(final VertexVisitor vertexVisitor) {
+	public void addVertexVisitor(final IVertexVisitor vertexVisitor) {
 		this.vertexVisitors.add(vertexVisitor);
 	}
 
-	public List<EdgeVisitor> getEdgeVisitors() {
+	public List<IEdgeVisitor> getEdgeVisitors() {
 		return this.edgeVisitors;
 	}
 
-	public void setEdgeVisitors(final List<EdgeVisitor> edgeVisitors) {
+	public void setEdgeVisitors(final List<IEdgeVisitor> edgeVisitors) {
 		this.edgeVisitors = edgeVisitors;
 	}
 
-	public void addEdgeVisitor(final EdgeVisitor edgeVisitor) {
+	public void addEdgeVisitor(final IEdgeVisitor edgeVisitor) {
 		this.edgeVisitors.add(edgeVisitor);
 	}
 
-	public abstract void traverse(final Graph graph);
+	public abstract void traverse(final IGraph graph);
 
 }

@@ -22,7 +22,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
-import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.graph.IGraph;
 import kieker.analysisteetime.util.graph.mapping.SimpleFileNameMapper;
 import kieker.analysisteetime.util.graph.util.FileExtension;
 
@@ -33,11 +33,11 @@ import kieker.analysisteetime.util.graph.util.FileExtension;
  */
 public class DotFileWriterStage extends DotWriterStage {
 
-	public DotFileWriterStage(final Function<Graph, String> fileNameMapper) {
+	public DotFileWriterStage(final Function<IGraph, String> fileNameMapper) {
 		this(fileNameMapper, new SimpleDotExportConfiguration());
 	}
 
-	public DotFileWriterStage(final Function<Graph, String> fileNameMapper, final DotExportConfiguration exportConfiguration) {
+	public DotFileWriterStage(final Function<IGraph, String> fileNameMapper, final DotExportConfiguration exportConfiguration) {
 		super(fileNameMapper.andThen(fileName -> {
 			try {
 				// return new FileWriter(fileName); // Criticized by Findbugs

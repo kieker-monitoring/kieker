@@ -14,21 +14,20 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.util.graph;
+package kieker.analysisteetime.util.graph.flattening;
+
+import kieker.analysisteetime.util.graph.IGraph;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-public interface GraphElement extends Element {
-	/**
-	 * @since 1.14
-	 */
-	public void remove();
+public interface IGraphFlattener {
 
 	/**
 	 * @since 1.14
 	 */
-	public Object getId();
+	public void flatten(IGraph graph);
+
 }

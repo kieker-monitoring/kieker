@@ -20,10 +20,10 @@ import java.util.Collection;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.IVertex;
 
 /**
- * This class is a {@link Function} that maps a {@link Vertex} to a label. The
+ * This class is a {@link Function} that maps a {@link IVertex} to a label. The
  * desired format is: container + "::\\n" + "@" + stackDepth + ":" + component + "\\n" + name;
  * {@code <DeploymentContext>::\\n@<StackDepth>:<Component>\\n<FullOperationSignature>}
  *
@@ -32,14 +32,14 @@ import kieker.analysisteetime.util.graph.Vertex;
  * @since 1.14
  *
  */
-public class NodeLabelMapper implements Function<Vertex, String> {
+public class NodeLabelMapper implements Function<IVertex, String> {
 
 	public NodeLabelMapper() {
 		super();
 	}
 
 	@Override
-	public String apply(final Vertex vertex) {
+	public String apply(final IVertex vertex) {
 
 		if (vertex.getProperty("artificial") != null) {
 			return vertex.getProperty("name").toString();

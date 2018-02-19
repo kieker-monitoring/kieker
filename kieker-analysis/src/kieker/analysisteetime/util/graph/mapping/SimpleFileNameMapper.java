@@ -18,7 +18,7 @@ package kieker.analysisteetime.util.graph.mapping;
 
 import java.util.function.Function;
 
-import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.graph.IGraph;
 import kieker.analysisteetime.util.graph.util.FileExtension;
 
 /**
@@ -29,7 +29,7 @@ import kieker.analysisteetime.util.graph.util.FileExtension;
  *
  * @since 1.14
  */
-public class SimpleFileNameMapper implements Function<Graph, String> {
+public class SimpleFileNameMapper implements Function<IGraph, String> {
 
 	private final String outputDirectory;
 	private final FileExtension fileExtension;
@@ -40,7 +40,7 @@ public class SimpleFileNameMapper implements Function<Graph, String> {
 	}
 
 	@Override
-	public String apply(final Graph graph) {
+	public String apply(final IGraph graph) {
 		return this.outputDirectory + '/' + graph.getName() + '.' + this.fileExtension;
 	}
 

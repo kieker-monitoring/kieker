@@ -18,7 +18,7 @@ package kieker.analysisteetime.dependencygraphs;
 
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.statistics.StatisticsModel;
-import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.graph.IGraph;
 
 /**
  * @author Sören Henning
@@ -38,7 +38,7 @@ public class DependencyGraphCreator {
 		this.graphBuilderFactory = graphBuilderFactory;
 	}
 
-	public Graph create() {
+	public IGraph create() {
 		return this.graphBuilderFactory.createDependencyGraphBuilder(this.executionModel, this.statisticsModel).build();
 	}
 

@@ -16,14 +16,14 @@
 
 package kieker.analysisteetime.util.graph.impl;
 
-import kieker.analysisteetime.util.graph.GraphElement;
+import kieker.analysisteetime.util.graph.IGraphElement;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-abstract class GraphElementImpl extends ElementImpl implements GraphElement { // NOPMD NOCS (GraphElement is in this context the abstraction of Vertex and Edge))
+abstract class GraphElementImpl extends ElementImpl implements IGraphElement { // NOPMD NOCS (GraphElement is in this context the abstraction of Vertex and Edge))
 
 	protected final Object id;
 	protected final GraphImpl graph;

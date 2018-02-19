@@ -16,13 +16,13 @@
 
 package kieker.analysisteetime.util.graph.export;
 
-import kieker.analysisteetime.util.graph.Edge;
-import kieker.analysisteetime.util.graph.Graph;
-import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.IEdge;
+import kieker.analysisteetime.util.graph.IGraph;
+import kieker.analysisteetime.util.graph.IVertex;
 import kieker.analysisteetime.util.graph.traversal.AbstractGraphTraverser;
-import kieker.analysisteetime.util.graph.traversal.EdgeVisitor;
 import kieker.analysisteetime.util.graph.traversal.FlatGraphTraverser;
-import kieker.analysisteetime.util.graph.traversal.VertexVisitor;
+import kieker.analysisteetime.util.graph.traversal.IEdgeVisitor;
+import kieker.analysisteetime.util.graph.traversal.IVertexVisitor;
 
 /**
  *
@@ -34,13 +34,13 @@ import kieker.analysisteetime.util.graph.traversal.VertexVisitor;
  *
  * @since 1.14
  */
-public abstract class AbstractTransformer<O> implements VertexVisitor, EdgeVisitor {
+public abstract class AbstractTransformer<O> implements IVertexVisitor, IEdgeVisitor {
 
-	protected Graph graph;
+	protected IGraph graph;
 
 	private final AbstractGraphTraverser graphTraverser = new FlatGraphTraverser(this, this);
 
-	protected AbstractTransformer(final Graph graph) {
+	protected AbstractTransformer(final IGraph graph) {
 		this.graph = graph;
 	}
 
@@ -59,19 +59,19 @@ public abstract class AbstractTransformer<O> implements VertexVisitor, EdgeVisit
 
 	protected abstract void afterTransformation();
 
-	protected abstract void transformVertex(Vertex vertex);
+	protected abstract void transformVertex(IVertex vertex);
 
-	protected abstract void transformEdge(Edge edge);
+	protected abstract void transformEdge(IEdge edge);
 
 	protected abstract O getTransformation();
 
 	@Override
-	public void visitVertex(final Vertex vertex) {
+	public void visitVertex(final IVertex vertex) {
 		this.transformVertex(vertex);
 	}
 
 	@Override
-	public void visitEdge(final Edge edge) {
+	public void visitEdge(final IEdge edge) {
 		this.transformEdge(edge);
 	}
 

@@ -17,20 +17,20 @@
 package kieker.analysisteetime.util.graph.impl;
 
 import kieker.analysisteetime.util.graph.Direction;
-import kieker.analysisteetime.util.graph.Edge;
-import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.IEdge;
+import kieker.analysisteetime.util.graph.IVertex;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-class EdgeImpl extends GraphElementImpl implements Edge {
+class EdgeImpl extends GraphElementImpl implements IEdge {
 
-	private final Vertex outVertex;
-	private final Vertex inVertex;
+	private final IVertex outVertex;
+	private final IVertex inVertex;
 
-	protected EdgeImpl(final Object id, final Vertex outVertex, final Vertex inVertex, final GraphImpl graph) {
+	protected EdgeImpl(final Object id, final IVertex outVertex, final IVertex inVertex, final GraphImpl graph) {
 		super(id, graph);
 		this.outVertex = outVertex;
 		this.inVertex = inVertex;
@@ -42,7 +42,7 @@ class EdgeImpl extends GraphElementImpl implements Edge {
 	}
 
 	@Override
-	public Vertex getVertex(final Direction direction) throws IllegalArgumentException {
+	public IVertex getVertex(final Direction direction) throws IllegalArgumentException {
 		switch (direction) {
 		case IN:
 			return this.inVertex;

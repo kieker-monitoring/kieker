@@ -22,9 +22,9 @@ import java.util.Map;
 import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 
 import kieker.analysisteetime.util.graph.Direction;
-import kieker.analysisteetime.util.graph.Edge;
-import kieker.analysisteetime.util.graph.Graph;
-import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.IEdge;
+import kieker.analysisteetime.util.graph.IGraph;
+import kieker.analysisteetime.util.graph.IVertex;
 import kieker.analysisteetime.util.graph.export.AbstractTransformer;
 
 /**
@@ -37,14 +37,14 @@ public class BlueprintsTransformer extends AbstractTransformer<com.tinkerpop.blu
 	private static final String LABEL_PROPERTY = "label";
 
 	private final com.tinkerpop.blueprints.Graph transformedGraph = new TinkerGraph();
-	private final Map<Vertex, com.tinkerpop.blueprints.Vertex> mappedVertices = new HashMap<>(); // NOPMD (no concurrent access intended)
+	private final Map<IVertex, com.tinkerpop.blueprints.Vertex> mappedVertices = new HashMap<>(); // NOPMD (no concurrent access intended)
 
-	public BlueprintsTransformer(final Graph graph) {
+	public BlueprintsTransformer(final IGraph graph) {
 		super(graph);
 	}
 
 	@Override
-	protected void transformVertex(final Vertex vertex) {
+	protected void transformVertex(final IVertex vertex) {
 		final com.tinkerpop.blueprints.Vertex mappedVertex = this.transformedGraph.addVertex(vertex.getId());
 		this.mappedVertices.put(vertex, mappedVertex);
 		for (final String propertyKey : vertex.getPropertyKeys()) {
@@ -54,7 +54,7 @@ public class BlueprintsTransformer extends AbstractTransformer<com.tinkerpop.blu
 	}
 
 	@Override
-	protected void transformEdge(final Edge edge) {
+	protected void transformEdge(final IEdge edge) {
 		final com.tinkerpop.blueprints.Vertex mappedInVertex = this.mappedVertices.get(edge.getVertex(Direction.IN));
 		final com.tinkerpop.blueprints.Vertex mappedOutVertex = this.mappedVertices.get(edge.getVertex(Direction.OUT));
 		String label = edge.getProperty(LABEL_PROPERTY);

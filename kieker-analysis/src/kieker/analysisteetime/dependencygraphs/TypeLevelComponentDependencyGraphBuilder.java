@@ -22,7 +22,7 @@ import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import kieker.analysisteetime.statistics.StatisticsModel;
-import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.IVertex;
 
 /**
  * Dependency graph builder for <strong>component</strong> dependency graphs
@@ -39,12 +39,12 @@ public class TypeLevelComponentDependencyGraphBuilder extends AbstractDependency
 	}
 
 	@Override
-	protected Vertex addVertex(final DeployedOperation deployedOperation) {
+	protected IVertex addVertex(final DeployedOperation deployedOperation) {
 		final OperationType operation = deployedOperation.getAssemblyOperation().getOperationType();
 		final ComponentType component = operation.getComponentType();
 
 		final int componentId = this.identifierRegistry.getIdentifier(component);
-		final Vertex componentVertex = this.graph.addVertexIfAbsent(componentId);
+		final IVertex componentVertex = this.graph.addVertexIfAbsent(componentId);
 		componentVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.COMPONENT_TYPE);
 		componentVertex.setPropertyIfAbsent(PropertyKeys.NAME, component.getName());
 		componentVertex.setPropertyIfAbsent(PropertyKeys.PACKAGE_NAME, component.getPackage());

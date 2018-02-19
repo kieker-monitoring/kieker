@@ -16,7 +16,7 @@
 
 package kieker.analysisteetime.dependencygraphs;
 
-import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.graph.IGraph;
 
 /**
  * @author Sören Henning
@@ -28,6 +28,6 @@ public interface IDependencyGraphBuilder {
 	/**
 	 * @since 1.14
 	 */
-	public Graph build();
+	public IGraph build();
 
 }

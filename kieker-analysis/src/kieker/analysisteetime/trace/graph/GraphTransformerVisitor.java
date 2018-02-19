@@ -22,9 +22,9 @@ import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import kieker.analysisteetime.trace.traversal.IOperationCallVisitor;
 import kieker.analysisteetime.util.ObjectIdentifierRegistry;
-import kieker.analysisteetime.util.graph.Edge;
-import kieker.analysisteetime.util.graph.Graph;
-import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.IEdge;
+import kieker.analysisteetime.util.graph.IGraph;
+import kieker.analysisteetime.util.graph.IVertex;
 
 /**
  * @author Sören Henning
@@ -33,10 +33,10 @@ import kieker.analysisteetime.util.graph.Vertex;
  */
 public class GraphTransformerVisitor implements IOperationCallVisitor {
 
-	private final Graph graph;
+	private final IGraph graph;
 	private final ObjectIdentifierRegistry objectIdentifierRegistry = new ObjectIdentifierRegistry();
 
-	public GraphTransformerVisitor(final Graph graph) {
+	public GraphTransformerVisitor(final IGraph graph) {
 		super();
 		this.graph = graph;
 	}
@@ -52,9 +52,9 @@ public class GraphTransformerVisitor implements IOperationCallVisitor {
 		}
 	}
 
-	private Vertex addVertex(final OperationCall operationCall) {
+	private IVertex addVertex(final OperationCall operationCall) {
 		final int vertexId = this.objectIdentifierRegistry.getIdentifier(operationCall);
-		final Vertex vertex = this.graph.addVertex(vertexId);
+		final IVertex vertex = this.graph.addVertex(vertexId);
 
 		final OperationType operationType = operationCall.getOperation().getAssemblyOperation().getOperationType();
 		final ComponentType componentType = operationType.getComponentType();
@@ -73,12 +73,12 @@ public class GraphTransformerVisitor implements IOperationCallVisitor {
 		return vertex;
 	}
 
-	private Edge addEdge(final OperationCall operationCall) {
+	private IEdge addEdge(final OperationCall operationCall) {
 
 		final int thisVertexId = this.objectIdentifierRegistry.getIdentifier(operationCall);
-		final Vertex thisVertex = this.graph.getVertex(thisVertexId);
+		final IVertex thisVertex = this.graph.getVertex(thisVertexId);
 		final int parentVertexId = this.objectIdentifierRegistry.getIdentifier(operationCall.getParent());
-		final Vertex parentVertex = this.graph.getVertex(parentVertexId);
+		final IVertex parentVertex = this.graph.getVertex(parentVertexId);
 
 		if (thisVertex == null) {
 			throw new IllegalStateException("Target vertex not found (operationCall:" + operationCall + ").");
@@ -86,25 +86,25 @@ public class GraphTransformerVisitor implements IOperationCallVisitor {
 			throw new IllegalStateException("Source vertex not found (operationCall:" + operationCall.getParent() + ").");
 		}
 
-		final Edge edge = this.graph.addEdge(null, parentVertex, thisVertex);
+		final IEdge edge = this.graph.addEdge(null, parentVertex, thisVertex);
 		edge.setProperty("orderIndex", operationCall.getOrderIndex() + 1);
 
 		return edge;
 	}
 
-	private Vertex addRootVertex(final OperationCall rootOperationCall) {
+	private IVertex addRootVertex(final OperationCall rootOperationCall) {
 		final int rootVertexId = this.objectIdentifierRegistry.getIdentifier(rootOperationCall);
-		final Vertex rootVertex = this.graph.getVertex(rootVertexId);
+		final IVertex rootVertex = this.graph.getVertex(rootVertexId);
 
 		if (rootVertex == null) {
 			throw new IllegalStateException("Root vertex not found (operationCall:" + rootOperationCall + ").");
 		}
 
-		final Vertex entryVertex = this.graph.addVertex("'Entry'");
+		final IVertex entryVertex = this.graph.addVertex("'Entry'");
 		entryVertex.setProperty("artificial", true);
 		entryVertex.setProperty("name", "'Entry'");
 
-		final Edge edge = this.graph.addEdge(null, entryVertex, rootVertex);
+		final IEdge edge = this.graph.addEdge(null, entryVertex, rootVertex);
 		edge.setProperty("orderIndex", 1);
 
 		return entryVertex;

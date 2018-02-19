@@ -21,14 +21,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import kieker.analysisteetime.util.graph.Element;
+import kieker.analysisteetime.util.graph.IElement;
 
 /**
  * @author Sören Henning
  *
  * @since 1.14
  */
-abstract class ElementImpl implements Element { // NOPMD NOCS (Element is in this context the abstraction of Graph, Vertex, and Edge)
+abstract class ElementImpl implements IElement { // NOPMD NOCS (Element is in this context the abstraction of Graph, Vertex, and Edge)
 
 	protected Map<String, Object> properties = new HashMap<>(); // NOPMD (no concurrent access intended)
 

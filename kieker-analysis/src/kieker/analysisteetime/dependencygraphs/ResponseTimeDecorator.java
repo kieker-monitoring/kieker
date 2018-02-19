@@ -22,7 +22,7 @@ import kieker.analysisteetime.statistics.IProperty;
 import kieker.analysisteetime.statistics.Properties;
 import kieker.analysisteetime.statistics.StatisticsModel;
 import kieker.analysisteetime.statistics.Units;
-import kieker.analysisteetime.util.graph.Vertex;
+import kieker.analysisteetime.util.graph.IVertex;
 import kieker.analysisteetime.util.time.ChronoUnitToSymbolMapper;
 
 /**
@@ -42,7 +42,7 @@ public class ResponseTimeDecorator {
 		this.timeUnit = ChronoUnitToSymbolMapper.create().apply(chronoUnit);
 	}
 
-	public void decorate(final Vertex vertex, final Object object) {
+	public void decorate(final IVertex vertex, final Object object) {
 		vertex.setPropertyIfAbsent(PropertyKeys.MIN_REPSONSE_TIME, this.getStatisticValue(object, Properties.MIN));
 		vertex.setPropertyIfAbsent(PropertyKeys.MAX_REPSONSE_TIME, this.getStatisticValue(object, Properties.MAX));
 		vertex.setPropertyIfAbsent(PropertyKeys.TOTAL_RESPONSE_TIME, this.getStatisticValue(object, Properties.TOTAL));

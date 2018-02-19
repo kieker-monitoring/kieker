@@ -21,7 +21,7 @@ import java.util.function.Function;
 
 import org.graphdrawing.graphml.GraphmlType;
 
-import kieker.analysisteetime.util.graph.Graph;
+import kieker.analysisteetime.util.graph.IGraph;
 import kieker.analysisteetime.util.stage.FunctionStage;
 import kieker.analysisteetime.util.stage.JAXBMarshalStage;
 
@@ -37,15 +37,15 @@ import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
  */
 public class GraphMLWriterStage extends CompositeStage {
 
-	private final InputPort<Graph> inputPort;
+	private final InputPort<IGraph> inputPort;
 
-	public GraphMLWriterStage(final Function<Graph, OutputStream> outputStreamMapper) {
+	public GraphMLWriterStage(final Function<IGraph, OutputStream> outputStreamMapper) {
 
-		final Distributor<Graph> graphDistributor = new Distributor<>(new CopyByReferenceStrategy());
+		final Distributor<IGraph> graphDistributor = new Distributor<>(new CopyByReferenceStrategy());
 		final GraphMLTransformationStage graphMLTransformer = new GraphMLTransformationStage();
 		final JAXBElementWrapperStage jaxbElementWrapper = new JAXBElementWrapperStage();
 		final JAXBMarshalStage<GraphmlType> jaxbMarshaller = new JAXBMarshalStage<>(GraphmlType.class);
-		final FunctionStage<Graph, OutputStream> outputStreamMapperStage = new FunctionStage<>(outputStreamMapper);
+		final FunctionStage<IGraph, OutputStream> outputStreamMapperStage = new FunctionStage<>(outputStreamMapper);
 
 		this.inputPort = graphDistributor.getInputPort();
 
@@ -57,7 +57,7 @@ public class GraphMLWriterStage extends CompositeStage {
 
 	}
 
-	public InputPort<Graph> getInputPort() {
+	public InputPort<IGraph> getInputPort() {
 		return this.inputPort;
 	}
 
