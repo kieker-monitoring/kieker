@@ -46,10 +46,16 @@ public class AsciiFileWriterTest {
 
 	private Configuration configuration;
 
+	/**
+	 * Test class.
+	 */
 	public AsciiFileWriterTest() {
-		super();
+		// empty constructor.
 	}
 
+	/**
+	 * Shared setup for the tests.
+	 */
 	@Before
 	public void before() {
 		this.configuration = new Configuration();
@@ -63,6 +69,9 @@ public class AsciiFileWriterTest {
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
 	}
 
+	/**
+	 * Test whether the log directory is created correctly.
+	 */
 	@Test
 	public void shouldCreateLogFolder() {
 		// test preparation
@@ -76,6 +85,9 @@ public class AsciiFileWriterTest {
 		Assert.assertTrue(Files.exists(writer.getLogFolder()));
 	}
 
+	/**
+	 * Test whether the mapping file is created correctly.
+	 */
 	@Test
 	public void shouldCreateMappingAndRecordFiles() {
 		// test preparation
@@ -102,6 +114,9 @@ public class AsciiFileWriterTest {
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(1));
 	}
 
+	/**
+	 * Test whether the upper limit of entries per file in honored.
+	 */
 	@Test
 	public void shouldCreateMultipleRecordFiles() {
 		// test preparation
@@ -129,6 +144,9 @@ public class AsciiFileWriterTest {
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(2));
 	}
 
+	/**
+	 * Test whether compression setting works.
+	 */
 	@Test
 	public void shouldCreateMultipleCompressedRecordFiles() {
 		// test preparation
@@ -156,6 +174,9 @@ public class AsciiFileWriterTest {
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(2));
 	}
 
+	/**
+	 * Test behavior regarding max log files. Should rotate.
+	 */
 	@Test
 	public final void testMaxLogFiles() {
 		// test preparation
@@ -188,6 +209,11 @@ public class AsciiFileWriterTest {
 		}
 	}
 
+	/**
+	 * Test whether the max log size.
+	 * 
+	 * @throws Exception on IO errors
+	 */
 	@Test
 	public void testMaxLogSize() throws Exception {
 		// size = $ + compressed record class name (=0) + ; + record.toString + newLine (\n or \n\r)
@@ -224,6 +250,9 @@ public class AsciiFileWriterTest {
 		}
 	}
 
+	/**
+	 * Test valid log directory.
+	 */
 	@Test
 	public void testValidLogFolder() {
 		final String passedConfigPathName = this.tmpFolder.getRoot().getAbsolutePath();
@@ -233,6 +262,9 @@ public class AsciiFileWriterTest {
 		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(passedConfigPathName));
 	}
 
+	/**
+	 * Test empty log directory property.
+	 */
 	@Test
 	public void testEmptyConfigPath() {
 		final String passedConfigPathName = "";
@@ -243,6 +275,11 @@ public class AsciiFileWriterTest {
 		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
 	}
 
+	/**
+	 * Test log directory missing in configuration.
+	 * 
+	 * @throws IOException on IO errors
+	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void testNonDirectoryConfigPath() throws IOException {
 		final String passedConfigPathName = this.tmpFolder.newFile().getAbsolutePath();
