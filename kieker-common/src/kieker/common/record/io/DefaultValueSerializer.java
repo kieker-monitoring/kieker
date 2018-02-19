@@ -30,7 +30,7 @@ import kieker.common.util.registry.IRegistry;
  * @deprecated 1.14 renamed to {@link BinaryValueSerializer}
  */
 @Deprecated
-public class DefaultValueSerializer extends BinaryValueSerializer {
+public class DefaultValueSerializer extends BinaryValueSerializer {	// NOCS (Default in type name: is already deprecated)
 
 	protected DefaultValueSerializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
 		super(buffer, stringRegistry);
