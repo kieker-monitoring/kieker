@@ -30,7 +30,15 @@ import kieker.common.record.IMonitoringRecord;
 
 import teetime.framework.test.StageTester;
 
+/**
+ * @since 1.14
+ *
+ */
 public class TcpReaderStageTest {
+
+	public TcpReaderStageTest() {
+		// empty constructor
+	}
 
 	@Test
 	@Ignore

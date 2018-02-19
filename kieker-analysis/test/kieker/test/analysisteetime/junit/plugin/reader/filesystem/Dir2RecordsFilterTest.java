@@ -32,7 +32,15 @@ import teetime.framework.OutputPort;
 import teetime.stage.InitialElementProducer;
 import teetime.stage.io.Printer;
 
+/**
+ * @since 1.14
+ *
+ */
 public class Dir2RecordsFilterTest {
+
+	public Dir2RecordsFilterTest() {
+		// empty constructor
+	}
 
 	@Test
 	public void shouldNotThrowAnyException() {

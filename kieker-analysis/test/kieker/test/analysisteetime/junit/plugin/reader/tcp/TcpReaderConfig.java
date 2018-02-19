@@ -23,6 +23,10 @@ import teetime.framework.Configuration;
 import teetime.framework.Execution;
 import teetime.stage.io.Printer;
 
+/**
+ * @since 1.14
+ *
+ */
 public class TcpReaderConfig extends Configuration {
 
 	public TcpReaderConfig() {
