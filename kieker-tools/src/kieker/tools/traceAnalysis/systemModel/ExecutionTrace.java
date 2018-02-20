@@ -27,14 +27,15 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
  * This class is a container for a whole trace of executions (represented as instances of {@link Execution}).
  *
- * Note that no assumptions about the {@link java.util.concurrent.TimeUnit} used for the
- * timestamps are made.
+ * Note that no assumptions about the {@link java.util.concurrent.TimeUnit} used for the timestamps are made.
  *
  * @author Andre van Hoorn
  *
@@ -42,14 +43,15 @@ import kieker.tools.util.LoggingTimestampConverter;
  */
 public class ExecutionTrace extends AbstractTrace {
 
-	// private static final Log LOG = LogFactory.getLog(ExecutionTrace.class);
-	private final AtomicReference<MessageTrace> messageTrace = new AtomicReference<MessageTrace>();
+	private static final Log LOG = LogFactory.getLog(ExecutionTrace.class);
+
+	private final AtomicReference<MessageTrace> messageTrace = new AtomicReference<>();
 	private int minEoi = -1;
 	private int maxEoi = -1;
 	private long minTin = -1;
 	private long maxTout = -1;
 	private int maxEss = -1;
-	private final SortedSet<Execution> set = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
+	private final SortedSet<Execution> set = new TreeSet<>(ExecutionTrace.createExecutionTraceComparator());
 	private final SortedSet<Execution> unmodifiableExecutions = Collections.unmodifiableSortedSet(this.set);
 
 	/**
@@ -81,12 +83,14 @@ public class ExecutionTrace extends AbstractTrace {
 	 *            The execution object which will be added to this trace.
 	 *
 	 * @throws InvalidTraceException
-	 *             If the traceId of the passed Execution object is not the same as the traceId of this ExecutionTrace object.
+	 *             If the traceId of the passed Execution object is not the same as the traceId of this ExecutionTrace
+	 *             object.
 	 */
 	public void add(final Execution execution) throws InvalidTraceException {
 		synchronized (this) {
 			if (this.getTraceId() != execution.getTraceId()) {
-				throw new InvalidTraceException("TraceId of new record (" + execution.getTraceId() + ") differs from Id of this trace (" + this.getTraceId() + ")");
+				throw new InvalidTraceException("TraceId of new record (" + execution.getTraceId()
+				+ ") differs from Id of this trace (" + this.getTraceId() + ")");
 			}
 			if ((this.minTin < 0) || (execution.getTin() < this.minTin)) {
 				this.minTin = execution.getTin();
@@ -112,8 +116,8 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Returns the message trace representation for this trace.<br/>
 	 *
-	 * The transformation to a message trace is only computed during the first execution of this method. After this, the stored reference is returned --- unless
-	 * executions are added to the trace afterwards.
+	 * The transformation to a message trace is only computed during the first execution of this method. After this, the
+	 * stored reference is returned --- unless executions are added to the trace afterwards.
 	 *
 	 * @param rootExecution
 	 *            The root execution object.
@@ -130,8 +134,8 @@ public class ExecutionTrace extends AbstractTrace {
 				return mt;
 			}
 
-			final List<AbstractMessage> mSeq = new ArrayList<AbstractMessage>();
-			final Stack<AbstractMessage> curStack = new Stack<AbstractMessage>();
+			final List<AbstractMessage> mSeq = new ArrayList<>();
+			final Stack<AbstractMessage> curStack = new Stack<>();
 			final Iterator<Execution> eSeqIt = this.set.iterator();
 
 			Execution prevE = rootExecution;
@@ -140,16 +144,17 @@ public class ExecutionTrace extends AbstractTrace {
 			while (eSeqIt.hasNext()) {
 				final Execution curE = eSeqIt.next();
 				if (expectingEntryCall && (curE.getEss() != 0)) {
-					final InvalidTraceException ex = new InvalidTraceException("First execution must have ess " + "0 (found " + curE.getEss()
-							+ ")\n Causing execution: " + curE);
+					final InvalidTraceException ex = new InvalidTraceException("First execution must have ess "
+							+ "0 (found " + curE.getEss() + ")\n Causing execution: " + curE);
 					// don't log and throw
 					// LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
 					throw ex;
 				}
 				expectingEntryCall = false; // now we're happy
 				if (prevEoi != (curE.getEoi() - 1)) {
-					final InvalidTraceException ex = new InvalidTraceException("Eois must increment by 1 --" + "but found sequence <" + prevEoi
-							+ "," + curE.getEoi() + ">" + "(Execution: " + curE + ")");
+					final InvalidTraceException ex = new InvalidTraceException(
+							"Eois must increment by 1 --" + "but found sequence <" + prevEoi + "," + curE.getEoi() + ">"
+									+ "(Execution: " + curE + ")");
 					// don't log and throw
 					// LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
 					throw ex;
@@ -163,34 +168,25 @@ public class ExecutionTrace extends AbstractTrace {
 						final AbstractMessage poppedCall = curStack.pop();
 						prevE = poppedCall.getReceivingExecution();
 						curReturnReceiver = poppedCall.getSendingExecution();
-						final AbstractMessage m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver);
+						final AbstractMessage m = new SynchronousReplyMessage(prevE.getTout(), prevE,
+								curReturnReceiver);
 						mSeq.add(m);
 						prevE = curReturnReceiver;
 					}
 				}
-				// Now, we handle the current execution callMessage
-				if (prevE.equals(rootExecution)) { // initial execution callMessage
-					final AbstractMessage m = new SynchronousCallMessage(curE.getTin(), rootExecution, curE);
-					mSeq.add(m);
-					curStack.push(m);
-				} else if ((prevE.getEss() + 1) == curE.getEss()) { // usual callMessage with senderComponentName and receiverComponentName
-					final AbstractMessage m = new SynchronousCallMessage(curE.getTin(), prevE, curE);
-					mSeq.add(m);
-					curStack.push(m);
-				} else if (prevE.getEss() < curE.getEss()) { // detect ess incrementation by > 1
-					final InvalidTraceException ex = new InvalidTraceException("Ess are only allowed to increment by 1 --"
-							+ "but found sequence <" + prevE.getEss() + "," + curE.getEss() + ">" + "(Execution: " + curE + ")");
-					// don't log and throw
-					// LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
-					throw ex;
-				}
+
+				final SynchronousCallMessage callMessage = createCallMessage(rootExecution, prevE, curE);
+				mSeq.add(callMessage);
+				curStack.push(callMessage);
+
 				if (!eSeqIt.hasNext()) { // empty stack completely, since no more executions
 					Execution curReturnReceiver; // receiverComponentName of return message
 					while (!curStack.empty()) {
 						final AbstractMessage poppedCall = curStack.pop();
 						prevE = poppedCall.getReceivingExecution();
 						curReturnReceiver = poppedCall.getSendingExecution();
-						final AbstractMessage m = new SynchronousReplyMessage(prevE.getTout(), prevE, curReturnReceiver);
+						final AbstractMessage m = new SynchronousReplyMessage(prevE.getTout(), prevE,
+								curReturnReceiver);
 						mSeq.add(m);
 						prevE = curReturnReceiver;
 					}
@@ -203,13 +199,37 @@ public class ExecutionTrace extends AbstractTrace {
 		}
 	}
 
+	private SynchronousCallMessage createCallMessage(final Execution rootExecution, final Execution prevE,
+			final Execution curE) throws InvalidTraceException {
+		final SynchronousCallMessage message;
+
+		if (prevE.equals(rootExecution)) { // initial execution callMessage
+			message = new SynchronousCallMessage(curE.getTin(), rootExecution, curE);
+		} else if ((prevE.getEss() + 1) == curE.getEss()) { // usual callMessage with senderComponentName and
+			// receiverComponentName
+			message = new SynchronousCallMessage(curE.getTin(), prevE, curE);
+		} else if (prevE.getEss() < curE.getEss()) { // detect ess incrementation by > 1
+			final InvalidTraceException ex = new InvalidTraceException(
+					"Ess are only allowed to increment by 1 --" + "but found sequence <" + prevE.getEss() + ","
+							+ curE.getEss() + ">" + "(Execution: " + curE + ")");
+			// don't log and throw
+			// LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
+			throw ex;
+		} else {
+			final String errorMessage = "Unexpected trace: " + prevE + " and " + curE;
+			throw new IllegalStateException(errorMessage);
+		}
+
+		return message;
+	}
+
 	/**
 	 * Returns a sorted set (unmodifiable) of {@link Execution}s in this trace.
 	 *
-	 * Note that the returned data structure is the (wrapped )internal data structure of this {@link ExecutionTrace} object, to which further elements may be added
-	 * by the {@link kieker.tools.traceAnalysis.systemModel.ExecutionTrace#add(Execution)} method. Consider to create a copy
-	 * of the returned list, while
-	 * synchronizing on this (i.e., the {@link ExecutionTrace}) object.
+	 * Note that the returned data structure is the (wrapped )internal data structure of this {@link ExecutionTrace}
+	 * object, to which further elements may be added by the
+	 * {@link kieker.tools.traceAnalysis.systemModel.ExecutionTrace#add(Execution)} method. Consider to create a copy of
+	 * the returned list, while synchronizing on this (i.e., the {@link ExecutionTrace}) object.
 	 *
 	 * @return the sorted set of {@link Execution}s in this trace
 	 */
@@ -221,8 +241,7 @@ public class ExecutionTrace extends AbstractTrace {
 	}
 
 	/**
-	 * Returns the length of this trace in terms of the number of contained
-	 * executions.
+	 * Returns the length of this trace in terms of the number of contained executions.
 	 *
 	 * @return the length of this trace.
 	 */
@@ -251,8 +270,7 @@ public class ExecutionTrace extends AbstractTrace {
 	}
 
 	/**
-	 * Returns the maximum execution stack size (ess) value, i.e., the maximum
-	 * stack depth, within the trace.
+	 * Returns the maximum execution stack size (ess) value, i.e., the maximum stack depth, within the trace.
 	 *
 	 * @return the maximum ess; -1 if the trace contains no executions.
 	 */
@@ -287,8 +305,8 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Returns the duration of this (possibly incomplete) trace.
 	 *
-	 * This value is the difference between the maximum tout and the minimum
-	 * tin value. Note that no specific assumptions about the {@link java.util.concurrent.TimeUnit} are made.
+	 * This value is the difference between the maximum tout and the minimum tin value. Note that no specific
+	 * assumptions about the {@link java.util.concurrent.TimeUnit} are made.
 	 *
 	 * @return the duration of this trace.
 	 */
@@ -301,8 +319,8 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Returns the maximum timestamp value of an execution return in this trace.
 	 *
-	 * Notice that you should need use this value to reason about the
-	 * control flow --- particularly in distributed scenarios.
+	 * Notice that you should need use this value to reason about the control flow --- particularly in distributed
+	 * scenarios.
 	 *
 	 * @return the maxmum timestamp value; -1 if the trace contains no executions.
 	 */
@@ -315,8 +333,8 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Returns the minimum timestamp of an execution start in this trace.
 	 *
-	 * Notice that you should need use this value to reason about the
-	 * control flow --- particularly in distributed scenarios.
+	 * Notice that you should need use this value to reason about the control flow --- particularly in distributed
+	 * scenarios.
 	 *
 	 * @return the minimum timestamp value; -1 if the trace contains no executions.
 	 */
@@ -343,7 +361,8 @@ public class ExecutionTrace extends AbstractTrace {
 	}
 
 	/**
-	 * Returns whether this Execution Trace and the passed Object are equal. Two execution traces are equal if the set of contained executions is equal.
+	 * Returns whether this Execution Trace and the passed Object are equal. Two execution traces are equal if the set
+	 * of contained executions is equal.
 	 *
 	 * @param obj
 	 *            The object to be compared for equality with this.
@@ -370,8 +389,7 @@ public class ExecutionTrace extends AbstractTrace {
 	}
 
 	/**
-	 * Returns an instance of the {@link Comparator} used by the internal {@link TreeSet} to
-	 * compare {@link Execution}s.
+	 * Returns an instance of the {@link Comparator} used by the internal {@link TreeSet} to compare {@link Execution}s.
 	 *
 	 * @return A comparator instance to compare execution objects.
 	 */
@@ -394,8 +412,8 @@ public class ExecutionTrace extends AbstractTrace {
 		}
 
 		/**
-		 * Note that this method is not only used by {@link ExecutionTrace#add(Execution)} but also by {@link TreeSet#equals(Object)} utilized in
-		 * {@link ExecutionTrace#equals(Object)}.
+		 * Note that this method is not only used by {@link ExecutionTrace#add(Execution)} but also by
+		 * {@link TreeSet#equals(Object)} utilized in {@link ExecutionTrace#equals(Object)}.
 		 *
 		 * @param e1
 		 *            The first execution object.

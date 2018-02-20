@@ -26,6 +26,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.common.util.Version;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 import kieker.monitoring.timer.ITimeSource;
@@ -48,6 +49,7 @@ public final class MonitoringController extends AbstractController implements IM
 	private final StateController stateController;
 	private final SamplingController samplingController;
 	private final JMXController jmxController;
+	private final TCPController tcpController;
 	private final WriterController writerController;
 	private final TimeSourceController timeSourceController;
 	private final ProbeController probeController;
@@ -60,11 +62,12 @@ public final class MonitoringController extends AbstractController implements IM
 		this.stateController = new StateController(configuration);
 		this.samplingController = new SamplingController(configuration);
 		this.jmxController = new JMXController(configuration);
+		this.tcpController = new TCPController(configuration, this);
 		this.writerController = new WriterController(configuration);
 		this.stateController.setStateListener(this);
 		this.timeSourceController = new TimeSourceController(configuration);
 		this.probeController = new ProbeController(configuration);
-		this.autoSetLoggingTimestamp = configuration.getBooleanProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP);
+		this.autoSetLoggingTimestamp = configuration.getBooleanProperty(ConfigurationKeys.AUTO_SET_LOGGINGTSTAMP);
 	}
 
 	// FACTORY
@@ -99,6 +102,10 @@ public final class MonitoringController extends AbstractController implements IM
 		if (monitoringController.jmxController.isTerminated()) {
 			monitoringController.terminate();
 		}
+		monitoringController.tcpController.setMonitoringController(monitoringController);
+		if (monitoringController.tcpController.isTerminated()) {
+			monitoringController.terminate();
+		}
 		monitoringController.writerController.setMonitoringController(monitoringController);
 		if (monitoringController.writerController.isTerminated()) {
 			monitoringController.terminate();
@@ -121,7 +128,7 @@ public final class MonitoringController extends AbstractController implements IM
 			monitoringController.enableMonitoring(); // notifies the listener
 		}
 
-		if (configuration.getBooleanProperty(ConfigurationFactory.USE_SHUTDOWN_HOOK)) {
+		if (configuration.getBooleanProperty(ConfigurationKeys.USE_SHUTDOWN_HOOK)) {
 			// This ensures that the terminateMonitoring() method is always called before shutting down the JVM. This method ensures that necessary cleanup steps are
 			// finished and no information is lost due to asynchronous writers.
 			try {
@@ -183,6 +190,7 @@ public final class MonitoringController extends AbstractController implements IM
 		this.timeSourceController.terminate();
 		this.writerController.terminate();
 		this.jmxController.terminate();
+		this.tcpController.terminate();
 		this.samplingController.terminate();
 		this.stateController.terminate();
 	}
@@ -325,8 +333,8 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public final String getJMXDomain() {
-		return this.jmxController.getJMXDomain();
+	public final String getControllerDomain() {
+		return this.jmxController.getControllerDomain();
 	}
 
 	@Override

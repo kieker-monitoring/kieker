@@ -174,7 +174,7 @@ public final class CLIServerMain { // NOPMD
 					.createLookupEntityMap(this.createRecordMap());
 
 			/** Kieker setup. */
-			Configuration configuration;
+			final Configuration configuration;
 			if (this.kiekerConfiguration != null) {
 				configuration = ConfigurationFactory
 						.createConfigurationFromFile(this.kiekerConfiguration.getAbsolutePath());

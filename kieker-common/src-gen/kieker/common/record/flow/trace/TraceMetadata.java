@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package kieker.common.record.flow.trace;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -156,8 +157,9 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public TraceMetadata(final IValueDeserializer deserializer) {
+	public TraceMetadata(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.traceId = deserializer.getLong();
 		this.threadId = deserializer.getLong();
 		this.sessionId = deserializer.getString();

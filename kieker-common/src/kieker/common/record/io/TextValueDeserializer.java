@@ -18,6 +18,8 @@ package kieker.common.record.io;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
+import kieker.common.exception.RecordInstantiationException;
+
 /**
  * Text value deserializer implementation.
  *
@@ -25,14 +27,27 @@ import java.nio.CharBuffer;
  * @since 1.13
  *
  */
-public class TextValueDeserializer implements IValueDeserializer {
+public class TextValueDeserializer extends AbstractValueDeserializer implements IValueDeserializer {
 
 	private final CharBuffer buffer;
 
+	/**
+	 * Create a text value deserializer.
+	 *
+	 * @param buffer
+	 *            buffer for the deserializer
+	 */
 	protected TextValueDeserializer(final CharBuffer buffer) {
 		this.buffer = buffer;
 	}
 
+	/**
+	 * Factory method to create a text value deserializer.
+	 *
+	 * @param buffer
+	 *            serialization buffer
+	 * @return the value deserializer
+	 */
 	public static TextValueDeserializer create(final CharBuffer buffer) {
 		return new TextValueDeserializer(buffer);
 	}
@@ -82,6 +97,12 @@ public class TextValueDeserializer implements IValueDeserializer {
 	@Override
 	public String getString() {
 		return this.readValue();
+	}
+
+	@Override
+	public <T extends Enum<T>> T getEnumeration(final Class<T> clazz) throws RecordInstantiationException {
+		final int value = Integer.parseInt(this.readValue());
+		return this.enumerationValueOf(clazz, value);
 	}
 
 	@Override
