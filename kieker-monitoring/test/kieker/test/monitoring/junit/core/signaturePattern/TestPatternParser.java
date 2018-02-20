@@ -31,7 +31,7 @@ import kieker.test.monitoring.util.signaturePattern.SignatureConstructor;
 
 /**
  * @author Bjoern Weissenfels, Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class TestPatternParser extends AbstractKiekerTest {
@@ -300,9 +300,8 @@ public class TestPatternParser extends AbstractKiekerTest {
 											if (nativeNonNatives[nativeNonNativeIdx].length() > 0) {
 												patternBuilder.append(nativeNonNatives[nativeNonNativeIdx]).append(white);
 											}
-											patternBuilder.append(returnTypesOrNews[returnTypeOrNewIdx]).append(white);
-											patternBuilder.append(fqClassNames[fqClassNameIdx]).append('.');
-											patternBuilder.append(operationNames[operationNameIdx]).append(whiteOrEmpty).append('(').append(whiteOrEmpty);
+											patternBuilder.append(returnTypesOrNews[returnTypeOrNewIdx]).append(white).append(fqClassNames[fqClassNameIdx])
+													.append('.').append(operationNames[operationNameIdx]).append(whiteOrEmpty).append('(').append(whiteOrEmpty);
 											if (paramLists[paramListIdx].length() > 0) {
 												patternBuilder.append(paramLists[paramListIdx]).append(whiteOrEmpty);
 											}
@@ -312,21 +311,17 @@ public class TestPatternParser extends AbstractKiekerTest {
 
 											// System.out.println(i++ + ": " + pattern);
 
-											final boolean expected =
-													visibilityMatches[visibilityIdy]
-															&& staticNonStaticMatches[staticNonStaticIdx]
-															&& nativeNonNativeMatches[nativeNonNativeIdx]
-															&& returnTypeOrNewMatches[returnTypeOrNewIdx]
-															&& fqClassNameMatches[fqClassNameIdx]
-															&& operationNameMatches[operationNameIdx]
-															&& paramListMatches[paramListIdx];
+											final boolean expected = visibilityMatches[visibilityIdy]
+													&& staticNonStaticMatches[staticNonStaticIdx]
+													&& nativeNonNativeMatches[nativeNonNativeIdx]
+													&& returnTypeOrNewMatches[returnTypeOrNewIdx]
+													&& fqClassNameMatches[fqClassNameIdx]
+													&& operationNameMatches[operationNameIdx]
+													&& paramListMatches[paramListIdx];
 
-											this.checkCombination(patternStr, visibilities[visibilityIdy], staticNonStatics[staticNonStaticIdx]
-													, nativeNonNatives[nativeNonNativeIdx]
-													, returnTypesOrNews[returnTypeOrNewIdx]
-													, fqClassNames[fqClassNameIdx]
-													, operationNames[operationNameIdx]
-													, paramLists[paramListIdx]);
+											this.checkCombination(patternStr, visibilities[visibilityIdy], staticNonStatics[staticNonStaticIdx],
+													nativeNonNatives[nativeNonNativeIdx], returnTypesOrNews[returnTypeOrNewIdx], fqClassNames[fqClassNameIdx],
+													operationNames[operationNameIdx], paramLists[paramListIdx]);
 
 											final Pattern pattern = PatternParser.parseToPattern(patternStr);
 											final Matcher m = pattern.matcher(signature01);

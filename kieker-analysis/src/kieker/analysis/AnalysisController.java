@@ -272,23 +272,14 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 */
 	public final void handleKiekerMetadataRecord(final KiekerMetadataRecord record) {
 		final StringBuilder sb = new StringBuilder(512);
-		sb.append("Kieker metadata: version='");
-		sb.append(record.getVersion());
-		sb.append("', controllerName='");
-		sb.append(record.getControllerName());
-		sb.append("', hostname='");
-		sb.append(record.getHostname());
-		sb.append("', experimentId='");
-		sb.append(record.getExperimentId());
-		sb.append("', debugMode='");
-		sb.append(record.isDebugMode());
-		sb.append("', timeOffset='");
-		sb.append(record.getTimeOffset());
-		sb.append("', timeUnit='");
-		sb.append(record.getTimeUnit());
-		sb.append("', numberOfRecords='");
-		sb.append(record.getNumberOfRecords());
-		sb.append('\'');
+		sb.append("Kieker metadata: version='").append(record.getVersion()).
+			append("', controllerName='").append(record.getControllerName()).
+			append("', hostname='").append(record.getHostname()).
+			append("', experimentId='").append(record.getExperimentId()).
+			append("', debugMode='").append(record.isDebugMode()).
+			append("', timeOffset='").append(record.getTimeOffset()).
+			append("', timeUnit='").append(record.getTimeUnit()).
+			append("', numberOfRecords='").append(record.getNumberOfRecords()).append('\'');
 		LOG.info(sb.toString());
 	}
 

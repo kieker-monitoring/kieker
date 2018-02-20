@@ -21,19 +21,19 @@ import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 
 /**
  * Abstract superclass for formatters for component-based dependency graphs.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @param <G>
  *            The graph type this formatter is for
- * 
+ *
  * @since 1.6
  */
 public abstract class AbstractComponentDependencyGraphFormatter<G extends AbstractDependencyGraph<?>> extends AbstractDependencyGraphFormatter<G> {
 
 	/**
 	 * Utility function to create a label for component nodes.
-	 * 
+	 *
 	 * @param node
 	 *            The component node to create the label for
 	 * @param useShortLabels
@@ -46,8 +46,7 @@ public abstract class AbstractComponentDependencyGraphFormatter<G extends Abstra
 		final StringBuilder builder = new StringBuilder();
 		final AllocationComponent component = node.getEntity();
 
-		builder.append(stereotype).append("\\n");
-		builder.append(component.getAssemblyComponent().getName()).append(':');
+		builder.append(stereotype).append(System.lineSeparator()).append(component.getAssemblyComponent().getName()).append(':');
 
 		if (useShortLabels) {
 			builder.append("..");
