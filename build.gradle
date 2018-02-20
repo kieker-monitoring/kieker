@@ -40,7 +40,7 @@ dependencies {
 // Otherwise, we need to add a new project twice: once in the settings.gradle and once in this file.
 def mainSubprojects = [
 	project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools'),
-	project(':kieker-extension-kafka')
+	project(':kieker-extension-kafka'), project(':kieker-extension-cassandra')
 ]
 
 subprojects {
