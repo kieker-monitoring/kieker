@@ -343,7 +343,7 @@ public class ConversionStep extends AbstractStep {
 	}
 
 	private boolean checkExecutable(final String command, final String parameter) {
-		Process p;
+		final Process p;
 		try {
 			p = Runtime.getRuntime().exec(new String[] { command, parameter, });
 			return (0 == p.waitFor());

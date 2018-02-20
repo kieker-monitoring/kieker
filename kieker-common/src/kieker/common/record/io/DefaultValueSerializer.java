@@ -13,18 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.common.record.flow;
+package kieker.common.record.io;
 
+import java.nio.ByteBuffer;
+
+import kieker.common.util.registry.IRegistry;
 
 /**
- * @author Jan Waller
- * 
- * @since 1.6
+ * This class is used to fulfill our deprecation policy. Due to a rename
+ * this class is replaced by {@link BinaryValueSerializer}.
+ *
+ * @author Reiner Jung
+ *
+ * @since 1.13
+ *
+ * @deprecated 1.14 renamed to {@link BinaryValueSerializer}
  */
-public interface ITraceRecord extends IFlowRecord {
-	public long getTraceId();
-	public void setTraceId(long traceId);
-	
-	public int getOrderIndex();
-	
+@Deprecated
+public class DefaultValueSerializer extends BinaryValueSerializer {	// NOCS (Default in type name: is already deprecated)
+
+	protected DefaultValueSerializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		super(buffer, stringRegistry);
+	}
+
 }
