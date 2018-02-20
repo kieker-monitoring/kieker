@@ -33,7 +33,7 @@ import org.junit.Assert;
 public class TCPServerForClient implements Runnable {
 
 	private final int port;
-	private boolean listening;
+	private volatile boolean listening;
 
 	/**
 	 * Constructor.
@@ -46,8 +46,15 @@ public class TCPServerForClient implements Runnable {
 		this.listening = false;
 	}
 
-	public synchronized boolean isListening() {
-		return this.listening;
+	/**
+	 * Check whether the server is available.
+	 *
+	 * @return true if the service is available
+	 */
+	public boolean isListening() {
+		synchronized (this) {
+			return this.listening;
+		}
 	}
 
 	/**
