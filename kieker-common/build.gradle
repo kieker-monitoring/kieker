@@ -29,5 +29,5 @@ task replaceHardCodedVersionNames() {
 compileJava.dependsOn replaceHardCodedVersionNames
 
 clean.doFirst {
-	println "${projectDir}/bin/build-eclipse"
+	delete "${projectDir}/bin/build-eclipse/"
 }
