@@ -30,7 +30,7 @@ import kieker.common.util.registry.IRegistry;
  * @deprecated 1.14 renamed to {@link BinaryValueDeserializer}
  */
 @Deprecated
-public class DefaultValueDeserializer extends BinaryValueDeserializer {
+public class DefaultValueDeserializer extends BinaryValueDeserializer {	// NOCS (Default in type name: is already deprecated)
 
 	protected DefaultValueDeserializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
 		super(buffer, stringRegistry);
