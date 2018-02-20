@@ -32,6 +32,7 @@ import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
 import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
+import kieker.monitoring.writer.filesystem.compression.ZipCompressionFilter;
 
 /**
  * Abstract file writer.
@@ -60,6 +61,8 @@ public abstract class AbstractFileWriter<T extends Buffer, S extends IValueSeria
 	public static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile";
 	/** The name of the configuration key to select a compression for the record log files */
 	public static final String CONFIG_COMPRESSION_FILTER = PREFIX + "compression";
+	@Deprecated
+	public static final String CONFIG_SHOULD_COMPRESS = PREFIX + "shouldCompress";
 	/** The name of the configuration determining the maximal size of the files in MiB. */
 	public static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // in MiB
 	/** The name of the configuration determining the maximal number of log files. */
@@ -115,7 +118,13 @@ public abstract class AbstractFileWriter<T extends Buffer, S extends IValueSeria
 		final String charsetName = configuration.getStringProperty(CONFIG_CHARSET_NAME, "UTF-8");
 		this.bufferSize = this.configuration.getIntProperty(CONFIG_BUFFERSIZE, 65536);
 
-		final String compressionFilterClassName = configuration.getStringProperty(CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
+		String compressionFilterClassName = configuration.getStringProperty(CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
+		if (compressionFilterClassName.equals(NoneCompressionFilter.class.getName())) {
+			final boolean compress = configuration.getBooleanProperty(CONFIG_SHOULD_COMPRESS, false);
+			if (compress) {
+				compressionFilterClassName = ZipCompressionFilter.class.getName();
+			}
+		}
 		final ICompressionFilter compressionFilter = ControllerFactory.getInstance(configuration).createAndInitialize(ICompressionFilter.class,
 				compressionFilterClassName, configuration);
 
