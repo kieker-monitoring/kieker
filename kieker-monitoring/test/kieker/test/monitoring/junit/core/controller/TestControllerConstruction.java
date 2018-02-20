@@ -25,7 +25,7 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.monitoring.util.DefaultConfigurationFactory;
+import kieker.test.monitoring.util.DummyWriterConfigurationFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -40,7 +40,7 @@ public class TestControllerConstruction extends AbstractKiekerTest { // NOCS
 	@Test
 	public void testConstructionFromConfig() {
 
-		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
+		final Configuration configuration = DummyWriterConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		{// Test with default values // NOCS
 			final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 			Assert.assertEquals("monitoring should not be terminated", false, kieker.isMonitoringTerminated());

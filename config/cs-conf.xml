@@ -22,7 +22,7 @@
 		property ! -->
 
 	<module name="BeforeExecutionExclusionFileFilter">
-		<property name="fileNamePattern" value=".*[/\\]src-gen[/\\].*"/>
+		<property name="fileNamePattern" value=".*[/\\]src-gen[/\\].*" />
 	</module>
 
 	<module name="BeforeExecutionExclusionFileFilter">
@@ -960,6 +960,17 @@
 			<property name="applyToPrivate" value="true" />
 		</module>
 
+		<!-- Disallows "Default" in a type name -->
+		<!-- Realized by a negative look ahead: "(?!<string>)" -->
+		<!-- Means: not ".*Default.*" -->
+		<module name="TypeName">
+			<property name="format" value="^(?!.*Default).*$" />
+			<property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF" />
+			<property name="applyToPublic" value="true" />
+			<property name="applyToProtected" value="true" />
+			<property name="applyToPackage" value="true" />
+			<property name="applyToPrivate" value="true" />
+		</module>
 
 		<!-- !________________________________________________________________________________________ 
 			! ! R E G E X P !________________________________________________________________________________________ 

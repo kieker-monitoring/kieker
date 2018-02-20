@@ -30,7 +30,7 @@ import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.timer.SystemNanoTimer;
 import kieker.monitoring.writer.filesystem.AsciiFileWriter;
 
-import kieker.test.monitoring.util.DefaultConfigurationFactory;
+import kieker.test.monitoring.util.DummyWriterConfigurationFactory;
 
 /**
  * Tests whether the factory methods of {@link Configuration} return instances and performs basic checks on these.
@@ -110,10 +110,10 @@ public class TestConfigurationFactoryMethods extends kieker.test.common.junit.Ab
 	 */
 	@Test
 	public void testCreationDefaultConfigurationWithDummyWriter() {
-		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
+		final Configuration configuration = DummyWriterConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		this.executeTestValues(configuration);
-		Assert.assertEquals("Writer must be " + DefaultConfigurationFactory.WRITER_NAME,
-				DefaultConfigurationFactory.WRITER_NAME,
+		Assert.assertEquals("Writer must be " + DummyWriterConfigurationFactory.WRITER_NAME,
+				DummyWriterConfigurationFactory.WRITER_NAME,
 				configuration.getStringProperty(ConfigurationKeys.WRITER_CLASSNAME));
 	}
 
