@@ -22,13 +22,13 @@ Further instructions for developers are available at
 https://kieker-monitoring.atlassian.net/wiki/display/DEV/
 
 ### Eclipse Setup for Contributors
-Read our [Confluence pages](https://kieker-monitoring.atlassian.net/wiki/spaces/DEV/pages/5865685/Local+Development+Environment) for more information.
 
-#### Gradle
 - Get Gradle support by installing the Eclipse plugin "Buildship: ..." in version 2 or above.
 - If you have already imported Kieker in Eclipse, delete it
 - Import Kieker in Eclipse by importing it as gradle project (Eclipse will also import all submodules automatically)
 - Whenever you change a build.gradle file, regenerate the .project and .classpath files for Eclipse by using "Gradle->Refresh Gradle Project"
 
-#### Code Conventions
+Read our [Confluence pages](https://kieker-monitoring.atlassian.net/wiki/spaces/DEV/pages/5865685/Local+Development+Environment) for more information.
+
+### Code Conventions
 Read and follow our [code conventions](https://kieker-monitoring.atlassian.net/wiki/spaces/DEV/pages/24215585/Kieker+Coding+Conventions+in+Eclipse)
