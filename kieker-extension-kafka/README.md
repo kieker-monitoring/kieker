@@ -25,7 +25,7 @@ kieker.monitoring.writer.collector.ChunkingCollector.writer=kieker.monitoring.wr
 ## The following properties correspond to Kafka producer's configuration paramaters with the same name
 ## For a more detailed explanation see: https://kafka.apache.org/documentation/#producerconfigs 
 #
-## The address and port of the Kafka bootstrap server(s) ("host1:port1"), multipe servers comma separated
+## The address and port of the Kafka bootstrap server(s) ("host1:port1"), multiple servers comma separated
 kieker.monitoring.writer.kafka.KafkaWriter.bootstrapServers=127.0.0.1:9092
 #
 ## The topic name to use for the monitoring records
@@ -46,7 +46,7 @@ kieker.monitoring.writer.kafka.KafkaWriter.lingerMs=1
 ````
 
 The Kafka writer properties `acks`, `batchSize`, `bufferMemory`, and `lingerMs` are optional. If they are not specified, the
-default values declared here are used. See the corresponding configuration parameters in the offical
+default values declared here are used. See the corresponding configuration parameters in the official
 [Kafka producer documentation](https://kafka.apache.org/documentation/#producerconfigs) for a more detailed explanation.
 
 In order to avoid unintended behavior, there should be no other active property with key `kieker.monitoring.writer`.
