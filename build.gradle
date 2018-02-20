@@ -16,6 +16,7 @@ plugins {
 }
 
 apply plugin: 'eclipse'
+apply plugin: 'java'		// required for compileJava.dependsOn, manifest etc.
 apply plugin: 'maven'
 apply plugin: 'signing'
 
@@ -35,23 +36,24 @@ dependencies {
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
-def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
+// FIXME the jar tasks should handle this requirement instead.
+// Otherwise, we need to add a new project twice: once in the settings.gradle and once in this file.
+def mainSubprojects = [
+	project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools'),
+	project(':kieker-extension-kafka')
+]
 
-// better use subprojects to avoid if-then-else in sourceSets
-allprojects {
-    version = kiekerVersion
+subprojects {
+	apply plugin: 'java'
 
-    apply plugin: 'java'
     sourceCompatibility = 1.7
     targetCompatibility = 1.7
     
-    sourceSets {
+	sourceSets {
         main {
             java {
-            	if (project != rootProject) {
-	                srcDir 'src'
-					srcDir 'src-gen'
-				}
+                srcDir 'src'
+				srcDir 'src-gen'
             }
             resources {
                 srcDir 'src-resources'
@@ -59,10 +61,8 @@ allprojects {
         }
         test {
             java {
-            	if (project != rootProject) {
-	                srcDir 'test'
-	                srcDir 'test-gen'
-				}
+                srcDir 'test'
+                srcDir 'test-gen'
             }
             resources {
                 srcDir 'test-resources'
@@ -72,14 +72,16 @@ allprojects {
             java {
                 srcDir 'test-integration'
 
-                compileClasspath += main.output + test.output
-                runtimeClasspath += main.output + test.output
+                compileClasspath += main.compileClasspath + test.compileClasspath
+                runtimeClasspath += main.runtimeClasspath + test.runtimeClasspath
             }
         }
     }
 
     test {
         systemProperty "java.io.tmpdir", "${buildDir}"
+		ignoreFailures = false
+	    maxHeapSize = "2g" 			// Set limit to prevent Travis-CI build to crash
 
         testLogging {
             showCauses = 'true'
@@ -92,36 +94,17 @@ allprojects {
 		    println "Executed test ${desc.name} [${desc.className}] with result: ${result.resultType}"
 		}
     }
-
-    configurations {
-        integrationTestCompile.extendsFrom testCompile
-        integrationTestRuntime.extendsFrom testRuntime
-    }
-
-    /*
-     * This task should only be executed when updating to a
-     * newer Gradle version. Note that manual changes to the
-     * previous scripts will need to be merged to the new
-     * wrapper script manually. Note that this tasks also
-     * creates/updates the wrapper scripts in subdirectories.
-     * */
-    task wrapper(type: Wrapper) {
-        description = 'Downloads the Gradle wrapper scripts.'
-        gradleVersion = '3.3'
-    }
-
+    
     task integrationTest(type: Test) {
-        testClassesDir = project.sourceSets.integrationTest.output.classesDir
+        testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
         classpath = project.sourceSets.integrationTest.runtimeClasspath
     }
     check.dependsOn integrationTest
-
-    test {
-        ignoreFailures = false
-	    maxHeapSize = "2g" // Set limit to prevent Travis-CI build to crash
-    }
-
+    
+    // --- quality assurance plugins ---
+    
     apply plugin: 'pmd'
+    
     pmd {
     	// the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
     	toolVersion = pmdAndCpdVersion
@@ -131,6 +114,8 @@ allprojects {
         ruleSets = []
         ruleSetFiles = files(resolveRelativeToParent(dirConfig, 'pmdrules.xml'))
     }
+
+    check.dependsOn(':cpdCheck')
 
     apply plugin: 'checkstyle'
     checkstyle {
@@ -157,6 +142,14 @@ allprojects {
             html.enabled = false
         }
     }
+
+	tasks.withType(Checkstyle) {
+	    reports {
+	        xml.enabled true
+	        html.enabled true
+	        //html.stylesheet resources.text.fromFile('config/xsl/checkstyle-custom.xsl')
+	    }
+	}
 
     tasks.withType(FindBugs) {
         reports {
@@ -185,7 +178,27 @@ allprojects {
 		testCompile 'org.hamcrest:hamcrest-library:1.3'
     }
 
-	check.dependsOn(':cpdCheck')
+}
+
+allprojects {
+    version = kiekerVersion
+
+    /*
+     * This task should only be executed when updating to a
+     * newer Gradle version. Note that manual changes to the
+     * previous scripts will need to be merged to the new
+     * wrapper script manually. Note that this tasks also
+     * creates/updates the wrapper scripts in subdirectories.
+     * */
+    task wrapper(type: Wrapper) {
+        description = 'Downloads the Gradle wrapper scripts.'
+        gradleVersion = '3.3'
+    }
+
+    repositories {
+    	mavenCentral() 
+    	jcenter() // for mockito
+    }
 }
 
 /*subprojects {
@@ -487,12 +500,6 @@ def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
     file.write(contents, 'UTF-8')
 }
 
-task replaceHardCodedVersionNames() {
-  doLast {
-    regexpReplaceInFiles(project.file("bin/dev/release-check-short.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
-  }
-}
-
 task updateLicenseHeaderYear() {
   doLast {
     FileTree tree = fileTree(dir: '.', include: '**/*.java')
@@ -502,7 +509,14 @@ task updateLicenseHeaderYear() {
   }
 }
 
+task replaceHardCodedVersionNames() {
+  doLast {
+    regexpReplaceInFiles(project.file("bin/dev/release-check-short.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+  }
+}
 compileJava.dependsOn replaceHardCodedVersionNames
+
+
 
 def reportingCompatibleJavaVersionPresent() {
     switch (JavaVersion.current()) {

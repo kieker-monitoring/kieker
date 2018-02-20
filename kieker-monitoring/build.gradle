@@ -21,9 +21,9 @@ dependencies {
 	compile resolveLibrary('disl-2.0/disl-server.jar')
 	compile resolveLibrary('sigar/sigar-*.jar')
 
-	compile 'org.apache.kafka:kafka-clients:0.11.0.1'
+	//compile 'org.apache.kafka:kafka-clients:0.11.0.1'
 	
-	compile 'org.tukaani:xz:1.6'
+	compile 'org.tukaani:xz:1.6'	// compression algorithms used by the file writers
 
 	compile 'org.apache.cxf:cxf-bundle-minimal:2.6.15'
 	compile resolveLibrary('framework-libs/jsr311-api-1.1.1.jar')
