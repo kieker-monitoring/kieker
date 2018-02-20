@@ -26,7 +26,7 @@ import kieker.monitoring.writer.dump.DumpWriter;
  *
  * @since 1.3
  */
-public final class DefaultConfigurationFactory {
+public final class DummyWriterConfigurationFactory {
 
 	/** The name of the writer used for the configuration. */
 	public static final String WRITER_NAME = DumpWriter.class.getName();
@@ -34,7 +34,7 @@ public final class DefaultConfigurationFactory {
 	/**
 	 * Private constructor to avoid instantiation.
 	 */
-	private DefaultConfigurationFactory() {}
+	private DummyWriterConfigurationFactory() {}
 
 	/**
 	 * This method creates a simple default configuration containing the dummy writer.
@@ -44,10 +44,10 @@ public final class DefaultConfigurationFactory {
 	public static Configuration createDefaultConfigurationWithDummyWriter() {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 		configuration.setProperty(ConfigurationKeys.CONTROLLER_NAME, "Kieker-Test");
-		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, DefaultConfigurationFactory.WRITER_NAME);
+		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, DummyWriterConfigurationFactory.WRITER_NAME);
 		// add ignored values
 		configuration.setProperty(ConfigurationKeys.PREFIX + "test", "true");
-		configuration.setProperty(DefaultConfigurationFactory.WRITER_NAME + ".test", "true");
+		configuration.setProperty(DummyWriterConfigurationFactory.WRITER_NAME + ".test", "true");
 		return configuration;
 	}
 }

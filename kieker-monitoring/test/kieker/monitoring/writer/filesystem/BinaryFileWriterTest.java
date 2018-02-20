@@ -51,6 +51,9 @@ public class BinaryFileWriterTest {
 		super();
 	}
 
+	/**
+	 * Shared setup for the tests.
+	 */
 	@Before
 	public void before() {
 		this.configuration = new Configuration();
@@ -64,6 +67,9 @@ public class BinaryFileWriterTest {
 		this.configuration.setProperty(BinaryFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
 	}
 
+	/**
+	 * Test whether the log directory is created correctly.
+	 */
 	@Test
 	public void shouldCreateLogFolder() {
 		// test preparation
@@ -77,6 +83,9 @@ public class BinaryFileWriterTest {
 		Assert.assertTrue(Files.exists(writer.getLogFolder()));
 	}
 
+	/**
+	 * Test whether the mapping file is created correctly.
+	 */
 	@Test
 	public void shouldCreateMappingAndRecordFiles() {
 		// test preparation
@@ -99,6 +108,9 @@ public class BinaryFileWriterTest {
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(1));
 	}
 
+	/**
+	 * Test whether the upper limit of entries per file in honored.
+	 */
 	@Test
 	public void shouldCreateMultipleRecordFiles() {
 		// test preparation
@@ -122,6 +134,9 @@ public class BinaryFileWriterTest {
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(2));
 	}
 
+	/**
+	 * Test whether compression setting works.
+	 */
 	@Test
 	public void shouldCreateMultipleCompressedRecordFiles() {
 		// test preparation
@@ -145,6 +160,9 @@ public class BinaryFileWriterTest {
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(2));
 	}
 
+	/**
+	 * Test behavior regarding max log files. Should rotate.
+	 */
 	@Test
 	public final void testMaxLogFiles() {
 		final int[] maxLogFilesValues = { -1, 0, 1, 2 };
@@ -176,6 +194,11 @@ public class BinaryFileWriterTest {
 		}
 	}
 
+	/**
+	 * Test whether the max log size.
+	 * 
+	 * @throws Exception on IO errors
+	 */
 	@Test
 	public void testMaxLogSize() throws Exception {
 		final int recordSizeInBytes = 4 + 8 + EmptyRecord.SIZE; // 12
@@ -210,6 +233,9 @@ public class BinaryFileWriterTest {
 		}
 	}
 
+	/**
+	 * Test valid log directory.
+	 */
 	@Test
 	public void testValidLogFolder() {
 		final String passedConfigPathName = this.tmpFolder.getRoot().getAbsolutePath();
@@ -219,6 +245,9 @@ public class BinaryFileWriterTest {
 		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(passedConfigPathName));
 	}
 
+	/**
+	 * Test empty log directory property.
+	 */
 	@Test
 	public void testEmptyConfigPath() {
 		final String passedConfigPathName = "";
@@ -229,6 +258,11 @@ public class BinaryFileWriterTest {
 		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
 	}
 
+	/**
+	 * Test log directory missing in configuration.
+	 * 
+	 * @throws IOException on IO errors
+	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void testNonDirectoryConfigPath() throws IOException {
 		final String passedConfigPathName = this.tmpFolder.newFile().getAbsolutePath();
