@@ -24,7 +24,7 @@ package kieker.common.logging;
  *
  * @since 1.6
  */
-public class LogImplSLF4JLogging implements Log {
+public class LogImplSLF4JLogging implements OLDLog {
 
 	private final org.slf4j.Logger log;
 

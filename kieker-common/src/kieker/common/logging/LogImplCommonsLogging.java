@@ -23,7 +23,7 @@ package kieker.common.logging;
  *
  * @since 1.5
  */
-public final class LogImplCommonsLogging implements Log {
+public final class LogImplCommonsLogging implements OLDLog {
 
 	private static final boolean JDK14PATCH;
 

@@ -21,7 +21,7 @@ package kieker.common.logging;
  *
  * @since 1.6
  */
-public final class LogImplNone implements Log {
+public final class LogImplNone implements OLDLog {
 	/**
 	 * Creates a new instance of this class.
 	 *

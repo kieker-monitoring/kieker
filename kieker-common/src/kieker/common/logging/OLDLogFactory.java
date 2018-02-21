@@ -25,7 +25,7 @@ import java.util.Locale;
  * 
  * @since 1.5
  */
-public final class LogFactory { // NOPMD (Implementation of an logger)
+public final class OLDLogFactory { // NOPMD (Implementation of an logger)
 
 	/** This constant should point to the fully qualified class name of the custom JVM logger. */
 	public static final String CUSTOM_LOGGER_JVM = "kieker.common.logging.Log";
@@ -44,8 +44,8 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 		} else {
 			JVM_LOGGER = null;
 		}
-		DETECTED_LOGGER = LogFactory.detectLogger();
-		final Log log = LogFactory.getLog(LogFactory.class);
+		DETECTED_LOGGER = OLDLogFactory.detectLogger();
+		final OLDLog log = OLDLogFactory.getLog(OLDLogFactory.class);
 		if ((null != JVM_LOGGER) && !DETECTED_LOGGER.name().equals(JVM_LOGGER)) {
 			log.warn("Failed to load Logger with property " + CUSTOM_LOGGER_JVM + "=" + JVM_LOGGER + ", using " + DETECTED_LOGGER.name() + " instead.");
 		}
@@ -58,7 +58,7 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 	/**
 	 * Private constructor to avoid instantiation.
 	 */
-	private LogFactory() {
+	private OLDLogFactory() {
 		// Nothing to do
 	}
 
@@ -70,8 +70,8 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 	 * 
 	 * @return A logger for the given class.
 	 */
-	public static final Log getLog(final Class<?> clazz) {
-		return LogFactory.getLog(clazz.getName());
+	public static final OLDLog getLog(final Class<?> clazz) {
+		return OLDLogFactory.getLog(clazz.getName());
 	}
 
 	/**
@@ -82,7 +82,7 @@ public final class LogFactory { // NOPMD (Implementation of an logger)
 	 * 
 	 * @return A logger for the given name.
 	 */
-	public static final Log getLog(final String name) {
+	public static final OLDLog getLog(final String name) {
 		switch (DETECTED_LOGGER) { // NOPMD (no break needed)
 		case NONE:
 			return new LogImplNone(name);
