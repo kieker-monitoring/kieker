@@ -58,12 +58,18 @@ import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
 /**
  * This is an executable TeeTime {@link Configuration} to create dependency graphs.
  *
- * @author Sören Henning
+ * @author Sï¿½ren Henning
  *
  * @since 1.14
  *
  */
 public class DependencyGraphConfiguration extends Configuration {
+
+	private static final String PREFIX = DependencyGraphConfiguration.class.getName();
+	private static final String KEY_IMPORT_DIRECTORY = System.getProperty(PREFIX + ".importDirectory");
+	private static final String KEY_TIME_UNIT_OF_RECODS = System.getProperty(PREFIX + ".timeUnitOfRecods");
+	private static final String KEY_EXPORT_DIRECTORY = System.getProperty(PREFIX + ".exportDirectory");
+
 	private static final DotExportConfigurationFactory DOT_EXPORT_CONFIGURATION_FACTORY = new DotExportConfigurationFactory(
 			NameBuilder.forJavaShortOperations());
 
@@ -74,14 +80,25 @@ public class DependencyGraphConfiguration extends Configuration {
 	private final StatisticsModel statisticsModel = new StatisticsModel();
 	private final SignatureExtractor signatureExtractor = SignatureExtractor.forJava();
 
-	public DependencyGraphConfiguration(final File importDirectory, final TemporalUnit timeUnitOfRecods, final File exportDirectory) {
+	public DependencyGraphConfiguration() {
+		this(KEY_IMPORT_DIRECTORY, KEY_TIME_UNIT_OF_RECODS, KEY_EXPORT_DIRECTORY);
+	}
+
+	public DependencyGraphConfiguration(final String importDirectory, final String timeUnitOfRecods,
+			final String exportDirectory) {
+		this(new File(importDirectory), ChronoUnit.valueOf(timeUnitOfRecods), new File(exportDirectory));
+	}
+
+	public DependencyGraphConfiguration(final File importDirectory, final TemporalUnit timeUnitOfRecods,
+			final File exportDirectory) {
 		final IDependencyGraphBuilderFactory graphBuilderFactory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
 
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
 		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final StaticModelsAssemblerStage staticModelsAssembler = new StaticModelsAssemblerStage(this.typeModel,
 				this.assemblyModel, this.deploymentModel, this.signatureExtractor);
-		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, timeUnitOfRecods);
+		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel,
+				timeUnitOfRecods);
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
 
 		final OperationCallExtractorStage operationCallExtractor = new OperationCallExtractorStage();
@@ -122,7 +139,8 @@ public class DependencyGraphConfiguration extends Configuration {
 		final File importDirectory = new File(args[0]);
 		final File exportDirectory = new File(args[1]);
 
-		final DependencyGraphConfiguration configuration = new DependencyGraphConfiguration(importDirectory, ChronoUnit.NANOS, exportDirectory);
+		final DependencyGraphConfiguration configuration = new DependencyGraphConfiguration(importDirectory,
+				ChronoUnit.NANOS, exportDirectory);
 		final Execution<DependencyGraphConfiguration> execution = new Execution<>(configuration);
 		execution.executeBlocking();
 	}
