@@ -139,8 +139,7 @@ public class DependencyGraphConfiguration extends Configuration {
 		final File importDirectory = new File(args[0]);
 		final File exportDirectory = new File(args[1]);
 
-		final DependencyGraphConfiguration configuration = new DependencyGraphConfiguration(importDirectory,
-				ChronoUnit.NANOS, exportDirectory);
+		final DependencyGraphConfiguration configuration = new DependencyGraphConfiguration(importDirectory, ChronoUnit.NANOS, exportDirectory);
 		final Execution<DependencyGraphConfiguration> execution = new Execution<>(configuration);
 		execution.executeBlocking();
 	}
