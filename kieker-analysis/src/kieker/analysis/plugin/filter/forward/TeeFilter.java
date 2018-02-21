@@ -31,24 +31,20 @@ import kieker.common.configuration.Configuration;
 
 /**
  * This filter has exactly one input port and one output port.
- * 
+ *
  * A simple message is printed to a configurable stream and all objects are forwarded to the output port.
- * 
+ *
  * @author Matthias Rohr, Jan Waller
- * 
+ *
  * @since 1.2
  */
-@Plugin(description = "A filter to print the object to a configured stream",
-		outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = { Object.class }),
-		configuration = {
-			@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_STREAM, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT,
-					description = "The name of the stream used to print the incoming data (special values are STDOUT, STDERR, STDlog, and NULL; "
-							+ "other values are interpreted as filenames)."),
-			@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_ENCODING, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING,
-					description = "The used encoding for the selected stream."),
-			@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_APPEND, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_APPEND,
-					description = "Decides whether the filter appends to the stream in the case of a file or not.")
-		})
+@Plugin(description = "A filter to print the object to a configured stream", outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = {
+	Object.class }), configuration = {
+		@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_STREAM, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT, description = "The name of the stream used to print the incoming data (special values are STDOUT, STDERR, STDlog, and NULL; "
+				+ "other values are interpreted as filenames)."),
+		@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_ENCODING, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING, description = "The used encoding for the selected stream."),
+		@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_APPEND, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_APPEND, description = "Decides whether the filter appends to the stream in the case of a file or not.")
+	})
 public final class TeeFilter extends AbstractFilterPlugin {
 
 	/** The name of the input port for incoming events. */
@@ -83,7 +79,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -124,10 +120,10 @@ public final class TeeFilter extends AbstractFilterPlugin {
 			try {
 				tmpPrintStream = new PrintStream(new FileOutputStream(printStreamNameConfig, this.append), false, this.encoding);
 			} catch (final UnsupportedEncodingException ex) {
-				this.log.error("Failed to initialize " + printStreamNameConfig, ex);
+				this.OLDlogger.error("Failed to initialize " + printStreamNameConfig, ex);
 				tmpPrintStream = null; // NOPMD (null)
 			} catch (final FileNotFoundException ex) {
-				this.log.error("Failed to initialize " + printStreamNameConfig, ex);
+				this.OLDlogger.error("Failed to initialize " + printStreamNameConfig, ex);
 				tmpPrintStream = null; // NOPMD (null)
 			}
 			this.printStream = tmpPrintStream;
@@ -171,7 +167,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	/**
 	 * This method is the input port of the filter receiving incoming objects. Every object will be printed into a stream (based on the configuration) before the
 	 * filter sends it to the output port.
-	 * 
+	 *
 	 * @param object
 	 *            The new object.
 	 */
@@ -185,7 +181,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 			if (this.printStream != null) {
 				this.printStream.println(record);
 			} else {
-				this.log.info(record);
+				this.OLDlogger.info(record);
 			}
 		}
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, object);

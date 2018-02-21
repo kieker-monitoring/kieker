@@ -77,8 +77,8 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		if (this.pipe == null) {
 			throw new IllegalArgumentException("Failed to get Pipe with name " + pipeNameConfig);
 		} else {
-			if (this.log.isDebugEnabled()) {
-				this.log.debug("Connected to named pipe '" + this.pipe.getName() + "'");
+			if (this.logger.isDebugEnabled()) {
+				this.logger.debug("Connected to named pipe '" + this.pipe.getName() + "'");
 			}
 		}
 		// escaping this in constructor! very bad practice!
@@ -95,9 +95,9 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		// No need to initialize since we receive asynchronously
 		try {
 			this.terminationLatch.await();
-			this.log.info("Pipe closed. Will terminate.");
+			this.logger.info("Pipe closed. Will terminate.");
 		} catch (final InterruptedException ex) {
-			this.log.error("Received InterruptedException", ex);
+			this.logger.error("Received InterruptedException", ex);
 			return false;
 		}
 		return true;

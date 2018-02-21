@@ -29,23 +29,20 @@ import kieker.common.configuration.Configuration;
 
 /**
  * This filter has exactly one input port and one output port.
- * 
+ *
  * Only the specified objects are forwarded to the output port.
  * All other objects are forwarded to the output-not port.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
-@Plugin(
-		description = "Filters incoming objects based on their type",
-		outputPorts = {
-			@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH, eventTypes = { Object.class }, description = "Forwards events matching the configured types"),
-			@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH, eventTypes = {}, description = "Forwards events not matching the configured types")
-		},
-		configuration = {
-			@Property(name = TypeFilter.CONFIG_PROPERTY_NAME_TYPES, defaultValue = "java.lang.Object")
-		})
+@Plugin(description = "Filters incoming objects based on their type", outputPorts = {
+	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH, eventTypes = { Object.class }, description = "Forwards events matching the configured types"),
+	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH, eventTypes = {}, description = "Forwards events not matching the configured types")
+}, configuration = {
+	@Property(name = TypeFilter.CONFIG_PROPERTY_NAME_TYPES, defaultValue = "java.lang.Object")
+})
 public final class TypeFilter extends AbstractFilterPlugin {
 
 	/**
@@ -72,7 +69,7 @@ public final class TypeFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -82,12 +79,12 @@ public final class TypeFilter extends AbstractFilterPlugin {
 		super(configuration, projectContext);
 
 		final String[] classes = configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_TYPES);
-		final List<Class<?>> listOfClasses = new LinkedList<Class<?>>();
+		final List<Class<?>> listOfClasses = new LinkedList<>();
 		for (final String clazz : classes) {
 			try {
 				listOfClasses.add(Class.forName(clazz));
 			} catch (final ClassNotFoundException ex) {
-				this.log.warn("Failed to add class " + clazz + " to the filter.", ex);
+				this.OLDlogger.warn("Failed to add class " + clazz + " to the filter.", ex);
 			}
 		}
 		this.acceptedClasses = listOfClasses.toArray(new Class<?>[listOfClasses.size()]);
@@ -109,7 +106,7 @@ public final class TypeFilter extends AbstractFilterPlugin {
 
 	/**
 	 * This method represents the input port for the incoming objects.
-	 * 
+	 *
 	 * @param event
 	 *            The new incoming object.
 	 */

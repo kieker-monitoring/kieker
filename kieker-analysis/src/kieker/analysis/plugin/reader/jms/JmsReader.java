@@ -136,23 +136,23 @@ public final class JmsReader extends AbstractReaderPlugin {
 				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ/HornetQ sometimes)
 				destination = session.createQueue(this.jmsDestination);
 				if (destination == null) { //
-					this.log.error("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage() + " AND failed to create queue");
+					this.logger.error("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage() + " AND failed to create queue");
 					throw exc; // will be catched below to abort the read method
 				}
 			}
 
-			this.log.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
+			this.logger.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
 			final MessageConsumer receiver = session.createConsumer(destination);
 			receiver.setMessageListener(new JMSMessageListener());
 
 			// start the connection to enable message delivery
 			connection.start();
 
-			this.log.info("JmsReader started and waits for incoming monitoring events!");
+			this.logger.info("JmsReader started and waits for incoming monitoring events!");
 			this.block();
-			this.log.info("Woke up by shutdown");
+			this.logger.info("Woke up by shutdown");
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			this.log.error("Error in read()", ex);
+			this.logger.error("Error in read()", ex);
 			retVal = false;
 		} finally {
 			try {
@@ -160,7 +160,7 @@ public final class JmsReader extends AbstractReaderPlugin {
 					connection.close();
 				}
 			} catch (final JMSException ex) {
-				this.log.error("Failed to close JMS", ex);
+				this.logger.error("Failed to close JMS", ex);
 			}
 		}
 		return retVal;
@@ -193,7 +193,7 @@ public final class JmsReader extends AbstractReaderPlugin {
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutdown of JmsReader requested.");
+		this.logger.info("Shutdown of JmsReader requested.");
 		this.unblock();
 	}
 
@@ -212,7 +212,7 @@ public final class JmsReader extends AbstractReaderPlugin {
 	}
 
 	protected Log getLog() {
-		return super.log;
+		return super.logger;
 	}
 
 	/**

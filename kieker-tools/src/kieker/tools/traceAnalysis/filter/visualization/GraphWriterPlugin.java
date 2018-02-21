@@ -206,7 +206,7 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 				try {
 					writer.close();
 				} catch (final IOException e) {
-					this.log.error(String.format(WRITE_ERROR_MESSAGE_TEMPLATE, fileName), e);
+					this.logger.error(String.format(WRITE_ERROR_MESSAGE_TEMPLATE, fileName), e);
 				}
 			}
 		}

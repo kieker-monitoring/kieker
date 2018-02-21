@@ -139,7 +139,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.logger.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
 			configTimeunit = this.timeunit;
 		}
 
@@ -211,7 +211,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
 			if (executionTrace != null) { // trace (artifacts) exists already;
 				if (!this.timeoutMap.remove(executionTrace)) { // remove from timeoutMap. Will be re-added below
-					this.log.error("Missing entry for trace in timeoutMap: " + executionTrace
+					this.logger.error("Missing entry for trace in timeoutMap: " + executionTrace
 							+ " PendingTraces and timeoutMap are now longer consistent!");
 					this.reportError(traceId);
 				}
@@ -222,13 +222,13 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			try {
 				executionTrace.add(execution);
 				if (!this.timeoutMap.add(executionTrace)) { // (re-)add trace to timeoutMap
-					this.log.error("Equal entry existed in timeoutMap already:" + executionTrace);
+					this.logger.error("Equal entry existed in timeoutMap already:" + executionTrace);
 				}
 				this.processTimeoutQueue();
 			} catch (final InvalidTraceException ex) { // this would be a bug!
-				this.log.error("Attempt to add record to wrong trace", ex);
+				this.logger.error("Attempt to add record to wrong trace", ex);
 			} catch (final ExecutionEventProcessingException ex) {
-				this.log.error("ExecutionEventProcessingException occured while processing the timeout queue.", ex);
+				this.logger.error("ExecutionEventProcessingException occured while processing the timeout queue.", ex);
 			}
 		}
 	}
@@ -277,15 +277,15 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				this.invalidTraces.add(curTraceId);
 				if (!this.ignoreInvalidTraces) {
 					this.traceProcessingErrorOccured = true;
-					this.log.warn("Note that this filter was configured to terminate at the *first* occurence of an invalid trace \n"
+					this.logger.warn("Note that this filter was configured to terminate at the *first* occurence of an invalid trace \n"
 							+ "If this is not the desired behavior, set the configuration property "
 							+ CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES + " to 'true'");
 					throw new ExecutionEventProcessingException(transformationError, ex);
 				} else {
-					this.log.error(transformationError); // do not pass 'ex' to log.error because this makes the output verbose (#584)
+					this.logger.error(transformationError); // do not pass 'ex' to log.error because this makes the output verbose (#584)
 				}
 			} else {
-				this.log.warn("Found additional fragment for trace already marked invalid: " + transformationError);
+				this.logger.warn("Found additional fragment for trace already marked invalid: " + transformationError);
 			}
 		}
 	}
@@ -332,11 +332,11 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				if (!error || (this.traceProcessingErrorOccured && !this.ignoreInvalidTraces)) {
 					this.processTimeoutQueue();
 				} else {
-					this.log.info("terminate called with error an flag set or a trace processing occurred; won't process timeoutqueue any more.");
+					this.logger.info("terminate called with error an flag set or a trace processing occurred; won't process timeoutqueue any more.");
 				}
 			} catch (final ExecutionEventProcessingException ex) {
 				this.traceProcessingErrorOccured = true;
-				this.log.error("Error processing timeout queue", ex);
+				this.logger.error("Error processing timeout queue", ex);
 			}
 		}
 	}

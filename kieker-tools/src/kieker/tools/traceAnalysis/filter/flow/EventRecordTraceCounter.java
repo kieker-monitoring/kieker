@@ -95,7 +95,7 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	@InputPort(name = INPUT_PORT_NAME_INVALID, eventTypes = { TraceEventRecords.class }, description = "Receives invalid event record traces")
 	public void inputInvalidTrace(final TraceEventRecords invalidTrace) {
 		if (this.logInvalidTraces) {
-			this.log.error("Invalid trace: " + invalidTrace);
+			this.logger.error("Invalid trace: " + invalidTrace);
 		}
 
 		final TraceMetadata trace = invalidTrace.getTraceMetadata();

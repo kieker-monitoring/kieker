@@ -87,7 +87,7 @@ public class AsciiLogReader extends AbstractReaderPlugin implements IMonitoringR
 			}
 		}
 		if (nDirs == 0) {
-			this.log.warn("The list of input dirs passed to the " + AsciiLogReader.class.getSimpleName() + " is empty");
+			this.logger.warn("The list of input dirs passed to the " + AsciiLogReader.class.getSimpleName() + " is empty");
 			nDirs = 1;
 		}
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(nDirs);
@@ -101,7 +101,7 @@ public class AsciiLogReader extends AbstractReaderPlugin implements IMonitoringR
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutting down reader.");
+		this.logger.info("Shutting down reader.");
 		for (final AbstractLogReaderThread readerThread : this.readerThreads) {
 			readerThread.terminate();
 		}
@@ -124,7 +124,7 @@ public class AsciiLogReader extends AbstractReaderPlugin implements IMonitoringR
 				this.readerThreads.add(readerThread);
 				readerThread.start();
 			} else {
-				this.log.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
+				this.logger.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
 				notInitializesReaders++;
 				continue;
 			}

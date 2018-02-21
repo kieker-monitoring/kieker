@@ -114,7 +114,7 @@ public class DbReader extends AbstractReaderPlugin {
 							this.table2record(connection, tablename, AbstractMonitoringRecord.classForName(classname));
 						} catch (final MonitoringRecordException ex) {
 							// log error but continue with next table
-							this.log.error("Failed to load records of type " + classname + " from table " + tablename, ex);
+							this.logger.error("Failed to load records of type " + classname + " from table " + tablename, ex);
 							continue;
 						}
 					}
@@ -129,14 +129,14 @@ public class DbReader extends AbstractReaderPlugin {
 				}
 			}
 		} catch (final SQLException ex) {
-			this.log.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+			this.logger.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 			return false;
 		} finally {
 			if (connection != null) {
 				try {
 					connection.close();
 				} catch (final SQLException ex) {
-					this.log.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+					this.logger.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 				}
 			}
 		}
@@ -192,7 +192,7 @@ public class DbReader extends AbstractReaderPlugin {
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutdown of DBReader requested.");
+		this.logger.info("Shutdown of DBReader requested.");
 		this.running = false;
 	}
 

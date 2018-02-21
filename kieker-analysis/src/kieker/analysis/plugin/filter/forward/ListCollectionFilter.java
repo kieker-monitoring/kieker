@@ -30,24 +30,18 @@ import kieker.common.configuration.Configuration;
 
 /**
  * This filter collects the incoming objects in a simple synchronized list. It is mostly used for test purposes.
- * 
+ *
  * @param <T>
  *            The type of the list.
- * 
+ *
  * @author Nils Christian Ehmke, Jan Waller, Bjoern Weissenfels
- * 
+ *
  * @since 1.6
  */
-@Plugin(programmaticOnly = true,
-		description = "A filter collecting incoming objects in a list (mostly used in testing scenarios)",
-		outputPorts = @OutputPort(name = ListCollectionFilter.OUTPUT_PORT_NAME, eventTypes = { Object.class }, description = "Provides each incoming object"),
-		configuration = {
-			@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES,
-					defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
-					description = "Sets the maximum number of stored values."),
-			@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR,
-					defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR,
-					description = "Determines what happens to new objects when the list is full.") })
+@Plugin(programmaticOnly = true, description = "A filter collecting incoming objects in a list (mostly used in testing scenarios)", outputPorts = @OutputPort(name = ListCollectionFilter.OUTPUT_PORT_NAME, eventTypes = {
+	Object.class }, description = "Provides each incoming object"), configuration = {
+		@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES, defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES, description = "Sets the maximum number of stored values."),
+		@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR, defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR, description = "Determines what happens to new objects when the list is full.") })
 public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 
 	/** The name of the input port for the incoming objects. */
@@ -73,7 +67,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 
 	/**
 	 * An enum for all possible list full behaviors.
-	 * 
+	 *
 	 * @author Jan Waller
 	 * @since 1.8
 	 */
@@ -88,7 +82,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -109,17 +103,17 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 		try {
 			tmpListFullBehavior = ListFullBehavior.valueOf(strListFullBehavior);
 		} catch (final IllegalArgumentException ex) {
-			this.log.warn(strListFullBehavior + " is no valid list full behavior! Using 'ignore' instead.");
+			this.OLDlogger.warn(strListFullBehavior + " is no valid list full behavior! Using 'ignore' instead.");
 			tmpListFullBehavior = ListFullBehavior.ignore;
 		}
 		this.listFullBehavior = tmpListFullBehavior;
 
-		this.list = new LinkedList<T>();
+		this.list = new LinkedList<>();
 	}
 
 	/**
 	 * This method represents the input port.
-	 * 
+	 *
 	 * @param data
 	 *            The next element.
 	 */
@@ -175,12 +169,12 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 
 	/**
 	 * Delivers a copy of the internal list.
-	 * 
+	 *
 	 * @return The content of the internal list.
 	 */
 	public List<T> getList() {
 		synchronized (this.list) {
-			return new CopyOnWriteArrayList<T>(this.list);
+			return new CopyOnWriteArrayList<>(this.list);
 		}
 	}
 

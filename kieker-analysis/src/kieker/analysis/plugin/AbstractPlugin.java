@@ -49,9 +49,9 @@ import kieker.common.record.misc.KiekerMetadataRecord;
 /**
  * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link kieker.analysis.plugin.filter.AbstractFilterPlugin} or
  * {@link kieker.analysis.plugin.reader.AbstractReaderPlugin}.
- * 
+ *
  * @author Nils Christian Ehmke, Jan Waller
- * 
+ *
  * @since 1.5
  */
 @Plugin
@@ -71,7 +71,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 	/**
 	 * Each Plugin requires a constructor with a Configuration object and an IProjectContext.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -82,20 +82,20 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		super(configuration, projectContext);
 
 		// Get all repository and output ports.
-		this.repositoryPorts = new ConcurrentHashMap<String, RepositoryPort>();
-		this.outputPorts = new ConcurrentHashMap<String, OutputPort>();
-		this.outputPortTypes = new ConcurrentHashMap<OutputPort, Class<?>[]>(); // NOCS
+		this.repositoryPorts = new ConcurrentHashMap<>();
+		this.outputPorts = new ConcurrentHashMap<>();
+		this.outputPortTypes = new ConcurrentHashMap<>(); // NOCS
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
 		for (final RepositoryPort repoPort : annotation.repositoryPorts()) {
 			if (this.repositoryPorts.put(repoPort.name(), repoPort) != null) {
-				this.log.error("Two RepositoryPorts use the same name: " + repoPort.name());
+				this.logger.error("Two RepositoryPorts use the same name: {}", repoPort.name());
 			}
 		}
 		// ignore possible outputPorts for IWebVisualizationFilters
 		if (!(this instanceof IWebVisualizationFilterPlugin)) {
 			for (final OutputPort outputPort : annotation.outputPorts()) {
 				if (this.outputPorts.put(outputPort.name(), outputPort) != null) {
-					this.log.error("Two OutputPorts use the same name: " + outputPort.name());
+					this.logger.error("Two OutputPorts use the same name: {}", outputPort.name());
 				}
 				Class<?>[] outTypes = outputPort.eventTypes();
 				if (outTypes.length == 0) {
@@ -106,23 +106,23 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		} else {
 			// But inform the user about these invalid ports
 			for (final OutputPort outputPort : annotation.outputPorts()) {
-				this.log.warn("Invalid port for visualization filter detected. Port is ignored: " + outputPort.name());
+				this.logger.warn("Invalid port for visualization filter detected. Port is ignored: {}", outputPort.name());
 			}
 		}
 
 		// Get all input ports.
-		this.inputPorts = new ConcurrentHashMap<String, InputPort>();
+		this.inputPorts = new ConcurrentHashMap<>();
 		// ignore possible inputPorts for IReaderPlugins
 		if (!(this instanceof IReaderPlugin)) {
 			for (final Method method : this.getClass().getMethods()) {
 				final InputPort inputPort = method.getAnnotation(InputPort.class);
 				if ((inputPort != null) && (this.inputPorts.put(inputPort.name(), inputPort) != null)) {
-					this.log.error("Two InputPorts use the same name: " + inputPort.name());
+					this.logger.error("Two InputPorts use the same name: {}", inputPort.name());
 				}
 				if (inputPort != null) {
 					final Class<?>[] parameters = method.getParameterTypes();
 					if (parameters.length != 1) {
-						this.log.error("The input port " + inputPort.name() + " has to provide exactly one parameter of the correct type.");
+						this.logger.error("The input port {} has to provide exactly one parameter of the correct type.", inputPort.name());
 					} else {
 						Class<?>[] eventTypes = inputPort.eventTypes();
 						if (eventTypes.length == 0) { // NOPMD (nested if)
@@ -130,9 +130,8 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 						}
 						for (final Class<?> event : eventTypes) {
 							if (!parameters[0].isAssignableFrom(event)) { // NOPMD (nested if)
-								this.log.error("The event type " + event.getName() + " of the input port " + inputPort.name()
-										+ " is not accepted by the parameter of type "
-										+ parameters[0].getName());
+								this.logger.error("The event type {} of the input port {} is not accepted by the parameter of type ", event.getName(),
+										inputPort.name(), parameters[0].getName());
 							}
 						}
 					}
@@ -143,25 +142,25 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			for (final Method method : this.getClass().getMethods()) {
 				final InputPort inputPort = method.getAnnotation(InputPort.class);
 				if (inputPort != null) {
-					this.log.warn("Invalid port for reader detected. Port is ignored: " + inputPort.name());
+					this.logger.warn("Invalid port for reader detected. Port is ignored: {}", inputPort.name());
 				}
 			}
 		}
-		this.registeredRepositories = new ConcurrentHashMap<String, AbstractRepository>(this.repositoryPorts.size());
+		this.registeredRepositories = new ConcurrentHashMap<>(this.repositoryPorts.size());
 
 		// Now create a linked queue for every output port of the class, to store the registered methods.
-		this.registeredMethods = new ConcurrentHashMap<String, List<PluginInputPortReference>>();
+		this.registeredMethods = new ConcurrentHashMap<>();
 		for (final OutputPort outputPort : annotation.outputPorts()) {
 			this.registeredMethods.put(outputPort.name(), new ArrayList<PluginInputPortReference>(1));
 		}
 		// and a List for every incoming and outgoing plugin
-		this.incomingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one incoming
-		this.outgoingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one outgoing
+		this.incomingPlugins = new ArrayList<>(1); // usually only one incoming
+		this.outgoingPlugins = new ArrayList<>(1); // usually only one outgoing
 	}
 
 	/**
 	 * Delivers the given data to all registered input ports of the given output port.
-	 * 
+	 *
 	 * @param outputPortName
 	 *            The output port to be used to send the given data.
 	 * @param data
@@ -217,16 +216,14 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 							// This is a severe case and there is little chance to terminate appropriately
 							throw (Error) cause;
 						} else {
-							this.log.warn("Caught exception when sending data from " + this.getClass().getName() + ": OutputPort " + outputPort.name()
-									+ " to "
-									+ pluginInputPortReference.getPlugin().getClass().getName() + "'s InputPort "
-									+ pluginInputPortReference.getInputPortMethod().getName(), cause);
+							this.logger.warn("Caught exception when sending data from {}: OutputPort {} to {}'s InputPort {}", this.getClass().getName(),
+									outputPort.name(), pluginInputPortReference.getPlugin().getClass().getName(),
+									pluginInputPortReference.getInputPortMethod().getName(), cause);
 						}
 					} catch (final Exception e) { // NOPMD NOCS (catch multiple)
 						// This is an exception wrapped by invoke
-						this.log.error("Caught exception when invoking "
-								+ pluginInputPortReference.getPlugin().getClass().getName() + "'s InputPort "
-								+ pluginInputPortReference.getInputPortMethod().getName(), e);
+						this.logger.error("Caught exception when invoking {}'s InputPort {}", pluginInputPortReference.getPlugin().getClass().getName(),
+								pluginInputPortReference.getInputPortMethod().getName(), e);
 					}
 					break; // for
 				}
@@ -266,7 +263,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 	/**
 	 * This method connects two plugins. <b>DO NOT USE THIS METHOD!</b> Use <code>AnalysisController.connect</code> instead!
-	 * 
+	 *
 	 * @param src
 	 *            The source plugin.
 	 * @param outputPortName
@@ -279,8 +276,8 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 *             if any given plugin is invalid, any output or input port doesn't exist or if they are incompatible.
 	 *             Furthermore the destination plugin must not be a reader.
 	 */
-	public static final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName) throws
-			AnalysisConfigurationException {
+	public static final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
+			throws AnalysisConfigurationException {
 		if (!AbstractPlugin.isConnectionAllowed(src, outputPortName, dst, inputPortName)) {
 			throw new AnalysisConfigurationException("Failed to connect plugin '" + src.getName() + "' (" + src.getPluginName() + ") to plugin '"
 					+ dst.getName() + "' (" + dst.getPluginName() + ").");
@@ -314,7 +311,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 	/**
 	 * This method checks whether two plugins can be connected.
-	 * 
+	 *
 	 * @param src
 	 *            The source plugin.
 	 * @param output
@@ -329,27 +326,27 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	public static final boolean isConnectionAllowed(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
 		// First step: Check whether the plugins are valid.
 		if ((src == null) || (dst == null) || (dst instanceof IReaderPlugin)) {
-			LOG.warn("Plugins are invalid or null.");
+			LOGGER.warn("Plugins are invalid or null.");
 			return false;
 		}
 		if (src.state != STATE.READY) {
-			LOG.warn("Plugin: " + src.getClass().getName() + " not in " + STATE.READY + " state, but in state " + src.state + ".");
+			LOGGER.warn("Plugin: " + src.getClass().getName() + " not in " + STATE.READY + " state, but in state " + src.state + ".");
 			return false;
 		}
 		if (dst.state != STATE.READY) {
-			LOG.warn("Plugin: " + dst.getClass().getName() + " not in " + STATE.READY + " state, but in state " + dst.state + ".");
+			LOGGER.warn("Plugin: " + dst.getClass().getName() + " not in " + STATE.READY + " state, but in state " + dst.state + ".");
 			return false;
 		}
 
 		// Second step: Check whether the ports exist.
 		final OutputPort outputPort = src.outputPorts.get(output);
 		if (outputPort == null) {
-			LOG.warn("Output port does not exist. " + "Plugin: " + src.getClass().getName() + "; output: " + output);
+			LOGGER.warn("Output port does not exist. " + "Plugin: " + src.getClass().getName() + "; output: " + output);
 			return false;
 		}
 		final InputPort inputPort = dst.inputPorts.get(input);
 		if (inputPort == null) {
-			LOG.warn("Input port does not exist. " + "Plugin: " + dst.getClass().getName() + "; input: " + input);
+			LOGGER.warn("Input port does not exist. " + "Plugin: " + dst.getClass().getName() + "; input: " + input);
 			return false;
 		}
 
@@ -377,7 +374,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			}
 			final String allowedOutputTypes = Arrays.toString(outputPort.eventTypes());
 			final String allowedInputTypes = Arrays.toString(inputPort.eventTypes());
-			LOG.warn("Output port '" + output + "' (" + allowedOutputTypes + ") is not compatible with input port '" + input + "' (" + allowedInputTypes
+			LOGGER.warn("Output port '" + output + "' (" + allowedOutputTypes + ") is not compatible with input port '" + input + "' (" + allowedInputTypes
 					+ ").");
 			return false;
 		}
@@ -388,7 +385,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 	/**
 	 * This method delivers an instance of {@code Configuration} containing the default properties for this class.
-	 * 
+	 *
 	 * @return The default properties.
 	 */
 	@Override
@@ -427,7 +424,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 	/**
 	 * This method checks whether all repository ports of the current plugin are connected.
-	 * 
+	 *
 	 * @return true if and only if all plugin ports (defined in the annotation) are connected to a repository.
 	 */
 	public final boolean areAllRepositoryPortsConnected() {
@@ -452,7 +449,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 	/**
 	 * Delivers the registered repository for the given name or null, if it doesn't exist.
-	 * 
+	 *
 	 * @param reponame
 	 *            The name (key) of the repository.
 	 * @return The registered repository instance.
@@ -466,7 +463,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 */
 	@Override
 	public final String[] getAllOutputPortNames() {
-		final List<String> outputNames = new LinkedList<String>();
+		final List<String> outputNames = new LinkedList<>();
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
 		for (final OutputPort outputPort : annotation.outputPorts()) {
 			outputNames.add(outputPort.name());
@@ -479,7 +476,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 */
 	@Override
 	public final String[] getAllInputPortNames() {
-		final List<String> inputNames = new LinkedList<String>();
+		final List<String> inputNames = new LinkedList<>();
 		for (final Method method : this.getClass().getMethods()) {
 			final InputPort inputPort = method.getAnnotation(InputPort.class);
 			if ((inputPort != null) && (method.getParameterTypes().length == 1)) {
@@ -494,7 +491,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 */
 	@Override
 	public final String[] getAllDisplayNames() {
-		final List<String> displayNames = new LinkedList<String>();
+		final List<String> displayNames = new LinkedList<>();
 		for (final Method method : this.getClass().getMethods()) {
 			final Display display = method.getAnnotation(Display.class);
 			if (display != null) {
@@ -509,7 +506,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 */
 	@Override
 	public final String[] getAllRepositoryPortNames() {
-		final List<String> repositoryNames = new LinkedList<String>();
+		final List<String> repositoryNames = new LinkedList<>();
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
 		for (final RepositoryPort repositoryPort : annotation.repositoryPorts()) {
 			repositoryNames.add(repositoryPort.name());
@@ -528,7 +525,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			return null;
 		}
 		// Now get the connections.
-		final List<PluginInputPortReference> result = new ArrayList<PluginInputPortReference>();
+		final List<PluginInputPortReference> result = new ArrayList<>();
 		for (final PluginInputPortReference ref : this.registeredMethods.get(outputPortName)) {
 			result.add(ref);
 		}
@@ -545,7 +542,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 	/**
 	 * Starts this plugin.
-	 * 
+	 *
 	 * @return true if and only if the start procedure was sucesful.
 	 */
 	public final boolean start() {
@@ -558,7 +555,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 	/**
 	 * Initializes a shutdown of this and all incoming plugins.
-	 * 
+	 *
 	 * @param error
 	 *            A flag determining whether this plugin has to be shutdown due to an error or not.
 	 */
@@ -588,13 +585,13 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 	/**
 	 * Returns the plugins which provide data to this plugin.
-	 * 
+	 *
 	 * @param transitive
 	 *            Denotes whether indirect (i.e. non-immediate) providers should be returned
 	 * @return A set of plugins which directly or indirectly (see above) provide data for this plugin
 	 */
 	public Set<AbstractPlugin> getIncomingPlugins(final boolean transitive) {
-		final Set<AbstractPlugin> knownIncomingPlugins = new HashSet<AbstractPlugin>();
+		final Set<AbstractPlugin> knownIncomingPlugins = new HashSet<>();
 		this.addIncomingPlugins(knownIncomingPlugins, transitive);
 		return knownIncomingPlugins;
 	}
@@ -610,7 +607,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 	/**
 	 * Notification method which is called when a new incoming connection to this plugin is established.
-	 * 
+	 *
 	 * @param inputPortName
 	 *            The input port name to which the connection was established
 	 * @param connectedPlugin
@@ -627,7 +624,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 	/**
 	 * Notification method which is called when a new outgoing connection from this plugin is established.
-	 * 
+	 *
 	 * @param outputPortName
 	 *            The output port name to which the connection was established
 	 * @param connectedPlugin

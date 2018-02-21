@@ -39,25 +39,20 @@ import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
  * This filter collects incoming traces for a specified amount of time.
  * Any traces representing the same series of events will be used to calculate statistical informations like the average runtime of this kind of trace.
  * Only one specimen of these traces containing this information will be forwarded from this filter.
- * 
+ *
  * Statistical outliers regarding the runtime of the trace will be treated special and therefore send out as they are and will not be mixed with others.
- * 
+ *
  * @author Jan Waller, Florian Biss
- * 
+ *
  * @since 1.9
  */
-@Plugin(description = "This filter tries to aggregate similar Traces into a single trace.",
-		outputPorts = {
-			@OutputPort(name = TraceAggregationFilter.OUTPUT_PORT_NAME_TRACES,
-					description = "Output port for the processed traces",
-					eventTypes = { TraceEventRecords.class })
-		},
-		configuration = {
-			@Property(name = TraceAggregationFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
-					defaultValue = TraceAggregationFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-			@Property(name = TraceAggregationFilter.CONFIG_PROPERTY_NAME_MAX_COLLECTION_DURATION,
-					defaultValue = TraceAggregationFilter.CONFIG_PROPERTY_VALUE_MAX_COLLECTION_DURATION)
-		})
+@Plugin(description = "This filter tries to aggregate similar Traces into a single trace.", outputPorts = {
+	@OutputPort(name = TraceAggregationFilter.OUTPUT_PORT_NAME_TRACES, description = "Output port for the processed traces", eventTypes = {
+		TraceEventRecords.class })
+}, configuration = {
+	@Property(name = TraceAggregationFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = TraceAggregationFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+	@Property(name = TraceAggregationFilter.CONFIG_PROPERTY_NAME_MAX_COLLECTION_DURATION, defaultValue = TraceAggregationFilter.CONFIG_PROPERTY_VALUE_MAX_COLLECTION_DURATION)
+})
 public class TraceAggregationFilter extends AbstractFilterPlugin {
 	/**
 	 * The name of the output port delivering the valid traces.
@@ -101,7 +96,7 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -117,23 +112,20 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.OLDlogger.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
 			configTimeunit = this.timeunit;
 		}
 		this.maxCollectionDuration = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_COLLECTION_DURATION), configTimeunit);
-		this.trace2buffer = new TreeMap<TraceEventRecords, TraceAggregationBuffer>(new TraceComperator());
+		this.trace2buffer = new TreeMap<>(new TraceComperator());
 	}
 
 	/**
 	 * This method is the input port for the timeout.
-	 * 
+	 *
 	 * @param timestamp
 	 *            The timestamp
 	 */
-	@InputPort(
-			name = INPUT_PORT_NAME_TIME_EVENT,
-			description = "Time signal for timeouts",
-			eventTypes = { Long.class })
+	@InputPort(name = INPUT_PORT_NAME_TIME_EVENT, description = "Time signal for timeouts", eventTypes = { Long.class })
 	public void newEvent(final Long timestamp) {
 		synchronized (this) {
 			this.processTimeoutQueue(timestamp);
@@ -142,14 +134,11 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 
 	/**
 	 * This method is the input port for incoming traces.
-	 * 
+	 *
 	 * @param traceEventRecords
 	 *            incoming TraceEventRecords
 	 */
-	@InputPort(
-			name = INPUT_PORT_NAME_TRACES,
-			description = "Collect identical traces and aggregate them.",
-			eventTypes = { TraceEventRecords.class })
+	@InputPort(name = INPUT_PORT_NAME_TRACES, description = "Collect identical traces and aggregate them.", eventTypes = { TraceEventRecords.class })
 	public void newEvent(final TraceEventRecords traceEventRecords) {
 		final long timestamp = this.timeunit.convert(System.nanoTime(), TimeUnit.NANOSECONDS);
 		synchronized (this) {
@@ -204,7 +193,7 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Buffer for similar traces that are to be aggregated into a single trace.
-	 * 
+	 *
 	 * @author Jan Waller, Florian Biss
 	 */
 	private static final class TraceAggregationBuffer {

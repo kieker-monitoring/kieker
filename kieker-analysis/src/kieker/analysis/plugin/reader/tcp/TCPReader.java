@@ -103,8 +103,8 @@ public final class TCPReader extends AbstractReaderPlugin {
 		try {
 			serversocket = ServerSocketChannel.open();
 			serversocket.socket().bind(new InetSocketAddress(this.port1));
-			if (this.log.isDebugEnabled()) {
-				this.log.debug("Listening on port " + this.port1);
+			if (this.logger.isDebugEnabled()) {
+				this.logger.debug("Listening on port " + this.port1);
 			}
 			// BEGIN also loop this one?
 			final SocketChannel socketChannel = serversocket.accept();
@@ -128,10 +128,10 @@ public final class TCPReader extends AbstractReaderPlugin {
 			socketChannel.close();
 			// END also loop this one?
 		} catch (final ClosedByInterruptException ex) {
-			this.log.warn("Reader interrupted", ex);
+			this.logger.warn("Reader interrupted", ex);
 			return this.terminated;
 		} catch (final IOException ex) {
-			this.log.error("Error while reading", ex);
+			this.logger.error("Error while reading", ex);
 			return false;
 		} finally {
 			if (null != serversocket) {
@@ -153,7 +153,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 
 			super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 		} catch (final RecordInstantiationException ex) {
-			this.log.error("Failed to create record", ex);
+			this.logger.error("Failed to create record", ex);
 		}
 	}
 
@@ -161,15 +161,15 @@ public final class TCPReader extends AbstractReaderPlugin {
 		try {
 			serversocket.close();
 		} catch (final IOException e) {
-			if (this.log.isDebugEnabled()) {
-				this.log.debug("Failed to close TCP connection!", e);
+			if (this.logger.isDebugEnabled()) {
+				this.logger.debug("Failed to close TCP connection!", e);
 			}
 		}
 	}
 
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutdown of TCPReader requested.");
+		this.logger.info("Shutdown of TCPReader requested.");
 		this.terminated = true;
 		this.readerThread.interrupt();
 

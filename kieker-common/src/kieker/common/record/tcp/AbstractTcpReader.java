@@ -22,6 +22,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
+import org.slf4j.Logger;
+
 import kieker.common.logging.Log;
 
 /**
@@ -37,7 +39,7 @@ public abstract class AbstractTcpReader implements Runnable {
 	private static final int CONNECTION_CLOSED_BY_CLIENT = -1;
 
 	@SuppressWarnings({ "PMD.LoggerIsNotStaticFinal", "PMD.ProperLogger" })
-	protected final Log logger;
+	protected final Logger logger;
 
 	private final int port;
 	private final int bufferCapacity;
@@ -53,7 +55,7 @@ public abstract class AbstractTcpReader implements Runnable {
 	 * @param logger
 	 *            for notification to users and developers
 	 */
-	public AbstractTcpReader(final int port, final int bufferCapacity, final Log logger) {
+	public AbstractTcpReader(final int port, final int bufferCapacity, final Logger logger) {
 		super();
 		this.port = port;
 		this.bufferCapacity = bufferCapacity;
@@ -66,9 +68,7 @@ public abstract class AbstractTcpReader implements Runnable {
 		try {
 			serversocket = ServerSocketChannel.open();
 			serversocket.socket().bind(new InetSocketAddress(this.port));
-			if (this.logger.isDebugEnabled()) {
-				this.logger.debug("Listening on port " + this.port);
-			}
+			this.logger.debug("Listening on port {}", this.port);
 
 			final SocketChannel socketChannel = serversocket.accept();
 			try {

@@ -203,8 +203,8 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 					confidenceUpper,
 					confidenceLower,
 					result.getMeanAbsoluteScaledError());
-			if (AbstractAnalysisComponent.LOG.isDebugEnabled()) {
-				AbstractAnalysisComponent.LOG.debug("Forecast: " + forecast + ", Measurement: " + input.getValue() + ", MASE: "
+			if (AbstractAnalysisComponent.LOGGER.isDebugEnabled()) {
+				AbstractAnalysisComponent.LOGGER.debug("Forecast: " + forecast + ", Measurement: " + input.getValue() + ", MASE: "
 						+ result.getMeanAbsoluteScaledError());
 			}
 			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_MEASURED, forecastedAndMeasuredResult);
@@ -222,7 +222,7 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, currentForecastPair);
 		} else {
-			this.log.error("There are no forecast points to deliver. Perhaps Rserve is not running?");
+			this.logger.error("There are no forecast points to deliver. Perhaps Rserve is not running?");
 		}
 
 	}

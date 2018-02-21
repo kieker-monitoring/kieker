@@ -138,7 +138,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 				try {
 					this.saveTreeToDotFile();
 				} catch (final IOException ex) {
-					this.log.error("IOException while saving to dot file", ex);
+					this.logger.error("IOException while saving to dot file", ex);
 				}
 			}
 		}
@@ -169,7 +169,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 				AbstractCallTreeFilter.addTraceToTree(this.root, trace, pairFactory, true); // aggregated
 				AbstractAggregatedCallTreeFilter.this.reportSuccess(trace.getTraceId());
 			} catch (final TraceProcessingException ex) {
-				this.log.error("TraceProcessingException", ex);
+				this.logger.error("TraceProcessingException", ex);
 				AbstractAggregatedCallTreeFilter.this.reportError(trace.getTraceId());
 			}
 		}

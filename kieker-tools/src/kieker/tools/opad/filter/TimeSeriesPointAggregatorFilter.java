@@ -99,7 +99,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 			configTimeUnit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
 			configTimeUnit = this.timeunit;
-			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + configTimeUnit.name() + " instead.");
+			this.logger.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + configTimeUnit.name() + " instead.");
 		}
 
 		// Determine aggregation span method

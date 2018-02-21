@@ -119,14 +119,14 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		try {
 			tmpTimer = TimerWithPrecision.valueOf(this.strTimerOrigin);
 		} catch (final IllegalArgumentException ex) {
-			this.log.warn(this.strTimerOrigin + " is no valid timer precision! Using MILLISECONDS instead.");
+			this.OLDlogger.warn(this.strTimerOrigin + " is no valid timer precision! Using MILLISECONDS instead.");
 			tmpTimer = TimerWithPrecision.MILLISECONDS;
 		}
 		this.timer = tmpTimer;
 
 		double accelerationFactorTmp = configuration.getDoubleProperty(CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR);
 		if (accelerationFactorTmp <= 0.0) {
-			this.log.warn("Acceleration factor must be > 0. Using default: " + CONFIG_PROPERTY_ACCELERATION_FACTOR_DEFAULT);
+			this.OLDlogger.warn("Acceleration factor must be > 0. Using default: " + CONFIG_PROPERTY_ACCELERATION_FACTOR_DEFAULT);
 			accelerationFactorTmp = 1;
 		}
 		this.accelerationFactor = accelerationFactorTmp;
@@ -164,7 +164,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 			schedTimeFromNow /= this.accelerationFactor;
 			if (schedTimeFromNow < -this.warnOnNegativeSchedTime) {
 				final long schedTimeSeconds = TimeUnit.SECONDS.convert(schedTimeFromNow, this.timeunit);
-				this.log.warn("negative scheduling time: " + schedTimeFromNow + " (" + this.timeunit.toString() + ") / " + schedTimeSeconds
+				this.OLDlogger.warn("negative scheduling time: " + schedTimeFromNow + " (" + this.timeunit.toString() + ") / " + schedTimeSeconds
 						+ " (seconds)-> scheduling with a delay of 0");
 			}
 			if (schedTimeFromNow < 0) {
@@ -203,12 +203,12 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 			}
 			shutdownDelaySecondsFromNow += 2; // Add a buffer for the timeout. Having exactly the second for the last event is unnecessarily tight.
 			try {
-				this.log.info("Awaiting termination delay of " + shutdownDelaySecondsFromNow + " seconds ...");
+				this.OLDlogger.info("Awaiting termination delay of " + shutdownDelaySecondsFromNow + " seconds ...");
 				if (!this.executor.awaitTermination(shutdownDelaySecondsFromNow, TimeUnit.SECONDS)) {
-					this.log.error("Termination delay triggerred before all scheduled records sent");
+					this.logger.error("Termination delay triggerred before all scheduled records sent");
 				}
 			} catch (final InterruptedException e) {
-				this.log.error("Interrupted while awaiting termination delay", e);
+				this.OLDlogger.error("Interrupted while awaiting termination delay", e);
 			}
 		}
 	}

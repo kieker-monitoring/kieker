@@ -123,7 +123,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.logger.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
 			configTimeunit = this.timeunit;
 		}
 
@@ -152,7 +152,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	@InputPort(name = INPUT_PORT_NAME_NEW_TIMESTAMP, description = "Receives a new timestamp as a time event", eventTypes = { Long.class })
 	public void inputTimestamp(final Long timestamp) {
 		if (timestamp < 0) {
-			this.log.warn("Received timestamp value < 0: " + timestamp);
+			this.logger.warn("Received timestamp value < 0: " + timestamp);
 			return;
 		}
 

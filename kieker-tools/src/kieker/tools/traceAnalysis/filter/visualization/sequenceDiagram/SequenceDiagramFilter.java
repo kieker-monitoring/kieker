@@ -108,14 +108,14 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			}
 			error = false;
 		} catch (final IOException exc) {
-			AbstractAnalysisComponent.LOG.error("Error while reading " + SEQUENCE_PIC_PATH, exc);
+			AbstractAnalysisComponent.LOGGER.error("Error while reading " + SEQUENCE_PIC_PATH, exc);
 		} finally {
 			try {
 				if (reader != null) {
 					reader.close();
 				}
 			} catch (final IOException ex) {
-				AbstractAnalysisComponent.LOG.error("Failed to close input stream", ex);
+				AbstractAnalysisComponent.LOGGER.error("Failed to close input stream", ex);
 			}
 			if (error) {
 				// sequence.pic must be provided on execution of pic2plot
@@ -184,10 +184,10 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			SequenceDiagramFilter.this.reportSuccess(((AbstractTrace) mt).getTraceId());
 		} catch (final FileNotFoundException ex) {
 			SequenceDiagramFilter.this.reportError(((AbstractTrace) mt).getTraceId());
-			this.log.error("File not found", ex);
+			this.logger.error("File not found", ex);
 		} catch (final UnsupportedEncodingException ex) {
 			SequenceDiagramFilter.this.reportError(((AbstractTrace) mt).getTraceId());
-			this.log.error("Encoding not supported", ex);
+			this.logger.error("Encoding not supported", ex);
 		}
 	}
 
@@ -283,7 +283,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				}
 			}
 		} else { // needs to be adjusted if a new mode is introduced
-			AbstractAnalysisComponent.LOG.error("Invalid mode: " + sdMode);
+			AbstractAnalysisComponent.LOGGER.error("Invalid mode: " + sdMode);
 		}
 
 		ps.print("step();" + "\n");
@@ -304,7 +304,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				senderDotId = "O" + senderComponent.getId();
 				receiverDotId = "O" + receiverComponent.getId();
 			} else { // needs to be adjusted if a new mode is introduced
-				AbstractAnalysisComponent.LOG.error("Invalid mode: " + sdMode);
+				AbstractAnalysisComponent.LOGGER.error("Invalid mode: " + sdMode);
 			}
 
 			if (me instanceof SynchronousCallMessage) {
@@ -332,7 +332,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				ps.print("rmessage(" + senderDotId + "," + receiverDotId + ", \"\");\n");
 				ps.print("inactive(" + senderDotId + ");\n");
 			} else {
-				AbstractAnalysisComponent.LOG.error("Message type not supported: " + me.getClass().getName());
+				AbstractAnalysisComponent.LOGGER.error("Message type not supported: " + me.getClass().getName());
 			}
 		}
 		ps.print("inactive(" + rootDotId + ");\n");

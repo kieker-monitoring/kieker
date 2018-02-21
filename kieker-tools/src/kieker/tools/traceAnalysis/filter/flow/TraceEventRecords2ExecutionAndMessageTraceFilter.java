@@ -133,7 +133,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	public void inputTraceEvents(final TraceEventRecords traceEventRecords) {
 		final TraceMetadata trace = traceEventRecords.getTraceMetadata();
 		if (trace == null) {
-			this.log.error("Trace is missing from TraceEvents");
+			this.logger.error("Trace is missing from TraceEvents");
 			return;
 		}
 		final long traceId = trace.getTraceId();
@@ -144,11 +144,11 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		for (final AbstractTraceEvent event : traceEventRecords.getTraceEvents()) {
 			expectedOrderIndex += 1; // increment in each iteration -> 0 is the first real value
 			if (event.getOrderIndex() != expectedOrderIndex) {
-				this.log.error("Found event with wrong orderIndex. Found: " + event.getOrderIndex() + " expected: " + (expectedOrderIndex - 1));
+				this.logger.error("Found event with wrong orderIndex. Found: " + event.getOrderIndex() + " expected: " + (expectedOrderIndex - 1));
 				continue; // simply ignore wrong event
 			}
 			if (event.getTraceId() != traceId) {
-				this.log.error("Found event with wrong traceId. Found: " + event.getTraceId() + " expected: " + traceId);
+				this.logger.error("Found event with wrong traceId. Found: " + event.getTraceId() + " expected: " + traceId);
 				continue; // simply ignore wrong event
 			}
 			try { // handle all cases (more specific classes should be handled before less specific ones)
@@ -173,12 +173,12 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 					traceEventRecordHandler.handleCallOperationEvent((CallOperationEvent) event);
 					// SplitEvent
 				} else if (SplitEvent.class.isAssignableFrom(event.getClass())) {
-					this.log.warn("Events of type 'SplitEvent' are currently not handled and ignored.");
+					this.logger.warn("Events of type 'SplitEvent' are currently not handled and ignored.");
 				} else {
-					this.log.warn("Events of type '" + event.getClass().getName() + "' are currently not handled and ignored.");
+					this.logger.warn("Events of type '" + event.getClass().getName() + "' are currently not handled and ignored.");
 				}
 			} catch (final InvalidTraceException ex) {
-				this.log.error("Failed to reconstruct trace.", ex);
+				this.logger.error("Failed to reconstruct trace.", ex);
 				super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
 				return;
 			}
@@ -190,14 +190,14 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTrace);
 			super.reportSuccess(executionTrace.getTraceId());
 		} catch (final InvalidTraceException ex) {
-			this.log.warn("Failed to convert to message trace: " + ex.getMessage()); // do not pass 'ex' to log.warn because this makes the output verbose (#584)
+			this.logger.warn("Failed to convert to message trace: " + ex.getMessage()); // do not pass 'ex' to log.warn because this makes the output verbose (#584)
 			super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
 		}
 
 	}
 
 	protected static Log getLOG() {
-		return AbstractAnalysisComponent.LOG;
+		return AbstractAnalysisComponent.LOGGER;
 	}
 
 	/**

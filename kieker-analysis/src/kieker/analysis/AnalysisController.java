@@ -29,6 +29,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.model.MetaModelHandler;
 import kieker.analysis.model.MetaModelHandler.PluginConnection;
@@ -44,53 +47,50 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.IReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.misc.KiekerMetadataRecord;
 
 /**
  * The <code>AnalysisController</code> can be used to configure, control, save and load an analysis instance.
  * It is responsible for the life cycle of the readers, filters and repositories.
- * 
+ *
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Jan Waller
- * 
+ *
  * @since 0.95a
  */
-@kieker.analysis.annotation.AnalysisController(
-		configuration = {
-			@Property(name = IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "NANOSECONDS"),
-			@Property(name = IProjectContext.CONFIG_PROPERTY_NAME_PROJECT_NAME, defaultValue = "AnalysisProject")
-		})
+@kieker.analysis.annotation.AnalysisController(configuration = {
+	@Property(name = IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "NANOSECONDS"),
+	@Property(name = IProjectContext.CONFIG_PROPERTY_NAME_PROJECT_NAME, defaultValue = "AnalysisProject")
+})
 public final class AnalysisController implements IAnalysisController { // NOPMD (really long class)
 
-	static final Log LOG = LogFactory.getLog(AnalysisController.class); // NOPMD package for inner class
+	static final Logger LOG = LoggerFactory.getLogger(AnalysisController.class); // NOPMD package for inner class
 
 	private final String projectName;
 
 	/**
 	 * This list contains the dependencies of the project. Currently this field is only being used when loading an instance of the model.
 	 */
-	private final Collection<MIDependency> dependencies = new CopyOnWriteArrayList<MIDependency>();
+	private final Collection<MIDependency> dependencies = new CopyOnWriteArrayList<>();
 	/**
 	 * This list contains all registered readers within this controller.
 	 */
-	private final Collection<AbstractReaderPlugin> readers = new CopyOnWriteArrayList<AbstractReaderPlugin>();
+	private final Collection<AbstractReaderPlugin> readers = new CopyOnWriteArrayList<>();
 	/**
 	 * This list contains all registered filters within this controller.
 	 */
-	private final Collection<AbstractFilterPlugin> filters = new CopyOnWriteArrayList<AbstractFilterPlugin>();
+	private final Collection<AbstractFilterPlugin> filters = new CopyOnWriteArrayList<>();
 	/**
 	 * This list contains all registered repositories within this controller.
 	 */
-	private final Collection<AbstractRepository> repos = new CopyOnWriteArrayList<AbstractRepository>();
+	private final Collection<AbstractRepository> repos = new CopyOnWriteArrayList<>();
 	/**
 	 * This list contains all registered state observers within this controller.
 	 */
-	private final Collection<IStateObserver> stateObservers = new CopyOnWriteArrayList<IStateObserver>();
+	private final Collection<IStateObserver> stateObservers = new CopyOnWriteArrayList<>();
 
 	private final CountDownLatch initializationLatch = new CountDownLatch(1);
 
-	private final Set<String> registeredComponentNames = new CopyOnWriteArraySet<String>();
+	private final Set<String> registeredComponentNames = new CopyOnWriteArraySet<>();
 
 	/**
 	 * This map is used to store the mapping between a given instance of {@link MIProject} and an actual instantiation of an analysis. It is not modified after
@@ -122,7 +122,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * Constructs an {@link AnalysisController} instance using the given parameter.
-	 * 
+	 *
 	 * @param projectName
 	 *            The name of the project.
 	 */
@@ -133,10 +133,10 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * This constructors creates an {@link AnalysisController} instance, using the given file to load an analysis model. The given file should therefore be an
 	 * instance of the analysis meta model.
-	 * 
+	 *
 	 * @param file
 	 *            The configuration file for the analysis.
-	 * 
+	 *
 	 * @throws IOException
 	 *             If the given file could not be loaded or is not a valid kax-configuration file.
 	 * @throws AnalysisConfigurationException
@@ -150,12 +150,12 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * This constructors creates an {@link AnalysisController} instance, using the given file to load an analysis model and the given classloader to initialize the
 	 * objects. The given file should therefore be an instance of the analysis meta model.
-	 * 
+	 *
 	 * @param file
 	 *            The configuration file for the analysis.
 	 * @param classLoader
 	 *            The classloader used to initialize the plugins etc.
-	 * 
+	 *
 	 * @throws IOException
 	 *             If the given file could not be loaded or is not a valid kax-configuration file.
 	 * @throws AnalysisConfigurationException
@@ -168,7 +168,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * Creates a new instance of the class {@link AnalysisController} but uses the given instance of {@link MIProject} to construct the analysis.
-	 * 
+	 *
 	 * @param project
 	 *            The project instance for the analysis.
 	 * @throws AnalysisConfigurationException
@@ -182,7 +182,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * Creates a new instance of the class {@link AnalysisController} but uses the given instance of @link{Project} to construct the analysis.
-	 * 
+	 *
 	 * @param project
 	 *            The project instance for the analysis.
 	 * @param classLoader
@@ -204,7 +204,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * Constructs an {@link AnalysisController} instance using the given parameter.
-	 * 
+	 *
 	 * @param configuration
 	 *            The global configuration of this analysis. All plugins can indirectly access it.
 	 */
@@ -215,7 +215,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * This simple helper method validates the configuration object.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration object to check and (perhaps) update.
 	 * @return The configuration object.
@@ -225,7 +225,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		try {
 			TimeUnit.valueOf(stringProperty);
 		} catch (final IllegalArgumentException ignore) {
-			LOG.warn(stringProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			LOG.warn("{} is no valid TimeUnit! Using NANOSECONDS instead.", stringProperty);
 			configuration.setProperty(CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, TimeUnit.NANOSECONDS.name());
 		}
 		return configuration;
@@ -233,7 +233,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * This simple helper method create a new configuration object which is empty except for an entry containing the given project name.
-	 * 
+	 *
 	 * @param projectName
 	 *            The project name to be stored in the new configuration object.
 	 * @return The configuration object.
@@ -246,7 +246,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * This method provides the default properties, as supplied by the annotation.
-	 * 
+	 *
 	 * @return The default configuration.
 	 */
 	private final Configuration getDefaultConfiguration() {
@@ -264,32 +264,17 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * Called whenever an {@link KiekerMetadataRecord} is found inside the filters network.
-	 * 
+	 *
 	 * Currently this method only logs all details.
-	 * 
+	 *
 	 * @param record
 	 *            the KiekerMetadataRecord containing the information
 	 */
 	public final void handleKiekerMetadataRecord(final KiekerMetadataRecord record) {
-		final StringBuilder sb = new StringBuilder(512);
-		sb.append("Kieker metadata: version='");
-		sb.append(record.getVersion());
-		sb.append("', controllerName='");
-		sb.append(record.getControllerName());
-		sb.append("', hostname='");
-		sb.append(record.getHostname());
-		sb.append("', experimentId='");
-		sb.append(record.getExperimentId());
-		sb.append("', debugMode='");
-		sb.append(record.isDebugMode());
-		sb.append("', timeOffset='");
-		sb.append(record.getTimeOffset());
-		sb.append("', timeUnit='");
-		sb.append(record.getTimeUnit());
-		sb.append("', numberOfRecords='");
-		sb.append(record.getNumberOfRecords());
-		sb.append('\'');
-		LOG.info(sb.toString());
+		LOG.info(
+				"Kieker metadata: version='{}', controllerName='{}', hostname='{}', experimentId='{}', debugMode='{}', timeOffset='{}', timeUnit='{}', numberOfRecords='{}'",
+				record.getVersion(), record.getControllerName(), record.getHostname(), record.getExperimentId(), record.isDebugMode(), record.getTimeOffset(),
+				record.getTimeUnit(), record.getNumberOfRecords());
 	}
 
 	/**
@@ -330,7 +315,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * This method can be used to load the configuration from a given meta model instance.
-	 * 
+	 *
 	 * @param mProject
 	 *            The instance to be used for configuration.
 	 * @param classLoader
@@ -339,10 +324,10 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             If the given project represents somehow an invalid configuration.
 	 */
 	private final void loadFromModelProject(final MIProject mProject, final ClassLoader classLoader) throws AnalysisConfigurationException {
-		final Map<MIRepository, AbstractRepository> repositoryMap = new HashMap<MIRepository, AbstractRepository>(); // NOPMD (no concurrent access)
-		final Map<MIPlugin, AbstractPlugin> pluginMap = new HashMap<MIPlugin, AbstractPlugin>(); // NOPMD (no concurrent access)
-		final Collection<PluginConnection> pluginConnections = new ArrayList<PluginConnection>();
-		final Collection<RepositoryConnection> repositoryConnections = new ArrayList<RepositoryConnection>();
+		final Map<MIRepository, AbstractRepository> repositoryMap = new HashMap<>(); // NOPMD (no concurrent access)
+		final Map<MIPlugin, AbstractPlugin> pluginMap = new HashMap<>(); // NOPMD (no concurrent access)
+		final Collection<PluginConnection> pluginConnections = new ArrayList<>();
+		final Collection<RepositoryConnection> repositoryConnections = new ArrayList<>();
 
 		MetaModelHandler.metaModelToJava(mProject, this, pluginConnections, repositoryConnections, this.dependencies, classLoader, this.globalConfiguration,
 				repositoryMap, pluginMap);
@@ -485,11 +470,11 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 						try {
 							if (!reader.read()) {
 								// here we started and won't throw any exceptions!
-								LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
+								LOG.error("Calling read() on Reader '{}' ({})  returned false.", reader.getName(), reader.getPluginName());
 								AnalysisController.this.terminate(true);
 							}
 						} catch (final Throwable t) { // NOPMD NOCS (we also want errors)
-							LOG.error("Exception while reading on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ").", t);
+							LOG.error("Exception while reading on Reader '{}' ({}).", reader.getName(), reader.getPluginName(), t);
 							AnalysisController.this.terminate(true);
 						} finally {
 							readerLatch.countDown();
@@ -569,10 +554,10 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * Registers the given reader with this analysis instance. <b>This method is for internal use only!</b>
-	 * 
+	 *
 	 * @param reader
 	 *            The reader to register with this analysis.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If the analysis has already been started when this method is called.
 	 */
@@ -581,21 +566,19 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
 		if (this.readers.contains(reader)) {
-			LOG.warn("Reader " + reader.getName() + " already registered.");
+			LOG.warn("Reader {} already registered.", reader.getName());
 			return;
 		}
 		this.readers.add(reader);
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Registered reader " + reader);
-		}
+		LOG.debug("Registered reader {}", reader);
 	}
 
 	/**
 	 * Registers the given filter with this analysis instance. <b>This method is for internal use only!</b>
-	 * 
+	 *
 	 * @param filter
 	 *            The filter to register with this analysis.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If the analysis has already been started when this method is called.
 	 */
@@ -604,7 +587,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
 		if (this.filters.contains(filter)) {
-			LOG.warn("Filter '" + filter.getName() + "' (" + filter.getPluginName() + ") already registered.");
+			LOG.warn("Filter '{}' ({}) already registered.", filter.getName(), filter.getPluginName());
 			return;
 		}
 		this.filters.add(filter);
@@ -615,10 +598,10 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * Registers the given repository with this analysis instance. <b>This method is for internal use only!</b>
-	 * 
+	 *
 	 * @param repository
 	 *            The repository to register with this analysis.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If the analysis has already been started when this method is called.
 	 */
@@ -627,13 +610,11 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			throw new IllegalStateException("Unable to register respository after starting analysis.");
 		}
 		if (this.repos.contains(repository)) {
-			LOG.warn("Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered.");
+			LOG.warn("Repository '{}' ({}) already registered.", repository.getName(), repository.getRepositoryName());
 			return;
 		}
 		this.repos.add(repository);
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Registered repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ")");
-		}
+		LOG.debug("Registered repository '{}' ({})", repository.getName(), repository.getRepositoryName());
 	}
 
 	/**
@@ -678,7 +659,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * This method can be used to load a meta model instance from a given file.
-	 * 
+	 *
 	 * @param file
 	 *            The file to be loaded.
 	 * @return An instance of <code>MIProject</code> if everything went well.
@@ -702,7 +683,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * This method can be used to save the given instance of <code>MIProject</code> within a given file.
-	 * 
+	 *
 	 * @param file
 	 *            The file to be used for the storage.
 	 * @param project
@@ -723,7 +704,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * This is a factory method which can be used to create a new instance of {@link AnalysisController}, but delivers the mapping between the {@link MIProject} and
 	 * the actual analysis. It calls the constructor {@code AnalysisController(MIProject, ClassLoader)}.
-	 * 
+	 *
 	 * @param project
 	 *            The project to be loaded.
 	 * @param classLoader
@@ -743,10 +724,10 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * This method tries to atomically register the given name for a component.
-	 * 
+	 *
 	 * @param name
 	 *            The component name to register
-	 * 
+	 *
 	 * @return true if and only if the given name is not already used and could now be registered.
 	 */
 	public boolean tryRegisterComponentName(final String name) {
@@ -756,9 +737,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * This is a wrapper for the {@link AnalysisController} which contains a mapping between the model instances and the actual objects as well. This is necessary if
 	 * one wants to create an analysis based on an instance of {@link MIProject} and needs to map from the model instances to the actual created objects.
-	 * 
+	 *
 	 * @author Andre van Hoorn, Nils Christian Ehmke, Jan Waller
-	 * 
+	 *
 	 * @since 1.6
 	 */
 	public static final class AnalysisControllerWithMapping {
@@ -769,7 +750,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 		/**
 		 * Creates a new instance of this class using the given parameters.
-		 * 
+		 *
 		 * @param controller
 		 *            The analysis controller to be stored in this container.
 		 * @param pluginMap
@@ -786,7 +767,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 		/**
 		 * Getter for the property {@link AnalysisControllerWithMapping#pluginMap}.
-		 * 
+		 *
 		 * @return The current value of the property.
 		 */
 		public Map<MIPlugin, AbstractPlugin> getPluginMap() {
@@ -795,7 +776,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 		/**
 		 * Getter for the property {@link AnalysisControllerWithMapping#repositoryMap}.
-		 * 
+		 *
 		 * @return The current value of the property.
 		 */
 		public Map<MIRepository, AbstractRepository> getRepositoryMap() {
@@ -804,7 +785,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 		/**
 		 * Getter for the property {@link AnalysisControllerWithMapping#controller}.
-		 * 
+		 *
 		 * @return The current value of the property.
 		 */
 		public AnalysisController getController() {
@@ -815,9 +796,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * An enumeration used to describe the state of an {@link AnalysisController}.
-	 * 
+	 *
 	 * @author Jan Waller
-	 * 
+	 *
 	 * @since 1.5
 	 */
 	public static enum STATE {
@@ -845,21 +826,21 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 
 	/**
 	 * This interface can be used for observers which want to get notified about state changes of an analysis controller.
-	 * 
+	 *
 	 * @author Nils Christian Ehmke
-	 * 
+	 *
 	 * @since 1.5
 	 */
 	public static interface IStateObserver {
 
 		/**
 		 * This method will be called for every update of the state.
-		 * 
+		 *
 		 * @param controller
 		 *            The controller which updated its state.
 		 * @param state
 		 *            The new state of the given controller.
-		 * 
+		 *
 		 * @since 1.5
 		 */
 		public void update(final AnalysisController controller, final STATE state);

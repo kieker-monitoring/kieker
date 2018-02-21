@@ -134,7 +134,7 @@ public final class AmqpReader extends AbstractStringRegistryReaderPlugin {
 	}
 
 	private void handleInitializationError(final Throwable e) {
-		LOG.error("An error occurred initializing the AMQP reader: " + e);
+		LOGGER.error("An error occurred initializing the AMQP reader: " + e);
 	}
 
 	private Connection createConnection() throws IOException, TimeoutException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {
@@ -182,15 +182,15 @@ public final class AmqpReader extends AbstractStringRegistryReaderPlugin {
 					this.handleRegularRecord(buffer);
 					break;
 				default:
-					this.log.error(String.format("Unknown record type: %02x", recordType));
+					this.logger.error(String.format("Unknown record type: %02x", recordType));
 					break;
 				}
 			}
 		} catch (final IOException e) {
-			this.log.error("Error while reading from queue " + this.queueName, e);
+			this.logger.error("Error while reading from queue " + this.queueName, e);
 			return false;
 		} catch (final InterruptedException e) {
-			this.log.error("Consumer was interrupted on queue " + this.queueName, e);
+			this.logger.error("Consumer was interrupted on queue " + this.queueName, e);
 			return false;
 		}
 
@@ -203,7 +203,7 @@ public final class AmqpReader extends AbstractStringRegistryReaderPlugin {
 			this.terminated = true;
 			this.connection.close();
 		} catch (final IOException e) {
-			this.log.error("IO error while trying to close the connection.", e);
+			this.logger.error("IO error while trying to close the connection.", e);
 		}
 	}
 

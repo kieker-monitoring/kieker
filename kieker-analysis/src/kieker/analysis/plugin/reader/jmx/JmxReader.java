@@ -136,7 +136,7 @@ public final class JmxReader extends AbstractReaderPlugin {
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutdown of JmxReader requested.");
+		this.logger.info("Shutdown of JmxReader requested.");
 		this.unblock();
 	}
 
@@ -158,9 +158,9 @@ public final class JmxReader extends AbstractReaderPlugin {
 			try {
 				jmx = JMXConnectorFactory.connect(this.serviceURL);
 			} catch (final IOException ex) {
-				this.log.error("Unable to connect to JMX Server (" + ex.getMessage() + ")");
-				if (this.log.isDebugEnabled()) {
-					this.log.debug("Error in JMX connection!", ex);
+				this.logger.error("Unable to connect to JMX Server (" + ex.getMessage() + ")");
+				if (this.logger.isDebugEnabled()) {
+					this.logger.debug("Error in JMX connection!", ex);
 				}
 				return false;
 			}
@@ -169,18 +169,18 @@ public final class JmxReader extends AbstractReaderPlugin {
 			mbServer = jmx.getMBeanServerConnection();
 			logNotificationListener = new LogNotificationListener();
 			mbServer.addNotificationListener(this.monitoringLog, logNotificationListener, null, null);
-			this.log.info("Connected to JMX Server, ID: " + jmx.getConnectionId());
+			this.logger.info("Connected to JMX Server, ID: " + jmx.getConnectionId());
 
 			// Waiting
 			this.block();
 
 			// Shutdown
-			this.log.info("Shutting down JmxReader");
+			this.logger.info("Shutting down JmxReader");
 		} catch (final InstanceNotFoundException ex) {
-			this.log.error("No monitoring log found: " + this.monitoringLog.toString()); // ok to ignore ex here
+			this.logger.error("No monitoring log found: " + this.monitoringLog.toString()); // ok to ignore ex here
 			ret = false;
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			this.log.error("Error in JMX connection!", ex);
+			this.logger.error("Error in JMX connection!", ex);
 			ret = false;
 		} finally {
 			try {
@@ -188,8 +188,8 @@ public final class JmxReader extends AbstractReaderPlugin {
 					mbServer.removeNotificationListener(this.monitoringLog, logNotificationListener);
 				}
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-				if (this.log.isDebugEnabled()) {
-					this.log.debug("Failed to remove Listener!", e);
+				if (this.logger.isDebugEnabled()) {
+					this.logger.debug("Failed to remove Listener!", e);
 				}
 			}
 			try {
@@ -197,8 +197,8 @@ public final class JmxReader extends AbstractReaderPlugin {
 					jmx.removeConnectionNotificationListener(serverNotificationListener);
 				}
 			} catch (final ListenerNotFoundException e) {
-				if (this.log.isDebugEnabled()) {
-					this.log.debug("Failed to remove Listener!", e);
+				if (this.logger.isDebugEnabled()) {
+					this.logger.debug("Failed to remove Listener!", e);
 				}
 			}
 			try {
@@ -206,8 +206,8 @@ public final class JmxReader extends AbstractReaderPlugin {
 					jmx.close();
 				}
 			} catch (final Exception e) { // NOCS (IllegalCatchCheck) // NOPMD
-				if (this.log.isDebugEnabled()) {
-					this.log.debug("Failed to close JMX connection!", e);
+				if (this.logger.isDebugEnabled()) {
+					this.logger.debug("Failed to close JMX connection!", e);
 				}
 			}
 		}
@@ -233,17 +233,17 @@ public final class JmxReader extends AbstractReaderPlugin {
 				mbServer = jmx.getMBeanServerConnection();
 				logNotificationListener = new LogNotificationListener();
 				mbServer.addNotificationListener(this.monitoringLog, logNotificationListener, null, null);
-				this.log.info("Connected to JMX Server, ID: " + jmx.getConnectionId());
+				this.logger.info("Connected to JMX Server, ID: " + jmx.getConnectionId());
 
 				// Waiting
 				this.block();
 
 				// Shutdown
-				this.log.info("Shutting down JmxReader");
+				this.logger.info("Shutting down JmxReader");
 
 			} catch (final InstanceNotFoundException e) { // NOPMD (ignore this)
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-				this.log.error("Error in JMX connection!", e);
+				this.logger.error("Error in JMX connection!", e);
 			} finally {
 				try {
 					if (logNotificationListener != null) {
@@ -308,7 +308,7 @@ public final class JmxReader extends AbstractReaderPlugin {
 	}
 
 	protected Log getLog() {
-		return super.log;
+		return super.logger;
 	}
 
 	/**

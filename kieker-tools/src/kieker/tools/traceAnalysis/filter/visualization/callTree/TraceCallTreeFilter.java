@@ -142,13 +142,13 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 			TraceCallTreeFilter.this.reportSuccess(mt.getTraceId());
 		} catch (final TraceProcessingException ex) {
 			TraceCallTreeFilter.this.reportError(mt.getTraceId());
-			this.log.error("TraceProcessingException", ex);
+			this.logger.error("TraceProcessingException", ex);
 		} catch (final FileNotFoundException ex) {
 			TraceCallTreeFilter.this.reportError(mt.getTraceId());
-			this.log.error("File not found", ex);
+			this.logger.error("File not found", ex);
 		} catch (final UnsupportedEncodingException ex) {
 			TraceCallTreeFilter.this.reportError(mt.getTraceId());
-			this.log.error("Encoding not supported", ex);
+			this.logger.error("Encoding not supported", ex);
 		}
 	}
 }

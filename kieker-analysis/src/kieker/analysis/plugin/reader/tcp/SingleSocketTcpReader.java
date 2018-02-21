@@ -55,7 +55,7 @@ public final class SingleSocketTcpReader extends AbstractReaderPlugin implements
 	public SingleSocketTcpReader(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 		this.port = this.configuration.getIntProperty(CONFIG_PROPERTY_NAME_PORT);
-		this.recordReader = new SingleSocketRecordReader(this.port, MESSAGE_BUFFER_SIZE, this.log, this);
+		this.recordReader = new SingleSocketRecordReader(this.port, MESSAGE_BUFFER_SIZE, this.logger, this);
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public final class SingleSocketTcpReader extends AbstractReaderPlugin implements
 
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutdown of TCPReader requested.");
+		this.logger.info("Shutdown of TCPReader requested.");
 	}
 
 }

@@ -64,9 +64,9 @@ public abstract class AbstractRawDataReader extends AbstractReaderPlugin {
 			final Constructor<? extends IMonitoringRecordDeserializer> constructor = deserializerClass.getConstructor(Configuration.class, IProjectContext.class);
 			localDeserializer = constructor.newInstance(configuration, projectContext);
 		} catch (final ClassNotFoundException e) {
-			LOG.error("The deserializer class '" + deserializerClassName + "' was not found.");
+			LOGGER.error("The deserializer class '" + deserializerClassName + "' was not found.");
 		} catch (final NoSuchMethodException e) {
-			LOG.error("The deserializer class '" + deserializerClassName + "' does not provide a suitable constructor.");
+			LOGGER.error("The deserializer class '" + deserializerClassName + "' does not provide a suitable constructor.");
 		} catch (final InstantiationException e) {
 			this.logInstantiationFailed(deserializerClassName, e);
 		} catch (final IllegalAccessException e) {
@@ -81,7 +81,7 @@ public abstract class AbstractRawDataReader extends AbstractReaderPlugin {
 	}
 
 	private void logInstantiationFailed(final String className, final Throwable e) {
-		LOG.error("The deserializer class '" + className + "' could not be instantiated.", e);
+		LOGGER.error("The deserializer class '" + className + "' could not be instantiated.", e);
 	}
 
 	/**

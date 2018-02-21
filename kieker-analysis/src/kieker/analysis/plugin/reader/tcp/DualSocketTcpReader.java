@@ -72,9 +72,9 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 		this.port1 = this.configuration.getIntProperty(CONFIG_PROPERTY_NAME_PORT1);
 		this.port2 = this.configuration.getIntProperty(CONFIG_PROPERTY_NAME_PORT2);
 
-		this.tcpMonitoringRecordReader = this.createTcpMonitoringRecordReader(this.port1, MESSAGE_BUFFER_SIZE, this.log, this.stringRegistry);
+		this.tcpMonitoringRecordReader = this.createTcpMonitoringRecordReader(this.port1, MESSAGE_BUFFER_SIZE, this.logger, this.stringRegistry);
 
-		this.tcpStringRecordReader = new AbstractTcpReader(this.port2, MESSAGE_BUFFER_SIZE, this.log) {
+		this.tcpStringRecordReader = new AbstractTcpReader(this.port2, MESSAGE_BUFFER_SIZE, this.logger) {
 			@SuppressWarnings("synthetic-access")
 			@Override
 			protected boolean onBufferReceived(final ByteBuffer buffer) {
@@ -120,7 +120,7 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutdown requested.");
+		this.logger.info("Shutdown requested.");
 		this.tcpMonitoringRecordReader.terminate();
 
 		this.tcpStringRecordReader.terminate();
