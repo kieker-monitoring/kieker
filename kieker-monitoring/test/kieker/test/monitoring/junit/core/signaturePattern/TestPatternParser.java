@@ -302,6 +302,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 											}
 											patternBuilder.append(returnTypesOrNews[returnTypeOrNewIdx]).append(white).append(fqClassNames[fqClassNameIdx])
 													.append('.').append(operationNames[operationNameIdx]).append(whiteOrEmpty).append('(').append(whiteOrEmpty);
+                      
 											if (paramLists[paramListIdx].length() > 0) {
 												patternBuilder.append(paramLists[paramListIdx]).append(whiteOrEmpty);
 											}

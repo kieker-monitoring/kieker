@@ -196,9 +196,9 @@ public class ClassOperationSignaturePair {
 		}
 
 		// Append operation name and parameter type list
-		strBuilder.append(fqClassName);
-		strBuilder.append('.').append(signature.getName());
-		strBuilder.append('(');
+		strBuilder.append(fqClassName)
+		          .append('.').append(signature.getName())
+		          .append('(');
 		boolean first = true;
 		for (final String type : signature.getParamTypeList()) {
 			if (!first) {
