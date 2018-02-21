@@ -49,8 +49,10 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 	}
 
 	private ElementGrouping groupElements(final OperationAllocationDependencyGraph graph) {
-		final ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping = new ConcurrentHashMap<ExecutionContainer, Set<AllocationComponent>>();
-		final ConcurrentMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping = new ConcurrentHashMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>>();
+		final ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping =
+				new ConcurrentHashMap<ExecutionContainer, Set<AllocationComponent>>();
+		final ConcurrentMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping =
+				new ConcurrentHashMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>>();
 
 		for (final DependencyGraphNode<AllocationComponentOperationPair> vertex : graph.getVertices()) {
 			final AllocationComponent allocationComponent = vertex.getEntity().getAllocationComponent();
@@ -83,8 +85,8 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 	private static String createAllocationComponentNodeLabel(final AllocationComponent component, final boolean useShortLabels) {
 		final StringBuilder builder = new StringBuilder();
 
-		builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ALLOCATION_COMPONENT).append(System.lineSeparator())
-				.append(component.getAssemblyComponent().getName()).append(':');
+		builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ALLOCATION_COMPONENT).append("\\n")
+		       .append(component.getAssemblyComponent().getName()).append(':');
 
 		if (useShortLabels) {
 			builder.append("..");
