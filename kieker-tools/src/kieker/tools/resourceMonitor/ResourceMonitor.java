@@ -266,8 +266,8 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 		final StringBuilder sb = new StringBuilder(2048);
 		final String lineSeparator = System.getProperty("line.separator");
 		sb.append("Resource Monitoring Configuration:").append(lineSeparator).append("\tSampling interval = ").append(this.interval).append(lineSeparator)
-				.append("\tSampling interval unit = ").append(this.intervalUnit).append(lineSeparator). // unit
-				append("\tInitial delay = ").append(this.initialDelay).append(lineSeparator). // delay
+				.append("\tSampling interval unit = ").append(this.intervalUnit).append(lineSeparator).
+				append("\tInitial delay = ").append(this.initialDelay).append(lineSeparator).
 				append("\tInitial delay unit = ").append(this.initialDelayUnit).append(lineSeparator);
 		if (this.duration < 0) {
 			sb.append("\tDuration = INFINITE").append(lineSeparator);
