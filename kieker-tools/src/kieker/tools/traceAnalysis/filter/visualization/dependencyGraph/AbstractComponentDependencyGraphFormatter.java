@@ -46,8 +46,8 @@ public abstract class AbstractComponentDependencyGraphFormatter<G extends Abstra
 		final StringBuilder builder = new StringBuilder();
 		final AllocationComponent component = node.getEntity();
 
-		builder.append(stereotype).append("\\n");
-		builder.append(component.getAssemblyComponent().getName()).append(':');
+		builder.append(stereotype).append("\\n")
+		       .append(component.getAssemblyComponent().getName()).append(':');
 
 		if (useShortLabels) {
 			builder.append("..");

@@ -78,17 +78,17 @@ public final class DotFactory {
 	 */
 	public static StringBuilder createHeader(final String name, final String label, final String fontcolor, final String fontname, final double fontsize) {
 		final StringBuilder dot = new StringBuilder(256);
-		dot.append("digraph ");
-		dot.append(name);
-		dot.append(" {\n label=<");
-		dot.append(label);
-		dot.append(">;\n fontcolor=\"");
-		dot.append(fontcolor);
-		dot.append("\";\n fontname=\"");
-		dot.append(fontname);
-		dot.append("\";\n fontsize=\"");
-		dot.append(Double.toString(fontsize));
-		dot.append("\";\n");
+		dot.append("digraph ")
+		   .append(name)
+		   .append(" {\n label=<")
+		   .append(label)
+		   .append(">;\n fontcolor=\"")
+		   .append(fontcolor)
+		   .append("\";\n fontname=\"")
+		   .append(fontname)
+		   .append("\";\n fontsize=\"")
+		   .append(Double.toString(fontsize))
+		   .append("\";\n");
 		return dot;
 	}
 
@@ -116,21 +116,21 @@ public final class DotFactory {
 	public static StringBuilder createNodeDefaults(final String style, final String shape, final String framecolor, final String fontcolor, final String fontname,
 			final double fontsize, final String imagescale) {
 		final StringBuilder dot = new StringBuilder(256);
-		dot.append(" node [style=\"");
-		dot.append(style);
-		dot.append("\",shape=\"");
-		dot.append(shape);
-		dot.append("\",color=\"");
-		dot.append(framecolor);
-		dot.append("\",fontcolor=\"");
-		dot.append(fontcolor);
-		dot.append("\",fontname=\"");
-		dot.append(fontname);
-		dot.append("\",fontsize=\"");
-		dot.append(fontsize);
-		dot.append("\",imagescale=\"");
-		dot.append(imagescale);
-		dot.append("\"];\n");
+		dot.append(" node [style=\"")
+		   .append(style)
+		   .append("\",shape=\"")
+		   .append(shape)
+		   .append("\",color=\"")
+		   .append(framecolor)
+		   .append("\",fontcolor=\"")
+		   .append(fontcolor)
+		   .append("\",fontname=\"")
+		   .append(fontname)
+		   .append("\",fontsize=\"")
+		   .append(fontsize)
+		   .append("\",imagescale=\"")
+		   .append(imagescale)
+		   .append("\"];\n");
 		return dot;
 	}
 
@@ -148,13 +148,13 @@ public final class DotFactory {
 	 */
 	public static StringBuilder createEdgeDefaults(final String style, final String arrowhead, final String labelfontname) {
 		final StringBuilder dot = new StringBuilder(128);
-		dot.append(" edge [style=\"");
-		dot.append(style);
-		dot.append("\",arrowhead=\"");
-		dot.append(arrowhead);
-		dot.append("\",labelfontname=\"");
-		dot.append(labelfontname);
-		dot.append("\"];\n");
+		dot.append(" edge [style=\"")
+		   .append(style)
+		   .append("\",arrowhead=\"")
+		   .append(arrowhead)
+		   .append("\",labelfontname=\"")
+		   .append(labelfontname)
+		   .append("\"];\n");
 		return dot;
 	}
 
@@ -196,85 +196,85 @@ public final class DotFactory {
 		if (prefix != null) {
 			dot.append(prefix);
 		}
-		dot.append('"');
-		dot.append(nodeId);
-		dot.append("\" [");
+		dot.append('"')
+		   .append(nodeId)
+		   .append("\" [");
 		if (label != null) {
-			dot.append("label=\"");
-			dot.append(label);
-			dot.append('"');
+			dot.append("label=\"")
+			   .append(label)
+			   .append('"');
 			addComma = true;
 		}
 		if (shape != null) {
 			if (addComma) {
 				dot.append(',');
 			}
-			dot.append("shape=\"");
-			dot.append(shape);
-			dot.append('"');
+			dot.append("shape=\"")
+			   .append(shape)
+			   .append('"');
 			addComma = true;
 		}
 		if (style != null) {
 			if (addComma) {
 				dot.append(',');
 			}
-			dot.append("style=\"");
-			dot.append(style);
-			dot.append('"');
+			dot.append("style=\"")
+			   .append(style)
+			   .append('"');
 			addComma = true;
 		}
 		if (framecolor != null) {
 			if (addComma) {
 				dot.append(',');
 			}
-			dot.append("color=\"");
-			dot.append(framecolor);
-			dot.append('"');
+			dot.append("color=\"")
+			   .append(framecolor)
+			   .append('"');
 			addComma = true;
 		}
 		if (fillcolor != null) {
 			if (addComma) {
 				dot.append(',');
 			}
-			dot.append("fillcolor=\"");
-			dot.append(fillcolor);
-			dot.append('"');
+			dot.append("fillcolor=\"")
+			   .append(fillcolor)
+			   .append('"');
 			addComma = true;
 		}
 		if (fontcolor != null) {
 			if (addComma) {
 				dot.append(',');
 			}
-			dot.append("fontcolor=\"");
-			dot.append(fontcolor);
-			dot.append('"');
+			dot.append("fontcolor=\"")
+			   .append(fontcolor)
+			   .append('"');
 			addComma = true;
 		}
 		if (fontsize != DOT_DEFAULT_FONTSIZE) {
 			if (addComma) {
 				dot.append(',');
 			}
-			dot.append("fontsize=\"");
-			dot.append(fontsize);
-			dot.append('"');
+			dot.append("fontsize=\"")
+			   .append(fontsize)
+			   .append('"');
 			addComma = true;
 		}
 		if (imageFilename != null) {
 			if (addComma) {
 				dot.append(',');
 			}
-			dot.append("image=\"");
-			dot.append(imageFilename);
-			dot.append('"');
+			dot.append("image=\"")
+			   .append(imageFilename)
+			   .append('"');
 			addComma = true;
 		}
 		if (tooltip != null) {
 			if (addComma) {
 				dot.append(',');
 			}
-			dot.append("tooltip=\"");
-			dot.append(tooltip);
-			dot.append('"');
+			dot.append("tooltip=\"")
+			   .append(tooltip)
+			   .append('"');
 			addComma = true;
 		}
 
@@ -319,48 +319,48 @@ public final class DotFactory {
 	public static StringBuilder createCluster(final String prefix, final String name, final String label, final String shape, final String style,
 			final String framecolor, final String fillcolor, final String fontcolor, final double fontsize, final String misc) {
 		final StringBuilder dot = new StringBuilder(256);
-		dot.append(prefix);
-		dot.append("subgraph \"cluster_");
-		dot.append(name);
-		dot.append("\" {\n");
-		dot.append(prefix);
-		dot.append(" label = \"");
-		dot.append(label);
+		dot.append(prefix)
+		   .append("subgraph \"cluster_")
+		   .append(name)
+		   .append("\" {\n")
+		   .append(prefix)
+		   .append(" label = \"")
+		   .append(label);
 		if (shape != null) {
-			dot.append("\";\n");
-			dot.append(prefix);
-			dot.append(" shape = \"");
-			dot.append(shape);
+			dot.append("\";\n")
+			   .append(prefix)
+			   .append(" shape = \"")
+			   .append(shape);
 		}
 		if (style != null) {
-			dot.append("\";\n");
-			dot.append(prefix);
-			dot.append(" style = \"");
-			dot.append(style);
+			dot.append("\";\n")
+			   .append(prefix)
+			   .append(" style = \"")
+			   .append(style);
 		}
 		if (framecolor != null) {
-			dot.append("\";\n");
-			dot.append(prefix);
-			dot.append(" pencolor = \"");
-			dot.append(framecolor);
+			dot.append("\";\n")
+			   .append(prefix)
+			   .append(" pencolor = \"")
+			   .append(framecolor);
 		}
 		if (fillcolor != null) {
-			dot.append("\";\n");
-			dot.append(prefix);
-			dot.append(" fillcolor = \"");
-			dot.append(fillcolor);
+			dot.append("\";\n")
+			   .append(prefix)
+			   .append(" fillcolor = \"")
+			   .append(fillcolor);
 		}
 		if (fontcolor != null) {
-			dot.append("\";\n");
-			dot.append(prefix);
-			dot.append(" fontcolor = \"");
-			dot.append(fontcolor);
+			dot.append("\";\n")
+			   .append(prefix)
+			   .append(" fontcolor = \"")
+			   .append(fontcolor);
 		}
 		if (fontsize != DOT_DEFAULT_FONTSIZE) {
-			dot.append("\";\n");
-			dot.append(prefix);
-			dot.append(" fontsize = \"");
-			dot.append(fontsize);
+			dot.append("\";\n")
+			   .append(prefix)
+			   .append(" fontsize = \"")
+			   .append(fontsize);
 		}
 		dot.append("\";");
 		if (misc != null) {
@@ -391,17 +391,17 @@ public final class DotFactory {
 	 */
 	public static String createConnection(final String prefix, final String from, final String to, final String style, final String arrowhead, final String color) {
 		final StringBuilder dot = new StringBuilder(128);
-		dot.append(prefix);
-		dot.append(from);
-		dot.append("->");
-		dot.append(to);
+		dot.append(prefix)
+		   .append(from)
+		   .append("->")
+		   .append(to);
 
 		boolean firstFlag = true;
 
 		if (style != null) {
-			dot.append("style=\"");
-			dot.append(style);
-			dot.append('"');
+			dot.append("style=\"")
+			   .append(style)
+			   .append('"');
 			firstFlag = false;
 		}
 		if (arrowhead != null) {
@@ -409,9 +409,9 @@ public final class DotFactory {
 				dot.append(',');
 			}
 
-			dot.append(" arrowhead=\"");
-			dot.append(arrowhead);
-			dot.append('"');
+			dot.append(" arrowhead=\"")
+			   .append(arrowhead)
+			   .append('"');
 			firstFlag = false;
 		}
 		if (color != null) {
@@ -419,9 +419,9 @@ public final class DotFactory {
 				dot.append(',');
 			}
 
-			dot.append(" color=\"");
-			dot.append(color);
-			dot.append('"');
+			dot.append(" color=\"")
+			   .append(color)
+			   .append('"');
 			firstFlag = false;
 		}
 		dot.append(']');
@@ -452,26 +452,26 @@ public final class DotFactory {
 	public static String createConnection(final String prefix, final String from, final String to, final String label, final String style, final String arrowhead,
 			final String color) {
 		final StringBuilder dot = new StringBuilder(128);
-		dot.append(prefix);
-		dot.append(from);
-		dot.append("->");
-		dot.append(to);
-		dot.append("[label=");
-		dot.append(label);
+		dot.append(prefix)
+		   .append(from)
+		   .append("->")
+		   .append(to)
+		   .append("[label=")
+		   .append(label);
 		if (style != null) {
-			dot.append(", style=\"");
-			dot.append(style);
-			dot.append('"');
+			dot.append(", style=\"")
+			   .append(style)
+			   .append('"');
 		}
 		if (arrowhead != null) {
-			dot.append(", arrowhead=\"");
-			dot.append(arrowhead);
-			dot.append('"');
+			dot.append(", arrowhead=\"")
+			   .append(arrowhead)
+			   .append('"');
 		}
 		if (color != null) {
-			dot.append(", color=\"");
-			dot.append(color);
-			dot.append('"');
+			dot.append(", color=\"")
+			   .append(color)
+			   .append('"');
 		}
 		dot.append(']');
 		return dot.toString();
@@ -495,16 +495,16 @@ public final class DotFactory {
 	 */
 	public static String createConnection(final String prefix, final String from, final String to, final double taillabel, final double headlabel) {
 		final StringBuilder dot = new StringBuilder(128);
-		dot.append(prefix);
-		dot.append('"');
-		dot.append(from);
-		dot.append("\" -> \"");
-		dot.append(to);
-		dot.append("\" [label=\" \",taillabel=\"");
-		dot.append(taillabel * 100.0);
-		dot.append("(\",headlabel=\"");
-		dot.append(headlabel * 100.0);
-		dot.append("\"];\n");
+		dot.append(prefix)
+		   .append('"')
+		   .append(from)
+		   .append("\" -> \"")
+		   .append(to)
+		   .append("\" [label=\" \",taillabel=\"")
+		   .append(taillabel * 100.0)
+		   .append("(\",headlabel=\"")
+		   .append(headlabel * 100.0)
+		   .append("\"];\n");
 		return dot.toString();
 	}
 }

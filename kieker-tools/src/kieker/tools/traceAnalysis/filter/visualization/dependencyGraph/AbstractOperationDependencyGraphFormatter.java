@@ -36,8 +36,8 @@ public abstract class AbstractOperationDependencyGraphFormatter<T extends Abstra
 		final StringBuilder builder = new StringBuilder();
 		final Signature signature = operation.getSignature();
 
-		builder.append(signature.getName());
-		builder.append('(');
+		builder.append(signature.getName())
+		       .append('(');
 
 		final String[] parameterTypes = signature.getParamTypeList();
 		if (parameterTypes.length > 0) { // // parameterTypes cannot be null (getParamTypeList never returns null)

@@ -85,8 +85,8 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 	private static String createAllocationComponentNodeLabel(final AllocationComponent component, final boolean useShortLabels) {
 		final StringBuilder builder = new StringBuilder();
 
-		builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ALLOCATION_COMPONENT).append("\\n");
-		builder.append(component.getAssemblyComponent().getName()).append(':');
+		builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ALLOCATION_COMPONENT).append("\\n")
+		       .append(component.getAssemblyComponent().getName()).append(':');
 
 		if (useShortLabels) {
 			builder.append("..");

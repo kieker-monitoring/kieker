@@ -84,16 +84,16 @@ public final class TraceEventRecords {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(64);
-		sb.append(super.toString());
-		sb.append("\n\tTrace (count=");
-		sb.append(this.count);
-		sb.append("): ");
-		sb.append(this.trace);
+		sb.append(super.toString())
+		  .append("\n\tTrace (count=")
+		  .append(this.count)
+		  .append("): ")
+		  .append(this.trace);
 		for (final AbstractTraceEvent traceEvent : this.traceEvents) {
-			sb.append("\n\t");
-			sb.append(traceEvent.getClass().getSimpleName());
-			sb.append(": ");
-			sb.append(traceEvent);
+			sb.append("\n\t")
+			  .append(traceEvent.getClass().getSimpleName())
+			  .append(": ")
+			  .append(traceEvent);
 		}
 		sb.append('\n');
 		return sb.toString();

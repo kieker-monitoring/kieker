@@ -300,9 +300,9 @@ public class TestPatternParser extends AbstractKiekerTest {
 											if (nativeNonNatives[nativeNonNativeIdx].length() > 0) {
 												patternBuilder.append(nativeNonNatives[nativeNonNativeIdx]).append(white);
 											}
-											patternBuilder.append(returnTypesOrNews[returnTypeOrNewIdx]).append(white);
-											patternBuilder.append(fqClassNames[fqClassNameIdx]).append('.');
-											patternBuilder.append(operationNames[operationNameIdx]).append(whiteOrEmpty).append('(').append(whiteOrEmpty);
+											patternBuilder.append(returnTypesOrNews[returnTypeOrNewIdx]).append(white)
+											              .append(fqClassNames[fqClassNameIdx]).append('.')
+											              .append(operationNames[operationNameIdx]).append(whiteOrEmpty).append('(').append(whiteOrEmpty);
 											if (paramLists[paramListIdx].length() > 0) {
 												patternBuilder.append(paramLists[paramListIdx]).append(whiteOrEmpty);
 											}

@@ -94,8 +94,8 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 	@Override
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder(64);
-		sb.append("Time in " + this.timeunit.toString().toLowerCase(Locale.ENGLISH) + " (with milliseconds precision) since ");
-		sb.append(new Date(this.offset));
+		sb.append("Time in " + this.timeunit.toString().toLowerCase(Locale.ENGLISH) + " (with milliseconds precision) since ")
+		  .append(new Date(this.offset));
 		return sb.toString();
 	}
 }
