@@ -115,17 +115,17 @@ public class ForecastResult implements IForecastResult {
 	@Override
 	public String toString() {
 		final StringBuilder strB = new StringBuilder(71);
-		strB.append('\n' + "tsForecast: ");
-		strB.append(this.tsForecast.toString());
-		strB.append('\n' + "tsOriginal: ");
-		strB.append(this.tsOriginal.toString());
-		strB.append('\n' + "confidenceLevel: ");
-		strB.append(this.confidenceLevel);
-		strB.append('\n' + "tsUpper: ");
-		strB.append(this.tsUpper);
-		strB.append('\n' + "tsLower: ");
-		strB.append(this.tsLower);
-		strB.append('\n');
+		strB.append('\n' + "tsForecast: ")
+		    .append(this.tsForecast.toString())
+		    .append('\n' + "tsOriginal: ")
+		    .append(this.tsOriginal.toString())
+		    .append('\n' + "confidenceLevel: ")
+		    .append(this.confidenceLevel)
+		    .append('\n' + "tsUpper: ")
+		    .append(this.tsUpper)
+		    .append('\n' + "tsLower: ")
+		    .append(this.tsLower)
+		    .append('\n');
 		return strB.toString();
 	}
 
