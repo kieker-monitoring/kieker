@@ -7,6 +7,8 @@ configurations {
 }
 
 dependencies {
+	clover 'org.openclover:clover:4.2.0'
+
 	jms 'commons-logging:commons-logging:1.2'
 
 	amqp 'commons-logging:commons-logging:1.2'
@@ -25,6 +27,13 @@ dependencies {
 
 	opad 'org.apache.commons:commons-math3:3.6.1'
 	opad 'org.apache.commons:commons-lang3:3.6'
+}
+
+clover {
+	report {
+		html=true
+	}
+	
 }
 
 defaultTasks 'cleanStandaloneExamples', 'buildStandaloneExamples'

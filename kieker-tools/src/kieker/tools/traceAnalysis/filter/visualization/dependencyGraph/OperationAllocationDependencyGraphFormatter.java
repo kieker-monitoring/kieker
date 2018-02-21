@@ -32,9 +32,9 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 
 /**
  * Formatter for operation dependency graphs on the allocation level (see {@link OperationAllocationDependencyGraph}).
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public class OperationAllocationDependencyGraphFormatter extends AbstractOperationDependencyGraphFormatter<OperationAllocationDependencyGraph> {
@@ -166,7 +166,7 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 							null, // imagefilename
 							null, // misc
 							node.getDescription() // tooltip
-							));
+					));
 				}
 
 				builder.append("}\n");

@@ -32,9 +32,9 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
 
 /**
  * Formatter for operation dependency graphs on the assembly level (see {@link OperationAssemblyDependencyGraph}).
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public class OperationAssemblyDependencyGraphFormatter extends AbstractOperationDependencyGraphFormatter<OperationAssemblyDependencyGraph> {
@@ -50,8 +50,7 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 
 	private ConcurrentMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>> groupNodesByComponent(
 			final OperationAssemblyDependencyGraph graph) {
-		final ConcurrentMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>> grouping =
-				new ConcurrentHashMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>>();
+		final ConcurrentMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>> grouping = new ConcurrentHashMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>>();
 
 		for (final DependencyGraphNode<AssemblyComponentOperationPair> vertex : graph.getVertices()) {
 			final AssemblyComponentOperationPair pair = vertex.getEntity();

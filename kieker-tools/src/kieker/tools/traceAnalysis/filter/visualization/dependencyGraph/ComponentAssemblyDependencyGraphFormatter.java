@@ -23,9 +23,9 @@ import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 
 /**
  * Formatter class for component dependency graphs on the assembly level (see {@link ComponentAssemblyDependencyGraph}).
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponentDependencyGraphFormatter<ComponentAssemblyDependencyGraph> {
