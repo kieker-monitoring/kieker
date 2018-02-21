@@ -89,10 +89,13 @@ public final class StateController extends AbstractController implements IStateC
 		} else {
 			sb.append("disabled");
 		}
-		sb.append("'\n\tName: '").append(this.name).
-			append("'; Hostname: '").append(this.hostname).
-			append("'; experimentID: '").append(this.getExperimentId()).
-			append("'\n");
+		sb.append("'\n\tName: '")
+          .append(this.name)
+          .append("'; Hostname: '")
+          .append(this.hostname)
+          .append("'; experimentID: '")
+          .append(this.getExperimentId())
+          .append("'\n");
 		return sb.toString();
 	}
 
