@@ -29,7 +29,31 @@ node('kieker-slave-docker') {
         junit '**/build/test-results/test/*.xml'
         step([
 		    $class: 'CloverPublisher',
+		    cloverReportDir: env.WORKSPACE + '/kieker-common/build/reports/clover',
+		    cloverReportFileName: 'clover.xml',
+		    healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80], // optional, default is: method=70, conditional=80, statement=80
+		    unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
+		    //failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
+		])
+		step([
+		    $class: 'CloverPublisher',
+		    cloverReportDir: env.WORKSPACE + '/kieker-monitoring/build/reports/clover',
+		    cloverReportFileName: 'clover.xml',
+		    healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80], // optional, default is: method=70, conditional=80, statement=80
+		    unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
+		    //failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
+		])
+		step([
+		    $class: 'CloverPublisher',
 		    cloverReportDir: env.WORKSPACE + '/kieker-analysis/build/reports/clover',
+		    cloverReportFileName: 'clover.xml',
+		    healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80], // optional, default is: method=70, conditional=80, statement=80
+		    unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
+		    //failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
+		])
+		step([
+		    $class: 'CloverPublisher',
+		    cloverReportDir: env.WORKSPACE + '/kieker-tools/build/reports/clover',
 		    cloverReportFileName: 'clover.xml',
 		    healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80], // optional, default is: method=70, conditional=80, statement=80
 		    unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none

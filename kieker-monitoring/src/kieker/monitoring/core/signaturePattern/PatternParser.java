@@ -534,7 +534,7 @@ public final class PatternParser {
 			"((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?synchronized\\s(native\\s)?",
 			"((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(native\\s)?",
 			"((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?native\\s",
-			"((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?"
+			"((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?",
 		};
 
 		for (int i = 0; i < tokens.length; i++) {
