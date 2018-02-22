@@ -17,13 +17,14 @@ package kieker.analysis.plugin.reader.tcp;
 
 import java.nio.ByteBuffer;
 
+import org.slf4j.Logger;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.misc.RegistryRecord;
@@ -60,7 +61,7 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 	private final int port1;
 	private final int port2;
 
-	private final ILookup<String> stringRegistry = new Lookup<String>();
+	private final ILookup<String> stringRegistry = new Lookup<>();
 
 	private final AbstractRecordTcpReader tcpMonitoringRecordReader;
 	private final AbstractTcpReader tcpStringRecordReader;
@@ -84,14 +85,15 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 		};
 	}
 
-	protected AbstractRecordTcpReader createTcpMonitoringRecordReader(final int port, final int bufferCapacity, final Log logger, final ILookup<String> registry) {
+	protected AbstractRecordTcpReader createTcpMonitoringRecordReader(final int port, final int bufferCapacity, final Logger logger,
+			final ILookup<String> registry) {
 		return new AbstractRecordTcpReader(port, bufferCapacity, logger, registry, new CachedRecordFactoryCatalog()) {
 			@SuppressWarnings("synthetic-access")
 			@Override
 			protected void onRecordReceived(final IMonitoringRecord record) {
 				final boolean success = DualSocketTcpReader.this.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 				if (!success) {
-					this.logger.warn("Failed to deliver record: " + record);
+					this.logger.warn("Failed to deliver record: {}", record);
 				}
 			}
 		};

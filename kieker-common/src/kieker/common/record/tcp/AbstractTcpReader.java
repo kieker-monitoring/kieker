@@ -24,8 +24,6 @@ import java.nio.channels.SocketChannel;
 
 import org.slf4j.Logger;
 
-import kieker.common.logging.Log;
-
 /**
  * Represents a TCP reader without any knowledge about Kieker in general and records in particular.
  *
