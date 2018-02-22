@@ -47,7 +47,7 @@ public class Dir2RecordsFilterTest {
 		new Execution<>(new TestConfiguration()).executeBlocking();
 	}
 
-	class TestConfiguration extends Configuration {
+	static class TestConfiguration extends Configuration {
 
 		public TestConfiguration() {
 			final ReadingComposite reader = new ReadingComposite(new File("."));
@@ -57,7 +57,7 @@ public class Dir2RecordsFilterTest {
 		}
 	}
 
-	class ReadingComposite extends CompositeStage {
+	static class ReadingComposite extends CompositeStage {
 
 		private final InitialElementProducer<File> producer;
 		private final Dir2RecordsFilter reader;
