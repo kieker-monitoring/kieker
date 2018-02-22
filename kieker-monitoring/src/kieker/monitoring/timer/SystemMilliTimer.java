@@ -26,9 +26,9 @@ import kieker.common.logging.LogFactory;
 
 /**
  * A timer implementation, counting in milliseconds since a specified offset.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public final class SystemMilliTimer extends AbstractTimeSource {
@@ -44,7 +44,7 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this timer.
 	 */
@@ -94,8 +94,8 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 	@Override
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder(64);
-		sb.append("Time in " + this.timeunit.toString().toLowerCase(Locale.ENGLISH) + " (with milliseconds precision) since ");
-		sb.append(new Date(this.offset));
+		sb.append("Time in ").append(this.timeunit.toString().toLowerCase(Locale.ENGLISH)).append(" (with milliseconds precision) since ")
+				.append(new Date(this.offset));
 		return sb.toString();
 	}
 }

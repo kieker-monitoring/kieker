@@ -5,6 +5,8 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
+	clover 'org.openclover:clover:4.2.0'
+
 	compile project(':kieker-common')
 
 	compile resolveLibrary('javax.jms-*.jar')				// old library; not available via maven repo
@@ -14,8 +16,6 @@ dependencies {
 	compile resolveLibrary('org.eclipse.emf.ecore_*.jar')
 	compile 'com.rabbitmq:amqp-client:4.2.1'
 	compile 'com.google.guava:guava:20.0'				// (21.0 and above require java 8) used by StringRegistryCache for amqp reader
-	compile 'org.apache.kafka:kafka-clients:0.11.0.1'
-	
 	compile resolveLibrary('teetime-3.0-20161128.194027-256-jar-with-dependencies.jar')
 	compile 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
 
@@ -23,6 +23,14 @@ dependencies {
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
 	
 	testRuntime 'org.apache.derby:derby:10.12.1.1'	// (10.13.1.1 and above require Java 8)
+}
+
+
+clover {
+	report {
+		html=true
+	}
+	
 }
 
 eclipse {
