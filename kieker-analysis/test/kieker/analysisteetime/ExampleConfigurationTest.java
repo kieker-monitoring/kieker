@@ -19,6 +19,7 @@ package kieker.analysisteetime;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -54,7 +55,7 @@ public class ExampleConfigurationTest {
 	}
 
 	@Test
-	public void testCurrentStateOfDevelopment() throws FileNotFoundException, URISyntaxException {
+	public void testCurrentStateOfDevelopment() throws FileNotFoundException, URISyntaxException, UnsupportedEncodingException {
 		// use the classloader to identify resources in a location-independent way
 		// from: https://stackoverflow.com/questions/24499692/access-resources-in-unit-tests
 		// => works with Eclipse and Gradle
@@ -90,8 +91,9 @@ public class ExampleConfigurationTest {
 		analysis.executeBlocking();
 
 		final DeploymentModel deploymentModel = configuration.getDeploymentModel();
-		final DeploymentModelPrinter deploymentModelPrinter = new DeploymentModelPrinter(
-				new PrintStream(new File(projectDir.getFile(), "model.txt")));
+		final File file = new File(projectDir.getFile(), "model.txt");
+		final PrintStream printStream = new PrintStream(file, "UFT-8");
+		final DeploymentModelPrinter deploymentModelPrinter = new DeploymentModelPrinter(printStream);
 		// final DeploymentModelPrinter deploymentModelPrinter = new
 		// DeploymentModelPrinter(System.out);
 		deploymentModelPrinter.print(deploymentModel);
