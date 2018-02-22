@@ -577,8 +577,10 @@ public final class PatternParser {
 	}
 
 	private static void checkNative(final StringBuilder signatureRegex, final String modifier) {
-		if (NATIVE.equals(modifier) || !NON_NATIVE.equals(modifier)) {
+		if (NATIVE.equals(modifier)) {
 			signatureRegex.append("native\\s");
+		} else if (!NON_NATIVE.equals(modifier)) {
+			signatureRegex.append("(native\\s)?");
 		}
 	}
 
