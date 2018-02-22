@@ -30,7 +30,8 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * This filter has exactly one input port and one output port.
  *
- * Every record received is cloned and each detected String is buffered in a shared area in order to save memory.
+ * Every record received is cloned and each detected String is buffered in a
+ * shared area in order to save memory.
  *
  * @author Jan Waller
  *
@@ -85,7 +86,7 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 					newRecord.setLoggingTimestamp(((IMonitoringRecord) object).getLoggingTimestamp());
 					super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, newRecord);
 				} catch (final MonitoringRecordException ex) {
-					this.OLDlogger.warn("Failed to recreate buffered monitoring record: " + object.toString(), ex);
+					this.logger.warn("Failed to recreate buffered monitoring record: {}", object.toString(), ex);
 				}
 			} else {
 				super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, object);

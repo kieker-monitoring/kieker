@@ -29,7 +29,8 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 /**
- * This filter collects the incoming objects in a simple synchronized list. It is mostly used for test purposes.
+ * This filter collects the incoming objects in a simple synchronized list. It
+ * is mostly used for test purposes.
  *
  * @param <T>
  *            The type of the list.
@@ -49,7 +50,9 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	/** The name of the output port for the forwarded objects. */
 	public static final String OUTPUT_PORT_NAME = "outputObjects";
 
-	/** The name of the property determining the maximal number of allowed entries. */
+	/**
+	 * The name of the property determining the maximal number of allowed entries.
+	 */
 	public static final String CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES = "maxNumberOfEntries";
 	/** The default value for the maximal number of allowed entries (unlimited. */
 	public static final String CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES = "-1"; // unlimited per default
@@ -103,7 +106,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 		try {
 			tmpListFullBehavior = ListFullBehavior.valueOf(strListFullBehavior);
 		} catch (final IllegalArgumentException ex) {
-			this.OLDlogger.warn(strListFullBehavior + " is no valid list full behavior! Using 'ignore' instead.");
+			this.logger.warn("{} is no valid list full behavior! Using 'ignore' instead.", strListFullBehavior);
 			tmpListFullBehavior = ListFullBehavior.ignore;
 		}
 		this.listFullBehavior = tmpListFullBehavior;
@@ -145,8 +148,9 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 					if (this.maxNumberOfEntries > this.list.size()) {
 						this.list.add(data);
 					} else {
-						throw new RuntimeException("Too many records for ListCollectionFilter, it was initialized with capacity: " // NOPMD
-								+ this.maxNumberOfEntries); // NOPMD
+						throw new RuntimeException(
+								"Too many records for ListCollectionFilter, it was initialized with capacity: " // NOPMD
+										+ this.maxNumberOfEntries); // NOPMD
 					}
 				}
 				break;

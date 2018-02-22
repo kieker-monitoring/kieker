@@ -32,7 +32,8 @@ import kieker.common.configuration.Configuration;
 /**
  * This filter has exactly one input port and one output port.
  *
- * A simple message is printed to a configurable stream and all objects are forwarded to the output port.
+ * A simple message is printed to a configurable stream and all objects are
+ * forwarded to the output port.
  *
  * @author Matthias Rohr, Jan Waller
  *
@@ -43,32 +44,55 @@ import kieker.common.configuration.Configuration;
 		@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_STREAM, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT, description = "The name of the stream used to print the incoming data (special values are STDOUT, STDERR, STDlog, and NULL; "
 				+ "other values are interpreted as filenames)."),
 		@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_ENCODING, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING, description = "The used encoding for the selected stream."),
-		@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_APPEND, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_APPEND, description = "Decides whether the filter appends to the stream in the case of a file or not.")
-	})
+		@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_APPEND, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_APPEND, description = "Decides whether the filter appends to the stream in the case of a file or not.") })
 public final class TeeFilter extends AbstractFilterPlugin {
 
 	/** The name of the input port for incoming events. */
 	public static final String INPUT_PORT_NAME_EVENTS = "receivedEvents";
 	/** The name of the output port delivering the incoming events. */
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
-	/** The name of the property determining the stream in which the incoming data will be printed. */
+	/**
+	 * The name of the property determining the stream in which the incoming data
+	 * will be printed.
+	 */
 	public static final String CONFIG_PROPERTY_NAME_STREAM = "stream";
 	/** The name of the property determining the used encoding. */
 	public static final String CONFIG_PROPERTY_NAME_ENCODING = "characterEncoding";
-	/** The name of the property determining whether or not the stream appends or overwrites to files. */
+	/**
+	 * The name of the property determining whether or not the stream appends or
+	 * overwrites to files.
+	 */
 	public static final String CONFIG_PROPERTY_NAME_APPEND = "append";
 
-	/** The value of the stream property which determines that the filter uses the standard output. */
+	/**
+	 * The value of the stream property which determines that the filter uses the
+	 * standard output.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDOUT = "STDOUT";
-	/** The value of the stream property which determines that the filter uses the standard error output. */
+	/**
+	 * The value of the stream property which determines that the filter uses the
+	 * standard error output.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDERR = "STDERR";
-	/** The value of the stream property which determines that the filter uses the standard log. */
+	/**
+	 * The value of the stream property which determines that the filter uses the
+	 * standard log.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDLOG = "STDlog";
-	/** The value of the stream property which determines that the filter doesn't print anything. */
+	/**
+	 * The value of the stream property which determines that the filter doesn't
+	 * print anything.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_NULL = "NULL";
-	/** The default value of the encoding property which determines that the filter uses utf-8. */
+	/**
+	 * The default value of the encoding property which determines that the filter
+	 * uses utf-8.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING = "UTF-8";
-	/** The default value of the stream property which determines that the filter appends or overwrites a file. */
+	/**
+	 * The default value of the stream property which determines that the filter
+	 * appends or overwrites a file.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_APPEND = "true";
 
 	private final PrintStream printStream;
@@ -118,12 +142,13 @@ public final class TeeFilter extends AbstractFilterPlugin {
 			this.append = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_APPEND);
 			PrintStream tmpPrintStream;
 			try {
-				tmpPrintStream = new PrintStream(new FileOutputStream(printStreamNameConfig, this.append), false, this.encoding);
+				tmpPrintStream = new PrintStream(new FileOutputStream(printStreamNameConfig, this.append), false,
+						this.encoding);
 			} catch (final UnsupportedEncodingException ex) {
-				this.OLDlogger.error("Failed to initialize " + printStreamNameConfig, ex);
+				this.logger.error("Failed to initialize {}", printStreamNameConfig, ex);
 				tmpPrintStream = null; // NOPMD (null)
 			} catch (final FileNotFoundException ex) {
-				this.OLDlogger.error("Failed to initialize " + printStreamNameConfig, ex);
+				this.logger.error("Failed to initialize {}", printStreamNameConfig, ex);
 				tmpPrintStream = null; // NOPMD (null)
 			}
 			this.printStream = tmpPrintStream;
@@ -165,24 +190,25 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * This method is the input port of the filter receiving incoming objects. Every object will be printed into a stream (based on the configuration) before the
+	 * This method is the input port of the filter receiving incoming objects. Every
+	 * object will be printed into a stream (based on the configuration) before the
 	 * filter sends it to the output port.
 	 *
 	 * @param object
 	 *            The new object.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be logged and forwarded", eventTypes = { Object.class })
+	@InputPort(name = INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be logged and forwarded", eventTypes = {
+		Object.class })
 	public final void inputEvent(final Object object) {
 		if (this.active) {
 			final StringBuilder sb = new StringBuilder(128);
-			sb.append(this.getName()).
-				append('(').append(object.getClass().getSimpleName()).append(") ").
-				append(object.toString());
+			sb.append(this.getName()).append('(').append(object.getClass().getSimpleName()).append(") ")
+					.append(object.toString());
 			final String record = sb.toString();
 			if (this.printStream != null) {
 				this.printStream.println(record);
 			} else {
-				this.OLDlogger.info(record);
+				this.logger.info(record);
 			}
 		}
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, object);
