@@ -437,5 +437,10 @@
 		<Class name="kieker.tools.resourceMonitor.ResourceMonitor$2" />
 		<Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
 	</Match>
+
+	<!-- Exclude all generated classes for the analysis model-->
+	<Match>
+		<Package name="~kieker\.analysisteetime\.model\.analysismodel.*" />
+	</Match>
 	
 </FindBugsFilter>
