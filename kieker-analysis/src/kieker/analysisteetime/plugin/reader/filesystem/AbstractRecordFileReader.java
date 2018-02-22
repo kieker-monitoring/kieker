@@ -18,7 +18,7 @@ package kieker.analysisteetime.plugin.reader.filesystem;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistry;
 import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryRepository;
@@ -50,11 +50,10 @@ public abstract class AbstractRecordFileReader extends AbstractConsumerStage<Fil
 
 		ClassNameRegistry classNameRegistry = this.classNameRegistryRepository.get(mapFile);
 		if (null == classNameRegistry) {
-			try {
-				final FileInputStream inputStream = new FileInputStream(mapFile);
+			try (final FileInputStream inputStream = new FileInputStream(mapFile)) {
 				classNameRegistry = this.mappingFileParser.parseFromStream(inputStream);
 				this.classNameRegistryRepository.put(mapFile, classNameRegistry);
-			} catch (final FileNotFoundException e) {
+			} catch (final IOException e) {
 				this.logger.error("", e);
 			}
 		}
