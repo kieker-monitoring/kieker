@@ -8,6 +8,8 @@ configurations {
 def aspectjVersion = '1.8.2'
 
 dependencies {
+	clover 'org.openclover:clover:4.2.0'
+
 	compile project(':kieker-common')
 	
 	compile 'com.rabbitmq:amqp-client:4.2.1'
@@ -46,6 +48,13 @@ dependencies {
 	testRuntime resolveLibrary('framework-libs/spring/spring-expression-*.jar')
 
 	testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
+}
+
+clover {
+	report {
+		html=true
+	}
+	
 }
 
 eclipse {

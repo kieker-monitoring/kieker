@@ -78,8 +78,8 @@ public abstract class AbstractMessage {
 	public String toString() {
 		final StringBuilder strBuild = new StringBuilder();
 
-		strBuild.append(this.timestamp);
-		strBuild.append(' ');
+		strBuild.append(this.timestamp)
+		        .append(' ');
 		if (this.getSendingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
 			strBuild.append(SystemModelRepository.ROOT_NODE_LABEL);
 		} else {

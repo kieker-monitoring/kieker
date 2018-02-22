@@ -77,11 +77,8 @@ public class AnalysisThroughputFilter extends AbstractFilterPlugin {
 		final long count = this.counter.getAndSet(0);
 		final long duration = timestamp - this.lastTimestamp;
 		final StringBuilder sb = new StringBuilder(256);
-		sb.append(count);
-		sb.append(" objects within ");
-		sb.append(duration);
-		sb.append(' ');
-		sb.append(super.recordsTimeUnitFromProjectContext.toString());
+		sb.append(count).append(" objects within ").append(duration).append(' ').
+			append(super.recordsTimeUnitFromProjectContext.toString());
 		this.plainTextDisplayObject.setText(sb.toString());
 		super.deliver(OUTPUT_PORT_NAME_THROUGHPUT, count);
 		this.lastTimestamp = timestamp;
