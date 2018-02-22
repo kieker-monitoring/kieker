@@ -134,7 +134,7 @@ public final class AmqpReader extends AbstractStringRegistryReaderPlugin {
 	}
 
 	private void handleInitializationError(final Throwable e) {
-		LOGGER.error("An error occurred initializing the AMQP reader: " + e);
+		LOGGER.error("An error occurred initializing the AMQP reader:", e);
 	}
 
 	private Connection createConnection() throws IOException, TimeoutException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {

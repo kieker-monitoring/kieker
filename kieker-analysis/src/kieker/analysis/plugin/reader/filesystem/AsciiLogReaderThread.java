@@ -29,10 +29,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipInputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -48,15 +49,15 @@ import kieker.common.util.filesystem.FileExtensionFilter;
  */
 class AsciiLogReaderThread extends AbstractLogReaderThread {
 
-	private static final Log LOG = LogFactory.getLog(AsciiLogReaderThread.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AsciiLogReaderThread.class);
 
-	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>(); // NOPMD (no synchronization needed)
+	private final Map<Integer, String> stringRegistry = new HashMap<>(); // NOPMD (no synchronization needed)
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
 	private final boolean ignoreUnknownRecordTypes;
 	private final boolean shouldDecompress;
 	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
-	private final Set<String> unknownTypesObserved = new HashSet<String>();
+	private final Set<String> unknownTypesObserved = new HashSet<>();
 
 	/**
 	 * Creates a new instance of this class.
@@ -72,7 +73,7 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 	 */
 	public AsciiLogReaderThread(final File inputDir, final IMonitoringRecordReceiver recordReceiver,
 			final boolean ignoreUnknownRecordTypes, final boolean shouldDecompress) {
-		super(LOG, inputDir);
+		super(LOGGER, inputDir);
 		if ((inputDir == null) || !inputDir.isDirectory()) {
 			throw new IllegalArgumentException("Invalid or empty inputDir");
 		}
@@ -92,13 +93,11 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 			// No mapping file found. Check whether we find a legacy tpmon.map file!
 			mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + FSUtil.LEGACY_MAP_FILENAME);
 			if (mappingFile.exists()) {
-				LOG.info("Directory '" + this.inputDir + "' contains no file '" + FSUtil.MAP_FILENAME + "'. Found '" + FSUtil.LEGACY_MAP_FILENAME
-						+ "' ... switching to legacy mode");
+				LOGGER.info("Directory '{}' contains no file '{}'. Found '{}' ... switching to legacy mode", this.inputDir, FSUtil.MAP_FILENAME,
+						FSUtil.LEGACY_MAP_FILENAME);
 			} else {
 				// no {kieker|tpmon}.map exists. This is valid for very old monitoring logs. Hence, only dump a log.warn
-				if (LOG.isWarnEnabled()) {
-					LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'");
-				}
+				LOGGER.warn("No mapping file in directory '{}'", this.inputDir.getAbsolutePath());
 				return;
 			}
 		}
@@ -111,13 +110,12 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 				if (line.length() == 0) {
 					continue; // ignore empty lines
 				}
-				if (LOG.isDebugEnabled()) {
-					LOG.debug("Read line: " + line);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Read line: " + line);
 				}
 				final int split = line.indexOf('=');
 				if (split == -1) {
-					LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath()
-							+ ". Each line must contain ID=VALUE pairs.");
+					LOGGER.error("Failed to parse line: {} from file {}. Each line must contain ID=VALUE pairs.", line, mappingFile.getAbsolutePath());
 					continue; // continue on errors
 				}
 				final String key = line.substring(0, split);
@@ -127,22 +125,22 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 				try {
 					id = Integer.valueOf((key.charAt(0) == '$') ? key.substring(1) : key); // NOCS
 				} catch (final NumberFormatException ex) {
-					LOG.error("Error reading mapping file, id must be integer", ex);
+					LOGGER.error("Error reading mapping file, id must be integer", ex);
 					continue; // continue on errors
 				}
 				final String prevVal = this.stringRegistry.put(id, value);
 				if (prevVal != null) {
-					LOG.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
+					LOGGER.error("Found addional entry for id='{}', old value was '{}' new value is '{}'", id, prevVal, value);
 				}
 			}
 		} catch (final IOException ex) {
-			LOG.error("Error reading mapping file", ex);
+			LOGGER.error("Error reading mapping file", ex);
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
 				} catch (final IOException ex) {
-					LOG.error("Exception while closing input stream for mapping file", ex);
+					LOGGER.error("Exception while closing input stream for mapping file", ex);
 				}
 			}
 		}
@@ -178,13 +176,13 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 				try {
 					if (recordFields[0].charAt(0) == '$') { // modern record
 						if (recordFields.length < 2) {
-							LOG.error("Illegal record format: " + line);
+							LOGGER.error("Illegal record format: {}", line);
 							continue; // skip this record
 						}
 						final Integer id = Integer.valueOf(recordFields[0].substring(1));
 						final String classname = this.stringRegistry.get(id);
 						if (classname == null) {
-							LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
+							LOGGER.error("Missing classname mapping for record type id '{}'", id);
 							continue; // skip this record
 						}
 						Class<? extends IMonitoringRecord> clazz = null;
@@ -197,7 +195,7 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 								abortDueToUnknownRecordType = true;
 								throw new MonitoringRecordException("Failed to load record type " + classname, ex);
 							} else if (!this.unknownTypesObserved.contains(classname)) {
-								LOG.error("Failed to load record type " + classname, ex); // log once for this type
+								LOGGER.error("Failed to load record type {}", classname, ex); // log once for this type
 								this.unknownTypesObserved.add(classname);
 							}
 							continue; // skip this ignored record
@@ -225,7 +223,7 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 						newEx.initCause(ex);
 						throw newEx; // NOPMD (cause is set above)
 					} else {
-						LOG.warn("Error processing line: " + line, ex);
+						LOGGER.warn("Error processing line: {}", line, ex);
 						continue; // skip this record
 					}
 				}
@@ -235,15 +233,15 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 				}
 			}
 		} catch (final IOException e) {
-			LOG.error("Error reading " + inputFile, e);
+			LOGGER.error("Error reading {}", inputFile, e);
 		} catch (final RuntimeException e) { // NOCS NOPMD (gonna catch them all)
-			LOG.error("Error reading " + inputFile, e);
+			LOGGER.error("Error reading {}", inputFile, e);
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
 				} catch (final IOException ex) {
-					LOG.error("Exception while closing input stream for processing input file", ex);
+					LOGGER.error("Exception while closing input stream for processing input file", ex);
 				}
 			}
 		}

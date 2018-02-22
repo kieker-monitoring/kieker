@@ -87,10 +87,10 @@ public class BinaryLogReader extends AbstractReaderPlugin implements IMonitoring
 			}
 		}
 		if (nDirs == 0) {
-			this.logger.warn("The list of input dirs passed to the " + BinaryLogReader.class.getSimpleName() + " is empty");
+			this.logger.warn("The list of input dirs passed to the {} is empty", BinaryLogReader.class.getSimpleName());
 			nDirs = 1;
 		}
-		this.recordQueue = new PriorityQueue<IMonitoringRecord>(nDirs);
+		this.recordQueue = new PriorityQueue<>(nDirs);
 
 		this.shouldDecompress = this.configuration.getBooleanProperty(CONFIG_SHOULD_DECOMPRESS);
 	}
@@ -124,7 +124,7 @@ public class BinaryLogReader extends AbstractReaderPlugin implements IMonitoring
 				this.readerThreads.add(readerThread);
 				readerThread.start();
 			} else {
-				this.logger.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
+				this.logger.warn("Invalid Directory or filename (no Kieker log): {}", inputDirFn);
 				notInitializesReaders++;
 				continue;
 			}
