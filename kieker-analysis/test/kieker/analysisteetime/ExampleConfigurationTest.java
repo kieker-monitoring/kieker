@@ -92,7 +92,7 @@ public class ExampleConfigurationTest {
 
 		final DeploymentModel deploymentModel = configuration.getDeploymentModel();
 		final File file = new File(projectDir.getFile(), "model.txt");
-		final PrintStream printStream = new PrintStream(file, "UFT-8");
+		final PrintStream printStream = new PrintStream(file, "UTF-8");
 		final DeploymentModelPrinter deploymentModelPrinter = new DeploymentModelPrinter(printStream);
 		// final DeploymentModelPrinter deploymentModelPrinter = new
 		// DeploymentModelPrinter(System.out);
