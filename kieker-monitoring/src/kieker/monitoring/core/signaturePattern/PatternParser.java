@@ -442,12 +442,12 @@ public final class PatternParser {
 		if (STATIC.equals(modifierList[0]) || STATIC.equals(modifierList[1]) || STATIC.equals(modifierList[2])) {
 			sb.append("static\\s");
 		} else if (!NON_STATIC.equals(modifierList[0]) && (!NON_STATIC.equals(modifierList[1])
-				& !NON_STATIC.equals(modifierList[2]))) {
+				&& !NON_STATIC.equals(modifierList[2]))) {
 			sb.append("(static\\s)?");
 		}
 		if (FINAL.equals(modifierList[1]) || FINAL.equals(modifierList[2]) || FINAL.equals(modifierList[3])) {
 			sb.append("final\\s");
-		} else if ((!NON_FINAL.equals(modifierList[1]) & !NON_FINAL.equals(modifierList[2]))
+		} else if ((!NON_FINAL.equals(modifierList[1]) && !NON_FINAL.equals(modifierList[2]))
 				&& !NON_FINAL.equals(modifierList[3])) {
 			sb.append("(final\\s)?");
 		}
