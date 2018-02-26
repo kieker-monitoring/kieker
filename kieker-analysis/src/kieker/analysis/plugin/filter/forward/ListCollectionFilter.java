@@ -40,9 +40,9 @@ import kieker.common.configuration.Configuration;
  * @since 1.6
  */
 @Plugin(programmaticOnly = true, description = "A filter collecting incoming objects in a list (mostly used in testing scenarios)", outputPorts = @OutputPort(name = ListCollectionFilter.OUTPUT_PORT_NAME, eventTypes = {
-	Object.class }, description = "Provides each incoming object"), configuration = {
-		@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES, defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES, description = "Sets the maximum number of stored values."),
-		@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR, defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR, description = "Determines what happens to new objects when the list is full.") })
+		Object.class }, description = "Provides each incoming object"), configuration = {
+				@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES, defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES, description = "Sets the maximum number of stored values."),
+				@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR, defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR, description = "Determines what happens to new objects when the list is full.") })
 public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 
 	/** The name of the input port for the incoming objects. */
@@ -148,7 +148,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 					if (this.maxNumberOfEntries > this.list.size()) {
 						this.list.add(data);
 					} else {
-						throw new RuntimeException(
+						throw new RuntimeException(// NOPMD
 								"Too many records for ListCollectionFilter, it was initialized with capacity: " // NOPMD
 										+ this.maxNumberOfEntries); // NOPMD
 					}
