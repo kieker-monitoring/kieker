@@ -27,7 +27,7 @@ import kieker.common.exception.RecordInstantiationException;
  * @since 1.14
  */
 public abstract class AbstractValueDeserializer { // NOPMD no abstract methods, as they are defined by the corresponding IValueDeserializer interface
-	
+
 	public AbstractValueDeserializer() {
 		// empty constructor
 	}
