@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.visualization.AbstractWebVisualizationFilterPlugin;
 
-import kieker.test.analysis.junit.plugin.TestPluginConfigurationRetention;
 import kieker.test.common.junit.AbstractDynamicKiekerTest;
 
 /**
@@ -38,7 +37,7 @@ import kieker.test.common.junit.AbstractDynamicKiekerTest;
  */
 public class TestNoOutputPortsForVisualizations extends AbstractDynamicKiekerTest {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(TestPluginConfigurationRetention.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestNoOutputPortsForVisualizations.class);
 
 	public TestNoOutputPortsForVisualizations() {
 		// empty default constructor

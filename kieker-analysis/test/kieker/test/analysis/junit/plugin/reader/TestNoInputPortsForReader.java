@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 
-import kieker.test.analysis.junit.plugin.TestPluginConfigurationRetention;
 import kieker.test.common.junit.AbstractDynamicKiekerTest;
 
 /**
@@ -39,7 +38,7 @@ import kieker.test.common.junit.AbstractDynamicKiekerTest;
  */
 public class TestNoInputPortsForReader extends AbstractDynamicKiekerTest {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(TestPluginConfigurationRetention.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestNoInputPortsForReader.class);
 
 	public TestNoInputPortsForReader() {
 		// empty default constructor
