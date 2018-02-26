@@ -22,9 +22,10 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.record.io.IValueSerializer;
@@ -47,7 +48,7 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 
 	private static final int DEFAULT_STRING_REGISTRY_BUFFER_SIZE = 1024;
 
-	private static final Log LOG = LogFactory.getLog(TCPWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TCPWriter.class);
 
 	private static final String PREFIX = TCPWriter.class.getName() + ".";
 
@@ -57,8 +58,7 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
-	private static final String CONFIG_STRING_REGISTRY_BUFFERSIZE = PREFIX + "stringRegistryBufferSize"; // NOCS
-																											// (afterPREFIX)
+	private static final String CONFIG_STRING_REGISTRY_BUFFERSIZE = PREFIX + "stringRegistryBufferSize"; // NOCS (afterPREFIX)
 
 	private final boolean flush;
 	private final SocketChannel monitoringRecordChannel;
@@ -78,8 +78,7 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 		final int bufferSize = configuration.getIntProperty(CONFIG_BUFFERSIZE);
 		int stringRegistryBufferSize = configuration.getIntProperty(CONFIG_STRING_REGISTRY_BUFFERSIZE);
 		if (stringRegistryBufferSize <= 0) {
-			LOG.warn("Invalid buffer size passed for string registry records: " + stringRegistryBufferSize
-					+ ". Defaults to " + DEFAULT_STRING_REGISTRY_BUFFER_SIZE);
+			LOGGER.warn("Invalid buffer size passed for string registry records: {}. Defaults to {}", stringRegistryBufferSize, DEFAULT_STRING_REGISTRY_BUFFER_SIZE);
 			stringRegistryBufferSize = DEFAULT_STRING_REGISTRY_BUFFER_SIZE;
 		}
 
@@ -105,7 +104,7 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 		final ByteBuffer buffer = this.recordBuffer;
 		final int requiredBufferSize = 4 + 8 + monitoringRecord.getSize();
 		if (requiredBufferSize > buffer.remaining()) {
-			WriterUtil.flushBuffer(buffer, this.monitoringRecordChannel, LOG);
+			WriterUtil.flushBuffer(buffer, this.monitoringRecordChannel, LOGGER);
 		}
 
 		final String recordClassName = monitoringRecord.getClass().getName();
@@ -115,7 +114,7 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 		monitoringRecord.serialize(this.serializer);
 
 		if (this.flush) {
-			WriterUtil.flushBuffer(buffer, this.monitoringRecordChannel, LOG);
+			WriterUtil.flushBuffer(buffer, this.monitoringRecordChannel, LOGGER);
 		}
 	}
 
@@ -139,16 +138,16 @@ public class TCPWriter extends AbstractMonitoringWriter implements IRegistryList
 		buffer.put(bytes);
 
 		// always flush so that on the reader side the records can be reconstructed
-		WriterUtil.flushBuffer(buffer, this.registryRecordChannel, LOG);
+		WriterUtil.flushBuffer(buffer, this.registryRecordChannel, LOGGER);
 	}
 
 	@Override
 	public void onTerminating() {
-		WriterUtil.flushBuffer(this.stringRegistryBuffer, this.registryRecordChannel, LOG);
-		WriterUtil.flushBuffer(this.recordBuffer, this.monitoringRecordChannel, LOG);
+		WriterUtil.flushBuffer(this.stringRegistryBuffer, this.registryRecordChannel, LOGGER);
+		WriterUtil.flushBuffer(this.recordBuffer, this.monitoringRecordChannel, LOGGER);
 
-		WriterUtil.close(this.registryRecordChannel, LOG);
-		WriterUtil.close(this.monitoringRecordChannel, LOG);
+		WriterUtil.close(this.registryRecordChannel, LOGGER);
+		WriterUtil.close(this.monitoringRecordChannel, LOGGER);
 	}
 
 }

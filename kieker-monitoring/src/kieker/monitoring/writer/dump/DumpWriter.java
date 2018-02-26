@@ -16,9 +16,10 @@
 
 package kieker.monitoring.writer.dump;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
@@ -31,7 +32,7 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  */
 public class DumpWriter extends AbstractMonitoringWriter {
 
-	private static final Log LOG = LogFactory.getLog(DumpWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DumpWriter.class);
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -46,7 +47,7 @@ public class DumpWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public void onStarting() {
-		LOG.info(this.getClass().getName() + " has been started.");
+		LOGGER.info("{} has been started.", this.getClass().getName());
 	}
 
 	@Override
@@ -56,6 +57,6 @@ public class DumpWriter extends AbstractMonitoringWriter {
 
 	@Override
 	public void onTerminating() {
-		LOG.info(this.getClass().getName() + " has shut down.");
+		LOGGER.info("{} has shut down.", this.getClass().getName());
 	}
 }

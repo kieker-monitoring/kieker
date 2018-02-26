@@ -24,7 +24,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-import kieker.common.logging.Log;
+import org.slf4j.Logger;
+
 import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
 
@@ -59,7 +60,7 @@ class BinaryFileWriterPool extends AbstractFileWriterPool<ByteBuffer> {
 	 * @param bufferSize
 	 *            size of the writing buffer
 	 */
-	public BinaryFileWriterPool(final Log writerLog, final Path folder, final String charsetName, final int maxEntriesInFile,
+	public BinaryFileWriterPool(final Logger writerLog, final Path folder, final String charsetName, final int maxEntriesInFile,
 			final ICompressionFilter compressionFilter,
 			final int maxAmountOfFiles, final int maxMegaBytesInFile, final ByteBuffer buffer) {
 		super(writerLog, folder, charsetName, maxEntriesInFile, compressionFilter, maxAmountOfFiles, maxMegaBytesInFile, FSUtil.BINARY_FILE_EXTENSION);
@@ -71,7 +72,7 @@ class BinaryFileWriterPool extends AbstractFileWriterPool<ByteBuffer> {
 
 	@Override
 	protected void onThresholdExceeded() {
-		this.currentChannel.close(this.writerLog);
+		this.currentChannel.close(this.writerLogger);
 		// we expect this.folder to exist
 
 		this.setCurrentFileNumber(this.getCurrentFileNumber() + 1);

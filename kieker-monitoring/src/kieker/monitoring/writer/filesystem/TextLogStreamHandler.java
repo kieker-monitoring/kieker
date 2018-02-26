@@ -19,8 +19,9 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.TextValueSerializer;
 import kieker.common.util.filesystem.FSUtil;
@@ -42,7 +43,7 @@ public class TextLogStreamHandler extends AbstractLogStreamHandler {
 	/** line separator string. */
 	private static final String LINE_SEPARATOR = System.lineSeparator();
 
-	private static final Log LOGGER = LogFactory.getLog(TextLogStreamHandler.class); // NOPMD use of "wrong" logger class
+	private static final Logger LOGGER = LoggerFactory.getLogger(TextLogStreamHandler.class);
 
 	private final CharBuffer buffer;
 

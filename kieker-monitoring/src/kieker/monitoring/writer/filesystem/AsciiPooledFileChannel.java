@@ -23,7 +23,7 @@ import java.io.Writer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 
-import kieker.common.logging.Log;
+import org.slf4j.Logger;
 
 /**
  *
@@ -54,15 +54,15 @@ public class AsciiPooledFileChannel extends AbstractPooledFileChannel<CharBuffer
 	}
 
 	@Override
-	public void flush(final Log log) {
+	public void flush(final Logger logger) {
 		this.getBuffer().flip();
 		this.printWriter.print(this.getBuffer().toString());
 		this.printWriter.println();
 	}
 
 	@Override
-	public void close(final Log log) {
-		this.flush(log);
+	public void close(final Logger logger) {
+		this.flush(logger);
 		this.printWriter.close();
 	}
 
