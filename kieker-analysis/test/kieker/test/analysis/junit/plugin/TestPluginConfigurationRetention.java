@@ -21,6 +21,8 @@ import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
@@ -29,22 +31,20 @@ import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 import kieker.test.common.junit.AbstractDynamicKiekerTest;
 
 /**
  * This JUnit test makes sure that all plugins handle their configurations correctly. To be more precise: The listed properties in the annotation of each plugin has
  * to be in the configuration map of the {@code getCurrentConfiguration} method.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 public class TestPluginConfigurationRetention extends AbstractDynamicKiekerTest {
 
-	private static final Log LOG = LogFactory.getLog(TestPluginConfigurationRetention.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestPluginConfigurationRetention.class);
 
 	public TestPluginConfigurationRetention() {
 		// empty default constructor
@@ -58,7 +58,7 @@ public class TestPluginConfigurationRetention extends AbstractDynamicKiekerTest 
 		final Collection<Class<?>> filteredClasses = super.filterOutClassesNotExtending(AbstractPlugin.class, notAbstractClasses);
 
 		for (final Class<?> clazz : filteredClasses) {
-			LOG.info("Testing '" + clazz.getSimpleName() + "'...");
+			LOGGER.info("Testing '{}'...", clazz.getSimpleName());
 			Assert.assertTrue(clazz.getSimpleName() + "' doesn't export all of its properties.", this.isConfigurationCorrect(clazz));
 		}
 	}

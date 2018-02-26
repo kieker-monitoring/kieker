@@ -21,24 +21,25 @@ import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
+import kieker.test.analysis.junit.plugin.TestPluginConfigurationRetention;
 import kieker.test.common.junit.AbstractDynamicKiekerTest;
 
 /**
  * This JUnit test makes sure that there are no readers with input ports in Kieker.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
  */
 public class TestNoInputPortsForReader extends AbstractDynamicKiekerTest {
 
-	private static final Log LOG = LogFactory.getLog(TestNoInputPortsForReader.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestPluginConfigurationRetention.class);
 
 	public TestNoInputPortsForReader() {
 		// empty default constructor
@@ -51,7 +52,7 @@ public class TestNoInputPortsForReader extends AbstractDynamicKiekerTest {
 		final Collection<Class<?>> filteredClasses = super.filterOutClassesNotExtending(AbstractReaderPlugin.class, notAbstractClasses);
 
 		for (final Class<?> clazz : filteredClasses) {
-			LOG.info("Testing '" + clazz.getSimpleName() + "'...");
+			LOGGER.info("Testing '{}'...", clazz.getSimpleName());
 			Assert.assertFalse(clazz.getSimpleName() + "' is a reader with input ports.", TestNoInputPortsForReader.containsInputPorts(clazz));
 		}
 	}
