@@ -18,9 +18,10 @@ package kieker.monitoring.core.controller;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * This class encapsulates the creation of Kieker monitoring controllers.
@@ -31,7 +32,7 @@ import kieker.common.logging.LogFactory;
  */
 public final class ControllerFactory {
 
-	private static final Log LOG = LogFactory.getLog(ControllerFactory.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ControllerFactory.class);
 
 	private static final ControllerFactory INSTANCE = new ControllerFactory();
 
@@ -75,16 +76,15 @@ public final class ControllerFactory {
 			if (c.isAssignableFrom(clazz)) {
 				createdClass = (C) this.instantiate(clazz, className, configuration);
 			} else {
-				LOG.error("Class '" + className + "' has to implement '" + c.getSimpleName() + "'");
+				LOGGER.error("Class '{}' has to implement '{}'", className, c.getSimpleName());
 			}
 		} catch (final ClassNotFoundException e) {
-			LOG.error(c.getSimpleName() + ": Class '" + className + "' not found", e);
+			LOGGER.error("{}: Class '{}' not found", c.getSimpleName(), className, e);
 		} catch (final NoSuchMethodException e) {
-			LOG.error(c.getSimpleName() + ": Class '" + className
-					+ "' has to implement a (public) constructor that accepts a single Configuration", e);
+			LOGGER.error("{}: Class '{}' has to implement a (public) constructor that accepts a single Configuration", c.getSimpleName(), className, e);
 		} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
-			LOG.error(c.getSimpleName() + ": Failed to load class for name '" + className + "'", e);
+			LOGGER.error("{}: Failed to load class for name '{}'", c.getSimpleName(), className, e);
 		}
 		return createdClass;
 	}
@@ -149,21 +149,20 @@ public final class ControllerFactory {
 			if (c.isAssignableFrom(clazz)) {
 				createdClass = (C) clazz.getConstructor(parameterTypes).newInstance(parameters);
 			} else {
-				LOG.error("Class '" + className + "' has to implement '" + c.getSimpleName() + "'");
+				LOGGER.error("Class '{}' has to implement '{}'", className, c.getSimpleName());
 			}
 		} catch (final ClassNotFoundException e) {
-			LOG.error(c.getSimpleName() + ": Class '" + className + "' not found", e);
+			LOGGER.error("{}: Class '{}' not found", c.getSimpleName(), className, e);
 		} catch (final NoSuchMethodException e) {
 			final StringBuilder parameterTypeNames = new StringBuilder();
 			for (final Object parameter : parameters) {
 				parameterTypeNames.append(", ");
 				parameterTypeNames.append(parameter.getClass().getName());
 			}
-			LOG.error(c.getSimpleName() + ": Class '" + className
-					+ "' has to implement a (public) constructor that accepts " + parameterTypeNames.toString(), e);
+			LOGGER.error("{}: Class '{}' has to implement a (public) constructor that accepts {}", c.getSimpleName(), className, parameterTypeNames.toString(), e);
 		} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
-			LOG.error(c.getSimpleName() + ": Failed to load class for name '" + className + "'", e);
+			LOGGER.error("{}: Failed to load class for name '{}'", c.getSimpleName(), className, e);
 		}
 		return createdClass;
 	}

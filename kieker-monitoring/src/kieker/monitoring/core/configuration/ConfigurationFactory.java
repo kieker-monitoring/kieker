@@ -24,9 +24,10 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * A ConfigurationFactory for kieker.monitoring.
@@ -36,7 +37,7 @@ import kieker.common.logging.LogFactory;
  * @since 1.3
  */
 public final class ConfigurationFactory {
-	private static final Log LOG = LogFactory.getLog(ConfigurationFactory.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationFactory.class);
 
 	/**
 	 * Private constructor to avoid instantiation.
@@ -53,9 +54,7 @@ public final class ConfigurationFactory {
 	 * @return the configuration for the singleton controller
 	 */
 	public static final Configuration createSingletonConfiguration() {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Searching for JVM argument '" + ConfigurationKeys.CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
-		}
+			LOGGER.debug("Searching for JVM argument '{}' ...", ConfigurationKeys.CUSTOM_PROPERTIES_LOCATION_JVM );
 		final Configuration defaultConfiguration = ConfigurationFactory.defaultConfiguration();
 		// ignore default default-name and set to KIEKER-SINGLETON
 		defaultConfiguration.setProperty(ConfigurationKeys.CONTROLLER_NAME, "KIEKER-SINGLETON");
@@ -63,12 +62,12 @@ public final class ConfigurationFactory {
 		String configurationFile = System.getProperty(ConfigurationKeys.CUSTOM_PROPERTIES_LOCATION_JVM);
 		final Configuration loadConfiguration;
 		if (configurationFile != null) {
-			LOG.info("Loading configuration from JVM-specified location: '" + configurationFile + "'");
+			LOGGER.info("Loading configuration from JVM-specified location: '{}'", configurationFile);
 			loadConfiguration = ConfigurationFactory.loadConfigurationFromFile(configurationFile, defaultConfiguration);
 		} else {
 			// No JVM property; Trying to find configuration file in classpath
 			configurationFile = ConfigurationKeys.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
-			LOG.info("Loading properties from properties file in classpath: '" + configurationFile + "'");
+			LOGGER.info("Loading properties from properties file in classpath: '{}'", configurationFile );
 			loadConfiguration = ConfigurationFactory.loadConfigurationFromResource(configurationFile,
 					defaultConfiguration);
 		}
@@ -131,7 +130,7 @@ public final class ConfigurationFactory {
 				// if not found as absolute path try within the classpath
 				final URL resourceUrl = ConfigurationFactory.loadKiekerPropertiesFile(propertiesFn);
 				if (resourceUrl == null) {
-					LOG.warn("File '" + propertiesFn + "' not found");
+					LOGGER.warn("File '{}' not found", propertiesFn);
 					return new Configuration(defaultValues);
 				}
 				is = resourceUrl.openStream();
@@ -139,13 +138,13 @@ public final class ConfigurationFactory {
 			properties.load(is);
 			return properties;
 		} catch (final IOException ex) {
-			LOG.error("Error reading file '" + propertiesFn + "'", ex);
+			LOGGER.error("Error reading file '{}'", propertiesFn, ex);
 		} finally {
 			if (is != null) {
 				try {
 					is.close();
 				} catch (final IOException ex) {
-					LOG.warn("Failed to close FileInputStream", ex);
+					LOGGER.warn("Failed to close FileInputStream", ex);
 				}
 			}
 		}
@@ -167,14 +166,14 @@ public final class ConfigurationFactory {
 			final Configuration defaultValues) {
 		final URL resourceUrl = ConfigurationFactory.loadKiekerPropertiesFile(propertiesFn);
 		if (resourceUrl == null) {
-			LOG.warn("File '" + propertiesFn + "' not found in classpath");
+			LOGGER.warn("File '{}' not found in classpath", propertiesFn);
 		} else {
 			try (final InputStream is = resourceUrl.openStream()) {
 				final Configuration properties = new Configuration(defaultValues);
 				properties.load(is);
 				return properties;
 			} catch (final IOException ex) {
-				LOG.error("Error reading file '" + propertiesFn + "'", ex);
+				LOGGER.error("Error reading file '{}'", propertiesFn , ex);
 			}
 		}
 		return new Configuration(defaultValues);
