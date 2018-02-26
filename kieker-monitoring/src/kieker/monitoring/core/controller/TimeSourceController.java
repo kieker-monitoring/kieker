@@ -16,9 +16,10 @@
 
 package kieker.monitoring.core.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.timer.ITimeSource;
 
@@ -28,7 +29,7 @@ import kieker.monitoring.timer.ITimeSource;
  * @since 1.3
  */
 public final class TimeSourceController extends AbstractController implements ITimeSourceController {
-	private static final Log LOG = LogFactory.getLog(TimeSourceController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TimeSourceController.class);
 
 	/** the ITimeSource used by this instance. */
 	private final ITimeSource timeSource;
@@ -55,9 +56,7 @@ public final class TimeSourceController extends AbstractController implements IT
 
 	@Override
 	protected final void cleanup() {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Shutting down TimeSource Controller");
-		}
+		LOGGER.debug("Shutting down TimeSource Controller");
 	}
 
 	@Override
