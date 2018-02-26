@@ -330,23 +330,23 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			return false;
 		}
 		if (src.state != STATE.READY) {
-			LOGGER.warn("Plugin: " + src.getClass().getName() + " not in " + STATE.READY + " state, but in state " + src.state + ".");
+			LOGGER.warn("Plugin: {} not in {} state, but in state {}.", src.getClass().getName(), STATE.READY, src.state);
 			return false;
 		}
 		if (dst.state != STATE.READY) {
-			LOGGER.warn("Plugin: " + dst.getClass().getName() + " not in " + STATE.READY + " state, but in state " + dst.state + ".");
+			LOGGER.warn("Plugin: {} not in {} state, but in state {}.", dst.getClass().getName(), STATE.READY, dst.state);
 			return false;
 		}
 
 		// Second step: Check whether the ports exist.
 		final OutputPort outputPort = src.outputPorts.get(output);
 		if (outputPort == null) {
-			LOGGER.warn("Output port does not exist. " + "Plugin: " + src.getClass().getName() + "; output: " + output);
+			LOGGER.warn("Output port does not exist. Plugin: {}; output: {}", src.getClass().getName(), output);
 			return false;
 		}
 		final InputPort inputPort = dst.inputPorts.get(input);
 		if (inputPort == null) {
-			LOGGER.warn("Input port does not exist. " + "Plugin: " + dst.getClass().getName() + "; input: " + input);
+			LOGGER.warn("Input port does not exist. Plugin: {}; output: {}", dst.getClass().getName(), input);
 			return false;
 		}
 
@@ -374,8 +374,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			}
 			final String allowedOutputTypes = Arrays.toString(outputPort.eventTypes());
 			final String allowedInputTypes = Arrays.toString(inputPort.eventTypes());
-			LOGGER.warn("Output port '" + output + "' (" + allowedOutputTypes + ") is not compatible with input port '" + input + "' (" + allowedInputTypes
-					+ ").");
+			LOGGER.warn("Output port '{}' ({}) is not compatible with input port '{}' ({}).", output, allowedOutputTypes, input, allowedInputTypes);
 			return false;
 		}
 
