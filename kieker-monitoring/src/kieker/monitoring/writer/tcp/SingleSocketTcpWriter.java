@@ -24,7 +24,6 @@ import java.net.SocketTimeoutException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.TimeUnit;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -150,8 +149,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		final long currentTimestampInNs = System.nanoTime();
 
 		final long elapsedTimeInNs = currentTimestampInNs - startTimestampInNs;
-		final long elapsedTimeInMs = TimeUnit.NANOSECONDS.toMillis(elapsedTimeInNs);
-		timeoutCountdown.countdown(elapsedTimeInMs);
+		timeoutCountdown.countdownNs(elapsedTimeInNs);
 
 		if (timeoutCountdown.getCurrentTimeoutinMs() <= 0) {
 			final String message = String.format("Connection timeout of %d ms exceeded.", this.connectionTimeoutInMs);

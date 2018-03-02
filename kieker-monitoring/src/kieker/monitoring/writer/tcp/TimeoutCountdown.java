@@ -15,6 +15,8 @@
  ***************************************************************************/
 package kieker.monitoring.writer.tcp;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author Christian Wulf
  *
@@ -22,17 +24,21 @@ package kieker.monitoring.writer.tcp;
  */
 class TimeoutCountdown {
 
-	private int currentTimeoutInMs;
+	private long currentTimeoutInNs;
 
 	public TimeoutCountdown(final int initialTimeoutInMs) {
-		this.currentTimeoutInMs = initialTimeoutInMs;
+		this.currentTimeoutInNs = TimeUnit.MILLISECONDS.toNanos(initialTimeoutInMs);
 	}
-
-	public void countdown(final long substractor) {
-		this.currentTimeoutInMs -= substractor;
+	
+	public void countdownNs(final long amountInNs) {
+		this.currentTimeoutInNs -= amountInNs; 
 	}
 
 	public int getCurrentTimeoutinMs() {
-		return this.currentTimeoutInMs;
+		return (int) TimeUnit.NANOSECONDS.toMillis(this.getCurrentTimeoutInNs());
+	}
+	
+	public long getCurrentTimeoutInNs() {
+		return this.currentTimeoutInNs;
 	}
 }
