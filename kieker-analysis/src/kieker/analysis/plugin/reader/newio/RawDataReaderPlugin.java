@@ -125,7 +125,7 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 			return null;
 		}
 
-		C instantiatedReader;
+		final C instantiatedReader;
 		final Configuration configurationToPass = configuration.flatten();
 
 		// Execute the appropriate constructor

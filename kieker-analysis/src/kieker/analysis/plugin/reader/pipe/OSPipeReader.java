@@ -120,7 +120,7 @@ public class OSPipeReader extends AbstractRawDataReader {
 		}
 
 		try {
-			Outcome outcome;
+			final Outcome outcome;
 
 			if (unwrapper.supportsCharacterData()) {
 				outcome = this.readCharacterData();

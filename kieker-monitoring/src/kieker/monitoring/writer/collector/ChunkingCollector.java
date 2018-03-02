@@ -254,6 +254,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	/**
 	 * Writer task to write records collected by the collector.
 	 * @author Holger Knoche
+	 * @param <T> The type of the used buffer
 	 * @since 1.13
 	 *
 	 */
