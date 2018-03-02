@@ -23,10 +23,10 @@ import kieker.tools.opad.timeseries.ITimeSeries;
 
 /**
  * Result of a time series forecast, e.g., computed by {@link IForecaster}. If additional fields are required, {@link IForecaster}s should extend this class.
- * 
+ *
  * @since 1.10
  * @author Andre van Hoorn
- * 
+ *
  */
 public class ForecastResult implements IForecastResult {
 
@@ -41,7 +41,7 @@ public class ForecastResult implements IForecastResult {
 	private final ITimeSeries<Double> tsLower;
 
 	/**
-	 * 
+	 *
 	 * @param tsForecast
 	 *            TimesSeries
 	 * @param tsOriginal
@@ -74,14 +74,14 @@ public class ForecastResult implements IForecastResult {
 	/**
 	 * Constructs a {@link ForecastResult} with confidence level <code>0</code>, where the time series returned {@link #getLower()} by {@link #getUpper()} are the
 	 * forecast series.
-	 * 
+	 *
 	 * @param tsForecast
 	 *            Timeseries with forecast
 	 * @param tsOriginal
 	 *            Timeseries with orginal
 	 * @param fcStrategy
 	 *            forecastMethod
-	 * 
+	 *
 	 */
 	public ForecastResult(final ITimeSeries<Double> tsForecast, final ITimeSeries<Double> tsOriginal, final ForecastMethod fcStrategy) {
 		this(tsForecast, tsOriginal, 0, 0, tsForecast, tsForecast, fcStrategy); // tsForecast also lower/upper
@@ -115,17 +115,9 @@ public class ForecastResult implements IForecastResult {
 	@Override
 	public String toString() {
 		final StringBuilder strB = new StringBuilder(71);
-		strB.append('\n' + "tsForecast: ");
-		strB.append(this.tsForecast.toString());
-		strB.append('\n' + "tsOriginal: ");
-		strB.append(this.tsOriginal.toString());
-		strB.append('\n' + "confidenceLevel: ");
-		strB.append(this.confidenceLevel);
-		strB.append('\n' + "tsUpper: ");
-		strB.append(this.tsUpper);
-		strB.append('\n' + "tsLower: ");
-		strB.append(this.tsLower);
-		strB.append('\n');
+		strB.append('\n' + "tsForecast: ").append(this.tsForecast.toString()).append('\n' + "tsOriginal: ").append(this.tsOriginal.toString())
+				.append('\n' + "confidenceLevel: ").append(this.confidenceLevel).append('\n' + "tsUpper: ").append(this.tsUpper).append('\n' + "tsLower: ")
+				.append(this.tsLower).append('\n');
 		return strB.toString();
 	}
 
@@ -141,7 +133,7 @@ public class ForecastResult implements IForecastResult {
 
 	/**
 	 * Checks whether the input seems to be plausible.
-	 * 
+	 *
 	 * @return true if plausible, else false
 	 */
 	@Override

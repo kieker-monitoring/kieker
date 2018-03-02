@@ -195,13 +195,12 @@ public class Execution {
 	@Override
 	public String toString() {
 		final StringBuilder strBuild = new StringBuilder(128);
-		strBuild.append(this.traceId);
-		strBuild.append('[').append(this.eoi).append(',').append(this.ess).append("] ");
-		strBuild.append(this.tin).append('-').append(this.tout).append(' ');
-		strBuild.append(this.allocationComponent.toString()).append('.');
-		strBuild.append(this.operation.getSignature().getName()).append(' ');
-
-		strBuild.append((this.sessionId != null) ? this.sessionId : NO_SESSION_ID); // NOCS
+		strBuild.append(this.traceId)
+		        .append('[').append(this.eoi).append(',').append(this.ess).append("] ")
+		        .append(this.tin).append('-').append(this.tout).append(' ')
+		        .append(this.allocationComponent.toString()).append('.')
+		        .append(this.operation.getSignature().getName()).append(' ')
+		        .append((this.sessionId != null) ? this.sessionId : NO_SESSION_ID); // NOCS
 
 		if (this.assumed) {
 			strBuild.append(" (assumed)");

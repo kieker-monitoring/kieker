@@ -16,23 +16,20 @@
 
 package kieker.monitoring.writer.filesystem;
 
-import java.io.FilenameFilter;
 import java.nio.file.Path;
 
 /**
  * Only used within tests (hence, declared package-private).
+ * Note: It is not a good idea to have a test only interface. However, in the present test setup it cannot be avoided.
  *
  * @author Christian Wulf
  *
  * @since 1.13
+ *
+ * @deprecated 1.14 should be removed after fixing tests.
  */
+@Deprecated
 interface IFileWriter {
-
-	/**
-	 * @since 1.13
-	 */
-	FilenameFilter getFileNameFilter();
-
 	/**
 	 * @since 1.13
 	 */

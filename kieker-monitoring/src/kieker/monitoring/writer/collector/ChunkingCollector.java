@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.monitoring.writer.collector;
 
 import java.lang.reflect.Constructor;
@@ -103,7 +102,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 
 	/** The name of the configuration property for the writer task interval. */
 	public static final String CONFIG_TASK_RUN_INTERVAL = PREFIX + "taskRunInterval"; // NOCS (afterPREFIX)
-	
+
 	/** The type of queue to use. */
 	public static final String CONFIG_QUEUE_TYPE = PREFIX + "queueType"; // NOCS (afterPREFIX)
 
@@ -137,7 +136,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		final IMonitoringRecordSerializer serializer = controllerFactory.createAndInitialize(IMonitoringRecordSerializer.class, serializerName, configuration);
 		final String writerName = configuration.getStringProperty(CONFIG_WRITER_CLASSNAME);
 		final IRawDataWriter writer = controllerFactory.createAndInitialize(IRawDataWriter.class, writerName, configuration);
-				
+
 		// Instantiate the writer task
 		final int deferredWriteDelayMs = configuration.getIntProperty(CONFIG_DEFERRED_WRITE_DELAY, DEFAULT_DEFERRED_WRITE_DELAY);
 		final int chunkSize = configuration.getIntProperty(CONFIG_CHUNK_SIZE, DEFAULT_CHUNK_SIZE);
@@ -145,19 +144,20 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 
 		this.writerTask = this.createWriterTask(chunkSize, deferredWriteDelayMs, outputBufferSize, serializer, writer);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private Queue<IMonitoringRecord> createQueue(final String queueTypeName, final int queueSize) {
 		if (queueTypeName == null || queueTypeName.isEmpty()) {
 			return this.createDefaultQueue(queueSize);
 		}
-		
+
 		try {
 			// Instantiate the queue of the given type. We assume that the queue has a constructor that takes the size as its only parameter.
 			final Class<?> queueClass = Class.forName(queueTypeName);
 			final Constructor<?> constructor = queueClass.getConstructor(int.class);
 			return (Queue<IMonitoringRecord>) constructor.newInstance(queueSize);
-		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
 			// Instantiate default queue type if the desired queue type cannot be instantiated
 			LOG.error("Error instantiating queue type " + queueTypeName + ". Using default queue type instead.", e);
 			return this.createDefaultQueue(queueSize);
@@ -214,7 +214,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 
 	@Override
 	public void onStarting() {
-		this.scheduledExecutor.scheduleAtFixedRate(this.writerTask, 0, this.taskRunInterval, TASK_RUN_INTERVAL_TIME_UNIT);		
+		this.scheduledExecutor.scheduleAtFixedRate(this.writerTask, 0, this.taskRunInterval, TASK_RUN_INTERVAL_TIME_UNIT);
 		this.writerTask.initialize();
 	}
 
@@ -222,26 +222,26 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	public void onTerminating() {
 		// Terminate scheduled execution and write remaining chunks, if any
 		this.scheduledExecutor.shutdown();
-		
+
 		try {
 			// Wait for the executor to shut down
 			this.scheduledExecutor.awaitTermination(Long.MAX_VALUE, TASK_RUN_INTERVAL_TIME_UNIT);
 		} catch (final InterruptedException e) {
 			LOG.warn("Awaiting termination of the scheduled executor was interrupted.", e);
 		}
-		
+
 		this.writerTask.terminate();
 	}
 
 	private boolean enqueueRecord(final IMonitoringRecord record) {
 		for (int tryNumber = 0; tryNumber < 10; tryNumber++) { // try up to 10 times to enqueue a record
 			final boolean recordEnqueued = this.recordQueue.offer(record);
-			
+
 			if (recordEnqueued) {
 				return true;
 			}
 		}
-		
+
 		LOG.error("Failed to add new monitoring record to queue (maximum number of attempts reached).");
 		return false;
 	}

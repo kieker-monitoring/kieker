@@ -27,7 +27,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.util.dataformat.FormatIdentifier;
 import kieker.common.util.dataformat.VariableLengthEncoding;
@@ -112,7 +112,7 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 
 	private List<IMonitoringRecord> decodeMonitoringRecords(final ByteBuffer buffer, final IRegistry<String> stringRegistry, final int endOffset) {
 		final List<IMonitoringRecord> records = new ArrayList<>();
-		final IValueDeserializer deserializer = DefaultValueDeserializer.create(buffer, stringRegistry);
+		final IValueDeserializer deserializer = BinaryValueDeserializer.create(buffer, stringRegistry);
 		int currentOffset = buffer.position();
 
 		final CachedRecordFactoryCatalog recordFactoryCatalog = this.cachedRecordFactoryCatalog;

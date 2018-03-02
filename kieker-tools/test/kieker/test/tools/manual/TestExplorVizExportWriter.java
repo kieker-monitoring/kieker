@@ -20,6 +20,7 @@ import kieker.analysis.plugin.filter.flow.TraceEventRecords;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.explorviz.ExplorVizTcpWriter;
@@ -39,8 +40,8 @@ public final class TestExplorVizExportWriter {
 
 	public static void main(final String[] args) {
 		final Configuration monitoringConfig = ConfigurationFactory.createDefaultConfiguration();
-		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, ExplorVizTcpWriter.class.getName());
-		monitoringConfig.setProperty(ConfigurationFactory.CONTROLLER_NAME, "Bookstore");
+		monitoringConfig.setProperty(ConfigurationKeys.WRITER_CLASSNAME, ExplorVizTcpWriter.class.getName());
+		monitoringConfig.setProperty(ConfigurationKeys.CONTROLLER_NAME, "Bookstore");
 		final IMonitoringController ctrl = MonitoringController.createInstance(monitoringConfig);
 
 		int traceId = 0;

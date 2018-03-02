@@ -15,10 +15,6 @@
  ***************************************************************************/
 package kieker.monitoring.probe.aspectj.flow.operationExecution;
 
-import static org.hamcrest.CoreMatchers.is; // NOCS (static import)
-import static org.hamcrest.Matchers.hasSize; // NOCS (static import)
-import static org.junit.Assert.assertThat; // NOCS (static import)
-
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -27,8 +23,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
+import org.junit.Assert;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -48,14 +45,17 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *
  * @since 1.13
  */
-public class AbstractAspectTest { // NOCS (abstract class)
+public class AbstractAspectTest { // NOCS NOPMD (abstract class)
 
+	/**
+	 * Empty constructor.
+	 */
 	public AbstractAspectTest() { // NOCS NOPMD (empty ctor)
-		super();
+		// empty constructor.
 	}
 
-	@Test
-	@Ignore
+	// why is this test deactivated?
+	// @Test
 	@SuppressFBWarnings(value = "UI_INHERITANCE_UNSAFE_GETRESOURCE", justification = "no problem since we use getResource without package name prefix")
 	public void testMonitoring() throws Exception { // NOPMD (rules/java/junit.html#JUnitTestContainsTooManyAsserts)
 		final URL resource = this.getClass().getResource("/kieker.monitoring.probe.aspectj.flow.operationExecution");
@@ -66,13 +66,13 @@ public class AbstractAspectTest { // NOCS (abstract class)
 		final int exitValue = aspectjMonitoring.runMonitoring(workingDirectory);
 
 		// check whether monitoring was successful
-		assertThat(exitValue, is(0));
+		Assert.assertThat(exitValue, CoreMatchers.is(0));
 
 		final AspectjAnalysisFromAsciiFileLog aspectjAnalysis = new AspectjAnalysisFromAsciiFileLog();
 		final List<IMonitoringRecord> records = aspectjAnalysis.runAnalysis(workingDirectory);
 
 		// -1 because AnalysisController absorbs the KiekerMetadataRecord
-		assertThat(records, hasSize(16 - 1));
+		Assert.assertThat(records, Matchers.hasSize(16 - 1));
 	}
 
 	private static class AspectjMonitoringToAsciiFileLog {
@@ -132,6 +132,12 @@ public class AbstractAspectTest { // NOCS (abstract class)
 		}
 	}
 
+	/**
+	 * ASCII log checker.
+	 *
+	 * @author Christian Wulf
+	 *
+	 */
 	private static class AspectjAnalysisFromAsciiFileLog { // NOCS (no ctor)
 
 		private static final FileFilter FILE_FILTER = new NonMetaInfDirectoryFilter();

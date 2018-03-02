@@ -29,10 +29,23 @@ public class TextValueSerializer implements IValueSerializer {
 	
 	private final CharBuffer buffer;
 
+	/**
+	 * Create a text value serializer.
+	 *
+	 * @param buffer
+	 *            buffer for the serializer
+	 */
 	protected TextValueSerializer(final CharBuffer buffer) {
 		this.buffer = buffer;
 	}
 
+	/**
+	 * Factory method to create a text value serializer.
+	 *
+	 * @param buffer
+	 *            serialization buffer
+	 * @return the value serializer
+	 */
 	public static TextValueSerializer create(final CharBuffer buffer) {
 		return new TextValueSerializer(buffer);
 	}
@@ -43,50 +56,50 @@ public class TextValueSerializer implements IValueSerializer {
 	
 	@Override
 	public void putBoolean(final boolean value) {
-		this.buffer.put(String.valueOf(value));
 		this.appendSeparator();
+		this.buffer.put(String.valueOf(value));		
 	}
 
 	@Override
 	public void putByte(final byte value) {
-		this.buffer.put(String.valueOf(value));
 		this.appendSeparator();
+		this.buffer.put(String.valueOf(value));
 	}
 
 	@Override
 	public void putChar(final char value) {
-		this.buffer.put(value);
 		this.appendSeparator();
+		this.buffer.put(value);
 	}
 
 	@Override
 	public void putShort(final short value) { // NOPMD
-		this.buffer.put(String.valueOf(value));
 		this.appendSeparator();
+		this.buffer.put(String.valueOf(value));		
 	}
 
 	@Override
 	public void putInt(final int value) {
-		this.buffer.put(String.valueOf(value));
 		this.appendSeparator();
+		this.buffer.put(String.valueOf(value));		
 	}
 
 	@Override
 	public void putLong(final long value) {
-		this.buffer.put(String.valueOf(value));
 		this.appendSeparator();
+		this.buffer.put(String.valueOf(value));		
 	}
 
 	@Override
 	public void putFloat(final float value) {
-		this.buffer.put(String.valueOf(value));
 		this.appendSeparator();
+		this.buffer.put(String.valueOf(value));
 	}
 
 	@Override
 	public void putDouble(final double value) {
-		this.buffer.put(String.valueOf(value));
 		this.appendSeparator();
+		this.buffer.put(String.valueOf(value));		
 	}
 
 	@Override
@@ -96,11 +109,16 @@ public class TextValueSerializer implements IValueSerializer {
 
 	@Override
 	public void putString(final String value) {
+		this.appendSeparator();
+		
 		if (value != null) {
 			this.buffer.put(value.replaceAll(";", "\\;"));
 		}
-		
-		this.appendSeparator();
+	}
+
+	@Override
+	public <T extends Enum<T>> void putEnumeration(final T value) {
+		this.buffer.put(";" + value.ordinal());
 	}
 
 }

@@ -36,7 +36,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.registry.ILookup;
@@ -143,7 +143,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 	}
 
 	private void read(final ByteBuffer buffer) {
-		final IValueDeserializer deserializer = DefaultValueDeserializer.create(buffer, this.stringRegistry);
+		final IValueDeserializer deserializer = BinaryValueDeserializer.create(buffer, this.stringRegistry);
 
 		final String recordClassName = deserializer.getString();
 		final long loggingTimestamp = deserializer.getLong();

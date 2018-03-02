@@ -1,13 +1,12 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-      		url "https://plugins.gradle.org/m2/"
-    	}
+        maven {url "https://plugins.gradle.org/m2/"}
     }
 
     dependencies {
         classpath 'gradle.plugin.gradle-plugins:jartest:1.0.1'			// necessary to depend tests on tests
+        classpath 'com.bmuschko:gradle-clover-plugin:2.2.0'
     }
 }
 
@@ -16,8 +15,10 @@ plugins {
 }
 
 apply plugin: 'eclipse'
+apply plugin: 'java'		// required for compileJava.dependsOn, manifest etc.
 apply plugin: 'maven'
 apply plugin: 'signing'
+apply plugin: 'com.bmuschko.clover'  
 
 eclipse {
 	classpath {
@@ -35,28 +36,32 @@ dependencies {
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
-def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
+// FIXME the jar tasks should handle this requirement instead.
+// Otherwise, we need to add a new project twice: once in the settings.gradle and once in this file.
+def mainSubprojects = [
+	project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools'),
+	project(':kieker-extension-kafka')
+]
 
-//def pmdAndCpdVersion = '5.0.5'	// works with 0 PMD errors and 0 PMD warnings
-//def pmdAndCpdVersion = '5.1.3'	// causes many new PMD errors and PMD warnings
-def pmdAndCpdVersion = '5.2.2'
-//def pmdAndCpdVersion = '5.5.0'	// causes many new PMD errors and PMD warnings
+clover {
+        report {
+                html=true
+        }
+        
+}
 
-// better use subprojects to avoid if-then-else in sourceSets
-allprojects {
-    version = kiekerVersion
-
-    apply plugin: 'java'
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
+subprojects {
+	apply plugin: 'java'
+  apply plugin: 'com.bmuschko.clover'  
+        
+  sourceCompatibility = 1.7
+  targetCompatibility = 1.7
     
-    sourceSets {
+	sourceSets {
         main {
             java {
-            	if (project != rootProject) {
-	                srcDir 'src'
-					srcDir 'src-gen'
-				}
+                srcDir 'src'
+				srcDir 'src-gen'
             }
             resources {
                 srcDir 'src-resources'
@@ -64,10 +69,8 @@ allprojects {
         }
         test {
             java {
-            	if (project != rootProject) {
-	                srcDir 'test'
-	                srcDir 'test-gen'
-				}
+                srcDir 'test'
+                srcDir 'test-gen'
             }
             resources {
                 srcDir 'test-resources'
@@ -77,14 +80,20 @@ allprojects {
             java {
                 srcDir 'test-integration'
 
-                compileClasspath += main.output + test.output
-                runtimeClasspath += main.output + test.output
+                compileClasspath += main.compileClasspath + test.compileClasspath
+                runtimeClasspath += main.runtimeClasspath + test.runtimeClasspath
             }
         }
+    }
+    
+    clover {
+    
     }
 
     test {
         systemProperty "java.io.tmpdir", "${buildDir}"
+		ignoreFailures = false
+	    maxHeapSize = "2g" 			// Set limit to prevent Travis-CI build to crash
 
         testLogging {
             showCauses = 'true'
@@ -97,36 +106,17 @@ allprojects {
 		    println "Executed test ${desc.name} [${desc.className}] with result: ${result.resultType}"
 		}
     }
-
-    configurations {
-        integrationTestCompile.extendsFrom testCompile
-        integrationTestRuntime.extendsFrom testRuntime
-    }
-
-    /*
-     * This task should only be executed when updating to a
-     * newer Gradle version. Note that manual changes to the
-     * previous scripts will need to be merged to the new
-     * wrapper script manually. Note that this tasks also
-     * creates/updates the wrapper scripts in subdirectories.
-     * */
-    task wrapper(type: Wrapper) {
-        description = 'Downloads the Gradle wrapper scripts.'
-        gradleVersion = '3.3'
-    }
-
+    
     task integrationTest(type: Test) {
-        testClassesDir = project.sourceSets.integrationTest.output.classesDir
+        testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
         classpath = project.sourceSets.integrationTest.runtimeClasspath
     }
     check.dependsOn integrationTest
-
-    test {
-        ignoreFailures = false
-	    maxHeapSize = "2g" // Set limit to prevent Travis-CI build to crash
-    }
-
+    
+    // --- quality assurance plugins ---
+    
     apply plugin: 'pmd'
+    
     pmd {
     	// the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
     	toolVersion = pmdAndCpdVersion
@@ -137,15 +127,17 @@ allprojects {
         ruleSetFiles = files(resolveRelativeToParent(dirConfig, 'pmdrules.xml'))
     }
 
+    check.dependsOn(':cpdCheck')
+
     apply plugin: 'checkstyle'
     checkstyle {
+    	toolVersion = checkstyleVersion
         ignoreFailures = true
         showViolations = false
 
         configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
     }
 
-    def fbVersion = '3.0.1'
     apply plugin: 'findbugs'
     findbugs {	
         toolVersion = fbVersion
@@ -163,6 +155,14 @@ allprojects {
         }
     }
 
+	tasks.withType(Checkstyle) {
+	    reports {
+	        xml.enabled true
+	        html.enabled true
+	        //html.stylesheet resources.text.fromFile('config/xsl/checkstyle-custom.xsl')
+	    }
+	}
+
     tasks.withType(FindBugs) {
         reports {
             xml.enabled = true
@@ -170,13 +170,6 @@ allprojects {
         }
     }
 
-    // CS is a little bit weird, when it comes to dependencies.
-    checkstyleTest.classpath += sourceSets.main.runtimeClasspath
-    checkstyleMain.classpath += configurations.compile
-    // This part makes sure that CS does not check the classes inside src-gen and test-gen
-    checkstyleMain.source = 'src'
-    checkstyleTest.source = 'test'
-    
     repositories {
     	mavenCentral() 
     	jcenter() // for mockito
@@ -184,13 +177,10 @@ allprojects {
 
     // Those are some dependencies which are needed by all subprojects
     dependencies {
-        checkstyle resolveLibrary('**/checkstyle-*/**/*.jar')
         checkstyle project(':kieker-checkstyle-extension')
 
-        findbugs resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
-        
         // compile-time dependency due to the annotation SuppressFBWarnings()
-        compile resolveLibrary("**/findbugs-$fbVersion/lib/*.jar")
+		compile "com.google.code.findbugs:findbugs:${fbVersion}"
 
 		compile 'commons-logging:commons-logging:1.2'
 		compile 'org.slf4j:slf4j-api:1.7.25'
@@ -200,7 +190,27 @@ allprojects {
 		testCompile 'org.hamcrest:hamcrest-library:1.3'
     }
 
-	check.dependsOn(':cpdCheck')
+}
+
+allprojects {
+    version = kiekerVersion
+
+    /*
+     * This task should only be executed when updating to a
+     * newer Gradle version. Note that manual changes to the
+     * previous scripts will need to be merged to the new
+     * wrapper script manually. Note that this tasks also
+     * creates/updates the wrapper scripts in subdirectories.
+     * */
+    task wrapper(type: Wrapper) {
+        description = 'Downloads the Gradle wrapper scripts.'
+        gradleVersion = '3.3'
+    }
+
+    repositories {
+    	mavenCentral() 
+    	jcenter() // for mockito
+    }
 }
 
 /*subprojects {
@@ -335,138 +345,137 @@ def parseCpdReport(File reportFile) {
     return [errors, warnings, infos]
 }
 
-task checkThresholds(dependsOn: mainSubprojects.tasks["build"]) {
-  doLast {
-    def reportTypes = ['main', 'test']
+mainSubprojects.each { project ->
+	configure(project) {
 
-    // Begin Checkstyle report parsing
-    def csErrors = 0
-    def csWarnings = 0
-    def csInfos = 0
+		task checkThresholds(dependsOn: ["build"]) {
+		  doLast {
+		    def reportTypes = ['main', 'test']
+		
+		    // Begin Checkstyle report parsing
+		    def csErrors = 0
+		    def csWarnings = 0
+		    def csInfos = 0
+		
+			def p = project
+			
+		        reportTypes.each { String type ->
+		            def reportFile = file(p.projectDir.path + '/build/reports/checkstyle/' + type + '.xml')
+		            def reportResults = parseCheckstyleReport(reportFile)
+		            csErrors += reportResults[0]
+		            csWarnings += reportResults[1]
+		            csInfos += reportResults[2]
+		        }
+		    // End Checkstyle report parsing
+		
+		
+		    // Begin Findbugs report parsing
+		    def fbErrors = 0
+		    def fbWarnings = 0
+		    def fbInfos = 0
+		
+		        reportTypes.each { String type ->
+		            def reportFile = file(p.projectDir.path + '/build/reports/findbugs/' + type + '.xml')
+		            def reportResults = parseFindbugsReport(reportFile)
+		            fbErrors += reportResults[0]
+		            fbWarnings += reportResults[1]
+		            fbInfos += reportResults[2]
+		        }
+		    // End Findbugs report parsing
+		
+		
+		    // Begin PMD report parsing
+		    def pmdErrors = 0
+		    def pmdWarnings = 0
+		    def pmdInfos = 0
+		
+		        reportTypes.each { String type ->
+		            def reportFile = file(p.projectDir.path + '/build/reports/pmd/' + type + '.xml')
+		            def reportResults = parsePmdReport(reportFile)
+		            pmdErrors += reportResults[0]
+		            pmdWarnings += reportResults[1]
+		            pmdInfos += reportResults[2]
+		        }
+		    // End PMD report parsing
+		
+		
+		    // Begin CPD report parsing
+		    def cpdErrors = 0
+		
+			p = rootProject
+		    	// cpd only produces one single file in the root project without any report types, such as main and test.
+		        def reportFile = file(p.projectDir.path + '/build/reports/cpd/cpdCheck.xml')
+		        def reportResults = parseCpdReport(reportFile)
+		        cpdErrors += reportResults[0]
+		    // End CPD report parsing
+		
+		
+		    // Print results
+		    println("Static analysis results:")
+		    println()
+		    println(" Checkstyle:")
+		    println("  Errors: " + csErrors + " (Threshold: " + checkstyleErrorThreshold + ")")
+		    println("  Warnings: " + csWarnings + " (Threshold: " + checkstyleWarningThreshold + ")")
+		    println("  Info: " + csInfos)
+		    println()
+		    println(" Findbugs:")
+		    println("  Errors: " + fbErrors + " (Threshold: " + findbugsErrorThreshold + ")")
+		    println("  Warnings: " + fbWarnings + " (Threshold: " + findbugsWarningThreshold + ")")
+		    println("  Info: " + fbInfos)
+		    println()
+		    println(" PMD:")
+		    println("  Errors: " + pmdErrors + " (Threshold: " + pmdErrorThreshold + ")")
+		    println("  Warnings: " + pmdWarnings + " (Threshold: " + pmdWarningThreshold + ")")
+		    println("  Info: " + pmdInfos)
+		    println()
+		    println(" CPD (counts for all Kieker components):")
+		    println("  Errors: " + cpdErrors + " (Threshold: " + cpdErrorThreshold + ")")
+		
+		
+		    // Fail build if Checkstyle thresholds are violated
+		    if (csWarnings > Integer.valueOf(checkstyleWarningThreshold)) {
+		        throw new GradleException("There were checkstyle warnings exceeding the warning threshold! Warnings: " + csWarnings + " Threshold: " + checkstyleWarningThreshold)
+		    }
+		
+		    if (csErrors > Integer.valueOf(checkstyleErrorThreshold)) {
+		        throw new GradleException("There were checkstyle errors exceeding the error threshold! Errors: " + csErrors + " Threshold: " + checkstyleErrorThreshold)
+		    }
+		
+		    // Fail build if Findbugs thresholds are violated
+		    if (fbWarnings > Integer.valueOf(findbugsWarningThreshold)) {
+		        throw new GradleException("There were findbugs warnings exceeding the warning threshold! Warnings: " + fbWarnings + " Threshold: " + findbugsWarningThreshold)
+		    }
+		
+		    if (fbErrors > Integer.valueOf(findbugsErrorThreshold)) {
+		        throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + fbErrors + " Threshold: " + findbugsErrorThreshold)
+		    }
+		
+		    // Fail build if PMD thresholds are violated
+		    if (pmdWarnings > Integer.valueOf(pmdWarningThreshold)) {
+		        throw new GradleException("There were pmd warnings exceeding the warning threshold! Warnings: " + pmdWarnings + " Threshold: " + pmdWarningThreshold)
+		    }
+		
+		    if (pmdErrors > Integer.valueOf(pmdErrorThreshold)) {
+		        throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + pmdErrors + " Threshold: " + pmdErrorThreshold)
+		    }
+		
+			// Fail build if CPD thresholds are violated
+		    if (cpdErrors > Integer.valueOf(cpdErrorThreshold)) {
+		        throw new GradleException("There were cpd errors exceeding the error threshold! Errors: " + cpdErrors + " Threshold: " + cpdErrorThreshold)
+		    }
+		  }
+		}
 
-    mainSubprojects.each { Project p ->
-        reportTypes.each { String type ->
-            def reportFile = file(p.projectDir.path + '/build/reports/checkstyle/' + type + '.xml')
-            def reportResults = parseCheckstyleReport(reportFile)
-            csErrors += reportResults[0]
-            csWarnings += reportResults[1]
-            csInfos += reportResults[2]
-        }
-    }
-    // End Checkstyle report parsing
-
-
-    // Begin Findbugs report parsing
-    def fbErrors = 0
-    def fbWarnings = 0
-    def fbInfos = 0
-
-    mainSubprojects.each { Project p ->
-        reportTypes.each { String type ->
-            def reportFile = file(p.projectDir.path + '/build/reports/findbugs/' + type + '.xml')
-            def reportResults = parseFindbugsReport(reportFile)
-            fbErrors += reportResults[0]
-            fbWarnings += reportResults[1]
-            fbInfos += reportResults[2]
-        }
-    }
-    // End Findbugs report parsing
-
-
-    // Begin PMD report parsing
-    def pmdErrors = 0
-    def pmdWarnings = 0
-    def pmdInfos = 0
-
-    mainSubprojects.each { Project p ->
-        reportTypes.each { String type ->
-            def reportFile = file(p.projectDir.path + '/build/reports/pmd/' + type + '.xml')
-            def reportResults = parsePmdReport(reportFile)
-            pmdErrors += reportResults[0]
-            pmdWarnings += reportResults[1]
-            pmdInfos += reportResults[2]
-        }
-    }
-    // End PMD report parsing
-
-
-    // Begin CPD report parsing
-    def cpdErrors = 0
-
-	def projects = [rootProject]
-    projects.each { Project p ->
-    	// cpd only produces one single file in the root project without any report types, such as main and test.
-        def reportFile = file(p.projectDir.path + '/build/reports/cpd/cpdCheck.xml')
-        def reportResults = parseCpdReport(reportFile)
-        cpdErrors += reportResults[0]
-    }
-    // End CPD report parsing
-
-
-    // Print results
-    println("Static analysis results:")
-    println()
-    println(" Checkstyle:")
-    println("  Errors: " + csErrors + " (Threshold: " + checkstyleErrorThreshold + ")")
-    println("  Warnings: " + csWarnings + " (Threshold: " + checkstyleWarningThreshold + ")")
-    println("  Info: " + csInfos)
-    println()
-    println(" Findbugs:")
-    println("  Errors: " + fbErrors + " (Threshold: " + findbugsErrorThreshold + ")")
-    println("  Warnings: " + fbWarnings + " (Threshold: " + findbugsWarningThreshold + ")")
-    println("  Info: " + fbInfos)
-    println()
-    println(" PMD:")
-    println("  Errors: " + pmdErrors + " (Threshold: " + pmdErrorThreshold + ")")
-    println("  Warnings: " + pmdWarnings + " (Threshold: " + pmdWarningThreshold + ")")
-    println("  Info: " + pmdInfos)
-    println()
-    println(" CPD:")
-    println("  Errors: " + cpdErrors + " (Threshold: " + cpdErrorThreshold + ")")
-
-
-    // Fail build if Checkstyle thresholds are violated
-    if (csWarnings > Integer.valueOf(checkstyleWarningThreshold)) {
-        throw new GradleException("There were checkstyle warnings exceeding the warning threshold! Warnings: " + csWarnings + " Threshold: " + checkstyleWarningThreshold)
-    }
-
-    if (csErrors > Integer.valueOf(checkstyleErrorThreshold)) {
-        throw new GradleException("There were checkstyle errors exceeding the error threshold! Errors: " + csErrors + " Threshold: " + checkstyleErrorThreshold)
-    }
-
-
-    // Fail build if Findbugs thresholds are violated
-    if (fbWarnings > Integer.valueOf(findbugsWarningThreshold)) {
-        throw new GradleException("There were findbugs warnings exceeding the warning threshold! Warnings: " + fbWarnings + " Threshold: " + findbugsWarningThreshold)
-    }
-
-    if (fbErrors > Integer.valueOf(findbugsErrorThreshold)) {
-        throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + fbErrors + " Threshold: " + findbugsErrorThreshold)
-    }
-
-    // Fail build if PMD thresholds are violated
-    if (pmdWarnings > Integer.valueOf(pmdWarningThreshold)) {
-        throw new GradleException("There were pmd warnings exceeding the warning threshold! Warnings: " + pmdWarnings + " Threshold: " + pmdWarningThreshold)
-    }
-
-    if (pmdErrors > Integer.valueOf(pmdErrorThreshold)) {
-        throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + pmdErrors + " Threshold: " + pmdErrorThreshold)
-    }
-
-	// Fail build if CPD thresholds are violated
-    if (cpdErrors > Integer.valueOf(cpdErrorThreshold)) {
-        throw new GradleException("There were cpd errors exceeding the error threshold! Errors: " + cpdErrors + " Threshold: " + cpdErrorThreshold)
-    }
-  }
+		tasks.check.finalizedBy(checkThresholds)
+	}
 }
 
 // Execute 'checkThresholds' after all check tasks in the subprojects have been executed
-mainSubprojects.tasks.check*.finalizedBy(checkThresholds)
+//mainSubprojects.tasks.check*.finalizedBy(checkThresholds)
 
+task checkThresholds(dependsOn: mainSubprojects.tasks["checkThresholds"])
 
-
-
-
+/*
 task htmlQualityReport() {
     def javaVersion = JavaVersion.current()
     def reportTypes = ['main', 'test']
@@ -492,8 +501,7 @@ task htmlQualityReport() {
 }
 mainSubprojects.tasks.check*.finalizedBy(htmlQualityReport)
 htmlQualityReport.onlyIf { reportingCompatibleJavaVersionPresent() }
-
-
+*/
 
 
 
@@ -502,12 +510,6 @@ def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
     String contents = file.getText('UTF-8')
     contents = contents.replaceAll(searchExp, replaceExp)
     file.write(contents, 'UTF-8')
-}
-
-task replaceHardCodedVersionNames() {
-  doLast {
-    regexpReplaceInFiles(project.file("bin/dev/release-check-short.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
-  }
 }
 
 task updateLicenseHeaderYear() {
@@ -519,7 +521,14 @@ task updateLicenseHeaderYear() {
   }
 }
 
+task replaceHardCodedVersionNames() {
+  doLast {
+    regexpReplaceInFiles(project.file("bin/dev/release-check-short.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+  }
+}
 compileJava.dependsOn replaceHardCodedVersionNames
+
+
 
 def reportingCompatibleJavaVersionPresent() {
     switch (JavaVersion.current()) {

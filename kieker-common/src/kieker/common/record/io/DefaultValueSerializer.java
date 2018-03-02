@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,100 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.io;
 
 import java.nio.ByteBuffer;
 
-import kieker.common.util.dataformat.VariableLengthEncoding;
 import kieker.common.util.registry.IRegistry;
 
 /**
- * Default value serializer implementation.
+ * This class is used to fulfill our deprecation policy. Due to a rename
+ * this class is replaced by {@link BinaryValueSerializer}.
  *
- * @author Holger Knoche
+ * @author Reiner Jung
+ *
  * @since 1.13
  *
+ * @deprecated 1.14 renamed to {@link BinaryValueSerializer}
  */
-public class DefaultValueSerializer implements IValueSerializer {
-
-	private static final byte TRUE_VALUE = (byte) 1;
-	private static final byte FALSE_VALUE = (byte) 0;
-
-	private final ByteBuffer buffer;
-	private final IRegistry<String> stringRegistry;
+@Deprecated
+public class DefaultValueSerializer extends BinaryValueSerializer {	// NOCS (Default in type name: is already deprecated)
 
 	protected DefaultValueSerializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		this.buffer = buffer;
-		this.stringRegistry = stringRegistry;
-	}
-
-	public static DefaultValueSerializer create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new DefaultValueSerializer(buffer, stringRegistry);
-	}
-
-	@Override
-	public void putBoolean(final boolean value) {
-		final byte data;
-
-		if (value) {
-			data = TRUE_VALUE;
-		} else {
-			data = FALSE_VALUE;
-		}
-
-		this.putByte(data);
-	}
-
-	@Override
-	public void putByte(final byte value) {
-		this.buffer.put(value);
-	}
-
-	@Override
-	public void putInt(final int value) {
-		this.buffer.putInt(value);
-	}
-
-	@Override
-	public void putLong(final long value) {
-		this.buffer.putLong(value);
-	}
-
-	@Override
-	public void putDouble(final double value) {
-		this.buffer.putDouble(value);
-	}
-
-	@Override
-	public void putBytes(final byte[] value) {
-		this.buffer.put(value);
-	}
-
-	@Override
-	public void putString(final String value) {
-		final int stringId = this.stringRegistry.get(value);
-		this.putTableIndex(stringId);
-	}
-
-	private void putTableIndex(final int index) {
-		// Use variable-length encoding for indexes into the string table
-		VariableLengthEncoding.encodeInt(index, this.buffer);
-	}
-	
-	@Override
-	public void putChar(final char value) {
-		this.buffer.putChar(value);
-	}
-
-	@Override
-	public void putShort(final short value) { // NOPMD
-		this.buffer.putShort(value);
-	}
-
-	@Override
-	public void putFloat(final float value) {
-		this.buffer.putFloat(value);
+		super(buffer, stringRegistry);
 	}
 
 }

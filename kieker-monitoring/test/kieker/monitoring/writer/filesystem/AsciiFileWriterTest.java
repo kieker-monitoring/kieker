@@ -29,7 +29,9 @@ import org.junit.rules.TemporaryFolder;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.util.filesystem.FileExtensionFilter;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
+import kieker.monitoring.writer.filesystem.compression.ZipCompressionFilter;
 
 /**
  * @author Christian Wulf
@@ -43,27 +45,37 @@ public class AsciiFileWriterTest {
 
 	private Configuration configuration;
 
+	/**
+	 * Test class.
+	 */
 	public AsciiFileWriterTest() {
-		super();
+		// empty constructor.
 	}
 
+	/**
+	 * Shared setup for the tests.
+	 */
 	@Before
 	public void before() {
 		this.configuration = new Configuration();
-		this.configuration.setProperty(ConfigurationFactory.HOST_NAME, "testHostName");
-		this.configuration.setProperty(ConfigurationFactory.CONTROLLER_NAME, "testControllerName");
+		this.configuration.setProperty(ConfigurationKeys.HOST_NAME, "testHostName");
+		this.configuration.setProperty(ConfigurationKeys.CONTROLLER_NAME, "testControllerName");
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_CHARSET_NAME, "UTF-8");
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
+		this.configuration.setProperty(AsciiFileWriter.CONFIG_BUFFERSIZE, "32768");
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, String.valueOf(Integer.MAX_VALUE));
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGSIZE, String.valueOf(Integer.MAX_VALUE));
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
 	}
 
+	/**
+	 * Test whether the log directory is created correctly.
+	 */
 	@Test
 	public void shouldCreateLogFolder() {
 		// test preparation
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "1");
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, "false");
+		this.configuration.setProperty(AsciiFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 
 		// test execution
 		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
@@ -72,11 +84,14 @@ public class AsciiFileWriterTest {
 		Assert.assertTrue(Files.exists(writer.getLogFolder()));
 	}
 
+	/**
+	 * Test whether the mapping file is created correctly.
+	 */
 	@Test
 	public void shouldCreateMappingAndRecordFiles() {
 		// test preparation
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "1");
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, "false");
+		this.configuration.setProperty(AsciiFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 
 		// test execution
 		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
@@ -98,11 +113,14 @@ public class AsciiFileWriterTest {
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(1));
 	}
 
+	/**
+	 * Test whether the upper limit of entries per file in honored.
+	 */
 	@Test
 	public void shouldCreateMultipleRecordFiles() {
 		// test preparation
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, "false");
+		this.configuration.setProperty(AsciiFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 
 		// test execution
 		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
@@ -125,11 +143,14 @@ public class AsciiFileWriterTest {
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(2));
 	}
 
+	/**
+	 * Test whether compression setting works.
+	 */
 	@Test
 	public void shouldCreateMultipleCompressedRecordFiles() {
 		// test preparation
 		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_SHOULD_COMPRESS, "true");
+		this.configuration.setProperty(AsciiFileWriter.CONFIG_COMPRESSION_FILTER, ZipCompressionFilter.class.getName());
 
 		// test execution
 		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
@@ -152,6 +173,9 @@ public class AsciiFileWriterTest {
 		Assert.assertThat(recordFiles.length, CoreMatchers.is(2));
 	}
 
+	/**
+	 * Test behavior regarding max log files. Should rotate.
+	 */
 	@Test
 	public final void testMaxLogFiles() {
 		// test preparation
@@ -177,13 +201,18 @@ public class AsciiFileWriterTest {
 
 				// test assertion
 				final String reasonMessage = "Passed arguments: maxLogFiles=" + maxLogFiles + ", numRecordsToWrite=" + numRecordsToWrite;
-				final File[] recordFiles = storePath.listFiles(writer.getFileNameFilter());
+				final File[] recordFiles = storePath.listFiles(FileExtensionFilter.DAT);
 				Assert.assertNotNull(recordFiles);
 				Assert.assertThat(reasonMessage, recordFiles.length, CoreMatchers.is(expectedNumRecordFiles));
 			}
 		}
 	}
 
+	/**
+	 * Test whether the max log size.
+	 * 
+	 * @throws Exception on IO errors
+	 */
 	@Test
 	public void testMaxLogSize() throws Exception {
 		// size = $ + compressed record class name (=0) + ; + logging timestamp (=-1) + newLine (\n or \n\r)
@@ -193,7 +222,8 @@ public class AsciiFileWriterTest {
 		final int[][] testInputTuples = {
 			{ -1, 0, 0 }, { -1, 1, 1 },
 			{ 0, 0, 0 }, { 0, 1, 1 },
-			{ 1, 0, 0 }, { 1, 1, 1 }, { 1, 2, 2 }, { 1, 3, 2 },
+			{ 1, 0, 0 }, { 1, 1, 1 },
+			{ 1, 2, 2 }, { 1, 3, 2 },
 		};
 
 		for (final int[] testInputTuple : testInputTuples) {
@@ -213,12 +243,15 @@ public class AsciiFileWriterTest {
 
 			// test assertion
 			final String reasonMessage = "Passed arguments: maxMegaBytesPerFile=" + maxMegaBytesPerFile + ", megaBytesToWrite=" + megaBytesToWrite;
-			final File[] recordFiles = storePath.listFiles(writer.getFileNameFilter());
+			final File[] recordFiles = storePath.listFiles(FileExtensionFilter.DAT);
 			Assert.assertNotNull(recordFiles);
 			Assert.assertThat(reasonMessage, recordFiles.length, CoreMatchers.is(expectedNumRecordFiles));
 		}
 	}
 
+	/**
+	 * Test valid log directory.
+	 */
 	@Test
 	public void testValidLogFolder() {
 		final String passedConfigPathName = this.tmpFolder.getRoot().getAbsolutePath();
@@ -228,6 +261,9 @@ public class AsciiFileWriterTest {
 		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(passedConfigPathName));
 	}
 
+	/**
+	 * Test empty log directory property.
+	 */
 	@Test
 	public void testEmptyConfigPath() {
 		final String passedConfigPathName = "";
@@ -238,6 +274,11 @@ public class AsciiFileWriterTest {
 		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
 	}
 
+	/**
+	 * Test log directory missing in configuration.
+	 * 
+	 * @throws IOException on IO errors
+	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void testNonDirectoryConfigPath() throws IOException {
 		final String passedConfigPathName = this.tmpFolder.newFile().getAbsolutePath();

@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.systemModel.repository;
 
+
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
@@ -25,9 +26,9 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPair;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepository {
@@ -35,12 +36,12 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
 			new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, OperationRepository.ROOT_OPERATION,
 					AssemblyRepository.ROOT_ASSEMBLY_COMPONENT);
 
-	private final Map<String, AssemblyComponentOperationPair> pairsByName = new Hashtable<String, AssemblyComponentOperationPair>(); // NOPMD (UseConcurrentHashMap)
-	private final Map<Integer, AssemblyComponentOperationPair> pairsById = new Hashtable<Integer, AssemblyComponentOperationPair>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<String, AssemblyComponentOperationPair> pairsByName = new Hashtable<>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<Integer, AssemblyComponentOperationPair> pairsById = new Hashtable<>(); // NOPMD (UseConcurrentHashMap)
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param systemFactory
 	 *            The system factory.
 	 */
@@ -50,30 +51,27 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
 
 	/**
 	 * Returns a corresponding pair instance (existing or newly created).
-	 * 
+	 *
 	 * @param assemblyComponent
 	 *            The assemble component for the pair.
 	 * @param operation
 	 *            The operation for the pair.
-	 * 
+	 *
 	 * @return The corresponding pair instance if it exists, otherwise a new one.
 	 */
 	public final AssemblyComponentOperationPair getPairInstanceByPair(final AssemblyComponent assemblyComponent, final Operation operation) {
-		final AssemblyComponentOperationPair inst = this.getPairByNamedIdentifier(assemblyComponent.getId() + "-" + operation.getId());
+		final String namedIdentifier = assemblyComponent.getId() + "-" + operation.getId();
+		final AssemblyComponentOperationPair inst = this.getPairByNamedIdentifier(namedIdentifier);
 		if (inst == null) {
-			return this.createAndRegisterPair(operation, assemblyComponent);
+			return this.createAndRegisterPair(namedIdentifier, operation, assemblyComponent);
 		}
 		return inst;
-	}
-
-	private AssemblyComponentOperationPair createAndRegisterPair(final Operation operation, final AssemblyComponent assemblyComponent) {
-		return this.createAndRegisterPair(assemblyComponent.getId() + "-" + operation.getId(), operation, assemblyComponent);
 	}
 
 	/**
 	 * Returns the instance for the passed factory name; null if no instance
 	 * with this factory name.
-	 * 
+	 *
 	 * @param namedIdentifier
 	 *            The identifier to search for.
 	 */
@@ -84,7 +82,7 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
 	/**
 	 * @param id
 	 *            The ID of the instance in question.
-	 * 
+	 *
 	 * @return The instance for the passed ID; null if no instance with this ID is available.
 	 */
 	public final AssemblyComponentOperationPair getPairById(final int id) {

@@ -25,7 +25,7 @@ import java.util.TimeZone;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 
 /**
  * @author Christian Wulf (chw)
@@ -44,8 +44,8 @@ final class KiekerLogFolder {
 		final String currentDateStr = date.format(new java.util.Date())
 				+ "-" + System.nanoTime(); // 'SSS' in SimpleDateFormat is not accurate enough for fast unit tests
 
-		final String hostName = configuration.getStringProperty(ConfigurationFactory.HOST_NAME);
-		final String controllerName = configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME);
+		final String hostName = configuration.getStringProperty(ConfigurationKeys.HOST_NAME);
+		final String controllerName = configuration.getStringProperty(ConfigurationKeys.CONTROLLER_NAME);
 
 		final String filename = String.format("%s-%s-UTC-%s-%s", FSUtil.FILE_PREFIX, currentDateStr, hostName, controllerName);
 

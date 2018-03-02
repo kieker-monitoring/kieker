@@ -76,6 +76,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		public String[] getValueNames() {
 			return new String[] { "timestamp", "traceId", "orderIndex" };
 		}
+
 	};
 
 	private ListReader<AbstractTraceEvent> reader;

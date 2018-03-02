@@ -35,6 +35,7 @@ import org.junit.rules.TemporaryFolder;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
@@ -77,7 +78,7 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 	@Before
 	public void init() throws IOException {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
 		config.setProperty(AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
 		this.monitoringCtrl = MonitoringController.createInstance(config);
 
@@ -123,7 +124,7 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 			this.registerTraceInfo();
 		}
 
-		final List<BasicMethodInvocation> invocations = new ArrayList<BasicMethodInvocation>(4);
+		final List<BasicMethodInvocation> invocations = new ArrayList<>(4);
 
 		// Note that right before the proceed we expect the ess to be proceeding execution's ess +1!
 		final BasicMethodInvocation invocation11Catalog = new BasicMethodInvocation(// eoi should not increase because no sub call

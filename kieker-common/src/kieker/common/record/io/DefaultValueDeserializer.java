@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,92 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.io;
 
 import java.nio.ByteBuffer;
 
-import kieker.common.util.dataformat.VariableLengthEncoding;
 import kieker.common.util.registry.IRegistry;
 
 /**
- * Default value deserializer implementation.
+ * This class is used to fulfill our deprecation policy. Due to a rename
+ * this class is replaced by {@link BinaryValueDeserializer}.
  *
- * @author Holger Knoche
+ * @author Reiner Jung
+ *
  * @since 1.13
  *
+ * @deprecated 1.14 renamed to {@link BinaryValueDeserializer}
  */
-public class DefaultValueDeserializer implements IValueDeserializer {
-
-	private static final byte TRUE_VALUE = (byte) 1;
-
-	private final ByteBuffer buffer;
-	private final IRegistry<String> stringRegistry;
+@Deprecated
+public class DefaultValueDeserializer extends BinaryValueDeserializer {	// NOCS (Default in type name: is already deprecated)
 
 	protected DefaultValueDeserializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		this.buffer = buffer;
-		this.stringRegistry = stringRegistry;
-	}
-
-	public static DefaultValueDeserializer create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new DefaultValueDeserializer(buffer, stringRegistry);
-	}
-
-	@Override
-	public boolean getBoolean() { // NOPMD
-		return (this.getByte() == TRUE_VALUE);
-	}
-
-	@Override
-	public byte getByte() {
-		return this.buffer.get();
-	}
-
-	@Override
-	public int getInt() {
-		return this.buffer.getInt();
-	}
-
-	@Override
-	public long getLong() {
-		return this.buffer.getLong();
-	}
-
-	@Override
-	public double getDouble() {
-		return this.buffer.getDouble();
-	}
-
-	private int getTableIndex() {
-		// Use variable-length encoding for indexes into the string table
-		return VariableLengthEncoding.decodeInt(this.buffer);
-	}
-	
-	@Override
-	public String getString() {
-		final int stringId = this.getTableIndex();
-		return this.stringRegistry.get(stringId);
-	}
-
-	@Override
-	public byte[] getBytes(final byte[] target) {
-		this.buffer.get(target);
-		return target;
-	}
-
-	@Override
-	public char getChar() {
-		return this.buffer.getChar();
-	}
-
-	@Override
-	public short getShort() { // NOPMD
-		return this.buffer.getShort();
-	}
-
-	@Override
-	public float getFloat() {
-		return this.buffer.getFloat();
+		super(buffer, stringRegistry);
 	}
 
 }

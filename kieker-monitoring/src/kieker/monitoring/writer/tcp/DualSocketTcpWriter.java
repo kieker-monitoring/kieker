@@ -26,7 +26,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.io.DefaultValueSerializer;
+import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.registry.GetIdAdapter;
@@ -101,7 +101,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 
 		final WriterRegistry writerRegistry = new WriterRegistry(this);
 		final GetIdAdapter<String> writeBytesAdapter = new GetIdAdapter<>(writerRegistry);
-		this.serializer = DefaultValueSerializer.create(this.recordBuffer, writeBytesAdapter);
+		this.serializer = BinaryValueSerializer.create(this.recordBuffer, writeBytesAdapter);
 
 		// this.encoder = StandardCharsets.UTF_8.newEncoder();
 
