@@ -66,7 +66,7 @@ public class OSPipeWriter implements IRawDataWriter {
 				return new FileOutputStream(outputStreamName);
 			}
 		} catch (final FileNotFoundException e) {
-			LOG.error("Unable to open output pipe '" + outputStreamName + "'.", e);
+			LOG.error("Unable to open output pipe '%s'.", e, outputStreamName);
 			return null;
 		}
 	}

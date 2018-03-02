@@ -98,9 +98,9 @@ public class OSPipeReader extends AbstractRawDataReader {
 			// Try to instantiate the unwrapper
 			unwrapper = unwrapperType.getConstructor(InputStream.class).newInstance(inputStream);
 		} catch (final NoSuchMethodException e) {
-			LOG.error("Class " + unwrapperType.getName() + " must implement a (public) constructor that accepts an input stream.", e);
+			LOG.error("Class %s must implement a (public) constructor that accepts an input stream.", unwrapperType.getName());
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | SecurityException e) {
-			LOG.error("Unable to instantiate " + unwrapperType.getName() + ".", e);
+			LOG.error("Unable to instantiate %s.", e, unwrapperType.getName());
 		}
 
 		return unwrapper;

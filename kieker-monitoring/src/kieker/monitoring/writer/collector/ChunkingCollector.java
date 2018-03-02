@@ -159,7 +159,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			// Instantiate default queue type if the desired queue type cannot be instantiated
-			LOG.error("Error instantiating queue type " + queueTypeName + ". Using default queue type instead.", e);
+			LOG.error("Error instantiating queue type %s. Using default queue type instead.", e, queueTypeName);
 			return this.createDefaultQueue(queueSize);
 		}
 	}
@@ -171,7 +171,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		// Create a no-op wrapper if no wrapper type is given  
 		if (wrapperType == null) {
 			if (writer.requiresWrappedData()) {
-				LOG.error("Writer " + writer.getClass().getName() + " requires wrapped data, but serializer " + serializer.getClass().getName() + " does not provide a wrapper.");
+				LOG.error("Writer %s requires wrapped data, but serializer %s does not provide a wrapper.", writer.getClass().getName(), serializer.getClass().getName());
 			}
 			
 			return this.createNoOpWrapperForSerializer(serializer, bufferSize);
@@ -180,10 +180,10 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		try {
 			return (IRawDataWrapper<B>) wrapperType.getConstructor(int.class).newInstance(bufferSize);
 		} catch (final NoSuchMethodException e) {
-			LOG.error("Wrapper type " + wrapperType.getName() + " does not provide an appropriate constructor.");
+			LOG.error("Wrapper type %s does not provide an appropriate constructor.", wrapperType.getName());
 			return this.createNoOpWrapperForSerializer(serializer, bufferSize);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
-			LOG.error("Error instantiating wrapper " + wrapperType.getClass().getName() + " for serializer " + wrapperType.getClass().getName() + ".", e);
+			LOG.error("Error instantiating wrapper %s for serializer %s.", e, wrapperType.getClass().getName(), wrapperType.getClass().getName());
 			return this.createNoOpWrapperForSerializer(serializer, bufferSize);
 		}
 	}
