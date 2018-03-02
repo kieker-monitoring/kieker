@@ -23,7 +23,7 @@ package kieker.common.logging;
  *
  * @since 1.5
  */
-public final class LogImplJDK14 implements Log {
+public final class LogImplJDK14 extends AbstractLogImpl {
 	private final java.util.logging.Logger logger; // NOPMD (Implementation of an logger)
 	private final String name;
 

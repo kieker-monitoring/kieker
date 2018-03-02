@@ -35,7 +35,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *
  * @since 1.6
  */
-public final class LogImplWebguiLogging implements Log {
+public final class LogImplWebguiLogging extends AbstractLogImpl {
 
 	private static final int MAX_ENTRIES = 100;
 	private static final Map<String, Queue<String>> QUEUES = new HashMap<String, Queue<String>>(); // NOPMD (sync needed)

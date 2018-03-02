@@ -218,7 +218,7 @@ public interface Log { // NOCS (Name of Interface)
 	 * @since 1.5
 	 */
 	public void warn(String message, Throwable t);
-
+	
 	/**
 	 * <p>
 	 * Log a message with error log level.
@@ -235,6 +235,46 @@ public interface Log { // NOCS (Name of Interface)
 	 */
 	public void error(String message);
 
+	/**
+	 * <p>
+	 * Log a message with error log level. This variant avoids the overhead of premature string formatting, and is 
+	 * recognized as such by PMD.
+	 * </p>
+	 *
+	 * <p>
+	 * Use this log level for the production mode.
+	 * </p>
+	 *
+	 * @param format
+	 *            format string for the method
+	 * @param arguments
+	 *            the arguments required for the format string
+	 *
+	 * @since 2.0
+	 */
+	public void error(String format, Object... arguments);
+	
+	/**
+	 * <p>
+	 * Log a message with error log level. This variant avoids the overhead of
+	 * premature string formatting, and is recognized as such by PMD.
+	 * </p>
+	 *
+	 * <p>
+	 * Use this log level for the production mode.
+	 * </p>
+	 *
+	 * @param format
+	 *            format string for the method
+	 * @param cause
+	 *            a cause to be logged
+	 * @param arguments
+	 *            the arguments required for the format string
+	 *
+	 * @since 2.0
+	 */
+	public void error(String format, Throwable cause, Object... arguments);
+	
 	/**
 	 * <p>
 	 * Log an error with error log level.

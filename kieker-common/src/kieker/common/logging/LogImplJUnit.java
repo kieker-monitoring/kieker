@@ -27,7 +27,7 @@ import java.util.Set;
  *
  * @since 1.6
  */
-public final class LogImplJUnit implements Log {
+public final class LogImplJUnit extends AbstractLogImpl {
 
 	private static final Log LOG = LogFactory.getLog(LogImplJUnit.class); // NOPMD
 	private static final Set<Class<? extends Throwable>> DISABLED_THROWABLES = new HashSet<Class<? extends Throwable>>();
