@@ -15,24 +15,55 @@
  ***************************************************************************/
 package kieker.monitoring.writer.tcp;
 
+import java.util.concurrent.TimeUnit;
+
 /**
+ * Countdown object for connection timeouts.
+ * 
  * @author Christian Wulf
  *
  * @since 1.14
  */
 class TimeoutCountdown {
 
-	private int currentTimeoutInMs;
+	private long currentTimeoutInNs;
 
+	/**
+	 * Creates a new countdown object with the given timout delay.
+	 * 
+	 * @param initialTimeoutInMs
+	 *            The timeout in milliseconds
+	 */
 	public TimeoutCountdown(final int initialTimeoutInMs) {
-		this.currentTimeoutInMs = initialTimeoutInMs;
+		this.currentTimeoutInNs = TimeUnit.MILLISECONDS.toNanos(initialTimeoutInMs);
 	}
 
-	public void countdown(final long substractor) {
-		this.currentTimeoutInMs -= substractor;
+	/**
+	 * Subtracts the given amount from the timeout.
+	 * 
+	 * @param amountInNs
+	 *            The amount to subtract in nanoseconds
+	 */
+	public void countdownNs(final long amountInNs) {
+		this.currentTimeoutInNs -= amountInNs;
 	}
 
+	/**
+	 * Returns the remaining time of the timeout in milliseconds.
+	 * 
+	 * @return see above
+	 */
 	public int getCurrentTimeoutinMs() {
-		return this.currentTimeoutInMs;
+		return (int) TimeUnit.NANOSECONDS.toMillis(this.getCurrentTimeoutInNs());
 	}
+
+	/**
+	 * Returns the remaining time of the timeout in nanoseconds.
+	 * 
+	 * @return see above
+	 */
+	public long getCurrentTimeoutInNs() {
+		return this.currentTimeoutInNs;
+	}
+
 }
