@@ -133,6 +133,9 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 			this.tryConnect(timeoutCountdown);
 		} while (!this.socketChannel.isConnected());
+
+		final String message = String.format("Successfully connected to %s.", this.socketAddress);
+		LOG.info(message);
 	}
 
 	private void tryConnect(final TimeoutCountdown timeoutCountdown) throws ConnectionTimeoutException {
