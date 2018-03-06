@@ -121,7 +121,8 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 	@Override
 	public void onStarting() {
-		final TimeoutCountdown timeoutCountdown = new TimeoutCountdown(this.connectionTimeoutInMs);
+		final long connectionTimeoutInNs = TimeUnit.MILLISECONDS.toNanos(this.connectionTimeoutInMs);
+		final TimeoutCountdown timeoutCountdown = new TimeoutCountdown(connectionTimeoutInNs);
 
 		do {
 			try {
@@ -142,17 +143,16 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 		final long startTimestampInNs = System.nanoTime(); // NOPMD (PrematureDeclaration)
 
-		if (this.connectOrTimeout(socket, timeoutCountdown.getCurrentTimeoutinMs())) {
+		if (this.connectOrTimeout(socket, timeoutCountdown.getRemainingTimeoutInMs())) {
 			return;
 		}
 
 		final long currentTimestampInNs = System.nanoTime();
 
 		final long elapsedTimeInNs = currentTimestampInNs - startTimestampInNs;
-		final long elapsedTimeInMs = TimeUnit.NANOSECONDS.toMillis(elapsedTimeInNs);
-		timeoutCountdown.countdown(elapsedTimeInMs);
+		timeoutCountdown.countdownNs(elapsedTimeInNs);
 
-		if (timeoutCountdown.getCurrentTimeoutinMs() <= 0) {
+		if (timeoutCountdown.getRemainingTimeoutInMs() <= 0) {
 			final String message = String.format("Connection timeout of %d ms exceeded.", this.connectionTimeoutInMs);
 			throw new ConnectionTimeoutException(message);
 		}
