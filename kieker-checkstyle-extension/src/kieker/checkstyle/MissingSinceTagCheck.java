@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,14 @@ package kieker.checkstyle;
 
 import java.util.Collection;
 
-import com.puppycrawl.tools.checkstyle.api.Check;
+import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 /**
- * This is an additional checkstyle check which makes sure that classes, interfaces, enums, annotations and methods within interfaces have a since tag.
+ * This is an additional checkstyle check which makes sure that classes,
+ * interfaces, enums, annotations and methods within interfaces have a since
+ * tag.
  *
  * @author Nils Christian Ehmke
  *
@@ -31,7 +33,7 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  *
  * @see NotAllowedSinceTagCheck
  */
-public class MissingSinceTagCheck extends Check {
+public class MissingSinceTagCheck extends AbstractCheck {
 
 	/**
 	 * Creates a new instance of this class.
@@ -44,7 +46,8 @@ public class MissingSinceTagCheck extends Check {
 	@Override
 	public int[] getDefaultTokens() {
 		// This here makes sure that we just get the correct components
-		return new int[] { TokenTypes.CLASS_DEF, TokenTypes.INTERFACE_DEF, TokenTypes.ANNOTATION_DEF, TokenTypes.ENUM_DEF };
+		return new int[] { TokenTypes.CLASS_DEF, TokenTypes.INTERFACE_DEF, TokenTypes.ANNOTATION_DEF,
+				TokenTypes.ENUM_DEF };
 	}
 
 	@Override
@@ -69,5 +72,15 @@ public class MissingSinceTagCheck extends Check {
 		if (!CSUtility.sinceTagAvailable(this, ast)) {
 			this.log(ast.getLineNo(), "@since tag missing");
 		}
+	}
+
+	@Override
+	public int[] getAcceptableTokens() {
+		return getDefaultTokens();
+	}
+
+	@Override
+	public int[] getRequiredTokens() {
+		return getDefaultTokens();
 	}
 }

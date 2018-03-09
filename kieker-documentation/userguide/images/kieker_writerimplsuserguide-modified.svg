@@ -1398,7 +1398,7 @@
        font-weight="bold"
        clip-path="url(#clipPath11)"
        y="218"
-       x="20">AsyncFsWriter</text>
+       x="20">AsciiFileWriter</text>
     <rect
        transform="translate(27.416159,-12.497637)"
        style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt"

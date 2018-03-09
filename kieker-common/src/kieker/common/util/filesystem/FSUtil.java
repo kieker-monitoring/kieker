@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,21 @@
 
 package kieker.common.util.filesystem;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.regex.Pattern;
+
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.7
  */
 public final class FSUtil { // NOCS NOPMD (constants interface)
@@ -34,9 +46,17 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 	public static final String LEGACY_MAP_FILENAME = "tpmon.map";
 
 	/** The usual extension of Kieker's record files. */
-	public static final String NORMAL_FILE_EXTENSION = ".dat";
+	public static final String DAT_FILE_EXTENSION = ".dat";
 	/** The extension of Kieker's zipped record files. */
 	public static final String ZIP_FILE_EXTENSION = ".zip";
+	/** The extension of Kieker's gzipped record files. */
+	public static final String GZIP_FILE_EXTENSION = ".gz";
+	/** The extension of Kieker's xz record files. */
+	public static final String XZ_FILE_EXTENSION = ".xz";
+	/** The extension of Kieker's binary record files. */
+	public static final String BINARY_FILE_EXTENSION = ".bin";
+	/** The extension of Kieker's mapping files. */
+	public static final String MAP_FILE_EXTENSION = ".map";
 
 	/** The encoding usually used within Kieker. */
 	public static final String ENCODING = "UTF-8";
@@ -46,11 +66,12 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 	}
 
 	/**
-	 * Encodes the given line (replaces {@code \\} with {@code \\\\}, {@code \r} with {@code \\r} and {@code \n} with {@code \\n}).
-	 * 
+	 * Encodes the given line (replaces {@code \\} with {@code \\\\}, {@code \r} with {@code \\r} and {@code \n} with
+	 * {@code \\n}).
+	 *
 	 * @param str
 	 *            The string to encode.
-	 * 
+	 *
 	 * @return The modified string.
 	 */
 	public static final String encodeNewline(final String str) {
@@ -83,11 +104,12 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 	}
 
 	/**
-	 * Decodes the given line (replaces {@code \\\\} with {@code \\}, {@code \\r} with {@code \r} and {@code \\n} with {@code \n}).
-	 * 
+	 * Decodes the given line (replaces {@code \\\\} with {@code \\}, {@code \\r} with {@code \r} and {@code \\n} with
+	 * {@code \n}).
+	 *
 	 * @param str
 	 *            The string to decode.
-	 * 
+	 *
 	 * @return The modified string.
 	 */
 	public static final String decodeNewline(final String str) {
@@ -120,6 +142,48 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 			return sb.toString();
 		} else {
 			return str;
+		}
+	}
+
+	/**
+	 * @param startDirectory
+	 * @param postfixRegexNamePattern
+	 *            to be used for the matching
+	 * @return all matching files within the given <code>startDirectory</code> and all its subdirectories
+	 */
+	public static Collection<File> listFilesRecursively(final Path startDirectory, final String postfixRegexNamePattern) {
+		final RecursiveFileVisitor visitor = new RecursiveFileVisitor(postfixRegexNamePattern);
+		try {
+			Files.walkFileTree(startDirectory, visitor);
+		} catch (final IOException e) {
+			throw new IllegalStateException(e);
+		}
+		return visitor.getFiles();
+	}
+
+	/**
+	 * @author Christian Wulf
+	 * @since 1.13
+	 */
+	static class RecursiveFileVisitor extends SimpleFileVisitor<Path> {
+		private final Pattern pattern;
+		private final List<File> files;
+
+		public RecursiveFileVisitor(final String postfixRegexNamePattern) {
+			this.pattern = Pattern.compile(postfixRegexNamePattern);
+			this.files = new ArrayList<>();
+		}
+
+		@Override
+		public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+			if (this.pattern.matcher(file.toString()).matches()) {
+				this.files.add(file.toFile());
+			}
+			return FileVisitResult.CONTINUE;
+		}
+
+		public List<File> getFiles() {
+			return this.files;
 		}
 	}
 }

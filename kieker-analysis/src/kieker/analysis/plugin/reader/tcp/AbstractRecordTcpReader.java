@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,14 @@ package kieker.analysis.plugin.reader.tcp;
 
 import java.nio.ByteBuffer;
 
-import kieker.analysis.plugin.reader.tcp.util.AbstractTcpReader;
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.logging.Log;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.BinaryValueDeserializer;
+import kieker.common.record.tcp.AbstractTcpReader;
 import kieker.common.util.registry.ILookup;
 
 /**
@@ -84,7 +85,7 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 		}
 
 		try {
-			final IMonitoringRecord record = recordFactory.create(buffer, this.stringRegistry);
+			final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(buffer, this.stringRegistry));
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			this.onRecordReceived(record);

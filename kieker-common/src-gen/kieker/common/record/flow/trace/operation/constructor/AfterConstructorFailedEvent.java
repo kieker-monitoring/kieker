@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.flow.trace.operation.constructor;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
+
 import kieker.common.record.flow.IConstructorRecord;
 
 /**
  * @author Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.6
  */
 public class AfterConstructorFailedEvent extends AfterOperationFailedEvent implements IConstructorRecord {
+	private static final long serialVersionUID = -4069763872765597698L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
@@ -40,7 +42,6 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 			 + TYPE_SIZE_STRING // IExceptionRecord.cause
 	;
-	private static final long serialVersionUID = -4069763872765597698L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -51,10 +52,19 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 		String.class, // IExceptionRecord.cause
 	};
 	
-	/* user-defined constants */
-	/* default constants */
-	/* property declarations */
-
+	
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"operationSignature",
+		"classSignature",
+		"cause",
+	};
+	
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -81,11 +91,14 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #AfterConstructorFailedEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public AfterConstructorFailedEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -93,28 +106,31 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #AfterConstructorFailedEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected AfterConstructorFailedEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
+	 * @param deserializer
+	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public AfterConstructorFailedEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
+	public AfterConstructorFailedEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		super(deserializer);
 	}
-
+	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -125,7 +141,6 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 			this.getCause()
 		};
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -135,20 +150,19 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getCause());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putLong(this.getTraceId());
-		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
-		buffer.putInt(stringRegistry.get(this.getClassSignature()));
-		buffer.putInt(stringRegistry.get(this.getCause()));
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
+		serializer.putLong(this.getTimestamp());
+		serializer.putLong(this.getTraceId());
+		serializer.putInt(this.getOrderIndex());
+		serializer.putString(this.getOperationSignature());
+		serializer.putString(this.getClassSignature());
+		serializer.putString(this.getCause());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -156,7 +170,15 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -164,6 +186,7 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -174,18 +197,7 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -205,5 +217,5 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 		if (!this.getCause().equals(castedRecord.getCause())) return false;
 		return true;
 	}
-
+	
 }

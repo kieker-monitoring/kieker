@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 
 /**
  * Formatter class for component dependency graphs on the assembly level (see {@link ComponentAssemblyDependencyGraph}).
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponentDependencyGraphFormatter<ComponentAssemblyDependencyGraph> {
@@ -68,8 +68,8 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 		private String createNodeLabel(final DependencyGraphNode<AssemblyComponent> vertex, final AssemblyComponent component) {
 			final StringBuilder builder = new StringBuilder();
 
-			builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ASSEMBLY_COMPONENT).append("\\n");
-			builder.append(component.getName()).append(':');
+			builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ASSEMBLY_COMPONENT).append("\\n")
+			       .append(component.getName()).append(':');
 
 			if (this.useShortLabels) {
 				builder.append("..").append(component.getType().getTypeName());

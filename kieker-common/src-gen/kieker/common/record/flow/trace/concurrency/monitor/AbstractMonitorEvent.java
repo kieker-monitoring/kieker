@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,32 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.flow.trace.concurrency.monitor;
 
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.io.IValueDeserializer;
+
 
 /**
  * @author Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.8
  */
 public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
-		private static final long serialVersionUID = 8385865083415561635L;
-	
-	
-	/* user-defined constants */
-	/* default constants */
-	public static final int LOCK_ID = 0;
-	/* property declarations */
-	private final int lockId;
+	private static final long serialVersionUID = 8385865083415561635L;
 
+	
+	
+	/** default constants. */
+	public static final int LOCK_ID = 0;
+	
+		
+	/** property declarations. */
+	private final int lockId;
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -56,7 +56,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 		this.lockId = lockId;
 	}
 
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -64,25 +64,26 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #AbstractMonitorEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected AbstractMonitorEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
 		this.lockId = (Integer) values[3];
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
+	 * @param deserializer
+	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public AbstractMonitorEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.lockId = buffer.getInt();
+	public AbstractMonitorEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		super(deserializer);
+		this.lockId = deserializer.getInt();
 	}
+	
 
 	/**
 	 * {@inheritDoc}
@@ -94,18 +95,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -123,7 +113,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 		if (this.getLockId() != castedRecord.getLockId()) return false;
 		return true;
 	}
-
+	
 	public final int getLockId() {
 		return this.lockId;
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,9 +32,9 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
 
 /**
  * Formatter for operation dependency graphs on the assembly level (see {@link OperationAssemblyDependencyGraph}).
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public class OperationAssemblyDependencyGraphFormatter extends AbstractOperationDependencyGraphFormatter<OperationAssemblyDependencyGraph> {
@@ -50,8 +50,7 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 
 	private ConcurrentMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>> groupNodesByComponent(
 			final OperationAssemblyDependencyGraph graph) {
-		final ConcurrentMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>> grouping =
-				new ConcurrentHashMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>>();
+		final ConcurrentMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>> grouping = new ConcurrentHashMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>>();
 
 		for (final DependencyGraphNode<AssemblyComponentOperationPair> vertex : graph.getVertices()) {
 			final AssemblyComponentOperationPair pair = vertex.getEntity();
@@ -71,8 +70,8 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 	private static String createComponentNodeLabel(final AssemblyComponent component, final boolean useShortLabels) {
 		final StringBuilder builder = new StringBuilder();
 
-		builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ASSEMBLY_COMPONENT).append("\\n");
-		builder.append(component.getName()).append(':');
+		builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ASSEMBLY_COMPONENT).append("\\n")
+		       .append(component.getName()).append(':');
 
 		if (useShortLabels) {
 			builder.append("..");

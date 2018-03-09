@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import kieker.analysis.plugin.reader.tcp.TCPReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.tcp.TCPWriter;
@@ -36,7 +37,7 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public class BasicTCPWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
@@ -49,7 +50,7 @@ public class BasicTCPWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	private volatile AnalysisControllerThread analysisThread = null; // NOPMD (init for findbugs)
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
+	protected MonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
 			InterruptedException {
 		this.analysisController = new AnalysisController();
 
@@ -65,7 +66,7 @@ public class BasicTCPWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 		Thread.sleep(1000);
 
 		final Configuration monitoringConfig = ConfigurationFactory.createDefaultConfiguration();
-		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, TCPWriter.class.getName());
+		monitoringConfig.setProperty(ConfigurationKeys.WRITER_CLASSNAME, TCPWriter.class.getName());
 		monitoringConfig.setProperty(TCPWriter.CONFIG_PORT1, BasicTCPWriterReaderTest.PORT1);
 		monitoringConfig.setProperty(TCPWriter.CONFIG_PORT2, BasicTCPWriterReaderTest.PORT2);
 		return MonitoringController.createInstance(monitoringConfig);

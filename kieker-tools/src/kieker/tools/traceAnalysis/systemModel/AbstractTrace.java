@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,7 +95,7 @@ public abstract class AbstractTrace {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOCS requests implementation of equals and hashCode in pairs
 		// On purpose, we are not considering the sessionId here
 		return (int) (this.getTraceId() ^ (this.getTraceId() >>> 32));
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -123,7 +123,7 @@ public class TestSessionReconstructionFilter extends AbstractKiekerTest { // NOC
 		Assert.assertEquals(1, sessions.size());
 
 		final ExecutionTraceBasedSession session = sessions.get(0);
-		Assert.assertEquals(2, session.getContainedTraces().size());
+		Assert.assertEquals(2, session.getStateContainedTraces().size());
 	}
 
 	/**
@@ -144,10 +144,10 @@ public class TestSessionReconstructionFilter extends AbstractKiekerTest { // NOC
 		Assert.assertEquals(2, sessions.size());
 
 		final ExecutionTraceBasedSession session1 = sessions.get(0);
-		Assert.assertEquals(1, session1.getContainedTraces().size());
+		Assert.assertEquals(1, session1.getStateContainedTraces().size());
 
 		final ExecutionTraceBasedSession session2 = sessions.get(1);
-		Assert.assertEquals(1, session2.getContainedTraces().size());
+		Assert.assertEquals(1, session2.getStateContainedTraces().size());
 	}
 
 	/**
@@ -167,9 +167,9 @@ public class TestSessionReconstructionFilter extends AbstractKiekerTest { // NOC
 		Assert.assertEquals(2, sessions.size());
 
 		final ExecutionTraceBasedSession session1 = sessions.get(0);
-		Assert.assertEquals(1, session1.getContainedTraces().size());
+		Assert.assertEquals(1, session1.getStateContainedTraces().size());
 
 		final ExecutionTraceBasedSession session2 = sessions.get(1);
-		Assert.assertEquals(1, session2.getContainedTraces().size());
+		Assert.assertEquals(1, session2.getStateContainedTraces().size());
 	}
 }

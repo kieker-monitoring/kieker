@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,15 @@
 package kieker.analysis.plugin.filter.flow;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
-import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -57,32 +60,18 @@ import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectEve
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
-@Plugin(
-		name = "Trace Reconstruction Filter (Event)",
-		description = "Filter to reconstruct event based (flow) traces",
-		outputPorts = {
-			@OutputPort(
-					name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
-					description = "Outputs valid traces", eventTypes = { TraceEventRecords.class }),
-			@OutputPort(
-					name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID,
-					description = "Outputs traces missing crucial records", eventTypes = { TraceEventRecords.class }) },
-		configuration = {
-			@Property(
-					name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
-					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-			@Property(
-					name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
-					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
-			@Property(
-					name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT,
-					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
-			@Property(
-					name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES,
-					defaultValue = "false") })
+@Plugin(name = "Trace Reconstruction Filter (Event)", description = "Filter to reconstruct event based (flow) traces", outputPorts = {
+		@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, description = "Outputs valid traces", eventTypes = {
+				TraceEventRecords.class }),
+		@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID, description = "Outputs traces missing crucial records", eventTypes = {
+				TraceEventRecords.class }) }, configuration = {
+						@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+						@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
+						@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
+						@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES, defaultValue = "false") })
 public final class EventRecordTraceReconstructionFilter extends AbstractFilterPlugin {
 	/**
 	 * The name of the output port delivering the valid traces.
@@ -126,15 +115,15 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 */
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
 	/**
-	 * This is the name of the property determining
-	 * whether to repair BeforeEvents with missing AfterEvents (e.g. because of software crash) or not.
+	 * This is the name of the property determining whether to repair BeforeEvents with missing AfterEvents (e.g.
+	 * because of software crash) or not.
 	 */
 	public static final String CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES = "repairEventBasedTraces";
 
 	private final TimeUnit timeunit;
 	private final long maxTraceDuration;
 	private final long maxTraceTimeout;
-	private final boolean timeout;
+	private final boolean hasTimeout;
 	private final boolean repairEventBasedTracesEnabled;
 	private long maxEncounteredLoggingTimestamp = -1;
 
@@ -142,13 +131,14 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
 	 */
-	public EventRecordTraceReconstructionFilter(final Configuration configuration, final IProjectContext projectContext) {
+	public EventRecordTraceReconstructionFilter(final Configuration configuration,
+			final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
 		this.timeunit = super.recordsTimeUnitFromProjectContext;
@@ -158,31 +148,32 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of "
+					+ this.timeunit.name() + " instead.");
 			configTimeunit = this.timeunit;
 		}
 
 		this.repairEventBasedTracesEnabled = configuration
 				.getBooleanProperty(CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES);
-		this.maxTraceDuration = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION), configTimeunit);
-		this.maxTraceTimeout = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT), configTimeunit);
-		this.timeout = !((this.maxTraceTimeout == Long.MAX_VALUE) && (this.maxTraceDuration == Long.MAX_VALUE));
-		this.traceId2trace = new ConcurrentHashMap<Long, TraceBuffer>();
+		this.maxTraceDuration = this.timeunit
+				.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION), configTimeunit);
+		this.maxTraceTimeout = this.timeunit
+				.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT), configTimeunit);
+		this.hasTimeout = (this.maxTraceTimeout != Long.MAX_VALUE) || (this.maxTraceDuration != Long.MAX_VALUE);
+		this.traceId2trace = new ConcurrentHashMap<>();
 	}
 
 	/**
 	 * This method is the input port for the timeout.
-	 * 
+	 *
 	 * @param timestamp
 	 *            The timestamp
 	 */
-	@InputPort(
-			name = INPUT_PORT_NAME_TIME_EVENT,
-			description = "Input port for a periodic time signal",
-			eventTypes = { Long.class })
+	@InputPort(name = INPUT_PORT_NAME_TIME_EVENT, description = "Input port for a periodic time signal", eventTypes = {
+			Long.class })
 	public void newEvent(final Long timestamp) {
 		synchronized (this) {
-			if (this.timeout) {
+			if (this.hasTimeout) {
 				this.processTimeoutQueue(timestamp);
 			}
 		}
@@ -190,14 +181,12 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 	/**
 	 * This method is the input port for the new events for this filter.
-	 * 
+	 *
 	 * @param traceEventRecords
 	 *            The new record to handle.
 	 */
-	@InputPort(
-			name = INPUT_PORT_NAME_TRACEEVENT_RECORDS,
-			description = "Reconstruct traces from incoming traces",
-			eventTypes = { TraceEventRecords.class })
+	@InputPort(name = INPUT_PORT_NAME_TRACEEVENT_RECORDS, description = "Reconstruct traces from incoming traces", eventTypes = {
+			TraceEventRecords.class })
 	public void newTraceEventRecord(final TraceEventRecords traceEventRecords) {
 		final TraceMetadata trace = traceEventRecords.getTraceMetadata();
 		if (null != trace) {
@@ -210,14 +199,12 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 	/**
 	 * This method is the input port for the new events for this filter.
-	 * 
+	 *
 	 * @param record
 	 *            The new record to handle.
 	 */
-	@InputPort(
-			name = INPUT_PORT_NAME_TRACE_RECORDS,
-			description = "Reconstruct traces from incoming flow records",
-			eventTypes = { TraceMetadata.class, AbstractTraceEvent.class })
+	@InputPort(name = INPUT_PORT_NAME_TRACE_RECORDS, description = "Reconstruct traces from incoming flow records", eventTypes = {
+			TraceMetadata.class, AbstractTraceEvent.class })
 	public void newEvent(final IFlowRecord record) {
 		final Long traceId;
 		TraceBuffer traceBuffer;
@@ -261,7 +248,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			}
 			super.deliver(OUTPUT_PORT_NAME_TRACE_VALID, traceBuffer.toTraceEvents());
 		}
-		if (this.timeout) {
+		if (this.hasTimeout) {
 			synchronized (this) {
 				// can we assume a rough order of logging timestamps? (yes, except with DB reader)
 				if (loggingTimestamp > this.maxEncounteredLoggingTimestamp) {
@@ -278,17 +265,21 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	@Override
 	public void terminate(final boolean error) {
 		synchronized (this) {
-			for (final Entry<Long, TraceBuffer> entry : this.traceId2trace.entrySet()) {
-				final TraceBuffer traceBuffer = entry.getValue();
+			final Collection<Long> sortedTraceIds = getSortedTraceIds(this.traceId2trace.keySet());
+
+			for (final Long traceId : sortedTraceIds) {
+				final TraceBuffer traceBuffer = this.traceId2trace.get(traceId);
 				if (this.repairEventBasedTracesEnabled && !traceBuffer.getEventStack().isEmpty()) {
 					traceBuffer.repairAllBeforeEventsLeftInStackAtTermination();
 				}
+
 				if (traceBuffer.isInvalid()) {
 					super.deliver(OUTPUT_PORT_NAME_TRACE_INVALID, traceBuffer.toTraceEvents());
 				} else {
 					super.deliver(OUTPUT_PORT_NAME_TRACE_VALID, traceBuffer.toTraceEvents());
 				}
 			}
+
 			this.traceId2trace.clear();
 		}
 	}
@@ -297,18 +288,36 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	private void processTimeoutQueue(final long timestamp) {
 		final long duration = timestamp - this.maxTraceDuration;
 		final long traceTimeout = timestamp - this.maxTraceTimeout;
-		for (final Iterator<Entry<Long, TraceBuffer>> iterator = this.traceId2trace.entrySet().iterator(); iterator.hasNext();) {
-			final TraceBuffer traceBuffer = iterator.next().getValue();
+
+		final Collection<Long> sortedTraceIds = getSortedTraceIds(this.traceId2trace.keySet());
+
+		for (final Long traceId : sortedTraceIds) {
+			final TraceBuffer traceBuffer = this.traceId2trace.get(traceId);
 			if ((traceBuffer.getMaxLoggingTimestamp() <= traceTimeout) // long time no see
 					|| (traceBuffer.getMinLoggingTimestamp() <= duration)) { // max duration is gone
+
 				if (traceBuffer.isInvalid()) {
 					super.deliver(OUTPUT_PORT_NAME_TRACE_INVALID, traceBuffer.toTraceEvents());
 				} else {
 					super.deliver(OUTPUT_PORT_NAME_TRACE_VALID, traceBuffer.toTraceEvents());
 				}
-				iterator.remove();
+
+				this.traceId2trace.remove(traceId);
 			}
 		}
+	}
+
+	/**
+	 * HACK: We sort the trace ids to get a deterministic result when plotting the traces to the dot format.
+	 * <p>
+	 * In future, we should better sort according to the start timestamp of each trace.
+	 */
+	private Collection<Long> getSortedTraceIds(final Set<Long> keys) {
+		final List<Long> copiedKeys = new ArrayList<>(keys);
+		Collections.sort(copiedKeys);
+
+		return copiedKeys;
+//		return keys;
 	}
 
 	/**
@@ -320,13 +329,14 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
 		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, String.valueOf(this.maxTraceDuration));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, String.valueOf(this.maxTraceTimeout));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES, Boolean.toString(this.repairEventBasedTracesEnabled));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES,
+				Boolean.toString(this.repairEventBasedTracesEnabled));
 		return configuration;
 	}
 
 	/**
 	 * The TraceBuffer is synchronized to prevent problems with concurrent access.
-	 * 
+	 *
 	 * @author Jan Waller
 	 */
 	private static final class TraceBuffer {
@@ -334,7 +344,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		private static final Comparator<AbstractTraceEvent> COMPARATOR = new TraceEventComperator();
 
 		private TraceMetadata trace;
-		private final SortedSet<AbstractTraceEvent> events = new TreeSet<AbstractTraceEvent>(COMPARATOR);
+		private final SortedSet<AbstractTraceEvent> events = new TreeSet<>(COMPARATOR);
 
 		private boolean closeable;
 		private boolean damaged;
@@ -349,8 +359,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		private boolean beforeEventStackEmptyAtTermination;
 		private boolean repairEventBasedTracesEnabled;
 
-		private final Deque<BeforeOperationEvent> beforeEventStack = new LinkedList<BeforeOperationEvent>();
-		private final Deque<AbstractTraceEvent> eventQueue = new LinkedList<AbstractTraceEvent>();
+		private final Deque<BeforeOperationEvent> beforeEventStack = new LinkedList<>();
+		private final Deque<AbstractTraceEvent> eventQueue = new LinkedList<>();
 
 		/**
 		 * Creates a new instance of this class.
@@ -377,7 +387,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					if (this.traceId == -1) {
 						this.traceId = myTraceId;
 					} else if (this.traceId != myTraceId) {
-						LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in event " + event.toString());
+						LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId
+								+ " in event " + event.toString());
 						this.damaged = true;
 					}
 					final long loggingTimestamp = receivedEvent.getTimestamp();
@@ -421,9 +432,10 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				this.beforeEventStack.addLast((BeforeOperationEvent) event);
 				this.eventQueue.add(event);
 			} else if (event instanceof AfterOperationEvent) {
-				while ((!this.beforeEventStack.getLast().getOperationSignature().equals(((AfterOperationEvent) event).getOperationSignature()))
-						&&
-						(!(this.beforeEventStack.getLast().getClassSignature()).equals(((AfterOperationEvent) event).getClassSignature()))) {
+				while ((!this.beforeEventStack.getLast().getOperationSignature()
+						.equals(((AfterOperationEvent) event).getOperationSignature()))
+						&& (!(this.beforeEventStack.getLast().getClassSignature())
+								.equals(((AfterOperationEvent) event).getClassSignature()))) {
 					final BeforeOperationEvent beforeEvent = this.beforeEventStack.getLast();
 					final String opSignature = beforeEvent.getOperationSignature();
 					final String classSignature = beforeEvent.getClassSignature();
@@ -431,15 +443,19 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					final long traceID = event.getTraceId();
 
 					if (beforeEvent instanceof BeforeConstructorObjectEvent) {
-						this.eventQueue.add(new AfterConstructorObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
+						this.eventQueue.add(new AfterConstructorObjectEvent(timestamp, traceID, orderIndex, opSignature,
+								classSignature,
 								((BeforeConstructorObjectEvent) this.beforeEventStack.getLast()).getObjectId()));
 					} else if (beforeEvent instanceof BeforeConstructorEvent) {
-						this.eventQueue.add(new AfterConstructorEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+						this.eventQueue.add(
+								new AfterConstructorEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
 					} else if (beforeEvent instanceof BeforeOperationObjectEvent) {
-						this.eventQueue.add(new AfterOperationObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
+						this.eventQueue.add(new AfterOperationObjectEvent(timestamp, traceID, orderIndex, opSignature,
+								classSignature,
 								((BeforeOperationObjectEvent) this.beforeEventStack.getLast()).getObjectId()));
 					} else {
-						this.eventQueue.add(new AfterOperationEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+						this.eventQueue.add(
+								new AfterOperationEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
 					}
 					this.beforeEventStack.removeLast();
 					orderIndex++;
@@ -456,29 +472,31 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					final long traceID = event.getTraceId();
 
 					if (event instanceof AfterConstructorFailedObjectEvent) {
-						this.eventQueue.add(new AfterConstructorFailedObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
-								((AfterConstructorFailedObjectEvent) event).getCause(),
+						this.eventQueue.add(new AfterConstructorFailedObjectEvent(timestamp, traceID, orderIndex,
+								opSignature, classSignature, ((AfterConstructorFailedObjectEvent) event).getCause(),
 								((AfterConstructorFailedObjectEvent) event).getObjectId()));
 					} else if (event instanceof AfterConstructorObjectEvent) {
-						this.eventQueue.add(new AfterConstructorObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
-								((AfterConstructorObjectEvent) event).getObjectId()));
+						this.eventQueue.add(new AfterConstructorObjectEvent(timestamp, traceID, orderIndex, opSignature,
+								classSignature, ((AfterConstructorObjectEvent) event).getObjectId()));
 					} else if (event instanceof AfterConstructorFailedEvent) {
-						this.eventQueue.add(new AfterConstructorFailedEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
-								((AfterConstructorFailedEvent) event).getCause()));
+						this.eventQueue.add(new AfterConstructorFailedEvent(timestamp, traceID, orderIndex, opSignature,
+								classSignature, ((AfterConstructorFailedEvent) event).getCause()));
 					} else if (event instanceof AfterConstructorEvent) {
-						this.eventQueue.add(new AfterConstructorEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+						this.eventQueue.add(
+								new AfterConstructorEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
 					} else if (event instanceof AfterOperationFailedObjectEvent) {
-						this.eventQueue.add(new AfterOperationFailedObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
-								((AfterOperationFailedObjectEvent) event).getCause(),
+						this.eventQueue.add(new AfterOperationFailedObjectEvent(timestamp, traceID, orderIndex,
+								opSignature, classSignature, ((AfterOperationFailedObjectEvent) event).getCause(),
 								((AfterOperationFailedObjectEvent) event).getObjectId()));
 					} else if (event instanceof AfterOperationObjectEvent) {
-						this.eventQueue.add(new AfterOperationObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
-								((AfterOperationObjectEvent) event).getObjectId()));
+						this.eventQueue.add(new AfterOperationObjectEvent(timestamp, traceID, orderIndex, opSignature,
+								classSignature, ((AfterOperationObjectEvent) event).getObjectId()));
 					} else if (event instanceof AfterOperationFailedEvent) {
-						this.eventQueue.add(new AfterOperationFailedEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
-								((AfterOperationFailedEvent) event).getCause()));
+						this.eventQueue.add(new AfterOperationFailedEvent(timestamp, traceID, orderIndex, opSignature,
+								classSignature, ((AfterOperationFailedEvent) event).getCause()));
 					} else {
-						this.eventQueue.add(new AfterOperationEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+						this.eventQueue.add(
+								new AfterOperationEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
 					}
 				}
 			}
@@ -496,15 +514,19 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				final int orderIndex = this.maxOrderIndex + 1;
 
 				if (beforeEvent instanceof BeforeConstructorObjectEvent) {
-					this.insertEvent(new AfterConstructorObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
-							((BeforeConstructorObjectEvent) this.beforeEventStack.getLast()).getObjectId()));
+					this.insertEvent(
+							new AfterConstructorObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
+									((BeforeConstructorObjectEvent) this.beforeEventStack.getLast()).getObjectId()));
 				} else if (beforeEvent instanceof BeforeConstructorEvent) {
-					this.insertEvent(new AfterConstructorEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+					this.insertEvent(
+							new AfterConstructorEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
 				} else if (beforeEvent instanceof BeforeOperationObjectEvent) {
-					this.insertEvent(new AfterOperationObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
-							((BeforeOperationObjectEvent) this.beforeEventStack.getLast()).getObjectId()));
+					this.insertEvent(
+							new AfterOperationObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
+									((BeforeOperationObjectEvent) this.beforeEventStack.getLast()).getObjectId()));
 				} else {
-					this.insertEvent(new AfterOperationEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+					this.insertEvent(
+							new AfterOperationEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
 				}
 				this.beforeEventStack.removeLast();
 			}
@@ -516,7 +538,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				if (this.traceId == -1) {
 					this.traceId = myTraceId;
 				} else if (this.traceId != myTraceId) {
-					LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in trace " + trace.toString());
+					LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in trace "
+							+ trace.toString());
 					this.damaged = true;
 				}
 				if (this.trace == null) {
@@ -536,13 +559,15 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		public boolean isInvalid() {
 			synchronized (this) {
-				return (this.trace == null) || this.damaged || (this.openEvents != 0) || (((this.maxOrderIndex + 1) != this.events.size()) || this.events.isEmpty());
+				return (this.trace == null) || this.damaged || (this.openEvents != 0)
+						|| (((this.maxOrderIndex + 1) != this.events.size()) || this.events.isEmpty());
 			}
 		}
 
 		public TraceEventRecords toTraceEvents() {
 			synchronized (this) {
-				return new TraceEventRecords(this.trace, this.events.toArray(new AbstractTraceEvent[this.events.size()]));
+				return new TraceEventRecords(this.trace,
+						this.events.toArray(new AbstractTraceEvent[this.events.size()]));
 			}
 		}
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -37,6 +36,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.record.system.MemSwapUsageRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.tools.logReplayer.AbstractLogReplayer;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -44,9 +44,9 @@ import kieker.test.monitoring.util.NamedListWriter;
 
 /**
  * Tests the {@link AbstractLogReplayer}.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 public class TestLogReplayer extends AbstractKiekerTest {
@@ -60,7 +60,7 @@ public class TestLogReplayer extends AbstractKiekerTest {
 	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
 
 	/**
-	 * Creastes a new instance of this class.
+	 * Creates a new instance of this class.
 	 */
 	public TestLogReplayer() {
 		// Adding arbitrary records
@@ -79,18 +79,17 @@ public class TestLogReplayer extends AbstractKiekerTest {
 
 	/**
 	 * Performs an initial test setup.
-	 * 
+	 *
 	 * @throws IOException
 	 *             If the setup failed.
 	 */
 	@Before
 	public void init() throws IOException {
-		this.tmpFolder.create();
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.METADATA, "false");
+		config.setProperty(ConfigurationKeys.META_DATA, "false");
 		final String listName = NamedListWriter.FALLBACK_LIST_NAME;
 		this.recordListFilledByListWriter = NamedListWriter.createNamedList(listName);
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		// Doesn't work because property not known to Kieker: System.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
 		this.monitoringConfigurationFile = this.tmpFolder.newFile("moitoring.properties");
 		final FileOutputStream fos = new FileOutputStream(this.monitoringConfigurationFile);
@@ -116,16 +115,11 @@ public class TestLogReplayer extends AbstractKiekerTest {
 
 		Assert.assertEquals("Unexpected list replayed", this.replayList, this.recordListFilledByListWriter);
 	}
-
-	@After
-	public void cleanup() {
-		this.tmpFolder.delete();
-	}
 }
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 class ListReplayer extends AbstractLogReplayer { // NOPMD

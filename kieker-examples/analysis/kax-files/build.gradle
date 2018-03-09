@@ -2,9 +2,10 @@ apply plugin: 'application'
 apply plugin: 'eclipse'
 
 dependencies {
-	compile fileTree('lib') {
-		include 'kieker-*-emf.jar'
-	}
+        // you need to ensure by yourself that the following jars are in the lib folder
+        compile fileTree('lib') {
+                include "kieker-*.jar"
+        }
 }
 
 // Simplify the JAR's file name

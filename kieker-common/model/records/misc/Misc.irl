@@ -28,3 +28,18 @@ entity KiekerMetadataRecord {
 entity TimestampRecord {
 	long timestamp = 0
 }
+
+@author 'Christian Wulf' @since '1.13'
+entity HostApplicationMetaData {
+	string systemName
+	string ipAddress
+	string hostname
+	string applicationName
+}
+
+@author 'Christian Wulf' @since '1.13'
+entity ThreadMetaData {
+	/** TODO map to appId, not to the host */
+	string hostname
+	long threadId
+}

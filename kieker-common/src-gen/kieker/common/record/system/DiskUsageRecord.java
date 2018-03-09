@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
 
 
 /**
  * @author Teerat Pitakrat
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.12
  */
 public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	private static final long serialVersionUID = 2474236414042988334L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // DiskUsageRecord.timestamp
 			 + TYPE_SIZE_STRING // DiskUsageRecord.hostname
@@ -43,7 +45,6 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.writeBytesPerSecond
 			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.writesPerSecond
 	;
-	private static final long serialVersionUID = 2474236414042988334L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // DiskUsageRecord.timestamp
@@ -57,8 +58,8 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		double.class, // DiskUsageRecord.writesPerSecond
 	};
 	
-	/* user-defined constants */
-	/* default constants */
+	
+	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String DEVICE_NAME = "";
@@ -68,7 +69,21 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	public static final double SERVICE_TIME = 0.0;
 	public static final double WRITE_BYTES_PER_SECOND = 0.0;
 	public static final double WRITES_PER_SECOND = 0.0;
-	/* property declarations */
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"hostname",
+		"deviceName",
+		"queue",
+		"readBytesPerSecond",
+		"readsPerSecond",
+		"serviceTime",
+		"writeBytesPerSecond",
+		"writesPerSecond",
+	};
+	
+	/** property declarations. */
 	private final long timestamp;
 	private final String hostname;
 	private final String deviceName;
@@ -78,7 +93,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	private final double serviceTime;
 	private final double writeBytesPerSecond;
 	private final double writesPerSecond;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -119,7 +134,10 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #DiskUsageRecord(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public DiskUsageRecord(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.timestamp = (Long) values[0];
@@ -132,7 +150,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		this.writeBytesPerSecond = (Double) values[7];
 		this.writesPerSecond = (Double) values[8];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -140,7 +158,10 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #DiskUsageRecord(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected DiskUsageRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
 		this.timestamp = (Long) values[0];
@@ -154,31 +175,31 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		this.writesPerSecond = (Double) values[8];
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
+	 * @param deserializer
+	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public DiskUsageRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.deviceName = stringRegistry.get(buffer.getInt());
-		this.queue = buffer.getDouble();
-		this.readBytesPerSecond = buffer.getDouble();
-		this.readsPerSecond = buffer.getDouble();
-		this.serviceTime = buffer.getDouble();
-		this.writeBytesPerSecond = buffer.getDouble();
-		this.writesPerSecond = buffer.getDouble();
+	public DiskUsageRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		this.timestamp = deserializer.getLong();
+		this.hostname = deserializer.getString();
+		this.deviceName = deserializer.getString();
+		this.queue = deserializer.getDouble();
+		this.readBytesPerSecond = deserializer.getDouble();
+		this.readsPerSecond = deserializer.getDouble();
+		this.serviceTime = deserializer.getDouble();
+		this.writeBytesPerSecond = deserializer.getDouble();
+		this.writesPerSecond = deserializer.getDouble();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -192,7 +213,6 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 			this.getWritesPerSecond()
 		};
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -201,23 +221,22 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getDeviceName());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(stringRegistry.get(this.getDeviceName()));
-		buffer.putDouble(this.getQueue());
-		buffer.putDouble(this.getReadBytesPerSecond());
-		buffer.putDouble(this.getReadsPerSecond());
-		buffer.putDouble(this.getServiceTime());
-		buffer.putDouble(this.getWriteBytesPerSecond());
-		buffer.putDouble(this.getWritesPerSecond());
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
+		serializer.putLong(this.getTimestamp());
+		serializer.putString(this.getHostname());
+		serializer.putString(this.getDeviceName());
+		serializer.putDouble(this.getQueue());
+		serializer.putDouble(this.getReadBytesPerSecond());
+		serializer.putDouble(this.getReadsPerSecond());
+		serializer.putDouble(this.getServiceTime());
+		serializer.putDouble(this.getWriteBytesPerSecond());
+		serializer.putDouble(this.getWritesPerSecond());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -225,7 +244,15 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -233,6 +260,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -243,18 +271,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -277,38 +294,46 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		if (isNotEqual(this.getWritesPerSecond(), castedRecord.getWritesPerSecond())) return false;
 		return true;
 	}
-
+	
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
+	
 	
 	public final String getHostname() {
 		return this.hostname;
 	}
 	
+	
 	public final String getDeviceName() {
 		return this.deviceName;
 	}
+	
 	
 	public final double getQueue() {
 		return this.queue;
 	}
 	
+	
 	public final double getReadBytesPerSecond() {
 		return this.readBytesPerSecond;
 	}
+	
 	
 	public final double getReadsPerSecond() {
 		return this.readsPerSecond;
 	}
 	
+	
 	public final double getServiceTime() {
 		return this.serviceTime;
 	}
 	
+	
 	public final double getWriteBytesPerSecond() {
 		return this.writeBytesPerSecond;
 	}
+	
 	
 	public final double getWritesPerSecond() {
 		return this.writesPerSecond;

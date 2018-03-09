@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,9 @@ import kieker.tools.bridge.connector.tcp.TCPClientConnector;
  * Test the TCPClientConnector, by creating a TCP server, which provides Kieker IMonitoringRecords to the connector.
  * This test class starts the server, which will then wait for a connection from the client. After connection is sends
  * SEND_NUMBER_OF_RECORDS records and terminates the connection.
- * 
+ *
  * @author Reiner Jung, Pascale Brandt
- * 
+ *
  * @since 1.8
  */
 public class TestTCPClientConnector extends AbstractConnectorTest {
@@ -43,19 +43,26 @@ public class TestTCPClientConnector extends AbstractConnectorTest {
 	/**
 	 * Test all methods of {@link kieker.tools.bridge.connector.tcp.TCPClientConnector}.
 	 * Testing single methods do not work, as the connector is stateful.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             on lookup failure for the test record
+	 * @throws InterruptedException
+	 *             when the test is interrupted
 	 */
 	@Test
-	public void testTCPClientConnector() throws ConnectorDataTransmissionException { // NOPMD
+	public void testTCPClientConnector() throws ConnectorDataTransmissionException, InterruptedException { // NOPMD
 		// Start a record providing server for the TCPClientConnector
-		final Thread serverThread = new Thread(new TCPServerForClient(ConfigurationParameters.TCP_CLIENT_PORT), "T1");
+		final TCPServerForClient server = new TCPServerForClient(ConfigurationParameters.TCP_CLIENT_PORT);
+		final Thread serverThread = new Thread(server, "T1");
 		serverThread.start();
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
 		configuration.setProperty(TCPClientConnector.HOSTNAME, ConfigurationParameters.HOSTNAME);
 		configuration.setProperty(TCPClientConnector.PORT, String.valueOf(ConfigurationParameters.TCP_CLIENT_PORT));
-		// test the connector
+
+		while (!server.isListening()) {
+			Thread.sleep(100);
+		}
+
 		this.setConnector(new TCPClientConnector(configuration, this.createLookupEntityMap()));
 		this.initialize();
 		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS, true);

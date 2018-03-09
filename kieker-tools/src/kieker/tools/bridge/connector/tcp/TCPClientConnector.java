@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import kieker.tools.bridge.connector.ConnectorProperty;
 
 /**
  * Connects to a remote record source.
- * 
+ *
  * @author Reiner Jung
  * @since 1.8
  */
@@ -59,10 +59,10 @@ public class TCPClientConnector extends AbstractConnector {
 
 	/**
 	 * Create a TCPClientConnector.
-	 * 
+	 *
 	 * @param configuration
 	 *            Kieker configuration including setup for connectors
-	 * 
+	 *
 	 * @param lookupEntityMap
 	 *            IMonitoringRecord constructor and TYPES-array to id map
 	 */
@@ -74,7 +74,7 @@ public class TCPClientConnector extends AbstractConnector {
 
 	/**
 	 * Create the connection to a remote service providing records.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             if the given host or IP cannot be found, or an IOException occurs
 	 */
@@ -93,7 +93,7 @@ public class TCPClientConnector extends AbstractConnector {
 
 	/**
 	 * Closes the data stream and socket.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             if an IOException occurs during the close operation
 	 */
@@ -109,9 +109,9 @@ public class TCPClientConnector extends AbstractConnector {
 
 	/**
 	 * De-serialize an object reading from the input stream.
-	 * 
+	 *
 	 * @return the de-serialized IMonitoringRecord object or null if the stream was terminated by the client.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             when a record is received that ID is unknown or the deserialization fails
 	 * @throws ConnectorEndOfDataException

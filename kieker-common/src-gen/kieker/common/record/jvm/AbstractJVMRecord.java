@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,36 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.jvm;
 
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
+import kieker.common.record.io.IValueDeserializer;
 
 
 /**
  * @author Nils Christian Ehmke
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.10
  */
 public abstract class AbstractJVMRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-		private static final long serialVersionUID = -961661872949303914L;
+	private static final long serialVersionUID = -961661872949303914L;
+
 	
 	
-	/* user-defined constants */
-	/* default constants */
+	/** default constants. */
 	public static final String HOSTNAME = "";
 	public static final String VM_NAME = "";
-	/* property declarations */
+	
+		
+	/** property declarations. */
 	private final long timestamp;
 	private final String hostname;
 	private final String vmName;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -59,7 +59,7 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 		this.vmName = vmName == null?"":vmName;
 	}
 
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -67,7 +67,10 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #AbstractJVMRecord(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected AbstractJVMRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
 		this.timestamp = (Long) values[0];
@@ -75,20 +78,18 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 		this.vmName = (String) values[2];
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
+	 * @param deserializer
+	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public AbstractJVMRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.vmName = stringRegistry.get(buffer.getInt());
+	public AbstractJVMRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		this.timestamp = deserializer.getLong();
+		this.hostname = deserializer.getString();
+		this.vmName = deserializer.getString();
 	}
+	
 
 	/**
 	 * {@inheritDoc}
@@ -100,18 +101,7 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -128,14 +118,16 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 		if (!this.getVmName().equals(castedRecord.getVmName())) return false;
 		return true;
 	}
-
+	
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
 	
+	
 	public final String getHostname() {
 		return this.hostname;
 	}
+	
 	
 	public final String getVmName() {
 		return this.vmName;

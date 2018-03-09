@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@ package kieker.tools.logReplayer;
 
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
-import kieker.analysis.plugin.reader.jms.JMSReader;
+import kieker.analysis.plugin.reader.jms.JmsReader;
 import kieker.common.configuration.Configuration;
 
 /**
- * An implementation of the {@link AbstractLogReplayer}, using the {@link JMSReader} to replay {@link kieker.common.record.IMonitoringRecord}s from a JMS queue.
+ * An implementation of the {@link AbstractLogReplayer}, using the {@link JmsReader} to replay {@link kieker.common.record.IMonitoringRecord}s from a JMS queue.
  * 
  * @author Andre van Hoorn
  * 
@@ -65,10 +65,10 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	@Override
 	protected AbstractReaderPlugin createReader(final IAnalysisController analysisController) {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, this.jmsProviderUrl);
-		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, this.jmsDestination);
-		configuration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, this.jmsFactoryLookupName);
-		return new JMSReader(configuration, analysisController);
+		configuration.setProperty(JmsReader.CONFIG_PROPERTY_NAME_PROVIDERURL, this.jmsProviderUrl);
+		configuration.setProperty(JmsReader.CONFIG_PROPERTY_NAME_DESTINATION, this.jmsDestination);
+		configuration.setProperty(JmsReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, this.jmsFactoryLookupName);
+		return new JmsReader(configuration, analysisController);
 	}
 
 	/**
@@ -76,6 +76,6 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	 */
 	@Override
 	protected String readerOutputPortName() {
-		return JMSReader.OUTPUT_PORT_NAME_RECORDS;
+		return JmsReader.OUTPUT_PORT_NAME_RECORDS;
 	}
 }

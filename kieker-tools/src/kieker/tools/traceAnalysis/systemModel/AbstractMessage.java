@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,14 +78,8 @@ public abstract class AbstractMessage {
 	public String toString() {
 		final StringBuilder strBuild = new StringBuilder();
 
-		if (this instanceof SynchronousCallMessage) {
-			strBuild.append("SYNC-CALL ");
-		} else {
-			strBuild.append("SYNC-RPLY ");
-		}
-
-		strBuild.append(this.timestamp);
-		strBuild.append(' ');
+		strBuild.append(this.timestamp)
+		        .append(' ');
 		if (this.getSendingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
 			strBuild.append(SystemModelRepository.ROOT_NODE_LABEL);
 		} else {
@@ -104,7 +98,7 @@ public abstract class AbstractMessage {
 	public abstract boolean equals(Object obj);
 
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOCS requests implementation of equals and hashCode in pairs
 		return (int) (this.timestamp ^ (this.timestamp >>> 32));
 	}
 }

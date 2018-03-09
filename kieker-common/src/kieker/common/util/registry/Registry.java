@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -174,7 +174,7 @@ public final class Registry<E> implements IRegistry<E> {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @deprecated As of 1.13. Do not iterate through the registry.
+	 * @deprecated since 1.13 (to be removed in 1.14): Do not iterate through the registry.
 	 */
 	@Deprecated
 	@Override

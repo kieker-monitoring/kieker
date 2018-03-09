@@ -1,3 +1,7 @@
+############################################
+# R - script to collect all moobench results
+############################################
+
 #rm(list=ls(all=TRUE))
 #data_fn="tmp/"
 #folder_fn="results-benchmark-binary"
@@ -7,10 +11,13 @@
 #outtxt_fn="results-text.txt"
 
 configs.threads=1
+
+#########
+# These are configuration parameters which are automatically prepended to this file by the benchmark.sh script.
+# Therefore, they must not be set here. The following lines only serve as documentation.
 #configs.loop=10
 #configs.recursion=c(10)
 #configs.labels=c("No Probe","Inactive Probe","Collecting Data","Writing Data (ASCII)", "Writing Data (Bin)")
-configs.count=length(configs.labels)
 #results.count=2000000
 #results.skip=1000000
 
@@ -18,7 +25,17 @@ configs.count=length(configs.labels)
 #bars.maxval=600
 
 
+##########
+# Process configuration
+configs.count=length(configs.labels)
+
+##########
+# Setup variables
 throughput = array(list(),dim=c(length(configs.recursion),configs.count))
+
+##########
+# Create result
+
 ## "[ recursion , config , loop ]"
 resultsBIG <- array(dim=c(length(configs.recursion),configs.count,configs.threads*configs.loop*(results.count-results.skip)),dimnames=list(configs.recursion,configs.labels,c(1:(configs.threads*configs.loop*(results.count-results.skip)))))
 for (cr in configs.recursion) {

@@ -1,6 +1,15 @@
-dependencies {
-	compile project(':kieker-common')
-	compile project(':kieker-analysis')
+apply plugin: 'eclipse'
 
-	compile resolveLibrary('**/checkstyle-*/**/*.jar')
+dependencies {
+	clover 'org.openclover:clover:4.2.0'
+
+	// checkstyleVersion is set in kieker/gradle.properties
+	compile "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
+}
+
+clover {
+	report {
+		html=true
+	}
+	
 }

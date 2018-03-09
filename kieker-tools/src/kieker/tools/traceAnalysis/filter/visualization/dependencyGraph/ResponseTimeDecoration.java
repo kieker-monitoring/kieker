@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -122,18 +122,18 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 	@Override
 	public String createFormattedOutput() {
 		final StringBuilder sb = new StringBuilder(30);
-		sb.append("min: ");
-		sb.append(this.getMinimalResponseTime());
-		sb.append(this.timeUnitShortname);
-		sb.append(", avg: ");
-		sb.append(Math.round(this.getAverageResponseTime()));
-		sb.append(this.timeUnitShortname);
-		sb.append(", max: ");
-		sb.append(this.getMaximalResponseTime());
-		sb.append(this.timeUnitShortname);
-		sb.append(",\\ntotal: ");
-		sb.append(this.getTotalResponseTime());
-		sb.append(this.timeUnitShortname);
+		sb.append("min: ")
+		  .append(this.getMinimalResponseTime())
+		  .append(this.timeUnitShortname)
+		  .append(", avg: ")
+		  .append(Math.round(this.getAverageResponseTime()))
+		  .append(this.timeUnitShortname)
+		  .append(", max: ")
+		  .append(this.getMaximalResponseTime())
+		  .append(this.timeUnitShortname)
+		  .append(",\\ntotal: ")
+		  .append(this.getTotalResponseTime())
+		  .append(this.timeUnitShortname);
 		return sb.toString();
 	}
 

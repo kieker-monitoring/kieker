@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,12 @@ import java.io.UnsupportedEncodingException;
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.ILookup;
 import kieker.common.util.registry.IRegistry;
 
@@ -60,13 +63,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	public RegistryRecord(final int id, final String string) {
 		this.id = id;
 		this.string = string;
-		byte[] tmpBytes;
-		try {
-			tmpBytes = this.getString().getBytes(ENCODING);
-		} catch (final UnsupportedEncodingException ex) {
-			tmpBytes = this.getString().getBytes();
-		}
-		this.strBytes = tmpBytes;
+		this.strBytes = RegistryRecord.stringToBytes(this.string);
 	}
 
 	/**
@@ -75,42 +72,26 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * @param values
 	 *            The values for the record.
 	 */
-	@SuppressWarnings("unchecked")
 	public RegistryRecord(final Object[] values) { // NOPMD (direct store of E (usually String))
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.id = (Integer) values[0];
 		this.string = (String) (values[1]);
-		byte[] tmpBytes;
-		try {
-			tmpBytes = this.getString().getBytes(ENCODING);
-		} catch (final UnsupportedEncodingException ex) {
-			tmpBytes = this.getString().getBytes();
-		}
-		this.strBytes = tmpBytes;
+		this.strBytes = RegistryRecord.stringToBytes(this.string);
 	}
 
 	/**
 	 * This constructor converts the given array into a record.
 	 *
-	 * @param buffer
-	 *            The bytes for the record.
-	 * @param stringRegistry
-	 *            the string registry to decode the string ids in the byte buffer.
+	 * @param deserializer
+	 *            The deserializer to decode the record with.
 	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public RegistryRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException { // NOPMD
-		this.id = buffer.getInt();
-		this.strBytes = new byte[buffer.getInt()];
-		buffer.get(this.strBytes);
-		String str;
-		try {
-			str = new String(this.strBytes, ENCODING);
-		} catch (final UnsupportedEncodingException e) {
-			str = new String(this.strBytes); // NOPMD
-		}
-		this.string = str;
+	public RegistryRecord(final IValueDeserializer deserializer) throws BufferUnderflowException { // NOPMD
+		this.id = deserializer.getInt();
+		this.string = deserializer.getString();
+		this.strBytes = this.string.getBytes();
 	}
 
 	/**
@@ -133,10 +114,9 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putInt(this.getId());
-		buffer.putInt(this.getString().length());
-		buffer.put(this.strBytes);
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		serializer.putInt(this.getId());
+		serializer.putString(this.getString());
 	}
 
 	/**
@@ -152,21 +132,15 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 
 	/**
 	 * {@inheritDoc}
-	 *
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * {@inheritDoc}
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+
+	@Override
+	public String[] getValueNames() {
+		return new String[] { "id", "string", "strBytes" };
 	}
 
 	/**
@@ -213,13 +187,28 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 		final int id = buffer.getInt();
 		final byte[] strBytes = new byte[buffer.getInt()];
 		buffer.get(strBytes);
-		String string;
-		try {
-			string = new String(strBytes, ENCODING);
-		} catch (final UnsupportedEncodingException e) {
-			string = new String(strBytes); // NOPMD
-		}
+		final String string = RegistryRecord.bytesToString(strBytes);
 		stringRegistry.set(string, id);
+	}
+
+	private static String bytesToString(final byte[] strBytes) {
+		String str;
+		try {
+			str = new String(strBytes, ENCODING);
+		} catch (final UnsupportedEncodingException e) {
+			str = new String(strBytes, Charset.defaultCharset());
+		}
+		return str;
+	}
+
+	private static byte[] stringToBytes(final String string) {
+		byte[] tmpBytes;
+		try {
+			tmpBytes = string.getBytes(ENCODING);
+		} catch (final UnsupportedEncodingException ex) {
+			tmpBytes = string.getBytes(Charset.defaultCharset());
+		}
+		return tmpBytes;
 	}
 
 }

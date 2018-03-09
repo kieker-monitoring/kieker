@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,8 @@
 
 package kieker.common.record.factory;
 
-import java.nio.ByteBuffer;
-
-import kieker.common.util.registry.IRegistry;
+import kieker.common.exception.RecordInstantiationException;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @param <T>
@@ -30,23 +29,26 @@ import kieker.common.util.registry.IRegistry;
 public interface IRecordFactory<T> {
 
 	/**
-	 * Represents the size of a record whose size is unknown in advance
+	 * Represents the size of a record whose size is unknown in advance.
 	 */
 	public static final int UNKNOWN_RECORD_SIZE = -1;
 
 	/**
+	 * Create a record of type T utilizing a @{link {@link IValueDeserializer}.
 	 *
-	 * @param buffer
-	 *            the buffer to read from
-	 * @param stringRegistry
-	 *            the registry to read strings from
+	 * @param deserializer
+	 *            The deserializer to use for decoding the values
 	 *
 	 * @return a new instance of the declared record type
+	 *
+	 * @throws RecordInstantiationException
+	 *             on issues deserializing records, e.g., during enumeration deserialization
 	 * @since 1.11
 	 */
-	T create(ByteBuffer buffer, IRegistry<String> stringRegistry);
+	T create(IValueDeserializer deserializer) throws RecordInstantiationException;
 
 	/**
+	 * Create a record of type T utilizing an object array.
 	 *
 	 * @param values
 	 *            the values used to fill the new instance

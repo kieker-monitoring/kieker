@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ public class ComponentType {
 	private final Collection<Operation> operations = Collections.synchronizedList(new ArrayList<Operation>());
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
+	 // NOCS requests implementation of equals and hashCode in pairs// NOCS requests implementation of equals and hashCode in pairs* Creates a new instance of this class using the given parameters.
 	 * 
 	 * @param id
 	 *            The ID of the component type.
@@ -59,8 +59,8 @@ public class ComponentType {
 	 */
 	public ComponentType(final int id, final String fullqualifiedTypeName) {
 		this.id = id;
-		String tmpPackagName;
-		String tmpTypeName;
+		final String tmpPackagName;
+		final String tmpTypeName;
 		if (fullqualifiedTypeName.indexOf('.') != -1) {
 			final String tmpComponentName = fullqualifiedTypeName;
 			int index = 0;

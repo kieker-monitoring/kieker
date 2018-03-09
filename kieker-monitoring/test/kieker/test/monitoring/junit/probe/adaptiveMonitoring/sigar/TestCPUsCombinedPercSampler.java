@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.system.ResourceUtilizationRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
@@ -38,9 +39,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.NamedListWriter;
 
 /**
- * 
+ *
  * @author Bjoern Weissenfels
- * 
+ *
  * @since 1.8
  */
 public class TestCPUsCombinedPercSampler extends AbstractKiekerTest { // NOCS
@@ -110,9 +111,9 @@ public class TestCPUsCombinedPercSampler extends AbstractKiekerTest { // NOCS
 
 	private IMonitoringController createMonitoringController() {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
-		config.setProperty(ConfigurationFactory.METADATA, "false");
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
+		config.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, "true");
+		config.setProperty(ConfigurationKeys.META_DATA, "false");
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
 		return MonitoringController.createInstance(config);
 	}

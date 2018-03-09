@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -267,7 +267,7 @@ public final class SignatureFactory {
 		} else {
 			throw new InvalidPatternException("method name is requiered");
 		}
-		if (params != null) {
+		if (params != null && params.length > 0) {
 			signature.append(params[0]);
 			for (int i = 1; i < params.length; i++) {
 				signature.append(',');
@@ -275,7 +275,7 @@ public final class SignatureFactory {
 			}
 		}
 		signature.append(')');
-		if (exceptions != null) {
+		if (exceptions != null && exceptions.length > 0) {
 			signature.append(" throws ");
 			signature.append(exceptions[0]);
 			for (int i = 1; i < exceptions.length; i++) {

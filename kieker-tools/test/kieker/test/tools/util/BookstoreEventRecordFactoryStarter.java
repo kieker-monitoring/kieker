@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public final class BookstoreEventRecordFactoryStarter {
@@ -44,7 +44,7 @@ public final class BookstoreEventRecordFactoryStarter {
 
 	/**
 	 * This is the main method of this starter.
-	 * 
+	 *
 	 * @param args
 	 *            The command line arguments. They have currently no effect.
 	 */
@@ -59,20 +59,20 @@ public final class BookstoreEventRecordFactoryStarter {
 
 		final List<IMonitoringRecord> allRecords = new ArrayList<IMonitoringRecord>();
 
-		final TraceEventRecords validSyncTraceBeforeAfterEvents =
-				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceId, sessionId, hostname);
+		final TraceEventRecords validSyncTraceBeforeAfterEvents = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceId, sessionId,
+				hostname);
 		allRecords.add(new TraceMetadata(traceId, traceId, sessionId, hostname, TraceMetadata.NO_PARENT_TRACEID, TraceMetadata.NO_PARENT_ORDER_INDEX));
 		allRecords.addAll(Arrays.asList(validSyncTraceBeforeAfterEvents.getTraceEvents()));
 		firstTimestamp += firstTimestampDelta;
 		traceId++;
-		final TraceEventRecords validSyncTraceAdditionalCallEvents =
-				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(firstTimestamp, traceId, sessionId, hostname);
+		final TraceEventRecords validSyncTraceAdditionalCallEvents = BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(firstTimestamp, traceId,
+				sessionId, hostname);
 		allRecords.add(new TraceMetadata(traceId, traceId, sessionId, hostname, TraceMetadata.NO_PARENT_TRACEID, TraceMetadata.NO_PARENT_ORDER_INDEX));
 		allRecords.addAll(Arrays.asList(validSyncTraceAdditionalCallEvents.getTraceEvents()));
 		firstTimestamp += firstTimestampDelta;
 		traceId++;
-		final TraceEventRecords validSyncTraceAdditionalCallEventsGap =
-				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(firstTimestamp, traceId, sessionId, hostname);
+		final TraceEventRecords validSyncTraceAdditionalCallEventsGap = BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(firstTimestamp, traceId,
+				sessionId, hostname);
 		allRecords.add(new TraceMetadata(traceId, traceId, sessionId, hostname, TraceMetadata.NO_PARENT_TRACEID, TraceMetadata.NO_PARENT_ORDER_INDEX));
 		allRecords.addAll(Arrays.asList(validSyncTraceAdditionalCallEventsGap.getTraceEvents()));
 

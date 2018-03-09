@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import kieker.analysis.plugin.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
@@ -36,7 +37,7 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
@@ -60,9 +61,9 @@ public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTe
 	}
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) {
+	protected MonitoringController createController(final int numRecordsWritten) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PipeWriter.class.getName());
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, PipeWriter.class.getName());
 		config.setProperty(PipeWriter.CONFIG_PIPENAME, BasicNamedRecordPipeWriterReaderTest.PIPE_NAME);
 		return MonitoringController.createInstance(config);
 	}

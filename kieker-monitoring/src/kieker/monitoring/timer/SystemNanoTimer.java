@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,8 +97,10 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 	@Override
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder(64);
-		sb.append("Time in " + this.timeunit.toString().toLowerCase(Locale.ENGLISH) + " (with nanoseconds precision) since ");
-		sb.append(new Date(TimeUnit.NANOSECONDS.toMillis(this.offset - this.clockdifference)));
+		sb.append("Time in ")
+          .append(this.timeunit.toString().toLowerCase(Locale.ENGLISH))
+          .append(" (with nanoseconds precision) since ")
+          .append(new Date(TimeUnit.NANOSECONDS.toMillis(this.offset - this.clockdifference)));
 		return sb.toString();
 	}
 

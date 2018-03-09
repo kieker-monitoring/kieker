@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,19 @@ package kieker.common.util.map;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
- * 
+ *
  * @param <K>
  *            The type of the keys.
  * @param <V>
  *            The type of the values.
  */
+@SuppressFBWarnings(value = "EQ_DOESNT_OVERRIDE_EQUALS") // inherit equals to follow Map's definition of equality 
 public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 
 	private static final long serialVersionUID = 1L;
@@ -37,7 +40,7 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 
 	/**
 	 * Initialize a bounded concurrent hash map.
-	 * 
+	 *
 	 * @param boundedCacheBehaviour
 	 *            set the cache behavior
 	 * @param maxCacheSize
@@ -51,17 +54,16 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	}
 
 	/**
-	 * Works like the overriden method, except that {@code null} is returned,
-	 * if the given element could not be added due to map limitations.
-	 * 
+	 * Works like the overriden method, except that {@code null} is returned, if the given element could not be added
+	 * due to map limitations.
+	 *
 	 * @param key
 	 *            key-value
 	 * @param value
 	 *            the associated value
-	 * 
-	 * @return the previous value associated with key,
-	 *         or null if there was no mapping for key,
-	 *         or null if the bounds limit was reached
+	 *
+	 * @return the previous value associated with key, or null if there was no mapping for key, or null if the bounds
+	 *         limit was reached
 	 */
 	@Override
 	public V put(final K key, final V value) {
@@ -73,14 +75,14 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	}
 
 	/**
-	 * Works like the overriden method, except that {@code null} is returned,
-	 * if the given element could not be added due to map limitations.
-	 * 
+	 * Works like the overriden method, except that {@code null} is returned, if the given element could not be added
+	 * due to map limitations.
+	 *
 	 * @param key
 	 *            key-value
 	 * @param value
 	 *            the associated value
-	 * 
+	 *
 	 * @return the previous value or null
 	 */
 	@Override
@@ -122,7 +124,7 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 
 	/**
 	 * @author Nils Christian Ehmke
-	 * 
+	 *
 	 * @since 1.10
 	 */
 	public enum BoundedCacheBehaviour {

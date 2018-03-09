@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.concurrency.monitor.MonitorRequestEvent;
+import kieker.common.record.io.BinaryValueDeserializer;
+import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
@@ -29,7 +31,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.8
  */
 public class TestMonitorRequestEvent extends AbstractKiekerTest {
@@ -48,7 +50,7 @@ public class TestMonitorRequestEvent extends AbstractKiekerTest {
 
 	/**
 	 * Tests the constructor and toArray(..) methods of {@link MonitorRequestEvent}.
-	 * 
+	 *
 	 * Assert that a record instance event1 equals an instance event2 created by serializing event1 to an array event1Array
 	 * and using event1Array to construct event2. This ignores a set loggingTimestamp!
 	 */
@@ -85,10 +87,10 @@ public class TestMonitorRequestEvent extends AbstractKiekerTest {
 
 		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
-		event1.writeBytes(buffer, stringRegistry);
+		event1.serialize(BinaryValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
 
-		final MonitorRequestEvent event2 = new MonitorRequestEvent(buffer, stringRegistry);
+		final MonitorRequestEvent event2 = new MonitorRequestEvent(BinaryValueDeserializer.create(buffer, stringRegistry));
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

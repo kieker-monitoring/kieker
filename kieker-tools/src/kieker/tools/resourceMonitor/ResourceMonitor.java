@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 	private ISampler[] createSamplers() {
 		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.INSTANCE;
 		return new ISampler[] { sigarFactory.createSensorCPUsDetailedPerc(), sigarFactory.createSensorMemSwapUsage(), sigarFactory.createSensorLoadAverage(),
-				sigarFactory.createSensorNetworkUtilization(), sigarFactory.createSensorDiskUsage(), };
+			sigarFactory.createSensorNetworkUtilization(), sigarFactory.createSensorDiskUsage(), };
 	}
 
 	private void initSensors() {
@@ -265,30 +265,16 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(2048);
 		final String lineSeparator = System.getProperty("line.separator");
-		sb.append("Resource Monitoring Configuration:");
-		sb.append(lineSeparator);
-		sb.append("\tSampling interval = ");
-		sb.append(this.interval);
-		sb.append(lineSeparator);
-		sb.append("\tSampling interval unit = ");
-		sb.append(this.intervalUnit);
-		sb.append(lineSeparator);
-		sb.append("\tInitial delay = ");
-		sb.append(this.initialDelay);
-		sb.append(lineSeparator);
-		sb.append("\tInitial delay unit = ");
-		sb.append(this.initialDelayUnit);
-		sb.append(lineSeparator);
+		sb.append("Resource Monitoring Configuration:").append(lineSeparator).append("\tSampling interval = ").append(this.interval).append(lineSeparator)
+				.append("\tSampling interval unit = ").append(this.intervalUnit).append(lineSeparator).
+				append("\tInitial delay = ").append(this.initialDelay).append(lineSeparator).
+				append("\tInitial delay unit = ").append(this.initialDelayUnit).append(lineSeparator);
 		if (this.duration < 0) {
-			sb.append("\tDuration = INFINITE");
-			sb.append(lineSeparator);
+			sb.append("\tDuration = INFINITE").append(lineSeparator);
 		} else {
-			sb.append("\tDuration = ");
-			sb.append(this.duration);
-			sb.append(lineSeparator);
-			sb.append("\tDuration unit = ");
-			sb.append(this.durationUnit);
-			sb.append(lineSeparator);
+			sb.append("\tDuration = ").append(this.duration);
+			sb.append(lineSeparator).append("\tDuration unit = ");
+			sb.append(this.durationUnit).append(lineSeparator);
 		}
 		return sb.toString();
 	}

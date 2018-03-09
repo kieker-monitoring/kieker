@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,24 +24,37 @@ import org.junit.Assert;
 
 /**
  * TCP server to test the TCPClientConnector.
- * 
+ *
  * @author Reiner Jung, Pascale Brandt
- * 
+ *
  * @since 1.8
- * 
+ *
  */
 public class TCPServerForClient implements Runnable {
 
 	private final int port;
+	private volatile boolean listening;
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param port
 	 *            the server port of this server
 	 */
 	public TCPServerForClient(final int port) {
 		this.port = port;
+		this.listening = false;
+	}
+
+	/**
+	 * Check whether the server is available.
+	 *
+	 * @return true if the service is available
+	 */
+	public boolean isListening() {
+		synchronized (this) {
+			return this.listening;
+		}
 	}
 
 	/**
@@ -52,6 +65,7 @@ public class TCPServerForClient implements Runnable {
 		try {
 			final ServerSocket serverSocket = new ServerSocket(this.port);
 			try {
+				this.listening = true;
 				final Socket connectionSocket = serverSocket.accept();
 				final DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 

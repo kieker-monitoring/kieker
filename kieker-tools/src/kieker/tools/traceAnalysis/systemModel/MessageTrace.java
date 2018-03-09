@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@ import java.util.List;
 
 /**
  * This class is a container for a whole trace of messages (represented as actual instances of {@link AbstractMessage}).
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public class MessageTrace extends AbstractTrace {
@@ -36,7 +36,7 @@ public class MessageTrace extends AbstractTrace {
 
 	/**
 	 * Creates a new message trace from the given data.
-	 * 
+	 *
 	 * @param traceId
 	 *            The ID for this message trace
 	 * @param seq
@@ -48,7 +48,7 @@ public class MessageTrace extends AbstractTrace {
 
 	/**
 	 * Creates a new message trace from the given data.
-	 * 
+	 *
 	 * @param traceId
 	 *            The ID for this trace.
 	 * @param sessionId
@@ -58,6 +58,11 @@ public class MessageTrace extends AbstractTrace {
 	 */
 	public MessageTrace(final long traceId, final String sessionId, final List<AbstractMessage> seq) {
 		super(traceId, sessionId);
+
+		// no need to sort: seq is already sorted - actually
+		// however, the reply message has the same timestamp as its associated call message
+		//		Collections.sort(seq, new MessageComparator());
+
 		this.messages = seq;
 
 		// Calculate start and end timestamp
@@ -78,7 +83,7 @@ public class MessageTrace extends AbstractTrace {
 
 	/**
 	 * Returns the message sequence contained in this trace as an (unmodifiable) list.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public final List<AbstractMessage> getSequenceAsVector() {

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,21 +21,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
-import kieker.monitoring.writer.DummyWriter;
+import kieker.monitoring.writer.dump.DumpWriter;
 
 /**
  * A writer that simply counts the number of records of type DummyRecord received.
- * 
+ *
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
-public final class DummyRecordCountWriter extends DummyWriter {
+public final class DummyRecordCountWriter extends DumpWriter {
 	private final AtomicInteger numDummyRecords = new AtomicInteger(0);
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this writer.
 	 */
@@ -51,10 +51,10 @@ public final class DummyRecordCountWriter extends DummyWriter {
 	}
 
 	@Override
-	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
+	public void writeMonitoringRecord(final IMonitoringRecord record) {
 		if (record instanceof EmptyRecord) {
 			this.numDummyRecords.incrementAndGet();
 		}
-		return super.newMonitoringRecord(record);
+		super.writeMonitoringRecord(record);
 	}
 }

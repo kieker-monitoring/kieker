@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.object.AfterOperationFailedObjectEvent;
+import kieker.common.record.io.BinaryValueDeserializer;
+import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
@@ -30,7 +32,7 @@ import kieker.test.common.junit.record.UtilityClass;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class TestAfterOperationFailedObjectEvent extends AbstractKiekerTest {
@@ -52,15 +54,15 @@ public class TestAfterOperationFailedObjectEvent extends AbstractKiekerTest {
 
 	/**
 	 * Tests the constructor and toArray(..) methods of {@link AfterOperationFailedObjectEvent}.
-	 * 
+	 *
 	 * Assert that a record instance event1 equals an instance event2 created by serializing event1 to an array event1Array
 	 * and using event1Array to construct event2. This ignores a set loggingTimestamp!
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
 
-		final AfterOperationFailedObjectEvent event1 =
-				new AfterOperationFailedObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME, CAUSE, OBJECT_ID);
+		final AfterOperationFailedObjectEvent event1 = new AfterOperationFailedObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME,
+				CAUSE, OBJECT_ID);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
@@ -85,8 +87,8 @@ public class TestAfterOperationFailedObjectEvent extends AbstractKiekerTest {
 	@Test
 	public void testSerializeDeserializeBinaryEquals() {
 
-		final AfterOperationFailedObjectEvent event1 =
-				new AfterOperationFailedObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME, CAUSE, OBJECT_ID);
+		final AfterOperationFailedObjectEvent event1 = new AfterOperationFailedObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME,
+				CAUSE, OBJECT_ID);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
@@ -98,10 +100,10 @@ public class TestAfterOperationFailedObjectEvent extends AbstractKiekerTest {
 
 		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
-		event1.writeBytes(buffer, stringRegistry);
+		event1.serialize(BinaryValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
 
-		final AfterOperationFailedObjectEvent event2 = new AfterOperationFailedObjectEvent(buffer, stringRegistry);
+		final AfterOperationFailedObjectEvent event2 = new AfterOperationFailedObjectEvent(BinaryValueDeserializer.create(buffer, stringRegistry));
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

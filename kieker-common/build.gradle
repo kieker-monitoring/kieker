@@ -1,46 +1,33 @@
+apply plugin: 'eclipse'
+apply plugin: "com.github.hauner.jarTest"
+
 dependencies {
-  compile resolveLibrary('commons-logging-*.jar')
-  compile resolveLibrary('slf4j-api-*.jar')
-  compile resolveLibrary('framework-libs/cxf/cxf-*.jar')
+	// no project-specific dependencies
+	clover 'org.openclover:clover:4.2.0'
+	
 }
 
-task replaceHardCodedVersionNames() << {
+clover {
+	report {
+		html=true
+	}
+	
+}
+
+eclipse {
+	classpath {
+		defaultOutputDir = file('build-eclipse')
+	}
+}
+
+task replaceHardCodedVersionNames() {
+  doLast {
 	regexpReplaceInFiles(project.file("src/kieker/common/util/Version.java"), "VERSION = \".*?\"", "VERSION = \"${version}\"")
+  }
 }
 
 compileJava.dependsOn replaceHardCodedVersionNames
 
-task generateRecords(type: JavaExec) {
-  description 'Generates the sources for the Kieker records using the IRL model specification'
-
-  classpath = fileTree('../bin/dev') {
-    include 'target/de.cau.cs.se.instrumentation.rl.cli-*.jar'
-  }				
-  main = 'de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain'
-  args '-r', '..',            // the root directory
-       '-a', 'Kieker Build',
-       '-d', 'src-gen',       // the destination directory
-       '-s', 'model/records', // the source directory
-       '-l', 'java',          // generate the records
-       '-l', 'java.factory',  // generate the record factories
-       '-n', 'kieker-common',
-       '-p', 'kieker-common',
-       '-v', '1.10'	          // generate code for Kieker 1.10
-}
-
-task generateRecordTests(type: JavaExec) {
-  description 'Generates the sources for the Kieker records tests using the IRL model specification'
-
-  classpath = fileTree('../bin/dev') {
-    include 'target/de.cau.cs.se.instrumentation.rl.cli-*.jar'
-  }				
-  main = 'de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain'
-  args '-r', '..',            // the root directory
-       '-a', 'Kieker Build',
-       '-d', 'test-gen',       // the destination directory
-       '-s', 'model/records', // the source directory
-       '-l', 'java.junit',          // generate the records
-       '-n', 'kieker-common',
-       '-p', 'kieker-common',
-       '-v', '1.10'	          // generate code for Kieker 1.10
+clean.doFirst {
+	delete "${projectDir}/bin/build-eclipse/"
 }

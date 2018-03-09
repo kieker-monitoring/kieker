@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.TimeZone;
 import java.util.concurrent.ArrayBlockingQueue;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * This is a simple logger for the Kieker WebGUI. It stores the log messages within a buffer of a static size. If the buffer is full, the oldest entry will be
@@ -150,21 +152,26 @@ public final class LogImplWebguiLogging implements Log {
 		synchronized (queue) {
 			// Is the queue full?
 			if (queue.size() >= MAX_ENTRIES) {
-				// Yes, remove the oldest entry.
-				queue.poll(); // NOFB (ignore the return value)
+				this.removeOldestEntryFrom(queue);
 			}
-			final StringBuilder sb = new StringBuilder(255);
-			sb.append(this.date.format(new java.util.Date())); // this has to be within synchronized
-			sb.append(": ");
-			sb.append(severity);
-			sb.append(' ');
-			sb.append(message);
+			final StringBuilder sb = new StringBuilder(255)
+					.append(this.date.format(new java.util.Date())) // this has to be within synchronized
+					.append(": ")
+					.append(severity)
+					.append(' ')
+					.append(message);
 			if (null != throwable) {
 				sb.append('\n');
 				sb.append(throwable.toString());
 			}
 			queue.add(sb.toString());
 		}
+	}
+
+	// extracted into a separate method to mark it with Findbugs' @SuppressFBWarnings
+	@SuppressFBWarnings("RV_RETURN_VALUE_IGNORED")
+	private void removeOldestEntryFrom(final Queue<String> queue) {
+		queue.poll();
 	}
 
 	/**

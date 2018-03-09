@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.flow.trace.operation.constructor.object;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.operation.constructor.object.BeforeConstructorObjectEvent;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
+
 import kieker.common.record.flow.IInterfaceRecord;
 
 /**
  * @author Florian Fittkau
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.10
  */
 public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObjectEvent implements IInterfaceRecord {
+	private static final long serialVersionUID = -3985311495464960429L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
@@ -41,7 +43,6 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 			 + TYPE_SIZE_STRING // IInterfaceRecord.interface
 	;
-	private static final long serialVersionUID = -3985311495464960429L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -53,12 +54,24 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		String.class, // IInterfaceRecord.interface
 	};
 	
-	/* user-defined constants */
-	/* default constants */
+	
+	/** default constants. */
 	public static final String INTERFACE = "";
-	/* property declarations */
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"operationSignature",
+		"classSignature",
+		"objectId",
+		"interface",
+	};
+	
+	/** property declarations. */
 	private final String _interface;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -88,12 +101,15 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #BeforeConstructorObjectInterfaceEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public BeforeConstructorObjectInterfaceEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
 		this._interface = (String) values[6];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -101,30 +117,33 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #BeforeConstructorObjectInterfaceEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected BeforeConstructorObjectInterfaceEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
 		this._interface = (String) values[6];
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
+	 * @param deserializer
+	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public BeforeConstructorObjectInterfaceEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this._interface = stringRegistry.get(buffer.getInt());
+	public BeforeConstructorObjectInterfaceEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		super(deserializer);
+		this._interface = deserializer.getString();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -136,7 +155,6 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 			this.getInterface()
 		};
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -146,21 +164,20 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getInterface());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putLong(this.getTraceId());
-		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
-		buffer.putInt(stringRegistry.get(this.getClassSignature()));
-		buffer.putInt(this.getObjectId());
-		buffer.putInt(stringRegistry.get(this.getInterface()));
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
+		serializer.putLong(this.getTimestamp());
+		serializer.putLong(this.getTraceId());
+		serializer.putInt(this.getOrderIndex());
+		serializer.putString(this.getOperationSignature());
+		serializer.putString(this.getClassSignature());
+		serializer.putInt(this.getObjectId());
+		serializer.putString(this.getInterface());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -168,7 +185,15 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -176,6 +201,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -186,18 +212,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -218,7 +233,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		if (!this.getInterface().equals(castedRecord.getInterface())) return false;
 		return true;
 	}
-
+	
 	public final String getInterface() {
 		return this._interface;
 	}

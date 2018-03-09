@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -42,9 +43,9 @@ import kieker.common.util.filesystem.FSUtil;
 
 /**
  * Reads the contents of a single file system log directory and passes the records to the registered receiver of type {@link IMonitoringRecordReceiver}.
- * 
+ *
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.2
  */
 final class FSDirectoryReader implements Runnable {
@@ -64,7 +65,7 @@ final class FSDirectoryReader implements Runnable {
 
 	/**
 	 * Creates a new instance of this class.
-	 * 
+	 *
 	 * @param inputDir
 	 *            The File object for the input directory.
 	 * @param recordReceiver
@@ -95,7 +96,7 @@ final class FSDirectoryReader implements Runnable {
 				final String name = pathname.getName();
 				return pathname.isFile()
 						&& name.startsWith(FSDirectoryReader.this.filePrefix)
-						&& (name.endsWith(FSUtil.NORMAL_FILE_EXTENSION) || BinaryCompressionMethod.hasValidFileExtension(name));
+						&& (name.endsWith(FSUtil.DAT_FILE_EXTENSION) || BinaryCompressionMethod.hasValidFileExtension(name));
 			}
 		});
 		if (inputFiles == null) {
@@ -118,7 +119,7 @@ final class FSDirectoryReader implements Runnable {
 					break;
 				}
 				LOG.info("< Loading " + inputFile.getAbsolutePath());
-				if (inputFile.getName().endsWith(FSUtil.NORMAL_FILE_EXTENSION)) {
+				if (inputFile.getName().endsWith(FSUtil.DAT_FILE_EXTENSION)) {
 					this.processNormalInputFile(inputFile);
 				} else {
 					if (this.ignoreUnknownRecordTypes && ignoreUnknownRecordTypesWarningAlreadyShown) {
@@ -136,7 +137,7 @@ final class FSDirectoryReader implements Runnable {
 				}
 			}
 		}
-		this.recordReceiver.newMonitoringRecord(FSReader.EOF);
+		this.recordReceiver.newEndOfFileRecord();
 	}
 
 	/**
@@ -165,6 +166,9 @@ final class FSDirectoryReader implements Runnable {
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				if (line.length() == 0) {
 					continue; // ignore empty lines
+				}
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Read line: " + line);
 				}
 				final int split = line.indexOf('=');
 				if (split == -1) {
@@ -202,7 +206,7 @@ final class FSDirectoryReader implements Runnable {
 
 	/**
 	 * Reads the records contained in the given normal file and passes them to the registered {@link #recordReceiver}.
-	 * 
+	 *
 	 * @param inputFile
 	 *            The input file which should be processed.
 	 */
@@ -293,7 +297,7 @@ final class FSDirectoryReader implements Runnable {
 
 	/**
 	 * Reads the records contained in the given binary file and passes them to the registered {@link #recordReceiver}.
-	 * 
+	 *
 	 * @param inputFile
 	 *            The input file which should be processed.
 	 * @param compressionMethod

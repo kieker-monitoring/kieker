@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -315,7 +315,7 @@ public final class MetaModelHandler {
 			final List<AbstractPlugin> plugins = new ArrayList<AbstractPlugin>(readers);
 			plugins.addAll(filters);
 			for (final AbstractPlugin plugin : plugins) {
-				MIPlugin mPlugin;
+				final MIPlugin mPlugin;
 				if (plugin instanceof AbstractReaderPlugin) {
 					mPlugin = factory.createReader();
 				} else {

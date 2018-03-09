@@ -3,7 +3,7 @@
 # include common variables and functions
 source "$(dirname $0)/release-check-common.sh"
 
-KIEKER_VERSION="1.13-SNAPSHOT"
+KIEKER_VERSION="1.14-SNAPSHOT"
 
 # lists the files included in an archive without extracting it
 function cat_archive_content {
@@ -167,6 +167,7 @@ function assert_files_exist_common {
 # Asserts the existence of files in the src release
 function assert_files_exist_src {
 	assert_files_exist_common
+	assert_file_exists_regular "Jenkinsfile"
 	assert_dir_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/"
 	assert_file_NOT_exists_recursive "build"
@@ -189,8 +190,8 @@ function assert_files_exist_src {
 	assert_file_exists_regular "kieker-eclipse.importorder"
 	assert_file_exists_regular "kieker-eclipse-cleanup.xml"
 	assert_file_exists_regular "kieker-eclipse-formatter.xml"
-	assert_file_exists_regular ".project"
-	assert_file_exists_regular ".classpath"
+	assert_file_NOT_exists ".project"
+	assert_file_NOT_exists ".classpath"
 	assert_file_exists_regular ".checkstyle"
 	assert_file_exists_regular ".pmd"
 	assert_dir_exists ".settings/"

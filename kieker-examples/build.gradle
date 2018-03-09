@@ -1,3 +1,41 @@
+configurations {
+	jms
+	amqp
+	kafka
+	spring
+	opad
+}
+
+dependencies {
+	clover 'org.openclover:clover:4.2.0'
+
+	jms 'commons-logging:commons-logging:1.2'
+
+	amqp 'commons-logging:commons-logging:1.2'
+	amqp 'com.rabbitmq:amqp-client:4.2.1'
+
+	kafka 'commons-logging:commons-logging:1.2'
+	kafka 'com.google.guava:guava:20.0'
+	kafka 'org.jctools:jctools-core:2.1.0'
+	kafka 'org.apache.kafka:kafka-clients:0.11.0.1'
+	// the following dependencies are transitive dependencies from kafka-clients
+	//kafka 'org.slf4j:slf4j-api:1.7.25'
+	//kafka files('../lib/kafka/lz4-*.jar')
+	//kafka files('../lib/kafka/snappy-java-*.jar')
+
+	spring 'commons-logging:commons-logging:1.2'
+
+	opad 'org.apache.commons:commons-math3:3.6.1'
+	opad 'org.apache.commons:commons-lang3:3.6'
+}
+
+clover {
+	report {
+		html=true
+	}
+	
+}
+
 defaultTasks 'cleanStandaloneExamples', 'buildStandaloneExamples'
 
 task buildStandaloneExamples(dependsOn: [
@@ -9,6 +47,7 @@ task buildStandaloneExamples(dependsOn: [
 					 'buildStandaloneExamplesUserguideAppendixSigar',
 					 'buildStandaloneExamplesUserguideAppendixJMS', 
 					 'buildStandaloneExamplesUserguideAppendixAMQP',
+					 'buildStandaloneExamplesUserguideAppendixKafka',
 					 'buildStandaloneExamplesMonitoringSigar',
 					 'buildStandaloneExamplesMonitoringJVM',
 					 'buildStandaloneExamplesMonitoringSpring',
@@ -23,7 +62,8 @@ task buildStandaloneExamples(dependsOn: [
 					 'replaceAbsoluteByRelativePathsEclipse']) {
 }
 
-task replaceHardCodedVersionNames() << {
+task replaceHardCodedVersionNames() {
+  doLast {
 	regexpReplaceInFiles(project.file("monitoring/custom-timesource/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
 	regexpReplaceInFiles(project.file("monitoring/probe-aspectj/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
 	regexpReplaceInFiles(project.file("monitoring/adaptive-monitoring/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
@@ -35,9 +75,11 @@ task replaceHardCodedVersionNames() << {
 	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/README.txt"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
 	regexpReplaceInFiles(project.file("userguide/ch3-4--custom-components/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
 	regexpReplaceInFiles(project.file("monitoring/probe-spring/.classpath"), "aspectjweaver-.*.jar", "aspectjweaver-${libAspectjVersion}.jar")
+  }
 }
 
-task replaceAbsoluteByRelativePathsEclipse << {
+task replaceAbsoluteByRelativePathsEclipse {
+  doLast {
     regexpReplaceInFiles(project.file("analysis/kax-files/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("analysis/opad-anomaly-detection/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("analysis/trace-analysis/.classpath"), "path=\".*/lib/", "path=\"lib/")
@@ -55,6 +97,7 @@ task replaceAbsoluteByRelativePathsEclipse << {
 	regexpReplaceInFiles(project.file("userguide/appendix-Sigar/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("userguide/ch3-4--custom-components/.classpath"), "path=\".*/lib/", "path=\"lib/")
+  }
 }
 
 task buildStandaloneExamplesUserguideCh2App(type: GradleBuild) {
@@ -117,9 +160,8 @@ task copyLibsStandaloneExamplesUserguideAppendixJMS(type: Copy, dependsOn: [root
 	from ('../build/libs') {
 		include "kieker-${version}-emf.jar"
 	}
-	from ('../lib') {
-		include "commons-logging-*.jar"
-	}
+	from configurations.jms
+
 	into 'userguide/appendix-JMS/lib/'
 }
 
@@ -132,15 +174,27 @@ task copyLibsStandaloneExamplesUserguideAppendixAMQP(type: Copy, dependsOn: [roo
 	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}
-	from ('../lib') {
-		include "commons-logging-*.jar"
-		include "amqp-client-*.jar"
-	}
+	from configurations.amqp
+
 	into 'userguide/appendix-AMQP/lib/'
 }
 
 task buildStandaloneExamplesUserguideAppendixAMQP(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixAMQP') {
 	buildFile = 'userguide/appendix-AMQP/build.gradle'
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+}
+
+task copyLibsStandaloneExamplesUserguideAppendixKafka(type: Copy, dependsOn: [rootProject.emfJar]) {
+	from ('../build/libs') {
+		include "kieker-${version}.jar"
+	}
+	from configurations.kafka
+
+	into 'userguide/appendix-Kafka/lib/'
+}
+
+task buildStandaloneExamplesUserguideAppendixKafka(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixKafka') {
+	buildFile = 'userguide/appendix-Kafka/build.gradle'
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
@@ -202,9 +256,9 @@ task copyLibsStandaloneExamplesMonitoringSpring(type: Copy, dependsOn: [rootProj
 	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}
+	from configurations.spring
 	from ('../lib') {
 		include "aspectjweaver-*.jar"
-		include "commons-logging-*.jar"
 	}
 	from ('../lib/framework-libs/spring/') {
 		include "aopalliance-*.jar"
@@ -286,13 +340,11 @@ task copyLibsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProject.
 	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}
+	from configurations.opad
 	from ('../lib') {
-		include 'commons-lang3-*.jar'
-		include 'commons-math3-*.jar'
 		include 'REngine-*.jar'
 		include 'Rserve-*.jar'
 		include 'Rsession-*.jar'
-		include 'opencsv-2.4-SNAPSHOT.jar'
 	}
 	into 'analysis/opad-anomaly-detection/lib/'
 }

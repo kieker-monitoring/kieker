@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.misc;
 
-import java.nio.ByteBuffer;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -28,12 +27,14 @@ import kieker.common.util.registry.IRegistry;
  */
 public final class TimestampRecordFactory implements IRecordFactory<TimestampRecord> {
 	
+	
 	@Override
-	public TimestampRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
-		return new TimestampRecord(buffer, stringRegistry);
+	public TimestampRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		return new TimestampRecord(deserializer);
 	}
 	
 	@Override
+	@Deprecated
 	public TimestampRecord create(final Object[] values) {
 		return new TimestampRecord(values);
 	}

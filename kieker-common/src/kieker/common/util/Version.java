@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,8 @@ package kieker.common.util;
  */
 public final class Version {
 	// The VERSION string is updated by the Ant build file, which looks for the pattern: VERSION = <quote>.*<quote>
-	private static final String VERSION = "1.13-SNAPSHOT"; // NOPMD (name equals classname)
-	private static final String COPYRIGHT = "Copyright (c) 2006-2014 Kieker Project";
+	private static final String VERSION = "1.14-SNAPSHOT"; // NOPMD (name equals classname)
+	private static final String COPYRIGHT = "Copyright (c) 2006-2017 Kieker Project";
 
 	/**
 	 * Private constructor to avoid instantiation.

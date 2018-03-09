@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,20 +21,22 @@ import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.puppycrawl.tools.checkstyle.api.Check;
+import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TextBlock;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 /**
- * This class extends checkstyle with a new check which makes sure that no block comments (expect for javadoc and comments containing {@code (non-javadoc)}) are
- * used within the source files. The check detects all files with a package declaration.
+ * This class extends checkstyle with a new check which makes sure that no block
+ * comments (expect for javadoc and comments containing {@code (non-javadoc)})
+ * are used within the source files. The check detects all files with a package
+ * declaration.
  *
  * @author Nils Christian Ehmke
  *
  * @since 1.7
  */
-public class NoBlockCommentsCheck extends Check {
+public class NoBlockCommentsCheck extends AbstractCheck {
 
 	/**
 	 * Creates a new instance of this class.
@@ -56,10 +58,11 @@ public class NoBlockCommentsCheck extends Check {
 
 	@Override
 	public void visitToken(final DetailAST ast) {
-		final Set<Entry<Integer, List<TextBlock>>> comments = this.getFileContents().getCComments().entrySet();
+		final Set<Entry<Integer, List<TextBlock>>> comments = this.getFileContents().getBlockComments().entrySet();
 
 		for (final Entry<Integer, List<TextBlock>> comment : comments) {
-			if (!NoBlockCommentsCheck.isJavadocComment(comment.getValue()) && !NoBlockCommentsCheck.isSeeJavaDoc(comment.getValue())) {
+			if (!NoBlockCommentsCheck.isJavadocComment(comment.getValue())
+					&& !NoBlockCommentsCheck.isSeeJavaDoc(comment.getValue())) {
 				this.log(comment.getKey(), "block comments are not allowed");
 			}
 		}
@@ -80,5 +83,15 @@ public class NoBlockCommentsCheck extends Check {
 		}
 
 		return false;
+	}
+
+	@Override
+	public int[] getAcceptableTokens() {
+		return getDefaultTokens();
+	}
+
+	@Override
+	public int[] getRequiredTokens() {
+		return getDefaultTokens();
 	}
 }

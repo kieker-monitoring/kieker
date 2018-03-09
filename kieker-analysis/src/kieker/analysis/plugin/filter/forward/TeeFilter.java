@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -179,8 +179,9 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	public final void inputEvent(final Object object) {
 		if (this.active) {
 			final StringBuilder sb = new StringBuilder(128);
-			sb.append(this.getName());
-			sb.append('(').append(object.getClass().getSimpleName()).append(") ").append(object.toString());
+			sb.append(this.getName()).
+				append('(').append(object.getClass().getSimpleName()).append(") ").
+				append(object.toString());
 			final String record = sb.toString();
 			if (this.printStream != null) {
 				this.printStream.println(record);

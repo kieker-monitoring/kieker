@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,21 +36,19 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionTraceBasedSession;
 
 /**
  * This filter reconstructs sessions from execution or message traces.
- * 
- * 
+ *
+ *
  * @author Holger Knoche
  * @since 1.10
- * 
+ *
  */
-@Plugin(description = "Reconstructs sessions from execution or message traces",
-		outputPorts = {
-			@OutputPort(name = SessionReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_SESSIONS, description = "Reconstructed execution trace-based sessions",
-					eventTypes = { ExecutionTraceBasedSession.class })
-		},
-		configuration = {
-			@Property(name = SessionReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_THINK_TIME, defaultValue = "500000"),
-			@Property(name = SessionReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = SessionReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT)
-		})
+@Plugin(description = "Reconstructs sessions from execution or message traces", outputPorts = {
+	@OutputPort(name = SessionReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_SESSIONS, description = "Reconstructed execution trace-based sessions", eventTypes = {
+		ExecutionTraceBasedSession.class })
+}, configuration = {
+	@Property(name = SessionReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_THINK_TIME, defaultValue = "500000"),
+	@Property(name = SessionReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = SessionReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT)
+})
 public class SessionReconstructionFilter extends AbstractFilterPlugin {
 
 	/**
@@ -89,12 +87,12 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 	private final long maxThinkTime;
 
 	private final ConcurrentHashMap<String, ExecutionTraceBasedSession> openExecutionBasedSessions = new ConcurrentHashMap<String, ExecutionTraceBasedSession>();
-	private final PriorityQueue<ExecutionTraceBasedSession> executionSessionTimeoutQueue =
-			new PriorityQueue<ExecutionTraceBasedSession>(DEFAULT_QUEUE_SIZE, new SessionEndTimestampComparator());
+	private final PriorityQueue<ExecutionTraceBasedSession> executionSessionTimeoutQueue = new PriorityQueue<ExecutionTraceBasedSession>(DEFAULT_QUEUE_SIZE,
+			new SessionEndTimestampComparator());
 
 	/**
 	 * Creates a new session reconstruction filter using the given configuration.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -176,7 +174,7 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Processes an incoming execution.
-	 * 
+	 *
 	 * @param executionTrace
 	 *            The execution trace to process.
 	 */
@@ -193,8 +191,8 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 			ExecutionTraceBasedSession session = this.openExecutionBasedSessions.get(sessionId);
 			if (session == null) {
 				session = new ExecutionTraceBasedSession(sessionId);
-				this.openExecutionBasedSessions.put(sessionId, session);
-				existingSession = false;
+				final ExecutionTraceBasedSession previousSession = this.openExecutionBasedSessions.putIfAbsent(sessionId, session);
+				existingSession = previousSession != null;
 			}
 
 			session.addTrace(executionTrace);

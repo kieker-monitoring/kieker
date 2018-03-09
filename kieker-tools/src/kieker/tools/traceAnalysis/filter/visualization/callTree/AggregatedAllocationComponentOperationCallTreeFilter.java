@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,10 +37,9 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * 
  * @since 1.1
  */
-@Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated allocation component operation call tree",
-		repositoryPorts = {
-			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
-		})
+@Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated allocation component operation call tree", repositoryPorts = {
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+})
 public class AggregatedAllocationComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AllocationComponentOperationPair> {
 
 	/**
@@ -95,7 +94,7 @@ class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggrega
 			final IOriginRetentionPolicy originPolicy) {
 		final AllocationComponentOperationPair destination = dstObj;
 		WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e = this.childMap.get(destination.getId());
-		AbstractCallTreeNode<AllocationComponentOperationPair> n;
+		final AbstractCallTreeNode<AllocationComponentOperationPair> n;
 		if (e != null) {
 			n = e.getTarget();
 			originPolicy.handleOrigin(e, origin);

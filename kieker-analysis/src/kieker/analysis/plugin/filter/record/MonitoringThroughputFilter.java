@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,26 +29,21 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * An instance of this class computes the throughput in terms of the number of records logged within the monitoring instance per time unit.
- * 
+ *
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.8
  */
-@Plugin(description = "A filter computing the throughput of the monitoring",
-		outputPorts = {
-			@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_RELAYED_RECORDS, eventTypes = { IMonitoringRecord.class },
-					description = "Provides each incoming record"),
-			@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_UNCOUNTED_RECORDS, eventTypes = { IMonitoringRecord.class },
-					description = "Provides each not counted record"),
-			@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT, eventTypes = { Long.class },
-					description = "Provides throughput within last interval")
-		},
-		configuration = {
-			@Property(name = MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
-					defaultValue = MonitoringThroughputFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-			@Property(name = MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE,
-					defaultValue = MonitoringThroughputFilter.CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_SECOND)
-		})
+@Plugin(description = "A filter computing the throughput of the monitoring", outputPorts = {
+	@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_RELAYED_RECORDS, eventTypes = {
+		IMonitoringRecord.class }, description = "Provides each incoming record"),
+	@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_UNCOUNTED_RECORDS, eventTypes = {
+		IMonitoringRecord.class }, description = "Provides each not counted record"),
+	@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT, eventTypes = { Long.class }, description = "Provides throughput within last interval")
+}, configuration = {
+	@Property(name = MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = MonitoringThroughputFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+	@Property(name = MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE, defaultValue = MonitoringThroughputFilter.CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_SECOND)
+})
 public class MonitoringThroughputFilter extends AbstractFilterPlugin {
 
 	/** The name of the input port receiving other objects. */
@@ -72,8 +67,8 @@ public class MonitoringThroughputFilter extends AbstractFilterPlugin {
 	private final TimeUnit timeunit;
 	private final long intervalSize;
 
-	private volatile long currentInterval = -1;
-	private volatile long recordsInInterval;
+	private long currentInterval = -1; // synchronized by (this)
+	private long recordsInInterval; // synchronized by (this)
 
 	public MonitoringThroughputFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

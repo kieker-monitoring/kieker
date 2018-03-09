@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,61 +16,207 @@
 
 package kieker.monitoring.core.controller;
 
-import java.util.concurrent.atomic.AtomicLong;
+import java.lang.Thread.State;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.misc.RegistryRecord;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.writer.IMonitoringWriter;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.queue.BlockingQueueDecorator;
+import kieker.monitoring.queue.behavior.BlockOnFailedInsertBehavior;
+import kieker.monitoring.queue.behavior.BypassQueueBehavior;
+import kieker.monitoring.queue.behavior.CountOnFailedInsertBehavior;
+import kieker.monitoring.queue.behavior.DoNotInsertBehavior;
+import kieker.monitoring.queue.behavior.InsertBehavior;
+import kieker.monitoring.queue.behavior.TerminateOnFailedInsertBehavior;
+import kieker.monitoring.queue.putstrategy.PutStrategy;
+import kieker.monitoring.queue.putstrategy.SPBlockingPutStrategy;
+import kieker.monitoring.queue.takestrategy.SCBlockingTakeStrategy;
+import kieker.monitoring.queue.takestrategy.TakeStrategy;
+import kieker.monitoring.writer.AbstractMonitoringWriter;
+import kieker.monitoring.writer.MonitoringWriterThread;
 
 /**
  * @author Andre van Hoorn, Matthias Rohr, Jan Waller, Robert von Massow
- * 
+ *
  * @since 1.3
  */
 public final class WriterController extends AbstractController implements IWriterController {
-	private static final Log LOG = LogFactory.getLog(WriterController.class);
 
-	/** the total number of monitoring records received. */
-	private final AtomicLong numberOfInserts = new AtomicLong(0);
+	public static final String PREFIX = WriterController.class.getName() + ".";
+	/** The name of the configuration determining the size of the queue of this writer. */
+	public static final String RECORD_QUEUE_SIZE = "RecordQueueSize";
+	/** The name of the configuration determining the insert behavior to the queue of the writer. */
+	public static final String RECORD_QUEUE_INSERT_BEHAVIOR = "RecordQueueInsertBehavior";
+	/** The fully qualified name of the queue to be used for the records. */
+	public static final String RECORD_QUEUE_FQN = "RecordQueueFQN";
+
+	private static final Log LOG = LogFactory.getLog(WriterController.class);
 	/** Monitoring Writer. */
-	private final IMonitoringWriter monitoringWriter;
-	/** Whether or not the {@link IMonitoringRecord#setLoggingTimestamp(long)} is automatically set. */
-	private final boolean autoSetLoggingTimestamp;
+	private AbstractMonitoringWriter monitoringWriter; // NOPMD (so far, cannot be made final due to the MonitoringController)
 	/** Whether or not to automatically log the metadata record. */
 	private final boolean logMetadataRecord;
+	/** the capacity of the queue. */
+	private final int queueCapacity;
+	/** the synchronized, blocking queue used for the communication between the monitored application's threads and the writer thread. */
+	private final BlockingQueue<IMonitoringRecord> writerQueue;
+
+	private MonitoringWriterThread monitoringWriterThread; // NOPMD (so far, cannot be made final due to the MonitoringController)
+
+	private InsertBehavior<IMonitoringRecord> insertBehavior; // NOPMD (so far, cannot be made final due to the MonitoringController)
+
+	// private Disruptor<IMonitoringRecordEvent> disruptor;
+
+	// private RingBuffer<IMonitoringRecordEvent> ringBuffer;
+
+	// private int numInsertedRecords;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for the controller.
 	 */
 	public WriterController(final Configuration configuration) {
 		super(configuration);
-		this.logMetadataRecord = configuration.getBooleanProperty(ConfigurationFactory.METADATA);
-		this.autoSetLoggingTimestamp = configuration.getBooleanProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP);
-		this.monitoringWriter = AbstractController.createAndInitialize(IMonitoringWriter.class,
-				configuration.getStringProperty(ConfigurationFactory.WRITER_CLASSNAME),
+		this.logMetadataRecord = configuration.getBooleanProperty(ConfigurationKeys.META_DATA);
+
+		this.queueCapacity = configuration.getIntProperty(PREFIX + RECORD_QUEUE_SIZE);
+		final String queueFqn = configuration.getStringProperty(PREFIX + RECORD_QUEUE_FQN);
+
+		final Queue<IMonitoringRecord> queue = this.newQueue(queueFqn, this.queueCapacity);
+		if (queue instanceof BlockingQueue) {
+			this.writerQueue = (BlockingQueue<IMonitoringRecord>) queue;
+		} else {
+			final PutStrategy putStrategy = new SPBlockingPutStrategy();
+			final TakeStrategy takeStrategy = new SCBlockingTakeStrategy();
+			this.writerQueue = new BlockingQueueDecorator<>(queue, putStrategy, takeStrategy);
+		}
+
+		final String writerClassName = configuration.getStringProperty(ConfigurationKeys.WRITER_CLASSNAME);
+		this.monitoringWriter = AbstractController.createAndInitialize(AbstractMonitoringWriter.class, writerClassName,
 				configuration);
 		if (this.monitoringWriter == null) {
 			this.terminate();
-			return;
+			return; // TODO should throw an exception! and then monitoringWriter can be declared final
+			// throw new IllegalStateException("monitoringWriter may not be null");
 		}
+
+		this.monitoringWriterThread = new MonitoringWriterThread(this.monitoringWriter, this.writerQueue);
+
+		int recordQueueInsertBehavior = configuration.getIntProperty(PREFIX + RECORD_QUEUE_INSERT_BEHAVIOR);
+		if ((recordQueueInsertBehavior < 0) || (recordQueueInsertBehavior > 5)) {
+			if (LOG.isWarnEnabled()) {
+				LOG.warn("Unknown value '" + recordQueueInsertBehavior + "' for " + PREFIX + RECORD_QUEUE_INSERT_BEHAVIOR
+						+ "; using default value 0");
+			}
+			recordQueueInsertBehavior = 0;
+		}
+
+		switch (recordQueueInsertBehavior) {
+		case 1:
+			this.insertBehavior = new BlockOnFailedInsertBehavior<>(this.writerQueue);
+			break;
+		case 2:
+			this.insertBehavior = new CountOnFailedInsertBehavior<>(this.writerQueue);
+			break;
+		case 3:
+			this.insertBehavior = new DoNotInsertBehavior<>();
+			break;
+		case 4:
+			// try {
+			// this.initDisruptor(configuration);
+			// } catch (final IOException e) {
+			// throw new IllegalStateException(e);
+			// }
+			// this.insertBehavior = new DisruptorInsertBehavior<IMonitoringRecord>(this.ringBuffer);
+			break;
+		case 5:
+			this.insertBehavior = new BypassQueueBehavior(this.monitoringWriter);
+			break;
+		default:
+			this.insertBehavior = new TerminateOnFailedInsertBehavior<>(this.writerQueue);
+			break;
+		}
+	}
+
+	// private void initDisruptor(final Configuration configuration) throws IOException {
+	// final EventFactory<IMonitoringRecordEvent> eventFactory = new NewRecordEventFactory();
+	// final int bufferSize = 1024;
+	// final ThreadFactory threadFactory = new ThreadFactory() {
+	// @Override
+	// public Thread newThread(final Runnable r) {
+	// final Thread thread = new Thread(r);
+	// thread.setDaemon(true);
+	// return thread;
+	// }
+	// };
+	//
+	// this.disruptor = new Disruptor<IMonitoringRecordEvent>(eventFactory, bufferSize, threadFactory);
+	//
+	// final SharedConnection connection = new SharedConnection(configuration);
+	// final EventHandler<? super IMonitoringRecordEvent> handler1 = new DisruptorTcpWriter(configuration, connection);
+	// // allowing more than one consumes breaks the assumptions that the records are sent in order of occurrence
+	// // final EventHandler<? super IMonitoringRecordEvent> handler2 = new DisruptorTcpWriter(configuration,
+	// connection);
+	//
+	// this.disruptor.handleEventsWith(handler1);
+	// this.disruptor.start();
+	//
+	// this.ringBuffer = this.disruptor.getRingBuffer();
+	// }
+
+	/**
+	 * @param queueFqn
+	 *            the fully qualified queue name
+	 * @param capacity
+	 *            the (initial) capacity of the queue
+	 * @return a new instance of the queue indicated by its <code>queueFQN</code>. Such instance is created by invoking
+	 *         the constructor with a single parameter of type <code>int</code>.
+	 */
+	@SuppressWarnings("unchecked")
+	private Queue<IMonitoringRecord> newQueue(final String queueFqn, final int capacity) {
+		try {
+			final Class<?> clazz = Class.forName(queueFqn);
+			@SuppressWarnings("rawtypes")
+			final Class<? extends Queue> queueClass = clazz.asSubclass(Queue.class);
+			@SuppressWarnings("rawtypes")
+			final Constructor<? extends Queue> constructor = queueClass.getConstructor(int.class);
+			return constructor.newInstance(capacity);
+		} catch (final ClassNotFoundException | InstantiationException e) {
+			LOG.warn("An exception occurred", e);
+			throw new IllegalStateException(e);
+		} catch (final NoSuchMethodException | SecurityException e) {
+			LOG.warn("An exception occurred", e);
+			throw new IllegalStateException(e);
+		} catch (final IllegalAccessException | IllegalArgumentException e) {
+			LOG.warn("An exception occurred", e);
+			throw new IllegalStateException(e);
+		} catch (final InvocationTargetException e) {
+			LOG.warn("An exception occurred", e);
+			throw new IllegalStateException(e);
+		}
+	}
+
+	@SuppressWarnings("PMD.DefaultPackage")
+	// default
+	boolean isLogMetadataRecord() {
+		return this.logMetadataRecord;
 	}
 
 	@Override
 	protected final void init() {
-		if (this.monitoringWriter != null) {
-			try {
-				this.monitoringWriter.setController(super.monitoringController);
-			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-				LOG.error("Error initializing writer", e);
-				this.terminate();
-			}
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Initializing Writer Controller");
+		}
+
+		if (this.monitoringWriterThread != null) {
+			this.monitoringWriterThread.start();
 		}
 	}
 
@@ -79,19 +225,30 @@ public final class WriterController extends AbstractController implements IWrite
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Shutting down Writer Controller");
 		}
-		if (this.monitoringWriter != null) {
-			this.monitoringWriter.terminate();
+
+		if (this.monitoringWriterThread != null) {
+			this.monitoringWriterThread.terminate();
 		}
+
+		// if (this.disruptor != null) {
+		// this.disruptor.shutdown();
+		// }
+
+		// LOG.info("block durations: {}" + this.insertBehavior.toString());
+		// System.out.println("block durations: " + this.insertBehavior.toString());
 	}
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder(256);
-		sb.append("WriterController:\n\tNumber of Inserts: '");
-		sb.append(this.getNumberOfInserts());
-		sb.append("'\n\tAutomatic assignment of logging timestamps: '");
-		sb.append(this.autoSetLoggingTimestamp);
-		sb.append("'\n");
+		final StringBuilder sb = new StringBuilder(256) // NOPMD (consecutive calls of append with string literals)
+				.append("WriterController:")
+				.append("\n\tQueue type: ")
+				.append(this.writerQueue)
+				.append("\n\tQueue capacity: ")
+				.append(this.queueCapacity)
+				.append("\n\tInsert behavior (a.k.a. QueueFullBehavior): ")
+				.append(this.insertBehavior.toString())
+				.append("\n");
 		if (this.monitoringWriter != null) {
 			sb.append(this.monitoringWriter.toString());
 		} else {
@@ -101,49 +258,29 @@ public final class WriterController extends AbstractController implements IWrite
 		return sb.toString();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
-		try {
-			// fast lane for RegistryRecords (these must always be delivered without blocking!)
-			if (!(record instanceof RegistryRecord)) {
-				final IMonitoringController monitoringController = super.monitoringController;
-				if (!monitoringController.isMonitoringEnabled()) { // enabled and not terminated
-					return false;
-				}
-				if (this.autoSetLoggingTimestamp) {
-					record.setLoggingTimestamp(monitoringController.getTimeSource().getTime());
-				}
-				if ((0L == this.numberOfInserts.getAndIncrement()) && this.logMetadataRecord) {
-					this.monitoringController.sendMetadataAsRecord();
-				}
-				if (!this.monitoringWriter.newMonitoringRecord(record)) {
-					LOG.error("Error writing the monitoring data. Will terminate monitoring!");
-					this.terminate();
-					return false;
-				}
-			} else { // registry record
-				if (!this.monitoringWriter.newMonitoringRecordNonBlocking(record)) {
-					LOG.error("Error writing the monitoring data. Will terminate monitoring!");
-					this.terminate();
-					return false;
-				}
-			}
-			return true;
-		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			LOG.error("Exception detected. Will terminate monitoring", ex);
+		final boolean recordSent = this.insertBehavior.insert(record);
+		if (!recordSent) {
+			LOG.error("Error writing the monitoring data. Will terminate monitoring!");
 			this.terminate();
-			return false;
+		}
+
+		return recordSent;
+	}
+
+	@Override
+	public void waitForTermination(final long timeoutInMs) throws InterruptedException {
+		if (this.monitoringWriterThread != null) {
+			this.monitoringWriterThread.join(timeoutInMs);
 		}
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Used in tests only.
 	 */
-	@Override
-	public final long getNumberOfInserts() {
-		return this.numberOfInserts.longValue();
+	@SuppressWarnings({ "PMD.DefaultPackage", "PMD.CommentDefaultAccessModifier" })
+	State getStateOfMonitoringWriterThread() {
+		return this.monitoringWriterThread.getState();
 	}
 }

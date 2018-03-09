@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,9 +41,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.ExecutionFactory;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.2
  */
 public class TestExecutionTraceBookstore extends AbstractKiekerTest {
@@ -114,7 +114,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	/**
 	 * Tests whether the "well-known" Bookstore trace gets correctly
 	 * represented as an Execution Trace.
-	 * 
+	 *
 	 * @throws InvalidTraceException
 	 *             If the internally assembled execution trace is somehow invalid.
 	 */
@@ -131,7 +131,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	/**
 	 * Tests the equals method of the ExecutionTrace class with two equal
 	 * traces.
-	 * 
+	 *
 	 * @throws InvalidTraceException
 	 *             If the internally assembled execution trace is somehow invalid.
 	 */
@@ -145,7 +145,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	/**
 	 * Tests the equals method of the ExecutionTrace class with two different
 	 * traces.
-	 * 
+	 *
 	 * @throws InvalidTraceException
 	 *             If the internally assembled execution trace is somehow invalid.
 	 */
@@ -163,7 +163,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	/**
 	 * Returns an {@link Execution} with each field being equal to that of <i>executionTemplate</i> except for the value
 	 * of the given {@link VariationPoint} being set to the respective value of <i>variationTemplate</i>.
-	 * 
+	 *
 	 * @param executionTemplate
 	 * @param vPoint
 	 * @param variationTemplate
@@ -209,7 +209,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 			break;
 		default:
 			Assert.fail();
-
+			break;
 		}
 
 		final Execution retVal = new Execution(op, allocComp, traceId, sessionId, eoi, ess, tin, tout, assumed);
@@ -228,11 +228,10 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 		 * Will be used to create a clone of exec0_0__bookstore_searchBook with certain variations
 		 * selected from the execution.
 		 */
-		final Execution variationTemplate =
-				new Execution(this.exec1_1__catalog_getBook.getOperation(), this.exec1_1__catalog_getBook.getAllocationComponent(),
-						this.exec1_1__catalog_getBook.getTraceId() + 100, this.exec1_1__catalog_getBook.getSessionId() + "_",
-						this.exec1_1__catalog_getBook.getEoi() + 100, this.exec1_1__catalog_getBook.getEss() + 100,
-						this.exec1_1__catalog_getBook.getTin() + 100, this.exec1_1__catalog_getBook.getTout(), !this.exec1_1__catalog_getBook.isAssumed());
+		final Execution variationTemplate = new Execution(this.exec1_1__catalog_getBook.getOperation(), this.exec1_1__catalog_getBook.getAllocationComponent(),
+				this.exec1_1__catalog_getBook.getTraceId() + 100, this.exec1_1__catalog_getBook.getSessionId() + "_",
+				this.exec1_1__catalog_getBook.getEoi() + 100, this.exec1_1__catalog_getBook.getEss() + 100,
+				this.exec1_1__catalog_getBook.getTin() + 100, this.exec1_1__catalog_getBook.getTout(), !this.exec1_1__catalog_getBook.isAssumed());
 
 		vLoop: for (final VariationPoint vPoint : VariationPoint.values()) {
 			final ExecutionTrace trace1 = new ExecutionTrace(trace0.getTraceId(), trace0.getSessionId());
@@ -279,7 +278,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	/**
 	 * Tests whether the "well-known" Bookstore trace can be correctly transformed
 	 * from an Execution Trace representation into a Message Trace representation.
-	 * 
+	 *
 	 * @throws InvalidTraceException
 	 *             If the internally assembled execution trace is somehow invalid.
 	 */
@@ -360,7 +359,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	/**
 	 * Make sure that the transformation from an Execution Trace to a Message
 	 * Trace is performed only once.
-	 * 
+	 *
 	 * @throws InvalidTraceException
 	 *             If the internally assembled execution trace is somehow invalid.
 	 */
@@ -376,7 +375,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	/**
 	 * Make sure that the transformation from an Execution Trace to a Message
 	 * Trace is performed only once.
-	 * 
+	 *
 	 * @throws InvalidTraceException
 	 *             If the internally assembled execution trace is somehow invalid.
 	 */
@@ -395,11 +394,11 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	/**
 	 * Creates a broken execution trace version of the "well-known" Bookstore
 	 * trace leads to an exception.
-	 * 
+	 *
 	 * The trace is broken in that the eoi/ess values of an execution with eoi/ess
 	 * [1,1] are replaced by the eoi/ess values [1,3]. Since ess values must only
 	 * increment/decrement by 1, this test must lead to an exception.
-	 * 
+	 *
 	 * @return
 	 * @throws InvalidTraceException
 	 *             If the internally assembled execution trace is somehow invalid.
@@ -422,11 +421,11 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	/**
 	 * Assert that the transformation of a broken execution trace version of the
 	 * "well-known" Bookstore trace leads to an exception.
-	 * 
+	 *
 	 * The trace is broken in that the eoi/ess values of an execution with eoi/ess
 	 * [1,1] are replaced by the eoi/ess values [1,3]. Since ess values must only
 	 * increment/decrement by 1, this test must lead to an exception.
-	 * 
+	 *
 	 * @throws InvalidTraceException
 	 *             If the internally assembled execution trace is somehow invalid.
 	 */
@@ -442,11 +441,11 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	/**
 	 * Creates a broken execution trace version of the "well-known" Bookstore
 	 * trace leads to an exception.
-	 * 
+	 *
 	 * The trace is broken in that the eoi/ess values of an execution with eoi/ess
 	 * [3,2] are replaced by the eoi/ess values [4,2]. Since eoi values must only
 	 * increment by 1, this test must lead to an exception.
-	 * 
+	 *
 	 * @return
 	 * @throws InvalidTraceException
 	 *             If the internally assembled execution trace is somehow invalid.
@@ -469,11 +468,11 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	/**
 	 * Assert that the transformation of a broken execution trace version of the
 	 * "well-known" Bookstore trace leads to an exception.
-	 * 
+	 *
 	 * The trace is broken in that the eoi/ess values of an execution with eoi/ess
 	 * [3,2] are replaced by the eoi/ess values [4,2]. Since eoi values must only
 	 * increment by 1, this test must lead to an exception.
-	 * 
+	 *
 	 * @throws InvalidTraceException
 	 *             If the internally assembled execution trace is somehow invalid.
 	 */

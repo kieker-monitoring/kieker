@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.record.io.BinaryValueDeserializer;
+import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
@@ -31,9 +33,9 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 /**
  * Creates {@link OperationExecutionRecord}s via the available constructors and
  * checks the values passed values via getters.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest {
@@ -54,9 +56,9 @@ public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest
 		final long tout = 33449; // any number will do
 		final int eoi = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI;
 		final int ess = BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS;
-		final OperationExecutionRecord opExecutionRecord =
-				new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK, sessionId, traceId,
-						tin, tout, hostname, eoi, ess);
+		final OperationExecutionRecord opExecutionRecord = new OperationExecutionRecord(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
+				sessionId, traceId,
+				tin, tout, hostname, eoi, ess);
 
 		this.checkTraceId(opExecutionRecord, traceId);
 		this.checkTinTout(opExecutionRecord, tin, tout);
@@ -106,9 +108,9 @@ public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest
 	private void checkToFromBinaryAllFields(final OperationExecutionRecord opExecutionRecord) {
 		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(OperationExecutionRecord.SIZE);
-		opExecutionRecord.writeBytes(buffer, stringRegistry);
+		opExecutionRecord.serialize(BinaryValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
-		final OperationExecutionRecord deserializedRecord = new OperationExecutionRecord(buffer, stringRegistry);
+		final OperationExecutionRecord deserializedRecord = new OperationExecutionRecord(BinaryValueDeserializer.create(buffer, stringRegistry));
 
 		Assert.assertEquals("Records not equal (binary)", opExecutionRecord, deserializedRecord);
 

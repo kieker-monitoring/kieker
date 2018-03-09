@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,10 +95,10 @@ public final class RBridgeControl {
 	public void toTS(final String variable) throws InvalidREvaluationResultException {
 		if (variable != null) {
 			final StringBuffer buf = new StringBuffer();
-			buf.append(variable);
-			buf.append(" <- ts(");
-			buf.append(variable);
-			buf.append(')');
+			buf.append(variable)
+			   .append(" <- ts(")
+			   .append(variable)
+			   .append(')');
 			this.evalWithR(buf.toString());
 		}
 	}
@@ -114,12 +114,12 @@ public final class RBridgeControl {
 	public void toTS(final String variable, final long frequency) throws InvalidREvaluationResultException {
 		if (variable != null) {
 			final StringBuffer buf = new StringBuffer(21);
-			buf.append(variable);
-			buf.append(" <- ts(");
-			buf.append(variable);
-			buf.append(", frequency=");
-			buf.append(frequency);
-			buf.append(')');
+			buf.append(variable)
+			   .append(" <- ts(")
+			   .append(variable)
+			   .append(", frequency=")
+			   .append(frequency)
+			   .append(')');
 			this.evalWithR(buf.toString());
 		}
 	}
@@ -200,8 +200,8 @@ public final class RBridgeControl {
 	 */
 	public void assign(final String variable, final double[] values) throws InvalidREvaluationResultException {
 		final StringBuffer buf = new StringBuffer();
-		buf.append(variable);
-		buf.append(" <- c(");
+		buf.append(variable)
+		   .append(" <- c(");
 		boolean first = true;
 		for (final double item : values) {
 			if (!first) {
@@ -225,8 +225,8 @@ public final class RBridgeControl {
 	 */
 	public void assign(final String variable, final Double[] values) throws InvalidREvaluationResultException {
 		final StringBuffer buf = new StringBuffer();
-		buf.append(variable);
-		buf.append(" <- c(");
+		buf.append(variable)
+		   .append(" <- c(");
 		boolean first = true;
 		for (final Double item : values) {
 			if (!first) {
@@ -254,8 +254,8 @@ public final class RBridgeControl {
 	 */
 	public void assign(final String variable, final Long[] values) throws InvalidREvaluationResultException {
 		final StringBuffer buf = new StringBuffer();
-		buf.append(variable);
-		buf.append(" <- c(");
+		buf.append(variable)
+		   .append(" <- c(");
 		boolean first = true;
 		for (final Long item : values) {
 			if (!first) {

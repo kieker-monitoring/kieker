@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -201,16 +201,14 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 		final MultivaluedMap<String, Object> responseHeader = containerResponse.getHttpHeaders();
 
 		// Pass back trace id, session id, eoi but not ess (use old value before the request)
-		final List<Object> responseHeaderList = new ArrayList<Object>();
+		final List<Object> responseHeaderList = new ArrayList<>();
 		responseHeaderList.add(Long.toString(traceId) + "," + sessionId + "," + Integer.toString(CF_REGISTRY.recallThreadLocalEOI()));
 		responseHeader.put(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER, responseHeaderList);
 		if (LOG.isDebugEnabled()) {
 			LOG.debug("Sending response with header = " + responseHeader.toString() + " to the request: " + containerResponse.getContainerRequest().getRequestUri());
 		}
 
-		final Object retval = thisJoinPoint.proceed();
-
-		return retval;
+		return thisJoinPoint.proceed();
 	}
 
 	private final void unsetKiekerThreadLocalData() {

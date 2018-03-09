@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,31 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.flow.trace.concurrency.monitor;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.concurrency.monitor.AbstractMonitorEvent;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
+
 
 /**
  * @author Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.8
  */
 public class MonitorWaitEvent extends AbstractMonitorEvent  {
+	private static final long serialVersionUID = -8450610362516231950L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
 			 + TYPE_SIZE_INT // AbstractMonitorEvent.lockId
 	;
-	private static final long serialVersionUID = -8450610362516231950L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -46,10 +47,17 @@ public class MonitorWaitEvent extends AbstractMonitorEvent  {
 		int.class, // AbstractMonitorEvent.lockId
 	};
 	
-	/* user-defined constants */
-	/* default constants */
-	/* property declarations */
-
+	
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"lockId",
+	};
+	
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -72,11 +80,14 @@ public class MonitorWaitEvent extends AbstractMonitorEvent  {
 	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #MonitorWaitEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public MonitorWaitEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -84,28 +95,31 @@ public class MonitorWaitEvent extends AbstractMonitorEvent  {
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #MonitorWaitEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected MonitorWaitEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
+	 * @param deserializer
+	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public MonitorWaitEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
+	public MonitorWaitEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		super(deserializer);
 	}
-
+	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -114,25 +128,23 @@ public class MonitorWaitEvent extends AbstractMonitorEvent  {
 			this.getLockId()
 		};
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putLong(this.getTraceId());
-		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(this.getLockId());
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
+		serializer.putLong(this.getTimestamp());
+		serializer.putLong(this.getTraceId());
+		serializer.putInt(this.getOrderIndex());
+		serializer.putInt(this.getLockId());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -140,7 +152,15 @@ public class MonitorWaitEvent extends AbstractMonitorEvent  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -148,6 +168,7 @@ public class MonitorWaitEvent extends AbstractMonitorEvent  {
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -158,18 +179,7 @@ public class MonitorWaitEvent extends AbstractMonitorEvent  {
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -187,5 +197,5 @@ public class MonitorWaitEvent extends AbstractMonitorEvent  {
 		if (this.getLockId() != castedRecord.getLockId()) return false;
 		return true;
 	}
-
+	
 }

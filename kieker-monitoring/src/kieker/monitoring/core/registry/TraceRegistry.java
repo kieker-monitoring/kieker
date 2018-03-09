@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.flow.trace.ApplicationTraceMetadata;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public enum TraceRegistry { // Singleton (Effective Java #3)
@@ -51,15 +52,15 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	/** store the parent Trace. */
 	private final WeakHashMap<Thread, TracePoint> parentTrace = new WeakHashMap<Thread, TracePoint>();
 
-	private final long getId() {
+	private final long getNewId() {
 		return this.unique | this.nextTraceId.getAndIncrement();
 	}
 
 	/**
 	 * Gets a Trace for the current thread. If no trace is active, null is returned.
-	 * 
+	 *
 	 * @return
-	 *         Trace object or null
+	 * 		Trace object or null
 	 */
 	public final TraceMetadata getTrace() {
 		return this.traceStorage.get();
@@ -67,12 +68,12 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 
 	/**
 	 * This creates a new unique Trace object and registers it.
-	 * 
+	 *
 	 * @return
-	 *         Trace object
+	 * 		Trace object
 	 */
-	public final TraceMetadata registerTrace() {
-		final TraceMetadata enclosingTrace = this.traceStorage.get();
+	public final ApplicationTraceMetadata registerTrace() {
+		final TraceMetadata enclosingTrace = this.getTrace();
 		if (enclosingTrace != null) { // we create a subtrace
 			Stack<TraceMetadata> localTraceStack = this.enclosingTraceStack.get();
 			if (localTraceStack == null) {
@@ -83,7 +84,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 		}
 		final Thread thread = Thread.currentThread();
 		final TracePoint tp = this.getAndRemoveParentTraceId(thread);
-		final long traceId = this.getId();
+		final long traceId = this.getNewId();
 		final long parentTraceId;
 		final int parentOrderId;
 		if (tp != null) { // we have a known split point
@@ -100,14 +101,16 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 			parentOrderId = -1;
 		}
 		final String sessionId = SessionRegistry.INSTANCE.recallThreadLocalSessionId();
-		final TraceMetadata trace = new TraceMetadata(traceId, thread.getId(), sessionId, this.hostname, parentTraceId, parentOrderId);
+		final String applicationName = MonitoringController.getInstance().getApplicationName();
+		final ApplicationTraceMetadata trace = new ApplicationTraceMetadata(traceId, thread.getId(), sessionId, this.hostname, parentTraceId, parentOrderId,
+				applicationName);
 		this.traceStorage.set(trace);
 		return trace;
 	}
 
 	/**
 	 * Unregisters the current Trace object.
-	 * 
+	 *
 	 * Future calls of getTrace() will either return null or the enclosing trace object.
 	 */
 	public final void unregisterTrace() {
@@ -133,7 +136,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	/**
 	 * Sets the parent for the next created trace inside this thread.
 	 * This method should be used by probes in connection with SpliEvents.
-	 * 
+	 *
 	 * @param t
 	 *            the thread the new trace belongs to
 	 * @param traceId

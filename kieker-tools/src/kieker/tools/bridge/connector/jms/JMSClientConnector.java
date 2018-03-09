@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package kieker.tools.bridge.connector.jms;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.CharBuffer;
 import java.util.Hashtable;
 import java.util.concurrent.ConcurrentMap;
 
@@ -36,6 +37,8 @@ import javax.naming.NamingException;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.TextValueDeserializer;
 import kieker.tools.bridge.LookupEntity;
 import kieker.tools.bridge.connector.AbstractConnector;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
@@ -44,9 +47,9 @@ import kieker.tools.bridge.connector.ConnectorProperty;
 
 /**
  * Implements a connector for JMS which supports text and binary messages.
- * 
+ *
  * @author Reiner Jung
- * 
+ *
  * @since 1.8
  */
 @ConnectorProperty(cmdName = "jms-client", name = "JMS Client Connector", description = "JMS Client to receive records from a JMS queue.")
@@ -59,7 +62,8 @@ public class JMSClientConnector extends AbstractConnector {
 	/** Property name for the configuration service URI property. */
 	public static final String URI = JMSClientConnector.class.getCanonicalName() + ".uri";
 	/** Property name for the configuration of the JMS connector. */
-	public static final String FACTORY_LOOKUP_NAME = JMSClientConnector.class.getCanonicalName() + ".jmsFactoryLookupName";
+	public static final String FACTORY_LOOKUP_NAME = JMSClientConnector.class.getCanonicalName()
+			+ ".jmsFactoryLookupName";
 	/** Default KDB queue name. */
 	public static final String KIEKER_DATA_BRIDGE_READ_QUEUE = "kieker.tools.bridge";
 
@@ -72,21 +76,22 @@ public class JMSClientConnector extends AbstractConnector {
 	private final String uri;
 
 	private MessageConsumer consumer;
-	private final byte[] buffer = new byte[BUF_LEN];
+	private final byte[] buffer = new byte[JMSClientConnector.BUF_LEN];
 	private Connection connection;
 	private final String jmsFactoryLookupName;
 
 	/**
 	 * Create a JMSClientConnector.
-	 * 
+	 *
 	 * @param configuration
 	 *            Kieker configuration including setup for connectors
-	 * 
+	 *
 	 * @param lookupEntityMap
 	 *            IMonitoringRecord constructor and TYPES-array to id map
 	 * @throws ConnectorDataTransmissionException
 	 */
-	public JMSClientConnector(final Configuration configuration, final ConcurrentMap<Integer, LookupEntity> lookupEntityMap) {
+	public JMSClientConnector(final Configuration configuration,
+			final ConcurrentMap<Integer, LookupEntity> lookupEntityMap) {
 		super(configuration, lookupEntityMap);
 		this.username = this.configuration.getStringProperty(JMSClientConnector.USERNAME);
 		this.password = this.configuration.getStringProperty(JMSClientConnector.PASSWORD);
@@ -96,7 +101,7 @@ public class JMSClientConnector extends AbstractConnector {
 
 	/**
 	 * Initialize the JMS connection to read from a JMS queue.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             if any JMSException occurs
 	 */
@@ -104,7 +109,10 @@ public class JMSClientConnector extends AbstractConnector {
 	public void initialize() throws ConnectorDataTransmissionException {
 		try {
 			// setup connection
-			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOPMD NOCS (IllegalTypeCheck, InitialContext requires Hashtable)
+			final Hashtable<String, String> properties = new Hashtable<>(); // NOPMD NOCS
+																			// (IllegalTypeCheck,
+																			// InitialContext requires
+																			// Hashtable)
 			properties.put(Context.INITIAL_CONTEXT_FACTORY, this.jmsFactoryLookupName);
 			properties.put(Context.PROVIDER_URL, this.uri);
 
@@ -113,7 +121,7 @@ public class JMSClientConnector extends AbstractConnector {
 			this.connection = factory.createConnection();
 
 			final Session session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-			final Destination destination = session.createQueue(KIEKER_DATA_BRIDGE_READ_QUEUE);
+			final Destination destination = session.createQueue(JMSClientConnector.KIEKER_DATA_BRIDGE_READ_QUEUE);
 			this.consumer = session.createConsumer(destination);
 
 			this.connection.start();
@@ -126,7 +134,7 @@ public class JMSClientConnector extends AbstractConnector {
 
 	/**
 	 * Close the JMS connection.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             if any JMSException occurs
 	 */
@@ -140,27 +148,32 @@ public class JMSClientConnector extends AbstractConnector {
 	}
 
 	/**
-	 * Fetch a text or binary message from the JMS queue and use the correct deserializer for the received message.
-	 * 
+	 * Fetch a text or binary message from the JMS queue and use the correct
+	 * deserializer for the received message.
+	 *
 	 * @return One new IMonitoringRecord
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
-	 *             if the message type is neither binary nor text, or if a JMSException occurs
+	 *             if the message type is neither binary nor text, or if a
+	 *             JMSException occurs
 	 * @throws ConnectorEndOfDataException
-	 *             if the received message is null indicating that the consumer is closed
+	 *             if the received message is null indicating that the consumer is
+	 *             closed
 	 */
 	@Override
-	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
-		Message message;
+	public IMonitoringRecord deserializeNextRecord()
+			throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
+		final Message message;
 		try {
 			message = this.consumer.receive();
 			if (message != null) {
 				if (message instanceof BytesMessage) {
 					return this.deserialize((BytesMessage) message);
 				} else if (message instanceof TextMessage) {
-					return this.deserialize(((TextMessage) message).getText().split(";"));
+					return this.deserialize(((TextMessage) message).getText());
 				} else {
-					throw new ConnectorDataTransmissionException("Unsupported message type " + message.getClass().getCanonicalName());
+					throw new ConnectorDataTransmissionException(
+							"Unsupported message type " + message.getClass().getCanonicalName());
 				}
 			} else {
 				throw new ConnectorEndOfDataException("No more records in the queue");
@@ -173,15 +186,16 @@ public class JMSClientConnector extends AbstractConnector {
 
 	/**
 	 * deserialize BinaryMessages and store them in a IMonitoringRecord.
-	 * 
+	 *
 	 * @param message
 	 *            a ByteMessage
 	 * @return A monitoring record for the given ByteMessage
 	 * @throws Exception
 	 *             when the record id is unknown or the composition fails
 	 */
-	private IMonitoringRecord deserialize(final BytesMessage message) throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
-		Integer id;
+	private IMonitoringRecord deserialize(final BytesMessage message)
+			throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
+		final Integer id;
 		try {
 			id = message.readInt();
 			final LookupEntity recordProperty = this.lookupEntityMap.get(id);
@@ -224,7 +238,8 @@ public class JMSClientConnector extends AbstractConnector {
 						if (resultLen == bufLen) {
 							values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
 						} else {
-							throw new ConnectorDataTransmissionException(bufLen + " bytes expected, but only " + resultLen + " bytes received.");
+							throw new ConnectorDataTransmissionException(
+									bufLen + " bytes expected, but only " + resultLen + " bytes received.");
 						}
 					} else { // reference types
 						throw new ConnectorDataTransmissionException("References are not yet supported.");
@@ -252,72 +267,71 @@ public class JMSClientConnector extends AbstractConnector {
 
 	/**
 	 * deserialize String array and store it in a IMonitoringRecord.
-	 * 
-	 * @param attributes
+	 *
+	 * @param message
 	 *            attributes of a text message
 	 * @return A monitoring record for the given String array
 	 * @throws Exception
 	 *             when the record id is unknown or the composition fails
 	 */
-	private IMonitoringRecord deserialize(final String[] attributes) throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
-		if (attributes.length > 0) {
-			final Integer id = Integer.parseInt(attributes[0]);
-			final LookupEntity recordProperty = this.lookupEntityMap.get(id);
-			if (recordProperty != null) {
-				final Object[] values = new Object[recordProperty.getParameterTypes().length];
+	private IMonitoringRecord deserialize(final String message)
+			throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
+		final IValueDeserializer deserializer = TextValueDeserializer.create(CharBuffer.wrap(message.toCharArray()));
+		/** get record id. */
+		final Integer id = deserializer.getInt();
+		final LookupEntity recordProperty = this.lookupEntityMap.get(id);
+		if (recordProperty != null) {
+			final Object[] values = new Object[recordProperty.getParameterTypes().length];
 
-				for (int i = 0; i < recordProperty.getParameterTypes().length; i++) {
-					final Class<?> parameterType = recordProperty.getParameterTypes()[i];
-					if (boolean.class.equals(parameterType)) {
-						values[i] = "t".equals(attributes[i + 1]);
-					} else if (parameterType.equals(Boolean.class)) {
-						values[i] = Boolean.valueOf("t".equals(attributes[i + 1]));
-					} else if (byte.class.equals(parameterType)) {
-						values[i] = Byte.parseByte(attributes[i + 1]);
-					} else if (Byte.class.equals(parameterType)) {
-						values[i] = Byte.valueOf(Byte.parseByte(attributes[i + 1]));
-					} else if (short.class.equals(parameterType)) { // NOPMD
-						values[i] = Short.parseShort(attributes[i + 1]);
-					} else if (Short.class.equals(parameterType)) {
-						values[i] = Short.valueOf(Short.parseShort(attributes[i + 1]));
-					} else if (int.class.equals(parameterType)) {
-						values[i] = Integer.parseInt(attributes[i + 1]);
-					} else if (Integer.class.equals(parameterType)) {
-						values[i] = Integer.valueOf(Integer.parseInt(attributes[i + 1]));
-					} else if (long.class.equals(parameterType)) {
-						values[i] = Long.parseLong(attributes[i + 1]);
-					} else if (Long.class.equals(parameterType)) {
-						values[i] = Long.valueOf(Long.parseLong(attributes[i + 1]));
-					} else if (float.class.equals(parameterType)) {
-						values[i] = Float.parseFloat(attributes[i + 1]);
-					} else if (Float.class.equals(parameterType)) {
-						values[i] = Float.valueOf(Float.parseFloat(attributes[i + 1]));
-					} else if (double.class.equals(parameterType)) {
-						values[i] = Double.parseDouble(attributes[i + 1]);
-					} else if (Double.class.equals(parameterType)) {
-						values[i] = Double.valueOf(Double.parseDouble(attributes[i + 1]));
-					} else if (String.class.equals(parameterType)) {
-						values[i] = attributes[i + 1];
-					} else { // reference types
-						throw new ConnectorDataTransmissionException("References are not yet supported.");
-					}
+			for (int i = 0; i < recordProperty.getParameterTypes().length; i++) {
+				final Class<?> parameterType = recordProperty.getParameterTypes()[i];
+				if (boolean.class.equals(parameterType)) {
+					values[i] = deserializer.getBoolean();
+				} else if (parameterType.equals(Boolean.class)) {
+					values[i] = deserializer.getBoolean();
+				} else if (byte.class.equals(parameterType)) {
+					values[i] = deserializer.getByte();
+				} else if (Byte.class.equals(parameterType)) {
+					values[i] = deserializer.getByte();
+				} else if (short.class.equals(parameterType)) { // NOPMD
+					values[i] = deserializer.getShort();
+				} else if (Short.class.equals(parameterType)) {
+					values[i] = deserializer.getShort();
+				} else if (int.class.equals(parameterType)) {
+					values[i] = deserializer.getInt();
+				} else if (Integer.class.equals(parameterType)) {
+					values[i] = deserializer.getInt();
+				} else if (long.class.equals(parameterType)) {
+					values[i] = deserializer.getLong();
+				} else if (Long.class.equals(parameterType)) {
+					values[i] = deserializer.getLong();
+				} else if (float.class.equals(parameterType)) {
+					values[i] = deserializer.getFloat();
+				} else if (Float.class.equals(parameterType)) {
+					values[i] = deserializer.getFloat();
+				} else if (double.class.equals(parameterType)) {
+					values[i] = deserializer.getDouble();
+				} else if (Double.class.equals(parameterType)) {
+					values[i] = deserializer.getDouble();
+				} else if (String.class.equals(parameterType)) {
+					values[i] = deserializer.getString();
+				} else { // reference types
+					throw new ConnectorDataTransmissionException("References are not yet supported.");
 				}
-				try {
-					return recordProperty.getConstructor().newInstance(values);
-				} catch (final InstantiationException e) {
-					throw new ConnectorDataTransmissionException(e.getMessage(), e);
-				} catch (final IllegalAccessException e) {
-					throw new ConnectorDataTransmissionException(e.getMessage(), e);
-				} catch (final IllegalArgumentException e) {
-					throw new ConnectorDataTransmissionException(e.getMessage(), e);
-				} catch (final InvocationTargetException e) {
-					throw new ConnectorDataTransmissionException(e.getMessage(), e);
-				}
-			} else {
-				throw new ConnectorDataTransmissionException("Record type " + id + " is not registered.");
+			}
+			try {
+				return recordProperty.getConstructor().newInstance(values);
+			} catch (final InstantiationException e) {
+				throw new ConnectorDataTransmissionException(e.getMessage(), e);
+			} catch (final IllegalAccessException e) {
+				throw new ConnectorDataTransmissionException(e.getMessage(), e);
+			} catch (final IllegalArgumentException e) {
+				throw new ConnectorDataTransmissionException(e.getMessage(), e);
+			} catch (final InvocationTargetException e) {
+				throw new ConnectorDataTransmissionException(e.getMessage(), e);
 			}
 		} else {
-			throw new ConnectorDataTransmissionException("Record structure is corrupt");
+			throw new ConnectorDataTransmissionException("Record type " + id + " is not registered.");
 		}
 
 	}

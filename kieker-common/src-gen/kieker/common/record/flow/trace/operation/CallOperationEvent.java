@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2016 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.record.flow.trace.operation;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.Version;
-
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
+import kieker.common.record.io.IValueDeserializer;
+import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
+
 import kieker.common.record.flow.ICallRecord;
 
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
+ * API compatibility: Kieker 1.13.0
  * 
  * @since 1.5
  */
 public class CallOperationEvent extends AbstractOperationEvent implements ICallRecord {
+	private static final long serialVersionUID = 1340141343488227597L;
+
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
@@ -41,7 +43,6 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 			 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
 			 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
 	;
-	private static final long serialVersionUID = 1340141343488227597L;
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -53,14 +54,26 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		String.class, // ICallRecord.calleeClassSignature
 	};
 	
-	/* user-defined constants */
-	/* default constants */
+	
+	/** default constants. */
 	public static final String CALLEE_OPERATION_SIGNATURE = "";
 	public static final String CALLEE_CLASS_SIGNATURE = "";
-	/* property declarations */
+	
+	/** property name array. */
+	private static final String[] PROPERTY_NAMES = {
+		"timestamp",
+		"traceId",
+		"orderIndex",
+		"operationSignature",
+		"classSignature",
+		"calleeOperationSignature",
+		"calleeClassSignature",
+	};
+	
+	/** property declarations. */
 	private final String calleeOperationSignature;
 	private final String calleeClassSignature;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -91,13 +104,16 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 * 
 	 * @param values
 	 *            The values for the record.
+	 *
+	 * @deprecated since 1.13. Use {@link #CallOperationEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	public CallOperationEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
 		this.calleeOperationSignature = (String) values[5];
 		this.calleeClassSignature = (String) values[6];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -105,32 +121,35 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 *            The values for the record.
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
+	 *
+	 * @deprecated since 1.13. Use {@link #CallOperationEvent(IValueDeserializer)} instead.
 	 */
+	@Deprecated
 	protected CallOperationEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
 		this.calleeOperationSignature = (String) values[5];
 		this.calleeClassSignature = (String) values[6];
 	}
 
+	
 	/**
-	 * This constructor converts the given array into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record.
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
+	 * @param deserializer
+	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
 	 */
-	public CallOperationEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.calleeOperationSignature = stringRegistry.get(buffer.getInt());
-		this.calleeClassSignature = stringRegistry.get(buffer.getInt());
+	public CallOperationEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		super(deserializer);
+		this.calleeOperationSignature = deserializer.getString();
+		this.calleeClassSignature = deserializer.getString();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
 	 */
 	@Override
+	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -142,7 +161,6 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 			this.getCalleeClassSignature()
 		};
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -153,21 +171,20 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		stringRegistry.get(this.getCalleeOperationSignature());
 		stringRegistry.get(this.getCalleeClassSignature());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putLong(this.getTraceId());
-		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
-		buffer.putInt(stringRegistry.get(this.getClassSignature()));
-		buffer.putInt(stringRegistry.get(this.getCalleeOperationSignature()));
-		buffer.putInt(stringRegistry.get(this.getCalleeClassSignature()));
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
+		serializer.putLong(this.getTimestamp());
+		serializer.putLong(this.getTraceId());
+		serializer.putInt(this.getOrderIndex());
+		serializer.putString(this.getOperationSignature());
+		serializer.putString(this.getClassSignature());
+		serializer.putString(this.getCalleeOperationSignature());
+		serializer.putString(this.getCalleeClassSignature());
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -175,7 +192,15 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] getValueNames() {
+		return PROPERTY_NAMES; // NOPMD
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -183,6 +208,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -193,18 +219,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
-	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -225,18 +240,21 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		if (!this.getCalleeClassSignature().equals(castedRecord.getCalleeClassSignature())) return false;
 		return true;
 	}
-
+	
 	public final String getCallerOperationSignature() {
 		return this.getOperationSignature();
 	}
+	
 	
 	public final String getCallerClassSignature() {
 		return this.getClassSignature();
 	}
 	
+	
 	public final String getCalleeOperationSignature() {
 		return this.calleeOperationSignature;
 	}
+	
 	
 	public final String getCalleeClassSignature() {
 		return this.calleeClassSignature;

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 public final class StateController extends AbstractController implements IStateController {
@@ -35,22 +35,26 @@ public final class StateController extends AbstractController implements IStateC
 	private volatile boolean monitoringEnabled;
 	private final String name;
 	private final String hostname;
+	private final String applicationName;
 	private final AtomicInteger experimentId = new AtomicInteger(0);
 	private final boolean debug;
 
+	private IStateListener stateListener;
+
 	/**
 	 * Creates a new instance of this class using the given parameter.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration which will be used to initialize the controller.
 	 */
 	protected StateController(final Configuration configuration) {
 		super(configuration);
-		this.name = configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME);
-		this.experimentId.set(configuration.getIntProperty(ConfigurationFactory.EXPERIMENT_ID));
-		this.monitoringEnabled = configuration.getBooleanProperty(ConfigurationFactory.MONITORING_ENABLED);
-		this.debug = configuration.getBooleanProperty(ConfigurationFactory.DEBUG);
-		String hostnameTmp = configuration.getStringProperty(ConfigurationFactory.HOST_NAME);
+		this.name = configuration.getStringProperty(ConfigurationKeys.CONTROLLER_NAME);
+		this.experimentId.set(configuration.getIntProperty(ConfigurationKeys.EXPERIMENT_ID));
+		this.applicationName = configuration.getStringProperty(ConfigurationKeys.APPLICATION_NAME);
+		this.monitoringEnabled = configuration.getBooleanProperty(ConfigurationKeys.MONITORING_ENABLED);
+		this.debug = configuration.getBooleanProperty(ConfigurationKeys.DEBUG);
+		String hostnameTmp = configuration.getStringProperty(ConfigurationKeys.HOST_NAME);
 		if (hostnameTmp.length() == 0) {
 			hostnameTmp = "<UNKNOWN>";
 			try {
@@ -85,13 +89,13 @@ public final class StateController extends AbstractController implements IStateC
 		} else {
 			sb.append("disabled");
 		}
-		sb.append("'\n\tName: '");
-		sb.append(this.name);
-		sb.append("'; Hostname: '");
-		sb.append(this.hostname);
-		sb.append("'; experimentID: '");
-		sb.append(this.getExperimentId());
-		sb.append("'\n");
+		sb.append("'\n\tName: '")
+          .append(this.name)
+          .append("'; Hostname: '")
+          .append(this.hostname)
+          .append("'; experimentID: '")
+          .append(this.getExperimentId())
+          .append("'\n");
 		return sb.toString();
 	}
 
@@ -123,6 +127,11 @@ public final class StateController extends AbstractController implements IStateC
 			return false;
 		}
 		LOG.info("Enabling monitoring");
+
+		if (this.stateListener != null) {
+			this.stateListener.beforeEnableMonitoring();
+		}
+
 		this.monitoringEnabled = true;
 		return true;
 	}
@@ -176,5 +185,13 @@ public final class StateController extends AbstractController implements IStateC
 	@Override
 	public final boolean isDebug() {
 		return this.debug;
+	}
+
+	public void setStateListener(final IStateListener stateListener) {
+		this.stateListener = stateListener;
+	}
+
+	public String getApplicationName() {
+		return this.applicationName;
 	}
 }

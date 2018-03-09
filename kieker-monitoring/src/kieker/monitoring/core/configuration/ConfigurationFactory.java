@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,22 +20,22 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.controller.MonitoringController;
 
 /**
  * A ConfigurationFactory for kieker.monitoring.
- * 
+ *
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
-public final class ConfigurationFactory implements Keys {
+public final class ConfigurationFactory {
 	private static final Log LOG = LogFactory.getLog(ConfigurationFactory.class);
 
 	/**
@@ -46,38 +46,39 @@ public final class ConfigurationFactory implements Keys {
 	// factory methods
 
 	/**
-	 * Creates the configuration for the singleton controller instance. Note
-	 * that the {@link Properties} returned by this method are not a
-	 * singleton instance, i.e., each call returns an equal but not same set of {@link Properties}.
-	 * 
+	 * Creates the configuration for the singleton controller instance. Note that the {@link Properties} returned by
+	 * this method are not a singleton instance, i.e., each call returns an equal but not same set of
+	 * {@link Properties}.
+	 *
 	 * @return the configuration for the singleton controller
 	 */
 	public static final Configuration createSingletonConfiguration() {
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("Searching for JVM argument '" + Keys.CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
+			LOG.debug("Searching for JVM argument '" + ConfigurationKeys.CUSTOM_PROPERTIES_LOCATION_JVM + "' ...");
 		}
 		final Configuration defaultConfiguration = ConfigurationFactory.defaultConfiguration();
 		// ignore default default-name and set to KIEKER-SINGLETON
-		defaultConfiguration.setProperty(Keys.CONTROLLER_NAME, "KIEKER-SINGLETON");
+		defaultConfiguration.setProperty(ConfigurationKeys.CONTROLLER_NAME, "KIEKER-SINGLETON");
 		// Searching for configuration file location passed to JVM
-		String configurationFile = System.getProperty(Keys.CUSTOM_PROPERTIES_LOCATION_JVM);
+		String configurationFile = System.getProperty(ConfigurationKeys.CUSTOM_PROPERTIES_LOCATION_JVM);
 		final Configuration loadConfiguration;
 		if (configurationFile != null) {
 			LOG.info("Loading configuration from JVM-specified location: '" + configurationFile + "'");
 			loadConfiguration = ConfigurationFactory.loadConfigurationFromFile(configurationFile, defaultConfiguration);
 		} else {
 			// No JVM property; Trying to find configuration file in classpath
-			configurationFile = Keys.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
+			configurationFile = ConfigurationKeys.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
 			LOG.info("Loading properties from properties file in classpath: '" + configurationFile + "'");
-			loadConfiguration = ConfigurationFactory.loadConfigurationFromResource(configurationFile, defaultConfiguration);
+			loadConfiguration = ConfigurationFactory.loadConfigurationFromResource(configurationFile,
+					defaultConfiguration);
 		}
 		// 1.JVM-params -> 2.properties file -> 3.default properties file
-		return ConfigurationFactory.getSystemPropertiesStartingWith(Keys.PREFIX, loadConfiguration);
+		return ConfigurationFactory.getSystemPropertiesStartingWith(ConfigurationKeys.PREFIX, loadConfiguration);
 	}
 
 	/**
 	 * Returns an empty properties map with a fallback on the default configuration.
-	 * 
+	 *
 	 * @return default configuration
 	 */
 	public static final Configuration createDefaultConfiguration() {
@@ -85,41 +86,42 @@ public final class ConfigurationFactory implements Keys {
 	}
 
 	/**
-	 * Creates a new configuration based on the given properties file with fallback on the default values.
-	 * If the file does not exists, a warning is logged and an empty configuration with fallback on
-	 * the default configuration is returned.
-	 * 
+	 * Creates a new configuration based on the given properties file with fallback on the default values. If the file
+	 * does not exists, a warning is logged and an empty configuration with fallback on the default configuration is
+	 * returned.
+	 *
 	 * @param configurationFile
 	 *            The file which contains the configuration.
-	 * 
+	 *
 	 * @return The created Configuration
 	 */
 	public static final Configuration createConfigurationFromFile(final String configurationFile) {
-		return ConfigurationFactory.loadConfigurationFromFile(configurationFile, ConfigurationFactory.defaultConfiguration());
+		return ConfigurationFactory.loadConfigurationFromFile(configurationFile,
+				ConfigurationFactory.defaultConfiguration());
 	}
 
 	/**
 	 * Returns a properties map with the default configuration.
-	 * 
+	 *
 	 * @return The created Configuration
 	 */
 	private static final Configuration defaultConfiguration() {
-		return ConfigurationFactory.loadConfigurationFromResource(Keys.DEFAULT_PROPERTIES_LOCATION_CLASSPATH, null);
+		return ConfigurationFactory.loadConfigurationFromResource(ConfigurationKeys.DEFAULT_PROPERTIES_LOCATION_CLASSPATH, null);
 	}
 
 	/**
-	 * Returns the properties loaded from file propertiesFn with fallback on the default values.
-	 * If the file does not exists, a warning is logged and an empty configuration with fallback on
-	 * the default configuration is returned.
-	 * 
+	 * Returns the properties loaded from file propertiesFn with fallback on the default values. If the file does not
+	 * exists, a warning is logged and an empty configuration with fallback on the default configuration is returned.
+	 *
 	 * @param propertiesFn
 	 *            The file which contains the properties.
 	 * @param defaultValues
 	 *            The configuration containing the default values.
-	 * 
+	 *
 	 * @return The created Configuration
 	 */
-	private static final Configuration loadConfigurationFromFile(final String propertiesFn, final Configuration defaultValues) {
+	private static final Configuration loadConfigurationFromFile(final String propertiesFn,
+			final Configuration defaultValues) {
 		final Configuration properties = new Configuration(defaultValues);
 		InputStream is = null; // NOPMD (null)
 		try {
@@ -127,15 +129,16 @@ public final class ConfigurationFactory implements Keys {
 				is = new FileInputStream(propertiesFn);
 			} catch (final FileNotFoundException ex) {
 				// if not found as absolute path try within the classpath
-				is = MonitoringController.class.getClassLoader().getResourceAsStream(propertiesFn);
-				if (is == null) {
+				final URL resourceUrl = ConfigurationFactory.loadKiekerPropertiesFile(propertiesFn);
+				if (resourceUrl == null) {
 					LOG.warn("File '" + propertiesFn + "' not found");
 					return new Configuration(defaultValues);
 				}
+				is = resourceUrl.openStream();
 			}
 			properties.load(is);
 			return properties;
-		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
+		} catch (final IOException ex) {
 			LOG.error("Error reading file '" + propertiesFn + "'", ex);
 		} finally {
 			if (is != null) {
@@ -150,50 +153,59 @@ public final class ConfigurationFactory implements Keys {
 	}
 
 	/**
-	 * Returns the properties loaded from the resource name with fallback on the default values.
-	 * If the file does not exists, a warning is logged and an empty configuration with fallback on
-	 * the default configuration is returned.
-	 * 
+	 * Returns the properties loaded from the resource name with fallback on the default values. If the file does not
+	 * exists, a warning is logged and an empty configuration with fallback on the default configuration is returned.
+	 *
 	 * @param propertiesFn
 	 *            The resource name which contains the properties.
 	 * @param defaultValues
 	 *            The configuration containing the default values.
-	 * 
+	 *
 	 * @return The created Configuration
 	 */
-	private static final Configuration loadConfigurationFromResource(final String propertiesFn, final Configuration defaultValues) {
-		final InputStream is = MonitoringController.class.getClassLoader().getResourceAsStream(propertiesFn);
-		if (is == null) {
+	private static final Configuration loadConfigurationFromResource(final String propertiesFn,
+			final Configuration defaultValues) {
+		final URL resourceUrl = ConfigurationFactory.loadKiekerPropertiesFile(propertiesFn);
+		if (resourceUrl == null) {
 			LOG.warn("File '" + propertiesFn + "' not found in classpath");
 		} else {
-			try {
+			try (final InputStream is = resourceUrl.openStream()) {
 				final Configuration properties = new Configuration(defaultValues);
 				properties.load(is);
 				return properties;
-			} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
+			} catch (final IOException ex) {
 				LOG.error("Error reading file '" + propertiesFn + "'", ex);
-			} finally {
-				try {
-					is.close();
-				} catch (final IOException ex) {
-					LOG.warn("Failed to close RessourceInputStream", ex);
-				}
 			}
 		}
 		return new Configuration(defaultValues);
 	}
 
 	/**
+	 * @param propertiesFileName
+	 *            the relative file name within the class path
+	 * @return A {@link java.net.URL} object or null if no resource with this name is found
+	 */
+	private static URL loadKiekerPropertiesFile(final String propertiesFileName) {
+		String resourceName = propertiesFileName;
+		if (!resourceName.startsWith("/")) {
+			// Class.getResource(..) requires a "/" at the beginning to load non-class resources
+			resourceName = "/" + resourceName;
+		}
+		return ConfigurationFactory.class.getResource(resourceName);
+	}
+
+	/**
 	 * Returns the system properties starting with the given prefix.
-	 * 
+	 *
 	 * @param prefix
 	 *            The prefix to search for.
 	 * @param defaultValues
 	 *            The configuration containing the default values.
-	 * 
+	 *
 	 * @return The created Configuration
 	 */
-	private static final Configuration getSystemPropertiesStartingWith(final String prefix, final Configuration defaultValues) {
+	private static final Configuration getSystemPropertiesStartingWith(final String prefix,
+			final Configuration defaultValues) {
 		final Configuration configuration = new Configuration(defaultValues);
 		final Properties properties = System.getProperties();
 		final Enumeration<?> keys = properties.propertyNames();

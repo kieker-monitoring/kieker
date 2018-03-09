@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,12 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Andre van Hoorn, Jan Waller, Nils Christian Ehmke
@@ -54,7 +53,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> CACHED_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>(); // NOCS
 	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Class<?>[]> CACHED_KIEKERRECORD_TYPES = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Class<?>[]>(); // NOCS
 	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Constructor<? extends IMonitoringRecord>> CACHED_KIEKERRECORD_CONSTRUCTORS_OBJECT = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Constructor<? extends IMonitoringRecord>>(); // NOCS
-	private static final ConcurrentMap<Integer, Constructor<? extends IMonitoringRecord>> CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY = new ConcurrentHashMap<Integer, Constructor<? extends IMonitoringRecord>>(); // NOCS
 
 	// added by chw; differs only in the key type: from integer to string
 	private static final ConcurrentMap<String, Constructor<? extends IMonitoringRecord>> CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY_CHW = new ConcurrentHashMap<String, Constructor<? extends IMonitoringRecord>>(); // NOCS
@@ -72,6 +70,16 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		CACHED_KIEKERRECORDS.put("kieker.common.record.flow.trace.Trace", kieker.common.record.flow.trace.TraceMetadata.class);
 	}
 
+	/**
+	 * Checks whether two double values are equal or not.
+	 *
+	 * @param x
+	 *            first value
+	 * @param y
+	 *            second values
+	 *
+	 * @return returns true if the values differ
+	 */
 	protected static boolean isNotEqual(final double x, final double y) {
 		final double diff = x - y;
 		// if (diff <= 0.0D) {
@@ -82,6 +90,16 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		return (diff < (0.0D - VALID_VARIANCE_DOUBLE)) || (diff > VALID_VARIANCE_DOUBLE);
 	}
 
+	/**
+	 * Checks whether two float values are equal or not.
+	 *
+	 * @param x
+	 *            first value
+	 * @param y
+	 *            second values
+	 *
+	 * @return returns true if the values differ
+	 */
 	protected static boolean isNotEqual(final float x, final float y) {
 		final float diff = x - y;
 		// if (diff <= 0.0F) {
@@ -435,61 +453,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	}
 
 	/**
-	 * This method creates a new monitoring record from a byte buffer containing a serialized record.
-	 *
-	 * @param clazzid
-	 *            The class id of the monitoring record.
-	 * @param buffer
-	 *            The byte buffer containing the data.
-	 * @param stringRegistry
-	 *            the string registry used to find the correct strings for the given string ids in the serialization.
-	 *
-	 * @return An initialized record instance.
-	 *
-	 * @throws MonitoringRecordException
-	 *             If this method failed to create the record for some reason.
-	 * @throws BufferUnderflowException
-	 *             If the byte buffer is to small to hold all necessary information for a record.
-	 */
-	public static final IMonitoringRecord createFromByteBuffer(final int clazzid, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
-			throws MonitoringRecordException, BufferUnderflowException {
-		try {
-			Constructor<? extends IMonitoringRecord> constructor = CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY.get(clazzid);
-			if (constructor == null) {
-				final String recordClassName = stringRegistry.get(clazzid);
-				final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(recordClassName);
-				if (IMonitoringRecord.BinaryFactory.class.isAssignableFrom(clazz)) {
-					// Factory interface present
-					constructor = clazz.getConstructor(ByteBuffer.class, IRegistry.class);
-					CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY.putIfAbsent(clazzid, constructor);
-				} else {
-					// try ordinary method
-					final IMonitoringRecord record = clazz.newInstance();
-					record.initFromBytes(buffer, stringRegistry);
-					return record;
-				}
-			}
-			return constructor.newInstance(buffer, stringRegistry);
-		} catch (final SecurityException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + stringRegistry.get(clazzid), ex);
-		} catch (final NoSuchMethodException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + stringRegistry.get(clazzid), ex);
-		} catch (final IllegalArgumentException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + stringRegistry.get(clazzid), ex);
-		} catch (final InstantiationException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + stringRegistry.get(clazzid), ex);
-		} catch (final IllegalAccessException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + stringRegistry.get(clazzid), ex);
-		} catch (final InvocationTargetException ex) {
-			final Throwable cause = ex.getCause();
-			if (cause instanceof BufferUnderflowException) {
-				throw (BufferUnderflowException) cause;
-			}
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + stringRegistry.get(clazzid), ex);
-		}
-	}
-
-	/**
 	 * This method creates a new monitoring record from the given data encoded in strings.
 	 *
 	 * @param clazz
@@ -534,11 +497,35 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
-	public static final IMonitoringRecord createFromByteBuffer(final String recordClassName, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
+	/**
+	 * Create monitoring record based on class name and a given value deserializer.
+	 *
+	 * @param recordClassName
+	 *            record class name
+	 * @param deserializer
+	 *            the derserializer
+	 * @return a monitoring record
+	 * @throws BufferUnderflowException
+	 *             on buffer read errors
+	 * @throws MonitoringRecordException
+	 *             when no record could be constructed
+	 */
+	public static final IMonitoringRecord createFromDeserializer(final String recordClassName, final IValueDeserializer deserializer)
 			throws BufferUnderflowException, MonitoringRecordException {
-		return AbstractMonitoringRecord.createFromByteBufferChw(recordClassName, buffer, stringRegistry);
+		return AbstractMonitoringRecord.createFromDeserializerChw(recordClassName, deserializer);
 	}
 
+	/**
+	 * Create monitoring record based on an value array and a given record class name.
+	 *
+	 * @param recordClassName
+	 *            record class name
+	 * @param values
+	 *            the value array
+	 * @return a monitoring record
+	 * @throws MonitoringRecordException
+	 *             when no record could be constructed
+	 */
 	public static final IMonitoringRecord createFromArray(final String recordClassName, final Object[] values) throws MonitoringRecordException {
 		final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(recordClassName);
 		return AbstractMonitoringRecord.createFromArray(clazz, values);
@@ -547,40 +534,40 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	/**
 	 * Copy of {@link #createFromByteBuffer}. However, the constructor cache's key is a string, not an integer
 	 */
-	private static final IMonitoringRecord createFromByteBufferChw(final String recordClassName, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
+	private static final IMonitoringRecord createFromDeserializerChw(final String recordClassName, final IValueDeserializer deserializer)
 			throws MonitoringRecordException, BufferUnderflowException {
 		try {
 			Constructor<? extends IMonitoringRecord> constructor = CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY_CHW.get(recordClassName);
+
 			if (constructor == null) {
 				final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(recordClassName);
 				if (IMonitoringRecord.BinaryFactory.class.isAssignableFrom(clazz)) {
 					// Factory interface present
-					constructor = clazz.getConstructor(ByteBuffer.class, IRegistry.class);
+					constructor = clazz.getConstructor(IValueDeserializer.class);
 					CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY_CHW.putIfAbsent(recordClassName, constructor);
 				} else {
-					// try ordinary method
-					final IMonitoringRecord record = clazz.newInstance();
-					record.initFromBytes(buffer, stringRegistry);
-					return record;
+					// Init methods are no longer supported
+					throw new MonitoringRecordException("No factory for record type " + recordClassName + ".");
 				}
 			}
-			return constructor.newInstance(buffer, stringRegistry);
+
+			return constructor.newInstance(deserializer);
 		} catch (final SecurityException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + stringRegistry.get(recordClassName), ex);
+			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + recordClassName, ex);
 		} catch (final NoSuchMethodException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + stringRegistry.get(recordClassName), ex);
+			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + recordClassName, ex);
 		} catch (final IllegalArgumentException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + stringRegistry.get(recordClassName), ex);
+			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + recordClassName, ex);
 		} catch (final InstantiationException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + stringRegistry.get(recordClassName), ex);
+			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + recordClassName, ex);
 		} catch (final IllegalAccessException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + stringRegistry.get(recordClassName), ex);
+			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + recordClassName, ex);
 		} catch (final InvocationTargetException ex) {
 			final Throwable cause = ex.getCause();
 			if (cause instanceof BufferUnderflowException) {
 				throw (BufferUnderflowException) cause;
 			}
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + stringRegistry.get(recordClassName), ex);
+			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + recordClassName, ex);
 		}
 	}
 

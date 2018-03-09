@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,9 +32,9 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 
 /**
  * Formatter for operation dependency graphs on the allocation level (see {@link OperationAllocationDependencyGraph}).
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public class OperationAllocationDependencyGraphFormatter extends AbstractOperationDependencyGraphFormatter<OperationAllocationDependencyGraph> {
@@ -85,8 +85,8 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 	private static String createAllocationComponentNodeLabel(final AllocationComponent component, final boolean useShortLabels) {
 		final StringBuilder builder = new StringBuilder();
 
-		builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ALLOCATION_COMPONENT).append("\\n");
-		builder.append(component.getAssemblyComponent().getName()).append(':');
+		builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ALLOCATION_COMPONENT).append("\\n")
+		       .append(component.getAssemblyComponent().getName()).append(':');
 
 		if (useShortLabels) {
 			builder.append("..");
@@ -166,7 +166,7 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 							null, // imagefilename
 							null, // misc
 							node.getDescription() // tooltip
-							));
+					));
 				}
 
 				builder.append("}\n");

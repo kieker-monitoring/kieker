@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@ import kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseOutInterceptor;
 
 /**
  * Tests the CXF interceptors with a previously registered Session ID.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 public class TestCXFClientServerInterceptorsSessionRegisteredBefore extends AbstractTestCXFClientServerInterceptors {
@@ -88,6 +88,7 @@ public class TestCXFClientServerInterceptorsSessionRegisteredBefore extends Abst
 				break;
 			default:
 				Assert.fail("Unexpected record" + opRec);
+				break;
 			}
 		}
 	}

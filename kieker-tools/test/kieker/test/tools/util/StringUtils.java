@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import org.junit.Assert;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.7
  */
 public final class StringUtils {
@@ -41,12 +41,12 @@ public final class StringUtils {
 
 	/**
 	 * A simple helper method reading the given file's content as a string (UTF-8).
-	 * 
+	 *
 	 * @param outputFile
 	 *            The file to read.
-	 * 
+	 *
 	 * @return A string representation of the file's content.
-	 * 
+	 *
 	 * @throws IOException
 	 *             If something went wrong during the reading.
 	 */
@@ -65,4 +65,5 @@ public final class StringUtils {
 		}
 		return new String(buffer, ENCODING);
 	}
+
 }

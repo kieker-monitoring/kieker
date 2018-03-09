@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,13 @@ import org.junit.After;
 import org.junit.Before;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.writer.PrintStreamWriter;
+import kieker.monitoring.writer.print.PrintStreamWriter;
 
 import kieker.test.tools.util.StringTeePrintStream;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterTest {
@@ -47,7 +47,7 @@ public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterT
 
 	/**
 	 * Initializes the test setup.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If something went wrong during the initialization.
 	 */
@@ -60,7 +60,7 @@ public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterT
 
 	/**
 	 * Cleans up after the test.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If something went wrong.
 	 */

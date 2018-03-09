@@ -1,4 +1,10 @@
-/build-eclipse/
+# do not ignore the whole ".settings" folder. For example, save actions should be used by all contributors (see org.eclipse.jdt.ui.prefs).
+**/.settings/edu.umd.cs.findbugs.core.prefs
+**/.settings/org.eclipse.buildship.core.prefs
+**/.settings/org.eclipse.jdt.core.prefs
+.project
+.classpath
+build-eclipse/
 /build/
 /dist/
 /tmp/
@@ -13,8 +19,6 @@ plugin.xml
 /activemq-data
 /invalidTraceArtifacts-yyyyMMdd-HHmmssSSS.txt
 /messageTraces-yyyyMMdd-HHmmssSSS.txt
-/examples/JavaEEServletContainerExample/livedemo/build-eclipse
-/.gradle
 /kieker-analysis/build
 /kieker-common/build
 /kieker-monitoring/build
@@ -28,9 +32,10 @@ plugin.xml
 /kieker-analysis/*.log
 /kieker-checkstyle-extension/build
 /docs
-/build-eclipse/
 /javadoc
-**/.gradle
+.gradle
+/src-gen
+/test-gen
 
 # IntelliJ
 .idea/

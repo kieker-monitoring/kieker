@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@ public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {
 		final PrintStream mapStream = new PrintStream(new FileOutputStream(mapFile), false, FSUtil.ENCODING);
 		mapStream.print(MAP_FILE);
 		mapStream.close();
-		final File datFile = this.tmpFolder.newFile(FSUtil.FILE_PREFIX + FSUtil.NORMAL_FILE_EXTENSION);
+		final File datFile = this.tmpFolder.newFile(FSUtil.FILE_PREFIX + FSUtil.DAT_FILE_EXTENSION);
 		final PrintStream datStream = new PrintStream(new FileOutputStream(datFile), false, FSUtil.ENCODING);
 		datStream.print(DAT_FILE);
 		datStream.close();
