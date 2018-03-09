@@ -27,9 +27,9 @@ import java.util.TimeZone;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.AbstractCommandLineTool;
 
 /**
@@ -42,7 +42,7 @@ import kieker.tools.AbstractCommandLineTool;
 @SuppressWarnings("static-access")
 public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool {
 
-	private static final Log LOG = LogFactory.getLog(FilesystemLogReplayerStarter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(FilesystemLogReplayerStarter.class);
 
 	private static final String CMD_OPT_NAME_MONITORING_CONFIGURATION = "monitoring.configuration";
 	private static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
@@ -140,7 +140,7 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 		// 1.) init inputDirs
 		this.inputDirs = commandLine.getOptionValues(CMD_OPT_NAME_INPUTDIRS);
 		if (this.inputDirs == null) {
-			LOG.error("No input directory configured");
+			LOGGER.error("No input directory configured");
 			retVal = false;
 		}
 
@@ -148,17 +148,15 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 		final String keepOriginalLoggingTimestampsOptValStr = commandLine.getOptionValue(
 				CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS, "true");
 		if (!("true".equals(keepOriginalLoggingTimestampsOptValStr) || "false".equals(keepOriginalLoggingTimestampsOptValStr))) {
-			LOG.error("Invalid value for option " + CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS + ": '" + keepOriginalLoggingTimestampsOptValStr + "'");
+			LOGGER.error("Invalid value for option {}: '{}'", CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS, keepOriginalLoggingTimestampsOptValStr);
 			retVal = false;
 		}
 		this.keepOriginalLoggingTimestamps = "true".equals(keepOriginalLoggingTimestampsOptValStr);
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Keeping original logging timestamps: " + (this.keepOriginalLoggingTimestamps ? "true" : "false")); // NOCS
-		}
+		LOGGER.debug("Keeping original logging timestamps: {}", (this.keepOriginalLoggingTimestamps ? "true" : "false")); // NOCS
 		// 3.) init realtimeMode
 		final String realtimeOptValStr = commandLine.getOptionValue(CMD_OPT_NAME_REALTIME, "false");
 		if (!("true".equals(realtimeOptValStr) || "false".equals(realtimeOptValStr))) {
-			LOG.error("Invalid value for option " + CMD_OPT_NAME_REALTIME + ": '" + realtimeOptValStr + "'");
+			LOGGER.error("Invalid value for option {}: '{}'", CMD_OPT_NAME_REALTIME, realtimeOptValStr);
 			retVal = false;
 		}
 		this.realtimeMode = "true".equals(realtimeOptValStr);
@@ -169,13 +167,13 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 		try {
 			this.numRealtimeWorkerThreads = Integer.parseInt(numRealtimeWorkerThreadsStr);
 		} catch (final NumberFormatException ex) {
-			LOG.error("Invalid value for option " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + ": '" + numRealtimeWorkerThreadsStr + "'");
-			LOG.error("NumberFormatException: ", ex);
+			LOGGER.error("Invalid value for option {}: '{}'", CMD_OPT_NAME_NUM_REALTIME_WORKERS, numRealtimeWorkerThreadsStr);
+			LOGGER.error("NumberFormatException: ", ex);
 			retVal = false;
 		}
 		if (this.numRealtimeWorkerThreads < 1) {
-			LOG.error("Option value for " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + " must be >= 1; found " + this.numRealtimeWorkerThreads);
-			LOG.error("Invalid specification of " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + ":" + this.numRealtimeWorkerThreads);
+			LOGGER.error("Option value for {} must be >= 1; found {}", CMD_OPT_NAME_NUM_REALTIME_WORKERS, this.numRealtimeWorkerThreads);
+			LOGGER.error("Invalid specification of {}: {}", CMD_OPT_NAME_NUM_REALTIME_WORKERS, this.numRealtimeWorkerThreads);
 			retVal = false;
 		}
 
@@ -185,14 +183,13 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 		try {
 			this.realtimeAccelerationFactor = Double.parseDouble(realtimeAccelerationFactorStr);
 		} catch (final NumberFormatException ex) {
-			LOG.error("Invalid value for option " + CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR + ": '" + numRealtimeWorkerThreadsStr + "'");
-			LOG.error("NumberFormatException: ", ex);
+			LOGGER.error("Invalid value for option {}: '{}'", CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR, numRealtimeWorkerThreadsStr);
+			LOGGER.error("NumberFormatException: ", ex);
 			retVal = false;
 		}
 		if (this.numRealtimeWorkerThreads <= 0) {
-			LOG.error("Option value for " + CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR + " must be > 0; found "
-					+ this.realtimeAccelerationFactor);
-			LOG.error("Invalid specification of " + CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR + ":" + this.realtimeAccelerationFactor);
+			LOGGER.error("Option value for {} must be > 0; found {}", CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR, this.realtimeAccelerationFactor);
+			LOGGER.error("Invalid specification of {}: {}", CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR, this.realtimeAccelerationFactor);
 			retVal = false;
 		}
 
@@ -208,30 +205,24 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 			if (ignoreRecordsBeforeTimestampString != null) {
 				final Date ignoreBeforeDate = dateFormat.parse(ignoreRecordsBeforeTimestampString);
 				this.ignoreRecordsBeforeTimestamp = ignoreBeforeDate.getTime() * (1000 * 1000);
-				if (LOG.isDebugEnabled()) {
-					LOG.debug("Ignoring records before " + dateFormat.format(ignoreBeforeDate) + " (" + this.ignoreRecordsBeforeTimestamp + ")");
-				}
+				LOGGER.debug("Ignoring records before {} ({})", dateFormat.format(ignoreBeforeDate), this.ignoreRecordsBeforeTimestamp);
 			}
 			if (ignoreRecordsAfterTimestampString != null) {
 				final Date ignoreAfterDate = dateFormat.parse(ignoreRecordsAfterTimestampString);
 				this.ignoreRecordsAfterTimestamp = ignoreAfterDate.getTime() * (1000 * 1000);
-				if (LOG.isDebugEnabled()) {
-					LOG.debug("Ignoring records after " + dateFormat.format(ignoreAfterDate) + " (" + this.ignoreRecordsAfterTimestamp + ")");
-				}
+				LOGGER.debug("Ignoring records after {} ({})", dateFormat.format(ignoreAfterDate), this.ignoreRecordsAfterTimestamp);
 			}
 		} catch (final java.text.ParseException ex) {
-			final String erorMsg = "Error parsing date/time string. Please use the following pattern: "
-					+ DATE_FORMAT_PATTERN_CMD_USAGE_HELP;
-			LOG.error(erorMsg, ex);
+			LOGGER.error("Error parsing date/time string. Please use the following pattern: {}", DATE_FORMAT_PATTERN_CMD_USAGE_HELP, ex);
 			return false;
 		}
 
 		// log configuration
-		if (retVal && LOG.isDebugEnabled()) {
-			LOG.debug("inputDirs: " + FilesystemLogReplayerStarter.fromStringArrayToDeliminedString(this.inputDirs, ';'));
-			LOG.debug("Replaying in " + (this.realtimeMode ? "" : "non-") + "realtime mode"); // NOCS
+		if (retVal && LOGGER.isDebugEnabled()) {
+			LOGGER.debug("inputDirs: {}", FilesystemLogReplayerStarter.fromStringArrayToDeliminedString(this.inputDirs, ';'));
+			LOGGER.debug("Replaying in {} realtime mode", (this.realtimeMode ? "" : "non-")); // NOCS
 			if (this.realtimeMode) {
-				LOG.debug("Using " + this.numRealtimeWorkerThreads + " realtime worker thread" + (this.numRealtimeWorkerThreads > 1 ? "s" : "")); // NOCS
+				LOGGER.debug("Using {} realtime worker thread {}", this.numRealtimeWorkerThreads, (this.numRealtimeWorkerThreads > 1 ? "s" : "")); // NOCS
 			}
 		}
 
@@ -240,11 +231,11 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 
 	@Override
 	protected boolean performTask() {
-		if (LOG.isDebugEnabled()) {
+		if (LOGGER.isDebugEnabled()) {
 			if (this.realtimeMode) {
-				LOG.debug("Replaying log data in real time");
+				LOGGER.debug("Replaying log data in real time");
 			} else {
-				LOG.debug("Replaying log data in non-real time");
+				LOGGER.debug("Replaying log data in non-real time");
 			}
 		}
 
@@ -255,7 +246,7 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 		if (player.replay()) {
 			return true;
 		} else {
-			LOG.error("An error occured");
+			LOGGER.error("An error occured");
 			return false;
 		}
 	}
