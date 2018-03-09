@@ -19,6 +19,9 @@ package kieker.test.tools.manual;
 import java.io.File;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -27,21 +30,19 @@ import kieker.analysis.plugin.filter.forward.TeeFilter;
 import kieker.analysis.plugin.reader.tcp.TCPReader;
 import kieker.analysis.plugin.reader.timer.TimeReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 // Command-Line:
 // java -javaagent:lib/kieker-1.14-SNAPSHOT-aspectj.jar -Dkieker.monitoring.writer=kieker.monitoring.writer.tcp.TCPWriter
 // -Dkieker.monitoring.writer.tcp.TCPWriter.QueueFullBehavior=1 -jar MooBench.jar --recursiondepth 10 --totalthreads 1 --methodtime 0 --output-filename raw.csv
 // --totalcalls 10000000
 /**
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.8
  */
 public final class TestTCPReader {
-	private static final Log LOG = LogFactory.getLog(TestTCPReader.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestTCPReader.class);
 
 	private static final String KAX_FILENAME = "tmp/testproject.kax";
 
@@ -53,7 +54,7 @@ public final class TestTCPReader {
 		try {
 			analysisController.run();
 		} catch (final AnalysisConfigurationException ex) {
-			TestTCPReader.LOG.error("Failed to start the example project.", ex);
+			TestTCPReader.LOGGER.error("Failed to start the example project.", ex);
 		}
 	}
 
@@ -87,14 +88,14 @@ public final class TestTCPReader {
 			analysisController.connect(teeFilter1, TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, countingFilter1, AnalysisThroughputFilter.INPUT_PORT_NAME_OBJECTS);
 			analysisController.connect(countingFilter1, AnalysisThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT, teeFilter2, TeeFilter.INPUT_PORT_NAME_EVENTS);
 		} catch (final AnalysisConfigurationException ex) {
-			TestTCPReader.LOG.error("Failed to wire the example project.", ex);
+			TestTCPReader.LOGGER.error("Failed to wire the example project.", ex);
 		}
 		try {
 			analysisController.saveToFile(new File(TestTCPReader.KAX_FILENAME));
 		} catch (final IOException ex) {
-			TestTCPReader.LOG.error("Failed to save configuration to " + TestTCPReader.KAX_FILENAME, ex);
+			TestTCPReader.LOGGER.error("Failed to save configuration to {}", TestTCPReader.KAX_FILENAME, ex);
 		} catch (final AnalysisConfigurationException ex) {
-			TestTCPReader.LOG.error("Failed to save configuration to " + TestTCPReader.KAX_FILENAME, ex);
+			TestTCPReader.LOGGER.error("Failed to save configuration to {}", TestTCPReader.KAX_FILENAME, ex);
 		}
 	}
 }
