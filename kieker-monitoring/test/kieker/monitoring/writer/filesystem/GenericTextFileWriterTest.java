@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.core.StringStartsWith;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -263,7 +264,7 @@ public class GenericTextFileWriterTest {
 
 		final FileWriter writer = new FileWriter(this.configuration);
 
-		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(passedConfigPathName));
+		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), StringStartsWith.startsWith(passedConfigPathName));
 	}
 
 	/**
@@ -277,7 +278,7 @@ public class GenericTextFileWriterTest {
 		final FileWriter writer = new FileWriter(this.configuration);
 
 		final String defaultDir = System.getProperty("java.io.tmpdir");
-		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
+		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), StringStartsWith.startsWith(defaultDir));
 	}
 
 	/**
@@ -293,7 +294,7 @@ public class GenericTextFileWriterTest {
 		final FileWriter writer = new FileWriter(this.configuration);
 
 		final String defaultDir = System.getProperty("java.io.tmpdir");
-		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
+		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), StringStartsWith.startsWith(defaultDir));
 	}
 
 }

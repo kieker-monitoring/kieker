@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.core.StringContains;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -81,7 +82,7 @@ public class BasicPrintStreamWriterTestFile {
 			final String curLine = inputRecordStringBuilder.toString();
 
 			// "Record '" + curLine + "' not found in output stream: '" + outputString + "'"
-			Assert.assertThat(fileContentAsString, CoreMatchers.containsString(curLine));
+			Assert.assertThat(fileContentAsString, StringContains.containsString(curLine));
 		}
 	}
 
