@@ -16,8 +16,9 @@
 
 package kieker.tools.opad.timeseries.forecast;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.tools.opad.timeseries.ITimeSeries;
 import kieker.tools.opad.timeseries.TimeSeries;
 
@@ -33,7 +34,7 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 	/**
 	 * Get Logger for this class.
 	 */
-	private static final Log LOG = LogFactory.getLog(AbstractForecaster.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractForecaster.class);
 
 	private static final boolean CONFIDENCE_SUPPORTED_BY_DEFAULT = true;
 
@@ -71,7 +72,7 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 		final ITimeSeries<T> history = this.getTsOriginal();
 
 		final long startTime = history.getStartTime();
-		final TimeSeries<T> tsFC = new TimeSeries<T>(startTime, history.getTimeSeriesTimeUnit(),
+		final TimeSeries<T> tsFC = new TimeSeries<>(startTime, history.getTimeSeriesTimeUnit(),
 				history.getDeltaTime(), history.getDeltaTimeUnit());
 		return tsFC;
 	}
@@ -86,7 +87,7 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 			return this.confidenceLevel;
 		} else {
 			if (!this.warningAlreadyLogged) {
-				LOG.warn("Confidence level not supported. Falling back to 0.0.");
+				LOGGER.warn("Confidence level not supported. Falling back to 0.0.");
 				this.warningAlreadyLogged = true;
 			}
 			return 0;
