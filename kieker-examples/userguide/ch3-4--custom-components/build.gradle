@@ -1,10 +1,15 @@
 apply plugin: 'application'
 apply plugin: 'eclipse'
 
+repositories {
+	mavenCentral() 
+}
+
 dependencies {
 	compile fileTree('lib') {
 		include 'kieker-*-emf.jar'
 	}
+	compile 'org.slf4j:slf4j-api:1.7.25'
 }
 
 // Simplify the JAR's file name
