@@ -28,16 +28,14 @@ import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 
 /**
  * Counts and reports the number of incoming valid/invalid {@link TraceEventRecords}.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.7
  */
-@Plugin(
-		description = "Counts and reports the number of incoming valid/invalid event record traces",
-		configuration = {
-			@Property(name = EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID, defaultValue = "true")
-		})
+@Plugin(description = "Counts and reports the number of incoming valid/invalid event record traces", configuration = {
+	@Property(name = EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID, defaultValue = "true")
+})
 public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 
 	/** This is the name of the input port receiving valid record traces. */
@@ -54,7 +52,7 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -77,7 +75,7 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 
 	/**
 	 * This method represents the input port for the valid traces.
-	 * 
+	 *
 	 * @param validTrace
 	 *            The next trace.
 	 */
@@ -88,14 +86,14 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 
 	/**
 	 * This method represents the input port for the invalid traces.
-	 * 
+	 *
 	 * @param invalidTrace
 	 *            The next trace.
 	 */
 	@InputPort(name = INPUT_PORT_NAME_INVALID, eventTypes = { TraceEventRecords.class }, description = "Receives invalid event record traces")
 	public void inputInvalidTrace(final TraceEventRecords invalidTrace) {
 		if (this.logInvalidTraces) {
-			this.logger.error("Invalid trace: " + invalidTrace);
+			this.logger.error("Invalid trace: {}", invalidTrace);
 		}
 
 		final TraceMetadata trace = invalidTrace.getTraceMetadata();

@@ -86,8 +86,8 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 
 	private final long maxThinkTime;
 
-	private final ConcurrentHashMap<String, ExecutionTraceBasedSession> openExecutionBasedSessions = new ConcurrentHashMap<String, ExecutionTraceBasedSession>();
-	private final PriorityQueue<ExecutionTraceBasedSession> executionSessionTimeoutQueue = new PriorityQueue<ExecutionTraceBasedSession>(DEFAULT_QUEUE_SIZE,
+	private final ConcurrentHashMap<String, ExecutionTraceBasedSession> openExecutionBasedSessions = new ConcurrentHashMap<>();
+	private final PriorityQueue<ExecutionTraceBasedSession> executionSessionTimeoutQueue = new PriorityQueue<>(DEFAULT_QUEUE_SIZE,
 			new SessionEndTimestampComparator());
 
 	/**
@@ -108,7 +108,7 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			this.logger.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.logger.warn("{} is no valid TimeUnit! Using inherited value of {} instead.", configTimeunitProperty, this.timeunit.name());
 			configTimeunit = this.timeunit;
 		}
 

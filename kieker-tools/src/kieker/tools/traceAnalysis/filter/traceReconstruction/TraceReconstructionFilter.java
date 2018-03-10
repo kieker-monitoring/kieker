@@ -134,7 +134,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			this.logger.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.logger.warn("{} is no valid TimeUnit! Using inherited value of {} instead.", configTimeunitProperty, this.timeunit.name());
 			configTimeunit = this.timeunit;
 		}
 
@@ -203,8 +203,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
 			if (executionTrace != null) { // trace (artifacts) exists already;
 				if (!this.timeoutMap.remove(executionTrace)) { // remove from timeoutMap. Will be re-added below
-					this.logger.error("Missing entry for trace in timeoutMap: " + executionTrace
-							+ " PendingTraces and timeoutMap are now longer consistent!");
+					this.logger.error("Missing entry for trace in timeoutMap: {} PendingTraces and timeoutMap are now longer consistent!", executionTrace);
 					this.reportError(traceId);
 				}
 			} else { // create and add new trace
@@ -214,7 +213,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			try {
 				executionTrace.add(execution);
 				if (!this.timeoutMap.add(executionTrace)) { // (re-)add trace to timeoutMap
-					this.logger.error("Equal entry existed in timeoutMap already:" + executionTrace);
+					this.logger.error("Equal entry existed in timeoutMap already:{}", executionTrace);
 				}
 				this.processTimeoutQueue();
 			} catch (final InvalidTraceException ex) { // this would be a bug!
@@ -271,13 +270,13 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 					this.traceProcessingErrorOccured = true;
 					this.logger.warn("Note that this filter was configured to terminate at the *first* occurence of an invalid trace \n"
 							+ "If this is not the desired behavior, set the configuration property "
-							+ CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES + " to 'true'");
+							+ "{} to 'true'", CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES);
 					throw new ExecutionEventProcessingException(transformationError, ex);
 				} else {
 					this.logger.error(transformationError); // do not pass 'ex' to log.error because this makes the output verbose (#584)
 				}
 			} else {
-				this.logger.warn("Found additional fragment for trace already marked invalid: " + transformationError);
+				this.logger.warn("Found additional fragment for trace already marked invalid: {}", transformationError);
 			}
 		}
 	}
@@ -324,7 +323,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				if (!error || (this.traceProcessingErrorOccured && !this.ignoreInvalidTraces)) {
 					this.processTimeoutQueue();
 				} else {
-					this.logger.info("terminate called with error an flag set or a trace processing occurred; won't process timeoutqueue any more.");
+					this.logger.info("Terminate called with error an flag set or a trace processing occurred; won't process timeoutqueue any more.");
 				}
 			} catch (final ExecutionEventProcessingException ex) {
 				this.traceProcessingErrorOccured = true;

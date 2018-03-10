@@ -48,18 +48,16 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
  * Generic graph writer plugin to generate graph specifications and save them to disk. This plugin uses
  * a formatter registry (see {@link #FORMATTER_REGISTRY}) to determine the appropriate formatter for a
  * given graph.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
-@Plugin(name = "Graph writer plugin",
-		description = "Generic plugin for writing graphs to files",
-		configuration = {
-			@Property(name = GraphWriterPlugin.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, defaultValue = "true"),
-			@Property(name = GraphWriterPlugin.CONFIG_PROPERTY_NAME_SHORTLABELS, defaultValue = "true"),
-			@Property(name = GraphWriterPlugin.CONFIG_PROPERTY_NAME_SELFLOOPS, defaultValue = "false")
-		})
+@Plugin(name = "Graph writer plugin", description = "Generic plugin for writing graphs to files", configuration = {
+	@Property(name = GraphWriterPlugin.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, defaultValue = "true"),
+	@Property(name = GraphWriterPlugin.CONFIG_PROPERTY_NAME_SHORTLABELS, defaultValue = "true"),
+	@Property(name = GraphWriterPlugin.CONFIG_PROPERTY_NAME_SELFLOOPS, defaultValue = "false")
+})
 public class GraphWriterPlugin extends AbstractFilterPlugin {
 
 	/**
@@ -93,8 +91,7 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	private static final String INSTANTIATION_ERROR_MESSAGE_TEMPLATE = "Could not instantiate formatter type %s for graph type %s.";
 	private static final String WRITE_ERROR_MESSAGE_TEMPLATE = "Graph could not be written to file %s.";
 
-	private static final ConcurrentMap<Class<? extends AbstractGraph<?, ?, ?>>, Class<? extends AbstractGraphFormatter<?>>> FORMATTER_REGISTRY =
-			new ConcurrentHashMap<Class<? extends AbstractGraph<?, ?, ?>>, Class<? extends AbstractGraphFormatter<?>>>();
+	private static final ConcurrentMap<Class<? extends AbstractGraph<?, ?, ?>>, Class<? extends AbstractGraphFormatter<?>>> FORMATTER_REGISTRY = new ConcurrentHashMap<>();
 
 	private final String outputPathName;
 	private final String outputFileName;
@@ -112,7 +109,7 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -185,7 +182,7 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	/**
 	 * Formats a given graph and saves the generated specification to disk. The file name to save the output to is specified by a the configuration options
 	 * {@link #CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME} and {@link #CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME}.
-	 * 
+	 *
 	 * @param graph
 	 *            The graph to save
 	 */
@@ -206,7 +203,9 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 				try {
 					writer.close();
 				} catch (final IOException e) {
-					this.logger.error(String.format(WRITE_ERROR_MESSAGE_TEMPLATE, fileName), e);
+					if (this.logger.isErrorEnabled()) {
+						this.logger.error(String.format(WRITE_ERROR_MESSAGE_TEMPLATE, fileName), e);
+					}
 				}
 			}
 		}
