@@ -60,8 +60,8 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 	private static final int MESSAGE_BUFFER_SIZE = 65535;
 
 	private final int port;
-	private final ILookup<String> stringRegistry = new Lookup<String>();
-	private final Deque<Number> recordValues = new LinkedList<Number>();
+	private final ILookup<String> stringRegistry = new Lookup<>();
+	private final Deque<Number> recordValues = new LinkedList<>();
 
 	public ExplorVizReader(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -76,7 +76,7 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 			final ServerSocket socket = serversocket.socket();
 			final InetSocketAddress address = new InetSocketAddress(this.port);
 			socket.bind(address);
-			this.logger.info("Listening on " + address);
+			this.logger.info("Listening on {}", address);
 
 			final ByteBuffer buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
 
@@ -99,9 +99,7 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 				try {
 					serversocket.close();
 				} catch (final IOException e) {
-					if (this.logger.isDebugEnabled()) {
-						this.logger.debug("Failed to close TCP connection!", e);
-					}
+					this.logger.debug("Failed to close TCP connection!", e);
 				}
 			}
 

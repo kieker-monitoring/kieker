@@ -187,10 +187,10 @@ public final class AmqpReader extends AbstractStringRegistryReaderPlugin {
 				}
 			}
 		} catch (final IOException e) {
-			this.logger.error("Error while reading from queue " + this.queueName, e);
+			this.logger.error("Error while reading from queue {}", this.queueName, e);
 			return false;
 		} catch (final InterruptedException e) {
-			this.logger.error("Consumer was interrupted on queue " + this.queueName, e);
+			this.logger.error("Consumer was interrupted on queue {}", this.queueName, e);
 			return false;
 		}
 
