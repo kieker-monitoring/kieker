@@ -103,7 +103,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			}
 			error = false;
 		} catch (final IOException exc) {
-			AbstractAnalysisComponent.LOGGER.error("Error while reading " + SEQUENCE_PIC_PATH, exc);
+			AbstractAnalysisComponent.LOGGER.error("Error while reading {}", SEQUENCE_PIC_PATH, exc);
 		} finally {
 			try {
 				if (reader != null) {
@@ -276,7 +276,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				}
 			}
 		} else { // needs to be adjusted if a new mode is introduced
-			AbstractAnalysisComponent.LOGGER.error("Invalid mode: " + sdMode);
+			AbstractAnalysisComponent.LOGGER.error("Invalid mode: {}", sdMode);
 		}
 
 		ps.print("step();" + "\n");
@@ -297,7 +297,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				senderDotId = "O" + senderComponent.getId();
 				receiverDotId = "O" + receiverComponent.getId();
 			} else { // needs to be adjusted if a new mode is introduced
-				AbstractAnalysisComponent.LOGGER.error("Invalid mode: " + sdMode);
+				AbstractAnalysisComponent.LOGGER.error("Invalid mode: {}", sdMode);
 			}
 
 			if (me instanceof SynchronousCallMessage) {
@@ -325,7 +325,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				ps.print("rmessage(" + senderDotId + "," + receiverDotId + ", \"\");\n");
 				ps.print("inactive(" + senderDotId + ");\n");
 			} else {
-				AbstractAnalysisComponent.LOGGER.error("Message type not supported: " + me.getClass().getName());
+				AbstractAnalysisComponent.LOGGER.error("Message type not supported: {}", me.getClass().getName());
 			}
 		}
 		ps.print("inactive(" + rootDotId + ");\n");
