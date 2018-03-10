@@ -109,7 +109,9 @@ class BinaryLogReaderThread extends AbstractLogReaderThread {
 				if (line.length() == 0) {
 					continue; // ignore empty lines
 				}
-				LOGGER.debug("Read line: {}", line);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Read line: " + line);
+				}
 				final int split = line.indexOf('=');
 				if (split == -1) {
 					LOGGER.error("Failed to parse line: {} from file {}. Each line must contain ID=VALUE pairs.", line, mappingFile.getAbsolutePath());

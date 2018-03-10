@@ -20,8 +20,9 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import org.slf4j.Logger;
+
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.logging.Log;
 import kieker.common.util.filesystem.FileExtensionFilter;
 
 /**
@@ -31,13 +32,13 @@ import kieker.common.util.filesystem.FileExtensionFilter;
  */
 abstract class AbstractLogReaderThread extends Thread {
 
-	private final Log logger; // NOPMD (private log instance passed by ctor)
+	private final Logger logger; // NOPMD (private log instance passed by ctor)
 	private final File inputDir;
 
 	/** indicates that this thread should terminate itself. */
 	private volatile boolean shouldTerminate;
 
-	protected AbstractLogReaderThread(final Log logger, final File inputDir) {
+	protected AbstractLogReaderThread(final Logger logger, final File inputDir) {
 		super();
 		this.logger = logger;
 		this.inputDir = inputDir;

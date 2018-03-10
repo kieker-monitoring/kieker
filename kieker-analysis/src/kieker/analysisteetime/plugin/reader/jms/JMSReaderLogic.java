@@ -34,7 +34,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 
-import kieker.common.logging.Log;
+import org.slf4j.Logger;
+
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -51,7 +52,7 @@ final class JMSReaderLogic {
 	private final String jmsFactoryLookupName;
 	private final CountDownLatch cdLatch = new CountDownLatch(1);
 
-	private final Log log;
+	private final Logger logger;
 	private final JMSReader jmsReaderStage;
 
 	/**
@@ -66,7 +67,7 @@ final class JMSReaderLogic {
 	 * @param jmsFactoryLookupName
 	 *            The name of the configuration determining the name of the used JMS factory,
 	 *            e.g. {@code org.exolab.jms.jndi.InitialContextFactory}.
-	 * @param log
+	 * @param logger
 	 *            Kieker log.
 	 * @param jmsReaderStage
 	 *            The actual teetime stage which uses this class.
@@ -74,15 +75,14 @@ final class JMSReaderLogic {
 	 * @throws IllegalArgumentException
 	 *             If one of the properties is empty.
 	 */
-	public JMSReaderLogic(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName, final Log log,
-			final JMSReader jmsReaderStage)
-			throws IllegalArgumentException {
+	public JMSReaderLogic(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName, final Logger logger,
+			final JMSReader jmsReaderStage) throws IllegalArgumentException {
 
 		// Initialize the reader bases
 		this.jmsProviderUrl = jmsProviderUrl;
 		this.jmsDestination = jmsDestination;
 		this.jmsFactoryLookupName = jmsFactoryLookupName;
-		this.log = log;
+		this.logger = logger;
 		this.jmsReaderStage = jmsReaderStage;
 
 		// simple sanity check
@@ -125,23 +125,23 @@ final class JMSReaderLogic {
 				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ/HornetQ sometimes)
 				destination = session.createQueue(this.jmsDestination);
 				if (destination == null) { //
-					this.log.error("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage() + " AND failed to create queue");
+					this.logger.error("Failed to lookup queue '{}' via JNDI: {} AND failed to create queue", this.jmsDestination, exc.getMessage());
 					throw exc; // will be catched below to abort the read method
 				}
 			}
 
-			this.log.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
+			this.logger.info("Listening to destination: {} at {} !\n***\n\n", destination, this.jmsProviderUrl);
 			final MessageConsumer receiver = session.createConsumer(destination);
 			receiver.setMessageListener(new JMSMessageListener());
 
 			// start the connection to enable message delivery
 			connection.start();
 
-			this.log.info("JMSReader started and waits for incoming monitoring events!");
+			this.logger.info("JMSReader started and waits for incoming monitoring events!");
 			this.block();
-			this.log.info("Woke up by shutdown");
+			this.logger.info("Woke up by shutdown");
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			this.log.error("Error in read()", ex);
+			this.logger.error("Error in read()", ex);
 			retVal = false;
 		} finally {
 			try {
@@ -149,7 +149,7 @@ final class JMSReaderLogic {
 					connection.close();
 				}
 			} catch (final JMSException ex) {
-				this.log.error("Failed to close JMS", ex);
+				this.logger.error("Failed to close JMS", ex);
 			}
 		}
 		return retVal;
@@ -181,12 +181,12 @@ final class JMSReaderLogic {
 	 * Terminates the reader logic by returning from read method.
 	 */
 	public void terminate() {
-		this.log.info("Shutdown of JMSReader requested.");
+		this.logger.info("Shutdown of JMSReader requested.");
 		this.unblock();
 	}
 
-	public Log getLog() {
-		return this.log;
+	public Logger getLogger() {
+		return this.logger;
 	}
 
 	/**
@@ -201,7 +201,7 @@ final class JMSReaderLogic {
 		@Override
 		public void onMessage(final Message jmsMessage) {
 			if (jmsMessage == null) {
-				JMSReaderLogic.this.getLog().warn("Received null message");
+				JMSReaderLogic.this.getLogger().warn("Received null message");
 			} else {
 				if (jmsMessage instanceof ObjectMessage) {
 					try {
@@ -211,14 +211,14 @@ final class JMSReaderLogic {
 							JMSReaderLogic.this.deliverIndirect((IMonitoringRecord) omo);
 						}
 					} catch (final MessageFormatException ex) {
-						JMSReaderLogic.this.getLog().error("Error delivering record", ex);
+						JMSReaderLogic.this.getLogger().error("Error delivering record", ex);
 					} catch (final JMSException ex) {
-						JMSReaderLogic.this.getLog().error("Error delivering record", ex);
+						JMSReaderLogic.this.getLogger().error("Error delivering record", ex);
 					} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
-						JMSReaderLogic.this.getLog().error("Error delivering record", ex);
+						JMSReaderLogic.this.getLogger().error("Error delivering record", ex);
 					}
 				} else {
-					JMSReaderLogic.this.getLog().warn("Received message of invalid type: " + jmsMessage.getClass().getName());
+					JMSReaderLogic.this.getLogger().warn("Received message of invalid type: {}", jmsMessage.getClass().getName());
 				}
 			}
 		}

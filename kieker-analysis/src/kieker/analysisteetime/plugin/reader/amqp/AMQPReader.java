@@ -16,7 +16,8 @@
 
 package kieker.analysisteetime.plugin.reader.amqp;
 
-import kieker.common.logging.LogFactory;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.record.IMonitoringRecord;
 
 import teetime.framework.AbstractProducerStage;
@@ -43,7 +44,7 @@ public class AMQPReader extends AbstractProducerStage<IMonitoringRecord> {
 	 *            The name of the configuration property for the heartbeat timeout.
 	 */
 	public AMQPReader(final String uri, final String queueName, final int heartbeat) {
-		this.readerLogic = new AMQPReaderLogic(uri, queueName, heartbeat, LogFactory.getLog(AMQPReader.class), this);
+		this.readerLogic = new AMQPReaderLogic(uri, queueName, heartbeat, LoggerFactory.getLogger(AMQPReader.class), this);
 	}
 
 	@Override

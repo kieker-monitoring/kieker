@@ -21,8 +21,9 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.registry.ILookup;
 
@@ -38,7 +39,7 @@ public class RegistryRecordHandler implements Runnable {
 	/** The default queue size for the registry record queue */
 	private static final int DEFAULT_QUEUE_SIZE = 1024;
 
-	private static final Log LOG = LogFactory.getLog(RegistryRecordHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RegistryRecordHandler.class);
 
 	private final ILookup<String> stringRegistry;
 	private final BlockingQueue<ByteBuffer> queue = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
@@ -61,7 +62,7 @@ public class RegistryRecordHandler implements Runnable {
 
 				this.readRegistryRecord(nextRecord);
 			} catch (final InterruptedException e) {
-				LOG.error("Registry record handler was interrupted", e);
+				LOGGER.error("Registry record handler was interrupted", e);
 			}
 		}
 	}
@@ -76,7 +77,7 @@ public class RegistryRecordHandler implements Runnable {
 		try {
 			this.queue.put(buffer);
 		} catch (final InterruptedException e) {
-			LOG.error("Record queue was interrupted", e);
+			LOGGER.error("Record queue was interrupted", e);
 		}
 	}
 
@@ -84,7 +85,7 @@ public class RegistryRecordHandler implements Runnable {
 		try {
 			RegistryRecord.registerRecordInRegistry(buffer, this.stringRegistry);
 		} catch (final BufferUnderflowException e) {
-			LOG.error("Buffer underflow while reading registry record", e);
+			LOGGER.error("Buffer underflow while reading registry record", e);
 		}
 	}
 
