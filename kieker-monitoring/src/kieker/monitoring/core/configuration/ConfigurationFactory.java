@@ -54,7 +54,7 @@ public final class ConfigurationFactory {
 	 * @return the configuration for the singleton controller
 	 */
 	public static final Configuration createSingletonConfiguration() {
-			LOGGER.debug("Searching for JVM argument '{}' ...", ConfigurationKeys.CUSTOM_PROPERTIES_LOCATION_JVM );
+		LOGGER.debug("Searching for JVM argument '{}' ...", ConfigurationKeys.CUSTOM_PROPERTIES_LOCATION_JVM);
 		final Configuration defaultConfiguration = ConfigurationFactory.defaultConfiguration();
 		// ignore default default-name and set to KIEKER-SINGLETON
 		defaultConfiguration.setProperty(ConfigurationKeys.CONTROLLER_NAME, "KIEKER-SINGLETON");
@@ -67,7 +67,7 @@ public final class ConfigurationFactory {
 		} else {
 			// No JVM property; Trying to find configuration file in classpath
 			configurationFile = ConfigurationKeys.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
-			LOGGER.info("Loading properties from properties file in classpath: '{}'", configurationFile );
+			LOGGER.info("Loading properties from properties file in classpath: '{}'", configurationFile);
 			loadConfiguration = ConfigurationFactory.loadConfigurationFromResource(configurationFile,
 					defaultConfiguration);
 		}
@@ -173,7 +173,7 @@ public final class ConfigurationFactory {
 				properties.load(is);
 				return properties;
 			} catch (final IOException ex) {
-				LOGGER.error("Error reading file '{}'", propertiesFn , ex);
+				LOGGER.error("Error reading file '{}'", propertiesFn, ex);
 			}
 		}
 		return new Configuration(defaultValues);
