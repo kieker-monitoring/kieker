@@ -32,8 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.examples.analysis.opad.experimentModel.WikiGer24_Oct11_21d_InputModel;
 import kieker.tools.opad.model.NamedDoubleTimeSeriesPoint;
 import kieker.tools.opad.timeseries.ForecastMethod;

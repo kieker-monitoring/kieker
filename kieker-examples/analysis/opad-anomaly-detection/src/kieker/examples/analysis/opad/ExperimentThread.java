@@ -36,8 +36,6 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.examples.analysis.opad.experimentModel.WikiGer24_Oct11_21d_OutputModel;
 import kieker.tools.opad.filter.ForecastingFilter;
 import kieker.tools.opad.model.ForecastMeasurementPair;
