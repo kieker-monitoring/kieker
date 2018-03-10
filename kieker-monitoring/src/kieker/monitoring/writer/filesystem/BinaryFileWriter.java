@@ -17,9 +17,10 @@ package kieker.monitoring.writer.filesystem;
 
 import java.nio.ByteBuffer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.record.io.IValueSerializer;
@@ -39,7 +40,7 @@ import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
 @ReceiveUnfilteredConfiguration // required for using class KiekerLogFolder
 public class BinaryFileWriter extends AbstractFileWriter<ByteBuffer, BinaryValueSerializer> {
 
-	private static final Log LOG = LogFactory.getLog(BinaryFileWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BinaryFileWriter.class);
 
 	public BinaryFileWriter(final Configuration configuration) {
 		super(configuration);
@@ -51,7 +52,7 @@ public class BinaryFileWriter extends AbstractFileWriter<ByteBuffer, BinaryValue
 			final int maxMegaBytesInFile) {
 		this.setBuffer(ByteBuffer.allocateDirect(this.getBufferSize()));
 
-		return new BinaryFileWriterPool(BinaryFileWriter.LOG, this.getLogFolder(), charsetName, maxEntriesInFile,
+		return new BinaryFileWriterPool(BinaryFileWriter.LOGGER, this.getLogFolder(), charsetName, maxEntriesInFile,
 				compressionFilter, maxAmountOfFiles, maxMegaBytesInFile, this.getBuffer());
 	}
 
@@ -67,7 +68,7 @@ public class BinaryFileWriter extends AbstractFileWriter<ByteBuffer, BinaryValue
 
 		final int recordId = super.registerMonitoringRecord(monitoringRecord);
 
-		this.getFileWriterPool().requestBufferSpace(4 + 8 + monitoringRecord.getSize(), BinaryFileWriter.LOG);
+		this.getFileWriterPool().requestBufferSpace(4 + 8 + monitoringRecord.getSize(), BinaryFileWriter.LOGGER);
 
 		this.getBuffer().putInt(recordId);
 		this.getBuffer().putLong(monitoringRecord.getLoggingTimestamp());
@@ -75,7 +76,7 @@ public class BinaryFileWriter extends AbstractFileWriter<ByteBuffer, BinaryValue
 		monitoringRecord.serialize(this.getSerializer());
 
 		if (this.isFlushLogFile()) {
-			channel.flush(BinaryFileWriter.LOG);
+			channel.flush(BinaryFileWriter.LOGGER);
 		}
 	}
 

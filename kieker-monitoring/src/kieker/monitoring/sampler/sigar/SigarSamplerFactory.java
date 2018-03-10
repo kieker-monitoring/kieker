@@ -19,9 +19,9 @@ package kieker.monitoring.sampler.sigar;
 import org.hyperic.sigar.Humidor;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.monitoring.sampler.sigar.samplers.CPUsCombinedPercSampler;
 import kieker.monitoring.sampler.sigar.samplers.CPUsDetailedPercSampler;
 import kieker.monitoring.sampler.sigar.samplers.DiskUsageSampler;
@@ -49,11 +49,11 @@ public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton p
 	 * Used by {@link #getInstance()} to construct the singleton instance.
 	 */
 	private SigarSamplerFactory() {
-		final Log log = LogFactory.getLog(SigarSamplerFactory.class); // access to static logger not possible in constructor
+		final Logger logger = LoggerFactory.getLogger(SigarSamplerFactory.class); // access to static logger not possible in constructor
 
 		final Sigar mySigar = new Sigar();
 		if (mySigar.getNativeLibrary() == null) {
-			log.error("No Sigar native lib in java.library.path. See Sigar log for details (maybe only visible on Debug log-level).");
+			logger.error("No Sigar native lib in java.library.path. See Sigar log for details (maybe only visible on Debug log-level).");
 		}
 		final Humidor humidor = new Humidor(mySigar);
 		this.sigar = humidor.getSigar();

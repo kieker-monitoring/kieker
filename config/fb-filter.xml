@@ -226,18 +226,6 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.common.logging.LogFactory" />
-		<Method name="&lt;clinit&gt;" params="" returns="void" />
-		<Bug pattern="DE_MIGHT_IGNORE" />
-	</Match>
-
-	<Match>
-		<Class name="kieker.common.logging.LogImplWebguiLogging" />
-		<Method name="addMessage" params="java.lang.String,java.lang.String,java.lang.Throwable" returns="void" />
-		<Bug pattern="RV_RETURN_VALUE_IGNORED" />
-	</Match>
-
-	<Match>
 		<Class name="kieker.analysis.display.XYPlot" />
 		<Method name="setEntry" params="java.lang.Object, java.lang.Number" returns="void" />
 		<Bug pattern="RV_RETURN_VALUE_IGNORED" />
@@ -354,12 +342,6 @@
 	<Match>
 		<Class name="kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter$1" />
 		<Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
-	</Match>
-
-	<Match>
-		<Class name="org.apache.commons.logging.impl.Jdk14LoggerPatched" />
-		<Method name="getLog" params="java.lang.String" returns="org.apache.commons.logging.Log" />
-		<Bug pattern="REC_CATCH_EXCEPTION" />
 	</Match>
 
 	<Match>

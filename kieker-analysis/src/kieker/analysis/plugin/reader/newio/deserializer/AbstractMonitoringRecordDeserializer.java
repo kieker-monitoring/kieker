@@ -28,13 +28,14 @@ public abstract class AbstractMonitoringRecordDeserializer implements IMonitorin
 
 	/**
 	 * Creates a new record deserializer.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use
 	 * @param projectContext
 	 *            The project context to use
 	 */
-	public AbstractMonitoringRecordDeserializer(final Configuration configuration, final IProjectContext projectContext) { // NOPMD Constructor template for deserializers
+	public AbstractMonitoringRecordDeserializer(final Configuration configuration, final IProjectContext projectContext) { // NOPMD Constructor template for
+																															// deserializers
 		// Constructor template
 	}
 

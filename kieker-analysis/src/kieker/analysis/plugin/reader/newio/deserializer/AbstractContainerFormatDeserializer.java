@@ -25,7 +25,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.dataformat.FormatIdentifier;
 
 /**
- * @author holger
+ * @author Holger Knoche
  *
  * @since 1.13
  */
@@ -44,7 +44,8 @@ public abstract class AbstractContainerFormatDeserializer extends AbstractMonito
 	 * @param projectContext
 	 *            The project context to use
 	 */
-	public AbstractContainerFormatDeserializer(final Configuration configuration, final IProjectContext projectContext) {
+	public AbstractContainerFormatDeserializer(final Configuration configuration,
+			final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
 
@@ -59,7 +60,8 @@ public abstract class AbstractContainerFormatDeserializer extends AbstractMonito
 		// Check the actual format identifier
 		final int formatIdentifier = buffer.getInt();
 		if (formatIdentifier != this.getFormatIdentifier()) {
-			throw new InvalidFormatException(String.format("An invalid format identifier %08x was found.", formatIdentifier));
+			throw new InvalidFormatException(
+					String.format("An invalid format identifier %08x was found.", formatIdentifier));
 		}
 
 		return this.decodeRecords(buffer, (dataSize - HEADER_SIZE));
@@ -69,8 +71,8 @@ public abstract class AbstractContainerFormatDeserializer extends AbstractMonito
 	 * Decodes the records from the container's payload.
 	 *
 	 * @param buffer
-	 *            The buffer to decode the data from. It is positioned at the
-	 *            first byte of the payload
+	 *            The buffer to decode the data from. It is positioned at the first
+	 *            byte of the payload
 	 * @param dataSize
 	 *            The size of the payload data in bytes
 	 * @return The decoded records

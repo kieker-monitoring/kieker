@@ -17,7 +17,7 @@ package kieker.monitoring.writer.filesystem;
 
 import java.nio.Buffer;
 
-import kieker.common.logging.Log;
+import org.slf4j.Logger;
 
 /**
  * @param <T>
@@ -40,12 +40,12 @@ public abstract class AbstractPooledFileChannel<T extends Buffer> {
 
 	public abstract long getBytesWritten();
 
-	public abstract void flush(Log log);
+	public abstract void flush(Logger logger);
 
 	/**
 	 * Flushes the buffer and closes the channel afterwards.
 	 */
-	public abstract void close(Log writerLog);
+	public abstract void close(Logger writerLogger);
 
 	protected T getBuffer() {
 		return this.buffer;

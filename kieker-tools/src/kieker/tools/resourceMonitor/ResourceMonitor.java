@@ -26,10 +26,10 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -47,7 +47,7 @@ import kieker.tools.AbstractCommandLineTool;
  */
 public final class ResourceMonitor extends AbstractCommandLineTool {
 
-	private static final Log LOG = LogFactory.getLog(ResourceMonitor.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceMonitor.class);
 
 	private static final String CMD_OPT_NAME_MONITORING_CONFIGURATION = "monitoring.configuration";
 
@@ -143,7 +143,7 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 			try {
 				this.interval = Long.parseLong(intervalStr);
 			} catch (final NumberFormatException ex) {
-				LOG.error("Failed to parse interval: " + intervalStr, ex);
+				LOGGER.error("Failed to parse interval: {}", intervalStr, ex);
 				return false;
 			}
 		}
@@ -153,10 +153,10 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 			try {
 				this.intervalUnit = TimeUnit.valueOf(intervalUnitStr.toUpperCase(Locale.US));
 			} catch (final IllegalArgumentException ex) {
-				LOG.error("Failed to parse interval unit: " + intervalUnitStr, ex);
+				LOGGER.error("Failed to parse interval unit: {}", intervalUnitStr, ex);
 				return false;
 			} catch (final NullPointerException ex) { // NOPMD (AvoidCatchingGenericException)
-				LOG.error("No interval unit passed as argument", ex);
+				LOGGER.error("No interval unit passed as argument", ex);
 				return false;
 			}
 		}
@@ -166,7 +166,7 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 			try {
 				this.initialDelay = Long.parseLong(initialDelayStr);
 			} catch (final NumberFormatException ex) {
-				LOG.error("Failed to parse initial delay: " + initialDelayStr, ex);
+				LOGGER.error("Failed to parse initial delay: {}", initialDelayStr, ex);
 				return false;
 			}
 		}
@@ -176,10 +176,10 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 			try {
 				this.initialDelayUnit = TimeUnit.valueOf(initialDelayUnitStr.toUpperCase(Locale.US));
 			} catch (final IllegalArgumentException ex) {
-				LOG.error("Failed to parse initial delay unit: " + initialDelayUnitStr, ex);
+				LOGGER.error("Failed to parse initial delay unit: {}", initialDelayUnitStr, ex);
 				return false;
 			} catch (final NullPointerException ex) { // NOPMD (AvoidCatchingGenericException)
-				LOG.error("No initial delay unit passed as argument", ex);
+				LOGGER.error("No initial delay unit passed as argument", ex);
 				return false;
 			}
 		}
@@ -189,7 +189,7 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 			try {
 				this.duration = Long.parseLong(durationStr);
 			} catch (final NumberFormatException ex) {
-				LOG.error("Failed to parse duration: " + durationStr, ex);
+				LOGGER.error("Failed to parse duration: {}", durationStr, ex);
 				return false;
 			}
 		}
@@ -199,10 +199,10 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 			try {
 				this.durationUnit = TimeUnit.valueOf(durationUnitStr.toUpperCase(Locale.US));
 			} catch (final IllegalArgumentException ex) {
-				LOG.error("Failed to parse duration unit: " + durationUnitStr, ex);
+				LOGGER.error("Failed to parse duration unit: {}", durationUnitStr, ex);
 				return false;
 			} catch (final NullPointerException ex) { // NOPMD (AvoidCatchingGenericException)
-				LOG.error("No duration unit passed as argument", ex);
+				LOGGER.error("No duration unit passed as argument", ex);
 				return false;
 			}
 		}
@@ -214,7 +214,7 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 
 	@Override
 	protected boolean performTask() {
-		LOG.info(this.toString());
+		LOGGER.info(this.toString());
 
 		final CountDownLatch cdl = new CountDownLatch(1);
 
@@ -234,7 +234,7 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 		this.monitoringController = MonitoringController.createInstance(controllerConfiguration);
 
 		this.initSensors();
-		LOG.info("Monitoring started");
+		LOGGER.info("Monitoring started");
 
 		if (this.duration >= 0) {
 			final Timer timer = new Timer();
@@ -245,17 +245,17 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 					timer.cancel();
 				}
 			}, TimeUnit.MILLISECONDS.convert(this.duration, this.durationUnit));
-			LOG.info("Waiting for " + this.duration + " " + this.durationUnit + " timeout...");
+			LOGGER.info("Waiting for {} {} timeout...", this.duration, this.durationUnit);
 		}
 
 		try {
-			LOG.info("Press Ctrl+c to terminate");
+			LOGGER.info("Press Ctrl+c to terminate");
 			cdl.await();
 		} catch (final InterruptedException ex) {
-			LOG.warn("The monitoring has been interrupted", ex);
+			LOGGER.warn("The monitoring has been interrupted", ex);
 			return false;
 		} finally {
-			LOG.info("Monitoring terminated");
+			LOGGER.info("Monitoring terminated");
 		}
 
 		return true;
@@ -266,9 +266,8 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 		final StringBuilder sb = new StringBuilder(2048);
 		final String lineSeparator = System.getProperty("line.separator");
 		sb.append("Resource Monitoring Configuration:").append(lineSeparator).append("\tSampling interval = ").append(this.interval).append(lineSeparator)
-				.append("\tSampling interval unit = ").append(this.intervalUnit).append(lineSeparator).
-				append("\tInitial delay = ").append(this.initialDelay).append(lineSeparator).
-				append("\tInitial delay unit = ").append(this.initialDelayUnit).append(lineSeparator);
+				.append("\tSampling interval unit = ").append(this.intervalUnit).append(lineSeparator).append("\tInitial delay = ").append(this.initialDelay)
+				.append(lineSeparator).append("\tInitial delay unit = ").append(this.initialDelayUnit).append(lineSeparator);
 		if (this.duration < 0) {
 			sb.append("\tDuration = INFINITE").append(lineSeparator);
 		} else {

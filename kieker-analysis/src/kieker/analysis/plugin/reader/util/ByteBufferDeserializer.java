@@ -21,8 +21,9 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 
+import org.slf4j.Logger;
+
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.logging.Log;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
@@ -43,14 +44,14 @@ public class ByteBufferDeserializer {
 	private static final int LONG_BYTES = AbstractMonitoringRecord.TYPE_SIZE_LONG;
 
 	private final IRegistry<String> stringRegistry;
-	private final Log logger; // NOPMD (logger from the caller)
+	private final Logger logger; // NOPMD (logger from the caller)
 	private final CachedRecordFactoryCatalog recordFactories;
 	private final ByteBuffer buffer;
 	private IMonitoringRecordReceiver recordReceiver;
 
-	public ByteBufferDeserializer(final ReaderRegistry<String> readerRegistry, final Log logger, final int bufferCapacity) {
+	public ByteBufferDeserializer(final ReaderRegistry<String> readerRegistry, final Logger logger, final int bufferCapacity) {
 		super();
-		this.stringRegistry = new GetValueAdapter<String>(readerRegistry); // compatibility wrapper
+		this.stringRegistry = new GetValueAdapter<>(readerRegistry); // compatibility wrapper
 		this.logger = logger;
 		this.recordFactories = new CachedRecordFactoryCatalog();
 		this.buffer = ByteBuffer.allocateDirect(bufferCapacity);
@@ -109,7 +110,7 @@ public class ByteBufferDeserializer {
 
 			this.recordReceiver.newMonitoringRecord(record);
 		} catch (final RecordInstantiationException ex) {
-			this.logger.error("Failed to create: " + recordClassName, ex);
+			this.logger.error("Failed to create: {}", recordClassName, ex);
 			throw ex; // we cannot continue reading the buffer because we do not know at which position to continue
 		}
 

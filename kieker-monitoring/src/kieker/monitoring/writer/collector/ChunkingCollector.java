@@ -23,9 +23,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.thread.DaemonThreadFactory;
 import kieker.monitoring.core.controller.ControllerFactory;
@@ -100,7 +101,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	/** The time unit for the writer task interval. */
 	private static final TimeUnit TASK_RUN_INTERVAL_TIME_UNIT = TimeUnit.MILLISECONDS;
 
-	private static final Log LOG = LogFactory.getLog(ChunkingCollector.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ChunkingCollector.class);
 
 	private final Queue<IMonitoringRecord> recordQueue;
 
@@ -148,7 +149,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			// Instantiate default queue type if the desired queue type cannot be instantiated
-			LOG.error("Error instantiating queue type " + queueTypeName + ". Using default queue type instead.", e);
+			LOGGER.error("Error instantiating queue type {}. Using default queue type instead.", queueTypeName, e);
 			return this.createDefaultQueue(queueSize);
 		}
 	}
@@ -172,7 +173,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 			// Wait for the executor to shut down
 			this.scheduledExecutor.awaitTermination(Long.MAX_VALUE, TASK_RUN_INTERVAL_TIME_UNIT);
 		} catch (final InterruptedException e) {
-			LOG.warn("Awaiting termination of the scheduled executor was interrupted.", e);
+			LOGGER.warn("Awaiting termination of the scheduled executor was interrupted.", e);
 		}
 
 		this.writerTask.terminate();
@@ -187,7 +188,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 			}
 		}
 
-		LOG.error("Failed to add new monitoring record to queue (maximum number of attempts reached).");
+		LOGGER.error("Failed to add new monitoring record to queue (maximum number of attempts reached).");
 		return false;
 	}
 

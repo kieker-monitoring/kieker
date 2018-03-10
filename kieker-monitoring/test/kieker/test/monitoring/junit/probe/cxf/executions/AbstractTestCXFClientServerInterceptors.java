@@ -27,10 +27,10 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
@@ -66,7 +66,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 
 	private static final String SERVICE_ADDRESS_TEMPLATE = "http://localhost:909X/bookstore";
 
-	private static final Log LOG = LogFactory.getLog(AbstractTestCXFClientServerInterceptors.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTestCXFClientServerInterceptors.class);
 
 	/**
 	 * Each instance of this class increments the port number by 1.
@@ -114,7 +114,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	}
 
 	private Server startServer() {
-		LOG.info("XX: " + this.serviceAddress);
+		LOGGER.info("XX: {}", this.serviceAddress);
 
 		final JaxWsServerFactoryBean srvFactory = new JaxWsServerFactoryBean();
 		srvFactory.setServiceClass(IBookstore.class);

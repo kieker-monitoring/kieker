@@ -27,12 +27,12 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.DeclarePrecedence;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -51,7 +51,7 @@ import kieker.monitoring.timer.ITimeSource;
 public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJProbe {
 	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
 
-	private static final Log LOG = LogFactory.getLog(OperationExecutionJerseyClientInterceptor.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OperationExecutionJerseyClientInterceptor.class);
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
@@ -102,7 +102,7 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 			ess = CF_REGISTRY.recallAndIncrementThreadLocalESS();
 			nextESS = ess + 1;
 			if ((eoi == -1) || (ess == -1)) {
-				LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
+				LOGGER.error("eoi and/or ess have invalid values: eoi == {} ess == {}", eoi, ess);
 				CTRLINST.terminateMonitoring();
 			}
 		}
@@ -116,15 +116,13 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 		// This is a hack to put all values in the header
 		MultivaluedMap<String, Object> requestHeader = request.getHeaders();
 		if (requestHeader == null) {
-			requestHeader = new MultivaluedHashMap<String, Object>();
+			requestHeader = new MultivaluedHashMap<>();
 		}
 
-		final List<Object> requestHeaderList = new ArrayList<Object>(4);
+		final List<Object> requestHeaderList = new ArrayList<>(4);
 		requestHeaderList.add(Long.toString(traceId) + "," + sessionId + "," + Integer.toString(eoi) + "," + Integer.toString(nextESS));
 		requestHeader.put(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER, requestHeaderList);
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Sending request to " + uri.toString() + " with header = " + requestHeader.toString());
-		}
+		LOGGER.debug("Sending request to {} with header = {}", uri.toString(), requestHeader.toString());
 
 		// measure before
 		final long tin = TIME.getTime();
@@ -143,9 +141,7 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 				if (responseHeader != null) {
 					final List<String> responseHeaderList = responseHeader.get(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER);
 					if (responseHeaderList != null) {
-						if (LOG.isDebugEnabled()) {
-							LOG.debug("Received response from " + uri.toString() + " with header = " + responseHeader.toString());
-						}
+						LOGGER.debug("Received response from {} with header = {}", uri.toString(), responseHeader.toString());
 						final String[] responseHeaderArray = responseHeaderList.get(0).split(",");
 
 						// Extract trace id
@@ -155,11 +151,11 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 							try {
 								retTraceId = Long.parseLong(retTraceIdStr);
 							} catch (final NumberFormatException exc) {
-								LOG.warn("Invalid tradeId");
+								LOGGER.warn("Invalid tradeId");
 							}
 						}
 						if (traceId != retTraceId) {
-							LOG.error("TraceId in response header (" + retTraceId + ") is different from that in request header (" + traceId + ")");
+							LOGGER.error("TraceId in response header ({}) is different from that in request header ({})", retTraceId, traceId);
 						}
 
 						// Extract session id
@@ -176,19 +172,15 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 								retEOI = Integer.parseInt(retEOIStr);
 								CF_REGISTRY.storeThreadLocalEOI(retEOI);
 							} catch (final NumberFormatException exc) {
-								LOG.warn("Invalid eoi", exc);
+								LOGGER.warn("Invalid eoi", exc);
 							}
 						}
 
 					} else {
-						if (LOG.isDebugEnabled()) {
-							LOG.debug("No monitoring data found in the response header from " + uri.toString() + ". Is it instrumented?");
-						}
+						LOGGER.debug("No monitoring data found in the response header from {}. Is it instrumented?", uri.toString());
 					}
 				} else {
-					if (LOG.isDebugEnabled()) {
-						LOG.debug("Response header from " + uri.toString() + " is null. Is it instrumented?");
-					}
+					LOGGER.debug("Response header from {} is null. Is it instrumented?", uri.toString());
 				}
 			}
 

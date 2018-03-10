@@ -29,24 +29,28 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * Forwards incoming {@link IMonitoringRecord}s with delays computed from the {@link kieker.common.record.IMonitoringRecord#getLoggingTimestamp()} value
- * (assumed to be in the configured resolution). For example, after initialization, if records with logging timestamps 3000 and 4500 nanos are received, the
- * first record is forwarded immediately; the second will be forwarded 1500 nanos later. The acceleration factor can be used to accelerate/slow down the
- * replay (default 1.0, which means no acceleration/slow down).
+ * Forwards incoming {@link IMonitoringRecord}s with delays computed from the
+ * {@link kieker.common.record.IMonitoringRecord#getLoggingTimestamp()} value
+ * (assumed to be in the configured resolution). For example, after
+ * initialization, if records with logging timestamps 3000 and 4500 nanos are
+ * received, the first record is forwarded immediately; the second will be
+ * forwarded 1500 nanos later. The acceleration factor can be used to
+ * accelerate/slow down the replay (default 1.0, which means no
+ * acceleration/slow down).
  *
  * @author Andre van Hoorn, Robert von Massow, Jan Waller
  *
  * @since 1.6
  */
 @Plugin(description = "Forwards incoming records with delays computed from the timestamp values", outputPorts = {
-	@OutputPort(name = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Outputs the delayed records")
-}, configuration = {
-	@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_NUM_WORKERS, defaultValue = "1"),
-	@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, defaultValue = "5"),
-	@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS, defaultValue = "2"),
-	@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_TIMER, defaultValue = "MILLISECONDS"),
-	@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR, defaultValue = "1") // CONFIG_PROPERTY_ACCELERATION_FACTOR_DEFAULT
-})
+	@OutputPort(name = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
+		IMonitoringRecord.class }, description = "Outputs the delayed records") }, configuration = {
+			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_NUM_WORKERS, defaultValue = "1"),
+			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, defaultValue = "5"),
+			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS, defaultValue = "2"),
+			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_TIMER, defaultValue = "MILLISECONDS"),
+			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR, defaultValue = "1") // CONFIG_PROPERTY_ACCELERATION_FACTOR_DEFAULT
+		})
 public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 	/** The name of the input port receiving the records. */
@@ -55,12 +59,15 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME_RECORDS = "outputRecords";
 
 	/**
-	 * The number of threads to be used for the internal {@link java.util.concurrent.ThreadPoolExecutor}, processing the scheduled {@link IMonitoringRecord}s.
+	 * The number of threads to be used for the internal
+	 * {@link java.util.concurrent.ThreadPoolExecutor}, processing the scheduled
+	 * {@link IMonitoringRecord}s.
 	 */
 	public static final String CONFIG_PROPERTY_NAME_NUM_WORKERS = "numWorkers";
 
 	/**
-	 * The number of additional seconds to wait before execute the termination (after all records have been forwarded).
+	 * The number of additional seconds to wait before execute the termination
+	 * (after all records have been forwarded).
 	 */
 	public static final String CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS = "additionalShutdownDelaySeconds";
 
@@ -119,23 +126,27 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		try {
 			tmpTimer = TimerWithPrecision.valueOf(this.strTimerOrigin);
 		} catch (final IllegalArgumentException ex) {
-			this.log.warn(this.strTimerOrigin + " is no valid timer precision! Using MILLISECONDS instead.");
+			this.logger.warn("{} is no valid timer precision! Using MILLISECONDS instead.", this.strTimerOrigin);
 			tmpTimer = TimerWithPrecision.MILLISECONDS;
 		}
 		this.timer = tmpTimer;
 
 		double accelerationFactorTmp = configuration.getDoubleProperty(CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR);
 		if (accelerationFactorTmp <= 0.0) {
-			this.log.warn("Acceleration factor must be > 0. Using default: " + CONFIG_PROPERTY_ACCELERATION_FACTOR_DEFAULT);
+			this.logger.warn("Acceleration factor must be > 0. Using default: {}",
+					CONFIG_PROPERTY_ACCELERATION_FACTOR_DEFAULT);
 			accelerationFactorTmp = 1;
 		}
 		this.accelerationFactor = accelerationFactorTmp;
 
-		this.warnOnNegativeSchedTimeOrigin = this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS);
+		this.warnOnNegativeSchedTimeOrigin = this.configuration
+				.getLongProperty(CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS);
 		this.warnOnNegativeSchedTime = this.timeunit.convert(this.warnOnNegativeSchedTimeOrigin, TimeUnit.SECONDS);
 
 		this.numWorkers = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS);
-		this.shutdownDelay = this.timeunit.convert(this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS), TimeUnit.SECONDS);
+		this.shutdownDelay = this.timeunit.convert(
+				this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS),
+				TimeUnit.SECONDS);
 
 		this.executor = new ScheduledThreadPoolExecutor(this.numWorkers);
 		this.executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
@@ -148,7 +159,8 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	 * @param monitoringRecord
 	 *            The next monitoring record.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Receives the records to be delayed")
+	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = {
+		IMonitoringRecord.class }, description = "Receives the records to be delayed")
 	public final void inputRecord(final IMonitoringRecord monitoringRecord) {
 		final long currentTime = this.timer.getCurrentTime(this.timeunit);
 
@@ -159,13 +171,15 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 			}
 
 			// Compute scheduling time (without acceleration)
-			long schedTimeFromNow = (monitoringRecord.getLoggingTimestamp() - this.firstLoggingTimestamp) // relative to 1st record
+			long schedTimeFromNow = (monitoringRecord.getLoggingTimestamp() - this.firstLoggingTimestamp) // relative to
+																											// 1st
+																											// record
 					- (currentTime - this.startTime); // subtract elapsed time
 			schedTimeFromNow /= this.accelerationFactor;
 			if (schedTimeFromNow < -this.warnOnNegativeSchedTime) {
 				final long schedTimeSeconds = TimeUnit.SECONDS.convert(schedTimeFromNow, this.timeunit);
-				this.log.warn("negative scheduling time: " + schedTimeFromNow + " (" + this.timeunit.toString() + ") / " + schedTimeSeconds
-						+ " (seconds)-> scheduling with a delay of 0");
+				this.logger.warn("negative scheduling time: {} ({}) / {} (seconds)-> scheduling with a delay of 0",
+						schedTimeFromNow, this.timeunit.toString(), schedTimeSeconds);
 			}
 			if (schedTimeFromNow < 0) {
 				schedTimeFromNow = 0; // i.e., schedule immediately
@@ -196,19 +210,21 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		this.executor.shutdown();
 
 		if (!error) {
-			long shutdownDelaySecondsFromNow = TimeUnit.SECONDS.convert((this.latestSchedulingTime - this.timer.getCurrentTime(this.timeunit)) + this.shutdownDelay,
+			long shutdownDelaySecondsFromNow = TimeUnit.SECONDS.convert(
+					(this.latestSchedulingTime - this.timer.getCurrentTime(this.timeunit)) + this.shutdownDelay,
 					this.timeunit);
 			if (shutdownDelaySecondsFromNow < 0) {
 				shutdownDelaySecondsFromNow = 0;
 			}
-			shutdownDelaySecondsFromNow += 2; // Add a buffer for the timeout. Having exactly the second for the last event is unnecessarily tight.
+			shutdownDelaySecondsFromNow += 2; // Add a buffer for the timeout. Having exactly the second for the last
+												// event is unnecessarily tight.
 			try {
-				this.log.info("Awaiting termination delay of " + shutdownDelaySecondsFromNow + " seconds ...");
+				this.logger.info("Awaiting termination delay of {} seconds ...", shutdownDelaySecondsFromNow);
 				if (!this.executor.awaitTermination(shutdownDelaySecondsFromNow, TimeUnit.SECONDS)) {
-					this.log.error("Termination delay triggerred before all scheduled records sent");
+					this.logger.error("Termination delay triggerred before all scheduled records sent");
 				}
 			} catch (final InterruptedException e) {
-				this.log.error("Interrupted while awaiting termination delay", e);
+				this.logger.error("Interrupted while awaiting termination delay", e);
 			}
 		}
 	}
@@ -220,13 +236,14 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
-		configuration.setProperty(CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS, Long.toString(this.warnOnNegativeSchedTimeOrigin));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS,
+				Long.toString(this.warnOnNegativeSchedTimeOrigin));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMER, this.strTimerOrigin);
 		configuration.setProperty(CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR, Double.toString(this.accelerationFactor));
 
-		configuration
-				.setProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, Long.toString(TimeUnit.SECONDS.convert(this.shutdownDelay, this.timeunit)));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS,
+				Long.toString(TimeUnit.SECONDS.convert(this.shutdownDelay, this.timeunit)));
 
 		return configuration;
 	}

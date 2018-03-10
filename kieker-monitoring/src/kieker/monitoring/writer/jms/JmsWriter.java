@@ -31,9 +31,10 @@ import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
@@ -44,7 +45,7 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  */
 public class JmsWriter extends AbstractMonitoringWriter {
 
-	private static final Log LOG = LogFactory.getLog(JmsWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(JmsWriter.class);
 
 	private static final String PREFIX = JmsWriter.class.getName() + ".";
 
@@ -77,7 +78,7 @@ public class JmsWriter extends AbstractMonitoringWriter {
 
 	private void init() {
 		try {
-			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOPMD NOCS (IllegalTypeCheck, InitialContext requires Hashtable)
+			final Hashtable<String, String> properties = new Hashtable<>(); // NOPMD NOCS (IllegalTypeCheck, InitialContext requires Hashtable)
 			properties.put(Context.INITIAL_CONTEXT_FACTORY, this.configContextFactoryType);
 			properties.put(Context.PROVIDER_URL, this.configProviderUrl);
 
@@ -104,7 +105,7 @@ public class JmsWriter extends AbstractMonitoringWriter {
 				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ/HornetQ sometimes)
 				destination = this.session.createQueue(this.configTopic);
 				if (destination == null) { //
-					LOG.error("Failed to lookup queue '" + this.configTopic + "' via JNDI: " + exc.getMessage() + " AND failed to create queue");
+					LOGGER.error("Failed to lookup queue '{}' via JNDI: {} AND failed to create queue", this.configTopic, exc.getMessage());
 					throw exc; // will be catched below to abort the read method
 				}
 			}
@@ -148,18 +149,15 @@ public class JmsWriter extends AbstractMonitoringWriter {
 				this.connection.close();
 			}
 		} catch (final JMSException ex) {
-			LOG.error("Error closing connection", ex);
+			LOGGER.error("Error closing connection", ex);
 		}
 	}
 
 	@Override
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder(128);
-		sb.append(super.toString()).
-			append("; Session: '").append(this.session.toString()).
-			append("'; Connection: '").append(this.connection.toString()).
-			append("'; MessageProducer: '").append(this.sender.toString()).
-			append('\'');
+		sb.append(super.toString()).append("; Session: '").append(this.session.toString()).append("'; Connection: '").append(this.connection.toString())
+				.append("'; MessageProducer: '").append(this.sender.toString()).append('\'');
 		return sb.toString();
 	}
 

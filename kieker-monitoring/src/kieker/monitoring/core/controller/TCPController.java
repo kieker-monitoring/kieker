@@ -16,9 +16,10 @@
 
 package kieker.monitoring.core.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IRecordReceivedListener;
 import kieker.common.record.tcp.SingleSocketRecordReader;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
@@ -39,7 +40,7 @@ public class TCPController extends AbstractController implements IRemoteControll
 	 */
 	private static final int BUFFER_SIZE = 65535;
 	/** The log for this component. */
-	private static final Log LOG = LogFactory.getLog(TCPController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TCPController.class);
 	// maybe not necessary
 	private final String domain;
 	private SingleSocketRecordReader tcpReader;
@@ -62,12 +63,12 @@ public class TCPController extends AbstractController implements IRemoteControll
 		try {
 			final int port = Integer.parseInt(configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_REMOTE_PORT));
 			this.tcpEnabled = configuration.getBooleanProperty(ConfigurationKeys.ACTIVATE_TCP);
-			this.tcpReader = new SingleSocketRecordReader(port, BUFFER_SIZE, TCPController.LOG, listener);
+			this.tcpReader = new SingleSocketRecordReader(port, BUFFER_SIZE, TCPController.LOGGER, listener);
 
 		} catch (final NumberFormatException e) {
 			this.tcpEnabled = false;
-			TCPController.LOG.error("Could not parse port for the TCPController, deactivating this option. Received string was: " // NOPMD
-					+ configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_REMOTE_PORT));
+			TCPController.LOGGER.error("Could not parse port for the TCPController, deactivating this option. Received string was: {}",
+					configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_REMOTE_PORT));
 		}
 		this.thread = new Thread(this.tcpReader);
 
@@ -81,7 +82,7 @@ public class TCPController extends AbstractController implements IRemoteControll
 	@Override
 	protected void init() {
 		if (this.tcpEnabled) {
-			LOG.info("TCP reader for remote commands started");
+			LOGGER.info("TCP reader for remote commands started");
 			this.thread.start();
 		}
 
@@ -90,7 +91,7 @@ public class TCPController extends AbstractController implements IRemoteControll
 	@Override
 	protected void cleanup() {
 		if (this.tcpEnabled) {
-			LOG.info("TCP reader for remote commands terminated");
+			LOGGER.info("TCP reader for remote commands terminated");
 			this.tcpReader.terminate();
 		}
 	}

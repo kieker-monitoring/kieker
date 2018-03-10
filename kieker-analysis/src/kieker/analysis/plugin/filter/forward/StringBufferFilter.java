@@ -29,19 +29,16 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * This filter has exactly one input port and one output port.
- * 
- * Every record received is cloned and each detected String is buffered in a shared area in order to save memory.
- * 
+ *
+ * Every record received is cloned and each detected String is buffered in a
+ * shared area in order to save memory.
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
-@Plugin(description = "A filter to reduce the memory footprint of strings used in records",
-		outputPorts = @OutputPort(
-				name = StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
-				description = "Provides each incoming object",
-				eventTypes = { Object.class }
-		))
+@Plugin(description = "A filter to reduce the memory footprint of strings used in records", outputPorts = @OutputPort(name = StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = {
+	Object.class }))
 public final class StringBufferFilter extends AbstractFilterPlugin {
 
 	/** The name of the input port for the incoming events. */
@@ -53,7 +50,7 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -69,8 +66,8 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 	}
 
 	@SuppressWarnings("unchecked")
-	@InputPort(name = StringBufferFilter.INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be buffered and forwarded",
-			eventTypes = { Object.class })
+	@InputPort(name = StringBufferFilter.INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be buffered and forwarded", eventTypes = {
+		Object.class })
 	public final void inputEvent(final Object object) {
 		if (object instanceof String) {
 			super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, this.kiekerHashMap.get((String) object));
@@ -89,7 +86,7 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 					newRecord.setLoggingTimestamp(((IMonitoringRecord) object).getLoggingTimestamp());
 					super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, newRecord);
 				} catch (final MonitoringRecordException ex) {
-					this.log.warn("Failed to recreate buffered monitoring record: " + object.toString(), ex);
+					this.logger.warn("Failed to recreate buffered monitoring record: {}", object.toString(), ex);
 				}
 			} else {
 				super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, object);

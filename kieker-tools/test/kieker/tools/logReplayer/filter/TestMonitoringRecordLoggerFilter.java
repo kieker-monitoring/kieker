@@ -31,6 +31,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -39,13 +41,12 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.AsciiLogReader;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.writer.filesystem.AbstractFileWriter;
 import kieker.monitoring.writer.filesystem.AsciiFileWriter;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
@@ -60,7 +61,7 @@ import kieker.test.tools.junit.writeRead.filesystem.KiekerLogDirFilter;
  * @since 1.6
  */
 public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
-	private static final Log LOG = LogFactory.getLog(TestMonitoringRecordLoggerFilter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestMonitoringRecordLoggerFilter.class);
 
 	// parameters for the default list of events to use in the test
 	private static final String DEFAULT_EVENTS_SESSION_ID = "A5AgX1itaI";
@@ -93,10 +94,10 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 
 		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
 
-		config.setProperty(AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
+		config.setProperty(AbstractFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
 
 		// Write configuration to tmp file
-		LOG.info("Writing monitoring.properties to file '" + monitoringPropertiesFn + "'");
+		LOGGER.info("Writing monitoring.properties to file '{}'", monitoringPropertiesFn);
 
 		OutputStream os = null;
 		try {
@@ -115,7 +116,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	 * @return A list of records.
 	 */
 	protected List<IMonitoringRecord> provideEvents() {
-		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> someEvents = new ArrayList<>();
 		for (int i = 0; i < DEFAULT_EVENTS_NUMBER; i = someEvents.size()) {
 			final List<AbstractTraceEvent> nextBatch = Arrays.asList(
 					BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(i, i, DEFAULT_EVENTS_SESSION_ID,
@@ -171,7 +172,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	private List<IMonitoringRecord> testIt(final List<IMonitoringRecord> eventsToWrite, final boolean keepLoggingTimestamps) throws Exception {
 		final AnalysisController analysisController = new AnalysisController();
 
-		final ListReader<IMonitoringRecord> reader = new ListReader<IMonitoringRecord>(new Configuration(), analysisController);
+		final ListReader<IMonitoringRecord> reader = new ListReader<>(new Configuration(), analysisController);
 		reader.addAllObjects(eventsToWrite);
 
 		Assert.assertTrue(this.tmpFolder.getRoot().exists());
@@ -187,7 +188,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 
 		analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, loggerFilter, MonitoringRecordLoggerFilter.INPUT_PORT_NAME_RECORD);
 
-		final ListCollectionFilter<IMonitoringRecord> simpleSinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
+		final ListCollectionFilter<IMonitoringRecord> simpleSinkFilter = new ListCollectionFilter<>(new Configuration(), analysisController);
 
 		analysisController.connect(
 				loggerFilter, MonitoringRecordLoggerFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
@@ -207,7 +208,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 		try {
 			Thread.sleep(500);
 		} catch (final InterruptedException e) {
-			LOG.warn("An exception occurred", e);
+			LOGGER.warn("An exception occurred", e);
 		}
 
 		final String[] monitoringLogs = this.tmpFolder.getRoot().list(new KiekerLogDirFilter());
@@ -227,7 +228,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 		readerConfiguration.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));
 		readerConfiguration.setProperty(AsciiLogReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, "false");
 		final AbstractReaderPlugin reader = new AsciiLogReader(readerConfiguration, analysisController);
-		final ListCollectionFilter<IMonitoringRecord> sinkPlugin = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
+		final ListCollectionFilter<IMonitoringRecord> sinkPlugin = new ListCollectionFilter<>(new Configuration(), analysisController);
 
 		analysisController.connect(reader, AsciiLogReader.OUTPUT_PORT_NAME_RECORDS, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 		analysisController.run();

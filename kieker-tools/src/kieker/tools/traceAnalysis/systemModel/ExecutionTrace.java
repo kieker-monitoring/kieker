@@ -27,8 +27,6 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.util.LoggingTimestampConverter;
 
@@ -42,8 +40,6 @@ import kieker.tools.util.LoggingTimestampConverter;
  * @since 0.95a
  */
 public class ExecutionTrace extends AbstractTrace {
-
-	private static final Log LOG = LogFactory.getLog(ExecutionTrace.class);
 
 	private final AtomicReference<MessageTrace> messageTrace = new AtomicReference<>();
 	private int minEoi = -1;
@@ -90,7 +86,7 @@ public class ExecutionTrace extends AbstractTrace {
 		synchronized (this) {
 			if (this.getTraceId() != execution.getTraceId()) {
 				throw new InvalidTraceException("TraceId of new record (" + execution.getTraceId()
-				+ ") differs from Id of this trace (" + this.getTraceId() + ")");
+						+ ") differs from Id of this trace (" + this.getTraceId() + ")");
 			}
 			if ((this.minTin < 0) || (execution.getTin() < this.minTin)) {
 				this.minTin = execution.getTin();
@@ -175,7 +171,7 @@ public class ExecutionTrace extends AbstractTrace {
 					}
 				}
 
-				final SynchronousCallMessage callMessage = createCallMessage(rootExecution, prevE, curE);
+				final SynchronousCallMessage callMessage = this.createCallMessage(rootExecution, prevE, curE);
 				mSeq.add(callMessage);
 				curStack.push(callMessage);
 

@@ -19,6 +19,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -26,23 +29,21 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.newio.deserializer.IMonitoringRecordDeserializer;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
  * Generic reader plugin for the new raw data I/O infrastructure.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.13
  *
  */
 @Plugin(description = "Generic reader plugin for raw data.", outputPorts = {
-		@OutputPort(name = RawDataReaderPlugin.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
-				IMonitoringRecord.class }, description = "Output port for the decoded records") }, configuration = {
-						@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_DESERIALIZER, defaultValue = "", description = "Class name of the deserializer to use"),
-						@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_READER, defaultValue = "", description = "Class name of the reader to use") })
+	@OutputPort(name = RawDataReaderPlugin.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
+		IMonitoringRecord.class }, description = "Output port for the decoded records") }, configuration = {
+			@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_DESERIALIZER, defaultValue = "", description = "Class name of the deserializer to use"),
+			@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_READER, defaultValue = "", description = "Class name of the reader to use") })
 public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDataProcessor {
 
 	/** The name of the output port for the decoded records. */
@@ -54,7 +55,7 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 	/** The name of the configuration property for the reader class name. */
 	public static final String CONFIG_PROPERTY_READER = "reader";
 
-	private static final Log LOG = LogFactory.getLog(RawDataReaderPlugin.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RawDataReaderPlugin.class);
 
 	private final String deserializerClassName;
 
@@ -87,17 +88,17 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 
 			// Check whether the class is a subtype of the expected type
 			if (!(expectedType.isAssignableFrom(clazz))) {
-				LOG.error("Class " + className + " must implement " + expectedType.getSimpleName() + ".");
+				LOGGER.error("Class {} must implement {}.", className, expectedType.getSimpleName());
 			}
 
 			// Actually create the instance
 			createdInstance = (C) this.instantiateReader(clazz, configuration);
 		} catch (final ClassNotFoundException e) {
-			LOG.error("Class '" + className + "' not found.");
+			LOGGER.error("Class '{}' not found.", className);
 		} catch (final NoSuchMethodException e) {
-			LOG.error("Class " + className + " must implement a (public) constructor that accepts a Configuration.");
+			LOGGER.error("Class {} must implement a (public) constructor that accepts a Configuration.", className);
 		} catch (final IllegalAccessException | InstantiationException | InvocationTargetException e) {
-			LOG.error("Unable to instantiate class " + className + ".", e);
+			LOGGER.error("Unable to instantiate class {}.", className, e);
 		}
 
 		return createdInstance;
@@ -122,17 +123,17 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 
 			// Check whether the class is a subtype of the expected type
 			if (!(expectedType.isAssignableFrom(clazz))) {
-				LOG.error("Class " + className + " must implement " + expectedType.getSimpleName() + ".");
+				LOGGER.error("Class {} must implement {}.", className, expectedType.getSimpleName());
 			}
 
 			// Actually create the instance
 			createdInstance = (C) this.instantiateDeserializer(clazz, configuration, context);
 		} catch (final ClassNotFoundException e) {
-			LOG.error("Class '" + className + "' not found."); // NOPMD (guard not necessary for error level)
+			LOGGER.error("Class '{}' not found.", className);
 		} catch (final NoSuchMethodException e) {
-			LOG.error("Class " + className + " must implement a (public) constructor that accepts a Configuration.");
+			LOGGER.error("Class {} must implement a (public) constructor that accepts a Configuration.", className);
 		} catch (final IllegalAccessException | InstantiationException | InvocationTargetException e) {
-			LOG.error("Unable to instantiate class " + className + ".", e);
+			LOGGER.error("Unable to instantiate class {}.", className, e);
 		}
 
 		return createdInstance;

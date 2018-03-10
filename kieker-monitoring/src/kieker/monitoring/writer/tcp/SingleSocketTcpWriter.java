@@ -26,9 +26,10 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.BinaryValueSerializer;
@@ -71,7 +72,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 	public static final String CONFIG_CONN_TIMEOUT_IN_MS = PREFIX + "connectionTimeoutInMs";
 
 	/** the logger for this class. */
-	private static final Log LOG = LogFactory.getLog(SingleSocketTcpWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SingleSocketTcpWriter.class);
 
 	// (afterPREFIX)
 	/** the host name and the port of the record reader. */
@@ -176,8 +177,8 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 			// Always flush the registryBuffer before flushing the recordBuffer.
 			// Otherwise the monitoring records could arrive before their string
 			// records
-			WriterUtil.flushBuffer(this.registryBuffer, this.socketChannel, LOG);
-			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOG);
+			WriterUtil.flushBuffer(this.registryBuffer, this.socketChannel, LOGGER);
+			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOGGER);
 		}
 
 		final String recordClassName = monitoringRecord.getClass().getName();
@@ -190,8 +191,8 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 			// Always flush the registryBuffer before flushing the recordBuffer.
 			// Otherwise the monitoring records could arrive before their string
 			// records
-			WriterUtil.flushBuffer(this.registryBuffer, this.socketChannel, LOG);
-			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOG);
+			WriterUtil.flushBuffer(this.registryBuffer, this.socketChannel, LOGGER);
+			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOGGER);
 		}
 	}
 
@@ -205,7 +206,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 				+ bytes.length;
 
 		if (localRegistryBuffer.remaining() < requiredBufferSize) {
-			WriterUtil.flushBuffer(localRegistryBuffer, this.socketChannel, LOG);
+			WriterUtil.flushBuffer(localRegistryBuffer, this.socketChannel, LOGGER);
 		}
 
 		localRegistryBuffer.putInt(RegistryRecord.CLASS_ID);
@@ -219,8 +220,8 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		// Always flush the registryBuffer before flushing the recordBuffer.
 		// Otherwise the monitoring records could arrive before their string
 		// records
-		WriterUtil.flushBuffer(this.registryBuffer, this.socketChannel, LOG);
-		WriterUtil.flushBuffer(this.buffer, this.socketChannel, LOG);
-		WriterUtil.close(this.socketChannel, LOG);
+		WriterUtil.flushBuffer(this.registryBuffer, this.socketChannel, LOGGER);
+		WriterUtil.flushBuffer(this.buffer, this.socketChannel, LOGGER);
+		WriterUtil.close(this.socketChannel, LOGGER);
 	}
 }

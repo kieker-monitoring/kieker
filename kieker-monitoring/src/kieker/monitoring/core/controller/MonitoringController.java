@@ -19,9 +19,10 @@ package kieker.monitoring.core.controller;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.common.util.Version;
@@ -37,12 +38,13 @@ import kieker.monitoring.timer.ITimeSource;
  * @since 1.3
  */
 public final class MonitoringController extends AbstractController implements IMonitoringController, IStateListener {
-	static final Log LOG = LogFactory.getLog(MonitoringController.class); // NOPMD package for inner class
+	static final Logger LOGGER = LoggerFactory.getLogger(MonitoringController.class); // NOPMD package for inner class
 
 	/**
-	 * Number of milliseconds the ShutdownHook waits after being triggered to send the termination signal
-	 * to the MonitoringController. The reason for introducing this was that a shutdown might be initiated
-	 * before all records (and particularly mapping enries) are written. #1634
+	 * Number of milliseconds the ShutdownHook waits after being triggered to send
+	 * the termination signal to the MonitoringController. The reason for
+	 * introducing this was that a shutdown might be initiated before all records
+	 * (and particularly mapping enries) are written. #1634
 	 */
 	private static final long SHUTDOWN_DELAY_MILLIS = 1000;
 
@@ -53,7 +55,10 @@ public final class MonitoringController extends AbstractController implements IM
 	private final WriterController writerController;
 	private final TimeSourceController timeSourceController;
 	private final ProbeController probeController;
-	/** Whether or not the {@link IMonitoringRecord#setLoggingTimestamp(long)} is automatically set. */
+	/**
+	 * Whether or not the {@link IMonitoringRecord#setLoggingTimestamp(long)} is
+	 * automatically set.
+	 */
 	private final boolean autoSetLoggingTimestamp;
 
 	// private Constructor
@@ -72,7 +77,8 @@ public final class MonitoringController extends AbstractController implements IM
 
 	// FACTORY
 	/**
-	 * This is a factory method creating a new monitoring controller instance using the given configuration.
+	 * This is a factory method creating a new monitoring controller instance using
+	 * the given configuration.
 	 *
 	 * @param configuration
 	 *            The configuration for the new controller.
@@ -84,9 +90,12 @@ public final class MonitoringController extends AbstractController implements IM
 		// try {
 		monitoringController = new MonitoringController(configuration);
 		// } catch (final IllegalStateException e) {
-		// // WriterControllerHstr throws an IllegalStateException upon an invalid configuration
-		// // TODO all controllers should throw an exception upon an invalid configuration
-		// return new TerminatedMonitoringController(configuration); // NullObject pattern
+		// // WriterControllerHstr throws an IllegalStateException upon an invalid
+		// configuration
+		// // TODO all controllers should throw an exception upon an invalid
+		// configuration
+		// return new TerminatedMonitoringController(configuration); // NullObject
+		// pattern
 		// }
 
 		// Initialize and handle early Termination (once for each Controller!)
@@ -129,7 +138,8 @@ public final class MonitoringController extends AbstractController implements IM
 		}
 
 		if (configuration.getBooleanProperty(ConfigurationKeys.USE_SHUTDOWN_HOOK)) {
-			// This ensures that the terminateMonitoring() method is always called before shutting down the JVM. This method ensures that necessary cleanup steps are
+			// This ensures that the terminateMonitoring() method is always called before
+			// shutting down the JVM. This method ensures that necessary cleanup steps are
 			// finished and no information is lost due to asynchronous writers.
 			try {
 				Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -137,14 +147,15 @@ public final class MonitoringController extends AbstractController implements IM
 					@Override
 					public void run() {
 						if (!monitoringController.isMonitoringTerminated()) {
-							// WONTFIX: We should not use a logger in shutdown hooks, logger may already be down! (#26)
-							LOG.info("ShutdownHook notifies controller to initiate shutdown.");
+							// WONTFIX: We should not use a logger in shutdown hooks, logger may already be
+							// down! (#26)
+							LOGGER.info("ShutdownHook notifies controller to initiate shutdown.");
 							monitoringController.terminateMonitoring();
 							try {
 								monitoringController.waitForTermination(SHUTDOWN_DELAY_MILLIS);
 							} catch (final InterruptedException e) {
 								// ignore since we cannot do anything at this point
-								LOG.warn("Shutdown was interrupted while waiting");
+								LOGGER.warn("Shutdown was interrupted while waiting");
 							}
 							// LOG.info("ShutdownHook has finished."); // does not work anymore
 							// System.out.println("ShutdownHook has finished."); // works!
@@ -152,12 +163,12 @@ public final class MonitoringController extends AbstractController implements IM
 					}
 				});
 			} catch (final Exception e) { // NOPMD NOCS (Exception)
-				LOG.warn("Failed to add shutdownHook");
+				LOGGER.warn("Failed to add shutdownHook");
 			}
 		} else {
-			LOG.warn("Shutdown Hook is disabled, loss of monitoring data might occur.");
+			LOGGER.warn("Shutdown Hook is disabled, loss of monitoring data might occur.");
 		}
-		LOG.info(monitoringController.toString());
+		LOGGER.info(monitoringController.toString());
 		return monitoringController;
 	}
 
@@ -184,7 +195,7 @@ public final class MonitoringController extends AbstractController implements IM
 
 	@Override
 	protected final void cleanup() {
-		LOG.info("Shutting down Monitoring Controller (" + this.getName() + ")");
+		LOGGER.info("Shutting down Monitoring Controller ({})", this.getName());
 		// this.saveMetadataAsRecord();
 		this.probeController.terminate();
 		this.timeSourceController.terminate();
@@ -197,32 +208,25 @@ public final class MonitoringController extends AbstractController implements IM
 
 	@Override
 	public final String toString() {
-		final StringBuilder sb = new StringBuilder(2048)
-				.append("Current State of kieker.monitoring (")
-				.append(MonitoringController.getVersion())
-				.append(") ")
-				.append(this.stateController.toString())
-				.append(this.jmxController.toString())
-				.append(this.timeSourceController.toString())
-				.append(this.probeController.toString())
-				.append(this.writerController.toString())
-				.append("\n\tAutomatic assignment of logging timestamps: '")
-				.append(this.autoSetLoggingTimestamp)
-				.append("'\n")
-				.append(this.samplingController.toString());
+		final StringBuilder sb = new StringBuilder(2048).append("Current State of kieker.monitoring (")
+				.append(MonitoringController.getVersion()).append(") ").append(this.stateController.toString())
+				.append(this.jmxController.toString()).append(this.timeSourceController.toString())
+				.append(this.probeController.toString()).append(this.writerController.toString())
+				.append("\n\tAutomatic assignment of logging timestamps: '").append(this.autoSetLoggingTimestamp)
+				.append("'\n").append(this.samplingController.toString());
 		return sb.toString();
 	}
 
 	/**
-	 * This method sends the meta data (like the controller and host name, the experiment ID, etc.) as a record.
+	 * This method sends the meta data (like the controller and host name, the
+	 * experiment ID, etc.) as a record.
 	 *
 	 * @return true on success; false in case of an error.
 	 */
 	@Override
 	public final boolean sendMetadataAsRecord() {
 		final ITimeSource timesource = this.getTimeSource();
-		return this.newMonitoringRecord(new KiekerMetadataRecord(
-				null, // Kieker version will be filled in
+		return this.newMonitoringRecord(new KiekerMetadataRecord(null, // Kieker version will be filled in
 				this.getName(), // controllerName
 				this.getHostname(), // hostname
 				this.getExperimentId(), // experimentId
@@ -242,7 +246,7 @@ public final class MonitoringController extends AbstractController implements IM
 
 	@Override
 	public final boolean terminateMonitoring() {
-		LOG.info("Terminating monitoring...");
+		LOGGER.info("Terminating monitoring...");
 		return this.stateController.terminateMonitoring();
 	}
 
@@ -318,7 +322,8 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay, final long period, final TimeUnit timeUnit) {
+	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay,
+			final long period, final TimeUnit timeUnit) {
 		return this.samplingController.schedulePeriodicSampler(sampler, initialDelay, period, timeUnit);
 	}
 
@@ -372,7 +377,8 @@ public final class MonitoringController extends AbstractController implements IM
 	 * SINGLETON.
 	 */
 	private static final class LazyHolder { // NOCS
-		static final IMonitoringController INSTANCE = MonitoringController.createInstance(ConfigurationFactory.createSingletonConfiguration()); // NOPMD package
+		static final IMonitoringController INSTANCE = MonitoringController
+				.createInstance(ConfigurationFactory.createSingletonConfiguration()); // NOPMD package
 	}
 
 }

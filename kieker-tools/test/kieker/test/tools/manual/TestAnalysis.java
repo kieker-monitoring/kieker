@@ -19,6 +19,9 @@ package kieker.test.tools.manual;
 import java.io.File;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
@@ -32,8 +35,6 @@ import kieker.analysis.plugin.filter.select.TraceIdFilter;
 import kieker.analysis.plugin.filter.select.TypeFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
@@ -51,7 +52,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @since 1.5
  */
 public final class TestAnalysis {
-	private static final Log LOG = LogFactory.getLog(TestAnalysis.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestAnalysis.class);
 	private static final boolean LOADCONFIG = false;
 
 	private static final String KAX_FILENAME = "tmp/testproject.kax";
@@ -66,10 +67,10 @@ public final class TestAnalysis {
 				analysisController = new AnalysisController(new File(TestAnalysis.KAX_FILENAME));
 
 			} catch (final IOException ex) {
-				TestAnalysis.LOG.error("Failed to load " + TestAnalysis.KAX_FILENAME, ex);
+				TestAnalysis.LOGGER.error("Failed to load {}", TestAnalysis.KAX_FILENAME, ex);
 				return;
 			} catch (final AnalysisConfigurationException ex) {
-				TestAnalysis.LOG.error("Failed to load " + TestAnalysis.KAX_FILENAME, ex);
+				TestAnalysis.LOGGER.error("Failed to load {}", TestAnalysis.KAX_FILENAME, ex);
 				return;
 			}
 		} else {
@@ -79,7 +80,7 @@ public final class TestAnalysis {
 		try {
 			analysisController.run();
 		} catch (final AnalysisConfigurationException ex) {
-			TestAnalysis.LOG.error("Failed to start the example project.", ex);
+			TestAnalysis.LOGGER.error("Failed to start the example project.", ex);
 		}
 	}
 
@@ -131,28 +132,28 @@ public final class TestAnalysis {
 		final TraceIdFilter traceIdFilter = new TraceIdFilter(confTraceIdFilter, analysisController);
 
 		final Configuration confEventTraceReconstructionFilter = new Configuration();
-		final EventRecordTraceReconstructionFilter eventTraceReconstructionFilter =
-				new EventRecordTraceReconstructionFilter(confEventTraceReconstructionFilter, analysisController);
+		final EventRecordTraceReconstructionFilter eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(confEventTraceReconstructionFilter,
+				analysisController);
 
 		final Configuration confTraceEvents2ExecutionAndMessageTraceFilter = new Configuration();
-		final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter =
-				new TraceEventRecords2ExecutionAndMessageTraceFilter(confTraceEvents2ExecutionAndMessageTraceFilter, analysisController);
+		final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter = new TraceEventRecords2ExecutionAndMessageTraceFilter(
+				confTraceEvents2ExecutionAndMessageTraceFilter, analysisController);
 
 		// Visualization
 		final Configuration confSequenceDiagramFilter = new Configuration();
 		confSequenceDiagramFilter.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, "tmp/SequenceAssembly");
 		final SequenceDiagramFilter sequenceDiagramFilter = new SequenceDiagramFilter(confSequenceDiagramFilter, analysisController);
 
-		final ComponentDependencyGraphAllocationFilter componentDependencyGraphAllocationFilter =
-				new ComponentDependencyGraphAllocationFilter(new Configuration(), analysisController);
+		final ComponentDependencyGraphAllocationFilter componentDependencyGraphAllocationFilter = new ComponentDependencyGraphAllocationFilter(new Configuration(),
+				analysisController);
 
 		final Configuration componentAllocationWriterConfiguration = new Configuration();
 		componentAllocationWriterConfiguration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, "tmp/");
 		componentAllocationWriterConfiguration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME, "dependency.dot");
 		final GraphWriterPlugin componentAllocationGraphWriter = new GraphWriterPlugin(componentAllocationWriterConfiguration, analysisController);
 
-		final OperationDependencyGraphAllocationFilter operationDependencyGraphAllocationFilter =
-				new OperationDependencyGraphAllocationFilter(new Configuration(), analysisController);
+		final OperationDependencyGraphAllocationFilter operationDependencyGraphAllocationFilter = new OperationDependencyGraphAllocationFilter(new Configuration(),
+				analysisController);
 
 		final Configuration operationAllocationWriterConfiguration = new Configuration();
 		operationAllocationWriterConfiguration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, "tmp/");
@@ -220,14 +221,14 @@ public final class TestAnalysis {
 			analysisController.connect(systemModel2FileFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, traceRepo);
 
 		} catch (final AnalysisConfigurationException ex) {
-			TestAnalysis.LOG.error("Failed to wire the example project.", ex);
+			TestAnalysis.LOGGER.error("Failed to wire the example project.", ex);
 		}
 		try {
 			analysisController.saveToFile(new File(TestAnalysis.KAX_FILENAME));
 		} catch (final IOException ex) {
-			TestAnalysis.LOG.error("Failed to save configuration to " + TestAnalysis.KAX_FILENAME, ex);
+			TestAnalysis.LOGGER.error("Failed to save configuration to {}", TestAnalysis.KAX_FILENAME, ex);
 		} catch (final AnalysisConfigurationException ex) {
-			TestAnalysis.LOG.error("Failed to save configuration to " + TestAnalysis.KAX_FILENAME, ex);
+			TestAnalysis.LOGGER.error("Failed to save configuration to {}", TestAnalysis.KAX_FILENAME, ex);
 		}
 	}
 }
