@@ -40,8 +40,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Nils Christian Ehmke
@@ -61,7 +61,7 @@ public class ConversionStep extends AbstractStep {
 	private static final String GRAPHVIZ_DIR_TEXT_FIELD_TOOLTIP = "The graphviz directory contains the path to the graphviz binary. Required for conversion.";
 	private static final String PIC2PLOT_DIR_TEXT_FIELD_TOOLTIP = "The pic2plot directory contains the path to the pic2plot binary. Required for conversion.";
 
-	private static final Log LOG = LogFactory.getLog(ConversionStep.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ConversionStep.class);
 	private final String currentPath = new File(".").getAbsolutePath();
 
 	private final JLabel infoLabel = new JLabel("<html>In this step you manage Graphviz and Pic2Plot in order to convert the results from the trace "
@@ -76,7 +76,7 @@ public class ConversionStep extends AbstractStep {
 	private final JButton graphvizDirectoryChooseButton = new JButton("Choose");
 	private final JButton pic2plotDirectoryChooseButton = new JButton("Choose");
 	private final JLabel outputFormat = new JLabel("Output Format: ");
-	private final JComboBox<String> outputFormatField = new JComboBox<String>(new String[] { "PNG", "JPEG", "SVG", "PDF", });
+	private final JComboBox<String> outputFormatField = new JComboBox<>(new String[] { "PNG", "JPEG", "SVG", "PDF", });
 
 	public ConversionStep() {
 		this.addAndLayoutComponents();
@@ -228,9 +228,9 @@ public class ConversionStep extends AbstractStep {
 								dotFile.getAbsolutePath(), });
 					p.waitFor();
 				} catch (final IOException e) {
-					LOG.warn("An exception occurred", e);
+					LOGGER.warn("An exception occurred", e);
 				} catch (final InterruptedException e) {
-					LOG.warn("An exception occurred", e);
+					LOGGER.warn("An exception occurred", e);
 				}
 			}
 
@@ -257,15 +257,15 @@ public class ConversionStep extends AbstractStep {
 					s.close();
 					p.waitFor();
 				} catch (final IOException e) {
-					LOG.warn("An exception occurred", e);
+					LOGGER.warn("An exception occurred", e);
 				} catch (final InterruptedException e) {
-					LOG.warn("An exception occurred", e);
+					LOGGER.warn("An exception occurred", e);
 				} finally {
 					if (null != writer) {
 						try {
 							writer.close();
 						} catch (final IOException e) {
-							LOG.warn("An exception occurred", e);
+							LOGGER.warn("An exception occurred", e);
 						}
 					}
 				}

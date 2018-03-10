@@ -95,11 +95,11 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 			super.printStatusMessage();
 			final int numPlots = this.getSuccessCount();
 			final long lastSuccessTracesId = this.getLastTraceIdSuccess();
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Wrote " + numPlots + " call tree" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" // NOCS
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Wrote " + numPlots + " call tree" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" // NOCS
 						+ this.dotOutputFn + "-<traceId>.dot'");
-				LOG.debug("Dot files can be converted using the dot tool");
-				LOG.debug("Example: dot -T svg " + this.dotOutputFn + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".dot > " // NOCS
+				LOGGER.debug("Dot files can be converted using the dot tool");
+				LOGGER.debug("Example: dot -T svg " + this.dotOutputFn + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".dot > " // NOCS
 						+ this.dotOutputFn + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS
 			}
 		}

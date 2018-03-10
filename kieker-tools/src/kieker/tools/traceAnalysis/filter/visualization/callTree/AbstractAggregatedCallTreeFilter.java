@@ -42,10 +42,10 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @since 1.1
  */
 @Plugin(description = "An abstract filter for aggregated call trees", repositoryPorts = {
-		@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) }, configuration = {
-				@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_INCLUDE_WEIGHTS_DEFAULT),
-				@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT),
-				@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT) })
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) }, configuration = {
+		@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_INCLUDE_WEIGHTS_DEFAULT),
+		@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT),
+		@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT) })
 public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTreeFilter<T> {
 
 	/** The name of the configuration determining the dot output file name. */
@@ -110,8 +110,8 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 					this.shortLabels);
 			this.numGraphsSaved++;
 			this.printDebugLogMessage(new String[] { "Wrote call tree to file '" + outputFn + "'",
-					"Dot file can be converted using the dot tool",
-					"Example: dot -T svg " + outputFn + " > " + outputFn + ".svg", });
+				"Dot file can be converted using the dot tool",
+				"Example: dot -T svg " + outputFn + " > " + outputFn + ".svg", });
 		}
 	}
 
@@ -119,9 +119,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	public void printStatusMessage() {
 		synchronized (this) {
 			super.printStatusMessage();
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
-			}
+			LOGGER.debug("Saved {} call tree{}", this.numGraphsSaved, (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
 		}
 	}
 
@@ -160,7 +158,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 
 	@Override
 	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed", eventTypes = {
-			MessageTrace.class })
+		MessageTrace.class })
 	public void inputMessageTraces(final MessageTrace trace) {
 		synchronized (this) {
 			try {
