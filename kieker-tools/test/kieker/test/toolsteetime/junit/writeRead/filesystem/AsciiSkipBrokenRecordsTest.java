@@ -20,23 +20,20 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.analysisteetime.plugin.reader.filesystem.fsReader.AsciiLogReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.exception.MonitoringRecordException;
-import kieker.common.logging.LogImplJUnit;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
+import kieker.monitoring.writer.filesystem.AbstractFileWriter;
 import kieker.monitoring.writer.filesystem.AsciiFileWriter;
 import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
 
@@ -60,16 +57,6 @@ public class AsciiSkipBrokenRecordsTest {
 
 	public AsciiSkipBrokenRecordsTest() {
 		super();
-	}
-
-	@Before
-	public void before() {
-		LogImplJUnit.disableThrowable(MonitoringRecordException.class);
-	}
-
-	@After
-	public void after() {
-		LogImplJUnit.reset();
 	}
 
 	@Test
@@ -104,8 +91,8 @@ public class AsciiSkipBrokenRecordsTest {
 		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
 		config.setProperty(WriterController.RECORD_QUEUE_SIZE, "128");
 		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
-		config.setProperty(AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
-		config.setProperty(AsciiFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
+		config.setProperty(AbstractFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
+		config.setProperty(AbstractFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 		final MonitoringController monitoringController = MonitoringController.createInstance(config);
 
 		// 3. initialize the reader

@@ -18,10 +18,11 @@ package kieker.toolsteetime.logReplayer;
 
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysisteetime.plugin.filter.record.delayfilter.RealtimeRecordDelayFilter;
 import kieker.analysisteetime.plugin.filter.select.timestampfilter.TimestampFilter;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.toolsteetime.logReplayer.filter.MonitoringRecordLoggerFilter;
 
@@ -42,7 +43,7 @@ public abstract class AbstractLogReplayer {
 	public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
 	public static final long MIN_TIMESTAMP = 0;
 
-	private static final Log LOG = LogFactory.getLog(AbstractLogReplayer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLogReplayer.class);
 
 	private final long ignoreRecordsBeforeTimestamp;
 	private final long ignoreRecordsAfterTimestamp;
@@ -87,7 +88,7 @@ public abstract class AbstractLogReplayer {
 		this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
 		this.monitoringConfigurationFile = monitoringConfigurationFile;
 		if (monitoringConfigurationFile == null) {
-			LOG.warn("No path to a 'monitoring.properties' passed; default configuration will be used.");
+			LOGGER.warn("No path to a 'monitoring.properties' passed; default configuration will be used.");
 		}
 	}
 
