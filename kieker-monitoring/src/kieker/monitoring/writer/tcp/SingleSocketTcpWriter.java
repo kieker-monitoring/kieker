@@ -58,14 +58,11 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 	public static final String PREFIX = SingleSocketTcpWriter.class.getName() + ".";
 
 	/** configuration key for the hostname. */
-	public static final String CONFIG_HOSTNAME = PREFIX + "hostname"; // NOCS
-																		// (afterPREFIX)
+	public static final String CONFIG_HOSTNAME = PREFIX + "hostname"; // NOCS (afterPREFIX)
 	/** configuration key for the port. */
-	public static final String CONFIG_PORT = PREFIX + "port"; // NOCS
-																// (afterPREFIX)
+	public static final String CONFIG_PORT = PREFIX + "port"; // NOCS (afterPREFIX)
 	/** configuration key for the size of the {@link #buffer}. */
-	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS
-																			// (afterPREFIX)
+	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
 	/** configuration key for {@link #flush}. */
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS
 
@@ -136,7 +133,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		} while (!this.socketChannel.isConnected());
 
 		final String message = String.format("Successfully connected to %s.", this.socketAddress);
-		LOG.info(message);
+		LOGGER.info(message);
 	}
 
 	private void tryConnect(final TimeoutCountdown timeoutCountdown) throws ConnectionTimeoutException {
@@ -168,8 +165,7 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 			socket.connect(this.socketAddress, timeoutInMs);
 			return true;
 		} catch (SocketTimeoutException | ConnectException e) {
-			// both of the exceptions indicate a connection timeout
-			// => ignore to reconnect
+			// both of the exceptions indicate a connection timeout => ignore to reconnect
 			return false;
 		} catch (final IOException e) {
 			throw new IllegalStateException(e);
@@ -180,9 +176,8 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 	public void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		final ByteBuffer recordBuffer = this.buffer;
 		if ((4 + 8 + monitoringRecord.getSize()) > recordBuffer.remaining()) {
-			// Always flush the registryBuffer before flushing the recordBuffer.
-			// Otherwise the monitoring records could arrive before their string
-			// records
+			// Always flush the registryBuffer before flushing the recordBuffer. Otherwise
+			// the monitoring records could arrive before their string records
 			WriterUtil.flushBuffer(this.registryBuffer, this.socketChannel, LOGGER);
 			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOGGER);
 		}
@@ -194,9 +189,8 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 		monitoringRecord.serialize(this.serializer);
 
 		if (this.flush) {
-			// Always flush the registryBuffer before flushing the recordBuffer.
-			// Otherwise the monitoring records could arrive before their string
-			// records
+			// Always flush the registryBuffer before flushing the recordBuffer. Otherwise
+			// the monitoring records could arrive before their string records
 			WriterUtil.flushBuffer(this.registryBuffer, this.socketChannel, LOGGER);
 			WriterUtil.flushBuffer(recordBuffer, this.socketChannel, LOGGER);
 		}
@@ -223,9 +217,8 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 	@Override
 	public void onTerminating() {
-		// Always flush the registryBuffer before flushing the recordBuffer.
-		// Otherwise the monitoring records could arrive before their string
-		// records
+		// Always flush the registryBuffer before flushing the recordBuffer. Otherwise
+		// the monitoring records could arrive before their string records
 		WriterUtil.flushBuffer(this.registryBuffer, this.socketChannel, LOGGER);
 		WriterUtil.flushBuffer(this.buffer, this.socketChannel, LOGGER);
 		WriterUtil.close(this.socketChannel, LOGGER);
