@@ -22,8 +22,6 @@ import javax.faces.bean.ManagedBean;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.examples.livedemo.analysis.LiveDemoAnalysis;
 import kieker.examples.livedemo.analysis.sink.CPUUtilizationDisplayFilter;
 import kieker.examples.livedemo.analysis.sink.ClassLoadingDisplayFilter;
@@ -41,6 +39,9 @@ import kieker.examples.livedemo.analysis.sink.ThreadsStatusDisplayFilter;
 import kieker.examples.livedemo.common.EnrichedOperationExecutionRecord;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Bjoern Weissenfels, Nils Christian Ehmke
  * 
@@ -50,15 +51,15 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 @ApplicationScoped
 public class AnalysisBean {
 
-	private static final Log LOG = LogFactory.getLog(AnalysisBean.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AnalysisBean.class);
 
 	public AnalysisBean() {
 		try {
 			LiveDemoAnalysis.getInstance().initializeAnalysis();
 		} catch (final IllegalStateException ex) {
-			AnalysisBean.LOG.error("Could not initialize analysis", ex);
+			AnalysisBean.LOGGER.error("Could not initialize analysis", ex);
 		} catch (final AnalysisConfigurationException ex) {
-			AnalysisBean.LOG.error("Could not initialize analysis", ex);
+			AnalysisBean.LOGGER.error("Could not initialize analysis", ex);
 		}
 	}
 

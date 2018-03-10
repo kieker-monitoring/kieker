@@ -12,6 +12,8 @@ dependencies {
 		include "opencsv-*.jar"
 	}
 
+	compile 'org.slf4j:slf4j-api:1.7.25'
+
 	//compile 'com.opencsv:opencsv:4.0'
 
 	runtime fileTree('lib') {
