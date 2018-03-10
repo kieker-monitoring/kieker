@@ -10,6 +10,10 @@ sourceSets {
 
 webAppDirName = 'livedemo-source/WebContent'
 
+repositories {
+	mavenCentral() 
+}
+
 dependencies {
   compile fileTree('livedemo-source/lib') {
     include '*.jar'
