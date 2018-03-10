@@ -42,7 +42,8 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.WriterUtil;
 
 /**
- * Represents a monitoring writer which serializes records via TCP to a given host:port.
+ * Represents a monitoring writer which serializes records via TCP to a given
+ * host:port.
  *
  * @author Christian Wulf
  *
@@ -51,8 +52,8 @@ import kieker.monitoring.writer.WriterUtil;
 public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
 
 	/**
-	 * This writer can be configured by the configuration file "kieker.properties". For this purpose, it uses this
-	 * prefix for all configuration keys.
+	 * This writer can be configured by the configuration file "kieker.properties".
+	 * For this purpose, it uses this prefix for all configuration keys.
 	 */
 	public static final String PREFIX = SingleSocketTcpWriter.class.getName() + ".";
 
@@ -86,7 +87,8 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 	/** the buffer used for buffering registry records. */
 	private final ByteBuffer registryBuffer;
 	/**
-	 * <code>true</code> if the {@link #buffer} should be flushed upon each new incoming monitoring record.
+	 * <code>true</code> if the {@link #buffer} should be flushed upon each new
+	 * incoming monitoring record.
 	 */
 	private final boolean flush;
 	/** the serializer to use for the incoming records. */
@@ -120,7 +122,8 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 	@Override
 	public void onStarting() {
-		final TimeoutCountdown timeoutCountdown = new TimeoutCountdown(this.connectionTimeoutInMs);
+		final long connectionTimeoutInNs = TimeUnit.MILLISECONDS.toNanos(this.connectionTimeoutInMs);
+		final TimeoutCountdown timeoutCountdown = new TimeoutCountdown(connectionTimeoutInNs);
 
 		do {
 			try {
@@ -131,6 +134,9 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 			this.tryConnect(timeoutCountdown);
 		} while (!this.socketChannel.isConnected());
+
+		final String message = String.format("Successfully connected to %s.", this.socketAddress);
+		LOG.info(message);
 	}
 
 	private void tryConnect(final TimeoutCountdown timeoutCountdown) throws ConnectionTimeoutException {
@@ -138,24 +144,24 @@ public class SingleSocketTcpWriter extends AbstractMonitoringWriter implements I
 
 		final long startTimestampInNs = System.nanoTime(); // NOPMD (PrematureDeclaration)
 
-		if (this.connectOrTimeout(socket, timeoutCountdown.getCurrentTimeoutinMs())) {
+		if (this.connectOrTimeout(socket, timeoutCountdown.getRemainingTimeoutInMs())) {
 			return;
 		}
 
 		final long currentTimestampInNs = System.nanoTime();
 
 		final long elapsedTimeInNs = currentTimestampInNs - startTimestampInNs;
-		final long elapsedTimeInMs = TimeUnit.NANOSECONDS.toMillis(elapsedTimeInNs);
-		timeoutCountdown.countdown(elapsedTimeInMs);
+		timeoutCountdown.countdownNs(elapsedTimeInNs);
 
-		if (timeoutCountdown.getCurrentTimeoutinMs() <= 0) {
+		if (timeoutCountdown.getRemainingTimeoutInMs() <= 0) {
 			final String message = String.format("Connection timeout of %d ms exceeded.", this.connectionTimeoutInMs);
 			throw new ConnectionTimeoutException(message);
 		}
 	}
 
 	/**
-	 * @return <code>true</code> if connected, <code>false</code> if not connected due to a timeout.
+	 * @return <code>true</code> if connected, <code>false</code> if not connected
+	 *         due to a timeout.
 	 */
 	private boolean connectOrTimeout(final Socket socket, final int timeoutInMs) {
 		try {
