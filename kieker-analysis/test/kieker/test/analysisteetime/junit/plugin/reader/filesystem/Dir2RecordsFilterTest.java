@@ -45,11 +45,14 @@ public class Dir2RecordsFilterTest {
 	}
 
 	@Test
-	public void shouldNotThrowAnyException() {
+	public void shouldNotThrowAnyException() { // NOPMD (Test if no exception is thrown)
 		new Execution<>(new TestConfiguration()).executeBlocking();
 	}
 
-	static class TestConfiguration extends Configuration {
+	/**
+	 * @since 1.14
+	 */
+	static class TestConfiguration extends Configuration { // NOPMD (default modifier intended)
 
 		public TestConfiguration() {
 			final ReadingComposite reader = new ReadingComposite(new File("."));
@@ -59,7 +62,10 @@ public class Dir2RecordsFilterTest {
 		}
 	}
 
-	static class ReadingComposite extends CompositeStage {
+	/**
+	 * @since 1.14
+	 */
+	static class ReadingComposite extends CompositeStage { // NOPMD (default modifier intended)
 
 		private final InitialElementProducer<File> producer;
 		private final Dir2RecordsFilter reader;

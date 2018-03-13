@@ -58,7 +58,7 @@ public final class Dir2RecordsFilter extends CompositeStage {
 
 		// FIXME does not yet work with more than one thread due to classNameRegistryRepository: classNameRegistryRepository is set after the ctor
 		// create stages
-		final ClassNameRegistryCreationFilter classNameRegistryCreationFilter = new ClassNameRegistryCreationFilter(this.classNameRegistryRepository);
+		final ClassNameRegistryCreationFilter tempClassNameRegistryCreationFilter = new ClassNameRegistryCreationFilter(this.classNameRegistryRepository);
 		final Directory2FilesFilter directory2FilesFilter = new Directory2FilesFilter();
 
 		final FileExtensionSwitch fileExtensionSwitch = new FileExtensionSwitch();
@@ -73,7 +73,7 @@ public final class Dir2RecordsFilter extends CompositeStage {
 		final OutputPort<File> binFileOutputPort = fileExtensionSwitch.addFileExtension(BinaryCompressionMethod.NONE.getFileExtension());
 
 		// connect ports by pipes
-		this.connectPorts(classNameRegistryCreationFilter.getOutputPort(), directory2FilesFilter.getInputPort());
+		this.connectPorts(tempClassNameRegistryCreationFilter.getOutputPort(), directory2FilesFilter.getInputPort());
 		this.connectPorts(directory2FilesFilter.getOutputPort(), fileExtensionSwitch.getInputPort());
 
 		this.connectPorts(datFileOutputPort, datFile2RecordFilter.getInputPort());
@@ -83,7 +83,7 @@ public final class Dir2RecordsFilter extends CompositeStage {
 		this.connectPorts(binaryFile2RecordFilter.getOutputPort(), this.recordMerger.getNewInputPort());
 
 		// prepare pipeline
-		this.classNameRegistryCreationFilter = classNameRegistryCreationFilter;
+		this.classNameRegistryCreationFilter = tempClassNameRegistryCreationFilter;
 	}
 
 	public AbstractStage getFirstStage() {

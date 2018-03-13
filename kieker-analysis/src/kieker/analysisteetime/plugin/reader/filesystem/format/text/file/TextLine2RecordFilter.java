@@ -43,7 +43,7 @@ public class TextLine2RecordFilter extends AbstractConsumerStage<TextLineContain
 
 	private boolean ignoreUnknownRecordTypes;
 
-	// private boolean abortDueToUnknownRecordType; // TODO currently not used
+	// private boolean abortDueToUnknownRecordType; // currently not used
 
 	private RecordFromTextLineCreator recordFromTextLineCreator;
 
@@ -91,7 +91,7 @@ public class TextLine2RecordFilter extends AbstractConsumerStage<TextLineContain
 		} catch (final UnknownRecordTypeException e) {
 			final String classname = e.getClassName();
 			if (!this.ignoreUnknownRecordTypes) {
-				// this.abortDueToUnknownRecordType = true; // TODO currently not used
+				// this.abortDueToUnknownRecordType = true; // currently not used
 				this.logger.error("Failed to load record type " + classname, e);
 			} else if (!this.unknownTypesObserved.contains(classname)) {
 				this.unknownTypesObserved.add(classname);

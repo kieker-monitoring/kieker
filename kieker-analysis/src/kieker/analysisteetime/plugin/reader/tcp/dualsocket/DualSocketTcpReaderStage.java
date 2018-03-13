@@ -72,7 +72,7 @@ public final class DualSocketTcpReaderStage extends AbstractProducerStage<IMonit
 		this.tcpStringRecordReader = new AbstractTcpReader(port2, bufferCapacity, this.logger) {
 			@Override
 			protected boolean onBufferReceived(final ByteBuffer buffer) {
-				RegistryRecord.registerRecordInRegistry(buffer, DualSocketTcpReaderStage.this.stringRegistry);
+				RegistryRecord.registerRecordInRegistry(buffer, DualSocketTcpReaderStage.this.stringRegistry); // NOPMD (method for legacy reasons)
 				return true;
 			}
 		};
