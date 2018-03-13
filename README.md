@@ -14,6 +14,10 @@ Kieker releases (stable, nightly, etc.) can be downloaded from our website's [Do
 
 Documentation on how to use Kieker can be found here: [Kieker Documentation](http://kieker-monitoring.net/documentation)
 
+#### Logging
+
+Kieker uses the [Simple Logging Facade for Java (SLF4J)](https://www.slf4j.org/) to support the logging framework of your choice. In order to see or store log messages, you need to [bind a logging framework](https://www.slf4j.org/manual.html#swapping) at deployment time.
+
 ## Development and Contribution
 
 Gradle is used as the build tool. A `build.gradle` file is provided.
