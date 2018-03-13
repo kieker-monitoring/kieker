@@ -31,6 +31,8 @@ import kieker.common.record.IMonitoringRecord;
 import teetime.framework.test.StageTester;
 
 /**
+ * @author Christian Wulf
+ *
  * @since 1.14
  *
  */

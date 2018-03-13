@@ -19,6 +19,8 @@ package kieker.analysisteetime.plugin.reader;
 import kieker.common.record.IMonitoringRecord;
 
 /**
+ * @author Christian Wulf
+ *
  * @since 1.14
  */
 public interface IRecordReceivedListener {

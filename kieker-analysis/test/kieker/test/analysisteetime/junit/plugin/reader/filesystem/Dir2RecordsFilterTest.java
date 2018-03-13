@@ -33,6 +33,8 @@ import teetime.stage.InitialElementProducer;
 import teetime.stage.io.Printer;
 
 /**
+ * @author Christian Wulf
+ *
  * @since 1.14
  *
  */
