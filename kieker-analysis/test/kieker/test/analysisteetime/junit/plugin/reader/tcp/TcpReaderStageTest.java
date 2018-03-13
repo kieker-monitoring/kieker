@@ -31,6 +31,8 @@ import kieker.common.record.IMonitoringRecord;
 import teetime.framework.test.StageTester;
 
 /**
+ * @author Christian Wulf
+ *
  * @since 1.14
  *
  */
@@ -40,9 +42,9 @@ public class TcpReaderStageTest {
 		// empty constructor
 	}
 
-	@Test
+	@Test // NOCS (Test not fully implemented yet)
 	@Ignore
-	public void testNonStringRecordTransmission() throws Exception {
+	public void testNonStringRecordTransmission() throws Exception { // NOPMD (Test not fully implemented yet)
 		final List<IMonitoringRecord> receivedRecords = new ArrayList<>();
 
 		final DualSocketTcpReaderStage stage = new DualSocketTcpReaderStage();
@@ -51,7 +53,7 @@ public class TcpReaderStageTest {
 				.start();
 
 		final List<IMonitoringRecord> sentRecords = new ArrayList<>();
-		// TODO
+		// TODO //NOCS (Test not fully implemented yet)
 
 		MatcherAssert.assertThat(receivedRecords, Is.is(IsEqual.equalTo(sentRecords)));
 	}

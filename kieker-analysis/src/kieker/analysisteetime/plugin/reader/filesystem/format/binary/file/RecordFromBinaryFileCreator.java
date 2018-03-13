@@ -35,7 +35,7 @@ import kieker.common.record.IMonitoringRecord;
  *
  * @since 1.10
  */
-public class RecordFromBinaryFileCreator {
+public class RecordFromBinaryFileCreator { // NOPMD (see writeToObjectArray() method)
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RecordFromBinaryFileCreator.class);
 
@@ -81,9 +81,8 @@ public class RecordFromBinaryFileCreator {
 		return record;
 	}
 
-	private boolean writeToObjectArray(final DataInputStream inputStream, final ClassNameRegistry classNameRegistry,
-			final Class<? extends IMonitoringRecord> clazz, final Object[] objectArray, final int idx,
-			final Class<?> type) throws IOException {
+	private boolean writeToObjectArray(final DataInputStream inputStream, final ClassNameRegistry classNameRegistry, // NOPMD (legacy support method)
+			final Class<? extends IMonitoringRecord> clazz, final Object[] objectArray, final int idx, final Class<?> type) throws IOException {
 		if (type == String.class) {
 			final Integer strId = inputStream.readInt();
 			final String str = classNameRegistry.get(strId);

@@ -31,6 +31,8 @@ import kieker.common.util.registry.reader.ReaderRegistry;
 import teetime.util.io.network.AbstractTcpReader;
 
 /**
+ * @author Christian Wulf
+ *
  * @since 1.14
  *
  */

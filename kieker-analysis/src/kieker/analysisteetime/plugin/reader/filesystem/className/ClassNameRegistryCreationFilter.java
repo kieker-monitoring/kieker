@@ -68,7 +68,7 @@ public class ClassNameRegistryCreationFilter extends AbstractConsumerStage<File>
 			this.outputPort.send(inputDir);
 
 			// final String filePrefix = this.mappingFileParser.getFilePrefixFromMappingFile(mappingFile);
-			// context.put(this.filePrefixOutputPort, filePrefix); // TODO pass prefix
+			// context.put(this.filePrefixOutputPort, filePrefix);
 		} catch (final FileNotFoundException e) {
 			this.logger.error("Mapping file not found.", e); // and skip this directory
 		}

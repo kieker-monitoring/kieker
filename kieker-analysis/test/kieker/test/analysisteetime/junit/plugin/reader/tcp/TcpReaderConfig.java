@@ -24,10 +24,11 @@ import teetime.framework.Execution;
 import teetime.stage.io.Printer;
 
 /**
- * @since 1.14
+ * @author Christian Wulf
  *
+ * @since 1.14
  */
-public class TcpReaderConfig extends Configuration {
+public class TcpReaderConfig extends Configuration { // NOPMD (class creates configuration)
 
 	public TcpReaderConfig() {
 		final DualSocketTcpReaderStage tcpReaderStage = new DualSocketTcpReaderStage();

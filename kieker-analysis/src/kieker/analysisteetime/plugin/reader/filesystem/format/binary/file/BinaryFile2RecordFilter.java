@@ -76,28 +76,32 @@ public class BinaryFile2RecordFilter extends AbstractConsumerStage<File> {
 	protected void execute(final File binaryFile) {
 		try {
 			final BinaryCompressionMethod method = BinaryCompressionMethod.getByFileExtension(binaryFile.getName());
-			final DataInputStream in = method.getDataInputStream(binaryFile, 1 * MB);
+			final DataInputStream inputStream = method.getDataInputStream(binaryFile, 1 * MB);
 			try {
-				IMonitoringRecord record = this.recordFromBinaryFileCreator.createRecordFromBinaryFile(binaryFile, in);
+				IMonitoringRecord record = this.recordFromBinaryFileCreator.createRecordFromBinaryFile(binaryFile, inputStream);
 				while (record != null) {
 					this.outputPort.send(record);
-					record = this.recordFromBinaryFileCreator.createRecordFromBinaryFile(binaryFile, in);
+					record = this.recordFromBinaryFileCreator.createRecordFromBinaryFile(binaryFile, inputStream);
 				}
 			} catch (final MonitoringRecordException e) {
 				this.logger.error("Error reading file: " + binaryFile, e);
 			} finally {
-				if (in != null) {
-					try {
-						in.close();
-					} catch (final IOException ex) {
-						this.logger.error("Exception while closing input stream for processing input file", ex);
-					}
+				if (inputStream != null) {
+					this.closeStream(inputStream);
 				}
 			}
 		} catch (final IOException e) {
 			this.logger.error("Error reading file: " + binaryFile, e);
 		} catch (final IllegalArgumentException e) {
 			this.logger.warn("Unknown file extension for file: " + binaryFile);
+		}
+	}
+
+	private void closeStream(final DataInputStream dataInputStream) {
+		try {
+			dataInputStream.close();
+		} catch (final IOException ex) {
+			this.logger.error("Exception while closing input stream for processing input file", ex);
 		}
 	}
 

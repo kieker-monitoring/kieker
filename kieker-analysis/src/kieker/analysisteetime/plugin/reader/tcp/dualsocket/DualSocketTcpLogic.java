@@ -30,6 +30,8 @@ import teetime.framework.OutputPort;
 import teetime.util.stage.io.network.AbstractTcpReader;
 
 /**
+ * @author Christian Wulf
+ *
  * @since 1.14
  */
 class DualSocketTcpLogic extends AbstractTcpReader implements IRecordReceivedListener {
