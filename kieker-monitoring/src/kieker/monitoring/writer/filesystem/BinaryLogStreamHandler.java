@@ -19,8 +19,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.util.filesystem.FSUtil;
@@ -39,7 +40,7 @@ import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
  */
 public class BinaryLogStreamHandler extends AbstractLogStreamHandler {
 
-	private static final Log LOGGER = LogFactory.getLog(BinaryLogStreamHandler.class); // NOPMD use of "wrong" logger class
+	private static final Logger LOGGER = LoggerFactory.getLogger(BinaryLogStreamHandler.class);
 
 	private final ByteBuffer buffer;
 

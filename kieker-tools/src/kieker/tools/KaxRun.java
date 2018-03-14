@@ -22,11 +22,11 @@ import java.io.IOException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * A simple execution of analysis configurations.
@@ -37,7 +37,7 @@ import kieker.common.logging.LogFactory;
  */
 public final class KaxRun extends AbstractCommandLineTool {
 
-	private static final Log LOG = LogFactory.getLog(KaxRun.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(KaxRun.class);
 
 	private String kaxFilename;
 
@@ -72,7 +72,7 @@ public final class KaxRun extends AbstractCommandLineTool {
 
 	private boolean assertInputFileExists() {
 		if (this.kaxFilename == null) {
-			LOG.error("No input file configured");
+			LOGGER.error("No input file configured");
 			return false;
 		}
 
@@ -87,11 +87,11 @@ public final class KaxRun extends AbstractCommandLineTool {
 			new AnalysisController(new File(this.kaxFilename)).run();
 			success = true;
 		} catch (final IOException ex) {
-			LOG.error("The given file could not be loaded", ex);
+			LOGGER.error("The given file could not be loaded", ex);
 		} catch (final AnalysisConfigurationException ex) {
-			LOG.error("The given configuration file is invalid", ex);
+			LOGGER.error("The given configuration file is invalid", ex);
 		} catch (final Exception ex) { // NOPMD NOCS (log all errors)
-			LOG.error("Error", ex);
+			LOGGER.error("Error", ex);
 		}
 
 		return success;

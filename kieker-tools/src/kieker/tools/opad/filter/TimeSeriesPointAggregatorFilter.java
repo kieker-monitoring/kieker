@@ -88,7 +88,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	public TimeSeriesPointAggregatorFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		this.aggregationVariables = new ConcurrentHashMap<String, AggregationVariableSet>();
+		this.aggregationVariables = new ConcurrentHashMap<>();
 
 		this.timeunit = super.recordsTimeUnitFromProjectContext;
 
@@ -99,7 +99,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 			configTimeUnit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
 			configTimeUnit = this.timeunit;
-			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + configTimeUnit.name() + " instead.");
+			this.logger.warn("{} is no valid TimeUnit! Using inherited value of {} instead.", configTimeunitProperty, configTimeUnit.name());
 		}
 
 		// Determine aggregation span method
@@ -203,7 +203,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		}
 
 		// There is no ConcurrentTreeMap implementation
-		final Map<Long, List<NamedDoubleTimeSeriesPoint>> orderedTsPoints = new TreeMap<Long, List<NamedDoubleTimeSeriesPoint>>(); // NOPMD (UseConcurrentHashMap)
+		final Map<Long, List<NamedDoubleTimeSeriesPoint>> orderedTsPoints = new TreeMap<>(); // NOPMD (UseConcurrentHashMap)
 
 		for (final Entry<String, AggregationVariableSet> entry : this.aggregationVariables.entrySet()) {
 			final String appname = entry.getKey();

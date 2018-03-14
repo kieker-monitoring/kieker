@@ -22,9 +22,10 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
@@ -39,7 +40,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class PrintStreamWriter extends AbstractMonitoringWriter {
 
-	private static final Log LOG = LogFactory.getLog(PrintStreamWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PrintStreamWriter.class);
 
 	private static final String ENCODING = "UTF-8";
 	private static final String PREFIX = PrintStreamWriter.class.getName() + ".";
@@ -77,7 +78,7 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 			try {
 				this.printStream = new PrintStream(new FileOutputStream(this.configPrintStreamName), false, ENCODING);
 			} catch (UnsupportedEncodingException | FileNotFoundException e) {
-				LOG.warn("An exception occurred", e);
+				LOGGER.warn("An exception occurred", e);
 			}
 		}
 	}
@@ -92,6 +93,6 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 		if ((this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();
 		}
-		LOG.info(this.getClass().getName() + " shutting down.");
+		LOGGER.info("{} shutting down.", this.getClass().getName());
 	}
 }

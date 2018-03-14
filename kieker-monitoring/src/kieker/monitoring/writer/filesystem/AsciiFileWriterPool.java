@@ -24,7 +24,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-import kieker.common.logging.Log;
+import org.slf4j.Logger;
+
 import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
 
@@ -43,7 +44,7 @@ class AsciiFileWriterPool extends AbstractFileWriterPool<CharBuffer> {
 	/**
 	 * Create an ASCII writer pool.
 	 *
-	 * @param writerLog
+	 * @param writerLogger
 	 *            logger for the pool
 	 * @param folder
 	 *            path where all files go
@@ -61,11 +62,11 @@ class AsciiFileWriterPool extends AbstractFileWriterPool<CharBuffer> {
 	 *            size of the writing buffer
 	 */
 	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
-	public AsciiFileWriterPool(final Log writerLog, final Path folder, final String charsetName, final int maxEntriesInFile,
+	public AsciiFileWriterPool(final Logger writerLogger, final Path folder, final String charsetName, final int maxEntriesInFile,
 			final ICompressionFilter compressionFilter,
 			final int maxAmountOfFiles, final int maxMegaBytesInFile, final CharBuffer buffer) {
 
-		super(writerLog, folder, charsetName, maxEntriesInFile, compressionFilter, maxAmountOfFiles, maxMegaBytesInFile, FSUtil.DAT_FILE_EXTENSION);
+		super(writerLogger, folder, charsetName, maxEntriesInFile, compressionFilter, maxAmountOfFiles, maxMegaBytesInFile, FSUtil.DAT_FILE_EXTENSION);
 
 		this.buffer = buffer;
 
@@ -74,7 +75,7 @@ class AsciiFileWriterPool extends AbstractFileWriterPool<CharBuffer> {
 
 	@Override
 	protected void onThresholdExceeded() {
-		this.currentChannel.close(this.writerLog);
+		this.currentChannel.close(this.writerLogger);
 		// we expect this.folder to exist
 
 		this.setCurrentFileNumber(this.getCurrentFileNumber() + 1);

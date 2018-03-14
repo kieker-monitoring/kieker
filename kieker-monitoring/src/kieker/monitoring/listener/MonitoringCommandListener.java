@@ -16,8 +16,9 @@
 
 package kieker.monitoring.listener;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IRecordReceivedListener;
 import kieker.common.record.remotecontrol.ActivationEvent;
@@ -34,7 +35,7 @@ import kieker.monitoring.core.controller.MonitoringController;
  */
 public class MonitoringCommandListener implements IRecordReceivedListener {
 
-	private static final Log LOG = LogFactory.getLog(MonitoringCommandListener.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringCommandListener.class);
 	private final MonitoringController monitoringController;
 
 	/**
@@ -55,11 +56,9 @@ public class MonitoringCommandListener implements IRecordReceivedListener {
 	@Override
 	public void onRecordReceived(final IMonitoringRecord record) {
 
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Received new record: " + record.getClass().getName());
-		}
+		LOGGER.debug("Received new record: {}", record.getClass().getName());
 		if (!(record instanceof IRemoteControlEvent)) {
-			LOG.info("Received an event for the TCP monitoring controller, which is no remote control event");
+			LOGGER.info("Received an event for the TCP monitoring controller, which is no remote control event");
 		}
 		final String pattern = ((IRemoteControlEvent) record).getPattern();
 		if (record instanceof DeactivationEvent) {
@@ -67,7 +66,7 @@ public class MonitoringCommandListener implements IRecordReceivedListener {
 		} else if (record instanceof ActivationEvent) {
 			this.monitoringController.activateProbe(pattern);
 		} else {
-			LOG.info("Received unknown remote control event: " + record.getClass().getName()); // NOPMD
+			LOGGER.info("Received unknown remote control event: {}", record.getClass().getName());
 		}
 	}
 

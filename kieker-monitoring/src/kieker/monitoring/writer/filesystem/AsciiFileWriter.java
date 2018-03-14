@@ -17,9 +17,10 @@ package kieker.monitoring.writer.filesystem;
 
 import java.nio.CharBuffer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.record.io.TextValueSerializer;
@@ -37,7 +38,7 @@ import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
 @ReceiveUnfilteredConfiguration // required for using class KiekerLogFolder
 public class AsciiFileWriter extends AbstractFileWriter<CharBuffer, TextValueSerializer> {
 
-	private static final Log LOG = LogFactory.getLog(AsciiFileWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AsciiFileWriter.class);
 
 	public AsciiFileWriter(final Configuration configuration) {
 		super(configuration);
@@ -50,7 +51,7 @@ public class AsciiFileWriter extends AbstractFileWriter<CharBuffer, TextValueSer
 			final int maxMegaBytesInFile) {
 		this.setBuffer(CharBuffer.allocate(this.getBufferSize()));
 
-		return new AsciiFileWriterPool(LOG, this.getLogFolder(), charsetName, maxEntriesInFile,
+		return new AsciiFileWriterPool(LOGGER, this.getLogFolder(), charsetName, maxEntriesInFile,
 				compressionFilter, maxAmountOfFiles, maxMegaBytesInFile, this.getBuffer());
 	}
 
@@ -75,7 +76,7 @@ public class AsciiFileWriter extends AbstractFileWriter<CharBuffer, TextValueSer
 
 		// flush is necessary, as only flushed data is counted.
 		// if (this.isFlushLogFile()) {
-		channel.flush(LOG);
+		channel.flush(LOGGER);
 		// }
 	}
 

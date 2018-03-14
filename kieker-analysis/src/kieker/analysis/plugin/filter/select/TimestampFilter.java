@@ -32,28 +32,26 @@ import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.TraceMetadata;
 
 /**
- * Allows to filter {@link IMonitoringRecord} objects based on their given timestamps.
- * 
+ * Allows to filter {@link IMonitoringRecord} objects based on their given
+ * timestamps.
+ *
  * This class has several specialized input ports and a single output port.
- * 
- * If the received record is within the defined timestamps, the object is delivered unmodified to the output port.
- * 
+ *
+ * If the received record is within the defined timestamps, the object is
+ * delivered unmodified to the output port.
+ *
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.2
  */
-@Plugin(description = "A filter which filters incoming records based on their timestamps",
-		outputPorts = {
-			@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, description = "Fowards records within the timeperiod",
-					eventTypes = { IMonitoringRecord.class }),
-			@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_OUTSIDE_PERIOD, description = "Forwards records out of the timeperiod",
-					eventTypes = { IMonitoringRecord.class })
-		},
-		configuration = {
+@Plugin(description = "A filter which filters incoming records based on their timestamps", outputPorts = {
+	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, description = "Fowards records within the timeperiod", eventTypes = {
+		IMonitoringRecord.class }),
+	@OutputPort(name = TimestampFilter.OUTPUT_PORT_NAME_OUTSIDE_PERIOD, description = "Forwards records out of the timeperiod", eventTypes = {
+		IMonitoringRecord.class }) }, configuration = {
 			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = TimestampFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
 			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, defaultValue = TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP),
-			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, defaultValue = TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP)
-		})
+			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, defaultValue = TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP) })
 public final class TimestampFilter extends AbstractFilterPlugin {
 	/** The name of the input port accepting records of any type. */
 	public static final String INPUT_PORT_NAME_ANY_RECORD = "monitoringRecordsAny";
@@ -63,9 +61,15 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME_EXECUTION = "monitoringRecordsExecution";
 	public static final String INPUT_PORT_NAME_COMBINED = "monitoringRecordsCombined";
 
-	/** The name of the output port delivering records which are within the defined time limits. */
+	/**
+	 * The name of the output port delivering records which are within the defined
+	 * time limits.
+	 */
 	public static final String OUTPUT_PORT_NAME_WITHIN_PERIOD = "recordsWithinTimePeriod";
-	/** The name of the output port delivering records which are not within the defined time limits. */
+	/**
+	 * The name of the output port delivering records which are not within the
+	 * defined time limits.
+	 */
 	public static final String OUTPUT_PORT_NAME_OUTSIDE_PERIOD = "recordsOutsidePeriod";
 
 	/** This is the name of the property for the used time unit. */
@@ -88,7 +92,7 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -104,7 +108,8 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.logger.warn("{} is no valid TimeUnit! Using inherited value of {} instead.", configTimeunitProperty,
+					this.timeunit.name());
 			configTimeunit = this.timeunit;
 		}
 
@@ -125,18 +130,20 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * A simple helper method which checks whether the given timestamp is in the configured limits.
-	 * 
+	 * A simple helper method which checks whether the given timestamp is in the
+	 * configured limits.
+	 *
 	 * @param timestamp
 	 *            The timestamp to be checked.
-	 * @return true if and only if the given timestamp is between or equals ignoreBeforeTimestamp and ignoreAfterTimestamp.
+	 * @return true if and only if the given timestamp is between or equals
+	 *         ignoreBeforeTimestamp and ignoreAfterTimestamp.
 	 */
 	private final boolean inRange(final long timestamp) {
 		return (timestamp >= this.ignoreBeforeTimestamp) && (timestamp <= this.ignoreAfterTimestamp);
 	}
 
-	@InputPort(name = INPUT_PORT_NAME_COMBINED, description = "Receives records to be selected by timestamps, based on type-specific selectors",
-			eventTypes = { IMonitoringRecord.class })
+	@InputPort(name = INPUT_PORT_NAME_COMBINED, description = "Receives records to be selected by timestamps, based on type-specific selectors", eventTypes = {
+		IMonitoringRecord.class })
 	public void inputCombined(final IMonitoringRecord record) {
 		if (record instanceof OperationExecutionRecord) {
 			this.inputOperationExecutionRecord((OperationExecutionRecord) record);
@@ -147,8 +154,8 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	@InputPort(name = INPUT_PORT_NAME_ANY_RECORD, description = "Receives records to be selected by their logging timestamps",
-			eventTypes = { IMonitoringRecord.class })
+	@InputPort(name = INPUT_PORT_NAME_ANY_RECORD, description = "Receives records to be selected by their logging timestamps", eventTypes = {
+		IMonitoringRecord.class })
 	public final void inputIMonitoringRecord(final IMonitoringRecord record) {
 		if (this.inRange(record.getLoggingTimestamp())) {
 			super.deliver(OUTPUT_PORT_NAME_WITHIN_PERIOD, record);
@@ -158,13 +165,14 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * This method represents the input port receiving trace events to be selected by a specific timestamp selector.
-	 * 
+	 * This method represents the input port receiving trace events to be selected
+	 * by a specific timestamp selector.
+	 *
 	 * @param record
 	 *            The new incoming record.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by a specific timestamp selector",
-			eventTypes = { IEventRecord.class, TraceMetadata.class })
+	@InputPort(name = INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by a specific timestamp selector", eventTypes = {
+		IEventRecord.class, TraceMetadata.class })
 	public final void inputTraceEvent(final IFlowRecord record) {
 		final long timestamp;
 
@@ -185,13 +193,14 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * This method represents the input port receiving trace events to be selected by a specific timestamp selector (based on tin and tout).
-	 * 
+	 * This method represents the input port receiving trace events to be selected
+	 * by a specific timestamp selector (based on tin and tout).
+	 *
 	 * @param execution
 	 *            The new incoming execution object.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives trace events to be selected by a specific timestamp selector (based on tin and tout)",
-			eventTypes = { OperationExecutionRecord.class })
+	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives trace events to be selected by a specific timestamp selector (based on tin and tout)", eventTypes = {
+		OperationExecutionRecord.class })
 	public final void inputOperationExecutionRecord(final OperationExecutionRecord execution) {
 		if (this.inRange(execution.getTin()) && this.inRange(execution.getTout())) {
 			super.deliver(OUTPUT_PORT_NAME_WITHIN_PERIOD, execution);

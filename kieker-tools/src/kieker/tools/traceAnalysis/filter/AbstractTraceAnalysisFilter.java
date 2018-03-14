@@ -16,13 +16,14 @@
 
 package kieker.tools.traceAnalysis.filter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.util.signature.Signature;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
@@ -34,7 +35,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.2
  */
 @Plugin(repositoryPorts = { @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
@@ -45,13 +46,13 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	/** The name of the repository port for the system model repository. */
 	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
 
-	protected static final Log LOG = LogFactory.getLog(AbstractTraceAnalysisFilter.class); // NOPMD (inherited constructor)
+	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractTraceAnalysisFilter.class); // NOPMD (inherited constructor)
 
 	private volatile SystemModelRepository systemEntityFactory;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -132,38 +133,38 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Prints a debug message to the logger. The output is prepended by a header which includes the name of this plugin instance.
-	 * 
+	 *
 	 * @param lines
 	 *            The lines to be printed.
 	 */
 	protected void printDebugLogMessage(final String[] lines) {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("");
-			LOG.debug("#");
-			LOG.debug("# Plugin: " + this.getName());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("");
+			LOGGER.debug("#");
+			LOGGER.debug("# Plugin: " + this.getName());
 			for (final String l : lines) {
-				LOG.debug(l);
+				LOGGER.debug(l);
 			}
 		}
 	}
 
 	protected void printErrorLogMessage(final String[] lines) {
-		LOG.error("");
-		LOG.error("#");
-		LOG.error("# Plugin: " + this.getName());
-		for (final String l : lines) {
-			LOG.error(l);
+		if (LOGGER.isErrorEnabled()) {
+			LOGGER.error("");
+			LOGGER.error("#");
+			LOGGER.error("# Plugin: " + this.getName());
+			for (final String l : lines) {
+				LOGGER.error(l);
+			}
 		}
 	}
 
 	public final SystemModelRepository getSystemEntityFactory() {
 		if (this.systemEntityFactory == null) {
-			this.systemEntityFactory = (SystemModelRepository)
-					this.getRepository(REPOSITORY_PORT_NAME_SYSTEM_MODEL);
+			this.systemEntityFactory = (SystemModelRepository) this.getRepository(REPOSITORY_PORT_NAME_SYSTEM_MODEL);
 		}
 		if (this.systemEntityFactory == null) {
-			LOG.error("Failed to connect to system model repository via repository port '"
-					+ REPOSITORY_PORT_NAME_SYSTEM_MODEL + "' (not connected?)");
+			LOGGER.error("Failed to connect to system model repository via repository port '{}' (not connected?)", REPOSITORY_PORT_NAME_SYSTEM_MODEL);
 		}
 		return this.systemEntityFactory;
 	}

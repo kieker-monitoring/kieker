@@ -22,9 +22,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.rosuda.REngine.REXPLogical;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.opad.timeseries.ForecastMethod;
 import kieker.tools.opad.timeseries.ITimeSeries;
 import kieker.tools.util.InvalidREvaluationResultException;
@@ -41,7 +41,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 
 	public static final int MIN_TS_SIZE_DEFAULT = 5;
 
-	private static final Log LOG = LogFactory.getLog(AbstractRForecaster.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRForecaster.class);
 	private static final RBridgeControl RBRIDGE = RBridgeControl.getInstance();
 	private static boolean forecastPackageAvailable;
 	private final String modelFunc;
@@ -56,7 +56,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 		try {
 			forecastPackageLoadResult = AbstractRForecaster.RBRIDGE.evalWithR("require(forecast)");
 		} catch (final InvalidREvaluationResultException e) {
-			LOG.warn("An exception occurred in R", e);
+			LOGGER.warn("An exception occurred in R", e);
 		} finally {
 			AbstractRForecaster.setForecastModuleAvailableAndLoadedFlag(forecastPackageLoadResult);
 		}
@@ -144,7 +144,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 
 	private void logForecastModuleNotAvailableOrLoaded() {
 		final IllegalStateException ise = new IllegalStateException("\"forecast\" package could not be loaded in R.");
-		LOG.error("Could not load \"forecast\" package in R. Perhaps it is not installed in R?", ise);
+		LOGGER.error("Could not load \"forecast\" package in R. Perhaps it is not installed in R?", ise);
 	}
 
 	/**
@@ -160,12 +160,12 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 			try {
 				forecast = this.forecastWithR(numForecastSteps);
 			} catch (final InvalidREvaluationResultException exception) {
-				LOG.warn("Exception occured when forecast with R", exception);
+				LOGGER.warn("Exception occured when forecast with R", exception);
 			}
 		}
 
 		if (forecast == null) {
-			LOG.warn("Null result for forecast. Falling back to Double.NaN result.");
+			LOGGER.warn("Null result for forecast. Falling back to Double.NaN result.");
 			forecast = this.createNaNForecast(history, numForecastSteps);
 		}
 		return forecast;
@@ -180,7 +180,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 		final String varNameModel = RBridgeControl.uniqueVarname();
 		final String varNameForecast = RBridgeControl.uniqueVarname();
 
-		final List<Double> allHistory = new ArrayList<Double>(history.getValues());
+		final List<Double> allHistory = new ArrayList<>(history.getValues());
 		final Double[] histValuesNotNull = AbstractRForecaster.removeNullValues(allHistory);
 		final double[] values = ArrayUtils.toPrimitive(histValuesNotNull);
 
@@ -330,7 +330,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	 * @return List/Array with no NullValues
 	 */
 	public static Double[] removeNullValues(final List<Double> allHistory) {
-		final List<Double> newList = new ArrayList<Double>();
+		final List<Double> newList = new ArrayList<>();
 		for (final Object obj : allHistory) {
 			if ((null != obj) && (obj instanceof Double)) {
 				newList.add((Double) obj);

@@ -37,25 +37,18 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.2
  */
-@Plugin(description = "Puts the incoming traces into equivalence classes",
-		outputPorts = {
-			@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES, description = "Message Traces",
-					eventTypes = { MessageTrace.class }),
-			@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES, description = "Execution Traces",
-					eventTypes = { ExecutionTrace.class })
-		},
-		repositoryPorts = {
-			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
-		},
-		configuration =
-		@Property(
-				name = TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
-				description = "The trace equivalence criteria: DISABLED (default value), ASSEMBLY (assembly-level equivalence), or ALLOCATION"
-						+ " (allocation-level equivalence)",
-				defaultValue = "DISABLED") // one of TraceEquivalenceClassFilter.TraceEquivalenceClassModes
+@Plugin(description = "Puts the incoming traces into equivalence classes", outputPorts = {
+	@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES, description = "Message Traces", eventTypes = {
+		MessageTrace.class }),
+	@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES, description = "Execution Traces", eventTypes = {
+		ExecutionTrace.class })
+}, repositoryPorts = {
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+}, configuration = @Property(name = TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE, description = "The trace equivalence criteria: DISABLED (default value), ASSEMBLY (assembly-level equivalence), or ALLOCATION"
+		+ " (allocation-level equivalence)", defaultValue = "DISABLED") // one of TraceEquivalenceClassFilter.TraceEquivalenceClassModes
 )
 public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessingFilter {
 
@@ -74,14 +67,13 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	private final TraceEquivalenceClassModes equivalenceMode;
 
 	/** Representative x # of equivalents. */
-	private final ConcurrentMap<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap =
-			new ConcurrentHashMap<AbstractExecutionTraceHashContainer, AtomicInteger>();
+	private final ConcurrentMap<AbstractExecutionTraceHashContainer, AtomicInteger> eTracesEquivClassesMap = new ConcurrentHashMap<>();
 
 	/**
 	 * This enum represents the different trace equivalence class modes.
-	 * 
+	 *
 	 * @author Andre van Hoorn
-	 * 
+	 *
 	 * @since 1.2
 	 */
 	public static enum TraceEquivalenceClassModes {
@@ -96,7 +88,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	/**
 	 * Creates a new instance of this class using the given parameters. Keep in mind that the Trace-Equivalence-Class-Mode has to be set via the method
 	 * <i>setTraceEquivalenceCallMode</i> before using this component!
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -113,7 +105,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		try {
 			extractedEquivalenceMode = TraceEquivalenceClassModes.valueOf(traceEquivalenceCallModeString);
 		} catch (final IllegalArgumentException exc) {
-			this.log.error("Error extracting enum value from String: '" + traceEquivalenceCallModeString + "'", exc);
+			this.logger.error("Error extracting enum value from String: '{}'", traceEquivalenceCallModeString, exc);
 			extractedEquivalenceMode = DEFAULT_EQUIVALENCE_MODE;
 		}
 		return extractedEquivalenceMode;
@@ -121,14 +113,11 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 
 	/**
 	 * This method represents the input port of this filter, processing incoming execution traces.
-	 * 
+	 *
 	 * @param et
 	 *            The next execution trace.
 	 */
-	@InputPort(
-			name = INPUT_PORT_NAME_EXECUTION_TRACE,
-			description = "Execution traces",
-			eventTypes = { ExecutionTrace.class })
+	@InputPort(name = INPUT_PORT_NAME_EXECUTION_TRACE, description = "Execution traces", eventTypes = { ExecutionTrace.class })
 	public void newExecutionTrace(final ExecutionTrace et) {
 		try {
 			if (this.equivalenceMode == TraceEquivalenceClassModes.DISABLED) {
@@ -141,7 +130,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 				} else if (this.equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) {
 					polledTraceHashContainer = new ExecutionTraceHashContainerAllocationEquivalence(et);
 				} else { // just to make sure
-					this.log.error("Invalid trace equivalence mode: " + this.equivalenceMode);
+					this.logger.error("Invalid trace equivalence mode: {}", this.equivalenceMode);
 					this.reportError(et.getTraceId());
 					return;
 				}
@@ -159,13 +148,13 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 			}
 			this.reportSuccess(et.getTraceId());
 		} catch (final InvalidTraceException ex) {
-			this.log.error("InvalidTraceException: " + ex.getMessage()); // do not pass 'ex' to LOG.error because this makes the output verbose (#584)
+			this.logger.error("InvalidTraceException: {}", ex.getMessage()); // do not pass 'ex' to LOG.error because this makes the output verbose (#584)
 			this.reportError(et.getTraceId());
 		}
 	}
 
 	public ConcurrentMap<ExecutionTrace, Integer> getEquivalenceClassMap() {
-		final ConcurrentMap<ExecutionTrace, Integer> map = new ConcurrentHashMap<ExecutionTrace, Integer>();
+		final ConcurrentMap<ExecutionTrace, Integer> map = new ConcurrentHashMap<>();
 		for (final Entry<AbstractExecutionTraceHashContainer, AtomicInteger> entry : this.eTracesEquivClassesMap.entrySet()) {
 			map.put(entry.getKey().getExecutionTrace(), entry.getValue().intValue());
 		}

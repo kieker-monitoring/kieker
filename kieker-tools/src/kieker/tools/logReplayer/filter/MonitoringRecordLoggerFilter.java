@@ -80,7 +80,7 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 		if (monitoringPropertiesFn.length() > 0) {
 			controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(monitoringPropertiesFn);
 		} else {
-			this.log.info("No path to a 'monitoring.properties' file passed; using default configuration");
+			this.logger.info("No path to a 'monitoring.properties' file passed; using default configuration");
 			controllerConfiguration = ConfigurationFactory.createDefaultConfiguration();
 		}
 		// flatten submitted properties
@@ -102,7 +102,7 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 			// So, a timeout of 10,000 ms should be high enough.
 			this.monitoringController.waitForTermination(10000);
 		} catch (final InterruptedException e) {
-			LOG.warn("An exception occurred while waiting for the monitoring to terminate.", e);
+			LOGGER.warn("An exception occurred while waiting for the monitoring to terminate.", e);
 		}
 	}
 

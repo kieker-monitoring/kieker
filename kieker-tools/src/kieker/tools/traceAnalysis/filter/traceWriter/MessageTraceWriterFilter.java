@@ -32,18 +32,16 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.2
  */
-@Plugin(description = "A filter allowing to write the incoming MessageTraces into a configured file",
-		repositoryPorts = {
-			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
-		},
-		configuration = {
-			@Property(name = MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, defaultValue = "messageTraces-yyyyMMdd-HHmmssSSS.txt")
-		})
+@Plugin(description = "A filter allowing to write the incoming MessageTraces into a configured file", repositoryPorts = {
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+}, configuration = {
+	@Property(name = MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, defaultValue = "messageTraces-yyyyMMdd-HHmmssSSS.txt")
+})
 public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilter {
 
 	/** The name of the configuration determining the output file name. */
@@ -56,12 +54,12 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
+	 *
 	 * @throws IOException
 	 *             If either the default encoding is not supported or the given file is somehow invalid.
 	 */
@@ -76,9 +74,7 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 	public void printStatusMessage() {
 		super.printStatusMessage();
 		final int numTraces = this.getSuccessCount();
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Wrote " + numTraces + " trace" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
-		}
+		LOGGER.debug("Wrote {} trace{} to file '{}'", numTraces, (numTraces > 1 ? "s" : ""), this.outputFn); // NOCS
 	}
 
 	/**
@@ -107,10 +103,8 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 	 * {@inheritDoc}
 	 */
 	@Override
-	@InputPort(
-			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
-			description = "Receives message traces to be processed",
-			eventTypes = { MessageTrace.class })
+	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives message traces to be processed", eventTypes = {
+		MessageTrace.class })
 	public void inputMessageTraces(final MessageTrace mt) {
 		MessageTraceWriterFilter.this.ps.println(mt.toString());
 		MessageTraceWriterFilter.this.reportSuccess(mt.getTraceId());

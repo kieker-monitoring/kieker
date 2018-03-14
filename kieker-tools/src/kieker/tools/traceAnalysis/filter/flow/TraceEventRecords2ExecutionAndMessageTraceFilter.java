@@ -18,6 +18,8 @@ package kieker.tools.traceAnalysis.filter.flow;
 
 import java.util.Stack;
 
+import org.slf4j.Logger;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -27,7 +29,6 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.filter.flow.TraceEventRecords;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.concurrency.SplitEvent;
@@ -53,21 +54,18 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
- * 
+ *
  * @since 1.6
  */
-@Plugin(description = "Transforms incoming TraceEventRecords into execution and message traces",
-		outputPorts = {
-			@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-					description = "Outputs transformed execution traces", eventTypes = { ExecutionTrace.class }),
-			@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-					description = "Outputs transformed message traces", eventTypes = { MessageTrace.class }),
-			@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
-					description = "Invalid Execution Traces", eventTypes = { InvalidExecutionTrace.class }) },
-		repositoryPorts = {
+@Plugin(description = "Transforms incoming TraceEventRecords into execution and message traces", outputPorts = {
+	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Outputs transformed execution traces", eventTypes = {
+		ExecutionTrace.class }),
+	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Outputs transformed message traces", eventTypes = {
+		MessageTrace.class }),
+	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces", eventTypes = {
+		InvalidExecutionTrace.class }) }, repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
-		},
-		configuration = {
+		}, configuration = {
 			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_JAVA_CONSTRUCTORS, defaultValue = "true"),
 			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_CALL_DETECTION, defaultValue = "true"),
 			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_IGNORE_ASSUMED, defaultValue = "false")
@@ -95,7 +93,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -125,7 +123,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 	/**
 	 * This method represents the input port, processing incoming trace event records.
-	 * 
+	 *
 	 * @param traceEventRecords
 	 *            The next trace event record.
 	 */
@@ -133,7 +131,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	public void inputTraceEvents(final TraceEventRecords traceEventRecords) {
 		final TraceMetadata trace = traceEventRecords.getTraceMetadata();
 		if (trace == null) {
-			this.log.error("Trace is missing from TraceEvents");
+			this.logger.error("Trace is missing from TraceEvents");
 			return;
 		}
 		final long traceId = trace.getTraceId();
@@ -144,11 +142,11 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		for (final AbstractTraceEvent event : traceEventRecords.getTraceEvents()) {
 			expectedOrderIndex += 1; // increment in each iteration -> 0 is the first real value
 			if (event.getOrderIndex() != expectedOrderIndex) {
-				this.log.error("Found event with wrong orderIndex. Found: " + event.getOrderIndex() + " expected: " + (expectedOrderIndex - 1));
+				this.logger.error("Found event with wrong orderIndex. Found: {} expected: {}", event.getOrderIndex(), (expectedOrderIndex - 1));
 				continue; // simply ignore wrong event
 			}
 			if (event.getTraceId() != traceId) {
-				this.log.error("Found event with wrong traceId. Found: " + event.getTraceId() + " expected: " + traceId);
+				this.logger.error("Found event with wrong traceId. Found: {} expected: {}", event.getTraceId(), traceId);
 				continue; // simply ignore wrong event
 			}
 			try { // handle all cases (more specific classes should be handled before less specific ones)
@@ -173,12 +171,12 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 					traceEventRecordHandler.handleCallOperationEvent((CallOperationEvent) event);
 					// SplitEvent
 				} else if (SplitEvent.class.isAssignableFrom(event.getClass())) {
-					this.log.warn("Events of type 'SplitEvent' are currently not handled and ignored.");
+					this.logger.warn("Events of type 'SplitEvent' are currently not handled and ignored.");
 				} else {
-					this.log.warn("Events of type '" + event.getClass().getName() + "' are currently not handled and ignored.");
+					this.logger.warn("Events of type '{}' are currently not handled and ignored.", event.getClass().getName());
 				}
 			} catch (final InvalidTraceException ex) {
-				this.log.error("Failed to reconstruct trace.", ex);
+				this.logger.error("Failed to reconstruct trace.", ex);
 				super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
 				return;
 			}
@@ -190,27 +188,27 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTrace);
 			super.reportSuccess(executionTrace.getTraceId());
 		} catch (final InvalidTraceException ex) {
-			this.log.warn("Failed to convert to message trace: " + ex.getMessage()); // do not pass 'ex' to log.warn because this makes the output verbose (#584)
+			this.logger.warn("Failed to convert to message trace: {}", ex.getMessage()); // do not pass 'ex' to log.warn because this makes the output verbose (#584)
 			super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
 		}
 
 	}
 
-	protected static Log getLOG() {
-		return AbstractAnalysisComponent.LOG;
+	protected static Logger getLogger() {
+		return AbstractAnalysisComponent.LOGGER;
 	}
 
 	/**
 	 * This class encapsulates the trace's state, that is, the current event and execution stacks.
-	 * 
+	 *
 	 * @author Andre van Hoorn, Holger Knoche, Jan Waller
 	 */
 	private static class TraceEventRecordHandler {
 		private final SystemModelRepository systemModelRepository;
 		private final TraceMetadata trace;
 		private final ExecutionTrace executionTrace;
-		private final Stack<AbstractTraceEvent> eventStack = new Stack<AbstractTraceEvent>();
-		private final Stack<ExecutionInformation> executionStack = new Stack<ExecutionInformation>();
+		private final Stack<AbstractTraceEvent> eventStack = new Stack<>();
+		private final Stack<ExecutionInformation> executionStack = new Stack<>();
 
 		private final boolean enhanceJavaConstructors;
 		private final boolean enhanceCallDetection;
@@ -230,12 +228,12 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 		/**
 		 * Finished the current execution. All open executions are finished and correctly added (if possible).
-		 * 
+		 *
 		 * @throws InvalidTraceException
 		 */
 		public void finish() throws InvalidTraceException {
-			final Stack<AbstractTraceEvent> tmpEventStack = new Stack<AbstractTraceEvent>();
-			final Stack<ExecutionInformation> tmpExecutionStack = new Stack<ExecutionInformation>();
+			final Stack<AbstractTraceEvent> tmpEventStack = new Stack<>();
+			final Stack<ExecutionInformation> tmpExecutionStack = new Stack<>();
 			if (!this.eventStack.isEmpty()) {
 				final long lastTimeStamp = this.eventStack.peek().getTimestamp();
 				while (!this.eventStack.isEmpty()) { // reverse order
@@ -267,7 +265,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 		/**
 		 * This method delivers the object on top of the stack without removing it, if it exists and null otherwise.
-		 * 
+		 *
 		 * @return The object on top if it exists or null otherwise.
 		 */
 		private AbstractTraceEvent peekEvent() {
@@ -284,8 +282,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		}
 
 		private void finishExecution(final String operationSignature, final String classSignature, final long traceId, final String sessionId,
-				final String hostname, final int eoi, final int ess, final long tin, final long tout, final boolean assumed, final boolean constructor) throws
-				InvalidTraceException {
+				final String hostname, final int eoi, final int ess, final long tin, final long tout, final boolean assumed, final boolean constructor)
+				throws InvalidTraceException {
 			final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(operationSignature,
 					constructor && this.enhanceJavaConstructors);
 			final String executionContext;
@@ -310,14 +308,14 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		/**
 		 * Removes all remaining call events from the top of the event stack. For each removed call statement, an assumed
 		 * execution is generated using the timestamp of the last recursive operation event.
-		 * 
+		 *
 		 * @param lastEvent
 		 *            The last processed operation event
 		 * @throws InvalidTraceException
 		 */
 		private void closeOpenCalls(final AbstractOperationEvent lastEvent) throws InvalidTraceException {
-			final Stack<CallOperationEvent> tmpEventStack = new Stack<CallOperationEvent>();
-			final Stack<ExecutionInformation> tmpExecutionStack = new Stack<ExecutionInformation>();
+			final Stack<CallOperationEvent> tmpEventStack = new Stack<>();
+			final Stack<ExecutionInformation> tmpExecutionStack = new Stack<>();
 			while (true) {
 				if (this.eventStack.isEmpty()) {
 					break; // we are done
@@ -386,11 +384,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 							isConstructor && this.enhanceJavaConstructors).getSignature();
 					final Signature afterSignature = ClassOperationSignaturePair.splitOperationSignatureStr(beforeOperationEvent.getOperationSignature(),
 							isConstructor && this.enhanceJavaConstructors).getSignature();
-					if (callSignature.equals(afterSignature)
-							&& callEvent.getCalleeClassSignature().equals(beforeOperationEvent.getClassSignature())) {
-						if (TraceEventRecords2ExecutionAndMessageTraceFilter.getLOG().isDebugEnabled()) {
-							TraceEventRecords2ExecutionAndMessageTraceFilter.getLOG().debug("Guessed call of \n\t" + callEvent + "\n\t" + beforeOperationEvent);
-						}
+					if (callSignature.equals(afterSignature) && callEvent.getCalleeClassSignature().equals(beforeOperationEvent.getClassSignature())) {
+						TraceEventRecords2ExecutionAndMessageTraceFilter.getLogger().debug("Guessed call of \n\t{}\n\t{}", callEvent, beforeOperationEvent);
 						return true;
 					}
 				}
@@ -486,7 +481,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 			/**
 			 * Creates a new instance of this class using the given parameters.
-			 * 
+			 *
 			 * @param executionIndex
 			 *            The execution order index.
 			 * @param stackDepth
@@ -499,7 +494,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 			/**
 			 * Returns the execution's execution order index.
-			 * 
+			 *
 			 * @return See above
 			 */
 			public int getEoi() {
@@ -508,7 +503,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 			/**
 			 * Returns the stack depth at which the execution occurred.
-			 * 
+			 *
 			 * @return See above
 			 */
 			public int getEss() {

@@ -118,7 +118,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 	@Override
 	public void terminate(final boolean error) {
 		if (!this.terminated) {
-			this.log.info("Shutdown of TimeReader requested.");
+			this.logger.info("Shutdown of TimeReader requested.");
 			this.executorService.shutdown();
 			try {
 				this.terminated = this.executorService.awaitTermination(5, TimeUnit.SECONDS);

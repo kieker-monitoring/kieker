@@ -22,9 +22,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
@@ -40,9 +41,9 @@ public class NamedListWriter extends AbstractMonitoringWriter {
 	/** The default used list name if no name has been specified. */
 	public static final String FALLBACK_LIST_NAME = "VbDt0E7Aqv";
 
-	private static final Log LOG = LogFactory.getLog(NamedListWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(NamedListWriter.class);
 
-	private static final Map<String, List<IMonitoringRecord>> NAMED_LISTS = new HashMap<String, List<IMonitoringRecord>>(); // NOPMD (no synchronization necessary)
+	private static final Map<String, List<IMonitoringRecord>> NAMED_LISTS = new HashMap<>(); // NOPMD (no synchronization necessary)
 
 	private final List<IMonitoringRecord> myNamedList;
 
@@ -57,7 +58,7 @@ public class NamedListWriter extends AbstractMonitoringWriter {
 		String name = configuration.getStringProperty(CONFIG_PROPERTY_NAME_LIST_NAME);
 		if (name.length() == 0) {
 			name = FALLBACK_LIST_NAME;
-			LOG.warn("No list name given as property. Falling back to the list with name '" + name + "'");
+			LOGGER.warn("No list name given as property. Falling back to the list with name '{}'", name);
 		}
 		this.myNamedList = NamedListWriter.createNamedList(name);
 	}

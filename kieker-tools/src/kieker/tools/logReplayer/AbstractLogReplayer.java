@@ -16,6 +16,9 @@
 
 package kieker.tools.logReplayer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -24,8 +27,6 @@ import kieker.analysis.plugin.filter.record.RealtimeRecordDelayFilter;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.tools.logReplayer.filter.MonitoringRecordLoggerFilter;
 
@@ -42,7 +43,7 @@ public abstract class AbstractLogReplayer {
 	public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
 	public static final long MIN_TIMESTAMP = 0;
 
-	private static final Log LOG = LogFactory.getLog(AbstractLogReplayer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLogReplayer.class);
 
 	private final long ignoreRecordsBeforeTimestamp;
 	private final long ignoreRecordsAfterTimestamp;
@@ -79,13 +80,13 @@ public abstract class AbstractLogReplayer {
 		this.keepOriginalLoggingTimestamps = keepOriginalLoggingTimestamps;
 		this.numRealtimeWorkerThreads = numRealtimeWorkerThreads;
 		if (this.numRealtimeWorkerThreads <= 0) {
-			LOG.warn("numRealtimeWorkerThreads == " + numRealtimeWorkerThreads);
+			LOGGER.warn("numRealtimeWorkerThreads == {}", numRealtimeWorkerThreads);
 		}
 		this.ignoreRecordsBeforeTimestamp = ignoreRecordsBeforeTimestamp;
 		this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
 		this.monitoringConfigurationFile = monitoringConfigurationFile;
 		if (this.monitoringConfigurationFile == null) {
-			LOG.warn("No path to a 'monitoring.properties' passed; default configuration will be used.");
+			LOGGER.warn("No path to a 'monitoring.properties' passed; default configuration will be used.");
 		}
 	}
 
@@ -160,10 +161,10 @@ public abstract class AbstractLogReplayer {
 
 			analysisInstance.run();
 		} catch (final IllegalStateException e) {
-			LOG.error("An error occurred while replaying", e);
+			LOGGER.error("An error occurred while replaying", e);
 			success = false;
 		} catch (final AnalysisConfigurationException e) {
-			LOG.error("An error occurred while replaying", e);
+			LOGGER.error("An error occurred while replaying", e);
 			success = false;
 		}
 		return success;
