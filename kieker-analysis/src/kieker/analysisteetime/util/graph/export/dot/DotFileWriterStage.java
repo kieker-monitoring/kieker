@@ -27,7 +27,7 @@ import kieker.analysisteetime.util.graph.mapping.SimpleFileNameMapper;
 import kieker.analysisteetime.util.graph.util.FileExtension;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

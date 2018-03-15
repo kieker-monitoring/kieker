@@ -30,7 +30,7 @@ import kieker.analysisteetime.util.graph.IVertex;
 /**
  * Default implementation of a {@link IGraph}. Instances can be created using the {@link IGraph} {@code create()} method.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

@@ -26,7 +26,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  *
  * @param <T>
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

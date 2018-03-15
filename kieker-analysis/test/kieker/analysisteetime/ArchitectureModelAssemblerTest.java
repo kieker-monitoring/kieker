@@ -33,7 +33,7 @@ import kieker.analysisteetime.signature.JavaOperationSignatureExtractor;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

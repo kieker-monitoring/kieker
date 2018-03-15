@@ -24,7 +24,7 @@ import teetime.framework.OutputPort;
 import teetime.stage.basic.ITransformation;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

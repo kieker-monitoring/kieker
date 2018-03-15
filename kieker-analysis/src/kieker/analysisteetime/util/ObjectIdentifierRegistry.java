@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

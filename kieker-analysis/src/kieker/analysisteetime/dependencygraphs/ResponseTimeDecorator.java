@@ -28,7 +28,7 @@ import kieker.analysisteetime.util.time.ChronoUnitToSymbolMapper;
 /**
  * This class adds corresponding statistics to vertices.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

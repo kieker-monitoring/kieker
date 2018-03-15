@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Helper class for {@link ChronoUnit}s.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

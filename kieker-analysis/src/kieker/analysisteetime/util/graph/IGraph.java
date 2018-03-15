@@ -19,7 +19,7 @@ package kieker.analysisteetime.util.graph;
 import kieker.analysisteetime.util.graph.impl.GraphImpl;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

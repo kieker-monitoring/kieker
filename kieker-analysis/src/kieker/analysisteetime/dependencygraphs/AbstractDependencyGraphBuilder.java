@@ -36,7 +36,7 @@ import kieker.analysisteetime.util.graph.IVertex;
  * simply extend it and implement the {@code addVertex(DeployedOperation deployedOperation)}
  * method.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

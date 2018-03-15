@@ -28,7 +28,7 @@ import kieker.analysisteetime.util.graph.IVertex;
  * Dependency graph builder for <strong>component</strong> dependency graphs
  * at the <strong>assembly level</strong>.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

@@ -20,7 +20,7 @@ import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.trace.traversal.IOperationCallVisitor;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

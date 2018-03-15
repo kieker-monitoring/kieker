@@ -40,7 +40,7 @@ import teetime.framework.Execution;
  * Class that executes the {@link ExampleConfiguration}. This is, so far, for
  * testing the current development only.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  *

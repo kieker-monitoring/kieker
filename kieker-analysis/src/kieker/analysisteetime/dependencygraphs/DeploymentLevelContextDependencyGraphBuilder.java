@@ -30,7 +30,7 @@ import kieker.analysisteetime.util.graph.IVertex;
  * Currently deployment context dependency graphs are only available at the deployment
  * level, but for clarity reasons it is explicitly mentioned in the class name.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

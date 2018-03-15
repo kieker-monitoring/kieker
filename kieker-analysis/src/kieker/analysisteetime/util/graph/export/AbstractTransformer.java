@@ -30,7 +30,7 @@ import kieker.analysisteetime.util.graph.traversal.IVertexVisitor;
  * @param <O>
  *            Output format of the transformation
  * 
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

@@ -22,10 +22,10 @@ import teetime.stage.basic.AbstractTransformation;
 
 /**
  * This class is a TeeTime stage that accepts {@link AggregatedTraceWrapper} elements at its input port
- * and send sends their containing aggregated trace to the stage´s output port if
+ * and send sends their containing aggregated trace to the stageï¿½s output port if
  * {@link AggregatedTraceWrapper#isFirst()} returns true.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

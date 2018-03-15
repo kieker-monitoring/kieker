@@ -26,7 +26,7 @@ import kieker.analysisteetime.model.analysismodel.trace.Trace;
  * A class that traverses {@link Trace}s along with one or multiple {@link IOperationCallVisitor}s. It calls the visitor(s) for every {@link OperationCall} within the
  * trace.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

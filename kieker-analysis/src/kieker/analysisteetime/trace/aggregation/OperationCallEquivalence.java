@@ -35,7 +35,7 @@ import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
  * {@link DeployedOperation}, their children are also considered equal (in the same order) and - optionally -
  * have the same failed cause.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

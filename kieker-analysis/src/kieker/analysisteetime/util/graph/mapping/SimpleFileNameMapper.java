@@ -25,7 +25,7 @@ import kieker.analysisteetime.util.graph.util.FileExtension;
  * This function maps a graph to a file name with the pattern:
  * output directory + graph name + file extension
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

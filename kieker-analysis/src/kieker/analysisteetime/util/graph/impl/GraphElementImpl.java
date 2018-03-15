@@ -19,7 +19,7 @@ package kieker.analysisteetime.util.graph.impl;
 import kieker.analysisteetime.util.graph.IGraphElement;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

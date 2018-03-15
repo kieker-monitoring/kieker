@@ -25,7 +25,7 @@ import kieker.analysisteetime.util.graph.util.dot.attributes.DotNodeAttribute;
  * and vertices to the <em>label</em> attribute of the corresponding nodes and
  * edges of the dot graph.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

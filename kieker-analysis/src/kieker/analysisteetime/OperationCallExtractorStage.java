@@ -26,7 +26,7 @@ import teetime.stage.basic.AbstractTransformation;
 /**
  * This stage accepts {@link Trace}s at its input port and sends all {@link OperationCall}s in this Traces to its output port.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  *

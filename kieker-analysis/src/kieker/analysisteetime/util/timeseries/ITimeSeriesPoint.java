@@ -22,7 +22,7 @@ import java.time.Instant;
  * {@link ITimeSeriesPoint}s are the elements of {@link TimeSeries}. They
  * consists of an instantaneous time stamp and a value.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

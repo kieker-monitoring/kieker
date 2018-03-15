@@ -25,7 +25,7 @@ import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */
@@ -95,7 +95,7 @@ public class JavaComponentSignatureExtractorTest {
 		this.testExtraction(packageName, componentName);
 	}
 
-	private void testExtraction(final String packageName, final String name) {
+	private void testExtraction(final String packageName, final String name) { // NOPMD (assert for other tests)
 		final ComponentType componentType = this.buildComponentTypeByNames(packageName, name);
 
 		this.signatureExtractor.extract(componentType);

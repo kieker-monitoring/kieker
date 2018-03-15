@@ -58,7 +58,7 @@ import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
 /**
  * This is an executable TeeTime {@link Configuration} to create dependency graphs.
  *
- * @author S�ren Henning
+ * @author Sören Henning
  *
  * @since 1.14
  *

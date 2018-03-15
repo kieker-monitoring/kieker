@@ -25,7 +25,7 @@ import kieker.analysisteetime.signature.IOperationSignatureExtractor;
 import kieker.common.record.flow.IOperationRecord;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

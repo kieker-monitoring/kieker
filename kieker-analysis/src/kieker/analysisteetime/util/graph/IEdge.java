@@ -17,7 +17,7 @@
 package kieker.analysisteetime.util.graph;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  *

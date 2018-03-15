@@ -26,7 +26,7 @@ import kieker.common.record.jvm.ThreadsStatusRecord;
 import teetime.framework.AbstractConsumerStage;
 
 /**
- * @author Nils Christian Ehmke, Lars Bluemke, Sören Henning
+ * @author Nils Christian Ehmke, Lars Bluemke, SÃ¶ren Henning
  *
  * @since 1.10
  */

@@ -26,7 +26,7 @@ import kieker.analysisteetime.model.analysismodel.trace.Trace;
  * This class is internally used to be created from {@link TraceAggregator} and processed from statistics
  * stages.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

@@ -36,7 +36,7 @@ import kieker.analysisteetime.util.graph.util.dot.attributes.DotNodeAttribute;
  *
  * To create a {@link DotExportConfiguration} use the {@link DotExportConfiguration.Builder}.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

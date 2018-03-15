@@ -21,7 +21,7 @@ import kieker.analysisteetime.util.graph.IGraph;
 import teetime.stage.basic.AbstractFilter;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

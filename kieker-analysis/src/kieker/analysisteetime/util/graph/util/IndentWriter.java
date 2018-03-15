@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

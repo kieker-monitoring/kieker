@@ -21,7 +21,7 @@ import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 /**
  * A {@link IComponentSignatureExtractor} that uses the Java signature style.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

@@ -19,7 +19,7 @@ package kieker.analysisteetime.dependencygraphs;
 import kieker.analysisteetime.util.graph.IGraph;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

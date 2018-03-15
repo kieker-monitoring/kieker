@@ -33,7 +33,7 @@ import javax.xml.bind.Marshaller;
  * @param <T>
  *            Type of elements
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

@@ -26,7 +26,7 @@ import teetime.stage.Counter;
 import teetime.stage.InstanceOfFilter;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

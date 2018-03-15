@@ -34,7 +34,7 @@ import com.google.common.collect.HashBiMap;
  *
  * @param <V>
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

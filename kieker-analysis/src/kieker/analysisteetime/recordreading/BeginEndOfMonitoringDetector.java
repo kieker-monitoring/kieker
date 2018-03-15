@@ -21,7 +21,7 @@ import kieker.common.record.IMonitoringRecord;
 import teetime.stage.basic.AbstractTransformation;
 
 /**
- * @author Nils Christian Ehmke, Sören Henning
+ * @author Nils Christian Ehmke, SÃ¶ren Henning
  *
  * @since 1.14
  */

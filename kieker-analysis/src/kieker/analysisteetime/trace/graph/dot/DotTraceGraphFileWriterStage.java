@@ -24,7 +24,7 @@ import kieker.analysisteetime.util.graph.util.dot.attributes.DotEdgeAttribute;
 import kieker.analysisteetime.util.graph.util.dot.attributes.DotNodeAttribute;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

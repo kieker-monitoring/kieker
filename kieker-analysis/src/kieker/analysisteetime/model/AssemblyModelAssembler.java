@@ -26,7 +26,7 @@ import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

@@ -26,7 +26,7 @@ import teetime.stage.basic.AbstractTransformation;
  * It uses an {@link TraceAggregator} under the hood and calls {@link TraceAggregator#handleTrace(Trace)}
  * for every incoming trace.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

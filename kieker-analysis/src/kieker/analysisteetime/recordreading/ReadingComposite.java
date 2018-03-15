@@ -29,7 +29,7 @@ import teetime.stage.InitialElementProducer;
 /**
  * This is a composite stage which deserializes monitoring records from a specific directory and forwards them to the output port.
  *
- * @author Nils Christian Ehmke, Sören Henning
+ * @author Nils Christian Ehmke, SÃ¶ren Henning
  *
  * @since 1.14
  */

@@ -27,7 +27,7 @@ import kieker.analysisteetime.ExampleConfigurationTest;
 import teetime.framework.Execution;
 
 /**
- * @author Christian Wulf, Sören Henning
+ * @author Christian Wulf, SÃ¶ren Henning
  *
  * @since 1.14
  */

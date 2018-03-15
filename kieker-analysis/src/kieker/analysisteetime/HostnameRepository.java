@@ -32,7 +32,7 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
  * and calling the {@code dec()} method when an {@link AfterOperationEvent} is processed. Thus the entry in this
  * repository will be removed after the last {@link AfterOperationEvent}.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

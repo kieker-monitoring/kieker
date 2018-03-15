@@ -23,7 +23,7 @@ import kieker.common.util.signature.Signature;
 /**
  * A {@link IOperationSignatureExtractor} that uses the Java signature style.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

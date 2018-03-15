@@ -33,7 +33,7 @@ import teetime.stage.basic.AbstractTransformation;
  * {@link AfterOperationEvent}
  * instances are supported.
  *
- * @author Nils Christian Ehmke, Sören Henning
+ * @author Nils Christian Ehmke, SÃ¶ren Henning
  *
  * @since 1.14
  *

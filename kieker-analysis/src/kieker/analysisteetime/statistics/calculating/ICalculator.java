@@ -23,7 +23,7 @@ import kieker.analysisteetime.statistics.Statistic;
  * @param <I>
  *            Type of elements
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  *
