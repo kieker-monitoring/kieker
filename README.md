@@ -37,7 +37,7 @@ Read and follow our [code conventions](https://kieker-monitoring.atlassian.net/w
 
 Kieker uses the [Simple Logging Facade for Java (SLF4J)](https://www.slf4j.org/) to support the logging framework of your choice. In order to see or store log messages, you need to [bind a logging framework](https://www.slf4j.org/manual.html#swapping) at deployment time.
 
-A fast and flexible logging framework that can be used with SLF4J is [Logback](https://logback.qos.ch). In order to use it, you have to [download](https://logback.qos.ch/download.html) it, add the following Jar files to the classpath:
+A fast and flexible logging framework that can be used with SLF4J is [Logback](https://logback.qos.ch). In order to use it, you have to [download](https://logback.qos.ch/download.html) it and add the following Jar files to the classpath:
 - `logback-classic-<version>.jar` 
 - `logback-core-<version>.jar` 
 
