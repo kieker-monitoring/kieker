@@ -42,7 +42,7 @@ public class RegularRecordHandler implements Runnable, IRecordReceivedListener {
 	/** The logger of this handler */
 	private static final Logger LOGGER = LoggerFactory.getLogger(RegularRecordHandler.class);
 
-	private final AMQPReaderLogic readerLogic;
+	private final AMQPReader readerLogic;
 	private final RecordDeserializer recordDeserializer;
 
 	private final BlockingQueue<ByteBuffer> queue = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
@@ -55,7 +55,7 @@ public class RegularRecordHandler implements Runnable, IRecordReceivedListener {
 	 * @param stringRegistry
 	 *            The string registry to use
 	 */
-	public RegularRecordHandler(final AMQPReaderLogic readerLogic, final ILookup<String> stringRegistry) {
+	public RegularRecordHandler(final AMQPReader readerLogic, final ILookup<String> stringRegistry) {
 		this.readerLogic = readerLogic;
 		this.recordDeserializer = new RecordDeserializer(this, stringRegistry);
 	}

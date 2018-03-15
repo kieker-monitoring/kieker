@@ -16,25 +16,67 @@
 
 package kieker.analysisteetime.plugin.reader.amqp;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.ByteBuffer;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
+
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.common.record.IMonitoringRecord;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.QueueingConsumer;
+import com.rabbitmq.client.ShutdownSignalException;
 
-import teetime.framework.AbstractProducerStage;
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.registry.ILookup;
+import kieker.common.util.registry.Lookup;
 
 /**
- * Reader stage that reads monitoring records from an AMQP queue.
+ * Logic module for the reader stage that reads monitoring records from an AMQP queue.
  *
- * @author Holger Knoche, Lars Bluemke
+ * @author Holger Knoche, Lars Bluemke, Sören Henning
  *
  * @since 1.12
  */
-public class AMQPReader extends AbstractProducerStage<IMonitoringRecord> {
+final class AMQPReader {
 
-	private final AMQPReaderLogic readerLogic;
+	private static final Logger LOGGER = LoggerFactory.getLogger(AMQPReader.class);
+
+	/** ID for registry records. */
+	private static final byte REGISTRY_RECORD_ID = (byte) 0xFF;
+
+	/** ID for regular records. */
+	private static final byte REGULAR_RECORD_ID = (byte) 0x01;
+
+	private final String uri;
+	private final String queueName;
+	private final int heartbeat;
+
+	private volatile Connection connection;
+	private volatile Channel channel;
+	private volatile QueueingConsumer consumer;
+
+	private final ILookup<String> stringRegistry = new Lookup<>();
+
+	private volatile Thread registryRecordHandlerThread;
+	private volatile RegistryRecordHandler registryRecordHandler;
+	private volatile RegularRecordHandler regularRecordHandler;
+
+	private volatile Thread regularRecordHandlerThread;
+
+	private volatile boolean terminated;
+	private volatile boolean threadsStarted;
+
+	private final Consumer<IMonitoringRecord> elementReceivedCallback;
 
 	/**
-	 * Creates a new AMQP reader.
+	 * Creates a new logic module for an AMQP reader.
 	 *
 	 * @param uri
 	 *            The name of the configuration property for the server URI.
@@ -42,35 +84,123 @@ public class AMQPReader extends AbstractProducerStage<IMonitoringRecord> {
 	 *            The name of the configuration property for the AMQP queue name.
 	 * @param heartbeat
 	 *            The name of the configuration property for the heartbeat timeout.
+	 * @param logger
+	 *            Kieker log.
+	 * @param elementReceivedCallback
+	 *            The actual teetime stage which uses this class.
 	 */
-	public AMQPReader(final String uri, final String queueName, final int heartbeat) {
-		this.readerLogic = new AMQPReaderLogic(uri, queueName, heartbeat, LoggerFactory.getLogger(AMQPReader.class), this);
+	public AMQPReader(final String uri, final String queueName, final int heartbeat, final Consumer<IMonitoringRecord> elementReceivedCallback) {
+		this.uri = uri;
+		this.queueName = queueName;
+		this.heartbeat = heartbeat;
+		this.elementReceivedCallback = elementReceivedCallback;
+		this.init();
 	}
 
-	@Override
-	protected void execute() {
-		this.readerLogic.read();
+	public void init() {
+		try {
+			this.connection = this.createConnection();
+			this.channel = this.connection.createChannel();
+			this.consumer = new QueueingConsumer(this.channel);
+
+			// Set up record handlers
+			this.registryRecordHandler = new RegistryRecordHandler(this.stringRegistry);
+			this.regularRecordHandler = new RegularRecordHandler(this, this.stringRegistry);
+
+			// Set up threads
+			this.registryRecordHandlerThread = new Thread(this.registryRecordHandler);
+			this.registryRecordHandlerThread.setDaemon(true);
+
+			this.regularRecordHandlerThread = new Thread(this.regularRecordHandler);
+			this.regularRecordHandlerThread.setDaemon(true);
+		} catch (final KeyManagementException e) {
+			this.handleInitializationError(e);
+		} catch (final NoSuchAlgorithmException e) {
+			this.handleInitializationError(e);
+		} catch (final IOException e) {
+			this.handleInitializationError(e);
+		} catch (final TimeoutException e) {
+			this.handleInitializationError(e);
+		} catch (final URISyntaxException e) {
+			this.handleInitializationError(e);
+		}
+
+	}
+
+	private void handleInitializationError(final Throwable e) {
+		LOGGER.error("An error occurred initializing the AMQP reader: {}", e);
+	}
+
+	private Connection createConnection() throws IOException, TimeoutException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {
+		final ConnectionFactory connectionFactory = new ConnectionFactory();
+
+		connectionFactory.setUri(this.uri);
+		connectionFactory.setRequestedHeartbeat(this.heartbeat);
+
+		return connectionFactory.newConnection();
+	}
+
+	public boolean read() {
+		// Start the worker threads, if necessary
+		if (!this.threadsStarted) {
+			this.registryRecordHandlerThread.start();
+			this.regularRecordHandlerThread.start();
+			this.threadsStarted = true;
+		}
+
+		try {
+			this.channel.basicConsume(this.queueName, true, this.consumer);
+
+			while (!this.terminated) {
+				final QueueingConsumer.Delivery delivery = this.consumer.nextDelivery();
+				final byte[] body = delivery.getBody();
+
+				final ByteBuffer buffer = ByteBuffer.wrap(body);
+				final byte recordType = buffer.get();
+
+				// Dispatch to the appropriate handlers
+				switch (recordType) {
+				case REGISTRY_RECORD_ID:
+					this.registryRecordHandler.enqueueRegistryRecord(buffer);
+					break;
+				case REGULAR_RECORD_ID:
+					this.regularRecordHandler.enqueueRegularRecord(buffer);
+					break;
+				default:
+					if (LOGGER.isErrorEnabled()) {
+						LOGGER.error(String.format("Unknown record type: %02x", recordType));
+					}
+					break;
+				}
+			}
+		} catch (final IOException e) {
+			LOGGER.error("Error while reading from queue {}", this.queueName, e);
+			return false;
+		} catch (final InterruptedException e) {
+			LOGGER.error("Consumer was interrupted on queue {}", this.queueName, e);
+			return false;
+		} catch (final ShutdownSignalException e) {
+			LOGGER.info("Consumer was shut down while waiting on queue {}", this.queueName, e);
+			return true;
+		}
+
+		return true;
 	}
 
 	/**
-	 * Terminates the reader logic by returning from read method and terminates the execution of the stage.
-	 * <p>
-	 * {@inheritDoc}
+	 * Terminates the reader logic by returning from read method.
 	 */
-	@Override
-	public void terminateStage() {
-		this.readerLogic.terminate();
-		super.terminateStage();
+	public void terminate() {
+		try {
+			this.terminated = true;
+			this.connection.close();
+		} catch (final IOException e) {
+			LOGGER.error("IO error while trying to close the connection.", e);
+		}
 	}
 
-	/**
-	 * Called from reader logic to send the read records to the output port.
-	 *
-	 * @param monitoringRecord
-	 *            The record to deliver.
-	 */
 	public void deliverRecord(final IMonitoringRecord monitoringRecord) {
-		this.outputPort.send(monitoringRecord);
+		this.elementReceivedCallback.accept(monitoringRecord);
 	}
 
 }
