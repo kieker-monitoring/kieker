@@ -24,7 +24,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysisteetime.plugin.reader.jms.JMSReader;
+import kieker.analysisteetime.plugin.reader.jms.JMSReaderStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
@@ -124,11 +124,11 @@ public class BasicJMSWriterReaderTest {
 	 * @author Lars Bluemke
 	 */
 	private class JMSReaderThread extends Thread {
-		private final JMSReader jmsReader;
+		private final JMSReaderStage jmsReader;
 		private final List<IMonitoringRecord> outputList;
 
 		public JMSReaderThread(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
-			this.jmsReader = new JMSReader(jmsProviderUrl, jmsDestination, jmsFactoryLookupName);
+			this.jmsReader = new JMSReaderStage(jmsProviderUrl, jmsDestination, jmsFactoryLookupName);
 			this.outputList = new LinkedList<>();
 		}
 

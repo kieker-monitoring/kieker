@@ -18,13 +18,13 @@ package kieker.toolsteetime.logReplayer;
 
 import java.util.concurrent.TimeUnit;
 
-import kieker.analysisteetime.plugin.reader.jms.JMSReader;
+import kieker.analysisteetime.plugin.reader.jms.JMSReaderStage;
 import kieker.common.record.IMonitoringRecord;
 
 import teetime.framework.AbstractProducerStage;
 
 /**
- * An implementation of the {@link AbstractLogReplayer}, using the {@link JMSReader} to replay {@link kieker.common.record.IMonitoringRecord}s from a JMS queue.
+ * An implementation of the {@link AbstractLogReplayer}, using the {@link JMSReaderStage} to replay {@link kieker.common.record.IMonitoringRecord}s from a JMS queue.
  *
  * @author Andre van Hoorn
  *
@@ -78,7 +78,7 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	 */
 	@Override
 	protected AbstractProducerStage<IMonitoringRecord> createReader() {
-		return new JMSReader(this.jmsProviderUrl, this.jmsDestination, this.jmsFactoryLookupName);
+		return new JMSReaderStage(this.jmsProviderUrl, this.jmsDestination, this.jmsFactoryLookupName);
 	}
 
 }
