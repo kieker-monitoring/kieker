@@ -21,9 +21,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.plugin.reader.newio.AbstractBinaryDataUnwrapper;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * Binary unwrapper which expects an int (big-endian) preceding the data block
@@ -36,7 +37,7 @@ public class BinaryChunkLengthUnwrapper extends AbstractBinaryDataUnwrapper {
 
 	private static final int BUFFER_SIZE = 65536;
 
-	private static final Log LOG = LogFactory.getLog(BinaryChunkLengthUnwrapper.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BinaryChunkLengthUnwrapper.class);
 
 	private final byte[] returnBytes;
 	private final ByteBuffer returnBuffer;
@@ -85,7 +86,8 @@ public class BinaryChunkLengthUnwrapper extends AbstractBinaryDataUnwrapper {
 			try {
 				chunkSize = dataStream.readInt();
 			} catch (final EOFException e) {
-				// If an EOF occurs at this position, the stream is considered to have ended gracefully
+				// If an EOF occurs at this position, the stream is considered to have ended
+				// gracefully
 				return -1;
 			}
 
@@ -96,10 +98,9 @@ public class BinaryChunkLengthUnwrapper extends AbstractBinaryDataUnwrapper {
 
 			// Check if there is enough space for the data
 			if (chunkSize > bufferCapacity) {
-				// If there is insufficient capacity, try to skip until a right-sized chunk is encountered
-				if (LOG.isWarnEnabled()) {
-					LOG.warn("Insufficient buffer capacity to read chunk of size " + chunkSize + ", skipping.");
-				}
+				// If there is insufficient capacity, try to skip until a right-sized chunk is
+				// encountered
+				LOGGER.warn("Insufficient buffer capacity to read chunk of size {}, skipping.", chunkSize);
 
 				this.skipChunk(chunkSize);
 				invalidChunk = true;
@@ -120,7 +121,8 @@ public class BinaryChunkLengthUnwrapper extends AbstractBinaryDataUnwrapper {
 			if (bytesSkipped == 0) {
 				final int probeValue = dataStream.read();
 
-				// If EOF is (prematurely) encountered, throw an exception as to avoid an infinite loop
+				// If EOF is (prematurely) encountered, throw an exception as to avoid an
+				// infinite loop
 				if (probeValue < 0) {
 					throw new IOException("Premature end of stream encountered, aborting.");
 				}

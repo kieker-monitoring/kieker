@@ -23,17 +23,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.reader.newio.AbstractRawDataReader;
 import kieker.analysis.plugin.reader.newio.IRawDataProcessor;
 import kieker.analysis.plugin.reader.newio.IRawDataUnwrapper;
 import kieker.analysis.plugin.reader.newio.Outcome;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
- * A reader that reads data from a OS pipe, such as {@code stdin} or a named pipe.
+ * A reader that reads data from a OS pipe, such as {@code stdin} or a named
+ * pipe.
  *
  * @author Holger Knoche
  * @since 2.0
@@ -45,19 +47,22 @@ public class OSPipeReader extends AbstractRawDataReader {
 
 	private static final String SYMBOLIC_NAME_STDIN = "-";
 
-	private static final Log LOG = LogFactory.getLog(OSPipeReader.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OSPipeReader.class);
 
 	private final IRawDataUnwrapper dataUnwrapper;
 
 	private volatile boolean terminated;
 
 	/**
-	 * Creates a new OS pipe reader with the given configuration, sending the data to the given processor.
+	 * Creates a new OS pipe reader with the given configuration, sending the data
+	 * to the given processor.
+	 *
 	 * @param configuration
 	 * @param unwrapperType
 	 * @param processor
 	 */
-	public OSPipeReader(final Configuration configuration, final Class<? extends IRawDataUnwrapper> unwrapperType, final IRawDataProcessor processor) throws AnalysisConfigurationException {
+	public OSPipeReader(final Configuration configuration, final Class<? extends IRawDataUnwrapper> unwrapperType,
+			final IRawDataProcessor processor) throws AnalysisConfigurationException {
 		super(processor);
 
 		String pipeName = configuration.getStringProperty(CONFIG_PROPERTY_PIPE_NAME);
@@ -65,7 +70,7 @@ public class OSPipeReader extends AbstractRawDataReader {
 		// Assume stdin if no pipe name is given
 		if (pipeName == null) {
 			pipeName = SYMBOLIC_NAME_STDIN;
-			LOG.info("No input pipe name given, stdin assumed.");
+			LOGGER.info("No input pipe name given, stdin assumed.");
 		}
 
 		// Open input stream and instantiate an appropriate unwrapper
@@ -86,9 +91,10 @@ public class OSPipeReader extends AbstractRawDataReader {
 		}
 	}
 
-	private IRawDataUnwrapper instantiateUnwrapper(final Class<? extends IRawDataUnwrapper> unwrapperType, final InputStream inputStream) {
+	private IRawDataUnwrapper instantiateUnwrapper(final Class<? extends IRawDataUnwrapper> unwrapperType,
+			final InputStream inputStream) {
 		if (unwrapperType == null) {
-			LOG.error("No unwrapper type was supplied.");
+			LOGGER.error("No unwrapper type was supplied.");
 			return null;
 		}
 
@@ -98,9 +104,10 @@ public class OSPipeReader extends AbstractRawDataReader {
 			// Try to instantiate the unwrapper
 			unwrapper = unwrapperType.getConstructor(InputStream.class).newInstance(inputStream);
 		} catch (final NoSuchMethodException e) {
-			LOG.error("Class %s must implement a (public) constructor that accepts an input stream.", unwrapperType.getName());
+			LOGGER.error("Class {} must implement a (public) constructor that accepts an input stream.",
+					unwrapperType.getName());
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException | SecurityException e) {
-			LOG.error("Unable to instantiate %s.", e, unwrapperType.getName());
+			LOGGER.error("Unable to instantiate {}.", unwrapperType.getName(), e);
 		}
 
 		return unwrapper;
@@ -130,7 +137,7 @@ public class OSPipeReader extends AbstractRawDataReader {
 
 			return outcome;
 		} catch (final IOException e) {
-			LOG.error("Error reading data.", e);
+			LOGGER.error("Error reading data.", e);
 			return Outcome.FAILURE;
 		}
 	}
