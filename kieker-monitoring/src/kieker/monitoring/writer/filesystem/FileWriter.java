@@ -22,9 +22,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.controller.ControllerFactory;
@@ -69,7 +70,7 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 	/** The name of the configuration key for the buffer size. */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize";
 
-	private static final Log LOGGER = LogFactory.getLog(FileWriter.class); // NOPMD use of "wrong" logger class
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileWriter.class);
 
 	private final int maxEntriesInFile;
 

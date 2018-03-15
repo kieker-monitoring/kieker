@@ -20,10 +20,11 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysisteetime.plugin.reader.IRecordReceivedListener;
 import kieker.analysisteetime.plugin.reader.RecordDeserializer;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.ILookup;
 
@@ -39,7 +40,7 @@ public class RegularRecordHandler implements Runnable, IRecordReceivedListener {
 	/** Default queue size for the regular record queue */
 	private static final int DEFAULT_QUEUE_SIZE = 4096;
 	/** The logger of this handler */
-	private static final Log LOG = LogFactory.getLog(RegularRecordHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RegularRecordHandler.class);
 
 	private final AMQPReaderLogic readerLogic;
 	private final RecordDeserializer recordDeserializer;
@@ -69,7 +70,7 @@ public class RegularRecordHandler implements Runnable, IRecordReceivedListener {
 
 				this.recordDeserializer.deserializeRecord(classId, nextRecord);
 			} catch (final InterruptedException e) {
-				LOG.error("Regular record handler was interrupted", e);
+				LOGGER.error("Regular record handler was interrupted", e);
 			}
 		}
 	}
@@ -84,7 +85,7 @@ public class RegularRecordHandler implements Runnable, IRecordReceivedListener {
 		try {
 			this.queue.put(buffer);
 		} catch (final InterruptedException e) {
-			LOG.error("Record queue was interrupted", e);
+			LOGGER.error("Record queue was interrupted", e);
 		}
 	}
 

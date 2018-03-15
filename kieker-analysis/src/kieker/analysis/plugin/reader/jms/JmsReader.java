@@ -34,33 +34,31 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 
+import org.slf4j.Logger;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
 import kieker.common.record.IMonitoringRecord;
 
 /**
  * Reads monitoring records from a (remote or local) JMS queue.
- * 
- * 
+ *
+ *
  * @author Andre van Hoorn, Matthias Rohr
- * 
+ *
  * @since 0.95a
  */
-@Plugin(description = "A reader which reads records from a (remove or local) JMS queue",
-		dependencies = "This plugin needs the file 'javax.jms-*.jar'.",
-		outputPorts = {
-			@OutputPort(name = JmsReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JmsReader")
-		},
-		configuration = {
-			@Property(name = JmsReader.CONFIG_PROPERTY_NAME_PROVIDERURL, defaultValue = "tcp://127.0.0.1:61616/"),
-			@Property(name = JmsReader.CONFIG_PROPERTY_NAME_DESTINATION, defaultValue = "queue1"),
-			@Property(name = JmsReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, defaultValue = "org.apache.activemq.jndi.ActiveMQInitialContextFactory")
-		})
+@Plugin(description = "A reader which reads records from a (remove or local) JMS queue", dependencies = "This plugin needs the file 'javax.jms-*.jar'.", outputPorts = {
+	@OutputPort(name = JmsReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JmsReader")
+}, configuration = {
+	@Property(name = JmsReader.CONFIG_PROPERTY_NAME_PROVIDERURL, defaultValue = "tcp://127.0.0.1:61616/"),
+	@Property(name = JmsReader.CONFIG_PROPERTY_NAME_DESTINATION, defaultValue = "queue1"),
+	@Property(name = JmsReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, defaultValue = "org.apache.activemq.jndi.ActiveMQInitialContextFactory")
+})
 public final class JmsReader extends AbstractReaderPlugin {
 
 	/** The name of the output port delivering the received records. */
@@ -80,7 +78,7 @@ public final class JmsReader extends AbstractReaderPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration used to initialize the whole reader. Keep in mind that the configuration should contain the following properties:
 	 *            <ul>
@@ -90,7 +88,7 @@ public final class JmsReader extends AbstractReaderPlugin {
 	 *            </ul>
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
+	 *
 	 * @throws IllegalArgumentException
 	 *             If one of the properties is empty.
 	 */
@@ -110,7 +108,7 @@ public final class JmsReader extends AbstractReaderPlugin {
 
 	/**
 	 * A call to this method is a blocking call.
-	 * 
+	 *
 	 * @return true if the method succeeds, false otherwise.
 	 */
 	@Override
@@ -118,7 +116,7 @@ public final class JmsReader extends AbstractReaderPlugin {
 		boolean retVal = true;
 		Connection connection = null;
 		try {
-			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOPMD NOCS (InitialContext expects Hashtable)
+			final Hashtable<String, String> properties = new Hashtable<>(); // NOPMD NOCS (InitialContext expects Hashtable)
 			properties.put(Context.INITIAL_CONTEXT_FACTORY, this.jmsFactoryLookupName);
 
 			// JMS initialization
@@ -136,23 +134,23 @@ public final class JmsReader extends AbstractReaderPlugin {
 				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ/HornetQ sometimes)
 				destination = session.createQueue(this.jmsDestination);
 				if (destination == null) { //
-					this.log.error("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage() + " AND failed to create queue");
+					this.logger.error("Failed to lookup queue '{}' via JNDI: {} AND failed to create queue", this.jmsDestination, exc.getMessage());
 					throw exc; // will be catched below to abort the read method
 				}
 			}
 
-			this.log.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
+			this.logger.info("Listening to destination: {} at {} !\n***\n\n", destination, this.jmsProviderUrl);
 			final MessageConsumer receiver = session.createConsumer(destination);
 			receiver.setMessageListener(new JMSMessageListener());
 
 			// start the connection to enable message delivery
 			connection.start();
 
-			this.log.info("JmsReader started and waits for incoming monitoring events!");
+			this.logger.info("JmsReader started and waits for incoming monitoring events!");
 			this.block();
-			this.log.info("Woke up by shutdown");
+			this.logger.info("Woke up by shutdown");
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			this.log.error("Error in read()", ex);
+			this.logger.error("Error in read()", ex);
 			retVal = false;
 		} finally {
 			try {
@@ -160,7 +158,7 @@ public final class JmsReader extends AbstractReaderPlugin {
 					connection.close();
 				}
 			} catch (final JMSException ex) {
-				this.log.error("Failed to close JMS", ex);
+				this.logger.error("Failed to close JMS", ex);
 			}
 		}
 		return retVal;
@@ -193,7 +191,7 @@ public final class JmsReader extends AbstractReaderPlugin {
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutdown of JmsReader requested.");
+		this.logger.info("Shutdown of JmsReader requested.");
 		this.unblock();
 	}
 
@@ -211,8 +209,8 @@ public final class JmsReader extends AbstractReaderPlugin {
 		return configuration;
 	}
 
-	protected Log getLog() {
-		return super.log;
+	protected Logger getLog() {
+		return super.logger;
 	}
 
 	/**
@@ -244,7 +242,7 @@ public final class JmsReader extends AbstractReaderPlugin {
 						JmsReader.this.getLog().error("Error delivering record", ex);
 					}
 				} else {
-					JmsReader.this.getLog().warn("Received message of invalid type: " + jmsMessage.getClass().getName());
+					JmsReader.this.getLog().warn("Received message of invalid type: {}", jmsMessage.getClass().getName());
 				}
 			}
 		}

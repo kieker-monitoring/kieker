@@ -16,7 +16,8 @@
 
 package kieker.analysisteetime.plugin.reader.jms;
 
-import kieker.common.logging.LogFactory;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.record.IMonitoringRecord;
 
 import teetime.framework.AbstractProducerStage;
@@ -48,7 +49,7 @@ public class JMSReader extends AbstractProducerStage<IMonitoringRecord> {
 	 *            e.g. {@code org.exolab.jms.jndi.InitialContextFactory}.
 	 */
 	public JMSReader(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
-		this.readerLogic = new JMSReaderLogic(jmsProviderUrl, jmsDestination, jmsFactoryLookupName, LogFactory.getLog(JMSReader.class), this);
+		this.readerLogic = new JMSReaderLogic(jmsProviderUrl, jmsDestination, jmsFactoryLookupName, LoggerFactory.getLogger(JMSReader.class), this);
 	}
 
 	@Override

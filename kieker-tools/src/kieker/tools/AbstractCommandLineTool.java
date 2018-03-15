@@ -22,9 +22,9 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.util.CLIHelpFormatter;
 import kieker.tools.util.ToolsUtil;
 
@@ -44,7 +44,7 @@ public abstract class AbstractCommandLineTool {
 	public static final String CMD_OPT_NAME_DEBUG_LONG = "debug";
 	public static final String CMD_OPT_NAME_DEBUG_SHORT = "d";
 
-	private static final Log LOG = LogFactory.getLog(AbstractCommandLineTool.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCommandLineTool.class);
 
 	private final boolean useSystemExit;
 
@@ -73,7 +73,7 @@ public abstract class AbstractCommandLineTool {
 			success = this.readPropertiesFromCommandLine(commandLine);
 
 			if (!success) {
-				LOG.info("Use the option `--" + CMD_OPT_NAME_HELP_LONG + "` for usage information");
+				LOGGER.info("Use the option `--{}` for usage information", CMD_OPT_NAME_HELP_LONG);
 			} else {
 				success = this.performTask();
 			}
@@ -82,7 +82,7 @@ public abstract class AbstractCommandLineTool {
 			success = false;
 		}
 
-		LOG.info("See 'kieker.log' for details");
+		LOGGER.info("See 'kieker.log' for details");
 		if (!success && this.useSystemExit) {
 			System.exit(1);
 		}
@@ -118,8 +118,8 @@ public abstract class AbstractCommandLineTool {
 		} catch (final ParseException ex) {
 			// Note that we append ex.getMessage() to the log message on purpose to improve the
 			// logging output on the console.
-			LOG.error("An error occurred while parsing the command line arguments: " + ex.getMessage(), ex);
-			LOG.info("Use the option `--" + CMD_OPT_NAME_HELP_LONG + "` for usage information");
+			LOGGER.error("An error occurred while parsing the command line arguments: {}", ex.getMessage(), ex);
+			LOGGER.info("Use the option `--{}` for usage information", CMD_OPT_NAME_HELP_LONG);
 
 			return null;
 		}

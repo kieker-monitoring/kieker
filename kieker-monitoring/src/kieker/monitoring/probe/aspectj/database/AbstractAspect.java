@@ -26,9 +26,9 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.database.AfterDatabaseEvent;
 import kieker.common.record.database.BeforeDatabaseEvent;
 import kieker.common.record.database.DatabaseFailedEvent;
@@ -57,7 +57,7 @@ import kieker.monitoring.timer.ITimeSource;
 @Aspect
 public abstract class AbstractAspect extends AbstractAspectJProbe {
 
-	private static final Log LOG = LogFactory.getLog(AbstractAspect.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractAspect.class);
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = AbstractAspect.CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
@@ -295,8 +295,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 				}
 			}
 		} catch (final SQLException e) {
-			AbstractAspect.LOG
-					.error(AbstractAspect.LOGGING_PREFIX + "getReturnValue: SQL-Exception: " + e.getMessage()); // NOPMD
+			AbstractAspect.LOGGER.error("{}getReturnValue: SQL-Exception:", AbstractAspect.LOGGING_PREFIX, e);
 		}
 		return String.valueOf(numberOfRows);
 	}

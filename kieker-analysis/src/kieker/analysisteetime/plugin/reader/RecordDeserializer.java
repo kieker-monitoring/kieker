@@ -18,9 +18,10 @@ package kieker.analysisteetime.plugin.reader;
 
 import java.nio.ByteBuffer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
@@ -38,7 +39,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public class RecordDeserializer {
 
-	private static final Log LOGGER = LogFactory.getLog(RecordDeserializer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RecordDeserializer.class);
 
 	private final IRecordReceivedListener listener;
 	private final IRegistry<String> registry;
@@ -77,7 +78,7 @@ public class RecordDeserializer {
 
 			this.listener.onRecordReceived(record);
 		} catch (final RecordInstantiationException ex) {
-			LOGGER.error("Failed to create: " + recordClassName, ex); // NOPMD (guard not necessary for error level)
+			LOGGER.error("Failed to create: {}", recordClassName, ex);
 		}
 
 		return true;

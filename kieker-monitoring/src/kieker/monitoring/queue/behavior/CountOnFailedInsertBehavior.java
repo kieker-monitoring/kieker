@@ -19,8 +19,8 @@ package kieker.monitoring.queue.behavior;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicLong;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author "Christian Wulf"
@@ -32,7 +32,7 @@ import kieker.common.logging.LogFactory;
  */
 public class CountOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 
-	private static final Log LOG = LogFactory.getLog(CountOnFailedInsertBehavior.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CountOnFailedInsertBehavior.class);
 
 	private final BlockingQueue<E> queue;
 	private final AtomicLong numFailedInserts = new AtomicLong();
@@ -46,9 +46,9 @@ public class CountOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 		final boolean offered = this.queue.offer(element);
 		if (!offered) {
 			final long tmpMissedRecords = this.numFailedInserts.incrementAndGet();
-			if (LOG.isWarnEnabled() && ((tmpMissedRecords % 1024) == 1)) {
+			if (LOGGER.isWarnEnabled() && ((tmpMissedRecords % 1024) == 1)) {
 				// warn upon the first failed element and upon all 1024th one
-				LOG.warn("Queue is full, dropping records. Number of already dropped records: " + tmpMissedRecords);
+				LOGGER.warn("Queue is full, dropping records. Number of already dropped records: " + tmpMissedRecords);
 			}
 		}
 		return true;
@@ -61,10 +61,10 @@ public class CountOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder()
-			.append(this.getClass())
-			.append("\n\t\t")
-			.append("Number of failed inserts: ")
-			.append(this.getNumFailedInserts());
+				.append(this.getClass())
+				.append("\n\t\t")
+				.append("Number of failed inserts: ")
+				.append(this.getNumFailedInserts());
 		return builder.toString();
 	}
 }

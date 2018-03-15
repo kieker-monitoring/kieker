@@ -31,7 +31,7 @@ import kieker.common.record.misc.TimestampRecord;
 /**
  * Generates time events with a given resolution based on the timestamps of
  * incoming {@link kieker.common.record.IMonitoringRecord}s.
- * 
+ *
  * <ol>
  * <li>The first record received via {@link #inputTimestamp(Long)} immediately leads to a new {@link TimestampRecord} with the given timestamp.</li>
  * <li>The timestamp of the first record is stored as {@link #firstTimestamp} and future events are generated at {@link #firstTimestamp} + i *
@@ -43,25 +43,22 @@ import kieker.common.record.misc.TimestampRecord;
  * </ol>
  * </li>
  * </ol>
- * 
+ *
  * It is guaranteed that the generated timestamps are in ascending order.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.3
  */
-@Plugin(description = "Generates time events with a given resolution based on the timestamps of incoming IMonitoringRecords",
-		outputPorts = {
-			@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, eventTypes = { TimestampRecord.class },
-					description = "Provides current time events"),
-			@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_VALUE, eventTypes = { Long.class },
-					description = "Provides current time values")
-		},
-		configuration = {
-			@Property(name = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
-					defaultValue = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-			@Property(name = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, defaultValue = "1000")
-		})
+@Plugin(description = "Generates time events with a given resolution based on the timestamps of incoming IMonitoringRecords", outputPorts = {
+	@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, eventTypes = {
+		TimestampRecord.class }, description = "Provides current time events"),
+	@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_VALUE, eventTypes = {
+		Long.class }, description = "Provides current time values")
+}, configuration = {
+	@Property(name = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+	@Property(name = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, defaultValue = "1000")
+})
 public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 
 	/** This is the name of the input port receiving new timestamps. */
@@ -107,7 +104,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	/**
 	 * Creates an event generator which generates time events with the given resolution in timeunits via the output port
 	 * {@link #OUTPUT_PORT_NAME_CURRENT_TIME_RECORD}.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to be used for this plugin.
 	 * @param projectContext
@@ -123,7 +120,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.logger.warn("{} is no valid TimeUnit! Using inherited value of {} instead.", configTimeunitProperty, this.timeunit.name());
 			configTimeunit = this.timeunit;
 		}
 
@@ -132,12 +129,12 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 
 	/**
 	 * This method represents the input port for new records.
-	 * 
+	 *
 	 * @param record
 	 *            The next record.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_NEW_RECORD, eventTypes = { IMonitoringRecord.class },
-			description = "Receives a new record and extracts the logging timestamp as a time event")
+	@InputPort(name = INPUT_PORT_NAME_NEW_RECORD, eventTypes = {
+		IMonitoringRecord.class }, description = "Receives a new record and extracts the logging timestamp as a time event")
 	public void inputRecord(final IMonitoringRecord record) {
 		this.inputTimestamp(record.getLoggingTimestamp());
 	}
@@ -145,14 +142,14 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	/**
 	 * Evaluates the given timestamp internal current time which may lead to
 	 * newly generated events via {@link #OUTPUT_PORT_NAME_CURRENT_TIME_RECORD}.
-	 * 
+	 *
 	 * @param timestamp
 	 *            The next timestamp.
 	 */
 	@InputPort(name = INPUT_PORT_NAME_NEW_TIMESTAMP, description = "Receives a new timestamp as a time event", eventTypes = { Long.class })
 	public void inputTimestamp(final Long timestamp) {
 		if (timestamp < 0) {
-			this.log.warn("Received timestamp value < 0: " + timestamp);
+			this.logger.warn("Received timestamp value < 0: " + timestamp);
 			return;
 		}
 
@@ -166,8 +163,8 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 		} else if (timestamp > this.maxTimestamp) {
 			this.maxTimestamp = timestamp;
 			// Fire timer event(s) if required.
-			for (long nextTimerEventAt = this.mostRecentEventFired + this.timerResolution; timestamp >= nextTimerEventAt; nextTimerEventAt =
-					this.mostRecentEventFired + this.timerResolution) {
+			for (long nextTimerEventAt = this.mostRecentEventFired
+					+ this.timerResolution; timestamp >= nextTimerEventAt; nextTimerEventAt = this.mostRecentEventFired + this.timerResolution) {
 				super.deliver(OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, new TimestampRecord(nextTimerEventAt));
 				super.deliver(OUTPUT_PORT_NAME_CURRENT_TIME_VALUE, nextTimerEventAt);
 				this.mostRecentEventFired = nextTimerEventAt;

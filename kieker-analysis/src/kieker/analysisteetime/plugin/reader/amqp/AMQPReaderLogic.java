@@ -23,13 +23,14 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
+import org.slf4j.Logger;
+
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
 import com.rabbitmq.client.ShutdownSignalException;
 
-import kieker.common.logging.Log;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.ILookup;
 import kieker.common.util.registry.Lookup;
@@ -71,7 +72,7 @@ final class AMQPReaderLogic {
 	private volatile boolean terminated;
 	private volatile boolean threadsStarted;
 
-	private final Log log;
+	private final Logger logger;
 	private final AMQPReader amqpReaderStage;
 
 	/**
@@ -83,16 +84,16 @@ final class AMQPReaderLogic {
 	 *            The name of the configuration property for the AMQP queue name.
 	 * @param heartbeat
 	 *            The name of the configuration property for the heartbeat timeout.
-	 * @param log
+	 * @param logger
 	 *            Kieker log.
 	 * @param amqpReaderStage
 	 *            The actual teetime stage which uses this class.
 	 */
-	public AMQPReaderLogic(final String uri, final String queueName, final int heartbeat, final Log log, final AMQPReader amqpReaderStage) {
+	public AMQPReaderLogic(final String uri, final String queueName, final int heartbeat, final Logger logger, final AMQPReader amqpReaderStage) {
 		this.uri = uri;
 		this.queueName = queueName;
 		this.heartbeat = heartbeat;
-		this.log = log;
+		this.logger = logger;
 		this.amqpReaderStage = amqpReaderStage;
 		this.init();
 	}
@@ -128,7 +129,7 @@ final class AMQPReaderLogic {
 	}
 
 	private void handleInitializationError(final Throwable e) {
-		this.log.error("An error occurred initializing the AMQP reader: " + e);
+		this.logger.error("An error occurred initializing the AMQP reader: {}", e);
 	}
 
 	private Connection createConnection() throws IOException, TimeoutException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {
@@ -167,18 +168,20 @@ final class AMQPReaderLogic {
 					this.regularRecordHandler.enqueueRegularRecord(buffer);
 					break;
 				default:
-					this.log.error(String.format("Unknown record type: %02x", recordType));
+					if (this.logger.isErrorEnabled()) {
+						this.logger.error(String.format("Unknown record type: %02x", recordType));
+					}
 					break;
 				}
 			}
 		} catch (final IOException e) {
-			this.log.error("Error while reading from queue " + this.queueName, e);
+			this.logger.error("Error while reading from queue {}", this.queueName, e);
 			return false;
 		} catch (final InterruptedException e) {
-			this.log.error("Consumer was interrupted on queue " + this.queueName, e);
+			this.logger.error("Consumer was interrupted on queue {}", this.queueName, e);
 			return false;
 		} catch (final ShutdownSignalException e) {
-			this.log.info("Consumer was shut down while waiting on queue " + this.queueName, e);
+			this.logger.info("Consumer was shut down while waiting on queue {}", this.queueName, e);
 			return true;
 		}
 
@@ -193,7 +196,7 @@ final class AMQPReaderLogic {
 			this.terminated = true;
 			this.connection.close();
 		} catch (final IOException e) {
-			this.log.error("IO error while trying to close the connection.", e);
+			this.logger.error("IO error while trying to close the connection.", e);
 		}
 	}
 
