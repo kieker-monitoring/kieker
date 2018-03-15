@@ -16,7 +16,9 @@
 package kieker.analysis.plugin.reader.newio;
 
 /**
- * Abstract superclass for raw data readers.
+ * <<<<<<< HEAD Abstract superclass for raw data readers. ======= Abstract
+ * superclass for all readers which only read raw data to be processed by a
+ * configurable deserializer. >>>>>>> stable
  *
  * @author Holger Knoche
  * @since 2.0

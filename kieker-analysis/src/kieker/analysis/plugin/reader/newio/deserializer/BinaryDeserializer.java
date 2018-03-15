@@ -75,7 +75,8 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 	}
 
 	@Override
-	protected List<IMonitoringRecord> decodeRecords(final ByteBuffer buffer, final int dataSize) throws InvalidFormatException {
+	protected List<IMonitoringRecord> decodeRecords(final ByteBuffer buffer, final int dataSize)
+			throws InvalidFormatException {
 		final int baseOffset = buffer.position();
 
 		// Retrieve the offset of the string table (last four bytes of the data)
@@ -89,9 +90,7 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 
 		// Position the buffer and decode the records
 		buffer.position(baseOffset);
-		final List<IMonitoringRecord> records = this.decodeMonitoringRecords(buffer, stringRegistry, absoluteStringTableOffset);
-
-		return records;
+		return this.decodeMonitoringRecords(buffer, stringRegistry, absoluteStringTableOffset);
 	}
 
 	private IRegistry<String> decodeStringRegistry(final ByteBuffer buffer) {
@@ -110,7 +109,8 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 		return new DeserializerStringRegistry(values);
 	}
 
-	private List<IMonitoringRecord> decodeMonitoringRecords(final ByteBuffer buffer, final IRegistry<String> stringRegistry, final int endOffset) {
+	private List<IMonitoringRecord> decodeMonitoringRecords(final ByteBuffer buffer,
+			final IRegistry<String> stringRegistry, final int endOffset) {
 		final List<IMonitoringRecord> records = new ArrayList<>();
 		final IValueDeserializer deserializer = BinaryValueDeserializer.create(buffer, stringRegistry);
 		int currentOffset = buffer.position();
@@ -133,7 +133,8 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 
 		// The record data must end exactly at the given end offset
 		if (currentOffset != endOffset) {
-			throw new InvalidFormatException("Invalid record data found, should have ended at offset " + endOffset + ", but ended at offset " + currentOffset + ".");
+			throw new InvalidFormatException("Invalid record data found, should have ended at offset " + endOffset
+					+ ", but ended at offset " + currentOffset + ".");
 		}
 
 		return records;

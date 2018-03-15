@@ -22,8 +22,8 @@ import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Set;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class represents a configuration object within the Kieker project. Technically it is a property list with some additional methods and possibilities.
@@ -39,7 +39,7 @@ import kieker.common.logging.LogFactory;
 public class Configuration extends Properties {
 
 	private static final long serialVersionUID = 3364877592243422259L;
-	private static final Log LOG = LogFactory.getLog(Configuration.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Configuration.class);
 
 	/**
 	 * Creates a new (empty) configuration.
@@ -164,7 +164,7 @@ public class Configuration extends Properties {
 		try {
 			return Integer.parseInt(value);
 		} catch (final NumberFormatException ex) {
-			LOG.warn("Error parsing configuration property '" + key + "', found value '" + value + "', using default value " + defaultValue); // ignore ex
+			LOGGER.warn("Error parsing configuration property '{}', found value '{}', using default value {}", key, value, defaultValue); // ignore ex
 			return defaultValue;
 		}
 	}
@@ -213,11 +213,11 @@ public class Configuration extends Properties {
 		try {
 			return Long.parseLong(value);
 		} catch (final NumberFormatException ex) {
-			LOG.warn("Error parsing configuration property '" + key + "', found value '" + value + "', using default value " + defaultValue); // ignore ex
+			LOGGER.warn("Error parsing configuration property '{}', found value '{}', using default value {}", key, value, defaultValue); // ignore ex
 			return defaultValue;
 		}
 	}
-	
+
 	private String getPropertyValueInternal(final String key) {
 		return super.getProperty(key);
 	}
@@ -266,7 +266,7 @@ public class Configuration extends Properties {
 		try {
 			return Double.parseDouble(value);
 		} catch (final NumberFormatException ex) {
-			LOG.warn("Error parsing configuration property '" + key + "', found value '" + value + "', using default value " + defaultValue); // ignore ex
+			LOGGER.warn("Error parsing configuration property '{}', found value '{}', using default value {}", key, value, defaultValue); // ignore ex
 			return defaultValue;
 		}
 	}

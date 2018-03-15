@@ -26,7 +26,8 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.dataformat.FormatIdentifier;
 
 /**
- * Abstract superclass for deserializers which use Kieker's binary container format.
+ * Abstract superclass for deserializers which use Kieker's binary container
+ * format.
  *
  * @author Holger Knoche
  * @since 1.13
@@ -46,7 +47,8 @@ public abstract class AbstractContainerFormatDeserializer extends AbstractBinary
 	 * @param projectContext
 	 *            The project context to use
 	 */
-	public AbstractContainerFormatDeserializer(final Configuration configuration, final IProjectContext projectContext) {
+	public AbstractContainerFormatDeserializer(final Configuration configuration,
+			final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
 
@@ -61,14 +63,16 @@ public abstract class AbstractContainerFormatDeserializer extends AbstractBinary
 		// Check the actual format identifier
 		final int formatIdentifier = buffer.getInt();
 		if (formatIdentifier != this.getFormatIdentifier()) {
-			throw new InvalidFormatException(String.format("An invalid format identifier %08x was found.", formatIdentifier));
+			throw new InvalidFormatException(
+					String.format("An invalid format identifier %08x was found.", formatIdentifier));
 		}
 
 		return this.decodeRecords(buffer, (dataSize - HEADER_SIZE));
 	}
 
 	@Override
-	public List<IMonitoringRecord> deserializeRecordsFromCharBuffer(final CharBuffer buffer, final int dataSize) throws InvalidFormatException {
+	public List<IMonitoringRecord> deserializeRecordsFromCharBuffer(final CharBuffer buffer, final int dataSize)
+			throws InvalidFormatException {
 		throw new UnsupportedOperationException("Character data is unsupported by this reader.");
 	}
 
@@ -76,8 +80,8 @@ public abstract class AbstractContainerFormatDeserializer extends AbstractBinary
 	 * Decodes the records from the container's payload.
 	 *
 	 * @param buffer
-	 *            The buffer to decode the data from. It is positioned at the
-	 *            first byte of the payload
+	 *            The buffer to decode the data from. It is positioned at the first
+	 *            byte of the payload
 	 * @param dataSize
 	 *            The size of the payload data in bytes
 	 * @return The decoded records

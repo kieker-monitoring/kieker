@@ -43,12 +43,10 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.LogImplJUnit;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.signaturePattern.InvalidPatternException;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
 import kieker.monitoring.writer.dump.DumpWriter;
 
@@ -133,9 +131,7 @@ public class TestProbeController extends AbstractKiekerTest {
 		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, "true");
 		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
 
-		LogImplJUnit.disableThrowable(InvalidPatternException.class);
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
-		LogImplJUnit.reset();
 
 		Assert.assertTrue(this.configFile.exists());
 		final List<String> list = ctrl.getProbePatternList();
@@ -255,9 +251,7 @@ public class TestProbeController extends AbstractKiekerTest {
 		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE, this.configFile.getAbsolutePath());
 		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE, "true");
 
-		LogImplJUnit.disableThrowable(InvalidPatternException.class);
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
-		LogImplJUnit.reset();
 
 		Assert.assertTrue(this.configFile.exists());
 		final List<String> list = ctrl.getProbePatternList();
@@ -326,9 +320,7 @@ public class TestProbeController extends AbstractKiekerTest {
 		// test methods
 		final String pattern = "..* kieker..*.*(..)";
 
-		LogImplJUnit.disableThrowable(InvalidPatternException.class);
 		Assert.assertFalse(ctrl.activateProbe("InvalidPatternException expected"));
-		LogImplJUnit.reset();
 
 		Assert.assertTrue(ctrl.activateProbe(pattern));
 		Assert.assertTrue(ctrl.isProbeActivated(signature));

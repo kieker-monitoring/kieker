@@ -18,8 +18,9 @@ package kieker.common.record.tcp;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
+import org.slf4j.Logger;
+
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.logging.Log;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IRecordReceivedListener;
@@ -51,7 +52,7 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 	private final IRecordReceivedListener listener;
 	private final CachedRecordFactoryCatalog recordFactories = new CachedRecordFactoryCatalog();
 
-	public SingleSocketRecordReader(final int port, final int bufferCapacity, final Log logger, final IRecordReceivedListener listener) {
+	public SingleSocketRecordReader(final int port, final int bufferCapacity, final Logger logger, final IRecordReceivedListener listener) {
 		super(port, bufferCapacity, logger);
 		this.listener = listener;
 		this.stringRegistryWrapper = new GetValueAdapter<>(this.readerRegistry);
@@ -104,7 +105,7 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 
 			this.listener.onRecordReceived(record);
 		} catch (final RecordInstantiationException ex) {
-			super.logger.error("Failed to create: " + recordClassName, ex);
+			super.logger.error("Failed to create: {}",  recordClassName, ex);
 		}
 
 		return true;

@@ -16,8 +16,9 @@
 
 package kieker.monitoring.probe.manual;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.record.controlflow.BranchingRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -26,13 +27,13 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * Convenience class which provides a static method to log branching.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 0.95a
  */
 public final class BranchingProbe implements IMonitoringProbe {
-	private static final Log LOG = LogFactory.getLog(BranchingProbe.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BranchingProbe.class);
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIMESOURCE = CTRLINST.getTimeSource();
 
@@ -46,7 +47,7 @@ public final class BranchingProbe implements IMonitoringProbe {
 		try {
 			CTRLINST.newMonitoringRecord(new BranchingRecord(TIMESOURCE.getTime(), branchID, branchingOutcome));
 		} catch (final Exception ex) { // NOPMD NOCS (Exceptions)
-			LOG.error("Error monitoring branching", ex);
+			LOGGER.error("Error monitoring branching", ex);
 		}
 	}
 }

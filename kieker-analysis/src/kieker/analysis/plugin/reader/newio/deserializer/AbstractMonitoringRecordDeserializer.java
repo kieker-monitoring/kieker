@@ -38,7 +38,8 @@ public abstract class AbstractMonitoringRecordDeserializer implements IMonitorin
 	 * @param projectContext
 	 *            The project context to use
 	 */
-	public AbstractMonitoringRecordDeserializer(final Configuration configuration, final IProjectContext projectContext) { // NOPMD Constructor template for deserializers
+	public AbstractMonitoringRecordDeserializer(final Configuration configuration, final IProjectContext projectContext) { // NOPMD Constructor template for
+																															// deserializers
 		// Constructor template
 	}
 

@@ -31,10 +31,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -49,11 +50,11 @@ import kieker.common.util.filesystem.FSUtil;
  * @since 1.2
  */
 final class FSDirectoryReader implements Runnable {
-	private static final Log LOG = LogFactory.getLog(FSDirectoryReader.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(FSDirectoryReader.class);
 
 	String filePrefix = FSUtil.FILE_PREFIX; // NOPMD NOCS (package visible for inner class)
 
-	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>(); // NOPMD (no synchronization needed)
+	private final Map<Integer, String> stringRegistry = new HashMap<>(); // NOPMD (no synchronization needed)
 
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
@@ -61,7 +62,7 @@ final class FSDirectoryReader implements Runnable {
 
 	private final boolean ignoreUnknownRecordTypes;
 	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
-	private final Set<String> unknownTypesObserved = new HashSet<String>();
+	private final Set<String> unknownTypesObserved = new HashSet<>();
 
 	/**
 	 * Creates a new instance of this class.
@@ -100,10 +101,10 @@ final class FSDirectoryReader implements Runnable {
 			}
 		});
 		if (inputFiles == null) {
-			LOG.error("Directory '" + this.inputDir + "' does not exist or an I/O error occured.");
+			LOGGER.error("Directory '{}' does not exist or an I/O error occured.", this.inputDir);
 		} else if (inputFiles.length == 0) {
 			// level 'warn' for this case, because this is not unusual for large monitoring logs including a number of directories
-			LOG.warn("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with a valid file extension.");
+			LOGGER.warn("Directory '{}' contains no files starting with '{}' and ending with a valid file extension.", this.inputDir, this.filePrefix);
 		} else { // everything ok, we process the files
 			Arrays.sort(inputFiles, new Comparator<File>() {
 
@@ -115,23 +116,23 @@ final class FSDirectoryReader implements Runnable {
 			boolean ignoreUnknownRecordTypesWarningAlreadyShown = false;
 			for (final File inputFile : inputFiles) {
 				if (this.terminated) {
-					LOG.info("Shutting down DirectoryReader.");
+					LOGGER.info("Shutting down DirectoryReader.");
 					break;
 				}
-				LOG.info("< Loading " + inputFile.getAbsolutePath());
+				LOGGER.info("< Loading {}", inputFile.getAbsolutePath());
 				if (inputFile.getName().endsWith(FSUtil.DAT_FILE_EXTENSION)) {
 					this.processNormalInputFile(inputFile);
 				} else {
 					if (this.ignoreUnknownRecordTypes && ignoreUnknownRecordTypesWarningAlreadyShown) {
 						ignoreUnknownRecordTypesWarningAlreadyShown = true;
-						LOG.warn("The property '" + FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES
-								+ "' is not supported for binary files. But trying to read '" + inputFile + "'");
+						LOGGER.warn("The property '{}' is not supported for binary files. But trying to read '{}'",
+								FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, inputFile);
 					}
 					try {
 						final BinaryCompressionMethod method = BinaryCompressionMethod.getByFileExtension(inputFile.getName());
 						this.processBinaryInputFile(inputFile, method);
 					} catch (final IllegalArgumentException ex) {
-						LOG.warn("Unknown file extension for file " + inputFile);
+						LOGGER.warn("Unknown file extension for file {}", inputFile);
 						continue;
 					}
 				}
@@ -149,12 +150,12 @@ final class FSDirectoryReader implements Runnable {
 			// No mapping file found. Check whether we find a legacy tpmon.map file!
 			mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + FSUtil.LEGACY_MAP_FILENAME);
 			if (mappingFile.exists()) {
-				LOG.info("Directory '" + this.inputDir + "' contains no file '" + FSUtil.MAP_FILENAME + "'. Found '" + FSUtil.LEGACY_MAP_FILENAME
-						+ "' ... switching to legacy mode");
+				LOGGER.info("Directory '{}' contains no file '{}'. Found '{}' ... switching to legacy mode", this.inputDir, FSUtil.MAP_FILENAME,
+						FSUtil.LEGACY_MAP_FILENAME);
 				this.filePrefix = FSUtil.LEGACY_FILE_PREFIX;
 			} else {
 				// no {kieker|tpmon}.map exists. This is valid for very old monitoring logs. Hence, only dump a log.warn
-				LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'");
+				LOGGER.warn("No mapping file in directory '{}'", this.inputDir.getAbsolutePath());
 				return;
 			}
 		}
@@ -167,13 +168,12 @@ final class FSDirectoryReader implements Runnable {
 				if (line.length() == 0) {
 					continue; // ignore empty lines
 				}
-				if (LOG.isDebugEnabled()) {
-					LOG.debug("Read line: " + line);
-				}
+
+				LOGGER.debug("Read line: {}", line);
+
 				final int split = line.indexOf('=');
 				if (split == -1) {
-					LOG.error("Failed to parse line: {" + line + "} from file " + mappingFile.getAbsolutePath()
-							+ ". Each line must contain ID=VALUE pairs.");
+					LOGGER.error("Failed to parse line: {} from file {}. Each line must contain ID=VALUE pairs.", line, mappingFile.getAbsolutePath());
 					continue; // continue on errors
 				}
 				final String key = line.substring(0, split);
@@ -183,22 +183,22 @@ final class FSDirectoryReader implements Runnable {
 				try {
 					id = Integer.valueOf((key.charAt(0) == '$') ? key.substring(1) : key); // NOCS
 				} catch (final NumberFormatException ex) {
-					LOG.error("Error reading mapping file, id must be integer", ex);
+					LOGGER.error("Error reading mapping file, id must be integer", ex);
 					continue; // continue on errors
 				}
 				final String prevVal = this.stringRegistry.put(id, value);
 				if (prevVal != null) {
-					LOG.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
+					LOGGER.error("Found addional entry for id='{}', old value was '{}' new value is '{}'", id, prevVal, value);
 				}
 			}
 		} catch (final IOException ex) {
-			LOG.error("Error reading mapping file", ex);
+			LOGGER.error("Error reading mapping file", ex);
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
 				} catch (final IOException ex) {
-					LOG.error("Exception while closing input stream for mapping file", ex);
+					LOGGER.error("Exception while closing input stream for mapping file", ex);
 				}
 			}
 		}
@@ -226,13 +226,13 @@ final class FSDirectoryReader implements Runnable {
 				try {
 					if (recordFields[0].charAt(0) == '$') { // modern record
 						if (recordFields.length < 2) {
-							LOG.error("Illegal record format: " + line);
+							LOGGER.error("Illegal record format: {}", line);
 							continue; // skip this record
 						}
 						final Integer id = Integer.valueOf(recordFields[0].substring(1));
 						final String classname = this.stringRegistry.get(id);
 						if (classname == null) {
-							LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
+							LOGGER.error("Missing classname mapping for record type id '{}'", id);
 							continue; // skip this record
 						}
 						Class<? extends IMonitoringRecord> clazz = null;
@@ -245,7 +245,7 @@ final class FSDirectoryReader implements Runnable {
 								abortDueToUnknownRecordType = true;
 								throw new MonitoringRecordException("Failed to load record type " + classname, ex);
 							} else if (!this.unknownTypesObserved.contains(classname)) {
-								LOG.error("Failed to load record type " + classname, ex); // log once for this type
+								LOGGER.error("Failed to load record type {}", classname, ex); // log once for this type
 								this.unknownTypesObserved.add(classname);
 							}
 							continue; // skip this ignored record
@@ -273,7 +273,7 @@ final class FSDirectoryReader implements Runnable {
 						newEx.initCause(ex);
 						throw newEx; // NOPMD (cause is set above)
 					} else {
-						LOG.warn("Error processing line: " + line, ex);
+						LOGGER.warn("Error processing line: {}", line, ex);
 						continue; // skip this record
 					}
 				}
@@ -283,13 +283,13 @@ final class FSDirectoryReader implements Runnable {
 				}
 			}
 		} catch (final Exception ex) { // NOCS NOPMD (gonna catch them all)
-			LOG.error("Error reading " + inputFile, ex);
+			LOGGER.error("Error reading {}", inputFile, ex);
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
 				} catch (final IOException ex) {
-					LOG.error("Exception while closing input stream for processing input file", ex);
+					LOGGER.error("Exception while closing input stream for processing input file", ex);
 				}
 			}
 		}
@@ -316,7 +316,7 @@ final class FSDirectoryReader implements Runnable {
 				}
 				final String classname = this.stringRegistry.get(id);
 				if (classname == null) {
-					LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
+					LOGGER.error("Missing classname mapping for record type id '{}'", id);
 					break; // we can't easily recover on errors
 				}
 
@@ -333,7 +333,7 @@ final class FSDirectoryReader implements Runnable {
 						final Integer strId = in.readInt();
 						final String str = this.stringRegistry.get(strId);
 						if (str == null) {
-							LOG.error("No String mapping found for id " + strId.toString());
+							LOGGER.error("No String mapping found for id {}", strId.toString());
 							objectArray[idx] = "";
 						} else {
 							objectArray[idx] = str;
@@ -354,10 +354,10 @@ final class FSDirectoryReader implements Runnable {
 						objectArray[idx] = in.readBoolean();
 					} else {
 						if (in.readByte() != 0) {
-							LOG.error("Unexpected value for unsupported type: " + clazz.getName());
+							LOGGER.error("Unexpected value for unsupported type: {}", clazz.getName());
 							return; // breaking error (break would not terminate the correct loop)
 						}
-						LOG.warn("Unsupported type: " + clazz.getName());
+						LOGGER.warn("Unsupported type: {}", clazz.getName());
 						objectArray[idx] = null;
 					}
 				}
@@ -369,13 +369,13 @@ final class FSDirectoryReader implements Runnable {
 				}
 			}
 		} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
-			LOG.error("Error reading " + inputFile, ex);
+			LOGGER.error("Error reading {}", inputFile, ex);
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
 				} catch (final IOException ex) {
-					LOG.error("Exception while closing input stream for processing input file", ex);
+					LOGGER.error("Exception while closing input stream for processing input file", ex);
 				}
 			}
 		}

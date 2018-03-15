@@ -26,6 +26,9 @@ import au.com.bytecode.opencsv.CSVWriter;
 import au.com.bytecode.opencsv.bean.BeanToCsv;
 import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.IProjectContext;
@@ -33,8 +36,6 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.examples.analysis.opad.experimentModel.WikiGer24_Oct11_21d_OutputModel;
 import kieker.tools.opad.filter.ForecastingFilter;
 import kieker.tools.opad.model.ForecastMeasurementPair;
@@ -48,7 +49,7 @@ import kieker.tools.opad.timeseries.ForecastMethod;
  */
 public class ExperimentThread extends Thread {
 
-	private static final Log LOG = LogFactory.getLog(ExperimentThread.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ExperimentThread.class);
 	private final List<NamedDoubleTimeSeriesPoint> readData;
 	private final String fileName;
 	private final ForecastMethod fcMethod;
@@ -63,17 +64,17 @@ public class ExperimentThread extends Thread {
 
 	@Override
 	public void run() {
-		ExperimentThread.LOG.info("Starting experiment for " + this.fcMethod.name());
+		ExperimentThread.LOGGER.info("Starting experiment for {}", this.fcMethod.name());
 		List<ForecastMeasurementPair> measurements;
 		try {
 			measurements = this.forecastWithR(this.readData, this.fcMethod);
 			this.writeToCsv(measurements, this.fileName, this.fcMethod);
 		} catch (final IllegalStateException e) {
-			LOG.warn("An exception occurred", e);
+			LOGGER.warn("An exception occurred", e);
 		} catch (final AnalysisConfigurationException e) {
-			LOG.warn("An exception occurred", e);
+			LOGGER.warn("An exception occurred", e);
 		}
-		ExperimentThread.LOG.info("Done with experiment for " + this.fcMethod.name());
+		ExperimentThread.LOGGER.info("Done with experiment for {}", this.fcMethod.name());
 	}
 
 	private List<ForecastMeasurementPair> forecastWithR(final List<NamedDoubleTimeSeriesPoint> data, final ForecastMethod fcMethod)
@@ -110,7 +111,7 @@ public class ExperimentThread extends Thread {
 		try {
 			Thread.sleep(3000);
 		} catch (final InterruptedException e) {
-			LOG.warn("An exception occurred", e);
+			LOGGER.warn("An exception occurred", e);
 		}
 		analysisController.terminate();
 
@@ -141,7 +142,7 @@ public class ExperimentThread extends Thread {
 			bean.write(strategy, writer, outputList);
 			writer.close();
 		} catch (final IOException e) {
-			LOG.warn("An exception occurred", e);
+			LOGGER.warn("An exception occurred", e);
 		}
 	}
 }

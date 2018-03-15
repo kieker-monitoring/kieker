@@ -22,27 +22,28 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.util.thread.DaemonThreadFactory;
 import kieker.monitoring.writer.raw.IRawDataWriter;
 
 /**
  * AMQP writer plugin that supports chunking via the new raw data I/O infrastructure.
- * 
+ *
  * @author Holger Knoche
  *
  * @since 1.13
  */
 public class ChunkingAmqpWriter implements IRawDataWriter {
-	
-	private static final Log LOG = LogFactory.getLog(ChunkingAmqpWriter.class);
-	
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ChunkingAmqpWriter.class);
+
 	private static final String PREFIX = ChunkingAmqpWriter.class.getName() + ".";
 
 	/** The name of the configuration property for the server URI. */
@@ -66,8 +67,9 @@ public class ChunkingAmqpWriter implements IRawDataWriter {
 
 	private final Connection connection;
 	private final Channel channel;
-	
-	public ChunkingAmqpWriter(final Configuration configuration) throws KeyManagementException, NoSuchAlgorithmException, URISyntaxException, IOException, TimeoutException {
+
+	public ChunkingAmqpWriter(final Configuration configuration)
+			throws KeyManagementException, NoSuchAlgorithmException, URISyntaxException, IOException, TimeoutException {
 		// Read configuration parameters from configuration
 		this.uri = configuration.getStringProperty(CONFIG_URI);
 		this.exchangeName = configuration.getStringProperty(CONFIG_EXCHANGENAME);
@@ -83,7 +85,7 @@ public class ChunkingAmqpWriter implements IRawDataWriter {
 		this.connection = this.createConnection();
 		this.channel = this.connection.createChannel();
 	}
-	
+
 	private Connection createConnection() throws KeyManagementException, NoSuchAlgorithmException, URISyntaxException, IOException, TimeoutException {
 		final ConnectionFactory connectionFactory = new ConnectionFactory();
 
@@ -111,20 +113,20 @@ public class ChunkingAmqpWriter implements IRawDataWriter {
 		try {
 			this.connection.close();
 		} catch (final IOException e) {
-			LOG.error("Error closing connection", e);
-		}		
+			LOGGER.error("Error closing connection", e);
+		}
 	}
-	
+
 	@Override
 	public void writeData(final ByteBuffer buffer) {
 		final byte[] rawData = new byte[buffer.limit()];
 		buffer.get(rawData);
-		
+
 		try {
 			this.channel.basicPublish(this.exchangeName, this.queueName, null, rawData);
 		} catch (final IOException e) {
-			LOG.error("An exception occurred publishing the data.", e);
+			LOGGER.error("An exception occurred publishing the data.", e);
 		}
 	}
-	
+
 }

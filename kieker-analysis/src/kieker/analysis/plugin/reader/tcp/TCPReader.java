@@ -24,6 +24,9 @@ import java.nio.channels.ClosedByInterruptException;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -31,8 +34,6 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
@@ -104,9 +105,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 		try {
 			serversocket = ServerSocketChannel.open();
 			serversocket.socket().bind(new InetSocketAddress(this.port1));
-			if (this.log.isDebugEnabled()) {
-				this.log.debug("Listening on port " + this.port1);
-			}
+			this.logger.debug("Listening on port {}", this.port1);
 			// BEGIN also loop this one?
 			final SocketChannel socketChannel = serversocket.accept();
 			final ByteBuffer buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
@@ -129,10 +128,10 @@ public final class TCPReader extends AbstractReaderPlugin {
 			socketChannel.close();
 			// END also loop this one?
 		} catch (final ClosedByInterruptException ex) {
-			this.log.warn("Reader interrupted", ex);
+			this.logger.warn("Reader interrupted", ex);
 			return this.terminated;
 		} catch (final IOException ex) {
-			this.log.error("Error while reading", ex);
+			this.logger.error("Error while reading", ex);
 			return false;
 		} finally {
 			if (null != serversocket) {
@@ -155,7 +154,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 
 			super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 		} catch (final RecordInstantiationException ex) {
-			this.log.error("Failed to create record", ex);
+			this.logger.error("Failed to create record", ex);
 		}
 	}
 
@@ -163,15 +162,13 @@ public final class TCPReader extends AbstractReaderPlugin {
 		try {
 			serversocket.close();
 		} catch (final IOException e) {
-			if (this.log.isDebugEnabled()) {
-				this.log.debug("Failed to close TCP connection!", e);
-			}
+			this.logger.debug("Failed to close TCP connection!", e);
 		}
 	}
 
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutdown of TCPReader requested.");
+		this.logger.info("Shutdown of TCPReader requested.");
 		this.terminated = true;
 		this.readerThread.interrupt();
 
@@ -190,7 +187,7 @@ class TCPStringReader extends Thread {
 
 	private static final int MESSAGE_BUFFER_SIZE = 65535;
 
-	private static final Log LOG = LogFactory.getLog(TCPStringReader.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TCPStringReader.class);
 
 	private final int port;
 	private final ILookup<String> stringRegistry;
@@ -214,9 +211,7 @@ class TCPStringReader extends Thread {
 		try {
 			serversocket = ServerSocketChannel.open();
 			serversocket.socket().bind(new InetSocketAddress(this.port));
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Listening on port " + this.port);
-			}
+			LOGGER.debug("Listening on port {}", this.port);
 			// BEGIN also loop this one?
 			final SocketChannel socketChannel = serversocket.accept();
 			final ByteBuffer buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
@@ -236,17 +231,15 @@ class TCPStringReader extends Thread {
 			socketChannel.close();
 			// END also loop this one?
 		} catch (final ClosedByInterruptException ex) {
-			LOG.warn("Reader interrupted", ex);
+			LOGGER.warn("Reader interrupted", ex);
 		} catch (final IOException ex) {
-			LOG.error("Error while reading", ex);
+			LOGGER.error("Error while reading", ex);
 		} finally {
 			if (null != serversocket) {
 				try {
 					serversocket.close();
 				} catch (final IOException e) {
-					if (LOG.isDebugEnabled()) {
-						LOG.debug("Failed to close TCP connection!", e);
-					}
+					LOGGER.debug("Failed to close TCP connection!", e);
 				}
 			}
 		}

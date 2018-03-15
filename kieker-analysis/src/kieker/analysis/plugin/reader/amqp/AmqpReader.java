@@ -45,12 +45,12 @@ import kieker.common.record.IMonitoringRecord;
  * @since 1.12
  */
 @Plugin(description = "A plugin that reads monitoring records from an AMQP queue", outputPorts = {
-	@OutputPort(name = AmqpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Output port of the AMQP reader") }, configuration = {
-			@Property(name = AmqpReader.CONFIG_PROPERTY_URI, defaultValue = "amqp://localhost", description = "Server URI of the AMQP server"),
-			@Property(name = AmqpReader.CONFIG_PROPERTY_QUEUENAME, defaultValue = "kieker", description = "AMQP queue name"),
-			@Property(name = AmqpReader.CONFIG_PROPERTY_HEARTBEAT, defaultValue = "60", description = "Heartbeat interval (in seconds)"),
-			@Property(name = AmqpReader.CONFIG_PROPERTY_CACHE_DURATION, defaultValue = "60", description = "Cache duration (in seconds) for string registries")
+		@OutputPort(name = AmqpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
+				IMonitoringRecord.class }, description = "Output port of the AMQP reader") }, configuration = {
+						@Property(name = AmqpReader.CONFIG_PROPERTY_URI, defaultValue = "amqp://localhost", description = "Server URI of the AMQP server"),
+						@Property(name = AmqpReader.CONFIG_PROPERTY_QUEUENAME, defaultValue = "kieker", description = "AMQP queue name"),
+						@Property(name = AmqpReader.CONFIG_PROPERTY_HEARTBEAT, defaultValue = "60", description = "Heartbeat interval (in seconds)"),
+						@Property(name = AmqpReader.CONFIG_PROPERTY_CACHE_DURATION, defaultValue = "60", description = "Cache duration (in seconds) for string registries")
 
 })
 public final class AmqpReader extends AbstractStringRegistryReaderPlugin {
@@ -64,7 +64,10 @@ public final class AmqpReader extends AbstractStringRegistryReaderPlugin {
 	public static final String CONFIG_PROPERTY_QUEUENAME = "queueName";
 	/** The name of the configuration property for the heartbeat timeout. */
 	public static final String CONFIG_PROPERTY_HEARTBEAT = "heartbeat";
-	/** The name of the configuration property for the cache duration (in seconds) for string registries. */
+	/**
+	 * The name of the configuration property for the cache duration (in seconds)
+	 * for string registries.
+	 */
 	public static final String CONFIG_PROPERTY_CACHE_DURATION = "cacheDuration";
 
 	/** ID for registry records. */
@@ -134,10 +137,11 @@ public final class AmqpReader extends AbstractStringRegistryReaderPlugin {
 	}
 
 	private void handleInitializationError(final Throwable e) {
-		LOG.error("An error occurred initializing the AMQP reader.", e);
+		LOGGER.error("An error occurred initializing the AMQP reader:", e);
 	}
 
-	private Connection createConnection() throws IOException, TimeoutException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {
+	private Connection createConnection()
+			throws IOException, TimeoutException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {
 		final ConnectionFactory connectionFactory = new ConnectionFactory();
 
 		connectionFactory.setUri(this.uri);
@@ -182,15 +186,15 @@ public final class AmqpReader extends AbstractStringRegistryReaderPlugin {
 					this.handleRegularRecord(buffer);
 					break;
 				default:
-					this.log.error(String.format("Unknown record type: %02x", recordType));
+					this.logger.error(String.format("Unknown record type: %02x", recordType));
 					break;
 				}
 			}
 		} catch (final IOException e) {
-			this.log.error("Error while reading from queue " + this.queueName, e);
+			this.logger.error("Error while reading from queue {}", this.queueName, e);
 			return false;
 		} catch (final InterruptedException e) {
-			this.log.error("Consumer was interrupted on queue " + this.queueName, e);
+			this.logger.error("Consumer was interrupted on queue {}", this.queueName, e);
 			return false;
 		}
 
@@ -203,7 +207,7 @@ public final class AmqpReader extends AbstractStringRegistryReaderPlugin {
 			this.terminated = true;
 			this.connection.close();
 		} catch (final IOException e) {
-			this.log.error("IO error while trying to close the connection.", e);
+			this.logger.error("IO error while trying to close the connection.", e);
 		}
 	}
 

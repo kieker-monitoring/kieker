@@ -49,26 +49,21 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool<br>
- * 
+ *
  * This class has exactly one input port named "in". The data which is send to
  * this plugin is not delegated in any way.
- * 
+ *
  * @author Andre van Hoorn, Nils Sommer, Jan Waller
- * 
+ *
  * @since 0.95a
  */
-@Plugin(description = "A filter allowing to write the incoming data into a sequence diagram",
-		repositoryPorts = {
-			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
-		},
-		configuration = {
-			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
-					defaultValue = SequenceDiagramFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT),
-			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES,
-					defaultValue = "true"),
-			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE,
-					defaultValue = "ASSEMBLY") // SDModes.ASSEMBLY.toString())
-		})
+@Plugin(description = "A filter allowing to write the incoming data into a sequence diagram", repositoryPorts = {
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+}, configuration = {
+	@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, defaultValue = SequenceDiagramFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT),
+	@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, defaultValue = "true"),
+	@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, defaultValue = "ASSEMBLY") // SDModes.ASSEMBLY.toString())
+})
 public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter {
 	/** The name of the configuration determining the used output filename base. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE = "filename";
@@ -108,14 +103,14 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			}
 			error = false;
 		} catch (final IOException exc) {
-			AbstractAnalysisComponent.LOG.error("Error while reading " + SEQUENCE_PIC_PATH, exc);
+			AbstractAnalysisComponent.LOGGER.error("Error while reading {}", SEQUENCE_PIC_PATH, exc);
 		} finally {
 			try {
 				if (reader != null) {
 					reader.close();
 				}
 			} catch (final IOException ex) {
-				AbstractAnalysisComponent.LOG.error("Failed to close input stream", ex);
+				AbstractAnalysisComponent.LOGGER.error("Failed to close input stream", ex);
 			}
 			if (error) {
 				// sequence.pic must be provided on execution of pic2plot
@@ -128,7 +123,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 
 	/**
 	 * @author Andre van Hoorn
-	 * 
+	 *
 	 * @since 1.2
 	 */
 	public static enum SDModes {
@@ -140,7 +135,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use for this filter.
 	 * @param projectContext
@@ -162,20 +157,18 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		super.printStatusMessage();
 		final int numPlots = this.getSuccessCount();
 		final long lastSuccessTracesId = this.getLastTraceIdSuccess();
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Wrote " + numPlots + " sequence diagram" + (numPlots > 1 ? "s" : "") // NOCS (AvoidInlineConditionalsCheck)
-					+ " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" + this.outputFnBase + "-<traceId>.pic'"); // NOCS
-																																// (AvoidInlineConditionalsCheck)
-			LOG.debug("Pic files can be converted using the pic2plot tool (package plotutils)");
-			LOG.debug("Example: pic2plot -T svg " + this.outputFnBase + "-" + ((numPlots > 0)
-					? lastSuccessTracesId : "<traceId>") // NOCS (AvoidInlineConditionalsCheck)
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Wrote " + numPlots + " sequence diagram" + (numPlots > 1 ? "s" : "") // NOCS (AvoidInlineConditionalsCheck)
+					+ " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" + this.outputFnBase + "-<traceId>.pic'"); // NOCS (Inline Conditional)
+			LOGGER.debug("Pic files can be converted using the pic2plot tool (package plotutils)");
+			LOGGER.debug("Example: pic2plot -T svg " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") // NOCS (Inline Conditional)
 					+ ".pic > " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS (AvoidInlineConditionalsCheck)
 		}
 	}
 
 	@Override
-	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed",
-			eventTypes = { MessageTrace.class })
+	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed", eventTypes = {
+		MessageTrace.class })
 	public void inputMessageTraces(final MessageTrace mt) {
 		try {
 			SequenceDiagramFilter.writePicForMessageTrace(mt,
@@ -184,10 +177,10 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			SequenceDiagramFilter.this.reportSuccess(((AbstractTrace) mt).getTraceId());
 		} catch (final FileNotFoundException ex) {
 			SequenceDiagramFilter.this.reportError(((AbstractTrace) mt).getTraceId());
-			this.log.error("File not found", ex);
+			this.logger.error("File not found", ex);
 		} catch (final UnsupportedEncodingException ex) {
 			SequenceDiagramFilter.this.reportError(((AbstractTrace) mt).getTraceId());
-			this.log.error("Encoding not supported", ex);
+			this.logger.error("Encoding not supported", ex);
 		}
 	}
 
@@ -225,7 +218,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	 * It is important NOT to use the println method but print and a manual
 	 * linebreak by printing the character \n. The pic2plot tool can only
 	 * process pic files with UNIX line breaks.
-	 * 
+	 *
 	 * @param messageTrace
 	 *            The message trace to convert.
 	 * @param sdMode
@@ -245,7 +238,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		ps.print("boxwid = 1.1;" + "\n");
 		ps.print("movewid = 0.5;" + "\n");
 
-		final Set<Integer> plottedComponentIds = new TreeSet<Integer>();
+		final Set<Integer> plottedComponentIds = new TreeSet<>();
 
 		final AllocationComponent rootAllocationComponent = AllocationRepository.ROOT_ALLOCATION_COMPONENT;
 		final String rootDotId = "O" + rootAllocationComponent.getId();
@@ -283,7 +276,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				}
 			}
 		} else { // needs to be adjusted if a new mode is introduced
-			AbstractAnalysisComponent.LOG.error("Invalid mode: " + sdMode);
+			AbstractAnalysisComponent.LOGGER.error("Invalid mode: {}", sdMode);
 		}
 
 		ps.print("step();" + "\n");
@@ -304,7 +297,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				senderDotId = "O" + senderComponent.getId();
 				receiverDotId = "O" + receiverComponent.getId();
 			} else { // needs to be adjusted if a new mode is introduced
-				AbstractAnalysisComponent.LOG.error("Invalid mode: " + sdMode);
+				AbstractAnalysisComponent.LOGGER.error("Invalid mode: {}", sdMode);
 			}
 
 			if (me instanceof SynchronousCallMessage) {
@@ -332,7 +325,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				ps.print("rmessage(" + senderDotId + "," + receiverDotId + ", \"\");\n");
 				ps.print("inactive(" + senderDotId + ");\n");
 			} else {
-				AbstractAnalysisComponent.LOG.error("Message type not supported: " + me.getClass().getName());
+				AbstractAnalysisComponent.LOGGER.error("Message type not supported: {}", me.getClass().getName());
 			}
 		}
 		ps.print("inactive(" + rootDotId + ");\n");
@@ -348,7 +341,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 
 	/**
 	 * This method writes the pic code for the given message trace into the given file.
-	 * 
+	 *
 	 * @param msgTrace
 	 *            The message trace to convert.
 	 * @param sdMode
@@ -357,7 +350,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	 *            Determines whether to use short labels or not.
 	 * @param outputFilename
 	 *            The name of the file in which the code will be written.
-	 * 
+	 *
 	 * @throws FileNotFoundException
 	 *             If the given file is somehow invalid.
 	 * @throws UnsupportedEncodingException

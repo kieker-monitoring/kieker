@@ -53,7 +53,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		try {
 			this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
 		} catch (final Exception ex) {
-			this.log.error("Failed to acquire pipe '" + this.pipeName + "'", ex);
+			this.logger.error("Failed to acquire pipe '{}'", this.pipeName, ex);
 		}
 	}
 

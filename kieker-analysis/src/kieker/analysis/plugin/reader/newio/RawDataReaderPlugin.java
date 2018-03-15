@@ -21,6 +21,9 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -29,8 +32,6 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.newio.deserializer.IMonitoringRecordDeserializer;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -45,8 +46,7 @@ import kieker.common.record.IMonitoringRecord;
 		@OutputPort(name = RawDataReaderPlugin.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
 				IMonitoringRecord.class }, description = "Output port for the decoded records") }, configuration = {
 						@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_DESERIALIZER, defaultValue = "", description = "Class name of the deserializer to use"),
-						@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_READER, defaultValue = "", description = "Class name of the reader to use")
-})
+						@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_READER, defaultValue = "", description = "Class name of the reader to use") })
 public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDataProcessor {
 
 	/** The name of the output port for the decoded records. */
@@ -58,7 +58,7 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 	/** The name of the configuration property for the reader class name. */
 	public static final String CONFIG_PROPERTY_READER = "reader";
 
-	private static final Log LOG = LogFactory.getLog(RawDataReaderPlugin.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RawDataReaderPlugin.class);
 
 	private final String deserializerClassName;
 
@@ -68,20 +68,25 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 
 	private final IMonitoringRecordDeserializer deserializer;
 
-	public RawDataReaderPlugin(final Configuration configuration, final IProjectContext projectContext) throws AnalysisConfigurationException {
+	public RawDataReaderPlugin(final Configuration configuration, final IProjectContext projectContext)
+			throws AnalysisConfigurationException {
 		super(configuration, projectContext);
 
 		final String deserializerName = configuration.getStringProperty(CONFIG_PROPERTY_DESERIALIZER);
 		this.deserializerClassName = deserializerName;
-		this.deserializer = this.createAndInitializeDeserializer(deserializerName, configuration, projectContext, IMonitoringRecordDeserializer.class);
+		this.deserializer = this.createAndInitializeDeserializer(deserializerName, configuration, projectContext,
+				IMonitoringRecordDeserializer.class);
 
 		final String readerName = configuration.getStringProperty(CONFIG_PROPERTY_READER);
 		this.readerClassName = readerName;
-		this.reader = this.createAndInitializeReader(readerName, configuration, this.deserializer, IRawDataReader.class);
+		this.reader = this.createAndInitializeReader(readerName, configuration, this.deserializer,
+				IRawDataReader.class);
 	}
 
 	@SuppressWarnings("unchecked")
-	private <C> C createAndInitializeReader(final String className, final Configuration configuration, final IMonitoringRecordDeserializer recordDeserializer, final Class<C> expectedType) throws AnalysisConfigurationException {
+	private <C> C createAndInitializeReader(final String className, final Configuration configuration,
+			final IMonitoringRecordDeserializer recordDeserializer, final Class<C> expectedType)
+			throws AnalysisConfigurationException {
 		C createdInstance = null;
 
 		try {
@@ -104,13 +109,18 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 		return createdInstance;
 	}
 
-	private <C> C instantiateReader(final Class<C> clazz, final Configuration configuration, final IMonitoringRecordDeserializer recordDeserializer) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, SecurityException, AnalysisConfigurationException {
+	private <C> C instantiateReader(final Class<C> clazz, final Configuration configuration,
+			final IMonitoringRecordDeserializer recordDeserializer)
+			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+			SecurityException, AnalysisConfigurationException {
 		// Determine which constructors are provided by the reader
-		final Constructor<C> constructorWithUnwrapper = this.getConstructor(clazz, Configuration.class, Class.class, IRawDataProcessor.class);
-		final Constructor<C> constructorWithoutUnwrapper = this.getConstructor(clazz, Configuration.class, IRawDataProcessor.class);
+		final Constructor<C> constructorWithUnwrapper = this.getConstructor(clazz, Configuration.class, Class.class,
+				IRawDataProcessor.class);
+		final Constructor<C> constructorWithoutUnwrapper = this.getConstructor(clazz, Configuration.class,
+				IRawDataProcessor.class);
 
 		// Check whether the required constructor is available
-		if (constructorWithUnwrapper == null && constructorWithoutUnwrapper == null) {
+		if ((constructorWithUnwrapper == null) && (constructorWithoutUnwrapper == null)) {
 			// No suitable constructor at all
 			this.handleConfigurationError("Class " + clazz.getName() + " does not provide a suitable constructor.");
 			return null;
@@ -119,9 +129,10 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 		// Get the unwrapper type from the deserializer, if any
 		final Class<? extends IRawDataUnwrapper> unwrapperType = recordDeserializer.getUnwrapperType();
 
-		if (constructorWithoutUnwrapper == null && unwrapperType == null) {
+		if ((constructorWithoutUnwrapper == null) && (unwrapperType == null)) {
 			// Reader requires unwrapper, but none is provided
-			this.handleConfigurationError("Reader " + clazz.getName() + " requires an unwrapper, but serializer " + recordDeserializer.getClass().getName() + " does not provide one.");
+			this.handleConfigurationError("Reader " + clazz.getName() + " requires an unwrapper, but serializer "
+					+ recordDeserializer.getClass().getName() + " does not provide one.");
 			return null;
 		}
 
@@ -129,8 +140,9 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 		final Configuration configurationToPass = configuration.flatten();
 
 		// Execute the appropriate constructor
-		if (constructorWithUnwrapper != null && unwrapperType != null) {
-			// If a constructor with unwrapper as well as an unwrapper type are available, use this constructor
+		if ((constructorWithUnwrapper != null) && (unwrapperType != null)) {
+			// If a constructor with unwrapper as well as an unwrapper type are available,
+			// use this constructor
 			instantiatedReader = constructorWithUnwrapper.newInstance(configurationToPass, unwrapperType, this);
 		} else {
 			// Otherwise use the no-unwrapper constructor
@@ -149,7 +161,8 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 	}
 
 	@SuppressWarnings("unchecked")
-	private <C> C createAndInitializeDeserializer(final String className, final Configuration configuration, final IProjectContext context, final Class<C> expectedType) throws AnalysisConfigurationException {
+	private <C> C createAndInitializeDeserializer(final String className, final Configuration configuration,
+			final IProjectContext context, final Class<C> expectedType) throws AnalysisConfigurationException {
 		C createdInstance = null;
 
 		try {
@@ -157,7 +170,8 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 
 			// Check whether the class is a subtype of the expected type
 			if (!(expectedType.isAssignableFrom(clazz))) {
-				this.handleConfigurationError("Class " + className + " must implement " + expectedType.getSimpleName() + ".");
+				this.handleConfigurationError(
+						"Class " + className + " must implement " + expectedType.getSimpleName() + ".");
 			}
 
 			// Actually create the instance
@@ -165,7 +179,8 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 		} catch (final ClassNotFoundException e) {
 			this.handleConfigurationError("Class '" + className + "' not found.");
 		} catch (final NoSuchMethodException e) {
-			this.handleConfigurationError("Class " + className + " must implement a (public) constructor that accepts a Configuration.");
+			this.handleConfigurationError(
+					"Class " + className + " must implement a (public) constructor that accepts a Configuration.");
 		} catch (final IllegalAccessException | InstantiationException | InvocationTargetException e) {
 			this.handleConfigurationError("Unable to instantiate class " + className + ".", e);
 		}
@@ -173,10 +188,13 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 		return createdInstance;
 	}
 
-	private <C> C instantiateDeserializer(final Class<C> clazz, final Configuration configuration, final IProjectContext context) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	private <C> C instantiateDeserializer(final Class<C> clazz, final Configuration configuration,
+			final IProjectContext context) throws InstantiationException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		final Configuration configurationToPass = configuration.flatten();
 
-		return clazz.getConstructor(Configuration.class, IProjectContext.class).newInstance(configurationToPass, context);
+		return clazz.getConstructor(Configuration.class, IProjectContext.class).newInstance(configurationToPass,
+				context);
 	}
 
 	@Override
@@ -272,14 +290,14 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 		this.handleConfigurationError(message, null);
 	}
 
-	private void handleConfigurationError(final String message, final Throwable cause) throws AnalysisConfigurationException {
+	private void handleConfigurationError(final String message, final Throwable cause)
+			throws AnalysisConfigurationException {
 		if (cause != null) {
-			LOG.error(message, cause);
+			LOGGER.error(message, cause);
 			throw new AnalysisConfigurationException(message, cause);
 		} else {
-			LOG.error(message);
+			LOGGER.error(message);
 			throw new AnalysisConfigurationException(message);
 		}
 	}
-
 }

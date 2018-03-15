@@ -21,7 +21,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 
-import kieker.common.logging.Log;
+import org.slf4j.Logger;
+
 import kieker.monitoring.writer.WriterUtil;
 
 /**
@@ -49,13 +50,13 @@ class BinaryPooledFileChannel extends AbstractPooledFileChannel<ByteBuffer> {
 	}
 
 	@Override
-	public void flush(final Log log) {
-		this.bytesWritten += WriterUtil.flushBuffer(this.getBuffer(), this.channel, log);
+	public void flush(final Logger logger) {
+		this.bytesWritten += WriterUtil.flushBuffer(this.getBuffer(), this.channel, logger);
 	}
 
 	@Override
-	public void close(final Log log) {
-		this.flush(log);
-		WriterUtil.close(this.channel, log);
+	public void close(final Logger logger) {
+		this.flush(logger);
+		WriterUtil.close(this.channel, logger);
 	}
 }

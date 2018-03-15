@@ -21,6 +21,8 @@ import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
@@ -30,14 +32,14 @@ import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 import kieker.test.common.junit.AbstractDynamicKiekerTest;
 
 /**
- * This JUnit test makes sure that all plugins handle their configurations correctly. To be more precise: The listed properties in the annotation of each plugin has
- * to be in the configuration map of the {@code getCurrentConfiguration} method.
+ * This JUnit test makes sure that all plugins handle their configurations
+ * correctly. To be more precise: The listed properties in the annotation of
+ * each plugin has to be in the configuration map of the
+ * {@code getCurrentConfiguration} method.
  *
  * @author Nils Christian Ehmke
  *
@@ -45,36 +47,39 @@ import kieker.test.common.junit.AbstractDynamicKiekerTest;
  */
 public class TestPluginConfigurationRetention extends AbstractDynamicKiekerTest {
 
-	private static final Log LOG = LogFactory.getLog(TestPluginConfigurationRetention.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestPluginConfigurationRetention.class);
 
 	public TestPluginConfigurationRetention() {
 		// empty default constructor
 	}
 
 	@Test
-	public void test() throws ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-	NoSuchMethodException, SecurityException {
+	public void test() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		final Collection<Class<?>> availableClasses = super.deliverAllAvailableClassesFromSourceDirectory();
 		final Collection<Class<?>> notAbstractClasses = super.filterOutAbstractClasses(availableClasses);
-		final Collection<Class<?>> filteredClasses = super.filterOutClassesNotExtending(AbstractPlugin.class, notAbstractClasses);
+		final Collection<Class<?>> filteredClasses = super.filterOutClassesNotExtending(AbstractPlugin.class,
+				notAbstractClasses);
 
 		for (final Class<?> clazz : filteredClasses) {
 			try {
-				LOG.info("Testing '" + clazz.getSimpleName() + "'...");
-				Assert.assertTrue(clazz.getSimpleName() + "' doesn't export all of its properties.", this.isConfigurationCorrect(clazz));
+				LOGGER.info("Testing '{}'...", clazz.getSimpleName());
+				Assert.assertTrue(clazz.getSimpleName() + "' doesn't export all of its properties.",
+						this.isConfigurationCorrect(clazz));
 			} catch (final InvocationTargetException e) {
 				// Ignore exceptions due to plugins not working with an empty configuration
 				if (e.getCause() instanceof AnalysisConfigurationException) {
-					LOG.info(clazz.getSimpleName() + " does not accept an empty configuration. Ignoring.");
+					LOGGER.info("{} does not accept an empty configuration. Ignoring.", clazz.getSimpleName());
 				}
 			}
 		}
 	}
 
-	private boolean isConfigurationCorrect(final Class<?> clazz) throws InstantiationException, IllegalAccessException, IllegalArgumentException,
-	InvocationTargetException, NoSuchMethodException, SecurityException {
+	private boolean isConfigurationCorrect(final Class<?> clazz) throws InstantiationException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		final IAnalysisController ac = new AnalysisController();
-		final AbstractPlugin pluginInstance = (AbstractPlugin) clazz.getConstructor(Configuration.class, IProjectContext.class).newInstance(new Configuration(), ac);
+		final AbstractPlugin pluginInstance = (AbstractPlugin) clazz
+				.getConstructor(Configuration.class, IProjectContext.class).newInstance(new Configuration(), ac);
 
 		final Property[] expectedProperties = this.getExpectedProperties(clazz);
 		final Configuration actualConfiguration = this.getActualProperties(pluginInstance);

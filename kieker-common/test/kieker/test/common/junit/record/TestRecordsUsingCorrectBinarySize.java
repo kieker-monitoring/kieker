@@ -20,9 +20,9 @@ import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
@@ -30,12 +30,12 @@ import kieker.test.common.junit.AbstractDynamicKiekerTest;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
  */
 public class TestRecordsUsingCorrectBinarySize extends AbstractDynamicKiekerTest {
 
-	private static final Log LOG = LogFactory.getLog(TestRecordsUsingCorrectBinarySize.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestRecordsUsingCorrectBinarySize.class);
 
 	public TestRecordsUsingCorrectBinarySize() {
 		// empty default constructor
@@ -48,7 +48,7 @@ public class TestRecordsUsingCorrectBinarySize extends AbstractDynamicKiekerTest
 		final Collection<Class<?>> filteredClasses = super.filterOutClassesNotExtending(IMonitoringRecord.BinaryFactory.class, notAbstractClasses);
 
 		for (final Class<?> clazz : filteredClasses) {
-			LOG.info("Testing '" + clazz.getSimpleName() + "'...");
+			LOGGER.info("Testing '{}'...", clazz.getSimpleName());
 			Assert.assertTrue(clazz.getSimpleName() + "' uses an incorrect size field.", this.isSizeCorrect(clazz));
 		}
 	}

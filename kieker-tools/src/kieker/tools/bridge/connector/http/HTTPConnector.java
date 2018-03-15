@@ -34,11 +34,11 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ajax.JSON;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
@@ -61,7 +61,7 @@ public final class HTTPConnector extends AbstractConnector {
 	public static final String CONTEXT = HTTPConnector.class.getCanonicalName() + ".context";
 	public static final String REST_URL = HTTPConnector.class.getCanonicalName() + ".restURL";
 
-	private final BlockingQueue<IMonitoringRecord> recordQueue = new LinkedBlockingQueue<IMonitoringRecord>();
+	private final BlockingQueue<IMonitoringRecord> recordQueue = new LinkedBlockingQueue<>();
 
 	private final int port;
 	private final String context;
@@ -124,7 +124,7 @@ public final class HTTPConnector extends AbstractConnector {
 	 */
 	private static class MonitoringReceiverServlet extends HttpServlet {
 
-		private static final Log LOG = LogFactory.getLog(MonitoringReceiverServlet.class);
+		private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringReceiverServlet.class);
 		private static final long serialVersionUID = 1L;
 
 		private final BlockingQueue<IMonitoringRecord> recordQueue;
@@ -148,7 +148,7 @@ public final class HTTPConnector extends AbstractConnector {
 				final Object[] rawValues = (Object[]) jsonObject.get("values");
 
 				if ((classname == null) || (rawTimestamp == null) || (rawValues == null)) {
-					LOG.warn("Invalid data received");
+					LOGGER.warn("Invalid data received");
 					response.sendError(400, "Invalid data received");
 					return;
 				}
@@ -163,19 +163,19 @@ public final class HTTPConnector extends AbstractConnector {
 				record.setLoggingTimestamp(timestamp);
 				this.recordQueue.add(record);
 			} catch (final ClassCastException ex) {
-				LOG.warn("Invalid data received", ex);
+				LOGGER.warn("Invalid data received", ex);
 				response.sendError(400, "Invalid data received");
 			} catch (final ArrayStoreException ex) {
-				LOG.warn("Invalid data received", ex);
+				LOGGER.warn("Invalid data received", ex);
 				response.sendError(400, "Invalid data received");
 			} catch (final NumberFormatException ex) {
-				LOG.warn("Invalid data received", ex);
+				LOGGER.warn("Invalid data received", ex);
 				response.sendError(400, "Invalid data received");
 			} catch (final MonitoringRecordException ex) {
-				LOG.warn("Could not deserialize monitoring record", ex);
+				LOGGER.warn("Could not deserialize monitoring record", ex);
 				response.sendError(400, "Could not deserialize monitoring record");
 			} catch (final IllegalStateException ex) {
-				LOG.warn("Invalid data received", ex);
+				LOGGER.warn("Invalid data received", ex);
 				response.sendError(400, "Invalid data received");
 			}
 		}
