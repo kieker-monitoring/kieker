@@ -21,7 +21,7 @@ import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 /**
  * A {@link IComponentNameBuilder} can be used to create the component name from a package name and a component name.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

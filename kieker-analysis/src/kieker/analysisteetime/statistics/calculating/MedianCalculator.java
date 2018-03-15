@@ -30,7 +30,7 @@ import kieker.analysisteetime.util.RunningMedian;
  * @param <T>
  *            Type of elements
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

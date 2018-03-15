@@ -27,7 +27,7 @@ import kieker.analysisteetime.util.graph.IElement;
  * @param <T>
  *            Type of elements
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

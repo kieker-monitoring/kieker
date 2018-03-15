@@ -19,7 +19,7 @@ package kieker.analysisteetime.util.timeseries;
 import java.time.Instant;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

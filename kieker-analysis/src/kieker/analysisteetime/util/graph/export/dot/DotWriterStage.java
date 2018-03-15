@@ -32,7 +32,7 @@ import teetime.framework.AbstractConsumerStage;
  * In addition, this stage can be configured by a {@link DotExportConfiguration}, which specifies
  * how attributes (for graphs, vertices and edges) are mapped to the dot graph.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

@@ -25,7 +25,7 @@ import java.util.Iterator;
  * @param <T>
  *            the type of elements returned by the iterator
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

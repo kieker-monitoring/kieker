@@ -22,7 +22,7 @@ import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import teetime.stage.basic.AbstractFilter;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

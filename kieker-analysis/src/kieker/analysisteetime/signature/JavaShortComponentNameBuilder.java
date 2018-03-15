@@ -19,7 +19,7 @@ package kieker.analysisteetime.signature;
 /**
  * This {@link IComponentNameBuilder} creates a component names in a short Java style by just returning the actual name.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

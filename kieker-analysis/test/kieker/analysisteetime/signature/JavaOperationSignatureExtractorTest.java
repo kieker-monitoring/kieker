@@ -30,7 +30,7 @@ import kieker.analysisteetime.model.analysismodel.type.OperationType;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */
@@ -136,7 +136,8 @@ public class JavaOperationSignatureExtractorTest {
 		this.testExtraction(modifiers, returnType, name, parameterTypes);
 	}
 
-	private void testExtraction(final List<String> modifiers, final String returnType, final String name, final List<String> parameters) {
+	private void testExtraction(final List<String> modifiers, final String returnType, final String name, final List<String> parameters) { // NOPMD (assert for other
+																																			// tests)
 		final OperationType operationType = this.buildComponentTypeByNames(modifiers, returnType, name, parameters);
 
 		this.signatureExtractor.extract(operationType);

@@ -21,7 +21,7 @@ import teetime.stage.basic.AbstractTransformation;
 /**
  * This stage sends a {@link Trigger} after the terminating signal was received.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

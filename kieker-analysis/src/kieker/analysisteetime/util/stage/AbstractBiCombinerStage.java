@@ -30,7 +30,7 @@ import teetime.framework.InputPort;
  * @param <J>
  *            Type of elements at second input port
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  *

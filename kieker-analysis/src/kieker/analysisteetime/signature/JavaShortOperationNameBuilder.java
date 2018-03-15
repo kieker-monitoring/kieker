@@ -23,7 +23,7 @@ import java.util.Collection;
  * the actual name followed by {@code ()} or {@code (..)} depending on whether this operation has parameters
  * or not.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

@@ -30,7 +30,7 @@ import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

@@ -23,7 +23,7 @@ import java.util.function.Function;
  * This class is a {@link Function} that maps {@link ChronoUnit}s to their common symbols and abbreviations. If not common abbreviations exists a full name is
  * returned.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */
@@ -37,7 +37,7 @@ public final class ChronoUnitToSymbolMapper implements Function<ChronoUnit, Stri
 		case NANOS:
 			return "ns";
 		case MICROS:
-			return "µs";
+			return "ï¿½s";
 		case MILLIS:
 			return "ms";
 		case SECONDS:

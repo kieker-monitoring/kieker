@@ -24,7 +24,7 @@ import kieker.analysisteetime.util.stage.trigger.Trigger;
 import teetime.stage.basic.AbstractTransformation;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

@@ -26,7 +26,7 @@ import kieker.analysisteetime.util.graph.util.IndentWriter;
 /**
  * Class to build and write a DOT Graph to a writer.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

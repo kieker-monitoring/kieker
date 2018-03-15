@@ -23,7 +23,7 @@ import teetime.framework.Execution;
 /**
  * This class executes a {@link HotspotDetectionConfiguration}.
  *
- * @author Sören Henning, Stephan Lenga
+ * @author SÃ¶ren Henning, Stephan Lenga
  *
  * @since 1.14
  */

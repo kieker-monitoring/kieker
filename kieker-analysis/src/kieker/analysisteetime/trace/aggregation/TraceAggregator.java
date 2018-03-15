@@ -29,7 +29,7 @@ import kieker.analysisteetime.model.analysismodel.trace.TraceFactory;
  * This class creates aggregated traces from normal {@link Trace}s. Traces are aggregated if they
  * are considered equal using the {@link TraceEquivalence}.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

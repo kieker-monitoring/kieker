@@ -19,7 +19,7 @@ package kieker.analysisteetime.util.graph.traversal;
 import kieker.analysisteetime.util.graph.IVertex;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

@@ -61,7 +61,7 @@ import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
  *
  * Example configuration for testing the current development.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

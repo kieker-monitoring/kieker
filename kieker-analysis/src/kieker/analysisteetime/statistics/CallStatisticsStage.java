@@ -23,7 +23,7 @@ import kieker.analysisteetime.statistics.calculating.CountCalculator;
 
 /**
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  *

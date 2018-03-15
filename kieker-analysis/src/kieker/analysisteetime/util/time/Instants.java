@@ -22,7 +22,7 @@ import java.time.temporal.TemporalUnit;
 /**
  * Helper class for {@link Instant}s.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

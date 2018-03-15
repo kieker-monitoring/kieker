@@ -41,7 +41,7 @@ import teetime.framework.AbstractConsumerStage;
  * The number of operation call that will be printed can be configured.
  * The default print stream is {@link System.out}.
  *
- * @author Sören Henning, Stephan Lenga
+ * @author SÃ¶ren Henning, Stephan Lenga
  *
  * @since 1.14
  */

@@ -24,7 +24,7 @@ import org.graphdrawing.graphml.ObjectFactory;
 import teetime.stage.basic.AbstractTransformation;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

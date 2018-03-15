@@ -31,7 +31,7 @@ import kieker.analysisteetime.model.analysismodel.trace.Trace;
  * With this class, two {@link Traces}s are considered equal iff both the root {@link OperationCall} are
  * considered equal using the {@link OperationCallEquivalence} or a specified {@link Equivalence}.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

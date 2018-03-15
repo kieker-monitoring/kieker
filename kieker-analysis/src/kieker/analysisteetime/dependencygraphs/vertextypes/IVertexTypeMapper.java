@@ -19,7 +19,7 @@ package kieker.analysisteetime.dependencygraphs.vertextypes;
 import java.util.function.Function;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

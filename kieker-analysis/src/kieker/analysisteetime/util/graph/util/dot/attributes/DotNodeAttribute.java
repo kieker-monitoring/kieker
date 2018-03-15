@@ -25,7 +25,7 @@ package kieker.analysisteetime.util.graph.util.dot.attributes;
  * The whole set of attributes including further documentation can be found here:
  * {@link http://www.graphviz.org/doc/info/attrs.html}
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

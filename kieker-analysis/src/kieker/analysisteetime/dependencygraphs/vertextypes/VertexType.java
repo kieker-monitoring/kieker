@@ -17,7 +17,7 @@
 package kieker.analysisteetime.dependencygraphs.vertextypes;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

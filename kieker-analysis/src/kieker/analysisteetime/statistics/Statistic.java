@@ -24,7 +24,7 @@ import java.util.Set;
 
 /**
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  *

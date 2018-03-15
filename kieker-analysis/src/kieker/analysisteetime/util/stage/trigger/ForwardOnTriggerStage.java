@@ -30,7 +30,7 @@ import teetime.stage.basic.ITransformation;
  * @param <T>
  *            Type of elements
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */
@@ -99,7 +99,7 @@ public class ForwardOnTriggerStage<T> extends AbstractStage implements ITransfor
 	}
 
 	/**
-	 * @author Sören Henning
+	 * @author SÃ¶ren Henning
 	 *
 	 * @since 1.14
 	 */

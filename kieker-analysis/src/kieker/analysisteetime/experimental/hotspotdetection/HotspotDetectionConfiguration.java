@@ -41,7 +41,7 @@ import teetime.stage.InstanceOfFilter;
 /**
  * Configuration for a hotspot detection based on the longest execution time of methods without children.
  *
- * @author Sören Henning, Stephan Lenga
+ * @author SÃ¶ren Henning, Stephan Lenga
  *
  * @since 1.14
  */

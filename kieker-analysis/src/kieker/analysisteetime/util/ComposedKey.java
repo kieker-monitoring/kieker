@@ -28,7 +28,7 @@ import com.google.common.base.Objects;
  * @param <S>
  *            Second elements type
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

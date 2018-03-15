@@ -25,7 +25,7 @@ import java.util.function.BiFunction;
  * @param <T>
  *            Type of elements the median should be calculated for
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

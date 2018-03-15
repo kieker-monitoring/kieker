@@ -27,7 +27,7 @@ import kieker.analysisteetime.util.graph.IVertex;
  * desired format is: container + "::\\n" + "@" + stackDepth + ":" + component + "\\n" + name;
  * {@code <DeploymentContext>::\\n@<StackDepth>:<Component>\\n<FullOperationSignature>}
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  *

@@ -26,7 +26,7 @@ import teetime.stage.basic.AbstractFilter;
  * @param <T>
  *            The precise type of the incoming and outgoing object.
  *
- * @author Nils Christian Ehmke, Sören Henning
+ * @author Nils Christian Ehmke, SÃ¶ren Henning
  *
  * @since 1.14
  */

@@ -20,7 +20,7 @@ package kieker.analysisteetime.util.graph.util.dot;
  * This class defines some constants which are used in dot graphs. These are,
  * for example, specific key words and symbols.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

@@ -23,7 +23,7 @@ import kieker.analysisteetime.util.graph.IGraph;
 import kieker.analysisteetime.util.graph.IVertex;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

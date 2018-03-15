@@ -26,7 +26,7 @@ import teetime.framework.AbstractConsumerStage;
 /**
  * This is a filter which accepts {@link OperationExecutionRecord} instances and provides different views to visualize them.
  *
- * @author Nils Christian Ehmke, Lars Bluemke, Sören Henning
+ * @author Nils Christian Ehmke, Lars Bluemke, SÃ¶ren Henning
  *
  * @since 1.8
  */

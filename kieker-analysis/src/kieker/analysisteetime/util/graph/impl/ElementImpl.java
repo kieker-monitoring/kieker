@@ -24,7 +24,7 @@ import java.util.Set;
 import kieker.analysisteetime.util.graph.IElement;
 
 /**
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

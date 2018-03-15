@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * This {@link IOperationNameBuilder} creates a operation names in a full Java style. That means, it returns
  * the name in the form of {@code private final MyReturnType doSomething(MyParameter, MyNextParameter)}.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */

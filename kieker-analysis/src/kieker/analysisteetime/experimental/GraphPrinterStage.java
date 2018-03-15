@@ -28,7 +28,7 @@ import teetime.framework.AbstractConsumerStage;
 /**
  * This stage prints {@link IGraph}s to a given {@link PrintStream} or {@code System.out} if no one specified.
  *
- * @author Sören Henning
+ * @author SÃ¶ren Henning
  *
  * @since 1.14
  */
