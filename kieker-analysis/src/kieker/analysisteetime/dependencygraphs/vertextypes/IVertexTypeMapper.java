@@ -23,7 +23,7 @@ import java.util.function.Function;
  *
  * @since 1.14
  */
-public interface IVertexTypeMapper extends Function<VertexType, String> { // NOCS (marker interface)
+public interface IVertexTypeMapper extends Function<VertexType, String> { // NOPMD NOCS (marker interface)
 
 	public static IVertexTypeMapper TO_STRING = t -> t.toString(); // NOPMD (Default interface implementation)
 
