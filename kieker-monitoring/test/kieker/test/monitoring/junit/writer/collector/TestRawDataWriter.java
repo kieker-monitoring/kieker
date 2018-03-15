@@ -19,9 +19,10 @@ package kieker.test.monitoring.junit.writer.collector;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.monitoring.writer.raw.IRawDataWriter;
 
 /**
@@ -33,7 +34,7 @@ import kieker.monitoring.writer.raw.IRawDataWriter;
  */
 public class TestRawDataWriter implements IRawDataWriter {
 
-	private static final Log LOG = LogFactory.getLog(TestRawDataWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestRawDataWriter.class);
 	private static final String PREFIX = TestRawDataWriter.class.getName() + ".";
 
 	/** Configuration property for the test ID */
@@ -57,7 +58,7 @@ public class TestRawDataWriter implements IRawDataWriter {
 			this.dataStorage.appendData(this.testId, dataArray);
 		} catch (final IOException e) {
 			// Should not happen
-            LOG.info(e.getMessage());
+			LOGGER.info(e.getMessage());
 		}
 	}
 

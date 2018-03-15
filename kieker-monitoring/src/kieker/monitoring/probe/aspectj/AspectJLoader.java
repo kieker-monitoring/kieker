@@ -23,13 +23,12 @@ import java.util.Enumeration;
 
 import org.aspectj.bridge.Constants;
 import org.aspectj.weaver.loadtime.Agent;
-
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Nils Christian Ehmke, Jan Waller
- * 
+ *
  * @since 1.9
  */
 public final class AspectJLoader {
@@ -37,7 +36,7 @@ public final class AspectJLoader {
 	public static final String KIEKER_MONITORING_SKIP_DEFAULT_AOP_CONFIGURATION = "kieker.monitoring.skipDefaultAOPConfiguration";
 
 	private static final String DEFAULT_AOP_CONFIG = "META-INF/aop.example.xml";
-	private static final Log LOG = LogFactory.getLog(AspectJLoader.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AspectJLoader.class);
 
 	private AspectJLoader() {
 		// Avoid instantiation
@@ -45,7 +44,7 @@ public final class AspectJLoader {
 
 	/**
 	 * JSR-163 preMain entry method.
-	 * 
+	 *
 	 * @param options
 	 *            for the weaver agent
 	 * @param instrumentation
@@ -54,7 +53,7 @@ public final class AspectJLoader {
 	public static void premain(final String options, final Instrumentation instrumentation) {
 		if (!AspectJLoader.checkConfigurationFileAvailable()) {
 			final URL aspectConfigURL = AspectJLoader.class.getClassLoader().getResource(DEFAULT_AOP_CONFIG);
-			LOG.info("No AspectJ configuration file found. Using Kieker's default AspectJ configuration file (" + aspectConfigURL + ").");
+			LOGGER.info("No AspectJ configuration file found. Using Kieker's default AspectJ configuration file ({}).", aspectConfigURL);
 			AspectJLoader.addKiekerDefaultConfigFile();
 		}
 
@@ -66,8 +65,9 @@ public final class AspectJLoader {
 			return true;
 		}
 
-		LOG.info("Using Kieker's AspectJLoader. This is not recommended for multi-classloader environments such as JavaEE and OSGI. Use the additional VM"
-				+ " parameter '-D" + KIEKER_MONITORING_SKIP_DEFAULT_AOP_CONFIGURATION + "=true'. to disable Kieker's AspectJLoader");
+		LOGGER.info(
+				"Using Kieker's AspectJLoader. This is not recommended for multi-classloader environments such as JavaEE and OSGI. Use the additional VM parameter '-D {}=true'. to disable Kieker's AspectJLoader",
+				KIEKER_MONITORING_SKIP_DEFAULT_AOP_CONFIGURATION);
 
 		if (null != System.getProperty("aj5.def")) {
 			return true;

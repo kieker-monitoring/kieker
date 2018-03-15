@@ -34,8 +34,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.tools.traceAnalysis.gui.AbstractStep;
 import kieker.tools.traceAnalysis.gui.AdditionalFiltersStep;
 import kieker.tools.traceAnalysis.gui.AdditionalOptionsStep;
@@ -47,14 +48,14 @@ import kieker.tools.traceAnalysis.gui.WelcomeStep;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
  */
 public class TraceAnalysisGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Log LOG = LogFactory.getLog(TraceAnalysisGUI.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TraceAnalysisGUI.class);
 
 	private final CardLayout mainPanelLayout = new CardLayout();
 	private final JPanel mainPanel = new JPanel(this.mainPanelLayout);
@@ -175,7 +176,7 @@ public class TraceAnalysisGUI extends JFrame {
 				try {
 					propertiesFileInputStream.close();
 				} catch (final IOException e) {
-					LOG.warn("Could not close input stream", e);
+					LOGGER.warn("Could not close input stream", e);
 				}
 			}
 		}
@@ -192,13 +193,13 @@ public class TraceAnalysisGUI extends JFrame {
 			stream = new OutputStreamWriter(new FileOutputStream("TraceAnalysisGUI.properties"), "UTF-8");
 			properties.store(stream, null);
 		} catch (final IOException ex) {
-			LOG.warn("Configuration could not be saved", ex);
+			LOGGER.warn("Configuration could not be saved", ex);
 		} finally {
 			if (null != stream) {
 				try {
 					stream.close();
 				} catch (final IOException e) {
-					LOG.warn("Could not close output stream", e);
+					LOGGER.warn("Could not close output stream", e);
 				}
 			}
 		}
@@ -221,7 +222,7 @@ public class TraceAnalysisGUI extends JFrame {
 	}
 
 	private void startTraceAnalysis() {
-		final Collection<String> parameters = new ArrayList<String>();
+		final Collection<String> parameters = new ArrayList<>();
 
 		for (final AbstractStep step : this.steps) {
 			step.addSelectedTraceAnalysisParameters(parameters);
@@ -251,7 +252,7 @@ public class TraceAnalysisGUI extends JFrame {
 
 	/**
 	 * @author Nils Christian Ehmke
-	 * 
+	 *
 	 * @since 1.9
 	 */
 	private class StartTraceAnalysisActionListener implements ActionListener {

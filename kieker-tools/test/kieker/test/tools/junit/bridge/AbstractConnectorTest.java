@@ -19,9 +19,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.bridge.LookupEntity;
@@ -35,24 +35,17 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * Class for all connector tests providing three methods for initialization,
  * record processing and connector termination.
- * 
+ *
  * @author Reiner Jung, Pascale Brandt
- * 
+ *
  * @since 1.8
  */
 public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 
-	protected static final Log LOG; // NOPMD
+	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractKiekerTest.class);
 
 	private IServiceConnector connector;
 	private int recordCount; // default initialization is 0
-
-	static {
-		if (System.getProperty("kieker.common.logging.Log") == null) {
-			System.setProperty("kieker.common.logging.Log", "JUNIT");
-		}
-		LOG = LogFactory.getLog(AbstractKiekerTest.class);
-	}
 
 	public int getRecordCount() {
 		return this.recordCount;
@@ -64,13 +57,13 @@ public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 
 	/**
 	 * Create the test lookup entity map.
-	 * 
+	 *
 	 * @return a lookup entity map
 	 * @throws ConnectorDataTransmissionException
 	 *             if record lookup fails
 	 */
 	protected final ConcurrentMap<Integer, LookupEntity> createLookupEntityMap() throws ConnectorDataTransmissionException {
-		final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> map = new ConcurrentHashMap<Integer, Class<? extends IMonitoringRecord>>();
+		final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> map = new ConcurrentHashMap<>();
 		map.put(ConfigurationParameters.TEST_RECORD_ID, OperationExecutionRecord.class);
 
 		return ServiceConnectorFactory.createLookupEntityMap(map);
@@ -81,7 +74,7 @@ public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 	 */
 	protected void initialize() {
 		try {
-			LOG.info("Initialize connector " + this.connector.getClass().toString());
+			LOGGER.info("Initialize connector {}", this.connector.getClass().toString());
 			this.connector.initialize();
 		} catch (final ConnectorDataTransmissionException e) {
 			Assert.fail("Connector initialization failed: " + e.getMessage());
@@ -90,13 +83,13 @@ public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 
 	/**
 	 * Close a service connector and trigger a failure on errors.
-	 * 
+	 *
 	 * @param numberOfRecords
 	 *            number of expected records
 	 */
 	protected void close(final int numberOfRecords) {
 		try {
-			LOG.info("Terminate connector " + this.connector.getClass().toString());
+			LOGGER.info("Terminate connector {}", this.connector.getClass().toString());
 			this.connector.close();
 		} catch (final ConnectorDataTransmissionException e) {
 			Assert.fail("Connector termination failed: " + e.getMessage());
@@ -108,7 +101,7 @@ public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 
 	/**
 	 * Read number of records from the input stream and trigger assertion errors if necessary.
-	 * 
+	 *
 	 * @param numberOfRecords
 	 *            number of expected records to receive
 	 * @param honorOrderId
@@ -116,9 +109,7 @@ public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 	 */
 	protected void deserialize(final int numberOfRecords, final boolean honorOrderId) {
 		for (int i = 0; i < numberOfRecords; i++) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Receive record " + i);
-			}
+			LOGGER.debug("Receive record {}", i);
 			try {
 				final OperationExecutionRecord record = (OperationExecutionRecord) this.connector.deserializeNextRecord();
 				Assert.assertEquals("Tin is not equal", ConfigurationParameters.TEST_TIN, record.getTin());

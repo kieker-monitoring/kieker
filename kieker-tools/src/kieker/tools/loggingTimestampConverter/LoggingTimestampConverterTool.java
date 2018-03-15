@@ -19,22 +19,22 @@ package kieker.tools.loggingTimestampConverter;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.AbstractCommandLineTool;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
  * This tool can be used to convert timestamps.
- * 
+ *
  * @author Andre van Hoorn, Nils Christian Ehmke
- * 
+ *
  * @since 1.1
  */
 public final class LoggingTimestampConverterTool extends AbstractCommandLineTool {
 
-	private static final Log LOG = LogFactory.getLog(LoggingTimestampConverterTool.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(LoggingTimestampConverterTool.class);
 	private static final String FLAG_TIMESTAMPS_PARAMETER = "t";
 
 	private long[] timestampsLong;
@@ -62,7 +62,7 @@ public final class LoggingTimestampConverterTool extends AbstractCommandLineTool
 	protected boolean readPropertiesFromCommandLine(final CommandLine commandLine) {
 		final String[] timestampsStr = commandLine.getOptionValues(FLAG_TIMESTAMPS_PARAMETER);
 		if ((timestampsStr == null) || (timestampsStr.length == 0)) {
-			LOG.error("No timestamp passed as argument.");
+			LOGGER.error("No timestamp passed as argument.");
 			return false;
 		}
 
@@ -72,7 +72,7 @@ public final class LoggingTimestampConverterTool extends AbstractCommandLineTool
 			try {
 				this.timestampsLong[curIdx] = Long.parseLong(timestampsStr[curIdx]);
 			} catch (final NumberFormatException ex) {
-				LOG.error("Failed to parse timestamp: " + timestampsStr[curIdx], ex);
+				LOGGER.error("Failed to parse timestamp: {}", timestampsStr[curIdx], ex);
 				return false;
 			}
 		}

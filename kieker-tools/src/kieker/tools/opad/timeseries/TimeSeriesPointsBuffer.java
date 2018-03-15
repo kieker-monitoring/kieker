@@ -18,22 +18,22 @@ package kieker.tools.opad.timeseries;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is a thread-safe buffer for time series points, which has or has not a fixed capacity.
- * 
+ *
  * @author Tom Frotscher, Nils Christian Ehmke
  * @since 1.10
- * 
+ *
  * @param <T>
  *            The type of the buffer.
  */
 public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implements ITimeSeriesPointsBuffer<T> {
 
 	private static final long serialVersionUID = -7988633509408488397L;
-	private static final Log LOG = LogFactory.getLog(TimeSeriesPointsBuffer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TimeSeriesPointsBuffer.class);
 
 	private final int capacity;
 	private final boolean unbounded;
@@ -47,7 +47,7 @@ public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implemen
 
 	/**
 	 * Creates a new instance with the given capacity. A capacity of less or equal zero means that the capacity is infinite.
-	 * 
+	 *
 	 * @param capacity
 	 *            The capacity of the buffer
 	 */
@@ -88,6 +88,6 @@ public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implemen
 	 * print buffer.
 	 */
 	public void printBuffer() {
-		LOG.info(this.toString());
+		LOGGER.info(this.toString());
 	}
 }

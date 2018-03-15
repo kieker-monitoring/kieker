@@ -18,14 +18,14 @@ package kieker.test.tools.junit.traceAnalysis.filter.traceReconstruction;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter;
@@ -47,7 +47,7 @@ import kieker.test.tools.util.ExecutionFactory;
  */
 public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 
-	private static final Log LOG = LogFactory.getLog(TestTraceReconstructionFilter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestTraceReconstructionFilter.class);
 	private static final long TRACE_ID = 62298L;
 	private static final String SESSION_ID = "Y2zm6CRc";
 
@@ -118,7 +118,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		validExecutionTrace = this.genValidBookstoreTrace();
 		validMessageTrace = validExecutionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
-		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
+		final ListReader<Execution> reader = new ListReader<>(new Configuration(), controller);
 		for (final Execution curExec : validExecutionTrace.getTraceAsSortedExecutionSet()) {
 			reader.addObject(curExec);
 		}
@@ -133,9 +133,9 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", validExecutionTrace.getDuration() <= filter
 				.getMaxTraceDuration());
 
-		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<ExecutionTrace>(new Configuration(), controller);
-		final ListCollectionFilter<MessageTrace> messageTraceSinkPlugin = new ListCollectionFilter<MessageTrace>(new Configuration(), controller);
-		final ListCollectionFilter<InvalidExecutionTrace> invalidExecutionTraceSinkPlugin = new ListCollectionFilter<InvalidExecutionTrace>(new Configuration(),
+		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<>(new Configuration(), controller);
+		final ListCollectionFilter<MessageTrace> messageTraceSinkPlugin = new ListCollectionFilter<>(new Configuration(), controller);
+		final ListCollectionFilter<InvalidExecutionTrace> invalidExecutionTraceSinkPlugin = new ListCollectionFilter<>(new Configuration(),
 				controller);
 
 		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), controller);
@@ -223,7 +223,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 
 		invalidExecutionTrace = this.genBrokenBookstoreTraceEssSkip(executionFactory);
 
-		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
+		final ListReader<Execution> reader = new ListReader<>(new Configuration(), controller);
 		for (final Execution curExec : invalidExecutionTrace.getTraceAsSortedExecutionSet()) {
 			reader.addObject(curExec);
 		}
@@ -237,9 +237,9 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", invalidExecutionTrace.getDuration() <= filter
 				.getMaxTraceDuration());
 
-		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<ExecutionTrace>(new Configuration(), controller);
-		final ListCollectionFilter<MessageTrace> messageTraceSinkPlugin = new ListCollectionFilter<MessageTrace>(new Configuration(), controller);
-		final ListCollectionFilter<InvalidExecutionTrace> invalidExecutionTraceSinkPlugin = new ListCollectionFilter<InvalidExecutionTrace>(new Configuration(),
+		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<>(new Configuration(), controller);
+		final ListCollectionFilter<MessageTrace> messageTraceSinkPlugin = new ListCollectionFilter<>(new Configuration(), controller);
+		final ListCollectionFilter<InvalidExecutionTrace> invalidExecutionTraceSinkPlugin = new ListCollectionFilter<>(new Configuration(),
 				controller);
 
 		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
@@ -254,7 +254,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		controller.connect(filter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, invalidExecutionTraceSinkPlugin,
 				ListCollectionFilter.INPUT_PORT_NAME);
 
-		TestTraceReconstructionFilter.LOG.info("This test triggers a FATAL warning about an ess skip <0,3> which can simply be ignored because it is desired");
+		TestTraceReconstructionFilter.LOGGER.info("This test triggers a FATAL warning about an ess skip <0,3> which can simply be ignored because it is desired");
 
 		controller.run();
 
@@ -329,14 +329,15 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		final long triggerTraceId = TestTraceReconstructionFilter.TRACE_ID + 1;
 		final Execution exec0_0__bookstore_searchBook__trigger = executionFactory.genExecution("Bookstore", "bookstore", "searchBook", triggerTraceId, // NOCS
 				TestTraceReconstructionFilter.SESSION_ID, incompleteExecutionTrace.getMaxTout(), incompleteExecutionTrace.getMaxTout()
-						+ (triggerTraceLengthMillis * (1000 * 1000)), 0, 0); // NOCS
+						+ (triggerTraceLengthMillis * (1000 * 1000)),
+				0, 0); // NOCS
 		final ExecutionTrace triggerExecutionTrace = new ExecutionTrace(triggerTraceId, TestTraceReconstructionFilter.SESSION_ID);
 		final MessageTrace triggerMessageTrace;
 		triggerExecutionTrace.add(exec0_0__bookstore_searchBook__trigger);
 		triggerMessageTrace = triggerExecutionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
 		// Instantiate reconstruction filter with timeout.
-		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
+		final ListReader<Execution> reader = new ListReader<>(new Configuration(), controller);
 		for (final Execution curExec : incompleteExecutionTrace.getTraceAsSortedExecutionSet()) {
 			reader.addObject(curExec);
 		}
@@ -347,15 +348,16 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 				.toString((triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace.getMinTin()) - 1));
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, controller);
 
-		final ListCollectionFilter<ExecutionTrace> executionTraceSink = new ListCollectionFilter<ExecutionTrace>(new Configuration(), controller);
-		final ListCollectionFilter<MessageTrace> messageTraceSink = new ListCollectionFilter<MessageTrace>(new Configuration(), controller);
-		final ListCollectionFilter<InvalidExecutionTrace> invalidExecutionTraceSink = new ListCollectionFilter<InvalidExecutionTrace>(new Configuration(),
+		final ListCollectionFilter<ExecutionTrace> executionTraceSink = new ListCollectionFilter<>(new Configuration(), controller);
+		final ListCollectionFilter<MessageTrace> messageTraceSink = new ListCollectionFilter<>(new Configuration(), controller);
+		final ListCollectionFilter<InvalidExecutionTrace> invalidExecutionTraceSink = new ListCollectionFilter<>(new Configuration(),
 				controller);
 
 		Assert.assertTrue("Test invalid: NOT (tout of trigger trace - tin of incomplete > filter max. duration)\n" + "triggerExecutionTrace.getMaxTout()"
 				+ triggerExecutionTrace.getMaxTout() + "\n" + "incompleteExecutionTrace.getMinTin()" + incompleteExecutionTrace.getMinTin() + "\n"
-				+ "filter.getMaxTraceDurationNanos()" + filter.getMaxTraceDuration(), (triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace
-				.getMinTin()) > filter.getMaxTraceDuration());
+				+ "filter.getMaxTraceDurationNanos()" + filter.getMaxTraceDuration(),
+				(triggerExecutionTrace.getMaxTout() - incompleteExecutionTrace
+						.getMinTin()) > filter.getMaxTraceDuration());
 
 		controller.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
 
@@ -376,7 +378,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		/**
 		 * Pass the timeout "trigger execution"
 		 */
-		LOG.info("Expecting (caught/logged) exception in TraceReconstructionFilter:");
+		LOGGER.info("Expecting (caught/logged) exception in TraceReconstructionFilter:");
 		reader.addObject(exec0_0__bookstore_searchBook__trigger);
 
 		/**

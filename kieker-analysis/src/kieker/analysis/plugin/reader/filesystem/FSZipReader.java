@@ -32,10 +32,11 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -49,18 +50,18 @@ import kieker.common.util.filesystem.FSUtil;
  * @since 1.7
  */
 public final class FSZipReader implements Runnable {
-	private static final Log LOG = LogFactory.getLog(FSZipReader.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(FSZipReader.class);
 
 	private final File zipFile;
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final boolean ignoreUnknownRecordTypes;
 
-	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>(); // NOPMD (no synchronization needed)
+	private final Map<Integer, String> stringRegistry = new HashMap<>(); // NOPMD (no synchronization needed)
 
 	private boolean terminated;
 
 	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
-	private final Set<String> unknownTypesObserved = new HashSet<String>();
+	private final Set<String> unknownTypesObserved = new HashSet<>();
 
 	/**
 	 * Creates a new instance of this class.
@@ -94,14 +95,14 @@ public final class FSZipReader implements Runnable {
 				// do nothing, just skip to the map file if present
 			}
 			if (null == zipEntry) {
-				LOG.error("The zip file does not contain a Kieker log: " + this.zipFile.toString());
+				LOGGER.error("The zip file does not contain a Kieker log: {}", this.zipFile.toString());
 				this.recordReceiver.newEndOfFileRecord();
 				return;
 			}
 			// read mapping file
 			this.readMappingFile(zipInputStream);
 		} catch (final IOException ex) {
-			LOG.error("Error accessing ZipInputStream", ex);
+			LOGGER.error("Error accessing ZipInputStream", ex);
 			this.recordReceiver.newEndOfFileRecord();
 			return;
 		} finally {
@@ -109,7 +110,7 @@ public final class FSZipReader implements Runnable {
 				try {
 					zipInputStream.close();
 				} catch (final IOException ex) {
-					LOG.error("Failed to close ZipInputStream", ex);
+					LOGGER.error("Failed to close ZipInputStream", ex);
 				}
 			}
 		}
@@ -124,47 +125,47 @@ public final class FSZipReader implements Runnable {
 			ZipEntry zipEntry;
 			while (null != (zipEntry = zipInputStream.getNextEntry())) { // NOCS NOPMD
 				if (this.terminated) {
-					LOG.info("Shutting down DirectoryReader.");
+					LOGGER.info("Shutting down DirectoryReader.");
 					break;
 				}
 				final String filename = zipEntry.getName();
 				if (filename.startsWith(FSUtil.FILE_PREFIX)) {
 					if (filename.endsWith(FSUtil.DAT_FILE_EXTENSION)) {
-						LOG.info("< Loading " + filename);
+						LOGGER.info("< Loading {}", filename);
 						this.readAsciiFile(reader);
 					} else if (filename.endsWith(".bin")) {
-						LOG.info("< Loading " + filename);
+						LOGGER.info("< Loading {}", filename);
 						if (this.ignoreUnknownRecordTypes) { // NOPMD (deeply nested if)
-							LOG.warn("The property '" + FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES
-									+ "' is not supported for binary files. But trying to read '" + filename + "'");
+							LOGGER.warn("The property '{}' is not supported for binary files. But trying to read '{}'",
+									FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, filename);
 						}
 						this.readBinaryFile(input);
 					}
 				}
 			}
 		} catch (final IOException ex) {
-			LOG.error("Error accessing ZipInputStream", ex);
+			LOGGER.error("Error accessing ZipInputStream", ex);
 			this.recordReceiver.newEndOfFileRecord();
 			return;
 		} finally {
 			try {
 				zipInputStream.close();
 			} catch (final IOException ex) {
-				LOG.error("Failed to close ZipInputStream", ex);
+				LOGGER.error("Failed to close ZipInputStream", ex);
 			}
 			try {
 				if (null != reader) {
 					reader.close();
 				}
 			} catch (final IOException ex) {
-				LOG.error("Failed to close ZipInputStream", ex);
+				LOGGER.error("Failed to close ZipInputStream", ex);
 			}
 			try {
 				if (null != input) {
 					input.close();
 				}
 			} catch (final IOException ex) {
-				LOG.error("Failed to close ZipInputStream", ex);
+				LOGGER.error("Failed to close ZipInputStream", ex);
 			}
 		}
 		this.recordReceiver.newEndOfFileRecord();
@@ -181,7 +182,7 @@ public final class FSZipReader implements Runnable {
 				}
 				final String classname = this.stringRegistry.get(id);
 				if (classname == null) {
-					LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
+					LOGGER.error("Missing classname mapping for record type id '{}'", id);
 					break; // we can't easily recover on errors
 				}
 
@@ -198,7 +199,7 @@ public final class FSZipReader implements Runnable {
 						final Integer strId = input.readInt();
 						final String str = this.stringRegistry.get(strId);
 						if (str == null) {
-							LOG.error("No String mapping found for id " + strId.toString());
+							LOGGER.error("No String mapping found for id {}", strId.toString());
 							objectArray[idx] = "";
 						} else {
 							objectArray[idx] = str;
@@ -219,10 +220,10 @@ public final class FSZipReader implements Runnable {
 						objectArray[idx] = input.readBoolean();
 					} else {
 						if (input.readByte() != 0) {
-							LOG.error("Unexpected value for unsupported type: " + clazz.getName());
+							LOGGER.error("Unexpected value for unsupported type: {}", clazz.getName());
 							return; // breaking error (break would not terminate the correct loop)
 						}
-						LOG.warn("Unsupported type: " + clazz.getName());
+						LOGGER.warn("Unsupported type: {}", clazz.getName());
 						objectArray[idx] = null;
 					}
 				}
@@ -234,7 +235,7 @@ public final class FSZipReader implements Runnable {
 				}
 			}
 		} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
-			LOG.error("Error reading " + this.zipFile.toString(), ex);
+			LOGGER.error("Error reading {}", this.zipFile.toString(), ex);
 		}
 	}
 
@@ -252,13 +253,13 @@ public final class FSZipReader implements Runnable {
 				try {
 					if (recordFields[0].charAt(0) == '$') { // modern record
 						if (recordFields.length < 2) {
-							LOG.error("Illegal record format: " + line);
+							LOGGER.error("Illegal record format: {}", line);
 							continue; // skip this record
 						}
 						final Integer id = Integer.valueOf(recordFields[0].substring(1));
 						final String classname = this.stringRegistry.get(id);
 						if (classname == null) {
-							LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
+							LOGGER.error("Missing classname mapping for record type id '{}'", id);
 							continue; // skip this record
 						}
 						Class<? extends IMonitoringRecord> clazz = null;
@@ -271,7 +272,7 @@ public final class FSZipReader implements Runnable {
 								abortDueToUnknownRecordType = true;
 								throw new MonitoringRecordException("Failed to load record type " + classname, ex);
 							} else if (!this.unknownTypesObserved.contains(classname)) {
-								LOG.error("Failed to load record type " + classname, ex); // log once for this type
+								LOGGER.error("Failed to load record type {}", classname, ex); // log once for this type
 								this.unknownTypesObserved.add(classname);
 							}
 							continue; // skip this ignored record
@@ -298,7 +299,7 @@ public final class FSZipReader implements Runnable {
 						newEx.initCause(ex);
 						throw newEx; // NOPMD (cause is set above)
 					} else {
-						LOG.warn("Error processing line: " + line, ex);
+						LOGGER.warn("Error processing line: {}", line, ex);
 						continue; // skip this record
 					}
 				}
@@ -308,7 +309,7 @@ public final class FSZipReader implements Runnable {
 				}
 			}
 		} catch (final Exception ex) { // NOCS NOPMD (gonna catch them all)
-			LOG.error("Error reading " + this.zipFile.toString(), ex);
+			LOGGER.error("Error reading {}", this.zipFile.toString(), ex);
 		}
 	}
 
@@ -328,8 +329,7 @@ public final class FSZipReader implements Runnable {
 				}
 				final int split = line.indexOf('=');
 				if (split == -1) {
-					LOG.error("Failed to parse line: {" + line + "} from mapping file in zip file " + this.zipFile.toString()
-							+ ". Each line must contain ID=VALUE pairs.");
+					LOGGER.error("Failed to parse line: {} from mapping file in zip file {}. Each line must contain ID=VALUE pairs.", line, this.zipFile.toString());
 					continue; // continue on errors
 				}
 				final String key = line.substring(0, split);
@@ -339,12 +339,12 @@ public final class FSZipReader implements Runnable {
 				try {
 					id = Integer.valueOf((key.charAt(0) == '$') ? key.substring(1) : key); // NOCS
 				} catch (final NumberFormatException ex) {
-					LOG.error("Error reading mapping file, id must be integer", ex);
+					LOGGER.error("Error reading mapping file, id must be integer", ex);
 					continue; // continue on errors
 				}
 				final String prevVal = this.stringRegistry.put(id, value);
 				if (prevVal != null) {
-					LOG.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
+					LOGGER.error("Found addional entry for id='{}', old value was '{}' new value is '{}'", id, prevVal, value);
 				}
 			}
 		} finally {

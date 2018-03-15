@@ -22,8 +22,9 @@ import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentMap;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
@@ -31,16 +32,16 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 
 /**
  * Handles one TCP connection for the multi server.
- * 
+ *
  * @author Reiner Jung
  * @since 1.8
- * 
+ *
  */
 public class TCPMultiServerConnectionRunnable implements Runnable {
 	// string buffer size (#1052)
 	private static final int BUF_LEN = 65536;
 
-	private static final Log LOG = LogFactory.getLog(TCPMultiServerConnectionRunnable.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TCPMultiServerConnectionRunnable.class);
 
 	private final Socket socket;
 	private final byte[] buffer = new byte[BUF_LEN];
@@ -53,7 +54,7 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 
 	/**
 	 * Create a service thread.
-	 * 
+	 *
 	 * @param socket
 	 *            service socket
 	 * @param lookupEntityMap
@@ -82,29 +83,29 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 					this.recordQueue.put(this.deserialize(in));
 				} catch (final InterruptedException e) {
 					this.active = false;
-					LOG.warn("Listener " + Thread.currentThread().getId() + " died.", e);
+					LOGGER.warn("Listener {} died.", Thread.currentThread().getId(), e);
 				} catch (final ConnectorDataTransmissionException e) {
 					this.active = false;
-					LOG.warn("Listener " + Thread.currentThread().getId() + " died.", e);
+					LOGGER.warn("Listener {} died.", Thread.currentThread().getId(), e);
 				} catch (final ConnectorEndOfDataException e) {
 					this.active = false;
-					LOG.info("Listener " + Thread.currentThread().getId() + " terminated at end of stream.");
+					LOGGER.info("Listener {} terminated at end of stream.", Thread.currentThread().getId());
 				}
 			}
 			in.close();
 			this.socket.close();
 		} catch (final IOException e) {
 			this.active = false;
-			LOG.warn("IO exception occurred. Cause " + e.getMessage());
+			LOGGER.warn("IO exception occurred. Cause {}", e.getMessage());
 		}
 	}
 
 	/**
 	 * Deserialize a received record.
-	 * 
+	 *
 	 * @param in
 	 *            the input data stream
-	 * 
+	 *
 	 * @return a new IMonitoringRecord
 	 * @throws Exception
 	 *             throws IOException when unknown record ID is read.

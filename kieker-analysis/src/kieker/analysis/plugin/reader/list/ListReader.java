@@ -108,12 +108,12 @@ public class ListReader<T> extends AbstractReaderPlugin {
 		}
 		try {
 			if (this.awaitTermination) {
-				this.log.info("Awaiting termination latch to count down ...");
+				this.logger.info("Awaiting termination latch to count down ...");
 				this.terminationLatch.await();
-				this.log.info("Passed termination latch");
+				this.logger.info("Passed termination latch");
 			}
 		} catch (final InterruptedException e) {
-			this.log.error("Reader interrupted while awaiting termination", e);
+			this.logger.error("Reader interrupted while awaiting termination", e);
 			return false;
 		}
 		return true;

@@ -33,16 +33,14 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.2
  */
-@Plugin(description = "A filter allowing to write the incoming InvalidExecutionTraces into a configured file",
-		repositoryPorts = {
-			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
-		},
-		configuration = {
-			@Property(name = InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, defaultValue = "invalidTraceArtifacts-yyyyMMdd-HHmmssSSS.txt")
-		})
+@Plugin(description = "A filter allowing to write the incoming InvalidExecutionTraces into a configured file", repositoryPorts = {
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+}, configuration = {
+	@Property(name = InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, defaultValue = "invalidTraceArtifacts-yyyyMMdd-HHmmssSSS.txt")
+})
 public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionTraceProcessingFilter {
 
 	/** This is the name of the input port receiving new (invalid) execution traces. */
@@ -57,12 +55,12 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
+	 *
 	 * @throws IOException
 	 *             If the write stream could not be prepared.
 	 */
@@ -77,9 +75,7 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 	public void printStatusMessage() {
 		super.printStatusMessage();
 		final int numTraces = this.getSuccessCount();
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Wrote " + numTraces + " execution trace artifact" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
-		}
+		LOGGER.debug("Wrote {} execution trace artifact{} to file '{}'", numTraces, (numTraces > 1 ? "s" : ""), this.outputFn); // NOCS
 	}
 
 	/**
@@ -99,13 +95,12 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 
 	/**
 	 * This method represents the input port of this filter.
-	 * 
+	 *
 	 * @param et
 	 *            The next execution trace.
 	 */
-	@InputPort(
-			name = INPUT_PORT_NAME_INVALID_EXECUTION_TRACES,
-			description = "Receives the invalid execution traces to be written", eventTypes = { InvalidExecutionTrace.class })
+	@InputPort(name = INPUT_PORT_NAME_INVALID_EXECUTION_TRACES, description = "Receives the invalid execution traces to be written", eventTypes = {
+		InvalidExecutionTrace.class })
 	public void newInvalidExecutionTrace(final InvalidExecutionTrace et) {
 		InvalidExecutionTraceWriterFilter.this.ps.println(et.getInvalidExecutionTraceArtifacts().toString());
 		InvalidExecutionTraceWriterFilter.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());

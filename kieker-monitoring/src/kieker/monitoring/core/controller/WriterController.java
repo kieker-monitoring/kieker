@@ -22,9 +22,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.queue.BlockingQueueDecorator;
@@ -56,7 +57,7 @@ public final class WriterController extends AbstractController implements IWrite
 	/** The fully qualified name of the queue to be used for the records. */
 	public static final String RECORD_QUEUE_FQN = "RecordQueueFQN";
 
-	private static final Log LOG = LogFactory.getLog(WriterController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(WriterController.class);
 	/** Monitoring Writer. */
 	private AbstractMonitoringWriter monitoringWriter; // NOPMD (so far, cannot be made final due to the MonitoringController)
 	/** Whether or not to automatically log the metadata record. */
@@ -111,10 +112,7 @@ public final class WriterController extends AbstractController implements IWrite
 
 		int recordQueueInsertBehavior = configuration.getIntProperty(PREFIX + RECORD_QUEUE_INSERT_BEHAVIOR);
 		if ((recordQueueInsertBehavior < 0) || (recordQueueInsertBehavior > 5)) {
-			if (LOG.isWarnEnabled()) {
-				LOG.warn("Unknown value '" + recordQueueInsertBehavior + "' for " + PREFIX + RECORD_QUEUE_INSERT_BEHAVIOR
-						+ "; using default value 0");
-			}
+			LOGGER.warn("Unknown value '{}' for {}{}; using default value 0", recordQueueInsertBehavior, PREFIX, RECORD_QUEUE_INSERT_BEHAVIOR);
 			recordQueueInsertBehavior = 0;
 		}
 
@@ -189,16 +187,16 @@ public final class WriterController extends AbstractController implements IWrite
 			final Constructor<? extends Queue> constructor = queueClass.getConstructor(int.class);
 			return constructor.newInstance(capacity);
 		} catch (final ClassNotFoundException | InstantiationException e) {
-			LOG.warn("An exception occurred", e);
+			LOGGER.warn("An exception occurred", e);
 			throw new IllegalStateException(e);
 		} catch (final NoSuchMethodException | SecurityException e) {
-			LOG.warn("An exception occurred", e);
+			LOGGER.warn("An exception occurred", e);
 			throw new IllegalStateException(e);
 		} catch (final IllegalAccessException | IllegalArgumentException e) {
-			LOG.warn("An exception occurred", e);
+			LOGGER.warn("An exception occurred", e);
 			throw new IllegalStateException(e);
 		} catch (final InvocationTargetException e) {
-			LOG.warn("An exception occurred", e);
+			LOGGER.warn("An exception occurred", e);
 			throw new IllegalStateException(e);
 		}
 	}
@@ -211,9 +209,7 @@ public final class WriterController extends AbstractController implements IWrite
 
 	@Override
 	protected final void init() {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Initializing Writer Controller");
-		}
+		LOGGER.debug("Initializing Writer Controller");
 
 		if (this.monitoringWriterThread != null) {
 			this.monitoringWriterThread.start();
@@ -222,9 +218,7 @@ public final class WriterController extends AbstractController implements IWrite
 
 	@Override
 	protected final void cleanup() {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Shutting down Writer Controller");
-		}
+		LOGGER.debug("Shutting down Writer Controller");
 
 		if (this.monitoringWriterThread != null) {
 			this.monitoringWriterThread.terminate();
@@ -262,7 +256,7 @@ public final class WriterController extends AbstractController implements IWrite
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		final boolean recordSent = this.insertBehavior.insert(record);
 		if (!recordSent) {
-			LOG.error("Error writing the monitoring data. Will terminate monitoring!");
+			LOGGER.error("Error writing the monitoring data. Will terminate monitoring!");
 			this.terminate();
 		}
 

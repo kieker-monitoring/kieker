@@ -27,7 +27,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import kieker.common.logging.Log;
+import org.slf4j.Logger;
+
 import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
 import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
@@ -51,7 +52,7 @@ public abstract class AbstractFileWriterPool<T extends Buffer> {
 	private static final String TIME_ZONE = "UTC";
 	private static final Locale LOCALE = Locale.US;
 
-	protected final Log writerLog; // NOPMD (logger passed by caller)
+	protected final Logger writerLogger; // NOPMD (logger passed by caller)
 	protected final Path folder;
 
 	protected final Charset charset;
@@ -75,7 +76,7 @@ public abstract class AbstractFileWriterPool<T extends Buffer> {
 	/**
 	 * Create an ASCII writer pool.
 	 *
-	 * @param writerLog
+	 * @param writerLogger
 	 *            logger for the pool
 	 * @param folder
 	 *            path where all files go
@@ -92,10 +93,10 @@ public abstract class AbstractFileWriterPool<T extends Buffer> {
 	 * @param fileExtensionWithDot
 	 *            file extension to be used for files if not compressed
 	 */
-	protected AbstractFileWriterPool(final Log writerLog, final Path folder, final String charsetName, final int maxEntriesInFile,
+	protected AbstractFileWriterPool(final Logger writerLogger, final Path folder, final String charsetName, final int maxEntriesInFile,
 			final ICompressionFilter compressionFilter,
 			final int maxAmountOfFiles, final int maxMegaBytesInFile, final String fileExtensionWithDot) {
-		this.writerLog = writerLog;
+		this.writerLogger = writerLogger;
 		this.folder = folder;
 
 		this.dateFormatter = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", LOCALE);
@@ -136,7 +137,7 @@ public abstract class AbstractFileWriterPool<T extends Buffer> {
 		try {
 			Files.delete(oldestFile);
 		} catch (final IOException e) {
-			this.writerLog.warn("Cannot delete oldest file.", e);
+			this.writerLogger.warn("Cannot delete oldest file.", e);
 		}
 	}
 
@@ -164,16 +165,16 @@ public abstract class AbstractFileWriterPool<T extends Buffer> {
 	 *
 	 * @param bufferSpace
 	 *            requested size
-	 * @param log
+	 * @param logger
 	 */
-	public void requestBufferSpace(final int bufferSpace, final Log log) {
+	public void requestBufferSpace(final int bufferSpace, final Logger logger) {
 		if (bufferSpace > this.buffer.remaining()) {
-			this.currentChannel.flush(log);
+			this.currentChannel.flush(logger);
 		}
 	}
 
 	public void close() {
-		this.currentChannel.close(this.writerLog);
+		this.currentChannel.close(this.writerLogger);
 	}
 
 	protected int getCurrentFileNumber() {

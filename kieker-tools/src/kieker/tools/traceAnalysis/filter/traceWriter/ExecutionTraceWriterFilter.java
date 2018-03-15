@@ -34,18 +34,16 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 /**
  * This class has exactly one input port named "in". The data which is send to
  * this plugin is not delegated in any way.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.2
  */
-@Plugin(description = "A filter allowing to write the incoming ExecutionTraces into a configured file",
-		repositoryPorts = {
-			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
-		},
-		configuration = {
-			@Property(name = ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, defaultValue = "invalidTraceArtifacts-yyyyMMdd-HHmmssSSS.txt")
-		})
+@Plugin(description = "A filter allowing to write the incoming ExecutionTraces into a configured file", repositoryPorts = {
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+}, configuration = {
+	@Property(name = ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, defaultValue = "invalidTraceArtifacts-yyyyMMdd-HHmmssSSS.txt")
+})
 public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessingFilter {
 
 	/** This is the name of the input port receiving new execution traces. */
@@ -61,12 +59,12 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
+	 *
 	 * @throws IOException
 	 *             If the write stream could not be prepared.
 	 */
@@ -81,9 +79,7 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	public void printStatusMessage() {
 		super.printStatusMessage();
 		final int numTraces = this.getSuccessCount();
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Wrote " + numTraces + " execution trace" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
-		}
+		LOGGER.debug("Wrote {} execution trace{} to file '{}'", numTraces, (numTraces > 1 ? "s" : ""), this.outputFn); // NOCS
 	}
 
 	/**
@@ -98,14 +94,11 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 
 	/**
 	 * This method represents the input port of this filter.
-	 * 
+	 *
 	 * @param et
 	 *            The next execution trace.
 	 */
-	@InputPort(
-			name = INPUT_PORT_NAME_EXECUTION_TRACES,
-			description = "Receives the execution traces to be written",
-			eventTypes = { ExecutionTrace.class })
+	@InputPort(name = INPUT_PORT_NAME_EXECUTION_TRACES, description = "Receives the execution traces to be written", eventTypes = { ExecutionTrace.class })
 	public void newExecutionTrace(final ExecutionTrace et) {
 		ExecutionTraceWriterFilter.this.ps.println(et.toString());
 		ExecutionTraceWriterFilter.this.reportSuccess(et.getTraceId());

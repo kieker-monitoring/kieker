@@ -42,6 +42,8 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
@@ -54,8 +56,6 @@ import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.analysis.plugin.filter.select.TraceIdFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.tools.AbstractCommandLineTool;
 import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
@@ -108,10 +108,9 @@ import kieker.tools.util.LoggingTimestampConverter;
  * @since 0.95a
  */
 public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD (long class)
-	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", "")
-			+ " | timestamp"; // only for usage info
+	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", "") + " | timestamp"; // only for usage info
 
-	private static final Log LOG = LogFactory.getLog(TraceAnalysisTool.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TraceAnalysisTool.class);
 	private static final String ENCODING = "UTF-8";
 
 	private final AnalysisController analysisController = new AnalysisController();
@@ -196,7 +195,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 
 		if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES)
 				&& this.cmdl.hasOption(Constants.CMD_OPT_NAME_FILTERTRACES)) {
-			LOG.error("Trace Id selection and filtering are mutually exclusive");
+			LOGGER.error("Trace Id selection and filtering are mutually exclusive");
 			return false;
 		}
 
@@ -215,10 +214,9 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				for (final String idStr : traceIdList) {
 					this.selectedTraces.add(Long.valueOf(idStr));
 				}
-				LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") // NOCS
-						+ (this.invertTraceIdFilter ? " filtered" : " selected")); // NOCS
+				LOGGER.info("{} trace{} {}", numSelectedTraces, (numSelectedTraces > 1 ? "s" : ""), (this.invertTraceIdFilter ? "filtered" : "selected")); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-				LOG.error("Failed to parse list of trace IDs: " + Arrays.toString(traceIdList), e);
+				LOGGER.error("Failed to parse list of trace IDs: {}", Arrays.toString(traceIdList), e);
 				return false;
 			}
 		}
@@ -234,8 +232,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 		try {
 			this.maxTraceDurationMillis = Integer.parseInt(maxTraceDurationStr);
 		} catch (final NumberFormatException exc) {
-			LOG.error("Failed to parse int value of property " + Constants.CMD_OPT_NAME_MAXTRACEDURATION
-					+ " (must be an integer):" + maxTraceDurationStr, exc);
+			LOGGER.error("Failed to parse int value of property {} (must be an integer):{}", Constants.CMD_OPT_NAME_MAXTRACEDURATION, maxTraceDurationStr, exc);
 			return false;
 		}
 
@@ -251,12 +248,11 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				long ignoreExecutionsBeforeTimestampTemp;
 				try {
 					ignoreExecutionsBeforeTimestampTemp = Long.parseLong(ignoreRecordsBeforeTimestampString);
-					LOG.info("Ignoring records before " + ignoreExecutionsBeforeTimestampTemp);
+					LOGGER.info("Ignoring records before {}", ignoreExecutionsBeforeTimestampTemp);
 				} catch (final NumberFormatException ex) {
 					final Date ignoreBeforeDate = dateFormat.parse(ignoreRecordsBeforeTimestampString);
 					ignoreExecutionsBeforeTimestampTemp = ignoreBeforeDate.getTime() * (1000 * 1000);
-					LOG.info("Ignoring records before " + dateFormat.format(ignoreBeforeDate) + " ("
-							+ ignoreExecutionsBeforeTimestampTemp + ")");
+					LOGGER.info("Ignoring records before {} ({})", dateFormat.format(ignoreBeforeDate), ignoreExecutionsBeforeTimestampTemp);
 				}
 				this.ignoreExecutionsBeforeTimestamp = ignoreExecutionsBeforeTimestampTemp;
 			}
@@ -264,20 +260,17 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				long ignoreExecutionsAfterTimestampTemp;
 				try {
 					ignoreExecutionsAfterTimestampTemp = Long.parseLong(ignoreRecordsAfterTimestampString);
-					LOG.info("Ignoring records after " + ignoreExecutionsAfterTimestampTemp);
+					LOGGER.info("Ignoring records after {}", ignoreExecutionsAfterTimestampTemp);
 				} catch (final NumberFormatException ex) {
 					final Date ignoreAfterDate = dateFormat.parse(ignoreRecordsAfterTimestampString);
 					ignoreExecutionsAfterTimestampTemp = ignoreAfterDate.getTime() * (1000 * 1000);
-					LOG.info("Ignoring records after " + dateFormat.format(ignoreAfterDate) + " ("
-							+ ignoreExecutionsAfterTimestampTemp + ")");
+					LOGGER.info("Ignoring records after {} ({})", dateFormat.format(ignoreAfterDate), ignoreExecutionsAfterTimestampTemp);
 				}
 				this.ignoreExecutionsAfterTimestamp = ignoreExecutionsAfterTimestampTemp;
 
 			}
 		} catch (final java.text.ParseException ex) {
-			final String errorMsg = "Error parsing date/time string. Please use the following pattern: "
-					+ DATE_FORMAT_PATTERN_CMD_USAGE_HELP;
-			LOG.error(errorMsg, ex);
+			LOGGER.error("Error parsing date/time string. Please use the following pattern: {}", DATE_FORMAT_PATTERN_CMD_USAGE_HELP, ex);
 			return false;
 		}
 		return true;
@@ -291,7 +284,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	 */
 	private boolean assertOutputDirExists() {
 		if ((this.outputDir == null) || this.outputDir.isEmpty()) {
-			LOG.error("No output directory configured");
+			LOGGER.error("No output directory configured");
 			return false;
 		}
 
@@ -299,18 +292,17 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 
 		try {
 			if (!outputDirFile.exists()) {
-				LOG.error("The specified output directory '" + outputDirFile.getCanonicalPath() + "' does not exist");
+				LOGGER.error("The specified output directory '{}' does not exist", outputDirFile.getCanonicalPath());
 				return false;
 			}
 
 			if (!outputDirFile.isDirectory()) {
-				LOG.error(
-						"The specified output directory '" + outputDirFile.getCanonicalPath() + "' is not a directory");
+				LOGGER.error("The specified output directory '{}' is not a directory", outputDirFile.getCanonicalPath());
 				return false;
 			}
 
 		} catch (final IOException e) { // thrown by File.getCanonicalPath()
-			LOG.error("Error resolving name of output directory: '" + this.outputDir + "'");
+			LOGGER.error("Error resolving name of output directory: '{}'", this.outputDir);
 		}
 
 		return true;
@@ -346,12 +338,10 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 
 					plugin.addDecorator(new ResponseTimeColorNodeDecorator(threshold));
 				} catch (final NumberFormatException exc) {
-					System.err.println(
-							"\nFailed to parse int value of property " + "threshold(ms) : " + thresholdStringStr); // NOPMD
-																													// (System.out)
+					System.err.println("\nFailed to parse int value of property " + "threshold(ms) : " + thresholdStringStr); // NOPMD (System.out)
 				}
 			} else {
-				LOG.warn("Unknown decoration name '" + currentDecoratorStr + "'.");
+				LOGGER.warn("Unknown decoration name '{}'.", currentDecoratorStr);
 				return;
 			}
 		}
@@ -365,7 +355,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	 */
 	private boolean assertInputDirsExistsAndAreMonitoringLogs() {
 		if (this.inputDirs == null) {
-			LOG.error("No input directories configured");
+			LOGGER.error("No input directories configured");
 			return false;
 		}
 
@@ -373,18 +363,17 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 			final File inputDirFile = new File(inputDir);
 			try {
 				if (!inputDirFile.exists()) {
-					LOG.error("The specified input directory '" + inputDirFile.getCanonicalPath() + "' does not exist");
+					LOGGER.error("The specified input directory '{}' does not exist", inputDirFile.getCanonicalPath());
 					return false;
 				}
 				if (!inputDirFile.isDirectory() && !inputDir.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
-					LOG.error("The specified input directory '" + inputDirFile.getCanonicalPath()
-							+ "' is neither a directory nor a zip file");
+					LOGGER.error("The specified input directory '{}' is neither a directory nor a zip file", inputDirFile.getCanonicalPath());
 					return false;
 				}
 				// check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons
 				if (inputDirFile.isDirectory()) { // only check for dirs
 					final File[] mapFiles = { new File(inputDir + File.separatorChar + FSUtil.MAP_FILENAME),
-							new File(inputDir + File.separatorChar + FSUtil.LEGACY_MAP_FILENAME), };
+						new File(inputDir + File.separatorChar + FSUtil.LEGACY_MAP_FILENAME), };
 					boolean mapFileExists = false;
 					for (final File potentialMapFile : mapFiles) {
 						if (potentialMapFile.isFile()) {
@@ -393,13 +382,12 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						}
 					}
 					if (!mapFileExists) {
-						LOG.error("The specified input directory '" + inputDirFile.getCanonicalPath()
-								+ "' is not a kieker log directory");
+						LOGGER.error("The specified input directory '{}' is not a kieker log directory", inputDirFile.getCanonicalPath());
 						return false;
 					}
 				}
 			} catch (final IOException e) { // thrown by File.getCanonicalPath()
-				LOG.error("Error resolving name of input directory: '" + inputDir + "'");
+				LOGGER.error("Error resolving name of input directory: '{}'", inputDir);
 			}
 		}
 
@@ -906,7 +894,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)) {
 				numRequestedTasks++;
 
-				componentPlotTraceCallTrees = createTraceCallTreeFilter(systemEntityFactory, mtReconstrFilter,
+				componentPlotTraceCallTrees = this.createTraceCallTreeFilter(systemEntityFactory, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter);
 
 				allTraceProcessingComponents.add(componentPlotTraceCallTrees);
@@ -945,7 +933,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE)) {
 				numRequestedTasks++;
 
-				componentPlotAssemblyCallTree = createAggrAssemblyCompOpCallTreeFilter(systemEntityFactory,
+				componentPlotAssemblyCallTree = this.createAggrAssemblyCompOpCallTreeFilter(systemEntityFactory,
 						mtReconstrFilter, traceEvents2ExecutionAndMessageTraceFilter);
 
 				allTraceProcessingComponents.add(componentPlotAssemblyCallTree);
@@ -962,8 +950,8 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 			this.attachGraphProcessors(allGraphProducers, this.analysisController, this.cmdl);
 
 			if (numRequestedTasks == 0) {
-				LOG.error("No task requested");
-				LOG.info("Use the option `--" + CMD_OPT_NAME_HELP_LONG + "` for usage information");
+				LOGGER.error("No task requested");
+				LOGGER.info("Use the option `--{}` for usage information", CMD_OPT_NAME_HELP_LONG);
 				return false;
 			}
 
@@ -986,8 +974,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				if (this.analysisController.getState() != AnalysisController.STATE.TERMINATED) {
 					// Analysis did not terminate successfully
 					retVal = false; // Error message referring to log will be printed later
-					LOG.error("Analysis instance terminated in state other than" + AnalysisController.STATE.TERMINATED
-							+ ":" + this.analysisController.getState());
+					LOGGER.error("Analysis instance terminated in state other than {}: {}", AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 				}
 			} finally {
 				for (final AbstractTraceProcessingFilter c : allTraceProcessingComponents) {
@@ -999,10 +986,9 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				try { // NOCS (nested try)
 						// Try to serialize analysis configuration to .kax file
 					this.analysisController.saveToFile(kaxOutputFile);
-					LOG.info("Saved analysis configuration to file '" + kaxOutputFile.getCanonicalPath() + "'");
+					LOGGER.info("Saved analysis configuration to file '{}'", kaxOutputFile.getCanonicalPath());
 				} catch (final IOException ex) {
-					LOG.error(
-							"Failed to save analysis configuration to file '" + kaxOutputFile.getCanonicalPath() + "'");
+					LOGGER.error("Failed to save analysis configuration to file '{}'", kaxOutputFile.getCanonicalPath());
 				}
 			}
 			if (!this.ignoreInvalidTraces && (numErrorCount > 0)) {
@@ -1011,8 +997,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 
 			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
 				retVal = this.writeTraceEquivalenceReport(
-						this.outputDir + File.separator + this.outputFnPrefix
-								+ Constants.TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX + ".txt",
+						this.outputDir + File.separator + this.outputFnPrefix + Constants.TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX + ".txt",
 						traceAllocationEquivClassFilter);
 			}
 
@@ -1023,7 +1008,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						traceAssemblyEquivClassFilter);
 			}
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			LOG.error("An error occured", ex);
+			LOGGER.error("An error occured", ex);
 			retVal = false;
 		} finally {
 			if (numRequestedTasks > 0) {
@@ -1043,7 +1028,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	}
 
 	/**
-	 * 
+	 *
 	 * @param systemEntityFactory
 	 *            the consumer filter
 	 * @param traceReconstructionFilter
@@ -1134,8 +1119,8 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	 * This method dumps the configuration on the screen.
 	 */
 	private void dumpConfiguration() {
-		LOG.debug("#");
-		LOG.debug("# Configuration");
+		LOGGER.debug("#");
+		LOGGER.debug("# Configuration");
 		for (final Option o : Constants.SORTED_OPTION_LIST) {
 			final String longOpt = o.getLongOpt();
 			String val = "<null>";
@@ -1213,11 +1198,9 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				}
 			} else {
 				val = Arrays.toString(this.cmdl.getOptionValues(longOpt));
-				LOG.warn("Unformatted configuration output for option " + longOpt);
+				LOGGER.warn("Unformatted configuration output for option {}", longOpt);
 			}
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("--" + longOpt + ": " + val);
-			}
+			LOGGER.debug("--{}: {}", longOpt, val);
 		}
 	}
 
@@ -1350,19 +1333,15 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 																										// (UseConcurrentHashMap)
 			for (final Entry<ExecutionTrace, Integer> e : classMap.entrySet()) {
 				final ExecutionTrace t = e.getKey();
-				ps.println(
-						"Class " + numClasses++ + " ; cardinality: " + e.getValue() + "; # executions: " + t.getLength()
-								+ "; representative: " + t.getTraceId() + "; max. stack depth: " + t.getMaxEss());
+				ps.println("Class " + numClasses++ + " ; cardinality: " + e.getValue() + "; # executions: " + t.getLength() + "; representative: " + t.getTraceId()
+						+ "; max. stack depth: " + t.getMaxEss());
 			}
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("");
-				LOG.debug("#");
-				LOG.debug("# Plugin: " + "Trace equivalence report");
-				LOG.debug("Wrote " + numClasses + " equivalence class" + (numClasses > 1 ? "es" : "") + " to file '" // NOCS
-						+ outputFn + "'");
-			}
+			LOGGER.debug("");
+			LOGGER.debug("#");
+			LOGGER.debug("# Plugin: Trace equivalence report");
+			LOGGER.debug("Wrote {} equivalence class{} to file '{}'", numClasses, (numClasses > 1 ? "es" : ""), outputFn); // NOCS
 		} catch (final FileNotFoundException e) {
-			LOG.error("File not found", e);
+			LOGGER.error("File not found", e);
 			retVal = false;
 		} finally {
 			if (ps != null) {
