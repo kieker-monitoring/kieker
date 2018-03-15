@@ -44,7 +44,7 @@ import kieker.common.util.registry.Lookup;
  *
  * @since 1.12
  */
-final class AMQPReader {
+public final class AMQPReader {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AMQPReader.class);
 
