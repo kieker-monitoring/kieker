@@ -50,26 +50,38 @@ import kieker.monitoring.writer.MonitoringWriterThread;
 public final class WriterController extends AbstractController implements IWriterController {
 
 	public static final String PREFIX = WriterController.class.getName() + ".";
-	/** The name of the configuration determining the size of the queue of this writer. */
+	/**
+	 * The name of the configuration determining the size of the queue of this
+	 * writer.
+	 */
 	public static final String RECORD_QUEUE_SIZE = "RecordQueueSize";
-	/** The name of the configuration determining the insert behavior to the queue of the writer. */
+	/**
+	 * The name of the configuration determining the insert behavior to the queue of
+	 * the writer.
+	 */
 	public static final String RECORD_QUEUE_INSERT_BEHAVIOR = "RecordQueueInsertBehavior";
 	/** The fully qualified name of the queue to be used for the records. */
 	public static final String RECORD_QUEUE_FQN = "RecordQueueFQN";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(WriterController.class);
 	/** Monitoring Writer. */
-	private AbstractMonitoringWriter monitoringWriter; // NOPMD (so far, cannot be made final due to the MonitoringController)
+	private AbstractMonitoringWriter monitoringWriter; // NOPMD (so far, cannot be made final due to the
+														// MonitoringController)
 	/** Whether or not to automatically log the metadata record. */
 	private final boolean logMetadataRecord;
 	/** the capacity of the queue. */
 	private final int queueCapacity;
-	/** the synchronized, blocking queue used for the communication between the monitored application's threads and the writer thread. */
+	/**
+	 * the synchronized, blocking queue used for the communication between the
+	 * monitored application's threads and the writer thread.
+	 */
 	private final BlockingQueue<IMonitoringRecord> writerQueue;
 
-	private MonitoringWriterThread monitoringWriterThread; // NOPMD (so far, cannot be made final due to the MonitoringController)
+	private MonitoringWriterThread monitoringWriterThread; // NOPMD (so far, cannot be made final due to the
+															// MonitoringController)
 
-	private InsertBehavior<IMonitoringRecord> insertBehavior; // NOPMD (so far, cannot be made final due to the MonitoringController)
+	private InsertBehavior<IMonitoringRecord> insertBehavior; // NOPMD (so far, cannot be made final due to the
+																// MonitoringController)
 
 	// private Disruptor<IMonitoringRecordEvent> disruptor;
 
@@ -104,7 +116,8 @@ public final class WriterController extends AbstractController implements IWrite
 				configuration);
 		if (this.monitoringWriter == null) {
 			this.terminate();
-			return; // TODO should throw an exception! and then monitoringWriter can be declared final
+			return; // TODO should throw an exception! and then monitoringWriter can be declared
+					// final
 			// throw new IllegalStateException("monitoringWriter may not be null");
 		}
 
@@ -112,7 +125,8 @@ public final class WriterController extends AbstractController implements IWrite
 
 		int recordQueueInsertBehavior = configuration.getIntProperty(PREFIX + RECORD_QUEUE_INSERT_BEHAVIOR);
 		if ((recordQueueInsertBehavior < 0) || (recordQueueInsertBehavior > 5)) {
-			LOGGER.warn("Unknown value '{}' for {}{}; using default value 0", recordQueueInsertBehavior, PREFIX, RECORD_QUEUE_INSERT_BEHAVIOR);
+			LOGGER.warn("Unknown value '{}' for {}{}; using default value 0", recordQueueInsertBehavior, PREFIX,
+					RECORD_QUEUE_INSERT_BEHAVIOR);
 			recordQueueInsertBehavior = 0;
 		}
 
@@ -132,7 +146,8 @@ public final class WriterController extends AbstractController implements IWrite
 			// } catch (final IOException e) {
 			// throw new IllegalStateException(e);
 			// }
-			// this.insertBehavior = new DisruptorInsertBehavior<IMonitoringRecord>(this.ringBuffer);
+			// this.insertBehavior = new
+			// DisruptorInsertBehavior<IMonitoringRecord>(this.ringBuffer);
 			break;
 		case 5:
 			this.insertBehavior = new BypassQueueBehavior(this.monitoringWriter);
@@ -143,8 +158,10 @@ public final class WriterController extends AbstractController implements IWrite
 		}
 	}
 
-	// private void initDisruptor(final Configuration configuration) throws IOException {
-	// final EventFactory<IMonitoringRecordEvent> eventFactory = new NewRecordEventFactory();
+	// private void initDisruptor(final Configuration configuration) throws
+	// IOException {
+	// final EventFactory<IMonitoringRecordEvent> eventFactory = new
+	// NewRecordEventFactory();
 	// final int bufferSize = 1024;
 	// final ThreadFactory threadFactory = new ThreadFactory() {
 	// @Override
@@ -155,12 +172,16 @@ public final class WriterController extends AbstractController implements IWrite
 	// }
 	// };
 	//
-	// this.disruptor = new Disruptor<IMonitoringRecordEvent>(eventFactory, bufferSize, threadFactory);
+	// this.disruptor = new Disruptor<IMonitoringRecordEvent>(eventFactory,
+	// bufferSize, threadFactory);
 	//
 	// final SharedConnection connection = new SharedConnection(configuration);
-	// final EventHandler<? super IMonitoringRecordEvent> handler1 = new DisruptorTcpWriter(configuration, connection);
-	// // allowing more than one consumes breaks the assumptions that the records are sent in order of occurrence
-	// // final EventHandler<? super IMonitoringRecordEvent> handler2 = new DisruptorTcpWriter(configuration,
+	// final EventHandler<? super IMonitoringRecordEvent> handler1 = new
+	// DisruptorTcpWriter(configuration, connection);
+	// // allowing more than one consumes breaks the assumptions that the records
+	// are sent in order of occurrence
+	// // final EventHandler<? super IMonitoringRecordEvent> handler2 = new
+	// DisruptorTcpWriter(configuration,
 	// connection);
 	//
 	// this.disruptor.handleEventsWith(handler1);
@@ -174,8 +195,9 @@ public final class WriterController extends AbstractController implements IWrite
 	 *            the fully qualified queue name
 	 * @param capacity
 	 *            the (initial) capacity of the queue
-	 * @return a new instance of the queue indicated by its <code>queueFQN</code>. Such instance is created by invoking
-	 *         the constructor with a single parameter of type <code>int</code>.
+	 * @return a new instance of the queue indicated by its <code>queueFQN</code>.
+	 *         Such instance is created by invoking the constructor with a single
+	 *         parameter of type <code>int</code>.
 	 */
 	@SuppressWarnings("unchecked")
 	private Queue<IMonitoringRecord> newQueue(final String queueFqn, final int capacity) {
@@ -202,7 +224,7 @@ public final class WriterController extends AbstractController implements IWrite
 	}
 
 	// default
-	boolean isLogMetadataRecord() {
+	boolean isLogMetadataRecord() { // NOPMD (package-private)
 		return this.logMetadataRecord;
 	}
 
@@ -234,13 +256,9 @@ public final class WriterController extends AbstractController implements IWrite
 	@Override
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder(256) // NOPMD (consecutive calls of append with string literals)
-				.append("WriterController:")
-				.append("\n\tQueue type: ")
-				.append(this.writerQueue.getClass())
-				.append("\n\tQueue capacity: ")
-				.append(this.queueCapacity)
-				.append("\n\tInsert behavior (a.k.a. QueueFullBehavior): ")
-				.append(this.insertBehavior.toString())
+				.append("WriterController:").append("\n\tQueue type: ").append(this.writerQueue.getClass())
+				.append("\n\tQueue capacity: ").append(this.queueCapacity)
+				.append("\n\tInsert behavior (a.k.a. QueueFullBehavior): ").append(this.insertBehavior.toString())
 				.append("\n");
 		if (this.monitoringWriter != null) {
 			sb.append(this.monitoringWriter.toString());
@@ -273,7 +291,7 @@ public final class WriterController extends AbstractController implements IWrite
 	 * Used in tests only.
 	 */
 	// default
-	State getStateOfMonitoringWriterThread() {
+	State getStateOfMonitoringWriterThread() { // NOPMD (package-private)
 		return this.monitoringWriterThread.getState();
 	}
 }
