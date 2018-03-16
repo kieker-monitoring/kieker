@@ -28,12 +28,16 @@ eclipse {
 
 configurations {
 	resultJar
+	emfJarConfig
 }
 
 dependencies {
 	resultJar project(path: ':kieker-tools', configuration: 'resultJar')	// project(':kieker-tools').configurations.resultJar does not work
 	resultJar 'org.jctools:jctools-core:2.1.0'
     resultJar 'org.slf4j:slf4j-api:1.7.25'
+	
+	emfJarConfig resolveLibrary('teetime-3.0-20161128.194027-256-jar-with-dependencies.jar')
+	emfJarConfig 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
@@ -62,10 +66,10 @@ subprojects {
         main {
             java {
                 srcDir 'src'
-				srcDir 'src-gen'
+				        srcDir 'src-gen'
             }
             resources {
-                srcDir 'src-resources'
+                srcDirs = ['src-resources']
             }
         }
         test {
@@ -74,12 +78,12 @@ subprojects {
                 srcDir 'test-gen'
             }
             resources {
-                srcDir 'test-resources'
+                srcDirs = ['test-resources']
             }
         }
         integrationTest {
             java {
-                srcDir 'test-integration'
+                srcDirs = ['test-integration']
 
                 compileClasspath += main.compileClasspath + test.compileClasspath
                 runtimeClasspath += main.runtimeClasspath + test.runtimeClasspath
@@ -93,8 +97,8 @@ subprojects {
 
     test {
         systemProperty "java.io.tmpdir", "${buildDir}"
-		ignoreFailures = false
-	    maxHeapSize = "2g" 			// Set limit to prevent Travis-CI build to crash
+		    ignoreFailures = false
+	      maxHeapSize = "2g" 			// Set limit to prevent Travis-CI build to crash
 
         testLogging {
             showCauses = 'true'
@@ -677,6 +681,8 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build"
         exclude "about.*"
         exclude "modeling32.png"
     }
+    
+    from configurations.emfJarConfig.collect { it.isDirectory() ? it : zipTree(it) }
 
     manifest = project.manifest {
         from sharedManifest

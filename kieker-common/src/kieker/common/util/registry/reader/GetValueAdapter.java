@@ -32,6 +32,12 @@ public class GetValueAdapter<E> implements IRegistry<E> {
 
 	private final ReaderRegistry<E> readerRegistry;
 
+	/**
+	 * Creates an instance of {@link GetValueAdapter}.
+	 * 
+	 * @param readerRegistry
+	 *            to which the calls should be delegated to.
+	 */
 	public GetValueAdapter(final ReaderRegistry<E> readerRegistry) {
 		this.readerRegistry = readerRegistry;
 	}

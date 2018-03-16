@@ -123,10 +123,10 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 	private final JPanel expandingPanel = new JPanel();
 
 	private final String[] responseTimeStrings = { "ns", "us", "ms", "s" };
-	private final JComboBox deploymentComponentDependencyGraphResponseTimeComboBox = new JComboBox(this.responseTimeStrings);
-	private final JComboBox assemblyComponentDependencyGraphResponseTimeComboBox = new JComboBox(this.responseTimeStrings);
-	private final JComboBox deploymentOperationDependencyGraphResponseTimeComboBox = new JComboBox(this.responseTimeStrings);
-	private final JComboBox assemblyOperationDependencyGraphResponseTimeComboBox = new JComboBox(this.responseTimeStrings);
+	private final JComboBox<String> deploymentComponentDependencyGraphResponseTimeComboBox = new JComboBox<>(this.responseTimeStrings);
+	private final JComboBox<String> assemblyComponentDependencyGraphResponseTimeComboBox = new JComboBox<>(this.responseTimeStrings);
+	private final JComboBox<String> deploymentOperationDependencyGraphResponseTimeComboBox = new JComboBox<>(this.responseTimeStrings);
+	private final JComboBox<String> assemblyOperationDependencyGraphResponseTimeComboBox = new JComboBox<>(this.responseTimeStrings);
 
 	public PlotStep() {
 		this.addAndLayoutComponents();
