@@ -31,7 +31,7 @@ import org.slf4j.Logger;
  *
  * @since 1.13
  */
-// TODO remove abstract and extract the method onBufferReceived() into an interface
+// BETTER remove abstract and extract the method onBufferReceived() into an interface
 public abstract class AbstractTcpReader implements Runnable {
 
 	private static final int CONNECTION_CLOSED_BY_CLIENT = -1;
