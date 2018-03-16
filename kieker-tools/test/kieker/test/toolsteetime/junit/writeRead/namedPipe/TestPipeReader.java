@@ -43,7 +43,7 @@ public class TestPipeReader extends AbstractKiekerTest {
 	public TestPipeReader() {
 		super();
 	}
-	
+
 	@Test
 	public void testNamedPipeReaderReceivesFromPipe() throws InterruptedException {
 		// the pipe
@@ -76,7 +76,7 @@ public class TestPipeReader extends AbstractKiekerTest {
 	 *
 	 * @author Lars Bluemke
 	 */
-	private class PipeReaderThread extends Thread {
+	private static class PipeReaderThread extends Thread {
 
 		private final List<IMonitoringRecord> outputList;
 		private final PipeReader pipeReader;
