@@ -57,7 +57,11 @@ public class TestLogReplayer extends AbstractKiekerTest {
 
 	private File monitoringConfigurationFile;
 	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
-	private List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
+	private final List<IMonitoringRecord> replayList = new ArrayList<>();
+
+	public TestLogReplayer() {
+		// empty constructor
+	}
 
 	/**
 	 * Performs an initial test setup.
@@ -105,7 +109,7 @@ public class TestLogReplayer extends AbstractKiekerTest {
 				this.replayList);
 		Assert.assertTrue(replayer.replay());
 
-		Assert.assertEquals("Unexpected list replayed", this.replayList, recordListFilledByListWriter);
+		Assert.assertEquals("Unexpected list replayed", this.replayList, this.recordListFilledByListWriter);
 	}
 }
 
@@ -115,7 +119,7 @@ public class TestLogReplayer extends AbstractKiekerTest {
  * @since 1.6
  */
 class ListReplayer extends AbstractLogReplayer { // NOPMD
-	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
+	private final List<IMonitoringRecord> replayList = new ArrayList<>();
 
 	public ListReplayer(final String monitoringConfigurationFile, final boolean realtimeMode,
 			final double realtimeAccelerationFactor, final boolean keepOriginalLoggingTimestamps,
@@ -136,7 +140,7 @@ class ListReplayer extends AbstractLogReplayer { // NOPMD
 		final Configuration listReaderConfig = new Configuration();
 		listReaderConfig.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION,
 				Boolean.toString(Boolean.FALSE));
-		final ListReader<IMonitoringRecord> listReader = new ListReader<IMonitoringRecord>(listReaderConfig,
+		final ListReader<IMonitoringRecord> listReader = new ListReader<>(listReaderConfig,
 				analysisController);
 		listReader.addAllObjects(this.replayList);
 		return listReader;

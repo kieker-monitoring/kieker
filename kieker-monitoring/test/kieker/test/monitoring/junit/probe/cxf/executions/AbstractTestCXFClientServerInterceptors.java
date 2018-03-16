@@ -16,8 +16,6 @@
 
 package kieker.test.monitoring.junit.probe.cxf.executions;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 
 import org.apache.cxf.endpoint.Server;
@@ -82,6 +80,10 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	private IBookstore client;
 	private Server server;
 
+	public AbstractTestCXFClientServerInterceptors() {
+		// empty constructor
+	}
+
 	@Before
 	public void prepare() throws Exception {
 		final int curIdx = this.getPortDigit();
@@ -97,8 +99,9 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	}
 
 	/**
-	 * Workaround to have unique port numbers among the CXF tests. A mechanism having a static integer increment by each
-	 * instance did work under Eclipse, but not when executed by ant.
+	 * Workaround to have unique port numbers among the CXF tests. A mechanism
+	 * having a static integer increment by each instance did work under Eclipse,
+	 * but not when executed by ant.
 	 *
 	 * @return A port digit.
 	 */
@@ -121,17 +124,19 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 		srvFactory.setAddress(this.serviceAddress);
 		srvFactory.setServiceBean(new BookstoreImpl());
 
-		// On the server-side, we only intercept incoming requests and outgoing responses.
+		// On the server-side, we only intercept incoming requests and outgoing
+		// responses.
 		srvFactory.getInInterceptors()
 				.add(new OperationExecutionSOAPRequestInInterceptor(this.serverMonitoringController));
 		srvFactory.getOutInterceptors()
 				.add(new OperationExecutionSOAPResponseOutInterceptor(this.serverMonitoringController));
-		return srvFactory.create();	// create() also starts the server
+		return srvFactory.create(); // create() also starts the server
 	}
 
 	private IBookstore createClient() {
 		final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-		// On the client-side, we only intercept outgoing requests and incoming responses.
+		// On the client-side, we only intercept outgoing requests and incoming
+		// responses.
 		factory.getOutInterceptors()
 				.add(new OperationExecutionSOAPRequestOutInterceptor(this.clientMonitoringController));
 		factory.getInInterceptors()
@@ -143,18 +148,20 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	}
 
 	/**
-	 * Gives implementing classes the possibility to modify the state before the request to {@link #client} is
-	 * performed.
+	 * Gives implementing classes the possibility to modify the state before the
+	 * request to {@link #client} is performed.
 	 */
 	protected abstract void beforeRequest();
 
 	/**
-	 * Gives implementing classes the possibility to modify the state after the request to {@link #client} is performed.
+	 * Gives implementing classes the possibility to modify the state after the
+	 * request to {@link #client} is performed.
 	 */
 	protected abstract void afterRequest();
 
 	/**
-	 * Gives implementing classes the possibility to inspect the records written by the probes.
+	 * Gives implementing classes the possibility to inspect the records written by
+	 * the probes.
 	 *
 	 * @param records
 	 *            The list of written records.
@@ -163,7 +170,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 
 	@Test
 	public final void testIt() throws InterruptedException {
-		assertTrue(this.server.isStarted());
+		Assert.assertTrue(this.server.isStarted());
 		this.beforeRequest();
 		final String retVal = this.client.searchBook("any"); // we could use the return value
 		Assert.assertEquals("Unexpected return value", "any", retVal);

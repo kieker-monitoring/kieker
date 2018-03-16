@@ -107,7 +107,7 @@ public class BasicJMSWriterReaderTest {
 	 * @return A list of records.
 	 */
 	protected List<IMonitoringRecord> provideEvents() {
-		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> someEvents = new ArrayList<>();
 		for (int i = 0; i < 5; i = someEvents.size()) {
 			final List<AbstractTraceEvent> nextBatch = Arrays.asList(
 					BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(i, i, "Mn51D97t0",
@@ -123,7 +123,7 @@ public class BasicJMSWriterReaderTest {
 	 *
 	 * @author Lars Bluemke
 	 */
-	private class JMSReaderThread extends Thread {
+	private static class JMSReaderThread extends Thread {
 		private final JMSReaderStage jmsReader;
 		private final List<IMonitoringRecord> outputList;
 

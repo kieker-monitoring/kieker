@@ -38,7 +38,7 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 	public static final String REGEX_PATTERN_JAVA_SOURCE_FILES = "[^\\-]*java";
 	public static final String REGEX_PATTERN_JAVA_TEST_FILES = ".*Test.*java";
 	public static final String REGEX_PATTERN_JUNIT_PACKAGE_NAME = ".*junit.*";
-	
+
 	private static final String DIR_NAME_TESTS = "test";
 	private static final String DIR_NAME_SOURCES = "src";
 
@@ -56,7 +56,7 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 
 		final Collection<File> javaTestFiles = this.listSourceFiles(dirNameTestsNormalized,
 				REGEX_PATTERN_JAVA_TEST_FILES);
-		Collection<File> filteredTestFiles = AbstractDynamicKiekerTest
+		final Collection<File> filteredTestFiles = AbstractDynamicKiekerTest
 				.filterOutFilesNotMatchingFullQualifiedPathName(REGEX_PATTERN_JUNIT_PACKAGE_NAME, javaTestFiles);
 		return this.transformClassNameToClasses(this.transformFilesToClassNames(filteredTestFiles));
 	}
