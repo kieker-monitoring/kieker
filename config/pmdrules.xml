@@ -35,6 +35,7 @@
 		<exclude name="ExcessiveMethodLength" />
 		<exclude name="ExcessiveParameterList" />
 		<exclude name="GodClass" />
+		<exclude name="JUnitAssertionsShouldIncludeMessage" />
 		<exclude name="LawOfDemeter" />
 		<exclude name="LongVariable" />
 		<exclude name="LoosePackageCoupling" />

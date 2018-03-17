@@ -79,7 +79,8 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 	}
 
 	@SuppressWarnings("unchecked")
-	private <C> C createAndInitializeReader(final String className, final Configuration configuration, final Class<C> expectedType) {
+	private <C> C createAndInitializeReader(final String className, final Configuration configuration,
+			final Class<C> expectedType) {
 		C createdInstance = null;
 
 		try {
