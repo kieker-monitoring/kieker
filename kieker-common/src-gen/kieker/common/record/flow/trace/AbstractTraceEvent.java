@@ -70,8 +70,8 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	@Deprecated
 	protected AbstractTraceEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
-		this.traceId = (Long) values[0];
-		this.orderIndex = (Integer) values[1];
+		this.traceId = (Long) values[1];
+		this.orderIndex = (Integer) values[2];
 	}
 
 	

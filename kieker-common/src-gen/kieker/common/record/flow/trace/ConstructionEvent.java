@@ -96,8 +96,8 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	@Deprecated
 	public ConstructionEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
-		this.classSignature = (String) values[2];
-		this.objectId = (Integer) values[3];
+		this.classSignature = (String) values[3];
+		this.objectId = (Integer) values[4];
 	}
 
 	/**
@@ -113,8 +113,8 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	@Deprecated
 	protected ConstructionEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
-		this.classSignature = (String) values[2];
-		this.objectId = (Integer) values[3];
+		this.classSignature = (String) values[3];
+		this.objectId = (Integer) values[4];
 	}
 
 	
