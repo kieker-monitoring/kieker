@@ -31,14 +31,11 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.2
  */
-public class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = 3957750090047819946L;
-
+public class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // BranchingRecord.timestamp
 			 + TYPE_SIZE_INT // BranchingRecord.branchID
-			 + TYPE_SIZE_INT // BranchingRecord.branchingOutcome
-	;
+			 + TYPE_SIZE_INT; // BranchingRecord.branchingOutcome
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // BranchingRecord.timestamp
@@ -46,11 +43,11 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 		int.class, // BranchingRecord.branchingOutcome
 	};
 	
-	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final int BRANCH_ID = 0;
 	public static final int BRANCHING_OUTCOME = 0;
+	private static final long serialVersionUID = 3957750090047819946L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -120,6 +117,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public BranchingRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -138,7 +136,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 		return new Object[] {
 			this.getTimestamp(),
 			this.getBranchID(),
-			this.getBranchingOutcome()
+			this.getBranchingOutcome(),
 		};
 	}
 	/**
@@ -147,6 +145,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -157,6 +156,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 		serializer.putInt(this.getBranchID());
 		serializer.putInt(this.getBranchingOutcome());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -197,15 +197,30 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final BranchingRecord castedRecord = (BranchingRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getBranchID() != castedRecord.getBranchID()) return false;
-		if (this.getBranchingOutcome() != castedRecord.getBranchingOutcome()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getBranchID() != castedRecord.getBranchID()) {
+			return false;
+		}
+		if (this.getBranchingOutcome() != castedRecord.getBranchingOutcome()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

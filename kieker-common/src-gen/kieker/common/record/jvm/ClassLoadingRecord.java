@@ -30,17 +30,14 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.10
  */
-public class ClassLoadingRecord extends AbstractJVMRecord  {
-	private static final long serialVersionUID = -5955568375346711225L;
-
+public class ClassLoadingRecord extends AbstractJVMRecord  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
 			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
 			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
 			 + TYPE_SIZE_LONG // ClassLoadingRecord.totalLoadedClassCount
 			 + TYPE_SIZE_INT // ClassLoadingRecord.loadedClassCount
-			 + TYPE_SIZE_LONG // ClassLoadingRecord.unloadedClassCount
-	;
+			 + TYPE_SIZE_LONG; // ClassLoadingRecord.unloadedClassCount
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp
@@ -51,7 +48,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		long.class, // ClassLoadingRecord.unloadedClassCount
 	};
 	
-	
+	private static final long serialVersionUID = -5955568375346711225L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -131,6 +128,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public ClassLoadingRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -153,7 +151,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 			this.getVmName(),
 			this.getTotalLoadedClassCount(),
 			this.getLoadedClassCount(),
-			this.getUnloadedClassCount()
+			this.getUnloadedClassCount(),
 		};
 	}
 	/**
@@ -164,6 +162,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getVmName());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -177,6 +176,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		serializer.putInt(this.getLoadedClassCount());
 		serializer.putLong(this.getUnloadedClassCount());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -217,18 +217,39 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final ClassLoadingRecord castedRecord = (ClassLoadingRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getVmName().equals(castedRecord.getVmName())) return false;
-		if (this.getTotalLoadedClassCount() != castedRecord.getTotalLoadedClassCount()) return false;
-		if (this.getLoadedClassCount() != castedRecord.getLoadedClassCount()) return false;
-		if (this.getUnloadedClassCount() != castedRecord.getUnloadedClassCount()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getVmName().equals(castedRecord.getVmName())) {
+			return false;
+		}
+		if (this.getTotalLoadedClassCount() != castedRecord.getTotalLoadedClassCount()) {
+			return false;
+		}
+		if (this.getLoadedClassCount() != castedRecord.getLoadedClassCount()) {
+			return false;
+		}
+		if (this.getUnloadedClassCount() != castedRecord.getUnloadedClassCount()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

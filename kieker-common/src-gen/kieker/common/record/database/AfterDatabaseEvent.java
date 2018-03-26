@@ -35,17 +35,14 @@ import kieker.common.record.flow.ITraceRecord;
  * 
  * @since 1.14
  */
-public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IEventRecord, IFlowRecord, IClassSignature, ITraceRecord {
-	private static final long serialVersionUID = -3115006839098290523L;
-
+public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IEventRecord, IFlowRecord, IClassSignature, ITraceRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
 			 + TYPE_SIZE_STRING // AfterDatabaseEvent.returnType
-			 + TYPE_SIZE_STRING // AfterDatabaseEvent.returnValue
-	;
+			 + TYPE_SIZE_STRING; // AfterDatabaseEvent.returnValue
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -56,7 +53,6 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 		String.class, // AfterDatabaseEvent.returnValue
 	};
 	
-	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String CLASS_SIGNATURE = "";
@@ -64,6 +60,7 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 	public static final int ORDER_INDEX = -1;
 	public static final String RETURN_TYPE = "";
 	public static final String RETURN_VALUE = "";
+	private static final long serialVersionUID = -3115006839098290523L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -154,6 +151,7 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public AfterDatabaseEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -178,7 +176,7 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 			this.getTraceId(),
 			this.getOrderIndex(),
 			this.getReturnType(),
-			this.getReturnValue()
+			this.getReturnValue(),
 		};
 	}
 	/**
@@ -190,6 +188,7 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 		stringRegistry.get(this.getReturnType());
 		stringRegistry.get(this.getReturnValue());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -203,6 +202,7 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 		serializer.putString(this.getReturnType());
 		serializer.putString(this.getReturnValue());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -243,18 +243,39 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMon
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final AfterDatabaseEvent castedRecord = (AfterDatabaseEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getReturnType().equals(castedRecord.getReturnType())) return false;
-		if (!this.getReturnValue().equals(castedRecord.getReturnValue())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getReturnType().equals(castedRecord.getReturnType())) {
+			return false;
+		}
+		if (!this.getReturnValue().equals(castedRecord.getReturnValue())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

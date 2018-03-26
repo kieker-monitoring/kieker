@@ -27,13 +27,11 @@ import kieker.common.record.io.IValueDeserializer;
  * 
  * @since 1.8
  */
-public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
-	private static final long serialVersionUID = 8385865083415561635L;
-
-	
+public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {			
 	
 	/** default constants. */
 	public static final int LOCK_ID = 0;
+	private static final long serialVersionUID = 8385865083415561635L;
 	
 		
 	/** property declarations. */
@@ -78,6 +76,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public AbstractMonitorEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -101,16 +100,33 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final AbstractMonitorEvent castedRecord = (AbstractMonitorEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (this.getLockId() != castedRecord.getLockId()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (this.getLockId() != castedRecord.getLockId()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

@@ -31,9 +31,7 @@ import kieker.common.record.flow.IConstructorRecord;
  * 
  * @since 1.6
  */
-public class CallConstructorEvent extends CallOperationEvent implements IConstructorRecord {
-	private static final long serialVersionUID = 8198255525819006580L;
-
+public class CallConstructorEvent extends CallOperationEvent implements IConstructorRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
@@ -41,8 +39,7 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 			 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
-			 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
-	;
+			 + TYPE_SIZE_STRING; // ICallRecord.calleeClassSignature
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -54,7 +51,7 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		String.class, // ICallRecord.calleeClassSignature
 	};
 	
-	
+	private static final long serialVersionUID = 8198255525819006580L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -124,6 +121,7 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public CallConstructorEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -144,7 +142,7 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 			this.getOperationSignature(),
 			this.getClassSignature(),
 			this.getCalleeOperationSignature(),
-			this.getCalleeClassSignature()
+			this.getCalleeClassSignature(),
 		};
 	}
 	/**
@@ -157,6 +155,7 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		stringRegistry.get(this.getCalleeOperationSignature());
 		stringRegistry.get(this.getCalleeClassSignature());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -171,6 +170,7 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		serializer.putString(this.getCalleeOperationSignature());
 		serializer.putString(this.getCalleeClassSignature());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -211,19 +211,42 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final CallConstructorEvent castedRecord = (CallConstructorEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
-		if (!this.getCalleeOperationSignature().equals(castedRecord.getCalleeOperationSignature())) return false;
-		if (!this.getCalleeClassSignature().equals(castedRecord.getCalleeClassSignature())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (!this.getCalleeOperationSignature().equals(castedRecord.getCalleeOperationSignature())) {
+			return false;
+		}
+		if (!this.getCalleeClassSignature().equals(castedRecord.getCalleeClassSignature())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

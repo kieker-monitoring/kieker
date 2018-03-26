@@ -32,20 +32,17 @@ import kieker.common.record.remotecontrol.IRemoteControlEvent;
  * 
  * @since 1.14
  */
-public class ActivationEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IRemoteControlEvent {
-	private static final long serialVersionUID = 6888923121890229913L;
-
+public class ActivationEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IRemoteControlEvent {			
 	/** Descriptive definition of the serialization size of the record. */
-	public static final int SIZE = TYPE_SIZE_STRING // IRemoteControlEvent.pattern
-	;
+	public static final int SIZE = TYPE_SIZE_STRING; // IRemoteControlEvent.pattern
 	
 	public static final Class<?>[] TYPES = {
 		String.class, // IRemoteControlEvent.pattern
 	};
 	
-	
 	/** default constants. */
 	public static final String PATTERN = "";
+	private static final long serialVersionUID = 6888923121890229913L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -101,6 +98,7 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IMonito
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public ActivationEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.pattern = deserializer.getString();
@@ -115,7 +113,7 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IMonito
 	@Deprecated
 	public Object[] toArray() {
 		return new Object[] {
-			this.getPattern()
+			this.getPattern(),
 		};
 	}
 	/**
@@ -125,6 +123,7 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IMonito
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getPattern());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -133,6 +132,7 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IMonito
 		//super.serialize(serializer);
 		serializer.putString(this.getPattern());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -173,13 +173,24 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IMonito
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final ActivationEvent castedRecord = (ActivationEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (!this.getPattern().equals(castedRecord.getPattern())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (!this.getPattern().equals(castedRecord.getPattern())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

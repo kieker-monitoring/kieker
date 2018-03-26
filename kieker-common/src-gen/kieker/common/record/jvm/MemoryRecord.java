@@ -30,9 +30,7 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.10
  */
-public class MemoryRecord extends AbstractJVMRecord  {
-	private static final long serialVersionUID = -9025858519361306011L;
-
+public class MemoryRecord extends AbstractJVMRecord  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
 			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
@@ -45,8 +43,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 			 + TYPE_SIZE_LONG // MemoryRecord.nonHeapUsedBytes
 			 + TYPE_SIZE_LONG // MemoryRecord.nonHeapCommittedBytes
 			 + TYPE_SIZE_LONG // MemoryRecord.nonHeapInitBytes
-			 + TYPE_SIZE_INT // MemoryRecord.objectPendingFinalizationCount
-	;
+			 + TYPE_SIZE_INT; // MemoryRecord.objectPendingFinalizationCount
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp
@@ -63,7 +60,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		int.class, // MemoryRecord.objectPendingFinalizationCount
 	};
 	
-	
+	private static final long serialVersionUID = -9025858519361306011L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -185,6 +182,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public MemoryRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -219,7 +217,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 			this.getNonHeapUsedBytes(),
 			this.getNonHeapCommittedBytes(),
 			this.getNonHeapInitBytes(),
-			this.getObjectPendingFinalizationCount()
+			this.getObjectPendingFinalizationCount(),
 		};
 	}
 	/**
@@ -230,6 +228,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getVmName());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -249,6 +248,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		serializer.putLong(this.getNonHeapInitBytes());
 		serializer.putInt(this.getObjectPendingFinalizationCount());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -289,24 +289,57 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final MemoryRecord castedRecord = (MemoryRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getVmName().equals(castedRecord.getVmName())) return false;
-		if (this.getHeapMaxBytes() != castedRecord.getHeapMaxBytes()) return false;
-		if (this.getHeapUsedBytes() != castedRecord.getHeapUsedBytes()) return false;
-		if (this.getHeapCommittedBytes() != castedRecord.getHeapCommittedBytes()) return false;
-		if (this.getHeapInitBytes() != castedRecord.getHeapInitBytes()) return false;
-		if (this.getNonHeapMaxBytes() != castedRecord.getNonHeapMaxBytes()) return false;
-		if (this.getNonHeapUsedBytes() != castedRecord.getNonHeapUsedBytes()) return false;
-		if (this.getNonHeapCommittedBytes() != castedRecord.getNonHeapCommittedBytes()) return false;
-		if (this.getNonHeapInitBytes() != castedRecord.getNonHeapInitBytes()) return false;
-		if (this.getObjectPendingFinalizationCount() != castedRecord.getObjectPendingFinalizationCount()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getVmName().equals(castedRecord.getVmName())) {
+			return false;
+		}
+		if (this.getHeapMaxBytes() != castedRecord.getHeapMaxBytes()) {
+			return false;
+		}
+		if (this.getHeapUsedBytes() != castedRecord.getHeapUsedBytes()) {
+			return false;
+		}
+		if (this.getHeapCommittedBytes() != castedRecord.getHeapCommittedBytes()) {
+			return false;
+		}
+		if (this.getHeapInitBytes() != castedRecord.getHeapInitBytes()) {
+			return false;
+		}
+		if (this.getNonHeapMaxBytes() != castedRecord.getNonHeapMaxBytes()) {
+			return false;
+		}
+		if (this.getNonHeapUsedBytes() != castedRecord.getNonHeapUsedBytes()) {
+			return false;
+		}
+		if (this.getNonHeapCommittedBytes() != castedRecord.getNonHeapCommittedBytes()) {
+			return false;
+		}
+		if (this.getNonHeapInitBytes() != castedRecord.getNonHeapInitBytes()) {
+			return false;
+		}
+		if (this.getObjectPendingFinalizationCount() != castedRecord.getObjectPendingFinalizationCount()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

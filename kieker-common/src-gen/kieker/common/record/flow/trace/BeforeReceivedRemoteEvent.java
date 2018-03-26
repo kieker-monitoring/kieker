@@ -31,16 +31,13 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.14
  */
-public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = -2469910628320520231L;
-
+public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // BeforeReceivedRemoteEvent.timestamp
 			 + TYPE_SIZE_LONG // BeforeReceivedRemoteEvent.callerTraceId
 			 + TYPE_SIZE_INT // BeforeReceivedRemoteEvent.callerOrderIndex
 			 + TYPE_SIZE_LONG // BeforeReceivedRemoteEvent.traceId
-			 + TYPE_SIZE_INT // BeforeReceivedRemoteEvent.orderIndex
-	;
+			 + TYPE_SIZE_INT; // BeforeReceivedRemoteEvent.orderIndex
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // BeforeReceivedRemoteEvent.timestamp
@@ -50,13 +47,13 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implemen
 		int.class, // BeforeReceivedRemoteEvent.orderIndex
 	};
 	
-	
 	/** default constants. */
 	public static final long TIMESTAMP = -1L;
 	public static final long CALLER_TRACE_ID = -1L;
 	public static final int CALLER_ORDER_INDEX = -1;
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
+	private static final long serialVersionUID = -2469910628320520231L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -140,6 +137,7 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implemen
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public BeforeReceivedRemoteEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -162,7 +160,7 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implemen
 			this.getCallerTraceId(),
 			this.getCallerOrderIndex(),
 			this.getTraceId(),
-			this.getOrderIndex()
+			this.getOrderIndex(),
 		};
 	}
 	/**
@@ -171,6 +169,7 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implemen
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -183,6 +182,7 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implemen
 		serializer.putLong(this.getTraceId());
 		serializer.putInt(this.getOrderIndex());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -223,17 +223,36 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implemen
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final BeforeReceivedRemoteEvent castedRecord = (BeforeReceivedRemoteEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getCallerTraceId() != castedRecord.getCallerTraceId()) return false;
-		if (this.getCallerOrderIndex() != castedRecord.getCallerOrderIndex()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getCallerTraceId() != castedRecord.getCallerTraceId()) {
+			return false;
+		}
+		if (this.getCallerOrderIndex() != castedRecord.getCallerOrderIndex()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

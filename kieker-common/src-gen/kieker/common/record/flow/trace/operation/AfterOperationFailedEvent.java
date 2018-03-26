@@ -31,17 +31,14 @@ import kieker.common.record.flow.IExceptionRecord;
  * 
  * @since 1.5
  */
-public class AfterOperationFailedEvent extends AfterOperationEvent implements IExceptionRecord {
-	private static final long serialVersionUID = -1887200574513819573L;
-
+public class AfterOperationFailedEvent extends AfterOperationEvent implements IExceptionRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
 			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // IExceptionRecord.cause
-	;
+			 + TYPE_SIZE_STRING; // IExceptionRecord.cause
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -52,9 +49,9 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		String.class, // IExceptionRecord.cause
 	};
 	
-	
 	/** default constants. */
 	public static final String CAUSE = "";
+	private static final long serialVersionUID = -1887200574513819573L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -126,6 +123,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public AfterOperationFailedEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -146,7 +144,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 			this.getOrderIndex(),
 			this.getOperationSignature(),
 			this.getClassSignature(),
-			this.getCause()
+			this.getCause(),
 		};
 	}
 	/**
@@ -158,6 +156,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getCause());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -171,6 +170,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		serializer.putString(this.getClassSignature());
 		serializer.putString(this.getCause());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -211,18 +211,39 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final AfterOperationFailedEvent castedRecord = (AfterOperationFailedEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
-		if (!this.getCause().equals(castedRecord.getCause())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (!this.getCause().equals(castedRecord.getCause())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

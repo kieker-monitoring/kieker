@@ -30,15 +30,12 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.8
  */
-public class JoinEvent extends AbstractTraceEvent  {
-	private static final long serialVersionUID = -7303666475064047694L;
-
+public class JoinEvent extends AbstractTraceEvent  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_LONG // JoinEvent.joinedTraceId
-	;
+			 + TYPE_SIZE_LONG; // JoinEvent.joinedTraceId
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -47,9 +44,9 @@ public class JoinEvent extends AbstractTraceEvent  {
 		long.class, // JoinEvent.joinedTraceId
 	};
 	
-	
 	/** default constants. */
 	public static final long JOINED_TRACE_ID = 0L;
+	private static final long serialVersionUID = -7303666475064047694L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -115,6 +112,7 @@ public class JoinEvent extends AbstractTraceEvent  {
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public JoinEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -133,7 +131,7 @@ public class JoinEvent extends AbstractTraceEvent  {
 			this.getTimestamp(),
 			this.getTraceId(),
 			this.getOrderIndex(),
-			this.getJoinedTraceId()
+			this.getJoinedTraceId(),
 		};
 	}
 	/**
@@ -142,6 +140,7 @@ public class JoinEvent extends AbstractTraceEvent  {
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -153,6 +152,7 @@ public class JoinEvent extends AbstractTraceEvent  {
 		serializer.putInt(this.getOrderIndex());
 		serializer.putLong(this.getJoinedTraceId());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -193,16 +193,33 @@ public class JoinEvent extends AbstractTraceEvent  {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final JoinEvent castedRecord = (JoinEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (this.getJoinedTraceId() != castedRecord.getJoinedTraceId()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (this.getJoinedTraceId() != castedRecord.getJoinedTraceId()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

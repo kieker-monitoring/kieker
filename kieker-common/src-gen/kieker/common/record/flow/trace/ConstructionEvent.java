@@ -30,16 +30,13 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.5
  */
-public class ConstructionEvent extends AbstractTraceEvent  {
-	private static final long serialVersionUID = 7724747240454611559L;
-
+public class ConstructionEvent extends AbstractTraceEvent  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
 			 + TYPE_SIZE_STRING // ConstructionEvent.classSignature
-			 + TYPE_SIZE_INT // ConstructionEvent.objectId
-	;
+			 + TYPE_SIZE_INT; // ConstructionEvent.objectId
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -49,10 +46,10 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 		int.class, // ConstructionEvent.objectId
 	};
 	
-	
 	/** default constants. */
 	public static final String CLASS_SIGNATURE = "";
 	public static final int OBJECT_ID = 0;
+	private static final long serialVersionUID = 7724747240454611559L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -99,8 +96,8 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	@Deprecated
 	public ConstructionEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
-		this.classSignature = (String) values[3];
-		this.objectId = (Integer) values[4];
+		this.classSignature = (String) values[2];
+		this.objectId = (Integer) values[3];
 	}
 
 	/**
@@ -116,8 +113,8 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	@Deprecated
 	protected ConstructionEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
-		this.classSignature = (String) values[3];
-		this.objectId = (Integer) values[4];
+		this.classSignature = (String) values[2];
+		this.objectId = (Integer) values[3];
 	}
 
 	
@@ -125,6 +122,7 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public ConstructionEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -145,7 +143,7 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 			this.getTraceId(),
 			this.getOrderIndex(),
 			this.getClassSignature(),
-			this.getObjectId()
+			this.getObjectId(),
 		};
 	}
 	/**
@@ -155,6 +153,7 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getClassSignature());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -167,6 +166,7 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 		serializer.putString(this.getClassSignature());
 		serializer.putInt(this.getObjectId());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -207,17 +207,36 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final ConstructionEvent castedRecord = (ConstructionEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
-		if (this.getObjectId() != castedRecord.getObjectId()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (this.getObjectId() != castedRecord.getObjectId()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

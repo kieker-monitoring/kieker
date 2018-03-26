@@ -18,29 +18,28 @@ package kieker.common.record.flow.trace;
 import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.IRegistry;
 
+
 /**
  * @author Christian Zirkelbach
- *         API compatibility: Kieker 1.13.0
- *
+ * API compatibility: Kieker 1.13.0
+ * 
  * @since 1.14
  */
-public class ApplicationTraceMetadata extends TraceMetadata {
-	private static final long serialVersionUID = 7720995073835113293L;
-
+public class ApplicationTraceMetadata extends TraceMetadata  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // TraceMetadata.traceId
-			+ TYPE_SIZE_LONG // TraceMetadata.threadId
-			+ TYPE_SIZE_STRING // TraceMetadata.sessionId
-			+ TYPE_SIZE_STRING // TraceMetadata.hostname
-			+ TYPE_SIZE_LONG // TraceMetadata.parentTraceId
-			+ TYPE_SIZE_INT // TraceMetadata.parentOrderId
-			+ TYPE_SIZE_STRING // ApplicationTraceMetadata.applicationName
-	;
-
+			 + TYPE_SIZE_LONG // TraceMetadata.threadId
+			 + TYPE_SIZE_STRING // TraceMetadata.sessionId
+			 + TYPE_SIZE_STRING // TraceMetadata.hostname
+			 + TYPE_SIZE_LONG // TraceMetadata.parentTraceId
+			 + TYPE_SIZE_INT // TraceMetadata.parentOrderId
+			 + TYPE_SIZE_STRING; // ApplicationTraceMetadata.applicationName
+	
 	public static final Class<?>[] TYPES = {
 		long.class, // TraceMetadata.traceId
 		long.class, // TraceMetadata.threadId
@@ -50,13 +49,13 @@ public class ApplicationTraceMetadata extends TraceMetadata {
 		int.class, // TraceMetadata.parentOrderId
 		String.class, // ApplicationTraceMetadata.applicationName
 	};
-
+	
 	/** user-defined constants. */
 	public static final String NO_APPLICATION_NAME = "<no-application-name>";
-
 	/** default constants. */
 	public static final String APPLICATION_NAME = NO_APPLICATION_NAME;
-
+	private static final long serialVersionUID = 7720995073835113293L;
+	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
 		"traceId",
@@ -67,13 +66,13 @@ public class ApplicationTraceMetadata extends TraceMetadata {
 		"parentOrderId",
 		"applicationName",
 	};
-
+	
 	/** property declarations. */
 	private final String applicationName;
-
+	
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 *
+	 * 
 	 * @param traceId
 	 *            traceId
 	 * @param threadId
@@ -89,16 +88,15 @@ public class ApplicationTraceMetadata extends TraceMetadata {
 	 * @param applicationName
 	 *            applicationName
 	 */
-	public ApplicationTraceMetadata(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId,
-			final int parentOrderId, final String applicationName) {
+	public ApplicationTraceMetadata(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId, final String applicationName) {
 		super(traceId, threadId, sessionId, hostname, parentTraceId, parentOrderId);
-		this.applicationName = applicationName == null ? NO_APPLICATION_NAME : applicationName;
+		this.applicationName = applicationName == null?NO_APPLICATION_NAME:applicationName;
 	}
 
 	/**
 	 * This constructor converts the given array into a record.
 	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 *
+	 * 
 	 * @param values
 	 *            The values for the record.
 	 *
@@ -112,7 +110,7 @@ public class ApplicationTraceMetadata extends TraceMetadata {
 
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
-	 *
+	 * 
 	 * @param values
 	 *            The values for the record.
 	 * @param valueTypes
@@ -126,16 +124,18 @@ public class ApplicationTraceMetadata extends TraceMetadata {
 		this.applicationName = (String) values[6];
 	}
 
+	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public ApplicationTraceMetadata(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.applicationName = deserializer.getString();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 *
@@ -151,26 +151,25 @@ public class ApplicationTraceMetadata extends TraceMetadata {
 			this.getHostname(),
 			this.getParentTraceId(),
 			this.getParentOrderId(),
-			this.getApplicationName()
+			this.getApplicationName(),
 		};
 	}
-
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (generated code)
+	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getSessionId());
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getApplicationName());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		// super.serialize(serializer);
+		//super.serialize(serializer);
 		serializer.putLong(this.getTraceId());
 		serializer.putLong(this.getThreadId());
 		serializer.putString(this.getSessionId());
@@ -179,7 +178,7 @@ public class ApplicationTraceMetadata extends TraceMetadata {
 		serializer.putInt(this.getParentOrderId());
 		serializer.putString(this.getApplicationName());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -187,7 +186,7 @@ public class ApplicationTraceMetadata extends TraceMetadata {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -195,7 +194,7 @@ public class ApplicationTraceMetadata extends TraceMetadata {
 	public String[] getValueNames() {
 		return PROPERTY_NAMES; // NOPMD
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -206,7 +205,7 @@ public class ApplicationTraceMetadata extends TraceMetadata {
 
 	/**
 	 * {@inheritDoc}
-	 *
+	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -214,7 +213,7 @@ public class ApplicationTraceMetadata extends TraceMetadata {
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -229,7 +228,7 @@ public class ApplicationTraceMetadata extends TraceMetadata {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-
+		
 		final ApplicationTraceMetadata castedRecord = (ApplicationTraceMetadata) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -258,11 +257,12 @@ public class ApplicationTraceMetadata extends TraceMetadata {
 		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) {
 			return false;
 		}
+		
 		return true;
 	}
-
+	
 	public final String getApplicationName() {
 		return this.applicationName;
 	}
-
+	
 }

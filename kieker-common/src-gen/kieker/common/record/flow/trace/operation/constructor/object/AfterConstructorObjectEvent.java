@@ -31,17 +31,14 @@ import kieker.common.record.flow.IObjectRecord;
  * 
  * @since 1.6
  */
-public class AfterConstructorObjectEvent extends AfterConstructorEvent implements IObjectRecord {
-	private static final long serialVersionUID = 1569131691754173288L;
-
+public class AfterConstructorObjectEvent extends AfterConstructorEvent implements IObjectRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
 			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_INT // IObjectRecord.objectId
-	;
+			 + TYPE_SIZE_INT; // IObjectRecord.objectId
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -52,9 +49,9 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 		int.class, // IObjectRecord.objectId
 	};
 	
-	
 	/** default constants. */
 	public static final int OBJECT_ID = 0;
+	private static final long serialVersionUID = 1569131691754173288L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -126,6 +123,7 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public AfterConstructorObjectEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -146,7 +144,7 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 			this.getOrderIndex(),
 			this.getOperationSignature(),
 			this.getClassSignature(),
-			this.getObjectId()
+			this.getObjectId(),
 		};
 	}
 	/**
@@ -157,6 +155,7 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 		stringRegistry.get(this.getOperationSignature());
 		stringRegistry.get(this.getClassSignature());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -170,6 +169,7 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 		serializer.putString(this.getClassSignature());
 		serializer.putInt(this.getObjectId());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -210,18 +210,39 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final AfterConstructorObjectEvent castedRecord = (AfterConstructorObjectEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
-		if (this.getObjectId() != castedRecord.getObjectId()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (this.getObjectId() != castedRecord.getObjectId()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

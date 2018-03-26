@@ -31,9 +31,7 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.12
  */
-public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = 2474236414042988334L;
-
+public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // DiskUsageRecord.timestamp
 			 + TYPE_SIZE_STRING // DiskUsageRecord.hostname
@@ -43,8 +41,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.readsPerSecond
 			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.serviceTime
 			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.writeBytesPerSecond
-			 + TYPE_SIZE_DOUBLE // DiskUsageRecord.writesPerSecond
-	;
+			 + TYPE_SIZE_DOUBLE; // DiskUsageRecord.writesPerSecond
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // DiskUsageRecord.timestamp
@@ -58,7 +55,6 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		double.class, // DiskUsageRecord.writesPerSecond
 	};
 	
-	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -69,6 +65,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	public static final double SERVICE_TIME = 0.0;
 	public static final double WRITE_BYTES_PER_SECOND = 0.0;
 	public static final double WRITES_PER_SECOND = 0.0;
+	private static final long serialVersionUID = 2474236414042988334L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -180,6 +177,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public DiskUsageRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -210,7 +208,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 			this.getReadsPerSecond(),
 			this.getServiceTime(),
 			this.getWriteBytesPerSecond(),
-			this.getWritesPerSecond()
+			this.getWritesPerSecond(),
 		};
 	}
 	/**
@@ -221,6 +219,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getDeviceName());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -237,6 +236,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		serializer.putDouble(this.getWriteBytesPerSecond());
 		serializer.putDouble(this.getWritesPerSecond());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -277,21 +277,48 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final DiskUsageRecord castedRecord = (DiskUsageRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getDeviceName().equals(castedRecord.getDeviceName())) return false;
-		if (isNotEqual(this.getQueue(), castedRecord.getQueue())) return false;
-		if (isNotEqual(this.getReadBytesPerSecond(), castedRecord.getReadBytesPerSecond())) return false;
-		if (isNotEqual(this.getReadsPerSecond(), castedRecord.getReadsPerSecond())) return false;
-		if (isNotEqual(this.getServiceTime(), castedRecord.getServiceTime())) return false;
-		if (isNotEqual(this.getWriteBytesPerSecond(), castedRecord.getWriteBytesPerSecond())) return false;
-		if (isNotEqual(this.getWritesPerSecond(), castedRecord.getWritesPerSecond())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getDeviceName().equals(castedRecord.getDeviceName())) {
+			return false;
+		}
+		if (isNotEqual(this.getQueue(), castedRecord.getQueue())) {
+			return false;
+		}
+		if (isNotEqual(this.getReadBytesPerSecond(), castedRecord.getReadBytesPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getReadsPerSecond(), castedRecord.getReadsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getServiceTime(), castedRecord.getServiceTime())) {
+			return false;
+		}
+		if (isNotEqual(this.getWriteBytesPerSecond(), castedRecord.getWriteBytesPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getWritesPerSecond(), castedRecord.getWritesPerSecond())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

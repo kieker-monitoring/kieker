@@ -30,15 +30,12 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.8
  */
-public class MonitorEntryEvent extends AbstractMonitorEvent  {
-	private static final long serialVersionUID = -3799634105947353908L;
-
+public class MonitorEntryEvent extends AbstractMonitorEvent  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_INT // AbstractMonitorEvent.lockId
-	;
+			 + TYPE_SIZE_INT; // AbstractMonitorEvent.lockId
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -47,7 +44,7 @@ public class MonitorEntryEvent extends AbstractMonitorEvent  {
 		int.class, // AbstractMonitorEvent.lockId
 	};
 	
-	
+	private static final long serialVersionUID = -3799634105947353908L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -108,6 +105,7 @@ public class MonitorEntryEvent extends AbstractMonitorEvent  {
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public MonitorEntryEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -125,7 +123,7 @@ public class MonitorEntryEvent extends AbstractMonitorEvent  {
 			this.getTimestamp(),
 			this.getTraceId(),
 			this.getOrderIndex(),
-			this.getLockId()
+			this.getLockId(),
 		};
 	}
 	/**
@@ -134,6 +132,7 @@ public class MonitorEntryEvent extends AbstractMonitorEvent  {
 	@Override
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -145,6 +144,7 @@ public class MonitorEntryEvent extends AbstractMonitorEvent  {
 		serializer.putInt(this.getOrderIndex());
 		serializer.putInt(this.getLockId());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -185,16 +185,33 @@ public class MonitorEntryEvent extends AbstractMonitorEvent  {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final MonitorEntryEvent castedRecord = (MonitorEntryEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (this.getLockId() != castedRecord.getLockId()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (this.getLockId() != castedRecord.getLockId()) {
+			return false;
+		}
+		
 		return true;
 	}
 	
