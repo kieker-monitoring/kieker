@@ -31,9 +31,7 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 0.91
  */
-public class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = -7768272829642950711L;
-
+public class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // OperationExecutionRecord.operationSignature
 			 + TYPE_SIZE_STRING // OperationExecutionRecord.sessionId
@@ -42,8 +40,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 			 + TYPE_SIZE_LONG // OperationExecutionRecord.tout
 			 + TYPE_SIZE_STRING // OperationExecutionRecord.hostname
 			 + TYPE_SIZE_INT // OperationExecutionRecord.eoi
-			 + TYPE_SIZE_INT // OperationExecutionRecord.ess
-	;
+			 + TYPE_SIZE_INT; // OperationExecutionRecord.ess
 	
 	public static final Class<?>[] TYPES = {
 		String.class, // OperationExecutionRecord.operationSignature
@@ -63,7 +60,6 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	public static final long NO_TRACE_ID = -1L;
 	public static final long NO_TIMESTAMP = -1L;
 	public static final int NO_EOI_ESS = -1;
-	
 	/** default constants. */
 	public static final String OPERATION_SIGNATURE = NO_OPERATION_SIGNATURE;
 	public static final String SESSION_ID = NO_SESSION_ID;
@@ -73,6 +69,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	public static final String HOSTNAME = NO_HOSTNAME;
 	public static final int EOI = NO_EOI_ESS;
 	public static final int ESS = NO_EOI_ESS;
+	private static final long serialVersionUID = -7768272829642950711L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -177,6 +174,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public OperationExecutionRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.operationSignature = deserializer.getString();
@@ -205,7 +203,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 			this.getTout(),
 			this.getHostname(),
 			this.getEoi(),
-			this.getEss()
+			this.getEss(),
 		};
 	}
 	/**
@@ -217,6 +215,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		stringRegistry.get(this.getSessionId());
 		stringRegistry.get(this.getHostname());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -232,6 +231,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		serializer.putInt(this.getEoi());
 		serializer.putInt(this.getEss());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -272,20 +272,45 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final OperationExecutionRecord castedRecord = (OperationExecutionRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getSessionId().equals(castedRecord.getSessionId())) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getTin() != castedRecord.getTin()) return false;
-		if (this.getTout() != castedRecord.getTout()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (this.getEoi() != castedRecord.getEoi()) return false;
-		if (this.getEss() != castedRecord.getEss()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getSessionId().equals(castedRecord.getSessionId())) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getTin() != castedRecord.getTin()) {
+			return false;
+		}
+		if (this.getTout() != castedRecord.getTout()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (this.getEoi() != castedRecord.getEoi()) {
+			return false;
+		}
+		if (this.getEss() != castedRecord.getEss()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

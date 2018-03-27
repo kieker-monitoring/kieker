@@ -35,17 +35,14 @@ import kieker.common.record.flow.ITraceRecord;
  * 
  * @since 1.14
  */
-public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IEventRecord, IFlowRecord, IClassSignature, ITraceRecord {
-	private static final long serialVersionUID = -2138603925245500796L;
-
+public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IEventRecord, IFlowRecord, IClassSignature, ITraceRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
 			 + TYPE_SIZE_STRING // BeforeDatabaseEvent.parameters
-			 + TYPE_SIZE_STRING // BeforeDatabaseEvent.technology
-	;
+			 + TYPE_SIZE_STRING; // BeforeDatabaseEvent.technology
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -56,7 +53,6 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IMo
 		String.class, // BeforeDatabaseEvent.technology
 	};
 	
-	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String CLASS_SIGNATURE = "";
@@ -64,6 +60,7 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IMo
 	public static final int ORDER_INDEX = -1;
 	public static final String PARAMETERS = "";
 	public static final String TECHNOLOGY = "";
+	private static final long serialVersionUID = -2138603925245500796L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -154,6 +151,7 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IMo
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public BeforeDatabaseEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -178,7 +176,7 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IMo
 			this.getTraceId(),
 			this.getOrderIndex(),
 			this.getParameters(),
-			this.getTechnology()
+			this.getTechnology(),
 		};
 	}
 	/**
@@ -190,6 +188,7 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IMo
 		stringRegistry.get(this.getParameters());
 		stringRegistry.get(this.getTechnology());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -203,6 +202,7 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IMo
 		serializer.putString(this.getParameters());
 		serializer.putString(this.getTechnology());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -243,18 +243,39 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IMo
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final BeforeDatabaseEvent castedRecord = (BeforeDatabaseEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getParameters().equals(castedRecord.getParameters())) return false;
-		if (!this.getTechnology().equals(castedRecord.getTechnology())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getParameters().equals(castedRecord.getParameters())) {
+			return false;
+		}
+		if (!this.getTechnology().equals(castedRecord.getTechnology())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

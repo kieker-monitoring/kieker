@@ -31,15 +31,12 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.3
  */
-public class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = 193790554451565711L;
-
+public class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // ResourceUtilizationRecord.timestamp
 			 + TYPE_SIZE_STRING // ResourceUtilizationRecord.hostname
 			 + TYPE_SIZE_STRING // ResourceUtilizationRecord.resourceName
-			 + TYPE_SIZE_DOUBLE // ResourceUtilizationRecord.utilization
-	;
+			 + TYPE_SIZE_DOUBLE; // ResourceUtilizationRecord.utilization
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // ResourceUtilizationRecord.timestamp
@@ -48,12 +45,12 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		double.class, // ResourceUtilizationRecord.utilization
 	};
 	
-	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String RESOURCE_NAME = "";
 	public static final double UTILIZATION = 0.0;
+	private static final long serialVersionUID = 193790554451565711L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -130,6 +127,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public ResourceUtilizationRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -150,7 +148,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 			this.getTimestamp(),
 			this.getHostname(),
 			this.getResourceName(),
-			this.getUtilization()
+			this.getUtilization(),
 		};
 	}
 	/**
@@ -161,6 +159,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getResourceName());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -172,6 +171,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		serializer.putString(this.getResourceName());
 		serializer.putDouble(this.getUtilization());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -212,16 +212,33 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final ResourceUtilizationRecord castedRecord = (ResourceUtilizationRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getResourceName().equals(castedRecord.getResourceName())) return false;
-		if (isNotEqual(this.getUtilization(), castedRecord.getUtilization())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getResourceName().equals(castedRecord.getResourceName())) {
+			return false;
+		}
+		if (isNotEqual(this.getUtilization(), castedRecord.getUtilization())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

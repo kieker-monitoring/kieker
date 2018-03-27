@@ -31,16 +31,13 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.12
  */
-public class LoadAverageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = -664763923774505966L;
-
+public class LoadAverageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // LoadAverageRecord.timestamp
 			 + TYPE_SIZE_STRING // LoadAverageRecord.hostname
 			 + TYPE_SIZE_DOUBLE // LoadAverageRecord.oneMinLoadAverage
 			 + TYPE_SIZE_DOUBLE // LoadAverageRecord.fiveMinLoadAverage
-			 + TYPE_SIZE_DOUBLE // LoadAverageRecord.fifteenMinLoadAverage
-	;
+			 + TYPE_SIZE_DOUBLE; // LoadAverageRecord.fifteenMinLoadAverage
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // LoadAverageRecord.timestamp
@@ -50,13 +47,13 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		double.class, // LoadAverageRecord.fifteenMinLoadAverage
 	};
 	
-	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final double ONE_MIN_LOAD_AVERAGE = 0.0;
 	public static final double FIVE_MIN_LOAD_AVERAGE = 0.0;
 	public static final double FIFTEEN_MIN_LOAD_AVERAGE = 0.0;
+	private static final long serialVersionUID = -664763923774505966L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -140,6 +137,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public LoadAverageRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -162,7 +160,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 			this.getHostname(),
 			this.getOneMinLoadAverage(),
 			this.getFiveMinLoadAverage(),
-			this.getFifteenMinLoadAverage()
+			this.getFifteenMinLoadAverage(),
 		};
 	}
 	/**
@@ -172,6 +170,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getHostname());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -184,6 +183,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 		serializer.putDouble(this.getFiveMinLoadAverage());
 		serializer.putDouble(this.getFifteenMinLoadAverage());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -224,17 +224,36 @@ public class LoadAverageRecord extends AbstractMonitoringRecord implements IMoni
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final LoadAverageRecord castedRecord = (LoadAverageRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (isNotEqual(this.getOneMinLoadAverage(), castedRecord.getOneMinLoadAverage())) return false;
-		if (isNotEqual(this.getFiveMinLoadAverage(), castedRecord.getFiveMinLoadAverage())) return false;
-		if (isNotEqual(this.getFifteenMinLoadAverage(), castedRecord.getFifteenMinLoadAverage())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (isNotEqual(this.getOneMinLoadAverage(), castedRecord.getOneMinLoadAverage())) {
+			return false;
+		}
+		if (isNotEqual(this.getFiveMinLoadAverage(), castedRecord.getFiveMinLoadAverage())) {
+			return false;
+		}
+		if (isNotEqual(this.getFifteenMinLoadAverage(), castedRecord.getFifteenMinLoadAverage())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

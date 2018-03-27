@@ -31,9 +31,7 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.12
  */
-public class NetworkUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = 7799663712343478641L;
-
+public class NetworkUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // NetworkUtilizationRecord.timestamp
 			 + TYPE_SIZE_STRING // NetworkUtilizationRecord.hostname
@@ -51,8 +49,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxErrorsPerSecond
 			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxFramePerSecond
 			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxOverrunsPerSecond
-			 + TYPE_SIZE_DOUBLE // NetworkUtilizationRecord.rxPacketsPerSecond
-	;
+			 + TYPE_SIZE_DOUBLE; // NetworkUtilizationRecord.rxPacketsPerSecond
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // NetworkUtilizationRecord.timestamp
@@ -74,7 +71,6 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		double.class, // NetworkUtilizationRecord.rxPacketsPerSecond
 	};
 	
-	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -93,6 +89,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	public static final double RX_FRAME_PER_SECOND = 0.0;
 	public static final double RX_OVERRUNS_PER_SECOND = 0.0;
 	public static final double RX_PACKETS_PER_SECOND = 0.0;
+	private static final long serialVersionUID = 7799663712343478641L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -260,6 +257,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public NetworkUtilizationRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -306,7 +304,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 			this.getRxErrorsPerSecond(),
 			this.getRxFramePerSecond(),
 			this.getRxOverrunsPerSecond(),
-			this.getRxPacketsPerSecond()
+			this.getRxPacketsPerSecond(),
 		};
 	}
 	/**
@@ -317,6 +315,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getInterfaceName());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -341,6 +340,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 		serializer.putDouble(this.getRxOverrunsPerSecond());
 		serializer.putDouble(this.getRxPacketsPerSecond());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -381,29 +381,72 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord implement
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final NetworkUtilizationRecord castedRecord = (NetworkUtilizationRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getInterfaceName().equals(castedRecord.getInterfaceName())) return false;
-		if (this.getSpeed() != castedRecord.getSpeed()) return false;
-		if (isNotEqual(this.getTxBytesPerSecond(), castedRecord.getTxBytesPerSecond())) return false;
-		if (isNotEqual(this.getTxCarrierPerSecond(), castedRecord.getTxCarrierPerSecond())) return false;
-		if (isNotEqual(this.getTxCollisionsPerSecond(), castedRecord.getTxCollisionsPerSecond())) return false;
-		if (isNotEqual(this.getTxDroppedPerSecond(), castedRecord.getTxDroppedPerSecond())) return false;
-		if (isNotEqual(this.getTxErrorsPerSecond(), castedRecord.getTxErrorsPerSecond())) return false;
-		if (isNotEqual(this.getTxOverrunsPerSecond(), castedRecord.getTxOverrunsPerSecond())) return false;
-		if (isNotEqual(this.getTxPacketsPerSecond(), castedRecord.getTxPacketsPerSecond())) return false;
-		if (isNotEqual(this.getRxBytesPerSecond(), castedRecord.getRxBytesPerSecond())) return false;
-		if (isNotEqual(this.getRxDroppedPerSecond(), castedRecord.getRxDroppedPerSecond())) return false;
-		if (isNotEqual(this.getRxErrorsPerSecond(), castedRecord.getRxErrorsPerSecond())) return false;
-		if (isNotEqual(this.getRxFramePerSecond(), castedRecord.getRxFramePerSecond())) return false;
-		if (isNotEqual(this.getRxOverrunsPerSecond(), castedRecord.getRxOverrunsPerSecond())) return false;
-		if (isNotEqual(this.getRxPacketsPerSecond(), castedRecord.getRxPacketsPerSecond())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getInterfaceName().equals(castedRecord.getInterfaceName())) {
+			return false;
+		}
+		if (this.getSpeed() != castedRecord.getSpeed()) {
+			return false;
+		}
+		if (isNotEqual(this.getTxBytesPerSecond(), castedRecord.getTxBytesPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxCarrierPerSecond(), castedRecord.getTxCarrierPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxCollisionsPerSecond(), castedRecord.getTxCollisionsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxDroppedPerSecond(), castedRecord.getTxDroppedPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxErrorsPerSecond(), castedRecord.getTxErrorsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxOverrunsPerSecond(), castedRecord.getTxOverrunsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getTxPacketsPerSecond(), castedRecord.getTxPacketsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxBytesPerSecond(), castedRecord.getRxBytesPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxDroppedPerSecond(), castedRecord.getRxDroppedPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxErrorsPerSecond(), castedRecord.getRxErrorsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxFramePerSecond(), castedRecord.getRxFramePerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxOverrunsPerSecond(), castedRecord.getRxOverrunsPerSecond())) {
+			return false;
+		}
+		if (isNotEqual(this.getRxPacketsPerSecond(), castedRecord.getRxPacketsPerSecond())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

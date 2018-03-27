@@ -31,9 +31,7 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.3
  */
-public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = 638480390439299363L;
-
+public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // MemSwapUsageRecord.timestamp
 			 + TYPE_SIZE_STRING // MemSwapUsageRecord.hostname
@@ -42,8 +40,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memFree
 			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapTotal
 			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapUsed
-			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapFree
-	;
+			 + TYPE_SIZE_LONG; // MemSwapUsageRecord.swapFree
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // MemSwapUsageRecord.timestamp
@@ -56,7 +53,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		long.class, // MemSwapUsageRecord.swapFree
 	};
 	
-	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -66,6 +62,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public static final long SWAP_TOTAL = 0L;
 	public static final long SWAP_USED = 0L;
 	public static final long SWAP_FREE = 0L;
+	private static final long serialVersionUID = 638480390439299363L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -170,6 +167,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public MemSwapUsageRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -198,7 +196,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 			this.getMemFree(),
 			this.getSwapTotal(),
 			this.getSwapUsed(),
-			this.getSwapFree()
+			this.getSwapFree(),
 		};
 	}
 	/**
@@ -208,6 +206,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getHostname());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -223,6 +222,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		serializer.putLong(this.getSwapUsed());
 		serializer.putLong(this.getSwapFree());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -263,20 +263,45 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final MemSwapUsageRecord castedRecord = (MemSwapUsageRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (this.getMemTotal() != castedRecord.getMemTotal()) return false;
-		if (this.getMemUsed() != castedRecord.getMemUsed()) return false;
-		if (this.getMemFree() != castedRecord.getMemFree()) return false;
-		if (this.getSwapTotal() != castedRecord.getSwapTotal()) return false;
-		if (this.getSwapUsed() != castedRecord.getSwapUsed()) return false;
-		if (this.getSwapFree() != castedRecord.getSwapFree()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (this.getMemTotal() != castedRecord.getMemTotal()) {
+			return false;
+		}
+		if (this.getMemUsed() != castedRecord.getMemUsed()) {
+			return false;
+		}
+		if (this.getMemFree() != castedRecord.getMemFree()) {
+			return false;
+		}
+		if (this.getSwapTotal() != castedRecord.getSwapTotal()) {
+			return false;
+		}
+		if (this.getSwapUsed() != castedRecord.getSwapUsed()) {
+			return false;
+		}
+		if (this.getSwapFree() != castedRecord.getSwapFree()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

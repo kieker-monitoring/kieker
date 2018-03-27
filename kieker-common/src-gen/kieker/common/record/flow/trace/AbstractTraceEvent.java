@@ -28,14 +28,12 @@ import kieker.common.record.flow.ITraceRecord;
  * 
  * @since 1.5
  */
-public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {
-	private static final long serialVersionUID = -3022261747819944031L;
-
-	
+public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {			
 	
 	/** default constants. */
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
+	private static final long serialVersionUID = -3022261747819944031L;
 	
 		
 	/** property declarations. */
@@ -81,6 +79,7 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public AbstractTraceEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -105,15 +104,30 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final AbstractTraceEvent castedRecord = (AbstractTraceEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

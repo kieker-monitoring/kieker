@@ -32,17 +32,14 @@ import kieker.common.record.flow.IFlowRecord;
  * 
  * @since 1.5
  */
-public class TraceMetadata extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IFlowRecord {
-	private static final long serialVersionUID = 2517933148667588979L;
-
+public class TraceMetadata extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IFlowRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // TraceMetadata.traceId
 			 + TYPE_SIZE_LONG // TraceMetadata.threadId
 			 + TYPE_SIZE_STRING // TraceMetadata.sessionId
 			 + TYPE_SIZE_STRING // TraceMetadata.hostname
 			 + TYPE_SIZE_LONG // TraceMetadata.parentTraceId
-			 + TYPE_SIZE_INT // TraceMetadata.parentOrderId
-	;
+			 + TYPE_SIZE_INT; // TraceMetadata.parentOrderId
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // TraceMetadata.traceId
@@ -58,7 +55,6 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	public static final int NO_PARENT_ORDER_INDEX = -1;
 	public static final String NO_SESSION_ID = "<no-session-id>";
 	public static final String NO_HOSTNAME = "<default-host>";
-	
 	/** default constants. */
 	public static final long TRACE_ID = 0L;
 	public static final long THREAD_ID = 0L;
@@ -67,6 +63,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	public static final long PARENT_TRACE_ID = NO_PARENT_TRACEID;
 	public static final int PARENT_ORDER_ID = NO_PARENT_ORDER_INDEX;
 	public static final int NEXT_ORDER_ID = 0;
+	private static final long serialVersionUID = 2517933148667588979L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -158,6 +155,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public TraceMetadata(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.traceId = deserializer.getLong();
@@ -183,7 +181,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 			this.getSessionId(),
 			this.getHostname(),
 			this.getParentTraceId(),
-			this.getParentOrderId()
+			this.getParentOrderId(),
 		};
 	}
 	/**
@@ -194,6 +192,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		stringRegistry.get(this.getSessionId());
 		stringRegistry.get(this.getHostname());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -207,6 +206,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		serializer.putLong(this.getParentTraceId());
 		serializer.putInt(this.getParentOrderId());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -247,19 +247,42 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final TraceMetadata castedRecord = (TraceMetadata) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getThreadId() != castedRecord.getThreadId()) return false;
-		if (!this.getSessionId().equals(castedRecord.getSessionId())) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (this.getParentTraceId() != castedRecord.getParentTraceId()) return false;
-		if (this.getParentOrderId() != castedRecord.getParentOrderId()) return false;
-		if (this.getNextOrderId() != castedRecord.getNextOrderId()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getThreadId() != castedRecord.getThreadId()) {
+			return false;
+		}
+		if (!this.getSessionId().equals(castedRecord.getSessionId())) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (this.getParentTraceId() != castedRecord.getParentTraceId()) {
+			return false;
+		}
+		if (this.getParentOrderId() != castedRecord.getParentOrderId()) {
+			return false;
+		}
+		if (this.getNextOrderId() != castedRecord.getNextOrderId()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

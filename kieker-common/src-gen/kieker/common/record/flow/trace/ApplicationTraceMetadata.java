@@ -30,9 +30,7 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.14
  */
-public class ApplicationTraceMetadata extends TraceMetadata  {
-	private static final long serialVersionUID = 7720995073835113293L;
-
+public class ApplicationTraceMetadata extends TraceMetadata  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // TraceMetadata.traceId
 			 + TYPE_SIZE_LONG // TraceMetadata.threadId
@@ -40,8 +38,7 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 			 + TYPE_SIZE_STRING // TraceMetadata.hostname
 			 + TYPE_SIZE_LONG // TraceMetadata.parentTraceId
 			 + TYPE_SIZE_INT // TraceMetadata.parentOrderId
-			 + TYPE_SIZE_STRING // ApplicationTraceMetadata.applicationName
-	;
+			 + TYPE_SIZE_STRING; // ApplicationTraceMetadata.applicationName
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // TraceMetadata.traceId
@@ -55,9 +52,9 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 	
 	/** user-defined constants. */
 	public static final String NO_APPLICATION_NAME = "<no-application-name>";
-	
 	/** default constants. */
 	public static final String APPLICATION_NAME = NO_APPLICATION_NAME;
+	private static final long serialVersionUID = 7720995073835113293L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -108,7 +105,7 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 	@Deprecated
 	public ApplicationTraceMetadata(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
-		this.applicationName = (String) values[7];
+		this.applicationName = (String) values[6];
 	}
 
 	/**
@@ -124,7 +121,7 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 	@Deprecated
 	protected ApplicationTraceMetadata(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
-		this.applicationName = (String) values[7];
+		this.applicationName = (String) values[6];
 	}
 
 	
@@ -132,6 +129,7 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public ApplicationTraceMetadata(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -153,7 +151,7 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 			this.getHostname(),
 			this.getParentTraceId(),
 			this.getParentOrderId(),
-			this.getApplicationName()
+			this.getApplicationName(),
 		};
 	}
 	/**
@@ -165,6 +163,7 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getApplicationName());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -179,6 +178,7 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 		serializer.putInt(this.getParentOrderId());
 		serializer.putString(this.getApplicationName());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -219,20 +219,45 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final ApplicationTraceMetadata castedRecord = (ApplicationTraceMetadata) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getThreadId() != castedRecord.getThreadId()) return false;
-		if (!this.getSessionId().equals(castedRecord.getSessionId())) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (this.getParentTraceId() != castedRecord.getParentTraceId()) return false;
-		if (this.getParentOrderId() != castedRecord.getParentOrderId()) return false;
-		if (this.getNextOrderId() != castedRecord.getNextOrderId()) return false;
-		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getThreadId() != castedRecord.getThreadId()) {
+			return false;
+		}
+		if (!this.getSessionId().equals(castedRecord.getSessionId())) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (this.getParentTraceId() != castedRecord.getParentTraceId()) {
+			return false;
+		}
+		if (this.getParentOrderId() != castedRecord.getParentOrderId()) {
+			return false;
+		}
+		if (this.getNextOrderId() != castedRecord.getNextOrderId()) {
+			return false;
+		}
+		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

@@ -30,16 +30,13 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.10
  */
-public class CompilationRecord extends AbstractJVMRecord  {
-	private static final long serialVersionUID = 3634137431488075031L;
-
+public class CompilationRecord extends AbstractJVMRecord  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
 			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
 			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
 			 + TYPE_SIZE_STRING // CompilationRecord.jitCompilerName
-			 + TYPE_SIZE_LONG // CompilationRecord.totalCompilationTimeMS
-	;
+			 + TYPE_SIZE_LONG; // CompilationRecord.totalCompilationTimeMS
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp
@@ -49,9 +46,9 @@ public class CompilationRecord extends AbstractJVMRecord  {
 		long.class, // CompilationRecord.totalCompilationTimeMS
 	};
 	
-	
 	/** default constants. */
 	public static final String JIT_COMPILER_NAME = "";
+	private static final long serialVersionUID = 3634137431488075031L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -124,6 +121,7 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public CompilationRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -144,7 +142,7 @@ public class CompilationRecord extends AbstractJVMRecord  {
 			this.getHostname(),
 			this.getVmName(),
 			this.getJitCompilerName(),
-			this.getTotalCompilationTimeMS()
+			this.getTotalCompilationTimeMS(),
 		};
 	}
 	/**
@@ -156,6 +154,7 @@ public class CompilationRecord extends AbstractJVMRecord  {
 		stringRegistry.get(this.getVmName());
 		stringRegistry.get(this.getJitCompilerName());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -168,6 +167,7 @@ public class CompilationRecord extends AbstractJVMRecord  {
 		serializer.putString(this.getJitCompilerName());
 		serializer.putLong(this.getTotalCompilationTimeMS());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -208,17 +208,36 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final CompilationRecord castedRecord = (CompilationRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getVmName().equals(castedRecord.getVmName())) return false;
-		if (!this.getJitCompilerName().equals(castedRecord.getJitCompilerName())) return false;
-		if (this.getTotalCompilationTimeMS() != castedRecord.getTotalCompilationTimeMS()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getVmName().equals(castedRecord.getVmName())) {
+			return false;
+		}
+		if (!this.getJitCompilerName().equals(castedRecord.getJitCompilerName())) {
+			return false;
+		}
+		if (this.getTotalCompilationTimeMS() != castedRecord.getTotalCompilationTimeMS()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

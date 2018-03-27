@@ -31,15 +31,12 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.14
  */
-public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = 1817999525650163947L;
-
+public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // BeforeSentRemoteEvent.timestamp
 			 + TYPE_SIZE_LONG // BeforeSentRemoteEvent.traceId
 			 + TYPE_SIZE_INT // BeforeSentRemoteEvent.orderIndex
-			 + TYPE_SIZE_STRING // BeforeSentRemoteEvent.technology
-	;
+			 + TYPE_SIZE_STRING; // BeforeSentRemoteEvent.technology
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // BeforeSentRemoteEvent.timestamp
@@ -48,12 +45,12 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements I
 		String.class, // BeforeSentRemoteEvent.technology
 	};
 	
-	
 	/** default constants. */
 	public static final long TIMESTAMP = -1L;
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
 	public static final String TECHNOLOGY = "<default-technology>";
+	private static final long serialVersionUID = 1817999525650163947L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -130,6 +127,7 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements I
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public BeforeSentRemoteEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -150,7 +148,7 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements I
 			this.getTimestamp(),
 			this.getTraceId(),
 			this.getOrderIndex(),
-			this.getTechnology()
+			this.getTechnology(),
 		};
 	}
 	/**
@@ -160,6 +158,7 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements I
 	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 		stringRegistry.get(this.getTechnology());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -171,6 +170,7 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements I
 		serializer.putInt(this.getOrderIndex());
 		serializer.putString(this.getTechnology());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -211,16 +211,33 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord implements I
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final BeforeSentRemoteEvent castedRecord = (BeforeSentRemoteEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getTechnology().equals(castedRecord.getTechnology())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getTechnology().equals(castedRecord.getTechnology())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

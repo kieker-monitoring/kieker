@@ -31,9 +31,7 @@ import kieker.common.record.flow.IInterfaceRecord;
  * 
  * @since 1.10
  */
-public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEvent implements IInterfaceRecord {
-	private static final long serialVersionUID = -8438691367718487460L;
-
+public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEvent implements IInterfaceRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
@@ -41,8 +39,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
-			 + TYPE_SIZE_STRING // IInterfaceRecord.interface
-	;
+			 + TYPE_SIZE_STRING; // IInterfaceRecord.interface
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -54,9 +51,9 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		String.class, // IInterfaceRecord.interface
 	};
 	
-	
 	/** default constants. */
 	public static final String INTERFACE = "";
+	private static final long serialVersionUID = -8438691367718487460L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -131,6 +128,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public BeforeOperationObjectInterfaceEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -152,7 +150,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 			this.getOperationSignature(),
 			this.getClassSignature(),
 			this.getObjectId(),
-			this.getInterface()
+			this.getInterface(),
 		};
 	}
 	/**
@@ -164,6 +162,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		stringRegistry.get(this.getClassSignature());
 		stringRegistry.get(this.getInterface());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -178,6 +177,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		serializer.putInt(this.getObjectId());
 		serializer.putString(this.getInterface());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -218,19 +218,42 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final BeforeOperationObjectInterfaceEvent castedRecord = (BeforeOperationObjectInterfaceEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
-		if (this.getObjectId() != castedRecord.getObjectId()) return false;
-		if (!this.getInterface().equals(castedRecord.getInterface())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (this.getObjectId() != castedRecord.getObjectId()) {
+			return false;
+		}
+		if (!this.getInterface().equals(castedRecord.getInterface())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

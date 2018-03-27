@@ -30,9 +30,7 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.10
  */
-public class ThreadsStatusRecord extends AbstractJVMRecord  {
-	private static final long serialVersionUID = -9176980438135391329L;
-
+public class ThreadsStatusRecord extends AbstractJVMRecord  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
 			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
@@ -40,8 +38,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 			 + TYPE_SIZE_LONG // ThreadsStatusRecord.threadCount
 			 + TYPE_SIZE_LONG // ThreadsStatusRecord.daemonThreadCount
 			 + TYPE_SIZE_LONG // ThreadsStatusRecord.peakThreadCount
-			 + TYPE_SIZE_LONG // ThreadsStatusRecord.totalStartedThreadCount
-	;
+			 + TYPE_SIZE_LONG; // ThreadsStatusRecord.totalStartedThreadCount
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp
@@ -53,7 +50,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		long.class, // ThreadsStatusRecord.totalStartedThreadCount
 	};
 	
-	
+	private static final long serialVersionUID = -9176980438135391329L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -140,6 +137,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public ThreadsStatusRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -164,7 +162,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 			this.getThreadCount(),
 			this.getDaemonThreadCount(),
 			this.getPeakThreadCount(),
-			this.getTotalStartedThreadCount()
+			this.getTotalStartedThreadCount(),
 		};
 	}
 	/**
@@ -175,6 +173,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		stringRegistry.get(this.getHostname());
 		stringRegistry.get(this.getVmName());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -189,6 +188,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		serializer.putLong(this.getPeakThreadCount());
 		serializer.putLong(this.getTotalStartedThreadCount());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -229,19 +229,42 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final ThreadsStatusRecord castedRecord = (ThreadsStatusRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getVmName().equals(castedRecord.getVmName())) return false;
-		if (this.getThreadCount() != castedRecord.getThreadCount()) return false;
-		if (this.getDaemonThreadCount() != castedRecord.getDaemonThreadCount()) return false;
-		if (this.getPeakThreadCount() != castedRecord.getPeakThreadCount()) return false;
-		if (this.getTotalStartedThreadCount() != castedRecord.getTotalStartedThreadCount()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getVmName().equals(castedRecord.getVmName())) {
+			return false;
+		}
+		if (this.getThreadCount() != castedRecord.getThreadCount()) {
+			return false;
+		}
+		if (this.getDaemonThreadCount() != castedRecord.getDaemonThreadCount()) {
+			return false;
+		}
+		if (this.getPeakThreadCount() != castedRecord.getPeakThreadCount()) {
+			return false;
+		}
+		if (this.getTotalStartedThreadCount() != castedRecord.getTotalStartedThreadCount()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

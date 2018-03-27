@@ -31,16 +31,13 @@ import kieker.common.record.flow.IConstructorRecord;
  * 
  * @since 1.6
  */
-public class BeforeConstructorEvent extends BeforeOperationEvent implements IConstructorRecord {
-	private static final long serialVersionUID = 5792711083403520393L;
-
+public class BeforeConstructorEvent extends BeforeOperationEvent implements IConstructorRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
 			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-	;
+			 + TYPE_SIZE_STRING; // IClassSignature.classSignature
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -50,7 +47,7 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		String.class, // IClassSignature.classSignature
 	};
 	
-	
+	private static final long serialVersionUID = 5792711083403520393L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -114,6 +111,7 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 	 * @param deserializer
 	 *            The deserializer to use
 	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
 	public BeforeConstructorEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -132,7 +130,7 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 			this.getTraceId(),
 			this.getOrderIndex(),
 			this.getOperationSignature(),
-			this.getClassSignature()
+			this.getClassSignature(),
 		};
 	}
 	/**
@@ -143,6 +141,7 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		stringRegistry.get(this.getOperationSignature());
 		stringRegistry.get(this.getClassSignature());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -155,6 +154,7 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		serializer.putString(this.getOperationSignature());
 		serializer.putString(this.getClassSignature());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -195,17 +195,36 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final BeforeConstructorEvent castedRecord = (BeforeConstructorEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		
 		return true;
 	}
 	
