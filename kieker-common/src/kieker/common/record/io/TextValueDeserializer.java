@@ -115,19 +115,23 @@ public class TextValueDeserializer extends AbstractValueDeserializer implements 
 
 	private String readValue() {
 		final char[] charArray = new char[this.buffer.limit()];
-		final int limit = this.buffer.limit() - this.buffer.position();
+		final int remaining = this.buffer.limit() - this.buffer.position();
 		char ch;
 		int i = 0;
-		do {
-			ch = this.buffer.get();
-			if (ch == '\\') {
-				charArray[i++] = ch;
-				charArray[i++] = this.buffer.get();
-			} else if (ch != ';') {
-				charArray[i++] = ch;
-			}
-		} while ((ch != ';') && (i < limit));
-		return new String(charArray, 0, i);
+		if (remaining > 0) {
+			do {
+				ch = this.buffer.get();
+				if (ch == '\\') {
+					charArray[i++] = ch;
+					charArray[i++] = this.buffer.get();
+				} else if (ch != ';') {
+					charArray[i++] = ch;
+				}
+			} while ((ch != ';') && (i < remaining));
+			return new String(charArray, 0, i);
+		} else {
+			return "";
+		}
 	}
 
 }
