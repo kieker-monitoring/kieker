@@ -103,4 +103,20 @@ public class TextValueDeserializerTest extends AbstractKiekerTest { // NOCS NOPM
 		Assert.assertEquals("string error", deserializer.getString(), "a line of text with a semicolon(\\;)");
 		Assert.assertEquals("string error", deserializer.getString(), "");
 	}
+
+	@Test
+	public void testWrongValueInField() {
+		final String string = "text;number";
+		final CharBuffer buffer = CharBuffer.wrap(string.toCharArray());
+
+		final TextValueDeserializer deserializer = TextValueDeserializer.create(buffer);
+
+		Assert.assertEquals("string error", deserializer.getString(), "text");
+		try {
+			deserializer.getInt();
+			Assert.fail("getInt should never return a value for non-number strings.");
+		} catch (final NumberFormatException e) {
+		}
+	}
+
 }
