@@ -21,6 +21,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.io.TextValueDeserializer;
+
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
@@ -84,4 +85,8 @@ public class TextValueDeserializerTest extends AbstractKiekerTest { // NOCS NOPM
 		Assert.assertEquals("enum error", deserializer.getEnumeration(ETestExample.class), ETestExample.NO);
 	}
 
+	@Test
+	public void testLastFieldEmpty() {
+
+	}
 }
