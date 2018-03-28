@@ -116,6 +116,7 @@ public class TextValueDeserializerTest extends AbstractKiekerTest { // NOCS NOPM
 			deserializer.getInt();
 			Assert.fail("getInt should never return a value for non-number strings.");
 		} catch (final NumberFormatException e) {
+			Assert.assertTrue(true);
 		}
 	}
 
