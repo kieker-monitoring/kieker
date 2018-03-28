@@ -87,6 +87,20 @@ public class TextValueDeserializerTest extends AbstractKiekerTest { // NOCS NOPM
 
 	@Test
 	public void testLastFieldEmpty() {
+		final String string = "false;0;1;2;3;4;5.5;6.6;a line of text with a semicolon(\\;);";
+		final CharBuffer buffer = CharBuffer.wrap(string.toCharArray());
 
+		final TextValueDeserializer deserializer = TextValueDeserializer.create(buffer);
+
+		Assert.assertEquals("boolean error", deserializer.getBoolean(), false);
+		Assert.assertEquals("byte error", deserializer.getByte(), 0);
+		Assert.assertEquals("char error", deserializer.getChar(), '1');
+		Assert.assertEquals("short error", deserializer.getShort(), 2);
+		Assert.assertEquals("int error", deserializer.getInt(), 3);
+		Assert.assertEquals("long error", deserializer.getLong(), 4);
+		Assert.assertEquals("float error", deserializer.getFloat(), 5.5, 0.00001);
+		Assert.assertEquals("double error", deserializer.getDouble(), 6.6, 0.00001);
+		Assert.assertEquals("string error", deserializer.getString(), "a line of text with a semicolon(\\;)");
+		Assert.assertEquals("string error", deserializer.getString(), "");
 	}
 }
