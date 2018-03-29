@@ -99,7 +99,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 *
 	 * @since 1.2
 	 *
-	 * @deprecated 1.13 to be removed in 1.14
+	 * @deprecated since 1.13 to be removed in 1.15
 	 */
 	@Deprecated
 	public void initFromArray(Object[] values);
