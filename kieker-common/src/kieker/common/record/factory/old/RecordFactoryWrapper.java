@@ -29,7 +29,10 @@ import kieker.common.record.io.IValueDeserializer;
  * @author Christian Wulf
  *
  * @since 1.11
+ *
+ * @deprecated since 1.14 can be removed in 1.14 as old object constructor is deprecated
  */
+@Deprecated
 public final class RecordFactoryWrapper implements IRecordFactory<IMonitoringRecord> {
 
 	private final String recordClassName;
@@ -53,7 +56,6 @@ public final class RecordFactoryWrapper implements IRecordFactory<IMonitoringRec
 		}
 	}
 
-	// @SuppressWarnings("deprecation")
 	@Override
 	public IMonitoringRecord create(final Object[] values) {
 		try {

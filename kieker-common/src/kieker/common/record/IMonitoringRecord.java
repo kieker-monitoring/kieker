@@ -151,7 +151,10 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * </ul>
 	 *
 	 * @since 1.5
+	 *
+	 * @deprecated since 1.14 can be removed in 1.15 as object array and string array are deprecated
 	 */
+	@Deprecated
 	public static interface Factory { // NOCS (name)
 		// empty marker interface
 	}
@@ -169,7 +172,10 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * </ul>
 	 *
 	 * @since 1.8
+	 *
+	 * @deprecated since 1.14 can be removed in 1.15 as object array and string array are deprecated
 	 */
+	@Deprecated
 	public static interface BinaryFactory { // NOCS (name)
 		// empty marker interface
 	}
