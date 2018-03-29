@@ -20,7 +20,6 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Micky Singh Multani
@@ -85,7 +84,7 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 	public Class<?>[] getValueTypes() { // NOPMD (not used method)
 		return (Class<?>[]) this.toArray();
 	}
-	
+
 	@Override
 	public String[] getValueNames() {
 		return new String[] { "timestamp", "traceId", "orderIndex" };
@@ -112,11 +111,6 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 	@Override
 	public int hashCode() { // not used method (needed for findbugs)
 		return 1;
-	}
-
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {
-		// No code necessary
 	}
 
 }

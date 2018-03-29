@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 iObserve Project (https://iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,12 @@ import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.IConstructorRecord;
 
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.14.0
  * 
  * @since 1.6
  */
@@ -145,17 +144,6 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 			this.getCalleeClassSignature(),
 		};
 	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getOperationSignature());
-		stringRegistry.get(this.getClassSignature());
-		stringRegistry.get(this.getCalleeOperationSignature());
-		stringRegistry.get(this.getCalleeClassSignature());
-	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

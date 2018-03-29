@@ -69,12 +69,6 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 	}
 
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {
-		stringRegistry.get(this.getClassName());
-		stringRegistry.get(this.getMethodName());
-	}
-
-	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		serializer.putString(this.getClassName());
 		serializer.putString(this.getMethodName());

@@ -174,10 +174,9 @@ public final class Registry<E> implements IRegistry<E> {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @deprecated since 1.13 (to be removed in 1.14): Do not iterate through the registry.
+	 * @deprecated since 1.13 (to be removed in 1.15): Do not iterate through the registry.
 	 */
 	@Deprecated
-	@Override
 	public final E[] getAll() {
 		final int capacity = this.nextId.get();
 		if (this.eArrayCached.length != capacity) { // volatile read

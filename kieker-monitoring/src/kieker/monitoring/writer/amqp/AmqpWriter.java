@@ -38,7 +38,6 @@ import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.thread.DaemonThreadFactory;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
-import kieker.monitoring.registry.RegisterAdapter;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
@@ -92,7 +91,7 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 	 * Adapter for the current, generated record structure.
 	 * The record generator should generate records with the new interface.
 	 */
-	private final RegisterAdapter<String> registerStringsAdapter;
+	// private final RegisterAdapter<String> registerStringsAdapter;
 	/**
 	 * Adapter for the current, generated record structure.
 	 * The record generator should generate records with the new interface.
@@ -121,7 +120,7 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 		this.channel = this.connection.createChannel();
 
 		this.writerRegistry = new WriterRegistry(this);
-		this.registerStringsAdapter = new RegisterAdapter<>(this.writerRegistry);
+		// this.registerStringsAdapter = new RegisterAdapter<>(this.writerRegistry);
 		this.writeBytesAdapter = new GetIdAdapter<>(this.writerRegistry);
 	}
 
@@ -144,7 +143,7 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 
 	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		monitoringRecord.registerStrings(this.registerStringsAdapter);
+		// monitoringRecord.registerStrings(this.registerStringsAdapter);
 
 		final ByteBuffer recordBuffer = this.buffer;
 		final int requiredBufferSize = SIZE_OF_ENVELOPE + 4 + 8 + monitoringRecord.getSize();
