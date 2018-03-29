@@ -39,7 +39,7 @@ public class TriggerOnTerminationStage extends AbstractTransformation<Object, Tr
 	}
 
 	@Override
-	public void onTerminating() throws Exception {
+	protected void onTerminating() {
 		this.outputPort.send(this.trigger);
 		super.onTerminating();
 	}

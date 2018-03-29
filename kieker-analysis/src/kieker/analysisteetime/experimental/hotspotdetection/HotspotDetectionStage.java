@@ -35,11 +35,10 @@ import teetime.framework.AbstractConsumerStage;
 
 /**
  *
- * This stage excepts traces at its input port and prints their operation calls to
- * a given {@link PrintStream}, which have the longest execution time without their children.
+ * This stage excepts traces at its input port and prints their operation calls to a given {@link PrintStream}, which
+ * have the longest execution time without their children.
  *
- * The number of operation call that will be printed can be configured.
- * The default print stream is {@link System.out}.
+ * The number of operation call that will be printed can be configured. The default print stream is {@link System.out}.
  *
  * @author Sören Henning, Stephan Lenga
  *
@@ -50,7 +49,7 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 	private static final int DEFAULT_MAX_OUTPUT = 10;
 	private static final PrintStream DEFAULT_PRINT_STREAM = System.out;
 
-	final Map<OperationCall, Duration> durationsWithoutChild = new HashMap<>(); // NOPMD (no concurrent access intended) // NOCS contradicts PMD
+	private final Map<OperationCall, Duration> durationsWithoutChild = new HashMap<>(); // NOPMD (no concurrent access)
 
 	private final TraceTraverser traceTraverser = new TraceTraverser();
 	private final int maxOutput;
@@ -68,13 +67,12 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 
 	@Override
 	protected void execute(final Trace trace) {
-		final IOperationCallVisitor visitor = new Visitor();
+		final IOperationCallVisitor visitor = new DurationCollector(this.durationsWithoutChild);
 		this.traceTraverser.traverse(trace, visitor);
 	}
 
 	@Override
-	public void onTerminating() throws Exception {
-
+	protected void onTerminating() {
 		this.printHotspots();
 
 		super.onTerminating();
@@ -82,9 +80,10 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 
 	private void printHotspots() {
 		final Map<OperationCall, Duration> sortedMap = HotspotDetectionStage.sortMapByValue(this.durationsWithoutChild);
-		sortedMap.entrySet().stream().limit(this.maxOutput)
-				.map(e -> e.getKey().getOperation().getComponent().getAssemblyComponent().getComponentType().getSignature() + " "
-						+ e.getKey().getOperation().getAssemblyOperation().getOperationType().getSignature() + ": " + e.getValue().toString())
+		sortedMap.entrySet().stream().limit(this.maxOutput).map(
+				e -> e.getKey().getOperation().getComponent().getAssemblyComponent().getComponentType().getSignature()
+						+ " " + e.getKey().getOperation().getAssemblyOperation().getOperationType().getSignature()
+						+ ": " + e.getValue().toString())
 				.forEach(this.printStream::println);
 	}
 
@@ -106,21 +105,25 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 	}
 
 	/**
-	 *
+	 * Collects the durations of operation calls without children.
 	 */
-	private class Visitor implements IOperationCallVisitor {
+	private class DurationCollector implements IOperationCallVisitor {
 
-		Visitor() {
-			// Create new visitor
+		@SuppressWarnings("hiding")
+		private final Map<OperationCall, Duration> durationsWithoutChild;
+
+		DurationCollector(final Map<OperationCall, Duration> durationsWithoutChild) {
+			this.durationsWithoutChild = durationsWithoutChild;
 		}
 
 		@Override
 		public void visit(final OperationCall operationCall) {
 			final Duration duration = operationCall.getDuration();
-			final Duration durationsOfChildren = operationCall.getChildren().stream().map(c -> c.getDuration()).reduce(Duration.ZERO, (r, d) -> r.plus(d));
+			final Duration durationsOfChildren = operationCall.getChildren().stream().map(c -> c.getDuration())
+					.reduce(Duration.ZERO, (r, d) -> r.plus(d));
 			final Duration durationWithoutChildren = duration.minus(durationsOfChildren);
 
-			HotspotDetectionStage.this.durationsWithoutChild.put(operationCall, durationWithoutChildren);
+			this.durationsWithoutChild.put(operationCall, durationWithoutChildren);
 		}
 
 	}
