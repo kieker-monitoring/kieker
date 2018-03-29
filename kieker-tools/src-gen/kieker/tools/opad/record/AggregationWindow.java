@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 iObserve Project (https://iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,33 +17,30 @@ package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Thomas Duellmann
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.14.0
  * 
  * @since 1.10
  */
-public class AggregationWindow extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = -6015104562956593414L;
-
+public class AggregationWindow extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AggregationWindow.windowStart
-			 + TYPE_SIZE_LONG // AggregationWindow.windowEnd
-	;
+			 + TYPE_SIZE_LONG; // AggregationWindow.windowEnd
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // AggregationWindow.windowStart
 		long.class, // AggregationWindow.windowEnd
 	};
 	
-	
+	private static final long serialVersionUID = -6015104562956593414L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -105,8 +102,10 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-	public AggregationWindow(final IValueDeserializer deserializer) {
+	public AggregationWindow(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.windowStart = deserializer.getLong();
 		this.windowEnd = deserializer.getLong();
 	}
@@ -121,14 +120,8 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 	public Object[] toArray() {
 		return new Object[] {
 			this.getWindowStart(),
-			this.getWindowEnd()
+			this.getWindowEnd(),
 		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
 	/**
 	 * {@inheritDoc}
@@ -139,6 +132,7 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 		serializer.putLong(this.getWindowStart());
 		serializer.putLong(this.getWindowEnd());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -179,14 +173,27 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final AggregationWindow castedRecord = (AggregationWindow) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getWindowStart() != castedRecord.getWindowStart()) return false;
-		if (this.getWindowEnd() != castedRecord.getWindowEnd()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getWindowStart() != castedRecord.getWindowStart()) {
+			return false;
+		}
+		if (this.getWindowEnd() != castedRecord.getWindowEnd()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

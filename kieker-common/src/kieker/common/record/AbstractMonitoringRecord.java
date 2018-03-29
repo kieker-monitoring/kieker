@@ -82,11 +82,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 */
 	protected static boolean isNotEqual(final double x, final double y) {
 		final double diff = x - y;
-		// if (diff <= 0.0D) {
-		// return (diff < (0.0D - VALID_VARIANCE_DOUBLE));
-		// } else {
-		// return (diff > VALID_VARIANCE_DOUBLE);
-		// }
 		return (diff < (0.0D - VALID_VARIANCE_DOUBLE)) || (diff > VALID_VARIANCE_DOUBLE);
 	}
 
@@ -102,11 +97,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 */
 	protected static boolean isNotEqual(final float x, final float y) {
 		final float diff = x - y;
-		// if (diff <= 0.0F) {
-		// return (diff < (0.0F - VALID_VARIANCE_FLOAT));
-		// } else {
-		// return (diff > VALID_VARIANCE_FLOAT);
-		// }
 		return (diff < (0.0F - VALID_VARIANCE_FLOAT)) || (diff > VALID_VARIANCE_FLOAT);
 	}
 
@@ -120,6 +110,12 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		this.loggingTimestamp = timestamp;
 	}
 
+	/**
+	 * Returns the record as string.
+	 *
+	 * @deprecated 1.14 will be replaced by individual toString methods.
+	 */
+	@Deprecated
 	@Override
 	public final String toString() {
 		final Object[] recordVector = this.toArray();
@@ -178,12 +174,15 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 
 		final AbstractMonitoringRecord castedRecord = (AbstractMonitoringRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		return Arrays.equals(this.toArray(), castedRecord.toArray());
+		return this.getLoggingTimestamp() == castedRecord.getLoggingTimestamp();
 	}
 
+	/**
+	 * Returns the hash code.
+	 *
+	 * @deprecated 1.14 to be replaced by a specific implementation in each record, as toArray is deprecated.
+	 */
+	@Deprecated
 	@Override
 	public final int hashCode() {
 		return (31 * Arrays.hashCode(this.toArray())) + (int) (this.loggingTimestamp ^ (this.loggingTimestamp >>> 32));
@@ -420,7 +419,10 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 *
 	 * @throws MonitoringRecordException
 	 *             If this method failed to create the record for some reason.
+	 *
+	 * @deprecated 1.14 remove in 1.15
 	 */
+	@Deprecated
 	public static final IMonitoringRecord createFromArray(final Class<? extends IMonitoringRecord> clazz, final Object[] values) throws MonitoringRecordException {
 		try {
 			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
@@ -464,7 +466,10 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 *
 	 * @throws MonitoringRecordException
 	 *             If this method failed to create the record for some reason.
+	 *
+	 * @deprecated 1.14 remove in 1.15
 	 */
+	@Deprecated
 	public static final IMonitoringRecord createFromStringArray(final Class<? extends IMonitoringRecord> clazz, final String[] values)
 			throws MonitoringRecordException {
 		try {

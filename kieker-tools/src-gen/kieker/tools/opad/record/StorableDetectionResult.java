@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 iObserve Project (https://iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,29 +17,26 @@ package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Tom Frotscher, Thomas Duellmann
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.14.0
  * 
  * @since 1.10
  */
-public class StorableDetectionResult extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = -758350040827117227L;
-
+public class StorableDetectionResult extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // StorableDetectionResult.applicationName
 			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.value
 			 + TYPE_SIZE_LONG // StorableDetectionResult.timestamp
 			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.forecast
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.score
-	;
+			 + TYPE_SIZE_DOUBLE; // StorableDetectionResult.score
 	
 	public static final Class<?>[] TYPES = {
 		String.class, // StorableDetectionResult.applicationName
@@ -49,9 +46,9 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		double.class, // StorableDetectionResult.score
 	};
 	
-	
 	/** default constants. */
 	public static final String APPLICATION_NAME = "";
+	private static final long serialVersionUID = -758350040827117227L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -134,8 +131,10 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-	public StorableDetectionResult(final IValueDeserializer deserializer) {
+	public StorableDetectionResult(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.applicationName = deserializer.getString();
 		this.value = deserializer.getDouble();
 		this.timestamp = deserializer.getLong();
@@ -156,15 +155,8 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 			this.getValue(),
 			this.getTimestamp(),
 			this.getForecast(),
-			this.getScore()
+			this.getScore(),
 		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getApplicationName());
 	}
 	/**
 	 * {@inheritDoc}
@@ -178,6 +170,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		serializer.putDouble(this.getForecast());
 		serializer.putDouble(this.getScore());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -218,17 +211,36 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final StorableDetectionResult castedRecord = (StorableDetectionResult) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) return false;
-		if (isNotEqual(this.getValue(), castedRecord.getValue())) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (isNotEqual(this.getForecast(), castedRecord.getForecast())) return false;
-		if (isNotEqual(this.getScore(), castedRecord.getScore())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) {
+			return false;
+		}
+		if (isNotEqual(this.getValue(), castedRecord.getValue())) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (isNotEqual(this.getForecast(), castedRecord.getForecast())) {
+			return false;
+		}
+		if (isNotEqual(this.getScore(), castedRecord.getScore())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

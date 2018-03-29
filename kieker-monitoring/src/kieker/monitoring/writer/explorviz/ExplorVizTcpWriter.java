@@ -39,7 +39,6 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.registry.IRegistryListener;
 import kieker.monitoring.registry.IWriterRegistry;
-import kieker.monitoring.registry.RegisterAdapter;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
@@ -81,11 +80,12 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 	private final WritableByteChannel socketChannel;
 	/** the registry used to compress string fields in monitoring records */
 	private final IWriterRegistry<String> writerRegistry;
+
 	/**
 	 * this adapter allows to use the new WriterRegistry with the legacy IRegistry
 	 * in {@link AbstractMonitoringRecord.registerStrings(..)}
 	 */
-	private final RegisterAdapter<String> registerStringsAdapter;
+	// private final RegisterAdapter<String> registerStringsAdapter;
 
 	public ExplorVizTcpWriter(final Configuration configuration) throws IOException {
 		super(configuration);
@@ -102,7 +102,7 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 
 		this.writerRegistry = new WriterRegistry(this);
 		this.writerRegistry.register(EMPTY_STRING);
-		this.registerStringsAdapter = new RegisterAdapter<>(this.writerRegistry);
+		// this.registerStringsAdapter = new RegisterAdapter<>(this.writerRegistry);
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 
 	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord record) {
-		record.registerStrings(this.registerStringsAdapter);
+		// record.registerStrings(this.registerStringsAdapter);
 
 		// sizes from ExplorViz not Kieker!
 		int recordSize = 0;

@@ -53,7 +53,7 @@ public final class RecordFactoryWrapper implements IRecordFactory<IMonitoringRec
 		}
 	}
 
-	@SuppressWarnings("deprecation")
+	// @SuppressWarnings("deprecation")
 	@Override
 	public IMonitoringRecord create(final Object[] values) {
 		try {
