@@ -356,12 +356,12 @@ record contents, as described in Section~\ref{sec:componentsMonitoring:monitorin
 \begin{figure}[b]%[H]
 	\begin{centering}
 		\includegraphics[scale=0.7]{images/kieker_writerimplsuserguide-modified}
-		\caption{Interface \class{IMonitoringWriter} and  the implementing classes}
+		\caption{Interface \class{IMonitoringWriter} and some of the implementing classes}
 		\label{figure:monitoringLogWritersHierarchy}
 	\end{centering}
 \end{figure}
 
-Figure~\ref{figure:monitoringLogWritersHierarchy} shows the monitoring writers %
+Figure~\ref{figure:monitoringLogWritersHierarchy} shows some fo the monitoring writers %
 already implemented in \KiekerMonitoringPart{}. The available properties for the %
 included writers are well-documented in the %
 example configuration file (see Appendix~\ref{sec:appdx:monitoringproperties}). %
@@ -369,11 +369,14 @@ example configuration file (see Appendix~\ref{sec:appdx:monitoringproperties}). 
 % \enlargethispage{1.2cm}
 
 Different writers can be used %
-to store monitoring records to filesystems and databases respectively (e.g., \class{AsciiFileWriter}, %
+to store monitoring records to filesystems and databases respectively (e.g., \class{FileWriter}, \class{AsciiFileWriter}, %
 \class{SyncFsWriter}, \class{AsyncDbWriter}, and \class{SyncDbWriter}). %
 The variants with the prefix \class{Async} are implemented using asynchronous %
 threads that decouple the I/O operations from the control flow of the %
 instrumented application. %
+As the new Kieker writer API uses always a fast pipe implementation to decouple the writer, nowadays all writers are asynchronuous.
+Furthermore, the new \class{FileWriter} introduced new features and comes with a standard Kieker text serialization and a binary serialization.
+In addition, it can be extended to write other formats.
 The \class{AsciiFileWriter} is the default writer that has already been used in %
 Section~\ref{sec:example:monitoring}. %
 Please note that the database writers are currently in a prototype stage and
