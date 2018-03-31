@@ -179,11 +179,6 @@ subprojects {
         }
     }
 
-    repositories {
-    	mavenCentral() 
-    	jcenter() // for mockito
-    }
-
     // Those are some dependencies which are needed by all subprojects
     dependencies {
         checkstyle project(':kieker-checkstyle-extension')
@@ -192,6 +187,9 @@ subprojects {
 		compile "com.google.code.findbugs:findbugs:${fbVersion}"
 
 		compile 'org.slf4j:slf4j-api:1.7.25'
+		
+		// enable logging for test runs
+		testCompile 'ch.qos.logback:logback-classic:1.2.3'
 
 		testCompile 'org.mockito:mockito-core:2.+'
         testCompile 'junit:junit:4.12'
