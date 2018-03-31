@@ -56,7 +56,7 @@ public class TraceIdFilter extends CompositeStage {
 	 *            Determining which trace IDs should be accepted by this filter.
 	 */
 	public TraceIdFilter(final boolean acceptAllTraces, final Long[] selectedTraceIds) {
-		// Initializing the internal filters
+		// Initialize the internal filters
 		final MultipleInstanceOfFilter<IMonitoringRecord> instanceOfFilter = new MultipleInstanceOfFilter<>();
 		final TraceMetadataTraceIdFilter traceMetadataFilter = new TraceMetadataTraceIdFilter(acceptAllTraces, selectedTraceIds);
 		final TraceEventTraceIdFilter traceEventFilter = new TraceEventTraceIdFilter(acceptAllTraces, selectedTraceIds);
@@ -65,11 +65,12 @@ public class TraceIdFilter extends CompositeStage {
 		final Merger<IMonitoringRecord> matchingMerger = new Merger<>();
 		final Merger<IMonitoringRecord> mismatchingMerger = new Merger<>();
 
-		this.monitoringRecordsCombinedInputPort = instanceOfFilter.getInputPort();
-		this.matchingTraceIdOutputPort = matchingMerger.getOutputPort();
-		this.mismatchingTraceIdOutputPort = mismatchingMerger.getOutputPort();
+		// Assign ports
+		this.monitoringRecordsCombinedInputPort = this.createInputPort(instanceOfFilter.getInputPort());
+		this.matchingTraceIdOutputPort = this.createOutputPort(matchingMerger.getOutputPort());
+		this.mismatchingTraceIdOutputPort = this.createOutputPort(mismatchingMerger.getOutputPort());
 
-		// Connecting the internal filters
+		// Connect the internal filters
 		this.connectPorts(instanceOfFilter.getOutputPortForType(TraceMetadata.class), traceMetadataFilter.getInputPort());
 		this.connectPorts(instanceOfFilter.getOutputPortForType(AbstractTraceEvent.class), traceEventFilter.getInputPort());
 		this.connectPorts(instanceOfFilter.getOutputPortForType(OperationExecutionRecord.class), operationExecutionFilter.getInputPort());

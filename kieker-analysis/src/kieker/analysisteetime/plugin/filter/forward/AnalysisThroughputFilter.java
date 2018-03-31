@@ -26,7 +26,8 @@ import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 
 /**
- * An instance of this class computes the throughput in terms of the number of objects received per time unit.
+ * An instance of this class computes the throughput in terms of the number of
+ * objects received per time unit.
  *
  * @author Jan Waller, Lars Bluemke
  *
@@ -67,11 +68,6 @@ public class AnalysisThroughputFilter extends AbstractStage {
 			this.plainTextDisplayObject.setText(sb.toString());
 			this.recordsCountOutputPort.send(this.numPassedElements);
 			this.resetTimestamp(timestampInNs);
-
-			// Manually terminate the stage when the records input port received a termination signal.
-			if (this.recordsInputPort.isClosed()) {
-				this.workCompleted();
-			}
 		}
 	}
 
