@@ -38,7 +38,6 @@ public final class ToolsUtil {
 
 	public static void loadVerboseLogger() {
 		ToolsUtil.loadLogger("logging.verbose.properties");
-
 	}
 
 	public static void loadDebugLogger() {

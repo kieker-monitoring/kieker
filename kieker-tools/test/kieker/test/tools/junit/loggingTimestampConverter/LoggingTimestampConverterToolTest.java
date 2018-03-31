@@ -66,10 +66,11 @@ public class LoggingTimestampConverterToolTest extends AbstractKiekerTest {
 
 		final String[] lines = this.testOutputBuffer.toString("UTF-8").split(System.getProperty("line.separator"));
 
-		Assert.assertEquals(2, lines.length);
+		Assert.assertEquals(3, lines.length);
 		// First line logging output
-		Assert.assertTrue(lines[1].matches("1283156545583183369: Mon, 30 Aug 2010 08:22:25.583 \\+0000 \\(UTC\\) \\(.* \\(local time\\)\\)"));
-
+		Assert.assertTrue(lines[1].matches(
+				"1283156545583183369: Mon, 30 Aug 2010 08:22:25.583 \\+0000 \\(UTC\\) \\(.* \\(local time\\)\\)"));
+		// Last line logging output
 	}
 
 	@Test
@@ -78,10 +79,13 @@ public class LoggingTimestampConverterToolTest extends AbstractKiekerTest {
 
 		final String[] lines = this.testOutputBuffer.toString("UTF-8").split(System.getProperty("line.separator"));
 
-		Assert.assertEquals(3, lines.length);
+		Assert.assertEquals(4, lines.length);
 		// First line logging output
-		Assert.assertTrue(lines[1].matches("0: Thu, 1 Jan 1970 00:00:00.000 \\+0000 \\(UTC\\) \\(.* \\(local time\\)\\)"));
-		Assert.assertTrue(lines[2].matches("1283156545583183369: Mon, 30 Aug 2010 08:22:25.583 \\+0000 \\(UTC\\) \\(.* \\(local time\\)\\)"));
+		Assert.assertTrue(
+				lines[1].matches("0: Thu, 1 Jan 1970 00:00:00.000 \\+0000 \\(UTC\\) \\(.* \\(local time\\)\\)"));
+		Assert.assertTrue(lines[2].matches(
+				"1283156545583183369: Mon, 30 Aug 2010 08:22:25.583 \\+0000 \\(UTC\\) \\(.* \\(local time\\)\\)"));
+		// Last line logging output
 	}
 
 }

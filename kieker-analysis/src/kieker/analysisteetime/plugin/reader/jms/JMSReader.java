@@ -68,10 +68,8 @@ public final class JMSReader {
 	 *            The name of the configuration determining the JMS destination,
 	 *            e.g. {@code queue1}.
 	 * @param jmsFactoryLookupName
-	 *            The name of the configuration determining the name of the used JMS factory,
-	 *            e.g. {@code org.exolab.jms.jndi.InitialContextFactory}.
-	 * @param LOGGER
-	 *            Kieker log.
+	 *            The name of the configuration determining the name of the used JMS
+	 *            factory, e.g. {@code org.exolab.jms.jndi.InitialContextFactory}.
 	 * @param elementReceivedCallback
 	 *            The actual teetime stage which uses this class.
 	 *
@@ -88,16 +86,19 @@ public final class JMSReader {
 		this.elementReceivedCallback = elementReceivedCallback;
 
 		// simple sanity check
-		if ((this.jmsProviderUrl.length() == 0) || (this.jmsDestination.length() == 0) || (this.jmsFactoryLookupName.length() == 0)) {
-			throw new IllegalArgumentException("JMSReader has not sufficient parameters. jmsProviderUrl ('" + this.jmsProviderUrl + "'), jmsDestination ('"
-					+ this.jmsDestination + "'), or factoryLookupName ('" + this.jmsFactoryLookupName + "') is null");
+		if ((this.jmsProviderUrl.length() == 0) || (this.jmsDestination.length() == 0)
+				|| (this.jmsFactoryLookupName.length() == 0)) {
+			final String message = String.format(
+					"Invalid or incomplete parameters: jmsProviderUrl ('%s'), jmsDestination ('%s'), or factoryLookupName ('%s') is null",
+					this.jmsProviderUrl, this.jmsDestination, this.jmsFactoryLookupName);
+			throw new IllegalArgumentException(message);
 		}
 	}
 
 	/**
-	 * Starts the reader. This method is intended to be a blocking operation,
-	 * i.e., it is assumed that reading has finished before this method returns.
-	 * The method should indicate an error by the return value false.
+	 * Starts the reader. This method is intended to be a blocking operation, i.e.,
+	 * it is assumed that reading has finished before this method returns. The
+	 * method should indicate an error by the return value false.
 	 *
 	 * In asynchronous scenarios, the {@link #terminate(boolean)} method can be used
 	 * to initiate the termination of this method.
@@ -109,7 +110,8 @@ public final class JMSReader {
 		boolean retVal = true;
 		Connection connection = null;
 		try {
-			final Hashtable<String, String> properties = new Hashtable<>(); // NOPMD NOCS (InitialContext expects Hashtable)
+			final Hashtable<String, String> properties = new Hashtable<>(); // NOPMD NOCS (InitialContext expects
+			// Hashtable)
 			properties.put(Context.INITIAL_CONTEXT_FACTORY, this.jmsFactoryLookupName);
 
 			// JMS initialization
@@ -121,13 +123,16 @@ public final class JMSReader {
 
 			Destination destination;
 			try {
-				// As a first step, try a JNDI lookup (this seems to fail with ActiveMQ sometimes)
+				// As a first step, try a JNDI lookup (this seems to fail with ActiveMQ
+				// sometimes)
 				destination = (Destination) context.lookup(this.jmsDestination);
 			} catch (final NameNotFoundException exc) {
-				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ/HornetQ sometimes)
+				// JNDI lookup failed, try manual creation (this seems to fail with
+				// ActiveMQ/HornetQ sometimes)
 				destination = session.createQueue(this.jmsDestination);
 				if (destination == null) { //
-					LOGGER.error("Failed to lookup queue '{}' via JNDI: {} AND failed to create queue", this.jmsDestination, exc.getMessage());
+					LOGGER.error("Failed to lookup queue '{}' via JNDI: {} AND failed to create queue",
+							this.jmsDestination, exc.getMessage());
 					throw exc; // will be catched below to abort the read method
 				}
 			}
@@ -159,15 +164,16 @@ public final class JMSReader {
 
 	private final void block() {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
-
 			@Override
 			public final void run() {
 				JMSReader.this.unblock();
 			}
 		});
+
 		try {
 			this.cdLatch.await();
-		} catch (final InterruptedException e) { // ignore
+		} catch (final InterruptedException e) {
+			// ignore
 		}
 	}
 
@@ -180,7 +186,7 @@ public final class JMSReader {
 	}
 
 	/**
-	 * Terminates the reader logic by returning from read method.
+	 * Terminates the reader logic and returns iff termination was successful.
 	 */
 	public void terminate() {
 		LOGGER.info("Shutdown of JMSReader requested.");
@@ -220,7 +226,8 @@ public final class JMSReader {
 						JMSReader.this.getLogger().error("Error delivering record", ex);
 					}
 				} else {
-					JMSReader.this.getLogger().warn("Received message of invalid type: {}", jmsMessage.getClass().getName());
+					JMSReader.this.getLogger().warn("Received message of invalid type: {}",
+							jmsMessage.getClass().getName());
 				}
 			}
 		}

@@ -43,8 +43,8 @@ public class JMSReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 	 *            The name of the configuration determining the JMS destination,
 	 *            e.g. {@code queue1}.
 	 * @param jmsFactoryLookupName
-	 *            The name of the configuration determining the name of the used JMS factory,
-	 *            e.g. {@code org.exolab.jms.jndi.InitialContextFactory}.
+	 *            The name of the configuration determining the name of the used JMS
+	 *            factory, e.g. {@code org.exolab.jms.jndi.InitialContextFactory}.
 	 */
 	public JMSReaderStage(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
 		this.readerLogic = new JMSReader(jmsProviderUrl, jmsDestination, jmsFactoryLookupName, this::deliverRecord);
@@ -56,12 +56,14 @@ public class JMSReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 	}
 
 	/**
-	 * Terminates the reader logic by returning from read method and terminates the execution of the stage.
+	 * Terminates the reader logic in addition to the following.
+	 * <p>
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void terminateStage() {
+	protected void workCompleted() {
 		this.readerLogic.terminate();
-		super.terminateStage();
+		super.workCompleted();
 	}
 
 	/**

@@ -66,7 +66,8 @@ public class BasicJMSWriterReaderTest {
 		final MonitoringController monCtrl = MonitoringController.createInstance(config);
 
 		// Start the reader
-		final JMSReaderThread jmsReaderThread = new JMSReaderThread("tcp://127.0.0.1:61616/", "queue1", FakeInitialContextFactory.class.getName());
+		final JMSReaderThread jmsReaderThread = new JMSReaderThread("tcp://127.0.0.1:61616/", "queue1",
+				FakeInitialContextFactory.class.getName());
 		jmsReaderThread.start();
 		Thread.sleep(1000); // wait a second to make sure the reader is ready to read
 
@@ -83,35 +84,39 @@ public class BasicJMSWriterReaderTest {
 
 		final List<IMonitoringRecord> outputRecords = jmsReaderThread.getOutputList();
 
-		// Inspect records (sublist is used to exclude the KiekerMetadataRecord sent by the monitoring controller)
+		// Inspect records (sublist is used to exclude the KiekerMetadataRecord sent by
+		// the monitoring controller)
 		Assert.assertEquals("Unexpected set of records", inputRecords, outputRecords.subList(1, outputRecords.size()));
 
-		// Need to terminate explicitly, because otherwise, the monitoring log directory cannot be removed
+		// Need to terminate explicitly, because otherwise, the monitoring log directory
+		// cannot be removed
 		monCtrl.terminateMonitoring();
 		monCtrl.waitForTermination(TIMEOUT_IN_MS);
 	}
 
-	protected void checkControllerStateBeforeRecordsPassedToController(final IMonitoringController monitoringController) {
+	protected void checkControllerStateBeforeRecordsPassedToController(
+			final IMonitoringController monitoringController) {
 		Assert.assertTrue(monitoringController.isMonitoringEnabled());
 	}
 
-	protected void checkControllerStateAfterRecordsPassedToController(final IMonitoringController monitoringController) {
+	protected void checkControllerStateAfterRecordsPassedToController(
+			final IMonitoringController monitoringController) {
 		Assert.assertTrue(monitoringController.isMonitoringEnabled());
 		monitoringController.disableMonitoring();
 		Assert.assertFalse(monitoringController.isMonitoringEnabled());
 	}
 
 	/**
-	 * Returns a list of {@link IMonitoringRecord}s to be used in this test. Extending classes can override this method to use their own list of records.
+	 * Returns a list of {@link IMonitoringRecord}s to be used in this test.
+	 * Extending classes can override this method to use their own list of records.
 	 *
 	 * @return A list of records.
 	 */
 	protected List<IMonitoringRecord> provideEvents() {
 		final List<IMonitoringRecord> someEvents = new ArrayList<>();
 		for (int i = 0; i < 5; i = someEvents.size()) {
-			final List<AbstractTraceEvent> nextBatch = Arrays.asList(
-					BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(i, i, "Mn51D97t0",
-							"srv-LURS0EMw").getTraceEvents());
+			final List<AbstractTraceEvent> nextBatch = Arrays.asList(BookstoreEventRecordFactory
+					.validSyncTraceAdditionalCallEventsGap(i, i, "Mn51D97t0", "srv-LURS0EMw").getTraceEvents());
 			someEvents.addAll(nextBatch);
 		}
 		someEvents.add(new EmptyRecord()); // this record used to cause problems (#475)
@@ -119,26 +124,48 @@ public class BasicJMSWriterReaderTest {
 	}
 
 	/**
-	 * Extra thread for JMXReader for testing
+	 * Executes the JmsReaderStage
 	 *
 	 * @author Lars Bluemke
 	 */
 	private static class JMSReaderThread extends Thread {
-		private final JMSReaderStage jmsReader;
-		private final List<IMonitoringRecord> outputList;
+		private final JMSReaderStage jmsReaderStage;
+		private final List<IMonitoringRecord> outputElements;
 
-		public JMSReaderThread(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
-			this.jmsReader = new JMSReaderStage(jmsProviderUrl, jmsDestination, jmsFactoryLookupName);
-			this.outputList = new LinkedList<>();
+		public JMSReaderThread(final String jmsProviderUrl, final String jmsDestination,
+				final String jmsFactoryLookupName) {
+			this.jmsReaderStage = new JMSReaderStage(jmsProviderUrl, jmsDestination, jmsFactoryLookupName);
+			this.outputElements = new LinkedList<>();
 		}
 
 		@Override
 		public void run() {
-			StageTester.test(this.jmsReader).and().receive(this.outputList).from(this.jmsReader.getOutputPort()).start();
+			StageTester.test(this.jmsReaderStage).and().receive(this.outputElements)
+					.from(this.jmsReaderStage.getOutputPort()).start();
 		}
 
 		public List<IMonitoringRecord> getOutputList() {
-			return this.outputList;
+			return this.outputElements;
 		}
 	}
+
+	// private static class AnalysisConfiguration extends
+	// teetime.framework.Configuration {
+	// private final JMSReaderStage jmsReaderStage;
+	// private final CollectorSink<IMonitoringRecord> collectorSink;
+	//
+	// public AnalysisConfiguration(final String jmsProviderUrl, final String
+	// jmsDestination,
+	// final String jmsFactoryLookupName) {
+	// this.jmsReaderStage = new JMSReaderStage(jmsProviderUrl, jmsDestination,
+	// jmsFactoryLookupName);
+	// this.collectorSink = new CollectorSink<>();
+	//
+	// this.from(this.jmsReaderStage).end(this.collectorSink);
+	// }
+	//
+	// public List<IMonitoringRecord> getOutputElements() {
+	// return this.collectorSink.getElements();
+	// }
+	// }
 }
