@@ -20,7 +20,6 @@ import java.io.Serializable;
 import java.nio.BufferOverflowException;
 
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * All Kieker monitoring records have to implement this minimal interface.
@@ -75,20 +74,11 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * @return An array with the values of the record.
 	 *
 	 * @since 1.2
-	 */
-	public Object[] toArray();
-
-	/**
-	 * Registers the string attributes of the record at the given <code>stringRegistry</code>.
 	 *
-	 * @param stringRegistry
-	 *            string registry
-	 *
-	 * @since 1.11
-	 * @deprecated since 1.13 (to be removed in 1.14): Is unnecessary when using the new, serializer-based output.
+	 * @deprecated 1.14 to be removed in 1.15 and moved to AbstractMonitoringRecord
 	 */
 	@Deprecated
-	public void registerStrings(final IRegistry<String> stringRegistry);
+	public Object[] toArray();
 
 	/**
 	 * This method serializes this record using the given serializer.
@@ -108,7 +98,10 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 *            The values for the record.
 	 *
 	 * @since 1.2
+	 *
+	 * @deprecated since 1.13 to be removed in 1.15
 	 */
+	@Deprecated
 	public void initFromArray(Object[] values);
 
 	/**
@@ -139,9 +132,9 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * @return The size.
 	 *
 	 * @since 1.8
-	 * @deprecated since 1.13 (to be removed in 1.14) With the introduction of value serializers, this method has become obsolete.
+	 *        might be deprecated since 1.13 removal must be reassessed.
+	 *        (to be removed in 1.14) With the introduction of value serializers, this method has become obsolete.
 	 */
-	@Deprecated
 	public int getSize();
 
 	/**
@@ -158,7 +151,10 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * </ul>
 	 *
 	 * @since 1.5
+	 *
+	 * @deprecated since 1.14 can be removed in 1.15 as object array and string array are deprecated
 	 */
+	@Deprecated
 	public static interface Factory { // NOCS (name)
 		// empty marker interface
 	}
@@ -176,7 +172,10 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * </ul>
 	 *
 	 * @since 1.8
+	 *
+	 * @deprecated since 1.14 can be removed in 1.15 as object array and string array are deprecated
 	 */
+	@Deprecated
 	public static interface BinaryFactory { // NOCS (name)
 		// empty marker interface
 	}

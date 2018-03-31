@@ -27,7 +27,6 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.ILookup;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * Record used to associate Objects (typically Strings) with unique ids.
@@ -100,14 +99,6 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getId(), this.getString(), };
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {
-		// makes not sense for this record
 	}
 
 	/**

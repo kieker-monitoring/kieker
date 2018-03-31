@@ -36,7 +36,6 @@ public abstract class AbstractTcpReader implements Runnable {
 
 	private static final int CONNECTION_CLOSED_BY_CLIENT = -1;
 
-	@SuppressWarnings({ "PMD.LoggerIsNotStaticFinal", "PMD.ProperLogger" })
 	protected final Logger logger;
 
 	private final int port;

@@ -20,7 +20,6 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * This record is used in tests where a record is needed that has no associated record factory.
@@ -43,11 +42,6 @@ public class TestRecord extends AbstractMonitoringRecord {
 	}
 
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {
-		// not used in test
-	}
-
-	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		// not used in test
 	}
@@ -66,7 +60,7 @@ public class TestRecord extends AbstractMonitoringRecord {
 	public String[] getValueNames() {
 		return new String[0];
 	}
-	
+
 	@Override
 	public int getSize() {
 		return 0;

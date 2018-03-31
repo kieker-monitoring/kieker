@@ -27,7 +27,6 @@ import kieker.analysisteetime.plugin.filter.select.timestampfilter.TimestampFilt
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -69,11 +68,6 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		@Override
 		public int getSize() {
 			return 8 + 8 + 4;
-		}
-
-		@Override
-		public void registerStrings(final IRegistry<String> stringRegistry) {
-			throw new UnsupportedOperationException("not used in this test");
 		}
 
 	};
