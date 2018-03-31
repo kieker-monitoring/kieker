@@ -17,20 +17,16 @@
 package kieker.test.analysisteetime.junit.plugin.filter.select;
 
 import java.nio.BufferOverflowException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysisteetime.plugin.filter.select.timestampfilter.TimestampFilter;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueSerializer;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
-import teetime.framework.AbstractStage;
 import teetime.framework.test.StageTester;
 
 /**
@@ -88,18 +84,13 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		final long leftBorder = TestTimestampFilter.EVENT.getTimestamp() + 1;
 		final long rightBorder = leftBorder + 1;
 		final TimestampFilter timestampStage = new TimestampFilter(leftBorder, rightBorder);
-		final AbstractStage owningStage = timestampStage.getMonitoringRecordsCombinedInputPort().getOwningStage();
-		final List<IMonitoringRecord> withinTimestampOutputs = new ArrayList<>();
-		final List<IMonitoringRecord> outsideTimestampOutputs = new ArrayList<>();
 
-		StageTester.test(owningStage)
-				.and().send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
-				.and().receive(withinTimestampOutputs).from(timestampStage.getRecordsWithinTimePeriodOutputPort())
-				.and().receive(outsideTimestampOutputs).from(timestampStage.getRecordsOutsideTimePeriodOutputPort())
-				.start();
+		StageTester.test(timestampStage).and()
+		.send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
+		.start();
 
-		Assert.assertTrue(withinTimestampOutputs.isEmpty());
-		Assert.assertSame(outsideTimestampOutputs.get(0), TestTimestampFilter.EVENT);
+		Assert.assertThat(timestampStage.getRecordsWithinTimePeriodOutputPort(), StageTester.producesNothing());
+		Assert.assertThat(timestampStage.getRecordsOutsideTimePeriodOutputPort(), StageTester.produces(TestTimestampFilter.EVENT));
 	}
 
 	/**
@@ -112,18 +103,13 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		final long rightBorder = TestTimestampFilter.EVENT.getTimestamp() - 1;
 		final long leftBorder = rightBorder - 1;
 		final TimestampFilter timestampStage = new TimestampFilter(leftBorder, rightBorder);
-		final AbstractStage owningStage = timestampStage.getMonitoringRecordsCombinedInputPort().getOwningStage();
-		final List<IMonitoringRecord> withinTimestampOutputs = new ArrayList<>();
-		final List<IMonitoringRecord> outsideTimestampOutputs = new ArrayList<>();
 
-		StageTester.test(owningStage)
-				.and().send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
-				.and().receive(withinTimestampOutputs).from(timestampStage.getRecordsWithinTimePeriodOutputPort())
-				.and().receive(outsideTimestampOutputs).from(timestampStage.getRecordsOutsideTimePeriodOutputPort())
-				.start();
+		StageTester.test(timestampStage)
+		.and().send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
+		.start();
 
-		Assert.assertTrue("Filter passed event " + TestTimestampFilter.EVENT + " although timestamp before " + leftBorder, withinTimestampOutputs.isEmpty());
-		Assert.assertSame(outsideTimestampOutputs.get(0), TestTimestampFilter.EVENT);
+		Assert.assertThat(timestampStage.getRecordsWithinTimePeriodOutputPort(), StageTester.producesNothing());
+		Assert.assertThat(timestampStage.getRecordsOutsideTimePeriodOutputPort(), StageTester.produces(TestTimestampFilter.EVENT));
 	}
 
 	/**
@@ -135,22 +121,13 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		final long leftBorder = TestTimestampFilter.EVENT.getTimestamp();
 		final long rightBorder = leftBorder + 1;
 		final TimestampFilter timestampStage = new TimestampFilter(leftBorder, rightBorder);
-		final AbstractStage owningStage = timestampStage.getMonitoringRecordsCombinedInputPort().getOwningStage();
-		final List<IMonitoringRecord> withinTimestampOutputs = new ArrayList<>();
-		final List<IMonitoringRecord> outsideTimestampOutputs = new ArrayList<>();
 
-		StageTester.test(owningStage)
-				.and().send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
-				.and().receive(withinTimestampOutputs).from(timestampStage.getRecordsWithinTimePeriodOutputPort())
-				.and().receive(outsideTimestampOutputs).from(timestampStage.getRecordsOutsideTimePeriodOutputPort())
-				.start();
+		StageTester.test(timestampStage).and()
+		.send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
+		.start();
 
-		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.EVENT + " although timestamp on left Border " + leftBorder,
-				withinTimestampOutputs.isEmpty());
-		Assert.assertTrue(withinTimestampOutputs.size() == 1);
-		Assert.assertSame(withinTimestampOutputs.get(0), TestTimestampFilter.EVENT);
-		Assert.assertTrue(outsideTimestampOutputs.isEmpty());
-
+		Assert.assertThat(timestampStage.getRecordsWithinTimePeriodOutputPort(), StageTester.produces(TestTimestampFilter.EVENT));
+		Assert.assertThat(timestampStage.getRecordsOutsideTimePeriodOutputPort(), StageTester.producesNothing());
 	}
 
 	/**
@@ -162,21 +139,13 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		final long rightBorder = TestTimestampFilter.EVENT.getTimestamp();
 		final long leftBorder = rightBorder - 1;
 		final TimestampFilter timestampStage = new TimestampFilter(leftBorder, rightBorder);
-		final AbstractStage owningStage = timestampStage.getMonitoringRecordsCombinedInputPort().getOwningStage();
-		final List<IMonitoringRecord> withinTimestampOutputs = new ArrayList<>();
-		final List<IMonitoringRecord> outsideTimestampOutputs = new ArrayList<>();
 
-		StageTester.test(owningStage)
-				.and().send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
-				.and().receive(withinTimestampOutputs).from(timestampStage.getRecordsWithinTimePeriodOutputPort())
-				.and().receive(outsideTimestampOutputs).from(timestampStage.getRecordsOutsideTimePeriodOutputPort())
-				.start();
+		StageTester.test(timestampStage).and()
+		.send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
+		.start();
 
-		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.EVENT + " although timestamp on right Border " + rightBorder,
-				withinTimestampOutputs.isEmpty());
-		Assert.assertTrue(withinTimestampOutputs.size() == 1);
-		Assert.assertSame(withinTimestampOutputs.get(0), TestTimestampFilter.EVENT);
-		Assert.assertTrue(outsideTimestampOutputs.isEmpty());
+		Assert.assertThat(timestampStage.getRecordsWithinTimePeriodOutputPort(), StageTester.produces(TestTimestampFilter.EVENT));
+		Assert.assertThat(timestampStage.getRecordsOutsideTimePeriodOutputPort(), StageTester.producesNothing());
 	}
 
 	/**
@@ -189,20 +158,12 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		final long leftBorder = TestTimestampFilter.EVENT.getTimestamp() - 1;
 		final long rightBorder = TestTimestampFilter.EVENT.getTimestamp() + 1;
 		final TimestampFilter timestampStage = new TimestampFilter(leftBorder, rightBorder);
-		final AbstractStage owningStage = timestampStage.getMonitoringRecordsCombinedInputPort().getOwningStage();
-		final List<IMonitoringRecord> withinTimestampOutputs = new ArrayList<>();
-		final List<IMonitoringRecord> outsideTimestampOutputs = new ArrayList<>();
 
-		StageTester.test(owningStage)
-				.and().send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
-				.and().receive(withinTimestampOutputs).from(timestampStage.getRecordsWithinTimePeriodOutputPort())
-				.and().receive(outsideTimestampOutputs).from(timestampStage.getRecordsOutsideTimePeriodOutputPort())
-				.start();
+		StageTester.test(timestampStage).and()
+		.send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
+		.start();
 
-		Assert.assertFalse("Filter ignored event " + TestTimestampFilter.EVENT + " although timestamp in interval [" + leftBorder + "," + rightBorder + "]",
-				withinTimestampOutputs.isEmpty());
-		Assert.assertTrue(withinTimestampOutputs.size() == 1);
-		Assert.assertSame(withinTimestampOutputs.get(0), TestTimestampFilter.EVENT);
-		Assert.assertTrue(outsideTimestampOutputs.isEmpty());
+		Assert.assertThat(timestampStage.getRecordsWithinTimePeriodOutputPort(), StageTester.produces(TestTimestampFilter.EVENT));
+		Assert.assertThat(timestampStage.getRecordsOutsideTimePeriodOutputPort(), StageTester.producesNothing());
 	}
 }

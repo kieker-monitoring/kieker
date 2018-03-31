@@ -59,7 +59,7 @@ public class BinaryFile2RecordFilter extends AbstractConsumerStage<File> {
 	}
 
 	@Override
-	public void onStarting() throws Exception {
+	public void onStarting() {
 		super.onStarting();
 		this.recordFromBinaryFileCreator = new RecordFromBinaryFileCreator(this.classNameRegistryRepository);
 	}
@@ -78,7 +78,8 @@ public class BinaryFile2RecordFilter extends AbstractConsumerStage<File> {
 			final BinaryCompressionMethod method = BinaryCompressionMethod.getByFileExtension(binaryFile.getName());
 			final DataInputStream inputStream = method.getDataInputStream(binaryFile, 1 * MB);
 			try {
-				IMonitoringRecord record = this.recordFromBinaryFileCreator.createRecordFromBinaryFile(binaryFile, inputStream);
+				IMonitoringRecord record = this.recordFromBinaryFileCreator.createRecordFromBinaryFile(binaryFile,
+						inputStream);
 				while (record != null) {
 					this.outputPort.send(record);
 					record = this.recordFromBinaryFileCreator.createRecordFromBinaryFile(binaryFile, inputStream);

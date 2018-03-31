@@ -60,7 +60,8 @@ public class TeeFilter extends AbstractFilter<Object> {
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters. Uses one of the predefined {@link TeeFilterStreamType}s.
+	 * Creates a new instance of this class using the given parameters. Uses one of the predefined
+	 * {@link TeeFilterStreamType}s.
 	 *
 	 * @param streamType
 	 *            Determines which of the predefined {@link TeeFilterStreamType}s the filter uses.
@@ -131,7 +132,7 @@ public class TeeFilter extends AbstractFilter<Object> {
 	}
 
 	@Override
-	public void onTerminating() throws Exception {
+	protected void onTerminating() {
 		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();
 		}
@@ -139,8 +140,8 @@ public class TeeFilter extends AbstractFilter<Object> {
 	}
 
 	/**
-	 * This method receives incoming objects from the filter's input port. Every object will be printed into a stream (based on the configuration) before the
-	 * filter sends it to the output port.
+	 * This method receives incoming objects from the filter's input port. Every object will be printed into a stream
+	 * (based on the configuration) before the filter sends it to the output port.
 	 *
 	 * @param object
 	 *            The new object.
@@ -148,9 +149,8 @@ public class TeeFilter extends AbstractFilter<Object> {
 	@Override
 	protected void execute(final Object object) {
 		if (this.active) {
-			final StringBuilder sb = new StringBuilder(128)
-					.append(this.getId())
-					.append('(').append(object.getClass().getSimpleName()).append(") ").append(object.toString());
+			final StringBuilder sb = new StringBuilder(128).append(this.getId()).append('(')
+					.append(object.getClass().getSimpleName()).append(") ").append(object.toString());
 			final String record = sb.toString();
 			if (this.printStream != null) {
 				this.printStream.println(record);

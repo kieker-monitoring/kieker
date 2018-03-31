@@ -33,6 +33,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 import teetime.framework.Configuration;
 import teetime.framework.Execution;
+import teetime.framework.termination.TerminationCondition;
 import teetime.stage.Clock;
 import teetime.stage.CollectorSink;
 import teetime.stage.Counter;
@@ -69,16 +70,19 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 	/**
 	 *
 	 * @param eventTimeOffsetsSeconds
-	 *            points in time for which to generate an event (relative to start; in seconds)
+	 *            points in time for which to generate an event (relative to start;
+	 *            in seconds)
 	 * @param expectedThroughputListOffsetSecondsInterval5Secs
-	 *            expected number of events per intervals (of length 5 seconds; relative to start time; in seconds)
+	 *            expected number of events per intervals (of length 5 seconds;
+	 *            relative to start time; in seconds)
 	 * @param accelerationFactor
 	 *            factor to be passed to the {@link RealtimeRecordDelayFilter}
 	 */
-	public AbstractTestRealtimeRecordDelayFilter(final long[] eventTimeOffsetsSeconds, final long[] expectedThroughputListOffsetSecondsInterval5Secs,
-			final double accelerationFactor) {
+	public AbstractTestRealtimeRecordDelayFilter(final long[] eventTimeOffsetsSeconds,
+			final long[] expectedThroughputListOffsetSecondsInterval5Secs, final double accelerationFactor) {
 		this.eventTimeOffsetsSeconds = eventTimeOffsetsSeconds.clone();
-		this.expectedThroughputListOffsetSecondsInterval5Secs = expectedThroughputListOffsetSecondsInterval5Secs.clone();
+		this.expectedThroughputListOffsetSecondsInterval5Secs = expectedThroughputListOffsetSecondsInterval5Secs
+				.clone();
 		this.accelerationFactor = accelerationFactor;
 	}
 
@@ -101,7 +105,13 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 		this.recordProducer = new InitialElementProducer<>(this.inputRecords);
 		this.preDelayCounter = new Counter<>();
 		this.delayFilter = new RealtimeRecordDelayFilter(TimeUnit.NANOSECONDS, this.accelerationFactor);
-		this.clock = new Clock();
+		final TerminationCondition terminationCondition = new TerminationCondition() {
+			@Override
+			public boolean isMet() {
+				return AbstractTestRealtimeRecordDelayFilter.this.throughputStage.getRecordsInputPort().isClosed(); // NOPMD
+			}
+		};
+		this.clock = new Clock(terminationCondition);
 		this.clock.setInitialDelayInMs(5000);
 		this.clock.setIntervalDelayInMs(5000);
 		this.throughputStage = new AnalysisThroughputFilter();
@@ -110,9 +120,9 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 		this.recordCollectorSink = new CollectorSink<>();
 		this.throughputCollectorSink = new CollectorSink<>();
 
-		this.testConfig = new RealtimeRecordDelayFilterConfig(this.recordProducer, this.preDelayCounter, this.delayFilter, this.clock,
-				this.throughputStage,
-				this.postDelayCounter, this.recordCollectorSink, this.throughputCollectorSink);
+		this.testConfig = new RealtimeRecordDelayFilterConfig(this.recordProducer, this.preDelayCounter,
+				this.delayFilter, this.clock, this.throughputStage, this.postDelayCounter, this.recordCollectorSink,
+				this.throughputCollectorSink);
 	}
 
 	private final void checkTiming() {
@@ -121,7 +131,8 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 		for (int i = 0; i < actualArray.length; i++) {
 			actualArray[i] = throughput.get(i);
 		}
-		Assert.assertArrayEquals("Unexpected throughput", this.expectedThroughputListOffsetSecondsInterval5Secs, actualArray);
+		Assert.assertArrayEquals("Unexpected throughput", this.expectedThroughputListOffsetSecondsInterval5Secs,
+				actualArray);
 	}
 
 	private final void checkRelayedRecords() {
@@ -130,7 +141,8 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 	}
 
 	/**
-	 * Tests if the records are delayed correctly by checking if the expected numbers of records arrive the expected time interval.
+	 * Tests if the records are delayed correctly by checking if the expected
+	 * numbers of records arrive the expected time interval.
 	 */
 	@Test
 	public void testNormal() {
@@ -138,14 +150,13 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 
 		new Execution<Configuration>(this.testConfig).executeBlocking();
 
-		// Make sure that all events have been provided to the delay filter (otherwise the test make no sense)
+		// Make sure that all events have been provided to the delay filter (otherwise
+		// the test make no sense)
 		Assert.assertEquals("Test invalid: Unexpected number of events provided TO the delay filter",
-				this.inputRecords.size(),
-				this.preDelayCounter.getNumElementsPassed());
+				this.inputRecords.size(), this.preDelayCounter.getNumElementsPassed());
 
 		// Make sure that all events have been passed through the delay filter
-		Assert.assertEquals("Unexpected number of events relayed by the delay filter",
-				this.inputRecords.size(),
+		Assert.assertEquals("Unexpected number of events relayed by the delay filter", this.inputRecords.size(),
 				this.postDelayCounter.getNumElementsPassed());
 
 		// Make sure the records arrived in the expected intervals
@@ -164,12 +175,9 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 	 */
 	private static class RealtimeRecordDelayFilterConfig extends Configuration {
 
-		public RealtimeRecordDelayFilterConfig(
-				final InitialElementProducer<IMonitoringRecord> recordProducer,
-				final Counter<IMonitoringRecord> preDelayCounter,
-				final RealtimeRecordDelayFilter delayFilter,
-				final Clock clock,
-				final AnalysisThroughputFilter throughputStage,
+		public RealtimeRecordDelayFilterConfig(final InitialElementProducer<IMonitoringRecord> recordProducer,
+				final Counter<IMonitoringRecord> preDelayCounter, final RealtimeRecordDelayFilter delayFilter,
+				final Clock clock, final AnalysisThroughputFilter throughputStage,
 				final Counter<IMonitoringRecord> postDelayCounter,
 				final CollectorSink<IMonitoringRecord> recordCollectorSink,
 				final CollectorSink<Long> throughputCollectorSink) {

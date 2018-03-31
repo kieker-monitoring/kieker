@@ -105,7 +105,7 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 			}
 
 		}
-		LOGGER.info("Prefix for test resources is {}", this.testModulePrefix);
+		LOGGER.debug("Prefix for test resources is {}", this.testModulePrefix);
 	}
 
 	protected String getTestModulePrefix() {

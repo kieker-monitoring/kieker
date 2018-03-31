@@ -26,7 +26,8 @@ import teetime.framework.InputPort;
 import teetime.framework.OutputPort;
 
 /**
- * An instance of this class computes the throughput in terms of the number of objects received per time unit.
+ * An instance of this class computes the throughput in terms of the number of
+ * objects received per time unit.
  *
  * @author Jan Waller, Lars Bluemke
  *
@@ -53,45 +54,25 @@ public class AnalysisThroughputFilter extends AbstractStage {
 
 	@Override
 	protected void execute() {
-		int failt = 0;
-
 		final IMonitoringRecord record = this.recordsInputPort.receive();
 		if (record != null) {
 			this.numPassedElements++;
 			this.recordsOutputPort.send(record);
-		} else {
-			failt++;
 		}
 
 		final Long timestampInNs = this.timestampsInputPort.receive();
 		if (timestampInNs != null) {
 			final long duration = timestampInNs - this.lastTimestampInNs;
-			final StringBuilder sb = new StringBuilder(256)
-					.append(this.numPassedElements)
-					.append(" objects within ")
-					.append(duration)
-					.append(' ')
-					.append(TimeUnit.NANOSECONDS.toString());
+			final StringBuilder sb = new StringBuilder(256).append(this.numPassedElements).append(" objects within ")
+					.append(duration).append(' ').append(TimeUnit.NANOSECONDS.toString());
 			this.plainTextDisplayObject.setText(sb.toString());
 			this.recordsCountOutputPort.send(this.numPassedElements);
 			this.resetTimestamp(timestampInNs);
-
-			// Manually terminate the stage when the records input port received a termination signal.
-			if (this.recordsInputPort.isClosed()) {
-				this.terminateStage();
-			}
-		} else {
-			failt++;
-		}
-
-		// Enable TeeTime to suspend the stage for some time when no input is received.
-		if (failt == 2) {
-			this.returnNoElement();
 		}
 	}
 
 	@Override
-	public void onStarting() throws Exception { // NOPMD
+	protected void onStarting() {
 		super.onStarting();
 		this.resetTimestamp(System.nanoTime());
 	}

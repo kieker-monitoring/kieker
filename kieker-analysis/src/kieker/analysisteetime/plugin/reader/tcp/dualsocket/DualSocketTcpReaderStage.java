@@ -72,14 +72,18 @@ public final class DualSocketTcpReaderStage extends AbstractProducerStage<IMonit
 		this.tcpStringRecordReader = new AbstractTcpReader(port2, bufferCapacity, this.logger) {
 			@Override
 			protected boolean onBufferReceived(final ByteBuffer buffer) {
-				RegistryRecord.registerRecordInRegistry(buffer, DualSocketTcpReaderStage.this.stringRegistry); // NOPMD (method for legacy reasons)
+				RegistryRecord.registerRecordInRegistry(buffer, DualSocketTcpReaderStage.this.stringRegistry); // NOPMD
+																												// (method
+																												// for
+																												// legacy
+																												// reasons)
 				return true;
 			}
 		};
 	}
 
 	@Override
-	public void onStarting() throws Exception {
+	public void onStarting() {
 		super.onStarting();
 		this.tcpStringRecordReaderThread = new Thread(this.tcpStringRecordReader);
 		this.tcpStringRecordReaderThread.start();
@@ -92,7 +96,7 @@ public final class DualSocketTcpReaderStage extends AbstractProducerStage<IMonit
 	}
 
 	@Override
-	public void onTerminating() throws Exception {
+	public void onTerminating() {
 		this.tcpStringRecordReader.terminate();
 		this.tcpStringRecordReaderThread.interrupt();
 		super.onTerminating();

@@ -53,7 +53,7 @@ public class RealtimeRecordDelayConsumer extends AbstractConsumerStage<IMonitori
 	}
 
 	@Override
-	public void onTerminating() throws Exception {
+	protected void onTerminating() {
 		this.recordQueue.add(this.endToken);
 		super.onTerminating();
 	}

@@ -7,3 +7,4 @@
 *.toc
 /*.pdf
 /build/
+/bin/

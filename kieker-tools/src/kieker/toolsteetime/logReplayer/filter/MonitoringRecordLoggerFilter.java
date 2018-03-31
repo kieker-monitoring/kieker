@@ -94,9 +94,14 @@ public class MonitoringRecordLoggerFilter extends AbstractFilter<IMonitoringReco
 	}
 
 	@Override
-	public void onTerminating() throws Exception {
+	protected void onTerminating() {
 		this.monitoringController.terminateMonitoring();
-		this.monitoringController.waitForTermination(WAIT_TIMEOUT_IN_MS);
-		super.onTerminating();
+		try {
+			this.monitoringController.waitForTermination(WAIT_TIMEOUT_IN_MS);
+		} catch (final InterruptedException e) {
+			throw new IllegalStateException(e);
+		} finally {
+			super.onTerminating();
+		}
 	}
 }

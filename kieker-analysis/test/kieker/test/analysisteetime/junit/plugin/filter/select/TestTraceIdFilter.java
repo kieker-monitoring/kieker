@@ -16,8 +16,6 @@
 
 package kieker.test.analysisteetime.junit.plugin.filter.select;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -25,13 +23,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysisteetime.plugin.filter.select.traceidfilter.TraceIdFilter;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
 
-import teetime.framework.AbstractStage;
 import teetime.framework.test.StageTester;
 
 /**
@@ -45,16 +41,17 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 	private static final String HOSTNAME = "srv098";
 
 	/**
-	 * Empty default constructor
+	 * Empty default constructor.
 	 */
 	public TestTraceIdFilter() {
 		// empty default constructor
 	}
 
 	/**
-	 * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,
-	 * assert that a {@link AbstractTraceEvent} object <i>event</i> with traceId not element of
-	 * <i>idsToPass</i> is NOT passed through the filter.
+	 * Given a TraceIdFilter that passes traceIds included in a set
+	 * <i>idsToPass</i>, assert that a {@link AbstractTraceEvent} object
+	 * <i>event</i> with traceId not element of <i>idsToPass</i> is NOT passed
+	 * through the filter.
 	 */
 	@Test
 	public void testAssertIgnoreTraceId() {
@@ -66,36 +63,29 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		idsToPass.add(2 + traceIdNotToPass);
 
 		final TraceIdFilter traceidFilter = new TraceIdFilter(false, idsToPass.toArray(new Long[idsToPass.size()]));
-		final AbstractStage owningStage = traceidFilter.getMonitoringRecordsCombinedInputPort().getOwningStage();
-		final List<IMonitoringRecord> acceptedTraceidOutputs = new ArrayList<>();
-		final List<IMonitoringRecord> notAcceptedTraceidOutputs = new ArrayList<>();
 
 		final AbstractTraceEvent[] traceEvents = BookstoreEventRecordFactory
-				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass, TestTraceIdFilter.SESSION_ID, TestTraceIdFilter.HOSTNAME)
+				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass, TestTraceIdFilter.SESSION_ID,
+						TestTraceIdFilter.HOSTNAME)
 				.getTraceEvents();
 
 		for (final AbstractTraceEvent e : traceEvents) {
 			Assert.assertTrue("Testcase invalid", !idsToPass.contains(e.getTraceId()));
 		}
 
-		StageTester.test(owningStage)
-				.and().send(traceEvents).to(traceidFilter.getMonitoringRecordsCombinedInputPort())
-				.and().receive(acceptedTraceidOutputs).from(traceidFilter.getMatchingTraceIdOutputPort())
-				.and().receive(notAcceptedTraceidOutputs).from(traceidFilter.getMismatchingTraceIdOutputPort())
-				.start();
+		StageTester.test(traceidFilter).and()
+		.send(traceEvents).to(traceidFilter.getMonitoringRecordsCombinedInputPort()).and()
+		.start();
 
-		if (!acceptedTraceidOutputs.isEmpty()) {
-			final long passedId = ((AbstractTraceEvent) acceptedTraceidOutputs.get(0)).getTraceId();
-			Assert.fail("Filter passed trace with ID " + passedId + " although traceId not element of " + idsToPass);
-		}
-
-		Assert.assertSame(notAcceptedTraceidOutputs.get(0), traceEvents[0]);
+		Assert.assertThat(traceidFilter.getMatchingTraceIdOutputPort(), StageTester.producesNothing());
+		Assert.assertThat(traceidFilter.getMismatchingTraceIdOutputPort(), StageTester.produces(traceEvents));
 	}
 
 	/**
-	 * Given a TraceIdFilter that passes traceIds included in a set <i>idsToPass</i>,
-	 * assert that a {@link AbstractTraceEvent} object <i>event</i> with traceId not element of
-	 * <i>idsToPass</i> IS passed through the filter.
+	 * Given a TraceIdFilter that passes traceIds included in a set
+	 * <i>idsToPass</i>, assert that a {@link AbstractTraceEvent} object
+	 * <i>event</i> with traceId not element of <i>idsToPass</i> IS passed through
+	 * the filter.
 	 */
 	@Test
 	public void testAssertPassTraceId() {
@@ -107,36 +97,27 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		idsToPass.add(1 + traceIdToPass);
 
 		final TraceIdFilter traceidFilter = new TraceIdFilter(false, idsToPass.toArray(new Long[idsToPass.size()]));
-		final AbstractStage owningStage = traceidFilter.getMonitoringRecordsCombinedInputPort().getOwningStage();
-		final List<IMonitoringRecord> acceptedTraceidOutputs = new ArrayList<>();
-		final List<IMonitoringRecord> notAcceptedTraceidOutputs = new ArrayList<>();
 
 		final AbstractTraceEvent[] traceEvents = BookstoreEventRecordFactory
-				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID, TestTraceIdFilter.HOSTNAME)
+				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
+						TestTraceIdFilter.HOSTNAME)
 				.getTraceEvents();
 
 		for (final AbstractTraceEvent e : traceEvents) {
 			Assert.assertTrue("Testcase invalid", idsToPass.contains(e.getTraceId()));
 		}
 
-		StageTester.test(owningStage)
-				.and().send(traceEvents).to(traceidFilter.getMonitoringRecordsCombinedInputPort())
-				.and().receive(acceptedTraceidOutputs).from(traceidFilter.getMatchingTraceIdOutputPort())
-				.and().receive(notAcceptedTraceidOutputs).from(traceidFilter.getMismatchingTraceIdOutputPort())
-				.start();
+		StageTester.test(traceidFilter).and()
+		.send(traceEvents).to(traceidFilter.getMonitoringRecordsCombinedInputPort()).and()
+		.start();
 
-		for (final AbstractTraceEvent e : traceEvents) {
-			Assert.assertTrue("Expected event " + e + " to pass the filter", acceptedTraceidOutputs.contains(e));
-		}
-
-		Assert.assertSame(acceptedTraceidOutputs.get(0), traceEvents[0]);
-
-		// Somehow redundant but records MIGHT be generated randomly ;-)
-		Assert.assertEquals("Unexpected number of output records", acceptedTraceidOutputs.size() + notAcceptedTraceidOutputs.size(), traceEvents.length);
+		Assert.assertThat(traceidFilter.getMatchingTraceIdOutputPort(), StageTester.produces(traceEvents));
+		Assert.assertThat(traceidFilter.getMismatchingTraceIdOutputPort(), StageTester.producesNothing());
 	}
 
 	/**
-	 * Given a TraceIdFilter that passes all traceIds, assert that an {@link AbstractTraceEvent} object <i>exec</i> is passed through the filter.
+	 * Given a TraceIdFilter that passes all traceIds, assert that an
+	 * {@link AbstractTraceEvent} object <i>exec</i> is passed through the filter.
 	 */
 	@Test
 	public void testAssertPassTraceIdWhenPassAll() {
@@ -144,27 +125,17 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		final long traceIdToPass = 11L; // (must be element of idsToPass)
 
 		final TraceIdFilter traceidFilter = new TraceIdFilter(true, new Long[0]); // i.e. pass all
-		final AbstractStage owningStage = traceidFilter.getMonitoringRecordsCombinedInputPort().getOwningStage();
-		final List<IMonitoringRecord> acceptedTraceidOutputs = new ArrayList<>();
-		final List<IMonitoringRecord> notAcceptedTraceidOutputs = new ArrayList<>();
 
 		final AbstractTraceEvent[] traceEvents = BookstoreEventRecordFactory
-				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID, TestTraceIdFilter.HOSTNAME)
+				.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
+						TestTraceIdFilter.HOSTNAME)
 				.getTraceEvents();
 
-		StageTester.test(owningStage)
-				.and().send(traceEvents).to(traceidFilter.getMonitoringRecordsCombinedInputPort())
-				.and().receive(acceptedTraceidOutputs).from(traceidFilter.getMatchingTraceIdOutputPort())
-				.and().receive(notAcceptedTraceidOutputs).from(traceidFilter.getMismatchingTraceIdOutputPort())
-				.start();
+		StageTester.test(traceidFilter).and()
+		.send(traceEvents).to(traceidFilter.getMonitoringRecordsCombinedInputPort()).and()
+		.start();
 
-		for (final AbstractTraceEvent e : traceEvents) {
-			Assert.assertTrue("Expected event " + e + " to pass the filter", acceptedTraceidOutputs.contains(e));
-		}
-
-		Assert.assertSame(acceptedTraceidOutputs.get(0), traceEvents[0]);
-
-		// Somehow redundant but records MIGHT be generated randomly ;-)
-		Assert.assertEquals("Unexpected number of output records", acceptedTraceidOutputs.size() + notAcceptedTraceidOutputs.size(), traceEvents.length);
+		Assert.assertThat(traceidFilter.getMatchingTraceIdOutputPort(), StageTester.produces(traceEvents));
+		Assert.assertThat(traceidFilter.getMismatchingTraceIdOutputPort(), StageTester.producesNothing());
 	}
 }
