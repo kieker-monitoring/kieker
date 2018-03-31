@@ -79,9 +79,9 @@ public class TimestampFilter extends CompositeStage {
 		final Merger<IMonitoringRecord> recordsOutsideTimePeriodMerger = new Merger<>();
 
 		// Define input and output ports of composite stage
-		this.monitoringRecordsCombinedInputPort = instanceOfOperationExecutionRecordFilter.getInputPort();
-		this.recordsWithinTimePeriodOutputPort = recordsWithinTimePeriodMerger.getOutputPort();
-		this.recordsOutsideTimePeriodOutputPort = recordsOutsideTimePeriodMerger.getOutputPort();
+		this.monitoringRecordsCombinedInputPort = this.createInputPort(instanceOfOperationExecutionRecordFilter.getInputPort());
+		this.recordsWithinTimePeriodOutputPort = this.createOutputPort(recordsWithinTimePeriodMerger.getOutputPort());
+		this.recordsOutsideTimePeriodOutputPort = this.createOutputPort(recordsOutsideTimePeriodMerger.getOutputPort());
 
 		// Connect InstanceOfFilters with specific TimestampStages and each other
 		this.connectPorts(instanceOfOperationExecutionRecordFilter.getMatchedOutputPort(), operationExecutionRecordTimestampStage.getInputPort());
