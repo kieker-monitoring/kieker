@@ -82,9 +82,9 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 		final Map<OperationCall, Duration> sortedMap = HotspotDetectionStage.sortMapByValue(this.durationsWithoutChild);
 		sortedMap.entrySet().stream().limit(this.maxOutput).map(
 				e -> e.getKey().getOperation().getComponent().getAssemblyComponent().getComponentType().getSignature()
-						+ " " + e.getKey().getOperation().getAssemblyOperation().getOperationType().getSignature()
-						+ ": " + e.getValue().toString())
-				.forEach(this.printStream::println);
+				+ " " + e.getKey().getOperation().getAssemblyOperation().getOperationType().getSignature()
+				+ ": " + e.getValue().toString())
+		.forEach(this.printStream::println);
 	}
 
 	// BETTER Put to some kind of MapUtil class
@@ -107,7 +107,7 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 	/**
 	 * Collects the durations of operation calls without children.
 	 */
-	private class DurationCollector implements IOperationCallVisitor {
+	private static class DurationCollector implements IOperationCallVisitor {
 
 		@SuppressWarnings("hiding")
 		private final Map<OperationCall, Duration> durationsWithoutChild;
