@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 iObserve Project (https://iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,20 @@ package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.14.0
  * 
  * @since 1.3
  */
-public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = -7851990890838902217L;
-
+public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // CPUUtilizationRecord.timestamp
 			 + TYPE_SIZE_STRING // CPUUtilizationRecord.hostname
@@ -43,8 +41,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.nice
 			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.irq
 			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.totalUtilization
-			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.idle
-	;
+			 + TYPE_SIZE_DOUBLE; // CPUUtilizationRecord.idle
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // CPUUtilizationRecord.timestamp
@@ -59,7 +56,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		double.class, // CPUUtilizationRecord.idle
 	};
 	
-	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -71,6 +67,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	public static final double IRQ = 0.0;
 	public static final double TOTAL_UTILIZATION = 0.0;
 	public static final double IDLE = 0.0;
+	private static final long serialVersionUID = -7851990890838902217L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -188,8 +185,10 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-	public CPUUtilizationRecord(final IValueDeserializer deserializer) {
+	public CPUUtilizationRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
 		this.hostname = deserializer.getString();
 		this.cpuID = deserializer.getString();
@@ -220,16 +219,8 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 			this.getNice(),
 			this.getIrq(),
 			this.getTotalUtilization(),
-			this.getIdle()
+			this.getIdle(),
 		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getHostname());
-		stringRegistry.get(this.getCpuID());
 	}
 	/**
 	 * {@inheritDoc}
@@ -248,6 +239,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		serializer.putDouble(this.getTotalUtilization());
 		serializer.putDouble(this.getIdle());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -288,22 +280,51 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final CPUUtilizationRecord castedRecord = (CPUUtilizationRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getCpuID().equals(castedRecord.getCpuID())) return false;
-		if (isNotEqual(this.getUser(), castedRecord.getUser())) return false;
-		if (isNotEqual(this.getSystem(), castedRecord.getSystem())) return false;
-		if (isNotEqual(this.getWait(), castedRecord.getWait())) return false;
-		if (isNotEqual(this.getNice(), castedRecord.getNice())) return false;
-		if (isNotEqual(this.getIrq(), castedRecord.getIrq())) return false;
-		if (isNotEqual(this.getTotalUtilization(), castedRecord.getTotalUtilization())) return false;
-		if (isNotEqual(this.getIdle(), castedRecord.getIdle())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getCpuID().equals(castedRecord.getCpuID())) {
+			return false;
+		}
+		if (isNotEqual(this.getUser(), castedRecord.getUser())) {
+			return false;
+		}
+		if (isNotEqual(this.getSystem(), castedRecord.getSystem())) {
+			return false;
+		}
+		if (isNotEqual(this.getWait(), castedRecord.getWait())) {
+			return false;
+		}
+		if (isNotEqual(this.getNice(), castedRecord.getNice())) {
+			return false;
+		}
+		if (isNotEqual(this.getIrq(), castedRecord.getIrq())) {
+			return false;
+		}
+		if (isNotEqual(this.getTotalUtilization(), castedRecord.getTotalUtilization())) {
+			return false;
+		}
+		if (isNotEqual(this.getIdle(), castedRecord.getIdle())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

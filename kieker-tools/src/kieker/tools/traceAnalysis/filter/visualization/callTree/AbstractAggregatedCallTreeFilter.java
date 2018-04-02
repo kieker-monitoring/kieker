@@ -33,27 +33,19 @@ import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
- * This class has exactly one input port named "in". The data which is send to
- * this plugin is not delegated in any way.
- * 
+ * This class has exactly one input port named "in". The data which is send to this plugin is not delegated in any way.
+ *
  * @param <T>
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
-@Plugin(description = "An abstract filter for aggregated call trees",
-		repositoryPorts = {
-			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
-		},
-		configuration = {
-			@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS,
-					defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_INCLUDE_WEIGHTS_DEFAULT),
-			@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
-					defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT),
-			@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME,
-					defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT)
-		})
+@Plugin(description = "An abstract filter for aggregated call trees", repositoryPorts = {
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) }, configuration = {
+		@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_INCLUDE_WEIGHTS_DEFAULT),
+		@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT),
+		@Property(name = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, defaultValue = AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT) })
 public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTreeFilter<T> {
 
 	/** The name of the configuration determining the dot output file name. */
@@ -77,7 +69,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -93,7 +85,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 
 	/**
 	 * Sets the root of the call tree.
-	 * 
+	 *
 	 * @param root
 	 *            The new root.
 	 */
@@ -104,19 +96,21 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	}
 
 	/**
-	 * This method tries to convert the current tree into the specified file as a valid dot file, which can later be transformed into a visual representation by dot
-	 * itself.
-	 * 
+	 * This method tries to convert the current tree into the specified file as a valid dot file, which can later be
+	 * transformed into a visual representation by dot itself.
+	 *
 	 * @throws IOException
 	 *             If something went wrong during the converting.
 	 */
 	public void saveTreeToDotFile() throws IOException {
 		synchronized (this) {
 			final String outputFn = new File(this.dotOutputFile).getCanonicalPath();
-			AbstractCallTreeFilter.saveTreeToDotFile(this.root, outputFn, this.includeWeights, false, // do not include EOIs
+			AbstractCallTreeFilter.saveTreeToDotFile(this.root, outputFn, this.includeWeights, false, // do not include
+					// EOIs
 					this.shortLabels);
 			this.numGraphsSaved++;
-			this.printDebugLogMessage(new String[] { "Wrote call tree to file '" + outputFn + "'", "Dot file can be converted using the dot tool",
+			this.printDebugLogMessage(new String[] { "Wrote call tree to file '" + outputFn + "'",
+				"Dot file can be converted using the dot tool",
 				"Example: dot -T svg " + outputFn + " > " + outputFn + ".svg", });
 		}
 	}
@@ -125,15 +119,13 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	public void printStatusMessage() {
 		synchronized (this) {
 			super.printStatusMessage();
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
-			}
+			LOGGER.debug("Saved {} call tree{}", this.numGraphsSaved, (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
 		}
 	}
 
 	/**
 	 * Saves the call tree to the dot file if error is not true.
-	 * 
+	 *
 	 * @param error
 	 *            Determines whether the plugin terminated due to an error or not.
 	 */
@@ -144,7 +136,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 				try {
 					this.saveTreeToDotFile();
 				} catch (final IOException ex) {
-					this.log.error("IOException while saving to dot file", ex);
+					this.logger.error("IOException while saving to dot file", ex);
 				}
 			}
 		}
@@ -165,36 +157,48 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	}
 
 	@Override
-	@InputPort(
-			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
-			description = "Receives the message traces to be processed",
-			eventTypes = { MessageTrace.class })
-	public void inputMessageTraces(final MessageTrace t) {
+	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed", eventTypes = {
+		MessageTrace.class })
+	public void inputMessageTraces(final MessageTrace trace) {
 		synchronized (this) {
 			try {
-				AbstractCallTreeFilter.addTraceToTree(this.root, t, new IPairFactory<T>() {
+				final SynchronousCallMessagePairFactory<T> pairFactory = new SynchronousCallMessagePairFactory<>(this);
 
-					@Override
-					public T createPair(final SynchronousCallMessage callMsg) {
-						return AbstractAggregatedCallTreeFilter.this.concreteCreatePair(callMsg);
-					}
-				}, true); // aggregated
-				AbstractAggregatedCallTreeFilter.this.reportSuccess(t.getTraceId());
+				AbstractCallTreeFilter.addTraceToTree(this.root, trace, pairFactory, true); // aggregated
+				AbstractAggregatedCallTreeFilter.this.reportSuccess(trace.getTraceId());
 			} catch (final TraceProcessingException ex) {
-				this.log.error("TraceProcessingException", ex);
-				AbstractAggregatedCallTreeFilter.this.reportError(t.getTraceId());
+				this.logger.error("TraceProcessingException", ex);
+				AbstractAggregatedCallTreeFilter.this.reportError(trace.getTraceId());
 			}
 		}
 	}
 
 	/**
 	 * HACK. Inheriting classes should implement this method to deliver the actual pair.
-	 * 
+	 *
 	 * @param callMsg
 	 *            The call message which contains the information necessary to create the pair.
-	 * 
+	 *
 	 * @return The actual pair.
 	 */
 	protected abstract T concreteCreatePair(SynchronousCallMessage callMsg);
 
+	/**
+	 * @author Christian Wulf
+	 *
+	 * @param <T>
+	 */
+	private static class SynchronousCallMessagePairFactory<T> implements IPairFactory<T> {
+
+		private final AbstractAggregatedCallTreeFilter<T> filter;
+
+		public SynchronousCallMessagePairFactory(final AbstractAggregatedCallTreeFilter<T> filter) {
+			this.filter = filter;
+		}
+
+		@Override
+		public T createPair(final SynchronousCallMessage callMsg) {
+			return this.filter.concreteCreatePair(callMsg);
+		}
+	}
 }

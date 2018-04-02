@@ -2,6 +2,7 @@ rootProject.name = 'kieker'
 
 // Kieker's subprojects:
 include 'kieker-common', 'kieker-monitoring', 'kieker-analysis', 'kieker-tools', 
+		'kieker-extension-kafka',
 		'kieker-checkstyle-extension',
 		'kieker-examples',  
 		'kieker-documentation:userguide'

@@ -18,14 +18,11 @@ package kieker.test.common.junit;
 
 import java.io.File;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
-
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
-import kieker.common.logging.LogImplJUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This abstract class is the base for all other JUnit tests within the system.
@@ -36,7 +33,7 @@ import kieker.common.logging.LogImplJUnit;
  */
 public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 
-	private static final Log LOG; // NOPMD (instantiation takes place in the static constructor)
+	private static final Logger LOGGER; // NOPMD (instantiation takes place in the static constructor)
 
 	/** This rule makes sure that we can dump the name of the currently executed test on the screen. */
 	@Rule
@@ -66,7 +63,7 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 		if (System.getProperty("kieker.common.logging.Log") == null) {
 			System.setProperty("kieker.common.logging.Log", "JUNIT");
 		}
-		LOG = LogFactory.getLog(AbstractKiekerTest.class);
+		LOGGER = LoggerFactory.getLogger(AbstractKiekerTest.class);
 	}
 
 	/**
@@ -81,7 +78,7 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 	 */
 	@Before
 	public final void printNameOfCurrentTest() {
-		LOG.info("Executing test: " + this.getClass().getName() + "." + this.nameOfCurrentTest.getMethodName() + "()\n\n");
+		LOGGER.info("Executing test: {}.{}()\n\n", this.getClass().getName(), this.nameOfCurrentTest.getMethodName());
 	}
 
 	/**
@@ -104,11 +101,11 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 			} else if (testClassName.startsWith("kieker.test.tools")) {
 				this.testModulePrefix = "kieker-tools/";
 			} else {
-				LOG.error("Failed to detect test module for test: " + testClassName);
+				LOGGER.error("Failed to detect test module for test: {}", testClassName);
 			}
 
 		}
-		LOG.info("Prefix for test resources is " + this.testModulePrefix);
+		LOGGER.debug("Prefix for test resources is {}", this.testModulePrefix);
 	}
 
 	protected String getTestModulePrefix() {
@@ -144,11 +141,4 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 		return path.substring(this.testModulePrefix.length()); // remove module prefix
 	}
 
-	/**
-	 * This method resets the logger.
-	 */
-	@After
-	public final void resetStateOfJUnitLogger() {
-		LogImplJUnit.reset();
-	}
 }

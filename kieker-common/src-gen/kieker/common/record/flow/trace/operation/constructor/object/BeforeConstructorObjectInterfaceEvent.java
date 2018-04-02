@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 iObserve Project (https://iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,20 @@ package kieker.common.record.flow.trace.operation.constructor.object;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.operation.constructor.object.BeforeConstructorObjectEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.IInterfaceRecord;
 
 /**
  * @author Florian Fittkau
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.14.0
  * 
  * @since 1.10
  */
-public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObjectEvent implements IInterfaceRecord {
-	private static final long serialVersionUID = -3985311495464960429L;
-
+public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObjectEvent implements IInterfaceRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
@@ -40,8 +38,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
-			 + TYPE_SIZE_STRING // IInterfaceRecord.interface
-	;
+			 + TYPE_SIZE_STRING; // IInterfaceRecord.interface
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -53,9 +50,9 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		String.class, // IInterfaceRecord.interface
 	};
 	
-	
 	/** default constants. */
 	public static final String INTERFACE = "";
+	private static final long serialVersionUID = -3985311495464960429L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -129,8 +126,10 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-	public BeforeConstructorObjectInterfaceEvent(final IValueDeserializer deserializer) {
+	public BeforeConstructorObjectInterfaceEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this._interface = deserializer.getString();
 	}
@@ -150,17 +149,8 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 			this.getOperationSignature(),
 			this.getClassSignature(),
 			this.getObjectId(),
-			this.getInterface()
+			this.getInterface(),
 		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getOperationSignature());
-		stringRegistry.get(this.getClassSignature());
-		stringRegistry.get(this.getInterface());
 	}
 	/**
 	 * {@inheritDoc}
@@ -176,6 +166,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		serializer.putInt(this.getObjectId());
 		serializer.putString(this.getInterface());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -216,19 +207,42 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final BeforeConstructorObjectInterfaceEvent castedRecord = (BeforeConstructorObjectInterfaceEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
-		if (this.getObjectId() != castedRecord.getObjectId()) return false;
-		if (!this.getInterface().equals(castedRecord.getInterface())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (this.getObjectId() != castedRecord.getObjectId()) {
+			return false;
+		}
+		if (!this.getInterface().equals(castedRecord.getInterface())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

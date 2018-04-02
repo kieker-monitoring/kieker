@@ -27,18 +27,20 @@ import kieker.common.util.filesystem.FSUtil;
 /**
  * This abstract class is the base for all other dynamic JUnit tests within the system. Those are tests which search for
  * example for specific classes in the source directory.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
  */
 public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 
+	// abc.java, but not package-info.java
+	public static final String REGEX_PATTERN_JAVA_SOURCE_FILES = "[^\\-]*java";
+	public static final String REGEX_PATTERN_JAVA_TEST_FILES = ".*Test.*java";
+	public static final String REGEX_PATTERN_JUNIT_PACKAGE_NAME = ".*junit.*";
+
 	private static final String DIR_NAME_TESTS = "test";
 	private static final String DIR_NAME_SOURCES = "src";
-	private static final String REGEX_PATTERN_JAVA_SOURCE_FILES = ".*java";
-	private static final String REGEX_PATTERN_JAVA_TEST_FILES = ".*Test.*java";
-	private static final String REGEX_PATTERN_JUNIT_PACKAGE_NAME = ".*junit.*";
 
 	protected Collection<Class<?>> deliverAllAvailableClassesFromSourceDirectory() throws ClassNotFoundException {
 		final String dirNameSourcesNormalized = super.modulePathToWorkingPath(DIR_NAME_SOURCES);
@@ -54,8 +56,9 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 
 		final Collection<File> javaTestFiles = this.listSourceFiles(dirNameTestsNormalized,
 				REGEX_PATTERN_JAVA_TEST_FILES);
-		return this.transformClassNameToClasses(this.transformFilesToClassNames(AbstractDynamicKiekerTest
-				.filterOutFilesNotMatchingFullQualifiedPathName(REGEX_PATTERN_JUNIT_PACKAGE_NAME, javaTestFiles)));
+		final Collection<File> filteredTestFiles = AbstractDynamicKiekerTest
+				.filterOutFilesNotMatchingFullQualifiedPathName(REGEX_PATTERN_JUNIT_PACKAGE_NAME, javaTestFiles);
+		return this.transformClassNameToClasses(this.transformFilesToClassNames(filteredTestFiles));
 	}
 
 	private static Collection<File> filterOutFilesNotMatchingFullQualifiedPathName(final String regExPattern,
@@ -94,8 +97,9 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 			throws ClassNotFoundException {
 		final Collection<Class<?>> result = new LinkedList<Class<?>>();
 
+		final ClassLoader classLoader = AbstractDynamicKiekerTest.class.getClassLoader();
 		for (final String className : classNames) {
-			result.add(AbstractDynamicKiekerTest.class.getClassLoader().loadClass(className));
+			result.add(classLoader.loadClass(className));
 		}
 
 		return result;

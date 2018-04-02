@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 iObserve Project (https://iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,20 @@ package kieker.common.record.flow.trace.operation.constructor.object;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.operation.constructor.CallConstructorEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.ICallObjectRecord;
 
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.14.0
  * 
  * @since 1.6
  */
-public class CallConstructorObjectEvent extends CallConstructorEvent implements ICallObjectRecord {
-	private static final long serialVersionUID = -567545225655603051L;
-
+public class CallConstructorObjectEvent extends CallConstructorEvent implements ICallObjectRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
@@ -42,8 +40,7 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 			 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
 			 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
-			 + TYPE_SIZE_INT // ICallObjectRecord.calleeObjectId
-	;
+			 + TYPE_SIZE_INT; // ICallObjectRecord.calleeObjectId
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -57,10 +54,10 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 		int.class, // ICallObjectRecord.calleeObjectId
 	};
 	
-	
 	/** default constants. */
 	public static final int OBJECT_ID = 0;
 	public static final int CALLEE_OBJECT_ID = 0;
+	private static final long serialVersionUID = -567545225655603051L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -144,8 +141,10 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-	public CallConstructorObjectEvent(final IValueDeserializer deserializer) {
+	public CallConstructorObjectEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.objectId = deserializer.getInt();
 		this.calleeObjectId = deserializer.getInt();
@@ -168,18 +167,8 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 			this.getCalleeOperationSignature(),
 			this.getCalleeClassSignature(),
 			this.getObjectId(),
-			this.getCalleeObjectId()
+			this.getCalleeObjectId(),
 		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getOperationSignature());
-		stringRegistry.get(this.getClassSignature());
-		stringRegistry.get(this.getCalleeOperationSignature());
-		stringRegistry.get(this.getCalleeClassSignature());
 	}
 	/**
 	 * {@inheritDoc}
@@ -197,6 +186,7 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 		serializer.putInt(this.getObjectId());
 		serializer.putInt(this.getCalleeObjectId());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -237,21 +227,48 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final CallConstructorObjectEvent castedRecord = (CallConstructorObjectEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
-		if (!this.getCalleeOperationSignature().equals(castedRecord.getCalleeOperationSignature())) return false;
-		if (!this.getCalleeClassSignature().equals(castedRecord.getCalleeClassSignature())) return false;
-		if (this.getObjectId() != castedRecord.getObjectId()) return false;
-		if (this.getCalleeObjectId() != castedRecord.getCalleeObjectId()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (!this.getCalleeOperationSignature().equals(castedRecord.getCalleeOperationSignature())) {
+			return false;
+		}
+		if (!this.getCalleeClassSignature().equals(castedRecord.getCalleeClassSignature())) {
+			return false;
+		}
+		if (this.getObjectId() != castedRecord.getObjectId()) {
+			return false;
+		}
+		if (this.getCalleeObjectId() != castedRecord.getCalleeObjectId()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

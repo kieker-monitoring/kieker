@@ -26,7 +26,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.util.dataformat.FormatIdentifier;
 import kieker.common.util.dataformat.VariableLengthEncoding;
 import kieker.common.util.registry.IRegistry;
@@ -81,14 +81,12 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 
 		// Position the buffer and decode the records
 		buffer.position(baseOffset);
-		final List<IMonitoringRecord> records = this.decodeMonitoringRecords(buffer, stringRegistry, absoluteStringTableOffset);
-
-		return records;
+		return this.decodeMonitoringRecords(buffer, stringRegistry, absoluteStringTableOffset);
 	}
 
 	private IRegistry<String> decodeStringRegistry(final ByteBuffer buffer) {
 		final int numberOfEntries = VariableLengthEncoding.decodeInt(buffer);
-		final List<String> values = new ArrayList<String>(numberOfEntries);
+		final List<String> values = new ArrayList<>(numberOfEntries);
 
 		for (int entryIndex = 0; entryIndex < numberOfEntries; entryIndex++) {
 			final int entryLength = VariableLengthEncoding.decodeInt(buffer);
@@ -102,8 +100,9 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 		return new DeserializerStringRegistry(values);
 	}
 
-	private List<IMonitoringRecord> decodeMonitoringRecords(final ByteBuffer buffer, final IRegistry<String> stringRegistry, final int endOffset) {
-		final List<IMonitoringRecord> records = new ArrayList<IMonitoringRecord>();
+	private List<IMonitoringRecord> decodeMonitoringRecords(final ByteBuffer buffer,
+			final IRegistry<String> stringRegistry, final int endOffset) {
+		final List<IMonitoringRecord> records = new ArrayList<>();
 		int currentOffset = buffer.position();
 
 		final CachedRecordFactoryCatalog recordFactoryCatalog = this.cachedRecordFactoryCatalog;
@@ -114,7 +113,8 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 			final long loggingTimestamp = buffer.getLong();
 
 			final IRecordFactory<? extends IMonitoringRecord> recordFactory = recordFactoryCatalog.get(recordTypeName);
-			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.create(buffer, stringRegistry));
+			final IMonitoringRecord record = recordFactory
+					.create(BinaryValueDeserializer.create(buffer, stringRegistry));
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			records.add(record);
@@ -124,7 +124,8 @@ public class BinaryDeserializer extends AbstractContainerFormatDeserializer {
 
 		// The record data must end exactly at the given end offset
 		if (currentOffset != endOffset) {
-			throw new InvalidFormatException("Invalid record data found, should have ended at offset " + endOffset + ", but ended at offset " + currentOffset + ".");
+			throw new InvalidFormatException("Invalid record data found, should have ended at offset " + endOffset
+					+ ", but ended at offset " + currentOffset + ".");
 		}
 
 		return records;

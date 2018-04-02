@@ -25,9 +25,10 @@ import java.nio.channels.SocketChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.StandardCharsets;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IObjectRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
@@ -38,7 +39,6 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.registry.IRegistryListener;
 import kieker.monitoring.registry.IWriterRegistry;
-import kieker.monitoring.registry.RegisterAdapter;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
@@ -49,7 +49,7 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  */
 public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
 
-	private static final Log LOG = LogFactory.getLog(ExplorVizTcpWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ExplorVizTcpWriter.class);
 
 	private static final String PREFIX = ExplorVizTcpWriter.class.getName() + ".";
 	/** configuration key for the hostname */
@@ -69,7 +69,10 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 
 	private static final String EMPTY_STRING = "";
 
-	/** <code>true</code> if the {@link #byteBuffer} should be flushed upon each new incoming monitoring record */
+	/**
+	 * <code>true</code> if the {@link #byteBuffer} should be flushed upon each new
+	 * incoming monitoring record
+	 */
 	private final boolean flush;
 	/** the buffer used for buffering monitoring and registry records */
 	private final ByteBuffer byteBuffer;
@@ -77,8 +80,12 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 	private final WritableByteChannel socketChannel;
 	/** the registry used to compress string fields in monitoring records */
 	private final IWriterRegistry<String> writerRegistry;
-	/** this adapter allows to use the new WriterRegistry with the legacy IRegistry in {@link AbstractMonitoringRecord.registerStrings(..)} */
-	private final RegisterAdapter<String> registerStringsAdapter;
+
+	/**
+	 * this adapter allows to use the new WriterRegistry with the legacy IRegistry
+	 * in {@link AbstractMonitoringRecord.registerStrings(..)}
+	 */
+	// private final RegisterAdapter<String> registerStringsAdapter;
 
 	public ExplorVizTcpWriter(final Configuration configuration) throws IOException {
 		super(configuration);
@@ -91,11 +98,11 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 		this.byteBuffer = ByteBuffer.allocateDirect(bufferSize);
 		this.socketChannel = SocketChannel.open(new InetSocketAddress(hostname, port));
 
-		LOG.info("Initialized socket channel for writing to " + hostname + ":" + port);
+		LOGGER.info("Initialized socket channel for writing to {}:{}", hostname, port);
 
 		this.writerRegistry = new WriterRegistry(this);
 		this.writerRegistry.register(EMPTY_STRING);
-		this.registerStringsAdapter = new RegisterAdapter<String>(this.writerRegistry);
+		// this.registerStringsAdapter = new RegisterAdapter<>(this.writerRegistry);
 	}
 
 	@Override
@@ -103,21 +110,19 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 		final IMonitoringController monitoringController = MonitoringController.getInstance();
 
 		try {
-			final HostApplicationMetaData record = new HostApplicationMetaData(
-					"Default System",
-					InetAddress.getLocalHost().getHostAddress(),
-					monitoringController.getHostname(),
+			final HostApplicationMetaData record = new HostApplicationMetaData("Default System",
+					InetAddress.getLocalHost().getHostAddress(), monitoringController.getHostname(),
 					monitoringController.getName());
 
 			this.writeMonitoringRecord(record);
 		} catch (final UnknownHostException e) {
-			LOG.warn("An exception occurred", e);
+			LOGGER.warn("An exception occurred", e);
 		}
 	}
 
 	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord record) {
-		record.registerStrings(this.registerStringsAdapter);
+		// record.registerStrings(this.registerStringsAdapter);
 
 		// sizes from ExplorViz not Kieker!
 		int recordSize = 0;
@@ -219,7 +224,7 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 			this.send(this.byteBuffer);
 			this.socketChannel.close();
 		} catch (final IOException ex) {
-			LOG.error("Error on closing connection.", ex);
+			LOGGER.error("Error on closing connection.", ex);
 		}
 	}
 
@@ -231,7 +236,7 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 				this.socketChannel.write(buffer);
 			}
 		} catch (final IOException e) {
-			LOG.error("Error on sending registry entry.", e);
+			LOGGER.error("Error on sending registry entry.", e);
 		}
 
 		buffer.clear();

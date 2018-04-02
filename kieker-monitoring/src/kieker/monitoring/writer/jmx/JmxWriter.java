@@ -21,9 +21,10 @@ import java.lang.management.ManagementFactory;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
@@ -35,7 +36,7 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  */
 public class JmxWriter extends AbstractMonitoringWriter {
 
-	private static final Log LOG = LogFactory.getLog(JmxWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(JmxWriter.class);
 
 	private static final String PREFIX = JmxWriter.class.getName() + ".";
 	public static final String CONFIG_DOMAIN = PREFIX + "domain"; // NOCS (afterPREFIX)
@@ -58,7 +59,7 @@ public class JmxWriter extends AbstractMonitoringWriter {
 		try {
 			String domain = this.configDomain;
 			if ("".equals(domain)) {
-				domain = MonitoringController.getInstance().getJMXDomain();
+				domain = MonitoringController.getInstance().getControllerDomain();
 			}
 			this.monitoringLogName = new ObjectName(domain, "type", this.configLogname);
 		} catch (final MalformedObjectNameException ex) {
@@ -83,7 +84,7 @@ public class JmxWriter extends AbstractMonitoringWriter {
 		try {
 			ManagementFactory.getPlatformMBeanServer().unregisterMBean(this.monitoringLogName);
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			LOG.error("Failed to terminate writer", ex);
+			LOGGER.error("Failed to terminate writer", ex);
 		}
 	}
 

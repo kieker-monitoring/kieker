@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 iObserve Project (https://iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,20 @@ package kieker.common.record.flow.trace.operation.object;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.IObjectRecord;
 
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.14.0
  * 
  * @since 1.6
  */
-public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent implements IObjectRecord {
-	private static final long serialVersionUID = -5115197861231353414L;
-
+public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent implements IObjectRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
@@ -40,8 +38,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
 			 + TYPE_SIZE_STRING // IExceptionRecord.cause
-			 + TYPE_SIZE_INT // IObjectRecord.objectId
-	;
+			 + TYPE_SIZE_INT; // IObjectRecord.objectId
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -53,9 +50,9 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		int.class, // IObjectRecord.objectId
 	};
 	
-	
 	/** default constants. */
 	public static final int OBJECT_ID = 0;
+	private static final long serialVersionUID = -5115197861231353414L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -129,8 +126,10 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-	public AfterOperationFailedObjectEvent(final IValueDeserializer deserializer) {
+	public AfterOperationFailedObjectEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.objectId = deserializer.getInt();
 	}
@@ -150,17 +149,8 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 			this.getOperationSignature(),
 			this.getClassSignature(),
 			this.getCause(),
-			this.getObjectId()
+			this.getObjectId(),
 		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getOperationSignature());
-		stringRegistry.get(this.getClassSignature());
-		stringRegistry.get(this.getCause());
 	}
 	/**
 	 * {@inheritDoc}
@@ -176,6 +166,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		serializer.putString(this.getCause());
 		serializer.putInt(this.getObjectId());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -216,19 +207,42 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final AfterOperationFailedObjectEvent castedRecord = (AfterOperationFailedObjectEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
-		if (!this.getCause().equals(castedRecord.getCause())) return false;
-		if (this.getObjectId() != castedRecord.getObjectId()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (!this.getCause().equals(castedRecord.getCause())) {
+			return false;
+		}
+		if (this.getObjectId() != castedRecord.getObjectId()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

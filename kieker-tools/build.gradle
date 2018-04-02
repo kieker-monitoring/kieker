@@ -4,7 +4,13 @@ configurations {
 	resultJar	// all dependencies in this config are included into all jars. This is necessary for the scripts in bin/ to work, e.g., convertLoggingTimestamp.
 }
 
+// Since the analysis component requires JRE 1.8, this "tools component" requires JRE 1.8, too.
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 dependencies {
+	clover 'org.openclover:clover:4.2.0'
+
 	resultJar 'commons-cli:commons-cli:1.4'
 	resultJar 'com.beust:jcommander:1.27'
 
@@ -25,8 +31,9 @@ dependencies {
 	//compile group: 'org.eclipse.jetty',	name: 'jetty-server', version: '8.1.16.v20140903'
 	
 	// Some dependencies for the HTTP connector of the KDB
-	compile fileTree(dir: 'lib/jetty', include: 'jetty-*.jar')
-	
+	//compile fileTree(dir: 'lib/jetty', include: 'jetty-*.jar')
+	compile fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
+
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
 	// this project depends on the tests of kieker-analysis, e.g., it requires the class BookstoreEventRecordFactory
@@ -35,9 +42,16 @@ dependencies {
 	testCompile project (path: ':kieker-monitoring', configuration: 'testArchives')
 
 	//testRuntime org.apache.derby:derby:10.13.1.1
-	testRuntime resolveLibrary('geronimo-j2ee-management_1.1_spec-*.jar')
-	testRuntime resolveLibrary('kahadb-*.jar')
-	testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
+	//testRuntime resolveLibrary('geronimo-j2ee-management_1.1_spec-*.jar')
+	//testRuntime resolveLibrary('kahadb-*.jar')
+	//testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
+}
+
+clover {
+	report {
+		html=true
+	}
+	
 }
 
 eclipse {
@@ -53,46 +67,3 @@ task replaceHardCodedVersionNames() {
 }
 
 compileJava.dependsOn replaceHardCodedVersionNames
-
-task generateRecords(type: JavaExec) {
-  description 'Generates the sources for the Kieker records using the IRL model specification'
-
-  classpath = fileTree('../bin/dev') {
-    include 'target/de.cau.cs.se.instrumentation.rl.cli-*.jar'
-    include 'lib/org.eclipse.emf.mwe.core_*.jar'
-    include 'lib/org.eclipse.xtext.common.types_*.jar'
-    include 'lib/org.eclipse.emf.mwe.utils_*.jar'
-    include 'lib/org.eclipse.xtext.common.types.ui_*.jar'
-  }				
-  main = 'de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain'
-  args '-r', '..',            // the root directory
-       '-a', 'Kieker Build',
-       '-d', 'src-gen',       // the destination directory
-       '-s', 'model/records', // the source directory
-       '-l', 'java',          // generate the records
-       '-l', 'java.factory',  // generate the record factories
-       '-n', 'kieker-tools',
-       '-p', 'kieker-tools',
-       '-v', '1.10'	          // generate code for Kieker 1.10
-}
-
-task generateRecordTests(type: JavaExec) {
-  description 'Generates the sources for the Kieker records tests using the IRL model specification'
-
-  classpath = fileTree('../bin/dev') {
-    include 'target/de.cau.cs.se.instrumentation.rl.cli-*.jar'
-    include 'lib/org.eclipse.emf.mwe.core_*.jar'
-    include 'lib/org.eclipse.xtext.common.types_*.jar'
-    include 'lib/org.eclipse.emf.mwe.utils_*.jar'
-    include 'lib/org.eclipse.xtext.common.types.ui_*.jar'
-  }				
-  main = 'de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain'
-  args '-r', '..',            // the root directory
-       '-a', 'Kieker Build',
-       '-d', 'test-gen',       // the destination directory
-       '-s', 'model/records', // the source directory
-       '-l', 'java.junit',          // generate the records
-       '-n', 'kieker-tools',
-       '-p', 'kieker-tools',
-       '-v', '1.10'	          // generate code for Kieker 1.10
-}

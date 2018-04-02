@@ -18,6 +18,8 @@ package kieker.common.record.io;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
+import kieker.common.exception.RecordInstantiationException;
+
 /**
  * Text value deserializer implementation.
  *
@@ -25,14 +27,27 @@ import java.nio.CharBuffer;
  * @since 1.13
  *
  */
-public class TextValueDeserializer implements IValueDeserializer {
+public class TextValueDeserializer extends AbstractValueDeserializer implements IValueDeserializer {
 
 	private final CharBuffer buffer;
 
+	/**
+	 * Create a text value deserializer.
+	 *
+	 * @param buffer
+	 *            buffer for the deserializer
+	 */
 	protected TextValueDeserializer(final CharBuffer buffer) {
 		this.buffer = buffer;
 	}
 
+	/**
+	 * Factory method to create a text value deserializer.
+	 *
+	 * @param buffer
+	 *            serialization buffer
+	 * @return the value deserializer
+	 */
 	public static TextValueDeserializer create(final CharBuffer buffer) {
 		return new TextValueDeserializer(buffer);
 	}
@@ -85,6 +100,12 @@ public class TextValueDeserializer implements IValueDeserializer {
 	}
 
 	@Override
+	public <T extends Enum<T>> T getEnumeration(final Class<T> clazz) throws RecordInstantiationException {
+		final int value = Integer.parseInt(this.readValue());
+		return this.enumerationValueOf(clazz, value);
+	}
+
+	@Override
 	public byte[] getBytes(final byte[] target) {
 		final char[] charTarget = new char[target.length];
 		this.buffer.get(charTarget);
@@ -93,21 +114,24 @@ public class TextValueDeserializer implements IValueDeserializer {
 	}
 
 	private String readValue() {
-		final char[] charArray = new char[this.buffer.capacity()];
+		final char[] charArray = new char[this.buffer.limit()];
+		final int remaining = this.buffer.limit() - this.buffer.position();
 		char ch;
-		boolean escape = false;
 		int i = 0;
-		do {
-			escape = false;
-			ch = this.buffer.get();
-			if ((ch == '\\') && !escape) {
-				escape = true;
-			}
-			if (escape || (ch != ';')) {
-				charArray[i++] = ch;
-			}
-		} while (escape || (ch != ';'));
-		return new String(charArray);
+		if (remaining > 0) {
+			do {
+				ch = this.buffer.get();
+				if (ch == '\\') {
+					charArray[i++] = ch;
+					charArray[i++] = this.buffer.get();
+				} else if (ch != ';') {
+					charArray[i++] = ch;
+				}
+			} while ((ch != ';') && (i < remaining));
+			return new String(charArray, 0, i);
+		} else {
+			return "";
+		}
 	}
 
 }

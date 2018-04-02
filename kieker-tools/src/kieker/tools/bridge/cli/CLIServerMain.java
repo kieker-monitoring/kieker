@@ -31,6 +31,8 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -40,8 +42,6 @@ import com.beust.jcommander.converters.FileConverter;
 import com.beust.jcommander.converters.IntegerConverter;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.tools.bridge.IServiceListener;
@@ -70,7 +70,7 @@ public final class CLIServerMain { // NOPMD
 	/**
 	 * The logger used in the server.
 	 */
-	private static final Log LOG = LogFactory.getLog(CLIServerMain.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CLIServerMain.class);
 
 	private static final String DAEMON_FILE = "daemon.pidfile";
 
@@ -80,7 +80,7 @@ public final class CLIServerMain { // NOPMD
 
 	/** Type selection. */
 	@Parameter(names = { "-t",
-			"--type" }, required = true, description = "select the service type: tcp-client, tcp-server, tcp-single-server, jms-client, jms-embedded, http-rest")
+		"--type" }, required = true, description = "select the service type: tcp-client, tcp-server, tcp-single-server, jms-client, jms-embedded, http-rest")
 	private String type;
 
 	/** TCP client. */
@@ -89,7 +89,7 @@ public final class CLIServerMain { // NOPMD
 
 	/** TCP server. */
 	@Parameter(names = { "-p",
-			"--port" }, description = "listen at port (tcp-server, jms-embedded, or http-rest) or connect to port (tcp-client)", converter = IntegerConverter.class)
+		"--port" }, description = "listen at port (tcp-server, jms-embedded, or http-rest) or connect to port (tcp-client)", converter = IntegerConverter.class)
 	private Integer port;
 
 	/** JMS client. */
@@ -108,17 +108,17 @@ public final class CLIServerMain { // NOPMD
 
 	/** kieker configuration file. */
 	@Parameter(names = { "-c",
-			"--configuration" }, required = false, description = "kieker configuration file", converter = FileConverter.class)
+		"--configuration" }, required = false, description = "kieker configuration file", converter = FileConverter.class)
 	private File kiekerConfiguration;
 
 	/** mapping file for TCP and JMS. */
 	@Parameter(names = { "-m",
-			"--map" }, description = "Class name to id (integer or string) mapping", converter = FileConverter.class)
+		"--map" }, description = "Class name to id (integer or string) mapping", converter = FileConverter.class)
 	private File mappingFile;
 
 	/** libraries. */
 	@Parameter(names = { "-L",
-			"--libraries" }, required = true, description = "List of library paths separated by :", converter = FileConverter.class)
+		"--libraries" }, required = true, description = "List of library paths separated by :", converter = FileConverter.class)
 	private File[] libraries;
 
 	/** verbose. */
@@ -131,7 +131,7 @@ public final class CLIServerMain { // NOPMD
 
 	/** daemon mode. */
 	@Parameter(names = { "-d",
-			"--daemon" }, description = "detach from console; TCP server allows multiple connections", converter = BooleanConverter.class)
+		"--daemon" }, description = "detach from console; TCP server allows multiple connections", converter = BooleanConverter.class)
 	private boolean daemonMode;
 
 	private long startTime;
@@ -174,7 +174,7 @@ public final class CLIServerMain { // NOPMD
 					.createLookupEntityMap(this.createRecordMap());
 
 			/** Kieker setup. */
-			Configuration configuration;
+			final Configuration configuration;
 			if (this.kiekerConfiguration != null) {
 				configuration = ConfigurationFactory
 						.createConfigurationFromFile(this.kiekerConfiguration.getAbsolutePath());
@@ -228,8 +228,7 @@ public final class CLIServerMain { // NOPMD
 
 			// start service depending on type
 			final IServiceConnector connector = this.createService(configuration, lookupEntityMap);
-			CLIServerMain.getLog().info("Service "
-					+ connector.getClass().getAnnotation(kieker.tools.bridge.connector.ConnectorProperty.class).name());
+			CLIServerMain.getLogger().info("Service {}", connector.getClass().getAnnotation(kieker.tools.bridge.connector.ConnectorProperty.class).name());
 			this.runService(configuration, connector);
 
 		} catch (final IOException e) {
@@ -259,7 +258,7 @@ public final class CLIServerMain { // NOPMD
 			this.container.addListener(new IServiceListener() {
 				@Override
 				public void handleEvent(final long count, final String message) {
-					CLIServerMain.getLog().info("Received " + count + " records");
+					CLIServerMain.getLogger().info("Received {} records", count);
 				}
 			});
 		}
@@ -274,8 +273,8 @@ public final class CLIServerMain { // NOPMD
 				try {
 					CLIServerMain.this.shutdown();
 				} catch (final ConnectorDataTransmissionException e) {
-					CLIServerMain.getLog().error("Graceful shutdown failed.");
-					CLIServerMain.getLog().error("Cause " + e.getMessage());
+					CLIServerMain.getLogger().error("Graceful shutdown failed.");
+					CLIServerMain.getLogger().error("Cause {}", e.getMessage());
 				}
 			}
 		});
@@ -287,15 +286,13 @@ public final class CLIServerMain { // NOPMD
 			this.deltaTime = System.nanoTime() - this.startTime;
 		}
 		if (this.verbose != null) {
-			CLIServerMain.getLog().info("Server stopped.");
+			CLIServerMain.getLogger().info("Server stopped.");
 		}
 		if (this.statistics) {
-			CLIServerMain.getLog().info("Execution time: " + this.deltaTime + " ns  "
-					+ TimeUnit.SECONDS.convert(this.deltaTime, TimeUnit.NANOSECONDS) + " s");
-			CLIServerMain.getLog()
-					.info("Time per records: " + (this.deltaTime / this.container.getRecordCount()) + " ns/r");
-			CLIServerMain.getLog().info("Records per second: " + (this.container.getRecordCount()
-					/ (double) TimeUnit.SECONDS.convert(this.deltaTime, TimeUnit.NANOSECONDS)));
+			CLIServerMain.getLogger().info("Execution time: {} ns {} s", this.deltaTime, TimeUnit.SECONDS.convert(this.deltaTime, TimeUnit.NANOSECONDS));
+			CLIServerMain.getLogger().info("Time per records: {} ns/r", (this.deltaTime / this.container.getRecordCount()));
+			CLIServerMain.getLogger().info("Records per second: {}",
+					(this.container.getRecordCount() / (double) TimeUnit.SECONDS.convert(this.deltaTime, TimeUnit.NANOSECONDS)));
 		}
 	}
 
@@ -441,7 +438,7 @@ public final class CLIServerMain { // NOPMD
 						}
 					}
 				} catch (final ClassNotFoundException e) {
-					CLIServerMain.getLog().warn("Could not load class", e);
+					CLIServerMain.getLogger().warn("Could not load class", e);
 				}
 			} while (line != null);
 		} finally {
@@ -471,7 +468,7 @@ public final class CLIServerMain { // NOPMD
 	private void usage(final JCommander commander, final int exitCode, final String message) {
 		final StringBuilder out = new StringBuilder();
 		commander.usage(out, message);
-		CLIServerMain.getLog().error(out.toString());
+		CLIServerMain.getLogger().error(out.toString());
 		System.exit(exitCode);
 	}
 
@@ -507,7 +504,7 @@ public final class CLIServerMain { // NOPMD
 	 *
 	 * @return Returns the logger
 	 */
-	public static Log getLog() {
-		return CLIServerMain.LOG;
+	public static Logger getLogger() {
+		return CLIServerMain.LOGGER;
 	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 iObserve Project (https://iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,26 +17,23 @@ package kieker.common.record.flow.trace.concurrency;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Jan Waller
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.14.0
  * 
  * @since 1.5
  */
-public class SplitEvent extends AbstractTraceEvent  {
-	private static final long serialVersionUID = 3680330659838545906L;
-
+public class SplitEvent extends AbstractTraceEvent  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-	;
+			 + TYPE_SIZE_INT; // ITraceRecord.orderIndex
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -44,7 +41,7 @@ public class SplitEvent extends AbstractTraceEvent  {
 		int.class, // ITraceRecord.orderIndex
 	};
 	
-	
+	private static final long serialVersionUID = 3680330659838545906L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -101,8 +98,10 @@ public class SplitEvent extends AbstractTraceEvent  {
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-	public SplitEvent(final IValueDeserializer deserializer) {
+	public SplitEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 	}
 	
@@ -117,14 +116,8 @@ public class SplitEvent extends AbstractTraceEvent  {
 		return new Object[] {
 			this.getTimestamp(),
 			this.getTraceId(),
-			this.getOrderIndex()
+			this.getOrderIndex(),
 		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
 	}
 	/**
 	 * {@inheritDoc}
@@ -136,6 +129,7 @@ public class SplitEvent extends AbstractTraceEvent  {
 		serializer.putLong(this.getTraceId());
 		serializer.putInt(this.getOrderIndex());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -176,15 +170,30 @@ public class SplitEvent extends AbstractTraceEvent  {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final SplitEvent castedRecord = (SplitEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

@@ -17,17 +17,18 @@ package kieker.analysis.plugin.reader.tcp;
 
 import java.nio.ByteBuffer;
 
+import org.slf4j.Logger;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
-import kieker.analysis.plugin.reader.tcp.util.AbstractTcpReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.misc.RegistryRecord;
+import kieker.common.record.tcp.AbstractTcpReader;
 import kieker.common.util.registry.ILookup;
 import kieker.common.util.registry.Lookup;
 
@@ -60,7 +61,7 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 	private final int port1;
 	private final int port2;
 
-	private final ILookup<String> stringRegistry = new Lookup<String>();
+	private final ILookup<String> stringRegistry = new Lookup<>();
 
 	private final AbstractRecordTcpReader tcpMonitoringRecordReader;
 	private final AbstractTcpReader tcpStringRecordReader;
@@ -72,9 +73,9 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 		this.port1 = this.configuration.getIntProperty(CONFIG_PROPERTY_NAME_PORT1);
 		this.port2 = this.configuration.getIntProperty(CONFIG_PROPERTY_NAME_PORT2);
 
-		this.tcpMonitoringRecordReader = this.createTcpMonitoringRecordReader(this.port1, MESSAGE_BUFFER_SIZE, this.log, this.stringRegistry);
+		this.tcpMonitoringRecordReader = this.createTcpMonitoringRecordReader(this.port1, MESSAGE_BUFFER_SIZE, this.logger, this.stringRegistry);
 
-		this.tcpStringRecordReader = new AbstractTcpReader(this.port2, MESSAGE_BUFFER_SIZE, this.log) {
+		this.tcpStringRecordReader = new AbstractTcpReader(this.port2, MESSAGE_BUFFER_SIZE, this.logger) {
 			@SuppressWarnings("synthetic-access")
 			@Override
 			protected boolean onBufferReceived(final ByteBuffer buffer) {
@@ -84,14 +85,15 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 		};
 	}
 
-	protected AbstractRecordTcpReader createTcpMonitoringRecordReader(final int port, final int bufferCapacity, final Log logger, final ILookup<String> registry) {
+	protected AbstractRecordTcpReader createTcpMonitoringRecordReader(final int port, final int bufferCapacity, final Logger logger,
+			final ILookup<String> registry) {
 		return new AbstractRecordTcpReader(port, bufferCapacity, logger, registry, new CachedRecordFactoryCatalog()) {
 			@SuppressWarnings("synthetic-access")
 			@Override
 			protected void onRecordReceived(final IMonitoringRecord record) {
 				final boolean success = DualSocketTcpReader.this.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 				if (!success) {
-					this.logger.warn("Failed to deliver record: " + record);
+					this.logger.warn("Failed to deliver record: {}", record);
 				}
 			}
 		};
@@ -120,7 +122,7 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutdown requested.");
+		this.logger.info("Shutdown requested.");
 		this.tcpMonitoringRecordReader.terminate();
 
 		this.tcpStringRecordReader.terminate();

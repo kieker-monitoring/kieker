@@ -30,6 +30,7 @@ import org.junit.Test;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.collector.ChunkingCollector;
@@ -110,7 +111,7 @@ public final class TestChunkingCollector {
 	private IMonitoringController createController(final String testId, final int deferredWriteDelay) {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 
-		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, ChunkingCollector.class.getName());
+		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, ChunkingCollector.class.getName());
 		configuration.setProperty(ChunkingCollector.CONFIG_SERIALIZER_CLASSNAME, StringSerializer.class.getName());
 		configuration.setProperty(ChunkingCollector.CONFIG_WRITER_CLASSNAME, TestRawDataWriter.class.getName());
 		configuration.setProperty(ChunkingCollector.CONFIG_DEFERRED_WRITE_DELAY, deferredWriteDelay);

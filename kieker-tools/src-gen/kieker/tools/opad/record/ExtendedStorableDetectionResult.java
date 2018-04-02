@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 iObserve Project (https://iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,29 +17,26 @@ package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.tools.opad.record.StorableDetectionResult;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Thomas Duellmann
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.14.0
  * 
  * @since 1.10
  */
-public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
-	private static final long serialVersionUID = 3489846495430494003L;
-
+public class ExtendedStorableDetectionResult extends StorableDetectionResult  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // StorableDetectionResult.applicationName
 			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.value
 			 + TYPE_SIZE_LONG // StorableDetectionResult.timestamp
 			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.forecast
 			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.score
-			 + TYPE_SIZE_DOUBLE // ExtendedStorableDetectionResult.anomalyThreshold
-	;
+			 + TYPE_SIZE_DOUBLE; // ExtendedStorableDetectionResult.anomalyThreshold
 	
 	public static final Class<?>[] TYPES = {
 		String.class, // StorableDetectionResult.applicationName
@@ -50,7 +47,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		double.class, // ExtendedStorableDetectionResult.anomalyThreshold
 	};
 	
-	
+	private static final long serialVersionUID = 3489846495430494003L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -121,8 +118,10 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-	public ExtendedStorableDetectionResult(final IValueDeserializer deserializer) {
+	public ExtendedStorableDetectionResult(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.anomalyThreshold = deserializer.getDouble();
 	}
@@ -141,15 +140,8 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 			this.getTimestamp(),
 			this.getForecast(),
 			this.getScore(),
-			this.getAnomalyThreshold()
+			this.getAnomalyThreshold(),
 		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getApplicationName());
 	}
 	/**
 	 * {@inheritDoc}
@@ -164,6 +156,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		serializer.putDouble(this.getScore());
 		serializer.putDouble(this.getAnomalyThreshold());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -204,18 +197,39 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final ExtendedStorableDetectionResult castedRecord = (ExtendedStorableDetectionResult) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) return false;
-		if (isNotEqual(this.getValue(), castedRecord.getValue())) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (isNotEqual(this.getForecast(), castedRecord.getForecast())) return false;
-		if (isNotEqual(this.getScore(), castedRecord.getScore())) return false;
-		if (isNotEqual(this.getAnomalyThreshold(), castedRecord.getAnomalyThreshold())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) {
+			return false;
+		}
+		if (isNotEqual(this.getValue(), castedRecord.getValue())) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (isNotEqual(this.getForecast(), castedRecord.getForecast())) {
+			return false;
+		}
+		if (isNotEqual(this.getScore(), castedRecord.getScore())) {
+			return false;
+		}
+		if (isNotEqual(this.getAnomalyThreshold(), castedRecord.getAnomalyThreshold())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

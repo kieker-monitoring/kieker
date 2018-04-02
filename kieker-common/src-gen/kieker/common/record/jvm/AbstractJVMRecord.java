@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 iObserve Project (https://iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package kieker.common.record.jvm;
 
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
@@ -23,18 +24,16 @@ import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Nils Christian Ehmke
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.14.0
  * 
  * @since 1.10
  */
-public abstract class AbstractJVMRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = -961661872949303914L;
-
-	
+public abstract class AbstractJVMRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	
 	/** default constants. */
 	public static final String HOSTNAME = "";
 	public static final String VM_NAME = "";
+	private static final long serialVersionUID = -961661872949303914L;
 	
 		
 	/** property declarations. */
@@ -81,8 +80,10 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-	public AbstractJVMRecord(final IValueDeserializer deserializer) {
+	public AbstractJVMRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
 		this.hostname = deserializer.getString();
 		this.vmName = deserializer.getString();
@@ -105,15 +106,30 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final AbstractJVMRecord castedRecord = (AbstractJVMRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getVmName().equals(castedRecord.getVmName())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getVmName().equals(castedRecord.getVmName())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

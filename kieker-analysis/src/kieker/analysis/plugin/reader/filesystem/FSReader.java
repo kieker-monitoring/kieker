@@ -82,10 +82,10 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			}
 		}
 		if (nDirs == 0) {
-			this.log.warn("The list of input dirs passed to the " + FSReader.class.getSimpleName() + " is empty");
+			this.logger.warn("The list of input dirs passed to the {} is empty", FSReader.class.getSimpleName());
 			nDirs = 1;
 		}
-		this.recordQueue = new PriorityQueue<IMonitoringRecord>(nDirs);
+		this.recordQueue = new PriorityQueue<>(nDirs);
 		this.ignoreUnknownRecordTypes = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES);
 	}
 
@@ -94,7 +94,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutting down reader.");
+		this.logger.info("Shutting down reader.");
 		this.running = false;
 	}
 
@@ -115,7 +115,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			} else if (inputDir.isFile() && inputDirFn.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
 				readerThread = new Thread(new FSZipReader(inputDir, this, this.ignoreUnknownRecordTypes));
 			} else {
-				this.log.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
+				this.logger.warn("Invalid Directory or filename (no Kieker log): {}", inputDirFn);
 				notInitializesReaders++;
 				continue;
 			}

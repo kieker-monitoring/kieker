@@ -95,7 +95,7 @@ public abstract class AbstractTrace {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int hashCode() {
+	public int hashCode() { // NOCS requests implementation of equals and hashCode in pairs
 		// On purpose, we are not considering the sessionId here
 		return (int) (this.getTraceId() ^ (this.getTraceId() >>> 32));
 	}

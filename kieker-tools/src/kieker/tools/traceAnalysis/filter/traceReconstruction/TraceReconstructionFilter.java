@@ -43,27 +43,22 @@ import kieker.tools.util.LoggingTimestampConverter;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
-@Plugin(description = "Uses the incoming data to enrich the connected repository with the reconstructed traces",
-		outputPorts = {
-			@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Reconstructed Message Traces",
-					eventTypes = { MessageTrace.class }),
-			@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Reconstructed Execution Traces",
-					eventTypes = { ExecutionTrace.class }),
-			@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces",
-					eventTypes = { InvalidExecutionTrace.class })
-		},
-		repositoryPorts = {
-			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
-		},
-		configuration = {
-			@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-			@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
-					defaultValue = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION),
-			@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, defaultValue = "true")
-		})
+@Plugin(description = "Uses the incoming data to enrich the connected repository with the reconstructed traces", outputPorts = {
+	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Reconstructed Message Traces", eventTypes = { MessageTrace.class }),
+	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Reconstructed Execution Traces", eventTypes = {
+		ExecutionTrace.class }),
+	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces", eventTypes = {
+		InvalidExecutionTrace.class })
+}, repositoryPorts = {
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+}, configuration = {
+	@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+	@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, defaultValue = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION),
+	@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, defaultValue = "true")
+})
 public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 
 	/** This is the name of the input port receiving new executions. */
@@ -89,9 +84,9 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	private final TimeUnit timeunit;
 
 	/** TraceId x trace. */
-	private final Map<Long, ExecutionTrace> pendingTraces = new Hashtable<Long, ExecutionTrace>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<Long, ExecutionTrace> pendingTraces = new Hashtable<>(); // NOPMD (UseConcurrentHashMap)
 	/** We need to keep track of invalid trace's IDs. */
-	private final Set<Long> invalidTraces = new TreeSet<Long>();
+	private final Set<Long> invalidTraces = new TreeSet<>();
 	private volatile long minTin = -1;
 	private volatile long maxTout = -1;
 	private volatile boolean terminated;
@@ -101,7 +96,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	private boolean traceProcessingErrorOccured; // false
 
 	/** Pending traces sorted by tin timestamps. */
-	private final NavigableSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
+	private final NavigableSet<ExecutionTrace> timeoutMap = new TreeSet<>(new Comparator<ExecutionTrace>() {
 
 		/** Order traces by tins */
 		@Override
@@ -123,7 +118,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -139,7 +134,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.logger.warn("{} is no valid TimeUnit! Using inherited value of {} instead.", configTimeunitProperty, this.timeunit.name());
 			configTimeunit = this.timeunit;
 		}
 
@@ -154,7 +149,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 
 	/**
 	 * Returns a set of the IDs of invalid traces.
-	 * 
+	 *
 	 * @return a set of the IDs of invalid traces
 	 */
 	public Set<Long> getInvalidTraces() {
@@ -163,7 +158,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 
 	/**
 	 * Returns the minimum tin timestamp of a processed execution.
-	 * 
+	 *
 	 * @return the minimum tin timestamp of a processed execution
 	 */
 	public final long getMinTin() {
@@ -172,7 +167,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 
 	/**
 	 * Returns the maximum tout timestamp of a processed execution.
-	 * 
+	 *
 	 * @return the maximum tout timestamp of a processed execution
 	 */
 	public final long getMaxTout() {
@@ -189,14 +184,11 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 
 	/**
 	 * This method represents the input port of this filter.
-	 * 
+	 *
 	 * @param execution
 	 *            The next execution.
 	 */
-	@InputPort(
-			name = INPUT_PORT_NAME_EXECUTIONS,
-			description = "Receives the executions to be processed",
-			eventTypes = { Execution.class })
+	@InputPort(name = INPUT_PORT_NAME_EXECUTIONS, description = "Receives the executions to be processed", eventTypes = { Execution.class })
 	public void inputExecutions(final Execution execution) {
 		synchronized (this) {
 			if (this.terminated || (this.traceProcessingErrorOccured && !this.ignoreInvalidTraces)) {
@@ -211,8 +203,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
 			if (executionTrace != null) { // trace (artifacts) exists already;
 				if (!this.timeoutMap.remove(executionTrace)) { // remove from timeoutMap. Will be re-added below
-					this.log.error("Missing entry for trace in timeoutMap: " + executionTrace
-							+ " PendingTraces and timeoutMap are now longer consistent!");
+					this.logger.error("Missing entry for trace in timeoutMap: {} PendingTraces and timeoutMap are now longer consistent!", executionTrace);
 					this.reportError(traceId);
 				}
 			} else { // create and add new trace
@@ -222,13 +213,13 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			try {
 				executionTrace.add(execution);
 				if (!this.timeoutMap.add(executionTrace)) { // (re-)add trace to timeoutMap
-					this.log.error("Equal entry existed in timeoutMap already:" + executionTrace);
+					this.logger.error("Equal entry existed in timeoutMap already:{}", executionTrace);
 				}
 				this.processTimeoutQueue();
 			} catch (final InvalidTraceException ex) { // this would be a bug!
-				this.log.error("Attempt to add record to wrong trace", ex);
+				this.logger.error("Attempt to add record to wrong trace", ex);
 			} catch (final ExecutionEventProcessingException ex) {
-				this.log.error("ExecutionEventProcessingException occured while processing the timeout queue.", ex);
+				this.logger.error("ExecutionEventProcessingException occured while processing the timeout queue.", ex);
 			}
 		}
 	}
@@ -237,10 +228,10 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	 * Transforms the execution trace is delivers the trace to the output ports
 	 * of this filter (message trace and execution trace output ports, or invalid
 	 * execution trace output port respectively).
-	 * 
+	 *
 	 * @param executionTrace
 	 *            The execution trace to transform.
-	 * 
+	 *
 	 * @throws ExecutionEventProcessingException
 	 *             if the passed execution trace is
 	 *             invalid and this filter is configured to fail on the occurrence of invalid
@@ -277,15 +268,15 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				this.invalidTraces.add(curTraceId);
 				if (!this.ignoreInvalidTraces) {
 					this.traceProcessingErrorOccured = true;
-					this.log.warn("Note that this filter was configured to terminate at the *first* occurence of an invalid trace \n"
+					this.logger.warn("Note that this filter was configured to terminate at the *first* occurence of an invalid trace \n"
 							+ "If this is not the desired behavior, set the configuration property "
-							+ CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES + " to 'true'");
+							+ "{} to 'true'", CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES);
 					throw new ExecutionEventProcessingException(transformationError, ex);
 				} else {
-					this.log.error(transformationError); // do not pass 'ex' to log.error because this makes the output verbose (#584)
+					this.logger.error(transformationError); // do not pass 'ex' to log.error because this makes the output verbose (#584)
 				}
 			} else {
-				this.log.warn("Found additional fragment for trace already marked invalid: " + transformationError);
+				this.logger.warn("Found additional fragment for trace already marked invalid: {}", transformationError);
 			}
 		}
 	}
@@ -293,7 +284,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	/**
 	 * Processes the pending traces in the timeout queue: Either those,
 	 * that timed out are all, if the filter was requested to terminate.
-	 * 
+	 *
 	 * @throws ExecutionEventProcessingException
 	 */
 	private void processTimeoutQueue() throws ExecutionEventProcessingException {
@@ -309,7 +300,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 
 	/**
 	 * Return the number of timeunits after which a pending trace is considered to have timed out.
-	 * 
+	 *
 	 * @return the timeout duration for a pending trace in timeunits
 	 */
 	public final long getMaxTraceDuration() {
@@ -320,7 +311,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 
 	/**
 	 * Terminates the filter (internally, all pending traces are processed).
-	 * 
+	 *
 	 * @param error
 	 *            Determines whether the plugin is terminated due to an error or not.
 	 */
@@ -332,11 +323,11 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				if (!error || (this.traceProcessingErrorOccured && !this.ignoreInvalidTraces)) {
 					this.processTimeoutQueue();
 				} else {
-					this.log.info("terminate called with error an flag set or a trace processing occurred; won't process timeoutqueue any more.");
+					this.logger.info("Terminate called with error an flag set or a trace processing occurred; won't process timeoutqueue any more.");
 				}
 			} catch (final ExecutionEventProcessingException ex) {
 				this.traceProcessingErrorOccured = true;
-				this.log.error("Error processing timeout queue", ex);
+				this.logger.error("Error processing timeout queue", ex);
 			}
 		}
 	}
@@ -352,10 +343,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				final String maxToutStr = new StringBuilder().append(this.maxTout).append(" (")
 						.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.maxTout))).append(",")
 						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout)).append(")").toString();
-				if (LOG.isDebugEnabled()) {
-					LOG.debug("First timestamp: " + minTinStr);
-					LOG.debug("Last timestamp: " + maxToutStr);
-				}
+				LOGGER.debug("First timestamp: {}", minTinStr);
+				LOGGER.debug("Last timestamp: {}", maxToutStr);
 			}
 		}
 	}

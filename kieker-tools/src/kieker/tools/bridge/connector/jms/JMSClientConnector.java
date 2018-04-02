@@ -163,7 +163,7 @@ public class JMSClientConnector extends AbstractConnector {
 	@Override
 	public IMonitoringRecord deserializeNextRecord()
 			throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
-		Message message;
+		final Message message;
 		try {
 			message = this.consumer.receive();
 			if (message != null) {
@@ -195,7 +195,7 @@ public class JMSClientConnector extends AbstractConnector {
 	 */
 	private IMonitoringRecord deserialize(final BytesMessage message)
 			throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
-		Integer id;
+		final Integer id;
 		try {
 			id = message.readInt();
 			final LookupEntity recordProperty = this.lookupEntityMap.get(id);

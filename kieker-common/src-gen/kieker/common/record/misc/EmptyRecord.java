@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 iObserve Project (https://iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,30 +17,27 @@ package kieker.common.record.misc;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.14.0
  * 
  * @since 0.95a
  */
-public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = -177095911417362302L;
-
+public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
-	public static final int SIZE = 0
-	;
+	public static final int SIZE = 0;
 	
 	public static final Class<?>[] TYPES = {
 	};
 	
-	
+	private static final long serialVersionUID = -177095911417362302L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -87,8 +84,10 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-	public EmptyRecord(final IValueDeserializer deserializer) {
+	public EmptyRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 	}
 	
 	/**
@@ -106,15 +105,10 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		//super.serialize(serializer);
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -155,12 +149,21 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final EmptyRecord castedRecord = (EmptyRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

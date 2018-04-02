@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 iObserve Project (https://iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,35 +17,32 @@ package kieker.common.record.misc;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Christian Wulf
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.14.0
  * 
  * @since 1.13
  */
-public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = 4284309919791475271L;
-
+public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // ThreadMetaData.hostname
-			 + TYPE_SIZE_LONG // ThreadMetaData.threadId
-	;
+			 + TYPE_SIZE_LONG; // ThreadMetaData.threadId
 	
 	public static final Class<?>[] TYPES = {
 		String.class, // ThreadMetaData.hostname
 		long.class, // ThreadMetaData.threadId
 	};
 	
-	
 	/** default constants. */
 	public static final String HOSTNAME = "";
+	private static final long serialVersionUID = 4284309919791475271L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -107,8 +104,10 @@ public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitor
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-	public ThreadMetaData(final IValueDeserializer deserializer) {
+	public ThreadMetaData(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.hostname = deserializer.getString();
 		this.threadId = deserializer.getLong();
 	}
@@ -123,15 +122,8 @@ public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitor
 	public Object[] toArray() {
 		return new Object[] {
 			this.getHostname(),
-			this.getThreadId()
+			this.getThreadId(),
 		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getHostname());
 	}
 	/**
 	 * {@inheritDoc}
@@ -142,6 +134,7 @@ public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitor
 		serializer.putString(this.getHostname());
 		serializer.putLong(this.getThreadId());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -182,14 +175,27 @@ public class ThreadMetaData extends AbstractMonitoringRecord implements IMonitor
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final ThreadMetaData castedRecord = (ThreadMetaData) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (this.getThreadId() != castedRecord.getThreadId()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (this.getThreadId() != castedRecord.getThreadId()) {
+			return false;
+		}
+		
 		return true;
 	}
 	

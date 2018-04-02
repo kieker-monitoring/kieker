@@ -27,7 +27,6 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.util.registry.ILookup;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * Record used to associate Objects (typically Strings) with unique ids.
@@ -72,7 +71,6 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * @param values
 	 *            The values for the record.
 	 */
-	@SuppressWarnings("unchecked")
 	public RegistryRecord(final Object[] values) { // NOPMD (direct store of E (usually String))
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.id = (Integer) values[0];
@@ -107,14 +105,6 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {
-		// makes not sense for this record
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		serializer.putInt(this.getId());
 		serializer.putString(this.getString());
@@ -138,7 +128,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	@Override
 	public String[] getValueNames() {
 		return new String[] { "id", "string", "strBytes" };

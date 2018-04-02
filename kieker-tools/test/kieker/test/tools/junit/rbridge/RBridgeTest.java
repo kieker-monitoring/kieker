@@ -18,9 +18,9 @@ package kieker.test.tools.junit.rbridge;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.util.InvalidREvaluationResultException;
 import kieker.tools.util.RBridgeControl;
 
@@ -33,7 +33,7 @@ import kieker.test.tools.junit.AbstractKiekerRTest;
  *
  */
 public class RBridgeTest extends AbstractKiekerRTest {
-	private static final Log LOG = LogFactory.getLog(RBridgeTest.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RBridgeTest.class);
 
 	/**
 	 * Creates a new instance of this class.
@@ -59,7 +59,7 @@ public class RBridgeTest extends AbstractKiekerRTest {
 		r.evalWithR("anomalies <- c(NA,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,0.8333333333333333,0.7446808510638298,"
 				+ "0.761768901569187,0.6308623298033282,0.2288135593220339,0.49510173323285606,0.3689400164338537,NA)");
 		final Object result = r.evalWithR("combined <- cbind(measures, forecasts, anomalies)");
-		LOG.info(result.toString());
+		LOGGER.info(result.toString());
 
 		Assert.assertTrue(result != null);
 		Assert.assertTrue(result instanceof org.rosuda.REngine.REXPDouble);

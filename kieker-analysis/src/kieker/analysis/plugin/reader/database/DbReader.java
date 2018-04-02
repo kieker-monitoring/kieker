@@ -34,23 +34,18 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * A very simple database reader that probably only works for small data sets.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
-@Plugin(description = "A reader which reads records from a database",
-		outputPorts = {
-			@OutputPort(name = DbReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the DBReader")
-		},
-		configuration = {
-			@Property(name = DbReader.CONFIG_PROPERTY_NAME_DRIVERCLASSNAME, defaultValue = "org.apache.derby.jdbc.EmbeddedDriver",
-					description = "The classname of the driver used for the connection."),
-			@Property(name = DbReader.CONFIG_PROPERTY_NAME_CONNECTIONSTRING, defaultValue = "jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS",
-					description = "The connection string used to establish the connection."),
-			@Property(name = DbReader.CONFIG_PROPERTY_NAME_TABLEPREFIX, defaultValue = "kieker",
-					description = "The prefix of the used table within the database.")
-		})
+@Plugin(description = "A reader which reads records from a database", outputPorts = {
+	@OutputPort(name = DbReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the DBReader")
+}, configuration = {
+	@Property(name = DbReader.CONFIG_PROPERTY_NAME_DRIVERCLASSNAME, defaultValue = "org.apache.derby.jdbc.EmbeddedDriver", description = "The classname of the driver used for the connection."),
+	@Property(name = DbReader.CONFIG_PROPERTY_NAME_CONNECTIONSTRING, defaultValue = "jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS", description = "The connection string used to establish the connection."),
+	@Property(name = DbReader.CONFIG_PROPERTY_NAME_TABLEPREFIX, defaultValue = "kieker", description = "The prefix of the used table within the database.")
+})
 public class DbReader extends AbstractReaderPlugin {
 
 	/** This is the name of the outport port delivering the records from the database. */
@@ -71,12 +66,12 @@ public class DbReader extends AbstractReaderPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If the driver for the database could not be found.
 	 */
@@ -114,7 +109,7 @@ public class DbReader extends AbstractReaderPlugin {
 							this.table2record(connection, tablename, AbstractMonitoringRecord.classForName(classname));
 						} catch (final MonitoringRecordException ex) {
 							// log error but continue with next table
-							this.log.error("Failed to load records of type " + classname + " from table " + tablename, ex);
+							this.logger.error("Failed to load records of type {} from table {}", classname, tablename, ex);
 							continue;
 						}
 					}
@@ -129,14 +124,14 @@ public class DbReader extends AbstractReaderPlugin {
 				}
 			}
 		} catch (final SQLException ex) {
-			this.log.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+			this.logger.error("SQLException with SQLState: '{}' and VendorError: '{}'", ex.getSQLState(), ex.getErrorCode(), ex);
 			return false;
 		} finally {
 			if (connection != null) {
 				try {
 					connection.close();
 				} catch (final SQLException ex) {
-					this.log.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+					this.logger.error("SQLException with SQLState: '{}' and VendorError: '{}'", ex.getSQLState(), ex.getErrorCode(), ex);
 				}
 			}
 		}
@@ -145,7 +140,7 @@ public class DbReader extends AbstractReaderPlugin {
 
 	/**
 	 * This method uses the given table to read records and sends them to the output port.
-	 * 
+	 *
 	 * @param connection
 	 *            The connection to the database which will be used.
 	 * @param tablename
@@ -192,7 +187,7 @@ public class DbReader extends AbstractReaderPlugin {
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		this.log.info("Shutdown of DBReader requested.");
+		this.logger.info("Shutdown of DBReader requested.");
 		this.running = false;
 	}
 

@@ -105,7 +105,7 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 				producer.requestOriginRetentionPolicy(this.getDesiredOriginRetentionPolicy());
 			}
 		} catch (final AnalysisConfigurationException e) {
-			this.log.error(e.getMessage(), e);
+			this.logger.error(e.getMessage(), e);
 			return false;
 		}
 

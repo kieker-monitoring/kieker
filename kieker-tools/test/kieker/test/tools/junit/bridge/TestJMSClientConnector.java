@@ -65,7 +65,7 @@ public class TestJMSClientConnector extends AbstractConnectorTest {
 		try {
 			messageGenerator.join(2000);
 		} catch (final InterruptedException e) {
-			LOG.error("Message generator was illegaly interrupted. ", e);
+			LOGGER.error("Message generator was illegaly interrupted. ", e);
 		}
 	}
 }

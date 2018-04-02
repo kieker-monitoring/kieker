@@ -21,14 +21,14 @@ import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.io.DefaultValueDeserializer;
-import kieker.common.record.io.DefaultValueSerializer;
+import kieker.common.record.io.BinaryValueDeserializer;
+import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
@@ -41,7 +41,7 @@ import kieker.test.common.junit.AbstractDynamicKiekerTest;
  */
 public class TestRecordSerialization extends AbstractDynamicKiekerTest {
 
-	private static final Log LOG = LogFactory.getLog(TestRecordSerialization.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestRecordSerialization.class);
 
 	private final IRegistry<String> registry = new Registry<String>();
 
@@ -55,7 +55,7 @@ public class TestRecordSerialization extends AbstractDynamicKiekerTest {
 		final Collection<Class<?>> filteredClasses = this.getFilteredClasses();
 
 		for (final Class<?> clazz : filteredClasses) {
-			LOG.info("Testing '" + clazz.getSimpleName() + "'...");
+			LOGGER.info("Testing '{}'...", clazz.getSimpleName());
 			final Object[] unserializedTestArray = TestRecordSerialization.prepareAndFillTestArray(clazz);
 
 			Assert.assertArrayEquals(clazz.getSimpleName() + "' uses an incorrect object serialization/dezerialization mechanism.", unserializedTestArray,
@@ -125,10 +125,10 @@ public class TestRecordSerialization extends AbstractDynamicKiekerTest {
 		final ByteBuffer byteBuffer = ByteBuffer.allocate(inRecord.getSize());
 
 		final String clazzID = clazz.getCanonicalName();
-		inRecord.serialize(DefaultValueSerializer.create(byteBuffer, this.registry));
+		inRecord.serialize(BinaryValueSerializer.create(byteBuffer, this.registry));
 		byteBuffer.flip();
 
-		final IMonitoringRecord outRecord = AbstractMonitoringRecord.createFromDeserializer(clazzID, DefaultValueDeserializer.create(byteBuffer, this.registry));
+		final IMonitoringRecord outRecord = AbstractMonitoringRecord.createFromDeserializer(clazzID, BinaryValueDeserializer.create(byteBuffer, this.registry));
 		return outRecord.toArray();
 	}
 

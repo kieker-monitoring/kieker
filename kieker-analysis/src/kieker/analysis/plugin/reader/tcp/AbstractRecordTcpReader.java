@@ -17,14 +17,15 @@ package kieker.analysis.plugin.reader.tcp;
 
 import java.nio.ByteBuffer;
 
-import kieker.analysis.plugin.reader.tcp.util.AbstractTcpReader;
+import org.slf4j.Logger;
+
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.logging.Log;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.io.DefaultValueDeserializer;
+import kieker.common.record.io.BinaryValueDeserializer;
+import kieker.common.record.tcp.AbstractTcpReader;
 import kieker.common.util.registry.ILookup;
 
 /**
@@ -45,7 +46,7 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 	/**
 	 * Default constructor with <code>port=10133</code> and <code>bufferCapacity=65535</code> and <code>new CachedRecordFactoryCatalog()</code>
 	 */
-	public AbstractRecordTcpReader(final Log logger, final ILookup<String> stringRegistry) {
+	public AbstractRecordTcpReader(final Logger logger, final ILookup<String> stringRegistry) {
 		this(10133, 65535, logger, stringRegistry, new CachedRecordFactoryCatalog());
 	}
 
@@ -56,7 +57,7 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 	 * @param bufferCapacity
 	 *            capacity of the receiving buffer
 	 */
-	public AbstractRecordTcpReader(final int port, final int bufferCapacity, final Log logger, final ILookup<String> stringRegistry,
+	public AbstractRecordTcpReader(final int port, final int bufferCapacity, final Logger logger, final ILookup<String> stringRegistry,
 			final CachedRecordFactoryCatalog recordFactories) {
 		super(port, bufferCapacity, logger);
 		this.stringRegistry = stringRegistry;
@@ -85,12 +86,12 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 		}
 
 		try {
-			final IMonitoringRecord record = recordFactory.create(DefaultValueDeserializer.create(buffer, this.stringRegistry));
+			final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(buffer, this.stringRegistry));
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			this.onRecordReceived(record);
 		} catch (final RecordInstantiationException ex) {
-			super.logger.error("Failed to create: " + recordClassName, ex);
+			super.logger.error("Failed to create: {}", recordClassName, ex);
 		}
 
 		return true;

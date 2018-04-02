@@ -25,12 +25,12 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.DeclarePrecedence;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerResponse;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -49,7 +49,7 @@ import kieker.monitoring.timer.ITimeSource;
 public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJProbe {
 	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
 
-	private static final Log LOG = LogFactory.getLog(OperationExecutionJerseyServerInterceptor.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OperationExecutionJerseyServerInterceptor.class);
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
@@ -92,7 +92,7 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 		final MultivaluedMap<String, String> requestHeader = request.getRequestHeaders();
 		final List<String> requestJerseyHeader = requestHeader.get(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER);
 		if ((requestJerseyHeader == null) || (requestJerseyHeader.isEmpty())) {
-			LOG.debug("No monitoring data found in the incoming request header");
+			LOGGER.debug("No monitoring data found in the incoming request header");
 			// LOG.info("Will continue without sending back reponse header");
 			traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 			CF_REGISTRY.storeThreadLocalEOI(0);
@@ -101,9 +101,7 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 			ess = 0;
 		} else {
 			final String operationExecutionHeader = requestJerseyHeader.get(0);
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Received request: " + request.getRequestUri() + "with header = " + requestHeader.toString());
-			}
+			LOGGER.debug("Received request: {} with header = {}", request.getRequestUri(), requestHeader.toString());
 			final String[] headerArray = operationExecutionHeader.split(",");
 
 			// Extract session id
@@ -118,7 +116,7 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 			try {
 				eoi = 1 + Integer.parseInt(eoiStr);
 			} catch (final NumberFormatException exc) {
-				LOG.warn("Invalid eoi", exc);
+				LOGGER.warn("Invalid eoi", exc);
 			}
 
 			// Extract ESS
@@ -127,7 +125,7 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 			try {
 				ess = Integer.parseInt(essStr);
 			} catch (final NumberFormatException exc) {
-				LOG.warn("Invalid ess", exc);
+				LOGGER.warn("Invalid ess", exc);
 			}
 
 			// Extract trace id
@@ -136,7 +134,7 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 				try {
 					traceId = Long.parseLong(traceIdStr);
 				} catch (final NumberFormatException exc) {
-					LOG.warn("Invalid trace id", exc);
+					LOGGER.warn("Invalid trace id", exc);
 				}
 			} else {
 				traceId = CF_REGISTRY.getUniqueTraceId();
@@ -192,7 +190,7 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 
 		if (traceId == -1) {
 			// Kieker trace Id not registered. Should not happen, since this is a response message!
-			LOG.warn("Kieker traceId not registered. Will unset all threadLocal variables and return.");
+			LOGGER.warn("Kieker traceId not registered. Will unset all threadLocal variables and return.");
 			return thisJoinPoint.proceed();
 		}
 
@@ -201,16 +199,12 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 		final MultivaluedMap<String, Object> responseHeader = containerResponse.getHttpHeaders();
 
 		// Pass back trace id, session id, eoi but not ess (use old value before the request)
-		final List<Object> responseHeaderList = new ArrayList<Object>();
+		final List<Object> responseHeaderList = new ArrayList<>();
 		responseHeaderList.add(Long.toString(traceId) + "," + sessionId + "," + Integer.toString(CF_REGISTRY.recallThreadLocalEOI()));
 		responseHeader.put(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER, responseHeaderList);
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Sending response with header = " + responseHeader.toString() + " to the request: " + containerResponse.getContainerRequest().getRequestUri());
-		}
+		LOGGER.debug("Sending response with header = {} to the request: {}", responseHeader.toString(), containerResponse.getContainerRequest().getRequestUri());
 
-		final Object retval = thisJoinPoint.proceed();
-
-		return retval;
+		return thisJoinPoint.proceed();
 	}
 
 	private final void unsetKiekerThreadLocalData() {

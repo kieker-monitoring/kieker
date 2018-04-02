@@ -49,21 +49,22 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
 
 /**
  * Plugin providing the creation of calling trees both for individual traces and an aggregated form multiple traces.
- * 
+ *
  * @param <T>
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
-@Plugin(repositoryPorts = { @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
+@Plugin(repositoryPorts = {
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
 public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProcessingFilter {
 
 	private static final String ENCODING = "UTF-8";
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -73,7 +74,8 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		super(configuration, projectContext);
 	}
 
-	private static final String assemblyComponentOperationPairNodeLabel(final AbstractCallTreeNode<AssemblyComponentOperationPair> node, final boolean shortLabels) {
+	private static final String assemblyComponentOperationPairNodeLabel(
+			final AbstractCallTreeNode<AssemblyComponentOperationPair> node, final boolean shortLabels) {
 		final AssemblyComponentOperationPair p = node.getEntity();
 		final AssemblyComponent component = p.getAssemblyComponent();
 		final Operation operation = p.getOperation();
@@ -102,8 +104,8 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		return strBuild.toString();
 	}
 
-	private static final String allocationComponentOperationPairNodeLabel(final AbstractCallTreeNode<AllocationComponentOperationPair> node,
-			final boolean shortLabels) {
+	private static final String allocationComponentOperationPairNodeLabel(
+			final AbstractCallTreeNode<AllocationComponentOperationPair> node, final boolean shortLabels) {
 		final AllocationComponentOperationPair p = node.getEntity();
 		final AllocationComponent component = p.getAllocationComponent();
 		final Operation operation = p.getOperation();
@@ -112,7 +114,8 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		final String componentTypePackagePrefx = component.getAssemblyComponent().getType().getPackageName();
 		final String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
 
-		final StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::\\n").append(assemblyComponentName).append(":");
+		final StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::\\n")
+				.append(assemblyComponentName).append(":");
 		if (!shortLabels) {
 			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
@@ -134,22 +137,32 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		return strBuild.toString();
 	}
 
+	/**
+	 * Add a node label.
+	 * 
+	 * @param node the node
+	 * @param shortLabels selects whether short or long labels should be produced
+	 * @return the label string
+	 */
 	@SuppressWarnings("unchecked")
 	// javac reports unchecked casts
 	protected static final String nodeLabel(final AbstractCallTreeNode<?> node, final boolean shortLabels) {
 		if (node.getEntity() instanceof AllocationComponentOperationPair) {
-			return AbstractCallTreeFilter.allocationComponentOperationPairNodeLabel((AbstractCallTreeNode<AllocationComponentOperationPair>) node, shortLabels);
+			return AbstractCallTreeFilter.allocationComponentOperationPairNodeLabel(
+					(AbstractCallTreeNode<AllocationComponentOperationPair>) node, shortLabels);
 		} else if (node.getEntity() instanceof AssemblyComponentOperationPair) {
-			return AbstractCallTreeFilter.assemblyComponentOperationPairNodeLabel((AbstractCallTreeNode<AssemblyComponentOperationPair>) node, shortLabels);
+			return AbstractCallTreeFilter.assemblyComponentOperationPairNodeLabel(
+					(AbstractCallTreeNode<AssemblyComponentOperationPair>) node, shortLabels);
 		} else {
-			throw new UnsupportedOperationException("Node type not supported: " + node.getEntity().getClass().getName());
+			throw new UnsupportedOperationException(
+					"Node type not supported: " + node.getEntity().getClass().getName());
 		}
 	}
 
 	/**
 	 * Traverse tree recursively and generate dot code for edges.
-	 * 
-	 * @param n
+	 *
+	 * @param node
 	 *            The root node to start with.
 	 * @param nodeIds
 	 *            The map containing the node IDs.
@@ -160,28 +173,48 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	 * @param shortLabels
 	 *            Determines whether to use short labels or not.
 	 */
-	private static void dotEdgesFromSubTree(final AbstractCallTreeNode<?> n,
-			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final AtomicInteger nextNodeId, final PrintStream ps, final boolean shortLabels) {
-		final StringBuilder strBuild = new StringBuilder(64);
-		nodeIds.put(n, nextNodeId.get());
-		strBuild.append(nextNodeId.getAndIncrement()).append("[label =\"").append(n.isRootNode() ? SystemModelRepository.ROOT_NODE_LABEL // NOCS
-				: AbstractCallTreeFilter.nodeLabel(n, shortLabels)) // NOCS
-				.append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
-		ps.println(strBuild.toString());
-		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
-			AbstractCallTreeFilter.dotEdgesFromSubTree(child.getTarget(), nodeIds, nextNodeId, ps, shortLabels);
+	private static void dotEdgesFromSubTree(final AbstractCallTreeNode<?> node,
+			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final AtomicInteger nextNodeId, final PrintStream ps,
+			final boolean shortLabels) {
+		final int newNodeId = nextNodeId.getAndIncrement();
+		nodeIds.put(node, newNodeId);
+
+		// final StringBuilder strBuild = new StringBuilder(64);
+
+		final String labelText = node.isRootNode() ? SystemModelRepository.ROOT_NODE_LABEL // NOCS
+				: AbstractCallTreeFilter.nodeLabel(node, shortLabels); // NOCS
+
+		// strBuild.append(newNodeId).append("[label =\"").append(labelText)
+		// .append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
+		final String textLine;
+		textLine = String.format("%d[label =\"%s\",shape=%s];", newNodeId, labelText, DotFactory.DOT_SHAPE_NONE);
+		// textLine = strBuild.toString();
+
+		ps.println(textLine);
+
+		// ensure a deterministic order in n.getChildEdges()
+		// final List<WeightedDirectedCallTreeEdge<?>> sortedChildren;
+		// sortedChildren = n.getChildEdges();
+		// sortedChildren = new ArrayList<WeightedDirectedCallTreeEdge<?>>(n.getChildEdges());
+		// final Comparator<? super WeightedDirectedCallTreeEdge<?>> comparator = new CallTreeEdgeComparator();
+		// Collections.sort(sortedChildren, comparator);
+
+		// n.getChildEdges() are in a non-deterministic order
+		for (final WeightedDirectedCallTreeEdge<?> child : node.getChildEdges()) {
+			final AbstractCallTreeNode<?> targetNode = child.getTarget();
+			AbstractCallTreeFilter.dotEdgesFromSubTree(targetNode, nodeIds, nextNodeId, ps, shortLabels);
 		}
 	}
 
 	/**
 	 * Traverse tree recursively and generate dot code for vertices.
-	 * 
+	 *
 	 * @param n
 	 *            The root node.
 	 * @param eoiCounter
 	 *            The counter for the execution order index.
 	 * @param nodeIds
-	 *            The map containing the node IDs.
+	 *            (read-only access) The map containing the node IDs.
 	 * @param ps
 	 *            The stream on which the generated code will be printed.
 	 * @param includeWeights
@@ -190,24 +223,32 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	private static void dotVerticesFromSubTree(final AbstractCallTreeNode<?> n, final AtomicInteger eoiCounter,
 			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final PrintStream ps, final boolean includeWeights) {
 		final int thisId = nodeIds.get(n);
-		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {
+
+		for (final WeightedDirectedCallTreeEdge<?> outgoingEdge : n.getChildEdges()) {
+			final int childId = nodeIds.get(outgoingEdge.getTarget());
+
 			final StringBuilder strBuild = new StringBuilder(1024);
-			final int childId = nodeIds.get(child.getTarget());
-			strBuild.append('\n').append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
+			strBuild.append('\n');
+			final String encodedEdge = String.format("%d->%d[style=solid,arrowhead=none", thisId, childId);
+			// strBuild.append('\n').append(thisId).append("->").append(childId).append("[style=solid,arrowhead=none");
+			strBuild.append(encodedEdge);
+
 			if (includeWeights) {
-				strBuild.append(",label=\"").append(child.getTargetWeight().get()).append('"');
+				strBuild.append(",label=\"").append(outgoingEdge.getTargetWeight().get()).append('"');
 			} else if (eoiCounter != null) {
 				strBuild.append(",label=\"").append(eoiCounter.getAndIncrement()).append(".\"");
 			}
 			strBuild.append(" ]");
 			ps.println(strBuild.toString());
-			AbstractCallTreeFilter.dotVerticesFromSubTree(child.getTarget(), eoiCounter, nodeIds, ps, includeWeights);
+
+			AbstractCallTreeFilter.dotVerticesFromSubTree(outgoingEdge.getTarget(), eoiCounter, nodeIds, ps,
+					includeWeights);
 		}
 	}
 
 	/**
 	 * This method converts the given tree completely into dot code.
-	 * 
+	 *
 	 * @param root
 	 *            The root of the tree.
 	 * @param ps
@@ -225,10 +266,12 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		ps.println("digraph G {");
 		final StringBuilder edgestringBuilder = new StringBuilder();
 
-		final Map<AbstractCallTreeNode<?>, Integer> nodeIds = new Hashtable<AbstractCallTreeNode<?>, Integer>(); // NOPMD (not synchronized)
+		final Map<AbstractCallTreeNode<?>, Integer> nodeIds = new Hashtable<>(); // NOPMD (not synchronized)
 
 		AbstractCallTreeFilter.dotEdgesFromSubTree(root, nodeIds, new AtomicInteger(0), ps, shortLabels);
-		AbstractCallTreeFilter.dotVerticesFromSubTree(root, includeEois ? new AtomicInteger(1) : null, nodeIds, ps, includeWeights); // NOPMD NOCS (null)
+
+		final AtomicInteger eoiCounter = includeEois ? new AtomicInteger(1) : null; // NOPMD NOCS (null)
+		AbstractCallTreeFilter.dotVerticesFromSubTree(root, eoiCounter, nodeIds, ps, includeWeights);
 
 		ps.println(edgestringBuilder.toString());
 		ps.println("}");
@@ -236,7 +279,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 	/**
 	 * This method saves the given tree as valid dot code into the given file.
-	 * 
+	 *
 	 * @param root
 	 *            The root of the tree.
 	 * @param outputFn
@@ -249,64 +292,87 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	 *            Determines whether to use short labels or not.
 	 * @throws FileNotFoundException
 	 *             If the given file is somehow invalid.
-	 * 
+	 *
 	 * @throws UnsupportedEncodingException
 	 *             If the default encoding is not supported.
 	 */
 	protected static void saveTreeToDotFile(final AbstractCallTreeNode<?> root, final String outputFn,
-			final boolean includeWeights, final boolean includeEois, final boolean shortLabels) throws FileNotFoundException, UnsupportedEncodingException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFn), false, ENCODING);
-		AbstractCallTreeFilter.dotFromCallingTree(root, ps, includeWeights, includeEois, shortLabels);
-		ps.flush();
-		ps.close();
+			final boolean includeWeights, final boolean includeEois, final boolean shortLabels)
+			throws FileNotFoundException, UnsupportedEncodingException {
+		try (final PrintStream ps = new PrintStream(new FileOutputStream(outputFn), false, ENCODING)) {
+			AbstractCallTreeFilter.dotFromCallingTree(root, ps, includeWeights, includeEois, shortLabels);
+		}
 	}
 
 	/**
 	 * Adds the given trace to the given tree.
-	 * 
+	 *
 	 * @param root
 	 *            The root of the call tree.
-	 * @param t
+	 * @param trace
 	 *            The trace to add.
 	 * @param pairFactory
 	 *            The factory creating the necessary pairs for the tree.
 	 * @param aggregated
 	 *            Determines whether the tree is aggregated or not.
-	 * 
+	 *
 	 * @throws TraceProcessingException
 	 *             If the message type is not supported or the trace is somehow invalid.
-	 * 
+	 *
 	 * @param <T>
 	 *            The type of the tree.
 	 */
-	protected static <T> void addTraceToTree(final AbstractCallTreeNode<T> root, final MessageTrace t, final IPairFactory<T> pairFactory, final boolean aggregated)
-			throws TraceProcessingException {
-		final Stack<AbstractCallTreeNode<T>> curStack = new Stack<AbstractCallTreeNode<T>>();
+	protected static <T> void addTraceToTree(final AbstractCallTreeNode<T> root, final MessageTrace trace,
+			final IPairFactory<T> pairFactory, final boolean aggregated) throws TraceProcessingException {
+		final Stack<AbstractCallTreeNode<T>> callStack = new Stack<>();
+		callStack.push(root);
 
-		final Collection<AbstractMessage> msgTraceVec = t.getSequenceAsVector();
-		AbstractCallTreeNode<T> curNode = root;
-		curStack.push(curNode);
-		for (final AbstractMessage m : msgTraceVec) {
+		final Collection<AbstractMessage> traceMessages = trace.getSequenceAsVector();
+		final String description = traceMessages.toString();
+		root.setDescription(description); // for debugging purposes (chw)
+
+		final NoOriginRetentionPolicy originPolicy = NoOriginRetentionPolicy.createInstance();
+
+		for (final AbstractMessage m : traceMessages) {
 			if (m instanceof SynchronousCallMessage) {
-				curNode = curStack.peek();
-				AbstractCallTreeNode<T> child;
-				child = curNode.newCall(pairFactory.createPair((SynchronousCallMessage) m), t, NoOriginRetentionPolicy.createInstance());
-				curNode = child;
-				curStack.push(curNode);
+				final AbstractCallTreeNode<T> curNode = callStack.peek();
+				// at first, curNode is root
+				final T pair = pairFactory.createPair((SynchronousCallMessage) m);
+				final AbstractCallTreeNode<T> newNode = curNode.newCall(pair, trace, originPolicy);
+
+				callStack.push(newNode);
 			} else if (m instanceof SynchronousReplyMessage) {
-				curNode = curStack.pop();
+				callStack.pop();
 			} else {
 				throw new TraceProcessingException("Message type not supported:" + m.getClass().getName());
 			}
 		}
-		if (curStack.pop() != root) {
+
+		if (callStack.pop() != root) {
 			throw new TraceProcessingException("Stack not empty after processing trace");
 		}
 	}
 
-	public static <T> void writeDotForMessageTrace(final AbstractCallTreeNode<T> root, final IPairFactory<T> pairFactory, final MessageTrace msgTrace,
-			final String outputFilename, final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException, TraceProcessingException,
-			UnsupportedEncodingException {
+	/**
+	 * Write dot info for message trace.
+	 * 
+	 * @param <T> type of trace
+	 * 
+	 * @param root root
+	 * @param pairFactory factory to create pairs
+	 * @param msgTrace message trace
+	 * @param outputFilename output file
+	 * @param includeWeights weights
+	 * @param shortLabels flag for short labels
+	 * 
+	 * @throws FileNotFoundException when the file cannot be created 
+	 * @throws TraceProcessingException when there is a processing error with the trace
+	 * @throws UnsupportedEncodingException string encoding not supported
+	 */
+	public static <T> void writeDotForMessageTrace(final AbstractCallTreeNode<T> root,
+			final IPairFactory<T> pairFactory, final MessageTrace msgTrace, final String outputFilename,
+			final boolean includeWeights, final boolean shortLabels)
+			throws FileNotFoundException, TraceProcessingException, UnsupportedEncodingException {
 
 		AbstractCallTreeFilter.<T>addTraceToTree(root, msgTrace, pairFactory, false); // false: no aggregation
 		AbstractCallTreeFilter.saveTreeToDotFile(root, outputFilename, includeWeights, true, shortLabels); // includeEois
@@ -314,19 +380,21 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 	/**
 	 * @author Andre van Hoorn
-	 * 
+	 *
+	 * @param <T> type used for the message pairing.
+	 *
 	 * @since 1.5
 	 */
 	public interface IPairFactory<T> {
 
 		/**
 		 * This method creates an actual pair using the given call message.
-		 * 
+		 *
 		 * @param callMsg
 		 *            The call message containing the necessary information to create the pair.
-		 * 
+		 *
 		 * @return The actual pair.
-		 * 
+		 *
 		 * @since 1.5
 		 */
 		public T createPair(final SynchronousCallMessage callMsg);

@@ -30,6 +30,8 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.eclipse.emf.common.util.EList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import com.mxgraph.model.mxCell;
@@ -56,8 +58,6 @@ import kieker.analysis.model.analysisMetaModel.MIProject;
 import kieker.analysis.model.analysisMetaModel.MIReader;
 import kieker.analysis.model.analysisMetaModel.MIRepository;
 import kieker.analysis.model.analysisMetaModel.MIRepositoryConnector;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * A simple visualization of analysis configurations.
@@ -68,7 +68,7 @@ import kieker.common.logging.LogFactory;
  */
 public final class KaxViz extends AbstractCommandLineTool {
 
-	static final Log LOG = LogFactory.getLog(KaxViz.class); // NOPMD package for inner class
+	static final Logger LOGGER = LoggerFactory.getLogger(KaxViz.class); // NOPMD package for inner class
 
 	private String kaxFilename;
 	private String svgFilename;
@@ -109,7 +109,7 @@ public final class KaxViz extends AbstractCommandLineTool {
 
 	private boolean assertInputFileExists() {
 		if (this.kaxFilename == null) {
-			LOG.error("No input file configured");
+			LOGGER.error("No input file configured");
 			return false;
 		}
 
@@ -125,10 +125,10 @@ public final class KaxViz extends AbstractCommandLineTool {
 			frame.setSize(800, 600);
 			frame.setVisible(true);
 		} catch (final IOException ex) {
-			LOG.error("The given file could not be loaded", ex);
+			LOGGER.error("The given file could not be loaded", ex);
 			return false;
 		} catch (final Exception ex) { // NOPMD NOCS (log all errors)
-			LOG.error("Error", ex);
+			LOGGER.error("Error", ex);
 			return false;
 		}
 		return true;
@@ -202,7 +202,7 @@ public final class KaxViz extends AbstractCommandLineTool {
 						try {
 							mxUtils.writeFile(mxXmlUtils.getXml(doc), outFilename);
 						} catch (final IOException ex) {
-							LOG.error("Failed to save Visualization of kax-File.", ex);
+							LOGGER.error("Failed to save Visualization of kax-File.", ex);
 						}
 					}
 				});
@@ -280,10 +280,10 @@ public final class KaxViz extends AbstractCommandLineTool {
 		}
 
 		private void displayGraph() {
-			final Map<MIPlugin, mxCell> mapPlugin2Graph = new HashMap<MIPlugin, mxCell>(); // NOPMD (no concurrent access)
-			final Map<MIPlugin, Map<String, mxCell>> mapPluginInputPorts2Graph = new HashMap<MIPlugin, Map<String, mxCell>>(); // NOPMD (no concurrent access)
-			final Map<MIPlugin, Map<String, mxCell>> mapPluginOutputPorts2Graph = new HashMap<MIPlugin, Map<String, mxCell>>(); // NOPMD (no concurrent access)
-			final Map<MIRepository, mxCell> mapRepository2Graph = new HashMap<MIRepository, mxCell>(); // NOPMD (no concurrent access)
+			final Map<MIPlugin, mxCell> mapPlugin2Graph = new HashMap<>(); // NOPMD (no concurrent access)
+			final Map<MIPlugin, Map<String, mxCell>> mapPluginInputPorts2Graph = new HashMap<>(); // NOPMD (no concurrent access)
+			final Map<MIPlugin, Map<String, mxCell>> mapPluginOutputPorts2Graph = new HashMap<>(); // NOPMD (no concurrent access)
+			final Map<MIRepository, mxCell> mapRepository2Graph = new HashMap<>(); // NOPMD (no concurrent access)
 			// draw the graph
 			this.graph.getModel().beginUpdate();
 			try {
@@ -347,7 +347,7 @@ public final class KaxViz extends AbstractCommandLineTool {
 		// }
 
 		private final Map<String, mxCell> createInputPorts(final MIFilter plugin, final mxCell vertex) {
-			final Map<String, mxCell> port2graph = new HashMap<String, mxCell>(); // NOPMD (no concurrent access)
+			final Map<String, mxCell> port2graph = new HashMap<>(); // NOPMD (no concurrent access)
 			final String[] portNames = KaxVizFrame.getAllInputPortNames(plugin);
 			for (int i = 0; i < portNames.length; i++) {
 				final mxGeometry portGeometry = new mxGeometry((i + 1d) / (portNames.length + 1), -0.06, 10, 10);
@@ -384,7 +384,7 @@ public final class KaxViz extends AbstractCommandLineTool {
 		}
 
 		private final Map<String, mxCell> createOutputPorts(final MIPlugin plugin, final mxCell vertex, final boolean reader) {
-			final Map<String, mxCell> port2graph = new HashMap<String, mxCell>(); // NOPMD (no concurrent access)
+			final Map<String, mxCell> port2graph = new HashMap<>(); // NOPMD (no concurrent access)
 			final String[] portNames = KaxVizFrame.getAllOutputPortNames(plugin);
 			for (int i = 0; i < portNames.length; i++) {
 				final mxGeometry portGeometry = new mxGeometry((i + 1d) / (portNames.length + 1), 1.06, 10, 10);
@@ -410,7 +410,8 @@ public final class KaxViz extends AbstractCommandLineTool {
 		private final mxCell createReader(final MIReader reader, final int c) {
 			final mxCell vertex = new mxCell("<<Reader>>\n" + reader.getName() + " : " + KaxVizFrame.getShortClassName(reader),
 					new mxGeometry(FILTER_SPACE, FILTER_SPACE + (c * (FILTER_HEIGHT + FILTER_SPACE)),
-							FILTER_WIDTH, FILTER_HEIGHT), STYLE_READER);
+							FILTER_WIDTH, FILTER_HEIGHT),
+					STYLE_READER);
 			vertex.setVertex(true);
 			this.graph.addCell(vertex);
 			return vertex;
@@ -419,7 +420,8 @@ public final class KaxViz extends AbstractCommandLineTool {
 		private final mxCell createFilter(final MIFilter plugin, final int c) {
 			final mxCell vertex = new mxCell("<<Filter>>\n" + plugin.getName() + " : " + KaxVizFrame.getShortClassName(plugin),
 					new mxGeometry(FILTER_SPACE, FILTER_SPACE + (c * (FILTER_HEIGHT + FILTER_SPACE)),
-							FILTER_WIDTH, FILTER_HEIGHT), STYLE_FILTER);
+							FILTER_WIDTH, FILTER_HEIGHT),
+					STYLE_FILTER);
 			vertex.setVertex(true);
 			this.graph.addCell(vertex);
 			return vertex;
@@ -428,7 +430,8 @@ public final class KaxViz extends AbstractCommandLineTool {
 		private final mxCell createRepository(final MIRepository repository, final int c) {
 			final mxCell vertex = new mxCell("<<Repository>>\n" + repository.getName() + " : " + KaxVizFrame.getShortClassName(repository),
 					new mxGeometry(FILTER_SPACE, FILTER_SPACE + (c * (FILTER_HEIGHT + FILTER_SPACE)),
-							FILTER_WIDTH, FILTER_HEIGHT), STYLE_REPOSITORY);
+							FILTER_WIDTH, FILTER_HEIGHT),
+					STYLE_REPOSITORY);
 			vertex.setVertex(true);
 			this.graph.addCell(vertex);
 			return vertex;

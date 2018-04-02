@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 iObserve Project (https://iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,30 +17,27 @@ package kieker.common.record.flow.thread;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.thread.AbstractThreadBasedEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.IExceptionRecord;
 
 /**
  * @author Christian Wulf
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.14.0
  * 
  * @since 1.13
  */
-public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implements IExceptionRecord {
-	private static final long serialVersionUID = -561668403011752179L;
-
+public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implements IExceptionRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // IThreadBasedRecord.threadId
 			 + TYPE_SIZE_INT // IThreadBasedRecord.orderIndex
 			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // IExceptionRecord.cause
-	;
+			 + TYPE_SIZE_STRING; // IExceptionRecord.cause
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
@@ -51,9 +48,9 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		String.class, // IExceptionRecord.cause
 	};
 	
-	
 	/** default constants. */
 	public static final String CAUSE = "";
+	private static final long serialVersionUID = -561668403011752179L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -124,8 +121,10 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-	public AfterFailedThreadBasedEvent(final IValueDeserializer deserializer) {
+	public AfterFailedThreadBasedEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
 		this.cause = deserializer.getString();
 	}
@@ -144,17 +143,8 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 			this.getOrderIndex(),
 			this.getOperationSignature(),
 			this.getClassSignature(),
-			this.getCause()
+			this.getCause(),
 		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getOperationSignature());
-		stringRegistry.get(this.getClassSignature());
-		stringRegistry.get(this.getCause());
 	}
 	/**
 	 * {@inheritDoc}
@@ -169,6 +159,7 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		serializer.putString(this.getClassSignature());
 		serializer.putString(this.getCause());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -209,18 +200,39 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final AfterFailedThreadBasedEvent castedRecord = (AfterFailedThreadBasedEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getThreadId() != castedRecord.getThreadId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
-		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) return false;
-		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) return false;
-		if (!this.getCause().equals(castedRecord.getCause())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getThreadId() != castedRecord.getThreadId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		if (!this.getOperationSignature().equals(castedRecord.getOperationSignature())) {
+			return false;
+		}
+		if (!this.getClassSignature().equals(castedRecord.getClassSignature())) {
+			return false;
+		}
+		if (!this.getCause().equals(castedRecord.getCause())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

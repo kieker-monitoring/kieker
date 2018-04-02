@@ -31,7 +31,6 @@ import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -58,11 +57,6 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		}
 
 		@Override
-		public void registerStrings(final IRegistry<String> stringRegistry) {
-			// not used here
-		}
-
-		@Override
 		public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 			// not used here
 		}
@@ -76,6 +70,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		public String[] getValueNames() {
 			return new String[] { "timestamp", "traceId", "orderIndex" };
 		}
+
 	};
 
 	private ListReader<AbstractTraceEvent> reader;
@@ -117,8 +112,8 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	@Before
 	public void before() {
 		this.controller = new AnalysisController();
-		this.reader = new ListReader<AbstractTraceEvent>(new Configuration(), this.controller);
-		this.sinkPlugin = new ListCollectionFilter<AbstractTraceEvent>(new Configuration(), this.controller);
+		this.reader = new ListReader<>(new Configuration(), this.controller);
+		this.sinkPlugin = new ListCollectionFilter<>(new Configuration(), this.controller);
 	}
 
 	/**

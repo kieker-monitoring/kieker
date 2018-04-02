@@ -22,11 +22,11 @@ import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Set;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * This class represents a configuration object within the Kieker project. Technically it is a property list with some additional methods and possibilities.<br/>
+ * This class represents a configuration object within the Kieker project. Technically it is a property list with some additional methods and possibilities.
  *
  * Some of the methods are marked as deprecated. This is not because they will be removed, but rather because they should not be used anymore (at least not directly
  * - they are still used in a valid way within this class). Normally we would remove them, but they are inherited from the class {@link Properties} and can neither
@@ -39,7 +39,7 @@ import kieker.common.logging.LogFactory;
 public class Configuration extends Properties {
 
 	private static final long serialVersionUID = 3364877592243422259L;
-	private static final Log LOG = LogFactory.getLog(Configuration.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Configuration.class);
 
 	/**
 	 * Creates a new (empty) configuration.
@@ -110,9 +110,9 @@ public class Configuration extends Properties {
 	 * @return A boolean with the value of the given property or the default value
 	 */
 	public final boolean getBooleanProperty(final String key, final boolean defaultValue) {
-		final String s = this.getStringProperty(key);
+		final String value = this.getPropertyValueInternal(key);
 
-		if (s == null) {
+		if (value == null) {
 			return defaultValue;
 		}
 
@@ -155,16 +155,16 @@ public class Configuration extends Properties {
 	 * @return An integer with the value of the given property or the default value
 	 */
 	public final int getIntProperty(final String key, final int defaultValue) {
-		final String s = this.getStringProperty(key);
+		final String value = this.getPropertyValueInternal(key);
 
-		if (s == null) {
+		if (value == null) {
 			return defaultValue;
 		}
 
 		try {
-			return Integer.parseInt(s);
+			return Integer.parseInt(value);
 		} catch (final NumberFormatException ex) {
-			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value " + defaultValue); // ignore ex
+			LOGGER.warn("Error parsing configuration property '{}', found value '{}', using default value {}", key, value, defaultValue); // ignore ex
 			return defaultValue;
 		}
 	}
@@ -189,13 +189,7 @@ public class Configuration extends Properties {
 	 * @return A long with the value of the given property or null, if the property does not exist.
 	 */
 	public final long getLongProperty(final String key) {
-		final String s = this.getStringProperty(key);
-		try {
-			return Long.parseLong(s);
-		} catch (final NumberFormatException ex) {
-			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0"); // ignore ex
-			return 0;
-		}
+		return this.getLongProperty(key, 0);
 	}
 
 	/**
@@ -210,18 +204,22 @@ public class Configuration extends Properties {
 	 * @return A long with the value of the given property or the default value
 	 */
 	public final long getLongProperty(final String key, final long defaultValue) {
-		final String s = this.getStringProperty(key);
+		final String value = this.getPropertyValueInternal(key);
 
-		if (s == null) {
+		if (value == null) {
 			return defaultValue;
 		}
 
 		try {
-			return Long.parseLong(s);
+			return Long.parseLong(value);
 		} catch (final NumberFormatException ex) {
-			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value " + defaultValue); // ignore ex
+			LOGGER.warn("Error parsing configuration property '{}', found value '{}', using default value {}", key, value, defaultValue); // ignore ex
 			return defaultValue;
 		}
+	}
+
+	private String getPropertyValueInternal(final String key) {
+		return super.getProperty(key);
 	}
 
 	/**
@@ -259,16 +257,16 @@ public class Configuration extends Properties {
 	 * @return A double with the value of the given property or the default value
 	 */
 	public final double getDoubleProperty(final String key, final double defaultValue) {
-		final String s = this.getStringProperty(key);
+		final String value = this.getPropertyValueInternal(key);
 
-		if (s == null) {
+		if (value == null) {
 			return defaultValue;
 		}
 
 		try {
-			return Double.parseDouble(s);
+			return Double.parseDouble(value);
 		} catch (final NumberFormatException ex) {
-			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value " + defaultValue); // ignore ex
+			LOGGER.warn("Error parsing configuration property '{}', found value '{}', using default value {}", key, value, defaultValue); // ignore ex
 			return defaultValue;
 		}
 	}
@@ -366,8 +364,8 @@ public class Configuration extends Properties {
 	}
 
 	/**
-	 * Based upon Guava 14.0.1 (Chris Nokleberg, Colin Decker). Guava is licensed under "The Apache Software License, Version 2.0".<br>
-	 * </br>
+	 * Based upon Guava 14.0.1 (Chris Nokleberg, Colin Decker). Guava is licensed under "The Apache Software License, Version 2.0".
+	 *
 	 * Simplifies a given file system path.
 	 *
 	 * @param pathname

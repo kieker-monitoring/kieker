@@ -28,6 +28,7 @@ import kieker.analysis.plugin.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
@@ -62,7 +63,7 @@ public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTe
 	@Override
 	protected MonitoringController createController(final int numRecordsWritten) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PipeWriter.class.getName());
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, PipeWriter.class.getName());
 		config.setProperty(PipeWriter.CONFIG_PIPENAME, BasicNamedRecordPipeWriterReaderTest.PIPE_NAME);
 		return MonitoringController.createInstance(config);
 	}

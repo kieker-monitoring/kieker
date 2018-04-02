@@ -103,14 +103,14 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 				final SystemModelRepository sysModelRepo = super.getSystemEntityFactory();
 				if (sysModelRepo == null) {
 					final String errorMsg = "Failed to get system model repository";
-					this.log.error(errorMsg);
+					this.logger.error(errorMsg);
 					error = true;
 				} else {
 					sysModelRepo.saveSystemToHTMLFile(outputFnHTMLCanonical);
 				}
 			} catch (final IOException e) {
 				final String errorMsg = "Failed to save system model to file " + outputFnHTMLCanonical;
-				this.log.error(errorMsg, e);
+				this.logger.error(errorMsg, e);
 				error = true;
 			}
 		}

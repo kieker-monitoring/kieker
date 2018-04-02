@@ -30,9 +30,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.bridge.connector.jms.JMSClientConnector;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -41,14 +41,14 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * Implements a JMS client sending Kieker records to a JMS queue.
  * This class is used by both JMS tests as message source. It mis-uses
  * the EOI property to deliver the record number.
- * 
+ *
  * @author Reiner Jung
- * 
+ *
  * @since 1.8
  */
 public class JMSMessageGenerator implements Runnable {
 
-	private static final Log LOG; // NOPMD
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractKiekerTest.class);
 
 	private Connection connection;
 	private MessageProducer producer;
@@ -57,23 +57,16 @@ public class JMSMessageGenerator implements Runnable {
 
 	private final String jmsContextFactory;
 
-	static {
-		if (System.getProperty("kieker.common.logging.Log") == null) {
-			System.setProperty("kieker.common.logging.Log", "JUNIT");
-		}
-		LOG = LogFactory.getLog(AbstractKiekerTest.class);
-	}
-
 	/**
 	 * Empty constructor.
-	 * 
+	 *
 	 * @param uri
 	 *            jms uri of the broker
 	 * @param jmsContextFactory
 	 *            full qualified class name of the context factory
 	 */
 	public JMSMessageGenerator(final String uri, final String jmsContextFactory) {
-		LOG.info("Destination " + uri);
+		LOGGER.info("Destination {}", uri);
 		this.jmsUri = uri;
 		this.jmsContextFactory = jmsContextFactory;
 	}
@@ -90,10 +83,10 @@ public class JMSMessageGenerator implements Runnable {
 
 	private void initialize() {
 		try {
-			LOG.info("Initialize message generator");
+			LOGGER.info("Initialize message generator");
 
 			// setup connection
-			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOPMD NOCS (IllegalTypeCheck, InitialContext requires Hashtable)
+			final Hashtable<String, String> properties = new Hashtable<>(); // NOPMD NOCS (IllegalTypeCheck, InitialContext requires Hashtable)
 			properties.put(Context.INITIAL_CONTEXT_FACTORY, this.jmsContextFactory);
 			properties.put(Context.PROVIDER_URL, this.jmsUri);
 			properties.put(Context.SECURITY_PRINCIPAL, ConfigurationParameters.JMS_USERNAME);
@@ -108,22 +101,20 @@ public class JMSMessageGenerator implements Runnable {
 			final Destination destination = this.session.createQueue(JMSClientConnector.KIEKER_DATA_BRIDGE_READ_QUEUE);
 			this.producer = this.session.createProducer(destination);
 
-			LOG.info("Start connection");
+			LOGGER.info("Start connection");
 			this.connection.start();
 		} catch (final JMSException e) {
 			Assert.fail(e.getMessage());
-			LOG.warn(e.getMessage());
+			LOGGER.warn(e.getMessage());
 		} catch (final NamingException e) {
 			Assert.fail(e.getMessage());
-			LOG.warn("No connection factory found. " + e.getMessage());
+			LOGGER.warn("No connection factory found. {}", e.getMessage());
 		}
 	}
 
 	private void sendRecords() {
 		for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Send record " + i);
-			}
+			LOGGER.debug("Send record {}", i);
 			try {
 				final TextMessage message = this.session.createTextMessage(ConfigurationParameters.TEST_RECORD_ID
 						+ ";" + ConfigurationParameters.TEST_OPERATION_SIGNATURE
@@ -146,7 +137,7 @@ public class JMSMessageGenerator implements Runnable {
 
 	private void close() {
 		try {
-			LOG.info("Stop connection");
+			LOGGER.info("Stop connection");
 			this.connection.stop();
 		} catch (final JMSException e) {
 			Assert.fail(e.getMessage());

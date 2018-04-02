@@ -46,14 +46,13 @@ public enum Broker { // Singleton pattern (Effective Java #3)
 	 *             If the pipe name is null or empty.
 	 */
 	public Pipe acquirePipe(final String pipeName) throws IllegalArgumentException {
-		Pipe conn;
 		synchronized (this) {
 			if ((pipeName == null) || (pipeName.length() == 0)) {
 				// LOG.error(errorMsg); no need to log if thrown
 				throw new IllegalArgumentException("pipeName must not be null or empty!  (Found: " + pipeName + ")");
 			}
 			final Pipe newPipe = new Pipe(pipeName);
-			conn = this.pipeMap.putIfAbsent(pipeName, newPipe);
+			final Pipe conn = this.pipeMap.putIfAbsent(pipeName, newPipe);
 			if (conn == null) {
 				return newPipe;
 			} else {

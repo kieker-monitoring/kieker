@@ -18,8 +18,8 @@ package kieker.monitoring.queue.behavior;
 
 import java.util.concurrent.BlockingQueue;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Christian Wulf
@@ -32,7 +32,7 @@ import kieker.common.logging.LogFactory;
 public class BlockOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 
 	/** the logger for this class */
-	private static final Log LOG = LogFactory.getLog(BlockOnFailedInsertBehavior.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BlockOnFailedInsertBehavior.class);
 	/** the blocking queue to which elements should be inserted */
 	private final BlockingQueue<E> queue;
 	/** current number of blocked inserts */
@@ -57,19 +57,19 @@ public class BlockOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 		} catch (final InterruptedException e) {
 			// The interrupt status has been reset by the put method when throwing the exception.
 			// We will not propagate the interrupt because the error is reported by returning false.
-			LOG.warn("Interrupted when adding new monitoring record to queue.", e);
+			LOGGER.warn("Interrupted when adding new monitoring record to queue.", e);
 		}
-		LOG.error("Failed to add new monitoring record to queue (maximum number of attempts reached).");
+		LOGGER.error("Failed to add new monitoring record to queue (maximum number of attempts reached).");
 		return false;
 	}
 
 	@Override
 	public String toString() {
-		final StringBuilder builder = new StringBuilder()
-			.append(this.getClass())
-			.append("\n\t\t")
-			.append("numBlocked: ")
-			.append(this.numBlocked);
+		final StringBuilder builder = new StringBuilder(50)
+				.append(this.getClass())
+				.append("\n\t\t")
+				.append("numBlocked: ")
+				.append(this.numBlocked);
 		return builder.toString();
 	}
 

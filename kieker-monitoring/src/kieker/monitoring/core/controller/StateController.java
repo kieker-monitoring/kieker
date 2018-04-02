@@ -19,10 +19,11 @@ package kieker.monitoring.core.controller;
 import java.net.UnknownHostException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -30,11 +31,12 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
  * @since 1.3
  */
 public final class StateController extends AbstractController implements IStateController {
-	private static final Log LOG = LogFactory.getLog(StateController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(StateController.class);
 
 	private volatile boolean monitoringEnabled;
 	private final String name;
 	private final String hostname;
+	private final String applicationName;
 	private final AtomicInteger experimentId = new AtomicInteger(0);
 	private final boolean debug;
 
@@ -48,17 +50,18 @@ public final class StateController extends AbstractController implements IStateC
 	 */
 	protected StateController(final Configuration configuration) {
 		super(configuration);
-		this.name = configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME);
-		this.experimentId.set(configuration.getIntProperty(ConfigurationFactory.EXPERIMENT_ID));
-		this.monitoringEnabled = configuration.getBooleanProperty(ConfigurationFactory.MONITORING_ENABLED);
-		this.debug = configuration.getBooleanProperty(ConfigurationFactory.DEBUG);
-		String hostnameTmp = configuration.getStringProperty(ConfigurationFactory.HOST_NAME);
+		this.name = configuration.getStringProperty(ConfigurationKeys.CONTROLLER_NAME);
+		this.experimentId.set(configuration.getIntProperty(ConfigurationKeys.EXPERIMENT_ID));
+		this.applicationName = configuration.getStringProperty(ConfigurationKeys.APPLICATION_NAME);
+		this.monitoringEnabled = configuration.getBooleanProperty(ConfigurationKeys.MONITORING_ENABLED);
+		this.debug = configuration.getBooleanProperty(ConfigurationKeys.DEBUG);
+		String hostnameTmp = configuration.getStringProperty(ConfigurationKeys.HOST_NAME);
 		if (hostnameTmp.length() == 0) {
 			hostnameTmp = "<UNKNOWN>";
 			try {
 				hostnameTmp = java.net.InetAddress.getLocalHost().getHostName();
 			} catch (final UnknownHostException ex) {
-				LOG.warn("Failed to retrieve hostname", ex);
+				LOGGER.warn("Failed to retrieve hostname", ex);
 			}
 		}
 		this.hostname = hostnameTmp;
@@ -71,9 +74,7 @@ public final class StateController extends AbstractController implements IStateC
 
 	@Override
 	protected final void cleanup() {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Shutting down State Controller");
-		}
+		LOGGER.debug("Shutting down State Controller");
 	}
 
 	@Override
@@ -87,13 +88,13 @@ public final class StateController extends AbstractController implements IStateC
 		} else {
 			sb.append("disabled");
 		}
-		sb.append("'\n\tName: '");
-		sb.append(this.name);
-		sb.append("'; Hostname: '");
-		sb.append(this.hostname);
-		sb.append("'; experimentID: '");
-		sb.append(this.getExperimentId());
-		sb.append("'\n");
+		sb.append("'\n\tName: '")
+				.append(this.name)
+				.append("'; Hostname: '")
+				.append(this.hostname)
+				.append("'; experimentID: '")
+				.append(this.getExperimentId())
+				.append("'\n");
 		return sb.toString();
 	}
 
@@ -105,7 +106,7 @@ public final class StateController extends AbstractController implements IStateC
 		if (super.monitoringController != null) {
 			return super.monitoringController.terminate();
 		} else {
-			LOG.warn("Shutting down Monitoring before it is correctly initialized");
+			LOGGER.warn("Shutting down Monitoring before it is correctly initialized");
 			return false;
 		}
 	}
@@ -121,10 +122,10 @@ public final class StateController extends AbstractController implements IStateC
 	@Override
 	public final boolean enableMonitoring() {
 		if (this.isMonitoringTerminated()) {
-			LOG.error("Refused to enable monitoring because monitoring has been permanently terminated");
+			LOGGER.error("Refused to enable monitoring because monitoring has been permanently terminated");
 			return false;
 		}
-		LOG.info("Enabling monitoring");
+		LOGGER.info("Enabling monitoring");
 
 		if (this.stateListener != null) {
 			this.stateListener.beforeEnableMonitoring();
@@ -139,7 +140,7 @@ public final class StateController extends AbstractController implements IStateC
 	 */
 	@Override
 	public final boolean disableMonitoring() {
-		LOG.info("Disabling monitoring");
+		LOGGER.info("Disabling monitoring");
 		this.monitoringEnabled = false;
 		return true;
 	}
@@ -187,5 +188,9 @@ public final class StateController extends AbstractController implements IStateC
 
 	public void setStateListener(final IStateListener stateListener) {
 		this.stateListener = stateListener;
+	}
+
+	public String getApplicationName() {
+		return this.applicationName;
 	}
 }

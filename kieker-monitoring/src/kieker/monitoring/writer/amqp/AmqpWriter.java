@@ -24,20 +24,20 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.io.DefaultValueSerializer;
+import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.thread.DaemonThreadFactory;
 import kieker.monitoring.registry.GetIdAdapter;
 import kieker.monitoring.registry.IRegistryListener;
-import kieker.monitoring.registry.RegisterAdapter;
 import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
@@ -55,7 +55,7 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 	/** ID for regular records. */
 	public static final byte REGULAR_RECORD_ID = (byte) 0x01;
 
-	private static final Log LOG = LogFactory.getLog(AmqpWriter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AmqpWriter.class);
 	/** The default size for the buffer used to serialize records */
 	private static final int DEFAULT_BUFFER_SIZE = 16384;
 	/** Size of the "envelope" data which is prepended before the actual record. */
@@ -91,7 +91,7 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 	 * Adapter for the current, generated record structure.
 	 * The record generator should generate records with the new interface.
 	 */
-	private final RegisterAdapter<String> registerStringsAdapter;
+	// private final RegisterAdapter<String> registerStringsAdapter;
 	/**
 	 * Adapter for the current, generated record structure.
 	 * The record generator should generate records with the new interface.
@@ -120,8 +120,8 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 		this.channel = this.connection.createChannel();
 
 		this.writerRegistry = new WriterRegistry(this);
-		this.registerStringsAdapter = new RegisterAdapter<String>(this.writerRegistry);
-		this.writeBytesAdapter = new GetIdAdapter<String>(this.writerRegistry);
+		// this.registerStringsAdapter = new RegisterAdapter<>(this.writerRegistry);
+		this.writeBytesAdapter = new GetIdAdapter<>(this.writerRegistry);
 	}
 
 	private Connection createConnection() throws KeyManagementException, NoSuchAlgorithmException, URISyntaxException, IOException, TimeoutException {
@@ -143,7 +143,7 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 
 	@Override
 	public void writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		monitoringRecord.registerStrings(this.registerStringsAdapter);
+		// monitoringRecord.registerStrings(this.registerStringsAdapter);
 
 		final ByteBuffer recordBuffer = this.buffer;
 		final int requiredBufferSize = SIZE_OF_ENVELOPE + 4 + 8 + monitoringRecord.getSize();
@@ -162,7 +162,7 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 		// serialized monitoringRecord
 		recordBuffer.putInt(this.writerRegistry.getId(recordClassName));
 		recordBuffer.putLong(monitoringRecord.getLoggingTimestamp());
-		monitoringRecord.serialize(DefaultValueSerializer.create(recordBuffer, this.writeBytesAdapter));
+		monitoringRecord.serialize(BinaryValueSerializer.create(recordBuffer, this.writeBytesAdapter));
 
 		this.publishBuffer(recordBuffer);
 	}
@@ -191,16 +191,16 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 
 	private void publishBuffer(final ByteBuffer localBuffer) {
 		final int dataSize = localBuffer.position();
-		final byte[] data = new byte[dataSize];		
+		final byte[] data = new byte[dataSize];
 		System.arraycopy(localBuffer.array(), localBuffer.arrayOffset(), data, 0, dataSize);
 
 		// Reset the buffer position
 		localBuffer.position(0);
-		
+
 		try {
 			this.channel.basicPublish(this.exchangeName, this.queueName, null, data);
 		} catch (final IOException e) {
-			LOG.error("An exception occurred", e);
+			LOGGER.error("An exception occurred", e);
 		}
 	}
 
@@ -209,7 +209,7 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 		try {
 			this.connection.close();
 		} catch (final IOException e) {
-			LOG.error("Error closing connection", e);
+			LOGGER.error("Error closing connection", e);
 		}
 	}
 

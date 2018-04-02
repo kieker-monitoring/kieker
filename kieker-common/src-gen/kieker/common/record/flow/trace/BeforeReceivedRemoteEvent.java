@@ -1,32 +1,42 @@
+/***************************************************************************
+ * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.flow.trace;
 
 import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Felix Eichhorst
- * API compatibility: Kieker 1.10.0
+ * API compatibility: Kieker 1.14.0
  * 
  * @since 1.14
  */
-public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = -2469910628320520231L;
-
+public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // BeforeReceivedRemoteEvent.timestamp
 			 + TYPE_SIZE_LONG // BeforeReceivedRemoteEvent.callerTraceId
 			 + TYPE_SIZE_INT // BeforeReceivedRemoteEvent.callerOrderIndex
 			 + TYPE_SIZE_LONG // BeforeReceivedRemoteEvent.traceId
-			 + TYPE_SIZE_INT // BeforeReceivedRemoteEvent.orderIndex
-	;
+			 + TYPE_SIZE_INT; // BeforeReceivedRemoteEvent.orderIndex
 	
 	public static final Class<?>[] TYPES = {
 		long.class, // BeforeReceivedRemoteEvent.timestamp
@@ -36,13 +46,13 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implemen
 		int.class, // BeforeReceivedRemoteEvent.orderIndex
 	};
 	
-	
 	/** default constants. */
 	public static final long TIMESTAMP = -1L;
 	public static final long CALLER_TRACE_ID = -1L;
 	public static final int CALLER_ORDER_INDEX = -1;
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
+	private static final long serialVersionUID = -2469910628320520231L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -121,40 +131,20 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implemen
 		this.orderIndex = (Integer) values[4];
 	}
 
-	/**
-	 * This constructor converts the given buffer into a record.
-	 * 
-	 * @param buffer
-	 *            The bytes for the record
-	 * @param stringRegistry
-	 *            The string registry for deserialization
-	 * 
-	 * @throws BufferUnderflowException
-	 *             if buffer not sufficient
-	 *
-	 * @deprecated since 1.13. Use {@link #BeforeReceivedRemoteEvent(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	public BeforeReceivedRemoteEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.callerTraceId = buffer.getLong();
-		this.callerOrderIndex = buffer.getInt();
-		this.traceId = buffer.getLong();
-		this.orderIndex = buffer.getInt();
-	}
 	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-	public BeforeReceivedRemoteEvent(final IValueDeserializer deserializer) {
+	public BeforeReceivedRemoteEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
 		this.callerTraceId = deserializer.getLong();
 		this.callerOrderIndex = deserializer.getInt();
 		this.traceId = deserializer.getLong();
 		this.orderIndex = deserializer.getInt();
 	}
-	
 	
 	/**
 	 * {@inheritDoc}
@@ -169,15 +159,22 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implemen
 			this.getCallerTraceId(),
 			this.getCallerOrderIndex(),
 			this.getTraceId(),
-			this.getOrderIndex()
+			this.getOrderIndex(),
 		};
 	}
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
+		//super.serialize(serializer);
+		serializer.putLong(this.getTimestamp());
+		serializer.putLong(this.getCallerTraceId());
+		serializer.putInt(this.getCallerOrderIndex());
+		serializer.putLong(this.getTraceId());
+		serializer.putInt(this.getOrderIndex());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -218,17 +215,36 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implemen
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final BeforeReceivedRemoteEvent castedRecord = (BeforeReceivedRemoteEvent) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (this.getTimestamp() != castedRecord.getTimestamp()) return false;
-		if (this.getCallerTraceId() != castedRecord.getCallerTraceId()) return false;
-		if (this.getCallerOrderIndex() != castedRecord.getCallerOrderIndex()) return false;
-		if (this.getTraceId() != castedRecord.getTraceId()) return false;
-		if (this.getOrderIndex() != castedRecord.getOrderIndex()) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+			return false;
+		}
+		if (this.getCallerTraceId() != castedRecord.getCallerTraceId()) {
+			return false;
+		}
+		if (this.getCallerOrderIndex() != castedRecord.getCallerOrderIndex()) {
+			return false;
+		}
+		if (this.getTraceId() != castedRecord.getTraceId()) {
+			return false;
+		}
+		if (this.getOrderIndex() != castedRecord.getOrderIndex()) {
+			return false;
+		}
+		
 		return true;
 	}
 	
@@ -254,15 +270,6 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implemen
 	
 	public final int getOrderIndex() {
 		return this.orderIndex;
-	}
-
-	@Override
-	public void serialize(IValueSerializer serializer) throws BufferOverflowException {
-		serializer.putLong(this.getTimestamp());
-		serializer.putLong(this.getCallerTraceId());
-		serializer.putInt(this.getCallerOrderIndex());
-		serializer.putLong(this.getTraceId());
-		serializer.putInt(this.getOrderIndex());
 	}
 	
 }

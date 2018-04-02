@@ -28,9 +28,10 @@ import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
 import au.com.bytecode.opencsv.bean.CsvToBean;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.examples.analysis.opad.experimentModel.WikiGer24_Oct11_21d_InputModel;
 import kieker.tools.opad.model.NamedDoubleTimeSeriesPoint;
 import kieker.tools.opad.timeseries.ForecastMethod;
@@ -51,7 +52,7 @@ public final class ExperimentStarter {
 	/**
 	 * Get Logger for this class.
 	 */
-	private static final Log LOG = LogFactory.getLog(ExperimentStarter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ExperimentStarter.class);
 
 	/**
 	 * Basename of the input data file. This will be the prefix of all resulting data.
@@ -99,9 +100,9 @@ public final class ExperimentStarter {
 
 		final String inputFileName = INPUT_DATA_FOLDER + DATA_BASENAME + ".csv";
 
-		ExperimentStarter.LOG.info("Starting to read data from " + inputFileName);
+		ExperimentStarter.LOGGER.info("Starting to read data from {}", inputFileName);
 		final List<NamedDoubleTimeSeriesPoint> readData = ExperimentStarter.readFromCsv(inputFileName);
-		ExperimentStarter.LOG.info("Done reading data from " + inputFileName + ".csv");
+		ExperimentStarter.LOGGER.info("Done reading data from {}.csv", inputFileName);
 
 		final List<ExperimentThread> experimentThreads = new ArrayList<ExperimentThread>();
 
@@ -115,9 +116,9 @@ public final class ExperimentStarter {
 			et.join();
 		}
 
-		ExperimentStarter.LOG.info("All experiments completed.");
+		ExperimentStarter.LOGGER.info("All experiments completed.");
 
-		ExperimentStarter.LOG.info("Connecting to R and plot the forecasting results.");
+		ExperimentStarter.LOGGER.info("Connecting to R and plot the forecasting results.");
 		final RBridgeControl rBridge = RBridgeControl.getInstance();
 		final String baseFolder = (new File(OPAD_EXAMPLE_FOLDER)).getAbsolutePath() + "/";
 		try {
@@ -125,17 +126,17 @@ public final class ExperimentStarter {
 			// Set the working directory of R to the OPAD_EXAMPLE_FOLDER
 			final String setwdCmdString = "setwd('" + baseFolder + "')";
 			System.out.println("PWD:" + setwdCmdString);
-			ExperimentStarter.LOG.info("Setting working directory ( " + setwdCmdString + " )");
+			ExperimentStarter.LOGGER.info("Setting working directory ( {} )", setwdCmdString);
 			rBridge.evalWithR(setwdCmdString);
 
 			// Execute the plotting script
 			final String sourceCmdString = "source('" + R_PLOT_SCRIPT + "', local=TRUE, echo=FALSE)";
-			ExperimentStarter.LOG.info("Executing plotting script ( " + sourceCmdString + " )");
+			ExperimentStarter.LOGGER.info("Executing plotting script ( {} )", sourceCmdString);
 			rBridge.evalWithR(sourceCmdString);
 		} catch (final InvalidREvaluationResultException e) {
-			LOG.warn("Could not execute the plotting script.", e);
+			LOGGER.warn("Could not execute the plotting script.", e);
 		}
-		ExperimentStarter.LOG.info("Done connecting to R and plotting the forecasting results.");
+		ExperimentStarter.LOGGER.info("Done connecting to R and plotting the forecasting results.");
 	}
 
 	private static List<NamedDoubleTimeSeriesPoint> readFromCsv(final String fileName) {
@@ -160,9 +161,9 @@ public final class ExperimentStarter {
 			reader.close();
 
 		} catch (final FileNotFoundException e) {
-			LOG.warn("An exception occurred", e);
+			LOGGER.warn("An exception occurred", e);
 		} catch (final IOException e) {
-			LOG.warn("An exception occurred", e);
+			LOGGER.warn("An exception occurred", e);
 		}
 
 		return outputList;

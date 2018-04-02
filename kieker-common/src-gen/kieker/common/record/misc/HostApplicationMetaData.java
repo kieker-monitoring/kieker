@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 iObserve Project (https://iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,28 +17,25 @@ package kieker.common.record.misc;
 
 import java.nio.BufferOverflowException;
 
+import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Christian Wulf
- * API compatibility: Kieker 1.13.0
+ * API compatibility: Kieker 1.14.0
  * 
  * @since 1.13
  */
-public class HostApplicationMetaData extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	private static final long serialVersionUID = 5425789809172379297L;
-
+public class HostApplicationMetaData extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // HostApplicationMetaData.systemName
 			 + TYPE_SIZE_STRING // HostApplicationMetaData.ipAddress
 			 + TYPE_SIZE_STRING // HostApplicationMetaData.hostname
-			 + TYPE_SIZE_STRING // HostApplicationMetaData.applicationName
-	;
+			 + TYPE_SIZE_STRING; // HostApplicationMetaData.applicationName
 	
 	public static final Class<?>[] TYPES = {
 		String.class, // HostApplicationMetaData.systemName
@@ -47,12 +44,12 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 		String.class, // HostApplicationMetaData.applicationName
 	};
 	
-	
 	/** default constants. */
 	public static final String SYSTEM_NAME = "";
 	public static final String IP_ADDRESS = "";
 	public static final String HOSTNAME = "";
 	public static final String APPLICATION_NAME = "";
+	private static final long serialVersionUID = 5425789809172379297L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
@@ -128,8 +125,10 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
+	 * @throws RecordInstantiationException 
+	 *            when the record could not be deserialized
 	 */
-	public HostApplicationMetaData(final IValueDeserializer deserializer) {
+	public HostApplicationMetaData(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.systemName = deserializer.getString();
 		this.ipAddress = deserializer.getString();
 		this.hostname = deserializer.getString();
@@ -148,18 +147,8 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 			this.getSystemName(),
 			this.getIpAddress(),
 			this.getHostname(),
-			this.getApplicationName()
+			this.getApplicationName(),
 		};
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void registerStrings(final IRegistry<String> stringRegistry) {	// NOPMD (generated code)
-		stringRegistry.get(this.getSystemName());
-		stringRegistry.get(this.getIpAddress());
-		stringRegistry.get(this.getHostname());
-		stringRegistry.get(this.getApplicationName());
 	}
 	/**
 	 * {@inheritDoc}
@@ -172,6 +161,7 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 		serializer.putString(this.getHostname());
 		serializer.putString(this.getApplicationName());
 	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -212,16 +202,33 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord implements
 	 */
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
 		
 		final HostApplicationMetaData castedRecord = (HostApplicationMetaData) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) return false;
-		if (!this.getSystemName().equals(castedRecord.getSystemName())) return false;
-		if (!this.getIpAddress().equals(castedRecord.getIpAddress())) return false;
-		if (!this.getHostname().equals(castedRecord.getHostname())) return false;
-		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) return false;
+		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
+			return false;
+		}
+		if (!this.getSystemName().equals(castedRecord.getSystemName())) {
+			return false;
+		}
+		if (!this.getIpAddress().equals(castedRecord.getIpAddress())) {
+			return false;
+		}
+		if (!this.getHostname().equals(castedRecord.getHostname())) {
+			return false;
+		}
+		if (!this.getApplicationName().equals(castedRecord.getApplicationName())) {
+			return false;
+		}
+		
 		return true;
 	}
 	

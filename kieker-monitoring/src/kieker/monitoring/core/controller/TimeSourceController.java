@@ -16,32 +16,33 @@
 
 package kieker.monitoring.core.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.3
  */
 public final class TimeSourceController extends AbstractController implements ITimeSourceController {
-	private static final Log LOG = LogFactory.getLog(TimeSourceController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TimeSourceController.class);
 
 	/** the ITimeSource used by this instance. */
 	private final ITimeSource timeSource;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration which is used to configure this controller.
 	 */
 	protected TimeSourceController(final Configuration configuration) {
 		super(configuration);
-		this.timeSource = AbstractController.createAndInitialize(ITimeSource.class, configuration.getStringProperty(ConfigurationFactory.TIMER_CLASSNAME),
+		this.timeSource = AbstractController.createAndInitialize(ITimeSource.class, configuration.getStringProperty(ConfigurationKeys.TIMER_CLASSNAME),
 				configuration);
 		if (this.timeSource == null) {
 			this.terminate();
@@ -55,9 +56,7 @@ public final class TimeSourceController extends AbstractController implements IT
 
 	@Override
 	protected final void cleanup() {
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("Shutting down TimeSource Controller");
-		}
+		LOGGER.debug("Shutting down TimeSource Controller");
 	}
 
 	@Override

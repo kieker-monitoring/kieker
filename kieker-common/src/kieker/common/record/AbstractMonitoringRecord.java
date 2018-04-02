@@ -70,23 +70,33 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		CACHED_KIEKERRECORDS.put("kieker.common.record.flow.trace.Trace", kieker.common.record.flow.trace.TraceMetadata.class);
 	}
 
+	/**
+	 * Checks whether two double values are equal or not.
+	 *
+	 * @param x
+	 *            first value
+	 * @param y
+	 *            second values
+	 *
+	 * @return returns true if the values differ
+	 */
 	protected static boolean isNotEqual(final double x, final double y) {
 		final double diff = x - y;
-		// if (diff <= 0.0D) {
-		// return (diff < (0.0D - VALID_VARIANCE_DOUBLE));
-		// } else {
-		// return (diff > VALID_VARIANCE_DOUBLE);
-		// }
 		return (diff < (0.0D - VALID_VARIANCE_DOUBLE)) || (diff > VALID_VARIANCE_DOUBLE);
 	}
 
+	/**
+	 * Checks whether two float values are equal or not.
+	 *
+	 * @param x
+	 *            first value
+	 * @param y
+	 *            second values
+	 *
+	 * @return returns true if the values differ
+	 */
 	protected static boolean isNotEqual(final float x, final float y) {
 		final float diff = x - y;
-		// if (diff <= 0.0F) {
-		// return (diff < (0.0F - VALID_VARIANCE_FLOAT));
-		// } else {
-		// return (diff > VALID_VARIANCE_FLOAT);
-		// }
 		return (diff < (0.0F - VALID_VARIANCE_FLOAT)) || (diff > VALID_VARIANCE_FLOAT);
 	}
 
@@ -100,6 +110,12 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		this.loggingTimestamp = timestamp;
 	}
 
+	/**
+	 * Returns the record as string.
+	 *
+	 * @deprecated 1.14 will be replaced by individual toString methods.
+	 */
+	@Deprecated
 	@Override
 	public final String toString() {
 		final Object[] recordVector = this.toArray();
@@ -158,12 +174,15 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 
 		final AbstractMonitoringRecord castedRecord = (AbstractMonitoringRecord) obj;
-		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
-			return false;
-		}
-		return Arrays.equals(this.toArray(), castedRecord.toArray());
+		return this.getLoggingTimestamp() == castedRecord.getLoggingTimestamp();
 	}
 
+	/**
+	 * Returns the hash code.
+	 *
+	 * @deprecated 1.14 to be replaced by a specific implementation in each record, as toArray is deprecated.
+	 */
+	@Deprecated
 	@Override
 	public final int hashCode() {
 		return (31 * Arrays.hashCode(this.toArray())) + (int) (this.loggingTimestamp ^ (this.loggingTimestamp >>> 32));
@@ -400,7 +419,10 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 *
 	 * @throws MonitoringRecordException
 	 *             If this method failed to create the record for some reason.
+	 *
+	 * @deprecated 1.14 remove in 1.15
 	 */
+	@Deprecated
 	public static final IMonitoringRecord createFromArray(final Class<? extends IMonitoringRecord> clazz, final Object[] values) throws MonitoringRecordException {
 		try {
 			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
@@ -444,7 +466,10 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 *
 	 * @throws MonitoringRecordException
 	 *             If this method failed to create the record for some reason.
+	 *
+	 * @deprecated 1.14 remove in 1.15
 	 */
+	@Deprecated
 	public static final IMonitoringRecord createFromStringArray(final Class<? extends IMonitoringRecord> clazz, final String[] values)
 			throws MonitoringRecordException {
 		try {
@@ -477,11 +502,35 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
+	/**
+	 * Create monitoring record based on class name and a given value deserializer.
+	 *
+	 * @param recordClassName
+	 *            record class name
+	 * @param deserializer
+	 *            the derserializer
+	 * @return a monitoring record
+	 * @throws BufferUnderflowException
+	 *             on buffer read errors
+	 * @throws MonitoringRecordException
+	 *             when no record could be constructed
+	 */
 	public static final IMonitoringRecord createFromDeserializer(final String recordClassName, final IValueDeserializer deserializer)
 			throws BufferUnderflowException, MonitoringRecordException {
 		return AbstractMonitoringRecord.createFromDeserializerChw(recordClassName, deserializer);
 	}
 
+	/**
+	 * Create monitoring record based on an value array and a given record class name.
+	 *
+	 * @param recordClassName
+	 *            record class name
+	 * @param values
+	 *            the value array
+	 * @return a monitoring record
+	 * @throws MonitoringRecordException
+	 *             when no record could be constructed
+	 */
 	public static final IMonitoringRecord createFromArray(final String recordClassName, final Object[] values) throws MonitoringRecordException {
 		final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(recordClassName);
 		return AbstractMonitoringRecord.createFromArray(clazz, values);
