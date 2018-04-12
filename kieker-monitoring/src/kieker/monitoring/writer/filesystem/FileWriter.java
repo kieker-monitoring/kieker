@@ -27,13 +27,13 @@ import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.registry.IRegistryListener;
+import kieker.common.registry.writer.WriterRegistry;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.controller.ControllerFactory;
-import kieker.monitoring.registry.IRegistryListener;
-import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
-import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
-import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
+import kieker.monitoring.writer.compression.ICompressionFilter;
+import kieker.monitoring.writer.compression.NoneCompressionFilter;
 
 /**
  * Generic file writer which can be used to write any type of serialization.

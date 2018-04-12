@@ -25,7 +25,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.record.io.TextValueSerializer;
 import kieker.monitoring.core.controller.ReceiveUnfilteredConfiguration;
-import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
+import kieker.monitoring.writer.compression.ICompressionFilter;
 
 /**
  * @author Matthias Rohr, Robert von Massow, Andre van Hoorn, Jan Waller, Christian Wulf

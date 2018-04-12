@@ -26,8 +26,8 @@ import java.nio.file.StandardOpenOption;
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.controller.ControllerFactory;
 import kieker.monitoring.core.controller.ReceiveUnfilteredConfiguration;
-import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
-import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
+import kieker.monitoring.writer.compression.ICompressionFilter;
+import kieker.monitoring.writer.compression.NoneCompressionFilter;
 
 /**
  * Handler for the map file used in Kieker.

@@ -21,6 +21,7 @@ import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
 
 
 /**
@@ -104,7 +105,7 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 	@Deprecated
 	public ApplicationTraceMetadata(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
-		this.applicationName = (String) values[7];
+		this.applicationName = (String) values[6];
 	}
 
 	/**
@@ -120,7 +121,7 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 	@Deprecated
 	protected ApplicationTraceMetadata(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
-		this.applicationName = (String) values[7];
+		this.applicationName = (String) values[6];
 	}
 
 	

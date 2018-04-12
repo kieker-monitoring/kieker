@@ -18,7 +18,9 @@ dependencies {
 	compile 'com.google.guava:guava:20.0'				// (21.0 and above require java 8) used by StringRegistryCache for amqp reader
 	compile 'net.sourceforge.teetime:teetime:3.0'
 	compile 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
-
+	
+	compile 'org.tukaani:xz:1.6'	// decompression algorithms used by the readers
+	
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
 	

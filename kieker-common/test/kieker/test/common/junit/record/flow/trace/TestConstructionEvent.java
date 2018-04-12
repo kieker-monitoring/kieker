@@ -24,10 +24,11 @@ import org.junit.Test;
 import kieker.common.record.flow.trace.ConstructionEvent;
 import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.io.BinaryValueSerializer;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.Registry;
+import kieker.common.registry.writer.IWriterRegistry;
+import kieker.common.registry.writer.WriterRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.WriterListener;
 
 /**
  * @author Jan Waller
@@ -88,12 +89,13 @@ public class TestConstructionEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected class name", FQ_CLASSNAME, event1.getClassSignature());
 		Assert.assertEquals("Unexpected object ID", OBJECT_ID, event1.getObjectId());
 
-		final IRegistry<String> stringRegistry = new Registry<String>();
+		final WriterListener receiver = new WriterListener();
+		final IWriterRegistry<String> stringRegistry = new WriterRegistry(receiver);
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
 		event1.serialize(BinaryValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
 
-		final ConstructionEvent event2 = new ConstructionEvent(BinaryValueDeserializer.create(buffer, stringRegistry));
+		final ConstructionEvent event2 = new ConstructionEvent(BinaryValueDeserializer.create(buffer, receiver.getReaderRegistry()));
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

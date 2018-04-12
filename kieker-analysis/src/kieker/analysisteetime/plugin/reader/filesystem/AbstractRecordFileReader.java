@@ -30,6 +30,8 @@ import teetime.framework.AbstractConsumerStage;
  * @author Christian Wulf
  *
  * @since 1.14
+ *
+ * TODO not used anywhere
  */
 public abstract class AbstractRecordFileReader extends AbstractConsumerStage<File> {
 

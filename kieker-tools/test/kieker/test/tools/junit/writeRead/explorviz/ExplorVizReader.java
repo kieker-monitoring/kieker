@@ -36,8 +36,8 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.RegistryRecord;
-import kieker.common.util.registry.ILookup;
-import kieker.common.util.registry.Lookup;
+import kieker.common.registry.ILookup;
+import kieker.common.registry.Lookup;
 
 /**
  * @author Micky Singh Multani

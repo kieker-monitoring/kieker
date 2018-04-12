@@ -30,8 +30,8 @@ import java.util.TimeZone;
 import org.slf4j.Logger;
 
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
-import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
+import kieker.monitoring.writer.compression.ICompressionFilter;
+import kieker.monitoring.writer.compression.NoneCompressionFilter;
 
 /**
  * Abstract file writer pool.

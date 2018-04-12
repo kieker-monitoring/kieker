@@ -32,8 +32,8 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.common.util.filesystem.FileExtensionFilter;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
-import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
-import kieker.monitoring.writer.filesystem.compression.ZipCompressionFilter;
+import kieker.monitoring.writer.compression.NoneCompressionFilter;
+import kieker.monitoring.writer.compression.ZipCompressionFilter;
 
 /**
  * @author Christian Wulf

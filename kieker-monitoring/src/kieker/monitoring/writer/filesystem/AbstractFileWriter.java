@@ -25,14 +25,14 @@ import java.nio.file.Path;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueSerializer;
+import kieker.common.registry.IRegistryListener;
+import kieker.common.registry.writer.IWriterRegistry;
+import kieker.common.registry.writer.WriterRegistry;
 import kieker.monitoring.core.controller.ControllerFactory;
-import kieker.monitoring.registry.IRegistryListener;
-import kieker.monitoring.registry.IWriterRegistry;
-import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
-import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
-import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
-import kieker.monitoring.writer.filesystem.compression.ZipCompressionFilter;
+import kieker.monitoring.writer.compression.ICompressionFilter;
+import kieker.monitoring.writer.compression.NoneCompressionFilter;
+import kieker.monitoring.writer.compression.ZipCompressionFilter;
 
 /**
  * Abstract file writer.

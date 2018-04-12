@@ -34,8 +34,7 @@ import com.rabbitmq.client.QueueingConsumer;
 import com.rabbitmq.client.ShutdownSignalException;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.registry.ILookup;
-import kieker.common.util.registry.Lookup;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * Logic module for the reader stage that reads monitoring records from an AMQP queue.
@@ -62,7 +61,7 @@ public final class AMQPReader {
 	private volatile Channel channel;
 	private volatile QueueingConsumer consumer;
 
-	private final ILookup<String> stringRegistry = new Lookup<>();
+	private final ReaderRegistry<String> stringRegistry = new ReaderRegistry<>();
 
 	private volatile Thread registryRecordHandlerThread;
 	private volatile RegistryRecordHandler registryRecordHandler;

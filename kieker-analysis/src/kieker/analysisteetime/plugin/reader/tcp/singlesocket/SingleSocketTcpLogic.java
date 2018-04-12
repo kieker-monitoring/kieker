@@ -25,8 +25,7 @@ import org.slf4j.Logger;
 import kieker.analysisteetime.plugin.reader.IRecordReceivedListener;
 import kieker.analysisteetime.plugin.reader.RecordDeserializer;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.util.registry.reader.GetValueAdapter;
-import kieker.common.util.registry.reader.ReaderRegistry;
+import kieker.common.registry.reader.ReaderRegistry;
 
 import teetime.util.io.network.AbstractTcpReader;
 
@@ -48,8 +47,7 @@ class SingleSocketTcpLogic extends AbstractTcpReader {
 			final IRecordReceivedListener listener) {
 		super(port, bufferCapacity, logger);
 
-		final GetValueAdapter<String> stringRegistryWrapper = new GetValueAdapter<>(this.readerRegistry);
-		this.recordDeserializer = new RecordDeserializer(listener, stringRegistryWrapper);
+		this.recordDeserializer = new RecordDeserializer(listener, this.readerRegistry);
 	}
 
 	@Override

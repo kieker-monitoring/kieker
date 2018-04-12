@@ -24,10 +24,11 @@ import org.junit.Test;
 import kieker.common.record.flow.trace.operation.object.AfterOperationFailedObjectEvent;
 import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.io.BinaryValueSerializer;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.Registry;
+import kieker.common.registry.writer.IWriterRegistry;
+import kieker.common.registry.writer.WriterRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.WriterListener;
 import kieker.test.common.junit.record.UtilityClass;
 
 /**
@@ -98,12 +99,13 @@ public class TestAfterOperationFailedObjectEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected cause", CAUSE, event1.getCause());
 		Assert.assertEquals("Unexpected object id", OBJECT_ID, event1.getObjectId());
 
-		final IRegistry<String> stringRegistry = new Registry<String>();
+		final WriterListener receiver = new WriterListener();
+		final IWriterRegistry<String> stringRegistry = new WriterRegistry(receiver);
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
 		event1.serialize(BinaryValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
 
-		final AfterOperationFailedObjectEvent event2 = new AfterOperationFailedObjectEvent(BinaryValueDeserializer.create(buffer, stringRegistry));
+		final AfterOperationFailedObjectEvent event2 = new AfterOperationFailedObjectEvent(BinaryValueDeserializer.create(buffer, receiver.getReaderRegistry()));
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

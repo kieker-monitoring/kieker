@@ -26,7 +26,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runners.MethodSorters;
 
-import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
@@ -36,10 +35,11 @@ import kieker.common.record.flow.trace.operation.AfterOperationEventFactory;
 import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.record.system.CPUUtilizationRecord;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.Registry;
+import kieker.common.registry.writer.IWriterRegistry;
+import kieker.common.registry.writer.WriterRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.WriterListener;
 import kieker.test.common.util.record.factory.TestRecord;
 
 /**
@@ -55,7 +55,6 @@ public class CachedRecordFactoryCatalogTest extends AbstractKiekerTest {
 
 	private CachedRecordFactoryCatalog cachedRecordFactories;
 	private ByteBuffer buffer;
-	private IRegistry<String> stringRegistry;
 
 	public CachedRecordFactoryCatalogTest() {
 		// Nothing to do
@@ -65,7 +64,6 @@ public class CachedRecordFactoryCatalogTest extends AbstractKiekerTest {
 	public void before() throws Exception {
 		this.cachedRecordFactories = new CachedRecordFactoryCatalog();
 		this.buffer = ByteBuffer.allocateDirect(1024);
-		this.stringRegistry = new Registry<String>();
 	}
 
 	@Test
@@ -77,6 +75,9 @@ public class CachedRecordFactoryCatalogTest extends AbstractKiekerTest {
 
 	@Test
 	public void testRecordConstructionWithFactory() {
+		final WriterListener receiver = new WriterListener();
+		final IWriterRegistry<String> writerRegistry = new WriterRegistry(receiver);
+
 		final String recordClassName = AfterOperationEvent.class.getName();
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
 		Assert.assertEquals(AfterOperationEventFactory.class, recordFactory.getClass());
@@ -87,9 +88,9 @@ public class CachedRecordFactoryCatalogTest extends AbstractKiekerTest {
 		final long traceId = 666;
 		final long timestamp = 111;
 		final AfterOperationEvent expectedEvent = new AfterOperationEvent(timestamp, traceId, orderIndex, classSignature, operationSignature);
-		expectedEvent.serialize(BinaryValueSerializer.create(this.buffer, this.stringRegistry));
+		expectedEvent.serialize(BinaryValueSerializer.create(this.buffer, writerRegistry));
 		this.buffer.flip();
-		final IMonitoringRecord event = recordFactory.create(BinaryValueDeserializer.create(this.buffer, this.stringRegistry));
+		final IMonitoringRecord event = recordFactory.create(BinaryValueDeserializer.create(this.buffer, receiver.getReaderRegistry()));
 
 		Assert.assertEquals(expectedEvent.getClass(), event.getClass());
 		final AfterOperationEvent castedEvent = (AfterOperationEvent) event;
@@ -109,11 +110,12 @@ public class CachedRecordFactoryCatalogTest extends AbstractKiekerTest {
 
 	@Test
 	public void testAVirtualRecord() {
+		final WriterListener receiver = new WriterListener();
+		final IWriterRegistry<String> writerRegistry = new WriterRegistry(receiver);
+
 		final String recordClassName = "kieker.common.record.CPUUtilizationRecord";
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
 		Assert.assertEquals(RecordFactoryWrapper.class, recordFactory.getClass());
-
-		Assert.assertEquals(0, this.stringRegistry.getSize());
 
 		final long timestamp = 111;
 		final String hostname = "www.test.de";
@@ -126,27 +128,13 @@ public class CachedRecordFactoryCatalogTest extends AbstractKiekerTest {
 		final double totalUtilization = 98.9;
 		final double idle = 0.666;
 		final CPUUtilizationRecord cpuRecord = new CPUUtilizationRecord(timestamp, hostname, cpuID, user, system, wait, nice, irq, totalUtilization, idle);
-		cpuRecord.serialize(BinaryValueSerializer.create(this.buffer, this.stringRegistry));
+		cpuRecord.serialize(BinaryValueSerializer.create(this.buffer, writerRegistry));
 		this.buffer.flip();
-		final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(this.buffer, this.stringRegistry));
+		final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(this.buffer, receiver.getReaderRegistry()));
 		Assert.assertEquals(CPUUtilizationRecord.class, record.getClass());
 
-		// final String[] strings = this.stringRegistry.getAll(); // causes a ClassCastException => Bug; However, method is not used within Kieker
-		Assert.assertEquals(2, this.stringRegistry.getSize());
-		Assert.assertEquals(hostname, this.stringRegistry.get(0));
-		Assert.assertEquals(cpuID, this.stringRegistry.get(1));
-	}
-
-	@Test
-	public void testBNotExistingRecordThrowsException() {
-		final String recordClassName = "record.that.does.not.exist";
-		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
-		Assert.assertEquals(RecordFactoryWrapper.class, recordFactory.getClass());
-
-		Assert.assertEquals(0, this.stringRegistry.getSize());
-
-		this.thrown.expect(RecordInstantiationException.class);
-		recordFactory.create(BinaryValueDeserializer.create(this.buffer, this.stringRegistry));
+		Assert.assertEquals(hostname, receiver.getReaderRegistry().get(0));
+		Assert.assertEquals(cpuID, receiver.getReaderRegistry().get(1));
 	}
 
 }

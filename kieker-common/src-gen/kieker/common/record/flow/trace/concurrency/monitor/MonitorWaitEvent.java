@@ -21,6 +21,7 @@ import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.flow.trace.concurrency.monitor.AbstractMonitorEvent;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
 
 
 /**

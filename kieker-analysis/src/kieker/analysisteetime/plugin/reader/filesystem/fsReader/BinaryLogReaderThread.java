@@ -32,9 +32,9 @@ import org.slf4j.LoggerFactory;
 
 import kieker.analysis.plugin.reader.util.ByteBufferDeserializer;
 import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
+import kieker.common.registry.reader.ReaderRegistry;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.common.util.filesystem.FileExtensionFilter;
-import kieker.common.util.registry.reader.ReaderRegistry;
 
 /**
  * Reads the contents of a single file system log directory and passes the records to the registered receiver of type

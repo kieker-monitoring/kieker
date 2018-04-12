@@ -22,7 +22,7 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import kieker.common.util.filesystem.FSUtil;
+import kieker.test.common.junit.util.filesystem.FSUtil4Tests;
 
 /**
  * This abstract class is the base for all other dynamic JUnit tests within the system. Those are tests which search for
@@ -75,7 +75,7 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 	}
 
 	private Collection<File> listSourceFiles(final String directoryName, final String regexFilePattern) {
-		return FSUtil.listFilesRecursively(Paths.get(directoryName), regexFilePattern);
+		return FSUtil4Tests.listFilesRecursively(Paths.get(directoryName), regexFilePattern);
 	}
 
 	private Collection<String> transformFilesToClassNames(final Collection<File> files) {

@@ -21,6 +21,7 @@ import kieker.common.exception.RecordInstantiationException;
 import kieker.tools.opad.record.StorableDetectionResult;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
+import kieker.common.registry.IRegistry;
 
 
 /**

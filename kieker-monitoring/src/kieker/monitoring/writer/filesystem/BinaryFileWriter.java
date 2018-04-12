@@ -25,8 +25,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.monitoring.core.controller.ReceiveUnfilteredConfiguration;
-import kieker.monitoring.registry.GetIdAdapter;
-import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
+import kieker.monitoring.writer.compression.ICompressionFilter;
 
 /**
  * @author Jan Waller, Christian Wulf
@@ -59,7 +58,7 @@ public class BinaryFileWriter extends AbstractFileWriter<ByteBuffer, BinaryValue
 	@Override
 	protected IValueSerializer createSerializer() {
 		return BinaryValueSerializer.create(this.getFileWriterPool().getBuffer(),
-				new GetIdAdapter<>(this.getWriterRegistry()));
+				this.getWriterRegistry());
 	}
 
 	@Override

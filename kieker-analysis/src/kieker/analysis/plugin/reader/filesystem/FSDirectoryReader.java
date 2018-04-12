@@ -34,12 +34,15 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kieker.analysis.plugin.reader.depcompression.AbstractDecompressionFilter;
+import kieker.analysis.plugin.reader.util.FSReaderUtil;
 import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
+import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.util.filesystem.BinaryCompressionMethod;
+import kieker.common.util.classpath.InstantiationFactory;
 import kieker.common.util.filesystem.FSUtil;
 
 /**
@@ -97,7 +100,7 @@ final class FSDirectoryReader implements Runnable {
 				final String name = pathname.getName();
 				return pathname.isFile()
 						&& name.startsWith(FSDirectoryReader.this.filePrefix)
-						&& (name.endsWith(FSUtil.DAT_FILE_EXTENSION) || BinaryCompressionMethod.hasValidFileExtension(name));
+						&& (FSReaderUtil.hasValidFileExtension(name));
 			}
 		});
 		if (inputFiles == null) {
@@ -129,8 +132,11 @@ final class FSDirectoryReader implements Runnable {
 								FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, inputFile);
 					}
 					try {
-						final BinaryCompressionMethod method = BinaryCompressionMethod.getByFileExtension(inputFile.getName());
-						this.processBinaryInputFile(inputFile, method);
+						final Class<? extends AbstractDecompressionFilter> clazz = FSReaderUtil.findDecompressionFilterByExtension(inputFile.getName());
+
+						final Configuration configuration = new Configuration();
+						final AbstractDecompressionFilter decompressionFilter = InstantiationFactory.getInstance(configuration).createAndInitialize(AbstractDecompressionFilter.class, clazz.getCanonicalName(), configuration);
+						this.processBinaryInputFile(inputFile, decompressionFilter);
 					} catch (final IllegalArgumentException ex) {
 						LOGGER.warn("Unknown file extension for file {}", inputFile);
 						continue;
@@ -239,7 +245,7 @@ final class FSDirectoryReader implements Runnable {
 						try { // NOCS (nested try)
 							clazz = AbstractMonitoringRecord.classForName(classname);
 						} catch (final MonitoringRecordException ex) { // NOPMD (ExceptionAsFlowControl); need this to distinguish error by
-																		// abortDueToUnknownRecordType
+							// abortDueToUnknownRecordType
 							if (!this.ignoreUnknownRecordTypes) {
 								// log message will be dumped in the Exception handler below
 								abortDueToUnknownRecordType = true;
@@ -300,13 +306,13 @@ final class FSDirectoryReader implements Runnable {
 	 *
 	 * @param inputFile
 	 *            The input file which should be processed.
-	 * @param compressionMethod
+	 * @param decompressionFilter
 	 *            Whether the input file is compressed.
 	 */
-	private final void processBinaryInputFile(final File inputFile, final BinaryCompressionMethod method) {
+	private final void processBinaryInputFile(final File inputFile, final AbstractDecompressionFilter decompressionFilter) {
 		DataInputStream in = null;
 		try {
-			in = method.getDataInputStream(inputFile, 1024 * 1024); // 1 MiB buffer
+			in = new DataInputStream(decompressionFilter.chainInputStream(new FileInputStream(inputFile)));
 			while (true) {
 				final Integer id;
 				try {

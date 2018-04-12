@@ -19,7 +19,7 @@ package kieker.analysis.configuration;
 import kieker.analysis.exception.PluginNotFoundException;
 import kieker.analysis.plugin.AbstractUpdateableFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.util.registry.Registry;
+import kieker.common.registry.Registry;
 
 /**
  * This is a global accesible singleton class to update the configuration of registered filters during runtime.

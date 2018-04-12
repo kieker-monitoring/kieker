@@ -29,10 +29,11 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.io.BinaryValueSerializer;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.Registry;
+import kieker.common.registry.writer.IWriterRegistry;
+import kieker.common.registry.writer.WriterRegistry;
 
 import kieker.test.common.junit.AbstractDynamicKiekerTest;
+import kieker.test.common.junit.WriterListener;
 
 /**
  * @author Nils Christian Ehmke
@@ -42,8 +43,6 @@ import kieker.test.common.junit.AbstractDynamicKiekerTest;
 public class TestRecordSerialization extends AbstractDynamicKiekerTest {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TestRecordSerialization.class);
-
-	private final IRegistry<String> registry = new Registry<String>();
 
 	public TestRecordSerialization() {
 		// empty default constructor
@@ -121,14 +120,18 @@ public class TestRecordSerialization extends AbstractDynamicKiekerTest {
 
 	@SuppressWarnings("unchecked")
 	private Object[] serializeAndDeserializeTestArrayWithBinary(final Class<?> clazz, final Object[] unserializedTestArray) throws MonitoringRecordException {
+		final WriterListener receiver = new WriterListener();
+		final IWriterRegistry<String> writerRegistry = new WriterRegistry(receiver);
+
 		final IMonitoringRecord inRecord = AbstractMonitoringRecord.createFromArray((Class<? extends IMonitoringRecord>) clazz, unserializedTestArray);
 		final ByteBuffer byteBuffer = ByteBuffer.allocate(inRecord.getSize());
 
 		final String clazzID = clazz.getCanonicalName();
-		inRecord.serialize(BinaryValueSerializer.create(byteBuffer, this.registry));
+		inRecord.serialize(BinaryValueSerializer.create(byteBuffer, writerRegistry));
 		byteBuffer.flip();
 
-		final IMonitoringRecord outRecord = AbstractMonitoringRecord.createFromDeserializer(clazzID, BinaryValueDeserializer.create(byteBuffer, this.registry));
+		final IMonitoringRecord outRecord = AbstractMonitoringRecord.createFromDeserializer(clazzID,
+				BinaryValueDeserializer.create(byteBuffer, receiver.getReaderRegistry()));
 		return outRecord.toArray();
 	}
 

@@ -22,6 +22,7 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
+import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.IFlowRecord;
 

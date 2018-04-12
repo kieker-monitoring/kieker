@@ -26,7 +26,8 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.ILookup;
+import kieker.common.registry.ILookup;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * Record used to associate Objects (typically Strings) with unique ids.
@@ -180,6 +181,14 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 		buffer.get(strBytes);
 		final String string = RegistryRecord.bytesToString(strBytes);
 		stringRegistry.set(string, id);
+	}
+
+	public static final void registerRecordInRegistry(final ByteBuffer buffer, final ReaderRegistry<String> stringRegistry) throws BufferOverflowException {
+		final int id = buffer.getInt();
+		final byte[] strBytes = new byte[buffer.getInt()];
+		buffer.get(strBytes);
+		final String string = RegistryRecord.bytesToString(strBytes);
+		stringRegistry.register(id, string);
 	}
 
 	private static String bytesToString(final byte[] strBytes) {

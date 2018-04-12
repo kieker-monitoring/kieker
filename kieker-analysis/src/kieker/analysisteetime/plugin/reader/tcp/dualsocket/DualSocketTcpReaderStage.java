@@ -21,8 +21,7 @@ import java.nio.ByteBuffer;
 import kieker.analysisteetime.plugin.reader.tcp.singlesocket.SingleSocketTcpReaderStage;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.RegistryRecord;
-import kieker.common.util.registry.ILookup;
-import kieker.common.util.registry.Lookup;
+import kieker.common.registry.reader.ReaderRegistry;
 
 import teetime.framework.AbstractProducerStage;
 import teetime.util.stage.io.network.AbstractTcpReader;
@@ -40,7 +39,7 @@ import teetime.util.stage.io.network.AbstractTcpReader;
 @Deprecated
 public final class DualSocketTcpReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 
-	private final ILookup<String> stringRegistry = new Lookup<>();
+	private final ReaderRegistry<String> stringRegistry = new ReaderRegistry<>();
 	private final AbstractTcpReader tcpMonitoringRecordReader;
 	private final AbstractTcpReader tcpStringRecordReader;
 
@@ -73,10 +72,10 @@ public final class DualSocketTcpReaderStage extends AbstractProducerStage<IMonit
 			@Override
 			protected boolean onBufferReceived(final ByteBuffer buffer) {
 				RegistryRecord.registerRecordInRegistry(buffer, DualSocketTcpReaderStage.this.stringRegistry); // NOPMD
-																												// (method
-																												// for
-																												// legacy
-																												// reasons)
+				// (method
+				// for
+				// legacy
+				// reasons)
 				return true;
 			}
 		};
