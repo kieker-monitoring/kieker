@@ -18,6 +18,8 @@ Documentation on how to use Kieker can be found here: [Kieker Documentation](htt
 
 Gradle is used as the build tool. A `build.gradle` file is provided.
 
+For issue tracking and bug reports, JIRA is used at <https://kieker-monitoring.atlassian.net/>. 
+ 
 Further instructions for developers are available at
 https://kieker-monitoring.atlassian.net/wiki/display/DEV/
 
