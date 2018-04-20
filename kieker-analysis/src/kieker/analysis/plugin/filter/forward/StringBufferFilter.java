@@ -37,7 +37,8 @@ import kieker.common.record.IMonitoringRecord;
  *
  * @since 1.6
  */
-@Plugin(description = "A filter to reduce the memory footprint of strings used in records", outputPorts = @OutputPort(name = StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = {
+@Plugin(description = "A filter to reduce the memory footprint of strings used in records",
+		outputPorts = @OutputPort(name = StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = {
 	Object.class }))
 public final class StringBufferFilter extends AbstractFilterPlugin {
 

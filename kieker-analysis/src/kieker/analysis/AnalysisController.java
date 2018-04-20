@@ -272,9 +272,10 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 */
 	public final void handleKiekerMetadataRecord(final KiekerMetadataRecord record) {
 		LOG.info(
-				"Kieker metadata: version='{}', controllerName='{}', hostname='{}', experimentId='{}', debugMode='{}', timeOffset='{}', timeUnit='{}', numberOfRecords='{}'",
-				record.getVersion(), record.getControllerName(), record.getHostname(), record.getExperimentId(), record.isDebugMode(), record.getTimeOffset(),
-				record.getTimeUnit(), record.getNumberOfRecords());
+				"Kieker metadata: version='{}', controllerName='{}', hostname='{}', " +
+				"experimentId='{}', debugMode='{}', timeOffset='{}', timeUnit='{}', numberOfRecords='{}'",
+				record.getVersion(), record.getControllerName(), record.getHostname(), record.getExperimentId(),
+				record.isDebugMode(), record.getTimeOffset(), record.getTimeUnit(), record.getNumberOfRecords());
 	}
 
 	/**

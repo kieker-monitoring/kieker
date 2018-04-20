@@ -58,11 +58,14 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @since 1.6
  */
 @Plugin(description = "Transforms incoming TraceEventRecords into execution and message traces", outputPorts = {
-	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Outputs transformed execution traces", eventTypes = {
+	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
+			description = "Outputs transformed execution traces", eventTypes = {
 		ExecutionTrace.class }),
-	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Outputs transformed message traces", eventTypes = {
+	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+			description = "Outputs transformed message traces", eventTypes = {
 		MessageTrace.class }),
-	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces", eventTypes = {
+	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
+			description = "Invalid Execution Traces", eventTypes = {
 		InvalidExecutionTrace.class }) }, repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		}, configuration = {

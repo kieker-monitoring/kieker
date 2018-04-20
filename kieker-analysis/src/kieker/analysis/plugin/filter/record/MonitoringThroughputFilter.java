@@ -42,8 +42,10 @@ import kieker.common.record.IMonitoringRecord;
 		IMonitoringRecord.class }, description = "Provides each not counted record"),
 	@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT, eventTypes = {
 		Long.class }, description = "Provides throughput within last interval") }, configuration = {
-			@Property(name = MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = MonitoringThroughputFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-			@Property(name = MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE, defaultValue = MonitoringThroughputFilter.CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_SECOND) })
+			@Property(name = MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
+					defaultValue = MonitoringThroughputFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+			@Property(name = MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE,
+					defaultValue = MonitoringThroughputFilter.CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_SECOND) })
 public class MonitoringThroughputFilter extends AbstractFilterPlugin {
 
 	/** The name of the input port receiving other objects. */

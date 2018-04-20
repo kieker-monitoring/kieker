@@ -42,8 +42,12 @@ import kieker.common.record.IMonitoringRecord;
 @Plugin(description = "A reader which reads records from a database", outputPorts = {
 	@OutputPort(name = DbReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the DBReader")
 }, configuration = {
-	@Property(name = DbReader.CONFIG_PROPERTY_NAME_DRIVERCLASSNAME, defaultValue = "org.apache.derby.jdbc.EmbeddedDriver", description = "The classname of the driver used for the connection."),
-	@Property(name = DbReader.CONFIG_PROPERTY_NAME_CONNECTIONSTRING, defaultValue = "jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS", description = "The connection string used to establish the connection."),
+	@Property(name = DbReader.CONFIG_PROPERTY_NAME_DRIVERCLASSNAME,
+			defaultValue = "org.apache.derby.jdbc.EmbeddedDriver",
+			description = "The classname of the driver used for the connection."),
+	@Property(name = DbReader.CONFIG_PROPERTY_NAME_CONNECTIONSTRING,
+			defaultValue = "jdbc:derby:tmp/KIEKER;user=DBUSER;password=DBPASS",
+			description = "The connection string used to establish the connection."),
 	@Property(name = DbReader.CONFIG_PROPERTY_NAME_TABLEPREFIX, defaultValue = "kieker", description = "The prefix of the used table within the database.")
 })
 public class DbReader extends AbstractReaderPlugin {
