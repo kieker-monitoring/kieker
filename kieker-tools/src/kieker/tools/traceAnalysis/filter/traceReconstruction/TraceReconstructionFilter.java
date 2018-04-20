@@ -57,8 +57,8 @@ import kieker.tools.util.LoggingTimestampConverter;
 			description = "Invalid Execution Traces", eventTypes = {
 		InvalidExecutionTrace.class })
 }, repositoryPorts = {
-	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, r
-			epositoryType = SystemModelRepository.class)
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+			repositoryType = SystemModelRepository.class)
 }, configuration = {
 	@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
 			defaultValue = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
