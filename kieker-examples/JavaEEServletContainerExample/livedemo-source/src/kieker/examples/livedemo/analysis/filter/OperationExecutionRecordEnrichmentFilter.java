@@ -29,8 +29,8 @@ import kieker.examples.livedemo.analysis.util.LimitedHashMap;
 import kieker.examples.livedemo.common.EnrichedOperationExecutionRecord;
 
 /**
- * A filter enriching Kieker's {@link OperationExecutionRecord} with a short signature and some comma seperated values. The filter uses an internal LRU cache for the
- * short signatures.
+ * A filter enriching Kieker's {@link OperationExecutionRecord} with a short signature and some comma seperated values.
+ * The filter uses an internal LRU cache for the short signatures.
  * 
  * @author Bjoern Weissenfels, Nils Christian Ehmke
  * 

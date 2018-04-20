@@ -46,18 +46,26 @@ import kieker.tools.util.LoggingTimestampConverter;
  *
  * @since 1.1
  */
-@Plugin(description = "Uses the incoming data to enrich the connected repository with the reconstructed traces", outputPorts = {
-	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Reconstructed Message Traces", eventTypes = { MessageTrace.class }),
-	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Reconstructed Execution Traces", eventTypes = {
+@Plugin(description = "Uses the incoming data to enrich the connected repository with the reconstructed traces",
+        outputPorts = {
+	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+			description = "Reconstructed Message Traces", eventTypes = { MessageTrace.class }),
+	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
+			description = "Reconstructed Execution Traces", eventTypes = {
 		ExecutionTrace.class }),
-	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces", eventTypes = {
+	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
+			description = "Invalid Execution Traces", eventTypes = {
 		InvalidExecutionTrace.class })
 }, repositoryPorts = {
-	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, r
+			epositoryType = SystemModelRepository.class)
 }, configuration = {
-	@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-	@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, defaultValue = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION),
-	@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, defaultValue = "true")
+	@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
+			defaultValue = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+	@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
+			defaultValue = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION),
+	@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES,
+			defaultValue = "true")
 })
 public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 
@@ -107,8 +115,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			final long t1LowestTin = t1.getTraceAsSortedExecutionSet().first().getTin();
 			final long t2LowestTin = t2.getTraceAsSortedExecutionSet().first().getTin();
 
-			// Multiple traces may have an equal tin timestamp value. In order to provide an absolute ordering of the keys, we take the traceId as a second ordering
-			// key.
+			// Multiple traces may have an equal tin timestamp value. In order to provide an absolute ordering of the keys,
+            // we take the traceId as a second ordering key.
 			if (t1LowestTin != t2LowestTin) {
 				return t1LowestTin < t2LowestTin ? -1 : 1; // NOCS
 			}

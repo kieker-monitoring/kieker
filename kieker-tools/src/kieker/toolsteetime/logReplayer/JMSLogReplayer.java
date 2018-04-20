@@ -24,7 +24,8 @@ import kieker.common.record.IMonitoringRecord;
 import teetime.framework.AbstractProducerStage;
 
 /**
- * An implementation of the {@link AbstractLogReplayer}, using the {@link JMSReaderStage} to replay {@link kieker.common.record.IMonitoringRecord}s from a JMS queue.
+ * An implementation of the {@link AbstractLogReplayer}, using the {@link JMSReaderStage} to
+ * replay {@link kieker.common.record.IMonitoringRecord}s from a JMS queue.
  *
  * @author Andre van Hoorn
  *
