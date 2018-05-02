@@ -10,7 +10,7 @@ RSCRIPTDIR=r/
 
 DATA_DIR="/data/reiner/"
 RESULTS_DIR="${DATA_DIR}/results-kieker/"
-AGENT="${BASE_DIR}lib/kieker-1.14-SNAPSHOT-aspectj.jar"
+AGENT="${BASE_DIR}lib/kieker-1.14-aspectj.jar"
 AOP="META-INF/kieker.aop.xml"
 
 SLEEPTIME=30            ## 30
