@@ -105,6 +105,10 @@ subprojects {
 		    ignoreFailures = false
 	      maxHeapSize = "2g" 			// Set limit to prevent Travis-CI build to crash
 
+              if (JavaVersion.current() >= JavaVersion.VERSION_1_9) {
+                  jvmArgs '--add-modules=ALL-SYSTEM'      // Load additional modules for Java 9 and up
+              }
+
         testLogging {
             showCauses = 'true'
             exceptionFormat = 'full'
