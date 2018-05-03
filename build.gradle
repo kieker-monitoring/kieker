@@ -12,6 +12,7 @@ buildscript {
 
 plugins {
     id 'de.aaschmid.cpd' version '1.0'	// cpd plugin
+    id 'com.github.spotbugs' version '1.6.1' // spotbugs plugin
 }
 
 apply plugin: 'eclipse'
@@ -147,14 +148,14 @@ subprojects {
         configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
     }
 
-    apply plugin: 'findbugs'
-    findbugs {	
-        toolVersion = fbVersion
+    apply plugin: 'com.github.spotbugs'
+    spotbugs {	
+        toolVersion = sbVersion
         ignoreFailures = true
         effort = "max"
         reportLevel = "low"
 
-        excludeFilter = resolveRelativeToParent(dirConfig, 'fb-filter.xml')
+        excludeFilter = resolveRelativeToParent(dirConfig, 'sb-filter.xml')
     }
 
     tasks.withType(Pmd) {
@@ -184,7 +185,7 @@ subprojects {
         checkstyle project(':kieker-checkstyle-extension')
 
         // compile-time dependency due to the annotation SuppressFBWarnings()
-		compile "com.google.code.findbugs:findbugs:${fbVersion}"
+		compile "com.github.spotbugs:spotbugs:${sbVersion}"
 
 		compile 'org.slf4j:slf4j-api:1.7.25'
 		
@@ -271,7 +272,7 @@ def parseCheckstyleReport(File reportFile) {
     return [errors, warnings, infos]
 }
 
-def parseFindbugsReport(File reportFile) {
+def parseSpotbugsReport(File reportFile) {
     def errors = 0
     def warnings = 0
     def infos = 0
@@ -382,7 +383,7 @@ mainSubprojects.each { project ->
 		
 		        reportTypes.each { String type ->
 		            def reportFile = file(p.projectDir.path + '/build/reports/findbugs/' + type + '.xml')
-		            def reportResults = parseFindbugsReport(reportFile)
+		            def reportResults = parseSpotbugsReport(reportFile)
 		            fbErrors += reportResults[0]
 		            fbWarnings += reportResults[1]
 		            fbInfos += reportResults[2]
