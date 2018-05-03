@@ -598,6 +598,10 @@ task apidoc(type: Javadoc) {
     options.encoding = "UTF-8"
     options.charSet = "UTF-8"
     options.docEncoding = "UTF-8"
+
+    if (JavaVersion.current() >= JavaVersion.VERSION_1_9) {    
+        options.addStringOption('-add-modules', 'ALL-SYSTEM') // Load additional modules for Java 9 and up
+    }    
 }
 
 ext.sharedManifest = manifest {
