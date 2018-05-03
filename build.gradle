@@ -386,7 +386,7 @@ mainSubprojects.each { project ->
 		    def fbInfos = 0
 		
 		        reportTypes.each { String type ->
-		            def reportFile = file(p.projectDir.path + '/build/reports/findbugs/' + type + '.xml')
+		            def reportFile = file(p.projectDir.path + '/build/reports/spotbugs/' + type + '.xml')
 		            def reportResults = parseSpotbugsReport(reportFile)
 		            fbErrors += reportResults[0]
 		            fbWarnings += reportResults[1]
@@ -429,7 +429,7 @@ mainSubprojects.each { project ->
 		    println("  Warnings: " + csWarnings + " (Threshold: " + checkstyleWarningThreshold + ")")
 		    println("  Info: " + csInfos)
 		    println()
-		    println(" Findbugs:")
+		    println(" Spotbugs:")
 		    println("  Errors: " + fbErrors + " (Threshold: " + findbugsErrorThreshold + ")")
 		    println("  Warnings: " + fbWarnings + " (Threshold: " + findbugsWarningThreshold + ")")
 		    println("  Info: " + fbInfos)
@@ -454,11 +454,11 @@ mainSubprojects.each { project ->
 		
 		    // Fail build if Findbugs thresholds are violated
 		    if (fbWarnings > Integer.valueOf(findbugsWarningThreshold)) {
-		        throw new GradleException("There were findbugs warnings exceeding the warning threshold! Warnings: " + fbWarnings + " Threshold: " + findbugsWarningThreshold)
+		        throw new GradleException("There were Spotbugs warnings exceeding the warning threshold! Warnings: " + fbWarnings + " Threshold: " + findbugsWarningThreshold)
 		    }
 		
 		    if (fbErrors > Integer.valueOf(findbugsErrorThreshold)) {
-		        throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + fbErrors + " Threshold: " + findbugsErrorThreshold)
+		        throw new GradleException("There were Spotbugs errors exceeding the error threshold! Errors: " + fbErrors + " Threshold: " + findbugsErrorThreshold)
 		    }
 		
 		    // Fail build if PMD thresholds are violated
@@ -496,7 +496,7 @@ task htmlQualityReport() {
         reportTypes.each { String type ->
             def reports = p.projectDir.path + '/build/reports'
             def checkstyleReportsFolder = "${reports}/checkstyle"
-            def findbugsReportsFolder = "${reports}/findbugs"
+            def findbugsReportsFolder = "${reports}/spotbugs"
             def pmdReportsFolder = "${reports}/pmd"
 
             doLast {
