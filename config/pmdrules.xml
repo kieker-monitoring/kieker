@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Kieker PMD ruleset" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+<ruleset name="Kieker PMD ruleset"
+	xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd"
 	xsi:noNamespaceSchemaLocation="http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
@@ -43,12 +44,14 @@
 		<exclude name="NPathComplexity" />
 		<exclude name="OnlyOneReturn" />
 		<exclude name="PackageCase" />
-		<!-- startsWith is better: it returns false instead of an IndexOutOfBoundsException and its name reflects its purpose -->
+		<!-- startsWith is better: it returns false instead of an IndexOutOfBoundsException 
+			and its name reflects its purpose -->
 		<exclude name="SimplifyStartsWith" />
 		<exclude name="ShortClassName" />
 		<exclude name="ShortVariable" />
 		<exclude name="SignatureDeclareThrowsException" />
-		<!-- Java automatically compiles to StringBuilder and StringBuffer is unnecessarily synchronized -->
+		<!-- Java automatically compiles to StringBuilder and StringBuffer is unnecessarily 
+			synchronized -->
 		<exclude name="UseStringBufferForStringAppends" />
 		<exclude name="TooManyMethods" />
 		<exclude name="UnnecessaryConstructor" />
@@ -66,17 +69,21 @@
 			<property name="violationSuppressXPath"
 				value="//ClassOrInterfaceBodyDeclaration/MethodDeclaration/MethodDeclarator[matches(@Image,'(get|is|set)[\p{Lu}].*') and not(FormalParameters/FormalParameter)]" />
 			<property name="fieldCommentRequirement" value="Ignored" />
-			<property name="protectedMethodCommentRequirement" value="Ignored" />
-			<property name="publicMethodCommentRequirement" value="Ignored" />
+			<property name="protectedMethodCommentRequirement"
+				value="Ignored" />
+			<property name="publicMethodCommentRequirement"
+				value="Ignored" />
 		</properties>
 	</rule>
 
 	<rule ref="rulesets/chw/basic.xml">
-		<exclude name="NonHeaderCommentSize"/>
+		<exclude name="NonHeaderCommentSize" />
+		<!-- enable "DisallowRawTypeDeclaration" on demand; contains a bug currently (05.05.2018) -->
+		<exclude name="DisallowRawTypeDeclaration" />
 	</rule>
 
-<!-- 	<rule ref="rulesets/java/logging-jakarta-commons.xml/GuardLogStatement"> -->
-<!-- 		<priority>3</priority> -->
-<!-- 	</rule> -->
+	<!-- <rule ref="rulesets/java/logging-jakarta-commons.xml/GuardLogStatement"> -->
+	<!-- <priority>3</priority> -->
+	<!-- </rule> -->
 
 </ruleset>
