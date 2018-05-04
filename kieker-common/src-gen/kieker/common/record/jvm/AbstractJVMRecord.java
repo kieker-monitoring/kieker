@@ -28,7 +28,7 @@ import kieker.common.record.io.IValueDeserializer;
  * 
  * @since 1.10
  */
-public abstract class AbstractJVMRecord extends AbstractMonitoringRecord  {			
+public abstract class AbstractJVMRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	
 	/** default constants. */
 	public static final String HOSTNAME = "";

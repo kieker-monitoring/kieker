@@ -30,7 +30,7 @@ import kieker.common.record.io.IValueSerializer;
  * 
  * @since 1.12
  */
-public class DiskUsageRecord extends AbstractMonitoringRecord  {			
+public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // DiskUsageRecord.timestamp
 			 + TYPE_SIZE_STRING // DiskUsageRecord.hostname

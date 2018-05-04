@@ -30,7 +30,7 @@ import kieker.common.record.io.IValueSerializer;
  * 
  * @since 1.10
  */
-public class NamedTSPoint extends AbstractMonitoringRecord  {			
+public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // NamedTSPoint.timestamp
 			 + TYPE_SIZE_DOUBLE // NamedTSPoint.value

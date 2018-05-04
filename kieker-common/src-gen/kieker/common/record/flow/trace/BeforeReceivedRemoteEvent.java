@@ -30,7 +30,7 @@ import kieker.common.record.io.IValueSerializer;
  * 
  * @since 1.14
  */
-public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord  {			
+public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // BeforeReceivedRemoteEvent.timestamp
 			 + TYPE_SIZE_LONG // BeforeReceivedRemoteEvent.callerTraceId

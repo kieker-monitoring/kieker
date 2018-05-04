@@ -29,7 +29,7 @@ import kieker.common.record.flow.IEventRecord;
  * 
  * @since 1.5
  */
-public abstract class AbstractEvent extends AbstractMonitoringRecord implements IEventRecord {			
+public abstract class AbstractEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IEventRecord {			
 	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;

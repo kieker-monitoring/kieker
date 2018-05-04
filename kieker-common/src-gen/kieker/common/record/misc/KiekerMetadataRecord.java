@@ -30,7 +30,7 @@ import kieker.common.record.io.IValueSerializer;
  * 
  * @since 1.7
  */
-public class KiekerMetadataRecord extends AbstractMonitoringRecord  {			
+public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // KiekerMetadataRecord.version
 			 + TYPE_SIZE_STRING // KiekerMetadataRecord.controllerName

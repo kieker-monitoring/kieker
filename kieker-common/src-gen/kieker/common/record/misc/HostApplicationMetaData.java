@@ -30,7 +30,7 @@ import kieker.common.record.io.IValueSerializer;
  * 
  * @since 1.13
  */
-public class HostApplicationMetaData extends AbstractMonitoringRecord  {			
+public class HostApplicationMetaData extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // HostApplicationMetaData.systemName
 			 + TYPE_SIZE_STRING // HostApplicationMetaData.ipAddress

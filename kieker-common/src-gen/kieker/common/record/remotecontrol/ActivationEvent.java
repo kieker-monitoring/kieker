@@ -31,7 +31,7 @@ import kieker.common.record.remotecontrol.IRemoteControlEvent;
  * 
  * @since 1.14
  */
-public class ActivationEvent extends AbstractMonitoringRecord implements IRemoteControlEvent {			
+public class ActivationEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IRemoteControlEvent {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING; // IRemoteControlEvent.pattern
 	

@@ -34,7 +34,7 @@ import kieker.common.record.flow.ITraceRecord;
  * 
  * @since 1.14
  */
-public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IEventRecord, IFlowRecord, IClassSignature, ITraceRecord {			
+public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IEventRecord, IFlowRecord, IClassSignature, ITraceRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature

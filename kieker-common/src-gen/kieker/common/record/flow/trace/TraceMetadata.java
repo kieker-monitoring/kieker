@@ -31,7 +31,7 @@ import kieker.common.record.flow.IFlowRecord;
  * 
  * @since 1.5
  */
-public class TraceMetadata extends AbstractMonitoringRecord implements IFlowRecord {			
+public class TraceMetadata extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IFlowRecord {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // TraceMetadata.traceId
 			 + TYPE_SIZE_LONG // TraceMetadata.threadId
