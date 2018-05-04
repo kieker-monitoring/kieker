@@ -17,8 +17,6 @@
 package kieker.analysisteetime.plugin.filter.forward;
 
 import kieker.analysis.plugin.filter.forward.util.KiekerHashMap;
-import kieker.common.exception.MonitoringRecordException;
-import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
 import teetime.stage.basic.AbstractFilter;
@@ -29,6 +27,9 @@ import teetime.stage.basic.AbstractFilter;
  * Every record received is cloned and each detected String is buffered in a shared area in order to save memory.
  *
  * @author Jan Waller, Lars Bluemke
+ *
+ * TODO this filter does not work anymore without the array API, also it is unclear if it is useful, as all
+ * strings in incoming records originate from a string registry. Therefore, they are already unique.
  *
  * @since 1.6
  */
@@ -48,26 +49,26 @@ public class StringBufferFilter extends AbstractFilter<Object> {
 	protected void execute(final Object object) {
 		if (object instanceof String) {
 			this.outputPort.send(this.kiekerHashMap.get((String) object));
-		} else if (object instanceof IMonitoringRecord) {
-			final Object[] objects = ((IMonitoringRecord) object).toArray();
-			boolean stringBuffered = false;
-			for (int i = 0; i < objects.length; i++) {
-				if (objects[i] instanceof String) {
-					objects[i] = this.kiekerHashMap.get((String) objects[i]);
-					stringBuffered = true;
-				}
-			}
-			if (stringBuffered) {
-				try {
-					final IMonitoringRecord newRecord = AbstractMonitoringRecord.createFromArray((Class<? extends IMonitoringRecord>) object.getClass(), objects);
-					newRecord.setLoggingTimestamp(((IMonitoringRecord) object).getLoggingTimestamp());
-					this.outputPort.send(newRecord);
-				} catch (final MonitoringRecordException ex) {
-					this.logger.warn("Failed to recreate buffered monitoring record: " + object.toString(), ex);
-				}
-			} else {
-				this.outputPort.send(object);
-			}
+		} else if (object instanceof IMonitoringRecord) {  // NOCS temporary removed
+			//			final Object[] objects = ((IMonitoringRecord) object).toArray();
+			//			boolean stringBuffered = false;
+			//			for (int i = 0; i < objects.length; i++) {
+			//				if (objects[i] instanceof String) {
+			//					objects[i] = this.kiekerHashMap.get((String) objects[i]);
+			//					stringBuffered = true;
+			//				}
+			//			}
+			//			if (stringBuffered) {
+			//				try {
+			//					final IMonitoringRecord newRecord = AbstractMonitoringRecord.createFromArray((Class<? extends IMonitoringRecord>) object.getClass(), objects);
+			//					newRecord.setLoggingTimestamp(((IMonitoringRecord) object).getLoggingTimestamp());
+			//					this.outputPort.send(newRecord);
+			//				} catch (final MonitoringRecordException ex) {
+			//					this.logger.warn("Failed to recreate buffered monitoring record: " + object.toString(), ex);
+			//				}
+			//			} else {
+			//				this.outputPort.send(object);
+			//			}
 
 		} else { // simply forward the object
 			this.outputPort.send(object);

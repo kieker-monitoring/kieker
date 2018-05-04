@@ -76,14 +76,6 @@ public class TestCallOperationObjectEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected callee class name", FQ_CALLEE_CLASSNAME, event1.getCalleeClassSignature());
 		Assert.assertEquals("Unexpected caller object id", CALLER_OBJECT_ID, event1.getCallerObjectId());
 		Assert.assertEquals("Unexpected callee object id", CALLEE_OBJECT_ID, event1.getCalleeObjectId());
-
-		final Object[] event1Array = event1.toArray();
-
-		final CallOperationObjectEvent event2 = new CallOperationObjectEvent(event1Array);
-
-		Assert.assertEquals(event1, event2);
-		Assert.assertEquals(0, event1.compareTo(event2));
-		Assert.assertTrue(UtilityClass.refersToSameOperationAs(event1, event2));
 	}
 
 	/**

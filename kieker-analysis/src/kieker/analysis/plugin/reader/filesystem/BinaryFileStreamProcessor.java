@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.analysisteetime.plugin.reader.filesystem.format.binary.file;
+package kieker.analysis.plugin.reader.filesystem;
 
 import java.io.DataInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
@@ -25,7 +23,7 @@ import java.nio.ByteBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryRepository;
+import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
@@ -36,46 +34,36 @@ import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.registry.reader.ReaderRegistry;
 
-import teetime.framework.OutputPort;
-
 /**
- * This is a record from file creator, hacked to replace the broken Kieker version.
+ * Process an binary stream and produce IMonitoringRecords.
  *
- * TODO The file directory reading facilities need some extra work to fix it.
- *
- * @author Christian Wulf -- initial contributor
  * @author Reiner Jung
  *
- * @since 1.10
+ * @since 1.15
  */
-public class RecordFromBinaryFileCreator {
+public class BinaryFileStreamProcessor {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RecordFromBinaryFileCreator.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BinaryFileStreamProcessor.class);
 
 	private static final int LONG_BYTES = AbstractMonitoringRecord.TYPE_SIZE_LONG;
-
-	private final ClassNameRegistryRepository classNameRegistryRepository;
 
 	private final CachedRecordFactoryCatalog recordFactories = CachedRecordFactoryCatalog.getInstance();
 
 	private final ByteBuffer buffer;
 
-	/**
-	 * Create a new record from binary file creator.
-	 *
-	 * @param classNameRegistryRepository
-	 *            class and string registry
-	 */
-	public RecordFromBinaryFileCreator(final ClassNameRegistryRepository classNameRegistryRepository) {
-		this.classNameRegistryRepository = classNameRegistryRepository;
+	private final ReaderRegistry<String> stringRegistry;
+
+	private final IMonitoringRecordReceiver recordReceiver;
+
+	public BinaryFileStreamProcessor(final ReaderRegistry<String> stringRegistry, final IMonitoringRecordReceiver recordReceiver) {
+		this.stringRegistry = stringRegistry;
 		this.buffer = ByteBuffer.allocate(1024000);
+		this.recordReceiver = recordReceiver;
 	}
 
 	/**
 	 * Create records from binary files.
 	 *
-	 * @param binaryFile
-	 *            binary file input, only used for logging info
 	 * @param inputStream
 	 *            data stream
 	 * @param outputPort
@@ -85,14 +73,9 @@ public class RecordFromBinaryFileCreator {
 	 * @throws MonitoringRecordException
 	 *             on deserialization issues
 	 */
-	public void createRecordsFromBinaryFile(final File binaryFile, final DataInputStream inputStream,
-			final OutputPort<IMonitoringRecord> outputPort) throws IOException, MonitoringRecordException {
+	public void createRecordsFromBinaryFile(final DataInputStream inputStream) throws IOException, MonitoringRecordException {
 
-		RecordFromBinaryFileCreator.LOGGER.info("reading file {}", binaryFile.getAbsolutePath());
-
-		final ReaderRegistry<String> registry = this.classNameRegistryRepository.get(binaryFile.getParentFile());
-
-		final BinaryValueDeserializer deserializer = BinaryValueDeserializer.create(this.buffer, registry);
+		final BinaryValueDeserializer deserializer = BinaryValueDeserializer.create(this.buffer, this.stringRegistry);
 
 		boolean endOfStreamReached = false;
 		while (!endOfStreamReached) {
@@ -110,7 +93,7 @@ public class RecordFromBinaryFileCreator {
 				endOfStreamReached = true;
 			}
 
-			this.processBuffer(registry, deserializer, outputPort);
+			this.processBuffer(deserializer);
 
 			if (endOfStreamReached) {
 				inputStream.close();
@@ -119,44 +102,43 @@ public class RecordFromBinaryFileCreator {
 
 	}
 
-	private void processBuffer(final ReaderRegistry<String> registry, final IValueDeserializer deserializer,
-			final OutputPort<IMonitoringRecord> outputPort) throws IOException {
+	private void processBuffer(final IValueDeserializer deserializer) throws IOException {
 		this.buffer.flip();
 
 		try {
 			/** Needs at least an record id. */
 			while ((this.buffer.position() + 4) <= this.buffer.limit()) {
 				this.buffer.mark();
-				final IMonitoringRecord record = this.deserializeRecord(registry, deserializer);
+				final IMonitoringRecord record = this.deserializeRecord(deserializer);
 				if (record == null) {
 					return;
 				} else {
-					outputPort.send(record);
+					this.recordReceiver.newMonitoringRecord(record);
 				}
 			}
 			this.buffer.mark();
 			this.buffer.compact();
 		} catch (final BufferUnderflowException ex) {
-			RecordFromBinaryFileCreator.LOGGER.warn("Unexpected buffer underflow. Resetting and compacting buffer.", ex);
+			LOGGER.warn("Unexpected buffer underflow. Resetting and compacting buffer.", ex);
 			this.buffer.reset();
 			this.buffer.compact();
 			throw ex;
 		}
 	}
 
-	private IMonitoringRecord deserializeRecord(final ReaderRegistry<String> registry, final IValueDeserializer deserializer)
+	private IMonitoringRecord deserializeRecord(final IValueDeserializer deserializer)
 			throws IOException {
 		final int clazzId = this.buffer.getInt();
-		final String recordClassName = registry.get(clazzId);
+		final String recordClassName = this.stringRegistry.get(clazzId);
 
 		if (recordClassName == null) {
-			RecordFromBinaryFileCreator.LOGGER.error("Missing classname mapping for record type id '{}'",
+			LOGGER.error("Missing classname mapping for record type id '{}'",
 					clazzId);
 			return null; // we can't easily recover on errors
 		}
 
 		// identify logging timestamp
-		if (this.buffer.remaining() < RecordFromBinaryFileCreator.LONG_BYTES) {
+		if (this.buffer.remaining() < LONG_BYTES) {
 			// incomplete record, move back
 			this.buffer.reset();
 			this.buffer.compact();
@@ -180,13 +162,13 @@ public class RecordFromBinaryFileCreator {
 					// arrays are used and the buffer
 					// does not hold the complete
 					// record.
-					RecordFromBinaryFileCreator.LOGGER.warn("Failed to create: {} error {}", recordClassName, ex);
+					LOGGER.warn("Failed to create: {} error {}", recordClassName, ex);
 					// incomplete record, move back
 					this.buffer.reset();
 					this.buffer.compact();
 					return null;
 				} catch (final BufferUnderflowException ex) {
-					RecordFromBinaryFileCreator.LOGGER.warn("Failed to create: {} error {}", recordClassName, ex);
+					LOGGER.warn("Failed to create: {} error {}", recordClassName, ex);
 					// incomplete record, move back
 					this.buffer.reset();
 					this.buffer.compact();
@@ -196,5 +178,4 @@ public class RecordFromBinaryFileCreator {
 			}
 		}
 	}
-
 }

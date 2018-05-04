@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,11 +33,6 @@ public final class MonitorNotifyAllEventFactory implements IRecordFactory<Monito
 		return new MonitorNotifyAllEvent(deserializer);
 	}
 	
-	@Override
-	@Deprecated
-	public MonitorNotifyAllEvent create(final Object[] values) {
-		return new MonitorNotifyAllEvent(values);
-	}
 	
 	public int getRecordSizeInBytes() {
 		return MonitorNotifyAllEvent.SIZE;

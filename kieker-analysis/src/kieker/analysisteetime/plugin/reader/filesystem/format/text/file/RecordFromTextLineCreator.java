@@ -17,16 +17,18 @@
 package kieker.analysisteetime.plugin.reader.filesystem.format.text.file;
 
 import java.io.File;
+import java.nio.CharBuffer;
 
-import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistry;
 import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryRepository;
 import kieker.analysisteetime.plugin.reader.filesystem.util.MappingException;
 import kieker.common.exception.IllegalRecordFormatException;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.exception.UnknownRecordTypeException;
-import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.record.factory.CachedRecordFactoryCatalog;
+import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.TextValueDeserializer;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * @author Christian Wulf
@@ -35,73 +37,49 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
  */
 public class RecordFromTextLineCreator {
 
-	private static final String CSV_SEPARATOR_CHARACTER = ";";
-
 	private static final IllegalRecordFormatException ILLEGAL_RECORD_FORMAT_EXCEPTION = new IllegalRecordFormatException();
+
+	private final CachedRecordFactoryCatalog recordFactories = CachedRecordFactoryCatalog.getInstance();
 
 	private final ClassNameRegistryRepository classNameRegistryRepository;
 
+	private final CharBuffer charBuffer;
+
 	public RecordFromTextLineCreator(final ClassNameRegistryRepository classNameRegistryRepository) {
 		this.classNameRegistryRepository = classNameRegistryRepository;
+		this.charBuffer = CharBuffer.allocate(100000);
 	}
 
 	public IMonitoringRecord createRecordFromLine(final File textFile, final String line) throws MonitoringRecordException, IllegalRecordFormatException,
-			MappingException,
-			UnknownRecordTypeException {
-		final String[] recordFields = line.split(CSV_SEPARATOR_CHARACTER, -1);
+	MappingException,
+	UnknownRecordTypeException {
+		this.charBuffer.put(line);
+		return this.createRecord(this.classNameRegistryRepository.get(textFile.getParentFile()));
 
-		if (recordFields.length < 2) {
+	}
+
+	private IMonitoringRecord createRecord(final ReaderRegistry<String> readerRegistry)
+			throws MappingException, MonitoringRecordException, UnknownRecordTypeException, IllegalRecordFormatException {
+		this.charBuffer.flip();
+		final char lead = this.charBuffer.get();
+		if (lead == '$') {
+			final TextValueDeserializer deserializer = TextValueDeserializer.create(this.charBuffer);
+			final int id = deserializer.getInt();
+			final String classname = readerRegistry.get(id);
+			if (classname == null) {
+				throw new MappingException("Missing classname mapping for record type id " + "'" + id + "'");
+			}
+
+			final long loggingTimestamp = deserializer.getLong();
+			final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(classname);
+			final IMonitoringRecord event = recordFactory.create(deserializer);
+			event.setLoggingTimestamp(loggingTimestamp);
+			this.charBuffer.clear();
+
+			return event;
+		} else {
 			throw ILLEGAL_RECORD_FORMAT_EXCEPTION;
 		}
-
-		final boolean isModernRecord = recordFields[0].charAt(0) == '$';
-		if (isModernRecord) {
-			return this.createModernRecordFromRecordFields(textFile, recordFields);
-		} else {
-			return this.createLegacyRecordFromRecordFiels(recordFields);
-		}
-	}
-
-	private IMonitoringRecord createModernRecordFromRecordFields(final File textFile, final String[] recordFields) throws MonitoringRecordException,
-			MappingException,
-			UnknownRecordTypeException {
-		final ClassNameRegistry classNameRegistry = this.classNameRegistryRepository.get(textFile.getParentFile());
-		final Integer id = Integer.valueOf(recordFields[0].substring(1));
-		final String classname = classNameRegistry.get(id);
-		if (classname == null) {
-			throw new MappingException("Missing classname mapping for record type id " + "'" + id + "'");
-		}
-		final Class<? extends IMonitoringRecord> clazz = this.getClassByName(classname);
-		final long loggingTimestamp = Long.parseLong(recordFields[1]);
-		final int skipValues;
-		// check for Kieker < 1.6 OperationExecutionRecords
-		if ((recordFields.length == 11) && clazz.equals(OperationExecutionRecord.class)) {
-			skipValues = 3;
-		} else {
-			skipValues = 2;
-		}
-		// Java 1.5 compatibility
-		final String[] recordFieldsReduced = new String[recordFields.length - skipValues];
-		System.arraycopy(recordFields, skipValues, recordFieldsReduced, 0, recordFields.length - skipValues);
-		// in Java 1.6 this could be simplified to
-		// recordFieldsReduced = Arrays.copyOfRange(recordFields, skipValues, recordFields.length);
-
-		final IMonitoringRecord record = AbstractMonitoringRecord.createFromStringArray(clazz, recordFieldsReduced);
-		record.setLoggingTimestamp(loggingTimestamp);
-		return record;
-	}
-
-	private Class<? extends IMonitoringRecord> getClassByName(final String classname) throws MonitoringRecordException, UnknownRecordTypeException {
-		try {
-			return AbstractMonitoringRecord.classForName(classname);
-		} catch (final MonitoringRecordException ex) {
-			throw new UnknownRecordTypeException("Failed to load record type " + classname, classname, ex);
-		}
-	}
-
-	private IMonitoringRecord createLegacyRecordFromRecordFiels(final String[] recordFields) throws MonitoringRecordException {
-		final String[] recordFieldsReduced = new String[recordFields.length - 1];
-		System.arraycopy(recordFields, 1, recordFieldsReduced, 0, recordFields.length - 1);
-		return AbstractMonitoringRecord.createFromStringArray(OperationExecutionRecord.class, recordFieldsReduced);
 	}
 }
+

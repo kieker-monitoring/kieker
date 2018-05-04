@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,11 +33,6 @@ public final class BeforeConstructorObjectInterfaceEventFactory implements IReco
 		return new BeforeConstructorObjectInterfaceEvent(deserializer);
 	}
 	
-	@Override
-	@Deprecated
-	public BeforeConstructorObjectInterfaceEvent create(final Object[] values) {
-		return new BeforeConstructorObjectInterfaceEvent(values);
-	}
 	
 	public int getRecordSizeInBytes() {
 		return BeforeConstructorObjectInterfaceEvent.SIZE;

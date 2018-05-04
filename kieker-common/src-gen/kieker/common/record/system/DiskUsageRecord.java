@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +22,15 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Teerat Pitakrat
- * API compatibility: Kieker 1.14.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.12
  */
-public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
+public class DiskUsageRecord extends AbstractMonitoringRecord  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // DiskUsageRecord.timestamp
 			 + TYPE_SIZE_STRING // DiskUsageRecord.hostname
@@ -125,52 +124,7 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		this.writesPerSecond = writesPerSecond;
 	}
 
-	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated since 1.13. Use {@link #DiskUsageRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	public DiskUsageRecord(final Object[] values) { // NOPMD (direct store of values)
-		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.deviceName = (String) values[2];
-		this.queue = (Double) values[3];
-		this.readBytesPerSecond = (Double) values[4];
-		this.readsPerSecond = (Double) values[5];
-		this.serviceTime = (Double) values[6];
-		this.writeBytesPerSecond = (Double) values[7];
-		this.writesPerSecond = (Double) values[8];
-	}
 
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use {@link #DiskUsageRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	protected DiskUsageRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.deviceName = (String) values[2];
-		this.queue = (Double) values[3];
-		this.readBytesPerSecond = (Double) values[4];
-		this.readsPerSecond = (Double) values[5];
-		this.serviceTime = (Double) values[6];
-		this.writeBytesPerSecond = (Double) values[7];
-		this.writesPerSecond = (Double) values[8];
-	}
 
 	
 	/**
@@ -191,26 +145,6 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		this.writesPerSecond = deserializer.getDouble();
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getHostname(),
-			this.getDeviceName(),
-			this.getQueue(),
-			this.getReadBytesPerSecond(),
-			this.getReadsPerSecond(),
-			this.getServiceTime(),
-			this.getWriteBytesPerSecond(),
-			this.getWritesPerSecond(),
-		};
-	}
 	/**
 	 * {@inheritDoc}
 	 */
@@ -252,16 +186,6 @@ public class DiskUsageRecord extends AbstractMonitoringRecord implements IMonito
 		return SIZE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
 	
 	/**
 	 * {@inheritDoc}

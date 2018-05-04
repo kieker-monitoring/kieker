@@ -27,10 +27,14 @@ import kieker.tools.bridge.connector.ConnectorProperty;
 
 /**
  * JMSClient with an embedded JMS server.
- * 
+ *
  * @author Reiner Jung
+ *
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
+@Deprecated
 @ConnectorProperty(cmdName = "jms-embedded", name = "JMS Embedded Connector", description = "JMS Client to receive records from a built-in JMS queue.")
 public class JMSEmbeddedConnector extends JMSClientConnector {
 
@@ -42,10 +46,10 @@ public class JMSEmbeddedConnector extends JMSClientConnector {
 
 	/**
 	 * Construct a new JMS service consumer and an embedded JMS service.
-	 * 
+	 *
 	 * @param configuration
 	 *            Kieker configuration including setup for connectors
-	 * 
+	 *
 	 * @param lookupEntityMap
 	 *            IMonitoringRecord constructor and TYPES-array to id map
 	 * @throws ConnectorDataTransmissionException
@@ -58,7 +62,7 @@ public class JMSEmbeddedConnector extends JMSClientConnector {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see kieker.tools.bridge.connector.jms.JMSClientConnector#initialize()
 	 */
 	@Override
@@ -77,7 +81,7 @@ public class JMSEmbeddedConnector extends JMSClientConnector {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see kieker.tools.bridge.connector.jms.JMSClientConnector#close()
 	 */
 	@Override

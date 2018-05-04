@@ -21,7 +21,10 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * @author Reiner Jung
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
+@Deprecated
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ConnectorProperty {
 	/** name used in tooling */

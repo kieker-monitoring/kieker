@@ -68,13 +68,6 @@ public class TestTraceMetadata extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected hostname", HOSTNAME, trace1.getHostname());
 		Assert.assertEquals("Unexpected parent trace ID", PARENT_TRACE_ID, trace1.getParentTraceId());
 		Assert.assertEquals("Unexpected parent order ID", PARENT_ORDER_ID, trace1.getParentOrderId());
-
-		final Object[] trace1Array = trace1.toArray();
-
-		final TraceMetadata trace2 = new TraceMetadata(trace1Array);
-
-		Assert.assertEquals(trace1, trace2);
-		Assert.assertEquals(0, trace1.compareTo(trace2));
 	}
 
 	/**

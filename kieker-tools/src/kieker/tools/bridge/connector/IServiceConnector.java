@@ -20,41 +20,44 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * Generic interface for every servcie connector.
- * 
+ *
  * @author Reiner Jung
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
+@Deprecated
 public interface IServiceConnector {
 
 	/**
 	 * The deserialize method reads source data and returns an {@link IMonitoringRecord}.
-	 * 
+	 *
 	 * @return A {@link IMonitoringRecord} or null on read error or end of line.
 	 * @throws ConnectorDataTransmissionException
 	 *             if a read error or an unknown record id occurs
 	 * @throws ConnectorEndOfDataException
 	 *             if the transmission is terminated or otherwise signaled that the last record has been received.
-	 * 
+	 *
 	 * @since 1.8
 	 */
 	IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException;
 
 	/**
 	 * Called to initialize the channel to read record information.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             when an error occurred setting up the record source.
-	 * 
+	 *
 	 * @since 1.8
 	 */
 	void initialize() throws ConnectorDataTransmissionException;
 
 	/**
 	 * Called to close the previously initialize record source.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             when an error occurred during connection close.
-	 * 
+	 *
 	 * @since 1.8
 	 */
 	void close() throws ConnectorDataTransmissionException;

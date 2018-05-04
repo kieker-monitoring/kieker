@@ -23,10 +23,13 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * Lookup entity for a record id to a monitoring record. To avoid too many lookups and queries,
  * this map record contains a constructor reference and an array containing the field descriptions.
- * 
+ *
  * @author Reiner Jung
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
+@Deprecated
 public final class LookupEntity {
 	/**
 	 * List of parameter types for a given IMonitoringRecord.
@@ -40,7 +43,7 @@ public final class LookupEntity {
 
 	/**
 	 * Construct one new LookupEntry.
-	 * 
+	 *
 	 * @param constructor
 	 *            constructor for a IMonitoringRecord class
 	 * @param parameterTypes

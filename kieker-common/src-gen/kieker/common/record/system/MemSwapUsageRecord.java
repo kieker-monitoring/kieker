@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +22,15 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 1.14.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.3
  */
-public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
+public class MemSwapUsageRecord extends AbstractMonitoringRecord  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // MemSwapUsageRecord.timestamp
 			 + TYPE_SIZE_STRING // MemSwapUsageRecord.hostname
@@ -117,50 +116,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		this.swapFree = swapFree;
 	}
 
-	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated since 1.13. Use {@link #MemSwapUsageRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	public MemSwapUsageRecord(final Object[] values) { // NOPMD (direct store of values)
-		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.memTotal = (Long) values[2];
-		this.memUsed = (Long) values[3];
-		this.memFree = (Long) values[4];
-		this.swapTotal = (Long) values[5];
-		this.swapUsed = (Long) values[6];
-		this.swapFree = (Long) values[7];
-	}
 
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use {@link #MemSwapUsageRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	protected MemSwapUsageRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.memTotal = (Long) values[2];
-		this.memUsed = (Long) values[3];
-		this.memFree = (Long) values[4];
-		this.swapTotal = (Long) values[5];
-		this.swapUsed = (Long) values[6];
-		this.swapFree = (Long) values[7];
-	}
 
 	
 	/**
@@ -180,25 +136,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		this.swapFree = deserializer.getLong();
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getHostname(),
-			this.getMemTotal(),
-			this.getMemUsed(),
-			this.getMemFree(),
-			this.getSwapTotal(),
-			this.getSwapUsed(),
-			this.getSwapFree(),
-		};
-	}
 	/**
 	 * {@inheritDoc}
 	 */
@@ -239,16 +176,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		return SIZE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
 	
 	/**
 	 * {@inheritDoc}

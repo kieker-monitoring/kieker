@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,11 +33,6 @@ public final class BeforeThreadBasedEventFactory implements IRecordFactory<Befor
 		return new BeforeThreadBasedEvent(deserializer);
 	}
 	
-	@Override
-	@Deprecated
-	public BeforeThreadBasedEvent create(final Object[] values) {
-		return new BeforeThreadBasedEvent(values);
-	}
 	
 	public int getRecordSizeInBytes() {
 		return BeforeThreadBasedEvent.SIZE;

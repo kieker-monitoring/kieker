@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 
+import kieker.common.registry.reader.ReaderRegistry;
 import kieker.common.util.filesystem.FSUtil;
 
 /**
@@ -55,8 +56,8 @@ public class MappingFileParser {
 	 * @param inputStream
 	 * @return
 	 */
-	public ClassNameRegistry parseFromStream(final InputStream inputStream) {
-		final ClassNameRegistry classNameRegistry = new ClassNameRegistry();
+	public ReaderRegistry<String> parseFromStream(final InputStream inputStream) {
+		final ReaderRegistry<String> classNameRegistry = new ReaderRegistry<>();
 
 		BufferedReader in = null;
 		try {
@@ -80,7 +81,7 @@ public class MappingFileParser {
 		return classNameRegistry;
 	}
 
-	private void parseTextLine(final String line, final Map<Integer, String> stringRegistry) {
+	private void parseTextLine(final String line, final ReaderRegistry<String> stringRegistry) {
 		if (line.length() == 0) {
 			return; // ignore empty lines
 		}
@@ -99,7 +100,7 @@ public class MappingFileParser {
 			return; // continue on errors
 		}
 		final String value = FSUtil.decodeNewline(line.substring(split + 1));
-		final String prevVal = stringRegistry.put(id, value);
+		final String prevVal = stringRegistry.register(id, value);
 		if (prevVal != null) {
 			this.logger.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
 		}

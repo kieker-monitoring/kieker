@@ -67,14 +67,6 @@ public class TestAfterConstructorEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
 		Assert.assertEquals("Unexpected class name", FQ_CLASSNAME, event1.getClassSignature());
 		Assert.assertEquals("Unexpected operation signature", FQ_OPERATION_SIGNATURE, event1.getOperationSignature());
-
-		final Object[] event1Array = event1.toArray();
-
-		final AfterConstructorEvent event2 = new AfterConstructorEvent(event1Array);
-
-		Assert.assertEquals(event1, event2);
-		Assert.assertEquals(0, event1.compareTo(event2));
-		Assert.assertTrue(UtilityClass.refersToSameOperationAs(event1, event2));
 	}
 
 	/**

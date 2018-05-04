@@ -66,13 +66,6 @@ public class TestConstructionEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
 		Assert.assertEquals("Unexpected class name", FQ_CLASSNAME, event1.getClassSignature());
 		Assert.assertEquals("Unexpected object ID", OBJECT_ID, event1.getObjectId());
-
-		final Object[] event1Array = event1.toArray();
-
-		final ConstructionEvent event2 = new ConstructionEvent(event1Array);
-
-		Assert.assertEquals(event1, event2);
-		Assert.assertEquals(0, event1.compareTo(event2));
 	}
 
 	/**

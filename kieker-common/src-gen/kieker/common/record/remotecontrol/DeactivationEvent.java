@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,17 +22,16 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.remotecontrol.IRemoteControlEvent;
 
 /**
  * @author Marc Adolf
- * API compatibility: Kieker 1.14.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.14
  */
-public class DeactivationEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IRemoteControlEvent {			
+public class DeactivationEvent extends AbstractMonitoringRecord implements IRemoteControlEvent {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING; // IRemoteControlEvent.pattern
 	
@@ -62,36 +61,7 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IMoni
 		this.pattern = pattern == null?"":pattern;
 	}
 
-	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated since 1.13. Use {@link #DeactivationEvent(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	public DeactivationEvent(final Object[] values) { // NOPMD (direct store of values)
-		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.pattern = (String) values[0];
-	}
 
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use {@link #DeactivationEvent(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	protected DeactivationEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.pattern = (String) values[0];
-	}
 
 	
 	/**
@@ -104,18 +74,6 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IMoni
 		this.pattern = deserializer.getString();
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] {
-			this.getPattern(),
-		};
-	}
 	/**
 	 * {@inheritDoc}
 	 */
@@ -149,16 +107,6 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IMoni
 		return SIZE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
 	
 	/**
 	 * {@inheritDoc}

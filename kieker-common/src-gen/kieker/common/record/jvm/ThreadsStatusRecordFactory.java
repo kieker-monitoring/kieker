@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,11 +33,6 @@ public final class ThreadsStatusRecordFactory implements IRecordFactory<ThreadsS
 		return new ThreadsStatusRecord(deserializer);
 	}
 	
-	@Override
-	@Deprecated
-	public ThreadsStatusRecord create(final Object[] values) {
-		return new ThreadsStatusRecord(values);
-	}
 	
 	public int getRecordSizeInBytes() {
 		return ThreadsStatusRecord.SIZE;

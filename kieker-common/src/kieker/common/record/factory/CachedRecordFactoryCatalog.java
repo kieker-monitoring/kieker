@@ -20,7 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.factory.old.RecordFactoryWrapper;
 
 /**
  * @author Christian Wulf
@@ -71,9 +70,6 @@ public final class CachedRecordFactoryCatalog {
 		IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
 		if (null == recordFactory) {
 			recordFactory = this.recordFactoryResolver.get(recordClassName);
-			if (null == recordFactory) { // if a corresponding factory could not be found
-				recordFactory = new RecordFactoryWrapper(recordClassName);
-			}
 			final IRecordFactory<? extends IMonitoringRecord> existingFactory = this.cachedRecordFactories.putIfAbsent(recordClassName, recordFactory);
 			if (existingFactory != null) {
 				recordFactory = existingFactory;

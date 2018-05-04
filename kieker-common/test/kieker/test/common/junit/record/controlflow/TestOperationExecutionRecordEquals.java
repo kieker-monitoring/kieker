@@ -31,32 +31,6 @@ import kieker.test.common.junit.AbstractKiekerTest;
 public class TestOperationExecutionRecordEquals extends AbstractKiekerTest { // NOCS (MissingCtorCheck)
 
 	/**
-	 * Tests the toArray(..) and initFromArray(..) methods of OperationExecutionRecord.
-	 *
-	 * Assert that a record instance r1 equals an instance r2 created by serializing r1 to an array a1 and using a1 to init r2.
-	 * This ignores a set loggingTimestamp!
-	 */
-	@Test
-	public void testSerializeDeserializeEquals() {
-		final OperationExecutionRecord r1 = new OperationExecutionRecord(
-				"public void p1.p2.p3.componentname.operation(boolean, int)", // operationSignature
-				"XXLJHDJHDHF", // sessionId
-				882287444, // traceId
-				5577376, // tin
-				7544522, // tout
-				"myVM", // hostname
-				1, // eoi
-				2 // ess
-		);
-
-		final Object[] r1Array = r1.toArray();
-
-		final OperationExecutionRecord r2 = new OperationExecutionRecord(r1Array);
-
-		Assert.assertEquals(r1, r2);
-	}
-
-	/**
 	 * Tests the equals(..) method of OperationExecutionRecord.
 	 *
 	 * Assert that two record instances with equal variables values are equal.

@@ -47,11 +47,6 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public Object[] toArray() {
-			return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
-		}
-
-		@Override
 		public Class<?>[] getValueTypes() {
 			return new Class<?>[] { long.class, long.class, int.class, };
 		}
@@ -97,7 +92,7 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 *             If the internal analysis is in an invalid state.
 	 */
 	private void createTimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp) throws IllegalStateException,
-			AnalysisConfigurationException {
+	AnalysisConfigurationException {
 		final Configuration cfg = new Configuration();
 		cfg.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(ignoreExecutionsBeforeTimestamp));
 		cfg.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(ignoreExecutionsAfterTimestamp));

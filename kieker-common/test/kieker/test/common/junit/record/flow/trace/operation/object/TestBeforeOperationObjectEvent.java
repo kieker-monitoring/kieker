@@ -69,14 +69,6 @@ public class TestBeforeOperationObjectEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected class name", FQ_CLASSNAME, event1.getClassSignature());
 		Assert.assertEquals("Unexpected operation signature", FQ_OPERATION_SIGNATURE, event1.getOperationSignature());
 		Assert.assertEquals("Unexpected object id", OBJECT_ID, event1.getObjectId());
-
-		final Object[] event1Array = event1.toArray();
-
-		final BeforeOperationObjectEvent event2 = new BeforeOperationObjectEvent(event1Array);
-
-		Assert.assertEquals(event1, event2);
-		Assert.assertEquals(0, event1.compareTo(event2));
-		Assert.assertTrue(UtilityClass.refersToSameOperationAs(event1, event2));
 	}
 
 	/**

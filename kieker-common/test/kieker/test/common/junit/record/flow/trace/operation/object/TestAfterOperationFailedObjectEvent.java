@@ -72,14 +72,6 @@ public class TestAfterOperationFailedObjectEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected operation signature", FQ_OPERATION_SIGNATURE, event1.getOperationSignature());
 		Assert.assertEquals("Unexpected cause", CAUSE, event1.getCause());
 		Assert.assertEquals("Unexpected object id", OBJECT_ID, event1.getObjectId());
-
-		final Object[] event1Array = event1.toArray();
-
-		final AfterOperationFailedObjectEvent event2 = new AfterOperationFailedObjectEvent(event1Array);
-
-		Assert.assertEquals(event1, event2);
-		Assert.assertEquals(0, event1.compareTo(event2));
-		Assert.assertTrue(UtilityClass.refersToSameOperationAs(event1, event2));
 	}
 
 	/**

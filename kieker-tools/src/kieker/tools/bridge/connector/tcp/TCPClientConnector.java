@@ -35,8 +35,12 @@ import kieker.tools.bridge.connector.ConnectorProperty;
  * Connects to a remote record source.
  *
  * @author Reiner Jung
+ *
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
+@Deprecated
 @ConnectorProperty(cmdName = "tcp-client", name = "TCP Client Connector", description = "connector for remote TCP record sources.")
 public class TCPClientConnector extends AbstractConnector {
 

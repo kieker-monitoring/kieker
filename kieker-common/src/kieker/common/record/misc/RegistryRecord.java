@@ -23,7 +23,6 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.registry.ILookup;
@@ -36,7 +35,7 @@ import kieker.common.registry.reader.ReaderRegistry;
  *
  * @since 1.5
  */
-public final class RegistryRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+public final class RegistryRecord extends AbstractMonitoringRecord {
 	public static final int SIZE = TYPE_SIZE_INT + TYPE_SIZE_STRING;
 	public static final Class<?>[] TYPES = new Class<?>[] {
 		int.class, // id
@@ -98,28 +97,9 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Object[] toArray() {
-		return new Object[] { this.getId(), this.getString(), };
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		serializer.putInt(this.getId());
 		serializer.putString(this.getString());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public final void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
 	}
 
 	/**

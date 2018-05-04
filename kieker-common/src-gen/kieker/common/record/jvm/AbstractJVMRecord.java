@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,11 @@ import kieker.common.record.io.IValueDeserializer;
 
 /**
  * @author Nils Christian Ehmke
- * API compatibility: Kieker 1.14.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.10
  */
-public abstract class AbstractJVMRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
+public abstract class AbstractJVMRecord extends AbstractMonitoringRecord  {			
 	
 	/** default constants. */
 	public static final String HOSTNAME = "";
@@ -58,23 +58,6 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	}
 
 
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use {@link #AbstractJVMRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	protected AbstractJVMRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.vmName = (String) values[2];
-	}
 
 	
 	/**
@@ -90,16 +73,6 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	}
 	
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
 	
 	/**
 	 * {@inheritDoc}

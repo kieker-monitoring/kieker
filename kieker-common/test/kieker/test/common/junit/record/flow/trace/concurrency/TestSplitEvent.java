@@ -62,13 +62,6 @@ public class TestSplitEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
 		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
-
-		final Object[] event1Array = event1.toArray();
-
-		final SplitEvent event2 = new SplitEvent(event1Array);
-
-		Assert.assertEquals(event1, event2);
-		Assert.assertEquals(0, event1.compareTo(event2));
 	}
 
 	/**

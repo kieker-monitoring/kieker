@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +22,15 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Felix Eichhorst
- * API compatibility: Kieker 1.14.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.14
  */
-public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
+public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // BeforeReceivedRemoteEvent.timestamp
 			 + TYPE_SIZE_LONG // BeforeReceivedRemoteEvent.callerTraceId
@@ -93,44 +92,7 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implemen
 		this.orderIndex = orderIndex;
 	}
 
-	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated since 1.13. Use {@link #BeforeReceivedRemoteEvent(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	public BeforeReceivedRemoteEvent(final Object[] values) { // NOPMD (direct store of values)
-		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.timestamp = (Long) values[0];
-		this.callerTraceId = (Long) values[1];
-		this.callerOrderIndex = (Integer) values[2];
-		this.traceId = (Long) values[3];
-		this.orderIndex = (Integer) values[4];
-	}
 
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use {@link #BeforeReceivedRemoteEvent(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	protected BeforeReceivedRemoteEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.timestamp = (Long) values[0];
-		this.callerTraceId = (Long) values[1];
-		this.callerOrderIndex = (Integer) values[2];
-		this.traceId = (Long) values[3];
-		this.orderIndex = (Integer) values[4];
-	}
 
 	
 	/**
@@ -147,22 +109,6 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implemen
 		this.orderIndex = deserializer.getInt();
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getCallerTraceId(),
-			this.getCallerOrderIndex(),
-			this.getTraceId(),
-			this.getOrderIndex(),
-		};
-	}
 	/**
 	 * {@inheritDoc}
 	 */
@@ -200,16 +146,6 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord implemen
 		return SIZE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
 	
 	/**
 	 * {@inheritDoc}

@@ -32,13 +32,14 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.test.common.junit.AbstractDynamicKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Christian Wulf
  *
  * @since 1.14
  */
-public class FSUtilTest {
+public class FSUtilTest extends AbstractKiekerTest {
 
 	@Rule
 	public final TemporaryFolder tempFolder = new TemporaryFolder();

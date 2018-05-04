@@ -67,7 +67,6 @@ public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest
 		this.checkHostName(opExecutionRecord, hostname);
 		this.checkSessionId(opExecutionRecord, sessionId);
 
-		this.checkToFromArrayAllFields(opExecutionRecord);
 		this.checkToFromBinaryAllFields(opExecutionRecord);
 	}
 
@@ -91,19 +90,6 @@ public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest
 	private void checkEoiEss(final OperationExecutionRecord opExecutionRecord, final int eoi, final int ess) {
 		Assert.assertEquals("eoi's differ", eoi, opExecutionRecord.getEoi());
 		Assert.assertEquals("ess's differ", ess, opExecutionRecord.getEss());
-	}
-
-	private void checkToFromArrayAllFields(final OperationExecutionRecord opExecutionRecord) {
-		final Object[] serializedRecord = opExecutionRecord.toArray();
-		final OperationExecutionRecord deserializedRecord = new OperationExecutionRecord(serializedRecord);
-
-		Assert.assertEquals("Records not equal (array)", opExecutionRecord, deserializedRecord);
-
-		this.checkEoiEss(deserializedRecord, opExecutionRecord.getEoi(), opExecutionRecord.getEss());
-		this.checkHostName(deserializedRecord, opExecutionRecord.getHostname());
-		this.checkSessionId(deserializedRecord, opExecutionRecord.getSessionId());
-		this.checkTinTout(deserializedRecord, opExecutionRecord.getTin(), opExecutionRecord.getTout());
-		this.checkTraceId(deserializedRecord, opExecutionRecord.getTraceId());
 	}
 
 	private void checkToFromBinaryAllFields(final OperationExecutionRecord opExecutionRecord) {

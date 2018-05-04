@@ -64,13 +64,6 @@ public class TestMonitorNotifyEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
 		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
 		Assert.assertEquals("Unexpected lock id", LOCK_ID, event1.getLockId());
-
-		final Object[] event1Array = event1.toArray();
-
-		final MonitorNotifyEvent event2 = new MonitorNotifyEvent(event1Array);
-
-		Assert.assertEquals(event1, event2);
-		Assert.assertEquals(0, event1.compareTo(event2));
 	}
 
 	/**

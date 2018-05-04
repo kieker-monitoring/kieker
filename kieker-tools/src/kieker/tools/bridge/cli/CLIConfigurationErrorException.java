@@ -17,10 +17,13 @@ package kieker.tools.bridge.cli;
 
 /**
  * This exception is used to encapsulate exceptions which occur during configuration in the CLI-server.
- * 
+ *
  * @author Reiner Jung
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
+@Deprecated
 public class CLIConfigurationErrorException extends Exception {
 
 	/**
@@ -30,7 +33,7 @@ public class CLIConfigurationErrorException extends Exception {
 
 	/**
 	 * Create an exception without an exception trail.
-	 * 
+	 *
 	 * @param message
 	 *            The message to explain the exception
 	 */
@@ -40,7 +43,7 @@ public class CLIConfigurationErrorException extends Exception {
 
 	/**
 	 * Create an exception with an exception trail.
-	 * 
+	 *
 	 * @param message
 	 *            The message to explain the exception
 	 * @param exception

@@ -29,18 +29,15 @@ import org.junit.runners.MethodSorters;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
-import kieker.common.record.factory.old.RecordFactoryWrapper;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEventFactory;
 import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.io.BinaryValueSerializer;
-import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.registry.writer.IWriterRegistry;
 import kieker.common.registry.writer.WriterRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.junit.WriterListener;
-import kieker.test.common.util.record.factory.TestRecord;
 
 /**
  * @author Christian Wulf
@@ -99,42 +96,6 @@ public class CachedRecordFactoryCatalogTest extends AbstractKiekerTest {
 		Assert.assertEquals(expectedEvent.getOrderIndex(), castedEvent.getOrderIndex());
 		Assert.assertEquals(expectedEvent.getClassSignature(), castedEvent.getClassSignature());
 		Assert.assertEquals(expectedEvent.getOperationSignature(), castedEvent.getOperationSignature());
-	}
-
-	@Test
-	public void testRecordWithoutFactoryIsAssignedFactoryWrapper() {
-		final String recordClassName = TestRecord.class.getName();
-		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
-		Assert.assertEquals(RecordFactoryWrapper.class, recordFactory.getClass());
-	}
-
-	@Test
-	public void testAVirtualRecord() {
-		final WriterListener receiver = new WriterListener();
-		final IWriterRegistry<String> writerRegistry = new WriterRegistry(receiver);
-
-		final String recordClassName = "kieker.common.record.CPUUtilizationRecord";
-		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
-		Assert.assertEquals(RecordFactoryWrapper.class, recordFactory.getClass());
-
-		final long timestamp = 111;
-		final String hostname = "www.test.de";
-		final String cpuID = "cpuTestId";
-		final double user = 5.555;
-		final double system = 3.333;
-		final double wait = 1.111;
-		final double nice = 0;
-		final double irq = 1;
-		final double totalUtilization = 98.9;
-		final double idle = 0.666;
-		final CPUUtilizationRecord cpuRecord = new CPUUtilizationRecord(timestamp, hostname, cpuID, user, system, wait, nice, irq, totalUtilization, idle);
-		cpuRecord.serialize(BinaryValueSerializer.create(this.buffer, writerRegistry));
-		this.buffer.flip();
-		final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(this.buffer, receiver.getReaderRegistry()));
-		Assert.assertEquals(CPUUtilizationRecord.class, record.getClass());
-
-		Assert.assertEquals(hostname, receiver.getReaderRegistry().get(0));
-		Assert.assertEquals(cpuID, receiver.getReaderRegistry().get(1));
 	}
 
 }

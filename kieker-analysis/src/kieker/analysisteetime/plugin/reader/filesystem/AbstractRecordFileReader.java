@@ -20,9 +20,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistry;
 import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryRepository;
 import kieker.analysisteetime.plugin.reader.filesystem.className.MappingFileParser;
+import kieker.common.registry.reader.ReaderRegistry;
 
 import teetime.framework.AbstractConsumerStage;
 
@@ -45,14 +45,14 @@ public abstract class AbstractRecordFileReader extends AbstractConsumerStage<Fil
 
 	@Override
 	protected void execute(final File recordFile) {
-		final ClassNameRegistry classNameRegistry = this.getClassNameRegistry(recordFile);
+		final ReaderRegistry<String> classNameRegistry = this.getClassNameRegistry(recordFile);
 		this.reconstructRecords(classNameRegistry);
 	}
 
-	private ClassNameRegistry getClassNameRegistry(final File recordFile) {
+	private ReaderRegistry<String> getClassNameRegistry(final File recordFile) {
 		final File mapFile = this.mappingFileParser.findMappingFile(recordFile.getParentFile());
 
-		ClassNameRegistry classNameRegistry = this.classNameRegistryRepository.get(mapFile);
+		ReaderRegistry<String> classNameRegistry = this.classNameRegistryRepository.get(mapFile);
 		if (null == classNameRegistry) {
 			try (final FileInputStream inputStream = new FileInputStream(mapFile)) {
 				classNameRegistry = this.mappingFileParser.parseFromStream(inputStream);
@@ -65,6 +65,6 @@ public abstract class AbstractRecordFileReader extends AbstractConsumerStage<Fil
 		return classNameRegistry;
 	}
 
-	protected abstract void reconstructRecords(ClassNameRegistry classNameRegistry);
+	protected abstract void reconstructRecords(ReaderRegistry<String> classNameRegistry);
 
 }

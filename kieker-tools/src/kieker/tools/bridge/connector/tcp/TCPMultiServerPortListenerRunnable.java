@@ -27,10 +27,14 @@ import kieker.tools.bridge.LookupEntity;
 /**
  * Runnable class implementing a thread listening for an incoming connection for monitoring data.
  * It then starts a connection thread handling the actual data transmissions.
- * 
+ *
  * @author Reiner Jung
+ *
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
+@Deprecated
 public class TCPMultiServerPortListenerRunnable implements Runnable {
 
 	private final ServerSocket serverSocket;
@@ -42,7 +46,7 @@ public class TCPMultiServerPortListenerRunnable implements Runnable {
 
 	/**
 	 * Create a listener for the incoming port of the multi server.
-	 * 
+	 *
 	 * @param port
 	 *            IP port to listen to
 	 * @param recordQueue

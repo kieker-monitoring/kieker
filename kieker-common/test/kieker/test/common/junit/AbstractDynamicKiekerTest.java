@@ -36,7 +36,7 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 
 	// abc.java, but not package-info.java
 	public static final String REGEX_PATTERN_JAVA_SOURCE_FILES = "[^\\-]*java";
-	public static final String REGEX_PATTERN_JAVA_TEST_FILES = ".*Test.*java";
+	public static final String REGEX_PATTERN_JAVA_TEST_FILES = ".*Test\\.java";
 	public static final String REGEX_PATTERN_JUNIT_PACKAGE_NAME = ".*junit.*";
 
 	private static final String DIR_NAME_TESTS = "test";

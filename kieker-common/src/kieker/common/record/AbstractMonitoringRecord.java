@@ -20,7 +20,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.BufferUnderflowException;
-import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -111,28 +110,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	}
 
 	/**
-	 * Returns the record as string.
-	 *
-	 * @deprecated 1.14 will be replaced by individual toString methods.
-	 */
-	@Deprecated
-	@Override
-	public final String toString() {
-		final Object[] recordVector = this.toArray();
-		final StringBuilder sb = new StringBuilder();
-		sb.append(this.loggingTimestamp);
-		for (final Object curStr : recordVector) {
-			sb.append(';');
-			if (curStr != null) {
-				sb.append(curStr.toString());
-			} else {
-				sb.append("null");
-			}
-		}
-		return sb.toString();
-	}
-
-	/**
 	 * Provides an ordering of IMonitoringRecords by the loggingTimestamp.
 	 * Classes overriding the implementation should respect this ordering. (see #326)
 	 *
@@ -175,17 +152,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 
 		final AbstractMonitoringRecord castedRecord = (AbstractMonitoringRecord) obj;
 		return this.getLoggingTimestamp() == castedRecord.getLoggingTimestamp();
-	}
-
-	/**
-	 * Returns the hash code.
-	 *
-	 * @deprecated 1.14 to be replaced by a specific implementation in each record, as toArray is deprecated.
-	 */
-	@Deprecated
-	@Override
-	public final int hashCode() {
-		return (31 * Arrays.hashCode(this.toArray())) + (int) (this.loggingTimestamp ^ (this.loggingTimestamp >>> 32));
 	}
 
 	/**
@@ -286,7 +252,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 * @throws IllegalArgumentException
 	 *             If one or more of the given types are not supported.
 	 */
-	public static final Object[] fromStringArrayToTypedArray(final String[] recordFields, final Class<?>[] valueTypes) throws IllegalArgumentException {
+	public static final Object[] fromStringArrayToTypedArray2(final String[] recordFields, final Class<?>[] valueTypes) throws IllegalArgumentException {
 		if (recordFields.length != valueTypes.length) {
 			throw new IllegalArgumentException("Expected " + valueTypes.length + " record fields, but found " + recordFields.length);
 		}
@@ -385,7 +351,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		Class<?>[] types = CACHED_KIEKERRECORD_TYPES.get(clazz);
 		if (types == null) {
 			try {
-				if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
+				if (IMonitoringRecord.class.isAssignableFrom(clazz)) {
 					final Field typesField = clazz.getDeclaredField("TYPES");
 					types = (Class<?>[]) typesField.get(null);
 				} else {
@@ -408,101 +374,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	}
 
 	/**
-	 * This method creates a new monitoring record from the given data.
-	 *
-	 * @param clazz
-	 *            The class of the monitoring record.
-	 * @param values
-	 *            The array which will be used to initialize the fields of the record.
-	 *
-	 * @return An initialized record instance.
-	 *
-	 * @throws MonitoringRecordException
-	 *             If this method failed to create the record for some reason.
-	 *
-	 * @deprecated 1.14 remove in 1.15
-	 */
-	@Deprecated
-	public static final IMonitoringRecord createFromArray(final Class<? extends IMonitoringRecord> clazz, final Object[] values) throws MonitoringRecordException {
-		try {
-			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
-				// Factory interface present
-				Constructor<? extends IMonitoringRecord> constructor = CACHED_KIEKERRECORD_CONSTRUCTORS_OBJECT.get(clazz);
-				if (constructor == null) {
-					constructor = clazz.getConstructor(Object[].class);
-					CACHED_KIEKERRECORD_CONSTRUCTORS_OBJECT.putIfAbsent(clazz, constructor);
-				}
-				return constructor.newInstance((Object) values);
-			} else {
-				// try ordinary method
-				final IMonitoringRecord record = clazz.newInstance();
-				record.initFromArray(values);
-				return record;
-			}
-		} catch (final SecurityException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + clazz.getName(), ex);
-		} catch (final NoSuchMethodException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + clazz.getName(), ex);
-		} catch (final IllegalArgumentException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + clazz.getName(), ex);
-		} catch (final InstantiationException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + clazz.getName(), ex);
-		} catch (final IllegalAccessException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + clazz.getName(), ex);
-		} catch (final InvocationTargetException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + clazz.getName(), ex);
-		}
-	}
-
-	/**
-	 * This method creates a new monitoring record from the given data encoded in strings.
-	 *
-	 * @param clazz
-	 *            The class of the monitoring record.
-	 * @param values
-	 *            The string array which will be used to initialize the fields of the record.
-	 *
-	 * @return An initialized record instance.
-	 *
-	 * @throws MonitoringRecordException
-	 *             If this method failed to create the record for some reason.
-	 *
-	 * @deprecated 1.14 remove in 1.15
-	 */
-	@Deprecated
-	public static final IMonitoringRecord createFromStringArray(final Class<? extends IMonitoringRecord> clazz, final String[] values)
-			throws MonitoringRecordException {
-		try {
-			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
-				// Factory interface present
-				Constructor<? extends IMonitoringRecord> constructor = CACHED_KIEKERRECORD_CONSTRUCTORS_OBJECT.get(clazz);
-				if (constructor == null) {
-					constructor = clazz.getConstructor(Object[].class);
-					CACHED_KIEKERRECORD_CONSTRUCTORS_OBJECT.putIfAbsent(clazz, constructor);
-				}
-				return constructor.newInstance((Object) AbstractMonitoringRecord.fromStringArrayToTypedArray(values, AbstractMonitoringRecord.typesForClass(clazz)));
-			} else {
-				// try ordinary method
-				final IMonitoringRecord record = clazz.newInstance();
-				record.initFromArray(AbstractMonitoringRecord.fromStringArrayToTypedArray(values, record.getValueTypes()));
-				return record;
-			}
-		} catch (final SecurityException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + clazz.getName(), ex);
-		} catch (final NoSuchMethodException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + clazz.getName(), ex);
-		} catch (final IllegalArgumentException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + clazz.getName(), ex);
-		} catch (final InstantiationException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + clazz.getName(), ex);
-		} catch (final IllegalAccessException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + clazz.getName(), ex);
-		} catch (final InvocationTargetException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + clazz.getName(), ex);
-		}
-	}
-
-	/**
 	 * Create monitoring record based on class name and a given value deserializer.
 	 *
 	 * @param recordClassName
@@ -521,22 +392,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	}
 
 	/**
-	 * Create monitoring record based on an value array and a given record class name.
-	 *
-	 * @param recordClassName
-	 *            record class name
-	 * @param values
-	 *            the value array
-	 * @return a monitoring record
-	 * @throws MonitoringRecordException
-	 *             when no record could be constructed
-	 */
-	public static final IMonitoringRecord createFromArray(final String recordClassName, final Object[] values) throws MonitoringRecordException {
-		final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(recordClassName);
-		return AbstractMonitoringRecord.createFromArray(clazz, values);
-	}
-
-	/**
 	 * Copy of {@link #createFromByteBuffer}. However, the constructor cache's key is a string, not an integer
 	 */
 	private static final IMonitoringRecord createFromDeserializerChw(final String recordClassName, final IValueDeserializer deserializer)
@@ -546,7 +401,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 
 			if (constructor == null) {
 				final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(recordClassName);
-				if (IMonitoringRecord.BinaryFactory.class.isAssignableFrom(clazz)) {
+				if (IMonitoringRecord.class.isAssignableFrom(clazz)) {
 					// Factory interface present
 					constructor = clazz.getConstructor(IValueDeserializer.class);
 					CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY_CHW.putIfAbsent(recordClassName, constructor);

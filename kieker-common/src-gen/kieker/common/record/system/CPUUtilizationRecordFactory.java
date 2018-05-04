@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,11 +33,6 @@ public final class CPUUtilizationRecordFactory implements IRecordFactory<CPUUtil
 		return new CPUUtilizationRecord(deserializer);
 	}
 	
-	@Override
-	@Deprecated
-	public CPUUtilizationRecord create(final Object[] values) {
-		return new CPUUtilizationRecord(values);
-	}
 	
 	public int getRecordSizeInBytes() {
 		return CPUUtilizationRecord.SIZE;

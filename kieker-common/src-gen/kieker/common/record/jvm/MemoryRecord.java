@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,11 @@ import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.jvm.AbstractJVMRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 
 /**
  * @author Nils Christian Ehmke
- * API compatibility: Kieker 1.14.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.10
  */
@@ -130,52 +129,7 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		this.objectPendingFinalizationCount = objectPendingFinalizationCount;
 	}
 
-	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated since 1.13. Use {@link #MemoryRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	public MemoryRecord(final Object[] values) { // NOPMD (direct store of values)
-		super(values, TYPES);
-		this.heapMaxBytes = (Long) values[3];
-		this.heapUsedBytes = (Long) values[4];
-		this.heapCommittedBytes = (Long) values[5];
-		this.heapInitBytes = (Long) values[6];
-		this.nonHeapMaxBytes = (Long) values[7];
-		this.nonHeapUsedBytes = (Long) values[8];
-		this.nonHeapCommittedBytes = (Long) values[9];
-		this.nonHeapInitBytes = (Long) values[10];
-		this.objectPendingFinalizationCount = (Integer) values[11];
-	}
 
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated since 1.13. Use {@link #MemoryRecord(IValueDeserializer)} instead.
-	 */
-	@Deprecated
-	protected MemoryRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		super(values, valueTypes);
-		this.heapMaxBytes = (Long) values[3];
-		this.heapUsedBytes = (Long) values[4];
-		this.heapCommittedBytes = (Long) values[5];
-		this.heapInitBytes = (Long) values[6];
-		this.nonHeapMaxBytes = (Long) values[7];
-		this.nonHeapUsedBytes = (Long) values[8];
-		this.nonHeapCommittedBytes = (Long) values[9];
-		this.nonHeapInitBytes = (Long) values[10];
-		this.objectPendingFinalizationCount = (Integer) values[11];
-	}
 
 	
 	/**
@@ -197,29 +151,6 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		this.objectPendingFinalizationCount = deserializer.getInt();
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getHostname(),
-			this.getVmName(),
-			this.getHeapMaxBytes(),
-			this.getHeapUsedBytes(),
-			this.getHeapCommittedBytes(),
-			this.getHeapInitBytes(),
-			this.getNonHeapMaxBytes(),
-			this.getNonHeapUsedBytes(),
-			this.getNonHeapCommittedBytes(),
-			this.getNonHeapInitBytes(),
-			this.getObjectPendingFinalizationCount(),
-		};
-	}
 	/**
 	 * {@inheritDoc}
 	 */
@@ -264,16 +195,6 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		return SIZE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
 	
 	/**
 	 * {@inheritDoc}
