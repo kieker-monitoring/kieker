@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import kieker.common.record.remotecontrol.IRemoteControlEvent;
  * 
  * @since 1.14
  */
-public class DeactivationEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IRemoteControlEvent {			
+public class DeactivationEvent extends AbstractMonitoringRecord implements IRemoteControlEvent {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING; // IRemoteControlEvent.pattern
 	
@@ -68,7 +68,7 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IMoni
 	 * @param values
 	 *            The values for the record.
 	 *
-	 * @deprecated since 1.13. Use {@link #DeactivationEvent(IValueDeserializer)} instead.
+	 * @deprecated to be removed 1.15
 	 */
 	@Deprecated
 	public DeactivationEvent(final Object[] values) { // NOPMD (direct store of values)
@@ -84,7 +84,7 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IMoni
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
 	 *
-	 * @deprecated since 1.13. Use {@link #DeactivationEvent(IValueDeserializer)} instead.
+	 * @deprecated to be removed 1.15
 	 */
 	@Deprecated
 	protected DeactivationEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
@@ -106,7 +106,7 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IMoni
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @deprecated since 1.13. Use {@link #serialize(IValueSerializer)} with an array serializer instead.
+	 * @deprecated to be removed in 1.15
 	 */
 	@Override
 	@Deprecated
@@ -151,7 +151,7 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IMoni
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 * @deprecated to be rmeoved in 1.15
 	 */
 	@Override
 	@Deprecated
