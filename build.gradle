@@ -599,8 +599,18 @@ task apidoc(type: Javadoc) {
     options.charSet = "UTF-8"
     options.docEncoding = "UTF-8"
 
+    // Disable DocLint for Java 8 and up, as it has become much more strict since Java 8. The option is only
+    // valid for Java 8 and up.
+    if (JavaVersion.current() >= JavaVersion.VERSION_1_8) {
+        // The 'quiet' option is only passed as the single-parameter variant of addStringOption does not
+        // pass the parameter correctly. Any valid option will do as the second parameter. See
+        // https://discuss.gradle.org/t/how-to-send-x-option-to-javadoc/23384 for more information.
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
+
+    // Load additional modules for Java 9 and up
     if (JavaVersion.current() >= JavaVersion.VERSION_1_9) {    
-        options.addStringOption('-add-modules', 'ALL-SYSTEM') // Load additional modules for Java 9 and up
+        options.addStringOption('-add-modules', 'ALL-SYSTEM') 
     }    
 }
 
