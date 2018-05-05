@@ -4,6 +4,10 @@ apply plugin: 'com.github.hauner.jarTest'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+configurations {
+	emfJarConfig	// all dependencies in this config are included into the emf jar. This is necessary for the scripts in bin/ to work.
+}
+
 dependencies {
 	clover 'org.openclover:clover:4.2.0'
 
@@ -16,8 +20,10 @@ dependencies {
 	compile resolveLibrary('org.eclipse.emf.ecore_*.jar')
 	compile 'com.rabbitmq:amqp-client:4.2.1'
 	compile 'com.google.guava:guava:20.0'				// (21.0 and above require java 8) used by StringRegistryCache for amqp reader
-	compile 'net.sourceforge.teetime:teetime:3.0'
-	compile 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
+	
+	emfJarConfig 'net.sourceforge.teetime:teetime:3.0'
+	emfJarConfig 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
+	compile configurations.emfJarConfig
 
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
