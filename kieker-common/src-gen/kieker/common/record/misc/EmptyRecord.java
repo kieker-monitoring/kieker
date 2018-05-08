@@ -118,5 +118,14 @@ public class EmptyRecord extends AbstractMonitoringRecord  {
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		
+		return code;
+	}
 	
 }

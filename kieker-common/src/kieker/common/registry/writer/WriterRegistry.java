@@ -47,10 +47,11 @@ public class WriterRegistry implements IWriterRegistry<String> {
 	public int getId(final String value) {
 		final Integer valueId = this.storage.get(value);
 		if (valueId == null) {
-			throw new IllegalArgumentException(
-					"The given value '" + value + "' is not registered. Thus, there is no identifier for this value.");
+			this.register(value);
+			return this.storage.get(value);
+		} else {
+			return valueId;
 		}
-		return valueId;
 	}
 
 	@Override

@@ -95,10 +95,12 @@ public class GenericTextFileWriterTest {
 		this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "1");
 		this.configuration.setProperty(FileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 
+		final EmptyRecord record = new EmptyRecord();
+
 		// test execution
 		final FileWriter writer = new FileWriter(this.configuration);
 		writer.onStarting();
-		FilesystemTestUtil.writeMonitoringRecords(writer, 1);
+		FilesystemTestUtil.writeMonitoringRecords(writer, 1, record);
 		writer.onTerminating();
 
 		// test assertion
@@ -124,10 +126,12 @@ public class GenericTextFileWriterTest {
 		this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "2");
 		this.configuration.setProperty(FileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 
+		final EmptyRecord record = new EmptyRecord();
+
 		// test execution
 		final FileWriter writer = new FileWriter(this.configuration);
 		writer.onStarting();
-		FilesystemTestUtil.writeMonitoringRecords(writer, 3);
+		FilesystemTestUtil.writeMonitoringRecords(writer, 3, record);
 		writer.onTerminating();
 
 		// test assertion
@@ -154,10 +158,12 @@ public class GenericTextFileWriterTest {
 		this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "2");
 		this.configuration.setProperty(FileWriter.CONFIG_COMPRESSION_FILTER, ZipCompressionFilter.class.getName());
 
+		final EmptyRecord record = new EmptyRecord();
+
 		// test execution
 		final FileWriter writer = new FileWriter(this.configuration);
 		writer.onStarting();
-		FilesystemTestUtil.writeMonitoringRecords(writer, 3);
+		FilesystemTestUtil.writeMonitoringRecords(writer, 3, record);
 		writer.onTerminating();
 
 		// test assertion
@@ -180,6 +186,8 @@ public class GenericTextFileWriterTest {
 	 */
 	@Test
 	public final void testMaxLogFiles() throws IOException {
+		final EmptyRecord record = new EmptyRecord();
+
 		// test preparation
 		this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "2");
 		final int[] maxLogFilesValues = { -1, 0, 1, 2 };
@@ -200,7 +208,7 @@ public class GenericTextFileWriterTest {
 				final FileWriter writer = new FileWriter(this.configuration);
 
 				// test execution
-				final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer);
+				final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer, record);
 
 				// test assertion
 				final String reasonMessage = "Passed arguments: maxLogFiles=" + maxLogFiles + ", numRecordsToWrite=" + numRecordsToWrite;
@@ -213,13 +221,16 @@ public class GenericTextFileWriterTest {
 
 	/**
 	 * Test whether the max log size.
-	 * 
-	 * @throws Exception on IO errors
+	 *
+	 * @throws Exception
+	 *             on IO errors
 	 */
 	@Test
 	public void testMaxLogSize() throws Exception {
+		final EmptyRecord record = new EmptyRecord();
+
 		// size = $ + compressed record class name (=0) + ; + record.toString + newLine (\n or \n\r)
-		final int recordSizeInBytes = 1 + 1 + 1 + new EmptyRecord().toString().length() + System.lineSeparator().length(); // 7=3+2+1/2
+		final int recordSizeInBytes = 1 + 1 + 1 + String.valueOf(record.getLoggingTimestamp()).length() + 1 + System.lineSeparator().length(); // 7=3+2+1/2
 
 		// semantics of the tuple: (maxMegaBytesPerFile, megaBytesToWrite, expectedNumRecordFiles)
 		final int[][] testInputTuples = {
@@ -243,7 +254,7 @@ public class GenericTextFileWriterTest {
 			final FileWriter writer = new FileWriter(this.configuration);
 
 			// test execution
-			final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer);
+			final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer, record);
 
 			// test assertion
 			final String reasonMessage = "Passed arguments: maxMegaBytesPerFile=" + maxMegaBytesPerFile + ", megaBytesToWrite=" + megaBytesToWrite;
@@ -282,8 +293,9 @@ public class GenericTextFileWriterTest {
 
 	/**
 	 * Test log directory missing in configuration.
-	 * 
-	 * @throws IOException on IO errors
+	 *
+	 * @throws IOException
+	 *             on IO errors
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void testNonDirectoryConfigPath() throws IOException {

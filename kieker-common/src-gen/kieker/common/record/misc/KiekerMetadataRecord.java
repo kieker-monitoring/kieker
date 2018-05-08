@@ -228,6 +228,23 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord  {
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += this.getVersion().hashCode();
+		code += this.getControllerName().hashCode();
+		code += this.getHostname().hashCode();
+		code += ((int)this.getExperimentId());
+		code += this.isDebugMode()?0:1;
+		code += ((int)this.getTimeOffset());
+		code += this.getTimeUnit().hashCode();
+		code += ((int)this.getNumberOfRecords());
+		
+		return code;
+	}
 	
 	public final String getVersion() {
 		return this.version;

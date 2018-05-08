@@ -236,6 +236,24 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int)this.getTimestamp());
+		code += this.getHostname().hashCode();
+		code += this.getDeviceName().hashCode();
+		code += ((int)this.getQueue());
+		code += ((int)this.getReadBytesPerSecond());
+		code += ((int)this.getReadsPerSecond());
+		code += ((int)this.getServiceTime());
+		code += ((int)this.getWriteBytesPerSecond());
+		code += ((int)this.getWritesPerSecond());
+		
+		return code;
+	}
 	
 	public final long getTimestamp() {
 		return this.timestamp;

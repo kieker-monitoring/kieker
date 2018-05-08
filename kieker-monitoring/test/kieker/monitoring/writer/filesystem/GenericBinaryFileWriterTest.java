@@ -95,10 +95,12 @@ public class GenericBinaryFileWriterTest {
 		this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "1");
 		this.configuration.setProperty(FileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 
+		final EmptyRecord record = new EmptyRecord();
+
 		// test execution
 		final FileWriter writer = new FileWriter(this.configuration);
 		writer.onStarting();
-		FilesystemTestUtil.writeMonitoringRecords(writer, 1);
+		FilesystemTestUtil.writeMonitoringRecords(writer, 1, record);
 		writer.onTerminating();
 
 		// test assertion
@@ -124,10 +126,12 @@ public class GenericBinaryFileWriterTest {
 		this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "2");
 		this.configuration.setProperty(FileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 
+		final EmptyRecord record = new EmptyRecord();
+
 		// test execution
 		final FileWriter writer = new FileWriter(this.configuration);
 		writer.onStarting();
-		FilesystemTestUtil.writeMonitoringRecords(writer, 3);
+		FilesystemTestUtil.writeMonitoringRecords(writer, 3, record);
 		writer.onTerminating();
 
 		// test assertion
@@ -154,10 +158,12 @@ public class GenericBinaryFileWriterTest {
 		this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "2");
 		this.configuration.setProperty(FileWriter.CONFIG_COMPRESSION_FILTER, ZipCompressionFilter.class.getName());
 
+		final EmptyRecord record = new EmptyRecord();
+
 		// test execution
 		final FileWriter writer = new FileWriter(this.configuration);
 		writer.onStarting();
-		FilesystemTestUtil.writeMonitoringRecords(writer, 3);
+		FilesystemTestUtil.writeMonitoringRecords(writer, 3, record);
 		writer.onTerminating();
 
 		// test assertion
@@ -199,8 +205,10 @@ public class GenericBinaryFileWriterTest {
 
 				final FileWriter writer = new FileWriter(this.configuration);
 
+				final EmptyRecord record = new EmptyRecord();
+
 				// test execution
-				final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer);
+				final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer, record);
 
 				// test assertion
 				final String reasonMessage = "Passed arguments: maxLogFiles=" + maxLogFiles + ", numRecordsToWrite=" + numRecordsToWrite;
@@ -213,8 +221,9 @@ public class GenericBinaryFileWriterTest {
 
 	/**
 	 * Test whether the max log size.
-	 * 
-	 * @throws Exception on IO errors
+	 *
+	 * @throws Exception
+	 *             on IO errors
 	 */
 	@Test
 	public void testMaxLogSize() throws Exception {
@@ -239,10 +248,12 @@ public class GenericBinaryFileWriterTest {
 			this.configuration.setProperty(FileWriter.CONFIG_MAXLOGSIZE, String.valueOf(maxMegaBytesPerFile));
 			this.configuration.setProperty(FileWriter.CONFIG_MAXLOGFILES, "2");
 
+			final EmptyRecord record = new EmptyRecord();
+
 			final FileWriter writer = new FileWriter(this.configuration);
 
 			// test execution
-			final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer);
+			final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer, record);
 
 			// test assertion
 			final String reasonMessage = "Passed arguments: maxMegaBytesPerFile=" + maxMegaBytesPerFile + ", megaBytesToWrite=" + megaBytesToWrite;
@@ -281,8 +292,9 @@ public class GenericBinaryFileWriterTest {
 
 	/**
 	 * Test log directory missing in configuration.
-	 * 
-	 * @throws IOException on IO errors
+	 *
+	 * @throws IOException
+	 *             on IO errors
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void testNonDirectoryConfigPath() throws IOException {

@@ -171,6 +171,19 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord  {
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += this.getSystemName().hashCode();
+		code += this.getIpAddress().hashCode();
+		code += this.getHostname().hashCode();
+		code += this.getApplicationName().hashCode();
+		
+		return code;
+	}
 	
 	public final String getSystemName() {
 		return this.systemName;

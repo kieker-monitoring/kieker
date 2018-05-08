@@ -230,6 +230,23 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += this.getOperationSignature().hashCode();
+		code += this.getSessionId().hashCode();
+		code += ((int)this.getTraceId());
+		code += ((int)this.getTin());
+		code += ((int)this.getTout());
+		code += this.getHostname().hashCode();
+		code += ((int)this.getEoi());
+		code += ((int)this.getEss());
+		
+		return code;
+	}
 	
 	public final String getOperationSignature() {
 		return this.operationSignature;

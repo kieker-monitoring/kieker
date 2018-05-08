@@ -133,6 +133,16 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += this.getPattern().hashCode();
+		
+		return code;
+	}
 	
 	public final String getPattern() {
 		return this.pattern;
