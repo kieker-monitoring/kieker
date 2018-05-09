@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.CharBuffer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
 import kieker.analysisteetime.plugin.reader.filesystem.util.MappingException;
 import kieker.common.exception.MonitoringRecordException;
@@ -36,6 +39,8 @@ import kieker.common.registry.reader.ReaderRegistry;
  *
  */
 public class TextFileStreamProcessor {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(TextFileStreamProcessor.class);
 
 	private static final int BUFFER_SIZE = 10240;
 
@@ -145,26 +150,36 @@ public class TextFileStreamProcessor {
 	private void createRecord()
 			throws MappingException, MonitoringRecordException, UnknownRecordTypeException {
 		this.charBuffer.flip();
-		final char lead = this.charBuffer.get();
-		if (lead == '$') {
-			final TextValueDeserializer deserializer = TextValueDeserializer.create(this.charBuffer);
-			final int id = deserializer.getInt();
-			final String classname = this.stringRegistry.get(id);
-			if (classname == null) {
-				if (this.ignoreUnknownRecordTypes) {
-					return;
-				} else {
-					throw new MappingException("Missing classname mapping for record type id " + "'" + id + "'");
+		if (this.charBuffer.hasRemaining()) {
+			final char lead = this.charBuffer.get();
+			if (lead == '$') {
+				final TextValueDeserializer deserializer = TextValueDeserializer.create(this.charBuffer);
+				final int id = deserializer.getInt();
+				final String classname = this.stringRegistry.get(id);
+				if (classname == null) {
+					if (this.ignoreUnknownRecordTypes) {
+						return;
+					} else {
+						throw new MappingException("Missing classname mapping for record type id " + "'" + id + "'");
+					}
 				}
-			}
-			final long loggingTimestamp = deserializer.getLong();
-			final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(classname);
-			final IMonitoringRecord event = recordFactory.create(deserializer);
-			event.setLoggingTimestamp(loggingTimestamp);
-			this.charBuffer.clear();
+				final long loggingTimestamp = deserializer.getLong();
+				final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(classname);
+				if (recordFactory != null) {
+					try {
+						final IMonitoringRecord event = recordFactory.create(deserializer);
+						event.setLoggingTimestamp(loggingTimestamp);
 
-			if (!this.recordReceiver.newMonitoringRecord(event)) {
-				this.terminated = true;
+						if (!this.recordReceiver.newMonitoringRecord(event)) {
+							this.terminated = true;
+						}
+					} catch (final NumberFormatException ex) {
+						LOGGER.error("Record of type {} format error.", classname);
+					}
+				} else {
+					LOGGER.info("Record type {} unkown", classname);
+				}
+				this.charBuffer.clear();
 			}
 		}
 	}

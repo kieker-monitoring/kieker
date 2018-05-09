@@ -98,7 +98,11 @@ public class ByteBufferDeserializer {
 		final String recordClassName = this.stringRegistry.get(clazzId);
 		// identify record data
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
-		if (buffer.remaining() < recordFactory.getRecordSizeInBytes()) { // includes the case where size is -1
+		if (recordFactory != null) {
+			if (buffer.remaining() < recordFactory.getRecordSizeInBytes()) { // includes the case where size is -1
+				return false;
+			}
+		} else {
 			return false;
 		}
 

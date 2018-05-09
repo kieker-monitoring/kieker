@@ -176,6 +176,21 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += this.getApplicationName().hashCode();
+		code += ((int)this.getValue());
+		code += ((int)this.getTimestamp());
+		code += ((int)this.getForecast());
+		code += ((int)this.getScore());
+		code += ((int)this.getAnomalyThreshold());
+		
+		return code;
+	}
 	
 	public final double getAnomalyThreshold() {
 		return this.anomalyThreshold;

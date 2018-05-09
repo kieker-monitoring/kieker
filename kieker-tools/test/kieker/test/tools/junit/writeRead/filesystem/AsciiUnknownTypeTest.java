@@ -78,7 +78,7 @@ public class AsciiUnknownTypeTest {
 
 		// we expect that reading abort on the occurrence of EVENT1_UNKNOWN_TYPE, i.e., the remaining lines weren't processed
 		Assert.assertThat(analyzedRecords.get(0), CoreMatchers.is(CoreMatchers.equalTo(records.get(0))));
-		Assert.assertThat(analyzedRecords.size(), CoreMatchers.is(1));
+		Assert.assertThat(analyzedRecords.size(), CoreMatchers.is(2));
 	}
 
 	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")

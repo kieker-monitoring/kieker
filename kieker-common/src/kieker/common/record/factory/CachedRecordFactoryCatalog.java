@@ -68,13 +68,14 @@ public final class CachedRecordFactoryCatalog {
 	 */
 	public IRecordFactory<? extends IMonitoringRecord> get(final String recordClassName) {
 		IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
-		if (null == recordFactory) {
+		if (recordFactory == null) {
 			recordFactory = this.recordFactoryResolver.get(recordClassName);
-			final IRecordFactory<? extends IMonitoringRecord> existingFactory = this.cachedRecordFactories.putIfAbsent(recordClassName, recordFactory);
-			if (existingFactory != null) {
-				recordFactory = existingFactory;
+			if (recordFactory != null) {
+				final IRecordFactory<? extends IMonitoringRecord> existingFactory = this.cachedRecordFactories.putIfAbsent(recordClassName, recordFactory);
+				if (existingFactory != null) {
+					recordFactory = existingFactory;
+				}
 			}
-
 		}
 		return recordFactory;
 	}

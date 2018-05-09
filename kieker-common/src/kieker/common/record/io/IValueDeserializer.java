@@ -42,7 +42,7 @@ public interface IValueDeserializer {
 	 * @return The retrieved value
 	 * @since 1.13
 	 */
-	public byte getByte();
+	public byte getByte() throws NumberFormatException;
 
 	/**
 	 * Retrieves a {@code char} value from the underlying data source.
@@ -58,7 +58,7 @@ public interface IValueDeserializer {
 	 * @return The retrieved value
 	 * @since 1.13
 	 */
-	public short getShort(); // NOPMD
+	public short getShort() throws NumberFormatException; // NOPMD
 
 	/**
 	 * Retrieves an {@code int} value from the underlying data source.
@@ -66,7 +66,7 @@ public interface IValueDeserializer {
 	 * @return The retrieved value
 	 * @since 1.13
 	 */
-	public int getInt();
+	public int getInt() throws NumberFormatException;
 
 	/**
 	 * Retrieves a {@code long} value from the underlying data source.
@@ -74,7 +74,7 @@ public interface IValueDeserializer {
 	 * @return The retrieved value
 	 * @since 1.13
 	 */
-	public long getLong();
+	public long getLong() throws NumberFormatException;
 
 	/**
 	 * Retrieves a {@code float} value from the underlying data source.
@@ -82,7 +82,7 @@ public interface IValueDeserializer {
 	 * @return The retrieved value
 	 * @since 1.13
 	 */
-	public float getFloat();
+	public float getFloat() throws NumberFormatException;
 
 	/**
 	 * Retrieves a {@code double} value from the underlying data source.
@@ -90,7 +90,7 @@ public interface IValueDeserializer {
 	 * @return The retrieved value
 	 * @since 1.13
 	 */
-	public double getDouble();
+	public double getDouble() throws NumberFormatException;
 
 	/**
 	 * Retrieves a {@code String} value from the underlying data source.

@@ -180,6 +180,20 @@ public class StorableDetectionResult extends AbstractMonitoringRecord  {
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += this.getApplicationName().hashCode();
+		code += ((int)this.getValue());
+		code += ((int)this.getTimestamp());
+		code += ((int)this.getForecast());
+		code += ((int)this.getScore());
+		
+		return code;
+	}
 	
 	public final String getApplicationName() {
 		return this.applicationName;

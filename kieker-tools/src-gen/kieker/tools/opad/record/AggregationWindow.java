@@ -142,6 +142,17 @@ public class AggregationWindow extends AbstractMonitoringRecord  {
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int)this.getWindowStart());
+		code += ((int)this.getWindowEnd());
+		
+		return code;
+	}
 	
 	public final long getWindowStart() {
 		return this.windowStart;

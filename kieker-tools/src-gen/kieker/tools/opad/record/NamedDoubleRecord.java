@@ -156,6 +156,18 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord  {
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += this.getApplicationName().hashCode();
+		code += ((int)this.getTimestamp());
+		code += ((int)this.getResponseTime());
+		
+		return code;
+	}
 	
 	public final String getApplicationName() {
 		return this.applicationName;
