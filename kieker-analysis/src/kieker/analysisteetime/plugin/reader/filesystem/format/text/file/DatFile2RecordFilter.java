@@ -31,7 +31,10 @@ import teetime.stage.io.File2TextLinesFilter;
  * @author Christian Wulf
  *
  * @since 1.10
+ *
+ * @deprecated to be removed in 1.15
  */
+@Deprecated
 public class DatFile2RecordFilter extends CompositeStage {
 
 	private final File2TextLinesFilter file2TextLinesFilter;
