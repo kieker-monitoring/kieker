@@ -119,10 +119,10 @@ public class KafkaWriter implements IRawDataWriter {
 	@Override
 	public void writeData(final ByteBuffer buffer, final int offset, final int length) {
 		buffer.position(offset);
-		final byte[] rawData = new byte[length];
-		buffer.get(rawData);
+		final byte[] rawDataAsBytes = new byte[length];
+		buffer.get(rawDataAsBytes);
 
-		final ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(this.topicName, rawData);
+		final ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(this.topicName, rawDataAsBytes);
 		this.producer.send(record);
 	}
 

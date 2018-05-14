@@ -162,8 +162,8 @@ public class KafkaReader extends AbstractRawDataReader {
 	// PMD thinks this is an unused private method (see: https://github.com/pmd/pmd/issues/521)
 	private void processRecords(final ConsumerRecords<String, byte[]> records) { // NOPMD (false positive, see above)
 		for (final ConsumerRecord<String, byte[]> record : records) {
-			final byte[] data = record.value();
-			this.decodeAndDeliverRecords(data, OUTPUT_PORT_NAME_RECORDS);
+			final byte[] valueAsBytes = record.value();
+			this.decodeAndDeliverRecords(valueAsBytes, OUTPUT_PORT_NAME_RECORDS);
 		}
 	} 
 

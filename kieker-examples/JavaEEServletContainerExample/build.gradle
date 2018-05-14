@@ -19,6 +19,7 @@ dependencies {
     include '*.jar'
   }
   compile 'org.slf4j:slf4j-api:1.7.25'
+  compile 'org.glassfish.main.javaee-api:javax.annotation:3.1.2.2'
 }
 
 task unwar(type: Copy) {

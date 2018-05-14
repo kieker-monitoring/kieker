@@ -59,7 +59,7 @@ public final class JMSReader {
 	private final Consumer<IMonitoringRecord> elementReceivedCallback;
 
 	/**
-	 * Creates a new logic module for the {@link Consumer<T>}.
+	 * Creates a new logic module for the {@link Consumer}.
 	 *
 	 * @param jmsProviderUrl
 	 *            The name of the configuration determining the JMS provider URL,

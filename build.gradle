@@ -12,6 +12,7 @@ buildscript {
 
 plugins {
     id 'de.aaschmid.cpd' version '1.0'	// cpd plugin
+    id 'com.github.spotbugs' version '1.6.1' // spotbugs plugin
 }
 
 apply plugin: 'eclipse'
@@ -35,9 +36,8 @@ dependencies {
 	resultJar project(path: ':kieker-tools', configuration: 'resultJar')	// project(':kieker-tools').configurations.resultJar does not work
 	resultJar 'org.jctools:jctools-core:2.1.0'
     resultJar 'org.slf4j:slf4j-api:1.7.25'
-	
-	emfJarConfig resolveLibrary('teetime-3.0-20161128.194027-256-jar-with-dependencies.jar')
-	emfJarConfig 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
+
+	emfJarConfig project(path: ':kieker-analysis', configuration: 'emfJarConfig')	// project(':kieker-analysis').configurations.resultJar does not work
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
@@ -52,7 +52,27 @@ clover {
         report {
                 html=true
         }
-        
+}
+
+allprojects {
+    version = kiekerVersion
+
+    /*
+     * This task should only be executed when updating to a
+     * newer Gradle version. Note that manual changes to the
+     * previous scripts will need to be merged to the new
+     * wrapper script manually. Note that this tasks also
+     * creates/updates the wrapper scripts in subdirectories.
+     * */
+    task wrapper(type: Wrapper) {
+        description = 'Downloads the Gradle wrapper scripts.'
+        gradleVersion = '3.3'
+    }
+
+    repositories {	// must be above subprojects {}
+    	mavenCentral() 
+    	jcenter() // for mockito
+    }
 }
 
 subprojects {
@@ -104,6 +124,11 @@ subprojects {
 		    ignoreFailures = false
 	      maxHeapSize = "2g" 			// Set limit to prevent Travis-CI build to crash
 
+              // Load additional modules for Java 9 and up
+              if (JavaVersion.current() >= JavaVersion.VERSION_1_9) {
+                  jvmArgs '--add-modules=ALL-SYSTEM'
+              }
+
         testLogging {
             showCauses = 'true'
             exceptionFormat = 'full'
@@ -123,10 +148,9 @@ subprojects {
     check.dependsOn integrationTest
     
     // --- quality assurance plugins ---
-    
+
     apply plugin: 'pmd'
-    
-    pmd {
+    pmd {	// is represented by the groovy class "PmdExtension"
     	// the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
     	toolVersion = pmdAndCpdVersion
         ignoreFailures = true
@@ -147,14 +171,14 @@ subprojects {
         configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
     }
 
-    apply plugin: 'findbugs'
-    findbugs {	
-        toolVersion = fbVersion
+    apply plugin: 'com.github.spotbugs'
+    spotbugs {	
+        toolVersion = sbVersion
         ignoreFailures = true
         effort = "max"
         reportLevel = "low"
 
-        excludeFilter = resolveRelativeToParent(dirConfig, 'fb-filter.xml')
+        excludeFilter = resolveRelativeToParent(dirConfig, 'sb-filter.xml')
     }
 
     tasks.withType(Pmd) {
@@ -162,6 +186,8 @@ subprojects {
             xml.enabled = true
             html.enabled = false
         }
+        // the following line of code adds our custom PMD rules as jar file to the classpath
+        pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
     }
 
 	tasks.withType(Checkstyle) {
@@ -184,10 +210,10 @@ subprojects {
         checkstyle project(':kieker-checkstyle-extension')
 
         // compile-time dependency due to the annotation SuppressFBWarnings()
-		compile "com.google.code.findbugs:findbugs:${fbVersion}"
+		compile "com.github.spotbugs:spotbugs:${sbVersion}"
 
 		compile 'org.slf4j:slf4j-api:1.7.25'
-		
+
 		// enable logging for test runs
 		testCompile 'ch.qos.logback:logback-classic:1.2.3'
 
@@ -196,27 +222,6 @@ subprojects {
 		testCompile 'org.hamcrest:hamcrest-library:1.3'
     }
 
-}
-
-allprojects {
-    version = kiekerVersion
-
-    /*
-     * This task should only be executed when updating to a
-     * newer Gradle version. Note that manual changes to the
-     * previous scripts will need to be merged to the new
-     * wrapper script manually. Note that this tasks also
-     * creates/updates the wrapper scripts in subdirectories.
-     * */
-    task wrapper(type: Wrapper) {
-        description = 'Downloads the Gradle wrapper scripts.'
-        gradleVersion = '3.3'
-    }
-
-    repositories {
-    	mavenCentral() 
-    	jcenter() // for mockito
-    }
 }
 
 /*subprojects {
@@ -271,7 +276,7 @@ def parseCheckstyleReport(File reportFile) {
     return [errors, warnings, infos]
 }
 
-def parseFindbugsReport(File reportFile) {
+def parseSpotbugsReport(File reportFile) {
     def errors = 0
     def warnings = 0
     def infos = 0
@@ -381,8 +386,8 @@ mainSubprojects.each { project ->
 		    def fbInfos = 0
 		
 		        reportTypes.each { String type ->
-		            def reportFile = file(p.projectDir.path + '/build/reports/findbugs/' + type + '.xml')
-		            def reportResults = parseFindbugsReport(reportFile)
+		            def reportFile = file(p.projectDir.path + '/build/reports/spotbugs/' + type + '.xml')
+		            def reportResults = parseSpotbugsReport(reportFile)
 		            fbErrors += reportResults[0]
 		            fbWarnings += reportResults[1]
 		            fbInfos += reportResults[2]
@@ -424,7 +429,7 @@ mainSubprojects.each { project ->
 		    println("  Warnings: " + csWarnings + " (Threshold: " + checkstyleWarningThreshold + ")")
 		    println("  Info: " + csInfos)
 		    println()
-		    println(" Findbugs:")
+		    println(" Spotbugs:")
 		    println("  Errors: " + fbErrors + " (Threshold: " + findbugsErrorThreshold + ")")
 		    println("  Warnings: " + fbWarnings + " (Threshold: " + findbugsWarningThreshold + ")")
 		    println("  Info: " + fbInfos)
@@ -449,11 +454,11 @@ mainSubprojects.each { project ->
 		
 		    // Fail build if Findbugs thresholds are violated
 		    if (fbWarnings > Integer.valueOf(findbugsWarningThreshold)) {
-		        throw new GradleException("There were findbugs warnings exceeding the warning threshold! Warnings: " + fbWarnings + " Threshold: " + findbugsWarningThreshold)
+		        throw new GradleException("There were Spotbugs warnings exceeding the warning threshold! Warnings: " + fbWarnings + " Threshold: " + findbugsWarningThreshold)
 		    }
 		
 		    if (fbErrors > Integer.valueOf(findbugsErrorThreshold)) {
-		        throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + fbErrors + " Threshold: " + findbugsErrorThreshold)
+		        throw new GradleException("There were Spotbugs errors exceeding the error threshold! Errors: " + fbErrors + " Threshold: " + findbugsErrorThreshold)
 		    }
 		
 		    // Fail build if PMD thresholds are violated
@@ -491,7 +496,7 @@ task htmlQualityReport() {
         reportTypes.each { String type ->
             def reports = p.projectDir.path + '/build/reports'
             def checkstyleReportsFolder = "${reports}/checkstyle"
-            def findbugsReportsFolder = "${reports}/findbugs"
+            def findbugsReportsFolder = "${reports}/spotbugs"
             def pmdReportsFolder = "${reports}/pmd"
 
             doLast {
@@ -593,6 +598,20 @@ task apidoc(type: Javadoc) {
     options.encoding = "UTF-8"
     options.charSet = "UTF-8"
     options.docEncoding = "UTF-8"
+
+    // Disable DocLint for Java 8 and up, as it has become much more strict since Java 8. The option is only
+    // valid for Java 8 and up.
+    if (JavaVersion.current() >= JavaVersion.VERSION_1_8) {
+        // The 'quiet' option is only passed as the single-parameter variant of addStringOption does not
+        // pass the parameter correctly. Any valid option will do as the second parameter. See
+        // https://discuss.gradle.org/t/how-to-send-x-option-to-javadoc/23384 for more information.
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
+
+    // Load additional modules for Java 9 and up
+    if (JavaVersion.current() >= JavaVersion.VERSION_1_9) {    
+        options.addStringOption('-add-modules', 'ALL-SYSTEM') 
+    }    
 }
 
 ext.sharedManifest = manifest {
