@@ -524,11 +524,11 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			return null;
 		}
 		// Now get the connections.
-		final List<PluginInputPortReference> result = new ArrayList<>();
+		final List<PluginInputPortReference> connectedPlugins = new ArrayList<>();
 		for (final PluginInputPortReference ref : this.registeredMethods.get(outputPortName)) {
-			result.add(ref);
+			connectedPlugins.add(ref);
 		}
-		return result;
+		return connectedPlugins;
 	}
 
 	/**
