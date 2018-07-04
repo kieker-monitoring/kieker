@@ -2,92 +2,101 @@ apply plugin: 'eclipse'
 apply plugin: "com.github.hauner.jarTest"
 
 configurations {
-	ajc
+    ajc
 }
 
 def aspectjVersion = '1.8.2'
 
 dependencies {
-	clover 'org.openclover:clover:4.2.0'
+    clover 'org.openclover:clover:4.2.0'
 
-	compile project(':kieker-common')
-	
-	compile 'com.rabbitmq:amqp-client:4.2.1'
-	compile resolveLibrary('javax.jms-*.jar')
-	compile 'org.jctools:jctools-core:2.1.0'
-	
-	ajc "org.aspectj:aspectjtools:$aspectjVersion"
-	compile "org.aspectj:aspectjrt:$aspectjVersion"
-	compile "org.aspectj:aspectjweaver:$aspectjVersion"	// for our custom AspectJ weaver (class: AspectJLoader)
+    compile project(':kieker-common')
 
-	compile resolveLibrary('disl-2.0/disl-server.jar')
-	compile resolveLibrary('sigar/sigar-*.jar')
+    compile 'com.rabbitmq:amqp-client:4.2.1'
+    compile resolveLibrary('javax.jms-*.jar')
+    compile 'org.jctools:jctools-core:2.1.0'
 
-	//compile 'org.apache.kafka:kafka-clients:0.11.0.1'
-	
-	compile 'org.tukaani:xz:1.6'	// compression algorithms used by the file writers
+    ajc "org.aspectj:aspectjtools:$aspectjVersion"
+    compile "org.aspectj:aspectjrt:$aspectjVersion"
+    compile "org.aspectj:aspectjweaver:$aspectjVersion"    // for our custom AspectJ weaver (class: AspectJLoader)
 
-	compile 'org.apache.cxf:cxf-bundle-minimal:2.6.15'
-	compile resolveLibrary('framework-libs/jsr311-api-1.1.1.jar')
-	compile resolveLibrary('framework-libs/javax.ws.rs-api-2.0.1.jar')
-	compile resolveLibrary('framework-libs/jersey/jersey-server-1.19.jar')
-	compile resolveLibrary('framework-libs/jersey/jersey-client-1.19.jar')
-	compile resolveLibrary('framework-libs/jersey/jersey-apache-client4-1.19.jar')
-	compile resolveLibrary('framework-libs/javax.servlet-*.jar')
-	compile resolveLibrary('framework-libs/spring/aopalliance-*.jar')
-        compile resolveLibrary('framework-libs/spring/spring-beans-*.jar')
-	compile resolveLibrary('framework-libs/spring/spring-context-*.jar')
-	compile resolveLibrary('framework-libs/spring/spring-core-*.jar')
-	compile resolveLibrary('framework-libs/spring/spring-web-*.jar')
-	compile resolveLibrary('framework-libs/spring/spring-webmvc-*.jar')
+    compile resolveLibrary('disl-2.0/disl-server.jar')
+    compile resolveLibrary('sigar/sigar-*.jar')
 
-	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
-	testCompile project (path: ':kieker-common', configuration: 'testArchives')
-	testCompile resolveLibrary('framework-libs/spring/spring-beans-*.jar')
+    //compile 'org.apache.kafka:kafka-clients:0.11.0.1'
 
-	testRuntime resolveLibrary('framework-libs/spring/spring-expression-*.jar')
+    compile 'org.tukaani:xz:1.6'    // compression algorithms used by the file writers
 
-	testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
+    compile 'org.apache.cxf:cxf-bundle-minimal:2.6.15'
+    //compile resolveLibrary('framework-libs/jsr311-api-1.1.1.jar')
+    compile resolveLibrary('framework-libs/javax.ws.rs-api-2.0.1.jar')
+    compile resolveLibrary('framework-libs/jersey/jersey-server-1.19.jar')
+    compile resolveLibrary('framework-libs/jersey/jersey-client-1.19.jar')
+    compile resolveLibrary('framework-libs/jersey/jersey-apache-client4-1.19.jar')
+    compile resolveLibrary('framework-libs/javax.servlet-*.jar')
+    compile resolveLibrary('framework-libs/spring/aopalliance-*.jar')
+    compile resolveLibrary('framework-libs/spring/spring-beans-*.jar')
+    compile resolveLibrary('framework-libs/spring/spring-context-*.jar')
+    compile resolveLibrary('framework-libs/spring/spring-core-*.jar')
+    compile resolveLibrary('framework-libs/spring/spring-web-*.jar')
+    compile resolveLibrary('framework-libs/spring/spring-webmvc-*.jar')
+
+    // this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
+    testCompile project(path: ':kieker-common', configuration: 'testArchives')
+    testCompile resolveLibrary('framework-libs/spring/spring-beans-*.jar')
+
+    testCompile project(':kieker-tools')
+
+    testCompile('com.github.tdomzal:junit-docker-rule:0.4.1'){
+       exclude group: 'javax.ws.rs', module: 'javax.ws.rs-api'
+    }
+
+    testCompile 'com.sun.jersey:jersey-core:1.13-b01'
+    testCompile 'org.apache.activemq:activemq-core:5.7.0'
+
+    testRuntime resolveLibrary('framework-libs/spring/spring-expression-*.jar')
+
+    testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
 }
 
 clover {
-	report {
-		html=true
-	}
-	
+    report {
+        html = true
+    }
+
 }
 
 eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
+    classpath {
+        defaultOutputDir = file('build-eclipse')
+    }
 }
 
 task iajc(dependsOn: classes) {
     doLast {
         ant.taskdef(
-        	resource: 'org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties',
-            classpath: configurations.ajc.asPath
+                resource: 'org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties',
+                classpath: configurations.ajc.asPath
         )
         ant.iajc(
-        	XlintFile: 'aspectjXlint.properties', 
-        	X: 'joinpoints:synchronization', 
-        	source: sourceCompatibility, 
-        	target: targetCompatibility, 
-        	debug: 'true', 
-        	destdir: sourceSets.main.output.classesDir) {
+                XlintFile: 'aspectjXlint.properties',
+                X: 'joinpoints:synchronization',
+                source: sourceCompatibility,
+                target: targetCompatibility,
+                debug: 'true',
+                destdir: sourceSets.main.output.classesDir) {
 
-        	classpath {
-        		pathElement(location: configurations.compile.asPath)
-        		pathElement(location: sourceSets.main.output.classesDir)
-        	}
+            classpath {
+                pathElement(location: configurations.compile.asPath)
+                pathElement(location: sourceSets.main.output.classesDir)
+            }
 
             sourceroots {
                 pathElement(location: 'src/kieker/monitoring/probe/aspectj')
             }
-           
+
         }
-    }   
+    }
 }
 
 compileJava.doLast {

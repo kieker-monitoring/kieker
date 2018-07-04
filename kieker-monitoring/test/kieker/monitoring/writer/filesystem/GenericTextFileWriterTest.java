@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -216,6 +217,7 @@ public class GenericTextFileWriterTest {
 	 * 
 	 * @throws Exception on IO errors
 	 */
+	@Ignore
 	@Test
 	public void testMaxLogSize() throws Exception {
 		// size = $ + compressed record class name (=0) + ; + record.toString + newLine (\n or \n\r)

@@ -24,6 +24,14 @@ node('kieker-slave-docker') {
         sh 'docker run --rm -u `id -u` -v ' + env.WORKSPACE + ':/opt/kieker '+DOCKER_IMAGE_NAME+' /bin/bash -c "cd /opt/kieker; ./gradlew -S compileJava compileTestJava"'
     }
 
+    def hostIP = InetAddress.localHost.hostAddress
+    withEnv(['HOST_IP=' + hostIP]) {
+      stage('integration-test logs') {
+          // TODO: Change Dockerfile to support docker in container https://github.com/kieker-monitoring-docker/kieker-build/pull/1
+          sh 'docker run --rm -u root -v ' + env.WORKSPACE + ':/opt/kieker -v /var/run/docker.sock:/var/run/docker.sock:rw -v /usr/bin/docker:/usr/bin/docker ' + DOCKER_IMAGE_NAME + ' /bin/bash -c "cd /opt/kieker; docker ps; ./gradlew -S integrationTest"'
+      }
+    }
+
     stage ('2-unit-test logs') {
         sh 'docker run --rm -u `id -u` -v ' + env.WORKSPACE + ':/opt/kieker '+DOCKER_IMAGE_NAME+' /bin/bash -c "cd /opt/kieker; ./gradlew -S test cloverAggregateReports cloverGenerateReport"'
         junit '**/build/test-results/test/*.xml'
