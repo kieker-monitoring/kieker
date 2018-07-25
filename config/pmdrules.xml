@@ -71,10 +71,6 @@
 		</properties>
 	</rule>
 
-	<rule ref="rulesets/chw/basic.xml">
-		<exclude name="NonHeaderCommentSize"/>
-	</rule>
-
 <!-- 	<rule ref="rulesets/java/logging-jakarta-commons.xml/GuardLogStatement"> -->
 <!-- 		<priority>3</priority> -->
 <!-- 	</rule> -->

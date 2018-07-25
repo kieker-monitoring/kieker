@@ -7,7 +7,6 @@ buildscript {
     dependencies {
         classpath 'gradle.plugin.gradle-plugins:jartest:1.0.1'			// necessary to depend tests on tests
         classpath 'com.bmuschko:gradle-clover-plugin:2.2.0'
-        //classpath files('config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar')
     }
 }
 
@@ -37,8 +36,9 @@ dependencies {
 	resultJar project(path: ':kieker-tools', configuration: 'resultJar')	// project(':kieker-tools').configurations.resultJar does not work
 	resultJar 'org.jctools:jctools-core:2.1.0'
     resultJar 'org.slf4j:slf4j-api:1.7.25'
-
-	emfJarConfig project(path: ':kieker-analysis', configuration: 'emfJarConfig')	// project(':kieker-analysis').configurations.resultJar does not work
+	
+	emfJarConfig resolveLibrary('teetime-3.0-20161128.194027-256-jar-with-dependencies.jar')
+	emfJarConfig 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
@@ -53,27 +53,7 @@ clover {
         report {
                 html=true
         }
-}
-
-allprojects {
-    version = kiekerVersion
-
-    /*
-     * This task should only be executed when updating to a
-     * newer Gradle version. Note that manual changes to the
-     * previous scripts will need to be merged to the new
-     * wrapper script manually. Note that this tasks also
-     * creates/updates the wrapper scripts in subdirectories.
-     * */
-    task wrapper(type: Wrapper) {
-        description = 'Downloads the Gradle wrapper scripts.'
-        gradleVersion = '3.3'
-    }
-
-    repositories {	// must be above subprojects {}
-    	mavenCentral() 
-    	jcenter() // for mockito
-    }
+        
 }
 
 subprojects {
@@ -149,23 +129,17 @@ subprojects {
     check.dependsOn integrationTest
     
     // --- quality assurance plugins ---
-
+    
     apply plugin: 'pmd'
-    pmd {	// is represented by the groovy class "PmdExtension"
+    
+    pmd {
     	// the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
     	toolVersion = pmdAndCpdVersion
         ignoreFailures = true
-        //pmdClasspath += files('config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar')
-        //classpath += files('config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar')
 
         // Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
         ruleSets = []
         ruleSetFiles = files(resolveRelativeToParent(dirConfig, 'pmdrules.xml'))
-    }
-
-    pmdMain {
-    	pmdClasspath += files('config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar')
-    	classpath += files('config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar')
     }
 
     check.dependsOn(':cpdCheck')
@@ -194,8 +168,6 @@ subprojects {
             xml.enabled = true
             html.enabled = false
         }
-        pmdClasspath += files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
-        classpath += files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
     }
 
 	tasks.withType(Checkstyle) {
@@ -221,7 +193,7 @@ subprojects {
 		compile "com.github.spotbugs:spotbugs:${sbVersion}"
 
 		compile 'org.slf4j:slf4j-api:1.7.25'
-
+		
 		// enable logging for test runs
 		testCompile 'ch.qos.logback:logback-classic:1.2.3'
 
@@ -230,6 +202,27 @@ subprojects {
 		testCompile 'org.hamcrest:hamcrest-library:1.3'
     }
 
+}
+
+allprojects {
+    version = kiekerVersion
+
+    /*
+     * This task should only be executed when updating to a
+     * newer Gradle version. Note that manual changes to the
+     * previous scripts will need to be merged to the new
+     * wrapper script manually. Note that this tasks also
+     * creates/updates the wrapper scripts in subdirectories.
+     * */
+    task wrapper(type: Wrapper) {
+        description = 'Downloads the Gradle wrapper scripts.'
+        gradleVersion = '3.3'
+    }
+
+    repositories {
+    	mavenCentral() 
+    	jcenter() // for mockito
+    }
 }
 
 /*subprojects {
