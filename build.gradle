@@ -7,6 +7,7 @@ buildscript {
     dependencies {
         classpath 'gradle.plugin.gradle-plugins:jartest:1.0.1'			// necessary to depend tests on tests
         classpath 'com.bmuschko:gradle-clover-plugin:2.2.0'
+        //classpath files('config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar')
     }
 }
 
@@ -154,10 +155,17 @@ subprojects {
     	// the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
     	toolVersion = pmdAndCpdVersion
         ignoreFailures = true
+        //pmdClasspath += files('config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar')
+        //classpath += files('config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar')
 
         // Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
         ruleSets = []
         ruleSetFiles = files(resolveRelativeToParent(dirConfig, 'pmdrules.xml'))
+    }
+
+    pmdMain {
+    	pmdClasspath += files('config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar')
+    	classpath += files('config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar')
     }
 
     check.dependsOn(':cpdCheck')
@@ -186,8 +194,8 @@ subprojects {
             xml.enabled = true
             html.enabled = false
         }
-        // the following line of code adds our custom PMD rules as jar file to the classpath
-        pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
+        pmdClasspath += files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
+        classpath += files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
     }
 
 	tasks.withType(Checkstyle) {
