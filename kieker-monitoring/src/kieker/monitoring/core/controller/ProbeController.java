@@ -29,7 +29,6 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -72,8 +71,8 @@ public class ProbeController extends AbstractController implements IProbeControl
 	private final ConfigFileReader configFileReader;
 
 	private final ConcurrentMap<String, Boolean> signatureCache;
-	private final List<PatternEntry> patternList = new ArrayList<>(); // only accessed synchronized
-	private final Map<String, Map<String, List<String>>> patternListParameters = new HashMap<>();
+	private final List<PatternEntry> patterns = new ArrayList<>(); // only accessed synchronized
+	private final Map<String, Map<String, List<String>>> patternListParameters = new ConcurrentHashMap<>();
 
 	/**
 	 * Creates a new instance of this class using the given configuration to
@@ -242,7 +241,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 		}
 
 		synchronized (this) {
-			this.patternList.clear();
+			this.patterns.clear();
 			this.signatureCache.clear();
 			for (final String pattern : strPatternList) {
 				this.addToPatternEntryList(pattern);
@@ -262,10 +261,10 @@ public class ProbeController extends AbstractController implements IProbeControl
 		try {
 			switch (pattern.charAt(0)) {
 			case '+':
-				this.patternList.add(new PatternEntry(pattern.substring(1).trim(), true));
+				this.patterns.add(new PatternEntry(pattern.substring(1).trim(), true));
 				break;
 			case '-':
-				this.patternList.add(new PatternEntry(pattern.substring(1).trim(), false));
+				this.patterns.add(new PatternEntry(pattern.substring(1).trim(), false));
 				break;
 			case '#':
 				// ignore comment
@@ -297,17 +296,17 @@ public class ProbeController extends AbstractController implements IProbeControl
 			return new ArrayList<>(0);
 		}
 		synchronized (this) {
-			final List<String> list = new ArrayList<>(this.patternList.size());
-			for (final PatternEntry entry : this.patternList) {
+			final List<String> currentPatterns = new ArrayList<>(this.patterns.size());
+			for (final PatternEntry entry : this.patterns) {
 				final String strPattern;
 				if (entry.isActivated()) {
 					strPattern = '+' + entry.getStrPattern();
 				} else {
 					strPattern = '-' + entry.getStrPattern();
 				}
-				list.add(strPattern);
+				currentPatterns.add(strPattern);
 			}
-			return list;
+			return currentPatterns;
 		}
 	}
 
@@ -361,8 +360,8 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 */
 	private boolean matchesPattern(final String signature) {
 		synchronized (this) {
-			final ListIterator<PatternEntry> patternListIterator = this.patternList
-					.listIterator(this.patternList.size());
+			final ListIterator<PatternEntry> patternListIterator = this.patterns
+					.listIterator(this.patterns.size());
 			while (patternListIterator.hasPrevious()) {
 				final PatternEntry patternEntry = patternListIterator.previous();
 				if (patternEntry.getPattern().matcher(signature).matches()) {
@@ -393,7 +392,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 				LOGGER.error("'{}' is not a valid pattern.", strPattern, ex);
 				return false;
 			}
-			this.patternList.add(new PatternEntry(strPattern, pattern, activated));
+			this.patterns.add(new PatternEntry(strPattern, pattern, activated));
 			if (this.configFileUpdate) {
 				this.updatePatternFile();
 			}
@@ -413,8 +412,8 @@ public class ProbeController extends AbstractController implements IProbeControl
 			date.setTimeZone(TimeZone.getTimeZone("UTC"));
 			pw.println(date.format(new java.util.Date()));
 			pw.println('#');
-			final List<String> strPatternList = this.getProbePatternList();
-			for (final String string : strPatternList) {
+			final List<String> strPatterns = this.getProbePatternList();
+			for (final String string : strPatterns) {
 				pw.println(string);
 			}
 		} catch (final IOException ex) {

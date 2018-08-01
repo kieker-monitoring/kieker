@@ -43,11 +43,19 @@ import kieker.monitoring.core.controller.MonitoringController;
  */
 public class MonitoringCommandListener implements IRecordReceivedListener {
 
+	/**
+	 * the logger for this class.
+	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringCommandListener.class);
+	/**
+	 * The corresponding {@link MonitoringController}.
+	 */
 	private final MonitoringController monitoringController;
 
 	/**
-	 * Creates a new listener for {@link RemoteControlEvent RemoteControlEvents}. Relies on an existing {@link MonitoringController} to transfer messages like the
+	 * Creates a new listener for {@link RemoteControlEvent RemoteControlEvents}.
+	 * Relies on an existing {@link MonitoringController} to
+	 * transfer messages like the
 	 * (de-)activation of probes.
 	 *
 	 * @param monitoringController
@@ -59,13 +67,13 @@ public class MonitoringCommandListener implements IRecordReceivedListener {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see kieker.common.record.IRecordReceivedListener#onRecordReceived(kieker.common.record.IMonitoringRecord)
+	 * @see kieker.common.record.IRecordReceivedListener#onRecordReceived
+	 * (kieker.common.record.IMonitoringRecord)
 	 */
 	@Override
 	public void onRecordReceived(final IMonitoringRecord record) {
-		LOGGER.debug("Received new record: {}", record.getClass().getName());
-		if (1 == 1) {
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Received new record: {}", record.getClass().getName());
 		}
 		if (!(record instanceof IRemoteControlEvent)) {
 			LOGGER.info("Received an event for the TCP monitoring controller, which is no remote control event");
