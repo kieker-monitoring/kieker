@@ -22,8 +22,7 @@ public class AmqpWriterIT extends AbstractRabbitMQWriterIT {
 	@Before
 	public void setUp() {
 		super.setUp();
-		this.configuration = ConfigurationFactory.createConfigurationFromFile(new File(getClass().getResource("META-INF/kieker.monitoring.integration.amqp.properties").getFile()).getAbsolutePath());
-
+		this.configuration = ConfigurationFactory.createConfigurationFromFile(System.getProperty("user.dir") + "/test-resources/META-INF/kieker.monitoring.integration.amqp.properties");
 		try {
 			this.writer = new AmqpWriter(this.configuration);
 		} catch (KeyManagementException | NoSuchAlgorithmException | IOException | URISyntaxException | TimeoutException e) {
