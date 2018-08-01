@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,13 @@
  * limitations under the License.
  ***************************************************************************/
 package kieker.tools.opad.record.junit;
-
-//import java.nio.ByteBuffer;
-
+		
 import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.tools.opad.record.StorableDetectionResult;
-//import kieker.common.util.registry.IRegistry;
-//import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractGeneratedKiekerTest;
-//import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 		
 /**
  * Creates {@link OperationExecutionRecord}s via the available constructors and

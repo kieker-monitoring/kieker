@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -524,11 +524,11 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			return null;
 		}
 		// Now get the connections.
-		final List<PluginInputPortReference> result = new ArrayList<>();
+		final List<PluginInputPortReference> connectedPlugins = new ArrayList<>();
 		for (final PluginInputPortReference ref : this.registeredMethods.get(outputPortName)) {
-			result.add(ref);
+			connectedPlugins.add(ref);
 		}
-		return result;
+		return connectedPlugins;
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,10 +38,10 @@ import kieker.common.configuration.Configuration;
  * @since 1.5
  */
 @Plugin(description = "Filters incoming objects based on their type", outputPorts = {
-	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH, eventTypes = {
-		Object.class }, description = "Forwards events matching the configured types"),
-	@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH, eventTypes = {}, description = "Forwards events not matching the configured types") }, configuration = {
-		@Property(name = TypeFilter.CONFIG_PROPERTY_NAME_TYPES, defaultValue = "java.lang.Object") })
+		@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH, eventTypes = {
+				Object.class }, description = "Forwards events matching the configured types"),
+		@OutputPort(name = TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH, eventTypes = {}, description = "Forwards events not matching the configured types") }, configuration = {
+				@Property(name = TypeFilter.CONFIG_PROPERTY_NAME_TYPES, defaultValue = "java.lang.Object") })
 public final class TypeFilter extends AbstractFilterPlugin {
 
 	/**
@@ -97,11 +97,11 @@ public final class TypeFilter extends AbstractFilterPlugin {
 	@Override
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		final String[] acceptedClassesConfig = new String[this.acceptedClasses.length];
-		for (int i = 0; i < acceptedClassesConfig.length; i++) {
-			acceptedClassesConfig[i] = this.acceptedClasses[i].getName();
+		final String[] acceptedClassNames = new String[this.acceptedClasses.length];
+		for (int i = 0; i < acceptedClassNames.length; i++) {
+			acceptedClassNames[i] = this.acceptedClasses[i].getName();
 		}
-		configuration.setProperty(CONFIG_PROPERTY_NAME_TYPES, Configuration.toProperty(acceptedClassesConfig));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TYPES, Configuration.toProperty(acceptedClassNames));
 		return configuration;
 	}
 

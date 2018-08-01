@@ -6,33 +6,46 @@ dynamic analysis capabilities, i.e., monitoring and analyzing a software systemâ
 runtime behavior â€” enabling application performance monitoring and architecture
 discovery.
 
-Detailed information about Kieker is provided at http://kieker-monitoring.net/
+Detailed information about Kieker is provided at http://kieker-monitoring.net/ and our [wiki](https://kieker-monitoring.atlassian.net/wiki/)
 
 ## Usage
 
-Kieker releases (stable, nightly, etc.) can be downloaded from our website's [Download Section](http://kieker-monitoring.net/download).
+Kieker releases and nightly builds can be downloaded from our website's [download section](http://kieker-monitoring.net/download) and obtained via maven's central repository.
 
-Documentation on how to use Kieker can be found here: [Kieker Documentation](http://kieker-monitoring.net/documentation)
+````xml
+<dependency>
+  <groupId>net.kieker-monitoring</groupId>
+  <artifactId>kieker</artifactId>
+  <version>1.13</version>
+</dependency>
+````
+
+Documentation on how to use Kieker can be downloaded form our [documentation page](http://kieker-monitoring.net/documentation) and obtained from our [wiki](https://kieker-monitoring.atlassian.net/wiki/)
 
 ## Development and Contribution
 
-Gradle is used as the build tool. A `build.gradle` file is provided.
+We use Gradle as build tool. To compile Kieker after checkout run `./gradlew` on Linux and other Unixes, and `gradlew.bat` on Windows.
+Our build supports a wide range of tasks. Most common used tasks are:
+- `./gradlew jar` to generate usable jars of Kieker
+- `./gradlew compileJava compileTestJava` compile code and tests
+- `./gradlew test` run tests
+- `./gradlew cloverAggregateReports cloverGenerateReport` collect test coverage and generate reports
 
-For issue tracking and bug reports, JIRA is used at <https://kieker-monitoring.atlassian.net/>. 
+We use JIRA for issue tracking and bug reporting at <https://kieker-monitoring.atlassian.net/>. 
  
-Further instructions for developers are available at
-https://kieker-monitoring.atlassian.net/wiki/display/DEV/
+Further instructions for developers are available at <https://kieker-monitoring.atlassian.net/wiki/display/DEV/>
 
 ### Eclipse Setup for Contributors
 
 - Get Gradle support by installing the Eclipse plugin "Buildship: ..." in version 2 or above.
-- If you have already imported Kieker in Eclipse, delete it
 - Import Kieker in Eclipse by importing it as gradle project (Eclipse will also import all submodules automatically)
+  - If you have already imported Kieker in Eclipse wihtout gradle support, delete the projects in Eclipse otherwise you get compilation issues.
 - Whenever you change a build.gradle file, regenerate the .project and .classpath files for Eclipse by using "Gradle->Refresh Gradle Project"
 
 Read our [Confluence pages](https://kieker-monitoring.atlassian.net/wiki/spaces/DEV/pages/5865685/Local+Development+Environment) for more information.
 
 ### Code Conventions
+
 Read and follow our [code conventions](https://kieker-monitoring.atlassian.net/wiki/spaces/DEV/pages/24215585/Kieker+Coding+Conventions+in+Eclipse)
 
 ### Debugging and Logging Kieker's Execution

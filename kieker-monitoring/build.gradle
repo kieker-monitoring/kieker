@@ -5,7 +5,7 @@ configurations {
 	ajc
 }
 
-def aspectjVersion = '1.8.2'
+def aspectjVersion = '1.9.1'
 
 dependencies {
 	clover 'org.openclover:clover:4.2.0'

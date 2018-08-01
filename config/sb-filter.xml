@@ -1,0 +1,428 @@
+<FindBugsFilter>
+	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
+
+	<Match>
+		<!-- Reason: http://trac.kieker-monitoring.net/ticket/1352 -->
+		<Class name="kieker.test.tools.junit.traceAnalysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraphTest" />
+		<Bug pattern=" BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
+	</Match>
+	
+	<Match>
+		<!-- Reason: http://trac.kieker-monitoring.net/ticket/1352 -->
+		<Class name="kieker.test.tools.junit.traceAnalysis.filter.visualization.descriptions.DescriptionDecoratorFilterTest" />
+		<Bug pattern=" BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
+	</Match>
+	
+	<Match>
+		<!-- Reason: http://trac.kieker-monitoring.net/ticket/1352 -->
+		<Class name="kieker.test.tools.junit.traceAnalysis.filter.visualization.traceColoring.TraceColoringFilterTest" />
+		<Bug pattern=" BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.tools.traceAnalysis.filter.sessionReconstruction.SessionReconstructionFilter" />
+		<Bug pattern="AT_OPERATION_SEQUENCE_ON_CONCURRENT_ABSTRACTION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.tcp.TCPReader" />
+		<Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.tools.AbstractCommandLineTool" />
+		<Bug pattern="DM_EXIT" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.tools.traceAnalysis.TraceAnalysisGUI" />
+		<Bug pattern="SE_BAD_FIELD" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.tools.traceAnalysis.gui.FinalStep" />
+		<Bug pattern="SE_BAD_FIELD" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.tools.traceAnalysis.gui.FinalStep" />
+		<Bug pattern="DM_DEFAULT_ENCODING" />
+	</Match>
+	
+	<Match>
+		<Package name="~kieker\.common\.record.*" />
+		<Bug pattern="EI_EXPOSE_REP" />
+	</Match>
+	
+	<Match>
+		<Package name="~kieker\.tools\.opad\.record.*" />
+		<Bug pattern="EI_EXPOSE_REP" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.common.record.misc.RegistryRecord" />
+		<Bug pattern="DM_DEFAULT_ENCODING" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.IPlugin$PluginInputPortReference" />
+		<Bug pattern="EI_EXPOSE_REP2" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.IPlugin$PluginInputPortReference" />
+		<Bug pattern="EI_EXPOSE_REP" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.monitoring.probe.aspectj.AbstractAspectJProbe" />
+		<Bug pattern="RV_RETURN_VALUE_OF_PUTIFABSENT_IGNORED" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.common.record.AbstractMonitoringRecord" />
+		<Bug pattern="RV_RETURN_VALUE_OF_PUTIFABSENT_IGNORED" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.test.monitoring.junit.probe.spring.executions.jetty.TestSpringMethodInterceptor" />
+		<Method name="testIt" params="" returns="void" />
+		<Bug pattern="NP_LOAD_OF_KNOWN_NULL_VALUE" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.test.analysis.junit.plugin.filter.forward.TestStringBufferFilter" />
+		<Bug pattern="DM_STRING_CTOR" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.test.analysisteetime.junit.plugin.filter.forward.TestStringBufferFilter" />
+		<Bug pattern="DM_STRING_CTOR" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.tools.traceAnalysis.repository.DescriptionRepository" />
+		<Method name="splitLine" params="java.lang.String" returns="java.lang.String[]" />
+		<Bug pattern="PZLA_PREFER_ZERO_LENGTH_ARRAYS" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.filter.forward.util.KiekerHashMap$Segment" />
+		<Bug pattern="SE_BAD_FIELD" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.model.MetaModelHandler" />
+		<Method name="javaToMetaModel" params="java.util.Collection,java.util.Collection,java.util.Collection,java.util.Collection,java.lang.String,kieker.common.configuration.Configuration" returns="kieker.analysis.model.analysisMetaModel.MIProject" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+		<Bug pattern="IC_SUPERCLASS_USES_SUBCLASS_DURING_INITIALIZATION" />
+	</Match>
+
+	<Match>
+		<Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+		<Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE" />
+	</Match>
+
+	<Match>
+		<Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+		<Bug pattern="BC_UNCONFIRMED_CAST" />
+	</Match>
+
+	<Match>
+		<Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+		<Bug pattern="NP_LOAD_OF_KNOWN_NULL_VALUE" />
+	</Match>
+
+	<Match>
+		<Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+		<Bug pattern="MS_PKGPROTECT" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.filter.flow.TraceEventRecords" />
+		<!--<Method name="getTraceEvents" params="" returns="kieker.common.record.flow.trace.AbstractTraceEvent" />-->
+		<Bug pattern="EI_EXPOSE_REP" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.filter.flow.TraceEventRecords" />
+		<!--<Method name="&lt;init&gt;" params="kieker.common.record.flow.trace.Trace,kieker.common.record.flow.trace.AbstractTraceEvent" returns="void" />-->
+		<Bug pattern="EI_EXPOSE_REP2" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.database.DbReader" />
+		<Method name="read" params="" returns="boolean" />
+		<Bug pattern="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.database.DbReader" />
+		<Method name="table2record" params="java.sql.Connection,java.lang.String,java.lang.Class" returns="void" />
+		<Bug pattern="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.filesystem.FSZipReader" />
+		<Method name="readBinaryFile" params="java.io.DataInputStream" returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.filesystem.FSZipReader" />
+		<Method name="readAsciiFile" params="java.io.BufferedReader" returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.filesystem.FSDirectoryReader" />
+		<Method name="processNormalInputFile" params="java.io.File" returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>	
+	
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.filesystem.FSDirectoryReader" />
+		<Method name="processBinaryInputFile" params="java.io.File,kieker.common.util.filesystem.BinaryCompressionMethod" returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.filesystem.FSDirectoryReader$2" />
+		<Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.filesystem.FSReader" />
+		<Method name="read" params="" returns="boolean" />
+		<Bug pattern="NN_NAKED_NOTIFY" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.filesystem.FSReader" />
+		<Method name="newMonitoringRecord" params="kieker.common.record.IMonitoringRecord" returns="boolean" />
+		<Bug pattern="WA_NOT_IN_LOOP" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.jms.JmsReader" />
+		<Method name="read" params="" returns="boolean" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.analysisteetime.plugin.reader.jms.JMSReaderLogic" />
+		<Method name="read" params="" returns="boolean" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.jmx.JmxReader" />
+		<Method name="read2" params="" returns="boolean" />
+		<Bug pattern="DE_MIGHT_IGNORE" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.display.XYPlot" />
+		<Method name="setEntry" params="java.lang.Object, java.lang.Number" returns="void" />
+		<Bug pattern="RV_RETURN_VALUE_IGNORED" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.monitoring.core.controller.JMXController" />
+		<Method name="&lt;init&gt;" params="kieker.common.configuration.Configuration" returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.monitoring.core.controller.SamplingController$1" />
+		<Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.common.util.registry.Lookup" />
+		<Field name="array" />
+		<Bug pattern="VO_VOLATILE_REFERENCE_TO_ARRAY" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.common.util.registry.Registry" />
+		<Field name="eArrayCached" />
+		<Bug pattern="VO_VOLATILE_REFERENCE_TO_ARRAY" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.monitoring.probe.servlet.SessionAndTraceRegistrationFilter" />
+		<Method name="doFilter" params="javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain" returns="void" />
+		<Bug pattern="ES_COMPARING_STRINGS_WITH_EQ" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.monitoring.writer.database.DBWriterHelper" />
+		<Method name="createTable" params="java.lang.String,java.lang.Class[]" returns="java.lang.String" />
+		<Bug pattern="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.monitoring.writer.database.DBWriterHelper" />
+		<Method name="createIndexTable" params="" returns="void" />
+		<Bug pattern="SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.monitoring.writer.database.DbWriterThread" />
+		<Method name="consume" params="kieker.common.record.IMonitoringRecord" returns="void" />
+		<Bug pattern="OBL_UNSATISFIED_OBLIGATION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.monitoring.writer.database.DbWriterThread" />
+		<Method name="consume" params="kieker.common.record.IMonitoringRecord" returns="void" />
+		<Bug pattern="SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.monitoring.writer.database.SyncDbWriter" />
+		<Method name="newMonitoringRecord" params="kieker.common.record.IMonitoringRecord" returns="boolean" />
+		<Bug pattern="OBL_UNSATISFIED_OBLIGATION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.monitoring.writer.database.SyncDbWriter" />
+		<Method name="newMonitoringRecord" params="kieker.common.record.IMonitoringRecord"
+			returns="boolean" />
+		<Bug pattern="SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING" />
+	</Match>
+
+	<Match>
+		<Class name="~kieker.test.*" />
+		<Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.filter.record.MonitoringThroughputFilter" />
+		<Bug pattern="VO_VOLATILE_INCREMENT" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.test.monitoring.junit.core.sampler.TestPeriodicSampling$1" />
+		<Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.test.monitoring.junit.core.sampler.TestPeriodicSampling$2" />
+		<Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.test.tools.junit.writeRead.filesystem.KiekerLogDirFilter$1" />
+		<Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.test.tools.junit.bridge.AbstractConnectorTest" />
+		<Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.tools.KaxViz" />
+		<Method name="main" params="java.lang.String[]" returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.tools.traceAnalysis.TraceAnalysisTool" />
+		<Method name="dispatchTasks" params="" returns="boolean" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter$1" />
+		<Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.evaluation.benchmark.Benchmark" />
+		<Method name="parseAndInitializeArguments" params="java.lang.String[]" returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.examples.userguide.ch2bookstore.manual.BookstoreAnalysisStarter" />
+		<Method name="main" params="java.lang.String[]" returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.examples.userguide.ch3and4bookstore.MyPipeReader" />
+		<Method name="read" params="" returns="boolean" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.examples.userguide.ch3and4bookstore.PipeData" />
+		<Bug pattern="EI_EXPOSE_REP" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.tools.bridge.LookupEntity" />
+		<Bug pattern="EI_EXPOSE_REP" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.examples.userguide.ch3and4bookstore.PipeData" />
+		<Bug pattern="EI_EXPOSE_REP2" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.tools.bridge.LookupEntity" />
+		<Bug pattern="EI_EXPOSE_REP2" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.tools.bridge.cli.PrivilegedClassLoaderAction" />
+		<Bug pattern="EI_EXPOSE_REP2" />
+	</Match>
+
+	<Match>
+		<Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
+		<Bug pattern="NM_CONFUSING" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.tools.traceAnalysis.TraceAnalysisGUI" />
+		<Method name="loadCurrentConfiguration" params="" returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
+	</Match>
+	
+	<!-- For the public TYPES field of our records. -->
+	<Match>
+		<Class name="~kieker.common.record.*" />
+		<Field name="TYPES" />
+		<Bug pattern="MS_PKGPROTECT, MS_MUTABLE_ARRAY" />
+	</Match>
+	<Match>
+		<Class name="~kieker.tools.opad.record.*" />
+		<Field name="TYPES" />
+		<Bug pattern="MS_PKGPROTECT, MS_MUTABLE_ARRAY" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.tools.resourceMonitor.ResourceMonitor$1" />
+		<Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.tools.resourceMonitor.ResourceMonitor$2" />
+		<Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
+	</Match>
+
+	<!-- Exclude all generated classes for the analysis model-->
+	<Match>
+		<Package name="~kieker\.analysisteetime\.model\.analysismodel.*" />
+	</Match>
+	
+</FindBugsFilter>

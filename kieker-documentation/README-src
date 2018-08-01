@@ -3,6 +3,10 @@ performance monitoring and dynamic software analysis.
 
 Detailed information about Kieker is provided at http://kieker-monitoring.net/
 
-Gradle is used as the build tool. A `build.gradle` is provided. Also, the sources can 
-be imported into Eclipse. The developer guide contains additional information 
-on the build environment: http://trac.kieker-monitoring.net/wiki/DevGuide 
+Gradle is used as the build tool. A `build.gradle` is provided. Also, the
+sources can be imported into Eclipse. The developer guide contains additional
+information on the build environment. Furthermore, you may consult:
+- README.md on github https://github.com/kieker-monitoring/kieker
+- Wiki for documentation and development
+  https://kieker-monitoring.atlassian.net/wiki/
+
