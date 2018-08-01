@@ -1,4 +1,4 @@
-package kieker.writer;
+package kieker.writer.queue;
 
 import static kieker.common.record.controlflow.OperationExecutionRecord.EOI;
 import static kieker.common.record.controlflow.OperationExecutionRecord.ESS;
@@ -17,7 +17,7 @@ import org.junit.ClassRule;
 import pl.domzal.junit.docker.rule.DockerRule;
 import pl.domzal.junit.docker.rule.WaitFor;
 
-public abstract class AbstractQueueWriterIT extends AbstractKiekerTest {
+public abstract class AbstractActiveMQWriterIT extends AbstractKiekerTest {
 
     public static final IMonitoringRecord MOCKED_MONITORING_RECORD = new OperationExecutionRecord(NO_OPERATION_SIGNATURE,
             SESSION_ID, TRACE_ID, TIN, TOUT, HOSTNAME,

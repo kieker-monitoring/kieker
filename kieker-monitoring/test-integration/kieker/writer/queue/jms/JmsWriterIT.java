@@ -1,13 +1,14 @@
-package kieker.writer;
+package kieker.writer.queue.jms;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.writer.jms.JmsWriter;
 import kieker.tools.bridge.connector.jms.JMSClientConnector;
+import kieker.writer.queue.AbstractActiveMQWriterIT;
 import org.junit.Before;
 import org.junit.Test;
 
-public class JmsWriterIT extends AbstractQueueWriterIT {
+public class JmsWriterIT extends AbstractActiveMQWriterIT {
 
     JmsWriter writer;
 
