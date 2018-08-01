@@ -17,6 +17,7 @@
 package kieker.monitoring.core.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -365,6 +366,26 @@ public final class MonitoringController extends AbstractController implements IM
 	@Override
 	public List<String> getProbePatternList() {
 		return this.probeController.getProbePatternList();
+	}
+
+	@Override
+	public Map<String, List<String>> getParameters(final String pattern) {
+		return this.probeController.getParameters(pattern);
+	}
+
+	@Override
+	public void deleteParameterEntry(final String pattern) {
+		this.probeController.deleteParameterEntry(pattern);
+	}
+
+	@Override
+	public void addParameterEntry(final String pattern, final String parameterName, final List<String> parameters) {
+		this.probeController.addParameterEntry(pattern, parameterName, parameters);
+	}
+
+	@Override
+	public void addCompletePatternParameters(final String pattern, final Map<String, List<String>> parameterMap) {
+		this.probeController.addCompletePatternParameters(pattern, parameterMap);
 	}
 
 	// GET SINGLETON INSTANCE
