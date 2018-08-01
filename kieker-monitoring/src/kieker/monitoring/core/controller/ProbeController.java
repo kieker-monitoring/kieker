@@ -29,10 +29,12 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -71,6 +73,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 
 	private final ConcurrentMap<String, Boolean> signatureCache;
 	private final List<PatternEntry> patternList = new ArrayList<>(); // only accessed synchronized
+	private final Map<String, Map<String, List<String>>> patternListParameters = new HashMap<>();
 
 	/**
 	 * Creates a new instance of this class using the given configuration to
@@ -305,6 +308,47 @@ public class ProbeController extends AbstractController implements IProbeControl
 				list.add(strPattern);
 			}
 			return list;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Map<String, List<String>> getParameters(final String pattern) {
+		synchronized (this) {
+			return this.patternListParameters.get(pattern);
+		}
+
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void deleteParameterEntry(final String pattern) {
+		synchronized (this) {
+			this.patternListParameters.remove(pattern);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void addParameterEntry(final String pattern, final String parameterName, final List<String> parameters) {
+		synchronized (this) {
+			this.patternListParameters.get(pattern).put(parameterName, parameters);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void addCompletePatternParameters(final String pattern, final Map<String, List<String>> parameterMap) {
+		synchronized (this) {
+			this.patternListParameters.put(pattern, parameterMap);
 		}
 	}
 
