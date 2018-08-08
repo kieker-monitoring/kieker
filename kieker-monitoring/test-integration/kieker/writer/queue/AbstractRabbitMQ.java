@@ -3,7 +3,7 @@ package kieker.writer.queue;
 import static kieker.common.record.controlflow.OperationExecutionRecord.EOI;
 import static kieker.common.record.controlflow.OperationExecutionRecord.ESS;
 import static kieker.common.record.controlflow.OperationExecutionRecord.HOSTNAME;
-import static kieker.common.record.controlflow.OperationExecutionRecord.NO_OPERATION_SIGNATURE;
+import static kieker.common.record.controlflow.OperationExecutionRecord.OPERATION_SIGNATURE;
 import static kieker.common.record.controlflow.OperationExecutionRecord.SESSION_ID;
 import static kieker.common.record.controlflow.OperationExecutionRecord.TIN;
 import static kieker.common.record.controlflow.OperationExecutionRecord.TOUT;
@@ -11,16 +11,13 @@ import static kieker.common.record.controlflow.OperationExecutionRecord.TRACE_ID
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import org.junit.Before;
 import org.junit.ClassRule;
 import pl.domzal.junit.docker.rule.DockerRule;
 import pl.domzal.junit.docker.rule.WaitFor;
 
-public abstract class AbstractRabbitMQWriterIT {
+public abstract class AbstractRabbitMQ {
 
-    private static int port = 66666;
-
-    public static final IMonitoringRecord MOCKED_MONITORING_RECORD = new OperationExecutionRecord(NO_OPERATION_SIGNATURE,
+    public static final IMonitoringRecord MOCKED_MONITORING_RECORD = new OperationExecutionRecord(OPERATION_SIGNATURE,
             SESSION_ID, TRACE_ID, TIN, TOUT, HOSTNAME,
             EOI, ESS);
 
@@ -31,8 +28,4 @@ public abstract class AbstractRabbitMQWriterIT {
             .expose("5672", "5672")
             .waitFor(WaitFor.logMessage("Server startup complete"))
             .build();
-
-    @Before
-    public void setUp() {
-    }
 }

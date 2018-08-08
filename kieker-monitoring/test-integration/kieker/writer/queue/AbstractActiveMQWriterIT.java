@@ -26,15 +26,14 @@ public abstract class AbstractActiveMQWriterIT extends AbstractKiekerTest {
     @ClassRule
     public static DockerRule rule = DockerRule.builder()
             .imageName("webcenter/activemq:5.13.2")
+            .name("activemq")
             .expose("61616", "61616")
             .expose("61613", "61613")
             .expose("8161", "8161")
-            .env("ACTIVEMQ_SERIALIZABLE_PACKAGES", "'*'")
-            .env("ACTIVEMQ_STATIC_QUEUES", "kieker")
             .waitFor(WaitFor.logMessage("INFO success"))
             .build();
 
     @Before
-    public void setUp() {
+    public void setUp() throws InterruptedException {
     }
 }
