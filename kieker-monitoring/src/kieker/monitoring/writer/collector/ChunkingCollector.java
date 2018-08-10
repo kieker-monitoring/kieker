@@ -276,8 +276,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	 * Writer task to write records collected by the collector.
 	 *
 	 * @author Holger Knoche
-	 * @param <T>
-	 *            The type of the used buffer
+	 * @param <T> The type of the used buffer
 	 * @since 1.13
 	 *
 	 */
@@ -388,7 +387,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 
 			// Serialize and write the data
 			final T outputBuffer = this.buffer;
-			outputBuffer.rewind();
+			outputBuffer.clear();
 			this.serializeAndWriteChunk(chunk, outputBuffer);
 		}
 
