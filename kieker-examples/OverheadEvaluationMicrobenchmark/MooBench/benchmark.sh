@@ -13,7 +13,7 @@ RESULTS_DIR="${DATA_DIR}/results-kieker"
 AGENT="${BASE_DIR}/lib/kieker-1.14-SNAPSHOT-aspectj.jar"
 AOP="META-INF/kieker.aop.xml"
 
-SLEEPTIME=3           ## 30
+SLEEPTIME=30          ## 30
 NUM_LOOPS=10            ## 10
 THREADS=1               ## 1
 RECURSIONDEPTH=10       ## 10
