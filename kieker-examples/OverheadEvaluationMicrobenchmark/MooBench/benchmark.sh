@@ -13,7 +13,7 @@ RESULTS_DIR="${DATA_DIR}/results-kieker"
 AGENT="${BASE_DIR}/lib/kieker-1.14-SNAPSHOT-aspectj.jar"
 AOP="META-INF/kieker.aop.xml"
 
-SLEEPTIME=30            ## 30
+SLEEPTIME=3           ## 30
 NUM_LOOPS=10            ## 10
 THREADS=1               ## 1
 RECURSIONDEPTH=10       ## 10
@@ -93,7 +93,7 @@ WRITER_CONFIG[6]="-Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem
 
 TITLE[7]="Logging (TCP)"
 WRITER_CONFIG[7]="-Dkieker.monitoring.writer=kieker.monitoring.writer.tcp.TCPWriter"
-RECEIVER[single-tcp]="${JAVABIN} -classpath MooBench.jar kieker.tcp.TestExperiment0"
+RECEIVER[7]="${JAVABIN} -classpath MooBench.jar kieker.tcp.TestExperiment0"
 
 # Create R labels
 LABELS=""
@@ -165,9 +165,16 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
     echo "## Starting iteration ${i}/${NUM_LOOPS}" >>${DATA_DIR}/kieker.log
 
 	for ((index=0;index<${#WRITER_CONFIG[@]};index+=1)); do
+	    if [[ ${RECEIVER[$index]} ]] ; then
+			echo "receiver ${RECEIVER[$index]}"
+			${RECEIVER[$index]} >> ${DATA_DIR}/kieker.receiver-$i-$index.log &
+			RECEIVER_PID=$!
+		fi
 		execute-experiment "$i" "$j" "$index" "${TITLE[$index]}" "${WRITER_CONFIG[$index]}"
-		if [[ ${RECEIVER[$index]} ]] ; then
-			${RECEIVER[$index_name]} >> ${DATA_DIR}/kieker.receiver-$i-$index.log
+		if [[ $RECEIVER_PID ]] ; then
+			kill -TERM $RECEIVER_PID
+			kill -9 $RECEIVER_PID
+			unset RECEIVER_PID
 		fi
 	done
 done
