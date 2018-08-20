@@ -13,7 +13,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 ***************************************************************************/
-package kieker.common.record.misc;
+package kieker.common.record.remotecontrol;
 
 
 import kieker.common.exception.RecordInstantiationException;
@@ -21,25 +21,25 @@ import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
- * @author Christian Wulf
+ * @author Marc Adolf
  * 
- * @since 1.13
+ * @since 1.14
  */
-public final class HostApplicationMetaDataFactory implements IRecordFactory<HostApplicationMetaData> {
+public final class UpdateParameterEventFactory implements IRecordFactory<UpdateParameterEvent> {
 	
 	
 	@Override
-	public HostApplicationMetaData create(final IValueDeserializer deserializer) throws RecordInstantiationException {
-		return new HostApplicationMetaData(deserializer);
+	public UpdateParameterEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		return new UpdateParameterEvent(deserializer);
 	}
 	
 	@Override
 	@Deprecated
-	public HostApplicationMetaData create(final Object[] values) {
-		return new HostApplicationMetaData(values);
+	public UpdateParameterEvent create(final Object[] values) {
+		return new UpdateParameterEvent(values);
 	}
 	
 	public int getRecordSizeInBytes() {
-		return HostApplicationMetaData.SIZE;
+		return UpdateParameterEvent.SIZE;
 	}
 }
