@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # internal parameter configuration
