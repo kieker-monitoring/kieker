@@ -6,14 +6,14 @@ JAVABIN="java"
 
 BASE_DIR=$(cd "$(dirname "$0")"; pwd)
 
-RSCRIPT_DIR=r/
+RSCRIPT_DIR="r"
 
 DATA_DIR="${BASE_DIR}/data"
 RESULTS_DIR="${DATA_DIR}/results-kieker"
 AGENT="${BASE_DIR}/lib/kieker-1.14-SNAPSHOT-aspectj.jar"
 AOP="META-INF/kieker.aop.xml"
 
-SLEEPTIME=30          ## 30
+SLEEPTIME=1 #30          ## 30
 NUM_LOOPS=10            ## 10
 THREADS=1               ## 1
 RECURSIONDEPTH=10       ## 10
@@ -97,8 +97,8 @@ RECEIVER[7]="${JAVABIN} -classpath MooBench.jar kieker.tcp.TestExperiment0"
 
 # Create R labels
 LABELS=""
-for I in ${WRITER_TYPE[@]} ; do
-	title="${TITLE[$I]}"
+for I in "${TITLE[@]}" ; do
+	title="$I"
 	if [ "$LABELS" == "" ] ; then
 		LABELS="\"$title\""
 	else
@@ -184,7 +184,7 @@ mv ${DATA_DIR}/kieker.log ${RESULTS_DIR}/kieker.log
 [ -f ${DATA_DIR}/errorlog.txt ] && mv ${DATA_DIR}/errorlog.txt ${RESULTS_DIR}
 
 ## Generate Results file
-R --vanilla --silent <<EOF
+R --vanilla --silent << EOF
 results_fn="${RAWFN}"
 outtxt_fn="${RESULTS_DIR}/results-text.txt"
 outcsv_fn="${RESULTS_DIR}/results-text.csv"
