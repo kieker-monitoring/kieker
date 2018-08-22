@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 # internal parameter configuration
@@ -102,7 +103,7 @@ for I in "${TITLE[@]}" ; do
 		LABELS="\"$title\""
 	else
 		LABELS="${LABELS}, \"$title\""
-	fi	
+	fi
 done
 
 ## Write configuration
@@ -158,7 +159,7 @@ function execute-experiment() {
 ## Execute Benchmark
 for ((i=1;i<=${NUM_OF_LOOPS};i+=1)); do
     j=${RECURSION_DEPTH}
-    
+
     echo "## Starting iteration ${i}/${NUM_OF_LOOPS}"
     echo "## Starting iteration ${i}/${NUM_OF_LOOPS}" >>${DATA_DIR}/kieker.log
 
@@ -182,7 +183,8 @@ mv ${DATA_DIR}/kieker.log ${RESULTS_DIR}/kieker.log
 [ -f ${DATA_DIR}/errorlog.txt ] && mv ${DATA_DIR}/errorlog.txt ${RESULTS_DIR}
 
 ## Generate Results file
-R --vanilla --silent << EOF
+#R --vanilla --silent << EOF
+cat > a << EOF
 results_fn="${RAWFN}"
 outtxt_fn="${RESULTS_DIR}/results-text.txt"
 outcsv_fn="${RESULTS_DIR}/results-text.csv"
