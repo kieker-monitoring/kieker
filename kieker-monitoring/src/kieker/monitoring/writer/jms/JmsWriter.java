@@ -101,7 +101,7 @@ public class JmsWriter extends AbstractMonitoringWriter {
 			final ConnectionFactory factory = (ConnectionFactory) context.lookup(this.configFactoryLookupName);
 
 
-			if(this.configUsername.isEmpty() && this.configPassword.isEmpty()) {
+			if (this.configUsername.isEmpty() && this.configPassword.isEmpty()) {
                 this.connection = factory.createConnection();
             } else {
                 this.connection = factory.createConnection(this.configUsername, this.configPassword);
