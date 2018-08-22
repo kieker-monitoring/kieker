@@ -5,6 +5,10 @@ template IRemoteControlEvent {
 	string pattern
 }
 
+template IRemoteParameterControlEvent: IRemoteControlEvent{
+	string[] parameterNames
+	string[][] parameters
+}
 
 @author 'Marc Adolf' @since '1.14'
 entity DeactivationEvent : IRemoteControlEvent {
@@ -12,4 +16,12 @@ entity DeactivationEvent : IRemoteControlEvent {
 
 @author 'Marc Adolf' @since '1.14'
 entity ActivationEvent : IRemoteControlEvent {
+} 
+
+@author 'Marc Adolf' @since '1.14'
+entity ActivationParameterEvent : IRemoteParameterControlEvent {
+} 
+
+@author 'Marc Adolf' @since '1.14'
+entity UpdateParameterEvent : IRemoteParameterControlEvent {
 } 
