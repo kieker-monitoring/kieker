@@ -7,7 +7,7 @@ JAVA_BIN="java"
 
 BASE_DIR=$(cd "$(dirname "$0")"; pwd)
 
-RSCRIPT_DIR="r/stats.csv.r"
+RSCRIPT_PATH="r/stats.csv.r"
 
 DATA_DIR="${BASE_DIR}/data"
 RESULTS_DIR="${DATA_DIR}/results-kieker"
@@ -193,7 +193,7 @@ configs.recursion=${RECURSION_DEPTH}
 configs.labels=c($LABELS)
 results.count=${TOTAL_NUM_OF_CALLS}
 results.skip=${TOTAL_NUM_OF_CALLS}/2
-source("${RSCRIPT}")
+source("${RSCRIPT_PATH}")
 EOF
 
 exit 1
