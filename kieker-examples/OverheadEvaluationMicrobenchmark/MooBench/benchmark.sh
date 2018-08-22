@@ -184,9 +184,7 @@ mv ${DATA_DIR}/kieker.log ${RESULTS_DIR}/kieker.log
 [ -f ${DATA_DIR}/errorlog.txt ] && mv ${DATA_DIR}/errorlog.txt ${RESULTS_DIR}
 
 ## Generate Results file
-#R --vanilla --silent << EOF
-#R --vanilla << EOF
-cat > a << EOF
+R --vanilla --silent << EOF
 results_fn="${RAWFN}"
 outtxt_fn="${RESULTS_DIR}/results-text.txt"
 outcsv_fn="${RESULTS_DIR}/results-text.csv"
@@ -197,8 +195,6 @@ results.count=${TOTALCALLS}
 results.skip=${TOTALCALLS}/2
 source("${RSCRIPT_DIR}/stats.csv.r")
 EOF
-
-exit 1
 
 ## Clean up raw results
 zip -jqr ${RESULTS_DIR}/results.zip ${RAWFN}*
