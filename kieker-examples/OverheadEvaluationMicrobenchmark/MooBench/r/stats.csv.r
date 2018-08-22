@@ -39,9 +39,6 @@ resultDimensionNames <- list(configs.labels, numbers)
 # result values
 resultsBIG <- array(dim=c(numberOfWriters, numberOfValues), dimnames=resultDimensionNames)
 
-# throughput ???
-throughput = array(list(),dim=c(numberOfWriters))
-
 ##########
 # Create result
 
@@ -68,29 +65,6 @@ for (writer_idx in (1:numberOfWriters)) {
         trx_idx <- c(1:numOfRowsToRead)
 
         resultsBIG[writer_idx,trx_idx] <- results[["duration_nsec"]]
-
-        # duration
-        for (duration in results[["duration_nsec"]]) {
-           if (rpsLastDuration + duration >= 1000000000) {
-              recordsPerSecond <- c(recordsPerSecond, rpsCount)
-              rpsCount = 0
-              rpsLastDuration = 1000000000 - rpsLastDuration
-           }
-           while (duration > 1000000000) {
-              recordsPerSecond <- c(recordsPerSecond, 0)
-              duration = duration - 1000000000
-           }
-           rpsCount = rpsCount + 1
-           rpsLastDuration = rpsLastDuration + duration
-        }
-        
-        rm(results, results_fn_filepath)
-      }
-
-      # done
-      recordsPerSecond <- c(recordsPerSecond, rpsCount)
-      throughput[[writer_idx]] <- recordsPerSecond
-      rm(recordsPerSecond, rpsLastDuration, rpsCount)
 }
 
 
