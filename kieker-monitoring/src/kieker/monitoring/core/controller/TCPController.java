@@ -36,7 +36,7 @@ import kieker.monitoring.listener.MonitoringCommandListener;
 public class TCPController extends AbstractController implements IRemoteController {
 
 	/**
-	 * The size for the message buffer
+	 * The size for the message buffer.
 	 */
 	private static final int BUFFER_SIZE = 65535;
 	/** The log for this component. */
