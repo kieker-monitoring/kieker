@@ -67,7 +67,6 @@ for (writer_idx in (1:numberOfWriters)) {
         resultsBIG[writer_idx,trx_idx] <- results[["duration_nsec"]]
 }
 
-
 qnorm_value <- qnorm(0.975)
 
 # print results
