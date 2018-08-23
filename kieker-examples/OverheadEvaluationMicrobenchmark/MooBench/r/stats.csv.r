@@ -44,27 +44,22 @@ resultsBIG <- array(dim=c(numberOfWriters, numberOfValues), dimnames=resultDimen
 
 ## "[ recursion , config , loop ]"
 
-print("configs.recursion")
-print(configs.recursion)
-
 recursion_depth <- configs.recursion
 numOfRowsToRead <- results.count-results.skip
 
 for (writer_idx in (1:numberOfWriters)) {
-     recordsPerSecond = c()
-     rpsLastDuration = 0
-     rpsCount = 0
-     file_idx <- writer_idx - 1
+   recordsPerSecond = c()
+   rpsLastDuration = 0
+   rpsCount = 0
+   file_idx <- writer_idx - 1
 
-     # loop
-     for (loop_counter in (1:configs.loop)) {
-        results_fn_filepath <- paste(results_fn, "-", loop_counter, "-", recursion_depth, "-", file_idx, ".csv", sep="")
- 
-        results <- read.csv2(results_fn_filepath, nrows=numOfRowsToRead, skip=results.skip, quote="", colClasses=c("NULL","numeric"), comment.char="", col.names=c("thread_id", "duration_nsec"), header=FALSE)
-
-        trx_idx <- c(1:numOfRowsToRead)
-
-        resultsBIG[writer_idx,trx_idx] <- results[["duration_nsec"]]
+   # loop
+   for (loop_counter in (1:configs.loop)) {
+      results_fn_filepath <- paste(results_fn, "-", loop_counter, "-", recursion_depth, "-", file_idx, ".csv", sep="")
+      results <- read.csv2(results_fn_filepath, nrows=numOfRowsToRead, skip=results.skip, quote="", colClasses=c("NULL","numeric"), comment.char="", col.names=c("thread_id", "duration_nsec"), header=FALSE)
+      trx_idx <- c(1:numOfRowsToRead)
+      resultsBIG[writer_idx,trx_idx] <- results[["duration_nsec"]]
+   }
 }
 
 qnorm_value <- qnorm(0.975)
@@ -78,7 +73,6 @@ for (writer_idx in (1:numberOfWriters)) {
    idx_mult <- c(1:numOfRowsToRead)
 
    valuesBIG <- resultsBIG[writer_idx,idx_mult]
-   valuesThroughput <- throughput[[writer_idx]]
 
    printvalues["mean",writer_idx] <- mean(valuesBIG)
    printvalues["ci95%",writer_idx] <- qnorm_value*sd(valuesBIG)/sqrt(length(valuesBIG))

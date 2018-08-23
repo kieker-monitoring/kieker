@@ -16,7 +16,7 @@ AOP="META-INF/kieker.aop.xml"
 SLEEP_TIME=30                   ## 30
 NUM_OF_LOOPS=10                 ## 10
 RECURSION_DEPTH=10              ## 10
-TOTAL_NUM_OF_CALLS=8000000      ## 2000000
+TOTAL_NUM_OF_CALLS=2000000      ## 2 000 000
 METHOD_TIME=5                   ## 500000
 
 # test input parameters and configuration
