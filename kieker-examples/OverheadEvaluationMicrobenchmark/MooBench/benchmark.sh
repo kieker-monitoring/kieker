@@ -2,23 +2,22 @@
 
 # internal parameter configuration
 
-JAVABIN="java"
+JAVA_BIN="java"
 
 BASE_DIR=$(cd "$(dirname "$0")"; pwd)
 
-RSCRIPT_DIR="r"
+RSCRIPT_PATH="r/stats.csv.r"
 
 DATA_DIR="${BASE_DIR}/data"
 RESULTS_DIR="${DATA_DIR}/results-kieker"
 AGENT="${BASE_DIR}/lib/kieker-1.14-SNAPSHOT-aspectj.jar"
 AOP="META-INF/kieker.aop.xml"
 
-SLEEPTIME=1 #30          ## 30
-NUM_LOOPS=10            ## 10
-THREADS=1               ## 1
-RECURSIONDEPTH=10       ## 10
-TOTALCALLS=2000000      ## 2000000
-METHODTIME=0       ## 500000
+SLEEP_TIME=30                   ## 30
+NUM_OF_LOOPS=10                 ## 10
+RECURSION_DEPTH=10              ## 10
+TOTAL_NUM_OF_CALLS=2000000      ## 2 000 000
+METHOD_TIME=5                   ## 500000
 
 # test input parameters and configuration
 if [ ! -d "${BASE_DIR}" ] ; then
@@ -37,10 +36,10 @@ echo "----------------------------------"
 echo "Running benchmark..."
 echo "----------------------------------"
 
-MOREPARAMS="--quickstart"
-MOREPARAMS="${MOREPARAMS} -r kieker.Logger"
+MORE_PARAMS="--quickstart"
+MORE_PARAMS="${MORE_PARAMS} -r kieker.Logger"
 
-TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 4 \* ${RECURSIONDEPTH} \* ${NUM_LOOPS} + ${SLEEPTIME} \* 4 \* ${NUM_LOOPS}  \* ${RECURSIONDEPTH} + 50 \* ${TOTALCALLS} / 1000000000 \* 4 \* ${RECURSIONDEPTH} \* ${NUM_LOOPS} `
+TIME=`expr ${METHOD_TIME} \* ${TOTAL_NUM_OF_CALLS} / 1000000000 \* 4 \* ${RECURSION_DEPTH} \* ${NUM_OF_LOOPS} + ${SLEEP_TIME} \* 4 \* ${NUM_OF_LOOPS}  \* ${RECURSION_DEPTH} + 50 \* ${TOTAL_NUM_OF_CALLS} / 1000000000 \* 4 \* ${RECURSION_DEPTH} \* ${NUM_OF_LOOPS} `
 echo "Experiment will take circa ${TIME} seconds."
 
 echo "Removing and recreating '$RESULTS_DIR'"
@@ -93,7 +92,7 @@ WRITER_CONFIG[6]="-Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem
 
 TITLE[7]="Logging (TCP)"
 WRITER_CONFIG[7]="-Dkieker.monitoring.writer=kieker.monitoring.writer.tcp.TCPWriter"
-RECEIVER[7]="${JAVABIN} -classpath MooBench.jar kieker.tcp.TestExperiment0"
+RECEIVER[7]="${JAVA_BIN} -classpath MooBench.jar kieker.tcp.TestExperiment0"
 
 # Create R labels
 LABELS=""
@@ -103,23 +102,22 @@ for I in "${TITLE[@]}" ; do
 		LABELS="\"$title\""
 	else
 		LABELS="${LABELS}, \"$title\""
-	fi	
+	fi
 done
 
 ## Write configuration
 uname -a >${RESULTS_DIR}/configuration.txt
-${JAVABIN} ${JAVAARGS} -version 2>>${RESULTS_DIR}/configuration.txt
+${JAVA_BIN} ${JAVAARGS} -version 2>>${RESULTS_DIR}/configuration.txt
 cat << EOF >>${RESULTS_DIR}/configuration.txt
 JAVAARGS: ${JAVAARGS}
 
 Runtime: circa ${TIME} seconds
 
-SLEEPTIME=${SLEEPTIME}
-NUM_LOOPS=${NUM_LOOPS}
-TOTALCALLS=${TOTALCALLS}
-METHODTIME=${METHODTIME}
-THREADS=${THREADS}
-RECURSIONDEPTH=${RECURSIONDEPTH}
+SLEEP_TIME=${SLEEP_TIME}
+NUM_OF_LOOPS=${NUM_OF_LOOPS}
+TOTAL_NUM_OF_CALLS=${TOTAL_NUM_OF_CALLS}
+METHOD_TIME=${METHOD_TIME}
+RECURSION_DEPTH=${RECURSION_DEPTH}
 EOF
 
 sync
@@ -142,45 +140,45 @@ function execute-experiment() {
     echo " # ${i}.${j}.${k} ${title}"
     echo " # ${i}.${j}.${k} ${title}" >>${DATA_DIR}/kieker.log
 
-    ${JAVABIN} ${writer_parameters} ${JAVA_PROGRAM} \
+    ${JAVA_BIN} ${writer_parameters} ${JAVA_PROGRAM} \
         --output-filename ${RAWFN}-${i}-${j}-${k}.csv \
-        --totalcalls ${TOTALCALLS} \
-        --methodtime ${METHODTIME} \
-        --totalthreads ${THREADS} \
+        --totalcalls ${TOTAL_NUM_OF_CALLS} \
+        --methodtime ${METHOD_TIME} \
+        --totalthreads 1 \
         --recursiondepth ${j} \
-        ${MOREPARAMS}
+        ${MORE_PARAMS}
 
     [ -f ${DATA_DIR}/hotspot.log ] && mv ${DATA_DIR}/hotspot.log ${RESULTS_DIR}hotspot-${i}-${j}-${k}.log
     echo >> ${DATA_DIR}/kieker.log
     echo >> ${DATA_DIR}/kieker.log
     sync
-    sleep ${SLEEPTIME}
+    sleep ${SLEEP_TIME}
 }
 
 ## Execute Benchmark
-for ((i=1;i<=${NUM_LOOPS};i+=1)); do
-    j=${RECURSIONDEPTH}
-    
-    echo "## Starting iteration ${i}/${NUM_LOOPS}"
-    echo "## Starting iteration ${i}/${NUM_LOOPS}" >>${DATA_DIR}/kieker.log
+for ((i=1;i<=${NUM_OF_LOOPS};i+=1)); do
+    j=${RECURSION_DEPTH}
 
-	for ((index=0;index<${#WRITER_CONFIG[@]};index+=1)); do
-	    if [[ ${RECEIVER[$index]} ]] ; then
-			echo "receiver ${RECEIVER[$index]}"
-			${RECEIVER[$index]} >> ${DATA_DIR}/kieker.receiver-$i-$index.log &
-			RECEIVER_PID=$!
-		fi
-		execute-experiment "$i" "$j" "$index" "${TITLE[$index]}" "${WRITER_CONFIG[$index]}"
-		if [[ $RECEIVER_PID ]] ; then
-			kill -TERM $RECEIVER_PID
-			kill -9 $RECEIVER_PID
-			unset RECEIVER_PID
-		fi
-	done
+    echo "## Starting iteration ${i}/${NUM_OF_LOOPS}"
+    echo "## Starting iteration ${i}/${NUM_OF_LOOPS}" >>${DATA_DIR}/kieker.log
+
+    for ((index=0;index<${#WRITER_CONFIG[@]};index+=1)); do
+      if [[ ${RECEIVER[$index]} ]] ; then
+         echo "receiver ${RECEIVER[$index]}"
+         ${RECEIVER[$index]} >> ${DATA_DIR}/kieker.receiver-$i-$index.log &
+         RECEIVER_PID=$!
+      fi
+      execute-experiment "$i" "$j" "$index" "${TITLE[$index]}" "${WRITER_CONFIG[$index]}"
+      if [[ $RECEIVER_PID ]] ; then
+         kill -TERM $RECEIVER_PID
+         kill -9 $RECEIVER_PID
+         unset RECEIVER_PID
+      fi
+    done
 done
 
 mv ${DATA_DIR}/kieker.log ${RESULTS_DIR}/kieker.log
-[ -f ${RESULTS_DIR}/hotspot-1-${RECURSIONDEPTH}-1.log ] && grep "<task " ${RESULTS_DIR}/hotspot-*.log > ${RESULTS_DIR}/log.log
+[ -f ${RESULTS_DIR}/hotspot-1-${RECURSION_DEPTH}-1.log ] && grep "<task " ${RESULTS_DIR}/hotspot-*.log > ${RESULTS_DIR}/log.log
 [ -f ${DATA_DIR}/errorlog.txt ] && mv ${DATA_DIR}/errorlog.txt ${RESULTS_DIR}
 
 ## Generate Results file
@@ -188,12 +186,12 @@ R --vanilla --silent << EOF
 results_fn="${RAWFN}"
 outtxt_fn="${RESULTS_DIR}/results-text.txt"
 outcsv_fn="${RESULTS_DIR}/results-text.csv"
-configs.loop=${NUM_LOOPS}
-configs.recursion=c(${RECURSIONDEPTH})
+configs.loop=${NUM_OF_LOOPS}
+configs.recursion=${RECURSION_DEPTH}
 configs.labels=c($LABELS)
-results.count=${TOTALCALLS}
-results.skip=${TOTALCALLS}/2
-source("${RSCRIPT_DIR}/stats.csv.r")
+results.count=${TOTAL_NUM_OF_CALLS}
+results.skip=${TOTAL_NUM_OF_CALLS}/2
+source("${RSCRIPT_PATH}")
 EOF
 
 ## Clean up raw results
