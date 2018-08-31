@@ -9,12 +9,16 @@ BASE_DIR=$(cd "$(dirname "$0")"; pwd)
 RSCRIPT_PATH="r/stats.csv.r"
 
 DATA_DIR="${BASE_DIR}/data"
-RESULTS_DIR="${DATA_DIR}/results-kieker"
+RESULTS_DIR="${BASE_DIR}/results-kieker"
 AGENT="${BASE_DIR}/lib/kieker-1.14-SNAPSHOT-aspectj.jar"
-AOP="META-INF/kieker.aop.xml"
+MOOBENCH="${BASE_DIR}/moobench-2.0-all.jar"
+
+# in-jar locations
+AOP="kieker.aop.xml"
+
 
 SLEEP_TIME=30                   ## 30
-NUM_OF_LOOPS=10                 ## 10
+NUM_OF_LOOPS=1                  ## 10
 RECURSION_DEPTH=10              ## 10
 TOTAL_NUM_OF_CALLS=2000000      ## 2 000 000
 METHOD_TIME=5                   ## 500000
@@ -36,8 +40,7 @@ echo "----------------------------------"
 echo "Running benchmark..."
 echo "----------------------------------"
 
-MORE_PARAMS="--quickstart"
-MORE_PARAMS="${MORE_PARAMS} -r kieker.Logger"
+FIXED_PARAMETERS="--quickstart -a moobench.monitoredApplication.MonitoredClassSimple"
 
 TIME=`expr ${METHOD_TIME} \* ${TOTAL_NUM_OF_CALLS} / 1000000000 \* 4 \* ${RECURSION_DEPTH} \* ${NUM_OF_LOOPS} + ${SLEEP_TIME} \* 4 \* ${NUM_OF_LOOPS}  \* ${RECURSION_DEPTH} + 50 \* ${TOTAL_NUM_OF_CALLS} / 1000000000 \* 4 \* ${RECURSION_DEPTH} \* ${NUM_OF_LOOPS} `
 echo "Experiment will take circa ${TIME} seconds."
@@ -52,14 +55,15 @@ touch ${DATA_DIR}/kieker.log
 RAWFN="${RESULTS_DIR}/raw"
 
 # general server arguments
-JAVAARGS="-server"
-JAVAARGS="${JAVAARGS} -d64"
-JAVAARGS="${JAVAARGS} -Xms1G -Xmx4G"
+JAVA_ARGS="-server"
+JAVA_ARGS="${JAVA_ARGS} -d64"
+JAVA_ARGS="${JAVA_ARGS} -Xms1G -Xmx4G"
 
-JAVA_PROGRAM="-jar MooBench.jar -a mooBench.monitoredApplication.MonitoredClassSimple"
+JAVA_PROGRAM="-jar ${MOOBENCH} ${FIXED_PARAMETERS}"
 
-JAVAARGS_LTW="${JAVAARGS} -javaagent:${AGENT} -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false -Dkieker.monitoring.skipDefaultAOPConfiguration=true -Dorg.aspectj.weaver.loadtime.configuration=${AOP}"
+LTW_ARGS="-javaagent:${AGENT} -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false -Dkieker.monitoring.skipDefaultAOPConfiguration=true -Dorg.aspectj.weaver.loadtime.configuration=${AOP}"
 
+KIEKER_ARGS="-Dlog4j.configuration=log4j.cfg -Dkieker.monitoring.name=KIEKER-BENCHMARK -Dkieker.monitoring.adaptiveMonitoring.enabled=false -Dkieker.monitoring.periodicSensorsExecutorPoolSize=0" 
 
 # JAVAARGS used to configure and setup a specific writer
 declare -a WRITER_CONFIG
@@ -76,23 +80,29 @@ TITLE[1]="Deactivated probe"
 WRITER_CONFIG[1]="-Dkieker.monitoring.enabled=false -Dkieker.monitoring.writer=kieker.monitoring.writer.dump.DumpWriter"
 
 TITLE[2]="No logging (null writer)"
-WRITER_CONFIG[2]="-Dkieker.monitoring.writer=kieker.monitoring.writer.dump.DumpWriter"
+WRITER_CONFIG[2]="-Dkieker.monitoring.enabled=true -Dkieker.monitoring.writer=kieker.monitoring.writer.dump.DumpWriter"
 
 TITLE[3]="Logging (ASCII)"
-WRITER_CONFIG[3]="-Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsciiFileWriter -Dkieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=${DATA_DIR}/"
+WRITER_CONFIG[3]="-Dkieker.monitoring.enabled=true -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsciiFileWriter -Dkieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=${DATA_DIR}/"
 
 TITLE[4]="Logging (Generic Text)"
-WRITER_CONFIG[4]="-Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter -Dkieker.monitoring.writer.filesystem.FileWriter.logStreamHandler=kieker.monitoring.writer.filesystem.TextLogStreamHandler -Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=${DATA_DIR}/"
+WRITER_CONFIG[4]="-Dkieker.monitoring.enabled=true -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter -Dkieker.monitoring.writer.filesystem.FileWriter.logStreamHandler=kieker.monitoring.writer.filesystem.TextLogStreamHandler -Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=${DATA_DIR}/"
 
 TITLE[5]="Logging (Bin)"
-WRITER_CONFIG[5]="-Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.BinaryFileWriter -Dkieker.monitoring.writer.filesystem.BinaryFileWriter.customStoragePath=${DATA_DIR}/"
+WRITER_CONFIG[5]="-Dkieker.monitoring.enabled=true -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.BinaryFileWriter -Dkieker.monitoring.writer.filesystem.AsciiFileWriter.customStoragePath=${DATA_DIR}/"
 
 TITLE[6]="Logging (Generic Bin)"
-WRITER_CONFIG[6]="-Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter -Dkieker.monitoring.writer.filesystem.FileWriter.logStreamHandler=kieker.monitoring.writer.filesystem.BinaryLogStreamHandler -Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=${DATA_DIR}/"
+WRITER_CONFIG[6]="-Dkieker.monitoring.enabled=true -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter -Dkieker.monitoring.writer.filesystem.FileWriter.logStreamHandler=kieker.monitoring.writer.filesystem.BinaryLogStreamHandler kieker.monitoring.writer.filesystem.FileWriter.bufferSize=8192 -Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=${DATA_DIR}/"
 
-TITLE[7]="Logging (TCP)"
-WRITER_CONFIG[7]="-Dkieker.monitoring.writer=kieker.monitoring.writer.tcp.TCPWriter"
-RECEIVER[7]="${JAVA_BIN} -classpath MooBench.jar kieker.tcp.TestExperiment0"
+TITLE[7]="Logging (Dual TCP)"
+WRITER_CONFIG[7]="-Dkieker.monitoring.writer=kieker.monitoring.writer.tcp.DualSocketTcpWriter -Dkieker.monitoring.writer.tcp.DualSocketTcpWriter.port1=2345 -Dkieker.monitoring.writer.tcp.DualSocketTcpWriter.port2=2346"
+RECEIVER[7]="${BASE_DIR}/collector-2.0/bin/collector -p 2345 -p 2346"
+
+TITLE[8]="Logging (Singe TCP)"
+WRITER_CONFIG[8]="-Dkieker.monitoring.writer=kieker.monitoring.writer.tcp.SingleSocketTcpWriter -Dkieker.monitoring.writer.tcp.SingleSocketTcpWriter.port=2345"
+RECEIVER[8]="${BASE_DIR}/collector-2.0/bin/collector -p 2345"
+
+export COLLECTOR_OPTS="-Dlog4j.configuration=file://${BASE_DIR}/log4j.cfg"
 
 # Create R labels
 LABELS=""
@@ -135,18 +145,23 @@ function execute-experiment() {
     j="$2"
     k="$3"
     title="$4"
-    writer_parameters="$5"
+    kieker_parameters="$5"
 
     echo " # ${i}.${j}.${k} ${title}"
-    echo " # ${i}.${j}.${k} ${title}" >>${DATA_DIR}/kieker.log
+    echo " # ${i}.${j}.${k} ${title}" >> ${DATA_DIR}/kieker.log
 
-    ${JAVA_BIN} ${writer_parameters} ${JAVA_PROGRAM} \
+    if [  "${kieker_parameters}" = "" ] ; then
+       COMPLETE_ARGS=${JAVA_ARGS}
+    else
+       COMPLETE_ARGS="${JAVA_ARGS} ${LTW_ARGS} ${KIEKER_ARGS} ${kieker_parameters}"
+    fi
+
+    ${JAVA_BIN} ${COMPLETE_ARGS} ${JAVA_PROGRAM} \
         --output-filename ${RAWFN}-${i}-${j}-${k}.csv \
-        --totalcalls ${TOTAL_NUM_OF_CALLS} \
-        --methodtime ${METHOD_TIME} \
-        --totalthreads 1 \
-        --recursiondepth ${j} \
-        ${MORE_PARAMS}
+        --total-calls ${TOTAL_NUM_OF_CALLS} \
+        --method-time ${METHOD_TIME} \
+        --total-threads 1 \
+        --recursion-depth ${j}
 
     [ -f ${DATA_DIR}/hotspot.log ] && mv ${DATA_DIR}/hotspot.log ${RESULTS_DIR}hotspot-${i}-${j}-${k}.log
     echo >> ${DATA_DIR}/kieker.log
@@ -165,13 +180,14 @@ for ((i=1;i<=${NUM_OF_LOOPS};i+=1)); do
     for ((index=0;index<${#WRITER_CONFIG[@]};index+=1)); do
       if [[ ${RECEIVER[$index]} ]] ; then
          echo "receiver ${RECEIVER[$index]}"
-         ${RECEIVER[$index]} >> ${DATA_DIR}/kieker.receiver-$i-$index.log &
+         ${RECEIVER[$index]} & #>> ${DATA_DIR}/kieker.receiver-$i-$index.log &
          RECEIVER_PID=$!
       fi
+
       execute-experiment "$i" "$j" "$index" "${TITLE[$index]}" "${WRITER_CONFIG[$index]}"
+
       if [[ $RECEIVER_PID ]] ; then
-         kill -TERM $RECEIVER_PID
-         kill -9 $RECEIVER_PID
+         wait $RECEIVER_PID
          unset RECEIVER_PID
       fi
     done

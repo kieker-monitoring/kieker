@@ -29,9 +29,8 @@
 
 # number of Kieker writer configurations 
 numberOfWriters <- length(configs.labels)
+recursion_depth <- configs.recursion
 
-##########
-# Setup variables
 numberOfValues <- configs.loop*(results.count-results.skip)
 numbers <- c(1:(numberOfValues))
 resultDimensionNames <- list(configs.labels, numbers)
@@ -44,7 +43,6 @@ resultsBIG <- array(dim=c(numberOfWriters, numberOfValues), dimnames=resultDimen
 
 ## "[ recursion , config , loop ]"
 
-recursion_depth <- configs.recursion
 numOfRowsToRead <- results.count-results.skip
 
 for (writer_idx in (1:numberOfWriters)) {
