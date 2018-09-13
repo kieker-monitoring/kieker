@@ -163,6 +163,8 @@ function execute-experiment() {
         --total-threads 1 \
         --recursion-depth ${j}
 
+    rm -rf ${DATA_DIR}/kieker-*
+
     [ -f ${DATA_DIR}/hotspot.log ] && mv ${DATA_DIR}/hotspot.log ${RESULTS_DIR}hotspot-${i}-${j}-${k}.log
     echo >> ${DATA_DIR}/kieker.log
     echo >> ${DATA_DIR}/kieker.log
