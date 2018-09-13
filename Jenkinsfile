@@ -1,6 +1,6 @@
 #!groovy
 
-DOCKER_IMAGE_NAME = "kieker/kieker-build:openjdk8"
+DOCKER_IMAGE_NAME = "kieker/kieker-build:openjdk8-small"
 
 node('kieker-slave-docker') {
   try {
