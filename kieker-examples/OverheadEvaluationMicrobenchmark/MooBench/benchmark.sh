@@ -15,10 +15,10 @@ else
 	echo "Missing configuration: ${BASE_DIR}/config"
 	exit 1
 fi
-if [ -f "${BASE_DIR}/common-functions.sh" ] ; then
-	. ${BASE_DIR}/common-functions.sh
+if [ -f "${BASE_DIR}/common-functions" ] ; then
+	. ${BASE_DIR}/common-functions
 else
-	echo "Missing configuration: ${BASE_DIR}/common-functions.sh"
+	echo "Missing configuration: ${BASE_DIR}/common-functions"
 	exit 1
 fi
 
