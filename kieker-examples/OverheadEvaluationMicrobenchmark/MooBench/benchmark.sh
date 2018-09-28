@@ -39,21 +39,21 @@ fi
 checkFile R-script "${RSCRIPT_PATH}"
 checkDirectory DATA_DIR "${DATA_DIR}" create
 
-PARENT=`dirname "${RESULTS_DIR}"
+PARENT=`dirname "${RESULTS_DIR}"`
 checkDirectory result-base "$PARENT"
-checkExecutable ApsectJ-Agent "${AGENT}"
+checkFile ApsectJ-Agent "${AGENT}"
 checkFile moobench "${MOOBENCH}"
 
-echo "----------------------------------"
-echo "Running benchmark..."
-echo "----------------------------------"
+information "----------------------------------"
+information "Running benchmark..."
+information "----------------------------------"
 
 FIXED_PARAMETERS="--quickstart -a moobench.monitoredApplication.MonitoredClassSimple"
 
 TIME=`expr ${METHOD_TIME} \* ${TOTAL_NUM_OF_CALLS} / 1000000000 \* 4 \* ${RECURSION_DEPTH} \* ${NUM_OF_LOOPS} + ${SLEEP_TIME} \* 4 \* ${NUM_OF_LOOPS}  \* ${RECURSION_DEPTH} + 50 \* ${TOTAL_NUM_OF_CALLS} / 1000000000 \* 4 \* ${RECURSION_DEPTH} \* ${NUM_OF_LOOPS} `
-echo "Experiment will take circa ${TIME} seconds."
+information "Experiment will take circa ${TIME} seconds."
 
-echo "Removing and recreating '$RESULTS_DIR'"
+information "Removing and recreating '$RESULTS_DIR'"
 (rm -rf ${RESULTS_DIR}) && mkdir -p ${RESULTS_DIR}
 
 # Clear kieker.log and initialize logging
@@ -155,7 +155,7 @@ function execute-experiment() {
     title="$4"
     kieker_parameters="$5"
 
-    echo " # ${i}.${j}.${k} ${title}"
+    information " # ${i}.${j}.${k} ${title}"
     echo " # ${i}.${j}.${k} ${title}" >> ${DATA_DIR}/kieker.log
 
     if [  "${kieker_parameters}" = "" ] ; then
@@ -185,7 +185,7 @@ function execute-benchmark() {
   for ((i=1;i<=${NUM_OF_LOOPS};i+=1)); do
     j=${RECURSION_DEPTH}
 
-    echo "## Starting iteration ${i}/${NUM_OF_LOOPS}"
+    information "## Starting iteration ${i}/${NUM_OF_LOOPS}"
     echo "## Starting iteration ${i}/${NUM_OF_LOOPS}" >>${DATA_DIR}/kieker.log
 
     for ((index=0;index<${#WRITER_CONFIG[@]};index+=1)); do
@@ -234,7 +234,7 @@ EOF
 ## Clean up raw results
 function cleanup-results() {
   zip -jqr ${RESULTS_DIR}/results.zip ${RAWFN}*
-#  rm -f ${RAWFN}*
+  rm -f ${RAWFN}*
   [ -f ${DATA_DIR}/nohup.out ] && cp ${DATA_DIR}/nohup.out ${RESULTS_DIR}
   [ -f ${DATA_DIR}/nohup.out ] && > ${DATA_DIR}/nohup.out
 }
@@ -252,6 +252,6 @@ else
    execute-benchmark-body $OPTION 1 1
 fi
 
-echo "Done."
+information "Done."
 
 # end

@@ -19,6 +19,6 @@ SLEEP_TIME=30                   ## 30
 NUM_OF_LOOPS=10                 ## 10
 RECURSION_DEPTH=10              ## 10
 TOTAL_NUM_OF_CALLS=2000000      ## 2 000 000
-METHOD_TIME=5                   ## 500000
+METHOD_TIME=500                 ## 500000
 
 # end
