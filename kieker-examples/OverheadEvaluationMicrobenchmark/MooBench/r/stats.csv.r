@@ -29,9 +29,8 @@
 
 # number of Kieker writer configurations 
 numberOfWriters <- length(configs.labels)
+recursion_depth <- configs.recursion
 
-##########
-# Setup variables
 numberOfValues <- configs.loop*(results.count-results.skip)
 numbers <- c(1:(numberOfValues))
 resultDimensionNames <- list(configs.labels, numbers)
@@ -44,7 +43,6 @@ resultsBIG <- array(dim=c(numberOfWriters, numberOfValues), dimnames=resultDimen
 
 ## "[ recursion , config , loop ]"
 
-recursion_depth <- configs.recursion
 numOfRowsToRead <- results.count-results.skip
 
 for (writer_idx in (1:numberOfWriters)) {
@@ -56,7 +54,8 @@ for (writer_idx in (1:numberOfWriters)) {
    # loop
    for (loop_counter in (1:configs.loop)) {
       results_fn_filepath <- paste(results_fn, "-", loop_counter, "-", recursion_depth, "-", file_idx, ".csv", sep="")
-      results <- read.csv2(results_fn_filepath, nrows=numOfRowsToRead, skip=results.skip, quote="", colClasses=c("NULL","numeric"), comment.char="", col.names=c("thread_id", "duration_nsec"), header=FALSE)
+      message(results_fn_filepath)
+      results <- read.csv2(results_fn_filepath, nrows=numOfRowsToRead, skip=results.skip, quote="", colClasses=c("NULL","numeric", "numeric", "numeric"), comment.char="", col.names=c("thread_id", "duration_nsec", "gc", "t"), header=FALSE)
       trx_idx <- c(1:numOfRowsToRead)
       resultsBIG[writer_idx,trx_idx] <- results[["duration_nsec"]]
    }
