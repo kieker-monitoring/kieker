@@ -33,7 +33,7 @@ scp ${REMOTE_NODE}:MooBench/${RESULTS_FOLDER_NAME}/results-text.csv ${RESULTS_TA
 
 # Save up to 100 results from previous benchmarks on the remote node and clean up
 BACKUP_FOLDER_NAME="$(date +%Y-%m-%d-%H-%M-%S)"
-ssh ${REMOTE_NODE} "mkdir old-results/${BACKUP_FOLDER_NAME}; cp MooBench/data/${RESULTS_FOLDER_NAME}/results.zip old-results/${BACKUP_FOLDER_NAME}/; exit"
+ssh ${REMOTE_NODE} "mkdir old-results/${BACKUP_FOLDER_NAME}; cp MooBench/${RESULTS_FOLDER_NAME}/results.zip old-results/${BACKUP_FOLDER_NAME}/; exit"
 # A Non-Solaris OS could require "-d '\n'" for the xargs command
 ssh ${REMOTE_NODE} "cd old-results; ls -A1t | sed -e '1,100d' | xargs rm -rf; exit"
 ssh ${REMOTE_NODE} 'rm -rf MooBench; exit'
