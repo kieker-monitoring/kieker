@@ -1,4 +1,4 @@
-customRulesJars=
+customRulesJars=../config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar
 eclipse.preferences.version=1
 enabled=true
 ruleSetFilePath=../config/pmdrules.xml

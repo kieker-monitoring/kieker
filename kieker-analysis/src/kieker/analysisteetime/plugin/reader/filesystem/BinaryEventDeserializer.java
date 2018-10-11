@@ -15,11 +15,23 @@
  ***************************************************************************/
 package kieker.analysisteetime.plugin.reader.filesystem;
 
+import java.io.InputStream;
+
+import kieker.common.record.IMonitoringRecord;
+
+import teetime.framework.OutputPort;
+
 /**
  * @author Reiner Jung
  *
  * @since 1.15
  */
 public class BinaryEventDeserializer implements IEventDeserializer {
+
+	@Override
+	public void processDataStream(final InputStream chainInputStream, final OutputPort<IMonitoringRecord> outputPort) {
+		// TODO Auto-generated method stub
+
+	}
 
 }
