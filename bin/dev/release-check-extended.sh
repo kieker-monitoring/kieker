@@ -227,4 +227,9 @@ else
   echo "The content of both source archives is NOT identical."
   exit 1
 fi
-rm -rf ${DIR}
+if [ -d ${DIR} ] ; then
+        rm -rf "${DIR}"
+else
+        echo "${DIR} is not a directory"
+fi
+# end
