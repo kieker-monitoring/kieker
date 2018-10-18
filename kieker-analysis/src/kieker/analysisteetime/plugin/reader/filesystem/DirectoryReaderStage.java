@@ -42,13 +42,11 @@ import teetime.framework.OutputPort;
  */
 public class DirectoryReaderStage extends AbstractConsumerStage<File> {
 
-	private final AbstractMapReader mapReader;
 	private final FilenameFilter mapFilter = new MapFileFilter();
 	private final OutputPort<IMonitoringRecord> outputPort = this.createOutputPort(IMonitoringRecord.class);
 	private final Configuration configuration;
 
-	public DirectoryReaderStage(final AbstractMapReader mapReader, final Configuration configuration) {
-		this.mapReader = mapReader;
+	public DirectoryReaderStage(final Configuration configuration) {
 		this.configuration = configuration;
 	}
 
@@ -57,39 +55,82 @@ public class DirectoryReaderStage extends AbstractConsumerStage<File> {
 		final ReaderRegistry<String> registry = new ReaderRegistry<>();
 		/** read all map files. */
 		for (final File mapFile : directory.listFiles(this.mapFilter)) {
-			this.mapReader.readMapFile(mapFile, registry);
+			final String mapFileName = mapFile.getName();
+			try {
+				this.readMapFile(new FileInputStream(mapFile), mapFileName, registry);
+			} catch (final FileNotFoundException e) {
+				this.logger.error("Cannot find map file {}.", mapFileName);
+			}
 		}
 
 		/** read log files. */
 		for (final File logFile : directory.listFiles()) {
-			final String name = logFile.getName();
+			final String logFileName = logFile.getName();
 
 			try {
-				this.readLogFile(new FileInputStream(logFile), name);
+				this.readLogFile(new FileInputStream(logFile), logFileName, registry);
 			} catch (final FileNotFoundException e) {
-				this.logger.error("Cannot find log file {}.", name);
+				this.logger.error("Cannot find log file {}.", logFileName);
 			}
 
 		}
 	}
 
-	private void readLogFile(final InputStream inputStream, final String name) {
-		final Class<? extends AbstractDecompressionFilter> decompressionClass = FSReaderUtil.findDecompressionFilterByExtension(name);
+	/**
+	 * Read a map file stream and initialize the registry.
+	 *
+	 * @param inputStream the input stream
+	 * @param logFileName the name of the log file used for user feedback
+	 * @param registry string registry
+	 */
+	private void readMapFile(final InputStream inputStream, final String mapFileName, final ReaderRegistry<String> registry) {
+		final Class<? extends AbstractDecompressionFilter> decompressionClass = FSReaderUtil.findDecompressionFilterByExtension(mapFileName);
 
-		final Class<? extends IEventDeserializer> deserializerClass;
+		/** detecting correct map file deserializer. */
+		final Class<? extends AbstractMapDeserializer> deserializerClass;
 		if (decompressionClass.equals(NoneDecompressionFilter.class)) {
-			deserializerClass = FSReaderUtil.findEventDeserializer(name);
+			deserializerClass = FSReaderUtil.findMapDeserializer(mapFileName);
 		} else {
-			final String baseName = name.substring(0, name.lastIndexOf('.')-1);
+			final String baseName = mapFileName.substring(0, mapFileName.lastIndexOf('.') - 1);
+			deserializerClass = FSReaderUtil.findMapDeserializer(baseName);
+		}
+
+		try {
+			final AbstractDecompressionFilter decompressionFilter = decompressionClass.getConstructor(Configuration.class).newInstance(this.configuration);
+			final AbstractMapDeserializer deserializer = deserializerClass.getConstructor(Configuration.class).newInstance(this.configuration);
+			deserializer.processDataStream(decompressionFilter.chainInputStream(inputStream), registry, mapFileName);
+		} catch (final IOException ex) {
+			this.logger.error("Reading map file {} failed.", mapFileName);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			this.logger.error("Cannot instantiate filter {} for decompression.", decompressionClass.getName());
+		}
+	}
+
+	/**
+	 * Read a log file stream and produce Kieker events.
+	 *
+	 * @param inputStream the input stream
+	 * @param logFileName the name of the log file used for user feedback
+	 * @param registry string registry
+	 */
+	private void readLogFile(final InputStream inputStream, final String logFileName, final ReaderRegistry<String> registry) {
+		final Class<? extends AbstractDecompressionFilter> decompressionClass = FSReaderUtil.findDecompressionFilterByExtension(logFileName);
+
+		/** detecting correct log file deserializer. */
+		final Class<? extends AbstractEventDeserializer> deserializerClass;
+		if (decompressionClass.equals(NoneDecompressionFilter.class)) {
+			deserializerClass = FSReaderUtil.findEventDeserializer(logFileName);
+		} else {
+			final String baseName = logFileName.substring(0, logFileName.lastIndexOf('.') - 1);
 			deserializerClass = FSReaderUtil.findEventDeserializer(baseName);
 		}
 
 		try {
 			final AbstractDecompressionFilter decompressionFilter = decompressionClass.getConstructor(Configuration.class).newInstance(this.configuration);
-			final IEventDeserializer deserializer = deserializerClass.getConstructor(Configuration.class).newInstance(this.configuration);
+			final AbstractEventDeserializer deserializer = deserializerClass.getConstructor(Configuration.class, ReaderRegistry.class).newInstance(this.configuration, registry);
 			deserializer.processDataStream(decompressionFilter.chainInputStream(inputStream), this.outputPort);
 		} catch (final IOException e) {
-			this.logger.error("Reading file {} failed.", name);
+			this.logger.error("Reading log file {} failed.", logFileName);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			this.logger.error("Cannot instantiate filter {} for decompression.", decompressionClass.getName());
 		}

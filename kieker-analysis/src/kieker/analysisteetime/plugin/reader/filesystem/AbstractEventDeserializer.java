@@ -15,21 +15,40 @@
  ***************************************************************************/
 package kieker.analysisteetime.plugin.reader.filesystem;
 
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
+import kieker.common.configuration.Configuration;
+import kieker.common.record.IMonitoringRecord;
 import kieker.common.registry.reader.ReaderRegistry;
 
+import teetime.framework.OutputPort;
+
 /**
- * Read a mapping file.
+ * Abstract interface for the event deserialization.
  *
  * @author Reiner Jung
  *
  * @since 1.15
+ *
  */
-public abstract class AbstractMapReader {
+public abstract class AbstractEventDeserializer {
 
-	public AbstractMapReader() {
+	protected final ReaderRegistry<String> registry;
+
+	public AbstractEventDeserializer(final Configuration configuration, final ReaderRegistry<String> registry) {
+		this.registry = registry;
 	}
 
-	public abstract void readMapFile(File mapFile, ReaderRegistry<String> registry);
+	/**
+	 * Read an input stream of data, deserialize it and output proper monitoring records.
+	 *
+	 * @param chainInputStream the input stream
+	 * @param outputPort the output port
+	 * @throws IOException on input stream errors
+	 *
+	 */
+	public abstract void processDataStream(InputStream chainInputStream, OutputPort<IMonitoringRecord> outputPort) throws IOException;
+
 }
+

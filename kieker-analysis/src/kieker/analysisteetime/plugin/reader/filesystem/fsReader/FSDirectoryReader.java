@@ -47,7 +47,10 @@ import kieker.common.util.filesystem.FSUtil;
  * @author Reiner Jung -- replaced reader code with code compatible with deserializer
  *
  * @since 1.2
+ *
+ * @deprecated 1.15
  */
+@Deprecated
 public class FSDirectoryReader implements Runnable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FSDirectoryReader.class);
 

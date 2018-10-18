@@ -21,9 +21,11 @@ import kieker.analysis.plugin.reader.depcompression.GZipDecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.NoneDecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.XZDecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.ZipDecompressionFilter;
+import kieker.analysisteetime.plugin.reader.filesystem.AbstractEventDeserializer;
+import kieker.analysisteetime.plugin.reader.filesystem.AbstractMapDeserializer;
 import kieker.analysisteetime.plugin.reader.filesystem.BinaryEventDeserializer;
 import kieker.analysisteetime.plugin.reader.filesystem.DatEventDeserializer;
-import kieker.analysisteetime.plugin.reader.filesystem.IEventDeserializer;
+import kieker.analysisteetime.plugin.reader.filesystem.TextMapDeserializer;
 import kieker.common.util.filesystem.FSUtil;
 
 /**
@@ -64,13 +66,23 @@ public final class FSReaderUtil {
 		}
 	}
 
-	public static Class<? extends IEventDeserializer> findEventDeserializer(final String name) {
-		final String extension = name.substring(name.lastIndexOf('.'));
+	public static Class<? extends AbstractEventDeserializer> findEventDeserializer(final String logFileName) {
+		final String extension = logFileName.substring(logFileName.lastIndexOf('.'));
 
-		if (FSUtil.GZIP_FILE_EXTENSION.equals(extension)) {
+		if (FSUtil.DAT_FILE_EXTENSION.equals(extension)) {
 			return DatEventDeserializer.class;
-		} else if (FSUtil.DEFLATE_FILE_EXTENSION.equals(extension)) {
+		} else if (FSUtil.BINARY_FILE_EXTENSION.equals(extension)) {
 			return BinaryEventDeserializer.class;
+		} else {
+			return null;
+		}
+	}
+
+	public static Class<? extends AbstractMapDeserializer> findMapDeserializer(final String mapFileName) {
+		final String extension = mapFileName.substring(mapFileName.lastIndexOf('.'));
+
+		if (FSUtil.MAP_FILE_EXTENSION.equals(extension)) {
+			return TextMapDeserializer.class;
 		} else {
 			return null;
 		}

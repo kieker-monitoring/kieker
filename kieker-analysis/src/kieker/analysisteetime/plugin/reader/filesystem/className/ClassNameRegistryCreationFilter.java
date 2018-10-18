@@ -30,7 +30,10 @@ import teetime.framework.OutputPort;
  * @author Christian Wulf
  *
  * @since 1.10
+ *
+ * @deprecated 1.15
  */
+@Deprecated
 public class ClassNameRegistryCreationFilter extends AbstractConsumerStage<File> {
 
 	private final OutputPort<File> outputPort = this.createOutputPort();

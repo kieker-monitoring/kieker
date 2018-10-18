@@ -28,13 +28,14 @@ import teetime.framework.OutputPort;
  *
  * @author Reiner Jung
  *
+ * @since 1.15
  */
 public class LogsReaderCompositeStage extends CompositeStage {
 
 	public static final String PREFIX = LogsReaderCompositeStage.class.getCanonicalName() + ".";
 	public static final String LOG_DIRECTORIES = PREFIX + "logDirectories";
 
-	private final DirectoryScannerStage directoryScannerStage;
+	private final DirectoryScannerStage directoryScannerStage; // NOPMD this stays here for documentation purposes
 	private final DirectoryReaderStage directoryReaderStage;
 
 	public LogsReaderCompositeStage(final Configuration configuration) {
@@ -46,10 +47,8 @@ public class LogsReaderCompositeStage extends CompositeStage {
 			directories[i++] = new File(name);
 		}
 
-		final AbstractMapReader mapReader = new TextMapReader();
-
 		this.directoryScannerStage = new DirectoryScannerStage(directories);
-		this.directoryReaderStage = new DirectoryReaderStage(mapReader, configuration);
+		this.directoryReaderStage = new DirectoryReaderStage(configuration);
 
 		this.connectPorts(this.directoryScannerStage.getOutputPort(), this.directoryReaderStage.getInputPort());
 	}

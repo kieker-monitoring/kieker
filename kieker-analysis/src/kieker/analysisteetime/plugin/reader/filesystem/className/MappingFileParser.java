@@ -33,7 +33,10 @@ import kieker.common.util.filesystem.FSUtil;
  * @author Christian Wulf
  *
  * @since 1.10
+ *
+ * @deprecated 1.15
  */
+@Deprecated
 public class MappingFileParser {
 
 	private static final Map<String, String> FILE_PREFIX_REGISTRY = new HashMap<>(); // NOPMD (no concurrent access intended)

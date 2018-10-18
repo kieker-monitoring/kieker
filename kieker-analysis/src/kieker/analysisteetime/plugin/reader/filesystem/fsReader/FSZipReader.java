@@ -45,7 +45,10 @@ import kieker.common.util.filesystem.FSUtil;
  * @author Jan Waller
  *
  * @since 1.7
+ *
+ * @deprecated 1.15
  */
+@Deprecated
 public final class FSZipReader implements Runnable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FSZipReader.class);
 

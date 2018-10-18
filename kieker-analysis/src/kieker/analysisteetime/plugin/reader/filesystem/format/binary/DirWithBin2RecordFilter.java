@@ -32,7 +32,10 @@ import teetime.framework.OutputPort;
  * @author Christian Wulf
  *
  * @since 1.14
+ *
+ * @deprecated 1.15
  */
+@Deprecated
 public class DirWithBin2RecordFilter extends CompositeStage {
 
 	private final ClassNameRegistryCreationFilter classNameRegistryCreationFilter;

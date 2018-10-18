@@ -43,7 +43,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  *
  * @since 1.6
  *
- * @deprecated 1.15 remove 1.16 is dynfunctional, as we do no logern support kieker 1.5 records
+ * @deprecated 1.15 remove 1.16 is dynfunctional, as we do no longer support kieker 1.5 records
  */
 @Deprecated
 public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {

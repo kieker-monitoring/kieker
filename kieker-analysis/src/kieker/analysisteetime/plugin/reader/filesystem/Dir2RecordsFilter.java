@@ -37,7 +37,10 @@ import teetime.stage.io.Directory2FilesFilter;
  * @author Christian Wulf
  *
  * @since 1.14
+ *
+ * @deprecated 1.15 use {@link LogsReaderCompositeStage} instead
  */
+@Deprecated
 public final class Dir2RecordsFilter extends CompositeStage {
 
 	private final ClassNameRegistryCreationFilter classNameRegistryCreationFilter;

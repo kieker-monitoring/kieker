@@ -36,7 +36,10 @@ import teetime.framework.OutputPort;
  * @author Christian Wulf
  *
  * @since 1.10
+ *
+ * @deprecated 1.15
  */
+@Deprecated
 public class BinaryFile2RecordFilter extends AbstractConsumerStage<File> {
 
 	private final OutputPort<IMonitoringRecord> outputPort = this.createOutputPort();

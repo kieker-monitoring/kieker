@@ -34,7 +34,10 @@ import kieker.common.registry.reader.ReaderRegistry;
  * @author Christian Wulf
  *
  * @since 1.10
+ *
+ * @deprecated 1.15
  */
+@Deprecated
 public class RecordFromTextLineCreator {
 
 	private static final IllegalRecordFormatException ILLEGAL_RECORD_FORMAT_EXCEPTION = new IllegalRecordFormatException();

@@ -18,6 +18,8 @@ package kieker.analysisteetime.plugin.reader.filesystem;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import kieker.common.util.filesystem.FSUtil;
+
 /**
  * Map file filter.
  *
@@ -27,13 +29,13 @@ import java.io.FilenameFilter;
  */
 public class MapFileFilter implements FilenameFilter {
 
+	public MapFileFilter() {
+		// empty constructor
+	}
+
 	@Override
 	public boolean accept(final File dir, final String name) {
-		if (name.endsWith(".map")) {
-			return true;
-		} else {
-			return false;
-		}
+		return name.endsWith(FSUtil.MAP_FILE_EXTENSION);
 	}
 
 }

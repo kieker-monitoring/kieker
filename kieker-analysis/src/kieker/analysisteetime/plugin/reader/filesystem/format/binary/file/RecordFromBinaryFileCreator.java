@@ -47,7 +47,10 @@ import teetime.framework.OutputPort;
  * @author Reiner Jung
  *
  * @since 1.10
+ *
+ * @deprecated 1.15
  */
+@Deprecated
 public class RecordFromBinaryFileCreator {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RecordFromBinaryFileCreator.class);

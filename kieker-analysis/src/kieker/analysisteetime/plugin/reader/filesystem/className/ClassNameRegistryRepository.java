@@ -31,7 +31,10 @@ import kieker.common.registry.reader.ReaderRegistry;
  * @author Christian Wulf
  *
  * @since 1.10
+ *
+ * @deprecated 1.15
  */
+@Deprecated
 public class ClassNameRegistryRepository {
 
 	private final ConcurrentHashMap<String, ReaderRegistry<String>> repository = new ConcurrentHashMap<>();
