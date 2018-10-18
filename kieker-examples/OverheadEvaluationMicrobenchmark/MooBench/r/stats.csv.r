@@ -71,7 +71,7 @@ printvalues <- matrix(nrow=7, ncol=numberOfWriters, dimnames=printDimensionNames
 for (writer_idx in (1:numberOfWriters)) {
    idx_mult <- c(1:numOfRowsToRead)
 
-   valuesBIG <- resultsBIG[writer_idx,idx_mult]
+   valuesBIG <- resultsBIG[writer_idx,idx_mult]/timeUnit
 
    printvalues["mean",writer_idx] <- mean(valuesBIG)
    printvalues["ci95%",writer_idx] <- qnorm_value*sd(valuesBIG)/sqrt(length(valuesBIG))
