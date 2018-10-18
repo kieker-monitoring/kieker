@@ -27,6 +27,9 @@
 ##########
 # Process configuration
 
+# divisor 1 = nano, 1000 = micro, 1000000 = milli seconds
+timeUnit <- 1000 
+
 # number of Kieker writer configurations 
 numberOfWriters <- length(configs.labels)
 recursion_depth <- configs.recursion
