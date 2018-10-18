@@ -25,6 +25,7 @@ import teetime.framework.AbstractProducerStage;
  *
  * @author Reiner Jung
  *
+ * @since 1.15
  */
 public class DirectoryScannerStage extends AbstractProducerStage<File> {
 
