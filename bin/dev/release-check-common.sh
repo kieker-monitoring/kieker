@@ -79,4 +79,3 @@ function extract_archive_n_cd {
 
 	change_dir kieker-*
 }
-

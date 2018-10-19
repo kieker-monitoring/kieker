@@ -351,4 +351,3 @@ DIR=$(pwd)
 SRCTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-sources.tar.gz)
 check_src_archive ${SRCTGZ}
 rm -rf ${DIR}
-
