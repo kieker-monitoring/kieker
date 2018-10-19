@@ -31,11 +31,21 @@ import kieker.common.util.filesystem.FSUtil;
  */
 public class GZipDecompressionFilter extends AbstractDecompressionFilter {
 
+	public static final String PREFIX = GZipDecompressionFilter.class.getCanonicalName();
+
+	public static final String BUFFER_SIZE = PREFIX + "bufferSize";
+	public static final int DEFAULT_BUFFER_SIZE = 1024 * 1024;
+
 	private final int bufferSize;
 
+	/**
+	 * Create new gzip decompression filter.
+	 *
+	 * @param configuration configuration for the filter
+	 */
 	public GZipDecompressionFilter(final Configuration configuration) {
 		super(configuration);
-		this.bufferSize = 1024 * 1024; // TODO currently this is not configurable in the deprecated impl.
+		this.bufferSize = configuration.getIntProperty(BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
 	}
 
 	/* (non-Javadoc)

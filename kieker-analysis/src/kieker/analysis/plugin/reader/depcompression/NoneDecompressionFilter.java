@@ -22,6 +22,9 @@ import java.io.InputStream;
 import kieker.common.configuration.Configuration;
 
 /**
+ * Decompression filter for stream reading stages providing no compression.
+ * This filter is used for uncompressed streams.
+ *
  * @author Reiner Jung
  *
  * @since 1.15
@@ -29,6 +32,11 @@ import kieker.common.configuration.Configuration;
  */
 public class NoneDecompressionFilter extends AbstractDecompressionFilter {
 
+	/**
+	 * Create dummy decompression filter.
+	 *
+	 * @param configuration configuration for the filter
+	 */
 	public NoneDecompressionFilter(final Configuration configuration) {
 		super(configuration);
 	}

@@ -25,6 +25,8 @@ import kieker.common.configuration.Configuration;
 import kieker.common.util.filesystem.FSUtil;
 
 /**
+ * Decompression filter for stream reading stages providing XZ-decompression.
+ *
  * @author Reiner Jung
  *
  * @since 1.15
@@ -32,11 +34,21 @@ import kieker.common.util.filesystem.FSUtil;
  */
 public class XZDecompressionFilter extends AbstractDecompressionFilter {
 
+	public static final String PREFIX = XZDecompressionFilter.class.getCanonicalName();
+
+	public static final String BUFFER_SIZE = PREFIX + "bufferSize";
+	public static final int DEFAULT_BUFFER_SIZE = 1024 * 1024;
+
 	private final int bufferSize;
 
+	/**
+	 * Create a new XZ decompression filter.
+	 *
+	 * @param configuration configuration settings
+	 */
 	public XZDecompressionFilter(final Configuration configuration) {
 		super(configuration);
-		this.bufferSize = 1024 * 1024; // TODO currently this is not configurable in the deprecated impl.
+		this.bufferSize = configuration.getIntProperty(BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
 	}
 
 	/* (non-Javadoc)
