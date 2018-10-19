@@ -78,7 +78,6 @@ public final class EnrichedOperationExecutionRecord extends OperationExecutionRe
 		return this.commaSeperatedValues;
 	}
 
-	@Override
 	public Object[] toArray() {
 		return new Object[] {
 			this.getOperationSignature(),
