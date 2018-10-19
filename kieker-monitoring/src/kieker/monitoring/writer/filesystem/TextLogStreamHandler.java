@@ -24,10 +24,10 @@ import org.slf4j.LoggerFactory;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.TextValueSerializer;
+import kieker.common.registry.writer.WriterRegistry;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.WriterUtil;
-import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
+import kieker.monitoring.writer.compression.ICompressionFilter;
 
 /**
  * Create log files following the Kieker DAT format of semicolon separated values.

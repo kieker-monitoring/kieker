@@ -23,8 +23,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.filter.forward.util.KiekerHashMap;
 import kieker.common.configuration.Configuration;
-import kieker.common.exception.MonitoringRecordException;
-import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -33,10 +31,16 @@ import kieker.common.record.IMonitoringRecord;
  * Every record received is cloned and each detected String is buffered in a
  * shared area in order to save memory.
  *
+ * TODO note this filter does not work anymore, as it uses deprecated API. As reader already user a string registry (binary), this filter duplicates effort.
+ * It only is useful for text logs, which are usually small. However, this feature could and should be integrated into the text file reader.
+ *
  * @author Jan Waller
  *
  * @since 1.6
+ *
+ * @deprecated since 1.15 should be removed in 1.16 after feature transfer to reader
  */
+@Deprecated
 @Plugin(description = "A filter to reduce the memory footprint of strings used in records", outputPorts = @OutputPort(name = StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = {
 	Object.class }))
 public final class StringBufferFilter extends AbstractFilterPlugin {
@@ -72,25 +76,26 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 		if (object instanceof String) {
 			super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, this.kiekerHashMap.get((String) object));
 		} else if (object instanceof IMonitoringRecord) {
-			final Object[] objects = ((IMonitoringRecord) object).toArray();
-			boolean stringBuffered = false;
-			for (int i = 0; i < objects.length; i++) {
-				if (objects[i] instanceof String) {
-					objects[i] = this.kiekerHashMap.get((String) objects[i]);
-					stringBuffered = true;
-				}
-			}
-			if (stringBuffered) {
-				try {
-					final IMonitoringRecord newRecord = AbstractMonitoringRecord.createFromArray((Class<? extends IMonitoringRecord>) object.getClass(), objects);
-					newRecord.setLoggingTimestamp(((IMonitoringRecord) object).getLoggingTimestamp());
-					super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, newRecord);
-				} catch (final MonitoringRecordException ex) {
-					this.logger.warn("Failed to recreate buffered monitoring record: {}", object.toString(), ex);
-				}
-			} else {
-				super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, object);
-			}
+			//final Object[] objects = ((IMonitoringRecord) object).toArray();
+			//boolean stringBuffered = false;
+			//for (int i = 0; i < objects.length; i++) {
+			//	if (objects[i] instanceof String) {
+			//		objects[i] = this.kiekerHashMap.get((String) objects[i]);
+			//		stringBuffered = true;
+			//	}
+			//}
+			//if (stringBuffered) {
+			//	try {
+			//		final IMonitoringRecord newRecord = AbstractMonitoringRecord.createFromArray((Class<? extends IMonitoringRecord>) object.getClass(), objects);
+			//		newRecord.setLoggingTimestamp(((IMonitoringRecord) object).getLoggingTimestamp());
+			final IMonitoringRecord newRecord = (IMonitoringRecord) object;
+			super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, newRecord);
+			//	} catch (final MonitoringRecordException ex) {
+			//		this.logger.warn("Failed to recreate buffered monitoring record: {}", object.toString(), ex);
+			//	}
+			//} else {
+			//	super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, object);
+			//}
 		} else { // simply forward the object
 			super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, object);
 		}

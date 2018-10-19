@@ -24,7 +24,7 @@ import kieker.analysisteetime.plugin.reader.IRecordReceivedListener;
 import kieker.analysisteetime.plugin.reader.RecordDeserializer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.registry.ILookup;
+import kieker.common.registry.reader.ReaderRegistry;
 
 import teetime.framework.OutputPort;
 import teetime.util.stage.io.network.AbstractTcpReader;
@@ -39,7 +39,7 @@ class DualSocketTcpLogic extends AbstractTcpReader implements IRecordReceivedLis
 	private final OutputPort<IMonitoringRecord> outputPort;
 	private final RecordDeserializer recordDeserializer;
 
-	public DualSocketTcpLogic(final int port, final int bufferCapacity, final Logger logger, final ILookup<String> stringRegistry,
+	public DualSocketTcpLogic(final int port, final int bufferCapacity, final Logger logger, final ReaderRegistry<String> stringRegistry,
 			final OutputPort<IMonitoringRecord> outputPort) {
 		super(port, bufferCapacity, logger);
 

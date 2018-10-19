@@ -30,7 +30,10 @@ import kieker.tools.bridge.connector.IServiceConnector;
  *
  * @author Reiner Jung
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
+@Deprecated
 public class ServiceContainer {
 
 	/**
@@ -44,7 +47,7 @@ public class ServiceContainer {
 	 */
 	protected volatile boolean active;
 
-	private final Collection<IServiceListener> listeners = new CopyOnWriteArrayList<IServiceListener>();
+	private final Collection<IServiceListener> listeners = new CopyOnWriteArrayList<>();
 	private final MonitoringController kiekerMonitoringController;
 	private final IServiceConnector service;
 

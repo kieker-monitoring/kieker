@@ -22,7 +22,6 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.util.registry.IRegistry;
 
 /**
  * A record enriching Kieker's {@link OperationExecutionRecord} with a short signature and some comma seperated values.
@@ -78,7 +77,6 @@ public final class EnrichedOperationExecutionRecord extends OperationExecutionRe
 		return this.commaSeperatedValues;
 	}
 
-	@Override
 	public Object[] toArray() {
 		return new Object[] {
 			this.getOperationSignature(),

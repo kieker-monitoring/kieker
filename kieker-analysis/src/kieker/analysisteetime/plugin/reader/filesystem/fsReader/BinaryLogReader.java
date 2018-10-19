@@ -35,7 +35,10 @@ import teetime.framework.AbstractProducerStage;
  * @author Andre van Hoorn, Jan Waller, Lars Bluemke
  *
  * @since 0.95a
+ *
+ * @deprecated 1.15
  */
+@Deprecated
 public class BinaryLogReader extends AbstractProducerStage<IMonitoringRecord> implements IMonitoringRecordReceiver {
 
 	/** This dummy record can be send to the reader's record queue to mark the end of the current file. */

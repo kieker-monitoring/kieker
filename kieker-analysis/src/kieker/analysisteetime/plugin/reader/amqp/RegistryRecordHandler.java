@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.common.record.misc.RegistryRecord;
-import kieker.common.util.registry.ILookup;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * Runnable to handle incoming registry records.
@@ -41,7 +41,7 @@ public class RegistryRecordHandler implements Runnable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RegistryRecordHandler.class);
 
-	private final ILookup<String> stringRegistry;
+	private final ReaderRegistry<String> stringRegistry;
 	private final BlockingQueue<ByteBuffer> queue = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
 
 	/**
@@ -50,7 +50,7 @@ public class RegistryRecordHandler implements Runnable {
 	 * @param stringRegistry
 	 *            The string registry to operate on
 	 */
-	public RegistryRecordHandler(final ILookup<String> stringRegistry) {
+	public RegistryRecordHandler(final ReaderRegistry<String> stringRegistry) {
 		this.stringRegistry = stringRegistry;
 	}
 

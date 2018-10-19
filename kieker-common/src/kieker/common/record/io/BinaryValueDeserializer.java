@@ -19,7 +19,7 @@ package kieker.common.record.io;
 import java.nio.ByteBuffer;
 
 import kieker.common.exception.RecordInstantiationException;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * Default value deserializer implementation.
@@ -34,7 +34,7 @@ public class BinaryValueDeserializer extends AbstractValueDeserializer implement
 	private static final byte TRUE_VALUE = (byte) 1;
 
 	private final ByteBuffer buffer;
-	private final IRegistry<String> stringRegistry;
+	private final ReaderRegistry<String> stringRegistry;
 
 	/**
 	 * Create a binary value deserializer.
@@ -44,7 +44,7 @@ public class BinaryValueDeserializer extends AbstractValueDeserializer implement
 	 * @param stringRegistry
 	 *            the string registry used for the deserializer
 	 */
-	protected BinaryValueDeserializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+	protected BinaryValueDeserializer(final ByteBuffer buffer, final ReaderRegistry<String> stringRegistry) {
 		this.buffer = buffer;
 		this.stringRegistry = stringRegistry;
 	}
@@ -58,7 +58,7 @@ public class BinaryValueDeserializer extends AbstractValueDeserializer implement
 	 *            the string registry used for the deserializer
 	 * @return the value deserializer
 	 */
-	public static BinaryValueDeserializer create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+	public static BinaryValueDeserializer create(final ByteBuffer buffer, final ReaderRegistry<String> stringRegistry) {
 		return new BinaryValueDeserializer(buffer, stringRegistry);
 	}
 

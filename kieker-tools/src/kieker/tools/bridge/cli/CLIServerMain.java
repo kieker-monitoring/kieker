@@ -64,7 +64,10 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *
  * @author Reiner Jung
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
+@Deprecated
 public final class CLIServerMain { // NOPMD
 
 	/**

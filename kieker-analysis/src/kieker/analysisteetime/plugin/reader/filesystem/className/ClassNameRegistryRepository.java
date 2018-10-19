@@ -19,6 +19,8 @@ package kieker.analysisteetime.plugin.reader.filesystem.className;
 import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
 
+import kieker.common.registry.reader.ReaderRegistry;
+
 /**
  * This class represents a wrapper for a Map<String, ClassNameRegistry> ensuring that keys are
  * <ul>
@@ -29,21 +31,24 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Christian Wulf
  *
  * @since 1.10
+ *
+ * @deprecated 1.15
  */
+@Deprecated
 public class ClassNameRegistryRepository {
 
-	private final ConcurrentHashMap<String, ClassNameRegistry> repository = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<String, ReaderRegistry<String>> repository = new ConcurrentHashMap<>();
 
 	public ClassNameRegistryRepository() {
 		// create repository
 	}
 
-	public ClassNameRegistry get(final File directory) {
+	public ReaderRegistry<String> get(final File directory) {
 		return this.repository.get(directory.getAbsolutePath());
 	}
 
-	public void put(final File directory, final ClassNameRegistry classNameRegistry) {
-		this.repository.put(directory.getAbsolutePath(), classNameRegistry);
+	public void put(final File directory, final ReaderRegistry<String> registry) {
+		this.repository.put(directory.getAbsolutePath(), registry);
 	}
 
 	public int size() {

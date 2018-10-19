@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import kieker.common.registry.reader.ReaderRegistry;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
@@ -28,7 +30,10 @@ import teetime.framework.OutputPort;
  * @author Christian Wulf
  *
  * @since 1.10
+ *
+ * @deprecated 1.15
  */
+@Deprecated
 public class ClassNameRegistryCreationFilter extends AbstractConsumerStage<File> {
 
 	private final OutputPort<File> outputPort = this.createOutputPort();
@@ -63,7 +68,7 @@ public class ClassNameRegistryCreationFilter extends AbstractConsumerStage<File>
 		}
 
 		try {
-			final ClassNameRegistry classNameRegistry = this.mappingFileParser.parseFromStream(new FileInputStream(mappingFile));
+			final ReaderRegistry<String> classNameRegistry = this.mappingFileParser.parseFromStream(new FileInputStream(mappingFile));
 			this.classNameRegistryRepository.put(inputDir, classNameRegistry);
 			this.outputPort.send(inputDir);
 

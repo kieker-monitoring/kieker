@@ -32,8 +32,8 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.common.util.filesystem.FileExtensionFilter;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
-import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
-import kieker.monitoring.writer.filesystem.compression.ZipCompressionFilter;
+import kieker.monitoring.writer.compression.NoneCompressionFilter;
+import kieker.monitoring.writer.compression.ZipCompressionFilter;
 
 /**
  * @author Christian Wulf
@@ -59,12 +59,12 @@ public class BinaryFileWriterTest {
 		this.configuration = new Configuration();
 		this.configuration.setProperty(ConfigurationKeys.HOST_NAME, "testHostName");
 		this.configuration.setProperty(ConfigurationKeys.CONTROLLER_NAME, "testControllerName");
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_BUFFERSIZE, "8192");
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_CHARSET_NAME, "UTF-8");
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXENTRIESINFILE, "-1");
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXLOGFILES, String.valueOf(Integer.MAX_VALUE));
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXLOGSIZE, String.valueOf(Integer.MAX_VALUE));
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_BUFFERSIZE, "8192");
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_CHARSET_NAME, "UTF-8");
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_MAXENTRIESINFILE, "-1");
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_MAXLOGFILES, String.valueOf(Integer.MAX_VALUE));
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_MAXLOGSIZE, String.valueOf(Integer.MAX_VALUE));
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
 	}
 
 	/**
@@ -73,8 +73,8 @@ public class BinaryFileWriterTest {
 	@Test
 	public void shouldCreateLogFolder() {
 		// test preparation
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXENTRIESINFILE, "1");
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_MAXENTRIESINFILE, "1");
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 
 		// test execution
 		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
@@ -89,12 +89,13 @@ public class BinaryFileWriterTest {
 	@Test
 	public void shouldCreateMappingAndRecordFiles() {
 		// test preparation
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXENTRIESINFILE, "1");
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_MAXENTRIESINFILE, "1");
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
 
+		final EmptyRecord record = new EmptyRecord();
 		// test execution
-		final File storePath = FilesystemTestUtil.executeFileWriterTest(1, writer);
+		final File storePath = FilesystemTestUtil.executeFileWriterTest(1, writer, record);
 
 		// test assertion
 		final File[] mapFiles = storePath.listFiles(FileExtensionFilter.MAP);
@@ -114,12 +115,14 @@ public class BinaryFileWriterTest {
 	@Test
 	public void shouldCreateMultipleRecordFiles() {
 		// test preparation
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXENTRIESINFILE, "2");
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_MAXENTRIESINFILE, "2");
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
 
+		final EmptyRecord record = new EmptyRecord();
+
 		// test execution
-		final File storePath = FilesystemTestUtil.executeFileWriterTest(3, writer);
+		final File storePath = FilesystemTestUtil.executeFileWriterTest(3, writer, record);
 
 		// test assertion
 		final File[] mapFiles = storePath.listFiles(FileExtensionFilter.MAP);
@@ -140,12 +143,14 @@ public class BinaryFileWriterTest {
 	@Test
 	public void shouldCreateMultipleCompressedRecordFiles() {
 		// test preparation
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXENTRIESINFILE, "2");
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_COMPRESSION_FILTER, ZipCompressionFilter.class.getName());
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_MAXENTRIESINFILE, "2");
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_COMPRESSION_FILTER, ZipCompressionFilter.class.getName());
 		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
 
+		final EmptyRecord record = new EmptyRecord();
+
 		// test execution
-		final File storePath = FilesystemTestUtil.executeFileWriterTest(3, writer);
+		final File storePath = FilesystemTestUtil.executeFileWriterTest(3, writer, record);
 
 		// test assertion
 		final File[] mapFiles = storePath.listFiles(FileExtensionFilter.MAP);
@@ -177,13 +182,15 @@ public class BinaryFileWriterTest {
 				final int expectedNumRecordFiles = expectedNumRecordFilesValues[i][j];
 
 				// test preparation
-				this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXENTRIESINFILE, "2");
-				this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXLOGSIZE, "-1");
-				this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXLOGFILES, String.valueOf(maxLogFiles));
+				this.configuration.setProperty(AbstractFileWriter.CONFIG_MAXENTRIESINFILE, "2");
+				this.configuration.setProperty(AbstractFileWriter.CONFIG_MAXLOGSIZE, "-1");
+				this.configuration.setProperty(AbstractFileWriter.CONFIG_MAXLOGFILES, String.valueOf(maxLogFiles));
 				final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
 
+				final EmptyRecord record = new EmptyRecord();
+
 				// test execution
-				final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer);
+				final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer, record);
 
 				// test assertion
 				final String reasonMessage = "Passed arguments: maxLogFiles=" + maxLogFiles + ", numRecordsToWrite=" + numRecordsToWrite;
@@ -196,8 +203,9 @@ public class BinaryFileWriterTest {
 
 	/**
 	 * Test whether the max log size.
-	 * 
-	 * @throws Exception on IO errors
+	 *
+	 * @throws Exception
+	 *             on IO errors
 	 */
 	@Test
 	public void testMaxLogSize() throws Exception {
@@ -217,13 +225,15 @@ public class BinaryFileWriterTest {
 
 			// test preparation
 			final int numRecordsToWrite = (1024 * 1024 * megaBytesToWrite) / recordSizeInBytes;
-			this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXENTRIESINFILE, "-1");
-			this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXLOGSIZE, String.valueOf(maxMegaBytesPerFile));
-			this.configuration.setProperty(BinaryFileWriter.CONFIG_MAXLOGFILES, "2");
+			this.configuration.setProperty(AbstractFileWriter.CONFIG_MAXENTRIESINFILE, "-1");
+			this.configuration.setProperty(AbstractFileWriter.CONFIG_MAXLOGSIZE, String.valueOf(maxMegaBytesPerFile));
+			this.configuration.setProperty(AbstractFileWriter.CONFIG_MAXLOGFILES, "2");
 			final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
 
+			final EmptyRecord record = new EmptyRecord();
+
 			// test execution
-			final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer);
+			final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer, record);
 
 			// test assertion
 			final String reasonMessage = "Passed arguments: maxMegaBytesPerFile=" + maxMegaBytesPerFile + ", megaBytesToWrite=" + megaBytesToWrite;
@@ -239,7 +249,7 @@ public class BinaryFileWriterTest {
 	@Test
 	public void testValidLogFolder() {
 		final String passedConfigPathName = this.tmpFolder.getRoot().getAbsolutePath();
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_PATH, passedConfigPathName);
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_PATH, passedConfigPathName);
 		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
 
 		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(passedConfigPathName));
@@ -251,7 +261,7 @@ public class BinaryFileWriterTest {
 	@Test
 	public void testEmptyConfigPath() {
 		final String passedConfigPathName = "";
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_PATH, passedConfigPathName);
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_PATH, passedConfigPathName);
 		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
 
 		final String defaultDir = System.getProperty("java.io.tmpdir");
@@ -260,13 +270,14 @@ public class BinaryFileWriterTest {
 
 	/**
 	 * Test log directory missing in configuration.
-	 * 
-	 * @throws IOException on IO errors
+	 *
+	 * @throws IOException
+	 *             on IO errors
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void testNonDirectoryConfigPath() throws IOException {
 		final String passedConfigPathName = this.tmpFolder.newFile().getAbsolutePath();
-		this.configuration.setProperty(BinaryFileWriter.CONFIG_PATH, passedConfigPathName);
+		this.configuration.setProperty(AbstractFileWriter.CONFIG_PATH, passedConfigPathName);
 		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
 
 		final String defaultDir = System.getProperty("java.io.tmpdir");
@@ -277,7 +288,7 @@ public class BinaryFileWriterTest {
 	public void testValidLogFolderDirectory() throws Exception {
 		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
 
-		final String directoryName = this.configuration.getStringProperty(BinaryFileWriter.CONFIG_PATH);
+		final String directoryName = this.configuration.getStringProperty(AbstractFileWriter.CONFIG_PATH);
 		Assert.assertThat(writer.getLogFolder().getParent().toString(), CoreMatchers.is(directoryName));
 	}
 

@@ -27,7 +27,7 @@ import java.nio.file.StandardOpenOption;
 import org.slf4j.Logger;
 
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
+import kieker.monitoring.writer.compression.ICompressionFilter;
 
 /**
  * @author Christian Wulf (chw)

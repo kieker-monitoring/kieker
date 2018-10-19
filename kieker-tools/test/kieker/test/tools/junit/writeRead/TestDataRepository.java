@@ -48,7 +48,7 @@ public class TestDataRepository {
 	}
 
 	public List<IMonitoringRecord> newTestUnknownRecords() {
-		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> someEvents = new ArrayList<>();
 		someEvents.add(new EmptyRecord()); // event with known type
 		someEvents.add(new BranchingRecord(-1, -1, -1)); // event with unknown type
 		someEvents.add(new EmptyRecord()); // event with known type
@@ -57,14 +57,12 @@ public class TestDataRepository {
 	}
 
 	public List<IMonitoringRecord> newTestEventRecords() {
-		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
-		final Object[] testValues1 = { 22L, 11L, 101, "BeOpEv", "BeforeOperationEvent" };
-		final Object[] testValues2 = { 6L, 8L, 120, "AfOpEv", "AfterOperationEvent" };
-		final Object[] testValues3 = { 10L, 12L, 150, "AfOpFaEv", "AfterOperationFailedEvent", "cause" };
+		final List<IMonitoringRecord> someEvents = new ArrayList<>();
 
-		final BeforeOperationEvent testBeforeOperationEvent = new BeforeOperationEvent(testValues1);
-		final AfterOperationEvent testAfterOperationEvent = new AfterOperationEvent(testValues2);
-		final AfterOperationFailedEvent testAfterOperationFailedEvent = new AfterOperationFailedEvent(testValues3);
+		final BeforeOperationEvent testBeforeOperationEvent = new BeforeOperationEvent(22L, 11L, 101, "BeOpEv", "BeforeOperationEvent");
+		final AfterOperationEvent testAfterOperationEvent = new AfterOperationEvent(6L, 8L, 120, "AfOpEv", "AfterOperationEvent");
+		final AfterOperationFailedEvent testAfterOperationFailedEvent = new AfterOperationFailedEvent(10L, 12L, 150, "AfOpFaEv", "AfterOperationFailedEvent",
+				"cause");
 
 		someEvents.add(testBeforeOperationEvent);
 		someEvents.add(testAfterOperationEvent);
@@ -77,7 +75,7 @@ public class TestDataRepository {
 	 * @return 10 (9+1) records
 	 */
 	public List<IMonitoringRecord> newTestRecords() {
-		final List<IMonitoringRecord> records = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> records = new ArrayList<>();
 		for (int i = 0; i < DEFAULT_EVENTS_NUMBER; i = records.size()) {
 			final AbstractTraceEvent[] events = BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(
 					i, i, DEFAULT_EVENTS_SESSION_ID, DEFAULT_EVENTS_HOSTNAME).getTraceEvents();

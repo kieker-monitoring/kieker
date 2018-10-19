@@ -42,11 +42,6 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public Object[] toArray() {
-			return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
-		}
-
-		@Override
 		public Class<?>[] getValueTypes() {
 			return new Class<?>[] { long.class, long.class, int.class, };
 		}

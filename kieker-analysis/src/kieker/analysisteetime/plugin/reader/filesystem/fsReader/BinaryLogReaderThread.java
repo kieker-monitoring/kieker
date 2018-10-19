@@ -32,9 +32,9 @@ import org.slf4j.LoggerFactory;
 
 import kieker.analysis.plugin.reader.util.ByteBufferDeserializer;
 import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
+import kieker.common.registry.reader.ReaderRegistry;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.common.util.filesystem.FileExtensionFilter;
-import kieker.common.util.registry.reader.ReaderRegistry;
 
 /**
  * Reads the contents of a single file system log directory and passes the records to the registered receiver of type
@@ -43,7 +43,10 @@ import kieker.common.util.registry.reader.ReaderRegistry;
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  *
  * @since 1.2
+ *
+ * @deprecated 1.15
  */
+@Deprecated
 class BinaryLogReaderThread extends AbstractLogReaderThread {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BinaryLogReaderThread.class);

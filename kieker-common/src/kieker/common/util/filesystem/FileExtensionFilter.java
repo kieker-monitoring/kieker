@@ -20,16 +20,19 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 /**
+ * File extension filters.
+ *
  * @author Christian Wulf
  *
  * @since 1.13
  */
 public class FileExtensionFilter implements FilenameFilter {
 
-	public static final FileExtensionFilter GZIP = new FileExtensionFilter(FSUtil.GZIP_FILE_EXTENSION);
-	public static final FileExtensionFilter DAT = new FileExtensionFilter(FSUtil.DAT_FILE_EXTENSION);
-	public static final FileExtensionFilter BIN = new FileExtensionFilter(FSUtil.BINARY_FILE_EXTENSION);
 	/** A filter ensuring that the name of the file starts with {@value FSUtil.FILE_PREFIX} and ends with {@value FSUtil.MAP_FILE_EXTENSION} */
+	public static final FileExtensionFilter BIN = new FileExtensionFilter(FSUtil.BINARY_FILE_EXTENSION);
+	public static final FileExtensionFilter DAT = new FileExtensionFilter(FSUtil.DAT_FILE_EXTENSION);
+	public static final FileExtensionFilter DEFLATE = new FileExtensionFilter(FSUtil.DEFLATE_FILE_EXTENSION);
+	public static final FileExtensionFilter GZIP = new FileExtensionFilter(FSUtil.GZIP_FILE_EXTENSION);
 	public static final FileExtensionFilter MAP = new FileExtensionFilter(FSUtil.MAP_FILE_EXTENSION);
 	public static final FileExtensionFilter XZ = new FileExtensionFilter(FSUtil.XZ_FILE_EXTENSION);
 	public static final FileExtensionFilter ZIP = new FileExtensionFilter(FSUtil.ZIP_FILE_EXTENSION);

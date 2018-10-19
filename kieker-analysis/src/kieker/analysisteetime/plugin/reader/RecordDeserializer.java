@@ -28,7 +28,7 @@ import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.io.IValueDeserializer;
-import kieker.common.util.registry.IRegistry;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * Represents a deserializer that deserializes records based on their id and a byte buffer.
@@ -42,10 +42,10 @@ public class RecordDeserializer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RecordDeserializer.class);
 
 	private final IRecordReceivedListener listener;
-	private final IRegistry<String> registry;
+	private final ReaderRegistry<String> registry;
 	private final CachedRecordFactoryCatalog recordFactories;
 
-	public RecordDeserializer(final IRecordReceivedListener listener, final IRegistry<String> registry) {
+	public RecordDeserializer(final IRecordReceivedListener listener, final ReaderRegistry<String> registry) {
 		this.listener = listener;
 		this.registry = registry;
 		this.recordFactories = CachedRecordFactoryCatalog.getInstance();

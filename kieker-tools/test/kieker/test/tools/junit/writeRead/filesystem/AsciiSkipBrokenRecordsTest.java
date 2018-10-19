@@ -32,9 +32,9 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
+import kieker.monitoring.writer.compression.NoneCompressionFilter;
 import kieker.monitoring.writer.filesystem.AbstractFileWriter;
 import kieker.monitoring.writer.filesystem.AsciiFileWriter;
-import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
 
 import kieker.test.tools.junit.writeRead.TestAnalysis;
 import kieker.test.tools.junit.writeRead.TestDataRepository;
@@ -64,9 +64,9 @@ public class AsciiSkipBrokenRecordsTest {
 		final List<IMonitoringRecord> analyzedRecords = this.executeTestSetup(records, true);
 
 		// we expect that EVENT1_UNKNOWN_TYPE and EVENT3_UNKNOWN_TYPE are simply ignored
+		Assert.assertThat(analyzedRecords.size(), CoreMatchers.is(2));
 		Assert.assertThat(analyzedRecords.get(0), CoreMatchers.is(CoreMatchers.equalTo(records.get(0))));
 		Assert.assertThat(analyzedRecords.get(1), CoreMatchers.is(CoreMatchers.equalTo(records.get(2))));
-		Assert.assertThat(analyzedRecords.size(), CoreMatchers.is(2));
 	}
 
 	@Test
@@ -76,9 +76,9 @@ public class AsciiSkipBrokenRecordsTest {
 		final List<IMonitoringRecord> analyzedRecords = this.executeTestSetup(records, false);
 
 		// we expect that EVENT1_UNKNOWN_TYPE and EVENT3_UNKNOWN_TYPE are simply ignored
+		Assert.assertThat(analyzedRecords.size(), CoreMatchers.is(2));
 		Assert.assertThat(analyzedRecords.get(0), CoreMatchers.is(CoreMatchers.equalTo(records.get(0))));
 		Assert.assertThat(analyzedRecords.get(1), CoreMatchers.is(CoreMatchers.equalTo(records.get(2))));
-		Assert.assertThat(analyzedRecords.size(), CoreMatchers.is(2));
 	}
 
 	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
