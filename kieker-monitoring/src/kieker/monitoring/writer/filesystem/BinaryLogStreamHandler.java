@@ -24,11 +24,10 @@ import org.slf4j.LoggerFactory;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.BinaryValueSerializer;
+import kieker.common.registry.writer.WriterRegistry;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.registry.GetIdAdapter;
-import kieker.monitoring.registry.WriterRegistry;
 import kieker.monitoring.writer.WriterUtil;
-import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
+import kieker.monitoring.writer.compression.ICompressionFilter;
 
 /**
  * Binary log stream handler.
@@ -62,7 +61,7 @@ public class BinaryLogStreamHandler extends AbstractLogStreamHandler {
 			final ICompressionFilter compressionFilter, final WriterRegistry writerRegistry) {
 		super(flushLogFile, bufferSize, charset, compressionFilter, writerRegistry);
 		this.buffer = ByteBuffer.allocateDirect(bufferSize);
-		this.serializer = BinaryValueSerializer.create(this.buffer, new GetIdAdapter<>(writerRegistry));
+		this.serializer = BinaryValueSerializer.create(this.buffer, writerRegistry);
 		this.extension = FSUtil.BINARY_FILE_EXTENSION;
 	}
 

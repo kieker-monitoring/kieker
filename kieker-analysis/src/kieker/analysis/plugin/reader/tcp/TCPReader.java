@@ -39,8 +39,7 @@ import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.misc.RegistryRecord;
-import kieker.common.util.registry.ILookup;
-import kieker.common.util.registry.Lookup;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * This is a reader which reads the records from a TCP port.
@@ -73,7 +72,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 
 	private final int port1;
 	private final int port2;
-	private final ILookup<String> stringRegistry = new Lookup<>();
+	private final ReaderRegistry<String> stringRegistry = new ReaderRegistry<>();
 	private final CachedRecordFactoryCatalog cachedRecordFactoryCatalog = CachedRecordFactoryCatalog.getInstance();
 
 	public TCPReader(final Configuration configuration, final IProjectContext projectContext) {
@@ -144,7 +143,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 		final int clazzId = buffer.getInt();
 		final long loggingTimestamp = buffer.getLong();
 		try { // NOCS (Nested try-catch)
-				// final IMonitoringRecord record = AbstractMonitoringRecord.createFromByteBuffer(clazzid, buffer, this.stringRegistry);
+			// final IMonitoringRecord record = AbstractMonitoringRecord.createFromByteBuffer(clazzid, buffer, this.stringRegistry);
 			final String recordClassName = this.stringRegistry.get(clazzId);
 			final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactoryCatalog.get(recordClassName);
 			final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(buffer, this.stringRegistry));
@@ -188,11 +187,11 @@ class TCPStringReader extends Thread {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TCPStringReader.class);
 
 	private final int port;
-	private final ILookup<String> stringRegistry;
+	private final ReaderRegistry<String> stringRegistry;
 	private volatile boolean terminated;
 	private volatile Thread readerThread;
 
-	public TCPStringReader(final int port, final ILookup<String> stringRegistry) {
+	public TCPStringReader(final int port, final ReaderRegistry<String> stringRegistry) {
 		this.port = port;
 		this.stringRegistry = stringRegistry;
 	}

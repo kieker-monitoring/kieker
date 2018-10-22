@@ -22,21 +22,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import java.util.zip.ZipInputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
+import kieker.analysisteetime.plugin.reader.filesystem.util.MappingException;
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.exception.UnknownRecordTypeException;
+import kieker.common.registry.reader.ReaderRegistry;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.common.util.filesystem.FileExtensionFilter;
 
@@ -44,6 +39,7 @@ import kieker.common.util.filesystem.FileExtensionFilter;
  * Reads the contents of a single file system log directory and passes the records to the registered receiver of type {@link IMonitoringRecordReceiver}.
  *
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
+ * @author Reiner Jung -- added modern log reading deserializer
  *
  * @since 1.2
  */
@@ -51,13 +47,14 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AsciiLogReaderThread.class);
 
-	private final Map<Integer, String> stringRegistry = new HashMap<>(); // NOPMD (no synchronization needed)
+	private final ReaderRegistry<String> stringRegistry = new ReaderRegistry<>();
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
-	private final boolean ignoreUnknownRecordTypes;
 	private final boolean shouldDecompress;
-	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
-	private final Set<String> unknownTypesObserved = new HashSet<>();
+
+	private final TextFileStreamProcessor textFileStreamProcessor;
+
+
 
 	/**
 	 * Creates a new instance of this class.
@@ -79,7 +76,7 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 		}
 		this.inputDir = inputDir;
 		this.recordReceiver = recordReceiver;
-		this.ignoreUnknownRecordTypes = ignoreUnknownRecordTypes;
+		this.textFileStreamProcessor = new TextFileStreamProcessor(ignoreUnknownRecordTypes, this.stringRegistry, recordReceiver);
 		this.shouldDecompress = shouldDecompress;
 	}
 
@@ -128,7 +125,7 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 					LOGGER.error("Error reading mapping file, id must be integer", ex);
 					continue; // continue on errors
 				}
-				final String prevVal = this.stringRegistry.put(id, value);
+				final String prevVal = this.stringRegistry.register(id, value);
 				if (prevVal != null) {
 					LOGGER.error("Found addional entry for id='{}', old value was '{}' new value is '{}'", id, prevVal, value);
 				}
@@ -154,8 +151,7 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 	 */
 	@Override
 	protected void processNormalInputFile(final File inputFile) {
-		boolean abortDueToUnknownRecordType = false;
-		BufferedReader in = null;
+		final BufferedReader in = null;
 		try {
 			InputStream fileInputStream = new FileInputStream(inputFile);
 			if (this.shouldDecompress) {
@@ -164,78 +160,15 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 				zipInputStream.getNextEntry();
 				fileInputStream = zipInputStream;
 			}
-			in = new BufferedReader(new InputStreamReader(fileInputStream, FSUtil.ENCODING));
-			String line;
-			while ((line = in.readLine()) != null) { // NOPMD (assign)
-				line = line.trim();
-				if (line.length() == 0) {
-					continue; // ignore empty lines
-				}
-				IMonitoringRecord record = null;
-				final String[] recordFields = line.split(";");
-				try {
-					if (recordFields[0].charAt(0) == '$') { // modern record
-						if (recordFields.length < 2) {
-							LOGGER.error("Illegal record format: {}", line);
-							continue; // skip this record
-						}
-						final Integer id = Integer.valueOf(recordFields[0].substring(1));
-						final String classname = this.stringRegistry.get(id);
-						if (classname == null) {
-							LOGGER.error("Missing classname mapping for record type id '{}'", id);
-							continue; // skip this record
-						}
-						Class<? extends IMonitoringRecord> clazz = null;
-						try { // NOCS (nested try)
-							clazz = AbstractMonitoringRecord.classForName(classname);
-						} catch (final MonitoringRecordException ex) { // NOPMD (ExceptionAsFlowControl); need this to distinguish error by
-																		// abortDueToUnknownRecordType
-							if (!this.ignoreUnknownRecordTypes) {
-								// log message will be dumped in the Exception handler below
-								abortDueToUnknownRecordType = true;
-								throw new MonitoringRecordException("Failed to load record type " + classname, ex);
-							} else if (!this.unknownTypesObserved.contains(classname)) {
-								LOGGER.error("Failed to load record type {}", classname, ex); // log once for this type
-								this.unknownTypesObserved.add(classname);
-							}
-							continue; // skip this ignored record
-						}
-						final long loggingTimestamp = Long.parseLong(recordFields[1]);
-						final int skipValues;
-						// check for Kieker < 1.6 OperationExecutionRecords
-						if ((recordFields.length == 11) && clazz.equals(OperationExecutionRecord.class)) {
-							skipValues = 3;
-						} else {
-							skipValues = 2;
-						}
-
-						record = AbstractMonitoringRecord.createFromStringArray(clazz, Arrays.copyOfRange(recordFields, skipValues, recordFields.length));
-						record.setLoggingTimestamp(loggingTimestamp);
-					} else { // legacy record
-						final String[] recordFieldsReduced = new String[recordFields.length - 1];
-						System.arraycopy(recordFields, 1, recordFieldsReduced, 0, recordFields.length - 1);
-						record = AbstractMonitoringRecord.createFromStringArray(OperationExecutionRecord.class, recordFieldsReduced);
-					}
-				} catch (final MonitoringRecordException ex) { // NOPMD (exception as flow control)
-					if (abortDueToUnknownRecordType) {
-						this.terminate(); // at least it doesn't hurt to set it
-						final IOException newEx = new IOException("Error processing line: " + line);
-						newEx.initCause(ex);
-						throw newEx; // NOPMD (cause is set above)
-					} else {
-						LOGGER.warn("Error processing line: {}", line, ex);
-						continue; // skip this record
-					}
-				}
-				if (!this.recordReceiver.newMonitoringRecord(record)) {
-					this.terminate();
-					break; // we got the signal to stop processing
-				}
-			}
+			this.textFileStreamProcessor.processInputChannel(fileInputStream);
 		} catch (final IOException e) {
-			LOGGER.error("Error reading {}", inputFile, e);
-		} catch (final RuntimeException e) { // NOCS NOPMD (gonna catch them all)
-			LOGGER.error("Error reading {}", inputFile, e);
+			LOGGER.error("Error reading {} {}", inputFile, e);
+		} catch (final MappingException e) {
+			LOGGER.error("Error reading {} {}", inputFile, e);
+		} catch (final MonitoringRecordException e) {
+			LOGGER.error("Error reading {} {}", inputFile, e);
+		} catch (final UnknownRecordTypeException e) {
+			LOGGER.error("Error reading {} {}", inputFile, e);
 		} finally {
 			if (in != null) {
 				try {
@@ -246,6 +179,8 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 			}
 		}
 	}
+
+
 
 	@Override
 	protected FileExtensionFilter getFileExtensionFilter() {

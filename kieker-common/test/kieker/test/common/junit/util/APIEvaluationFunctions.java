@@ -20,7 +20,7 @@ import java.nio.ByteBuffer;
 
 import org.junit.Assert;
 
-import kieker.common.util.registry.IRegistry;
+import kieker.common.registry.IRegistry;
 
 /**
  * The PMD warning suppression is necessary to avoid complexity

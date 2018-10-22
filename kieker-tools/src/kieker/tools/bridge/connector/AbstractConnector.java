@@ -23,10 +23,13 @@ import kieker.tools.bridge.LookupEntity;
 
 /**
  * Generic abstract connector used in all TCP services.
- * 
+ *
  * @author Reiner Jung
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
+@Deprecated
 public abstract class AbstractConnector implements IServiceConnector {
 
 	/**
@@ -40,7 +43,7 @@ public abstract class AbstractConnector implements IServiceConnector {
 
 	/**
 	 * AbstractTCPService constructor.
-	 * 
+	 *
 	 * @param configuration
 	 *            Kieker configuration including setup for connectors
 	 * @param lookupEntityMap

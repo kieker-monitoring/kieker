@@ -44,6 +44,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 
 	private final String pipeName;
 	private volatile MyPipe pipe;
+	private final ArrayDeserializer deserializer = new ArrayDeserializer();
 
 	public MyPipeReader(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -64,9 +65,10 @@ public class MyPipeReader extends AbstractReaderPlugin {
 			PipeData data = this.pipe.poll(4);
 			while (data != null) {
 				// Create new record, init from received array ...
+				this.deserializer.receiveData(data.getRecordData());
 				final IMonitoringRecord record = // throws MonitoringRecordException:
-				AbstractMonitoringRecord.createFromArray(data.getRecordType(),
-						data.getRecordData());
+						AbstractMonitoringRecord.createFromDeserializer(data.getRecordType().getCanonicalName(),
+								deserializer);
 				record.setLoggingTimestamp(data.getLoggingTimestamp());
 				// ...and delegate the task of delivering to the super class.
 				super.deliver(MyPipeReader.OUTPUT_PORT_NAME, record);

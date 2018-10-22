@@ -48,17 +48,6 @@ public interface IRecordFactory<T> {
 	T create(IValueDeserializer deserializer) throws RecordInstantiationException;
 
 	/**
-	 * Create a record of type T utilizing an object array.
-	 *
-	 * @param values
-	 *            the values used to fill the new instance
-	 *
-	 * @return a new instance of the declared record type
-	 * @since 1.11
-	 */
-	T create(Object[] values);
-
-	/**
 	 * @return the size (in bytes) of the record in the serialized form, or a negative value represented by the constant {@link #UNKNOWN_RECORD_SIZE} if the
 	 *         size is unknown
 	 *         in advance.

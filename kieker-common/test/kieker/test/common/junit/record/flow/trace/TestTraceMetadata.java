@@ -24,10 +24,11 @@ import org.junit.Test;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.io.BinaryValueSerializer;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.Registry;
+import kieker.common.registry.writer.IWriterRegistry;
+import kieker.common.registry.writer.WriterRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.WriterListener;
 
 /**
  * @author Jan Waller
@@ -67,13 +68,6 @@ public class TestTraceMetadata extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected hostname", HOSTNAME, trace1.getHostname());
 		Assert.assertEquals("Unexpected parent trace ID", PARENT_TRACE_ID, trace1.getParentTraceId());
 		Assert.assertEquals("Unexpected parent order ID", PARENT_ORDER_ID, trace1.getParentOrderId());
-
-		final Object[] trace1Array = trace1.toArray();
-
-		final TraceMetadata trace2 = new TraceMetadata(trace1Array);
-
-		Assert.assertEquals(trace1, trace2);
-		Assert.assertEquals(0, trace1.compareTo(trace2));
 	}
 
 	/**
@@ -91,12 +85,13 @@ public class TestTraceMetadata extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected parent trace ID", PARENT_TRACE_ID, trace1.getParentTraceId());
 		Assert.assertEquals("Unexpected parent order ID", PARENT_ORDER_ID, trace1.getParentOrderId());
 
-		final IRegistry<String> stringRegistry = new Registry<String>();
+		final WriterListener receiver = new WriterListener();
+		final IWriterRegistry<String> stringRegistry = new WriterRegistry(receiver);
 		final ByteBuffer buffer = ByteBuffer.allocate(trace1.getSize());
 		trace1.serialize(BinaryValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
 
-		final TraceMetadata trace2 = new TraceMetadata(BinaryValueDeserializer.create(buffer, stringRegistry));
+		final TraceMetadata trace2 = new TraceMetadata(BinaryValueDeserializer.create(buffer, receiver.getReaderRegistry()));
 
 		Assert.assertEquals(trace1, trace2);
 		Assert.assertEquals(0, trace1.compareTo(trace2));

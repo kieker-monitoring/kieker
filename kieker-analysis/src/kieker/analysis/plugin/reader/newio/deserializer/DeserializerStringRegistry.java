@@ -18,10 +18,7 @@ package kieker.analysis.plugin.reader.newio.deserializer;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.IRegistryRecordReceiver;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * Rudimentary string registry for use by the binary format decoder.
@@ -30,46 +27,22 @@ import kieker.common.util.registry.IRegistryRecordReceiver;
  *
  * @since 1.13
  */
-public class DeserializerStringRegistry implements IRegistry<String> {
-
-	private final List<String> values;
+public class DeserializerStringRegistry extends ReaderRegistry<String> {
 
 	/**
 	 * Creates a new deserializer string registry.
 	 * @param values The values to use
 	 */
 	public DeserializerStringRegistry(final List<String> values) {
-		this.values = ImmutableList.copyOf(values);
+		super();
+		long key = 0;
+		for (final String value : values) {
+			this.register(key++, value);
+		}
 	}
 
-	@Override
-	public long getId() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public int get(final String value) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public String get(final int i) {
-		return this.values.get(i);
-	}
-
-	@Override
-	public String[] getAll() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public int getSize() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void setRecordReceiver(final IRegistryRecordReceiver registryRecordReceiver) {
-		throw new UnsupportedOperationException();
+		return this.get(i);
 	}
 
 }

@@ -17,7 +17,7 @@ package kieker.common.record.io;
 
 import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * This class is used to fulfill our deprecation policy. Due to a rename
@@ -30,9 +30,9 @@ import kieker.common.util.registry.IRegistry;
  * @deprecated 1.14 renamed to {@link BinaryValueDeserializer}
  */
 @Deprecated
-public class DefaultValueDeserializer extends BinaryValueDeserializer {	// NOCS (Default in type name: is already deprecated)
+public class DefaultValueDeserializer extends BinaryValueDeserializer { // NOCS (Default in type name: is already deprecated)
 
-	protected DefaultValueDeserializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+	protected DefaultValueDeserializer(final ByteBuffer buffer, final ReaderRegistry<String> stringRegistry) {
 		super(buffer, stringRegistry);
 	}
 

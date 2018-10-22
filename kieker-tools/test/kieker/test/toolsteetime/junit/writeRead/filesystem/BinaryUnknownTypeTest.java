@@ -32,9 +32,9 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
+import kieker.monitoring.writer.compression.NoneCompressionFilter;
 import kieker.monitoring.writer.filesystem.AbstractFileWriter;
 import kieker.monitoring.writer.filesystem.BinaryFileWriter;
-import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
 
 import kieker.test.tools.junit.writeRead.TestDataRepository;
 import kieker.test.tools.junit.writeRead.TestProbe;

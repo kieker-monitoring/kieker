@@ -28,7 +28,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.BinaryValueDeserializer;
-import kieker.common.util.registry.ILookup;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * Runnable to handle incoming regular records.
@@ -90,7 +90,7 @@ public class RegularRecordHandler implements Runnable {
 		}
 	}
 
-	private ILookup<String> getStringRegistry(final long registryId) {
+	private ReaderRegistry<String> getStringRegistry(final long registryId) {
 		return this.stringRegistryCache.getOrCreateRegistry(registryId);
 	}
 
@@ -99,7 +99,7 @@ public class RegularRecordHandler implements Runnable {
 		final int classId = buffer.getInt();
 		final long loggingTimestamp = buffer.getLong();
 
-		final ILookup<String> stringRegistry = this.getStringRegistry(registryId);
+		final ReaderRegistry<String> stringRegistry = this.getStringRegistry(registryId);
 
 		try {
 			final String recordClassName = stringRegistry.get(classId);

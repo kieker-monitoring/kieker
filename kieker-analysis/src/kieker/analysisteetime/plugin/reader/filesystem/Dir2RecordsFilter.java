@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysisteetime.plugin.reader.filesystem;
 
 import java.io.File;
@@ -38,7 +37,10 @@ import teetime.stage.io.Directory2FilesFilter;
  * @author Christian Wulf
  *
  * @since 1.14
+ *
+ * @deprecated 1.15 use {@link LogsReaderCompositeStage} instead
  */
+@Deprecated
 public final class Dir2RecordsFilter extends CompositeStage {
 
 	private final ClassNameRegistryCreationFilter classNameRegistryCreationFilter;

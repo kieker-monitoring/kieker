@@ -17,10 +17,13 @@ package kieker.tools.bridge.connector;
 
 /**
  * Exception to box any Exception in a connector during data transmission and related tasks.
- * 
+ *
  * @author Reiner Jung
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
+@Deprecated
 public class ConnectorDataTransmissionException extends Exception {
 
 	/**
@@ -30,7 +33,7 @@ public class ConnectorDataTransmissionException extends Exception {
 
 	/**
 	 * Create an exception without an exception trail.
-	 * 
+	 *
 	 * @param message
 	 *            The message to explain the exception
 	 */
@@ -40,7 +43,7 @@ public class ConnectorDataTransmissionException extends Exception {
 
 	/**
 	 * Create an exception with an exception trail.
-	 * 
+	 *
 	 * @param message
 	 *            The message to explain the exception
 	 * @param exception

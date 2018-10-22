@@ -18,7 +18,7 @@ package kieker.common.record.io;
 
 import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.IRegistry;
+import kieker.common.registry.writer.IWriterRegistry;
 
 /**
  * Default value serializer implementation.
@@ -33,7 +33,7 @@ public class BinaryValueSerializer implements IValueSerializer {
 	private static final byte FALSE_VALUE = (byte) 0;
 
 	private final ByteBuffer buffer;
-	private final IRegistry<String> stringRegistry;
+	private final IWriterRegistry<String> stringRegistry;
 
 	/**
 	 * Create a binary value serializer.
@@ -43,7 +43,7 @@ public class BinaryValueSerializer implements IValueSerializer {
 	 * @param stringRegistry
 	 *            the string registry used for the serializer
 	 */
-	protected BinaryValueSerializer(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+	protected BinaryValueSerializer(final ByteBuffer buffer, final IWriterRegistry<String> stringRegistry) {
 		this.buffer = buffer;
 		this.stringRegistry = stringRegistry;
 	}
@@ -57,7 +57,7 @@ public class BinaryValueSerializer implements IValueSerializer {
 	 *            the string registry used for the serializer
 	 * @return the value serializer
 	 */
-	public static BinaryValueSerializer create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+	public static BinaryValueSerializer create(final ByteBuffer buffer, final IWriterRegistry<String> stringRegistry) {
 		return new BinaryValueSerializer(buffer, stringRegistry);
 	}
 
@@ -101,7 +101,7 @@ public class BinaryValueSerializer implements IValueSerializer {
 
 	@Override
 	public void putString(final String value) {
-		final int stringId = this.stringRegistry.get(value);
+		final int stringId = this.stringRegistry.getId(value);
 		this.putInt(stringId);
 	}
 

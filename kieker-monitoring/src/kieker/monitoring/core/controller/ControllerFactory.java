@@ -29,7 +29,9 @@ import kieker.common.configuration.Configuration;
  * @author Holger Knoche
  *
  * @since 1.13
+ * @deprecated since 1.15 moved to common
  */
+@Deprecated
 public final class ControllerFactory {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ControllerFactory.class);

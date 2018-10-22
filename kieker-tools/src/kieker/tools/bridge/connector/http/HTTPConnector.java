@@ -52,8 +52,13 @@ import kieker.tools.bridge.connector.ConnectorProperty;
  *
  * @author Nils Christian Ehmke
  *
+ *         TODO this class is not functional anymore, as the array API has been removed. Also the bridge is deprecated.
+ *
  * @since 1.11
+ *
+ * @deprecated since 1.15 remove in 1.16
  */
+@Deprecated
 @ConnectorProperty(cmdName = "http-rest", name = "REST/HTTP Connector", description = "HTTP Client to receive records via a REST URL.")
 public final class HTTPConnector extends AbstractConnector {
 
@@ -159,9 +164,9 @@ public final class HTTPConnector extends AbstractConnector {
 				// Try to deserialize a monitoring record from the given values
 				final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(classname);
 
-				final IMonitoringRecord record = AbstractMonitoringRecord.createFromStringArray(clazz, values);
-				record.setLoggingTimestamp(timestamp);
-				this.recordQueue.add(record);
+				// final IMonitoringRecord record = AbstractMonitoringRecord.createFromStringArray(clazz, values);
+				// record.setLoggingTimestamp(timestamp);
+				// this.recordQueue.add(record);
 			} catch (final ClassCastException ex) {
 				LOGGER.warn("Invalid data received", ex);
 				response.sendError(400, "Invalid data received");

@@ -29,8 +29,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.misc.RegistryRecord;
 import kieker.common.record.tcp.AbstractTcpReader;
-import kieker.common.util.registry.ILookup;
-import kieker.common.util.registry.Lookup;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * This is a reader which reads the records from a TCP port. Compared to the {@link TCPReader}, it is more modular and faster in reading.
@@ -61,7 +60,7 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 	private final int port1;
 	private final int port2;
 
-	private final ILookup<String> stringRegistry = new Lookup<>();
+	private final ReaderRegistry<String> stringRegistry = new ReaderRegistry<>();
 
 	private final AbstractRecordTcpReader tcpMonitoringRecordReader;
 	private final AbstractTcpReader tcpStringRecordReader;
@@ -86,7 +85,7 @@ public class DualSocketTcpReader extends AbstractReaderPlugin {
 	}
 
 	protected AbstractRecordTcpReader createTcpMonitoringRecordReader(final int port, final int bufferCapacity, final Logger logger,
-			final ILookup<String> registry) {
+			final ReaderRegistry<String> registry) {
 		return new AbstractRecordTcpReader(port, bufferCapacity, logger, registry, new CachedRecordFactoryCatalog()) {
 			@SuppressWarnings("synthetic-access")
 			@Override

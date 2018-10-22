@@ -51,7 +51,10 @@ import kieker.tools.bridge.connector.ConnectorProperty;
  * @author Reiner Jung
  *
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
+@Deprecated
 @ConnectorProperty(cmdName = "jms-client", name = "JMS Client Connector", description = "JMS Client to receive records from a JMS queue.")
 public class JMSClientConnector extends AbstractConnector {
 

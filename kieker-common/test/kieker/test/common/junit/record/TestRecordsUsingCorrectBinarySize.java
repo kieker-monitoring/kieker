@@ -45,7 +45,7 @@ public class TestRecordsUsingCorrectBinarySize extends AbstractDynamicKiekerTest
 	public void test() throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		final Collection<Class<?>> availableClasses = super.deliverAllAvailableClassesFromSourceDirectory();
 		final Collection<Class<?>> notAbstractClasses = super.filterOutAbstractClasses(availableClasses);
-		final Collection<Class<?>> filteredClasses = super.filterOutClassesNotExtending(IMonitoringRecord.BinaryFactory.class, notAbstractClasses);
+		final Collection<Class<?>> filteredClasses = super.filterOutClassesNotExtending(IMonitoringRecord.class, notAbstractClasses);
 
 		for (final Class<?> clazz : filteredClasses) {
 			LOGGER.info("Testing '{}'...", clazz.getSimpleName());

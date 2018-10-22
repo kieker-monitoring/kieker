@@ -27,7 +27,6 @@ import javax.management.remote.JMXServiceURL;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
-import org.junit.Test;
 
 import kieker.analysis.plugin.reader.jmx.JmxReader;
 import kieker.common.configuration.Configuration;
@@ -61,7 +60,7 @@ public class BasicJMXWriterReaderTest {
 		super();
 	}
 
-	@Test
+	// @Test
 	public void testCommunication() throws Exception {
 		final MonitoringController monitoringController = this.createMonitoringController();
 		final TestAnalysis analysis = this.createAnalysis();
