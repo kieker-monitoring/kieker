@@ -19,13 +19,13 @@ package kieker.test.tools.util;
 import org.junit.Assert;
 
 import kieker.common.util.signature.Signature;
-import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
-import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
-import kieker.tools.traceAnalysis.systemModel.ComponentType;
-import kieker.tools.traceAnalysis.systemModel.Execution;
-import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
-import kieker.tools.traceAnalysis.systemModel.Operation;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.trace.analysis.systemModel.AllocationComponent;
+import kieker.tools.trace.analysis.systemModel.AssemblyComponent;
+import kieker.tools.trace.analysis.systemModel.ComponentType;
+import kieker.tools.trace.analysis.systemModel.Execution;
+import kieker.tools.trace.analysis.systemModel.ExecutionContainer;
+import kieker.tools.trace.analysis.systemModel.Operation;
+import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * This factory class can be used to create artificial executions.

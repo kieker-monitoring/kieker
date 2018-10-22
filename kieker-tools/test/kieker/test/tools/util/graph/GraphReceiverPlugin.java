@@ -20,7 +20,7 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
+import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
 
 /**
  * A plugin which receives one or more graphs and stores them for later access. This plugin is primarily

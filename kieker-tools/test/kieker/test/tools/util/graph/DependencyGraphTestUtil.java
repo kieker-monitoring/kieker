@@ -27,17 +27,17 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
-import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
-import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
-import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
-import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter;
-import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFilter;
-import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.AbstractDependencyGraph;
-import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.DependencyGraphNode;
-import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.WeightedBidirectionalDependencyGraphEdge;
-import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.trace.analysis.filter.AbstractGraphProducingFilter;
+import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
+import kieker.tools.trace.analysis.filter.IGraphOutputtingFilter;
+import kieker.tools.trace.analysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
+import kieker.tools.trace.analysis.filter.traceReconstruction.TraceReconstructionFilter;
+import kieker.tools.trace.analysis.filter.visualization.AbstractGraphFilter;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.AbstractDependencyGraph;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.DependencyGraphNode;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.WeightedBidirectionalDependencyGraphEdge;
+import kieker.tools.trace.analysis.systemModel.ISystemModelElement;
+import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * This class provides utility functions for dependency graph tests.
@@ -57,7 +57,7 @@ public final class DependencyGraphTestUtil {
 	 * 
 	 * @param graph
 	 *            The graph whose nodes shall be indexed
-	 * @return A map which associates the node's identifier (see {@link kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraphElement#getIdentifier()})
+	 * @return A map which associates the node's identifier (see {@link kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraphElement#getIdentifier()})
 	 *         to the actual identifier
 	 * 
 	 * @param <T>

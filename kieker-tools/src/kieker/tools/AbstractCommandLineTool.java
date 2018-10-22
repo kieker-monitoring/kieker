@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools;
 
 import org.apache.commons.cli.BasicParser;
@@ -32,7 +31,10 @@ import kieker.tools.util.ToolsUtil;
  * @author Nils Christian Ehmke
  *
  * @since 1.10
+ *
+ * @deprecated since 1.15 remove after porting all tools to JCommander
  */
+@Deprecated
 public abstract class AbstractCommandLineTool {
 
 	public static final String CMD_OPT_NAME_HELP_LONG = "help";
