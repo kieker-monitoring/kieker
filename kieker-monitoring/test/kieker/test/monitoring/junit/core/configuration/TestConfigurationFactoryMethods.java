@@ -28,7 +28,7 @@ import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.timer.SystemNanoTimer;
-import kieker.monitoring.writer.filesystem.AsciiFileWriter;
+import kieker.monitoring.writer.filesystem.FileWriter;
 
 import kieker.test.monitoring.util.DummyWriterConfigurationFactory;
 
@@ -144,7 +144,7 @@ public class TestConfigurationFactoryMethods extends kieker.test.common.junit.Ab
 		Assert.assertEquals(true, configuration.getBooleanProperty(ConfigurationKeys.META_DATA));
 		Assert.assertEquals(true, configuration.getBooleanProperty(ConfigurationKeys.AUTO_SET_LOGGINGTSTAMP));
 		Assert.assertThat(configuration.getStringProperty(ConfigurationKeys.WRITER_CLASSNAME),
-				CoreMatchers.is(AsciiFileWriter.class.getName()));
+				CoreMatchers.is(FileWriter.class.getName()));
 		// TimeSource controller
 		Assert.assertThat(configuration.getStringProperty(ConfigurationKeys.TIMER_CLASSNAME),
 				CoreMatchers.is(SystemNanoTimer.class.getName()));

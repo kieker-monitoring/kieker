@@ -34,7 +34,7 @@ import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.writer.compression.ICompressionFilter;
 import kieker.monitoring.writer.compression.NoneCompressionFilter;
 import kieker.monitoring.writer.compression.ZipCompressionFilter;
-import kieker.monitoring.writer.filesystem.BinaryFileWriter;
+import kieker.monitoring.writer.filesystem.FileWriter;
 
 import kieker.test.tools.junit.writeRead.TestAnalysis;
 import kieker.test.tools.junit.writeRead.TestDataRepository;
@@ -84,11 +84,11 @@ public class BinaryWriterReaderTest {
 		// 2. define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 
-		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, BinaryFileWriter.class.getName());
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, FileWriter.class.getName());
 		config.setProperty(WriterController.RECORD_QUEUE_SIZE, "128");
 		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
-		config.setProperty(BinaryFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
-		config.setProperty(BinaryFileWriter.CONFIG_COMPRESSION_FILTER, compressionFilter.getClass().getName());
+		config.setProperty(FileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
+		config.setProperty(FileWriter.CONFIG_COMPRESSION_FILTER, compressionFilter.getClass().getName());
 		final MonitoringController monitoringController = MonitoringController.createInstance(config);
 
 		// 3. define analysis config

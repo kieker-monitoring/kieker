@@ -154,6 +154,11 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		return this.getLoggingTimestamp() == castedRecord.getLoggingTimestamp();
 	}
 
+	@Override
+	public int hashCode() {
+		return Long.hashCode(this.getLoggingTimestamp());
+	}
+
 	/**
 	 * This method checks the given arrays, making sure that they have the same length and that the value elements are compatible with the given value types. If the
 	 * arrays are not compatible, this method throws an {@link IllegalArgumentException}.

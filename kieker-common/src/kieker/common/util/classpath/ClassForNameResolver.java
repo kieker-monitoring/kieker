@@ -27,6 +27,12 @@ public class ClassForNameResolver<T> {
 
 	private final Class<T> classToCast;
 
+	/**
+	 * Create new class resolver.
+	 *
+	 * @param classToCast
+	 *            class to cast
+	 */
 	public ClassForNameResolver(final Class<T> classToCast) {
 		this.classToCast = classToCast;
 	}
@@ -39,6 +45,7 @@ public class ClassForNameResolver<T> {
 	 *
 	 * @return A {@link Class} instance corresponding to the given name, if it exists.
 	 * @throws ClassNotFoundException
+	 *             when the class is not known
 	 *
 	 */
 	public final Class<? extends T> classForName(final String classname) throws ClassNotFoundException {

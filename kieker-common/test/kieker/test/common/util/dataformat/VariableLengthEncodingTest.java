@@ -32,6 +32,9 @@ import kieker.common.util.dataformat.VariableLengthEncoding;
  */
 public class VariableLengthEncodingTest {
 
+	/**
+	 * create test.
+	 */
 	public VariableLengthEncodingTest() {
 		// Default Constructor
 	}
@@ -120,9 +123,9 @@ public class VariableLengthEncodingTest {
 	@Test
 	public void testEncodeNegativeInteger() {
 		final int value = -13570409;
-		final byte[] expected = VariableLengthEncodingTest.asByteArray(0x97, 0xDD, 0xC3, 0xF9, 0x0F);// NOPMD plural not relevant
+		final byte[] expected = VariableLengthEncodingTest.asByteArray(0x97, 0xDD, 0xC3, 0xF9, 0x0F); // NOPMD plural not relevant
 
-		final byte[] actual = this.encodeInt(value);// NOPMD plural not relevant
+		final byte[] actual = this.encodeInt(value); // NOPMD plural not relevant
 
 		Assert.assertArrayEquals(expected, actual);
 	}
@@ -132,16 +135,16 @@ public class VariableLengthEncodingTest {
 	 */
 	@Test
 	public void testDecodeNegativeInteger() {
-		final byte[] data = VariableLengthEncodingTest.asByteArray(0x97, 0xDD, 0xC3, 0xF9, 0x0F);// NOPMD plural not relevant
+		final byte[] data = VariableLengthEncodingTest.asByteArray(0x97, 0xDD, 0xC3, 0xF9, 0x0F); // NOPMD plural not relevant
 		final int expected = -13570409;
 
-		final int actual = this.decodeInt(data);// NOPMD plural not relevant
+		final int actual = this.decodeInt(data); // NOPMD plural not relevant
 
 		Assert.assertEquals(expected, actual);
 	}
 
 	private static byte[] asByteArray(final int... values) {
-		final byte[] data = new byte[values.length];// NOPMD plural not relevant
+		final byte[] data = new byte[values.length]; // NOPMD plural not relevant
 
 		for (int index = 0; index < values.length; index++) {
 			data[index] = (byte) values[index];
@@ -153,7 +156,7 @@ public class VariableLengthEncodingTest {
 	private byte[] encodeInt(final int value) {
 		final int bufferSize = 5;
 
-		final byte[] data = new byte[bufferSize];// NOPMD plural not relevant
+		final byte[] data = new byte[bufferSize]; // NOPMD plural not relevant
 		final ByteBuffer buffer = ByteBuffer.wrap(data);
 		VariableLengthEncoding.encodeInt(value, buffer);
 

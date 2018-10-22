@@ -28,6 +28,9 @@ public interface IRegistryRecordReceiver {
 	/**
 	 * @param registryRecord
 	 *            the new instantiated registry record
+	 * 
+	 * @return true on success
+	 *
 	 * @since 1.13
 	 */
 	public abstract boolean newRegistryRecord(RegistryRecord registryRecord);

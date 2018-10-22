@@ -13,27 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.common.record.io;
-
-import java.nio.ByteBuffer;
-
-import kieker.common.registry.reader.ReaderRegistry;
-
-/**
- * This class is used to fulfill our deprecation policy. Due to a rename
- * this class is replaced by {@link BinaryValueDeserializer}.
- *
- * @author Reiner Jung
- *
- * @since 1.13
- *
- * @deprecated since 1.14 remove 1.15 renamed to {@link BinaryValueDeserializer}
- */
-@Deprecated
-public class DefaultValueDeserializer extends BinaryValueDeserializer { // NOCS (Default in type name: is already deprecated)
-
-	protected DefaultValueDeserializer(final ByteBuffer buffer, final ReaderRegistry<String> stringRegistry) {
-		super(buffer, stringRegistry);
-	}
-
-}
+package kieker.test.common.util.dataformat;

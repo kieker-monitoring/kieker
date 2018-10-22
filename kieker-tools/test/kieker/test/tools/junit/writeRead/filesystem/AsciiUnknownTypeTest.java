@@ -32,8 +32,7 @@ import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.writer.compression.NoneCompressionFilter;
-import kieker.monitoring.writer.filesystem.AbstractFileWriter;
-import kieker.monitoring.writer.filesystem.AsciiFileWriter;
+import kieker.monitoring.writer.filesystem.FileWriter;
 
 import kieker.test.tools.junit.writeRead.TestAnalysis;
 import kieker.test.tools.junit.writeRead.TestDataRepository;
@@ -85,11 +84,11 @@ public class AsciiUnknownTypeTest {
 	private List<IMonitoringRecord> testUnknownRecordTypes(final List<IMonitoringRecord> records, final boolean ignoreUnknownRecordTypes) throws Exception {
 		// 2. define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, FileWriter.class.getName());
 		config.setProperty(WriterController.RECORD_QUEUE_SIZE, "128");
 		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
-		config.setProperty(AbstractFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
-		config.setProperty(AbstractFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
+		config.setProperty(FileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
+		config.setProperty(FileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 		final MonitoringController monitoringController = MonitoringController.createInstance(config);
 
 		// 3. define analysis config
