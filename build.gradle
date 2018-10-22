@@ -167,7 +167,7 @@ subprojects {
         showViolations = false
 
         configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
-        configDir = new File(dirConfig)
+        configDir = rootProject.file(dirConfig)
     }
 
     apply plugin: 'findbugs'

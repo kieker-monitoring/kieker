@@ -44,7 +44,7 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 	private final ReaderRegistry<String> stringRegistry;
 
 	/**
-	 * Default constructor with <code>port=10133</code> and <code>bufferCapacity=65535</code> and <code>new CachedRecordFactoryCatalog()</code>
+	 * Default constructor with <code>port=10133</code> and <code>bufferCapacity=65535</code> and <code>new CachedRecordFactoryCatalog()</code>.
 	 */
 	public AbstractRecordTcpReader(final Logger logger, final ReaderRegistry<String> stringRegistry) {
 		this(10133, 65535, logger, stringRegistry, new CachedRecordFactoryCatalog());
