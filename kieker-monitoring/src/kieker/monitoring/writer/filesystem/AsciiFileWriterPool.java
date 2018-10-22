@@ -36,7 +36,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *
  * @since 1.13
  *
- * @deprecated 1.14 should be removed in 1.15 replaced by new FileWriter API
+ * @deprecated since 1.14 remove in 1.15 replaced by new FileWriter API
  */
 @Deprecated
 class AsciiFileWriterPool extends AbstractFileWriterPool<CharBuffer> {

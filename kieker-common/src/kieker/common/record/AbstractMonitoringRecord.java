@@ -256,7 +256,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		if (recordFields.length != valueTypes.length) {
 			throw new IllegalArgumentException("Expected " + valueTypes.length + " record fields, but found " + recordFields.length);
 		}
-		final Object[] typedArray = new Object[recordFields.length];
+		final Object[] typedArray = new Object[recordFields.length]; // NOPMD
 		for (int curIdx = 0; curIdx < typedArray.length; curIdx++) {
 			if (valueTypes[curIdx] == String.class) {
 				typedArray[curIdx] = recordFields[curIdx];

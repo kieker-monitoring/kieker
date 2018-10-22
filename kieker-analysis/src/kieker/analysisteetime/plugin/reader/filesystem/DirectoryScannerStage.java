@@ -22,6 +22,7 @@ import teetime.framework.AbstractProducerStage;
 
 /**
  * Scan a set of directories recursively for Kieker logs.
+ * This producer stage outputs File objects representing valid Kieker log directories.
  *
  * @author Reiner Jung
  *
@@ -32,6 +33,11 @@ public class DirectoryScannerStage extends AbstractProducerStage<File> {
 	private final File[] directories;
 	private final FilenameFilter filter = new MapFileFilter();
 
+	/**
+	 * Create a directory scanner.
+	 *
+	 * @param directories array of directories to scan
+	 */
 	public DirectoryScannerStage(final File[] directories) {
 		this.directories = directories;
 	}

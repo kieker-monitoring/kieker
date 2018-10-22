@@ -147,7 +147,7 @@ public class BinaryEventDeserializer extends AbstractEventDeserializer {
 					final IMonitoringRecord record = recordFactory.create(deserializer);
 					record.setLoggingTimestamp(loggingTimestamp);
 					return record;
-				} catch (final RecordInstantiationException ex) { // TODO this happens when dynamic
+				} catch (final RecordInstantiationException ex) { // This happens when dynamic
 					// arrays are used and the buffer
 					// does not hold the complete
 					// record.

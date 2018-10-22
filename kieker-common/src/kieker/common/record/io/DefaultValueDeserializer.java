@@ -27,7 +27,7 @@ import kieker.common.registry.reader.ReaderRegistry;
  *
  * @since 1.13
  *
- * @deprecated 1.14 renamed to {@link BinaryValueDeserializer}
+ * @deprecated since 1.14 remove 1.15 renamed to {@link BinaryValueDeserializer}
  */
 @Deprecated
 public class DefaultValueDeserializer extends BinaryValueDeserializer { // NOCS (Default in type name: is already deprecated)

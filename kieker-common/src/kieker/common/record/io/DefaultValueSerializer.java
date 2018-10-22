@@ -27,7 +27,7 @@ import kieker.common.registry.writer.IWriterRegistry;
  *
  * @since 1.13
  *
- * @deprecated 1.14 renamed to {@link BinaryValueSerializer}
+ * @deprecated since 1.14 remove 1.15 renamed to {@link BinaryValueSerializer}
  */
 @Deprecated
 public class DefaultValueSerializer extends BinaryValueSerializer { // NOCS (Default in type name: is already deprecated)

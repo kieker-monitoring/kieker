@@ -21,7 +21,7 @@ package kieker.analysisteetime.plugin.reader.filesystem.util;
  *
  * @since 1.10
  *
- * @deprecated 1.15
+ * @deprecated since 1.15 removed 1.16
  */
 @Deprecated
 public final class MappingException extends Exception {

@@ -27,7 +27,7 @@ import org.slf4j.Logger;
  *
  * @since 1.14
  *
- * @deprecated 1.14 should be removed in 1.15 replaced by new FileWriter API
+ * @deprecated since 1.14 remove in 1.15 replaced by new FileWriter API
  */
 @Deprecated
 public abstract class AbstractPooledFileChannel<T extends Buffer> {

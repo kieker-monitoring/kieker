@@ -46,7 +46,7 @@ import kieker.monitoring.writer.compression.ZipCompressionFilter;
  *
  * @since 1.14
  *
- * @deprecated 1.14 should be removed in 1.15 replaced by new FileWriter API
+ * @deprecated since 1.14 remove in 1.15 replaced by new FileWriter API
  */
 @Deprecated
 public abstract class AbstractFileWriter<T extends Buffer, S extends IValueSerializer> extends AbstractMonitoringWriter

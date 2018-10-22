@@ -30,7 +30,7 @@ import kieker.monitoring.writer.WriterUtil;
  *
  * @since 1.13
  *
- * @deprecated 1.14 should be removed in 1.15 replaced by new FileWriter API
+ * @deprecated since 1.14 remove in 1.15 replaced by new FileWriter API
  */
 @Deprecated
 class BinaryPooledFileChannel extends AbstractPooledFileChannel<ByteBuffer> {
