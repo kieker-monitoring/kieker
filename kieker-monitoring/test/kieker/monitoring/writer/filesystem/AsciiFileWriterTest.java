@@ -22,6 +22,7 @@ import java.nio.CharBuffer;
 import java.nio.file.Files;
 
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.core.StringStartsWith;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -273,7 +274,7 @@ public class AsciiFileWriterTest {
 		this.configuration.setProperty(AbstractFileWriter.CONFIG_PATH, passedConfigPathName);
 		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
 
-		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(passedConfigPathName));
+		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), StringStartsWith.startsWith(passedConfigPathName));
 	}
 
 	/**
@@ -286,7 +287,7 @@ public class AsciiFileWriterTest {
 		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
 
 		final String defaultDir = System.getProperty("java.io.tmpdir");
-		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
+		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), StringStartsWith.startsWith(defaultDir));
 	}
 
 	/**
@@ -302,7 +303,7 @@ public class AsciiFileWriterTest {
 		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
 
 		final String defaultDir = System.getProperty("java.io.tmpdir");
-		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
+		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), StringStartsWith.startsWith(defaultDir));
 	}
 
 }

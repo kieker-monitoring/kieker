@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.core.StringEndsWith;
+import org.hamcrest.core.StringStartsWith;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -252,7 +254,7 @@ public class BinaryFileWriterTest {
 		this.configuration.setProperty(AbstractFileWriter.CONFIG_PATH, passedConfigPathName);
 		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
 
-		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(passedConfigPathName));
+		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), StringStartsWith.startsWith(passedConfigPathName));
 	}
 
 	/**
@@ -265,7 +267,7 @@ public class BinaryFileWriterTest {
 		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
 
 		final String defaultDir = System.getProperty("java.io.tmpdir");
-		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
+		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), StringStartsWith.startsWith(defaultDir));
 	}
 
 	/**
@@ -281,7 +283,7 @@ public class BinaryFileWriterTest {
 		final BinaryFileWriter writer = new BinaryFileWriter(this.configuration);
 
 		final String defaultDir = System.getProperty("java.io.tmpdir");
-		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
+		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), StringStartsWith.startsWith(defaultDir));
 	}
 
 	@Test
@@ -298,7 +300,7 @@ public class BinaryFileWriterTest {
 
 		final String hostName = this.configuration.getStringProperty(ConfigurationKeys.HOST_NAME);
 		final String controllerName = this.configuration.getStringProperty(ConfigurationKeys.CONTROLLER_NAME);
-		Assert.assertThat(writer.getLogFolder().getFileName().toString(), CoreMatchers.startsWith(FSUtil.FILE_PREFIX));
-		Assert.assertThat(writer.getLogFolder().getFileName().toString(), CoreMatchers.endsWith(hostName + "-" + controllerName));
+		Assert.assertThat(writer.getLogFolder().getFileName().toString(), StringStartsWith.startsWith(FSUtil.FILE_PREFIX));
+		Assert.assertThat(writer.getLogFolder().getFileName().toString(), StringEndsWith.endsWith(hostName + "-" + controllerName));
 	}
 }
