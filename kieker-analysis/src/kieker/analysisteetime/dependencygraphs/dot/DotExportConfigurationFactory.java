@@ -225,7 +225,6 @@ public class DotExportConfigurationFactory {
 	}
 
 	private StringBuilder createOperationLabelFromVertex(final IVertex vertex) {
-
 		@SuppressWarnings("unchecked")
 		final Collection<String> modifiers = this.getProperty(vertex, PropertyKeys.MODIFIERS, Collection.class);
 		final String returnType = this.getProperty(vertex, PropertyKeys.RETURN_TYPE, String.class);

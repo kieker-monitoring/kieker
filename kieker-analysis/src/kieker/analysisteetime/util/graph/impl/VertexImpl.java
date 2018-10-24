@@ -94,7 +94,6 @@ class VertexImpl extends GraphElementImpl implements IVertex {
 
 	@Override
 	public Iterable<IVertex> getVertices(final Direction direction) {
-
 		if (direction.equals(Direction.BOTH)) {
 			final List<IVertex> vertices = (List<IVertex>) this.getVertices(Direction.IN);
 			vertices.addAll((List<IVertex>) this.getVertices(Direction.OUT));

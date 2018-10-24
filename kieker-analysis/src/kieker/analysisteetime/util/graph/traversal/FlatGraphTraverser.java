@@ -43,7 +43,6 @@ public class FlatGraphTraverser extends AbstractGraphTraverser {
 
 	@Override
 	public void traverse(final IGraph graph) {
-
 		for (final IVertex vertex : graph.getVertices()) {
 			for (final IVertexVisitor visitor : this.vertexVisitors) {
 				visitor.visitVertex(vertex);
@@ -55,7 +54,6 @@ public class FlatGraphTraverser extends AbstractGraphTraverser {
 				visitor.visitEdge(edge);
 			}
 		}
-
 	}
 
 }

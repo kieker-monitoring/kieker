@@ -35,7 +35,6 @@ public class GraphMLTransformationStage extends AbstractTransformation<IGraph, G
 
 	@Override
 	protected void execute(final IGraph graph) {
-
 		final GraphMLTransformer graphMLTransformer = new GraphMLTransformer(graph);
 		final GraphmlType graphmlType = graphMLTransformer.transform();
 

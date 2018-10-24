@@ -111,7 +111,6 @@ public class GraphImpl extends ElementImpl implements IGraph {
 
 	@Override
 	public IEdge addEdge(final Object id, final IVertex outVertex, final IVertex inVertex) {
-
 		// BETTER Throw Exception if Vertices are null
 
 		final Stack<VertexImpl> outVertexParents = new Stack<>();

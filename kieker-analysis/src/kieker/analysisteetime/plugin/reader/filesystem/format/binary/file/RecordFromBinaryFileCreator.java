@@ -90,7 +90,6 @@ public class RecordFromBinaryFileCreator {
 	 */
 	public void createRecordsFromBinaryFile(final File binaryFile, final DataInputStream inputStream,
 			final OutputPort<IMonitoringRecord> outputPort) throws IOException, MonitoringRecordException {
-
 		RecordFromBinaryFileCreator.LOGGER.info("reading file {}", binaryFile.getAbsolutePath());
 
 		final ReaderRegistry<String> registry = this.classNameRegistryRepository.get(binaryFile.getParentFile());

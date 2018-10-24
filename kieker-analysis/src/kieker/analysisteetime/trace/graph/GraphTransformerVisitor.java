@@ -74,7 +74,6 @@ public class GraphTransformerVisitor implements IOperationCallVisitor {
 	}
 
 	private IEdge addEdge(final OperationCall operationCall) {
-
 		final int thisVertexId = this.objectIdentifierRegistry.getIdentifier(operationCall);
 		final IVertex thisVertex = this.graph.getVertex(thisVertexId);
 		final int parentVertexId = this.objectIdentifierRegistry.getIdentifier(operationCall.getParent());

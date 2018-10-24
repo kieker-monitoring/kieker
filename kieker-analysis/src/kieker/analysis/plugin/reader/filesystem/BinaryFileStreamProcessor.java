@@ -74,7 +74,6 @@ public class BinaryFileStreamProcessor {
 	 *             on deserialization issues
 	 */
 	public void createRecordsFromBinaryFile(final DataInputStream inputStream) throws IOException, MonitoringRecordException {
-
 		final BinaryValueDeserializer deserializer = BinaryValueDeserializer.create(this.buffer, this.stringRegistry);
 
 		boolean endOfStreamReached = false;

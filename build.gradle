@@ -149,8 +149,8 @@ subprojects {
 
     apply plugin: 'pmd'
     pmd {	// is represented by the groovy class "PmdExtension"
-    	// the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
-    	toolVersion = pmdAndCpdVersion
+	// the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
+	toolVersion = pmdAndCpdVersion
         ignoreFailures = true
 
         // Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
