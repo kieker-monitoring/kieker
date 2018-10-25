@@ -57,11 +57,11 @@ public abstract class AbstractToolMain<T extends Object> {
 	 * @param configuration
 	 *            configuration object
 	 */
-	public void run(final String title, final String label, final String[] args, final T settings) {
-		this.settings = settings;
+	public void run(final String title, final String label, final String[] args, final T configuration) {
+		this.settings = configuration;
 		AbstractToolMain.LOGGER.debug(title); // NOPMD
 
-		final JCommander commander = new JCommander(settings);
+		final JCommander commander = new JCommander(configuration);
 		try {
 			commander.parse(args);
 			if (this.checkParameters(commander)) {

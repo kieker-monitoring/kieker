@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.systemModel;
 
 /**
  * This class stores trace meta-information, such as the trace ID. This kept separate from the actual trace
  * information to allow references to traces without the need to keep the trace itself.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public class TraceInformation {
@@ -31,7 +30,7 @@ public class TraceInformation {
 
 	/**
 	 * Creates a new trace information object using the given data.
-	 * 
+	 *
 	 * @param traceId
 	 *            The trace ID to use
 	 * @param sessionId
@@ -44,7 +43,7 @@ public class TraceInformation {
 
 	/**
 	 * Returns the trace ID.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public long getTraceId() {
@@ -53,7 +52,7 @@ public class TraceInformation {
 
 	/**
 	 * Returns the trace's session ID, if any.
-	 * 
+	 *
 	 * @return See above. Note that this ID may be {@code null}.
 	 */
 	public String getSessionId() {
