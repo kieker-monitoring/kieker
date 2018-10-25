@@ -41,7 +41,7 @@ public class TraceAnalysisConfiguration {
 
 	private static final String CMD_INPUTDIRS = "--inputdirs";
 
-	private static final String CMD_DIR = "--dir";
+	private static final String CMD_DIR = "--outputdir";
 
 	private static final String CMD_PREFIX = "--prefix";
 
