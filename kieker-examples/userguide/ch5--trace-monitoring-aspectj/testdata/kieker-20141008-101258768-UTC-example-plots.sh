@@ -56,7 +56,7 @@ ${TRACE_ANALYSIS_SH} \
 #${TRACE_ANALYSIS_SH} \
 #    --verbose \
 #    --inputdirs "${EXAMPLE_LOG}" --outputdir "./${OUTDIR}" \
-#	--p responseTime- \
+#	-p responseTime- \
 #	--plot-Deployment-Component-Dependency-Graph responseTimes-ms \
 #	--plot-Assembly-Component-Dependency-Graph responseTimes-ns  \
 #	--plot-Deployment-Operation-Dependency-Graph responseTimes-us  \
