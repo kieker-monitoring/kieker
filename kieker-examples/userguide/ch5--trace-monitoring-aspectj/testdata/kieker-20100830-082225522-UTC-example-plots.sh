@@ -48,8 +48,6 @@ ${TRACE_ANALYSIS_SH} \
     --plot-Aggregated-Assembly-Call-Tree \
     --print-Deployment-Equivalence-Classes \
     --print-Assembly-Equivalence-Classes \
-    --plot-Aggregated-Deployment-Call-Tree \
-    --plot-Aggregated-Assembly-Call-Tree \
     --short-labels
 	
 # Dependency graphs with responseTimes
