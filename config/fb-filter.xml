@@ -3,24 +3,24 @@
 
 	<Match>
 		<!-- Reason: http://trac.kieker-monitoring.net/ticket/1352 -->
-		<Class name="kieker.test.tools.junit.traceAnalysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraphTest" />
+		<Class name="kieker.test.tools.junit.trace.analysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraphTest" />
 		<Bug pattern=" BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
 	</Match>
 	
 	<Match>
 		<!-- Reason: http://trac.kieker-monitoring.net/ticket/1352 -->
-		<Class name="kieker.test.tools.junit.traceAnalysis.filter.visualization.descriptions.DescriptionDecoratorFilterTest" />
+		<Class name="kieker.test.tools.junit.trace.analysis.filter.visualization.descriptions.DescriptionDecoratorFilterTest" />
 		<Bug pattern=" BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
 	</Match>
 	
 	<Match>
 		<!-- Reason: http://trac.kieker-monitoring.net/ticket/1352 -->
-		<Class name="kieker.test.tools.junit.traceAnalysis.filter.visualization.traceColoring.TraceColoringFilterTest" />
+		<Class name="kieker.test.tools.junit.trace.analysis.filter.visualization.traceColoring.TraceColoringFilterTest" />
 		<Bug pattern=" BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
 	</Match>
 	
 	<Match>
-		<Class name="kieker.tools.traceAnalysis.filter.sessionReconstruction.SessionReconstructionFilter" />
+		<Class name="kieker.tools.trace.analysis.filter.sessionReconstruction.SessionReconstructionFilter" />
 		<Bug pattern="AT_OPERATION_SEQUENCE_ON_CONCURRENT_ABSTRACTION" />
 	</Match>
 
@@ -35,17 +35,17 @@
 	</Match>
 	
 	<Match>
-		<Class name="kieker.tools.traceAnalysis.TraceAnalysisGUI" />
+		<Class name="kieker.tools.trace.analysis.TraceAnalysisGUI" />
 		<Bug pattern="SE_BAD_FIELD" />
 	</Match>
 	
 	<Match>
-		<Class name="kieker.tools.traceAnalysis.gui.FinalStep" />
+		<Class name="kieker.tools.trace.analysis.gui.FinalStep" />
 		<Bug pattern="SE_BAD_FIELD" />
 	</Match>
 	
 	<Match>
-		<Class name="kieker.tools.traceAnalysis.gui.FinalStep" />
+		<Class name="kieker.tools.trace.analysis.gui.FinalStep" />
 		<Bug pattern="DM_DEFAULT_ENCODING" />
 	</Match>
 	
@@ -101,7 +101,7 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.tools.traceAnalysis.repository.DescriptionRepository" />
+		<Class name="kieker.tools.trace.analysis.repository.DescriptionRepository" />
 		<Method name="splitLine" params="java.lang.String" returns="java.lang.String[]" />
 		<Bug pattern="PZLA_PREFER_ZERO_LENGTH_ARRAYS" />
 	</Match>
@@ -334,13 +334,13 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.tools.traceAnalysis.TraceAnalysisTool" />
+		<Class name="kieker.tools.trace.analysis.TraceAnalysisTool" />
 		<Method name="dispatchTasks" params="" returns="boolean" />
 		<Bug pattern="REC_CATCH_EXCEPTION" />
 	</Match>
 
 	<Match>
-		<Class name="kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter$1" />
+		<Class name="kieker.tools.trace.analysis.filter.traceReconstruction.TraceReconstructionFilter$1" />
 		<Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
 	</Match>
 
@@ -393,7 +393,7 @@
 	</Match>
 	
 	<Match>
-		<Class name="kieker.tools.traceAnalysis.TraceAnalysisGUI" />
+		<Class name="kieker.tools.trace.analysis.TraceAnalysisGUI" />
 		<Method name="loadCurrentConfiguration" params="" returns="void" />
 		<Bug pattern="REC_CATCH_EXCEPTION" />
 	</Match>
