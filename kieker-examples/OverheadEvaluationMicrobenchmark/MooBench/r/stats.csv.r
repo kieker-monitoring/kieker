@@ -27,6 +27,9 @@
 ##########
 # Process configuration
 
+# divisor 1 = nano, 1000 = micro, 1000000 = milli seconds
+timeUnit <- 1000 
+
 # number of Kieker writer configurations 
 numberOfWriters <- length(configs.labels)
 recursion_depth <- configs.recursion
@@ -71,7 +74,7 @@ printvalues <- matrix(nrow=7, ncol=numberOfWriters, dimnames=printDimensionNames
 for (writer_idx in (1:numberOfWriters)) {
    idx_mult <- c(1:numOfRowsToRead)
 
-   valuesBIG <- resultsBIG[writer_idx,idx_mult]
+   valuesBIG <- resultsBIG[writer_idx,idx_mult]/timeUnit
 
    printvalues["mean",writer_idx] <- mean(valuesBIG)
    printvalues["ci95%",writer_idx] <- qnorm_value*sd(valuesBIG)/sqrt(length(valuesBIG))
