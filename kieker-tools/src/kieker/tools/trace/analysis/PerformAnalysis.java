@@ -156,18 +156,11 @@ public class PerformAnalysis {
 			{ // NOCS (nested block)
 				// Create the timestamp filter and connect to the reader's output port
 				final Configuration configTimestampFilter = new Configuration();
-				if (this.settings.getIgnoreExecutionsBeforeDate() == null) {
-					configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, "");
-				} else {
-					configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
-							Long.toString(this.settings.getIgnoreExecutionsBeforeDate()));
-				}
-				if (this.settings.getIgnoreExecutionsAfterDate() == null) {
-					configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, "");
-				} else {
-					configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
-							Long.toString(this.settings.getIgnoreExecutionsAfterDate()));
-				}
+				configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
+						this.longToString(this.settings.getIgnoreExecutionsBeforeDate()));
+
+				configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
+						this.longToString(this.settings.getIgnoreExecutionsAfterDate()));
 
 				timestampFilter = new TimestampFilter(configTimestampFilter, this.analysisController);
 				this.analysisController.connect(sourceStage, sourcePort, timestampFilter,
@@ -225,9 +218,9 @@ public class PerformAnalysis {
 				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
 						TimeUnit.MILLISECONDS.name());
 				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
-						Long.toString(this.settings.getMaxTraceDuration()));
+						this.longToString(this.settings.getMaxTraceDuration()));
 				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES,
-						Boolean.toString(this.settings.isIgnoreInvalidTraces()));
+						this.booleanToString(this.settings.isIgnoreInvalidTraces()));
 				mtReconstrFilter = new TraceReconstructionFilter(mtReconstrFilterConfig, this.analysisController);
 				this.analysisController.connect(mtReconstrFilter,
 						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
@@ -246,10 +239,10 @@ public class PerformAnalysis {
 						TimeUnit.MILLISECONDS.name());
 				configurationEventRecordTraceGenerationFilter.setProperty(
 						EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
-						Long.toString(this.settings.getMaxTraceDuration()));
+						this.longToString(this.settings.getMaxTraceDuration()));
 				configurationEventRecordTraceGenerationFilter.setProperty(
 						EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES,
-						Boolean.toString(this.settings.isRepairEventBasedTraces()));
+						this.booleanToString(this.settings.isRepairEventBasedTraces()));
 				eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(
 						configurationEventRecordTraceGenerationFilter, this.analysisController);
 
@@ -270,7 +263,7 @@ public class PerformAnalysis {
 						Constants.EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME);
 				configurationEventRecordTraceCounter.setProperty(
 						EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID,
-						Boolean.toString(!this.settings.isIgnoreInvalidTraces()));
+						this.booleanToString(!this.settings.isIgnoreInvalidTraces()));
 				eventRecordTraceCounter = new EventRecordTraceCounter(configurationEventRecordTraceCounter,
 						this.analysisController);
 
@@ -291,7 +284,7 @@ public class PerformAnalysis {
 						Constants.EXECTRACESFROMEVENTTRACES_COMPONENT_NAME);
 				configurationEventTrace2ExecutionTraceFilter.setProperty(
 						TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_IGNORE_ASSUMED,
-						Boolean.toString(this.settings.isIgnoreAssumedCalls()));
+						this.booleanToString(this.settings.isIgnoreAssumedCalls()));
 				// EventTrace2ExecutionTraceFilter has no configuration properties
 				traceEvents2ExecutionAndMessageTraceFilter = new TraceEventRecords2ExecutionAndMessageTraceFilter(
 						configurationEventTrace2ExecutionTraceFilter, this.analysisController);
@@ -438,7 +431,7 @@ public class PerformAnalysis {
 						SequenceDiagramFilter.SDModes.ALLOCATION.toString());
 				componentPlotAllocationSeqDiagrConfig.setProperty(
 						SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES,
-						Boolean.toString(this.settings.isShortLabels()));
+						this.booleanToString(this.settings.isShortLabels()));
 				componentPlotAllocationSeqDiagr = new SequenceDiagramFilter(componentPlotAllocationSeqDiagrConfig,
 						this.analysisController);
 
@@ -466,7 +459,7 @@ public class PerformAnalysis {
 						SequenceDiagramFilter.SDModes.ASSEMBLY.toString());
 				componentPlotAssemblySeqDiagrConfig.setProperty(
 						SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES,
-						Boolean.toString(this.settings.isShortLabels()));
+						this.booleanToString(this.settings.isShortLabels()));
 				componentPlotAssemblySeqDiagr = new SequenceDiagramFilter(componentPlotAssemblySeqDiagrConfig,
 						this.analysisController);
 
@@ -617,7 +610,7 @@ public class PerformAnalysis {
 						AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
 				componentPlotAggregatedCallTreeConfig.setProperty(
 						AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
-						Boolean.toString(this.settings.isShortLabels()));
+						this.booleanToString(this.settings.isShortLabels()));
 				componentPlotAggregatedCallTreeConfig.setProperty(
 						AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME,
 						pathPrefix + Constants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX + ".dot");
@@ -733,6 +726,22 @@ public class PerformAnalysis {
 		return retVal;
 	}
 
+	private String booleanToString(final Boolean value) {
+		if (value == null) {
+			return "";
+		} else {
+			return Boolean.toString(value);
+		}
+	}
+
+	private String longToString(final Long value) {
+		if (value == null) {
+			return "";
+		} else {
+			return Long.toString(value);
+		}
+	}
+
 	/**
 	 *
 	 * @param decoratorNames
@@ -801,7 +810,7 @@ public class PerformAnalysis {
 				new File(pathPrefix + Constants.CALL_TREE_FN_PREFIX)
 						.getCanonicalPath());
 		componentPlotTraceCallTreesConfig.setProperty(TraceCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
-				Boolean.toString(this.settings.isShortLabels()));
+				this.booleanToString(this.settings.isShortLabels()));
 		componentPlotTraceCallTreesConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 				Constants.PLOTCALLTREE_COMPONENT_NAME);
 
@@ -844,7 +853,7 @@ public class PerformAnalysis {
 		componentPlotAssemblyCallTreeConfig.setProperty(
 				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
 		componentPlotAssemblyCallTreeConfig.setProperty(
-				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.settings.isShortLabels()));
+				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, this.booleanToString(this.settings.isShortLabels()));
 		componentPlotAssemblyCallTreeConfig.setProperty(
 				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, pathPrefix + Constants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX + ".dot");
 
