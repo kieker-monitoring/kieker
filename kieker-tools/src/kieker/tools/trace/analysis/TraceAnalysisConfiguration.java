@@ -338,7 +338,7 @@ public class TraceAnalysisConfiguration {
 		return this.repairEventBasedTraces;
 	}
 
-	public long getMaxTraceDuration() {
+	public Long getMaxTraceDuration() {
 		return this.maxTraceDuration;
 	}
 
