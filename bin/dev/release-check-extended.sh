@@ -75,7 +75,7 @@ function check_src_archive {
 
 	VERSION_CLASS=$(find kieker-common/build -name "Version.class")
 	assert_file_exists_regular "${VERSION_CLASS}"
-	
+
 	bytecodeVersion="$(javap -verbose ${VERSION_CLASS} | grep -q "${javaVersion}")"
 	echo "Found ${bytecodeVersion}"
 
@@ -123,20 +123,23 @@ function check_bin_archive {
 	for testset in "kieker-20100830-082225522-UTC-example-plots" "kieker-20141008-101258768-UTC-example-plots" \
 		"kieker-20141008-101258768-UTC-repairEventBasedTraces-example-plots" \
 	    "kieker-20141009-160413833-UTC-operationExecutionsConstructors-example-plots" \
-	    "kieker-20141009-163010944-UTC-constructor-events-example-plots"; do   
+	    "kieker-20141009-163010944-UTC-constructor-events-example-plots"; do
 	    ARCHDIR=$(pwd)
 	    create_subdir_n_cd
 	    REFERENCE_OUTPUT_DIR="${ARCHDIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/${testset}"
 	    PLOT_SCRIPT="${ARCHDIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/${testset}.sh"
+
 	    if ! test -x ${PLOT_SCRIPT}; then
 		echo "${PLOT_SCRIPT} does not exist or is not executable"
 		exit 1
 	    fi
+
 	    if ! ${PLOT_SCRIPT} "${ARCHDIR}" "."; then # passing kieker dir and output dir
 		echo "${PLOT_SCRIPT} returned with error"
 		exit 1
 	    fi
-	    for f in $(ls "${REFERENCE_OUTPUT_DIR}" | egrep "(dot$|pic$|html$|txt$)"); do 
+
+	    for f in $(ls "${REFERENCE_OUTPUT_DIR}" | egrep "(dot$|pic$|html$|txt$)"); do
 		echo -n "Comparing to reference file $f ... "
 		if test -z "$f"; then
 		    echo "File $f does not exist or is empty"
@@ -153,7 +156,7 @@ function check_bin_archive {
 		if ! diff --context=5	 left.tmp right.tmp; then
 		    echo "Detected deviation between files: '$f', '${REFERENCE_OUTPUT_DIR}/${f}'"
 		    exit 1
-		else 
+		else
 		    echo "OK"
 		fi
 	    done
