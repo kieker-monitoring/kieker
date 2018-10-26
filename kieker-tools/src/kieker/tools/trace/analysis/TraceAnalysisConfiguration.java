@@ -130,19 +130,19 @@ public class TraceAnalysisConfiguration {
 	private boolean plotAssemblySequenceDiagrams;
 
 	@Parameter(names = { CMD_PLOT_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH }, description = "Generate and store a deployment-level component dependency graph (.dot)")
-	private List<String> plotDeploymentComponentDependencyGraph;
+	private List<String> plotDeploymentComponentDependencyGraph = new ArrayList<>();
 
 	@Parameter(names = { CMD_PLOT_ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH }, description = "Generate and store an assembly-level component dependency graph (.dot)")
-	private List<String> plotAssemblyComponentDependencyGraph;
+	private List<String> plotAssemblyComponentDependencyGraph = new ArrayList<>();
 
 	@Parameter(names = { CMD_PLOT_CONTAINER_DEPENDENCY_GRAPH }, description = "Generate and store a container dependency graph (.dot file)")
 	private boolean plotContainerDependencyGraph;
 
 	@Parameter(names = { CMD_PLOT_DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH }, description = "Generate and store a deployment-level operation dependency graph (.dot)")
-	private List<String> plotDeploymentOperationDependencyGraph;
+	private List<String> plotDeploymentOperationDependencyGraph = new ArrayList<>();
 
 	@Parameter(names = { CMD_PLOT_ASSEMBLY_OPERATION_DEPENDENCY_GRAPH }, description = "Generate and store an assembly-level operation dependency graph (.dot)")
-	private List<String> plotAssemblyOperationDependencyGraph;
+	private List<String> plotAssemblyOperationDependencyGraph = new ArrayList<>();
 
 	@Parameter(names = { CMD_PLOT_AGGREGATED_DEPLOYMENT_CALL_TREE }, description = "Generate and store an aggregated deployment-level call tree (.dot)")
 	private boolean plotAggregatedDeploymentCallTree;
@@ -173,11 +173,11 @@ public class TraceAnalysisConfiguration {
 
 	@Parameter(names = {
 		CMD_SELECT_TRACES }, variableArity = true, description = "Consider only the traces identified by the list of trace IDs. Defaults to all traces.")
-	private List<Long> selectTraces;
+	private List<Long> selectTraces = new ArrayList<>();
 
 	@Parameter(names = {
 		CMD_FILTER_TRACES }, variableArity = true, description = "Consider only the traces not identified by the list of trace IDs. Defaults to no traces.")
-	private List<Long> filterTraces;
+	private List<Long> filterTraces = new ArrayList<>();
 
 	@Parameter(names = { CMD_IGNORE_INVALID_TRACES }, description = "If selected, the execution aborts on the occurence of an invalid trace.")
 	private boolean ignoreInvalidTraces;
