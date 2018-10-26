@@ -156,10 +156,18 @@ public class PerformAnalysis {
 			{ // NOCS (nested block)
 				// Create the timestamp filter and connect to the reader's output port
 				final Configuration configTimestampFilter = new Configuration();
-				configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
-						Long.toString(this.settings.getIgnoreExecutionsBeforeDate()));
-				configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
-						Long.toString(this.settings.getIgnoreExecutionsAfterDate()));
+				if (this.settings.getIgnoreExecutionsBeforeDate() == null) {
+					configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, "");
+				} else {
+					configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
+							Long.toString(this.settings.getIgnoreExecutionsBeforeDate()));
+				}
+				if (this.settings.getIgnoreExecutionsAfterDate() == null) {
+					configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, "");
+				} else {
+					configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
+							Long.toString(this.settings.getIgnoreExecutionsAfterDate()));
+				}
 
 				timestampFilter = new TimestampFilter(configTimestampFilter, this.analysisController);
 				this.analysisController.connect(sourceStage, sourcePort, timestampFilter,

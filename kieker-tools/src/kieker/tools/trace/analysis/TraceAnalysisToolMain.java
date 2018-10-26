@@ -111,13 +111,11 @@ public final class TraceAnalysisToolMain extends AbstractToolMain<TraceAnalysisC
 		// nothing to do here
 	}
 
-	private boolean checkNotEmpty(List<?> list) {
+	private final boolean checkNotEmpty(final List<?> list) {
 		if (list == null) {
 			return false;
-		} else if (list.isEmpty()) {
-			return false;
 		} else {
-			return true;
+			return !list.isEmpty();
 		}
 	}
 
@@ -127,7 +125,7 @@ public final class TraceAnalysisToolMain extends AbstractToolMain<TraceAnalysisC
 	 * @return true if not both trace features have been requested
 	 */
 	private boolean selectOrFilterTraces() {
-		if (checkNotEmpty(this.settings.getSelectTraces()) && checkNotEmpty(this.settings.getFilterTraces())) {
+		if (this.checkNotEmpty(this.settings.getSelectTraces()) && this.checkNotEmpty(this.settings.getFilterTraces())) {
 			LOGGER.error("Trace Id selection and filtering are mutually exclusive");
 			return false;
 		} else if (!this.settings.getSelectTraces().isEmpty()) {
