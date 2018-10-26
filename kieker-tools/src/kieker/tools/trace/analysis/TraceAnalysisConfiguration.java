@@ -441,10 +441,10 @@ public class TraceAnalysisConfiguration {
 		} else {
 			val = "<select all>";
 		}
-		if (!this.selectTraces.isEmpty()) {
+		if (this.selectTraces != null) {
 			logger.debug("{}: {}", CMD_SELECT_TRACES, val);
 		}
-		if (!this.filterTraces.isEmpty()) {
+		if (this.filterTraces != null) {
 			logger.debug("{}: {}", CMD_FILTER_TRACES, val);
 		}
 
