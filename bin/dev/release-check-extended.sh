@@ -178,6 +178,10 @@ TMP_TGZ_DIR=tgz
 #
 ## binary releases
 #
+echo "--------------------------------"
+echo "Binary release"
+echo "--------------------------------"
+
 assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"
 BASE_TMP_DIR_ABS=$(pwd)
@@ -186,9 +190,11 @@ change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
 
+echo "Binary ZIP"
 BINZIP=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.zip)
 extract_archive_to ${BINZIP} ${TMP_ZIP_DIR}
 
+echo "Binary TGZ"
 BINTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.tar.gz)
 extract_archive_to ${BINTGZ} ${TMP_TGZ_DIR}
 
@@ -210,13 +216,19 @@ rm -rf ${DIR}
 #
 ## source releases
 #
+echo "--------------------------------"
+echo "Source Releases"
+echo "--------------------------------"
+
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
 
+echo "Source ZIP"
 SRCZIP=$(ls ../../${DIST_RELEASE_DIR}/*-sources.zip)
 extract_archive_to ${SRCZIP} ${TMP_ZIP_DIR}
 
+echo "Source TGZ"
 SRCTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-sources.tar.gz)
 extract_archive_to ${SRCTGZ} ${TMP_TGZ_DIR}
 

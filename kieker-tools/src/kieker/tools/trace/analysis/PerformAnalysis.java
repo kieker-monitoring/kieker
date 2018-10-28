@@ -728,7 +728,7 @@ public class PerformAnalysis {
 
 	private String booleanToString(final Boolean value) {
 		if (value == null) {
-			return "";
+			return "false";
 		} else {
 			return Boolean.toString(value);
 		}
@@ -736,7 +736,7 @@ public class PerformAnalysis {
 
 	private String longToString(final Long value) {
 		if (value == null) {
-			return "";
+			return "0";
 		} else {
 			return Long.toString(value);
 		}
