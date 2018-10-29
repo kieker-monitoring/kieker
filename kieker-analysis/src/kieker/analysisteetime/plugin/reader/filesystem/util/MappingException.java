@@ -20,14 +20,15 @@ package kieker.analysisteetime.plugin.reader.filesystem.util;
  * @author Christian Wulf
  *
  * @since 1.10
- *
- * @deprecated 1.15
  */
-@Deprecated
 public final class MappingException extends Exception {
 
 	private static final long serialVersionUID = 7300752837946139350L;
 
+	/**
+	 * Create a mapping exception.
+	 * @param text error message
+	 */
 	public MappingException(final String text) {
 		super(text);
 	}

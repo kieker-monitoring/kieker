@@ -41,10 +41,24 @@ public class ReaderRegistry<E> {
 		super();
 	}
 
+	/**
+	 * Get registry entry matching the key.
+	 *
+	 * @param key
+	 *            key
+	 * @return returns matching entry.
+	 */
 	public E get(final long key) {
 		return this.registryEntries.get(key);
 	}
 
+	/**
+	 * Reverse lookup of key based on value.
+	 *
+	 * @param value
+	 *            value
+	 * @return returns first key
+	 */
 	public Long getKey(final E value) {
 		for (final Entry<Long, E> entry : this.registryEntries.entrySet()) {
 			if (entry.equals(value)) {
@@ -55,6 +69,13 @@ public class ReaderRegistry<E> {
 	}
 
 	/**
+	 * Add one entry to the registry.
+	 *
+	 * @param key
+	 *            key
+	 * @param value
+	 *            value
+	 *
 	 * @return the previous associated value for the given <code>key</code>, or <code>null</code> otherwise.
 	 */
 	public E register(final long key, final E value) {

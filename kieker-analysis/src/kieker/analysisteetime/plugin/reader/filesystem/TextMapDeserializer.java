@@ -31,7 +31,7 @@ import kieker.common.util.filesystem.FSUtil;
  * Reader for text-based mapfiles. The accepted file format is a number on the left side and a escaped string on the right side terminated by a newline.
  * Both parts are separated by a equal sign (=). The number can be prefixed by a dollar sign ($). Format regex ^\$?[0-9]+=\a$
  *
- * In case the mapfile is compressed with one of the supported
+ * In case the mapfile is compressed with one of the supported compression formats, it will be decompressed before interpretation.
  *
  * @author Reiner Jung
  *
@@ -41,6 +41,11 @@ public class TextMapDeserializer extends AbstractMapDeserializer {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TextMapDeserializer.class);
 
+	/**
+	 * Create a new map file deserializer.
+	 *
+	 * @param configuration configuration of the text deserializer.
+	 */
 	public TextMapDeserializer(final Configuration configuration) {
 		super(configuration);
 	}

@@ -31,6 +31,11 @@ public abstract class AbstractMapDeserializer {
 
 	protected final Configuration configuration;
 
+	/**
+	 * Create an abstract map deserializer.
+	 *
+	 * @param configuration configuration
+	 */
 	public AbstractMapDeserializer(final Configuration configuration) {
 		this.configuration = configuration;
 	}

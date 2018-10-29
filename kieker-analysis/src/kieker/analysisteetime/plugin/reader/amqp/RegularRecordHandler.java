@@ -37,9 +37,9 @@ import kieker.common.registry.reader.ReaderRegistry;
  */
 public class RegularRecordHandler implements Runnable, IRecordReceivedListener {
 
-	/** Default queue size for the regular record queue */
+	/** Default queue size for the regular record queue. */
 	private static final int DEFAULT_QUEUE_SIZE = 4096;
-	/** The logger of this handler */
+	/** The logger of this handler. */
 	private static final Logger LOGGER = LoggerFactory.getLogger(RegularRecordHandler.class);
 
 	private final AMQPReader readerLogic;

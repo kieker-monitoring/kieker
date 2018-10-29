@@ -35,7 +35,7 @@ public final class SingleSocketTcpReaderStage extends AbstractProducerStage<IMon
 	private final AbstractTcpReader tcpStreamReader;
 
 	/**
-	 * Default constructor with <code>port1=10133</code> and <code>bufferCapacity=65535</code></code>
+	 * Default constructor with <code>port1=10133</code> and <code>bufferCapacity=65535</code>.
 	 */
 	public SingleSocketTcpReaderStage() {
 		this(10133, 65535);

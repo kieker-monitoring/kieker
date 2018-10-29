@@ -41,6 +41,9 @@ public interface IValueDeserializer {
 	 *
 	 * @return The retrieved value
 	 * @since 1.13
+	 *
+	 * @throws NumberFormatException
+	 *             on format errors
 	 */
 	public byte getByte() throws NumberFormatException;
 
@@ -57,6 +60,9 @@ public interface IValueDeserializer {
 	 *
 	 * @return The retrieved value
 	 * @since 1.13
+	 *
+	 * @throws NumberFormatException
+	 *             on format errors
 	 */
 	public short getShort() throws NumberFormatException; // NOPMD
 
@@ -65,6 +71,9 @@ public interface IValueDeserializer {
 	 *
 	 * @return The retrieved value
 	 * @since 1.13
+	 *
+	 * @throws NumberFormatException
+	 *             on format errors
 	 */
 	public int getInt() throws NumberFormatException;
 
@@ -73,6 +82,9 @@ public interface IValueDeserializer {
 	 *
 	 * @return The retrieved value
 	 * @since 1.13
+	 *
+	 * @throws NumberFormatException
+	 *             on format errors
 	 */
 	public long getLong() throws NumberFormatException;
 
@@ -81,6 +93,9 @@ public interface IValueDeserializer {
 	 *
 	 * @return The retrieved value
 	 * @since 1.13
+	 *
+	 * @throws NumberFormatException
+	 *             on format errors
 	 */
 	public float getFloat() throws NumberFormatException;
 
@@ -89,6 +104,9 @@ public interface IValueDeserializer {
 	 *
 	 * @return The retrieved value
 	 * @since 1.13
+	 *
+	 * @throws NumberFormatException
+	 *             on format errors
 	 */
 	public double getDouble() throws NumberFormatException;
 
@@ -103,6 +121,9 @@ public interface IValueDeserializer {
 	/**
 	 * Retrieves a {@code Enumeration} value from the underlying data source.
 	 *
+	 * @param <T>
+	 *            the corresponding enumeration type
+	 *
 	 * @param clazz
 	 *            enumeration type to be used
 	 * @return The retrieved value
@@ -110,6 +131,9 @@ public interface IValueDeserializer {
 	 * @throws RecordInstantiationException
 	 *             in case the received ordinal does not exist in the specified enumeration type
 	 * @since 1.14
+	 *
+	 * @throws RecordInstantiationException
+	 *             input errors
 	 */
 	public <T extends Enum<T>> T getEnumeration(Class<T> clazz) throws RecordInstantiationException;
 

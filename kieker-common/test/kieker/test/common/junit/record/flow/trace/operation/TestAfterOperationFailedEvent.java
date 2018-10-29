@@ -60,7 +60,6 @@ public class TestAfterOperationFailedEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
-
 		final AfterOperationFailedEvent event1 = new AfterOperationFailedEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME, CAUSE);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
@@ -76,7 +75,6 @@ public class TestAfterOperationFailedEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeBinaryEquals() {
-
 		final AfterOperationFailedEvent event1 = new AfterOperationFailedEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME, CAUSE);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());

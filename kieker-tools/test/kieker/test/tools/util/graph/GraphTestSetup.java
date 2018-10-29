@@ -16,7 +16,7 @@
 package kieker.test.tools.util.graph;
 
 import kieker.analysis.AnalysisController;
-import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
+import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
 
 import kieker.test.tools.util.GenericTestSetup;
 

@@ -25,11 +25,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 
 import kieker.examples.livedemo.view.AnalysisBean;
-import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
-import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
-import kieker.tools.traceAnalysis.systemModel.ComponentType;
-import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
-import kieker.tools.traceAnalysis.systemModel.Operation;
+import kieker.tools.trace.analysis.systemModel.AllocationComponent;
+import kieker.tools.trace.analysis.systemModel.AssemblyComponent;
+import kieker.tools.trace.analysis.systemModel.ComponentType;
+import kieker.tools.trace.analysis.systemModel.ExecutionContainer;
+import kieker.tools.trace.analysis.systemModel.Operation;
 
 /**
  * @author Bjoern Weissenfels

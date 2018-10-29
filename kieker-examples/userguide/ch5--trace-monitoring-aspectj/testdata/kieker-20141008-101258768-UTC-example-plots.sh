@@ -50,15 +50,13 @@ ${TRACE_ANALYSIS_SH} \
     --plot-Aggregated-Assembly-Call-Tree \
     --print-Deployment-Equivalence-Classes \
     --print-Assembly-Equivalence-Classes \
-    --plot-Aggregated-Deployment-Call-Tree \
-    --plot-Aggregated-Assembly-Call-Tree \
     --short-labels
 	
 # Dependency graphs with responseTimes
 #${TRACE_ANALYSIS_SH} \
 #    --verbose \
 #    --inputdirs "${EXAMPLE_LOG}" --outputdir "./${OUTDIR}" \
-#	--p responseTime- \
+#	-p responseTime- \
 #	--plot-Deployment-Component-Dependency-Graph responseTimes-ms \
 #	--plot-Assembly-Component-Dependency-Graph responseTimes-ns  \
 #	--plot-Deployment-Operation-Dependency-Graph responseTimes-us  \

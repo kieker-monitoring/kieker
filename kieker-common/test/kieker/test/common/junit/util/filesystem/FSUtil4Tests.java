@@ -40,7 +40,10 @@ public final class FSUtil4Tests {
 	}
 
 	/**
+	 * find all files in a directory tree.
+	 *
 	 * @param startDirectory
+	 *            root directory for the search
 	 * @param postfixRegexNamePattern
 	 *            to be used for the matching
 	 * @return all matching files within the given <code>startDirectory</code> and all its subdirectories
@@ -59,7 +62,7 @@ public final class FSUtil4Tests {
 	 * @author Christian Wulf
 	 * @since 1.13
 	 */
-	static class RecursiveFileVisitor extends SimpleFileVisitor<Path> {
+	private static class RecursiveFileVisitor extends SimpleFileVisitor<Path> {
 		private final Pattern pattern;
 		private final List<File> files;
 

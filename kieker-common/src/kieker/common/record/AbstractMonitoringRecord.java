@@ -154,6 +154,11 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		return this.getLoggingTimestamp() == castedRecord.getLoggingTimestamp();
 	}
 
+	@Override
+	public int hashCode() {
+		return Long.hashCode(this.getLoggingTimestamp());
+	}
+
 	/**
 	 * This method checks the given arrays, making sure that they have the same length and that the value elements are compatible with the given value types. If the
 	 * arrays are not compatible, this method throws an {@link IllegalArgumentException}.
@@ -256,7 +261,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		if (recordFields.length != valueTypes.length) {
 			throw new IllegalArgumentException("Expected " + valueTypes.length + " record fields, but found " + recordFields.length);
 		}
-		final Object[] typedArray = new Object[recordFields.length];
+		final Object[] typedArray = new Object[recordFields.length]; // NOPMD
 		for (int curIdx = 0; curIdx < typedArray.length; curIdx++) {
 			if (valueTypes[curIdx] == String.class) {
 				typedArray[curIdx] = recordFields[curIdx];

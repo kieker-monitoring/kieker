@@ -57,7 +57,6 @@ public class TestJoinEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
-
 		final JoinEvent event1 = new JoinEvent(TSTAMP, TRACE_ID, ORDER_INDEX, JOINED_TRACE_ID);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
@@ -71,7 +70,6 @@ public class TestJoinEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeBinaryEquals() {
-
 		final JoinEvent event1 = new JoinEvent(TSTAMP, TRACE_ID, ORDER_INDEX, JOINED_TRACE_ID);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());

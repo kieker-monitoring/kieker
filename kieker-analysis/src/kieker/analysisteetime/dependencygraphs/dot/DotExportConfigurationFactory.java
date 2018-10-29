@@ -45,7 +45,7 @@ public class DotExportConfigurationFactory {
 	/**
 	 * Uses TO_STRING of {@link kieker.analysisteetime.dependencygraphs.vertextypes.IVertexTypeMapper} as second default argument.
 	 *
-	 * @param nameBuilder
+	 * @param nameBuilder label for the builder
 	 */
 	public DotExportConfigurationFactory(final NameBuilder nameBuilder) {
 		this(nameBuilder, IVertexTypeMapper.TO_STRING);
@@ -225,7 +225,6 @@ public class DotExportConfigurationFactory {
 	}
 
 	private StringBuilder createOperationLabelFromVertex(final IVertex vertex) {
-
 		@SuppressWarnings("unchecked")
 		final Collection<String> modifiers = this.getProperty(vertex, PropertyKeys.MODIFIERS, Collection.class);
 		final String returnType = this.getProperty(vertex, PropertyKeys.RETURN_TYPE, String.class);

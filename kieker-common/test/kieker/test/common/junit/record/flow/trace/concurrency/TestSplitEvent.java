@@ -56,7 +56,6 @@ public class TestSplitEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
-
 		final SplitEvent event1 = new SplitEvent(TSTAMP, TRACE_ID, ORDER_INDEX);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
@@ -69,7 +68,6 @@ public class TestSplitEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeBinaryEquals() {
-
 		final SplitEvent event1 = new SplitEvent(TSTAMP, TRACE_ID, ORDER_INDEX);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());

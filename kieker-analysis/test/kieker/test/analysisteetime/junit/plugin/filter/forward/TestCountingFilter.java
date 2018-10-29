@@ -42,7 +42,7 @@ public class TestCountingFilter extends AbstractKiekerTest {
 	private List<Object> testElements;
 
 	/**
-	 * Empty default constructor
+	 * Empty default constructor.
 	 */
 	public TestCountingFilter() {
 		// empty default constructor

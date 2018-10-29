@@ -91,7 +91,6 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 	 */
 	@Before
 	public void initializeTestConfiguration() {
-
 		// Create a list of records from the given list of time stamps
 		long currentTimeSeconds;
 		for (final long eventDelaySeconds : this.eventTimeOffsetsSeconds) {

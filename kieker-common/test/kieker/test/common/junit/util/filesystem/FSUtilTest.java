@@ -46,10 +46,19 @@ public class FSUtilTest extends AbstractKiekerTest {
 
 	private Path startDirectory;
 
+	/**
+	 * Create test.
+	 */
 	public FSUtilTest() {
 		// empty constructor
 	}
 
+	/**
+	 * setup.
+	 *
+	 * @throws Exception
+	 *             on errors
+	 */
 	@Before
 	public void setUp() throws Exception {
 		this.startDirectory = this.tempFolder.newFolder(this.getClass().getName()).toPath();
@@ -83,6 +92,12 @@ public class FSUtilTest extends AbstractKiekerTest {
 		MatcherAssert.assertThat(files.size(), Matchers.is(3));
 	}
 
+	/**
+	 * Test if only and all java classes are found.
+	 *
+	 * @throws Exception
+	 *             on various errors
+	 */
 	@Test
 	public void listFilesRecursivelyShouldDetectJavaClassesOnly() throws Exception { // NOPMD (uses MatcherAssert)
 		final List<File> files = FSUtil4Tests.listFilesRecursively(this.startDirectory, AbstractDynamicKiekerTest.REGEX_PATTERN_JAVA_SOURCE_FILES);

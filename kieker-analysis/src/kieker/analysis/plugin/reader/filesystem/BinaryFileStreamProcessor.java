@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
+ * Copyright 2018 Kieker Project (https://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +74,6 @@ public class BinaryFileStreamProcessor {
 	 *             on deserialization issues
 	 */
 	public void createRecordsFromBinaryFile(final DataInputStream inputStream) throws IOException, MonitoringRecordException {
-
 		final BinaryValueDeserializer deserializer = BinaryValueDeserializer.create(this.buffer, this.stringRegistry);
 
 		boolean endOfStreamReached = false;

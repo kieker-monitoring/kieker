@@ -73,8 +73,8 @@ allprojects {
     }
 
     repositories {	// must be above subprojects {}
-    	mavenCentral() 
-    	jcenter() // for mockito
+        mavenCentral() 
+        jcenter() // for mockito
     }
 }
 
@@ -83,11 +83,11 @@ subprojects {
 	apply plugin: 'com.bmuschko.clover'  
         
 	sourceCompatibility = 1.7
- 	targetCompatibility = 1.7
+        targetCompatibility = 1.7
     
     // Encoding should be UTF-8
     compileJava.options.encoding = 'UTF-8'
-    compileTestJava.options.encoding = 'UTF-8' 	
+    compileTestJava.options.encoding = 'UTF-8'
     
 	sourceSets {
         main {
@@ -124,8 +124,8 @@ subprojects {
 
     test {
         systemProperty "java.io.tmpdir", "${buildDir}"
-		    ignoreFailures = false
-	      maxHeapSize = "2g" 			// Set limit to prevent Travis-CI build to crash
+        ignoreFailures = false
+        maxHeapSize = "2g" 			// Set limit to prevent Travis-CI build to crash
 
         testLogging {
             showCauses = 'true'
@@ -149,8 +149,8 @@ subprojects {
 
     apply plugin: 'pmd'
     pmd {	// is represented by the groovy class "PmdExtension"
-    	// the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
-    	toolVersion = pmdAndCpdVersion
+	// the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
+	toolVersion = pmdAndCpdVersion
         ignoreFailures = true
 
         // Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
@@ -167,6 +167,7 @@ subprojects {
         showViolations = false
 
         configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
+        configDir = rootProject.file(dirConfig)
     }
 
     apply plugin: 'findbugs'

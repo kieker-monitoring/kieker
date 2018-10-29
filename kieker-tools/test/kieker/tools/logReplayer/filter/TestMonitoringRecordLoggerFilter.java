@@ -46,8 +46,7 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
-import kieker.monitoring.writer.filesystem.AbstractFileWriter;
-import kieker.monitoring.writer.filesystem.AsciiFileWriter;
+import kieker.monitoring.writer.filesystem.FileWriter;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -92,9 +91,9 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	private void createControllerConfiguration(final String monitoringPropertiesFn) throws IOException {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 
-		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, FileWriter.class.getName());
 
-		config.setProperty(AbstractFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
+		config.setProperty(FileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
 
 		// Write configuration to tmp file
 		LOGGER.info("Writing monitoring.properties to file '{}'", monitoringPropertiesFn);
