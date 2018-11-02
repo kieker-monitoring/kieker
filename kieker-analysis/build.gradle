@@ -28,6 +28,11 @@ dependencies {
 
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
+	testCompile project(':kieker-monitoring')
+
+	testCompile('com.github.tdomzal:junit-docker-rule:0.4.1')
+
+	testCompile 'org.assertj:assertj-core:3.10.0'
 	
 	testRuntime 'org.apache.derby:derby:10.12.1.1'	// (10.13.1.1 and above require Java 8)
 }
