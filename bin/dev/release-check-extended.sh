@@ -139,6 +139,13 @@ function check_bin_archive {
 		exit 1
 	    fi
 
+            information "${REFERENCE_OUTPUT_DIR}"
+            
+            ls "${REFERENCE_OUTPUT_DIR}"
+            echo "--------------------"
+            ls
+            echo "++++++++++++++++++++"
+
 	    for f in $(ls "${REFERENCE_OUTPUT_DIR}" | egrep "(dot$|pic$|html$|txt$)"); do
 		information "Comparing to reference file $f ... "
 		if test -z "$f"; then

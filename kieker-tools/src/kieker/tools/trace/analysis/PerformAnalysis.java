@@ -106,7 +106,18 @@ public class PerformAnalysis {
 	 * @return false iff an error occurred
 	 */
 	boolean dispatchTasks() {
-		final String pathPrefix = this.settings.getOutputDir() + File.separator + this.settings.getPrefix();
+		final String pathPrefix;
+		if (this.settings.getOutputDir() != null) {
+			if (this.settings.getPrefix() != null) {
+				pathPrefix = this.settings.getOutputDir() + File.separator + this.settings.getPrefix();
+			} else {
+				pathPrefix = this.settings.getOutputDir() + File.separator;
+			}
+		} else if (this.settings.getPrefix() != null) {
+			pathPrefix = this.settings.getPrefix();
+		} else {
+			pathPrefix = "";
+		}
 		boolean retVal = true;
 		int numRequestedTasks = 0;
 
