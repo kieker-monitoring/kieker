@@ -59,7 +59,7 @@ public final class JMSReader {
 	private final Consumer<IMonitoringRecord> elementReceivedCallback;
 
 	/**
-	 * Creates a new logic module for the {@link Consumer<T>}.
+	 * Creates a new logic module for the Consumer.
 	 *
 	 * @param jmsProviderUrl
 	 *            The name of the configuration determining the JMS provider URL,
@@ -100,7 +100,7 @@ public final class JMSReader {
 	 * it is assumed that reading has finished before this method returns. The
 	 * method should indicate an error by the return value false.
 	 *
-	 * In asynchronous scenarios, the {@link #terminate(boolean)} method can be used
+	 * In asynchronous scenarios, the {@link #terminate()} method can be used
 	 * to initiate the termination of this method.
 	 *
 	 * @return true if reading was successful; false if an error occurred

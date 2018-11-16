@@ -41,6 +41,8 @@ public interface IForecaster<T> {
 	/**
 	 * Returns the original time series used for the forecast.
 	 * 
+	 * @return returns get ts original
+	 *
 	 * @since 1.10
 	 */
 	public ITimeSeries<T> getTsOriginal();
@@ -48,6 +50,8 @@ public interface IForecaster<T> {
 	/**
 	 * Returns the confidence level to be computed for the forecast.
 	 * 
+	 * @return returns the get confidence level
+	 *
 	 * @since 1.10
 	 */
 	public int getConfidenceLevel();

@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
  * 
  * @author Matthias Rohr, Thilo Focke, Jan Waller
  * 
- * @since < 0.9
+ * @since before 0.9
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD, ElementType.CONSTRUCTOR })

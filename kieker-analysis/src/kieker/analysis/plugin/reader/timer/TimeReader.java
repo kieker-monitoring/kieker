@@ -35,10 +35,10 @@ import kieker.common.record.misc.TimestampRecord;
 /**
  * This plugin provides the current (system) time in regular intervals. The time is delivered to the two output ports as both a timestamp and a
  * {@link TimestampRecord} instance.<br>
- * <br/>
+ * <br>
  * 
  * The reader can be configured to emit an arbitrary amount of signals. It can also be configured to emit an infinite amount of signals.<br>
- * <br/>
+ * <br>
  * 
  * The sent timestamps are created using {@link System#nanoTime()} as a time source, which is being converted to the global time unit (as defined in the
  * configuration from the given {@link IProjectContext}).

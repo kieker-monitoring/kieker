@@ -33,6 +33,8 @@ public class ResponseTimeNodeDecorator extends AbstractNodeDecorator {
 
 	/**
 	 * Creates a new response time decorator.
+	 *
+	 * @param displayTimeunit The time unit used for displaying time values.
 	 */
 	public ResponseTimeNodeDecorator(final TimeUnit displayTimeunit) {
 		this.displayTimeunit = displayTimeunit;

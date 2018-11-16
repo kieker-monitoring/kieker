@@ -32,7 +32,7 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 /**
  * Refactored copy from LogAnalysis-legacy tool.
  * 
- * @param <T>
+ * @param <T> subtype of a ISystemModelElement
  * 
  * @author Andre van Hoorn, Lena Stoever, Matthias Rohr,
  * 

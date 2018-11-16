@@ -51,7 +51,7 @@ function check_src_archive {
 	touch $(basename "$1") # just to mark where this dir comes from
 
 	# Making sure that no JavaDoc warnings reported by the `javadoc` tool
-	into2 -n "Making sure that no JavaDoc warnings (ignoring generated sources) ..."
+	information "Making sure that no JavaDoc warnings (ignoring generated sources) ..."
 	if (run_gradle apidoc | grep -v "src-gen" | grep "warning -"); then
 	    error "One or more JavaDoc warnings"
 	    exit 1
