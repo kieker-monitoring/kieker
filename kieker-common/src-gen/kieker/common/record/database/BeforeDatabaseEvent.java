@@ -201,21 +201,6 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 		
 		return true;
 	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += this.getClassSignature().hashCode();
-		code += ((int)this.getTraceId());
-		code += ((int)this.getOrderIndex());
-		code += this.getParameters().hashCode();
-		code += this.getTechnology().hashCode();
-		
-		return code;
-	}
 	
 	public final long getTimestamp() {
 		return this.timestamp;

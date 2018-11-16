@@ -223,23 +223,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord  {
 		
 		return true;
 	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += this.getHostname().hashCode();
-		code += ((int)this.getMemTotal());
-		code += ((int)this.getMemUsed());
-		code += ((int)this.getMemFree());
-		code += ((int)this.getSwapTotal());
-		code += ((int)this.getSwapUsed());
-		code += ((int)this.getSwapFree());
-		
-		return code;
-	}
 	
 	public final long getTimestamp() {
 		return this.timestamp;

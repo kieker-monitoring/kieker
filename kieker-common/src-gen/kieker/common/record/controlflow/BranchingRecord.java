@@ -158,18 +158,6 @@ public class BranchingRecord extends AbstractMonitoringRecord  {
 		
 		return true;
 	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getBranchID());
-		code += ((int)this.getBranchingOutcome());
-		
-		return code;
-	}
 	
 	public final long getTimestamp() {
 		return this.timestamp;

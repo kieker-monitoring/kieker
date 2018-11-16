@@ -340,32 +340,6 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord  {
 		
 		return true;
 	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += this.getHostname().hashCode();
-		code += this.getInterfaceName().hashCode();
-		code += ((int)this.getSpeed());
-		code += ((int)this.getTxBytesPerSecond());
-		code += ((int)this.getTxCarrierPerSecond());
-		code += ((int)this.getTxCollisionsPerSecond());
-		code += ((int)this.getTxDroppedPerSecond());
-		code += ((int)this.getTxErrorsPerSecond());
-		code += ((int)this.getTxOverrunsPerSecond());
-		code += ((int)this.getTxPacketsPerSecond());
-		code += ((int)this.getRxBytesPerSecond());
-		code += ((int)this.getRxDroppedPerSecond());
-		code += ((int)this.getRxErrorsPerSecond());
-		code += ((int)this.getRxFramePerSecond());
-		code += ((int)this.getRxOverrunsPerSecond());
-		code += ((int)this.getRxPacketsPerSecond());
-		
-		return code;
-	}
 	
 	public final long getTimestamp() {
 		return this.timestamp;

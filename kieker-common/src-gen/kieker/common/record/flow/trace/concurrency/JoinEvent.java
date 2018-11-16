@@ -160,19 +160,6 @@ public class JoinEvent extends AbstractTraceEvent  {
 		
 		return true;
 	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getTraceId());
-		code += ((int)this.getOrderIndex());
-		code += ((int)this.getJoinedTraceId());
-		
-		return code;
-	}
 	
 	public final long getJoinedTraceId() {
 		return this.joinedTraceId;

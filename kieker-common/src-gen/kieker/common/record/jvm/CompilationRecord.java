@@ -172,20 +172,6 @@ public class CompilationRecord extends AbstractJVMRecord  {
 		
 		return true;
 	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += this.getHostname().hashCode();
-		code += this.getVmName().hashCode();
-		code += this.getJitCompilerName().hashCode();
-		code += ((int)this.getTotalCompilationTimeMS());
-		
-		return code;
-	}
 	
 	public final String getJitCompilerName() {
 		return this.jitCompilerName;

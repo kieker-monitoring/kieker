@@ -124,20 +124,6 @@ public abstract class AbstractThreadBasedEvent extends AbstractEvent implements 
 		
 		return true;
 	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getThreadId());
-		code += ((int)this.getOrderIndex());
-		code += this.getOperationSignature().hashCode();
-		code += this.getClassSignature().hashCode();
-		
-		return code;
-	}
 	
 	public final long getThreadId() {
 		return this.threadId;

@@ -11,9 +11,9 @@ javaVersion="major version: 51"
 
 # build with ant (target may be passed as $1)
 function run_gradle {
-	echo "Trying to invoke gradle with target '$1' ..."
+	information "Trying to invoke gradle with target '$1' ..."
 	if ! ./gradlew -S $1; then
-		echo "Gradle build failed"
+		error "Gradle build failed"
 		exit 1
 	fi
 }
@@ -21,7 +21,7 @@ function run_gradle {
 # extract archive to a specific location
 function extract_archive_to {
 	if [ -z "$1" ]; then
-		echo "No archive provided"
+		error "No archive provided"
 		exit 1
 	fi
 
@@ -35,28 +35,28 @@ function extract_archive_to {
 	elif echo "$1" | grep "tar.gz"; then
 		tar -xzf "$1" -C "$2"
 	else
-		echo "Archive '$1' is neither zip nor .tar.gz"
+		error "Archive '$1' is neither zip nor .tar.gz"
 		exit 1
 	fi
 }
 
 function check_src_archive {
 	if [ -z "$1" ]; then
-		echo "No source archive provided"
+		error "No source archive provided"
 		exit 1
 	fi
 
-	echo "Decompressing archive '$1' ..."
+	information "Decompressing archive '$1' ..."
 	extract_archive_n_cd "$1"
 	touch $(basename "$1") # just to mark where this dir comes from
 
 	# Making sure that no JavaDoc warnings reported by the `javadoc` tool
-	echo -n "Making sure that no JavaDoc warnings (ignoring generated sources) ..."
+	into2 -n "Making sure that no JavaDoc warnings (ignoring generated sources) ..."
 	if (run_gradle apidoc | grep -v "src-gen" | grep "warning -"); then
-	    echo "One or more JavaDoc warnings"
+	    error "One or more JavaDoc warnings"
 	    exit 1
 	fi
-	echo "OK"
+	information "OK"
 
 	# now build release from source (including checks and tests)
 	run_gradle distribute
@@ -69,7 +69,7 @@ function check_src_archive {
 	assert_file_NOT_exists "${DIST_JAR_DIR}/kieker-monitoring-servlet-"*".war"
 
 	# check bytecode version of classes contained in jar
-	echo "Making sure that bytecode version of class in jar is $javaVersion"
+	information "Making sure that bytecode version of class in jar is $javaVersion"
 	MAIN_JAR=$(ls "${DIST_JAR_DIR}/kieker-"*".jar" | grep -E "kieker-[^-]*(-SNAPSHOT)?.jar")
 	assert_file_exists_regular ${MAIN_JAR}
 
@@ -77,27 +77,27 @@ function check_src_archive {
 	assert_file_exists_regular "${VERSION_CLASS}"
 
 	bytecodeVersion="$(javap -verbose ${VERSION_CLASS} | grep -q "${javaVersion}")"
-	echo "Found ${bytecodeVersion}"
+	information "Found ${bytecodeVersion}"
 
 	if ! javap -verbose ${VERSION_CLASS} | grep -q "${javaVersion}"; then
-		echo "Unexpected bytecode version: ${bytecodeVersion}"
+		error "Unexpected bytecode version: ${bytecodeVersion}"
 		exit 1
 	fi
-	echo "OK"
+	information "OK"
 }
 
 function check_bin_archive {
 	if [ -z "$1" ]; then
-		echo "No source archive provided"
+		error "No source archive provided"
 		exit 1
 	fi
 
-	echo "Decompressing archive '$1' ..."
+	information "Decompressing archive '$1' ..."
 	extract_archive_n_cd "$1"
 	touch $(basename "$1") # just to mark where this dir comes from
 
 	# check bytecode version of classes contained in jar
-	echo "Making sure that bytecode version of class in jar is $javaVersion"
+	information "Making sure that bytecode version of class in jar is $javaVersion"
 	MAIN_JAR=$(ls "${DIST_JAR_DIR}/kieker-"*".jar" | grep -E "kieker-[^-]*(-SNAPSHOT)?.jar")
 	assert_file_exists_regular ${MAIN_JAR}
 	VERSION_CLASS_IN_JAR=$(unzip -l	 ${MAIN_JAR} | grep Version.class | awk '{ print $4 }')
@@ -105,17 +105,17 @@ function check_bin_archive {
 	assert_file_exists_regular "${VERSION_CLASS_IN_JAR}"
 
 	bytecodeVersion=$(javap -verbose ${VERSION_CLASS_IN_JAR} | grep -q "${javaVersion}")
-	echo "Found bytecode version ${bytecodeVersion}"
+	information "Found bytecode version ${bytecodeVersion}"
 
 	if ! javap -verbose ${VERSION_CLASS_IN_JAR} | grep -q "${javaVersion}"; then
-		echo "Unexpected bytecode version: ${bytecodeVersion}"
+		error "Unexpected bytecode version: ${bytecodeVersion}"
 		exit 1
 	fi
-	echo "Bytecode version is OK"
+	information "Bytecode version is OK"
 
 	# some basic tests with the tools
 	if ! (bin/convertLoggingTimestamp.sh --timestamps 1283156545581511026 1283156546127117246 | grep "Mon, 30 Aug 2010 08:22:25.581 +0000 (UTC)"); then
-		echo "Unexpected result executing bin/convertLoggingTimestamp.sh"
+		error "Unexpected result executing bin/convertLoggingTimestamp.sh"
 		exit 1
 	fi
 
@@ -130,34 +130,35 @@ function check_bin_archive {
 	    PLOT_SCRIPT="${ARCHDIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/${testset}.sh"
 
 	    if ! test -x ${PLOT_SCRIPT}; then
-		echo "${PLOT_SCRIPT} does not exist or is not executable"
+		error "${PLOT_SCRIPT} does not exist or is not executable"
 		exit 1
 	    fi
 
 	    if ! ${PLOT_SCRIPT} "${ARCHDIR}" "."; then # passing kieker dir and output dir
-		echo "${PLOT_SCRIPT} returned with error"
+		error "${PLOT_SCRIPT} returned with error"
 		exit 1
 	    fi
 
 	    for f in $(ls "${REFERENCE_OUTPUT_DIR}" | egrep "(dot$|pic$|html$|txt$)"); do
-		echo -n "Comparing to reference file $f ... "
+		information "Comparing to reference file $f ... "
 		if test -z "$f"; then
-		    echo "File $f does not exist or is empty"
+		    error "File $f does not exist or is empty"
 		    exit 1;
-		fi
-		# Note that this is a hack because sometimes the line order differs
-		(cat "$f" | sort) > left.tmp
-		(cat "${REFERENCE_OUTPUT_DIR}/$f" | sort) > right.tmp
-		if test "$f" = "traceDeploymentEquivClasses.txt" || test "$f" = "traceAssemblyEquivClasses.txt"; then
-			# only the basic test already performed because the assignment to classes is not deterministic
-		    echo "OK"
-		    continue;
-		fi
-		if ! diff --context=5	 left.tmp right.tmp; then
-		    echo "Detected deviation between files: '$f', '${REFERENCE_OUTPUT_DIR}/${f}'"
-		    exit 1
 		else
-		    echo "OK"
+		    # Note that this is a hack because sometimes the line order differs
+		    (cat "$f" | sort) > left.tmp
+		    (cat "${REFERENCE_OUTPUT_DIR}/$f" | sort) > right.tmp
+		    if test "$f" = "traceDeploymentEquivClasses.txt" || test "$f" = "traceAssemblyEquivClasses.txt"; then
+			# only the basic test already performed because the assignment to classes is not deterministic
+		        information "OK"
+		        continue;
+		    fi
+		    if ! diff --context=5	 left.tmp right.tmp; then
+		        error "Detected deviation between files: '$f', '${REFERENCE_OUTPUT_DIR}/${f}'"
+		        exit 1
+		    else
+		        information "OK"
+		    fi
 		fi
 	    done
 
@@ -178,9 +179,9 @@ TMP_TGZ_DIR=tgz
 #
 ## binary releases
 #
-echo "--------------------------------"
-echo "Binary release"
-echo "--------------------------------"
+information "--------------------------------"
+information "Binary release"
+information "--------------------------------"
 
 assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"
@@ -190,11 +191,11 @@ change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
 
-echo "Binary ZIP"
+information "Binary ZIP"
 BINZIP=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.zip)
 extract_archive_to ${BINZIP} ${TMP_ZIP_DIR}
 
-echo "Binary TGZ"
+information "Binary TGZ"
 BINTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.tar.gz)
 extract_archive_to ${BINTGZ} ${TMP_TGZ_DIR}
 
@@ -205,10 +206,10 @@ DIFF_BIN_RESULT=$?
 rm -rf ${TMP_BINZIP_DIR} ${TMP_GZ_DIR}
 
 if [ ${DIFF_BIN_RESULT} -eq 0 ]; then
-  echo "The content of both binary archives is identical."
+  information "The content of both binary archives is identical."
   check_bin_archive "${BINTGZ}"
 else
-  echo "The content of both binary archives is NOT identical."
+  error "The content of both binary archives is NOT identical."
   exit 1
 fi
 rm -rf ${DIR}
@@ -216,19 +217,19 @@ rm -rf ${DIR}
 #
 ## source releases
 #
-echo "--------------------------------"
-echo "Source Releases"
-echo "--------------------------------"
+information "--------------------------------"
+information "Source Releases"
+information "--------------------------------"
 
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
 
-echo "Source ZIP"
+information "Source ZIP"
 SRCZIP=$(ls ../../${DIST_RELEASE_DIR}/*-sources.zip)
 extract_archive_to ${SRCZIP} ${TMP_ZIP_DIR}
 
-echo "Source TGZ"
+information "Source TGZ"
 SRCTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-sources.tar.gz)
 extract_archive_to ${SRCTGZ} ${TMP_TGZ_DIR}
 
@@ -236,15 +237,15 @@ diff -r ${TMP_TGZ_DIR} ${TMP_ZIP_DIR}
 DIFF_SRC_RESULT=$?
 
 if [ ${DIFF_SRC_RESULT} -eq 0 ]; then
-  echo "The content of both source archives is identical."
+  information "The content of both source archives is identical."
   check_src_archive "${SRCTGZ}"
 else
-  echo "The content of both source archives is NOT identical."
+  error "The content of both source archives is NOT identical."
   exit 1
 fi
 if [ -d ${DIR} ] ; then
         rm -rf "${DIR}"
 else
-        echo "${DIR} is not a directory"
+        error "${DIR} is not a directory"
 fi
 # end

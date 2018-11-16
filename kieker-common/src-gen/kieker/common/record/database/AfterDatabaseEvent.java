@@ -201,21 +201,6 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IEve
 		
 		return true;
 	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += this.getClassSignature().hashCode();
-		code += ((int)this.getTraceId());
-		code += ((int)this.getOrderIndex());
-		code += this.getReturnType().hashCode();
-		code += this.getReturnValue().hashCode();
-		
-		return code;
-	}
 	
 	public final long getTimestamp() {
 		return this.timestamp;

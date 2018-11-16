@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 
 import com.beust.jcommander.Parameter;
 
+import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.tools.common.DateConverter;
 
 /**
@@ -44,7 +45,7 @@ public class TraceAnalysisConfiguration {
 
 	private static final String CMD_DIR = "--outputdir";
 
-	private static final String CMD_PREFIX = "--prefix";
+	private static final String CMD_OUTPUT_FILENAME_PREFIX = "--output-filename-prefix";
 
 	private static final String CMD_PLOT_DEPLOYMENT_SEQUENCE_DIAGRAMS = "--plot-Deployment-Sequence-Diagrams";
 
@@ -116,12 +117,12 @@ public class TraceAnalysisConfiguration {
 	private boolean help;
 
 	@Parameter(names = { "-i", CMD_INPUTDIRS }, variableArity = true, description = "Log directories to read data from")
-	private List<File> inputDirs;
+	private final List<File> inputDirs = new ArrayList<>();
 
 	@Parameter(names = { "-o", CMD_DIR }, required = true, description = "Directory for the generated file(s)")
 	private File outputDir;
 
-	@Parameter(names = { "-p", CMD_PREFIX }, description = "Prefix for output filenames")
+	@Parameter(names = { "-p", CMD_OUTPUT_FILENAME_PREFIX }, description = "Prefix for output filenames")
 	private String prefix;
 
 	@Parameter(names = { CMD_PLOT_DEPLOYMENT_SEQUENCE_DIAGRAMS }, description = "Generate and store deployment-level sequence diagrams (.pic)")
@@ -131,19 +132,19 @@ public class TraceAnalysisConfiguration {
 	private boolean plotAssemblySequenceDiagrams;
 
 	@Parameter(names = { CMD_PLOT_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH }, description = "Generate and store a deployment-level component dependency graph (.dot)")
-	private List<String> plotDeploymentComponentDependencyGraph = new ArrayList<>();
+	private final List<String> plotDeploymentComponentDependencyGraph = new ArrayList<>();
 
 	@Parameter(names = { CMD_PLOT_ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH }, description = "Generate and store an assembly-level component dependency graph (.dot)")
-	private List<String> plotAssemblyComponentDependencyGraph = new ArrayList<>();
+	private final List<String> plotAssemblyComponentDependencyGraph = new ArrayList<>();
 
 	@Parameter(names = { CMD_PLOT_CONTAINER_DEPENDENCY_GRAPH }, description = "Generate and store a container dependency graph (.dot file)")
 	private boolean plotContainerDependencyGraph;
 
 	@Parameter(names = { CMD_PLOT_DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH }, description = "Generate and store a deployment-level operation dependency graph (.dot)")
-	private List<String> plotDeploymentOperationDependencyGraph = new ArrayList<>();
+	private final List<String> plotDeploymentOperationDependencyGraph = new ArrayList<>();
 
 	@Parameter(names = { CMD_PLOT_ASSEMBLY_OPERATION_DEPENDENCY_GRAPH }, description = "Generate and store an assembly-level operation dependency graph (.dot)")
-	private List<String> plotAssemblyOperationDependencyGraph = new ArrayList<>();
+	private final List<String> plotAssemblyOperationDependencyGraph = new ArrayList<>();
 
 	@Parameter(names = { CMD_PLOT_AGGREGATED_DEPLOYMENT_CALL_TREE }, description = "Generate and store an aggregated deployment-level call tree (.dot)")
 	private boolean plotAggregatedDeploymentCallTree;
@@ -174,11 +175,11 @@ public class TraceAnalysisConfiguration {
 
 	@Parameter(names = {
 		CMD_SELECT_TRACES }, variableArity = true, description = "Consider only the traces identified by the list of trace IDs. Defaults to all traces.")
-	private List<Long> selectTraces = new ArrayList<>();
+	private final List<Long> selectTraces = new ArrayList<>();
 
 	@Parameter(names = {
 		CMD_FILTER_TRACES }, variableArity = true, description = "Consider only the traces not identified by the list of trace IDs. Defaults to no traces.")
-	private List<Long> filterTraces = new ArrayList<>();
+	private final List<Long> filterTraces = new ArrayList<>();
 
 	@Parameter(names = { CMD_IGNORE_INVALID_TRACES }, description = "If selected, the execution aborts on the occurence of an invalid trace.")
 	private boolean ignoreInvalidTraces;
@@ -340,14 +341,23 @@ public class TraceAnalysisConfiguration {
 	}
 
 	public Long getMaxTraceDuration() {
+		if (this.maxTraceDuration == null) {
+			this.maxTraceDuration = (long) (10 * 60 * 1000);
+		}
 		return this.maxTraceDuration;
 	}
 
 	public Long getIgnoreExecutionsBeforeDate() {
+		if (this.ignoreExecutionsBeforeDate == null) {
+			this.ignoreExecutionsBeforeDate = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP);
+		}
 		return this.ignoreExecutionsBeforeDate;
 	}
 
 	public Long getIgnoreExecutionsAfterDate() {
+		if (this.ignoreExecutionsAfterDate == null) {
+			this.ignoreExecutionsAfterDate = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP);
+		}
 		return this.ignoreExecutionsAfterDate;
 	}
 
@@ -408,12 +418,14 @@ public class TraceAnalysisConfiguration {
 
 		logger.debug("{}: {}", CMD_DIR, this.outputDir.getAbsolutePath());
 
-		logger.debug("{}: {}", CMD_PREFIX, this.prefix);
+		logger.debug("{}: {}", CMD_OUTPUT_FILENAME_PREFIX, this.prefix);
 
-		logger.debug("{}: {}", CMD_PRINT_DEPLOYMENT_EQUIVALENCE_CLASSES, String.valueOf(this.printDeploymentEquivalenceClasses));
-		logger.debug("{}: {}", CMD_PRINT_ASSEMBLY_EQUIVALENCE_CLASSES, String.valueOf(this.printAssemblyEquivalenceClasses));
+		logger.debug("{}: {}", CMD_VERBOSE, String.valueOf(this.verbose));
+		logger.debug("{}: {}", CMD_DEBUG, String.valueOf(this.debug));
+
 		logger.debug("{}: {}", CMD_PLOT_DEPLOYMENT_SEQUENCE_DIAGRAMS, String.valueOf(this.plotDeploymentSequenceDiagrams));
 		logger.debug("{}: {}", CMD_PLOT_ASSEMBLY_SEQUENCE_DIAGRAMS, String.valueOf(this.plotAssemblySequenceDiagrams));
+
 		logger.debug("{}: {}", CMD_PLOT_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH, String.valueOf(this.plotDeploymentComponentDependencyGraph));
 		logger.debug("{}: {}", CMD_PLOT_ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH, String.valueOf(this.plotAssemblyComponentDependencyGraph));
 		logger.debug("{}: {}", CMD_PLOT_CONTAINER_DEPENDENCY_GRAPH, String.valueOf(this.plotContainerDependencyGraph));
@@ -422,15 +434,15 @@ public class TraceAnalysisConfiguration {
 		logger.debug("{}: {}", CMD_PLOT_AGGREGATED_DEPLOYMENT_CALL_TREE, String.valueOf(this.plotAggregatedDeploymentCallTree));
 		logger.debug("{}: {}", CMD_PLOT_AGGREGATED_ASSEMBLY_CALL_TREE, String.valueOf(this.plotAggregatedAssemblyCallTree));
 		logger.debug("{}: {}", CMD_PLOT_CALL_TREES, String.valueOf(this.plotCallTrees));
+		logger.debug("{}: {}", CMD_PRINT_MESSAGE_TRACES, String.valueOf(this.printMessageTraces));
 		logger.debug("{}: {}", CMD_PRINT_EXECUTION_TRACES, String.valueOf(this.printExecutionTraces));
 		logger.debug("{}: {}", CMD_PRINT_INVALID_EXECUTION_TRACES, String.valueOf(this.printInvalidExecutionTraces));
-		logger.debug("{}: {}", CMD_PRINT_MESSAGE_TRACES, String.valueOf(this.printMessageTraces));
 		logger.debug("{}: {}", CMD_PRINT_SYSTEM_MODEL, String.valueOf(this.printSystemModel));
-		logger.debug("{}: {}", CMD_DEBUG, String.valueOf(this.debug));
-		logger.debug("{}: {}", CMD_VERBOSE, String.valueOf(this.verbose));
-		logger.debug("{}: {}", CMD_HELP, String.valueOf(this.help));
 
-		if (this.selectedTraces != null) {
+		logger.debug("{}: {}", CMD_PRINT_DEPLOYMENT_EQUIVALENCE_CLASSES, String.valueOf(this.printDeploymentEquivalenceClasses));
+		logger.debug("{}: {}", CMD_PRINT_ASSEMBLY_EQUIVALENCE_CLASSES, String.valueOf(this.printAssemblyEquivalenceClasses));
+
+		if (this.selectedTraces.isEmpty()) {
 			val = "<null>";
 			for (final Long id : this.selectedTraces) {
 				if ("<null>".equals(val)) {
@@ -449,28 +461,32 @@ public class TraceAnalysisConfiguration {
 			logger.debug("{}: {}", CMD_FILTER_TRACES, val);
 		}
 
+		logger.debug("{}: {}", CMD_IGNORE_INVALID_TRACES, String.valueOf(this.ignoreInvalidTraces));
+		logger.debug("{}: {}", CMD_REPAIR_EVENT_BASED_TRACES, String.valueOf(this.repairEventBasedTraces));
+		logger.debug("{}: {} ms", CMD_MAX_TRACE_DURATION, String.valueOf(this.getMaxTraceDuration()));
+
+		logger.debug("{}: {} {}", CMD_IGNORE_EXECUTIONS_BEFORE_DATE, String.valueOf(this.getIgnoreExecutionsBeforeDate()),
+				dateFormat.format(this.getIgnoreExecutionsBeforeDate()));
+
+		logger.debug("{}: {}", CMD_IGNORE_EXECUTIONS_AFTER_DATE, String.valueOf(this.getIgnoreExecutionsAfterDate()),
+				dateFormat.format(this.getIgnoreExecutionsAfterDate()));
+
 		logger.debug("{}: {}", CMD_SHORT_LABELS, String.valueOf(this.shortLabels));
 		logger.debug("{}: {}", CMD_INCLUDE_SELF_LOOPS, String.valueOf(this.includeSelfLoops));
 		logger.debug("{}: {}", CMD_IGNORE_ASSUMED_CALLS, String.valueOf(this.ignoreAssumedCalls));
-		logger.debug("{}: {}", CMD_IGNORE_INVALID_TRACES, String.valueOf(this.ignoreInvalidTraces));
-		logger.debug("{}: {}", CMD_REPAIR_EVENT_BASED_TRACES, String.valueOf(this.repairEventBasedTraces));
-		if (this.maxTraceDuration != null) {
-			logger.debug("{}: {} ms", CMD_MAX_TRACE_DURATION, String.valueOf(this.maxTraceDuration));
-		}
-		if (this.ignoreExecutionsBeforeDate != null) {
-			logger.debug("{}: {} {}", CMD_IGNORE_EXECUTIONS_BEFORE_DATE, String.valueOf(this.ignoreExecutionsBeforeDate),
-					dateFormat.format(this.ignoreExecutionsBeforeDate));
-		}
-		if (this.ignoreExecutionsAfterDate != null) {
-			logger.debug("{}: {}", CMD_IGNORE_EXECUTIONS_AFTER_DATE, String.valueOf(this.ignoreExecutionsAfterDate),
-					dateFormat.format(this.ignoreExecutionsBeforeDate));
-		}
+
 		if (this.traceColoringFile != null) {
 			logger.debug("{}: {}", CMD_TRACE_COLORING, this.traceColoringFile.getAbsolutePath());
+		} else {
+			logger.debug("{}: <none>", CMD_TRACE_COLORING);
 		}
 		if (this.addDescriptions != null) {
 			logger.debug("{}: {}", CMD_ADD_DESCRIPTIONS, String.valueOf(this.addDescriptions));
+		} else {
+			logger.debug("{}: <none>", CMD_ADD_DESCRIPTIONS);
 		}
+
+		logger.debug("{}: {}", CMD_HELP, String.valueOf(this.help));
 
 	}
 

@@ -254,27 +254,6 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		
 		return true;
 	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += this.getHostname().hashCode();
-		code += this.getVmName().hashCode();
-		code += ((int)this.getHeapMaxBytes());
-		code += ((int)this.getHeapUsedBytes());
-		code += ((int)this.getHeapCommittedBytes());
-		code += ((int)this.getHeapInitBytes());
-		code += ((int)this.getNonHeapMaxBytes());
-		code += ((int)this.getNonHeapUsedBytes());
-		code += ((int)this.getNonHeapCommittedBytes());
-		code += ((int)this.getNonHeapInitBytes());
-		code += ((int)this.getObjectPendingFinalizationCount());
-		
-		return code;
-	}
 	
 	public final long getHeapMaxBytes() {
 		return this.heapMaxBytes;

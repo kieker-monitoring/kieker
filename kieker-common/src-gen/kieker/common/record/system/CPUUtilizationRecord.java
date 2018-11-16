@@ -249,25 +249,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord  {
 		
 		return true;
 	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += this.getHostname().hashCode();
-		code += this.getCpuID().hashCode();
-		code += ((int)this.getUser());
-		code += ((int)this.getSystem());
-		code += ((int)this.getWait());
-		code += ((int)this.getNice());
-		code += ((int)this.getIrq());
-		code += ((int)this.getTotalUtilization());
-		code += ((int)this.getIdle());
-		
-		return code;
-	}
 	
 	public final long getTimestamp() {
 		return this.timestamp;

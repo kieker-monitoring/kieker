@@ -21,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -482,8 +481,7 @@ public class PerformAnalysis {
 				componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphAllocationFilter(configuration,
 						this.analysisController);
 
-				final String[] nodeDecorations = Convert.listToArray(this.settings.getPlotDeploymentComponentDependencyGraph());
-				this.addDecorators(nodeDecorations, componentPlotAllocationComponentDepGraph);
+				this.addDecorators(this.settings.getPlotDeploymentComponentDependencyGraph(), componentPlotAllocationComponentDepGraph);
 
 				this.analysisController.connect(mtReconstrFilter,
 						TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
@@ -507,8 +505,7 @@ public class PerformAnalysis {
 				componentPlotAssemblyComponentDepGraph = new ComponentDependencyGraphAssemblyFilter(configuration,
 						this.analysisController);
 
-				final String[] nodeDecorations = Convert.listToArray(this.settings.getPlotAssemblyComponentDependencyGraph());
-				this.addDecorators(nodeDecorations, componentPlotAssemblyComponentDepGraph);
+				this.addDecorators(this.settings.getPlotAssemblyComponentDependencyGraph(), componentPlotAssemblyComponentDepGraph);
 
 				this.analysisController.connect(mtReconstrFilter,
 						TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
@@ -550,8 +547,7 @@ public class PerformAnalysis {
 				componentPlotAllocationOperationDepGraph = new OperationDependencyGraphAllocationFilter(configuration,
 						this.analysisController);
 
-				final String[] nodeDecorations = Convert.listToArray(this.settings.getPlotDeploymentOperationDependencyGraph());
-				this.addDecorators(nodeDecorations, componentPlotAllocationOperationDepGraph);
+				this.addDecorators(this.settings.getPlotDeploymentOperationDependencyGraph(), componentPlotAllocationOperationDepGraph);
 
 				this.analysisController.connect(mtReconstrFilter,
 						TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
@@ -574,8 +570,7 @@ public class PerformAnalysis {
 				componentPlotAssemblyOperationDepGraph = new OperationDependencyGraphAssemblyFilter(configuration,
 						this.analysisController);
 
-				final String[] nodeDecorations = Convert.listToArray(this.settings.getPlotAssemblyOperationDependencyGraph());
-				this.addDecorators(nodeDecorations, componentPlotAssemblyOperationDepGraph);
+				this.addDecorators(this.settings.getPlotAssemblyOperationDependencyGraph(), componentPlotAssemblyOperationDepGraph);
 
 				this.analysisController.connect(mtReconstrFilter,
 						TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
@@ -744,44 +739,43 @@ public class PerformAnalysis {
 
 	/**
 	 *
-	 * @param decoratorNames
+	 * @param decoratorList
 	 * @param plugin
 	 */
-	private void addDecorators(final String[] decoratorNames, final AbstractDependencyGraphFilter<?> plugin) {
-		if (decoratorNames == null) {
-			return;
-		}
-		final List<String> decoratorList = Arrays.asList(decoratorNames);
-		final Iterator<String> decoratorIterator = decoratorList.iterator();
+	private void addDecorators(final List<String> decoratorList, final AbstractDependencyGraphFilter<?> plugin) {
+		if (decoratorList != null) {
+			final Iterator<String> decoratorIterator = decoratorList.iterator();
 
-		while (decoratorIterator.hasNext()) {
-			final String currentDecoratorStr = decoratorIterator.next();
-			if (Constants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(currentDecoratorStr)) {
-				plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.NANOSECONDS));
-				continue;
-			} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_US.equals(currentDecoratorStr)) {
-				plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.MICROSECONDS));
-				continue;
-			} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_MS.equals(currentDecoratorStr)) {
-				plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.MILLISECONDS));
-				continue;
-			} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(currentDecoratorStr)) {
-				plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.SECONDS));
-				continue;
-			} else if (Constants.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(currentDecoratorStr)) {
-				// if decorator is responseColoring, next value should be the threshold
-				final String thresholdStringStr = decoratorIterator.next();
+			// cannot use for loop iterator, as response time coloring uses multiple elements.
+			while (decoratorIterator.hasNext()) {
+				final String currentDecoratorStr = decoratorIterator.next();
+				if (Constants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(currentDecoratorStr)) {
+					plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.NANOSECONDS));
+					continue;
+				} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_US.equals(currentDecoratorStr)) {
+					plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.MICROSECONDS));
+					continue;
+				} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_MS.equals(currentDecoratorStr)) {
+					plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.MILLISECONDS));
+					continue;
+				} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(currentDecoratorStr)) {
+					plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.SECONDS));
+					continue;
+				} else if (Constants.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(currentDecoratorStr)) {
+					// if decorator is responseColoring, next value should be the threshold
+					final String thresholdStringStr = decoratorIterator.next();
 
-				try {
-					final int threshold = Integer.parseInt(thresholdStringStr);
+					try {
+						final int threshold = Integer.parseInt(thresholdStringStr);
 
-					plugin.addDecorator(new ResponseTimeColorNodeDecorator(threshold));
-				} catch (final NumberFormatException exc) {
-					this.logger.error("Failed to parse int value of property " + "threshold(ms) : " + thresholdStringStr);
+						plugin.addDecorator(new ResponseTimeColorNodeDecorator(threshold));
+					} catch (final NumberFormatException exc) {
+						this.logger.error("Failed to parse int value of property " + "threshold(ms) : " + thresholdStringStr);
+					}
+				} else {
+					this.logger.warn("Unknown decoration name '{}'.", currentDecoratorStr);
+					return;
 				}
-			} else {
-				this.logger.warn("Unknown decoration name '{}'.", currentDecoratorStr);
-				return;
 			}
 		}
 	}

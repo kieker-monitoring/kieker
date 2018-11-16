@@ -144,17 +144,6 @@ public class ThreadMetaData extends AbstractMonitoringRecord  {
 		
 		return true;
 	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode() {
-		int code = 0;
-		code += this.getHostname().hashCode();
-		code += ((int)this.getThreadId());
-		
-		return code;
-	}
 	
 	public final String getHostname() {
 		return this.hostname;
