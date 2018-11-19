@@ -183,7 +183,7 @@ public class PerformAnalysis {
 			{ // NOCS (nested block)
 				// Create the trace ID filter and connect to the timestamp filter's output port
 				final Configuration configTraceIdFilterFlow = new Configuration();
-				if (this.settings.getSelectedTraces() == null) {
+				if (this.settings.getSelectedTraces().isEmpty()) {
 					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES,
 							Boolean.TRUE.toString());
 				} else {
