@@ -133,6 +133,8 @@ function check_bin_archive {
 		error "${PLOT_SCRIPT} does not exist or is not executable"
 		exit 1
 	    fi
+	    
+	    information ${PLOT_SCRIPT} "${ARCHDIR}" "."
 
 	    if ! ${PLOT_SCRIPT} "${ARCHDIR}" "."; then # passing kieker dir and output dir
 		error "${PLOT_SCRIPT} returned with error"
@@ -141,11 +143,6 @@ function check_bin_archive {
 
             information "${REFERENCE_OUTPUT_DIR}"
             
-            ls "${REFERENCE_OUTPUT_DIR}"
-            echo "--------------------"
-            ls
-            echo "++++++++++++++++++++"
-
 	    for f in $(ls "${REFERENCE_OUTPUT_DIR}" | egrep "(dot$|pic$|html$|txt$)"); do
 		information "Comparing to reference file $f ... "
 		if test -z "$f"; then

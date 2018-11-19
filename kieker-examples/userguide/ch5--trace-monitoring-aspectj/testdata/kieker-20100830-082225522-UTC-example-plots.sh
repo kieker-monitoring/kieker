@@ -35,7 +35,6 @@ fi
 #fi
 #mkdir "${OUTDIR}"
 
-echo "111111111111111111111111111111"
 # Dependency graphs, equivalence classes
 ${TRACE_ANALYSIS_SH} \
     --verbose \
@@ -51,19 +50,17 @@ ${TRACE_ANALYSIS_SH} \
     --print-Assembly-Equivalence-Classes \
     --short-labels
 
-echo "22222222222222222222222222222"
 # Dependency graphs with responseTimes
 ${TRACE_ANALYSIS_SH} \
     --verbose \
     --inputdirs "${EXAMPLE_LOG}" --outputdir "./${OUTDIR}" \
-	-p responseTime- \
-	--plot-Deployment-Component-Dependency-Graph responseTimes-ms \
-	--plot-Assembly-Component-Dependency-Graph responseTimes-ns  \
-	--plot-Deployment-Operation-Dependency-Graph responseTimes-us  \
-	--plot-Assembly-Operation-Dependency-Graph responseTimes-ns \
+    -p responseTime- \
+    --plot-Deployment-Component-Dependency-Graph responseTimes-ms \
+    --plot-Assembly-Component-Dependency-Graph responseTimes-ns  \
+    --plot-Deployment-Operation-Dependency-Graph responseTimes-us  \
+    --plot-Assembly-Operation-Dependency-Graph responseTimes-ns \
     --short-labels
 
-echo "333333333333333333333333333333"
 # Deployment-level representatives: 6488138950668976141 6488138950668976129 6488138950668976130 6488138950668976131
 # Assembly-level representative:    6488138950668976129
 
@@ -78,7 +75,6 @@ ${TRACE_ANALYSIS_SH} \
     --print-Execution-Traces  \
     --short-labels
 
-echo "444444444444444444444444444444"
 # Should be enabled only if the reference pdfs shall be created (otherwise the release test script is broken):
 #${FILE_CONVERTER_SH} "./${OUTDIR}" pdf
 #for f in "./${OUTDIR}"/*.pdf; do
