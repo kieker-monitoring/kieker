@@ -140,10 +140,12 @@ public class TraceAnalysisConfiguration {
 	@Parameter(names = { CMD_PLOT_CONTAINER_DEPENDENCY_GRAPH }, description = "Generate and store a container dependency graph (.dot file)")
 	private boolean plotContainerDependencyGraph;
 
-	@Parameter(names = { CMD_PLOT_DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH }, description = "Generate and store a deployment-level operation dependency graph (.dot)")
+	@Parameter(names = {
+		CMD_PLOT_DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH }, variableArity = true, description = "Generate and store a deployment-level operation dependency graph (.dot)")
 	private final List<String> plotDeploymentOperationDependencyGraph = new ArrayList<>();
 
-	@Parameter(names = { CMD_PLOT_ASSEMBLY_OPERATION_DEPENDENCY_GRAPH }, description = "Generate and store an assembly-level operation dependency graph (.dot)")
+	@Parameter(names = {
+		CMD_PLOT_ASSEMBLY_OPERATION_DEPENDENCY_GRAPH }, variableArity = true, description = "Generate and store an assembly-level operation dependency graph (.dot)")
 	private final List<String> plotAssemblyOperationDependencyGraph = new ArrayList<>();
 
 	@Parameter(names = { CMD_PLOT_AGGREGATED_DEPLOYMENT_CALL_TREE }, description = "Generate and store an aggregated deployment-level call tree (.dot)")
