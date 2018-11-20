@@ -48,7 +48,7 @@ public class BasicJMSWriterReaderTest {
 	private static final int TIMEOUT_IN_MS = 0;
 
 	/**
-	 * Empty default constructor
+	 * Empty default constructor.
 	 */
 	public BasicJMSWriterReaderTest() {
 		// empty constructor
@@ -124,7 +124,7 @@ public class BasicJMSWriterReaderTest {
 	}
 
 	/**
-	 * Executes the JmsReaderStage
+	 * Executes the JmsReaderStage.
 	 *
 	 * @author Lars Bluemke
 	 */

@@ -50,10 +50,22 @@ public abstract class AbstractCommandLineTool {
 
 	private final boolean useSystemExit;
 
+	/**
+	 * Create an abstract commandline tool.
+	 *
+	 * @param useSystemExit
+	 *            true to indicated exit can be used
+	 */
 	public AbstractCommandLineTool(final boolean useSystemExit) {
 		this.useSystemExit = useSystemExit;
 	}
 
+	/**
+	 * Start analysis.
+	 *
+	 * @param args
+	 *            parameters
+	 */
 	public final void start(final String[] args) {
 		final Options options = new Options();
 
@@ -127,12 +139,35 @@ public abstract class AbstractCommandLineTool {
 		}
 	}
 
+	/**
+	 * Add additional options.
+	 *
+	 * @param options
+	 *            options
+	 */
 	protected abstract void addAdditionalOptions(Options options);
 
+	/**
+	 * Read properties from command line.
+	 *
+	 * @param commandLine
+	 *            command line handler
+	 * @return true on success
+	 */
 	protected abstract boolean readPropertiesFromCommandLine(CommandLine commandLine);
 
+	/**
+	 * Perform task.
+	 *
+	 * @return true on success
+	 */
 	protected abstract boolean performTask();
 
+	/**
+	 * Format usage output.
+	 * 
+	 * @return the formatter
+	 */
 	protected HelpFormatter getHelpFormatter() {
 		return new CLIHelpFormatter();
 	}

@@ -31,12 +31,12 @@ import kieker.tools.trace.analysis.filter.IGraphOutputtingFilter;
 import kieker.tools.trace.analysis.filter.visualization.AbstractGraphFilter;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractEdge;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
+import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph.IGraphVisitor;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraphElement;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractVertex;
 import kieker.tools.trace.analysis.filter.visualization.graph.Color;
 import kieker.tools.trace.analysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.trace.analysis.filter.visualization.graph.SpecificOriginRetentionPolicy;
-import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph.IGraphVisitor;
 import kieker.tools.trace.analysis.repository.TraceColorRepository;
 import kieker.tools.trace.analysis.systemModel.TraceInformation;
 
@@ -44,20 +44,18 @@ import kieker.tools.trace.analysis.systemModel.TraceInformation;
  * This filter sets the color of nodes and edges which belong to a single trace according to a trace
  * coloring schema defined in a color repository (see {@link TraceColorRepository}). Element that belong
  * to multiple traces get the collision color defined in the repository.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @param <V>
  *            The type of the graph's vertices
  * @param <E>
  *            The type of the graph's edges
- * 
+ *
  * @since 1.6
  */
-@Plugin(name = "Trace coloring filter",
-		description = "Colors graph elements that can uniquely associated to a trace according to the color repository",
-		repositoryPorts = @RepositoryPort(name = TraceColoringFilter.COLOR_REPOSITORY_PORT_NAME, repositoryType = TraceColorRepository.class),
-		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
+@Plugin(name = "Trace coloring filter", description = "Colors graph elements that can uniquely associated to a trace according to the color repository", repositoryPorts = @RepositoryPort(name = TraceColoringFilter.COLOR_REPOSITORY_PORT_NAME, repositoryType = TraceColorRepository.class), outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = {
+	AbstractGraph.class }))
 public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation>, E extends AbstractEdge<V, E, TraceInformation>> extends
 		AbstractGraphFilter<AbstractGraph<V, E, TraceInformation>, V, E, TraceInformation> implements IGraphVisitor<V, E> {
 
@@ -72,7 +70,7 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 
 	/**
 	 * Creates a new filter using the given configuration.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use for this filter.
 	 * @param projectContext
@@ -153,7 +151,7 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 	protected IOriginRetentionPolicy getDesiredOriginRetentionPolicy() throws AnalysisConfigurationException {
 		final TraceColorRepository colorRepository = (TraceColorRepository) super.getRepository(COLOR_REPOSITORY_PORT_NAME);
 
-		final Set<TraceInformation> desiredTraces = new HashSet<TraceInformation>();
+		final Set<TraceInformation> desiredTraces = new HashSet<>();
 		for (final Long traceId : colorRepository.getColorMap().keySet()) {
 			desiredTraces.add(new TraceInformation(traceId, null));
 		}

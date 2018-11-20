@@ -27,31 +27,29 @@ import kieker.tools.trace.analysis.filter.IGraphOutputtingFilter;
 import kieker.tools.trace.analysis.filter.visualization.AbstractGraphFilter;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractEdge;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
+import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph.IGraphVisitor;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractPayloadedVertex;
 import kieker.tools.trace.analysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.trace.analysis.filter.visualization.graph.NoOriginRetentionPolicy;
-import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph.IGraphVisitor;
 import kieker.tools.trace.analysis.repository.DescriptionRepository;
 import kieker.tools.trace.analysis.systemModel.ISystemModelElement;
 
 /**
  * A filter which attaches decorations from a repository to graph entities.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @param <V>
  *            The type of the graph's vertices
  * @param <E>
  *            The type of the graph's edges
  * @param <O>
  *            The type of the origin of the graph's elements
- * 
+ *
  * @since 1.6
  */
-@Plugin(name = "",
-		description = "This filter attaches decorations to graph entities",
-		repositoryPorts = @RepositoryPort(name = DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_PORT_NAME, repositoryType = DescriptionRepository.class),
-		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
+@Plugin(name = "", description = "This filter attaches decorations to graph entities", repositoryPorts = @RepositoryPort(name = DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_PORT_NAME, repositoryType = DescriptionRepository.class), outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = {
+	AbstractGraph.class }))
 public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, O, ISystemModelElement>, E extends AbstractEdge<V, E, O>, O> extends
 		AbstractGraphFilter<AbstractGraph<V, E, O>, V, E, O> implements IGraphVisitor<V, E> {
 
@@ -64,7 +62,7 @@ public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, 
 
 	/**
 	 * Creates a new description decorator filter using the given configuration.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use for this filter.
 	 * @param projectContext

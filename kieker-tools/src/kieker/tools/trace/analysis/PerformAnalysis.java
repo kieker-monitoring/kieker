@@ -35,10 +35,10 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.filter.flow.EventRecordTraceReconstructionFilter;
 import kieker.analysis.plugin.filter.flow.ThreadEvent2TraceEventFilter;
-import kieker.analysis.plugin.filter.forward.StringBufferFilter;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.analysis.plugin.filter.select.TraceIdFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.tools.common.Convert;
 import kieker.tools.trace.analysis.filter.AbstractGraphProducingFilter;
@@ -91,11 +91,21 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 public class PerformAnalysis {
 
 	private static final String ENCODING = "UTF-8";
+	private static final String TXT_SUFFIX = ".txt";
+
 	private final AnalysisController analysisController = new AnalysisController();
 
 	private final Logger logger;
 	private final TraceAnalysisConfiguration settings;
 
+	/**
+	 * Create analysis configuration.
+	 *
+	 * @param logger
+	 *            logger to be used
+	 * @param settings
+	 *            configuration settings
+	 */
 	public PerformAnalysis(final Logger logger, final TraceAnalysisConfiguration settings) {
 		this.logger = logger;
 		this.settings = settings;
@@ -105,19 +115,9 @@ public class PerformAnalysis {
 	 *
 	 * @return false iff an error occurred
 	 */
-	boolean dispatchTasks() {
-		final String pathPrefix;
-		if (this.settings.getOutputDir() != null) {
-			if (this.settings.getPrefix() != null) {
-				pathPrefix = this.settings.getOutputDir() + File.separator + this.settings.getPrefix();
-			} else {
-				pathPrefix = this.settings.getOutputDir() + File.separator;
-			}
-		} else if (this.settings.getPrefix() != null) {
-			pathPrefix = this.settings.getPrefix();
-		} else {
-			pathPrefix = "";
-		}
+	public boolean dispatchTasks() {
+		final String pathPrefix = this.computePrefix();
+
 		boolean retVal = true;
 		int numRequestedTasks = 0;
 
@@ -126,520 +126,114 @@ public class PerformAnalysis {
 
 		TraceReconstructionFilter mtReconstrFilter = null;
 		EventRecordTraceCounter eventRecordTraceCounter = null;
-		EventRecordTraceReconstructionFilter eventTraceReconstructionFilter = null;
 		TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter = null;
+
 		try {
-			final FSReader reader;
-			{ // NOCS (NestedBlock)
-				final Configuration conf = new Configuration(null);
-				conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(Convert.fileListToStringArray(this.settings.getInputDirs())));
-				conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.TRUE.toString());
-				reader = new FSReader(conf, this.analysisController);
-			}
+			final TraceIdFilter traceIdFilter = this
+					.createTraceIdFilter(this.createTimestampFilter(this.createThreadEvent2TraceEventFilter(this.createReader())));
 
-			// Unify Strings
-			final StringBufferFilter stringBufferFilter = new StringBufferFilter(new Configuration(),
-					this.analysisController);
-			this.analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, stringBufferFilter,
-					StringBufferFilter.INPUT_PORT_NAME_EVENTS);
+			final ExecutionRecordTransformationFilter execRecTransformer = this.createExecutionRecordTransformationFilter(traceIdFilter, systemEntityFactory);
+			mtReconstrFilter = this.createTraceReconstruction(execRecTransformer, systemEntityFactory);
 
-			AbstractPlugin sourceStage;
-			String sourcePort;
+			final EventRecordTraceReconstructionFilter eventTraceReconstructionFilter = this.createEventRecordTraceReconstruction(traceIdFilter);
 
-			sourceStage = stringBufferFilter;
-			sourcePort = StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS;
+			eventRecordTraceCounter = this.createEventRecordTraceCounter(eventTraceReconstructionFilter);
 
-			// transforms thread-based events to trace-based events
-			final Configuration config = new Configuration();
-			final ThreadEvent2TraceEventFilter threadEvent2TraceEventFilter = new ThreadEvent2TraceEventFilter(config,
-					this.analysisController);
-			this.analysisController.connect(sourceStage, sourcePort, threadEvent2TraceEventFilter,
-					ThreadEvent2TraceEventFilter.INPUT_PORT_NAME_DEFAULT);
-
-			sourceStage = threadEvent2TraceEventFilter;
-			sourcePort = ThreadEvent2TraceEventFilter.OUTPUT_PORT_NAME_DEFAULT;
-
-			// This map can be used within the constructor for all following plugins which use the repository with the
-			// name defined in the
-			// AbstractTraceAnalysisPlugin.
-			final TimestampFilter timestampFilter;
-			{ // NOCS (nested block)
-				// Create the timestamp filter and connect to the reader's output port
-				final Configuration configTimestampFilter = new Configuration();
-				configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
-						this.longToString(this.settings.getIgnoreExecutionsBeforeDate()));
-
-				configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
-						this.longToString(this.settings.getIgnoreExecutionsAfterDate()));
-
-				timestampFilter = new TimestampFilter(configTimestampFilter, this.analysisController);
-				this.analysisController.connect(sourceStage, sourcePort, timestampFilter,
-						TimestampFilter.INPUT_PORT_NAME_EXECUTION);
-				this.analysisController.connect(sourceStage, sourcePort, timestampFilter,
-						TimestampFilter.INPUT_PORT_NAME_FLOW);
-			}
-
-			final TraceIdFilter traceIdFilter;
-			{ // NOCS (nested block)
-				// Create the trace ID filter and connect to the timestamp filter's output port
-				final Configuration configTraceIdFilterFlow = new Configuration();
-				if (this.settings.getSelectedTraces().isEmpty()) {
-					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES,
-							Boolean.TRUE.toString());
-				} else {
-					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES,
-							Boolean.FALSE.toString());
-					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES,
-							Configuration
-									.toProperty(this.settings.getSelectedTraces().toArray(new Long[this.settings.getSelectedTraces().size()])));
-				}
-
-				traceIdFilter = new TraceIdFilter(configTraceIdFilterFlow, this.analysisController);
-
-				this.analysisController.connect(timestampFilter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD,
-						traceIdFilter, TraceIdFilter.INPUT_PORT_NAME_COMBINED);
-			}
-
-			final ExecutionRecordTransformationFilter execRecTransformer;
-			{ // NOCS (nested block)
-				// Create the execution record transformation filter and connect to the trace ID filter's output port
-				final Configuration execRecTransformerConfig = new Configuration();
-				execRecTransformerConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-						Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME);
-				execRecTransformer = new ExecutionRecordTransformationFilter(execRecTransformerConfig,
-						this.analysisController);
-				if (this.settings.isInvertTraceIdFilter()) {
-					this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH,
-							execRecTransformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
-				} else {
-					this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH,
-							execRecTransformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
-				}
-
-				this.analysisController.connect(execRecTransformer,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-			}
-
-			{ // NOCS (nested block)
-				// Create the trace reconstruction filter and connect to the record transformation filter's output port
-				final Configuration mtReconstrFilterConfig = new Configuration();
-				mtReconstrFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-						Constants.TRACERECONSTR_COMPONENT_NAME);
-				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
-						TimeUnit.MILLISECONDS.name());
-				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
-						this.longToString(this.settings.getMaxTraceDuration()));
-				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES,
-						this.booleanToString(this.settings.isIgnoreInvalidTraces()));
-				mtReconstrFilter = new TraceReconstructionFilter(mtReconstrFilterConfig, this.analysisController);
-				this.analysisController.connect(mtReconstrFilter,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-				this.analysisController.connect(execRecTransformer,
-						ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, mtReconstrFilter,
-						TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
-			}
-
-			{ // NOCS (nested block)
-				// Create the event record trace generation filter and connect to the trace ID filter's output port
-				final Configuration configurationEventRecordTraceGenerationFilter = new Configuration();
-				configurationEventRecordTraceGenerationFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-						Constants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
-				configurationEventRecordTraceGenerationFilter.setProperty(
-						EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
-						TimeUnit.MILLISECONDS.name());
-				configurationEventRecordTraceGenerationFilter.setProperty(
-						EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
-						this.longToString(this.settings.getMaxTraceDuration()));
-				configurationEventRecordTraceGenerationFilter.setProperty(
-						EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES,
-						this.booleanToString(this.settings.isRepairEventBasedTraces()));
-				eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(
-						configurationEventRecordTraceGenerationFilter, this.analysisController);
-
-				final String outputPortName;
-				if (this.settings.isInvertTraceIdFilter()) {
-					outputPortName = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH;
-				} else {
-					outputPortName = TraceIdFilter.OUTPUT_PORT_NAME_MATCH;
-				}
-				this.analysisController.connect(traceIdFilter, outputPortName, eventTraceReconstructionFilter,
-						EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
-			}
-
-			{ // NOCS (nested block)
-				// Create the counter for valid/invalid event record traces
-				final Configuration configurationEventRecordTraceCounter = new Configuration();
-				configurationEventRecordTraceCounter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-						Constants.EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME);
-				configurationEventRecordTraceCounter.setProperty(
-						EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID,
-						this.booleanToString(!this.settings.isIgnoreInvalidTraces()));
-				eventRecordTraceCounter = new EventRecordTraceCounter(configurationEventRecordTraceCounter,
-						this.analysisController);
-
-				this.analysisController.connect(eventTraceReconstructionFilter,
-						EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, eventRecordTraceCounter,
-						EventRecordTraceCounter.INPUT_PORT_NAME_VALID);
-				this.analysisController.connect(eventTraceReconstructionFilter,
-						EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID, eventRecordTraceCounter,
-						EventRecordTraceCounter.INPUT_PORT_NAME_INVALID);
-			}
-
-			{ // NOCS (nested block)
-				// Create the event trace to execution/message trace transformation filter and connect its input to the
-				// event record trace generation filter's output
-				// port
-				final Configuration configurationEventTrace2ExecutionTraceFilter = new Configuration();
-				configurationEventTrace2ExecutionTraceFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-						Constants.EXECTRACESFROMEVENTTRACES_COMPONENT_NAME);
-				configurationEventTrace2ExecutionTraceFilter.setProperty(
-						TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_IGNORE_ASSUMED,
-						this.booleanToString(this.settings.isIgnoreAssumedCalls()));
-				// EventTrace2ExecutionTraceFilter has no configuration properties
-				traceEvents2ExecutionAndMessageTraceFilter = new TraceEventRecords2ExecutionAndMessageTraceFilter(
-						configurationEventTrace2ExecutionTraceFilter, this.analysisController);
-
-				this.analysisController.connect(eventTraceReconstructionFilter,
-						EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
-						traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE);
-				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-			}
+			traceEvents2ExecutionAndMessageTraceFilter = this.createTraceEvents2ExecutionAndMessageTraceFilter(eventTraceReconstructionFilter, systemEntityFactory);
 
 			final List<AbstractTraceProcessingFilter> allTraceProcessingComponents = new ArrayList<>();
 			final List<AbstractGraphProducingFilter<?>> allGraphProducers = new ArrayList<>();
 
-			final Configuration traceAllocationEquivClassFilterConfig = new Configuration();
-			traceAllocationEquivClassFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-					Constants.TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME);
-			traceAllocationEquivClassFilterConfig.setProperty(
-					TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
-					TraceEquivalenceClassModes.ALLOCATION.toString());
-			TraceEquivalenceClassFilter traceAllocationEquivClassFilter = null; // must not be instantiate it here, due
-																				// to side-effects in the constructor
-			if (this.settings.isPrintDeploymentEquivalenceClasses()) {
-				/**
-				 * Currently, this filter is only used to print an equivalence report. That's why we only activate it in
-				 * case this options is requested.
-				 */
-				traceAllocationEquivClassFilter = new TraceEquivalenceClassFilter(traceAllocationEquivClassFilterConfig,
-						this.analysisController);
-				this.analysisController.connect(traceAllocationEquivClassFilter,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-				this.analysisController.connect(mtReconstrFilter,
-						TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, traceAllocationEquivClassFilter,
-						TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
-				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-						traceAllocationEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
-				allTraceProcessingComponents.add(traceAllocationEquivClassFilter);
-			}
+			final TraceEquivalenceClassFilter traceAllocationEquivClassFilter = this.createPrintDeploymentEquivalenceClasses(allTraceProcessingComponents,
+					mtReconstrFilter, traceEvents2ExecutionAndMessageTraceFilter,
+					systemEntityFactory);
 
-			final Configuration traceAssemblyEquivClassFilterConfig = new Configuration();
-			traceAssemblyEquivClassFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-					Constants.TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME);
-			traceAssemblyEquivClassFilterConfig.setProperty(
-					TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
-					TraceEquivalenceClassModes.ASSEMBLY.toString());
-			TraceEquivalenceClassFilter traceAssemblyEquivClassFilter = null; // must not be instantiate it here, due to
-																				// side-effects in the constructor
-			if (this.settings.isPrintAssemblyEquivalenceClasses()) {
-				/**
-				 * Currently, this filter is only used to print an equivalence report. That's why we only activate it in
-				 * case this options is requested.
-				 */
-				traceAssemblyEquivClassFilter = new TraceEquivalenceClassFilter(traceAssemblyEquivClassFilterConfig,
-						this.analysisController);
-				this.analysisController.connect(mtReconstrFilter,
-						TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, traceAssemblyEquivClassFilter,
-						TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
-				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-						traceAssemblyEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
-				this.analysisController.connect(traceAssemblyEquivClassFilter,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-				allTraceProcessingComponents.add(traceAssemblyEquivClassFilter);
-			}
+			final TraceEquivalenceClassFilter traceAssemblyEquivClassFilter = this.createPrintAssemblyEquivalenceClasses(allTraceProcessingComponents,
+					mtReconstrFilter, traceEvents2ExecutionAndMessageTraceFilter,
+					systemEntityFactory);
 
 			// fill list of msgTraceProcessingComponents:
-			MessageTraceWriterFilter componentPrintMsgTrace = null;
 			if (this.settings.isPrintMessageTraces()) {
 				numRequestedTasks++;
-				final Configuration componentPrintMsgTraceConfig = new Configuration();
-				componentPrintMsgTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-						Constants.PRINTMSGTRACE_COMPONENT_NAME);
-				componentPrintMsgTraceConfig.setProperty(MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN,
-						new File(pathPrefix + Constants.MESSAGE_TRACES_FN_PREFIX + ".txt").getCanonicalPath());
-				componentPrintMsgTrace = new MessageTraceWriterFilter(componentPrintMsgTraceConfig,
-						this.analysisController);
-
-				this.analysisController.connect(mtReconstrFilter,
-						TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, componentPrintMsgTrace,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPrintMsgTrace, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(componentPrintMsgTrace,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-				allTraceProcessingComponents.add(componentPrintMsgTrace);
+				this.createComponentPrintMsgTrace(allTraceProcessingComponents, pathPrefix, mtReconstrFilter,
+						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
-			ExecutionTraceWriterFilter componentPrintExecTrace = null;
+
 			if (this.settings.isPrintExecutionTraces()) {
 				numRequestedTasks++;
-				final Configuration componentPrintExecTraceConfig = new Configuration();
-				componentPrintExecTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-						Constants.PRINTEXECTRACE_COMPONENT_NAME);
-				componentPrintExecTraceConfig.setProperty(ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN,
-						new File(pathPrefix + Constants.EXECUTION_TRACES_FN_PREFIX + ".txt").getCanonicalPath());
-				componentPrintExecTrace = new ExecutionTraceWriterFilter(componentPrintExecTraceConfig,
-						this.analysisController);
-
-				this.analysisController.connect(mtReconstrFilter,
-						TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, componentPrintExecTrace,
-						ExecutionTraceWriterFilter.INPUT_PORT_NAME_EXECUTION_TRACES);
-				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-						componentPrintExecTrace, ExecutionTraceWriterFilter.INPUT_PORT_NAME_EXECUTION_TRACES);
-				this.analysisController.connect(componentPrintExecTrace,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-				allTraceProcessingComponents.add(componentPrintExecTrace);
+				this.createComponentPrintExecTrace(allTraceProcessingComponents, pathPrefix, mtReconstrFilter,
+						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
-			InvalidExecutionTraceWriterFilter componentPrintInvalidTrace = null;
+
 			if (this.settings.isPrintInvalidExecutionTraces()) {
 				numRequestedTasks++;
-				final Configuration componentPrintInvalidTraceConfig = new Configuration();
-				componentPrintInvalidTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-						Constants.PRINTINVALIDEXECTRACE_COMPONENT_NAME);
-				componentPrintInvalidTraceConfig.setProperty(
-						InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN,
-						new File(pathPrefix + Constants.INVALID_TRACES_FN_PREFIX + ".txt").getCanonicalPath());
-				componentPrintInvalidTrace = new InvalidExecutionTraceWriterFilter(componentPrintInvalidTraceConfig,
-						this.analysisController);
-
-				this.analysisController.connect(mtReconstrFilter,
-						TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, componentPrintInvalidTrace,
-						InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES);
-				this.analysisController.connect(componentPrintInvalidTrace,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
-						componentPrintInvalidTrace,
-						InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES);
-				allTraceProcessingComponents.add(componentPrintInvalidTrace);
+				this.createPrintInvalidExecutionTraces(allTraceProcessingComponents, pathPrefix, mtReconstrFilter,
+						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
-			SequenceDiagramFilter componentPlotAllocationSeqDiagr = null;
+
 			if (retVal && this.settings.isPlotDeploymentSequenceDiagrams()) {
 				numRequestedTasks++;
-				final Configuration componentPlotAllocationSeqDiagrConfig = new Configuration();
-				componentPlotAllocationSeqDiagrConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-						Constants.PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME);
-				componentPlotAllocationSeqDiagrConfig.setProperty(
-						SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, pathPrefix + Constants.ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX);
-				componentPlotAllocationSeqDiagrConfig.setProperty(
-						SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE,
-						SequenceDiagramFilter.SDModes.ALLOCATION.toString());
-				componentPlotAllocationSeqDiagrConfig.setProperty(
-						SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES,
-						this.booleanToString(this.settings.isShortLabels()));
-				componentPlotAllocationSeqDiagr = new SequenceDiagramFilter(componentPlotAllocationSeqDiagrConfig,
-						this.analysisController);
-
-				this.analysisController.connect(mtReconstrFilter,
-						TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, componentPlotAllocationSeqDiagr,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationSeqDiagr,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(componentPlotAllocationSeqDiagr,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-				allTraceProcessingComponents.add(componentPlotAllocationSeqDiagr);
+				this.createPlotDeploymentSequenceDiagrams(allTraceProcessingComponents, pathPrefix, mtReconstrFilter,
+						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
-			SequenceDiagramFilter componentPlotAssemblySeqDiagr = null;
+
 			if (retVal && this.settings.isPlotAssemblySequenceDiagrams()) {
 				numRequestedTasks++;
-				final Configuration componentPlotAssemblySeqDiagrConfig = new Configuration();
-				componentPlotAssemblySeqDiagrConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-						Constants.PLOTASSEMBLYSEQDIAGR_COMPONENT_NAME);
-				componentPlotAssemblySeqDiagrConfig
-						.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, pathPrefix + Constants.ASSEMBLY_SEQUENCE_DIAGRAM_FN_PREFIX);
-				componentPlotAssemblySeqDiagrConfig.setProperty(
-						SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE,
-						SequenceDiagramFilter.SDModes.ASSEMBLY.toString());
-				componentPlotAssemblySeqDiagrConfig.setProperty(
-						SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES,
-						this.booleanToString(this.settings.isShortLabels()));
-				componentPlotAssemblySeqDiagr = new SequenceDiagramFilter(componentPlotAssemblySeqDiagrConfig,
-						this.analysisController);
+				this.createPlotAssemblySequenceDiagrams(allTraceProcessingComponents, pathPrefix, mtReconstrFilter,
+						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 
-				this.analysisController.connect(mtReconstrFilter,
-						TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, componentPlotAssemblySeqDiagr,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblySeqDiagr,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(componentPlotAssemblySeqDiagr,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-				allTraceProcessingComponents.add(componentPlotAssemblySeqDiagr);
 			}
 
-			ComponentDependencyGraphAllocationFilter componentPlotAllocationComponentDepGraph = null;
 			if (retVal && !this.settings.getPlotDeploymentComponentDependencyGraph().isEmpty()) {
 				numRequestedTasks++;
-				final Configuration configuration = new Configuration();
-				componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphAllocationFilter(configuration,
-						this.analysisController);
-
-				this.addDecorators(this.settings.getPlotDeploymentComponentDependencyGraph(), componentPlotAllocationComponentDepGraph);
-
-				this.analysisController.connect(mtReconstrFilter,
-						TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationComponentDepGraph,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationComponentDepGraph,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(componentPlotAllocationComponentDepGraph,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-
-				allTraceProcessingComponents.add(componentPlotAllocationComponentDepGraph);
-				allGraphProducers.add(componentPlotAllocationComponentDepGraph);
+				this.createPlotDeploymentComponentDependencyGraph(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			ComponentDependencyGraphAssemblyFilter componentPlotAssemblyComponentDepGraph = null;
 			if (retVal && !this.settings.getPlotAssemblyComponentDependencyGraph().isEmpty()) {
 				numRequestedTasks++;
-				final Configuration configuration = new Configuration();
-				componentPlotAssemblyComponentDepGraph = new ComponentDependencyGraphAssemblyFilter(configuration,
-						this.analysisController);
+				this.createPlotAssemblyComponentDependencyGraph(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 
-				this.addDecorators(this.settings.getPlotAssemblyComponentDependencyGraph(), componentPlotAssemblyComponentDepGraph);
-
-				this.analysisController.connect(mtReconstrFilter,
-						TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyComponentDepGraph,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyComponentDepGraph,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(componentPlotAssemblyComponentDepGraph,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-				allTraceProcessingComponents.add(componentPlotAssemblyComponentDepGraph);
-				allGraphProducers.add(componentPlotAssemblyComponentDepGraph);
 			}
 
-			ContainerDependencyGraphFilter componentPlotContainerDepGraph = null;
 			if (retVal && this.settings.isPlotContainerDependencyGraph()) {
 				numRequestedTasks++;
-				final Configuration configuration = new Configuration();
-				componentPlotContainerDepGraph = new ContainerDependencyGraphFilter(configuration,
-						this.analysisController);
-				this.analysisController.connect(mtReconstrFilter,
-						TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, componentPlotContainerDepGraph,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotContainerDepGraph,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(componentPlotContainerDepGraph,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-				allTraceProcessingComponents.add(componentPlotContainerDepGraph);
-				allGraphProducers.add(componentPlotContainerDepGraph);
+				this.createPlotContainerDependencyGraph(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			OperationDependencyGraphAllocationFilter componentPlotAllocationOperationDepGraph = null;
 			if (retVal && !this.settings.getPlotDeploymentOperationDependencyGraph().isEmpty()) {
 				numRequestedTasks++;
-				final Configuration configuration = new Configuration();
-				componentPlotAllocationOperationDepGraph = new OperationDependencyGraphAllocationFilter(configuration,
-						this.analysisController);
-
-				this.addDecorators(this.settings.getPlotDeploymentOperationDependencyGraph(), componentPlotAllocationOperationDepGraph);
-
-				this.analysisController.connect(mtReconstrFilter,
-						TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationOperationDepGraph,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationOperationDepGraph,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(componentPlotAllocationOperationDepGraph,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-				allTraceProcessingComponents.add(componentPlotAllocationOperationDepGraph);
-				allGraphProducers.add(componentPlotAllocationOperationDepGraph);
+				this.createPlotDeploymentOperationDependencyGraph(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			OperationDependencyGraphAssemblyFilter componentPlotAssemblyOperationDepGraph = null;
 			if (retVal && !this.settings.getPlotAssemblyOperationDependencyGraph().isEmpty()) {
 				numRequestedTasks++;
-				final Configuration configuration = new Configuration();
-				componentPlotAssemblyOperationDepGraph = new OperationDependencyGraphAssemblyFilter(configuration,
-						this.analysisController);
-
-				this.addDecorators(this.settings.getPlotAssemblyOperationDependencyGraph(), componentPlotAssemblyOperationDepGraph);
-
-				this.analysisController.connect(mtReconstrFilter,
-						TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyOperationDepGraph,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyOperationDepGraph,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(componentPlotAssemblyOperationDepGraph,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-				allTraceProcessingComponents.add(componentPlotAssemblyOperationDepGraph);
-				allGraphProducers.add(componentPlotAssemblyOperationDepGraph);
+				this.createPlotAssemblyOperationDependencyGraph(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			TraceCallTreeFilter componentPlotTraceCallTrees = null;
 			if (retVal && this.settings.isPlotCallTrees()) {
 				numRequestedTasks++;
-
-				componentPlotTraceCallTrees = this.createTraceCallTreeFilter(pathPrefix, systemEntityFactory, mtReconstrFilter,
+				final TraceCallTreeFilter componentPlotTraceCallTrees = this.createTraceCallTreeFilter(pathPrefix, systemEntityFactory, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter);
 
 				allTraceProcessingComponents.add(componentPlotTraceCallTrees);
 			}
-			AggregatedAllocationComponentOperationCallTreeFilter componentPlotAggregatedCallTree = null;
+
 			if (retVal && this.settings.isPlotAggregatedDeploymentCallTree()) {
 				numRequestedTasks++;
-				final Configuration componentPlotAggregatedCallTreeConfig = new Configuration();
-				componentPlotAggregatedCallTreeConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-						Constants.PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME);
-				componentPlotAggregatedCallTreeConfig.setProperty(
-						AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
-				componentPlotAggregatedCallTreeConfig.setProperty(
-						AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
-						this.booleanToString(this.settings.isShortLabels()));
-				componentPlotAggregatedCallTreeConfig.setProperty(
-						AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME,
-						pathPrefix + Constants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX + ".dot");
-				componentPlotAggregatedCallTree = new AggregatedAllocationComponentOperationCallTreeFilter(
-						componentPlotAggregatedCallTreeConfig, this.analysisController);
+				this.createPlotAggregatedDeploymentCallTree(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 
-				this.analysisController.connect(mtReconstrFilter,
-						TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, componentPlotAggregatedCallTree,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAggregatedCallTree,
-						AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				this.analysisController.connect(componentPlotAggregatedCallTree,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-				allTraceProcessingComponents.add(componentPlotAggregatedCallTree);
 			}
 
-			AggregatedAssemblyComponentOperationCallTreeFilter componentPlotAssemblyCallTree = null;
 			if (retVal && this.settings.isPlotAggregatedAssemblyCallTree()) {
 				numRequestedTasks++;
-
-				componentPlotAssemblyCallTree = this.createAggrAssemblyCompOpCallTreeFilter(pathPrefix, systemEntityFactory,
+				final AggregatedAssemblyComponentOperationCallTreeFilter componentPlotAssemblyCallTree = this.createAggrAssemblyCompOpCallTreeFilter(pathPrefix,
+						systemEntityFactory,
 						mtReconstrFilter, traceEvents2ExecutionAndMessageTraceFilter);
 
 				allTraceProcessingComponents.add(componentPlotAssemblyCallTree);
@@ -703,13 +297,13 @@ public class PerformAnalysis {
 
 			if (retVal && this.settings.isPrintDeploymentEquivalenceClasses()) {
 				retVal = this.writeTraceEquivalenceReport(
-						pathPrefix + Constants.TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX + ".txt",
+						pathPrefix + Constants.TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX + TXT_SUFFIX,
 						traceAllocationEquivClassFilter);
 			}
 
 			if (retVal && this.settings.isPrintAssemblyEquivalenceClasses()) {
 				retVal = this.writeTraceEquivalenceReport(
-						pathPrefix + Constants.TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX + ".txt",
+						pathPrefix + Constants.TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX + TXT_SUFFIX,
 						traceAssemblyEquivClassFilter);
 			}
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
@@ -730,6 +324,741 @@ public class PerformAnalysis {
 		}
 
 		return retVal;
+	}
+
+	private String computePrefix() {
+		if (this.settings.getOutputDir() != null) {
+			if (this.settings.getPrefix() != null) {
+				return this.settings.getOutputDir() + File.separator + this.settings.getPrefix();
+			} else {
+				return this.settings.getOutputDir() + File.separator;
+			}
+		} else if (this.settings.getPrefix() != null) {
+			return this.settings.getPrefix();
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 *
+	 * @param reader
+	 * @return
+	 * @throws IllegalStateException
+	 * @throws AnalysisConfigurationException
+	 */
+	private ThreadEvent2TraceEventFilter createThreadEvent2TraceEventFilter(final FSReader reader) throws IllegalStateException, AnalysisConfigurationException {
+		// transforms thread-based events to trace-based events
+		final ThreadEvent2TraceEventFilter threadEvent2TraceEventFilter = new ThreadEvent2TraceEventFilter(new Configuration(),
+				this.analysisController);
+
+		this.analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, threadEvent2TraceEventFilter,
+				ThreadEvent2TraceEventFilter.INPUT_PORT_NAME_DEFAULT);
+
+		return threadEvent2TraceEventFilter;
+	}
+
+	/**
+	 *
+	 * @param allTraceProcessingComponents
+	 * @param allGraphProducers
+	 * @param pathPrefix
+	 * @param mtReconstrFilter
+	 * @param traceEvents2ExecutionAndMessageTraceFilter
+	 * @param systemEntityFactory
+	 * @throws IllegalStateException
+	 * @throws AnalysisConfigurationException
+	 */
+	private void createPlotAggregatedDeploymentCallTree(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
+			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
+			throws IllegalStateException, AnalysisConfigurationException {
+		final Configuration componentPlotAggregatedCallTreeConfig = new Configuration();
+
+		componentPlotAggregatedCallTreeConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+				Constants.PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME);
+		componentPlotAggregatedCallTreeConfig.setProperty(
+				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
+		componentPlotAggregatedCallTreeConfig.setProperty(
+				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
+				this.booleanToString(this.settings.isShortLabels()));
+		componentPlotAggregatedCallTreeConfig.setProperty(
+				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME,
+				pathPrefix + Constants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX + ".dot");
+
+		final AggregatedAllocationComponentOperationCallTreeFilter componentPlotAggregatedCallTree = new AggregatedAllocationComponentOperationCallTreeFilter(
+				componentPlotAggregatedCallTreeConfig, this.analysisController);
+
+		this.analysisController.connect(mtReconstrFilter,
+				TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, componentPlotAggregatedCallTree,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+				TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+				componentPlotAggregatedCallTree,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(componentPlotAggregatedCallTree,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+
+		allTraceProcessingComponents.add(componentPlotAggregatedCallTree);
+	}
+
+	private void createPlotAssemblyOperationDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
+			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
+			throws IllegalStateException, AnalysisConfigurationException {
+		final Configuration configuration = new Configuration();
+
+		final OperationDependencyGraphAssemblyFilter componentPlotAssemblyOperationDepGraph = new OperationDependencyGraphAssemblyFilter(configuration,
+				this.analysisController);
+
+		this.addDecorators(this.settings.getPlotAssemblyOperationDependencyGraph(), componentPlotAssemblyOperationDepGraph);
+
+		this.analysisController.connect(mtReconstrFilter,
+				TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+				componentPlotAssemblyOperationDepGraph,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+				TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+				componentPlotAssemblyOperationDepGraph,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(componentPlotAssemblyOperationDepGraph,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+
+		allTraceProcessingComponents.add(componentPlotAssemblyOperationDepGraph);
+		allGraphProducers.add(componentPlotAssemblyOperationDepGraph);
+	}
+
+	/**
+	 *
+	 * @param allTraceProcessingComponents
+	 * @param allGraphProducers
+	 * @param pathPrefix
+	 * @param mtReconstrFilter
+	 * @param traceEvents2ExecutionAndMessageTraceFilter
+	 * @param systemEntityFactory
+	 * @throws IllegalStateException
+	 * @throws AnalysisConfigurationException
+	 */
+	private void createPlotDeploymentOperationDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
+			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
+			throws IllegalStateException, AnalysisConfigurationException {
+		final Configuration configuration = new Configuration();
+		final OperationDependencyGraphAllocationFilter componentPlotAllocationOperationDepGraph = new OperationDependencyGraphAllocationFilter(configuration,
+				this.analysisController);
+
+		this.addDecorators(this.settings.getPlotDeploymentOperationDependencyGraph(), componentPlotAllocationOperationDepGraph);
+
+		this.analysisController.connect(mtReconstrFilter,
+				TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+				componentPlotAllocationOperationDepGraph,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+				TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+				componentPlotAllocationOperationDepGraph,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(componentPlotAllocationOperationDepGraph,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+
+		allTraceProcessingComponents.add(componentPlotAllocationOperationDepGraph);
+		allGraphProducers.add(componentPlotAllocationOperationDepGraph);
+	}
+
+	/**
+	 *
+	 * @param allTraceProcessingComponents
+	 * @param allGraphProducers
+	 * @param pathPrefix
+	 * @param mtReconstrFilter
+	 * @param traceEvents2ExecutionAndMessageTraceFilter
+	 * @param systemEntityFactory
+	 * @throws IllegalStateException
+	 * @throws AnalysisConfigurationException
+	 */
+	private void createPlotContainerDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
+			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
+			throws IllegalStateException, AnalysisConfigurationException {
+		final Configuration configuration = new Configuration();
+
+		final ContainerDependencyGraphFilter componentPlotContainerDepGraph = new ContainerDependencyGraphFilter(configuration,
+				this.analysisController);
+
+		this.analysisController.connect(mtReconstrFilter,
+				TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, componentPlotContainerDepGraph,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+				TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+				componentPlotContainerDepGraph,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(componentPlotContainerDepGraph,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+		allTraceProcessingComponents.add(componentPlotContainerDepGraph);
+		allGraphProducers.add(componentPlotContainerDepGraph);
+	}
+
+	/**
+	 *
+	 * @param allTraceProcessingComponents
+	 * @param allGraphProducers
+	 * @param pathPrefix
+	 * @param mtReconstrFilter
+	 * @param traceEvents2ExecutionAndMessageTraceFilter
+	 * @param systemEntityFactory
+	 * @throws IllegalStateException
+	 * @throws AnalysisConfigurationException
+	 */
+	private void createPlotAssemblyComponentDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
+			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
+			throws IllegalStateException, AnalysisConfigurationException {
+		final Configuration configuration = new Configuration();
+
+		final ComponentDependencyGraphAssemblyFilter componentPlotAssemblyComponentDepGraph = new ComponentDependencyGraphAssemblyFilter(configuration,
+				this.analysisController);
+
+		this.addDecorators(this.settings.getPlotAssemblyComponentDependencyGraph(), componentPlotAssemblyComponentDepGraph);
+
+		this.analysisController.connect(mtReconstrFilter,
+				TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+				componentPlotAssemblyComponentDepGraph,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+				TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+				componentPlotAssemblyComponentDepGraph,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(componentPlotAssemblyComponentDepGraph,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+		allTraceProcessingComponents.add(componentPlotAssemblyComponentDepGraph);
+		allGraphProducers.add(componentPlotAssemblyComponentDepGraph);
+	}
+
+	/**
+	 *
+	 * @param allTraceProcessingComponents
+	 * @param allGraphProducers
+	 * @param pathPrefix
+	 * @param mtReconstrFilter
+	 * @param traceEvents2ExecutionAndMessageTraceFilter
+	 * @param systemEntityFactory
+	 * @throws IllegalStateException
+	 * @throws AnalysisConfigurationException
+	 */
+	private void createPlotDeploymentComponentDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix,
+			final TraceReconstructionFilter mtReconstrFilter, final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter,
+			final SystemModelRepository systemEntityFactory) throws IllegalStateException, AnalysisConfigurationException {
+		final Configuration configuration = new Configuration();
+		final ComponentDependencyGraphAllocationFilter componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphAllocationFilter(configuration,
+				this.analysisController);
+
+		this.addDecorators(this.settings.getPlotDeploymentComponentDependencyGraph(), componentPlotAllocationComponentDepGraph);
+
+		this.analysisController.connect(mtReconstrFilter,
+				TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+				componentPlotAllocationComponentDepGraph,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+				TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+				componentPlotAllocationComponentDepGraph,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(componentPlotAllocationComponentDepGraph,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+
+		allTraceProcessingComponents.add(componentPlotAllocationComponentDepGraph);
+		allGraphProducers.add(componentPlotAllocationComponentDepGraph);
+	}
+
+	/**
+	 *
+	 * @param allTraceProcessingComponents
+	 * @param pathPrefix
+	 * @param mtReconstrFilter
+	 * @param traceEvents2ExecutionAndMessageTraceFilter
+	 * @param systemEntityFactory
+	 * @throws IllegalStateException
+	 * @throws AnalysisConfigurationException
+	 */
+	private void createPlotAssemblySequenceDiagrams(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents, final String pathPrefix,
+			final TraceReconstructionFilter mtReconstrFilter, final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter,
+			final SystemModelRepository systemEntityFactory) throws IllegalStateException, AnalysisConfigurationException {
+		final Configuration componentPlotAssemblySeqDiagrConfig = new Configuration();
+
+		componentPlotAssemblySeqDiagrConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+				Constants.PLOTASSEMBLYSEQDIAGR_COMPONENT_NAME);
+		componentPlotAssemblySeqDiagrConfig
+				.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, pathPrefix + Constants.ASSEMBLY_SEQUENCE_DIAGRAM_FN_PREFIX);
+		componentPlotAssemblySeqDiagrConfig.setProperty(
+				SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE,
+				SequenceDiagramFilter.SDModes.ASSEMBLY.toString());
+		componentPlotAssemblySeqDiagrConfig.setProperty(
+				SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES,
+				this.booleanToString(this.settings.isShortLabels()));
+
+		final SequenceDiagramFilter componentPlotAssemblySeqDiagr = new SequenceDiagramFilter(componentPlotAssemblySeqDiagrConfig,
+				this.analysisController);
+
+		this.analysisController.connect(mtReconstrFilter,
+				TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, componentPlotAssemblySeqDiagr,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+				TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+				componentPlotAssemblySeqDiagr,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(componentPlotAssemblySeqDiagr,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+
+		allTraceProcessingComponents.add(componentPlotAssemblySeqDiagr);
+	}
+
+	private void createPlotDeploymentSequenceDiagrams(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents, final String pathPrefix,
+			final TraceReconstructionFilter mtReconstrFilter,
+			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
+			throws IllegalStateException, AnalysisConfigurationException {
+		final Configuration componentPlotAllocationSeqDiagrConfig = new Configuration();
+		componentPlotAllocationSeqDiagrConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+				Constants.PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME);
+		componentPlotAllocationSeqDiagrConfig.setProperty(
+				SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, pathPrefix + Constants.ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX);
+		componentPlotAllocationSeqDiagrConfig.setProperty(
+				SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE,
+				SequenceDiagramFilter.SDModes.ALLOCATION.toString());
+		componentPlotAllocationSeqDiagrConfig.setProperty(
+				SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES,
+				this.booleanToString(this.settings.isShortLabels()));
+
+		final SequenceDiagramFilter componentPlotAllocationSeqDiagr = new SequenceDiagramFilter(componentPlotAllocationSeqDiagrConfig,
+				this.analysisController);
+
+		this.analysisController.connect(mtReconstrFilter,
+				TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, componentPlotAllocationSeqDiagr,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+				TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+				componentPlotAllocationSeqDiagr,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(componentPlotAllocationSeqDiagr,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+		allTraceProcessingComponents.add(componentPlotAllocationSeqDiagr);
+	}
+
+	/**
+	 *
+	 * @param allTraceProcessingComponents
+	 * @param pathPrefix
+	 * @param mtReconstrFilter
+	 * @param traceEvents2ExecutionAndMessageTraceFilter
+	 * @param systemEntityFactory
+	 * @throws IOException
+	 * @throws IllegalStateException
+	 * @throws AnalysisConfigurationException
+	 */
+	private void createPrintInvalidExecutionTraces(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents, final String pathPrefix,
+			final TraceReconstructionFilter mtReconstrFilter,
+			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
+			throws IOException, IllegalStateException, AnalysisConfigurationException {
+		final Configuration componentPrintInvalidTraceConfig = new Configuration();
+		componentPrintInvalidTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+				Constants.PRINTINVALIDEXECTRACE_COMPONENT_NAME);
+		componentPrintInvalidTraceConfig.setProperty(
+				InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN,
+				new File(pathPrefix + Constants.INVALID_TRACES_FN_PREFIX + TXT_SUFFIX).getCanonicalPath());
+
+		final InvalidExecutionTraceWriterFilter componentPrintInvalidTrace = new InvalidExecutionTraceWriterFilter(componentPrintInvalidTraceConfig,
+				this.analysisController);
+
+		this.analysisController.connect(mtReconstrFilter,
+				TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, componentPrintInvalidTrace,
+				InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES);
+		this.analysisController.connect(componentPrintInvalidTrace,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+		this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+				TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
+				componentPrintInvalidTrace,
+				InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES);
+
+		allTraceProcessingComponents.add(componentPrintInvalidTrace);
+	}
+
+	/**
+	 *
+	 * @param allTraceProcessingComponents
+	 * @param pathPrefix
+	 * @param mtReconstrFilter
+	 * @param traceEvents2ExecutionAndMessageTraceFilter
+	 * @param systemEntityFactory
+	 * @throws IOException
+	 * @throws IllegalStateException
+	 * @throws AnalysisConfigurationException
+	 */
+	private void createComponentPrintExecTrace(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents, final String pathPrefix,
+			final TraceReconstructionFilter mtReconstrFilter,
+			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
+			throws IOException, IllegalStateException, AnalysisConfigurationException {
+		final Configuration componentPrintExecTraceConfig = new Configuration();
+		componentPrintExecTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+				Constants.PRINTEXECTRACE_COMPONENT_NAME);
+		componentPrintExecTraceConfig.setProperty(ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN,
+				new File(pathPrefix + Constants.EXECUTION_TRACES_FN_PREFIX + TXT_SUFFIX).getCanonicalPath());
+
+		final ExecutionTraceWriterFilter componentPrintExecTrace = new ExecutionTraceWriterFilter(componentPrintExecTraceConfig,
+				this.analysisController);
+
+		this.analysisController.connect(mtReconstrFilter,
+				TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, componentPrintExecTrace,
+				ExecutionTraceWriterFilter.INPUT_PORT_NAME_EXECUTION_TRACES);
+		this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+				TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
+				componentPrintExecTrace, ExecutionTraceWriterFilter.INPUT_PORT_NAME_EXECUTION_TRACES);
+		this.analysisController.connect(componentPrintExecTrace,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+
+		allTraceProcessingComponents.add(componentPrintExecTrace);
+	}
+
+	/**
+	 *
+	 * @param allTraceProcessingComponents
+	 * @param pathPrefix
+	 * @param mtReconstrFilter
+	 * @param traceEvents2ExecutionAndMessageTraceFilter
+	 * @param systemEntityFactory
+	 * @throws IOException
+	 * @throws IllegalStateException
+	 * @throws AnalysisConfigurationException
+	 */
+	private void createComponentPrintMsgTrace(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents, final String pathPrefix,
+			final TraceReconstructionFilter mtReconstrFilter, final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter,
+			final SystemModelRepository systemEntityFactory)
+			throws IOException, IllegalStateException, AnalysisConfigurationException {
+		final Configuration componentPrintMsgTraceConfig = new Configuration();
+		componentPrintMsgTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+				Constants.PRINTMSGTRACE_COMPONENT_NAME);
+		componentPrintMsgTraceConfig.setProperty(MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN,
+				new File(pathPrefix + Constants.MESSAGE_TRACES_FN_PREFIX + TXT_SUFFIX).getCanonicalPath());
+
+		final MessageTraceWriterFilter componentPrintMsgTrace = new MessageTraceWriterFilter(componentPrintMsgTraceConfig,
+				this.analysisController);
+
+		this.analysisController.connect(mtReconstrFilter,
+				TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, componentPrintMsgTrace,
+				AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+				TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+				componentPrintMsgTrace, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+		this.analysisController.connect(componentPrintMsgTrace,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+
+		allTraceProcessingComponents.add(componentPrintMsgTrace);
+	}
+
+	/**
+	 *
+	 * @param allTraceProcessingComponents
+	 * @param mtReconstrFilter
+	 * @param transformTraceEventsFilter
+	 * @param systemEntityFactory
+	 * @throws IllegalStateException
+	 * @throws AnalysisConfigurationException
+	 */
+	private TraceEquivalenceClassFilter createPrintAssemblyEquivalenceClasses(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
+			final TraceReconstructionFilter mtReconstrFilter,
+			final TraceEventRecords2ExecutionAndMessageTraceFilter transformTraceEventsFilter, final SystemModelRepository systemEntityFactory)
+			throws IllegalStateException, AnalysisConfigurationException {
+		final Configuration traceAssemblyEquivClassFilterConfig = new Configuration();
+		traceAssemblyEquivClassFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+				Constants.TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME);
+		traceAssemblyEquivClassFilterConfig.setProperty(
+				TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
+				TraceEquivalenceClassModes.ASSEMBLY.toString());
+
+		TraceEquivalenceClassFilter traceAssemblyEquivClassFilter = null; // must not be instantiate it here, due to
+																			// side-effects in the constructor
+		if (this.settings.isPrintAssemblyEquivalenceClasses()) {
+			/**
+			 * Currently, this filter is only used to print an equivalence report. That's why we only activate it in
+			 * case this options is requested.
+			 */
+			traceAssemblyEquivClassFilter = new TraceEquivalenceClassFilter(traceAssemblyEquivClassFilterConfig,
+					this.analysisController);
+			this.analysisController.connect(mtReconstrFilter,
+					TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, traceAssemblyEquivClassFilter,
+					TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
+			this.analysisController.connect(transformTraceEventsFilter,
+					TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
+					traceAssemblyEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
+			this.analysisController.connect(traceAssemblyEquivClassFilter,
+					AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+			allTraceProcessingComponents.add(traceAssemblyEquivClassFilter);
+		}
+
+		return traceAssemblyEquivClassFilter;
+	}
+
+	/**
+	 *
+	 * @param allTraceProcessingComponents
+	 * @param mtReconstrFilter
+	 * @param traceEvents2ExecutionAndMessageTraceFilter
+	 * @param systemEntityFactory
+	 *
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
+	 */
+	private TraceEquivalenceClassFilter createPrintDeploymentEquivalenceClasses(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
+			final TraceReconstructionFilter mtReconstrFilter,
+			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final AbstractRepository systemEntityFactory)
+			throws IllegalStateException, AnalysisConfigurationException {
+		final Configuration traceAllocationEquivClassFilterConfig = new Configuration();
+
+		traceAllocationEquivClassFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+				Constants.TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME);
+		traceAllocationEquivClassFilterConfig.setProperty(
+				TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
+				TraceEquivalenceClassModes.ALLOCATION.toString());
+		TraceEquivalenceClassFilter traceAllocationEquivClassFilter = null; // must not be instantiate it here, due
+																			// to side-effects in the constructor
+		if (this.settings.isPrintDeploymentEquivalenceClasses()) {
+			/**
+			 * Currently, this filter is only used to print an equivalence report. That's why we only activate it in
+			 * case this options is requested.
+			 */
+			traceAllocationEquivClassFilter = new TraceEquivalenceClassFilter(traceAllocationEquivClassFilterConfig,
+					this.analysisController);
+
+			this.analysisController.connect(traceAllocationEquivClassFilter,
+					AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+			this.analysisController.connect(mtReconstrFilter,
+					TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, traceAllocationEquivClassFilter,
+					TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
+			this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+					TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
+					traceAllocationEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
+
+			allTraceProcessingComponents.add(traceAllocationEquivClassFilter);
+		}
+
+		return traceAllocationEquivClassFilter;
+	}
+
+	/**
+	 *
+	 * @param eventTraceReconstructionFilter
+	 * @param systemEntityFactory
+	 * @return
+	 * @throws AnalysisConfigurationException
+	 * @throws IllegalStateException
+	 */
+	private TraceEventRecords2ExecutionAndMessageTraceFilter createTraceEvents2ExecutionAndMessageTraceFilter(
+			final EventRecordTraceReconstructionFilter eventTraceReconstructionFilter, final AbstractRepository systemEntityFactory)
+			throws IllegalStateException, AnalysisConfigurationException {
+		// Create the event trace to execution/message trace transformation filter and connect its input to the
+		// event record trace generation filter's output
+		// port
+		final Configuration configurationEventTrace2ExecutionTraceFilter = new Configuration();
+
+		configurationEventTrace2ExecutionTraceFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+				Constants.EXECTRACESFROMEVENTTRACES_COMPONENT_NAME);
+		configurationEventTrace2ExecutionTraceFilter.setProperty(
+				TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_IGNORE_ASSUMED,
+				this.booleanToString(this.settings.isIgnoreAssumedCalls()));
+
+		// EventTrace2ExecutionTraceFilter has no configuration properties
+		final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter = new TraceEventRecords2ExecutionAndMessageTraceFilter(
+				configurationEventTrace2ExecutionTraceFilter, this.analysisController);
+
+		this.analysisController.connect(eventTraceReconstructionFilter,
+				EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
+				traceEvents2ExecutionAndMessageTraceFilter,
+				TraceEventRecords2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE);
+		this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+
+		return traceEvents2ExecutionAndMessageTraceFilter;
+	}
+
+	/**
+	 *
+	 * @param eventTraceReconstructionFilter
+	 * @return
+	 * @throws IllegalStateException
+	 * @throws AnalysisConfigurationException
+	 */
+	private EventRecordTraceCounter createEventRecordTraceCounter(final EventRecordTraceReconstructionFilter eventTraceReconstructionFilter)
+			throws IllegalStateException, AnalysisConfigurationException {
+		// Create the counter for valid/invalid event record traces
+		final Configuration configurationEventRecordTraceCounter = new Configuration();
+		configurationEventRecordTraceCounter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+				Constants.EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME);
+		configurationEventRecordTraceCounter.setProperty(
+				EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID,
+				this.booleanToString(!this.settings.isIgnoreInvalidTraces()));
+
+		final EventRecordTraceCounter eventRecordTraceCounter = new EventRecordTraceCounter(configurationEventRecordTraceCounter,
+				this.analysisController);
+
+		this.analysisController.connect(eventTraceReconstructionFilter,
+				EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, eventRecordTraceCounter,
+				EventRecordTraceCounter.INPUT_PORT_NAME_VALID);
+		this.analysisController.connect(eventTraceReconstructionFilter,
+				EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID, eventRecordTraceCounter,
+				EventRecordTraceCounter.INPUT_PORT_NAME_INVALID);
+
+		return eventRecordTraceCounter;
+	}
+
+	/**
+	 *
+	 * @param execRecTransformer
+	 * @param systemEntityFactory
+	 * @return
+	 * @throws IllegalStateException
+	 * @throws AnalysisConfigurationException
+	 */
+	private TraceReconstructionFilter createTraceReconstruction(final AbstractPlugin execRecTransformer, final AbstractRepository systemEntityFactory)
+			throws IllegalStateException, AnalysisConfigurationException {
+		// Create the trace reconstruction filter and connect to the record transformation filter's output port
+		final Configuration mtReconstrFilterConfig = new Configuration();
+		mtReconstrFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+				Constants.TRACERECONSTR_COMPONENT_NAME);
+		mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
+				TimeUnit.MILLISECONDS.name());
+		mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
+				this.longToString(this.settings.getMaxTraceDuration()));
+		mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES,
+				this.booleanToString(this.settings.isIgnoreInvalidTraces()));
+
+		final TraceReconstructionFilter mtReconstrFilter = new TraceReconstructionFilter(mtReconstrFilterConfig, this.analysisController);
+
+		this.analysisController.connect(mtReconstrFilter,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+		this.analysisController.connect(execRecTransformer,
+				ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, mtReconstrFilter,
+				TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
+
+		return mtReconstrFilter;
+	}
+
+	/**
+	 *
+	 * @param traceIdFilter
+	 * @return
+	 * @throws IllegalStateException
+	 * @throws AnalysisConfigurationException
+	 */
+	private EventRecordTraceReconstructionFilter createEventRecordTraceReconstruction(final TraceIdFilter traceIdFilter)
+			throws IllegalStateException, AnalysisConfigurationException {
+		// Create the event record trace generation filter and connect to the trace ID filter's output port
+		final Configuration configurationEventRecordTraceGenerationFilter = new Configuration();
+		configurationEventRecordTraceGenerationFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+				Constants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
+		configurationEventRecordTraceGenerationFilter.setProperty(
+				EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
+				TimeUnit.MILLISECONDS.name());
+		configurationEventRecordTraceGenerationFilter.setProperty(
+				EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
+				this.longToString(this.settings.getMaxTraceDuration()));
+		configurationEventRecordTraceGenerationFilter.setProperty(
+				EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES,
+				this.booleanToString(this.settings.isRepairEventBasedTraces()));
+
+		final EventRecordTraceReconstructionFilter eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(
+				configurationEventRecordTraceGenerationFilter, this.analysisController);
+
+		final String outputPortName;
+		if (this.settings.isInvertTraceIdFilter()) {
+			outputPortName = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH;
+		} else {
+			outputPortName = TraceIdFilter.OUTPUT_PORT_NAME_MATCH;
+		}
+		this.analysisController.connect(traceIdFilter, outputPortName, eventTraceReconstructionFilter,
+				EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
+
+		return eventTraceReconstructionFilter;
+	}
+
+	/**
+	 *
+	 * @param traceIdFilter
+	 * @param systemEntityFactory
+	 * @return
+	 * @throws IllegalStateException
+	 * @throws AnalysisConfigurationException
+	 */
+	private ExecutionRecordTransformationFilter createExecutionRecordTransformationFilter(final TraceIdFilter traceIdFilter,
+			final AbstractRepository systemEntityFactory) throws IllegalStateException, AnalysisConfigurationException {
+		// Create the execution record transformation filter and connect to the trace ID filter's output port
+		final Configuration execRecTransformerConfig = new Configuration();
+		execRecTransformerConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+				Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME);
+		final ExecutionRecordTransformationFilter execRecTransformer = new ExecutionRecordTransformationFilter(execRecTransformerConfig,
+				this.analysisController);
+		if (this.settings.isInvertTraceIdFilter()) {
+			this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH,
+					execRecTransformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
+		} else {
+			this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH,
+					execRecTransformer, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
+		}
+
+		this.analysisController.connect(execRecTransformer,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+		return execRecTransformer;
+	}
+
+	/**
+	 *
+	 * @param timestampFilter
+	 * @return
+	 * @throws IllegalStateException
+	 * @throws AnalysisConfigurationException
+	 */
+	private TraceIdFilter createTraceIdFilter(final TimestampFilter timestampFilter) throws IllegalStateException, AnalysisConfigurationException {
+		// Create the trace ID filter and connect to the timestamp filter's output port
+		final Configuration configTraceIdFilterFlow = new Configuration();
+		if (this.settings.getSelectedTraces().isEmpty()) {
+			configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES,
+					Boolean.TRUE.toString());
+		} else {
+			configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES,
+					Boolean.FALSE.toString());
+			configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES,
+					Configuration
+							.toProperty(this.settings.getSelectedTraces().toArray(new Long[this.settings.getSelectedTraces().size()])));
+		}
+
+		final TraceIdFilter traceIdFilter = new TraceIdFilter(configTraceIdFilterFlow, this.analysisController);
+
+		this.analysisController.connect(timestampFilter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD,
+				traceIdFilter, TraceIdFilter.INPUT_PORT_NAME_COMBINED);
+		return traceIdFilter;
+	}
+
+	private TimestampFilter createTimestampFilter(final ThreadEvent2TraceEventFilter sourceStage)
+			throws IllegalStateException, AnalysisConfigurationException {
+		// Create the timestamp filter and connect to the reader's output port
+		final Configuration configTimestampFilter = new Configuration();
+		configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
+				this.longToString(this.settings.getIgnoreExecutionsBeforeDate()));
+
+		configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
+				this.longToString(this.settings.getIgnoreExecutionsAfterDate()));
+
+		final TimestampFilter timestampFilter = new TimestampFilter(configTimestampFilter, this.analysisController);
+
+		this.analysisController.connect(sourceStage, ThreadEvent2TraceEventFilter.OUTPUT_PORT_NAME_DEFAULT, timestampFilter,
+				TimestampFilter.INPUT_PORT_NAME_EXECUTION);
+		this.analysisController.connect(sourceStage, ThreadEvent2TraceEventFilter.OUTPUT_PORT_NAME_DEFAULT, timestampFilter,
+				TimestampFilter.INPUT_PORT_NAME_FLOW);
+
+		return timestampFilter;
+	}
+
+	private FSReader createReader() {
+		final Configuration conf = new Configuration(null);
+		conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(Convert.fileListToStringArray(this.settings.getInputDirs())));
+		conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.TRUE.toString());
+		return new FSReader(conf, this.analysisController);
 	}
 
 	private String booleanToString(final Boolean value) {

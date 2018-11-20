@@ -21,13 +21,13 @@ import java.util.Comparator;
 
 /**
  * @author Christian Wulf (chw)
- * 
+ *
  * @since 1.14
  */
 class MessageComparator implements Comparator<AbstractMessage>, Serializable {
 
 	/**
-	 * 8697359317711222757L for 1.14
+	 * 8697359317711222757L for 1.14.
 	 */
 	private static final long serialVersionUID = 8697359317711222757L;
 

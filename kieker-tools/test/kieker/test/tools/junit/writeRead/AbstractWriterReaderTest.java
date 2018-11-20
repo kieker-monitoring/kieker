@@ -36,6 +36,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @author Andre van Hoorn
  *
  * @since 1.5
+ *
+ * @deprecated since 1.15 remove in 1.16
  */
 @Deprecated
 public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
@@ -96,7 +98,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	 * @return A list of records.
 	 */
 	protected List<IMonitoringRecord> provideEvents() {
-		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
+		final List<IMonitoringRecord> someEvents = new ArrayList<>();
 		for (int i = 0; i < DEFAULT_EVENTS_NUMBER; i = someEvents.size()) {
 			final List<AbstractTraceEvent> nextBatch = Arrays.asList(
 					BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(i, i, DEFAULT_EVENTS_SESSION_ID,

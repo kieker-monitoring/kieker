@@ -26,7 +26,7 @@ import java.util.TimeZone;
 import com.beust.jcommander.JCommander;
 
 import kieker.common.util.filesystem.FSUtil;
-import kieker.tools.common.AbstractToolMain;
+import kieker.tools.common.AbstractTool;
 import kieker.tools.common.CommandLineParameterEvaluation;
 import kieker.tools.common.ConfigurationException;
 
@@ -41,7 +41,7 @@ import kieker.tools.common.ConfigurationException;
  *
  * @since 0.95a, 1.15
  */
-public final class TraceAnalysisToolMain extends AbstractToolMain<TraceAnalysisConfiguration> {
+public final class TraceAnalysisToolMain extends AbstractTool<TraceAnalysisConfiguration> {
 
 	/**
 	 * Private constructor.
@@ -51,17 +51,27 @@ public final class TraceAnalysisToolMain extends AbstractToolMain<TraceAnalysisC
 	}
 
 	/**
-	 * Configure and execute the splitter.
+	 * Configure and execute the analysis.
 	 *
 	 * @param args
-	 *            arguments are ignored
+	 *            arguments
 	 */
-	public static void main(final String[] args) {
+	public static void main(final String... args) {
+		System.exit(new TraceAnalysisToolMain().run("TraceAnalysisTool", "traceAnalysisTool", args, new TraceAnalysisConfiguration())); // NOPMD
+	}
+
+	/**
+	 * Run the application without calling exit. This is glue code for the TraceAnalysisGUI.
+	 *
+	 * @param args
+	 *            arguments
+	 */
+	public static void runEmbedded(final String... args) {
 		new TraceAnalysisToolMain().run("TraceAnalysisTool", "traceAnalysisTool", args, new TraceAnalysisConfiguration());
 	}
 
 	@Override
-	protected void execute(final JCommander commander, final String label) throws ConfigurationException {
+	protected int execute(final JCommander commander, final String label) throws ConfigurationException {
 		final DateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_PATTERN, Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -78,9 +88,10 @@ public final class TraceAnalysisToolMain extends AbstractToolMain<TraceAnalysisC
 
 		if (new PerformAnalysis(LOGGER, this.settings).dispatchTasks()) {
 			LOGGER.info("Analysis complete. See 'kieker.log' for details.");
+			return SUCCESS_EXIT_CODE;
 		} else {
 			LOGGER.error("Analysis incomplete. See 'kieker.log' for details.");
-			System.exit(1);
+			return RUNTIME_ERROR;
 		}
 	}
 

@@ -16,14 +16,7 @@
 
 package kieker.tools.trace.analysis;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
-import kieker.tools.AbstractCommandLineTool;
 
 /**
  * Externalized Strings from {@link TraceAnalysisTool}.
@@ -32,8 +25,10 @@ import kieker.tools.AbstractCommandLineTool;
  *
  * @since 1.2
  */
-@SuppressWarnings({ "static-access", "static" })
 public final class Constants {
+
+	/** Date format pattern used for information. */
+	public static final String HUMAN_READABLE_DATE_FORMAT = Constants.DATE_FORMAT_PATTERN.replaceAll("'", "") + " | timestamp"; // only for usage info
 
 	/** Command for the input directories containing monitoring records. */
 	public static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
@@ -141,7 +136,6 @@ public final class Constants {
 	public static final String PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME = "Aggregated call tree (assembly level)";
 	public static final String PLOTCALLTREE_COMPONENT_NAME = "Trace call trees";
 	public static final Options CMDL_OPTIONS = new Options();
-	public static final List<Option> SORTED_OPTION_LIST = new CopyOnWriteArrayList<>();
 
 	public static final String DECORATORS_OPTION_NAME = "responseTimes-ns | responseTimes-us | responseTimes-ms | responseTimes-s> "
 			+ "<responseTimeColoring threshold(ms)";
@@ -158,258 +152,8 @@ public final class Constants {
 	public static final String CMD_OPT_NAME_ADD_DESCRIPTIONS = "addDescriptions";
 	public static final String DESCRIPTIONS_FILE_OPTION_NAME = "descriptions file";
 
-	static {
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_INPUTDIRS);
-		OptionBuilder.withArgName("dir1 ... dirN");
-		OptionBuilder.hasArgs();
-		OptionBuilder.isRequired(false);
-		OptionBuilder
-				.withDescription("Log directories to read data from");
-		OptionBuilder.withValueSeparator('=');
-		// the following two options used to be required. However, then --help not working
-		SORTED_OPTION_LIST.add(OptionBuilder.create("i"));
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_OUTPUTDIR);
-		OptionBuilder.withArgName("dir");
-		OptionBuilder.hasArg(true);
-		OptionBuilder.isRequired(false);
-		OptionBuilder
-				.withDescription("Directory for the generated file(s)");
-		OptionBuilder.withValueSeparator('=');
-		SORTED_OPTION_LIST.add(OptionBuilder.create("o"));
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_OUTPUTFNPREFIX);
-		OptionBuilder.withArgName("prefix");
-		OptionBuilder.hasArg(true);
-		OptionBuilder.isRequired(false);
-		OptionBuilder
-				.withDescription("Prefix for output filenames\n");
-		OptionBuilder.withValueSeparator('=');
-		SORTED_OPTION_LIST.add(OptionBuilder.create("p"));
-		OptionBuilder.withLongOpt(AbstractCommandLineTool.CMD_OPT_NAME_VERBOSE_LONG);
-		OptionBuilder.hasArg(false);
-		OptionBuilder
-				.withDescription("Verbosely list used parameters and processed traces");
-		SORTED_OPTION_LIST.add(OptionBuilder.create(AbstractCommandLineTool.CMD_OPT_NAME_VERBOSE_SHORT));
-		OptionBuilder.withLongOpt(AbstractCommandLineTool.CMD_OPT_NAME_DEBUG_LONG);
-		OptionBuilder.hasArg(false);
-		OptionBuilder
-				.withDescription("prints additional debug information");
-		SORTED_OPTION_LIST.add(OptionBuilder.create(AbstractCommandLineTool.CMD_OPT_NAME_DEBUG_SHORT));
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS);
-		OptionBuilder.hasArg(false);
-		OptionBuilder
-				.withDescription("Generate and store deployment-level sequence diagrams (.pic)");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS);
-		OptionBuilder.hasArg(false);
-		OptionBuilder
-				.withDescription("Generate and store assembly-level sequence diagrams (.pic)");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG);
-		OptionBuilder
-				.withArgName(DECORATORS_OPTION_NAME);
-		OptionBuilder
-				.hasArg(true);
-		OptionBuilder.hasOptionalArgs();
-		OptionBuilder.withValueSeparator(DECORATOR_SEPARATOR);
-		OptionBuilder
-				.withDescription("Generate and store a deployment-level component dependency graph (.dot)");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG);
-		OptionBuilder
-				.withArgName(DECORATORS_OPTION_NAME);
-		OptionBuilder
-				.hasArg(true);
-		OptionBuilder.hasOptionalArgs();
-		OptionBuilder.withValueSeparator(DECORATOR_SEPARATOR);
-		OptionBuilder
-				.withDescription("Generate and store an assembly-level component dependency graph (.dot)");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG);
-		OptionBuilder.hasArg(false);
-		OptionBuilder
-				.withDescription("Generate and store a container dependency graph (.dot file)");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG);
-		OptionBuilder
-				.withArgName(DECORATORS_OPTION_NAME);
-		OptionBuilder
-				.hasArg(true);
-		OptionBuilder.hasOptionalArgs();
-		OptionBuilder.withValueSeparator(DECORATOR_SEPARATOR);
-		OptionBuilder
-				.withDescription("Generate and store a deployment-level operation dependency graph (.dot)");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG);
-		OptionBuilder
-				.withArgName(DECORATORS_OPTION_NAME);
-		OptionBuilder
-				.hasArg(true);
-		OptionBuilder.hasOptionalArgs();
-		OptionBuilder.withValueSeparator(DECORATOR_SEPARATOR);
-		OptionBuilder
-				.withDescription("Generate and store an assembly-level operation dependency graph (.dot)");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE);
-		OptionBuilder.hasArg(false);
-		OptionBuilder
-				.withDescription("Generate and store an aggregated deployment-level call tree (.dot)");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE);
-		OptionBuilder.hasArg(false);
-		OptionBuilder
-				.withDescription("Generate and store an aggregated assembly-level call tree (.dot)");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTCALLTREES);
-		OptionBuilder.hasArg(false);
-		OptionBuilder
-				.withDescription("Generate and store call trees for the selected traces (.dot)");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTMSGTRACES);
-		OptionBuilder.hasArg(false);
-		OptionBuilder
-				.withDescription("Save message trace representations of valid traces (.txt)");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTEXECTRACES);
-		OptionBuilder.hasArg(false);
-		OptionBuilder
-				.withDescription("Save execution trace representations of valid traces (.txt)");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES);
-		OptionBuilder.hasArg(false);
-		OptionBuilder
-				.withDescription("Save a execution trace representations of invalid trace artifacts (.txt)");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL);
-		OptionBuilder.hasArg(false);
-		OptionBuilder
-				.withDescription("Save a representation of the internal system model (.html)");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT);
-		OptionBuilder.hasArg(false);
-		OptionBuilder
-				.withDescription("Output an overview about the deployment-level trace equivalence classes");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT);
-		OptionBuilder.hasArg(false);
-		OptionBuilder
-				.withDescription("Output an overview about the assembly-level trace equivalence classes");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_SELECTTRACES);
-		OptionBuilder.withArgName("id0 ... idn");
-		OptionBuilder.hasArgs();
-		OptionBuilder.isRequired(false);
-		OptionBuilder
-				.withDescription("Consider only the traces identified by the list of trace IDs. Defaults to all traces.");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_FILTERTRACES);
-		OptionBuilder.withArgName("id0 ... idn");
-		OptionBuilder.hasArgs();
-		OptionBuilder.isRequired(false);
-		OptionBuilder
-				.withDescription("Consider only the traces not identified by the list of trace IDs. Defaults to no traces.");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREINVALIDTRACES);
-		OptionBuilder.hasArg(false);
-		OptionBuilder.isRequired(false);
-		OptionBuilder
-				.withDescription("If selected, the execution aborts on the occurence of an invalid trace.");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_REPAIR_EVENT_BASED_TRACES);
-		OptionBuilder.hasArg(false);
-		OptionBuilder.isRequired(false);
-		OptionBuilder
-				.withDescription("If selected, BeforeEvents with missing AfterEvents e.g. because of software crash will be repaired.");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_MAXTRACEDURATION);
-		OptionBuilder.withArgName("duration in ms");
-		OptionBuilder.hasArg();
-		OptionBuilder.isRequired(false);
-		OptionBuilder
-				.withDescription("Threshold (in ms) after which incomplete traces become invalid. Defaults to 600,000 (i.e, 10 minutes).");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE);
-		OptionBuilder
-				.withArgName(TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP);
-		OptionBuilder.hasArg();
-		OptionBuilder.isRequired(false);
-		OptionBuilder
-				.withDescription("Executions starting before this date (UTC timezone) or monitoring timestamp are ignored.");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE);
-		OptionBuilder
-				.withArgName(TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP);
-		OptionBuilder.hasArg();
-		OptionBuilder.isRequired(false);
-		OptionBuilder
-				.withDescription("Executions ending after this date (UTC timezone) or monitoring timestamp  are ignored.");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_SHORTLABELS);
-		OptionBuilder.hasArg(false);
-		OptionBuilder.isRequired(false);
-		OptionBuilder
-				.withDescription("If selected, abbreviated labels (e.g., package names) are used in the visualizations.");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_INCLUDESELFLOOPS);
-		OptionBuilder.hasArg(false);
-		OptionBuilder.isRequired(false);
-		OptionBuilder
-				.withDescription("If selected, self-loops are included in the visualizations.");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNORE_ASSUMED);
-		OptionBuilder.hasArg(false);
-		OptionBuilder.isRequired(false);
-		OptionBuilder
-				.withDescription("If selected, assumed calls are visualized just as regular calls.");
-		SORTED_OPTION_LIST.add(OptionBuilder.create());
-		OptionBuilder
-				.withLongOpt(CMD_OPT_NAME_TRACE_COLORING);
-		OptionBuilder
-				.hasArg();
-		OptionBuilder
-				.isRequired(false);
-		OptionBuilder
-				.withDescription(
-						"Color traces according to the given color map given as a properties file (key: trace ID, value: color in hex format, e.g., 0xff0000 for red; use trace ID 'default' to specify the default color)") // NOCS
-		;
-		OptionBuilder
-				.withArgName(COLORING_FILE_OPTION_NAME);
-		SORTED_OPTION_LIST
-				.add(OptionBuilder.create());
-		OptionBuilder
-				.withLongOpt(CMD_OPT_NAME_ADD_DESCRIPTIONS);
-		OptionBuilder
-				.hasArg();
-		OptionBuilder
-				.isRequired(false);
-		OptionBuilder
-				.withDescription(
-						"Adds descriptions to elements according to the given file as a properties file (key: component ID, e.g., @1; value: description)");
-		OptionBuilder
-				.withArgName(DESCRIPTIONS_FILE_OPTION_NAME);
-		SORTED_OPTION_LIST
-				.add(OptionBuilder.create());
-
-		for (final Option o : SORTED_OPTION_LIST) {
-			CMDL_OPTIONS.addOption(o);
-		}
-	}
-
 	/**
 	 * Private constructor to avoid instantiation.
 	 */
 	private Constants() {}
-
-	public static String stringArrToStringList(final String[] strs) {
-		final StringBuilder strB = new StringBuilder();
-		boolean first = true;
-		for (final String s : strs) {
-			if (!first) {
-				strB.append(", ");
-			} else {
-				first = false;
-			}
-			strB.append(s);
-		}
-		return strB.toString();
-	}
 }
