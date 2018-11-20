@@ -300,7 +300,7 @@ function check_bin_archive {
     assert_file_exists_regular "$1"
     assert_no_duplicate_files_in_archive "$1"
 
-	error "Decompressing archive '$1' ..."
+	information "Decompressing archive '$1' ..."
 	extract_archive_n_cd "$1"
 	touch $(basename "$1") # just to mark where this dir comes from
 

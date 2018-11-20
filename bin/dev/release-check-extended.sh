@@ -250,6 +250,6 @@ fi
 if [ -d ${DIR} ] ; then
         rm -rf "${DIR}"
 else
-        error "${DIR} is not a directory"
+        warning "${DIR} is not a directory"
 fi
 # end
