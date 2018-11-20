@@ -9,17 +9,17 @@ export WHITE='\033[1;37m'
 export YELLOW='\033[1;33m'
 export NC='\033[0m'
 
-#if [ -t 1 ]; then
+if [ "$TERM" == "xterm-256color" ]; then
 	# interactive shell - use colors
 	export ERROR="${RED}[error]${NC}"
 	export WARNING="${YELLOW}[warning]${NC}"
 	export INFO="${WHITE}[info]${NC}"
-#else
+else
         # not interactive shell
-#	export ERROR="[error]"
-#	export WARNING="[warning]"
-#	export INFO="[info]"
-#fi
+	export ERROR="[error]"
+	export WARNING="[warning]"
+	export INFO="[info]"
+fi
 
 function error() {
 	echo -e "${ERROR} $@"
