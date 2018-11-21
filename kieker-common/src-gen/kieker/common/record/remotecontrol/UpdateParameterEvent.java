@@ -87,14 +87,14 @@ public class UpdateParameterEvent extends AbstractMonitoringRecord implements IR
 	public UpdateParameterEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.pattern = deserializer.getString();
 		// load array sizes
-		int _parameterNames_size0 = deserializer.getInt();
+		final int _parameterNames_size0 = deserializer.getInt();
 		this.parameterNames = new String[_parameterNames_size0];
 		for (int i0=0;i0<_parameterNames_size0;i0++)
 			this.parameterNames[i0] = deserializer.getString();
 		
 		// load array sizes
-		int _parameters_size0 = deserializer.getInt();
-		int _parameters_size1 = deserializer.getInt();
+		final int _parameters_size0 = deserializer.getInt();
+		final int _parameters_size1 = deserializer.getInt();
 		this.parameters = new String[_parameters_size0][_parameters_size1];
 		for (int i0=0;i0<_parameters_size0;i0++)
 			for (int i1=0;i1<_parameters_size1;i1++)

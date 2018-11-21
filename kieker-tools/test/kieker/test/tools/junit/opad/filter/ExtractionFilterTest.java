@@ -39,10 +39,10 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * This Filter creates some NamedDoubleRecords and let them run trough the
  * ExtractionFilter. We assume that the output corresponds to the time unit
  * converted input timestamp from the incoming record.
- * 
+ *
  * @author Tom Frotscher
  * @since 1.10
- * 
+ *
  */
 public class ExtractionFilterTest extends AbstractKiekerTest {
 
@@ -63,7 +63,7 @@ public class ExtractionFilterTest extends AbstractKiekerTest {
 	 * Creates inputs with timestamps.
 	 */
 	private List<NamedDoubleRecord> createInputEventSetOER() {
-		final List<NamedDoubleRecord> retList = new ArrayList<NamedDoubleRecord>();
+		final List<NamedDoubleRecord> retList = new ArrayList<>();
 		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 1369127812664L, 10341.94));
 		retList.add(new NamedDoubleRecord(OP_SIGNATURE_B, 1369128812669L, 8341.00));
 		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 1369129812674L, 78.26));
@@ -72,7 +72,7 @@ public class ExtractionFilterTest extends AbstractKiekerTest {
 
 	/**
 	 * Sets up the test for the ExtractionFilter.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If illegal state
 	 * @throws AnalysisConfigurationException
@@ -86,7 +86,7 @@ public class ExtractionFilterTest extends AbstractKiekerTest {
 		// Start - Read OperationExecutionRecords
 		final Configuration readerOERConfiguration = new Configuration();
 		readerOERConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		final ListReader<NamedDoubleRecord> theReaderRecords = new ListReader<NamedDoubleRecord>(readerOERConfiguration, this.controller);
+		final ListReader<NamedDoubleRecord> theReaderRecords = new ListReader<>(readerOERConfiguration, this.controller);
 		theReaderRecords.addAllObjects(this.createInputEventSetOER());
 		// End - Read OperationExecutionRecords
 
@@ -97,7 +97,7 @@ public class ExtractionFilterTest extends AbstractKiekerTest {
 		// End - ResponseTimeExtractionFilter
 
 		// SINK Mock-up
-		this.sinkPlugin = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(), this.controller);
+		this.sinkPlugin = new ListCollectionFilter<>(new Configuration(), this.controller);
 
 		// CONNECT the filters
 		// Mock-up Reader (OperationExecutionRecords) -> ResponseTimeExtractionFIlter
@@ -115,13 +115,12 @@ public class ExtractionFilterTest extends AbstractKiekerTest {
 
 	/**
 	 * Test the extraction of the data from ResponseTimeDoubleRecords.
-	 * 
+	 *
 	 * @throws InterruptedException
 	 *             If interrupted
 	 */
 	@Test
 	public void testResponsetimeOnly() throws InterruptedException {
-
 		final AnalysisControllerThread thread = new AnalysisControllerThread(this.controller);
 		thread.start();
 
@@ -139,6 +138,5 @@ public class ExtractionFilterTest extends AbstractKiekerTest {
 		Assert.assertEquals(10341.94, this.sinkPlugin.getList().get(0).getDoubleValue(), 0);
 		Assert.assertEquals(8341.00, this.sinkPlugin.getList().get(1).getDoubleValue(), 0);
 		Assert.assertEquals(78.26, this.sinkPlugin.getList().get(2).getDoubleValue(), 0);
-
 	}
 }

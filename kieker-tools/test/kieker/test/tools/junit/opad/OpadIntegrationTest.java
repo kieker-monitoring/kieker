@@ -67,7 +67,7 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 	}
 
 	private List<NamedDoubleRecord> createInputEventSetOER() {
-		final List<NamedDoubleRecord> retList = new ArrayList<NamedDoubleRecord>();
+		final List<NamedDoubleRecord> retList = new ArrayList<>();
 		// First Span:
 		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 1500000, 500000));
 		retList.add(new NamedDoubleRecord(OP_SIGNATURE_B, 2200000, 125000));
@@ -117,7 +117,7 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 		// Start - Read OperationExecutionRecords
 		final Configuration readerOERConfiguration = new Configuration();
 		readerOERConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		final ListReader<NamedDoubleRecord> theReaderNamedDoubleRecord = new ListReader<NamedDoubleRecord>(readerOERConfiguration, this.controller);
+		final ListReader<NamedDoubleRecord> theReaderNamedDoubleRecord = new ListReader<>(readerOERConfiguration, this.controller);
 		theReaderNamedDoubleRecord.addAllObjects(this.createInputEventSetOER());
 		// End - Read OperationExecutionRecords
 
@@ -158,9 +158,9 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 		// End - AnomalyDetectionFilter
 
 		// SINK 1
-		this.sinkPluginIfAnomaly = new ListCollectionFilter<StorableDetectionResult>(new Configuration(), this.controller);
+		this.sinkPluginIfAnomaly = new ListCollectionFilter<>(new Configuration(), this.controller);
 		// SINK 2
-		this.sinkPluginElse = new ListCollectionFilter<StorableDetectionResult>(new Configuration(), this.controller);
+		this.sinkPluginElse = new ListCollectionFilter<>(new Configuration(), this.controller);
 
 		// CONNECT the filters
 		// Mock-up Reader (NamedDoubleRecords) -> Extraction Input
@@ -200,7 +200,6 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testOpadFlow() throws InterruptedException {
-
 		final AnalysisControllerThread thread = new AnalysisControllerThread(this.controller);
 		thread.start();
 		Thread.sleep(2000);

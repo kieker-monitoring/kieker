@@ -39,7 +39,6 @@ public class TestControllerConstruction extends AbstractKiekerTest { // NOCS
 	 */
 	@Test
 	public void testConstructionFromConfig() {
-
 		final Configuration configuration = DummyWriterConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		{// Test with default values // NOCS
 			final IMonitoringController kieker = MonitoringController.createInstance(configuration);

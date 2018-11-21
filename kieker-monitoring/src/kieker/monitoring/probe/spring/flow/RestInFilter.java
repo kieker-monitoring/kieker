@@ -68,7 +68,6 @@ public class RestInFilter extends OncePerRequestFilter implements IMonitoringPro
 	protected final void doFilterInternal(final HttpServletRequest httpServletRequest,
 			final HttpServletResponse httpServletResponse, final FilterChain filterChain)
 			throws ServletException, IOException {
-
 		if (!MONITORING_CTRL.isMonitoringEnabled()) {
 			filterChain.doFilter(httpServletRequest, httpServletResponse);
 			return;

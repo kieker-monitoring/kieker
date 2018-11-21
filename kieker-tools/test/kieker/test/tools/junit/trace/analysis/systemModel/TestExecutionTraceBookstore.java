@@ -263,8 +263,8 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testTreeSet() {
-		final SortedSet<Execution> s0 = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
-		final SortedSet<Execution> s1 = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
+		final SortedSet<Execution> s0 = new TreeSet<>(ExecutionTrace.createExecutionTraceComparator());
+		final SortedSet<Execution> s1 = new TreeSet<>(ExecutionTrace.createExecutionTraceComparator());
 		final Execution execFromTrace0 = this.exec0_0__bookstore_searchBook;
 		final Execution long1 = new Execution(execFromTrace0.getOperation(), execFromTrace0.getAllocationComponent(), execFromTrace0.getTraceId(),
 				execFromTrace0.getSessionId(), execFromTrace0.getEoi(), execFromTrace0.getEss(), execFromTrace0.getTin(),
@@ -284,7 +284,6 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testMessageTraceTransformationValidTrace() throws InvalidTraceException {
-
 		final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
 
 		// Transform Execution Trace to Message Trace representation

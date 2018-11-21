@@ -206,7 +206,6 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	}
 
 	private List<IMonitoringRecord> readEvents() throws AnalysisConfigurationException {
-
 		try {
 			Thread.sleep(500);
 		} catch (final InterruptedException e) {

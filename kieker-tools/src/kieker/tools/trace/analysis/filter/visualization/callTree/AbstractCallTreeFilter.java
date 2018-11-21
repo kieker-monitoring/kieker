@@ -139,9 +139,11 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 	/**
 	 * Add a node label.
-	 * 
-	 * @param node the node
-	 * @param shortLabels selects whether short or long labels should be produced
+	 *
+	 * @param node
+	 *            the node
+	 * @param shortLabels
+	 *            selects whether short or long labels should be produced
 	 * @return the label string
 	 */
 	@SuppressWarnings("unchecked")
@@ -355,33 +357,43 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 	/**
 	 * Write dot info for message trace.
-	 * 
-	 * @param <T> type of trace
-	 * 
-	 * @param root root
-	 * @param pairFactory factory to create pairs
-	 * @param msgTrace message trace
-	 * @param outputFilename output file
-	 * @param includeWeights weights
-	 * @param shortLabels flag for short labels
-	 * 
-	 * @throws FileNotFoundException when the file cannot be created 
-	 * @throws TraceProcessingException when there is a processing error with the trace
-	 * @throws UnsupportedEncodingException string encoding not supported
+	 *
+	 * @param <T>
+	 *            type of trace
+	 *
+	 * @param root
+	 *            root
+	 * @param pairFactory
+	 *            factory to create pairs
+	 * @param msgTrace
+	 *            message trace
+	 * @param outputFilename
+	 *            output file
+	 * @param includeWeights
+	 *            weights
+	 * @param shortLabels
+	 *            flag for short labels
+	 *
+	 * @throws FileNotFoundException
+	 *             when the file cannot be created
+	 * @throws TraceProcessingException
+	 *             when there is a processing error with the trace
+	 * @throws UnsupportedEncodingException
+	 *             string encoding not supported
 	 */
 	public static <T> void writeDotForMessageTrace(final AbstractCallTreeNode<T> root,
 			final IPairFactory<T> pairFactory, final MessageTrace msgTrace, final String outputFilename,
 			final boolean includeWeights, final boolean shortLabels)
 			throws FileNotFoundException, TraceProcessingException, UnsupportedEncodingException {
-
-		AbstractCallTreeFilter.<T>addTraceToTree(root, msgTrace, pairFactory, false); // false: no aggregation
+		AbstractCallTreeFilter.<T> addTraceToTree(root, msgTrace, pairFactory, false); // false: no aggregation
 		AbstractCallTreeFilter.saveTreeToDotFile(root, outputFilename, includeWeights, true, shortLabels); // includeEois
 	}
 
 	/**
 	 * @author Andre van Hoorn
 	 *
-	 * @param <T> type used for the message pairing.
+	 * @param <T>
+	 *            type used for the message pairing.
 	 *
 	 * @since 1.5
 	 */
