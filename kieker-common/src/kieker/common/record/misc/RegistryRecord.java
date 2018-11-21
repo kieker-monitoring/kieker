@@ -25,7 +25,6 @@ import java.nio.charset.Charset;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
-import kieker.common.registry.ILookup;
 import kieker.common.registry.reader.ReaderRegistry;
 
 /**
@@ -155,14 +154,6 @@ public final class RegistryRecord extends AbstractMonitoringRecord {
 	 * @throws BufferOverflowException
 	 *             if the length encoded in the buffer exceeds the buffers boundary
 	 */
-	public static final void registerRecordInRegistry(final ByteBuffer buffer, final ILookup<String> stringRegistry) throws BufferOverflowException {
-		final int id = buffer.getInt();
-		final byte[] strBytes = new byte[buffer.getInt()];
-		buffer.get(strBytes);
-		final String string = RegistryRecord.bytesToString(strBytes);
-		stringRegistry.set(string, id);
-	}
-
 	public static final void registerRecordInRegistry(final ByteBuffer buffer, final ReaderRegistry<String> stringRegistry) throws BufferOverflowException {
 		final int id = buffer.getInt();
 		final byte[] strBytes = new byte[buffer.getInt()];

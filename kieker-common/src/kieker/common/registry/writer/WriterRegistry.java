@@ -22,6 +22,7 @@ import java.util.Map;
 import kieker.common.registry.IRegistryListener;
 
 /**
+ * Manages a writer registry. It triggers an registry listener for every new entry.
  *
  * @author Christian Wulf (chw)
  *
@@ -31,13 +32,19 @@ public class WriterRegistry implements IWriterRegistry<String> {
 
 	// TODO introduce faster, non-boxing ObjectIntMap
 	private final Map<String, Integer> storage = new HashMap<String, Integer>(); // NOPMD (synchronization is not necessary)
-	/** id of the next value which will be registered */
+	/** id of the next value which will be registered. */
 	private int nextId;
-	/** the listener of this registry which is notified upon a newly registered value */
+	/** the listener of this registry which is notified upon a newly registered value. */
 	private final IRegistryListener<String> registryListener;
-	/** ID of this registry to distinguish multiple ones */
+	/** ID of this registry to distinguish multiple ones. */
 	private final long id;
 
+	/**
+	 * Create a new writer registry.
+	 *
+	 * @param registryListener
+	 *            registry listener
+	 */
 	public WriterRegistry(final IRegistryListener<String> registryListener) {
 		this.registryListener = registryListener;
 		this.id = WriterRegistryUtil.generateId();

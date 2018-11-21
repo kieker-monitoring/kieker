@@ -23,7 +23,7 @@ import java.util.HashMap;
  *
  * @since 1.10
  *
- * @deprecated 1.15
+ * @deprecated since 1.15 remove 1.16
  */
 @Deprecated
 public class ClassNameRegistry extends HashMap<Integer, String> {

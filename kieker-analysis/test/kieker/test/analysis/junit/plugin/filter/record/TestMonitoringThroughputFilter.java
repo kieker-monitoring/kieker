@@ -38,9 +38,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This test is for the class {@link MonitoringThroughputFilter}.
- * 
+ *
  * @author Henry Grow
- * 
+ *
  * @since 1.9
  */
 public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
@@ -67,7 +67,7 @@ public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 
 	/**
 	 * This method prepares the test setup.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If something went wrong during the test setup (should not happen).
 	 * @throws AnalysisConfigurationException
@@ -87,7 +87,7 @@ public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 		configuration.setProperty(MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, TimeUnit.NANOSECONDS.name());
 
 		// ListReader
-		this.simpleListReader = new ListReader<EmptyRecord>(new Configuration(), this.analysisController);
+		this.simpleListReader = new ListReader<>(new Configuration(), this.analysisController);
 
 		// MonitoringThroughPut
 		monitoringThroughputFilter = new MonitoringThroughputFilter(configuration, this.analysisController);
@@ -105,24 +105,24 @@ public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 				relayedRecordsCountingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		// sink for uncounted records
-		this.sinkPluginUncountedRecords = new ListCollectionFilter<Long>(configuration, this.analysisController);
+		this.sinkPluginUncountedRecords = new ListCollectionFilter<>(configuration, this.analysisController);
 		this.analysisController.connect(uncountedRecordsCountingFilter, CountingFilter.OUTPUT_PORT_NAME_COUNT,
 				this.sinkPluginUncountedRecords, ListCollectionFilter.INPUT_PORT_NAME);
 
 		// sink for all relayed records
-		this.sinkPluginRelayedRecords = new ListCollectionFilter<Long>(configuration, this.analysisController);
+		this.sinkPluginRelayedRecords = new ListCollectionFilter<>(configuration, this.analysisController);
 		this.analysisController.connect(relayedRecordsCountingFilter, CountingFilter.OUTPUT_PORT_NAME_COUNT,
 				this.sinkPluginRelayedRecords, ListCollectionFilter.INPUT_PORT_NAME);
 
 		// sink for the count
-		this.sinkPluginCount = new ListCollectionFilter<Long>(configuration, this.analysisController);
+		this.sinkPluginCount = new ListCollectionFilter<>(configuration, this.analysisController);
 		this.analysisController.connect(monitoringThroughputFilter, MonitoringThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT,
 				this.sinkPluginCount, ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
 	/**
 	 * A simple test for the counting filter.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If the test setup is somehow invalid (should not happen).
 	 * @throws AnalysisConfigurationException
@@ -130,8 +130,7 @@ public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testNormal() throws IllegalStateException, AnalysisConfigurationException {
-
-		final List<EmptyRecord> records = new ArrayList<EmptyRecord>();
+		final List<EmptyRecord> records = new ArrayList<>();
 
 		// adding 20 records with timestamps from 10 to 29
 		for (long i = 10; i < 30; i++) {

@@ -36,7 +36,7 @@ import kieker.common.registry.reader.ReaderRegistry;
  */
 public class RegistryRecordHandler implements Runnable {
 
-	/** The default queue size for the registry record queue */
+	/** The default queue size for the registry record queue. */
 	private static final int DEFAULT_QUEUE_SIZE = 1024;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RegistryRecordHandler.class);

@@ -36,6 +36,12 @@ public abstract class AbstractEventDeserializer {
 
 	protected final ReaderRegistry<String> registry;
 
+	/**
+	 * Create an abstract event deserializer.
+	 *
+	 * @param configuration configuration for the deserializer.
+	 * @param registry string registry to be used.
+	 */
 	public AbstractEventDeserializer(final Configuration configuration, final ReaderRegistry<String> registry) {
 		this.registry = registry;
 	}

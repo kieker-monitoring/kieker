@@ -34,7 +34,8 @@ import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
 /**
- * Read a kieker log directory. The directory is received as input.
+ * Read a kieker log directory. The filter receives a directory as input and
+ * outputs all events collected in the directory.
  *
  * @author Reiner Jung
  *
@@ -46,6 +47,11 @@ public class DirectoryReaderStage extends AbstractConsumerStage<File> {
 	private final OutputPort<IMonitoringRecord> outputPort = this.createOutputPort(IMonitoringRecord.class);
 	private final Configuration configuration;
 
+	/**
+	 * Create a new directory reader stage.
+	 *
+	 * @param configuration configuration for the stage and its plugins
+	 */
 	public DirectoryReaderStage(final Configuration configuration) {
 		this.configuration = configuration;
 	}

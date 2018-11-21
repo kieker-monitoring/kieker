@@ -44,7 +44,7 @@ import kieker.common.util.filesystem.FileExtensionFilter;
  *
  * @since 1.2
  *
- * @deprecated 1.15
+ * @deprecated since 1.15 removed 1.16
  */
 @Deprecated
 class BinaryLogReaderThread extends AbstractLogReaderThread {

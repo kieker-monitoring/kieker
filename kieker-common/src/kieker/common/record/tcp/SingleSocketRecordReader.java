@@ -46,6 +46,18 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 	private final IRecordReceivedListener listener;
 	private final CachedRecordFactoryCatalog recordFactories = new CachedRecordFactoryCatalog();
 
+	/**
+	 * Create single socket reader.
+	 *
+	 * @param port
+	 *            port to listen to
+	 * @param bufferCapacity
+	 *            buffer capacity
+	 * @param logger
+	 *            logger to be used
+	 * @param listener
+	 *            listener to trigger on received records
+	 */
 	public SingleSocketRecordReader(final int port, final int bufferCapacity, final Logger logger, final IRecordReceivedListener listener) {
 		super(port, bufferCapacity, logger);
 		this.listener = listener;

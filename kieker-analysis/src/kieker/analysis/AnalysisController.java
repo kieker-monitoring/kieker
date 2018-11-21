@@ -498,7 +498,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * Causes the calling thread to wait until the analysis controller has been initialized.
 	 */
-	protected final void awaitInitialization() {
+	public final void awaitInitialization() {
 		try {
 			this.initializationLatch.await();
 		} catch (final InterruptedException ex) {
@@ -716,7 +716,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             If the given project could not be loaded.
 	 */
 	public static final AnalysisControllerWithMapping createAnalysisController(final MIProject project, final ClassLoader classLoader) throws NullPointerException,
-			AnalysisConfigurationException {
+	AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController(project, classLoader);
 
 		return new AnalysisControllerWithMapping(controller, controller.pluginModelMap, controller.repositoryModelMap);

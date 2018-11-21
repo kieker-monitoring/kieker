@@ -17,9 +17,9 @@
 package kieker.test.tools.util;
 
 import kieker.common.util.signature.ClassOperationSignaturePair;
-import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
-import kieker.tools.traceAnalysis.systemModel.Execution;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
+import kieker.tools.trace.analysis.systemModel.Execution;
+import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 

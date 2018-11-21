@@ -29,7 +29,7 @@ import javax.xml.bind.Marshaller;
  *
  * A class object has to be passed at creation. Only elements of this type
  * wrapped in a {@code JAXBElement} could be marshaled.
- * 
+ *
  * @param <T>
  *            Type of elements
  *
@@ -59,7 +59,6 @@ public class JAXBMarshalStage<T> extends AbstractBiCombinerStage<JAXBElement<T>,
 
 	@Override
 	protected void combine(final JAXBElement<T> jaxbElement, final OutputStream outputStream) {
-
 		try {
 			this.marshaller.marshal(jaxbElement, outputStream);
 		} catch (final JAXBException e) {

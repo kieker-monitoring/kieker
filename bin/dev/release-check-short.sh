@@ -316,10 +316,15 @@ aspectjversion="$(grep "libAspectjVersion = " gradle.properties | sed s/.*=.//g)
 #
 ## binary releases
 #
+echo "---------------------------------"
+echo "Check binary releases"
+echo "---------------------------------"
+
 assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"
 BASE_TMP_DIR_ABS=$(pwd)
 
+echo "Check zip"
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
@@ -327,6 +332,7 @@ BINZIP=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.zip)
 check_bin_archive ${BINZIP}
 rm -rf ${DIR}
 
+echo "Check tar.gz"
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
@@ -338,6 +344,12 @@ rm -rf ${DIR}
 #
 ## source releases
 #
+
+echo "---------------------------------"
+echo "Check source releases"
+echo "---------------------------------"
+
+echo "check zip"
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
@@ -345,9 +357,16 @@ SRCZIP=$(ls ../../${DIST_RELEASE_DIR}/*-sources.zip)
 check_src_archive ${SRCZIP}
 rm -rf ${DIR}
 
+echo "check tar.gz"
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
 SRCTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-sources.tar.gz)
 check_src_archive ${SRCTGZ}
 rm -rf ${DIR}
+
+# end
+echo "---------------------------------"
+echo "Success."
+echo "---------------------------------"
+

@@ -25,6 +25,16 @@ public class UnknownRecordTypeException extends Exception {
 	private static final long serialVersionUID = 3967732396720668295L;
 	private final String classname;
 
+	/**
+	 * Create an unknown record type exception.
+	 *
+	 * @param message
+	 *            exception message
+	 * @param classname
+	 *            class involved
+	 * @param cause
+	 *            cause of the exception
+	 */
 	public UnknownRecordTypeException(final String message, final String classname, final Throwable cause) {
 		super(message, cause);
 		this.classname = classname;

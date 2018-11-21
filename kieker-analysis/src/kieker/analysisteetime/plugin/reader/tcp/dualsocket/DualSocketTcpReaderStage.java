@@ -47,7 +47,7 @@ public final class DualSocketTcpReaderStage extends AbstractProducerStage<IMonit
 
 	/**
 	 * Default constructor with <code>port1=10133</code>, <code>bufferCapacity=65535</code>, and
-	 * <code>port2=10134</code>
+	 * <code>port2=10134</code>.
 	 */
 	public DualSocketTcpReaderStage() {
 		this(10133, 65535, 10134);

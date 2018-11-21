@@ -59,7 +59,6 @@ public abstract class AbstractRawDataReader extends AbstractReaderPlugin {
 	@SuppressWarnings("unchecked")
 	private IMonitoringRecordDeserializer createDeserializer(final String deserializerClassName, final Configuration configuration,
 			final IProjectContext projectContext) {
-
 		// NOCS TODO Externalize instance creation into a factory
 		final Class<? extends IMonitoringRecordDeserializer> deserializerClass;
 		IMonitoringRecordDeserializer localDeserializer = null;

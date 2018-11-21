@@ -32,7 +32,7 @@ import kieker.common.registry.reader.ReaderRegistry;
  *
  * @since 1.10
  *
- * @deprecated 1.15
+ * @deprecated since 1.15 remove 1.16
  */
 @Deprecated
 public class ClassNameRegistryRepository {

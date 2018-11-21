@@ -35,7 +35,7 @@ import teetime.stage.util.TextLineContainer;
  *
  * @since 1.10
  *
- * @deprecated 1.15
+ * @deprecated since 1.15 removed 1.16
  */
 @Deprecated
 public class TextLine2RecordFilter extends AbstractConsumerStage<TextLineContainer> {

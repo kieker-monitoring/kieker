@@ -46,7 +46,7 @@ import kieker.common.util.filesystem.FSUtil;
  *
  * @since 1.7
  *
- * @deprecated 1.15
+ * @deprecated since 1.15 removed 1.16
  */
 @Deprecated
 public final class FSZipReader implements Runnable {

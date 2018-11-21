@@ -28,7 +28,7 @@ import java.io.FilenameFilter;
  */
 public class FileExtensionFilter implements FilenameFilter {
 
-	/** A filter ensuring that the name of the file starts with {@value FSUtil.FILE_PREFIX} and ends with {@value FSUtil.MAP_FILE_EXTENSION} */
+	/** A filter ensuring that the name of the file starts with {@value FSUtil.FILE_PREFIX} and ends with {@value FSUtil.MAP_FILE_EXTENSION}. */
 	public static final FileExtensionFilter BIN = new FileExtensionFilter(FSUtil.BINARY_FILE_EXTENSION);
 	public static final FileExtensionFilter DAT = new FileExtensionFilter(FSUtil.DAT_FILE_EXTENSION);
 	public static final FileExtensionFilter DEFLATE = new FileExtensionFilter(FSUtil.DEFLATE_FILE_EXTENSION);
@@ -39,6 +39,12 @@ public class FileExtensionFilter implements FilenameFilter {
 
 	private final String fileExtension;
 
+	/**
+	 * create filename filter.
+	 * 
+	 * @param fileExtension
+	 *            extension
+	 */
 	public FileExtensionFilter(final String fileExtension) {
 		super();
 		this.fileExtension = fileExtension;

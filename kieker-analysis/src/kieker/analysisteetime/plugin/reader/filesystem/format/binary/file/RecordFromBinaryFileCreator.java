@@ -48,7 +48,7 @@ import teetime.framework.OutputPort;
  *
  * @since 1.10
  *
- * @deprecated 1.15
+ * @deprecated since 1.15 removed 1.16
  */
 @Deprecated
 public class RecordFromBinaryFileCreator {
@@ -90,7 +90,6 @@ public class RecordFromBinaryFileCreator {
 	 */
 	public void createRecordsFromBinaryFile(final File binaryFile, final DataInputStream inputStream,
 			final OutputPort<IMonitoringRecord> outputPort) throws IOException, MonitoringRecordException {
-
 		RecordFromBinaryFileCreator.LOGGER.info("reading file {}", binaryFile.getAbsolutePath());
 
 		final ReaderRegistry<String> registry = this.classNameRegistryRepository.get(binaryFile.getParentFile());

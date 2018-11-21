@@ -30,7 +30,7 @@ import kieker.common.util.filesystem.FileExtensionFilter;
  *
  * @since 1.13
  *
- * @deprecated 1.15
+ * @deprecated since 1.15 removed 1.16
  */
 @Deprecated
 abstract class AbstractLogReaderThread extends Thread {

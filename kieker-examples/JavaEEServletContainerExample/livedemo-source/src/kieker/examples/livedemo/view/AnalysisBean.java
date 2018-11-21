@@ -37,7 +37,7 @@ import kieker.examples.livedemo.analysis.sink.MethodResponsetimeDisplayFilter;
 import kieker.examples.livedemo.analysis.sink.SwapDisplayFilter;
 import kieker.examples.livedemo.analysis.sink.ThreadsStatusDisplayFilter;
 import kieker.examples.livedemo.common.EnrichedOperationExecutionRecord;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

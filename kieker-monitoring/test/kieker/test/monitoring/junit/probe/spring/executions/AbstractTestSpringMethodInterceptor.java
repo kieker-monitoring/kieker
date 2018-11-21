@@ -41,7 +41,7 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.spring.executions.OperationExecutionMethodInvocationInterceptor;
-import kieker.monitoring.writer.filesystem.AsciiFileWriter;
+import kieker.monitoring.writer.filesystem.FileWriter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -78,8 +78,8 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 	@Before
 	public void init() throws IOException {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
-		config.setProperty(AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, FileWriter.class.getName());
+		config.setProperty(FileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
 		this.monitoringCtrl = MonitoringController.createInstance(config);
 
 		this.controlFlowRegistry.unsetThreadLocalEOI();
