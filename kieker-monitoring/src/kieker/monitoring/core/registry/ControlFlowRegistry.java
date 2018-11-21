@@ -55,7 +55,6 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	 * @return a globally unique trace id.
 	 */
 	public final long getUniqueTraceId() {
-
 		final long id = this.lastThreadId.incrementAndGet();
 		// Since we use -1 as a marker for an invalid traceId, it must not be returned!
 		if (id == -1) {

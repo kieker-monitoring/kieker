@@ -24,9 +24,9 @@ import org.junit.Assert;
 
 /**
  * Client for the TCP server tests, providing records.
- * 
+ *
  * @author Reiner Jung, Pascale Brandt
- * 
+ *
  * @since 1.8
  */
 
@@ -36,7 +36,7 @@ public class TCPClientforServer implements Runnable {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param port
 	 *            the server port this client connects to
 	 */
@@ -49,7 +49,6 @@ public class TCPClientforServer implements Runnable {
 	 */
 	@Override
 	public void run() {
-
 		boolean connected = false;
 
 		while (!connected) {

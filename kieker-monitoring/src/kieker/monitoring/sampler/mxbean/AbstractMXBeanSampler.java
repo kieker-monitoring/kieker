@@ -51,7 +51,6 @@ public abstract class AbstractMXBeanSampler implements ISampler {
 	 */
 	@Override
 	public final void sample(final IMonitoringController monitoringController) throws Exception {
-
 		if (!monitoringController.isMonitoringEnabled()) {
 			return;
 		}

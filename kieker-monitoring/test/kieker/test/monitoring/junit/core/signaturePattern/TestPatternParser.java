@@ -273,7 +273,6 @@ public class TestPatternParser extends AbstractKiekerTest {
 
 	private void checkCombination(final String patternStr, final String visibility, final String staticNonStatic, final String nativeNonNative,
 			final String returnTypeOrNew, final String fqClassName, final String operationName, final String paramList) throws InvalidPatternException {
-
 		final StringBuilder signatureBuilder = new StringBuilder(128);
 
 		// Visibility

@@ -83,7 +83,6 @@ public class BinaryWriterReaderTest {
 
 	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
 	private List<IMonitoringRecord> testBinaryCommunication(final List<IMonitoringRecord> records, final boolean shouldDecompress) throws Exception {
-
 		final String compressionFilter = shouldDecompress ? ZipCompressionFilter.class.getName() : NoneCompressionFilter.class.getName(); // NOCS (declarative)
 
 		// 2. define monitoring config

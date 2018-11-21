@@ -116,7 +116,6 @@ public final class ControllerFactory {
 	 */
 	private <C> C instantiate(final Class<C> clazz, final String className, final Configuration configuration)
 			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-
 		// Choose the appropriate configuration to pass
 		final Configuration configurationToPass;
 		if (clazz.isAnnotationPresent(ReceiveUnfilteredConfiguration.class)) {

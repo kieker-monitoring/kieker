@@ -1227,7 +1227,6 @@ public class PerformAnalysis {
 	 */
 	private void attachGraphProcessors(final String pathPrefix, final List<AbstractGraphProducingFilter<?>> graphProducers)
 			throws IllegalStateException, AnalysisConfigurationException, IOException {
-
 		for (final AbstractGraphProducingFilter<?> producer : graphProducers) {
 			AbstractGraphFilter<?, ?, ?, ?> lastFilter = null;
 
@@ -1275,7 +1274,6 @@ public class PerformAnalysis {
 	private <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void attachGraphWriter(final String pathPrefix, final P plugin,
 			final AbstractGraphProducingFilter<?> producer)
 			throws IllegalStateException, AnalysisConfigurationException {
-
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, pathPrefix);
 		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, String.valueOf(true));

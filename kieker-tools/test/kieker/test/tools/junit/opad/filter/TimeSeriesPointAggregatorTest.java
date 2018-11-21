@@ -57,12 +57,11 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 
 	@Test
 	public void testAggregatorOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-
 		final AnalysisController controller = new AnalysisController();
 
 		// READER
 		final Configuration readerAggregationConfiguration = new Configuration();
-		final ListReader<NamedDoubleTimeSeriesPoint> theReaderAggregator = new ListReader<NamedDoubleTimeSeriesPoint>(readerAggregationConfiguration,
+		final ListReader<NamedDoubleTimeSeriesPoint> theReaderAggregator = new ListReader<>(readerAggregationConfiguration,
 				controller);
 
 		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(664L, 1000.0, OP_SIGNATURE_A));
@@ -90,7 +89,7 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		final TimeSeriesPointAggregatorFilter aggregator = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, controller);
 
 		// SINK 1
-		final ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(),
+		final ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin = new ListCollectionFilter<>(new Configuration(),
 				controller);
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
@@ -131,7 +130,7 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 
 		// READER
 		final Configuration readerAggregationConfiguration = new Configuration();
-		final ListReader<NamedDoubleTimeSeriesPoint> listReader = new ListReader<NamedDoubleTimeSeriesPoint>(readerAggregationConfiguration,
+		final ListReader<NamedDoubleTimeSeriesPoint> listReader = new ListReader<>(readerAggregationConfiguration,
 				controller);
 
 		listReader.addObject(new NamedDoubleTimeSeriesPoint(1L, 3.0, OP_SIGNATURE_A));
@@ -146,7 +145,7 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		final TimeSeriesPointAggregatorFilter aggregator = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, controller);
 
 		// SINK
-		final ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(),
+		final ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin = new ListCollectionFilter<>(new Configuration(),
 				controller);
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
@@ -176,7 +175,7 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 
 		// READER
 		final Configuration readerAggregationConfiguration = new Configuration();
-		final ListReader<NamedDoubleTimeSeriesPoint> listReader = new ListReader<NamedDoubleTimeSeriesPoint>(readerAggregationConfiguration,
+		final ListReader<NamedDoubleTimeSeriesPoint> listReader = new ListReader<>(readerAggregationConfiguration,
 				controller);
 
 		listReader.addObject(new NamedDoubleTimeSeriesPoint(1000000L, 3.0, OP_SIGNATURE_A));
@@ -191,7 +190,7 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		final TimeSeriesPointAggregatorFilter aggregator = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, controller);
 
 		// SINK
-		final ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(),
+		final ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin = new ListCollectionFilter<>(new Configuration(),
 				controller);
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
@@ -217,12 +216,11 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 
 	@Test
 	public void testGlobalTimescope() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-
 		final AnalysisController controller = new AnalysisController();
 
 		// READER
 		final Configuration readerAggregationConfiguration = new Configuration();
-		final ListReader<NamedDoubleTimeSeriesPoint> theReaderAggregator = new ListReader<NamedDoubleTimeSeriesPoint>(readerAggregationConfiguration,
+		final ListReader<NamedDoubleTimeSeriesPoint> theReaderAggregator = new ListReader<>(readerAggregationConfiguration,
 				controller);
 
 		/**
@@ -282,7 +280,7 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		final TimeSeriesPointAggregatorFilter aggregator = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, controller);
 
 		// SINK 1
-		final ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(),
+		final ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin = new ListCollectionFilter<>(new Configuration(),
 				controller);
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 

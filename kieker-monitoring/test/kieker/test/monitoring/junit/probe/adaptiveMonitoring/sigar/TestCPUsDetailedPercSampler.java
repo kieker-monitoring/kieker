@@ -59,7 +59,6 @@ public class TestCPUsDetailedPercSampler extends AbstractKiekerTest { // NOCS
 
 	@Test
 	public void testDeactivationAndReactivation() throws InterruptedException {
-
 		final long period = 1000; // 1000 ms
 		final long offset = 300; // i.e., 1st event after 300 ms
 

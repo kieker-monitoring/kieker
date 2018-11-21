@@ -65,7 +65,6 @@ public class TestServiceContainer extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testServiceConnectorInterface() throws IOException, ConnectorDataTransmissionException, InterruptedException {
-
 		/**
 		 * 1st parameter: Configuration is in CLIServerMain
 		 * next steps stays in CLIServerMain//

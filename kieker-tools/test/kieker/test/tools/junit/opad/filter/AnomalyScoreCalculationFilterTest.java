@@ -38,7 +38,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * Test for the AnomalyScoreCalculationFilter. Therefore comparing the result of the Filter with some
  * previous manually calculated Results.
- * 
+ *
  * @since 1.10
  * @author Tom Frotscher
  */
@@ -61,7 +61,7 @@ public class AnomalyScoreCalculationFilterTest extends AbstractKiekerTest {
 	}
 
 	private List<ForecastMeasurementPair> createInputEventSetScoreCalc() {
-		final List<ForecastMeasurementPair> retList = new ArrayList<ForecastMeasurementPair>();
+		final List<ForecastMeasurementPair> retList = new ArrayList<>();
 
 		retList.add(this.createFMP(OP_SIGNATURE_A, 0.6, 0.4));
 		retList.add(this.createFMP(OP_SIGNATURE_A, 0.3, 0.4));
@@ -72,7 +72,7 @@ public class AnomalyScoreCalculationFilterTest extends AbstractKiekerTest {
 
 	/**
 	 * Set up for the AnomalyScoreCalculationFilterTest.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If illegal state
 	 * @throws AnalysisConfigurationException
@@ -86,14 +86,14 @@ public class AnomalyScoreCalculationFilterTest extends AbstractKiekerTest {
 		// READER
 		final Configuration readerScoreCalcConfiguration = new Configuration();
 		readerScoreCalcConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		final ListReader<ForecastMeasurementPair> theReaderScoreCalc = new ListReader<ForecastMeasurementPair>(readerScoreCalcConfiguration, this.controller);
+		final ListReader<ForecastMeasurementPair> theReaderScoreCalc = new ListReader<>(readerScoreCalcConfiguration, this.controller);
 		theReaderScoreCalc.addAllObjects(this.createInputEventSetScoreCalc());
 
 		final Configuration scoreConfiguration = new Configuration();
 		final AnomalyScoreCalculationFilter scoreCalc = new AnomalyScoreCalculationFilter(scoreConfiguration, this.controller);
 
 		// SINK 1
-		this.sinkAnomalyScore = new ListCollectionFilter<StorableDetectionResult>(new Configuration(), this.controller);
+		this.sinkAnomalyScore = new ListCollectionFilter<>(new Configuration(), this.controller);
 
 		// CONNECTION
 		this.controller
@@ -104,7 +104,7 @@ public class AnomalyScoreCalculationFilterTest extends AbstractKiekerTest {
 
 	/**
 	 * Test of the AnomalyScoreCalculationFilter.
-	 * 
+	 *
 	 * @throws InterruptedException
 	 *             If interrupted
 	 * @throws IllegalStateException
@@ -114,7 +114,6 @@ public class AnomalyScoreCalculationFilterTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testAnomalyScoreCalculationOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-
 		final AnalysisControllerThread thread = new AnalysisControllerThread(this.controller);
 		thread.start();
 

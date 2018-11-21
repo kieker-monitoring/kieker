@@ -50,7 +50,6 @@ public class RBridgeTest extends AbstractKiekerRTest {
 	 */
 	@Test
 	public void test() throws Exception {
-
 		final RBridgeControl r = RBridgeControl.getInstance();
 
 		r.evalWithR("measures <- c(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,31.0,41.0,95.0,77.0,29.0,62.0,49.0,NA)");

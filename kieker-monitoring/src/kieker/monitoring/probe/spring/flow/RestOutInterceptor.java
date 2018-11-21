@@ -62,7 +62,6 @@ public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 	@Override
 	public ClientHttpResponse intercept(final HttpRequest request, final byte[] body,
 			final ClientHttpRequestExecution execution) throws IOException {
-
 		if (!RestOutInterceptor.CTRLINST.isMonitoringEnabled()) {
 			return execution.execute(request, body);
 		}
