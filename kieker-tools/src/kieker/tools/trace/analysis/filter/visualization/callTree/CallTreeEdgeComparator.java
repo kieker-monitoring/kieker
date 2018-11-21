@@ -21,13 +21,13 @@ import java.util.Comparator;
 
 /**
  * @author Christian Wulf (chw)
- * 
+ *
  * @since 1.14
  */
 class CallTreeEdgeComparator implements Comparator<WeightedDirectedCallTreeEdge<?>>, Serializable {
 
 	/**
-	 * 8026580351004780853L for 1.14
+	 * 8026580351004780853L for 1.14.
 	 */
 	private static final long serialVersionUID = 8026580351004780853L;
 

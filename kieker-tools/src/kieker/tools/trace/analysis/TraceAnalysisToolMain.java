@@ -75,18 +75,18 @@ public final class TraceAnalysisToolMain extends AbstractTool<TraceAnalysisConfi
 		final DateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_PATTERN, Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-		if (this.settings.getIgnoreExecutionsBeforeDate() != null) {
-			LOGGER.info("Ignoring records before {} ({})", dateFormat.format(this.settings.getIgnoreExecutionsBeforeDate()),
-					this.settings.getIgnoreExecutionsBeforeDate());
+		if (this.parameterConfiguration.getIgnoreExecutionsBeforeDate() != null) {
+			LOGGER.info("Ignoring records before {} ({})", dateFormat.format(this.parameterConfiguration.getIgnoreExecutionsBeforeDate()),
+					this.parameterConfiguration.getIgnoreExecutionsBeforeDate());
 		}
-		if (this.settings.getIgnoreExecutionsAfterDate() != null) {
-			LOGGER.info("Ignoring records after {} ({})", dateFormat.format(this.settings.getIgnoreExecutionsAfterDate()),
-					this.settings.getIgnoreExecutionsAfterDate());
+		if (this.parameterConfiguration.getIgnoreExecutionsAfterDate() != null) {
+			LOGGER.info("Ignoring records after {} ({})", dateFormat.format(this.parameterConfiguration.getIgnoreExecutionsAfterDate()),
+					this.parameterConfiguration.getIgnoreExecutionsAfterDate());
 		}
 
-		this.settings.dumpConfiguration(LOGGER);
+		this.parameterConfiguration.dumpConfiguration(LOGGER);
 
-		if (new PerformAnalysis(LOGGER, this.settings).dispatchTasks()) {
+		if (new PerformAnalysis(LOGGER, this.parameterConfiguration).dispatchTasks()) {
 			LOGGER.info("Analysis complete. See 'kieker.log' for details.");
 			return SUCCESS_EXIT_CODE;
 		} else {
@@ -110,7 +110,7 @@ public final class TraceAnalysisToolMain extends AbstractTool<TraceAnalysisConfi
 	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
 		try {
 			return this.checkInputDirs(commander)
-					&& CommandLineParameterEvaluation.checkDirectory(this.settings.getOutputDir(), "output", commander)
+					&& CommandLineParameterEvaluation.checkDirectory(this.parameterConfiguration.getOutputDir(), "output", commander)
 					&& this.selectOrFilterTraces();
 		} catch (final IOException e) {
 			throw new ConfigurationException(e);
@@ -136,32 +136,32 @@ public final class TraceAnalysisToolMain extends AbstractTool<TraceAnalysisConfi
 	 * @return true if not both trace features have been requested
 	 */
 	private boolean selectOrFilterTraces() {
-		if (this.checkNotEmpty(this.settings.getSelectTraces()) && this.checkNotEmpty(this.settings.getFilterTraces())) {
+		if (this.checkNotEmpty(this.parameterConfiguration.getSelectTraces()) && this.checkNotEmpty(this.parameterConfiguration.getFilterTraces())) {
 			LOGGER.error("Trace Id selection and filtering are mutually exclusive");
 			return false;
-		} else if (!this.settings.getSelectTraces().isEmpty()) {
-			final int numSelectedTraces = this.settings.getSelectTraces().size();
+		} else if (!this.parameterConfiguration.getSelectTraces().isEmpty()) {
+			final int numSelectedTraces = this.parameterConfiguration.getSelectTraces().size();
 			try {
-				for (final Long idStr : this.settings.getSelectTraces()) {
-					this.settings.getSelectedTraces().add(idStr);
+				for (final Long idStr : this.parameterConfiguration.getSelectTraces()) {
+					this.parameterConfiguration.getSelectedTraces().add(idStr);
 				}
 				LOGGER.info("{} trace{} selected", numSelectedTraces, (numSelectedTraces > 1 ? "s" : "")); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-				LOGGER.error("Failed to parse list of trace IDs: {}", this.settings.getSelectTraces().toArray().toString(), e);
+				LOGGER.error("Failed to parse list of trace IDs: {}", this.parameterConfiguration.getSelectTraces().toArray().toString(), e);
 				return false;
 			}
-		} else if (!this.settings.getFilterTraces().isEmpty()) {
-			this.settings.setInvertTraceIdFilter(true);
-			final String[] traceIdList = this.settings.getFilterTraces().toArray(new String[this.settings.getFilterTraces().size()]);
+		} else if (!this.parameterConfiguration.getFilterTraces().isEmpty()) {
+			this.parameterConfiguration.setInvertTraceIdFilter(true);
+			final String[] traceIdList = this.parameterConfiguration.getFilterTraces().toArray(new String[this.parameterConfiguration.getFilterTraces().size()]);
 
 			final int numSelectedTraces = traceIdList.length;
 			try {
-				for (final Long idStr : this.settings.getSelectTraces()) {
-					this.settings.getSelectedTraces().add(idStr);
+				for (final Long idStr : this.parameterConfiguration.getSelectTraces()) {
+					this.parameterConfiguration.getSelectedTraces().add(idStr);
 				}
 				LOGGER.info("{} trace{} filtered", numSelectedTraces, (numSelectedTraces > 1 ? "s" : "")); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-				LOGGER.error("Failed to parse list of trace IDs: {}", this.settings.getSelectTraces().toArray().toString(), e);
+				LOGGER.error("Failed to parse list of trace IDs: {}", this.parameterConfiguration.getSelectTraces().toArray().toString(), e);
 				return false;
 			}
 		}
@@ -176,7 +176,7 @@ public final class TraceAnalysisToolMain extends AbstractTool<TraceAnalysisConfi
 	 * @return true if {@link #inputDirs} exist and are Kieker directories; false otherwise
 	 */
 	private boolean checkInputDirs(final JCommander commander) {
-		for (final File inputDir : this.settings.getInputDirs()) {
+		for (final File inputDir : this.parameterConfiguration.getInputDirs()) {
 			try {
 				if (!inputDir.exists()) {
 					LOGGER.error("The specified input directory '{}' does not exist", inputDir.getCanonicalPath());

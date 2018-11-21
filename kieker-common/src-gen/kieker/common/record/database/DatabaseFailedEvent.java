@@ -189,6 +189,20 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int)this.getTimestamp());
+		code += this.getClassSignature().hashCode();
+		code += ((int)this.getTraceId());
+		code += ((int)this.getOrderIndex());
+		code += this.getCause().hashCode();
+		
+		return code;
+	}
 	
 	public final long getTimestamp() {
 		return this.timestamp;

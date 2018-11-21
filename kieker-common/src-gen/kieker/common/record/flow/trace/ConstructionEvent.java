@@ -173,6 +173,20 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int)this.getTimestamp());
+		code += ((int)this.getTraceId());
+		code += ((int)this.getOrderIndex());
+		code += this.getClassSignature().hashCode();
+		code += ((int)this.getObjectId());
+		
+		return code;
+	}
 	
 	public final String getClassSignature() {
 		return this.classSignature;

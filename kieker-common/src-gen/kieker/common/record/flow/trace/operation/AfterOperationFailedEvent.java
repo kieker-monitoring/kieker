@@ -179,6 +179,21 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int)this.getTimestamp());
+		code += ((int)this.getTraceId());
+		code += ((int)this.getOrderIndex());
+		code += this.getOperationSignature().hashCode();
+		code += this.getClassSignature().hashCode();
+		code += this.getCause().hashCode();
+		
+		return code;
+	}
 	
 	public final String getCause() {
 		return this.cause;

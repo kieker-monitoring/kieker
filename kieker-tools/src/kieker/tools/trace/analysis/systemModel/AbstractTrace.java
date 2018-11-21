@@ -18,9 +18,9 @@ package kieker.tools.trace.analysis.systemModel;
 
 /**
  * This is the abstract base for a trace (like a message trace e.g.).
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.2
  */
 public abstract class AbstractTrace {
@@ -44,7 +44,7 @@ public abstract class AbstractTrace {
 
 	/**
 	 * Creates a new abstract trace with the given trace ID and a default session ID.
-	 * 
+	 *
 	 * @param traceId
 	 *            The trace ID to use for the new trace
 	 */
@@ -54,7 +54,7 @@ public abstract class AbstractTrace {
 
 	/**
 	 * Creates a new abstract trace with the given parameters.
-	 * 
+	 *
 	 * @param traceId
 	 *            The trace ID to use for the new trace
 	 * @param sessionId
@@ -66,7 +66,7 @@ public abstract class AbstractTrace {
 
 	/**
 	 * Returns information about this trace.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public TraceInformation getTraceInformation() {
@@ -75,7 +75,7 @@ public abstract class AbstractTrace {
 
 	/**
 	 * Returns this trace's trace ID.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public long getTraceId() {
@@ -84,7 +84,7 @@ public abstract class AbstractTrace {
 
 	/**
 	 * Delivers the ID of the session.
-	 * 
+	 *
 	 * @return The session ID.
 	 */
 	public String getSessionId() {
@@ -94,7 +94,7 @@ public abstract class AbstractTrace {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
+	@Override // NOCS requests implementation of equals and hashCode in pairs
 	public int hashCode() { // NOCS requests implementation of equals and hashCode in pairs
 		// On purpose, we are not considering the sessionId here
 		return (int) (this.getTraceId() ^ (this.getTraceId() >>> 32));
@@ -105,14 +105,14 @@ public abstract class AbstractTrace {
 
 	/**
 	 * Returns this trace's start timestamp.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public abstract long getStartTimestamp();
 
 	/**
 	 * Returns this trace's end timestamp.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public abstract long getEndTimestamp();

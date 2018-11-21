@@ -39,7 +39,7 @@ public abstract class AbstractTool<T extends Object> {
 
 	/** Exit code for successful operation. */
 	public static final int SUCCESS_EXIT_CODE = 0;
-	/** An runtim error happened. */
+	/** An runtime error happened. */
 	public static final int RUNTIME_ERROR = 1;
 	/** There was an configuration error. */
 	public static final int CONFIGURATION_ERROR = 2;
@@ -51,14 +51,15 @@ public abstract class AbstractTool<T extends Object> {
 	/** logger for all tools. */
 	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractTool.class);
 
+	/** true if help should be displayed. */
 	protected boolean help = false; // NOPMD this is set to false for documentation purposes
-	protected T settings;
+	/** configuration specified as parameters. */
+	protected T parameterConfiguration;
+	/** configuration provided as kieker configuration file. */
+	protected kieker.common.configuration.Configuration kiekerConfiguration;
 
 	/**
 	 * Configure and execute the evaluation tool utilizing an external configuration.
-	 *
-	 * @param <R>
-	 *            configuration object type
 	 *
 	 * @param title
 	 *            start up label for debug messages
@@ -72,7 +73,7 @@ public abstract class AbstractTool<T extends Object> {
 	 * @return returns exit code
 	 */
 	public int run(final String title, final String label, final String[] args, final T configuration) {
-		this.settings = configuration;
+		this.parameterConfiguration = configuration;
 		AbstractTool.LOGGER.debug(title); // NOPMD
 
 		final JCommander commander = new JCommander(configuration);
@@ -83,9 +84,9 @@ public abstract class AbstractTool<T extends Object> {
 					commander.usage();
 					return USAGE_EXIT_CODE;
 				} else {
-					final kieker.common.configuration.Configuration kiekerConfiguration = this.readConfiguration();
+					this.kiekerConfiguration = this.readConfiguration();
 
-					if (this.checkConfiguration(kiekerConfiguration, commander)) {
+					if (this.checkConfiguration(this.kiekerConfiguration, commander)) {
 						return this.execute(commander, label);
 					} else {
 						return CONFIGURATION_ERROR;
@@ -113,7 +114,7 @@ public abstract class AbstractTool<T extends Object> {
 	 *            JCommander instance used to display usage information in case of errors
 	 * @param label
 	 *            additional label
-	 * 
+	 *
 	 * @return returns exit code
 	 * @throws ConfigurationException
 	 *             on configuration errors occuring at runtime

@@ -34,7 +34,7 @@ public interface ITimeSeries<T> {
 	public static final int INFINITE_CAPACITY = -1;
 
 	/**
-	 * Returns the start of the time series, i.e., the time of the first value.
+	 * @return returns the start of the time series, i.e., the time of the first value.
 	 *
 	 * @since 1.10
 	 */
@@ -43,12 +43,16 @@ public interface ITimeSeries<T> {
 	/**
 	 * The {@link TimeUnit} used to specify the temporal distance between to values ({@link #getStartTime()}).
 	 *
+	 * @return returns the {@link TimeUnit}
+	 *
 	 * @since 1.10
 	 */
 	public TimeUnit getTimeSeriesTimeUnit();
 
 	/**
 	 * Returns the temporal distance between to time series values with respect to the configured {@link TimeUnit} {@link #getDeltaTime()}.
+	 *
+	 * @return returns the time delta.
 	 *
 	 * @since 1.10
 	 */
@@ -57,6 +61,7 @@ public interface ITimeSeries<T> {
 	/**
 	 * The {@link TimeUnit} used to specify the temporal distance between to values ({@link #getDeltaTime()}).
 	 *
+	 * @return returns the {@link TimeUnit}
 	 * @since 1.10
 	 */
 	public TimeUnit getDeltaTimeUnit();
@@ -64,15 +69,20 @@ public interface ITimeSeries<T> {
 	/**
 	 * Appends the given value to the time series.
 	 *
-	 * @since 1.10
 	 * @param value
 	 *            the value to append
+	 * @return returns a time series
+	 *
+	 * @since 1.10
 	 */
 	public ITimeSeriesPoint<T> append(T value);
 
 	/**
 	 * Appends the given value to the time series.
 	 *
+	 * @param values
+	 *            values to be appended
+	 * @return returns a list of time series
 	 * @since 1.10
 	 */
 	public List<ITimeSeriesPoint<T>> appendAll(T[] values);
@@ -80,14 +90,16 @@ public interface ITimeSeries<T> {
 	/**
 	 * Returns the {@link ITimeSeriesPoint}s of this time series.
 	 *
-	 * @since 1.10
 	 * @return Points
+	 *
+	 * @since 1.10
 	 */
 	public List<ITimeSeriesPoint<T>> getPoints();
 
 	/**
 	 * Returns a list of all {@code getPoints()getValues()}.
 	 *
+	 * @return get all values
 	 * @since 1.10
 	 */
 	public List<T> getValues();
@@ -95,20 +107,21 @@ public interface ITimeSeries<T> {
 	/**
 	 * Returns the maximum number of elements held in this time series.
 	 *
-	 * @since 1.10
 	 * @return the capacity; {@link #INFINITE_CAPACITY} if the capacity is infinite
+	 *
+	 * @since 1.10
 	 */
 	public int getCapacity();
 
 	/**
-	 * Returns the number of value contained in the time series.
+	 * @return returns the number of value contained in the time series.
 	 *
 	 * @since 1.10
 	 */
 	public int size();
 
 	/**
-	 * Returns the time corresponding to the most recent value in the time series.
+	 * @return returns the time corresponding to the most recent value in the time series.
 	 *
 	 * @since 1.10
 	 */

@@ -198,6 +198,31 @@ public class UpdateParameterEvent extends AbstractMonitoringRecord implements IR
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += this.getPattern().hashCode();
+		// get array length
+		for (int i0=0;i0 < this.parameterNames.length;i0++) {
+			for (int i1=0;i1 < this.parameterNames.length;i1++) {
+				code += this.getParameterNames()[i0].hashCode();
+			}
+		}
+		
+		// get array length
+		for (int i0=0;i0 < this.parameters.length;i0++) {
+			for (int i1=0;i1 < this.parameters.length;i1++) {
+				for (int i2=0;i2 < this.parameters.length;i2++) {
+					code += this.getParameters()[i0][i1].hashCode();
+				}
+			}
+		}
+		
+		return code;
+	}
 	
 	public final String getPattern() {
 		return this.pattern;

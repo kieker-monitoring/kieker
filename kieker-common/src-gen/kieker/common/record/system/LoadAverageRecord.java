@@ -184,6 +184,20 @@ public class LoadAverageRecord extends AbstractMonitoringRecord  {
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int)this.getTimestamp());
+		code += this.getHostname().hashCode();
+		code += ((int)this.getOneMinLoadAverage());
+		code += ((int)this.getFiveMinLoadAverage());
+		code += ((int)this.getFifteenMinLoadAverage());
+		
+		return code;
+	}
 	
 	public final long getTimestamp() {
 		return this.timestamp;

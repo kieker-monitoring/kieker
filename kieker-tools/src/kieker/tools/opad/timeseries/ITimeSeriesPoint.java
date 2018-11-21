@@ -19,18 +19,20 @@ package kieker.tools.opad.timeseries;
 /**
  * @author Andre van Hoorn
  * @since 1.10
- * 
+ *
  * @param <T>
  *            The type of the point.
  */
 public interface ITimeSeriesPoint<T> {
 
 	/**
+	 * @return returns the timestamp
 	 * @since 1.10
 	 */
 	public long getTime();
 
 	/**
+	 * @return returns the value
 	 * @since 1.10
 	 */
 	public T getValue();

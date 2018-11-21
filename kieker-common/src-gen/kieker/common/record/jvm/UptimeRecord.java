@@ -158,6 +158,19 @@ public class UptimeRecord extends AbstractJVMRecord  {
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int)this.getTimestamp());
+		code += this.getHostname().hashCode();
+		code += this.getVmName().hashCode();
+		code += ((int)this.getUptimeMS());
+		
+		return code;
+	}
 	
 	public final long getUptimeMS() {
 		return this.uptimeMS;

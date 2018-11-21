@@ -209,6 +209,22 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 		
 		return true;
 	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int)this.getTraceId());
+		code += ((int)this.getThreadId());
+		code += this.getSessionId().hashCode();
+		code += this.getHostname().hashCode();
+		code += ((int)this.getParentTraceId());
+		code += ((int)this.getParentOrderId());
+		code += ((int)this.getNextOrderId());
+		
+		return code;
+	}
 	
 	public final long getTraceId() {
 		return this.traceId;

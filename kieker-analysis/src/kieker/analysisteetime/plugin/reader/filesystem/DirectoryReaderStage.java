@@ -60,25 +60,30 @@ public class DirectoryReaderStage extends AbstractConsumerStage<File> {
 	protected void execute(final File directory) {
 		final ReaderRegistry<String> registry = new ReaderRegistry<>();
 		/** read all map files. */
-		for (final File mapFile : directory.listFiles(this.mapFilter)) {
-			final String mapFileName = mapFile.getName();
-			try {
-				this.readMapFile(new FileInputStream(mapFile), mapFileName, registry);
-			} catch (final FileNotFoundException e) {
-				this.logger.error("Cannot find map file {}.", mapFileName);
-			}
-		}
-
-		/** read log files. */
-		for (final File logFile : directory.listFiles()) {
-			final String logFileName = logFile.getName();
-
-			try {
-				this.readLogFile(new FileInputStream(logFile), logFileName, registry);
-			} catch (final FileNotFoundException e) {
-				this.logger.error("Cannot find log file {}.", logFileName);
+		final File[] mapFiles = directory.listFiles(this.mapFilter);
+		if (mapFiles == null) {
+			this.logger.error("{} is not a proper directory.", directory.getAbsolutePath());
+		} else {
+			for (final File mapFile : mapFiles) {
+				final String mapFileName = mapFile.getName();
+				try {
+					this.readMapFile(new FileInputStream(mapFile), mapFileName, registry);
+				} catch (final FileNotFoundException e) {
+					this.logger.error("Cannot find map file {}.", mapFileName);
+				}
 			}
 
+			/** read log files. */
+			for (final File logFile : directory.listFiles()) {
+				final String logFileName = logFile.getName();
+
+				try {
+					this.readLogFile(new FileInputStream(logFile), logFileName, registry);
+				} catch (final FileNotFoundException e) {
+					this.logger.error("Cannot find log file {}.", logFileName);
+				}
+
+			}
 		}
 	}
 
@@ -107,7 +112,8 @@ public class DirectoryReaderStage extends AbstractConsumerStage<File> {
 			deserializer.processDataStream(decompressionFilter.chainInputStream(inputStream), registry, mapFileName);
 		} catch (final IOException ex) {
 			this.logger.error("Reading map file {} failed.", mapFileName);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			this.logger.error("Cannot instantiate filter {} for decompression.", decompressionClass.getName());
 		}
 	}
@@ -133,11 +139,13 @@ public class DirectoryReaderStage extends AbstractConsumerStage<File> {
 
 		try {
 			final AbstractDecompressionFilter decompressionFilter = decompressionClass.getConstructor(Configuration.class).newInstance(this.configuration);
-			final AbstractEventDeserializer deserializer = deserializerClass.getConstructor(Configuration.class, ReaderRegistry.class).newInstance(this.configuration, registry);
+			final AbstractEventDeserializer deserializer =
+					deserializerClass.getConstructor(Configuration.class, ReaderRegistry.class).newInstance(this.configuration, registry);
 			deserializer.processDataStream(decompressionFilter.chainInputStream(inputStream), this.outputPort);
 		} catch (final IOException e) {
 			this.logger.error("Reading log file {} failed.", logFileName);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			this.logger.error("Cannot instantiate filter {} for decompression.", decompressionClass.getName());
 		}
 	}

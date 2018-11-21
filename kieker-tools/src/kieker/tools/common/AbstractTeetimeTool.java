@@ -26,7 +26,7 @@ import teetime.framework.Execution;
  * Generic service main class.
  *
  * @param <T>
- *            type of the teetime Configuration to be used
+ *            type of the teetime configuration to be used
  * @param <R>
  *            type of the parameter configuration object
  *
@@ -38,10 +38,10 @@ public abstract class AbstractTeetimeTool<T extends Configuration, R extends Obj
 
 	@Override
 	protected int execute(final JCommander commander, final String label) throws ConfigurationException {
-		final kieker.common.configuration.Configuration configuration = this.readConfiguration();
+		this.kiekerConfiguration = this.readConfiguration();
 
-		if (this.checkConfiguration(configuration, commander)) {
-			final Execution<T> execution = new Execution<>(this.createTeetimeConfiguration(configuration));
+		if (this.checkConfiguration(this.kiekerConfiguration, commander)) {
+			final Execution<T> execution = new Execution<>(this.createTeetimeConfiguration());
 
 			this.shutdownHook(execution);
 
@@ -108,14 +108,12 @@ public abstract class AbstractTeetimeTool<T extends Configuration, R extends Obj
 	/**
 	 * Create and initialize teetime configuration for a service.
 	 *
-	 * @param configuration
-	 *            kieker configuration object, can be null if now configuration
 	 * @return return the newly created service
 	 *
 	 * @throws ConfigurationException
 	 *             in case the creation fails
 	 */
-	protected abstract T createTeetimeConfiguration(kieker.common.configuration.Configuration configuration)
+	protected abstract T createTeetimeConfiguration()
 			throws ConfigurationException;
 
 }

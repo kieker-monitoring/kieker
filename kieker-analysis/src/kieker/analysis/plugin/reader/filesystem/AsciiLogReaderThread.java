@@ -151,7 +151,6 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 	 */
 	@Override
 	protected void processNormalInputFile(final File inputFile) {
-		final BufferedReader in = null;
 		try {
 			InputStream fileInputStream = new FileInputStream(inputFile);
 			if (this.shouldDecompress) {
@@ -169,14 +168,6 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 			LOGGER.error("Error reading {} {}", inputFile, e);
 		} catch (final UnknownRecordTypeException e) {
 			LOGGER.error("Error reading {} {}", inputFile, e);
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (final IOException ex) {
-					LOGGER.error("Exception while closing input stream for processing input file", ex);
-				}
-			}
 		}
 	}
 
