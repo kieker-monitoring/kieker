@@ -385,7 +385,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 			final IPairFactory<T> pairFactory, final MessageTrace msgTrace, final String outputFilename,
 			final boolean includeWeights, final boolean shortLabels)
 			throws FileNotFoundException, TraceProcessingException, UnsupportedEncodingException {
-		AbstractCallTreeFilter.<T> addTraceToTree(root, msgTrace, pairFactory, false); // false: no aggregation
+		AbstractCallTreeFilter.addTraceToTree(root, msgTrace, pairFactory, false); // false: no aggregation
 		AbstractCallTreeFilter.saveTreeToDotFile(root, outputFilename, includeWeights, true, shortLabels); // includeEois
 	}
 
