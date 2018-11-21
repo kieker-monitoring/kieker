@@ -31,7 +31,16 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.*;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraph;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraphFormatter;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.ComponentAssemblyDependencyGraph;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.ComponentAssemblyDependencyGraphFormatter;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.ContainerDependencyGraph;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.ContainerDependencyGraphFormatter;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.OperationAllocationDependencyGraph;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.OperationAllocationDependencyGraphFormatter;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.OperationAssemblyDependencyGraph;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.OperationAssemblyDependencyGraphFormatter;
 import kieker.tools.trace.analysis.filter.visualization.exception.GraphFormattingException;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
 

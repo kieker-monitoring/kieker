@@ -45,6 +45,8 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 	 * 
 	 * @param executionTimeunit
 	 *            The time unit which tells how to interpret the times of the executions.
+	 * @param displayTimeunit
+	 *            The time unit used for printing the time value.
 	 */
 	public ResponseTimeDecoration(final TimeUnit executionTimeunit, final TimeUnit displayTimeunit) {
 		this.executionTimeunit = executionTimeunit;

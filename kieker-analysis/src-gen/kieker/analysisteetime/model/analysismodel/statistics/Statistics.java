@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.EObject;
 public interface Statistics extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Time Series</b></em>' reference list.
-	 * The list contents are of type {@link kieker.analysisteetime.model.analysismodel.statistics.TimeSeries}&lt;?, ?>.
+	 * The list contents are of type {@link kieker.analysisteetime.model.analysismodel.statistics.TimeSeries}&lt;?, ?&gt;.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Time Series</em>' reference list isn't clear,

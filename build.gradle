@@ -511,6 +511,8 @@ task apidoc(type: Javadoc) {
     classpath = files(mainSubprojects.collect { project -> project.sourceSets.main.compileClasspath })
     destinationDir = new File(projectDir, 'docs')
 
+    failOnError = true
+
     title = "Kieker Monitoring and Analysis Framework, Vers. $kiekerVersion<br/>API Documentation"
     options.header = "Kieker $kiekerVersion"
     options.footer = "Kieker $kiekerVersion"

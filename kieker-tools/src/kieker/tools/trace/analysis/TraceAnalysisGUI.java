@@ -235,7 +235,8 @@ public class TraceAnalysisGUI extends JFrame {
 			@SuppressWarnings("synthetic-access")
 			@Override
 			public void run() {
-				TraceAnalysisTool.mainHelper(parameters.toArray(new String[parameters.size()]), false);
+				TraceAnalysisToolMain.runEmbedded(parameters.toArray(new String[parameters.size()]));
+
 				TraceAnalysisGUI.this.conversionStep.convert(TraceAnalysisGUI.this.welcomeStep.getOutputDirectory());
 				TraceAnalysisGUI.this.previousButton.setEnabled(true);
 				TraceAnalysisGUI.this.finalStep.enableButtons();

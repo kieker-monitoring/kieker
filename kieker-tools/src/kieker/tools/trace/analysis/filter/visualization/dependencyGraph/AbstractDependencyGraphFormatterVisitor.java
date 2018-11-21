@@ -27,7 +27,7 @@ import kieker.tools.trace.analysis.systemModel.ISystemModelElement;
  * 
  * @author Holger Knoche
  * 
- * @param <T>
+ * @param <T> subtype of an ISystemModelElement
  * 
  * @since 1.6
  */

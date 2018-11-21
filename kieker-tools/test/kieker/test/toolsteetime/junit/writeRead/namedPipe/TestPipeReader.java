@@ -72,7 +72,7 @@ public class TestPipeReader extends AbstractKiekerTest {
 	}
 
 	/**
-	 * Extra thread for PipeReader for testing
+	 * Extra thread for PipeReader for testing.
 	 *
 	 * @author Lars Bluemke
 	 */

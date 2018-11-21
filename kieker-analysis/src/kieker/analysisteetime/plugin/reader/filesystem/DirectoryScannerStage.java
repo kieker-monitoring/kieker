@@ -58,7 +58,7 @@ public class DirectoryScannerStage extends AbstractProducerStage<File> {
 		if (this.isKiekerDirectory(directory)) {
 			this.getOutputPort().send(directory);
 		} else {
-			for (final File subDirectory : directory.listFiles()) {
+			for (final File subDirectory : directory.listFiles()) { // NOFB is guaranteed to be a directory
 				if (subDirectory.isDirectory()) {
 					this.scanDirectory(subDirectory);
 				}

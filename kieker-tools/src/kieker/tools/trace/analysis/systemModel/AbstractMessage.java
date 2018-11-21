@@ -20,9 +20,9 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * An abstract base for messages which can later be used and combined in a {@link kieker.tools.trace.analysis.systemModel.MessageTrace}.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 0.95a
  */
 public abstract class AbstractMessage {
@@ -33,7 +33,7 @@ public abstract class AbstractMessage {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            The timestamp of the message.
 	 * @param sendingExecution
@@ -49,7 +49,7 @@ public abstract class AbstractMessage {
 
 	/**
 	 * Delivers the object which received the message.
-	 * 
+	 *
 	 * @return The receiving object.
 	 */
 	public final Execution getReceivingExecution() {
@@ -58,7 +58,7 @@ public abstract class AbstractMessage {
 
 	/**
 	 * Delivers the object which sent the message.
-	 * 
+	 *
 	 * @return The sending object.
 	 */
 	public final Execution getSendingExecution() {
@@ -67,7 +67,7 @@ public abstract class AbstractMessage {
 
 	/**
 	 * Delivers the timestamp at which the message was created.
-	 * 
+	 *
 	 * @return The timestamp of the message.
 	 */
 	public final long getTimestamp() {
@@ -79,7 +79,7 @@ public abstract class AbstractMessage {
 		final StringBuilder strBuild = new StringBuilder();
 
 		strBuild.append(this.timestamp)
-		        .append(' ');
+				.append(' ');
 		if (this.getSendingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
 			strBuild.append(SystemModelRepository.ROOT_NODE_LABEL);
 		} else {
@@ -97,7 +97,7 @@ public abstract class AbstractMessage {
 	@Override
 	public abstract boolean equals(Object obj);
 
-	@Override
+	@Override // NOCS requests implementation of equals and hashCode in pairs
 	public int hashCode() { // NOCS requests implementation of equals and hashCode in pairs
 		return (int) (this.timestamp ^ (this.timestamp >>> 32));
 	}

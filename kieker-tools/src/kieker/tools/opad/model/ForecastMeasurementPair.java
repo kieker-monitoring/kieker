@@ -34,6 +34,26 @@ public class ForecastMeasurementPair implements IForecastMeasurementPair {
 	private double confidenceUpper = Double.NaN;
 	private double confidenceLower = Double.NaN;
 
+	/**
+	 * Create a forecast measurement pair with confidence values.
+	 *
+	 * @param name
+	 *            name of the measurement
+	 * @param forecast
+	 *            forecast value
+	 * @param measurement
+	 *            measurement value
+	 * @param time
+	 *            timestamp
+	 * @param confidenceLevel
+	 *            confidence value
+	 * @param confidenceUpper
+	 *            upper limit
+	 * @param confidenceLower
+	 *            lower limit
+	 * @param mase
+	 *            mase
+	 */
 	public ForecastMeasurementPair(final String name, final Double forecast, final Double measurement, final long time, final int confidenceLevel,
 			final double confidenceUpper, final double confidenceLower, final Double mase) {
 		this(name, forecast, measurement, time, mase);
@@ -42,6 +62,20 @@ public class ForecastMeasurementPair implements IForecastMeasurementPair {
 		this.confidenceLower = confidenceLower;
 	}
 
+	/**
+	 * Create a forecast measurement pair without confidence values.
+	 *
+	 * @param name
+	 *            name of the measurement
+	 * @param forecast
+	 *            forecast value
+	 * @param measurement
+	 *            measurement value
+	 * @param time
+	 *            timestamp
+	 * @param mase
+	 *            mase
+	 */
 	public ForecastMeasurementPair(final String name, final Double forecast, final Double measurement, final long time, final Double mase) {
 		this.name = name;
 		this.forecast = forecast;
@@ -50,6 +84,18 @@ public class ForecastMeasurementPair implements IForecastMeasurementPair {
 		this.mase = mase;
 	}
 
+	/**
+	 * Create a forecast measurement pair without confidence values and mase.
+	 *
+	 * @param name
+	 *            name of the measurement
+	 * @param forecast
+	 *            forecast value
+	 * @param measurement
+	 *            measurement value
+	 * @param time
+	 *            timestamp
+	 */
 	public ForecastMeasurementPair(final String name, final Double forecast, final Double measurement, final long time) {
 		this(name, forecast, measurement, time, Double.NaN);
 	}
