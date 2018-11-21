@@ -149,14 +149,14 @@ sync
 # $4 = title
 # $5 = writer parameters
 function execute-experiment() {
-    i="$1"
-    j="$2"
-    k="$3"
+    loop="$1"
+    recursion="$2"
+    index="$3"
     title="$4"
     kieker_parameters="$5"
 
-    information " # ${i}.${j}.${k} ${title}"
-    echo " # ${i}.${j}.${k} ${title}" >> ${DATA_DIR}/kieker.log
+    information " # recursion=${recursion} loop=${loop} writer=${index} ${title}"
+    echo " # ${loop}.${recursion}.${index} ${title}" >> ${DATA_DIR}/kieker.log
 
     if [  "${kieker_parameters}" = "" ] ; then
        COMPLETE_ARGS=${JAVA_ARGS}
@@ -165,55 +165,55 @@ function execute-experiment() {
     fi
 
     ${JAVA_BIN} ${COMPLETE_ARGS} ${JAVA_PROGRAM} \
-        --output-filename ${RAWFN}-${i}-${j}-${k}.csv \
+        --output-filename ${RAWFN}-${loop}-${recursion}-${index}.csv \
         --total-calls ${TOTAL_NUM_OF_CALLS} \
         --method-time ${METHOD_TIME} \
         --total-threads 1 \
-        --recursion-depth ${j}
+        --recursion-depth ${recursion}
 
     rm -rf ${DATA_DIR}/kieker-*
 
-    [ -f ${DATA_DIR}/hotspot.log ] && mv ${DATA_DIR}/hotspot.log ${RESULTS_DIR}hotspot-${i}-${j}-${k}.log
+    [ -f ${DATA_DIR}/hotspot.log ] && mv ${DATA_DIR}/hotspot.log ${RESULTS_DIR}hotspot-${loop}-${recursion}-${index}.log
     echo >> ${DATA_DIR}/kieker.log
     echo >> ${DATA_DIR}/kieker.log
     sync
     sleep ${SLEEP_TIME}
 }
 
-## Execute Benchmark
-function execute-benchmark() {
-  for ((i=1;i<=${NUM_OF_LOOPS};i+=1)); do
-    j=${RECURSION_DEPTH}
-
-    information "## Starting iteration ${i}/${NUM_OF_LOOPS}"
-    echo "## Starting iteration ${i}/${NUM_OF_LOOPS}" >>${DATA_DIR}/kieker.log
-
-    for ((index=0;index<${#WRITER_CONFIG[@]};index+=1)); do
-      execute-benchmark-body $index $i $j
-    done
-  done
-
-  mv ${DATA_DIR}/kieker.log ${RESULTS_DIR}/kieker.log
-  [ -f ${RESULTS_DIR}/hotspot-1-${RECURSION_DEPTH}-1.log ] && grep "<task " ${RESULTS_DIR}/hotspot-*.log > ${RESULTS_DIR}/log.log
-  [ -f ${DATA_DIR}/errorlog.txt ] && mv ${DATA_DIR}/errorlog.txt ${RESULTS_DIR}
-}
-
 function execute-benchmark-body() {
   index="$1"
-  i="$2"
-  j="$3"
+  loop="$2"
+  recursion="$3"
   if [[ ${RECEIVER[$index]} ]] ; then
      echo "receiver ${RECEIVER[$index]}"
      ${RECEIVER[$index]} & #>> ${DATA_DIR}/kieker.receiver-$i-$index.log &
      RECEIVER_PID=$!
   fi
 
-  execute-experiment "$i" "$j" "$index" "${TITLE[$index]}" "${WRITER_CONFIG[$index]}"
+  execute-experiment "$loop" "$recursion" "$index" "${TITLE[$index]}" "${WRITER_CONFIG[$index]}"
 
   if [[ $RECEIVER_PID ]] ; then
      wait $RECEIVER_PID
      unset RECEIVER_PID
   fi
+}
+
+## Execute Benchmark
+function execute-benchmark() {
+  for ((loop=1;loop<=${NUM_OF_LOOPS};loop+=1)); do
+    recursion=${RECURSION_DEPTH}
+
+    information "## Starting iteration ${i}/${NUM_OF_LOOPS}"
+    echo "## Starting iteration ${i}/${NUM_OF_LOOPS}" >>${DATA_DIR}/kieker.log
+
+    for ((index=0;index<${#WRITER_CONFIG[@]};index+=1)); do
+      execute-benchmark-body $index $loop $recursion
+    done
+  done
+
+  mv ${DATA_DIR}/kieker.log ${RESULTS_DIR}/kieker.log
+  [ -f ${RESULTS_DIR}/hotspot-1-${RECURSION_DEPTH}-1.log ] && grep "<task " ${RESULTS_DIR}/hotspot-*.log > ${RESULTS_DIR}/log.log
+  [ -f ${DATA_DIR}/errorlog.txt ] && mv ${DATA_DIR}/errorlog.txt ${RESULTS_DIR}
 }
 
 ## Generate Results file
