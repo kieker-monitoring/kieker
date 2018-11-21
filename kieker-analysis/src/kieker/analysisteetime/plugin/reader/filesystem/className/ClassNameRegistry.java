@@ -22,7 +22,10 @@ import java.util.HashMap;
  * @author Christian Wulf
  *
  * @since 1.10
+ *
+ * @deprecated since 1.15 remove 1.16
  */
+@Deprecated
 public class ClassNameRegistry extends HashMap<Integer, String> {
 
 	private static final long serialVersionUID = -7254550212115937463L;

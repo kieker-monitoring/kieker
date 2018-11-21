@@ -26,7 +26,7 @@ import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.tcp.AbstractTcpReader;
-import kieker.common.util.registry.ILookup;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  *
@@ -41,12 +41,12 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 
 	private final CachedRecordFactoryCatalog recordFactories;
 	// BETTER use a non thread-safe implementation to increase performance. A thread-safe version is not necessary.
-	private final ILookup<String> stringRegistry;
+	private final ReaderRegistry<String> stringRegistry;
 
 	/**
-	 * Default constructor with <code>port=10133</code> and <code>bufferCapacity=65535</code> and <code>new CachedRecordFactoryCatalog()</code>
+	 * Default constructor with <code>port=10133</code> and <code>bufferCapacity=65535</code> and <code>new CachedRecordFactoryCatalog()</code>.
 	 */
-	public AbstractRecordTcpReader(final Logger logger, final ILookup<String> stringRegistry) {
+	public AbstractRecordTcpReader(final Logger logger, final ReaderRegistry<String> stringRegistry) {
 		this(10133, 65535, logger, stringRegistry, new CachedRecordFactoryCatalog());
 	}
 
@@ -57,7 +57,7 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 	 * @param bufferCapacity
 	 *            capacity of the receiving buffer
 	 */
-	public AbstractRecordTcpReader(final int port, final int bufferCapacity, final Logger logger, final ILookup<String> stringRegistry,
+	public AbstractRecordTcpReader(final int port, final int bufferCapacity, final Logger logger, final ReaderRegistry<String> stringRegistry,
 			final CachedRecordFactoryCatalog recordFactories) {
 		super(port, bufferCapacity, logger);
 		this.stringRegistry = stringRegistry;

@@ -34,7 +34,7 @@ import kieker.analysis.plugin.reader.filesystem.AsciiLogReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.Version;
-import kieker.monitoring.writer.filesystem.AsciiFileWriter;
+import kieker.monitoring.writer.filesystem.FileWriter;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -107,7 +107,7 @@ public class AbstractAspectTest { // NOCS NOPMD (abstract class)
 		 * @throws InterruptedException
 		 */
 		public int runMonitoring(final File workingDirectory) throws IOException, InterruptedException {
-			this.addJmvArgument(AsciiFileWriter.CONFIG_PATH + "=" + workingDirectory);
+			this.addJmvArgument(FileWriter.CONFIG_PATH + "=" + workingDirectory);
 
 			final List<String> commandWithArgs = new ArrayList<>();
 			commandWithArgs.add(JAVA_COMMAND);

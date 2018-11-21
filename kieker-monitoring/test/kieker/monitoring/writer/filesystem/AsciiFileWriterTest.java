@@ -18,6 +18,7 @@ package kieker.monitoring.writer.filesystem;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.CharBuffer;
 import java.nio.file.Files;
 
 import org.hamcrest.CoreMatchers;
@@ -28,11 +29,13 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.record.io.IValueSerializer;
+import kieker.common.record.io.TextValueSerializer;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.filesystem.FileExtensionFilter;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
-import kieker.monitoring.writer.filesystem.compression.NoneCompressionFilter;
-import kieker.monitoring.writer.filesystem.compression.ZipCompressionFilter;
+import kieker.monitoring.writer.compression.NoneCompressionFilter;
+import kieker.monitoring.writer.compression.ZipCompressionFilter;
 
 /**
  * @author Christian Wulf
@@ -61,25 +64,28 @@ public class AsciiFileWriterTest {
 		this.configuration = new Configuration();
 		this.configuration.setProperty(ConfigurationKeys.HOST_NAME, "testHostName");
 		this.configuration.setProperty(ConfigurationKeys.CONTROLLER_NAME, "testControllerName");
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_CHARSET_NAME, "UTF-8");
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_BUFFERSIZE, "32768");
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, String.valueOf(Integer.MAX_VALUE));
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGSIZE, String.valueOf(Integer.MAX_VALUE));
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
+		this.configuration.setProperty(FileWriter.CONFIG_CHARSET_NAME, "UTF-8");
+		this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "2");
+		this.configuration.setProperty(FileWriter.CONFIG_BUFFERSIZE, "32768");
+		this.configuration.setProperty(FileWriter.CONFIG_MAXLOGFILES, String.valueOf(Integer.MAX_VALUE));
+		this.configuration.setProperty(FileWriter.CONFIG_MAXLOGSIZE, String.valueOf(Integer.MAX_VALUE));
+		this.configuration.setProperty(FileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
 	}
 
 	/**
 	 * Test whether the log directory is created correctly.
+	 *
+	 * @throws IOException
 	 */
 	@Test
-	public void shouldCreateLogFolder() {
+	public void shouldCreateLogFolder() throws IOException {
 		// test preparation
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "1");
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
+		this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "1");
+		this.configuration.setProperty(FileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
+		this.configuration.setProperty(FileWriter.CONFIG_MAP_FILE_HANDLER, TextMapFileHandler.class.getCanonicalName());
+		this.configuration.setProperty(FileWriter.CONFIG_LOG_STREAM_HANDLER, TextLogStreamHandler.class.getCanonicalName());
 
-		// test execution
-		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
+		final FileWriter writer = new FileWriter(this.configuration);
 
 		// test assertion
 		Assert.assertTrue(Files.exists(writer.getLogFolder()));
@@ -87,17 +93,23 @@ public class AsciiFileWriterTest {
 
 	/**
 	 * Test whether the mapping file is created correctly.
+	 *
+	 * @throws IOException
 	 */
 	@Test
-	public void shouldCreateMappingAndRecordFiles() {
+	public void shouldCreateMappingAndRecordFiles() throws IOException {
 		// test preparation
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "1");
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
+		this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "1");
+		this.configuration.setProperty(FileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 
-		// test execution
-		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
+		this.configuration.setProperty(FileWriter.CONFIG_MAP_FILE_HANDLER, TextMapFileHandler.class.getCanonicalName());
+		this.configuration.setProperty(FileWriter.CONFIG_LOG_STREAM_HANDLER, TextLogStreamHandler.class.getCanonicalName());
+
+		final FileWriter writer = new FileWriter(this.configuration);
+
 		writer.onStarting();
-		FilesystemTestUtil.writeMonitoringRecords(writer, 1);
+		final EmptyRecord record = new EmptyRecord();
+		FilesystemTestUtil.writeMonitoringRecords(writer, 1, record);
 		writer.onTerminating();
 
 		// test assertion
@@ -116,17 +128,23 @@ public class AsciiFileWriterTest {
 
 	/**
 	 * Test whether the upper limit of entries per file in honored.
+	 *
+	 * @throws IOException
 	 */
 	@Test
-	public void shouldCreateMultipleRecordFiles() {
+	public void shouldCreateMultipleRecordFiles() throws IOException {
 		// test preparation
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
+		this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "2");
+		this.configuration.setProperty(FileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 
-		// test execution
-		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
+		this.configuration.setProperty(FileWriter.CONFIG_MAP_FILE_HANDLER, TextMapFileHandler.class.getCanonicalName());
+		this.configuration.setProperty(FileWriter.CONFIG_LOG_STREAM_HANDLER, TextLogStreamHandler.class.getCanonicalName());
+
+		final FileWriter writer = new FileWriter(this.configuration);
+
 		writer.onStarting();
-		FilesystemTestUtil.writeMonitoringRecords(writer, 3);
+		final EmptyRecord record = new EmptyRecord();
+		FilesystemTestUtil.writeMonitoringRecords(writer, 3, record);
 		writer.onTerminating();
 
 		// test assertion
@@ -146,17 +164,23 @@ public class AsciiFileWriterTest {
 
 	/**
 	 * Test whether compression setting works.
+	 *
+	 * @throws IOException
 	 */
 	@Test
-	public void shouldCreateMultipleCompressedRecordFiles() {
+	public void shouldCreateMultipleCompressedRecordFiles() throws IOException {
 		// test preparation
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_COMPRESSION_FILTER, ZipCompressionFilter.class.getName());
+		this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "2");
+		this.configuration.setProperty(FileWriter.CONFIG_COMPRESSION_FILTER, ZipCompressionFilter.class.getName());
 
-		// test execution
-		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
+		this.configuration.setProperty(FileWriter.CONFIG_MAP_FILE_HANDLER, TextMapFileHandler.class.getCanonicalName());
+		this.configuration.setProperty(FileWriter.CONFIG_LOG_STREAM_HANDLER, TextLogStreamHandler.class.getCanonicalName());
+
+		final FileWriter writer = new FileWriter(this.configuration);
+
 		writer.onStarting();
-		FilesystemTestUtil.writeMonitoringRecords(writer, 3);
+		final EmptyRecord record = new EmptyRecord();
+		FilesystemTestUtil.writeMonitoringRecords(writer, 3, record);
 		writer.onTerminating();
 
 		// test assertion
@@ -176,14 +200,16 @@ public class AsciiFileWriterTest {
 
 	/**
 	 * Test behavior regarding max log files. Should rotate.
+	 *
+	 * @throws IOException
 	 */
 	@Test
-	public final void testMaxLogFiles() {
+	public final void testMaxLogFiles() throws IOException {
 		// test preparation
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
+		this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "2");
 		final int[] maxLogFilesValues = { -1, 0, 1, 2 };
 		final int[] numRecordsToWriteValues = { 0, 1, 2, 3, 10 };
-		final int[][] expectedNumRecordFilesValues = { { 0, 1, 1, 2, 5, }, { 0, 1, 1, 2, 5 }, { 0, 1, 1, 1, 1 }, { 0, 1, 1, 2, 2 } };
+		final int[][] expectedNumRecordFilesValues = { { 1, 1, 1, 2, 5, }, { 1, 1, 1, 2, 5 }, { 1, 1, 1, 1, 1 }, { 1, 1, 1, 2, 2 } };
 
 		for (int i = 0; i < maxLogFilesValues.length; i++) {
 			final int maxLogFiles = maxLogFilesValues[i];
@@ -193,12 +219,16 @@ public class AsciiFileWriterTest {
 				final int expectedNumRecordFiles = expectedNumRecordFilesValues[i][j];
 
 				// test preparation
-				this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "2");
-				this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, String.valueOf(maxLogFiles));
-				final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
+				this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "2");
+				this.configuration.setProperty(FileWriter.CONFIG_MAXLOGFILES, String.valueOf(maxLogFiles));
+				this.configuration.setProperty(FileWriter.CONFIG_MAP_FILE_HANDLER, TextMapFileHandler.class.getCanonicalName());
+				this.configuration.setProperty(FileWriter.CONFIG_LOG_STREAM_HANDLER, TextLogStreamHandler.class.getCanonicalName());
 
+				final FileWriter writer = new FileWriter(this.configuration);
+
+				final EmptyRecord record = new EmptyRecord();
 				// test execution
-				final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer);
+				final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer, record);
 
 				// test assertion
 				final String reasonMessage = "Passed arguments: maxLogFiles=" + maxLogFiles + ", numRecordsToWrite=" + numRecordsToWrite;
@@ -211,36 +241,46 @@ public class AsciiFileWriterTest {
 
 	/**
 	 * Test whether the max log size.
-	 * 
-	 * @throws Exception on IO errors
+	 *
+	 * @throws Exception
+	 *             on IO errors
 	 */
 	@Test
 	public void testMaxLogSize() throws Exception {
-		// size = $ + compressed record class name (=0) + ; + record.toString + newLine (\n or \n\r)
-		final int recordSizeInBytes = 1 + 1 + 1 + new EmptyRecord().toString().length() + System.lineSeparator().length(); // 7=3+2+1/2
+		final CharBuffer charBuffer = CharBuffer.allocate(1024);
+		final IValueSerializer serializer = TextValueSerializer.create(charBuffer);
+		final EmptyRecord record = new EmptyRecord();
+		record.serialize(serializer);
+		charBuffer.flip();
+		final String recordString = record.getLoggingTimestamp() + ";" + charBuffer.toString();
+		// size = $ + compressed record class name (0) + ; + record.toString + newLine (\n or \n\r)
+		final int recordSizeInBytes = 1 + 1 + 1 + recordString.length() + System.lineSeparator().length(); // 7=3+2+1/2
 
 		// semantics of the tuple: (maxMegaBytesPerFile, megaBytesToWrite, expectedNumRecordFiles)
 		final int[][] testInputTuples = {
-			{ -1, 0, 0 }, { -1, 1, 1 },
-			{ 0, 0, 0 }, { 0, 1, 1 },
-			{ 1, 0, 0 }, { 1, 1, 1 },
+			{ -1, 0, 1 }, { -1, 1, 1 },
+			{ 0, 0, 1 }, { 0, 1, 1 },
+			{ 1, 0, 1 }, { 1, 1, 1 },
 			{ 1, 2, 2 }, { 1, 3, 2 },
 		};
 
-		for (final int[] testInputTuple : testInputTuples) {
+		for (final int[] testInputTuple : testInputTuples) { // NOPMD
 			final int maxMegaBytesPerFile = testInputTuple[0];
 			final int megaBytesToWrite = testInputTuple[1];
 			final int expectedNumRecordFiles = testInputTuple[2];
 
 			// test preparation
 			final int numRecordsToWrite = (1024 * 1024 * megaBytesToWrite) / recordSizeInBytes;
-			this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "-1");
-			this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGSIZE, String.valueOf(maxMegaBytesPerFile));
-			this.configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, "2");
-			final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
+			this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "-1");
+			this.configuration.setProperty(FileWriter.CONFIG_MAXLOGSIZE, String.valueOf(maxMegaBytesPerFile));
+			this.configuration.setProperty(FileWriter.CONFIG_MAXLOGFILES, "2");
+			this.configuration.setProperty(FileWriter.CONFIG_MAP_FILE_HANDLER, TextMapFileHandler.class.getCanonicalName());
+			this.configuration.setProperty(FileWriter.CONFIG_LOG_STREAM_HANDLER, TextLogStreamHandler.class.getCanonicalName());
+
+			final FileWriter writer = new FileWriter(this.configuration);
 
 			// test execution
-			final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer);
+			final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer, record);
 
 			// test assertion
 			final String reasonMessage = "Passed arguments: maxMegaBytesPerFile=" + maxMegaBytesPerFile + ", megaBytesToWrite=" + megaBytesToWrite;
@@ -252,24 +292,34 @@ public class AsciiFileWriterTest {
 
 	/**
 	 * Test valid log directory.
+	 *
+	 * @throws IOException
 	 */
 	@Test
-	public void testValidLogFolder() {
+	public void testValidLogFolder() throws IOException {
 		final String passedConfigPathName = this.tmpFolder.getRoot().getAbsolutePath();
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_PATH, passedConfigPathName);
-		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
+		this.configuration.setProperty(FileWriter.CONFIG_PATH, passedConfigPathName);
+		this.configuration.setProperty(FileWriter.CONFIG_MAP_FILE_HANDLER, TextMapFileHandler.class.getCanonicalName());
+		this.configuration.setProperty(FileWriter.CONFIG_LOG_STREAM_HANDLER, TextLogStreamHandler.class.getCanonicalName());
+
+		final FileWriter writer = new FileWriter(this.configuration);
 
 		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(passedConfigPathName));
 	}
 
 	/**
 	 * Test empty log directory property.
+	 *
+	 * @throws IOException
 	 */
 	@Test
-	public void testEmptyConfigPath() {
+	public void testEmptyConfigPath() throws IOException {
 		final String passedConfigPathName = "";
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_PATH, passedConfigPathName);
-		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
+		this.configuration.setProperty(FileWriter.CONFIG_PATH, passedConfigPathName);
+		this.configuration.setProperty(FileWriter.CONFIG_MAP_FILE_HANDLER, TextMapFileHandler.class.getCanonicalName());
+		this.configuration.setProperty(FileWriter.CONFIG_LOG_STREAM_HANDLER, TextLogStreamHandler.class.getCanonicalName());
+
+		final FileWriter writer = new FileWriter(this.configuration);
 
 		final String defaultDir = System.getProperty("java.io.tmpdir");
 		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
@@ -277,14 +327,18 @@ public class AsciiFileWriterTest {
 
 	/**
 	 * Test log directory missing in configuration.
-	 * 
-	 * @throws IOException on IO errors
+	 *
+	 * @throws IOException
+	 *             on IO errors
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void testNonDirectoryConfigPath() throws IOException {
 		final String passedConfigPathName = this.tmpFolder.newFile().getAbsolutePath();
-		this.configuration.setProperty(AsciiFileWriter.CONFIG_PATH, passedConfigPathName);
-		final AsciiFileWriter writer = new AsciiFileWriter(this.configuration);
+		this.configuration.setProperty(FileWriter.CONFIG_PATH, passedConfigPathName);
+		this.configuration.setProperty(FileWriter.CONFIG_MAP_FILE_HANDLER, TextMapFileHandler.class.getCanonicalName());
+		this.configuration.setProperty(FileWriter.CONFIG_LOG_STREAM_HANDLER, TextLogStreamHandler.class.getCanonicalName());
+
+		final FileWriter writer = new FileWriter(this.configuration);
 
 		final String defaultDir = System.getProperty("java.io.tmpdir");
 		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));

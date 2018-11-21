@@ -17,21 +17,24 @@
 package kieker.tools.bridge;
 
 /**
- * 
- * 
+ *
+ *
  * @author Reiner Jung
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
+@Deprecated
 public interface IServiceListener {
 
 	/**
 	 * Called by the main service loop to inform the listener about processed records and an optional message.
-	 * 
+	 *
 	 * @param recordCount
 	 *            number of processed records
 	 * @param message
 	 *            optional message (could be null)
-	 * 
+	 *
 	 * @since 1.8
 	 */
 	void handleEvent(long recordCount, String message);

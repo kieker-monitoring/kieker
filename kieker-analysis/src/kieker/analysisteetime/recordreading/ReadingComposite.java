@@ -32,7 +32,10 @@ import teetime.stage.InitialElementProducer;
  * @author Nils Christian Ehmke, Sören Henning
  *
  * @since 1.14
+ *
+ * @deprecated since 1.15 remove 1.16
  */
+@Deprecated
 public final class ReadingComposite extends CompositeStage {
 
 	private final Dir2RecordsFilter reader;

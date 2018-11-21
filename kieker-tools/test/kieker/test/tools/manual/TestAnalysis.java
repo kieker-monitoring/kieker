@@ -35,16 +35,16 @@ import kieker.analysis.plugin.filter.select.TraceIdFilter;
 import kieker.analysis.plugin.filter.select.TypeFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
-import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
-import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
-import kieker.tools.traceAnalysis.filter.flow.TraceEventRecords2ExecutionAndMessageTraceFilter;
-import kieker.tools.traceAnalysis.filter.systemModel.SystemModel2FileFilter;
-import kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin;
-import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentDependencyGraphAllocationFilter;
-import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAllocationFilter;
-import kieker.tools.traceAnalysis.filter.visualization.sequenceDiagram.SequenceDiagramFilter;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.trace.analysis.filter.AbstractMessageTraceProcessingFilter;
+import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
+import kieker.tools.trace.analysis.filter.IGraphOutputtingFilter;
+import kieker.tools.trace.analysis.filter.flow.TraceEventRecords2ExecutionAndMessageTraceFilter;
+import kieker.tools.trace.analysis.filter.systemModel.SystemModel2FileFilter;
+import kieker.tools.trace.analysis.filter.visualization.GraphWriterPlugin;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.ComponentDependencyGraphAllocationFilter;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.OperationDependencyGraphAllocationFilter;
+import kieker.tools.trace.analysis.filter.visualization.sequenceDiagram.SequenceDiagramFilter;
+import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * @author Jan Waller

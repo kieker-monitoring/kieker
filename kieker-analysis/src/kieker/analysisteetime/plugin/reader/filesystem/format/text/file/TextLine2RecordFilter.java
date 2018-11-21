@@ -34,7 +34,10 @@ import teetime.stage.util.TextLineContainer;
  * @author Christian Wulf
  *
  * @since 1.10
+ *
+ * @deprecated since 1.15 removed 1.16
  */
+@Deprecated
 public class TextLine2RecordFilter extends AbstractConsumerStage<TextLineContainer> {
 
 	private final OutputPort<IMonitoringRecord> outputPort = this.createOutputPort();

@@ -18,12 +18,16 @@ package kieker.analysisteetime.plugin.reader.filesystem.format.binary.file;
 
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
+import kieker.analysis.plugin.reader.depcompression.AbstractDecompressionFilter;
+import kieker.analysis.plugin.reader.util.FSReaderUtil;
 import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryRepository;
+import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.filesystem.BinaryCompressionMethod;
 
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
@@ -32,10 +36,11 @@ import teetime.framework.OutputPort;
  * @author Christian Wulf
  *
  * @since 1.10
+ *
+ * @deprecated since 1.15 removed 1.16
  */
+@Deprecated
 public class BinaryFile2RecordFilter extends AbstractConsumerStage<File> {
-
-	private static final int MB = 1024 * 1024;
 
 	private final OutputPort<IMonitoringRecord> outputPort = this.createOutputPort();
 
@@ -74,16 +79,16 @@ public class BinaryFile2RecordFilter extends AbstractConsumerStage<File> {
 
 	@Override
 	protected void execute(final File binaryFile) {
+		final String name = binaryFile.getName();
+
+		final Class<? extends AbstractDecompressionFilter> clazz = FSReaderUtil.findDecompressionFilterByExtension(name);
+
 		try {
-			final BinaryCompressionMethod method = BinaryCompressionMethod.getByFileExtension(binaryFile.getName());
-			final DataInputStream inputStream = method.getDataInputStream(binaryFile, 1 * MB);
+			// TODO we should pass a configuration object here
+			final AbstractDecompressionFilter filter = clazz.getConstructor(Configuration.class).newInstance(new Configuration());
+			final DataInputStream inputStream = new DataInputStream(filter.chainInputStream(new FileInputStream(binaryFile)));
 			try {
-				IMonitoringRecord record = this.recordFromBinaryFileCreator.createRecordFromBinaryFile(binaryFile,
-						inputStream);
-				while (record != null) {
-					this.outputPort.send(record);
-					record = this.recordFromBinaryFileCreator.createRecordFromBinaryFile(binaryFile, inputStream);
-				}
+				this.recordFromBinaryFileCreator.createRecordsFromBinaryFile(binaryFile, inputStream, this.outputPort);
 			} catch (final MonitoringRecordException e) {
 				this.logger.error("Error reading file: " + binaryFile, e);
 			} finally {
@@ -95,6 +100,16 @@ public class BinaryFile2RecordFilter extends AbstractConsumerStage<File> {
 			this.logger.error("Error reading file: " + binaryFile, e);
 		} catch (final IllegalArgumentException e) {
 			this.logger.warn("Unknown file extension for file: " + binaryFile);
+		} catch (final InstantiationException e1) {
+			this.logger.error("Decompression filter instantiation failed. {}", e1);
+		} catch (final IllegalAccessException e1) {
+			this.logger.error("Decompression filter instantiation failed. {}", e1);
+		} catch (final InvocationTargetException e1) {
+			this.logger.error("Decompression filter instantiation failed. {}", e1);
+		} catch (final NoSuchMethodException e1) {
+			this.logger.error("Decompression filter instantiation failed. {}", e1);
+		} catch (final SecurityException e1) {
+			this.logger.error("Decompression filter instantiation failed. {}", e1);
 		}
 	}
 

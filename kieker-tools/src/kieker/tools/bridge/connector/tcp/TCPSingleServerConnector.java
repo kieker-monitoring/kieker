@@ -32,15 +32,17 @@ import kieker.tools.bridge.connector.ConnectorProperty;
 
 /**
  * TCP server connector supporting one client.
- * 
+ *
  * All operations provided by this connector must run in the same thread.
- * 
+ *
  * @author Reiner Jung
- * 
+ *
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
-@ConnectorProperty(cmdName = "tcp-single-server", name = "TCP Single Server Connector",
-		description = "TCP server for binary Kieker records. Accepts only one connection.")
+@Deprecated
+@ConnectorProperty(cmdName = "tcp-single-server", name = "TCP Single Server Connector", description = "TCP server for binary Kieker records. Accepts only one connection.")
 public class TCPSingleServerConnector extends AbstractConnector {
 
 	/** Constant holding the name of the port configuration property. */
@@ -65,10 +67,10 @@ public class TCPSingleServerConnector extends AbstractConnector {
 
 	/**
 	 * Create a TCPSingleServerConnector.
-	 * 
+	 *
 	 * @param configuration
 	 *            Kieker configuration including setup for connectors
-	 * 
+	 *
 	 * @param lookupEntityMap
 	 *            IMonitoringRecord constructor and TYPES-array to id map
 	 */
@@ -79,7 +81,7 @@ public class TCPSingleServerConnector extends AbstractConnector {
 
 	/**
 	 * Initializes a server socket and data stream for a single connection.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             it the socket could not be established
 	 */
@@ -96,7 +98,7 @@ public class TCPSingleServerConnector extends AbstractConnector {
 
 	/**
 	 * Close the server connection.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             if the closing fails
 	 */
@@ -113,9 +115,9 @@ public class TCPSingleServerConnector extends AbstractConnector {
 
 	/**
 	 * De-serialize an object reading from the input stream.
-	 * 
+	 *
 	 * @return the de-serialized IMonitoringRecord object or null if the stream was terminated by the client.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             if an unknown id is received which cannot be mapped to an IMonitoringRecord
 	 * @throws ConnectorEndOfDataException

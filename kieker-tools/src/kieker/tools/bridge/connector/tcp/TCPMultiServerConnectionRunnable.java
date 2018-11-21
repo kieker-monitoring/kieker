@@ -34,9 +34,12 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * Handles one TCP connection for the multi server.
  *
  * @author Reiner Jung
+ *
  * @since 1.8
  *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
+@Deprecated
 public class TCPMultiServerConnectionRunnable implements Runnable {
 	// string buffer size (#1052)
 	private static final int BUF_LEN = 65536;

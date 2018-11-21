@@ -24,8 +24,8 @@ import java.nio.file.Path;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueSerializer;
-import kieker.monitoring.registry.WriterRegistry;
-import kieker.monitoring.writer.filesystem.compression.ICompressionFilter;
+import kieker.common.registry.writer.WriterRegistry;
+import kieker.monitoring.writer.compression.ICompressionFilter;
 
 /**
  * Abstract class for log stream handler. As log stream handler share a lot of functionality,

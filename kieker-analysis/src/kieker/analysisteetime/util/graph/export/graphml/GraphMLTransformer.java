@@ -56,7 +56,6 @@ public class GraphMLTransformer extends AbstractTransformer<GraphmlType> {
 
 	@Override
 	protected void transformVertex(final IVertex vertex) {
-
 		final NodeType nodeType = new NodeType();
 		nodeType.setId(vertex.getId().toString());
 		final List<Object> dataOrPort = nodeType.getDataOrPort();

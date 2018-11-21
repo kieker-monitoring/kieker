@@ -29,7 +29,7 @@ import kieker.analysisteetime.util.graph.traversal.IVertexVisitor;
  *
  * @param <O>
  *            Output format of the transformation
- * 
+ *
  * @author Sören Henning
  *
  * @since 1.14
@@ -45,7 +45,6 @@ public abstract class AbstractTransformer<O> implements IVertexVisitor, IEdgeVis
 	}
 
 	public final O transform() {
-
 		this.beforeTransformation();
 
 		this.graphTraverser.traverse(this.graph);

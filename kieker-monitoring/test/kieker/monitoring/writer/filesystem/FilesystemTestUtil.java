@@ -32,15 +32,16 @@ final class FilesystemTestUtil {
 		// utility class
 	}
 
-	public static void writeMonitoringRecords(final AbstractMonitoringWriter writer, final int numRecords) {
+	public static void writeMonitoringRecords(final AbstractMonitoringWriter writer, final int numRecords, final EmptyRecord record) {
 		for (int i = 0; i < numRecords; i++) {
-			writer.writeMonitoringRecord(new EmptyRecord());
+			writer.writeMonitoringRecord(record);
 		}
 	}
 
-	public static <W extends AbstractMonitoringWriter & IFileWriter> File executeFileWriterTest(final int numRecordsToWrite, final W writer) {
+	public static <W extends AbstractMonitoringWriter & IFileWriter> File executeFileWriterTest(final int numRecordsToWrite, final W writer,
+			final EmptyRecord record) {
 		writer.onStarting();
-		FilesystemTestUtil.writeMonitoringRecords(writer, numRecordsToWrite);
+		FilesystemTestUtil.writeMonitoringRecords(writer, numRecordsToWrite, record);
 		writer.onTerminating();
 
 		return writer.getLogFolder().toFile();

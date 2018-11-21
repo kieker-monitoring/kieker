@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysisteetime.plugin.reader.filesystem.fsReader;
 
 import java.io.File;
@@ -35,7 +34,10 @@ import teetime.framework.AbstractProducerStage;
  * @author Andre van Hoorn, Jan Waller, Lars Bluemke
  *
  * @since 0.95a
+ *
+ * @deprecated since 1.15 removed 1.16
  */
+@Deprecated
 public class AsciiLogReader extends AbstractProducerStage<IMonitoringRecord> implements IMonitoringRecordReceiver {
 
 	/** This dummy record can be send to the reader's record queue to mark the end of the current file. */

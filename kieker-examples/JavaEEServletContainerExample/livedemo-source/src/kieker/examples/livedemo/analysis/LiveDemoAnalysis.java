@@ -42,9 +42,9 @@ import kieker.examples.livedemo.analysis.sink.MethodResponsetimeDisplayFilter;
 import kieker.examples.livedemo.analysis.sink.SwapDisplayFilter;
 import kieker.examples.livedemo.analysis.sink.ThreadsStatusDisplayFilter;
 import kieker.examples.livedemo.common.EnrichedOperationExecutionRecord;
-import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
-import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
+import kieker.tools.trace.analysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
+import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * @author Nils Christian Ehmke

@@ -26,7 +26,10 @@ import teetime.framework.AbstractConsumerStage;
  * @author Christian Wulf
  *
  * @since 1.10
+ *
+ * @deprecated since 1.15 removed 1.16
  */
+@Deprecated
 public class TextLine2MappingRegistryFilter extends AbstractConsumerStage<String> {
 
 	private final Map<Integer, String> stringRegistry;

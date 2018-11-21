@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://iobserve-devops.net)
+ * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,11 +33,6 @@ public final class AggregationWindowFactory implements IRecordFactory<Aggregatio
 		return new AggregationWindow(deserializer);
 	}
 	
-	@Override
-	@Deprecated
-	public AggregationWindow create(final Object[] values) {
-		return new AggregationWindow(values);
-	}
 	
 	public int getRecordSizeInBytes() {
 		return AggregationWindow.SIZE;

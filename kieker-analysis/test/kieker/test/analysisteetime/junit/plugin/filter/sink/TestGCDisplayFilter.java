@@ -32,7 +32,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import teetime.framework.test.StageTester;
 
 /**
- * Test cases for {@link GCDisplayFilter}
+ * Test cases for {@link GCDisplayFilter}.
  *
  * @author Lars Bluemke
  *

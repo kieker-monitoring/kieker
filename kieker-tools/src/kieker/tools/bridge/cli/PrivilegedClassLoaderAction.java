@@ -21,9 +21,12 @@ import java.security.PrivilegedAction;
 
 /**
  * @author Reiner Jung, Nils Christian Ehmke
- * 
+ *
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
+@Deprecated
 public class PrivilegedClassLoaderAction implements PrivilegedAction<URLClassLoader> {
 
 	/**
@@ -33,7 +36,7 @@ public class PrivilegedClassLoaderAction implements PrivilegedAction<URLClassLoa
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param urls
 	 *            The list of libraries used to create the class loader.
 	 */
@@ -43,7 +46,7 @@ public class PrivilegedClassLoaderAction implements PrivilegedAction<URLClassLoa
 
 	/**
 	 * Runs the action.
-	 * 
+	 *
 	 * @return The class loader.
 	 */
 	@Override

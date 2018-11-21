@@ -1,18 +1,18 @@
 /***************************************************************************
-* Copyright 2018 Kieker Project (http://kieker-monitoring.net)
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-***************************************************************************/
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.common.record.system;
 
 import java.nio.BufferOverflowException;
@@ -26,11 +26,11 @@ import kieker.common.record.io.IValueSerializer;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 1.14.0
+ * API compatibility: Kieker 1.15.0
  * 
  * @since 1.3
  */
-public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {			
+public class CPUUtilizationRecord extends AbstractMonitoringRecord  {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // CPUUtilizationRecord.timestamp
 			 + TYPE_SIZE_STRING // CPUUtilizationRecord.hostname
@@ -132,54 +132,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		this.idle = idle;
 	}
 
-	/**
-	 * This constructor converts the given array into a record.
-	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 *
-	 * @deprecated to be removed 1.15
-	 */
-	@Deprecated
-	public CPUUtilizationRecord(final Object[] values) { // NOPMD (direct store of values)
-		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.cpuID = (String) values[2];
-		this.user = (Double) values[3];
-		this.system = (Double) values[4];
-		this.wait = (Double) values[5];
-		this.nice = (Double) values[6];
-		this.irq = (Double) values[7];
-		this.totalUtilization = (Double) values[8];
-		this.idle = (Double) values[9];
-	}
 
-	/**
-	 * This constructor uses the given array to initialize the fields of this record.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 * @param valueTypes
-	 *            The types of the elements in the first array.
-	 *
-	 * @deprecated to be removed 1.15
-	 */
-	@Deprecated
-	protected CPUUtilizationRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.cpuID = (String) values[2];
-		this.user = (Double) values[3];
-		this.system = (Double) values[4];
-		this.wait = (Double) values[5];
-		this.nice = (Double) values[6];
-		this.irq = (Double) values[7];
-		this.totalUtilization = (Double) values[8];
-		this.idle = (Double) values[9];
-	}
 
 	
 	/**
@@ -201,27 +154,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		this.idle = deserializer.getDouble();
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated to be removed in 1.15
-	 */
-	@Override
-	@Deprecated
-	public Object[] toArray() {
-		return new Object[] {
-			this.getTimestamp(),
-			this.getHostname(),
-			this.getCpuID(),
-			this.getUser(),
-			this.getSystem(),
-			this.getWait(),
-			this.getNice(),
-			this.getIrq(),
-			this.getTotalUtilization(),
-			this.getIdle(),
-		};
-	}
 	/**
 	 * {@inheritDoc}
 	 */
@@ -264,16 +196,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		return SIZE;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated to be rmeoved in 1.15
-	 */
-	@Override
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
 	
 	/**
 	 * {@inheritDoc}
@@ -326,6 +248,25 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		}
 		
 		return true;
+	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode() {
+		int code = 0;
+		code += ((int)this.getTimestamp());
+		code += this.getHostname().hashCode();
+		code += this.getCpuID().hashCode();
+		code += ((int)this.getUser());
+		code += ((int)this.getSystem());
+		code += ((int)this.getWait());
+		code += ((int)this.getNice());
+		code += ((int)this.getIrq());
+		code += ((int)this.getTotalUtilization());
+		code += ((int)this.getIdle());
+		
+		return code;
 	}
 	
 	public final long getTimestamp() {

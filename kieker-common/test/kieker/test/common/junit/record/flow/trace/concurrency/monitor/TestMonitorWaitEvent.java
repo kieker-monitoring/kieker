@@ -24,10 +24,11 @@ import org.junit.Test;
 import kieker.common.record.flow.trace.concurrency.monitor.MonitorWaitEvent;
 import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.record.io.BinaryValueSerializer;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.Registry;
+import kieker.common.registry.writer.IWriterRegistry;
+import kieker.common.registry.writer.WriterRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.WriterListener;
 
 /**
  * @author Jan Waller
@@ -56,20 +57,12 @@ public class TestMonitorWaitEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
-
 		final MonitorWaitEvent event1 = new MonitorWaitEvent(TSTAMP, TRACE_ID, ORDER_INDEX, LOCK_ID);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
 		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
 		Assert.assertEquals("Unexpected lock id", LOCK_ID, event1.getLockId());
-
-		final Object[] event1Array = event1.toArray();
-
-		final MonitorWaitEvent event2 = new MonitorWaitEvent(event1Array);
-
-		Assert.assertEquals(event1, event2);
-		Assert.assertEquals(0, event1.compareTo(event2));
 	}
 
 	/**
@@ -77,7 +70,6 @@ public class TestMonitorWaitEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeBinaryEquals() {
-
 		final MonitorWaitEvent event1 = new MonitorWaitEvent(TSTAMP, TRACE_ID, ORDER_INDEX, LOCK_ID);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
@@ -85,12 +77,13 @@ public class TestMonitorWaitEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
 		Assert.assertEquals("Unexpected lock id", LOCK_ID, event1.getLockId());
 
-		final IRegistry<String> stringRegistry = new Registry<String>();
+		final WriterListener receiver = new WriterListener();
+		final IWriterRegistry<String> stringRegistry = new WriterRegistry(receiver);
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
 		event1.serialize(BinaryValueSerializer.create(buffer, stringRegistry));
 		buffer.flip();
 
-		final MonitorWaitEvent event2 = new MonitorWaitEvent(BinaryValueDeserializer.create(buffer, stringRegistry));
+		final MonitorWaitEvent event2 = new MonitorWaitEvent(BinaryValueDeserializer.create(buffer, receiver.getReaderRegistry()));
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

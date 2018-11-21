@@ -46,8 +46,7 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
-import kieker.monitoring.writer.filesystem.AbstractFileWriter;
-import kieker.monitoring.writer.filesystem.AsciiFileWriter;
+import kieker.monitoring.writer.filesystem.FileWriter;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -92,9 +91,9 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	private void createControllerConfiguration(final String monitoringPropertiesFn) throws IOException {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 
-		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, AsciiFileWriter.class.getName());
+		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, FileWriter.class.getName());
 
-		config.setProperty(AbstractFileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
+		config.setProperty(FileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
 
 		// Write configuration to tmp file
 		LOGGER.info("Writing monitoring.properties to file '{}'", monitoringPropertiesFn);
@@ -133,7 +132,6 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 		final List<IMonitoringRecord> eventsToWrite = this.provideEvents();
 		// The following line is an easy way to test the tests (given monitoringRecords includes at least one record). But don't forget to deactivate afterwards.
 		// eventsToWrite.remove(eventsToWrite.size() - 1);
-
 		final List<IMonitoringRecord> eventsFromRecordLoggerFilter = this.testIt(eventsToWrite, true); // includes Assert(s)
 		Assert.assertEquals("Unexpected set of records relayed by filter", eventsToWrite, eventsFromRecordLoggerFilter);
 
@@ -177,13 +175,16 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 
 		Assert.assertTrue(this.tmpFolder.getRoot().exists());
 		final File monitoringProperties = this.tmpFolder.newFile();
+
 		this.createControllerConfiguration(monitoringProperties.getAbsolutePath());
 
 		final Configuration recordLoggingFilterConfiguration = new Configuration();
+
 		recordLoggingFilterConfiguration.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, monitoringProperties.getPath());
 		recordLoggingFilterConfiguration.setProperty(
 				ConfigurationKeys.AUTO_SET_LOGGINGTSTAMP,
 				Boolean.toString(!keepLoggingTimestamps));
+
 		final MonitoringRecordLoggerFilter loggerFilter = new MonitoringRecordLoggerFilter(recordLoggingFilterConfiguration, analysisController);
 
 		analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, loggerFilter, MonitoringRecordLoggerFilter.INPUT_PORT_NAME_RECORD);

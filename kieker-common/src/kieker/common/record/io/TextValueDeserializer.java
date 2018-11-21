@@ -58,7 +58,7 @@ public class TextValueDeserializer extends AbstractValueDeserializer implements 
 	}
 
 	@Override
-	public byte getByte() {
+	public byte getByte() throws NumberFormatException {
 		return Byte.parseByte(this.readValue());
 	}
 
@@ -70,27 +70,27 @@ public class TextValueDeserializer extends AbstractValueDeserializer implements 
 	}
 
 	@Override
-	public short getShort() { // NOPMD
+	public short getShort() throws NumberFormatException { // NOPMD
 		return Short.parseShort(this.readValue());
 	}
 
 	@Override
-	public int getInt() {
+	public int getInt() throws NumberFormatException {
 		return Integer.parseInt(this.readValue());
 	}
 
 	@Override
-	public long getLong() {
+	public long getLong() throws NumberFormatException {
 		return Long.parseLong(this.readValue());
 	}
 
 	@Override
-	public float getFloat() {
+	public float getFloat() throws NumberFormatException {
 		return Float.parseFloat(this.readValue());
 	}
 
 	@Override
-	public double getDouble() {
+	public double getDouble() throws NumberFormatException {
 		return Double.parseDouble(this.readValue());
 	}
 
@@ -107,14 +107,14 @@ public class TextValueDeserializer extends AbstractValueDeserializer implements 
 
 	@Override
 	public byte[] getBytes(final byte[] target) {
-		final char[] charTarget = new char[target.length];
+		final char[] charTarget = new char[target.length]; // NOPMD plural name not relevant
 		this.buffer.get(charTarget);
 		ByteBuffer.wrap(target).asCharBuffer().put(charTarget);
 		return target;
 	}
 
 	private String readValue() {
-		final char[] charArray = new char[this.buffer.limit()];
+		final char[] charArray = new char[this.buffer.limit()]; // NOPMD plural name not relevant
 		final int remaining = this.buffer.limit() - this.buffer.position();
 		char ch;
 		int i = 0;

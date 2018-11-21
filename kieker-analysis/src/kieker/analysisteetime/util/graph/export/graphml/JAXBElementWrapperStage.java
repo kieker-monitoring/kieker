@@ -38,7 +38,6 @@ public class JAXBElementWrapperStage extends AbstractTransformation<GraphmlType,
 
 	@Override
 	protected void execute(final GraphmlType graphmlType) {
-
 		final JAXBElement<GraphmlType> jaxbElement = this.objectFactory.createGraphml(graphmlType);
 		this.getOutputPort().send(jaxbElement);
 

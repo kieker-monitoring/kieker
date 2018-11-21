@@ -40,7 +40,6 @@ public class NodeLabelMapper implements Function<IVertex, String> {
 
 	@Override
 	public String apply(final IVertex vertex) {
-
 		if (vertex.getProperty("artificial") != null) {
 			return vertex.getProperty("name").toString();
 		}
@@ -70,13 +69,13 @@ public class NodeLabelMapper implements Function<IVertex, String> {
 		// BETTER this could be extracted
 		final StringBuilder signature = new StringBuilder();
 		signature.append(modifiers.stream().collect(Collectors.joining(" ")))
-				.append(' ')
-				.append(vertex.getProperty("returnType").toString())
-				.append(' ')
-				.append(vertex.getProperty("name").toString())
-				.append('(')
-				.append(parameters.stream().collect(Collectors.joining(", ")))
-				.append(')');
+		.append(' ')
+		.append(vertex.getProperty("returnType").toString())
+		.append(' ')
+		.append(vertex.getProperty("name").toString())
+		.append('(')
+		.append(parameters.stream().collect(Collectors.joining(", ")))
+		.append(')');
 
 		final StringBuilder label = new StringBuilder() // NOPMD (.append(<>.toString() + "...") does not make sense)
 				.append(vertex.getProperty("deploymentContext").toString())

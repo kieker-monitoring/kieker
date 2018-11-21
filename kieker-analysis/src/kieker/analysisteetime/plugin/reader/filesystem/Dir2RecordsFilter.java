@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.analysisteetime.plugin.reader.filesystem;
 
 import java.io.File;
@@ -38,7 +37,10 @@ import teetime.stage.io.Directory2FilesFilter;
  * @author Christian Wulf
  *
  * @since 1.14
+ *
+ * @deprecated since 1.15 remove 1.16 use {@link LogsReaderCompositeStage} instead
  */
+@Deprecated
 public final class Dir2RecordsFilter extends CompositeStage {
 
 	private final ClassNameRegistryCreationFilter classNameRegistryCreationFilter;
@@ -47,7 +49,7 @@ public final class Dir2RecordsFilter extends CompositeStage {
 	private ClassNameRegistryRepository classNameRegistryRepository;
 
 	/**
-	 * Default constructor using a new instance of {@link ClassNameRegistryRepository}
+	 * Default constructor using a new instance of {@link ClassNameRegistryRepository}.
 	 */
 	public Dir2RecordsFilter() {
 		this(new ClassNameRegistryRepository());
@@ -56,7 +58,7 @@ public final class Dir2RecordsFilter extends CompositeStage {
 	public Dir2RecordsFilter(final ClassNameRegistryRepository classNameRegistryRepository) {
 		this.classNameRegistryRepository = classNameRegistryRepository;
 
-		// FIXME does not yet work with more than one thread due to classNameRegistryRepository: classNameRegistryRepository is set after the ctor
+		// does not yet work with more than one thread due to classNameRegistryRepository: classNameRegistryRepository is set after the ctor
 		// create stages
 		final ClassNameRegistryCreationFilter tempClassNameRegistryCreationFilter = new ClassNameRegistryCreationFilter(this.classNameRegistryRepository);
 		final Directory2FilesFilter directory2FilesFilter = new Directory2FilesFilter();

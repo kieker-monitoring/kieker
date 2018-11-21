@@ -16,17 +16,6 @@
 
 package kieker.common.util.filesystem;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-
 /**
  * @author Jan Waller
  *
@@ -48,6 +37,8 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 	public static final String DAT_FILE_EXTENSION = ".dat";
 	/** The extension of Kieker's zipped record files. */
 	public static final String ZIP_FILE_EXTENSION = ".zip";
+	/** The extension of Kieker's defalted record files. */
+	public static final String DEFLATE_FILE_EXTENSION = ".df";
 	/** The extension of Kieker's gzipped record files. */
 	public static final String GZIP_FILE_EXTENSION = ".gz";
 	/** The extension of Kieker's xz record files. */
@@ -144,49 +135,4 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 		}
 	}
 
-	/**
-	 * @param startDirectory
-	 * @param postfixRegexNamePattern
-	 *            to be used for the matching
-	 * @return all matching files within the given <code>startDirectory</code> and all its subdirectories
-	 */
-	public static List<File> listFilesRecursively(final Path startDirectory, final String postfixRegexNamePattern) {
-		final RecursiveFileVisitor visitor = new RecursiveFileVisitor(postfixRegexNamePattern);
-		try {
-			Files.walkFileTree(startDirectory, visitor);
-		} catch (final IOException e) {
-			throw new IllegalStateException(e);
-		}
-		return visitor.getFiles();
-	}
-
-	/**
-	 * @author Christian Wulf
-	 * @since 1.13
-	 */
-	static class RecursiveFileVisitor extends SimpleFileVisitor<Path> {
-		private final Pattern pattern;
-		private final List<File> files;
-
-		public RecursiveFileVisitor(final String postfixRegexNamePattern) {
-			this.pattern = Pattern.compile(postfixRegexNamePattern);
-			this.files = new ArrayList<>();
-		}
-
-		@Override
-		public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-			final Path fileName = file.getFileName(); // Nullable
-			if (fileName != null) {
-				final String fileNameString = fileName.toString();
-				if (this.pattern.matcher(fileNameString).matches()) {
-					this.files.add(file.toFile());
-				}
-			}
-			return FileVisitResult.CONTINUE;
-		}
-
-		public List<File> getFiles() {
-			return this.files;
-		}
-	}
 }

@@ -28,10 +28,13 @@ import kieker.tools.bridge.LookupEntity;
 /**
  * This factory is an attempt to simplify the instantiation of new
  * connector types. However, we need to re-think this and move configuration to the Kieker configuration.
- * 
+ *
  * @author Reiner Jung
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
+@Deprecated
 public final class ServiceConnectorFactory {
 
 	private static final String TYPES = "TYPES";
@@ -43,7 +46,7 @@ public final class ServiceConnectorFactory {
 
 	/**
 	 * Calculates the lookup table from the record map.
-	 * 
+	 *
 	 * @param recordMap
 	 *            A map containing ids and IMonitoringRecord types
 	 * @return A map containing record ids referencing constructor and field information
@@ -52,7 +55,7 @@ public final class ServiceConnectorFactory {
 	 */
 	public static ConcurrentMap<Integer, LookupEntity> createLookupEntityMap(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap)
 			throws ConnectorDataTransmissionException {
-		final ConcurrentMap<Integer, LookupEntity> lookupEntityMap = new ConcurrentHashMap<Integer, LookupEntity>();
+		final ConcurrentMap<Integer, LookupEntity> lookupEntityMap = new ConcurrentHashMap<>();
 
 		for (final Map.Entry<Integer, Class<? extends IMonitoringRecord>> entry : recordMap.entrySet()) {
 			final int key = entry.getKey();

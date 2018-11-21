@@ -29,7 +29,10 @@ import kieker.common.util.filesystem.FileExtensionFilter;
  * @author Christian Wulf
  *
  * @since 1.13
+ *
+ * @deprecated since 1.15 removed 1.16
  */
+@Deprecated
 abstract class AbstractLogReaderThread extends Thread {
 
 	private final Logger logger; // NOPMD (private log instance passed by ctor)

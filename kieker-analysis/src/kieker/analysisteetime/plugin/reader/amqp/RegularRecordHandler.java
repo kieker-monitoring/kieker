@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import kieker.analysisteetime.plugin.reader.IRecordReceivedListener;
 import kieker.analysisteetime.plugin.reader.RecordDeserializer;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.registry.ILookup;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * Runnable to handle incoming regular records.
@@ -37,9 +37,9 @@ import kieker.common.util.registry.ILookup;
  */
 public class RegularRecordHandler implements Runnable, IRecordReceivedListener {
 
-	/** Default queue size for the regular record queue */
+	/** Default queue size for the regular record queue. */
 	private static final int DEFAULT_QUEUE_SIZE = 4096;
-	/** The logger of this handler */
+	/** The logger of this handler. */
 	private static final Logger LOGGER = LoggerFactory.getLogger(RegularRecordHandler.class);
 
 	private final AMQPReader readerLogic;
@@ -55,7 +55,7 @@ public class RegularRecordHandler implements Runnable, IRecordReceivedListener {
 	 * @param stringRegistry
 	 *            The string registry to use
 	 */
-	public RegularRecordHandler(final AMQPReader readerLogic, final ILookup<String> stringRegistry) {
+	public RegularRecordHandler(final AMQPReader readerLogic, final ReaderRegistry<String> stringRegistry) {
 		this.readerLogic = readerLogic;
 		this.recordDeserializer = new RecordDeserializer(this, stringRegistry);
 	}

@@ -27,9 +27,7 @@ import kieker.common.record.IRecordReceivedListener;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.BinaryValueDeserializer;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.reader.GetValueAdapter;
-import kieker.common.util.registry.reader.ReaderRegistry;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * Represents a TCP reader which reads and reconstructs Kieker records from a single TCP stream.
@@ -45,14 +43,24 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 	private static final Charset ENCODING = Charset.forName("UTF-8");
 
 	private final ReaderRegistry<String> readerRegistry = new ReaderRegistry<String>();
-	private final IRegistry<String> stringRegistryWrapper;
 	private final IRecordReceivedListener listener;
 	private final CachedRecordFactoryCatalog recordFactories = new CachedRecordFactoryCatalog();
 
+	/**
+	 * Create single socket reader.
+	 *
+	 * @param port
+	 *            port to listen to
+	 * @param bufferCapacity
+	 *            buffer capacity
+	 * @param logger
+	 *            logger to be used
+	 * @param listener
+	 *            listener to trigger on received records
+	 */
 	public SingleSocketRecordReader(final int port, final int bufferCapacity, final Logger logger, final IRecordReceivedListener listener) {
 		super(port, bufferCapacity, logger);
 		this.listener = listener;
-		this.stringRegistryWrapper = new GetValueAdapter<String>(this.readerRegistry);
 	}
 
 	@Override
@@ -106,12 +114,12 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 		}
 
 		try {
-			final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(buffer, this.stringRegistryWrapper));
+			final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(buffer, this.readerRegistry));
 			record.setLoggingTimestamp(loggingTimestamp);
 
 			this.listener.onRecordReceived(record);
 		} catch (final RecordInstantiationException ex) {
-			super.logger.error("Failed to create: {}",  recordClassName, ex);
+			super.logger.error("Failed to create: {}", recordClassName, ex);
 		}
 
 		return true;

@@ -22,7 +22,7 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import kieker.common.util.filesystem.FSUtil;
+import kieker.test.common.junit.util.filesystem.FSUtil4Tests;
 
 /**
  * This abstract class is the base for all other dynamic JUnit tests within the system. Those are tests which search for
@@ -36,7 +36,7 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 
 	// abc.java, but not package-info.java
 	public static final String REGEX_PATTERN_JAVA_SOURCE_FILES = "[^\\-]*java";
-	public static final String REGEX_PATTERN_JAVA_TEST_FILES = ".*Test.*java";
+	public static final String REGEX_PATTERN_JAVA_TEST_FILES = ".*Test\\.java";
 	public static final String REGEX_PATTERN_JUNIT_PACKAGE_NAME = ".*junit.*";
 
 	private static final String DIR_NAME_TESTS = "test";
@@ -63,23 +63,23 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 
 	private static Collection<File> filterOutFilesNotMatchingFullQualifiedPathName(final String regExPattern,
 			final Collection<File> files) {
-		final Collection<File> result = new LinkedList<File>();
+		final Collection<File> results = new LinkedList<File>();
 
 		for (final File file : files) {
 			if (file.getAbsolutePath().matches(regExPattern)) {
-				result.add(file);
+				results.add(file);
 			}
 		}
 
-		return result;
+		return results;
 	}
 
 	private Collection<File> listSourceFiles(final String directoryName, final String regexFilePattern) {
-		return FSUtil.listFilesRecursively(Paths.get(directoryName), regexFilePattern);
+		return FSUtil4Tests.listFilesRecursively(Paths.get(directoryName), regexFilePattern);
 	}
 
 	private Collection<String> transformFilesToClassNames(final Collection<File> files) {
-		final Collection<String> result = new LinkedList<String>();
+		final Collection<String> results = new LinkedList<String>();
 
 		for (final File file : files) {
 			final String pathName = this.workingPathToModulePath(file.getPath());
@@ -87,73 +87,73 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 			final int firstPointPos = className.indexOf('.');
 			className = className.substring(firstPointPos + 1);
 
-			result.add(className);
+			results.add(className);
 		}
 
-		return result;
+		return results;
 	}
 
 	private Collection<Class<?>> transformClassNameToClasses(final Collection<String> classNames)
 			throws ClassNotFoundException {
-		final Collection<Class<?>> result = new LinkedList<Class<?>>();
+		final Collection<Class<?>> results = new LinkedList<Class<?>>();
 
 		final ClassLoader classLoader = AbstractDynamicKiekerTest.class.getClassLoader();
 		for (final String className : classNames) {
-			result.add(classLoader.loadClass(className));
+			results.add(classLoader.loadClass(className));
 		}
 
-		return result;
+		return results;
 	}
 
 	protected Collection<Class<?>> filterOutAbstractClasses(final Collection<Class<?>> classes) {
-		final Collection<Class<?>> result = new LinkedList<Class<?>>();
+		final Collection<Class<?>> results = new LinkedList<Class<?>>();
 
 		for (final Class<?> clazz : classes) {
 			if (!Modifier.isAbstract(clazz.getModifiers())) {
-				result.add(clazz);
+				results.add(clazz);
 			}
 		}
 
-		return result;
+		return results;
 	}
 
 	protected Collection<Class<?>> filterOutClassesNotExtending(final Class<?> superClass,
 			final Collection<Class<?>> classes) {
-		final Collection<Class<?>> result = new LinkedList<Class<?>>();
+		final Collection<Class<?>> results = new LinkedList<Class<?>>();
 
 		for (final Class<?> clazz : classes) {
 			if (superClass.isAssignableFrom(clazz)) {
-				result.add(clazz);
+				results.add(clazz);
 			}
 		}
 
-		return result;
+		return results;
 	}
 
 	public Collection<Class<?>> filterOutClassesExtending(final Class<AbstractKiekerTest> superClass,
 			final Collection<Class<?>> classes) {
-		final Collection<Class<?>> result = new LinkedList<Class<?>>();
+		final Collection<Class<?>> results = new LinkedList<Class<?>>();
 
 		for (final Class<?> clazz : classes) {
 			if (!superClass.isAssignableFrom(clazz)) {
-				result.add(clazz);
+				results.add(clazz);
 			}
 		}
 
-		return result;
+		return results;
 	}
 
 	protected Collection<Class<?>> filterOutClassesNotMatchingFullQualifiedClassNamePattern(final String pattern,
 			final Collection<Class<?>> classes) {
-		final Collection<Class<?>> result = new LinkedList<Class<?>>();
+		final Collection<Class<?>> results = new LinkedList<Class<?>>();
 
 		for (final Class<?> clazz : classes) {
 			if (clazz.getCanonicalName().matches(pattern)) {
-				result.add(clazz);
+				results.add(clazz);
 			}
 		}
 
-		return result;
+		return results;
 	}
 
 }

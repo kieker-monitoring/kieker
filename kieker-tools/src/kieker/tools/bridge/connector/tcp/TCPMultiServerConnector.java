@@ -34,12 +34,15 @@ import kieker.tools.bridge.connector.ConnectorProperty;
 
 /**
  * TCP server connector supporting multiple clients.
- * 
+ *
  * @author Reiner Jung
+ *
  * @since 1.8
+ *
+ * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
-@ConnectorProperty(cmdName = "tcp-server", name = "TCP Multi Server Connector",
-		description = "TCP server for binary Kieker records. Accepts multiple connections.")
+@Deprecated
+@ConnectorProperty(cmdName = "tcp-server", name = "TCP Multi Server Connector", description = "TCP server for binary Kieker records. Accepts multiple connections.")
 public class TCPMultiServerConnector extends AbstractConnector {
 
 	/** Constant holds name for the port property . */
@@ -60,10 +63,10 @@ public class TCPMultiServerConnector extends AbstractConnector {
 
 	/**
 	 * Create a TCPMultiServerConnector.
-	 * 
+	 *
 	 * @param configuration
 	 *            Kieker configuration including setup for connectors
-	 * 
+	 *
 	 * @param lookupEntityMap
 	 *            IMonitoringRecord constructor and TYPES-array to id map
 	 */
@@ -74,16 +77,16 @@ public class TCPMultiServerConnector extends AbstractConnector {
 
 	/**
 	 * Initializes internal queues and an executor pool for communication.
-	 * 
+	 *
 	 * @see kieker.tools.bridge.connector.AbstractConnector#initialize()
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             when the server socket cannot be acquired
 	 */
 	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
 		// do not move, in future these properties will be handled by the kieker configuration
-		this.recordQueue = new ArrayBlockingQueue<IMonitoringRecord>(QUEUE_CAPACITY);
+		this.recordQueue = new ArrayBlockingQueue<>(QUEUE_CAPACITY);
 		this.executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
 		// The port listener must run in its own thread to accept new connections
@@ -97,7 +100,7 @@ public class TCPMultiServerConnector extends AbstractConnector {
 
 	/**
 	 * Stop all service threads to handle TCP communication and empty the record queue.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             if the thread shutdown is interrupted or fails, the graceful wait to empty the queue
 	 *             fails or the queue is not emptied after a waiting period
@@ -136,7 +139,7 @@ public class TCPMultiServerConnector extends AbstractConnector {
 	/**
 	 * Implements the deserializeNextRecord interface. Fetches deserialized data from the recordQeue
 	 * which is filled by the connection listener threads.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             if the record reading is interrupted
 	 * @throws ConnectorEndOfDataException

@@ -40,7 +40,6 @@ public abstract class AbstractEStructuralFeatureChangedListener<T> extends Adapt
 
 	@Override
 	public final void notifyChanged(final Notification notification) {
-
 		if (this.listenedFeatures.contains(notification.getFeature())
 				&& ((notification.getEventType() == Notification.SET) || (notification.getEventType() == Notification.UNSET))) {
 			this.notifyChangedIntern(notification.getNotifier());

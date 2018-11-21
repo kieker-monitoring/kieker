@@ -29,9 +29,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.BinaryValueDeserializer;
-import kieker.common.util.registry.IRegistry;
-import kieker.common.util.registry.reader.GetValueAdapter;
-import kieker.common.util.registry.reader.ReaderRegistry;
+import kieker.common.registry.reader.ReaderRegistry;
 
 /**
  * @author Christian Wulf
@@ -43,7 +41,7 @@ public class ByteBufferDeserializer {
 	private static final int INT_BYTES = AbstractMonitoringRecord.TYPE_SIZE_INT;
 	private static final int LONG_BYTES = AbstractMonitoringRecord.TYPE_SIZE_LONG;
 
-	private final IRegistry<String> stringRegistry;
+	private final ReaderRegistry<String> stringRegistry;
 	private final Logger logger; // NOPMD (logger from the caller)
 	private final CachedRecordFactoryCatalog recordFactories;
 	private final ByteBuffer buffer;
@@ -51,7 +49,7 @@ public class ByteBufferDeserializer {
 
 	public ByteBufferDeserializer(final ReaderRegistry<String> readerRegistry, final Logger logger, final int bufferCapacity) {
 		super();
-		this.stringRegistry = new GetValueAdapter<>(readerRegistry); // compatibility wrapper
+		this.stringRegistry = readerRegistry;
 		this.logger = logger;
 		this.recordFactories = new CachedRecordFactoryCatalog();
 		this.buffer = ByteBuffer.allocateDirect(bufferCapacity);
@@ -98,23 +96,32 @@ public class ByteBufferDeserializer {
 		final long loggingTimestamp = buffer.getLong(); // NOPMD (timestamp must be read before checking the buffer for record size)
 
 		final String recordClassName = this.stringRegistry.get(clazzId);
-		// identify record data
-		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
-		if (buffer.remaining() < recordFactory.getRecordSizeInBytes()) { // includes the case where size is -1
-			return false;
+		if (recordClassName != null) {
+			// identify record data
+			final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
+			if (recordFactory != null) {
+				if (buffer.remaining() < recordFactory.getRecordSizeInBytes()) { // includes the case where size is -1
+					return false;
+				}
+			} else {
+				return false;
+			}
+
+			try {
+				final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(buffer, this.stringRegistry));
+				record.setLoggingTimestamp(loggingTimestamp);
+
+				this.recordReceiver.newMonitoringRecord(record);
+			} catch (final RecordInstantiationException ex) {
+				this.logger.error("Failed to create: {}", recordClassName, ex);
+				throw ex; // we cannot continue reading the buffer because we do not know at which position to continue
+			}
+
+			return true;
+		} else {
+			this.logger.error("Failed to identify a event type {}, no classname registered.", clazzId);
+			throw new RecordInstantiationException("Cannot identify record class. Unknown id" + clazzId);
 		}
-
-		try {
-			final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(buffer, this.stringRegistry));
-			record.setLoggingTimestamp(loggingTimestamp);
-
-			this.recordReceiver.newMonitoringRecord(record);
-		} catch (final RecordInstantiationException ex) {
-			this.logger.error("Failed to create: {}", recordClassName, ex);
-			throw ex; // we cannot continue reading the buffer because we do not know at which position to continue
-		}
-
-		return true;
 	}
 
 	public void register(final IMonitoringRecordReceiver recordReceiver) { // NOCS (hides field)

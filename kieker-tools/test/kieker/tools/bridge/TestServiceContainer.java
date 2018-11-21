@@ -26,7 +26,7 @@ import org.junit.rules.TemporaryFolder;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.writer.filesystem.AsciiFileWriter;
+import kieker.monitoring.writer.filesystem.FileWriter;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -77,12 +77,12 @@ public class TestServiceContainer extends AbstractKiekerTest {
 
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 
-		configuration.setProperty(AsciiFileWriter.CONFIG_MAXENTRIESINFILE, "1");
+		configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "1");
 		// The maximal size of the log file must be greater than the expected number of log entries to ensure, that the framework allows to write more records, which
 		// we then can detect as failures. Otherwise writing more than expected records would be hindered by the framework itself.
-		configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGFILES, String.valueOf(ConfigurationParameters.SEND_NUMBER_OF_RECORDS * 2));
-		configuration.setProperty(AsciiFileWriter.CONFIG_MAXLOGSIZE, "-1");
-		configuration.setProperty(AsciiFileWriter.CONFIG_PATH, path.getCanonicalPath());
+		configuration.setProperty(FileWriter.CONFIG_MAXLOGFILES, String.valueOf(ConfigurationParameters.SEND_NUMBER_OF_RECORDS * 2));
+		configuration.setProperty(FileWriter.CONFIG_MAXLOGSIZE, "-1");
+		configuration.setProperty(FileWriter.CONFIG_PATH, path.getCanonicalPath());
 
 		// Create the service container and deploy the TestServiceConnector.
 		final ServiceContainer serviceContainer = new ServiceContainer(configuration, new ServiceConnectorStub(), false);

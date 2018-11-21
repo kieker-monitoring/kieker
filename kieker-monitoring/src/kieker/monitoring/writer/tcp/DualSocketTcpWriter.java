@@ -30,9 +30,8 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.BinaryValueSerializer;
 import kieker.common.record.io.IValueSerializer;
 import kieker.common.record.misc.RegistryRecord;
-import kieker.monitoring.registry.GetIdAdapter;
-import kieker.monitoring.registry.IRegistryListener;
-import kieker.monitoring.registry.WriterRegistry;
+import kieker.common.registry.IRegistryListener;
+import kieker.common.registry.writer.WriterRegistry;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.WriterUtil;
 
@@ -100,8 +99,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 		this.registryRecordChannel = SocketChannel.open(new InetSocketAddress(hostname, registryPort));
 
 		final WriterRegistry writerRegistry = new WriterRegistry(this);
-		final GetIdAdapter<String> writeBytesAdapter = new GetIdAdapter<>(writerRegistry);
-		this.serializer = BinaryValueSerializer.create(this.recordBuffer, writeBytesAdapter);
+		this.serializer = BinaryValueSerializer.create(this.recordBuffer, writerRegistry);
 
 		// this.encoder = StandardCharsets.UTF_8.newEncoder();
 

@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.EReference;
 
 /**
  *
- * 
+ *
  * @param <T>
  *
  * @author Sören Henning
@@ -41,7 +41,6 @@ public abstract class AbstractEReferenceChangedListener<T> extends AdapterImpl {
 
 	@Override
 	public final void notifyChanged(final Notification notification) {
-
 		if (notification.getFeature() == this.listenedFeature) {
 			switch (notification.getEventType()) {
 			case Notification.ADD:

@@ -37,17 +37,7 @@ public class TestRecord extends AbstractMonitoringRecord {
 	}
 
 	@Override
-	public Object[] toArray() {
-		return new Object[0];
-	}
-
-	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		// not used in test
-	}
-
-	@Override
-	public void initFromArray(final Object[] values) {
 		// not used in test
 	}
 

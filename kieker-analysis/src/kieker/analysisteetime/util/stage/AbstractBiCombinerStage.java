@@ -57,7 +57,6 @@ public abstract class AbstractBiCombinerStage<I, J> extends AbstractStage {
 
 	@Override
 	protected void execute() {
-
 		final I element1 = this.getInputPort1().receive();
 		if (element1 != null) {
 			this.elements1.add(element1);

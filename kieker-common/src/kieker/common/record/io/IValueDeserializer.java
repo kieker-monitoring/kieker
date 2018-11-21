@@ -41,8 +41,11 @@ public interface IValueDeserializer {
 	 *
 	 * @return The retrieved value
 	 * @since 1.13
+	 *
+	 * @throws NumberFormatException
+	 *             on format errors
 	 */
-	public byte getByte();
+	public byte getByte() throws NumberFormatException;
 
 	/**
 	 * Retrieves a {@code char} value from the underlying data source.
@@ -57,40 +60,55 @@ public interface IValueDeserializer {
 	 *
 	 * @return The retrieved value
 	 * @since 1.13
+	 *
+	 * @throws NumberFormatException
+	 *             on format errors
 	 */
-	public short getShort(); // NOPMD
+	public short getShort() throws NumberFormatException; // NOPMD
 
 	/**
 	 * Retrieves an {@code int} value from the underlying data source.
 	 *
 	 * @return The retrieved value
 	 * @since 1.13
+	 *
+	 * @throws NumberFormatException
+	 *             on format errors
 	 */
-	public int getInt();
+	public int getInt() throws NumberFormatException;
 
 	/**
 	 * Retrieves a {@code long} value from the underlying data source.
 	 *
 	 * @return The retrieved value
 	 * @since 1.13
+	 *
+	 * @throws NumberFormatException
+	 *             on format errors
 	 */
-	public long getLong();
+	public long getLong() throws NumberFormatException;
 
 	/**
 	 * Retrieves a {@code float} value from the underlying data source.
 	 *
 	 * @return The retrieved value
 	 * @since 1.13
+	 *
+	 * @throws NumberFormatException
+	 *             on format errors
 	 */
-	public float getFloat();
+	public float getFloat() throws NumberFormatException;
 
 	/**
 	 * Retrieves a {@code double} value from the underlying data source.
 	 *
 	 * @return The retrieved value
 	 * @since 1.13
+	 *
+	 * @throws NumberFormatException
+	 *             on format errors
 	 */
-	public double getDouble();
+	public double getDouble() throws NumberFormatException;
 
 	/**
 	 * Retrieves a {@code String} value from the underlying data source.
@@ -103,6 +121,9 @@ public interface IValueDeserializer {
 	/**
 	 * Retrieves a {@code Enumeration} value from the underlying data source.
 	 *
+	 * @param <T>
+	 *            the corresponding enumeration type
+	 *
 	 * @param clazz
 	 *            enumeration type to be used
 	 * @return The retrieved value
@@ -110,6 +131,9 @@ public interface IValueDeserializer {
 	 * @throws RecordInstantiationException
 	 *             in case the received ordinal does not exist in the specified enumeration type
 	 * @since 1.14
+	 *
+	 * @throws RecordInstantiationException
+	 *             input errors
 	 */
 	public <T extends Enum<T>> T getEnumeration(Class<T> clazz) throws RecordInstantiationException;
 
