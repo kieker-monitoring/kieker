@@ -70,6 +70,9 @@ public class TraceAnalysisGUI extends JFrame {
 		this.conversionStep, this.finalStep, };
 	private int currentStepIndex;
 
+	/**
+	 * Creating UI.
+	 */
 	public TraceAnalysisGUI() {
 		super("Trace Analysis Tool - GUI");
 

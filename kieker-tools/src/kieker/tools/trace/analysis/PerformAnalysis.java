@@ -186,32 +186,32 @@ public class PerformAnalysis {
 
 			if (retVal && !this.settings.getPlotDeploymentComponentDependencyGraph().isEmpty()) {
 				numRequestedTasks++;
-				this.createPlotDeploymentComponentDependencyGraph(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+				this.createPlotDeploymentComponentDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
 			if (retVal && !this.settings.getPlotAssemblyComponentDependencyGraph().isEmpty()) {
 				numRequestedTasks++;
-				this.createPlotAssemblyComponentDependencyGraph(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+				this.createPlotAssemblyComponentDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 
 			}
 
 			if (retVal && this.settings.isPlotContainerDependencyGraph()) {
 				numRequestedTasks++;
-				this.createPlotContainerDependencyGraph(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+				this.createPlotContainerDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
 			if (retVal && !this.settings.getPlotDeploymentOperationDependencyGraph().isEmpty()) {
 				numRequestedTasks++;
-				this.createPlotDeploymentOperationDependencyGraph(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+				this.createPlotDeploymentOperationDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
 			if (retVal && !this.settings.getPlotAssemblyOperationDependencyGraph().isEmpty()) {
 				numRequestedTasks++;
-				this.createPlotAssemblyOperationDependencyGraph(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+				this.createPlotAssemblyOperationDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
@@ -225,7 +225,7 @@ public class PerformAnalysis {
 
 			if (retVal && this.settings.isPlotAggregatedDeploymentCallTree()) {
 				numRequestedTasks++;
-				this.createPlotAggregatedDeploymentCallTree(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+				this.createPlotAggregatedDeploymentCallTree(allTraceProcessingComponents, pathPrefix, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 
 			}
@@ -361,7 +361,6 @@ public class PerformAnalysis {
 	/**
 	 *
 	 * @param allTraceProcessingComponents
-	 * @param allGraphProducers
 	 * @param pathPrefix
 	 * @param mtReconstrFilter
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
@@ -370,7 +369,7 @@ public class PerformAnalysis {
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPlotAggregatedDeploymentCallTree(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
-			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
+			final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
 			throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration componentPlotAggregatedCallTreeConfig = new Configuration();
@@ -403,7 +402,7 @@ public class PerformAnalysis {
 	}
 
 	private void createPlotAssemblyOperationDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
-			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
 			throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration configuration = new Configuration();
@@ -432,7 +431,6 @@ public class PerformAnalysis {
 	 *
 	 * @param allTraceProcessingComponents
 	 * @param allGraphProducers
-	 * @param pathPrefix
 	 * @param mtReconstrFilter
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
@@ -440,7 +438,7 @@ public class PerformAnalysis {
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPlotDeploymentOperationDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
-			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
 			throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration configuration = new Configuration();
@@ -468,7 +466,6 @@ public class PerformAnalysis {
 	 *
 	 * @param allTraceProcessingComponents
 	 * @param allGraphProducers
-	 * @param pathPrefix
 	 * @param mtReconstrFilter
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
@@ -476,7 +473,7 @@ public class PerformAnalysis {
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPlotContainerDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
-			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
 			throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration configuration = new Configuration();
@@ -501,7 +498,6 @@ public class PerformAnalysis {
 	 *
 	 * @param allTraceProcessingComponents
 	 * @param allGraphProducers
-	 * @param pathPrefix
 	 * @param mtReconstrFilter
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
@@ -509,7 +505,7 @@ public class PerformAnalysis {
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPlotAssemblyComponentDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
-			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
 			throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration configuration = new Configuration();
@@ -537,7 +533,6 @@ public class PerformAnalysis {
 	 *
 	 * @param allTraceProcessingComponents
 	 * @param allGraphProducers
-	 * @param pathPrefix
 	 * @param mtReconstrFilter
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
@@ -545,7 +540,7 @@ public class PerformAnalysis {
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPlotDeploymentComponentDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
-			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix,
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers,
 			final TraceReconstructionFilter mtReconstrFilter, final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter,
 			final SystemModelRepository systemEntityFactory) throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration configuration = new Configuration();
