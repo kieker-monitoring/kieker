@@ -27,10 +27,10 @@ import kieker.analysis.common.ConfigurationException;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 
 /**
- * Generic service main class.
+ * Generic legacy tool framework class.
  *
  * @param <T>
- *            type of the teetime Configuration to be used
+ *            type of the configuration object to be used
  *
  * @author Reiner Jung
  *
@@ -60,12 +60,19 @@ public abstract class AbstractLegacyTool<T extends Object> {
 	protected kieker.common.configuration.Configuration kiekerConfiguration;
 
 	/**
+	 * Default constructor.
+	 */
+	public AbstractLegacyTool() {
+		// nothing to do
+	}
+
+	/**
 	 * Configure and execute the evaluation tool utilizing an external configuration.
 	 *
 	 * @param title
 	 *            start up label for debug messages
 	 * @param label
-	 *            label used during execution
+	 *            label used during execution to indicate the running service
 	 * @param args
 	 *            arguments are ignored
 	 * @param configuration
@@ -75,7 +82,7 @@ public abstract class AbstractLegacyTool<T extends Object> {
 	 */
 	public int run(final String title, final String label, final String[] args, final T configuration) {
 		this.parameterConfiguration = configuration;
-		AbstractLegacyTool.LOGGER.debug(title); // NOPMD
+		AbstractLegacyTool.LOGGER.debug(title);
 
 		final JCommander commander = new JCommander(configuration);
 		try {
@@ -114,7 +121,7 @@ public abstract class AbstractLegacyTool<T extends Object> {
 	 * @param commander
 	 *            JCommander instance used to display usage information in case of errors
 	 * @param label
-	 *            additional label
+	 *            label used during execution to indicate the running service
 	 *
 	 * @return returns exit code
 	 * @throws ConfigurationException
