@@ -25,10 +25,10 @@ import java.util.TimeZone;
 
 import com.beust.jcommander.JCommander;
 
+import kieker.analysis.common.ConfigurationException;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.tools.common.AbstractTool;
+import kieker.tools.common.AbstractLegacyTool;
 import kieker.tools.common.CommandLineParameterEvaluation;
-import kieker.tools.common.ConfigurationException;
 
 /**
  * This is the main class to start the Kieker TraceAnalysisTool - the model synthesis and analysis tool to process the
@@ -41,7 +41,7 @@ import kieker.tools.common.ConfigurationException;
  *
  * @since 0.95a, 1.15
  */
-public final class TraceAnalysisToolMain extends AbstractTool<TraceAnalysisConfiguration> {
+public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysisConfiguration> {
 
 	/**
 	 * Private constructor.

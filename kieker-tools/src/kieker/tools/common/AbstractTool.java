@@ -17,121 +17,73 @@ package kieker.tools.common;
 
 import java.io.File;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.beust.jcommander.JCommander;
-import com.beust.jcommander.ParameterException;
 
-import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.analysis.common.ConfigurationException;
+
+import teetime.framework.Configuration;
+import teetime.framework.Execution;
 
 /**
  * Generic service main class.
  *
  * @param <T>
- *            type of the teetime Configuration to be used
+ *            type of the teetime configuration to be used
+ * @param <R>
+ *            type of the parameter configuration object
  *
  * @author Reiner Jung
  *
  * @since 1.15
  */
-public abstract class AbstractTool<T extends Object> {
+public abstract class AbstractTool<T extends Configuration, R extends Object> extends AbstractLegacyTool<R> {
 
-	/** Exit code for successful operation. */
-	public static final int SUCCESS_EXIT_CODE = 0;
-	/** An runtime error happened. */
-	public static final int RUNTIME_ERROR = 1;
-	/** There was an configuration error. */
-	public static final int CONFIGURATION_ERROR = 2;
-	/** There was a parameter error. */
-	public static final int PARAMETER_ERROR = 3;
-	/** Displayed the usage message. */
-	public static final int USAGE_EXIT_CODE = 4;
+	@Override
+	protected int execute(final JCommander commander, final String label) throws ConfigurationException {
+		this.kiekerConfiguration = this.readConfiguration();
 
-	/** logger for all tools. */
-	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractTool.class);
+		if (this.checkConfiguration(this.kiekerConfiguration, commander)) {
+			final Execution<T> execution = new Execution<>(this.createTeetimeConfiguration());
 
-	/** true if help should be displayed. */
-	protected boolean help = false; // NOPMD this is set to false for documentation purposes
-	/** configuration specified as parameters. */
-	protected T parameterConfiguration;
-	/** configuration provided as kieker configuration file. */
-	protected kieker.common.configuration.Configuration kiekerConfiguration;
+			this.shutdownHook(execution);
 
-	/**
-	 * Configure and execute the evaluation tool utilizing an external configuration.
-	 *
-	 * @param title
-	 *            start up label for debug messages
-	 * @param label
-	 *            label used during execution
-	 * @param args
-	 *            arguments are ignored
-	 * @param configuration
-	 *            configuration object
-	 *
-	 * @return returns exit code
-	 */
-	public int run(final String title, final String label, final String[] args, final T configuration) {
-		this.parameterConfiguration = configuration;
-		AbstractTool.LOGGER.debug(title); // NOPMD
+			AbstractLegacyTool.LOGGER.debug("Running {}", label); // NOPMD LoD sucks
 
-		final JCommander commander = new JCommander(configuration);
-		try {
-			commander.parse(args);
-			if (this.checkParameters(commander)) {
-				if (this.help) {
-					commander.usage();
-					return USAGE_EXIT_CODE;
-				} else {
-					this.kiekerConfiguration = this.readConfiguration();
+			execution.executeBlocking();
+			this.shutdownService();
 
-					if (this.checkConfiguration(this.kiekerConfiguration, commander)) {
-						return this.execute(commander, label);
-					} else {
-						return CONFIGURATION_ERROR;
-					}
-				}
-			} else {
-				AbstractTool.LOGGER.error("Configuration Error"); // NOPMD
-				return CONFIGURATION_ERROR;
-			}
-		} catch (final ParameterException e) {
-			AbstractTool.LOGGER.error(e.getLocalizedMessage()); // NOPMD
-			commander.usage();
-			return PARAMETER_ERROR;
-		} catch (final ConfigurationException e) {
-			AbstractTool.LOGGER.error(e.getLocalizedMessage()); // NOPMD
-			commander.usage();
+			AbstractLegacyTool.LOGGER.debug("Done"); // NOPMD LoD sucks
+
+			return SUCCESS_EXIT_CODE;
+		} else {
 			return CONFIGURATION_ERROR;
 		}
 	}
 
 	/**
-	 * Execute the core part of a tool or service.
+	 * General shutdown hook for services and tools.
 	 *
-	 * @param commander
-	 *            JCommander instance used to display usage information in case of errors
-	 * @param label
-	 *            additional label
-	 *
-	 * @return returns exit code
-	 * @throws ConfigurationException
-	 *             on configuration errors occuring at runtime
+	 * @param execution
+	 *            teetime execution
 	 */
-	protected abstract int execute(final JCommander commander, final String label) throws ConfigurationException;
+	private void shutdownHook(final Execution<T> execution) {
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() { // NOPMD is not a web app
+			/**
+			 * Thread to gracefully terminate service.
+			 */
+			@Override
+			public void run() {
+				try {
+					synchronized (execution) {
+						execution.abortEventually(); // TODO replace by different termination logic
+						AbstractTool.this.shutdownService(); // NOPMD
+					}
+				} catch (final Exception e) { // NOCS NOPMD
 
-	/**
-	 * Read a configuration form a file.
-	 *
-	 * @return returns a complete Kieker configuration
-	 */
-	protected kieker.common.configuration.Configuration readConfiguration() {
-		if (this.getConfigurationFile() != null) { // NOPMD
-			return ConfigurationFactory.createConfigurationFromFile(this.getConfigurationFile().getAbsolutePath()); // NOPMD
-		} else {
-			return null;
-		}
+				}
+			}
+		}));
+
 	}
 
 	/**
@@ -139,6 +91,7 @@ public abstract class AbstractTool<T extends Object> {
 	 *
 	 * @return returns a file handle in case a configuration file is used, else null
 	 */
+	@Override
 	protected abstract File getConfigurationFile();
 
 	/**
@@ -150,25 +103,19 @@ public abstract class AbstractTool<T extends Object> {
 	 *            JCommander used to generate usage information.
 	 * @return true if the configuration is valid.
 	 */
+	@Override
 	protected abstract boolean checkConfiguration(kieker.common.configuration.Configuration configuration,
 			JCommander commander);
 
 	/**
-	 * Check all given parameters for correct directory and files path, as well as, all other values
-	 * for fitness.
+	 * Create and initialize teetime configuration for a service.
 	 *
-	 * @param commander
-	 *            the command line interface
-	 * @return true if all parameter check out, else false
+	 * @return return the newly created service
 	 *
 	 * @throws ConfigurationException
-	 *             on error
+	 *             in case the creation fails
 	 */
-	protected abstract boolean checkParameters(JCommander commander) throws ConfigurationException;
-
-	/**
-	 * Shutdown cleanup features of the application.
-	 */
-	protected abstract void shutdownService();
+	protected abstract T createTeetimeConfiguration()
+			throws ConfigurationException;
 
 }
