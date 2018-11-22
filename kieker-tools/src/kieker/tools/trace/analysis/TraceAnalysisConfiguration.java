@@ -450,7 +450,7 @@ public class TraceAnalysisConfiguration {
 				if ("<null>".equals(val)) {
 					val = String.valueOf(id);
 				} else {
-					val += ", " + String.valueOf(id);
+					val += ", " + id;
 				}
 			}
 		} else {
