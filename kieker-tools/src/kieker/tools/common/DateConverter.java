@@ -42,6 +42,12 @@ public class DateConverter extends BaseConverter<Long> implements IStringConvert
 		DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 
+	/**
+	 * Create a date converter.
+	 *
+	 * @param optionName
+	 *            option name
+	 */
 	public DateConverter(final String optionName) {
 		super(optionName);
 	}
@@ -53,7 +59,7 @@ public class DateConverter extends BaseConverter<Long> implements IStringConvert
 			result = Long.parseLong(value);
 		} catch (final NumberFormatException ex) {
 			try {
-				final Date ignoreBeforeDate = DATE_FORMAT.parse(value);
+				final Date ignoreBeforeDate = DATE_FORMAT.parse(value); // NOPMD concurrent access not possible
 				result = ignoreBeforeDate.getTime() * (1000 * 1000);
 			} catch (final java.text.ParseException ex2) {
 				return null;

@@ -36,6 +36,7 @@ public final class Convert {
 
 	/**
 	 * JCommander and modern service infrastructure passes file properties as files, but old filters expect them as strings.
+	 * This helper allows to convert file lists to string arrays.
 	 *
 	 * @param directories
 	 *            input directories
@@ -52,6 +53,13 @@ public final class Convert {
 		return array;
 	}
 
+	/**
+	 * Convert a list of strings into an array of strings.
+	 *
+	 * @param list
+	 *            list of strings
+	 * @return returns an array of strings
+	 */
 	public static String[] listToArray(final List<String> list) {
 		return list.toArray(new String[list.size()]);
 	}

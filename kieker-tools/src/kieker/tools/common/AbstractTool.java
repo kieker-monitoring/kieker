@@ -15,8 +15,6 @@
  ***************************************************************************/
 package kieker.tools.common;
 
-import java.io.File;
-
 import com.beust.jcommander.JCommander;
 
 import kieker.analysis.common.ConfigurationException;
@@ -25,7 +23,7 @@ import teetime.framework.Configuration;
 import teetime.framework.Execution;
 
 /**
- * Generic service main class.
+ * Generic tool framework class.
  *
  * @param <T>
  *            type of the teetime configuration to be used
@@ -38,6 +36,21 @@ import teetime.framework.Execution;
  */
 public abstract class AbstractTool<T extends Configuration, R extends Object> extends AbstractLegacyTool<R> {
 
+	/**
+	 * Default constructor.
+	 */
+	public AbstractTool() {
+		super();
+	}
+
+	/**
+	 * Execute the tool.
+	 *
+	 * @param commander
+	 *            command line parter JCommander
+	 * @param label
+	 *            printed to the debug log about what application is running.
+	 */
 	@Override
 	protected int execute(final JCommander commander, final String label) throws ConfigurationException {
 		this.kiekerConfiguration = this.readConfiguration();
@@ -47,12 +60,12 @@ public abstract class AbstractTool<T extends Configuration, R extends Object> ex
 
 			this.shutdownHook(execution);
 
-			AbstractLegacyTool.LOGGER.debug("Running {}", label); // NOPMD LoD sucks
+			AbstractLegacyTool.LOGGER.debug("Running {}", label);
 
 			execution.executeBlocking();
 			this.shutdownService();
 
-			AbstractLegacyTool.LOGGER.debug("Done"); // NOPMD LoD sucks
+			AbstractLegacyTool.LOGGER.debug("Done");
 
 			return SUCCESS_EXIT_CODE;
 		} else {
@@ -73,39 +86,14 @@ public abstract class AbstractTool<T extends Configuration, R extends Object> ex
 			 */
 			@Override
 			public void run() {
-				try {
-					synchronized (execution) {
-						execution.abortEventually(); // TODO replace by different termination logic
-						AbstractTool.this.shutdownService(); // NOPMD
-					}
-				} catch (final Exception e) { // NOCS NOPMD
-
+				synchronized (execution) {
+					execution.abortEventually();
+					AbstractTool.this.shutdownService();
 				}
 			}
 		}));
 
 	}
-
-	/**
-	 * Method returning the configuration file handle.
-	 *
-	 * @return returns a file handle in case a configuration file is used, else null
-	 */
-	@Override
-	protected abstract File getConfigurationFile();
-
-	/**
-	 * Check a given configuration for validity.
-	 *
-	 * @param configuration
-	 *            the configuration object with all configuration parameter. Can be null.
-	 * @param commander
-	 *            JCommander used to generate usage information.
-	 * @return true if the configuration is valid.
-	 */
-	@Override
-	protected abstract boolean checkConfiguration(kieker.common.configuration.Configuration configuration,
-			JCommander commander);
 
 	/**
 	 * Create and initialize teetime configuration for a service.
