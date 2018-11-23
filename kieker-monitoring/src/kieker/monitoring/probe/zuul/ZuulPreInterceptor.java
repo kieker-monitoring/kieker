@@ -27,7 +27,6 @@ import com.netflix.zuul.context.RequestContext;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
-import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.spring.flow.ThreadSpecificInterceptedData;
 import kieker.monitoring.timer.ITimeSource;
 
@@ -49,7 +48,6 @@ public class ZuulPreInterceptor extends ZuulFilter {
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final String VMNAME = CTRLINST.getHostname();
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
-	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 
 	/** default constructor. */
 	public ZuulPreInterceptor() {
@@ -64,12 +62,12 @@ public class ZuulPreInterceptor extends ZuulFilter {
 
 	@Override
 	public Object run() {
-		final RequestContext ctx = RequestContext.getCurrentContext();
-
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return null;
 		}
-		boolean entrypoint = true;
+
+		final RequestContext ctx = RequestContext.getCurrentContext();
+
 		final String hostname = VMNAME;
 		final HttpServletRequest request = ctx.getRequest();
 		// TODO handle thread IDs
@@ -81,16 +79,14 @@ public class ZuulPreInterceptor extends ZuulFilter {
 		final int eoi; // this is executionOrderIndex-th execution in this trace
 		final int ess; // this is the height in the dynamic call tree of this execution
 		if (traceId == -1) {
-			entrypoint = true;
 			traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 			eoi = 0;
 			ess = 0;
 		} else {
-			entrypoint = false;
 			eoi = tData.getEoi() + 1;
 			ess = tData.getEss();
 			if ((eoi == -1) || (ess == -1)) {
-				LOGGER.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
+				LOGGER.error("eoi and/or ess have invalid values: eoi == {} ess == {}", eoi, ess);
 				CTRLINST.terminateMonitoring();
 			}
 		}
@@ -100,13 +96,9 @@ public class ZuulPreInterceptor extends ZuulFilter {
 
 		final String comma = ",";
 		final StringBuilder builder = new StringBuilder();
-		builder.append(traceId);
-		builder.append(comma);
-		builder.append(ctx.getRequest().getSession().getId());
-		builder.append(comma);
-		builder.append(Integer.toString(eoi));
-		builder.append(comma);
-		builder.append(Integer.toString(ess + 1));
+		builder.append(traceId).append(comma).append(ctx.getRequest().getSession().getId())
+				.append(comma).append(Integer.toString(eoi))
+				.append(comma).append(Integer.toString(ess + 1));
 		ctx.addZuulRequestHeader("KiekerTracingInfo", builder.toString());
 
 		// measure before

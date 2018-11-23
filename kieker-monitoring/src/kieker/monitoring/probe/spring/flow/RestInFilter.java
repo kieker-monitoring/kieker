@@ -136,48 +136,12 @@ public class RestInFilter extends OncePerRequestFilter implements IMonitoringPro
 				ess = 0; // ESS of this execution
 			}
 
-			// Store thread-local values
-			CF_REGISTRY.storeThreadLocalTraceId(traceId.get());
-			CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with
-													// incrementAndRecall
-			CF_REGISTRY.storeThreadLocalESS(ess + 1); // this execution has ESS=ess
-			SESSION_REGISTRY.storeThreadLocalSessionId(sessionId.get());
+			this.storeThreadLocalValues(traceId, eoi, ess, sessionId);
 		}
 
 		final long tin = TIMESOURCE.getTime(); // the entry timestamp
 
-		final HttpServletResponseWrapper wrapper = new HttpServletResponseWrapper(httpServletResponse) {
-
-			@Override
-			public void setStatus(final int sc) {
-				super.setStatus(sc);
-				this.handleStatus(sc);
-			}
-
-			@Override
-			public void setStatus(final int sc, final String sm) {
-				super.setStatus(sc, sm);
-				this.handleStatus(sc);
-			}
-
-			@Override
-			public void sendError(final int sc, final String msg) throws IOException {
-				super.sendError(sc, msg);
-				this.handleStatus(sc);
-			}
-
-			@Override
-			public void sendError(final int sc) throws IOException {
-				super.sendError(sc);
-				this.handleStatus(sc);
-			}
-
-			private void handleStatus(final int code) {
-				this.addHeader(RestConstants.HEADER_FIELD,
-						traceId + "," + sessionId + "," + CF_REGISTRY.recallThreadLocalEOI() + ","
-								+ Integer.toString(CF_REGISTRY.recallThreadLocalESS()));
-			}
-		};
+		final HttpServletResponseWrapper wrapper = new RestServletWrapper(httpServletResponse, traceId, sessionId, CF_REGISTRY);
 
 		try {
 			filterChain.doFilter(httpServletRequest, wrapper);
@@ -196,4 +160,65 @@ public class RestInFilter extends OncePerRequestFilter implements IMonitoringPro
 			CF_REGISTRY.unsetThreadLocalESS();
 		}
 	}
+
+	private void storeThreadLocalValues(final AtomicLong traceId, final int eoi, final int ess, final AtomicReference<String> sessionId) {
+		// Store thread-local values
+		CF_REGISTRY.storeThreadLocalTraceId(traceId.get());
+		CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with
+												// incrementAndRecall
+		CF_REGISTRY.storeThreadLocalESS(ess + 1); // this execution has ESS=ess
+		SESSION_REGISTRY.storeThreadLocalSessionId(sessionId.get());
+	}
+
+	/**
+	 * Wrapper class.
+	 *
+	 * @author Reiner Jung
+	 *
+	 */
+	private class RestServletWrapper extends HttpServletResponseWrapper {
+
+		private final AtomicLong traceId;
+		private final AtomicReference<String> sessionId;
+		private final ControlFlowRegistry cfRegistry;
+
+		public RestServletWrapper(final HttpServletResponse response, final AtomicLong traceId, final AtomicReference<String> sessionId,
+				final ControlFlowRegistry cfRegistry) {
+			super(response);
+			this.traceId = traceId;
+			this.sessionId = sessionId;
+			this.cfRegistry = cfRegistry;
+		}
+
+		@Override
+		public void setStatus(final int sc) {
+			super.setStatus(sc);
+			this.handleStatus();
+		}
+
+		@Override
+		public void setStatus(final int sc, final String sm) {
+			super.setStatus(sc, sm);
+			this.handleStatus();
+		}
+
+		@Override
+		public void sendError(final int sc, final String msg) throws IOException {
+			super.sendError(sc, msg);
+			this.handleStatus();
+		}
+
+		@Override
+		public void sendError(final int sc) throws IOException {
+			super.sendError(sc);
+			this.handleStatus();
+		}
+
+		private void handleStatus() {
+			this.addHeader(RestConstants.HEADER_FIELD,
+					this.traceId + "," + this.sessionId + "," + this.cfRegistry.recallThreadLocalEOI() + ","
+							+ Integer.toString(this.cfRegistry.recallThreadLocalESS()));
+		}
+	};
+
 }

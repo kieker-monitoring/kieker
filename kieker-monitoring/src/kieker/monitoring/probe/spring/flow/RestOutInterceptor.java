@@ -105,75 +105,110 @@ public class RestOutInterceptor implements ClientHttpRequestInterceptor {
 		try {
 			retval = execution.execute(request, body);
 		} finally {
-			// measure after
-			final long tout = RestOutInterceptor.TIME.getTime();
-
-			// Process response
-			if (retval instanceof ClientHttpResponse) {
-				final ClientHttpResponse response = (ClientHttpResponse) retval;
-				final HttpHeaders responseHeaders = response.getHeaders();
-				if (responseHeaders != null) {
-					final List<String> responseHeaderList = responseHeaders.get(RestConstants.HEADER_FIELD);
-
-					if (responseHeaderList != null) {
-						RestOutInterceptor.LOGGER.debug("Received response from {} with header = {}", responseHeaders.getLocation().toString(),
-								responseHeaders.toString());
-						final String[] responseHeaderArray = responseHeaderList.get(0).split(",");
-
-						// Extract trace id
-						final String retTraceIdStr = responseHeaderArray[0];
-						Long retTraceId = -1L;
-						if (!"null".equals(retTraceIdStr)) {
-							try {
-								retTraceId = Long.parseLong(retTraceIdStr);
-							} catch (final NumberFormatException exc) {
-								RestOutInterceptor.LOGGER.warn("Invalid tradeId");
-							}
-						}
-						if (traceId != retTraceId) {
-							RestOutInterceptor.LOGGER.error("TraceId in response header ({}) is different from that in request header ({})", retTraceId, traceId);
-						}
-
-						// Extract session id
-						String retSessionId = responseHeaderArray[1];
-						if ("null".equals(retSessionId)) {
-							retSessionId = OperationExecutionRecord.NO_SESSION_ID;
-						}
-
-						// Extract eoi
-						int retEOI = -1;
-						final String retEOIStr = responseHeaderArray[2];
-						if (!"null".equals(retEOIStr)) {
-							try {
-								retEOI = Integer.parseInt(retEOIStr);
-								RestOutInterceptor.CF_REGISTRY.storeThreadLocalEOI(retEOI);
-							} catch (final NumberFormatException exc) {
-								RestOutInterceptor.LOGGER.warn("Invalid eoi", exc);
-							}
-						}
-
-					} else {
-						RestOutInterceptor.LOGGER.debug("No monitoring data found in the response header from {}. Is it instrumented?",
-								responseHeaders.getLocation().toString());
-					}
-				} else {
-					RestOutInterceptor.LOGGER.debug("Response header from {} is null. Is it instrumented?", response.getHeaders().getLocation().toString());
-				}
-				response.close();
-			}
-
-			RestOutInterceptor.CTRLINST.newMonitoringRecord(new OperationExecutionRecord(RestOutInterceptor.SIGNATURE,
-					sessionId, traceId, tin, tout, RestOutInterceptor.VMNAME, eoi, ess));
-			// cleanup
-			if (entrypoint) {
-				RestOutInterceptor.CF_REGISTRY.unsetThreadLocalTraceId();
-				RestOutInterceptor.CF_REGISTRY.unsetThreadLocalEOI();
-				RestOutInterceptor.CF_REGISTRY.unsetThreadLocalESS();
-				RestOutInterceptor.SESSION_REGISTRY.unsetThreadLocalSessionId();
-			} else {
-				RestOutInterceptor.CF_REGISTRY.storeThreadLocalESS(ess); // next operation is ess
-			}
+			this.processResponse(retval, traceId, sessionId, tin, entrypoint, eoi, ess);
 		}
 		return (ClientHttpResponse) retval;
+	}
+
+	/**
+	 * Process response.
+	 *
+	 * @param retval
+	 *            return value
+	 * @param traceId
+	 *            trace id
+	 * @param sessionId
+	 *            session id
+	 * @param tin
+	 *            entry time
+	 * @param entrypoint
+	 *            entrypoint
+	 * @param eoi
+	 *            eoi
+	 * @param ess
+	 *            ess
+	 */
+	private void processResponse(final Object retval, final long traceId, final String sessionId, final long tin, final boolean entrypoint, final int eoi,
+			final int ess) {
+		// measure after
+		final long tout = RestOutInterceptor.TIME.getTime();
+
+		// Process response
+		if (retval instanceof ClientHttpResponse) {
+			final ClientHttpResponse response = (ClientHttpResponse) retval;
+			final HttpHeaders responseHeaders = response.getHeaders();
+			if (responseHeaders != null) {
+				final List<String> responseHeaderList = responseHeaders.get(RestConstants.HEADER_FIELD);
+				if (responseHeaderList != null) {
+					this.processMonitoringData(responseHeaders, responseHeaderList, traceId);
+				} else {
+					RestOutInterceptor.LOGGER.debug("No monitoring data found in the response header from {}. Is it instrumented?",
+							responseHeaders.getLocation().toString());
+				}
+			} else {
+				RestOutInterceptor.LOGGER.debug("Response header from {} is null. Is it instrumented?", response.getHeaders().getLocation().toString());
+			}
+			response.close();
+		}
+
+		RestOutInterceptor.CTRLINST.newMonitoringRecord(new OperationExecutionRecord(RestOutInterceptor.SIGNATURE,
+				sessionId, traceId, tin, tout, RestOutInterceptor.VMNAME, eoi, ess));
+		// cleanup
+		if (entrypoint) {
+			RestOutInterceptor.CF_REGISTRY.unsetThreadLocalTraceId();
+			RestOutInterceptor.CF_REGISTRY.unsetThreadLocalEOI();
+			RestOutInterceptor.CF_REGISTRY.unsetThreadLocalESS();
+			RestOutInterceptor.SESSION_REGISTRY.unsetThreadLocalSessionId();
+		} else {
+			RestOutInterceptor.CF_REGISTRY.storeThreadLocalESS(ess); // next operation is ess
+		}
+	}
+
+	/**
+	 * Processing monitoring data.
+	 *
+	 * @param responseHeaders
+	 *            response headers
+	 * @param responseHeaderList
+	 *            response header list
+	 * @param traceId
+	 *            trace id
+	 */
+	private void processMonitoringData(final HttpHeaders responseHeaders, final List<String> responseHeaderList, final long traceId) {
+		RestOutInterceptor.LOGGER.debug("Received response from {} with header = {}", responseHeaders.getLocation().toString(),
+				responseHeaders.toString());
+		final String[] responseHeaderArray = responseHeaderList.get(0).split(",");
+
+		// Extract trace id
+		final String retTraceIdStr = responseHeaderArray[0];
+		Long retTraceId = -1L;
+		if (!"null".equals(retTraceIdStr)) {
+			try {
+				retTraceId = Long.parseLong(retTraceIdStr);
+			} catch (final NumberFormatException exc) {
+				RestOutInterceptor.LOGGER.warn("Invalid tradeId");
+			}
+		}
+		if (traceId != retTraceId) {
+			RestOutInterceptor.LOGGER.error("TraceId in response header ({}) is different from that in request header ({})", retTraceId, traceId);
+		}
+
+		// Extract session id
+		String retSessionId = responseHeaderArray[1];
+		if ("null".equals(retSessionId)) {
+			retSessionId = OperationExecutionRecord.NO_SESSION_ID;
+		}
+
+		// Extract eoi
+		int retEOI = -1;
+		final String retEOIStr = responseHeaderArray[2];
+		if (!"null".equals(retEOIStr)) {
+			try {
+				retEOI = Integer.parseInt(retEOIStr);
+				RestOutInterceptor.CF_REGISTRY.storeThreadLocalEOI(retEOI);
+			} catch (final NumberFormatException exc) {
+				RestOutInterceptor.LOGGER.warn("Invalid eoi", exc);
+			}
+		}
 	}
 }
