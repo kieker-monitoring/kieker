@@ -132,7 +132,7 @@ public final class BookstoreOperationExecutionRecordFactory {
 	public static List<OperationExecutionRecord> genValidBookstoreTraceFullSignature(final String sessionId, final long traceId) {
 		final String hostname = "srv9786";
 
-		final List<OperationExecutionRecord> retList = new ArrayList<OperationExecutionRecord>(4); // 4 executions
+		final List<OperationExecutionRecord> traceEvents = new ArrayList<OperationExecutionRecord>(4); // 4 executions
 
 		final OperationExecutionRecord exec0_0__bookstore_searchBook = new OperationExecutionRecord( // NOCS (LocalFinalVariableNameCheck)
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
@@ -142,7 +142,7 @@ public final class BookstoreOperationExecutionRecordFactory {
 				hostname,
 				BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI,
 				BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS);
-		retList.add(exec0_0__bookstore_searchBook);
+		traceEvents.add(exec0_0__bookstore_searchBook);
 
 		final OperationExecutionRecord exec1_1__catalog_getBook = new OperationExecutionRecord( // NOCS (LocalFinalVariableNameCheck)
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK,
@@ -152,7 +152,7 @@ public final class BookstoreOperationExecutionRecordFactory {
 				hostname,
 				BookstoreOperationExecutionRecordFactory.EXEC1_1__CATALOG_GETBOOK_EOI,
 				BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS);
-		retList.add(exec1_1__catalog_getBook);
+		traceEvents.add(exec1_1__catalog_getBook);
 
 		final OperationExecutionRecord exec2_1__crm_getOrders = new OperationExecutionRecord( // NOCS (LocalFinalVariableNameCheck)
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
@@ -162,7 +162,7 @@ public final class BookstoreOperationExecutionRecordFactory {
 				hostname,
 				BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_EOI,
 				BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_ESS);
-		retList.add(exec2_1__crm_getOrders);
+		traceEvents.add(exec2_1__crm_getOrders);
 
 		final OperationExecutionRecord exec3_2__catalog_getBook = new OperationExecutionRecord( // NOCS (LocalFinalVariableNameCheck)
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK,
@@ -172,7 +172,7 @@ public final class BookstoreOperationExecutionRecordFactory {
 				hostname,
 				BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_EOI,
 				BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_ESS);
-		retList.add(exec3_2__catalog_getBook);
-		return retList;
+		traceEvents.add(exec3_2__catalog_getBook);
+		return traceEvents;
 	}
 }

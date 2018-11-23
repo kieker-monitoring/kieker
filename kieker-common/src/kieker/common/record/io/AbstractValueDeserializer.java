@@ -28,12 +28,18 @@ import kieker.common.exception.RecordInstantiationException;
  */
 public abstract class AbstractValueDeserializer { // NOPMD no abstract methods, as they are defined by the corresponding IValueDeserializer interface
 
+	/**
+	 * Create an abstract value deserializer.
+	 */
 	public AbstractValueDeserializer() {
 		// empty constructor
 	}
 
 	/**
 	 * Compute the correct enumeration value for the given {@code enumType} and {@code ordinal} value.
+	 *
+	 * @param <T>
+	 *            enumeration type
 	 *
 	 * @param enumType
 	 *            class type referring to an enumeration type

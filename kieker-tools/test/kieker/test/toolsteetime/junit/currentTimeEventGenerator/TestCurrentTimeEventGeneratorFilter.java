@@ -121,7 +121,6 @@ public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest {
 	 */
 	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents,
 			final boolean rawTimestamp) {
-
 		final List<TimestampRecord> recordOutputs;
 		final List<Long> timestampOutputs;
 
@@ -129,7 +128,7 @@ public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest {
 		if (rawTimestamp) {
 			final TimestampCurrentTimeEventGenerationFilterConfig rawTimestampConfig = new TimestampCurrentTimeEventGenerationFilterConfig(timerResolution,
 					inputTimestamps);
-			final Execution<TimestampCurrentTimeEventGenerationFilterConfig> execution = new Execution<TimestampCurrentTimeEventGenerationFilterConfig>(
+			final Execution<TimestampCurrentTimeEventGenerationFilterConfig> execution = new Execution<>(
 					rawTimestampConfig);
 			execution.executeBlocking();
 
@@ -138,7 +137,7 @@ public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest {
 
 		} else {
 			final RecordCurrentTimeEventGenerationFilterConfig recordConfig = new RecordCurrentTimeEventGenerationFilterConfig(timerResolution, inputTimestamps);
-			final Execution<RecordCurrentTimeEventGenerationFilterConfig> execution = new Execution<RecordCurrentTimeEventGenerationFilterConfig>(recordConfig);
+			final Execution<RecordCurrentTimeEventGenerationFilterConfig> execution = new Execution<>(recordConfig);
 			execution.executeBlocking();
 
 			recordOutputs = recordConfig.getRecordOutputs();
@@ -182,21 +181,21 @@ public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest {
 	 * @since 1.13
 	 */
 	private static class TimestampCurrentTimeEventGenerationFilterConfig extends Configuration {
-		private final CollectorSink<TimestampRecord> recordCollector = new CollectorSink<TimestampRecord>();
-		private final CollectorSink<Long> timestampCollector = new CollectorSink<Long>();
+		private final CollectorSink<TimestampRecord> recordCollector = new CollectorSink<>();
+		private final CollectorSink<Long> timestampCollector = new CollectorSink<>();
 
 		public TimestampCurrentTimeEventGenerationFilterConfig(final long timerResolution, final long[] inputTimestamps) {
 			final InitialElementProducer<Long> timestampProducer;
 			final TimestampCurrentTimeEventGenerationFilter timestampCurrentTimeGenerationFilter = new TimestampCurrentTimeEventGenerationFilter(timerResolution);
 
-			final List<Long> inputs = new LinkedList<Long>();
+			final List<Long> inputs = new LinkedList<>();
 
 			// pass raw timestamp as long
 			for (final long timestamp : inputTimestamps) {
 				inputs.add(timestamp);
 			}
 
-			timestampProducer = new InitialElementProducer<Long>(inputs);
+			timestampProducer = new InitialElementProducer<>(inputs);
 
 			this.connectPorts(timestampProducer.getOutputPort(), timestampCurrentTimeGenerationFilter.getInputPort());
 			this.connectPorts(timestampCurrentTimeGenerationFilter.getCurrentTimeRecordOutputPort(), this.recordCollector.getInputPort());
@@ -220,15 +219,15 @@ public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest {
 	 * @since 1.13
 	 */
 	private static class RecordCurrentTimeEventGenerationFilterConfig extends Configuration {
-		private final CollectorSink<TimestampRecord> recordCollector = new CollectorSink<TimestampRecord>();
-		private final CollectorSink<Long> timestampCollector = new CollectorSink<Long>();
+		private final CollectorSink<TimestampRecord> recordCollector = new CollectorSink<>();
+		private final CollectorSink<Long> timestampCollector = new CollectorSink<>();
 
 		public RecordCurrentTimeEventGenerationFilterConfig(final long timerResolution, final long[] inputTimestamps) {
 
 			final InitialElementProducer<IMonitoringRecord> recordProducer;
 			final RecordCurrentTimeEventGenerationFilter recordCurrentTimeGenerationFilter = new RecordCurrentTimeEventGenerationFilter(timerResolution);
 
-			final List<IMonitoringRecord> inputs = new LinkedList<IMonitoringRecord>();
+			final List<IMonitoringRecord> inputs = new LinkedList<>();
 
 			// wrap timestamp in dummy record
 			for (final long timestamp : inputTimestamps) {
@@ -237,7 +236,7 @@ public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest {
 				inputs.add(r);
 			}
 
-			recordProducer = new InitialElementProducer<IMonitoringRecord>(inputs);
+			recordProducer = new InitialElementProducer<>(inputs);
 
 			this.connectPorts(recordProducer.getOutputPort(), recordCurrentTimeGenerationFilter.getInputPort());
 			this.connectPorts(recordCurrentTimeGenerationFilter.getCurrentTimeRecordOutputPort(), this.recordCollector.getInputPort());

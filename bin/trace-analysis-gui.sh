@@ -8,7 +8,7 @@
 BINDIR=$(cd "$(dirname "$0")"; pwd)/
 
 JAVAARGS="-Dkieker.common.logging.Log=JDK -Djava.util.logging.config.file=${BINDIR}/logging.properties -Xms56m -Xmx1024m"
-MAINCLASSNAME=kieker.tools.traceAnalysis.TraceAnalysisGUI
+MAINCLASSNAME=kieker.tools.trace.analysis.TraceAnalysisGUI
 
 #echo java ${JAVAARGS} -cp "${CLASSPATH}" ${MAINCLASSNAME} "$@"
 

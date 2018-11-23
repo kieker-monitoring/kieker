@@ -38,10 +38,10 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * Basically compares the results of the forecaster with previous manually calculated forecasted results.
  * Currently for the mean forecaster.
- * 
+ *
  * @since 1.10
  * @author Tom Frotscher
- * 
+ *
  */
 public class ForecastingFilterTest extends AbstractKiekerTest {
 
@@ -66,7 +66,7 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 	}
 
 	private List<NamedDoubleTimeSeriesPoint> createInputEventSetForecast() {
-		final List<NamedDoubleTimeSeriesPoint> retList = new ArrayList<NamedDoubleTimeSeriesPoint>();
+		final List<NamedDoubleTimeSeriesPoint> retList = new ArrayList<>();
 		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.3));
 		retList.add(this.createNDTSP(OP_SIGNATURE_B, 0.4));
 		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.5));
@@ -79,7 +79,7 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 
 	/**
 	 * Sets up the controller and configuration for the test of the VariateForecastingFilter.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If illegal State
 	 * @throws AnalysisConfigurationException
@@ -91,7 +91,7 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 		// READER
 		final Configuration readerForecastConfiguration = new Configuration();
 		readerForecastConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		final ListReader<NamedDoubleTimeSeriesPoint> theReaderForecast = new ListReader<NamedDoubleTimeSeriesPoint>(readerForecastConfiguration, this.controller);
+		final ListReader<NamedDoubleTimeSeriesPoint> theReaderForecast = new ListReader<>(readerForecastConfiguration, this.controller);
 		theReaderForecast.addAllObjects(this.createInputEventSetForecast());
 
 		// FORECASTINGFILTER
@@ -103,7 +103,7 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 		final ForecastingFilter forecasting = new ForecastingFilter(forecastConfiguration, this.controller);
 
 		// SINK 1
-		this.sinkPlugin = new ListCollectionFilter<ForecastMeasurementPair>(new Configuration(), this.controller);
+		this.sinkPlugin = new ListCollectionFilter<>(new Configuration(), this.controller);
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
 
 		// CONNECTION
@@ -115,7 +115,7 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 
 	/**
 	 * Test of the Forecasting with incoming measurements of different Applications. This test case is successful for the MEANJAVA Forecaster.
-	 * 
+	 *
 	 * @throws InterruptedException
 	 *             If interrupted
 	 * @throws IllegalStateException
@@ -125,7 +125,6 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testForecastingOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-
 		final AnalysisControllerThread thread = new AnalysisControllerThread(this.controller);
 		thread.start();
 

@@ -36,7 +36,7 @@ import teetime.framework.AbstractProducerStage;
  *
  * @since 0.95a
  *
- * @deprecated 1.15
+ * @deprecated since 1.15 removed 1.16
  */
 @Deprecated
 public class BinaryLogReader extends AbstractProducerStage<IMonitoringRecord> implements IMonitoringRecordReceiver {

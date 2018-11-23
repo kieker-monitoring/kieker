@@ -23,8 +23,8 @@ package kieker.tools.opad.model;
 public interface IDoubleValue {
 
 	/**
-	 * Returns the double value as basic type.
-	 * 
+	 * @return returns the double value as basic type
+	 *
 	 * @since 1.10
 	 */
 	public double getValue();

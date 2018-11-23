@@ -25,7 +25,7 @@ package kieker.monitoring.core.configuration;
  *
  * @since 1.3
  *
- * @deprecated 1.14 replaced by the class {@link ConfigurationKeys} to support Kieker checkstyle policy
+ * @deprecated since 1.14 remove in 1.16 replaced by the class {@link ConfigurationKeys} to support Kieker checkstyle policy
  */
 @Deprecated
 public interface Keys { // NOCS

@@ -257,7 +257,6 @@ public final class JMXController extends AbstractController implements IRemoteCo
 
 		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
-
 			if (LOGGER.isInfoEnabled()) {
 				final String notificationType = notification.getType();
 				final String connectionID;
@@ -274,7 +273,6 @@ public final class JMXController extends AbstractController implements IRemoteCo
 					LOGGER.info(notificationType + ": " + notification.getMessage() + " (ID: " + connectionID + ")");
 				}
 			}
-
 		}
 	}
 }

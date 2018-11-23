@@ -107,14 +107,14 @@ public class TextValueDeserializer extends AbstractValueDeserializer implements 
 
 	@Override
 	public byte[] getBytes(final byte[] target) {
-		final char[] charTarget = new char[target.length];
+		final char[] charTarget = new char[target.length]; // NOPMD plural name not relevant
 		this.buffer.get(charTarget);
 		ByteBuffer.wrap(target).asCharBuffer().put(charTarget);
 		return target;
 	}
 
 	private String readValue() {
-		final char[] charArray = new char[this.buffer.limit()];
+		final char[] charArray = new char[this.buffer.limit()]; // NOPMD plural name not relevant
 		final int remaining = this.buffer.limit() - this.buffer.position();
 		char ch;
 		int i = 0;

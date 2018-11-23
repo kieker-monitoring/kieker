@@ -101,6 +101,9 @@ public interface IValueSerializer {
 	/**
 	 * Stores a {@code Enumeration} value in the underlying data store.
 	 *
+	 * @param <T>
+	 *            enumeration type
+	 *
 	 * @param value
 	 *            The value to store
 	 * @since 1.14

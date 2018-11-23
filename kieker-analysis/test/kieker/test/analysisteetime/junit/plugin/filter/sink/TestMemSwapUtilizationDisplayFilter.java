@@ -32,7 +32,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import teetime.framework.test.StageTester;
 
 /**
- * Test cases for {@link MemSwapUtilizationDisplayFilter}
+ * Test cases for {@link MemSwapUtilizationDisplayFilter}.
  *
  * @author Lars Bluemke
  *

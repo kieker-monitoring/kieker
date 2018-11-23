@@ -22,8 +22,8 @@ import kieker.analysisteetime.util.graph.IGraph;
 import kieker.analysisteetime.util.graph.util.FileExtension;
 
 /**
- * This function maps a graph to a file name with the pattern:
- * output directory + graph name + file extension
+ * This function maps a graph to a file name with a specific pattern.
+ * Pattern is defined as: output directory + graph name + file extension
  *
  * @author Sören Henning
  *
@@ -34,6 +34,12 @@ public class SimpleFileNameMapper implements Function<IGraph, String> {
 	private final String outputDirectory;
 	private final FileExtension fileExtension;
 
+	/**
+	 * Create a simple file mapper.
+	 *
+	 * @param outputDirectory output directory path
+	 * @param fileExtension file extension for the graph
+	 */
 	public SimpleFileNameMapper(final String outputDirectory, final FileExtension fileExtension) {
 		this.outputDirectory = outputDirectory;
 		this.fileExtension = fileExtension;

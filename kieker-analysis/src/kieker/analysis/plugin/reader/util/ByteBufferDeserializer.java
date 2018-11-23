@@ -96,27 +96,32 @@ public class ByteBufferDeserializer {
 		final long loggingTimestamp = buffer.getLong(); // NOPMD (timestamp must be read before checking the buffer for record size)
 
 		final String recordClassName = this.stringRegistry.get(clazzId);
-		// identify record data
-		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
-		if (recordFactory != null) {
-			if (buffer.remaining() < recordFactory.getRecordSizeInBytes()) { // includes the case where size is -1
+		if (recordClassName != null) {
+			// identify record data
+			final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
+			if (recordFactory != null) {
+				if (buffer.remaining() < recordFactory.getRecordSizeInBytes()) { // includes the case where size is -1
+					return false;
+				}
+			} else {
 				return false;
 			}
+
+			try {
+				final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(buffer, this.stringRegistry));
+				record.setLoggingTimestamp(loggingTimestamp);
+
+				this.recordReceiver.newMonitoringRecord(record);
+			} catch (final RecordInstantiationException ex) {
+				this.logger.error("Failed to create: {}", recordClassName, ex);
+				throw ex; // we cannot continue reading the buffer because we do not know at which position to continue
+			}
+
+			return true;
 		} else {
-			return false;
+			this.logger.error("Failed to identify a event type {}, no classname registered.", clazzId);
+			throw new RecordInstantiationException("Cannot identify record class. Unknown id" + clazzId);
 		}
-
-		try {
-			final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(buffer, this.stringRegistry));
-			record.setLoggingTimestamp(loggingTimestamp);
-
-			this.recordReceiver.newMonitoringRecord(record);
-		} catch (final RecordInstantiationException ex) {
-			this.logger.error("Failed to create: {}", recordClassName, ex);
-			throw ex; // we cannot continue reading the buffer because we do not know at which position to continue
-		}
-
-		return true;
 	}
 
 	public void register(final IMonitoringRecordReceiver recordReceiver) { // NOCS (hides field)

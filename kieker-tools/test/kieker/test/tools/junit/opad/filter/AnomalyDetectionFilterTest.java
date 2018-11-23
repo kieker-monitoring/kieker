@@ -36,14 +36,14 @@ import kieker.tools.opad.record.StorableDetectionResult;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
- * 
+ *
  * Testing the AnomalyDetectionFilter. What is basically testing is following:
  * + Set Threshold of the Filter to 0.6
  * + Input 0.5, 0.6, 0.7
  * + Awaits
  * - 0.5 to be normal (1 in the sink)
  * - 0.6 and 0.7 to be an anomaly
- * 
+ *
  * @author Tillmann Carlos Bielefeld
  * @since 1.10
  */
@@ -68,7 +68,7 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 	}
 
 	private List<StorableDetectionResult> createInputEventSet() {
-		final List<StorableDetectionResult> retList = new ArrayList<StorableDetectionResult>();
+		final List<StorableDetectionResult> retList = new ArrayList<>();
 		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.5));
 		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.6));
 		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.7));
@@ -77,7 +77,7 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 
 	/**
 	 * Set up for the AnomalyDetectionFilterTest.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If illegal state
 	 * @throws AnalysisConfigurationException
@@ -90,7 +90,7 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 		// READER
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		final ListReader<StorableDetectionResult> theReader = new ListReader<StorableDetectionResult>(readerConfiguration, this.controller);
+		final ListReader<StorableDetectionResult> theReader = new ListReader<>(readerConfiguration, this.controller);
 		theReader.addAllObjects(this.createInputEventSet());
 
 		// ANOMALY DETECTION FILTER
@@ -99,13 +99,13 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 		final AnomalyDetectionFilter anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomaly, this.controller);
 
 		// SINK 1
-		this.sinkPluginIfAnomaly = new ListCollectionFilter<StorableDetectionResult>(new Configuration(), this.controller);
+		this.sinkPluginIfAnomaly = new ListCollectionFilter<>(new Configuration(), this.controller);
 
 		// SINK 2
-		this.sinkPluginElse = new ListCollectionFilter<StorableDetectionResult>(new Configuration(), this.controller);
+		this.sinkPluginElse = new ListCollectionFilter<>(new Configuration(), this.controller);
 
 		// SINK 3
-		this.sinkPluginAll = new ListCollectionFilter<ExtendedStorableDetectionResult>(new Configuration(), this.controller);
+		this.sinkPluginAll = new ListCollectionFilter<>(new Configuration(), this.controller);
 
 		// CONNECT the filters
 		this.controller.connect(theReader, ListReader.OUTPUT_PORT_NAME,
@@ -124,7 +124,7 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 
 	/**
 	 * Test of the AnomalyDetectionFilter.
-	 * 
+	 *
 	 * @throws InterruptedException
 	 *             If interrupted
 	 * @throws IllegalStateException
@@ -134,7 +134,6 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testDetectionOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-
 		final AnalysisControllerThread thread = new AnalysisControllerThread(this.controller);
 		thread.start();
 

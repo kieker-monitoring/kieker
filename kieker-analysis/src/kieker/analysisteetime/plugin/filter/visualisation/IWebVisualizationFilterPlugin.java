@@ -26,16 +26,22 @@ package kieker.analysisteetime.plugin.filter.visualisation;
 public interface IWebVisualizationFilterPlugin {
 
 	/**
+	 * @return returns header string
+	 *
 	 * @since 1.9
 	 */
 	public String getHeader();
 
 	/**
+	 * @return returns the initial content
+	 *
 	 * @since 1.9
 	 */
 	public String getInitialContent();
 
 	/**
+	 * @return returns the updated content
+	 *
 	 * @since 1.9
 	 */
 	public String getUpdatedContent();

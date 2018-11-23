@@ -24,12 +24,12 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
-import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
-import kieker.tools.traceAnalysis.filter.sessionReconstruction.SessionReconstructionFilter;
-import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter;
-import kieker.tools.traceAnalysis.systemModel.ExecutionTraceBasedSession;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
+import kieker.tools.trace.analysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
+import kieker.tools.trace.analysis.filter.sessionReconstruction.SessionReconstructionFilter;
+import kieker.tools.trace.analysis.filter.traceReconstruction.TraceReconstructionFilter;
+import kieker.tools.trace.analysis.systemModel.ExecutionTraceBasedSession;
+import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Utility functions for the test of the {@link SessionReconstructionFilter}.

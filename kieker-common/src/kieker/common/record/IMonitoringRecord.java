@@ -56,8 +56,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	public void setLoggingTimestamp(long timestamp);
 
 	/**
-	 * Creates a string representation of this record.<br/>
-	 * <br/>
+	 * Creates a string representation of this record.<br>
+	 * <br>
 	 *
 	 * This method should not be used for serialization purposes since this is not the purpose of Object's toString method.
 	 *
@@ -84,8 +84,6 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 *
 	 * @return The types of the values. This returned array should be treated readonly.
 	 *
-	 * @see #toArray()
-	 *
 	 * @since 1.2
 	 */
 	public Class<?>[] getValueTypes();
@@ -94,8 +92,6 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * This method delivers an array containing the value names of the record.
 	 *
 	 * @return The types of the values. This returned array should be treated readonly.
-	 *
-	 * @see #toArray()
 	 *
 	 * @since 1.2
 	 */

@@ -44,9 +44,7 @@ public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 	 */
 	@Before
 	public void preCheckForRSysPropertyAndConnection() {
-
-		final String messageWhenPropertyNotSet =
-				"Skipping " + this.getClass() + " because system property " + PROPERTY_NAME_KIEKER_R_TEST + " not true";
+		final String messageWhenPropertyNotSet = "Skipping " + this.getClass() + " because system property " + PROPERTY_NAME_KIEKER_R_TEST + " not true";
 		Assume.assumeTrue(messageWhenPropertyNotSet, this.isTestKiekerRTestsSet());
 
 		try {

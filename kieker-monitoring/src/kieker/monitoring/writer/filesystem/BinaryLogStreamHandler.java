@@ -67,7 +67,6 @@ public class BinaryLogStreamHandler extends AbstractLogStreamHandler {
 
 	@Override
 	public void serialize(final IMonitoringRecord record, final int id) throws IOException {
-
 		this.requestBufferSpace(4 + 8 + record.getSize());
 
 		this.buffer.putInt(id);

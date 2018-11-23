@@ -22,6 +22,7 @@ import teetime.framework.AbstractProducerStage;
 
 /**
  * Scan a set of directories recursively for Kieker logs.
+ * This producer stage outputs File objects representing valid Kieker log directories.
  *
  * @author Reiner Jung
  *
@@ -32,10 +33,18 @@ public class DirectoryScannerStage extends AbstractProducerStage<File> {
 	private final File[] directories;
 	private final FilenameFilter filter = new MapFileFilter();
 
-	public DirectoryScannerStage(final File[] directories) {
+	/**
+	 * Create a directory scanner.
+	 *
+	 * @param directories array of directories to scan
+	 */
+	public DirectoryScannerStage(final File[] directories) { // NOPMD passing array is not an issue here, read only
 		this.directories = directories;
 	}
 
+	/**
+	 * Execute the directory scanner.
+	 */
 	@Override
 	protected void execute() {
 		for (final File directory : this.directories) {
@@ -49,7 +58,7 @@ public class DirectoryScannerStage extends AbstractProducerStage<File> {
 		if (this.isKiekerDirectory(directory)) {
 			this.getOutputPort().send(directory);
 		} else {
-			for (final File subDirectory : directory.listFiles()) {
+			for (final File subDirectory : directory.listFiles()) { // NOFB is guaranteed to be a directory
 				if (subDirectory.isDirectory()) {
 					this.scanDirectory(subDirectory);
 				}
@@ -59,8 +68,8 @@ public class DirectoryScannerStage extends AbstractProducerStage<File> {
 
 	private boolean isKiekerDirectory(final File directory) {
 		if (directory.isDirectory()) {
-			if (directory.exists()) {
-				if (directory.listFiles(this.filter).length > 0) {
+			if (directory.exists()) { // NOPMD collapsing is not useful
+				if (directory.listFiles(this.filter).length > 0) { // NOPMD collapsing is not useful
 					return true;
 				}
 			}

@@ -75,7 +75,7 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 	private AtomicInteger timeSeriesWindowCapacity;
 	private AtomicInteger forecastConfidence;
-	private final AtomicReference<ForecastMethod> forecastMethod = new AtomicReference<ForecastMethod>();
+	private final AtomicReference<ForecastMethod> forecastMethod = new AtomicReference<>();
 	private AtomicLong deltat;
 	private TimeUnit tunit;
 
@@ -89,8 +89,8 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 	 */
 	public ForecastingFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-		this.applicationForecastingWindow = new ConcurrentHashMap<String, ITimeSeries<Double>>();
-		this.previousFCPair = new ConcurrentHashMap<String, ForecastMeasurementPair>();
+		this.applicationForecastingWindow = new ConcurrentHashMap<>();
+		this.previousFCPair = new ConcurrentHashMap<>();
 		this.setFieldsByConfiguration(configuration, false);
 	}
 
@@ -161,7 +161,6 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 	 *            Name of the application of the measurement
 	 */
 	public void processInput(final NamedDoubleTimeSeriesPoint input, final long timestamp, final String name) {
-
 		final ITimeSeries<Double> currentWindow = this.applicationForecastingWindow.get(name);
 		currentWindow.append(input.getValue());
 

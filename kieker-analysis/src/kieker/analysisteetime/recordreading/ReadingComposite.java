@@ -33,7 +33,7 @@ import teetime.stage.InitialElementProducer;
  *
  * @since 1.14
  *
- * @deprecated 1.15
+ * @deprecated since 1.15 remove 1.16
  */
 @Deprecated
 public final class ReadingComposite extends CompositeStage {

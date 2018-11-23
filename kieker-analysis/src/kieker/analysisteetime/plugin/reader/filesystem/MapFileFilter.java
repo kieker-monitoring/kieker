@@ -29,6 +29,9 @@ import kieker.common.util.filesystem.FSUtil;
  */
 public class MapFileFilter implements FilenameFilter {
 
+	/**
+	 * Create a new file name filter for map files.
+	 */
 	public MapFileFilter() {
 		// empty constructor
 	}

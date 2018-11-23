@@ -63,9 +63,9 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		this.timeSeriesStepSize = timeSeriesTimeUnit.convert(this.deltaTime, this.deltaTimeUnit);
 
 		if (ITimeSeries.INFINITE_CAPACITY == capacity) {
-			this.points = new TimeSeriesPointsBuffer<ITimeSeriesPoint<T>>();
+			this.points = new TimeSeriesPointsBuffer<>();
 		} else {
-			this.points = new TimeSeriesPointsBuffer<ITimeSeriesPoint<T>>(this.capacity);
+			this.points = new TimeSeriesPointsBuffer<>(this.capacity);
 		}
 
 		this.nextTime = this.startTime;
@@ -112,6 +112,17 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 
 	/**
 	 * Constructor using the timeunit as unit for internal usage and deltatime time unit.
+	 *
+	 * @param startTime
+	 *            start time
+	 * @param timeUnit
+	 *            time unit
+	 * @param deltaTime
+	 *            delta time
+	 * @param frequency
+	 *            frequency
+	 * @param capacity
+	 *            capacity
 	 */
 	public TimeSeries(final long startTime, final TimeUnit timeUnit, final long deltaTime, final int frequency,
 			final int capacity) {
@@ -162,7 +173,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		final ITimeSeriesPoint<T> point;
 
 		synchronized (value) {
-			point = new TimeSeriesPoint<T>(this.nextTime, value);
+			point = new TimeSeriesPoint<>(this.nextTime, value);
 			this.points.add(point);
 			this.startTime = this.points.peek().getTime(); // we have a bounded buffer so the first element might be gone
 			this.nextTime = this.nextTime + this.timeSeriesStepSize;
@@ -172,13 +183,13 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 
 	@Override
 	public List<ITimeSeriesPoint<T>> getPoints() {
-		return new ArrayList<ITimeSeriesPoint<T>>(this.points);
+		return new ArrayList<>(this.points);
 	}
 
 	@Override
 	public List<T> getValues() {
 		final List<ITimeSeriesPoint<T>> pointsCopy = this.getPoints();
-		final List<T> retVals = new ArrayList<T>(pointsCopy.size());
+		final List<T> retVals = new ArrayList<>(pointsCopy.size());
 		for (final ITimeSeriesPoint<T> curPoint : pointsCopy) {
 			retVals.add(curPoint.getValue());
 		}
@@ -206,7 +217,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 
 	@Override
 	public List<ITimeSeriesPoint<T>> appendAll(final T[] values) {
-		final List<ITimeSeriesPoint<T>> retVals = new ArrayList<ITimeSeriesPoint<T>>(values.length);
+		final List<ITimeSeriesPoint<T>> retVals = new ArrayList<>(values.length);
 		for (final T value : values) {
 			retVals.add(this.append(value));
 		}

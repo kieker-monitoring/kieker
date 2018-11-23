@@ -70,7 +70,7 @@ public class HostnameRepository {
 	}
 
 	/**
-	 * Repository entries
+	 * Repository entries.
 	 */
 	private static class Entry {
 		protected int size; // size = 0

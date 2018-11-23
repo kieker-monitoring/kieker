@@ -66,6 +66,8 @@ public class TypeFilter extends AbstractConsumerStage<Object> {
 
 	/**
 	 * Returns the output port where the incoming matching objects will be sent to.
+	 *
+	 * @return matching type port
 	 */
 	public OutputPort<Object> getMatchingTypeOutputPort() {
 		return this.matchingTypeOutputPort;
@@ -73,6 +75,8 @@ public class TypeFilter extends AbstractConsumerStage<Object> {
 
 	/**
 	 * Returns the output port where the incoming objects will be sent to, which do not match the configured types.
+	 *
+	 * @return mismatching type port
 	 */
 	public OutputPort<Object> getMismatchingTypeOutputPort() {
 		return this.mismatchingTypeOutputPort;

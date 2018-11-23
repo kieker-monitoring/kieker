@@ -4,62 +4,91 @@ BASE_TMP_DIR="$(dirname $0)/../../build/"
 DIST_RELEASE_DIR="build/distributions/"
 DIST_JAR_DIR="build/libs/"
 
+export RED='\033[1;31m'
+export WHITE='\033[1;37m'
+export YELLOW='\033[1;33m'
+export NC='\033[0m'
+
+if [ "$TERM" == "xterm-256color" ]; then
+	# interactive shell - use colors
+	export ERROR="${RED}[error]${NC}"
+	export WARNING="${YELLOW}[warning]${NC}"
+	export INFO="${WHITE}[info]${NC}"
+else
+        # not interactive shell
+	export ERROR="[error]"
+	export WARNING="[warning]"
+	export INFO="[info]"
+fi
+
+function error() {
+	echo -e "${ERROR} $@"
+}
+
+function warning() {
+	echo -e "${WARNING} $@"
+}
+
+function information() {
+	echo -e "${INFO} $@"
+}
+
 function change_dir {
-	echo "Changing dir to $1 ..."
+	information "Changing dir to $1 ..."
 	if ! cd ${1}; then
-		echo "Failed to cd to '${1}'"
+		error "Failed to cd to '${1}'"
 		exit 1
 	fi
-	echo "Current directory: $(pwd)"
+	information "Current directory: $(pwd)"
 }
 
 # create tmp subdir in the current directory and change to it
 function create_subdir_n_cd {
 	TMPDIR=$(mktemp -d --tmpdir="$(pwd)")
-	echo "Created temp dir '${TMPDIR}'"
+	information "Created temp dir '${TMPDIR}'"
 	change_dir "${TMPDIR}"
 }
 
 function assert_dir_exists {
-	echo -n "Asserting '$1' is a directory ..."
+	information "Asserting '$1' is a directory ..."
 	if ! test -d "$1"; then
-		echo "File '$1' is missing or not a directory"
+		error "Directory '$1' is missing or not a directory"
 		exit 1
 	fi
-	echo OK
+	information OK
 }
 
 function assert_file_exists_regular {
-	echo -n "Asserting '$1' is a regular file ..."
+	information "Asserting '$1' is a regular file ..."
 	if ! test -s "$1"; then
-		echo "File '$1' is missing or not a regular file"
+		error "File '$1' is missing or not a regular file"
 		exit 1
 	fi
-	echo OK
+	information OK
 }
 
 function assert_dir_NOT_exists {
-	echo -n "Asserting '$1' is a directory ..."
+	information "Asserting '$1' is a directory ..."
 	if test -d "$1"; then
-		echo "Directory '$1' should not exist"
+		error "Directory '$1' should not exist"
 		exit 1
 	fi
-	echo OK
+	information OK
 }
 
 function assert_file_NOT_exists {
-	echo -n "Asserting file '$1' does not exist ..."
+	information "Asserting file '$1' does not exist ..."
 	if test -e "$1"; then
-		echo "File '$1' should not exist"
+		error "File '$1' should not exist"
 		exit 1
 	fi
-	echo OK
+	information OK
 }
 
 # extract archive
 function extract_archive {
 	if [ -z "$1" ]; then
-		echo "No archive provided"
+		error "No archive provided"
 		exit 1
 	fi
 
@@ -68,7 +97,7 @@ function extract_archive {
 	elif echo "$1" | grep "tar.gz"; then
 		tar -xzf "$1"
 	else
-		echo "Archive '$1' is neither zip nor .tar.gz"
+		error "Archive '$1' is neither zip nor .tar.gz"
 		exit 1
 	fi
 }

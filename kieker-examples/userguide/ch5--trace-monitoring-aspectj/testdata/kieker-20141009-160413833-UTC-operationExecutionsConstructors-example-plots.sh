@@ -41,17 +41,15 @@ fi
 ${TRACE_ANALYSIS_SH} \
     --verbose \
     --inputdirs "${EXAMPLE_LOG}" --outputdir "./${OUTDIR}" \
-    --plot-Deployment-Component-Dependency-Graph \
-    --plot-Assembly-Component-Dependency-Graph \
+    --plot-Deployment-Component-Dependency-Graph none\
+    --plot-Assembly-Component-Dependency-Graph none\
     --plot-Container-Dependency-Graph \
-    --plot-Deployment-Operation-Dependency-Graph \
-    --plot-Assembly-Operation-Dependency-Graph \
+    --plot-Deployment-Operation-Dependency-Graph none\
+    --plot-Assembly-Operation-Dependency-Graph none\
     --plot-Aggregated-Deployment-Call-Tree \
     --plot-Aggregated-Assembly-Call-Tree \
     --print-Deployment-Equivalence-Classes \
     --print-Assembly-Equivalence-Classes \
-    --plot-Aggregated-Deployment-Call-Tree \
-    --plot-Aggregated-Assembly-Call-Tree \
     --short-labels
 	
 # Should be enabled only if the reference pdfs shall be created (otherwise the release test script is broken):

@@ -30,6 +30,11 @@ public interface IRegistryListener<T> {
 	/**
 	 * This event is fired after a new registry entry was registered.
 	 *
+	 * @param value
+	 *            value
+	 * @param id
+	 *            id
+	 *
 	 * @since 1.13
 	 */
 	void onNewRegistryEntry(T value, int id);

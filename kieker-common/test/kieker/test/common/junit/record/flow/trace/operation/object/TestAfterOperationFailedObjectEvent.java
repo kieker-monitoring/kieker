@@ -61,7 +61,6 @@ public class TestAfterOperationFailedObjectEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
-
 		final AfterOperationFailedObjectEvent event1 = new AfterOperationFailedObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME,
 				CAUSE, OBJECT_ID);
 
@@ -79,7 +78,6 @@ public class TestAfterOperationFailedObjectEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeBinaryEquals() {
-
 		final AfterOperationFailedObjectEvent event1 = new AfterOperationFailedObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME,
 				CAUSE, OBJECT_ID);
 

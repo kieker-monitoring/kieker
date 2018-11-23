@@ -27,23 +27,23 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
-import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
-import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
-import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
-import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter;
-import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFilter;
-import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.AbstractDependencyGraph;
-import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.DependencyGraphNode;
-import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.WeightedBidirectionalDependencyGraphEdge;
-import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.trace.analysis.filter.AbstractGraphProducingFilter;
+import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
+import kieker.tools.trace.analysis.filter.IGraphOutputtingFilter;
+import kieker.tools.trace.analysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
+import kieker.tools.trace.analysis.filter.traceReconstruction.TraceReconstructionFilter;
+import kieker.tools.trace.analysis.filter.visualization.AbstractGraphFilter;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.AbstractDependencyGraph;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.DependencyGraphNode;
+import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.WeightedBidirectionalDependencyGraphEdge;
+import kieker.tools.trace.analysis.systemModel.ISystemModelElement;
+import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * This class provides utility functions for dependency graph tests.
- * 
+ *
  * @author Holger Knoche, Nils Christian Ehmke
- * 
+ *
  * @since 1.6
  */
 public final class DependencyGraphTestUtil {
@@ -54,17 +54,17 @@ public final class DependencyGraphTestUtil {
 
 	/**
 	 * Utility function to create a node lookup table for a given dependency graph.
-	 * 
+	 *
 	 * @param graph
 	 *            The graph whose nodes shall be indexed
-	 * @return A map which associates the node's identifier (see {@link kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraphElement#getIdentifier()})
+	 * @return A map which associates the node's identifier (see {@link kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraphElement#getIdentifier()})
 	 *         to the actual identifier
-	 * 
+	 *
 	 * @param <T>
 	 *            The type of the entities within the dependency graph.
 	 */
 	public static <T extends ISystemModelElement> ConcurrentMap<String, DependencyGraphNode<T>> createNodeLookupTable(final AbstractDependencyGraph<T> graph) {
-		final ConcurrentMap<String, DependencyGraphNode<T>> map = new ConcurrentHashMap<String, DependencyGraphNode<T>>();
+		final ConcurrentMap<String, DependencyGraphNode<T>> map = new ConcurrentHashMap<>();
 
 		for (final DependencyGraphNode<T> node : graph.getNodes()) {
 			map.put(node.getIdentifier(), node);
@@ -78,7 +78,7 @@ public final class DependencyGraphTestUtil {
 	 * structure contains all necessary plugins to process the given list of operation execution records using the given filter.
 	 * A {@link GraphReceiverPlugin} is attached to the plugin's output port to make the created graph available for
 	 * inspection.
-	 * 
+	 *
 	 * @param graphProducer
 	 *            The graph-producing filter
 	 * @param inputPortName
@@ -90,15 +90,15 @@ public final class DependencyGraphTestUtil {
 	 *            The execution records that shall be processed
 	 * @param analysisController
 	 *            The analysis controller which will be used to register this component.
-	 * 
+	 *
 	 * @return A fully-initialized {@link GraphTestSetup} instance
-	 * 
+	 *
 	 * @throws AnalysisConfigurationException
 	 *             If the process yields an invalid analysis configuration
 	 */
 	public static GraphTestSetup prepareEnvironmentForProducerTest(final AnalysisController analysisController, final AbstractGraphProducingFilter<?> graphProducer,
-			final String inputPortName, final String systemModelRepositoryPortName, final List<OperationExecutionRecord> executionRecords) throws
-			AnalysisConfigurationException {
+			final String inputPortName, final String systemModelRepositoryPortName, final List<OperationExecutionRecord> executionRecords)
+			throws AnalysisConfigurationException {
 		return DependencyGraphTestUtil.prepareEnvironment(analysisController, graphProducer, inputPortName, systemModelRepositoryPortName, executionRecords);
 	}
 
@@ -107,7 +107,7 @@ public final class DependencyGraphTestUtil {
 	 * The created structure contains all necessary plugins to process the given list of operation execution records using the given filter.
 	 * A {@link GraphReceiverPlugin} is attached to the plugin's output port to make the created graph available for
 	 * inspection.
-	 * 
+	 *
 	 * @param graphProducer
 	 *            The graph-producing filter
 	 * @param inputPortName
@@ -121,9 +121,9 @@ public final class DependencyGraphTestUtil {
 	 *            The graph filters in the order they should be attached to the producer
 	 * @param analysisController
 	 *            The analysis controller which will be used to register this component.
-	 * 
+	 *
 	 * @return A fully-initialized {@link GraphTestSetup} instance
-	 * 
+	 *
 	 * @throws AnalysisConfigurationException
 	 *             If the process yields an invalid analysis configuration
 	 */
@@ -137,10 +137,9 @@ public final class DependencyGraphTestUtil {
 	private static GraphTestSetup prepareEnvironment(final AnalysisController analysisController, final AbstractGraphProducingFilter<?> graphProducer,
 			final String inputPortName, final String systemModelRepositoryPortName, final List<OperationExecutionRecord> executionRecords,
 			final AbstractGraphFilter<?, ?, ?, ?>... graphFilters) throws AnalysisConfigurationException {
-
 		final SystemModelRepository systemModelRepository = new SystemModelRepository(new Configuration(), analysisController);
 
-		final ListReader<OperationExecutionRecord> readerPlugin = new ListReader<OperationExecutionRecord>(new Configuration(), analysisController);
+		final ListReader<OperationExecutionRecord> readerPlugin = new ListReader<>(new Configuration(), analysisController);
 		readerPlugin.addAllObjects(executionRecords);
 
 		final ExecutionRecordTransformationFilter transformationFilter = new ExecutionRecordTransformationFilter(new Configuration(), analysisController);
@@ -201,7 +200,7 @@ public final class DependencyGraphTestUtil {
 
 	/**
 	 * Utility function to test whether an edge with the given target weight exists between the given nodes.
-	 * 
+	 *
 	 * @param source
 	 *            The expected source node
 	 * @param expectedWeight

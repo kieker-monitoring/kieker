@@ -178,7 +178,7 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 
 	private void publishBuffer(final ByteBuffer localBuffer) {
 		final int dataSize = localBuffer.position();
-		final byte[] data = new byte[dataSize];
+		final byte[] data = new byte[dataSize]; // NOPMD
 		System.arraycopy(localBuffer.array(), localBuffer.arrayOffset(), data, 0, dataSize);
 
 		// Reset the buffer position

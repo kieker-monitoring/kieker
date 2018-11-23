@@ -38,6 +38,11 @@ public class LogsReaderCompositeStage extends CompositeStage {
 	private final DirectoryScannerStage directoryScannerStage; // NOPMD this stays here for documentation purposes
 	private final DirectoryReaderStage directoryReaderStage;
 
+	/**
+	 * Creates a composite stage to scan and read a set of Kieker log directories.
+	 *
+	 * @param configuration configuration for the enclosed filters
+	 */
 	public LogsReaderCompositeStage(final Configuration configuration) {
 
 		final String[] directoryNames = configuration.getStringArrayProperty(LOG_DIRECTORIES, ":");

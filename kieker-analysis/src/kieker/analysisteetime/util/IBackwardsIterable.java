@@ -34,6 +34,8 @@ public interface IBackwardsIterable<T> {
 	/**
 	 * Returns an Iterator that iterates the elements backwards.
 	 *
+	 * @return returns the iterator
+	 *
 	 * @since 1.14
 	 */
 	public Iterator<T> backwardsIterator();
@@ -41,6 +43,8 @@ public interface IBackwardsIterable<T> {
 	/**
 	 * Returns an Iterable that iterates the elements backwards using the
 	 * Iterator returned by {@code backwardsIterator()}.
+	 *
+	 * @return returns an iterable
 	 *
 	 * @since 1.14
 	 */

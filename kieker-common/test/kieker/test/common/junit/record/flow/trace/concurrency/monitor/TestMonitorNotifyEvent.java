@@ -57,7 +57,6 @@ public class TestMonitorNotifyEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeEquals() {
-
 		final MonitorNotifyEvent event1 = new MonitorNotifyEvent(TSTAMP, TRACE_ID, ORDER_INDEX, LOCK_ID);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
@@ -71,7 +70,6 @@ public class TestMonitorNotifyEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testSerializeDeserializeBinaryEquals() {
-
 		final MonitorNotifyEvent event1 = new MonitorNotifyEvent(TSTAMP, TRACE_ID, ORDER_INDEX, LOCK_ID);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
