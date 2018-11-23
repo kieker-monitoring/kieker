@@ -34,7 +34,6 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
  * @since 1.5
  */
 public final class BookstoreEventRecordFactory {
-	// private static final Log LOG = LogFactory.getLog(BookstoreEventRecordFactory.class);
 
 	public static final long TSTAMP_OFFSET_entry0_0__bookstore_searchBook = 0; // NOPMD NOCS (VariableNamingConventions)
 	public static final long TSTAMP_OFFSET_call1_1__catalog_getBook = 1; // NOPMD NOCS (VariableNamingConventions)

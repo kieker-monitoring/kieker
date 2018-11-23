@@ -47,7 +47,6 @@ import kieker.test.monitoring.util.NamedListWriter;
  * @since 1.5
  */
 public class TestSpringMethodInterceptor extends AbstractKiekerTest {
-	// private static final Log LOG = LogFactory.getLog(TestSpringMethodInterceptor.class);
 
 	private static final String HOSTNAME = "SRV-W4W7E9pN";
 	private static final String CTRLNAME = "MonitoringController-TestSpringMethodInterceptor";
