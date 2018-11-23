@@ -141,7 +141,8 @@ public class TraceAnalysisConfiguration {
 	private boolean plotContainerDependencyGraph;
 
 	@Parameter(names = {
-		CMD_PLOT_DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH }, variableArity = true, description = "Generate and store a deployment-level operation dependency graph (.dot)")
+		CMD_PLOT_DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH }, variableArity = true,
+			description = "Generate and store a deployment-level operation dependency graph (.dot)")
 	private final List<String> plotDeploymentOperationDependencyGraph = new ArrayList<>();
 
 	@Parameter(names = {
@@ -197,11 +198,13 @@ public class TraceAnalysisConfiguration {
 
 	// DATE_FORMAT_PATTERN_CMD_USAGE_HELP
 	@Parameter(names = {
-		CMD_IGNORE_EXECUTIONS_BEFORE_DATE }, description = "Executions starting before this date (UTC timezone) or monitoring timestamp are ignored.", converter = DateConverter.class)
+		CMD_IGNORE_EXECUTIONS_BEFORE_DATE }, description = "Executions starting before this date (UTC timezone) or monitoring timestamp are ignored.",
+			converter = DateConverter.class)
 	private Long ignoreExecutionsBeforeDate;
 
 	@Parameter(names = {
-		CMD_IGNORE_EXECUTIONS_AFTER_DATE }, description = "Executions ending after this date (UTC timezone) or monitoring timestamp  are ignored.", converter = DateConverter.class)
+		CMD_IGNORE_EXECUTIONS_AFTER_DATE }, description = "Executions ending after this date (UTC timezone) or monitoring timestamp  are ignored.",
+			converter = DateConverter.class)
 	private Long ignoreExecutionsAfterDate;
 
 	@Parameter(names = { CMD_SHORT_LABELS }, description = "If selected, abbreviated labels (e.g., package names) are used in the visualizations.")
@@ -215,12 +218,15 @@ public class TraceAnalysisConfiguration {
 
 	// COLORING_FILE_OPTION_NAME
 	@Parameter(names = {
-		CMD_TRACE_COLORING }, description = "Color traces according to the given color map given as a properties file (key: trace ID, value: color in hex format, e.g., 0xff0000 for red; use trace ID 'default' to specify the default color)")
+		CMD_TRACE_COLORING },
+			description = "Color traces according to the given color map given as a properties file (key: trace ID, value: color in hex format,"
+					+ " e.g., 0xff0000 for red; use trace ID 'default' to specify the default color)")
 	private File traceColoringFile;
 
 	// DESCRIPTIONS_FILE_OPTION_NAME
 	@Parameter(names = {
-		CMD_ADD_DESCRIPTIONS }, description = "Adds descriptions to elements according to the given file as a properties file (key: component ID, e.g., @1; value: description)")
+		CMD_ADD_DESCRIPTIONS },
+			description = "Adds descriptions to elements according to the given file as a properties file (key: component ID, e.g., @1; value: description)")
 	private File addDescriptions;
 
 	/** derived settings. */
@@ -342,6 +348,11 @@ public class TraceAnalysisConfiguration {
 		return this.repairEventBasedTraces;
 	}
 
+	/**
+	 * Get max trace duration, default is 600 000 ms.
+	 *
+	 * @return returns the max trace duration
+	 */
 	public Long getMaxTraceDuration() {
 		if (this.maxTraceDuration == null) {
 			this.maxTraceDuration = (long) (10 * 60 * 1000);
@@ -349,6 +360,9 @@ public class TraceAnalysisConfiguration {
 		return this.maxTraceDuration;
 	}
 
+	/**
+	 * @return returns the ignore execution before date value, if none is specified created default value.
+	 */
 	public Long getIgnoreExecutionsBeforeDate() {
 		if (this.ignoreExecutionsBeforeDate == null) {
 			this.ignoreExecutionsBeforeDate = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP);
@@ -356,6 +370,9 @@ public class TraceAnalysisConfiguration {
 		return this.ignoreExecutionsBeforeDate;
 	}
 
+	/**
+	 * @return returns the ignore execution after date value, if none is specified created default value.
+	 */
 	public Long getIgnoreExecutionsAfterDate() {
 		if (this.ignoreExecutionsAfterDate == null) {
 			this.ignoreExecutionsAfterDate = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP);

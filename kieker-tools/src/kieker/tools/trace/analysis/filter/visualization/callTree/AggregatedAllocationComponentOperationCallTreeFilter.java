@@ -34,17 +34,18 @@ import kieker.tools.trace.analysis.systemModel.util.AllocationComponentOperation
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
-@Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated allocation component operation call tree", repositoryPorts = {
-	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
-})
+@Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated allocation component operation call tree",
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		})
 public class AggregatedAllocationComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AllocationComponentOperationPair> {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -79,7 +80,7 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggregatedCallTreeNode<AllocationComponentOperationPair> {
@@ -102,7 +103,7 @@ class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggrega
 		} else {
 			n = new AggregatedAllocationComponentOperationCallTreeNode(destination.getId(), destination, false, origin, originPolicy); // !
 			// rootNode
-			e = new WeightedDirectedCallTreeEdge<AllocationComponentOperationPair>(this, n, origin, originPolicy);
+			e = new WeightedDirectedCallTreeEdge<>(this, n, origin, originPolicy);
 			this.childMap.put(destination.getId(), e);
 			super.appendChildEdge(e);
 		}
