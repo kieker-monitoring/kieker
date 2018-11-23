@@ -34,12 +34,12 @@ import teetime.framework.Execution;
  *
  * @since 1.15
  */
-public abstract class AbstractTool<T extends Configuration, R extends Object> extends AbstractLegacyTool<R> {
+public abstract class AbstractService<T extends Configuration, R extends Object> extends AbstractLegacyTool<R> {
 
 	/**
 	 * Default constructor.
 	 */
-	public AbstractTool() {
+	public AbstractService() {
 		super();
 	}
 
@@ -88,7 +88,7 @@ public abstract class AbstractTool<T extends Configuration, R extends Object> ex
 			public void run() {
 				synchronized (execution) {
 					execution.abortEventually();
-					AbstractTool.this.shutdownService();
+					AbstractService.this.shutdownService();
 				}
 			}
 		}));

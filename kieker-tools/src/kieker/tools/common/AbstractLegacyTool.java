@@ -175,7 +175,7 @@ public abstract class AbstractLegacyTool<T extends Object> {
 	protected abstract boolean checkParameters(JCommander commander) throws ConfigurationException;
 
 	/**
-	 * Shutdown cleanup features of the application.
+	 * Trigger cleanup features of the service.
 	 */
 	protected abstract void shutdownService();
 
