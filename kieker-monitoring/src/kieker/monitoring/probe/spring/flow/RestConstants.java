@@ -24,13 +24,14 @@ package kieker.monitoring.probe.spring.flow;
  * @since 1.13
  */
 public class RestConstants {
-    /**
-     * Name of the header field that is used to store the Kieker tracing information in HTTP requests and responses
-     */
-    protected static final String HEADER_FIELD = "KiekerTracingInfo";
+	/**
+	 * Name of the header field that is used to store the Kieker tracing information in HTTP requests and responses.
+	 */
+	protected static final String HEADER_FIELD = "KiekerTracingInfo";
 
-    protected RestConstants() {
-        // default constructor
-    }
+	/** default constructor. */
+	protected RestConstants() {
+		// nothing to be done here
+	}
 
 }

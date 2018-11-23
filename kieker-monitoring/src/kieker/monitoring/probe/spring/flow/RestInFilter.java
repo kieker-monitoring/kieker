@@ -60,8 +60,9 @@ public class RestInFilter extends OncePerRequestFilter implements IMonitoringPro
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RestInFilter.class);
 
+	/** default constructor. */
 	public RestInFilter() {
-		// default constructor
+		// nothing to be done here
 	}
 
 	@Override
@@ -76,6 +77,7 @@ public class RestInFilter extends OncePerRequestFilter implements IMonitoringPro
 		final String signature = "public void com.example.intercept.in.RestInInterceptor.interceptIncoming"
 				+ httpServletRequest.getMethod() + "Request()";
 
+		@SuppressWarnings("unchecked")
 		final List<String> requestRestHeader = Collections.list(httpServletRequest.getHeaders(RestConstants.HEADER_FIELD));
 		final AtomicLong traceId = new AtomicLong(-1);
 		final AtomicReference<String> sessionId = new AtomicReference<>(SESSION_REGISTRY.recallThreadLocalSessionId());
@@ -153,7 +155,6 @@ public class RestInFilter extends OncePerRequestFilter implements IMonitoringPro
 			}
 
 			@Override
-			@SuppressWarnings("deprecation")
 			public void setStatus(final int sc, final String sm) {
 				super.setStatus(sc, sm);
 				this.handleStatus(sc);

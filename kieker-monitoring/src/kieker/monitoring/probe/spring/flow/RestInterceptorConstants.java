@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.monitoring.probe.spring.flow;
 
 /**
@@ -23,10 +22,11 @@ package kieker.monitoring.probe.spring.flow;
  *
  * @since 1.13
  */
-public class RestInterceptorConstants {
+public final class RestInterceptorConstants {
 	// Name of the header fielt that is added in the HTTP requests
 	public static final String HEADER_FIELD = "KiekerTracingInfo";
 
+	/** default constructor. */
 	private RestInterceptorConstants() {
 		// empty constructor
 	}

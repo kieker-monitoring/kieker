@@ -31,7 +31,7 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Nils Christian Ehmke, Jan Waller
- * 
+ *
  * @since 1.8
  */
 public class OperationExecutionMethodInvocationInterceptor implements MethodInterceptor, IMonitoringProbe {
@@ -41,13 +41,16 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 	private final IMonitoringController monitoringCtrl;
 	private final ITimeSource timeSource;
 
+	/**
+	 * Basic constructor.
+	 */
 	public OperationExecutionMethodInvocationInterceptor() {
 		this(MonitoringController.getInstance());
 	}
 
 	/**
 	 * This constructor is mainly used for testing, providing a custom {@link IMonitoringController} instead of using the singleton instance.
-	 * 
+	 *
 	 * @param monitoringController
 	 *            must not be null
 	 */

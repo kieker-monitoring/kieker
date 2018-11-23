@@ -35,6 +35,21 @@ public class ThreadSpecificInterceptedData {
 
 	/**
 	 * Constructor initializing all the variables.
+	 *
+	 * @param signature
+	 *            signature
+	 * @param sessionId
+	 *            session Id
+	 * @param traceId
+	 *            trace id
+	 * @param tin
+	 *            entry point time
+	 * @param hostname
+	 *            hostname
+	 * @param eoi
+	 *            eoi
+	 * @param ess
+	 *            ess
 	 */
 	public ThreadSpecificInterceptedData(final String signature, final String sessionId, final long traceId, final long tin, final String hostname, final int eoi,
 			final int ess) {

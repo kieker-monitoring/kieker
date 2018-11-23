@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.monitoring.probe.spring.flow;
 
 import java.util.Collections;
@@ -22,10 +21,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.mvc.WebContentInterceptor;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -44,7 +43,7 @@ public class RestInInterceptor extends WebContentInterceptor {
 
 	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
 
-	private static final Log LOG = LogFactory.getLog(RestInInterceptor.class);
+	private static final Logger LOG = LoggerFactory.getLogger(RestInInterceptor.class);
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
@@ -52,15 +51,15 @@ public class RestInInterceptor extends WebContentInterceptor {
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 
-	private final ThreadLocal<ThreadSpecificInterceptedData> threadSpecificInterceptedData = new ThreadLocal<ThreadSpecificInterceptedData>();
+	private final ThreadLocal<ThreadSpecificInterceptedData> threadSpecificInterceptedData = new ThreadLocal<>();
 
+	/** default constructor. */
 	public RestInInterceptor() {
-		// empty constructor
+		super();
 	}
 
 	@Override
 	public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) {
-
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return true;
 		}
@@ -68,11 +67,12 @@ public class RestInInterceptor extends WebContentInterceptor {
 		final String signature = request.getMethod();
 		String sessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
 		long traceId = -1L;
-		long tin;
+		final long tin;
 		final String hostname = VMNAME;
 		int eoi;
 		int ess;
 
+		@SuppressWarnings("unchecked") // as getHeaders is old and without generics
 		final List<String> requestRestHeader = Collections.list(request.getHeaders(RestInterceptorConstants.HEADER_FIELD));
 
 		if ((requestRestHeader == null) || (requestRestHeader.isEmpty())) {
