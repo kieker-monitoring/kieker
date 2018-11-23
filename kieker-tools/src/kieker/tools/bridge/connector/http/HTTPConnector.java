@@ -18,7 +18,6 @@ package kieker.tools.bridge.connector.http;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentMap;
@@ -38,8 +37,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.exception.MonitoringRecordException;
-import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
 import kieker.tools.bridge.connector.AbstractConnector;
@@ -158,11 +155,11 @@ public final class HTTPConnector extends AbstractConnector {
 					return;
 				}
 
-				final long timestamp = Integer.parseInt(rawTimestamp);
-				final String[] values = Arrays.copyOf(rawValues, rawValues.length, String[].class);
+				// final long timestamp = Integer.parseInt(rawTimestamp);
+				// final String[] values = Arrays.copyOf(rawValues, rawValues.length, String[].class);
 
 				// Try to deserialize a monitoring record from the given values
-				final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(classname);
+				// final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(classname);
 
 				// final IMonitoringRecord record = AbstractMonitoringRecord.createFromStringArray(clazz, values);
 				// record.setLoggingTimestamp(timestamp);
@@ -176,9 +173,9 @@ public final class HTTPConnector extends AbstractConnector {
 			} catch (final NumberFormatException ex) {
 				LOGGER.warn("Invalid data received", ex);
 				response.sendError(400, "Invalid data received");
-			} catch (final MonitoringRecordException ex) {
-				LOGGER.warn("Could not deserialize monitoring record", ex);
-				response.sendError(400, "Could not deserialize monitoring record");
+				// } catch (final MonitoringRecordException ex) {
+				// LOGGER.warn("Could not deserialize monitoring record", ex);
+				// response.sendError(400, "Could not deserialize monitoring record");
 			} catch (final IllegalStateException ex) {
 				LOGGER.warn("Invalid data received", ex);
 				response.sendError(400, "Invalid data received");

@@ -20,7 +20,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.StringContains;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -111,7 +110,7 @@ public class BasicPrintStreamWriterTestFile {
 		// 7. read actual records
 		// We cannot do anything meaningful here, because there's nothing like a PrintStreamReader.
 		// We'll return an empty List and use our own buffer when evaluating the result.
-		return new ArrayList<IMonitoringRecord>();
+		return new ArrayList<>();
 	}
 
 }

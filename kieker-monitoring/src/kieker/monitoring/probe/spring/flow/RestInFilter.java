@@ -176,7 +176,7 @@ public class RestInFilter extends OncePerRequestFilter implements IMonitoringPro
 	 * @author Reiner Jung
 	 *
 	 */
-	private class RestServletWrapper extends HttpServletResponseWrapper {
+	private static class RestServletWrapper extends HttpServletResponseWrapper {
 
 		private final AtomicLong traceId;
 		private final AtomicReference<String> sessionId;
