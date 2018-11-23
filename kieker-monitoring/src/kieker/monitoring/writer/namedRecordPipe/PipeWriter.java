@@ -31,7 +31,6 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 public final class PipeWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = PipeWriter.class.getName() + ".";
 	public static final String CONFIG_PIPENAME = PREFIX + "pipeName"; // NOCS (afterPREFIX)
-	// private static final Log LOG = LogFactory.getLog(PipeWriter.class);
 
 	private final Pipe pipe;
 
@@ -61,9 +60,7 @@ public final class PipeWriter extends AbstractMonitoringWriter {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(64);
-		sb.append(super.toString()).
-			append("\n\tConnected to pipe: '").append(this.pipe.getName()).
-			append('\'');
+		sb.append(super.toString()).append("\n\tConnected to pipe: '").append(this.pipe.getName()).append('\'');
 		return sb.toString();
 	}
 

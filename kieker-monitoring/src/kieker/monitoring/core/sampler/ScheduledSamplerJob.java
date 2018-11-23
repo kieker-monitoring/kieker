@@ -22,19 +22,17 @@ import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.3
  */
 public class ScheduledSamplerJob implements Runnable {
-	// private static final Log LOG = LogFactory.getLog(ScheduledSamplerJob.class);
-
 	private final IMonitoringController monitoringController;
 	private final ISampler sampler;
 	private volatile ScheduledFuture<?> future;
 
 	/**
 	 * Constructs a new {@link ScheduledSamplerJob} with the given parameters.
-	 * 
+	 *
 	 * @param monitoringController
 	 *            used to log the sampled data (represented as {@link kieker.common.record.IMonitoringRecord}s) via
 	 *            {@link kieker.monitoring.core.controller.IMonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)}.
@@ -60,7 +58,7 @@ public class ScheduledSamplerJob implements Runnable {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param future
 	 *            The new future object.
 	 */
@@ -69,7 +67,7 @@ public class ScheduledSamplerJob implements Runnable {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return the {@link ScheduledFuture} which allows to cancel future
 	 *         executions of this {@link ScheduledSamplerJob}.
 	 */

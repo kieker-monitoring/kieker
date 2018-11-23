@@ -38,7 +38,6 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @since 1.4
  */
 public class TestPipeReader extends AbstractKiekerTest { // NOCS (MissingCtorCheck)
-	// private static final Log log = LogFactory.getLog(TestPipeReader.class);
 
 	@Test
 	public void testNamedPipeReaderReceivesFromPipe() throws IllegalStateException, AnalysisConfigurationException {

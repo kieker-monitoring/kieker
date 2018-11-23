@@ -26,19 +26,17 @@ import kieker.common.configuration.Configuration;
 /**
  * An implementation of the {@link AbstractLogReplayer}, using the {@link FSReader} to replay {@link kieker.common.record.IMonitoringRecord}s from a list of file
  * system monitoring logs.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 0.95a
  */
 public class FilesystemLogReplayer extends AbstractLogReplayer {
-	// private static final Log LOG = LogFactory.getLog(FilesystemLogReplayer.class);
-
 	private final String[] inputDirs;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param monitoringConfigurationFile
 	 *            The name of the monitoring configuration file.
 	 * @param realtimeMode

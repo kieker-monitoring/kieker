@@ -33,8 +33,6 @@ import teetime.framework.AbstractProducerStage;
  * @since 0.95a
  */
 public class FilesystemLogReplayer extends AbstractLogReplayer {
-	// private static final Log LOG = LogFactory.getLog(FilesystemLogReplayer.class);
-
 	private final String[] inputDirs;
 	private final boolean ignoreUnknownRecordTypes;
 
