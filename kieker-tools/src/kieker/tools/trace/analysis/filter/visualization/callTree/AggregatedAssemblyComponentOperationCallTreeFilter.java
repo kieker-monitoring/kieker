@@ -35,13 +35,14 @@ import kieker.tools.trace.analysis.systemModel.util.AssemblyComponentOperationPa
 
 /**
  * @author Andre van Hoorn
- *~/Projects/Kieker/kieker/
+ *         ~/Projects/Kieker/kieker/
  * @since 1.1
  */
-@Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated assembly component operation call tree", repositoryPorts = {
-		@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
+@Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated assembly component operation call tree",
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
 public class AggregatedAssemblyComponentOperationCallTreeFilter
-extends AbstractAggregatedCallTreeFilter<AssemblyComponentOperationPair> {
+		extends AbstractAggregatedCallTreeFilter<AssemblyComponentOperationPair> {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
@@ -90,7 +91,7 @@ extends AbstractAggregatedCallTreeFilter<AssemblyComponentOperationPair> {
  * @since 1.1
  */
 class AggregatedAssemblyComponentOperationCallTreeNode
-extends AbstractAggregatedCallTreeNode<AssemblyComponentOperationPair> {
+		extends AbstractAggregatedCallTreeNode<AssemblyComponentOperationPair> {
 
 	public AggregatedAssemblyComponentOperationCallTreeNode(final int id, final AssemblyComponentOperationPair entity,
 			final boolean rootNode, final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
