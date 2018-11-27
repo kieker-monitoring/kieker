@@ -1,4 +1,5 @@
 apply plugin: 'eclipse'
+apply plugin: "com.github.hauner.jarTest"
 
 configurations {
 	resultJar	// all dependencies in this config are included into all jars. This is necessary for the scripts in bin/ to work, e.g., convertLoggingTimestamp.
@@ -60,10 +61,3 @@ eclipse {
 	}
 }
 
-task replaceHardCodedVersionNames() {
-  doLast {
-	regexpReplaceInFiles(project.file("test/kieker/test/tools/manual/TestTCPReader.java"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-  }
-}
-
-compileJava.dependsOn replaceHardCodedVersionNames
