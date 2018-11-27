@@ -1,0 +1,21 @@
+apply plugin: 'application'
+
+mainClassName='kieker.tools.trace.resource.monitor.ResourceMonitorMain'
+
+dependencies {
+	compile project(":kieker-tools")
+	compile "com.beust:jcommander:1.60"
+}
+
+clover {
+	report {
+		html=true
+	}
+	
+}
+
+eclipse {
+	classpath {
+		defaultOutputDir = file('build-eclipse')
+	}
+}

@@ -1,0 +1,19 @@
+dependencies {
+	compile project(':kieker-tools')
+	
+	testCompile project (path: ':kieker-common', configuration: 'testArchives')
+	testCompile project (path: ':kieker-tools', configuration: 'testArchives')
+}
+
+clover {
+	report {
+		html=true
+	}
+	
+}
+
+eclipse {
+	classpath {
+		defaultOutputDir = file('build-eclipse')
+	}
+}

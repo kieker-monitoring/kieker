@@ -1,0 +1,25 @@
+apply plugin: 'application'
+
+mainClassName='kieker.tools.trace.analysis.ui.TraceAnalysisGUI'
+
+dependencies {
+	compile project(":kieker-tools")
+	compile project(":kieker-tools:trace-analysis")
+	compile "com.beust:jcommander:1.60"
+	
+	testCompile project (path: ':kieker-common', configuration: 'testArchives')
+	testCompile project (path: ':kieker-tools', configuration: 'testArchives')
+}
+
+clover {
+	report {
+		html=true
+	}
+	
+}
+
+eclipse {
+	classpath {
+		defaultOutputDir = file('build-eclipse')
+	}
+}
