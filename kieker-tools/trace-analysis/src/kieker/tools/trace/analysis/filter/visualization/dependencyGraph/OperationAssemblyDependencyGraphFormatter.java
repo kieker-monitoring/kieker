@@ -50,7 +50,7 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 
 	private ConcurrentMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>> groupNodesByComponent(
 			final OperationAssemblyDependencyGraph graph) {
-		final ConcurrentMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>> grouping = new ConcurrentHashMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>>();
+		final ConcurrentMap<AssemblyComponent, List<DependencyGraphNode<AssemblyComponentOperationPair>>> grouping = new ConcurrentHashMap<>();
 
 		for (final DependencyGraphNode<AssemblyComponentOperationPair> vertex : graph.getVertices()) {
 			final AssemblyComponentOperationPair pair = vertex.getEntity();
@@ -58,7 +58,7 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 
 			List<DependencyGraphNode<AssemblyComponentOperationPair>> nodes = grouping.get(assemblyComponent);
 			if (nodes == null) {
-				nodes = new ArrayList<DependencyGraphNode<AssemblyComponentOperationPair>>();
+				nodes = new ArrayList<>();
 				grouping.put(assemblyComponent, nodes);
 			}
 			nodes.add(vertex);
@@ -71,7 +71,7 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 		final StringBuilder builder = new StringBuilder();
 
 		builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ASSEMBLY_COMPONENT).append("\\n")
-		       .append(component.getName()).append(':');
+				.append(component.getName()).append(':');
 
 		if (useShortLabels) {
 			builder.append("..");

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.common;
+package kieker.analysis.common;
 
 /**
  * Configuration exception for command line and configuration file parameters.

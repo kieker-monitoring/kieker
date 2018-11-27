@@ -43,8 +43,9 @@ import kieker.tools.trace.analysis.systemModel.ExecutionTraceBasedSession;
  *
  */
 @Plugin(description = "Reconstructs sessions from execution or message traces", outputPorts = {
-	@OutputPort(name = SessionReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_SESSIONS, description = "Reconstructed execution trace-based sessions", eventTypes = {
-		ExecutionTraceBasedSession.class })
+	@OutputPort(name = SessionReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_SESSIONS, description = "Reconstructed execution trace-based sessions",
+			eventTypes = {
+				ExecutionTraceBasedSession.class })
 }, configuration = {
 	@Property(name = SessionReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_THINK_TIME, defaultValue = "500000"),
 	@Property(name = SessionReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = SessionReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT)

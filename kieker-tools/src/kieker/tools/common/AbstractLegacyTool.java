@@ -23,19 +23,20 @@ import org.slf4j.LoggerFactory;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 
+import kieker.analysis.common.ConfigurationException;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 
 /**
- * Generic service main class.
+ * Generic legacy tool framework class.
  *
  * @param <T>
- *            type of the teetime Configuration to be used
+ *            type of the configuration object to be used
  *
  * @author Reiner Jung
  *
  * @since 1.15
  */
-public abstract class AbstractTool<T extends Object> {
+public abstract class AbstractLegacyTool<T extends Object> {
 
 	/** Exit code for successful operation. */
 	public static final int SUCCESS_EXIT_CODE = 0;
@@ -49,7 +50,7 @@ public abstract class AbstractTool<T extends Object> {
 	public static final int USAGE_EXIT_CODE = 4;
 
 	/** logger for all tools. */
-	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractTool.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractLegacyTool.class);
 
 	/** true if help should be displayed. */
 	protected boolean help = false; // NOPMD this is set to false for documentation purposes
@@ -59,12 +60,19 @@ public abstract class AbstractTool<T extends Object> {
 	protected kieker.common.configuration.Configuration kiekerConfiguration;
 
 	/**
+	 * Default constructor.
+	 */
+	public AbstractLegacyTool() {
+		// nothing to do
+	}
+
+	/**
 	 * Configure and execute the evaluation tool utilizing an external configuration.
 	 *
 	 * @param title
 	 *            start up label for debug messages
 	 * @param label
-	 *            label used during execution
+	 *            label used during execution to indicate the running service
 	 * @param args
 	 *            arguments are ignored
 	 * @param configuration
@@ -74,7 +82,7 @@ public abstract class AbstractTool<T extends Object> {
 	 */
 	public int run(final String title, final String label, final String[] args, final T configuration) {
 		this.parameterConfiguration = configuration;
-		AbstractTool.LOGGER.debug(title); // NOPMD
+		AbstractLegacyTool.LOGGER.debug(title);
 
 		final JCommander commander = new JCommander(configuration);
 		try {
@@ -93,15 +101,15 @@ public abstract class AbstractTool<T extends Object> {
 					}
 				}
 			} else {
-				AbstractTool.LOGGER.error("Configuration Error"); // NOPMD
+				AbstractLegacyTool.LOGGER.error("Configuration Error"); // NOPMD
 				return CONFIGURATION_ERROR;
 			}
 		} catch (final ParameterException e) {
-			AbstractTool.LOGGER.error(e.getLocalizedMessage()); // NOPMD
+			AbstractLegacyTool.LOGGER.error(e.getLocalizedMessage()); // NOPMD
 			commander.usage();
 			return PARAMETER_ERROR;
 		} catch (final ConfigurationException e) {
-			AbstractTool.LOGGER.error(e.getLocalizedMessage()); // NOPMD
+			AbstractLegacyTool.LOGGER.error(e.getLocalizedMessage()); // NOPMD
 			commander.usage();
 			return CONFIGURATION_ERROR;
 		}
@@ -113,7 +121,7 @@ public abstract class AbstractTool<T extends Object> {
 	 * @param commander
 	 *            JCommander instance used to display usage information in case of errors
 	 * @param label
-	 *            additional label
+	 *            label used during execution to indicate the running service
 	 *
 	 * @return returns exit code
 	 * @throws ConfigurationException
@@ -167,7 +175,7 @@ public abstract class AbstractTool<T extends Object> {
 	protected abstract boolean checkParameters(JCommander commander) throws ConfigurationException;
 
 	/**
-	 * Shutdown cleanup features of the application.
+	 * Trigger cleanup features of the service.
 	 */
 	protected abstract void shutdownService();
 

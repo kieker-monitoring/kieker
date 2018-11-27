@@ -219,7 +219,8 @@ public class TraceAnalysisConfiguration {
 	// COLORING_FILE_OPTION_NAME
 	@Parameter(names = {
 		CMD_TRACE_COLORING },
-			description = "Color traces according to the given color map given as a properties file (key: trace ID, value: color in hex format, e.g., 0xff0000 for red; use trace ID 'default' to specify the default color)")
+			description = "Color traces according to the given color map given as a properties file (key: trace ID, value: color in hex format,"
+					+ " e.g., 0xff0000 for red; use trace ID 'default' to specify the default color)")
 	private File traceColoringFile;
 
 	// DESCRIPTIONS_FILE_OPTION_NAME
@@ -347,6 +348,11 @@ public class TraceAnalysisConfiguration {
 		return this.repairEventBasedTraces;
 	}
 
+	/**
+	 * Get max trace duration, default is 600 000 ms.
+	 *
+	 * @return returns the max trace duration
+	 */
 	public Long getMaxTraceDuration() {
 		if (this.maxTraceDuration == null) {
 			this.maxTraceDuration = (long) (10 * 60 * 1000);
@@ -354,6 +360,9 @@ public class TraceAnalysisConfiguration {
 		return this.maxTraceDuration;
 	}
 
+	/**
+	 * @return returns the ignore execution before date value, if none is specified created default value.
+	 */
 	public Long getIgnoreExecutionsBeforeDate() {
 		if (this.ignoreExecutionsBeforeDate == null) {
 			this.ignoreExecutionsBeforeDate = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP);
@@ -361,6 +370,9 @@ public class TraceAnalysisConfiguration {
 		return this.ignoreExecutionsBeforeDate;
 	}
 
+	/**
+	 * @return returns the ignore execution after date value, if none is specified created default value.
+	 */
 	public Long getIgnoreExecutionsAfterDate() {
 		if (this.ignoreExecutionsAfterDate == null) {
 			this.ignoreExecutionsAfterDate = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP);
@@ -455,7 +467,7 @@ public class TraceAnalysisConfiguration {
 				if ("<null>".equals(val)) {
 					val = String.valueOf(id);
 				} else {
-					val += ", " + String.valueOf(id);
+					val += ", " + id;
 				}
 			}
 		} else {

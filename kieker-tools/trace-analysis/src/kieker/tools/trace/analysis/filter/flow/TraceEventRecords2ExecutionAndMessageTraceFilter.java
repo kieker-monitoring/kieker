@@ -58,14 +58,18 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  * @since 1.6
  */
 @Plugin(description = "Transforms incoming TraceEventRecords into execution and message traces", outputPorts = {
-	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Outputs transformed execution traces", eventTypes = {
-		ExecutionTrace.class }),
-	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Outputs transformed message traces", eventTypes = {
-		MessageTrace.class }),
-	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces", eventTypes = {
-		InvalidExecutionTrace.class }) }, repositoryPorts = {
+	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Outputs transformed execution traces",
+			eventTypes = { ExecutionTrace.class }),
+	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Outputs transformed message traces",
+			eventTypes = {
+				MessageTrace.class }),
+	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces",
+			eventTypes = {
+				InvalidExecutionTrace.class }) },
+		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
-		}, configuration = {
+		},
+		configuration = {
 			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_JAVA_CONSTRUCTORS, defaultValue = "true"),
 			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_CALL_DETECTION, defaultValue = "true"),
 			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_IGNORE_ASSUMED, defaultValue = "false")
