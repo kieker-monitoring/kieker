@@ -25,10 +25,10 @@ import java.util.TimeZone;
 
 import com.beust.jcommander.JCommander;
 
+import kieker.analysis.common.ConfigurationException;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.tools.common.AbstractTool;
-import kieker.tools.common.CommandLineParameterEvaluation;
-import kieker.tools.common.ConfigurationException;
+import kieker.tools.common.AbstractLegacyTool;
+import kieker.tools.common.ParameterEvaluation;
 
 /**
  * This is the main class to start the Kieker TraceAnalysisTool - the model synthesis and analysis tool to process the
@@ -41,7 +41,7 @@ import kieker.tools.common.ConfigurationException;
  *
  * @since 0.95a, 1.15
  */
-public final class TraceAnalysisToolMain extends AbstractTool<TraceAnalysisConfiguration> {
+public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysisConfiguration> {
 
 	/**
 	 * Private constructor.
@@ -98,7 +98,7 @@ public final class TraceAnalysisToolMain extends AbstractTool<TraceAnalysisConfi
 	/** support for external configuration file. */
 	@Override
 	protected File getConfigurationFile() {
-		return null;
+		return null; // Trace analysis does not support configuration files yet
 	}
 
 	@Override
@@ -108,13 +108,9 @@ public final class TraceAnalysisToolMain extends AbstractTool<TraceAnalysisConfi
 
 	@Override
 	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
-		try {
-			return this.checkInputDirs(commander)
-					&& CommandLineParameterEvaluation.checkDirectory(this.parameterConfiguration.getOutputDir(), "output", commander)
-					&& this.selectOrFilterTraces();
-		} catch (final IOException e) {
-			throw new ConfigurationException(e);
-		}
+		return this.checkInputDirs(commander)
+				&& ParameterEvaluation.checkDirectory(this.parameterConfiguration.getOutputDir(), "Output", commander)
+				&& this.selectOrFilterTraces();
 	}
 
 	@Override

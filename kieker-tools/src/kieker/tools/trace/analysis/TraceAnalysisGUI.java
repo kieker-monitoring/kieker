@@ -70,6 +70,9 @@ public class TraceAnalysisGUI extends JFrame {
 		this.conversionStep, this.finalStep, };
 	private int currentStepIndex;
 
+	/**
+	 * Creating UI.
+	 */
 	public TraceAnalysisGUI() {
 		super("Trace Analysis Tool - GUI");
 
@@ -246,6 +249,12 @@ public class TraceAnalysisGUI extends JFrame {
 		thread.start();
 	}
 
+	/**
+	 * Main function.
+	 *
+	 * @param args
+	 *            command line arguments
+	 */
 	public static void main(final String[] args) {
 		final TraceAnalysisGUI gui = new TraceAnalysisGUI();
 		gui.setVisible(true);

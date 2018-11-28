@@ -40,7 +40,7 @@ import kieker.analysis.plugin.filter.select.TraceIdFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
-import kieker.tools.common.Convert;
+import kieker.tools.common.ConvertLegacyValues;
 import kieker.tools.trace.analysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.trace.analysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
@@ -118,8 +118,8 @@ public class PerformAnalysis {
 	public boolean dispatchTasks() {
 		final String pathPrefix = this.computePrefix();
 
-		boolean retVal = true;
 		int numRequestedTasks = 0;
+		boolean successfulExecution = true;
 
 		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(),
 				this.analysisController);
@@ -171,51 +171,51 @@ public class PerformAnalysis {
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (retVal && this.settings.isPlotDeploymentSequenceDiagrams()) {
+			if (this.settings.isPlotDeploymentSequenceDiagrams()) {
 				numRequestedTasks++;
 				this.createPlotDeploymentSequenceDiagrams(allTraceProcessingComponents, pathPrefix, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (retVal && this.settings.isPlotAssemblySequenceDiagrams()) {
+			if (this.settings.isPlotAssemblySequenceDiagrams()) {
 				numRequestedTasks++;
 				this.createPlotAssemblySequenceDiagrams(allTraceProcessingComponents, pathPrefix, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 
 			}
 
-			if (retVal && !this.settings.getPlotDeploymentComponentDependencyGraph().isEmpty()) {
+			if (!this.settings.getPlotDeploymentComponentDependencyGraph().isEmpty()) {
 				numRequestedTasks++;
-				this.createPlotDeploymentComponentDependencyGraph(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+				this.createPlotDeploymentComponentDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (retVal && !this.settings.getPlotAssemblyComponentDependencyGraph().isEmpty()) {
+			if (!this.settings.getPlotAssemblyComponentDependencyGraph().isEmpty()) {
 				numRequestedTasks++;
-				this.createPlotAssemblyComponentDependencyGraph(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+				this.createPlotAssemblyComponentDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 
 			}
 
-			if (retVal && this.settings.isPlotContainerDependencyGraph()) {
+			if (this.settings.isPlotContainerDependencyGraph()) {
 				numRequestedTasks++;
-				this.createPlotContainerDependencyGraph(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+				this.createPlotContainerDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (retVal && !this.settings.getPlotDeploymentOperationDependencyGraph().isEmpty()) {
+			if (!this.settings.getPlotDeploymentOperationDependencyGraph().isEmpty()) {
 				numRequestedTasks++;
-				this.createPlotDeploymentOperationDependencyGraph(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+				this.createPlotDeploymentOperationDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (retVal && !this.settings.getPlotAssemblyOperationDependencyGraph().isEmpty()) {
+			if (!this.settings.getPlotAssemblyOperationDependencyGraph().isEmpty()) {
 				numRequestedTasks++;
-				this.createPlotAssemblyOperationDependencyGraph(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+				this.createPlotAssemblyOperationDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (retVal && this.settings.isPlotCallTrees()) {
+			if (this.settings.isPlotCallTrees()) {
 				numRequestedTasks++;
 				final TraceCallTreeFilter componentPlotTraceCallTrees = this.createTraceCallTreeFilter(pathPrefix, systemEntityFactory, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter);
@@ -223,14 +223,14 @@ public class PerformAnalysis {
 				allTraceProcessingComponents.add(componentPlotTraceCallTrees);
 			}
 
-			if (retVal && this.settings.isPlotAggregatedDeploymentCallTree()) {
+			if (this.settings.isPlotAggregatedDeploymentCallTree()) {
 				numRequestedTasks++;
-				this.createPlotAggregatedDeploymentCallTree(allTraceProcessingComponents, allGraphProducers, pathPrefix, mtReconstrFilter,
+				this.createPlotAggregatedDeploymentCallTree(allTraceProcessingComponents, pathPrefix, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 
 			}
 
-			if (retVal && this.settings.isPlotAggregatedAssemblyCallTree()) {
+			if (this.settings.isPlotAggregatedAssemblyCallTree()) {
 				numRequestedTasks++;
 				final AggregatedAssemblyComponentOperationCallTreeFilter componentPlotAssemblyCallTree = this.createAggrAssemblyCompOpCallTreeFilter(pathPrefix,
 						systemEntityFactory,
@@ -238,7 +238,7 @@ public class PerformAnalysis {
 
 				allTraceProcessingComponents.add(componentPlotAssemblyCallTree);
 			}
-			if (retVal && this.settings.isPrintDeploymentEquivalenceClasses()) {
+			if (this.settings.isPrintDeploymentEquivalenceClasses()) {
 				numRequestedTasks++;
 				// the actual execution of the task is performed below
 			}
@@ -255,60 +255,24 @@ public class PerformAnalysis {
 				return false;
 			}
 
-			if (retVal) {
-				final String systemEntitiesHtmlFn = pathPrefix + "system-entities.html";
-				final Configuration systemModel2FileFilterConfig = new Configuration();
-				systemModel2FileFilterConfig.setProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN,
-						systemEntitiesHtmlFn);
-				final SystemModel2FileFilter systemModel2FileFilter = new SystemModel2FileFilter(
-						systemModel2FileFilterConfig, this.analysisController);
-				// note that this plugin is (currently) not connected to any other filters
-				this.analysisController.connect(systemModel2FileFilter,
-						AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
-			}
+			this.printSystemEntities(pathPrefix, systemEntityFactory);
 
-			int numErrorCount = 0;
-			try {
-				this.analysisController.run();
-				if (this.analysisController.getState() != AnalysisController.STATE.TERMINATED) {
-					// Analysis did not terminate successfully
-					retVal = false; // Error message referring to log will be printed later
-					this.logger.error("Analysis instance terminated in state other than {}: {}", AnalysisController.STATE.TERMINATED,
-							this.analysisController.getState());
-				}
-			} finally {
-				for (final AbstractTraceProcessingFilter c : allTraceProcessingComponents) {
-					numErrorCount += c.getErrorCount();
-					c.printStatusMessage();
-				}
-				final String kaxOutputFn = pathPrefix + "traceAnalysis.kax";
-				final File kaxOutputFile = new File(kaxOutputFn);
-				try { // NOCS (nested try)
-						// Try to serialize analysis configuration to .kax file
-					this.analysisController.saveToFile(kaxOutputFile);
-					this.logger.info("Saved analysis configuration to file '{}'", kaxOutputFile.getCanonicalPath());
-				} catch (final IOException ex) {
-					this.logger.error("Failed to save analysis configuration to file '{}'", kaxOutputFile.getCanonicalPath());
-				}
-			}
-			if (!this.settings.isIgnoreInvalidTraces() && (numErrorCount > 0)) {
-				throw new Exception(numErrorCount + " errors occured in trace processing components");
-			}
+			successfulExecution = this.checkTerminationState(pathPrefix, allTraceProcessingComponents);
 
-			if (retVal && this.settings.isPrintDeploymentEquivalenceClasses()) {
-				retVal = this.writeTraceEquivalenceReport(
+			if (successfulExecution && this.settings.isPrintDeploymentEquivalenceClasses()) {
+				successfulExecution = this.writeTraceEquivalenceReport(
 						pathPrefix + Constants.TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX + TXT_SUFFIX,
 						traceAllocationEquivClassFilter);
 			}
 
-			if (retVal && this.settings.isPrintAssemblyEquivalenceClasses()) {
-				retVal = this.writeTraceEquivalenceReport(
+			if (successfulExecution && this.settings.isPrintAssemblyEquivalenceClasses()) {
+				successfulExecution = this.writeTraceEquivalenceReport(
 						pathPrefix + Constants.TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX + TXT_SUFFIX,
 						traceAssemblyEquivClassFilter);
 			}
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			this.logger.error("An error occured", ex);
-			retVal = false;
+			successfulExecution = false;
 		} finally {
 			if (numRequestedTasks > 0) {
 				if (mtReconstrFilter != null) {
@@ -323,7 +287,55 @@ public class PerformAnalysis {
 			}
 		}
 
+		return successfulExecution;
+	}
+
+	private boolean checkTerminationState(final String pathPrefix, final List<AbstractTraceProcessingFilter> allTraceProcessingComponents)
+			throws Exception {
+		boolean retVal = true;
+
+		int numErrorCount = 0;
+		try {
+			this.analysisController.run();
+			if (this.analysisController.getState() != AnalysisController.STATE.TERMINATED) {
+				// Analysis did not terminate successfully
+				retVal = false; // Error message referring to log will be printed later
+				this.logger.error("Analysis instance terminated in state other than {}: {}", AnalysisController.STATE.TERMINATED,
+						this.analysisController.getState());
+			}
+		} finally {
+			for (final AbstractTraceProcessingFilter c : allTraceProcessingComponents) {
+				numErrorCount += c.getErrorCount();
+				c.printStatusMessage();
+			}
+			final String kaxOutputFn = pathPrefix + "traceAnalysis.kax";
+			final File kaxOutputFile = new File(kaxOutputFn);
+			try { // NOCS (nested try)
+					// Try to serialize analysis configuration to .kax file
+				this.analysisController.saveToFile(kaxOutputFile);
+				this.logger.info("Saved analysis configuration to file '{}'", kaxOutputFile.getCanonicalPath());
+			} catch (final IOException ex) {
+				this.logger.error("Failed to save analysis configuration to file '{}'", kaxOutputFile.getCanonicalPath());
+			}
+		}
+		if (!this.settings.isIgnoreInvalidTraces() && (numErrorCount > 0)) {
+			throw new Exception(numErrorCount + " errors occured in trace processing components");
+		}
+
 		return retVal;
+	}
+
+	private void printSystemEntities(final String pathPrefix, final SystemModelRepository systemEntityFactory)
+			throws IllegalStateException, AnalysisConfigurationException {
+		final String systemEntitiesHtmlFn = pathPrefix + "system-entities.html";
+		final Configuration systemModel2FileFilterConfig = new Configuration();
+		systemModel2FileFilterConfig.setProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN,
+				systemEntitiesHtmlFn);
+		final SystemModel2FileFilter systemModel2FileFilter = new SystemModel2FileFilter(
+				systemModel2FileFilterConfig, this.analysisController);
+		// note that this plugin is (currently) not connected to any other filters
+		this.analysisController.connect(systemModel2FileFilter,
+				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
 	}
 
 	private String computePrefix() {
@@ -361,7 +373,6 @@ public class PerformAnalysis {
 	/**
 	 *
 	 * @param allTraceProcessingComponents
-	 * @param allGraphProducers
 	 * @param pathPrefix
 	 * @param mtReconstrFilter
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
@@ -370,7 +381,7 @@ public class PerformAnalysis {
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPlotAggregatedDeploymentCallTree(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
-			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
+			final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
 			throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration componentPlotAggregatedCallTreeConfig = new Configuration();
@@ -403,7 +414,7 @@ public class PerformAnalysis {
 	}
 
 	private void createPlotAssemblyOperationDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
-			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
 			throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration configuration = new Configuration();
@@ -432,7 +443,6 @@ public class PerformAnalysis {
 	 *
 	 * @param allTraceProcessingComponents
 	 * @param allGraphProducers
-	 * @param pathPrefix
 	 * @param mtReconstrFilter
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
@@ -440,7 +450,7 @@ public class PerformAnalysis {
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPlotDeploymentOperationDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
-			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
 			throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration configuration = new Configuration();
@@ -468,7 +478,6 @@ public class PerformAnalysis {
 	 *
 	 * @param allTraceProcessingComponents
 	 * @param allGraphProducers
-	 * @param pathPrefix
 	 * @param mtReconstrFilter
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
@@ -476,7 +485,7 @@ public class PerformAnalysis {
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPlotContainerDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
-			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
 			throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration configuration = new Configuration();
@@ -501,7 +510,6 @@ public class PerformAnalysis {
 	 *
 	 * @param allTraceProcessingComponents
 	 * @param allGraphProducers
-	 * @param pathPrefix
 	 * @param mtReconstrFilter
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
@@ -509,7 +517,7 @@ public class PerformAnalysis {
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPlotAssemblyComponentDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
-			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix, final TraceReconstructionFilter mtReconstrFilter,
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final TraceReconstructionFilter mtReconstrFilter,
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter, final SystemModelRepository systemEntityFactory)
 			throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration configuration = new Configuration();
@@ -537,7 +545,6 @@ public class PerformAnalysis {
 	 *
 	 * @param allTraceProcessingComponents
 	 * @param allGraphProducers
-	 * @param pathPrefix
 	 * @param mtReconstrFilter
 	 * @param traceEvents2ExecutionAndMessageTraceFilter
 	 * @param systemEntityFactory
@@ -545,7 +552,7 @@ public class PerformAnalysis {
 	 * @throws AnalysisConfigurationException
 	 */
 	private void createPlotDeploymentComponentDependencyGraph(final List<AbstractTraceProcessingFilter> allTraceProcessingComponents,
-			final List<AbstractGraphProducingFilter<?>> allGraphProducers, final String pathPrefix,
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers,
 			final TraceReconstructionFilter mtReconstrFilter, final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter,
 			final SystemModelRepository systemEntityFactory) throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration configuration = new Configuration();
@@ -1056,7 +1063,7 @@ public class PerformAnalysis {
 
 	private FSReader createReader() {
 		final Configuration conf = new Configuration(null);
-		conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(Convert.fileListToStringArray(this.settings.getInputDirs())));
+		conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(ConvertLegacyValues.fileListToStringArray(this.settings.getInputDirs())));
 		conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.TRUE.toString());
 		return new FSReader(conf, this.analysisController);
 	}

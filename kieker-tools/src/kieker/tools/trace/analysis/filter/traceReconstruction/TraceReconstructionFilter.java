@@ -56,7 +56,8 @@ import kieker.tools.util.LoggingTimestampConverter;
 	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 }, configuration = {
 	@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-	@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, defaultValue = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION),
+	@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
+			defaultValue = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION),
 	@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, defaultValue = "true")
 })
 public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
