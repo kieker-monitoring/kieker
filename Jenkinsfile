@@ -4,14 +4,14 @@ DOCKER_IMAGE_NAME = "kieker/kieker-build:openjdk8"
 
 node('kieker-slave-docker') {
   try {
-  	stage('Pull Request Check') {
-    	if ( isPRMergeBuild() ) {
-    		echo "This build is a pull request from branch '${env.BRANCH_NAME}' to branch '${env.CHANGE_TARGET}'."
+	stage('Pull Request Check') {
+	if ( isPRMergeBuild() ) {
+		echo "This build is a pull request from branch '${env.BRANCH_NAME}' to branch '${env.CHANGE_TARGET}'."
 
-	    	if ( env.CHANGE_TARGET == 'stable' ) {
-	    		error "Pull requests are not allowed to target to the 'stable' branch."
-	    	}
-    	}
+		if ( env.CHANGE_TARGET == 'stable' ) {
+			error "Pull requests are not allowed to target to the 'stable' branch."
+		}
+	}
   	}
 
     stage ('Checkout') {
@@ -21,7 +21,7 @@ node('kieker-slave-docker') {
     }
 
     stage ('1-compile logs') {
-        sh 'docker run --rm -u `id -u` -v ' + env.WORKSPACE + ':/opt/kieker '+DOCKER_IMAGE_NAME+' /bin/bash -c "cd /opt/kieker; ./gradlew -S compileJava compileTestJava"'
+        sh 'docker run --rm -u `id -u` -v ' + env.WORKSPACE + ':/opt/kieker '+DOCKER_IMAGE_NAME+' /bin/bash -c "cd /opt/kieker; ./gradlew -S compileJava compileTestJava jar"'
     }
 
     stage ('2-unit-test logs') {
