@@ -1,5 +1,15 @@
+apply plugin: "com.github.hauner.jarTest"
+
+
+configurations {
+    resultJar
+}
+
 dependencies {
+	clover 'org.openclover:clover:4.2.0'
+
 	compile project(':kieker-tools')
+	compile configurations.resultJar
 	
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
 	testCompile project (path: ':kieker-tools', configuration: 'testArchives')

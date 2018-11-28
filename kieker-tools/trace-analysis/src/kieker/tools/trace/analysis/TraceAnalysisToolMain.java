@@ -28,7 +28,6 @@ import com.beust.jcommander.JCommander;
 import kieker.analysis.common.ConfigurationException;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.tools.common.AbstractLegacyTool;
-import kieker.tools.common.ConfigurationException;
 import kieker.tools.common.DateConverter;
 import kieker.tools.common.ParameterEvaluation;
 
