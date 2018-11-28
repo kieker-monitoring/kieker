@@ -58,6 +58,7 @@ import kieker.tools.trace.analysis.filter.traceWriter.InvalidExecutionTraceWrite
 import kieker.tools.trace.analysis.filter.traceWriter.MessageTraceWriterFilter;
 import kieker.tools.trace.analysis.filter.visualization.AbstractGraphFilter;
 import kieker.tools.trace.analysis.filter.visualization.GraphWriterPlugin;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.filter.visualization.callTree.AbstractAggregatedCallTreeFilter;
 import kieker.tools.trace.analysis.filter.visualization.callTree.AggregatedAllocationComponentOperationCallTreeFilter;
 import kieker.tools.trace.analysis.filter.visualization.callTree.AggregatedAssemblyComponentOperationCallTreeFilter;
@@ -387,7 +388,7 @@ public class PerformAnalysis {
 		final Configuration componentPlotAggregatedCallTreeConfig = new Configuration();
 
 		componentPlotAggregatedCallTreeConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-				Constants.PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME);
+				VisualizationConstants.PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME);
 		componentPlotAggregatedCallTreeConfig.setProperty(
 				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
 		componentPlotAggregatedCallTreeConfig.setProperty(
@@ -395,7 +396,7 @@ public class PerformAnalysis {
 				this.booleanToString(this.settings.isShortLabels()));
 		componentPlotAggregatedCallTreeConfig.setProperty(
 				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME,
-				pathPrefix + Constants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX + ".dot");
+				pathPrefix + VisualizationConstants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX + ".dot");
 
 		final AggregatedAllocationComponentOperationCallTreeFilter componentPlotAggregatedCallTree = new AggregatedAllocationComponentOperationCallTreeFilter(
 				componentPlotAggregatedCallTreeConfig, this.analysisController);
@@ -592,9 +593,9 @@ public class PerformAnalysis {
 		final Configuration componentPlotAssemblySeqDiagrConfig = new Configuration();
 
 		componentPlotAssemblySeqDiagrConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-				Constants.PLOTASSEMBLYSEQDIAGR_COMPONENT_NAME);
+				VisualizationConstants.PLOTASSEMBLYSEQDIAGR_COMPONENT_NAME);
 		componentPlotAssemblySeqDiagrConfig
-				.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, pathPrefix + Constants.ASSEMBLY_SEQUENCE_DIAGRAM_FN_PREFIX);
+				.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, pathPrefix + VisualizationConstants.ASSEMBLY_SEQUENCE_DIAGRAM_FN_PREFIX);
 		componentPlotAssemblySeqDiagrConfig.setProperty(
 				SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE,
 				SequenceDiagramFilter.SDModes.ASSEMBLY.toString());
@@ -624,9 +625,9 @@ public class PerformAnalysis {
 			throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration componentPlotAllocationSeqDiagrConfig = new Configuration();
 		componentPlotAllocationSeqDiagrConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-				Constants.PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME);
+				VisualizationConstants.PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME);
 		componentPlotAllocationSeqDiagrConfig.setProperty(
-				SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, pathPrefix + Constants.ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX);
+				SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, pathPrefix + VisualizationConstants.ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX);
 		componentPlotAllocationSeqDiagrConfig.setProperty(
 				SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE,
 				SequenceDiagramFilter.SDModes.ALLOCATION.toString());
@@ -666,7 +667,7 @@ public class PerformAnalysis {
 			throws IOException, IllegalStateException, AnalysisConfigurationException {
 		final Configuration componentPrintInvalidTraceConfig = new Configuration();
 		componentPrintInvalidTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-				Constants.PRINTINVALIDEXECTRACE_COMPONENT_NAME);
+				VisualizationConstants.PRINTINVALIDEXECTRACE_COMPONENT_NAME);
 		componentPrintInvalidTraceConfig.setProperty(
 				InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN,
 				new File(pathPrefix + Constants.INVALID_TRACES_FN_PREFIX + TXT_SUFFIX).getCanonicalPath());
@@ -704,7 +705,7 @@ public class PerformAnalysis {
 			throws IOException, IllegalStateException, AnalysisConfigurationException {
 		final Configuration componentPrintExecTraceConfig = new Configuration();
 		componentPrintExecTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-				Constants.PRINTEXECTRACE_COMPONENT_NAME);
+				VisualizationConstants.PRINTEXECTRACE_COMPONENT_NAME);
 		componentPrintExecTraceConfig.setProperty(ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN,
 				new File(pathPrefix + Constants.EXECUTION_TRACES_FN_PREFIX + TXT_SUFFIX).getCanonicalPath());
 
@@ -740,7 +741,7 @@ public class PerformAnalysis {
 			throws IOException, IllegalStateException, AnalysisConfigurationException {
 		final Configuration componentPrintMsgTraceConfig = new Configuration();
 		componentPrintMsgTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-				Constants.PRINTMSGTRACE_COMPONENT_NAME);
+				VisualizationConstants.PRINTMSGTRACE_COMPONENT_NAME);
 		componentPrintMsgTraceConfig.setProperty(MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN,
 				new File(pathPrefix + Constants.MESSAGE_TRACES_FN_PREFIX + TXT_SUFFIX).getCanonicalPath());
 
@@ -896,7 +897,7 @@ public class PerformAnalysis {
 		// Create the counter for valid/invalid event record traces
 		final Configuration configurationEventRecordTraceCounter = new Configuration();
 		configurationEventRecordTraceCounter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-				Constants.EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME);
+				VisualizationConstants.EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME);
 		configurationEventRecordTraceCounter.setProperty(
 				EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID,
 				this.booleanToString(!this.settings.isIgnoreInvalidTraces()));
@@ -1096,16 +1097,16 @@ public class PerformAnalysis {
 			// cannot use for loop iterator, as response time coloring uses multiple elements.
 			while (decoratorIterator.hasNext()) {
 				final String currentDecoratorStr = decoratorIterator.next();
-				if (Constants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(currentDecoratorStr)) {
+				if (VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(currentDecoratorStr)) {
 					plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.NANOSECONDS));
 					continue;
-				} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_US.equals(currentDecoratorStr)) {
+				} else if (VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_US.equals(currentDecoratorStr)) {
 					plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.MICROSECONDS));
 					continue;
-				} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_MS.equals(currentDecoratorStr)) {
+				} else if (VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS.equals(currentDecoratorStr)) {
 					plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.MILLISECONDS));
 					continue;
-				} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(currentDecoratorStr)) {
+				} else if (VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(currentDecoratorStr)) {
 					plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.SECONDS));
 					continue;
 				} else if (Constants.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(currentDecoratorStr)) {
@@ -1153,7 +1154,7 @@ public class PerformAnalysis {
 		componentPlotTraceCallTreesConfig.setProperty(TraceCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
 				this.booleanToString(this.settings.isShortLabels()));
 		componentPlotTraceCallTreesConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-				Constants.PLOTCALLTREE_COMPONENT_NAME);
+				VisualizationConstants.PLOTCALLTREE_COMPONENT_NAME);
 
 		// create filter
 		final TraceCallTreeFilter componentPlotTraceCallTrees = new TraceCallTreeFilter(componentPlotTraceCallTreesConfig,
@@ -1190,13 +1191,14 @@ public class PerformAnalysis {
 		// build configuration
 		final Configuration componentPlotAssemblyCallTreeConfig = new Configuration();
 		componentPlotAssemblyCallTreeConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-				Constants.PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME);
+				VisualizationConstants.PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME);
 		componentPlotAssemblyCallTreeConfig.setProperty(
 				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
 		componentPlotAssemblyCallTreeConfig.setProperty(
 				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, this.booleanToString(this.settings.isShortLabels()));
 		componentPlotAssemblyCallTreeConfig.setProperty(
-				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, pathPrefix + Constants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX + ".dot");
+				AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME,
+				pathPrefix + VisualizationConstants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX + ".dot");
 
 		// create filter
 		final AggregatedAssemblyComponentOperationCallTreeFilter componentPlotAssemblyCallTree = new AggregatedAssemblyComponentOperationCallTreeFilter(

@@ -22,38 +22,37 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.tools.trace.analysis.Constants;
 import kieker.tools.trace.analysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.trace.analysis.filter.IGraphOutputtingFilter;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.trace.analysis.systemModel.AbstractMessage;
-import kieker.tools.trace.analysis.systemModel.AllocationComponent;
+import kieker.tools.trace.analysis.systemModel.AssemblyComponent;
 import kieker.tools.trace.analysis.systemModel.MessageTrace;
 import kieker.tools.trace.analysis.systemModel.Operation;
 import kieker.tools.trace.analysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.trace.analysis.systemModel.repository.AbstractSystemSubRepository;
-import kieker.tools.trace.analysis.systemModel.repository.AllocationComponentOperationPairFactory;
-import kieker.tools.trace.analysis.systemModel.repository.AllocationRepository;
+import kieker.tools.trace.analysis.systemModel.repository.AssemblyComponentOperationPairFactory;
+import kieker.tools.trace.analysis.systemModel.repository.AssemblyRepository;
 import kieker.tools.trace.analysis.systemModel.repository.OperationRepository;
 import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
-import kieker.tools.trace.analysis.systemModel.util.AllocationComponentOperationPair;
+import kieker.tools.trace.analysis.systemModel.util.AssemblyComponentOperationPair;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool<br>
  *
- * This class has exactly one input port named "in". The data which is send to
- * this plugin is not delegated in any way.
+ * This class has exactly one input port named "in". The data which is send to this plugin is not delegated in any way.
  *
  * @author Andre van Hoorn, Lena Stoever, Matthias Rohr,
  *
- * @since 1.1
+ * @since 1.2
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
-outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
-public class OperationDependencyGraphAllocationFilter extends AbstractDependencyGraphFilter<AllocationComponentOperationPair> {
+		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
+public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGraphFilter<AssemblyComponentOperationPair> {
 
-	private static final String CONFIGURATION_NAME = Constants.PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME;
+	private static final String CONFIGURATION_NAME = VisualizationConstants.PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME;
 
 	/**
 	 * Creates a new filter using the given parameters.
@@ -63,47 +62,49 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 	 * @param projectContext
 	 *            The project context to use.
 	 */
-	public OperationDependencyGraphAllocationFilter(final Configuration configuration, final IProjectContext projectContext) {
-		super(configuration, projectContext, new OperationAllocationDependencyGraph(new AllocationComponentOperationPair(
-				AbstractSystemSubRepository.ROOT_ELEMENT_ID, OperationRepository.ROOT_OPERATION, AllocationRepository.ROOT_ALLOCATION_COMPONENT)));
+	public OperationDependencyGraphAssemblyFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext, new OperationAssemblyDependencyGraph(new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+				OperationRepository.ROOT_OPERATION,
+				AssemblyRepository.ROOT_ASSEMBLY_COMPONENT)));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed",
-	eventTypes = { MessageTrace.class })
+	@InputPort(
+			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
+			description = "Receives the message traces to be processed",
+			eventTypes = { MessageTrace.class })
 	public void inputMessageTraces(final MessageTrace t) {
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
 			if (m instanceof SynchronousReplyMessage) {
 				continue;
 			}
-			final AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
-			final AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
+			final AssemblyComponent senderComponent = m.getSendingExecution().getAllocationComponent().getAssemblyComponent();
+			final AssemblyComponent receiverComponent = m.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
 			final int rootOperationId = OperationRepository.ROOT_OPERATION.getId();
 			final Operation senderOperation = m.getSendingExecution().getOperation();
 			final Operation receiverOperation = m.getReceivingExecution().getOperation();
 			// The following two get-calls to the factory return s.th. in either case
-			final AllocationComponentOperationPairFactory pairFactory = this.getSystemEntityFactory().getAllocationPairFactory();
+			final AssemblyComponentOperationPairFactory pairFactory = this.getSystemEntityFactory().getAssemblyPairFactory();
 
-			final AllocationComponentOperationPair senderPair;
+			final AssemblyComponentOperationPair senderPair;
 			if (senderOperation.getId() == rootOperationId) {
 				senderPair = this.getGraph().getRootNode().getEntity();
 			} else {
 				senderPair = pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
 			}
 
-			final AllocationComponentOperationPair receiverPair;
+			final AssemblyComponentOperationPair receiverPair;
 			if (receiverOperation.getId() == rootOperationId) {
 				receiverPair = this.getGraph().getRootNode().getEntity();
 			} else {
 				receiverPair = pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
 			}
 
-			DependencyGraphNode<AllocationComponentOperationPair> senderNode = this.getGraph().getNode(senderPair
-					.getId());
-			DependencyGraphNode<AllocationComponentOperationPair> receiverNode = this.getGraph().getNode(receiverPair.getId());
+			DependencyGraphNode<AssemblyComponentOperationPair> senderNode = this.getGraph().getNode(senderPair.getId());
+			DependencyGraphNode<AssemblyComponentOperationPair> receiverNode = this.getGraph().getNode(receiverPair.getId());
 			if (senderNode == null) {
 				senderNode = new DependencyGraphNode<>(senderPair.getId(), senderPair, t.getTraceInformation(),
 						this.getOriginRetentionPolicy());

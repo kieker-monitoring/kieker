@@ -30,14 +30,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import kieker.tools.trace.analysis.Constants;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.gui.util.AllSelectionBindingItemListener;
 import kieker.tools.trace.analysis.gui.util.SelectionBindingItemListener;
 
 /**
  * In this step of the trace analysis wizard, the user can choose the plots to draw.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
  */
 public class PlotStep extends AbstractStep { // NOPMD (number of fields)
@@ -369,16 +370,16 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 			if (this.deploymentComponentDependencyGraphResponseTime.isSelected()) {
 				switch (this.deploymentComponentDependencyGraphResponseTimeComboBox.getSelectedIndex()) {
 				case 0: // ns
-					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_NS);
+					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_NS);
 					break;
 				case 1: // us
-					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_US);
+					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_US);
 					break;
 				case 2: // ms
-					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_MS);
+					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS);
 					break;
 				case 3: // s
-					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_S);
+					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S);
 					break;
 				default:
 					// default not required nevertheless added because of PMD
@@ -391,16 +392,16 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 			if (this.assemblyComponentDependencyGraphResponseTime.isSelected()) {
 				switch (this.assemblyComponentDependencyGraphResponseTimeComboBox.getSelectedIndex()) {
 				case 0: // ns
-					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_NS);
+					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_NS);
 					break;
 				case 1: // us
-					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_US);
+					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_US);
 					break;
 				case 2: // ms
-					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_MS);
+					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS);
 					break;
 				case 3: // s
-					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_S);
+					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S);
 					break;
 				default:
 					// default not required nevertheless added because of PMD
@@ -417,16 +418,16 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 			if (this.deploymentOperationDependencyGraphResponseTime.isSelected()) {
 				switch (this.deploymentOperationDependencyGraphResponseTimeComboBox.getSelectedIndex()) {
 				case 0: // ns
-					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_NS);
+					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_NS);
 					break;
 				case 1: // us
-					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_US);
+					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_US);
 					break;
 				case 2: // ms
-					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_MS);
+					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS);
 					break;
 				case 3: // s
-					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_S);
+					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S);
 					break;
 				default:
 					// default not required nevertheless added because of PMD
@@ -439,16 +440,16 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 			if (this.assemblyOperationDependencyGraphResponseTime.isSelected()) {
 				switch (this.assemblyOperationDependencyGraphResponseTimeComboBox.getSelectedIndex()) {
 				case 0: // ns
-					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_NS);
+					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_NS);
 					break;
 				case 1: // us
-					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_US);
+					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_US);
 					break;
 				case 2: // ms
-					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_MS);
+					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS);
 					break;
 				case 3: // s
-					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_S);
+					parameters.add(VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S);
 					break;
 				default:
 					// default not required nevertheless added because of PMD

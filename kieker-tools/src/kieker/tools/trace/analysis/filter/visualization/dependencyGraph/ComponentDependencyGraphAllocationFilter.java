@@ -22,55 +22,52 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.tools.trace.analysis.Constants;
 import kieker.tools.trace.analysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.trace.analysis.filter.IGraphOutputtingFilter;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.trace.analysis.systemModel.AbstractMessage;
 import kieker.tools.trace.analysis.systemModel.AllocationComponent;
-import kieker.tools.trace.analysis.systemModel.ExecutionContainer;
 import kieker.tools.trace.analysis.systemModel.MessageTrace;
 import kieker.tools.trace.analysis.systemModel.SynchronousReplyMessage;
-import kieker.tools.trace.analysis.systemModel.repository.ExecutionEnvironmentRepository;
+import kieker.tools.trace.analysis.systemModel.repository.AllocationRepository;
 import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool<br>
- * 
- * This class has exactly one input port named "in". The data which is send to
- * this plugin is not delegated in any way.
- * 
- * @author Andre van Hoorn, Lena Stoever, Matthias Rohr,
- * 
- * @since 1.1
+ *
+ * This class has exactly one input port named "in". The produced graph is emitted through
+ * the single output port.
+ *
+ * @author Andre van Hoorn, Lena Stoever, Matthias Rohr, Jan Waller
+ *
+ *
+ * @since 0.95a
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
-public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilter<ExecutionContainer> {
+public class ComponentDependencyGraphAllocationFilter extends AbstractDependencyGraphFilter<AllocationComponent> {
 
-	private static final String CONFIGURATION_NAME = Constants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME;
+	private static final String CONFIGURATION_NAME = VisualizationConstants.PLOTALLOCATIONCOMPONENTDEPGRAPH_COMPONENT_NAME;
 
 	/**
-	 * Creates a new filter using the given parameters.
-	 * 
+	 * Creates a new filter using the given configuration.
+	 *
 	 * @param configuration
 	 *            The configuration to use.
 	 * @param projectContext
 	 *            The project context to use.
 	 */
-	public ContainerDependencyGraphFilter(final Configuration configuration, final IProjectContext projectContext) {
-		super(configuration, projectContext, new ContainerDependencyGraph(ExecutionEnvironmentRepository.ROOT_EXECUTION_CONTAINER));
+	public ComponentDependencyGraphAllocationFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext, new ComponentAllocationDependencyGraph(AllocationRepository.ROOT_ALLOCATION_COMPONENT));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	@InputPort(
-			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
-			description = "Receives the message traces to be processed",
-			eventTypes = { MessageTrace.class })
+	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Message traces", eventTypes = { MessageTrace.class })
 	public void inputMessageTraces(final MessageTrace t) {
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
 			if (m instanceof SynchronousReplyMessage) {
@@ -78,30 +75,43 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 			}
 			final AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
 			final AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
-			final ExecutionContainer senderContainer = senderComponent.getExecutionContainer();
-			final ExecutionContainer receiverContainer = receiverComponent.getExecutionContainer();
-			DependencyGraphNode<ExecutionContainer> senderNode = this.getGraph().getNode(senderContainer.getId());
-			DependencyGraphNode<ExecutionContainer> receiverNode = this.getGraph().getNode(receiverContainer.getId());
+			DependencyGraphNode<AllocationComponent> senderNode = this.getGraph().getNode(senderComponent.getId());
+			DependencyGraphNode<AllocationComponent> receiverNode = this.getGraph().getNode(receiverComponent.getId());
 
 			if (senderNode == null) {
-				senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer, t.getTraceInformation(),
+				senderNode = new DependencyGraphNode<>(senderComponent.getId(), senderComponent, t.getTraceInformation(),
 						this.getOriginRetentionPolicy());
-				this.getGraph().addNode(senderContainer.getId(), senderNode);
+
+				if (m.getSendingExecution().isAssumed()) {
+					senderNode.setAssumed();
+				}
+
+				this.getGraph().addNode(senderNode.getId(), senderNode);
 			} else {
 				this.handleOrigin(senderNode, t.getTraceInformation());
 			}
 
 			if (receiverNode == null) {
-				receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer, t.getTraceInformation(),
+				receiverNode = new DependencyGraphNode<>(receiverComponent.getId(), receiverComponent, t.getTraceInformation(),
 						this.getOriginRetentionPolicy());
-				this.getGraph().addNode(receiverContainer.getId(), receiverNode);
+
+				if (m.getReceivingExecution().isAssumed()) {
+					receiverNode.setAssumed();
+				}
+
+				this.getGraph().addNode(receiverNode.getId(), receiverNode);
 			} else {
 				this.handleOrigin(receiverNode, t.getTraceInformation());
 			}
 
-			senderNode.addOutgoingDependency(receiverNode, t.getTraceInformation(), this.getOriginRetentionPolicy());
-			receiverNode.addIncomingDependency(senderNode, t.getTraceInformation(), this.getOriginRetentionPolicy());
+			final boolean assumed = this.isDependencyAssumed(senderNode, receiverNode);
+
+			senderNode.addOutgoingDependency(receiverNode, assumed, t.getTraceInformation(), this.getOriginRetentionPolicy());
+			receiverNode.addIncomingDependency(senderNode, assumed, t.getTraceInformation(), this.getOriginRetentionPolicy());
+
+			this.invokeDecorators(m, senderNode, receiverNode);
 		}
+
 		this.reportSuccess(t.getTraceId());
 	}
 
@@ -112,5 +122,4 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 	public String getConfigurationName() {
 		return CONFIGURATION_NAME;
 	}
-
 }

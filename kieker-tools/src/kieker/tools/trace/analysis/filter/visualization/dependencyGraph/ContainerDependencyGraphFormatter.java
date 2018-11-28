@@ -16,31 +16,35 @@
 
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
-import kieker.tools.trace.analysis.Constants;
 import kieker.tools.trace.analysis.filter.visualization.AbstractGraphFormatter;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.filter.visualization.util.dot.DotFactory;
-import kieker.tools.trace.analysis.systemModel.AssemblyComponent;
+import kieker.tools.trace.analysis.systemModel.ExecutionContainer;
 
 /**
- * Formatter class for component dependency graphs on the assembly level (see {@link ComponentAssemblyDependencyGraph}).
+ * Formatter for container dependency graphs.
  *
  * @author Holger Knoche
  *
  * @since 1.6
  */
-public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponentDependencyGraphFormatter<ComponentAssemblyDependencyGraph> {
+public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFormatter<ContainerDependencyGraph> {
 
-	private static final String DEFAULT_FILE_NAME = Constants.ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
+	private static final String DEFAULT_FILE_NAME = VisualizationConstants.CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX + VisualizationConstants.DOT_FILE_SUFFIX;
 
 	/**
 	 * Creates a new formatter.
 	 */
-	public ComponentAssemblyDependencyGraphFormatter() {
+	public ContainerDependencyGraphFormatter() {
 		// empty default constructor
 	}
 
+	static String createExecutionContainerNodeLabel(final ExecutionContainer container) { // NOPMD package for outer class
+		return AbstractDependencyGraphFormatter.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + container.getName();
+	}
+
 	@Override
-	protected String formatDependencyGraph(final ComponentAssemblyDependencyGraph graph, final boolean includeWeights, final boolean useShortLabels,
+	protected String formatDependencyGraph(final ContainerDependencyGraph graph, final boolean includeWeights, final boolean useShortLabels,
 			final boolean plotLoops) {
 		final StringBuilder builder = new StringBuilder();
 
@@ -59,59 +63,43 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 	/**
 	 * @author Holger Knoche
 	 */
-	private static class FormatterVisitor extends AbstractDependencyGraphFormatterVisitor<AssemblyComponent> {
+	private static class FormatterVisitor extends AbstractDependencyGraphFormatterVisitor<ExecutionContainer> {
 
 		public FormatterVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
 			super(builder, includeWeights, plotLoops, useShortLabels);
 		}
 
-		private String createNodeLabel(final DependencyGraphNode<AssemblyComponent> vertex, final AssemblyComponent component) {
-			final StringBuilder builder = new StringBuilder();
-
-			builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ASSEMBLY_COMPONENT).append("\\n")
-			       .append(component.getName()).append(':');
-
-			if (this.useShortLabels) {
-				builder.append("..").append(component.getType().getTypeName());
-			} else {
-				builder.append(component.getType().getFullQualifiedName());
-			}
-
-			AbstractGraphFormatter.formatDecorations(builder, vertex);
-
-			return builder.toString();
-		}
-
 		@Override
-		public void visitVertex(final DependencyGraphNode<AssemblyComponent> vertex) {
-			final AssemblyComponent component = vertex.getEntity();
+		public void visitVertex(final DependencyGraphNode<ExecutionContainer> vertex) {
+			final ExecutionContainer container = vertex.getEntity();
 
-			if (component.isRootComponent()) {
-				this.builder.append(DotFactory.createNode("", AbstractDependencyGraphFormatter.createNodeId(vertex),
-						component.getName(),
-						DotFactory.DOT_SHAPE_NONE, // NOCS
-						null, // style // NOCS // NOPMD (null)
+			if (container.isRootContainer()) {
+				this.builder.append(DotFactory.createNode("",
+						AbstractDependencyGraphFormatter.createNodeId(vertex),
+						container.getName(),
+						DotFactory.DOT_SHAPE_NONE,
+						null,
 						null, // framecolor
-						null, // fillcolor // NOCS //NOPMD (null)
+						null, // fillcolor // NOPMD (null) // NOCS
 						null, // fontcolor
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
 						null, // misc
 						null)); // tooltip
 			} else {
-				this.builder.append(DotFactory.createNode("", AbstractDependencyGraphFormatter.createNodeId(vertex),
-						this.createNodeLabel(vertex, component), // NOCS
-						DotFactory.DOT_SHAPE_BOX, // NOCS
-						DotFactory.DOT_STYLE_FILLED, // style // NOCS // NOPMD (null)
+				this.builder.append(DotFactory.createNode("",
+						AbstractDependencyGraphFormatter.createNodeId(vertex),
+						ContainerDependencyGraphFormatter.createExecutionContainerNodeLabel(container),
+						DotFactory.DOT_SHAPE_BOX3D, // NOCS (AvoidInlineConditionalsCheck)
+						DotFactory.DOT_STYLE_FILLED, // style // NOPMD (null) // NOCS (AvoidInlineConditionalsCheck)
 						AbstractGraphFormatter.getDotRepresentation(vertex.getColor()), // framecolor
-						AbstractDependencyGraphFormatter.getNodeFillColor(vertex), // fillcolor // NOCS //NOPMD (null)
+						DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor // NOPMD (null) // NOCS
 						null, // fontcolor
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
 						null, // misc
 						vertex.getDescription())); // tooltip
 			}
-
 			this.builder.append("\n");
 		}
 	}

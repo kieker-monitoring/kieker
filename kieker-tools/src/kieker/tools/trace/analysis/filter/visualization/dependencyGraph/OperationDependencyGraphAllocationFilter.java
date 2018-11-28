@@ -22,52 +22,58 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.tools.trace.analysis.Constants;
 import kieker.tools.trace.analysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.trace.analysis.filter.IGraphOutputtingFilter;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.trace.analysis.systemModel.AbstractMessage;
 import kieker.tools.trace.analysis.systemModel.AllocationComponent;
 import kieker.tools.trace.analysis.systemModel.MessageTrace;
+import kieker.tools.trace.analysis.systemModel.Operation;
 import kieker.tools.trace.analysis.systemModel.SynchronousReplyMessage;
+import kieker.tools.trace.analysis.systemModel.repository.AbstractSystemSubRepository;
+import kieker.tools.trace.analysis.systemModel.repository.AllocationComponentOperationPairFactory;
 import kieker.tools.trace.analysis.systemModel.repository.AllocationRepository;
+import kieker.tools.trace.analysis.systemModel.repository.OperationRepository;
 import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.trace.analysis.systemModel.util.AllocationComponentOperationPair;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool<br>
- * 
- * This class has exactly one input port named "in". The produced graph is emitted through
- * the single output port.
- * 
- * @author Andre van Hoorn, Lena Stoever, Matthias Rohr, Jan Waller
- * 
- * 
- * @since 0.95a
+ *
+ * This class has exactly one input port named "in". The data which is send to
+ * this plugin is not delegated in any way.
+ *
+ * @author Andre van Hoorn, Lena Stoever, Matthias Rohr,
+ *
+ * @since 1.1
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
-public class ComponentDependencyGraphAllocationFilter extends AbstractDependencyGraphFilter<AllocationComponent> {
+public class OperationDependencyGraphAllocationFilter extends AbstractDependencyGraphFilter<AllocationComponentOperationPair> {
 
-	private static final String CONFIGURATION_NAME = Constants.PLOTALLOCATIONCOMPONENTDEPGRAPH_COMPONENT_NAME;
+	private static final String CONFIGURATION_NAME = VisualizationConstants.PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME;
 
 	/**
-	 * Creates a new filter using the given configuration.
-	 * 
+	 * Creates a new filter using the given parameters.
+	 *
 	 * @param configuration
 	 *            The configuration to use.
 	 * @param projectContext
 	 *            The project context to use.
 	 */
-	public ComponentDependencyGraphAllocationFilter(final Configuration configuration, final IProjectContext projectContext) {
-		super(configuration, projectContext, new ComponentAllocationDependencyGraph(AllocationRepository.ROOT_ALLOCATION_COMPONENT));
+	public OperationDependencyGraphAllocationFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext, new OperationAllocationDependencyGraph(new AllocationComponentOperationPair(
+				AbstractSystemSubRepository.ROOT_ELEMENT_ID, OperationRepository.ROOT_OPERATION, AllocationRepository.ROOT_ALLOCATION_COMPONENT)));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Message traces", eventTypes = { MessageTrace.class })
+	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed",
+			eventTypes = { MessageTrace.class })
 	public void inputMessageTraces(final MessageTrace t) {
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
 			if (m instanceof SynchronousReplyMessage) {
@@ -75,11 +81,31 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 			}
 			final AllocationComponent senderComponent = m.getSendingExecution().getAllocationComponent();
 			final AllocationComponent receiverComponent = m.getReceivingExecution().getAllocationComponent();
-			DependencyGraphNode<AllocationComponent> senderNode = this.getGraph().getNode(senderComponent.getId());
-			DependencyGraphNode<AllocationComponent> receiverNode = this.getGraph().getNode(receiverComponent.getId());
+			final int rootOperationId = OperationRepository.ROOT_OPERATION.getId();
+			final Operation senderOperation = m.getSendingExecution().getOperation();
+			final Operation receiverOperation = m.getReceivingExecution().getOperation();
+			// The following two get-calls to the factory return s.th. in either case
+			final AllocationComponentOperationPairFactory pairFactory = this.getSystemEntityFactory().getAllocationPairFactory();
 
+			final AllocationComponentOperationPair senderPair;
+			if (senderOperation.getId() == rootOperationId) {
+				senderPair = this.getGraph().getRootNode().getEntity();
+			} else {
+				senderPair = pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
+			}
+
+			final AllocationComponentOperationPair receiverPair;
+			if (receiverOperation.getId() == rootOperationId) {
+				receiverPair = this.getGraph().getRootNode().getEntity();
+			} else {
+				receiverPair = pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
+			}
+
+			DependencyGraphNode<AllocationComponentOperationPair> senderNode = this.getGraph().getNode(senderPair
+					.getId());
+			DependencyGraphNode<AllocationComponentOperationPair> receiverNode = this.getGraph().getNode(receiverPair.getId());
 			if (senderNode == null) {
-				senderNode = new DependencyGraphNode<AllocationComponent>(senderComponent.getId(), senderComponent, t.getTraceInformation(),
+				senderNode = new DependencyGraphNode<>(senderPair.getId(), senderPair, t.getTraceInformation(),
 						this.getOriginRetentionPolicy());
 
 				if (m.getSendingExecution().isAssumed()) {
@@ -92,7 +118,7 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 			}
 
 			if (receiverNode == null) {
-				receiverNode = new DependencyGraphNode<AllocationComponent>(receiverComponent.getId(), receiverComponent, t.getTraceInformation(),
+				receiverNode = new DependencyGraphNode<>(receiverPair.getId(), receiverPair, t.getTraceInformation(),
 						this.getOriginRetentionPolicy());
 
 				if (m.getReceivingExecution().isAssumed()) {
@@ -111,7 +137,6 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 
 			this.invokeDecorators(m, senderNode, receiverNode);
 		}
-
 		this.reportSuccess(t.getTraceId());
 	}
 
@@ -122,4 +147,5 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 	public String getConfigurationName() {
 		return CONFIGURATION_NAME;
 	}
+
 }

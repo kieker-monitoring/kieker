@@ -5,6 +5,10 @@ configurations {
     resultJar
 }
 
+// Since the analysis component requires JRE 1.8, this "tools component" requires JRE 1.8, too.
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 dependencies {
 	clover 'org.openclover:clover:4.2.0'
 

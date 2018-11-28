@@ -16,8 +16,6 @@
 
 package kieker.tools.trace.analysis;
 
-import org.apache.commons.cli.Options;
-
 /**
  * Externalized Strings from {@link TraceAnalysisTool}.
  *
@@ -76,23 +74,7 @@ public final class Constants {
 	public static final String CMD_OPT_NAME_MAXTRACEDURATION = "max-trace-duration";
 	public static final String CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE = "ignore-executions-before-date";
 	public static final String CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE = "ignore-executions-after-date";
-	/** The prefix for the files of the allocation sequence diagram. */
-	public static final String ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX = "deploymentSequenceDiagram";
-	/** The prefix for the files of the assembly sequence diagram. */
-	public static final String ASSEMBLY_SEQUENCE_DIAGRAM_FN_PREFIX = "assemblySequenceDiagram";
-	/** The prefix for the files of the allocation component dependency graphs. */
-	public static final String ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX = "deploymentComponentDependencyGraph";
-	/** The prefix for the files of the assembly component dependency graphs. */
-	public static final String ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX = "assemblyComponentDependencyGraph";
-	/** The prefix for the files of the container dependency graphs. */
-	public static final String CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX = "containerDependencyGraph";
-	/** The prefix for the files of the allocation operation dependency graphs. */
-	public static final String ALLOCATION_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX = "deploymentOperationDependencyGraph";
-	public static final String ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX = "assemblyOperationDependencyGraph";
-	public static final String AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX = "aggregatedDeploymentCallTree";
-	public static final String AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX = "aggregatedAssemblyCallTree";
-	/** The suffix for dot files. */
-	public static final String DOT_FILE_SUFFIX = ".dot";
+
 	/** The prefix for the call tree files. */
 	public static final String CALL_TREE_FN_PREFIX = "callTree";
 	/** The name prefix for the message traces files. */
@@ -116,32 +98,12 @@ public final class Constants {
 	public static final String EVENTRECORDTRACERECONSTR_COMPONENT_NAME = "Trace reconstruction (trace event records -> event record traces)";
 	/** The name of the component for the trace reconstruction of event record traces. */
 	public static final String EXECTRACESFROMEVENTTRACES_COMPONENT_NAME = "Trace reconstruction (event record traces -> execution traces)";
-	/** The name of the component for the trace reconstruction of event records. */
-	public static final String EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME = "Trace reconstruction (event records -> event record traces)";
-	public static final String PRINTMSGTRACE_COMPONENT_NAME = "Print message traces";
-	public static final String PRINTEXECTRACE_COMPONENT_NAME = "Print execution traces";
-	public static final String PRINTINVALIDEXECTRACE_COMPONENT_NAME = "Print invalid execution traces";
-	public static final String PLOTALLOCATIONCOMPONENTDEPGRAPH_COMPONENT_NAME = "Component dependency graph (deployment level)";
-	public static final String PLOTASSEMBLYCOMPONENTDEPGRAPH_COMPONENT_NAME = "Component dependency graph (assembly level)";
-	public static final String PLOTCONTAINERDEPGRAPH_COMPONENT_NAME = "Container dependency graph";
-	public static final String PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME = "Operation dependency graph (deployment level)";
-	public static final String PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME = "Operation dependency graph (assembly level)";
-	public static final String PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME = "Sequence diagrams (deployment level)";
-	public static final String PLOTASSEMBLYSEQDIAGR_COMPONENT_NAME = "Sequence diagrams (assembly level)";
-	public static final String PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME = "Aggregated call tree (deployment level)";
-	public static final String PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME = "Aggregated call tree (assembly level)";
-	public static final String PLOTCALLTREE_COMPONENT_NAME = "Trace call trees";
-	public static final Options CMDL_OPTIONS = new Options();
 
 	public static final String DECORATORS_OPTION_NAME = "responseTimes-ns | responseTimes-us | responseTimes-ms | responseTimes-s> "
 			+ "<responseTimeColoring threshold(ms)";
 	public static final char DECORATOR_SEPARATOR = ',';
-	public static final String RESPONSE_TIME_DECORATOR_FLAG_NS = "responseTimes-ns";
-	public static final String RESPONSE_TIME_DECORATOR_FLAG_US = "responseTimes-us";
-	public static final String RESPONSE_TIME_DECORATOR_FLAG_MS = "responseTimes-ms";
-	public static final String RESPONSE_TIME_DECORATOR_FLAG_S = "responseTimes-s";
-	public static final String RESPONSE_TIME_COLORING_DECORATOR_FLAG = "responseTimeColoring";
 
+	public static final String RESPONSE_TIME_COLORING_DECORATOR_FLAG = "responseTimeColoring";
 	public static final String CMD_OPT_NAME_TRACE_COLORING = "traceColoring";
 	public static final String COLORING_FILE_OPTION_NAME = "color map file";
 
