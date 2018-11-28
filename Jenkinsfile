@@ -21,7 +21,7 @@ node('kieker-slave-docker') {
     }
 
     stage ('1-compile logs') {
-        sh 'docker run --rm -u `id -u` -v ' + env.WORKSPACE + ':/opt/kieker '+DOCKER_IMAGE_NAME+' /bin/bash -c "cd /opt/kieker; ./gradlew -S compileJava compileTestJava jar"'
+        sh 'docker run --rm -u `id -u` -v ' + env.WORKSPACE + ':/opt/kieker '+DOCKER_IMAGE_NAME+' /bin/bash -c "cd /opt/kieker; ./gradlew -S compileJava compileTestJava build"'
     }
 
     stage ('2-unit-test logs') {

@@ -3,7 +3,17 @@
 KIEKER_DIR="$1"
 OUTDIR="$2"
 EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141008-101258768-UTC
-TRACE_ANALYSIS_SH=${KIEKER_DIR}/bin/trace-analysis.sh
+
+TOOL_DIR=`mktemp -d`
+
+TAR_NAME="${KIEKER_DIR}/kieker-tools/trace-analysis/build/distributions/trace-analysis-*.tar"
+
+( cd ${TOOL_DIR} ; tar -xvpf ${TAR_NAME} )
+
+TOOL_NAME=`basename ${TAR_NAME} | sed 's/\.tar$//g'`
+
+TRACE_ANALYSIS_SH=${TOOL_DIR}/$TOOL_NAME/bin/trace-analysis
+
 FILE_CONVERTER_SH=${KIEKER_DIR}/bin/dotPic-fileConverter.sh
 
 # Should be enabled only if the reference pdfs shall be created (otherwise the release test script is broken):
