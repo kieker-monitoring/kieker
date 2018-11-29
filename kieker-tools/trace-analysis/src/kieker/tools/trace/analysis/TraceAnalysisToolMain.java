@@ -136,7 +136,7 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 		if (this.checkNotEmpty(this.parameterConfiguration.getSelectTraces()) && this.checkNotEmpty(this.parameterConfiguration.getFilterTraces())) {
 			LOGGER.error("Trace Id selection and filtering are mutually exclusive");
 			return false;
-		} else if (!this.parameterConfiguration.getSelectTraces().isEmpty()) {
+		} else if (this.parameterConfiguration.getSelectTraces() != null) {
 			final int numSelectedTraces = this.parameterConfiguration.getSelectTraces().size();
 			try {
 				for (final Long idStr : this.parameterConfiguration.getSelectTraces()) {
@@ -147,7 +147,7 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 				LOGGER.error("Failed to parse list of trace IDs: {}", this.parameterConfiguration.getSelectTraces().toArray().toString(), e);
 				return false;
 			}
-		} else if (!this.parameterConfiguration.getFilterTraces().isEmpty()) {
+		} else if (this.parameterConfiguration.getFilterTraces() != null) {
 			this.parameterConfiguration.setInvertTraceIdFilter(true);
 			final String[] traceIdList = this.parameterConfiguration.getFilterTraces().toArray(new String[this.parameterConfiguration.getFilterTraces().size()]);
 

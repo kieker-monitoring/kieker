@@ -18,7 +18,6 @@ package kieker.tools.trace.analysis;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -117,7 +116,7 @@ public class TraceAnalysisConfiguration {
 	private boolean help;
 
 	@Parameter(names = { "-i", CMD_INPUTDIRS }, variableArity = true, description = "Log directories to read data from")
-	private final List<File> inputDirs = new ArrayList<>();
+	private List<File> inputDirs;
 
 	@Parameter(names = { "-o", CMD_DIR }, required = true, description = "Directory for the generated file(s)")
 	private File outputDir;
@@ -132,10 +131,10 @@ public class TraceAnalysisConfiguration {
 	private boolean plotAssemblySequenceDiagrams;
 
 	@Parameter(names = { CMD_PLOT_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH }, description = "Generate and store a deployment-level component dependency graph (.dot)")
-	private final List<String> plotDeploymentComponentDependencyGraph = new ArrayList<>();
+	private List<String> plotDeploymentComponentDependencyGraph;
 
 	@Parameter(names = { CMD_PLOT_ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH }, description = "Generate and store an assembly-level component dependency graph (.dot)")
-	private final List<String> plotAssemblyComponentDependencyGraph = new ArrayList<>();
+	private List<String> plotAssemblyComponentDependencyGraph;
 
 	@Parameter(names = { CMD_PLOT_CONTAINER_DEPENDENCY_GRAPH }, description = "Generate and store a container dependency graph (.dot file)")
 	private boolean plotContainerDependencyGraph;
@@ -143,11 +142,11 @@ public class TraceAnalysisConfiguration {
 	@Parameter(names = {
 		CMD_PLOT_DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH }, variableArity = true,
 			description = "Generate and store a deployment-level operation dependency graph (.dot)")
-	private final List<String> plotDeploymentOperationDependencyGraph = new ArrayList<>();
+	private List<String> plotDeploymentOperationDependencyGraph;
 
 	@Parameter(names = {
 		CMD_PLOT_ASSEMBLY_OPERATION_DEPENDENCY_GRAPH }, variableArity = true, description = "Generate and store an assembly-level operation dependency graph (.dot)")
-	private final List<String> plotAssemblyOperationDependencyGraph = new ArrayList<>();
+	private List<String> plotAssemblyOperationDependencyGraph;
 
 	@Parameter(names = { CMD_PLOT_AGGREGATED_DEPLOYMENT_CALL_TREE }, description = "Generate and store an aggregated deployment-level call tree (.dot)")
 	private boolean plotAggregatedDeploymentCallTree;
@@ -178,11 +177,11 @@ public class TraceAnalysisConfiguration {
 
 	@Parameter(names = {
 		CMD_SELECT_TRACES }, variableArity = true, description = "Consider only the traces identified by the list of trace IDs. Defaults to all traces.")
-	private final List<Long> selectTraces = new ArrayList<>();
+	private List<Long> selectTraces;
 
 	@Parameter(names = {
 		CMD_FILTER_TRACES }, variableArity = true, description = "Consider only the traces not identified by the list of trace IDs. Defaults to no traces.")
-	private final List<Long> filterTraces = new ArrayList<>();
+	private List<Long> filterTraces;
 
 	@Parameter(names = { CMD_IGNORE_INVALID_TRACES }, description = "If selected, the execution aborts on the occurence of an invalid trace.")
 	private boolean ignoreInvalidTraces;

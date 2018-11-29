@@ -185,13 +185,13 @@ public class PerformAnalysis {
 
 			}
 
-			if (!this.settings.getPlotDeploymentComponentDependencyGraph().isEmpty()) {
+			if (this.settings.getPlotDeploymentComponentDependencyGraph() != null) {
 				numRequestedTasks++;
 				this.createPlotDeploymentComponentDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (!this.settings.getPlotAssemblyComponentDependencyGraph().isEmpty()) {
+			if (this.settings.getPlotAssemblyComponentDependencyGraph() != null) {
 				numRequestedTasks++;
 				this.createPlotAssemblyComponentDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
@@ -204,13 +204,13 @@ public class PerformAnalysis {
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (!this.settings.getPlotDeploymentOperationDependencyGraph().isEmpty()) {
+			if (this.settings.getPlotDeploymentOperationDependencyGraph() != null) {
 				numRequestedTasks++;
 				this.createPlotDeploymentOperationDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
 			}
 
-			if (!this.settings.getPlotAssemblyOperationDependencyGraph().isEmpty()) {
+			if (this.settings.getPlotAssemblyOperationDependencyGraph() != null) {
 				numRequestedTasks++;
 				this.createPlotAssemblyOperationDependencyGraph(allTraceProcessingComponents, allGraphProducers, mtReconstrFilter,
 						traceEvents2ExecutionAndMessageTraceFilter, systemEntityFactory);
