@@ -6,7 +6,7 @@ EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testd
 
 TOOL_DIR=`mktemp -d`
 
-TAR_NAME="${KIEKER_DIR}/tools/trace-analysis/build/distributions/trace-analysis-*.tar"
+TAR_NAME="${KIEKER_DIR}/tools/trace-analysis-1.14-SNAPSHOT.tar"
 
 ( cd ${TOOL_DIR} ; tar -xvpf ${TAR_NAME} )
 
