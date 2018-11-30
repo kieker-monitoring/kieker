@@ -708,6 +708,7 @@ def binaryContent = project.copySpec {
         include 'javadoc/**'
         include 'build/libs/*'
 
+        exclude 'bin/**/*.class'
         exclude '**/.gradle/**'
         exclude 'lib/static-analysis/'
         exclude 'bin/dev/release-check*'
