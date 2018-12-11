@@ -362,6 +362,7 @@ task copyScriptsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProje
 }
 
 task buildStandaloneExamplesAnalysisOpad(type: GradleBuild, dependsOn: [ 'copyLibsStandaloneExamplesAnalysisOpad', 'copyScriptsStandaloneExamplesAnalysisOpad' ]) {
+    println("++++++++++++++++++++++++++")
 	buildFile = 'analysis/opad-anomaly-detection/build.gradle'
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
