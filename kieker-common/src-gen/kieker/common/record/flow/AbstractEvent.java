@@ -37,7 +37,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	
 		
 	/** property declarations. */
-	private final long timestamp;
+	private long timestamp;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -104,4 +104,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		return this.timestamp;
 	}
 	
+	public final void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
 }
