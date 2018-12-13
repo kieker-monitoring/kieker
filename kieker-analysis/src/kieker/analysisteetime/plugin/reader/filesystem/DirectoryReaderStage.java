@@ -137,16 +137,20 @@ public class DirectoryReaderStage extends AbstractConsumerStage<File> {
 			deserializerClass = FSReaderUtil.findEventDeserializer(baseName);
 		}
 
-		try {
-			final AbstractDecompressionFilter decompressionFilter = decompressionClass.getConstructor(Configuration.class).newInstance(this.configuration);
-			final AbstractEventDeserializer deserializer =
-					deserializerClass.getConstructor(Configuration.class, ReaderRegistry.class).newInstance(this.configuration, registry);
-			deserializer.processDataStream(decompressionFilter.chainInputStream(inputStream), this.outputPort);
-		} catch (final IOException e) {
-			this.logger.error("Reading log file {} failed.", logFileName);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			this.logger.error("Cannot instantiate filter {} for decompression.", decompressionClass.getName());
+		if (deserializerClass != null) {
+			try {
+				final AbstractDecompressionFilter decompressionFilter = decompressionClass.getConstructor(Configuration.class).newInstance(this.configuration);
+				final AbstractEventDeserializer deserializer =
+						deserializerClass.getConstructor(Configuration.class, ReaderRegistry.class).newInstance(this.configuration, registry);
+				deserializer.processDataStream(decompressionFilter.chainInputStream(inputStream), this.outputPort);
+			} catch (final IOException e) {
+				this.logger.error("Reading log file {} failed.", logFileName);
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
+				this.logger.error("Cannot instantiate filter {} for decompression.", decompressionClass.getName());
+			}
+		} else {
+			this.logger.debug("Skipping file {}, as the extension indicates that it is not a log file.", logFileName);
 		}
 	}
 
