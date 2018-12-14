@@ -55,15 +55,16 @@ public class DirectoryScannerStageIntegrationTest {
 	private File[] directories;
 	private final List<File> results = new ArrayList<>();
 
+	/** Create test. */
 	public DirectoryScannerStageIntegrationTest() {
 		// default constructor
 	}
 
 	/**
-	 * @throws java.lang.Exception
+	 * @throws java.io.IOException on errors
 	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws IOException {
 		final File rootTempDirHandle = new File(System.getProperty("java.io.tmpdir"));
 		final Path treeA = Files.createTempDirectory(rootTempDirHandle.toPath(), "tree-A");
 		final Path treeB = Files.createTempDirectory(rootTempDirHandle.toPath(), "tree-B");
@@ -80,19 +81,21 @@ public class DirectoryScannerStageIntegrationTest {
 	}
 
 	private void createKiekerDirectory(final Path path) throws IOException {
-		path.toFile().mkdirs();
+		if (path.toFile().mkdirs()) {
+			if (!path.resolve(KIEKER_MAP_NAME).toFile().createNewFile()
+					|| !path.resolve(KIEKER_LOG_NAME).toFile().createNewFile()) {
+				Assert.fail("Cannot create file system.");
+			}
 
-		path.resolve(KIEKER_MAP_NAME).toFile().createNewFile();
-		path.resolve(KIEKER_LOG_NAME).toFile().createNewFile();
-
-		this.results.add(path.toFile());
+			this.results.add(path.toFile());
+		}
 	}
 
 	/**
-	 * @throws java.lang.Exception
+	 * @throws java.io.IOException on errors
 	 */
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() throws IOException {
 		for (final File directory : this.directories) {
 			this.deleteRecursively(directory.toPath());
 		}
@@ -146,7 +149,7 @@ public class DirectoryScannerStageIntegrationTest {
 	 *
 	 * @since 1.15
 	 */
-	private class RandomContentMatcher extends BaseMatcher<OutputPort<File>> {
+	private static class RandomContentMatcher extends BaseMatcher<OutputPort<File>> {
 
 		private final List<File> remainingResults;
 		private final List<File> results;
