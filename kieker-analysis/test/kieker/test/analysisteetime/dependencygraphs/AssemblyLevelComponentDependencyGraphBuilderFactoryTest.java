@@ -14,13 +14,16 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.dependencygraphs;
+package kieker.test.analysisteetime.dependencygraphs;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import kieker.analysisteetime.dependencygraphs.AssemblyLevelComponentDependencyGraphBuilder;
+import kieker.analysisteetime.dependencygraphs.AssemblyLevelComponentDependencyGraphBuilderFactory;
+import kieker.analysisteetime.dependencygraphs.IDependencyGraphBuilder;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.statistics.StatisticsModel;

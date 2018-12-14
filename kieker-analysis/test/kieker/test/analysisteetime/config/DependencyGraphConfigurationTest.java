@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.config;
+package kieker.test.analysisteetime.config;
 
 import java.io.File;
 import java.net.URL;
@@ -22,7 +22,9 @@ import java.time.temporal.ChronoUnit;
 
 import org.junit.Test;
 
-import kieker.analysisteetime.ExampleConfigurationTest;
+import kieker.analysisteetime.config.DependencyGraphConfiguration;
+
+import kieker.test.analysisteetime.ExampleConfigurationTest;
 
 import teetime.framework.Execution;
 

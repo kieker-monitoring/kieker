@@ -28,9 +28,9 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 
 /**
  * A starter method for this factory is implemented in kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactoryStarter.
- * 
+ *
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
- * 
+ *
  * @since 1.5
  */
 public final class BookstoreEventRecordFactory {
@@ -53,7 +53,7 @@ public final class BookstoreEventRecordFactory {
 	/**
 	 * Returns the "well-known" Bookstore trace as a list of {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered by its
 	 * {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}es.
-	 * 
+	 *
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
@@ -136,7 +136,7 @@ public final class BookstoreEventRecordFactory {
 	 * Returns the "well-known" Bookstore trace as a list of {@link CallOperationEvent}, {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered
 	 * by
 	 * its {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}es.
-	 * 
+	 *
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
@@ -246,7 +246,7 @@ public final class BookstoreEventRecordFactory {
 	 * Returns the "well-known" Bookstore trace as a list of {@link CallOperationEvent}, {@link BeforeOperationEvent} and {@link AfterOperationEvent} events, ordered
 	 * by
 	 * its {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}es. In this trace, <i>CRM.getOrders</i> is assumed not to be instrumented.
-	 * 
+	 *
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
@@ -255,7 +255,7 @@ public final class BookstoreEventRecordFactory {
 	 *            The session ID.
 	 * @param hostname
 	 *            The name of the host.
-	 * 
+	 *
 	 * @return A Bookstore trace.
 	 */
 	public static TraceEventRecords validSyncTraceAdditionalCallEventsGap(final long firstTimestamp, final long traceId, final String sessionId,
@@ -354,7 +354,7 @@ public final class BookstoreEventRecordFactory {
 	 * Returns a variant of the "well-known" Bookstore trace as a list of {@link CallOperationEvent}, {@link BeforeOperationEvent} and {@link AfterOperationEvent}
 	 * events, ordered by its {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}es. In this trace, <i>CRM.getOrders</i> and
 	 * <i>Catalog.getBook</i> are assumed not to be instrumented.
-	 * 
+	 *
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
@@ -363,7 +363,7 @@ public final class BookstoreEventRecordFactory {
 	 *            The session ID.
 	 * @param hostname
 	 *            The name of the host.
-	 * 
+	 *
 	 * @return A Bookstore trace.
 	 */
 	public static TraceEventRecords validSyncTraceSimpleEntryCallExit(final long firstTimestamp, final long traceId, final String sessionId,
@@ -413,7 +413,7 @@ public final class BookstoreEventRecordFactory {
 	 * Returns a variant the of "well-known" Bookstore trace as a list of {@link CallOperationEvent}, {@link BeforeOperationEvent} and {@link AfterOperationEvent}
 	 * events, ordered by its {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}es. In this trace, <i>CRM.getOrders</i> and
 	 * <i>Catalog.getBook</i> are assumed not to be instrumented.
-	 * 
+	 *
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
@@ -422,7 +422,7 @@ public final class BookstoreEventRecordFactory {
 	 *            The session ID.
 	 * @param hostname
 	 *            The name of the host for the trace.
-	 * 
+	 *
 	 * @return A Bookstore trace.
 	 */
 	public static TraceEventRecords validSyncTraceSimpleEntryCallReturnCallCallExit(final long firstTimestamp, final long traceId, final String sessionId,
@@ -484,7 +484,7 @@ public final class BookstoreEventRecordFactory {
 	 * Returns a variant of "well-known" Bookstore trace as a list of {@link CallOperationEvent}, {@link BeforeOperationEvent} and {@link AfterOperationEvent}
 	 * events, ordered by its {@link kieker.common.record.flow.trace.AbstractTraceEvent#getOrderIndex()}es. In this trace, <i>Catalog.getBook</i> is assumed
 	 * not to be instrumented.
-	 * 
+	 *
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
@@ -493,7 +493,7 @@ public final class BookstoreEventRecordFactory {
 	 *            The session ID.
 	 * @param hostname
 	 *            The name of the host for the trace.
-	 * 
+	 *
 	 * @return A Bookstore trace.
 	 */
 	public static TraceEventRecords validSyncTraceSimpleEntryCallCallExit(final long firstTimestamp, final long traceId, final String sessionId,
@@ -548,6 +548,15 @@ public final class BookstoreEventRecordFactory {
 		return new TraceEventRecords(trace, events);
 	}
 
+	/**
+	 * Valid synce trace simple call call.
+	 *
+	 * @param firstTimestamp first time stampe
+	 * @param traceId trace id
+	 * @param sessionId session id
+	 * @param hostname hostname
+	 * @return returns a set of trace events contained within TraceEventRecords
+	 */
 	public static TraceEventRecords validSyncTraceSimpleCallCall(final long firstTimestamp, final long traceId, final String sessionId, final String hostname) {
 		int curOrderIndex = -1;
 

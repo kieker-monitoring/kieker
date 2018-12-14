@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.signature;
+package kieker.test.analysisteetime.signature;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -23,6 +23,7 @@ import org.junit.Test;
 
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
+import kieker.analysisteetime.signature.JavaComponentSignatureExtractor;
 
 /**
  * @author Sören Henning

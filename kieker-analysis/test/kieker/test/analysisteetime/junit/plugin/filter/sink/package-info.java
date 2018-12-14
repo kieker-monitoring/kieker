@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.monitoring.probe.spring.flow;
-
-/**
- * Provides shared constants that are used by other REST filters and interceptors.
- *
- * @author Teerat Pitakrat, Thomas Duellmann
- *
- * @since 1.13
- */
-public class RestConstants {
-	/**
-	 * Name of the header field that is used to store the Kieker tracing information in HTTP requests and responses.
-	 */
-	protected static final String HEADER_FIELD = "KiekerTracingInfo";
-
-	protected RestConstants() {
-		// default constructor
-	}
-
-}
+package kieker.test.analysisteetime.junit.plugin.filter.sink;
