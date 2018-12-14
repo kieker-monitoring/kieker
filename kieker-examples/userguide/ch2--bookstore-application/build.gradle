@@ -1,6 +1,12 @@
 apply plugin: 'application'
 apply plugin: 'eclipse'
 
+eclipse {
+  project {
+    name = 'Kieker Example 1 ch2--bookstore-application'
+  }
+}
+
 // Simplify the JAR's file name
 archivesBaseName = 'BookstoreApplication'
 version = ''
