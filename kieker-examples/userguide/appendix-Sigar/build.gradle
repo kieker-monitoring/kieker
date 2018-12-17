@@ -10,6 +10,12 @@ dependencies {
 	}
 }
 
+eclipse {
+  project {
+    name = 'Kieker Example 6 appendix-Sigar'
+  }
+}
+
 // Simplify the JAR's file name
 archivesBaseName = 'SigarMonitoringAnalysis'
 version = ''
