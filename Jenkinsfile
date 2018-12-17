@@ -27,10 +27,10 @@ pipeline {
         }
       }
       steps {
-        echo "BRANCH_NAME: $env.BRANCH_NAME"
-        echo "CHANGE_TARGET: $env.CHANGE_TARGET"
-        echo "NODE_NAME: $env.NODE_NAME"
-        echo "NODE_LABELS: $env.NODE_LABELS"
+        echo "BRANCH_NAME: ${BRANCH_NAME}"
+        echo "CHANGE_TARGET: ${CHANGE_TARGET}"
+        echo "NODE_NAME: ${NODE_NAME}"
+        echo "NODE_LABELS: ${NODE_LABELS}"
         error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
       }
     }
@@ -139,7 +139,7 @@ pipeline {
   }
 
   post {
-    always {
+    cleanup {
       deleteDir()
     }
 
