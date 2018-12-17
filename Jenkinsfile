@@ -97,12 +97,13 @@ pipeline {
 
         stage('Release Check Extended') {
           when {
+            beforeAgent true
             branch 'master'
           }
           steps {
             dir(env.WORKSPACE) {
               echo "We are in master - executing the extended release archive check."
-              sh './gradlew checkReleaseArchives -x test -x check '
+              sh './gradlew checkReleaseArchives'
             }
           }
         }
@@ -111,6 +112,7 @@ pipeline {
 
     stage('Push to Stable') {
       when {
+        beforeAgent true
         branch 'master'
       }
       steps {
@@ -122,7 +124,8 @@ pipeline {
     }
 
     stage('Upload Snapshot Version') {
-      when {
+      when { 
+        beforeAgent true
         branch 'master'
       }
       steps {
@@ -141,8 +144,8 @@ pipeline {
     }
 
     failure {
-      mail to: 'ci@kieker-monitoring.net', subject: 'Pipeline outcome has changed.', body: '''
-      Dear Kieker Developers,
+      mail to: env.CHANGE_AUTHOR_EMAIL, subject: 'Pipeline build $BRANCH_NAME:$BUILD_NUMBER failed.', body: '''
+      Dear $CHANGE_AUTHOR,
       unfortunately, the Kieker build $BUILD_NUMBER for branch $BRANCH_NAME failed.
       More details can be found at $BUILD_URL.
       Best,
