@@ -11,6 +11,12 @@ dependencies {
   }
 }
 
+eclipse {
+  project {
+    name = 'Kieker Example 5 appendix-JMS'
+  }
+}
+
 def monitoringConfigurationActiveMQ = 'META-INF/kieker.monitoring.properties-activemq'
 
 // Simplify the JAR's file name
