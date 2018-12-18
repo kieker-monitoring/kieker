@@ -14,12 +14,14 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.util;
+package kieker.test.analysisteetime.util;
 
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import kieker.analysisteetime.util.RunningMedian;
 
 /**
  * @author Sören Henning

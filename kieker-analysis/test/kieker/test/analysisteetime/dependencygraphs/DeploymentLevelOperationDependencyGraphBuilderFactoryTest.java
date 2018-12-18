@@ -14,13 +14,16 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.dependencygraphs;
+package kieker.test.analysisteetime.dependencygraphs;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependencyGraphBuilder;
+import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependencyGraphBuilderFactory;
+import kieker.analysisteetime.dependencygraphs.IDependencyGraphBuilder;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
 import kieker.analysisteetime.statistics.StatisticsModel;
@@ -30,19 +33,19 @@ import kieker.analysisteetime.statistics.StatisticsModel;
  *
  * @since 1.14
  */
-public class TypeLevelOperationDependencyGraphBuilderFactoryTest {
+public class DeploymentLevelOperationDependencyGraphBuilderFactoryTest {
 
-	private TypeLevelOperationDependencyGraphBuilderFactory factory;
+	private DeploymentLevelOperationDependencyGraphBuilderFactory factory;
 	private final ExecutionModel executionModel = ExecutionFactory.eINSTANCE.createExecutionModel();
 	private final StatisticsModel statisticsModel = new StatisticsModel();
 
-	public TypeLevelOperationDependencyGraphBuilderFactoryTest() {
+	public DeploymentLevelOperationDependencyGraphBuilderFactoryTest() {
 		super();
 	}
 
 	@Before
 	public void setUp() throws Exception {
-		this.factory = new TypeLevelOperationDependencyGraphBuilderFactory();
+		this.factory = new DeploymentLevelOperationDependencyGraphBuilderFactory();
 	}
 
 	@After
@@ -56,7 +59,7 @@ public class TypeLevelOperationDependencyGraphBuilderFactoryTest {
 	@Test
 	public void testCreateDependencyGraphBuilder() {
 		final IDependencyGraphBuilder graphBuilder = this.factory.createDependencyGraphBuilder(this.executionModel, this.statisticsModel);
-		Assert.assertTrue(graphBuilder instanceof TypeLevelOperationDependencyGraphBuilder);
+		Assert.assertTrue(graphBuilder instanceof DeploymentLevelOperationDependencyGraphBuilder);
 	}
 
 }

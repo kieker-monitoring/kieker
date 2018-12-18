@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime;
+package kieker.test.analysisteetime;
 
 import java.util.ArrayList;
 import java.util.Arrays;
