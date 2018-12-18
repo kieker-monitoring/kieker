@@ -14,12 +14,14 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime;
+package kieker.test.analysisteetime;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import kieker.analysisteetime.HostnameRepository;
 
 /**
  * @author Sören Henning
