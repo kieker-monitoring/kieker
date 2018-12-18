@@ -21,10 +21,7 @@ pipeline {
   stages {
     stage('Precheck') {
       when {
-        expression {
-          // if this is a PR against the 'stable' branch
-          (env.CHANGE_TARGET != null) && (env.CHANGE_TARGET == 'stable')
-        }
+        changeRequest target: 'stable'
       }
       steps {
         echo "BRANCH_NAME: ${BRANCH_NAME}"
@@ -117,12 +114,12 @@ pipeline {
     */
 
     stage('Archive Artifacts') {
-      // Archive artifacts if (in master or *-RC branch) and NOT in pull request.
+      // Archive artifacts if in master or *-RC branch.
       when {
         beforeAgent true
         anyOf {
           branch 'master'
-          expression { branch '.*-RC$' }
+          branch '*-RC'
         }
       }
       steps {
