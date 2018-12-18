@@ -80,16 +80,20 @@ pipeline {
       steps {
         dir(env.WORKSPACE) {
           sh './gradlew distribute'
+          //stash includes: 'build/distributions/*', name: 'distribution'
           archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true, onlyIfSuccessful: true
         }
       }
     }
 
+    /*
     stage('Release Checks') {
       parallel {
+    */
         stage('Release Check Short') {
           steps {
             dir(env.WORKSPACE) {
+              //unstash 'distribution'
               sh './gradlew checkReleaseArchivesShort'
             }
           }
@@ -103,12 +107,15 @@ pipeline {
           steps {
             dir(env.WORKSPACE) {
               echo "We are in master - executing the extended release archive check."
+              //unstash 'distribution'
               sh './gradlew checkReleaseArchives'
             }
           }
         }
+    /*
       }
     }
+    */
 
     stage('Push to Stable') {
       when {
@@ -145,7 +152,7 @@ pipeline {
 
     failure {
       mail to: env.CHANGE_AUTHOR_EMAIL, subject: "Pipeline build ${BRANCH_NAME}:${BUILD_NUMBER} failed.", body: """
-      Dear $CHANGE_AUTHOR,
+      Dear ${CHANGE_AUTHOR},
       unfortunately, the Kieker build ${BUILD_NUMBER} for branch ${BRANCH_NAME} failed.
       More details can be found at ${BUILD_URL}.
       Best,
