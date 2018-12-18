@@ -81,8 +81,24 @@ pipeline {
         dir(env.WORKSPACE) {
           sh './gradlew distribute'
           //stash includes: 'build/distributions/*', name: 'distribution'
-          archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true, onlyIfSuccessful: true
         }
+      }
+    }
+
+    stage('Archive Artifacts') {
+      // Archive artifacts if (in master or *-RC branch) and NOT in pull request.
+      when {
+        beforeAgent true
+        allOf {
+          anyOf {
+            branch 'master'
+            expression { branch '.*-RC$' }
+          }
+          expression { env.CHANGE_TARGET == null }
+        }
+      }
+      steps {
+        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true, onlyIfSuccessful: true
       }
     }
 
@@ -160,7 +176,6 @@ pipeline {
       """
     }
     //changed  {}
-    //failure  {}
     //success  {}
     //unstable {}
   }
