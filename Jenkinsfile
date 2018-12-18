@@ -148,7 +148,7 @@ pipeline {
 
     failure {
       mail to: env.CHANGE_AUTHOR_EMAIL, subject: "Pipeline build ${BRANCH_NAME}:${BUILD_NUMBER} failed.", body: """
-      Dear $CHANGE_AUTHOR,
+      Dear ${CHANGE_AUTHOR},
       unfortunately, the Kieker build ${BUILD_NUMBER} for branch ${BRANCH_NAME} failed.
       More details can be found at ${BUILD_URL}.
       Best,
