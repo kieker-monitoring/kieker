@@ -20,6 +20,12 @@ dependencies {
   }
 }
 
+eclipse {
+  project {
+    name = 'Kieker Example 5 appendix-AMQP'
+  }
+}
+
 def monitoringConfigurationAMQP = 'META-INF/kieker.monitoring.properties'
 
 // Simplify the JAR's file name
