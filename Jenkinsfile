@@ -85,23 +85,6 @@ pipeline {
       }
     }
 
-    stage('Archive Artifacts') {
-      // Archive artifacts if (in master or *-RC branch) and NOT in pull request.
-      when {
-        beforeAgent true
-        allOf {
-          anyOf {
-            branch 'master'
-            expression { branch '.*-RC$' }
-          }
-          expression { env.CHANGE_TARGET == null }
-        }
-      }
-      steps {
-        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true, onlyIfSuccessful: true
-      }
-    }
-
     /*
     stage('Release Checks') {
       parallel {
@@ -132,6 +115,20 @@ pipeline {
       }
     }
     */
+
+    stage('Archive Artifacts') {
+      // Archive artifacts if (in master or *-RC branch) and NOT in pull request.
+      when {
+        beforeAgent true
+        anyOf {
+          branch 'master'
+          expression { branch '.*-RC$' }
+        }
+      }
+      steps {
+        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true, onlyIfSuccessful: true
+      }
+    }
 
     stage('Push to Stable') {
       when {
