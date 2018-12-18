@@ -802,7 +802,7 @@ task checkReleaseArchivesShort(type: Exec, dependsOn: [distribute]) {
     commandLine 'bin/dev/release-check-short.sh'
 }
 
-task checkReleaseArchives(type: Exec, dependsOn: [checkReleaseArchivesShort]) {
+task checkReleaseArchives(type: Exec, dependsOn: [distribute]) {
     commandLine 'bin/dev/release-check-extended.sh'
 }
 
