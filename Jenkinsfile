@@ -81,51 +81,32 @@ pipeline {
       steps {
         dir(env.WORKSPACE) {
           sh './gradlew distribute'
-          //stash includes: 'build/distributions/*', name: 'distribution'
         }
       }
     }
 
-    /*
-    stage('Release Checks') {
-      parallel {
-    */
-        stage('Release Check Short') {
-          steps {
-            dir(env.WORKSPACE) {
-              //unstash 'distribution'
-              sh './gradlew checkReleaseArchivesShort'
-            }
-          }
+    stage('Release Check Short') {
+      steps {
+        dir(env.WORKSPACE) {
+          sh './gradlew checkReleaseArchivesShort'
         }
-
-        stage('Release Check Extended') {
-          when {
-            beforeAgent true
-            branch 'master'
-          }
-          steps {
-            dir(env.WORKSPACE) {
-              echo "We are in master - executing the extended release archive check."
-              //unstash 'distribution'
-              sh './gradlew checkReleaseArchives'
-            }
-          }
-        }
-    /*
       }
     }
-    */
 
-    stage('Archive Artifacts') {
-      // Archive artifacts if in master or *-RC branch.
+    stage('Release Check Extended') {
       when {
         beforeAgent true
-        anyOf {
-          branch 'master'
-          branch '*-RC'
+        branch 'master'
+      }
+      steps {
+        dir(env.WORKSPACE) {
+          echo "We are in master - executing the extended release archive check."
+          sh './gradlew checkReleaseArchives'
         }
       }
+    }
+
+    stage('Archive Artifacts') {
       steps {
         archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true, onlyIfSuccessful: true
       }
@@ -173,8 +154,5 @@ pipeline {
       Jenkins
       """
     }
-    //changed  {}
-    //success  {}
-    //unstable {}
   }
 }
