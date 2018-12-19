@@ -14,6 +14,10 @@ pipeline {
     }
   }
 
+  options {
+    buildDiscarder logRotator(artifactNumToKeepStr: '10')
+  }
+
   triggers {
     cron(env.BRANCH_NAME == 'master' ? '@daily' : '')
   }
