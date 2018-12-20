@@ -14,6 +14,10 @@ pipeline {
     }
   }
 
+  options {
+    buildDiscarder logRotator(artifactNumToKeepStr: '10')
+  }
+
   triggers {
     cron(env.BRANCH_NAME == 'master' ? '@daily' : '')
   }
@@ -21,10 +25,7 @@ pipeline {
   stages {
     stage('Precheck') {
       when {
-        expression {
-          // if this is a PR against the 'stable' branch
-          (env.CHANGE_TARGET != null) && (env.CHANGE_TARGET == 'stable')
-        }
+        changeRequest target: 'stable'
       }
       steps {
         echo "BRANCH_NAME: ${BRANCH_NAME}"
@@ -80,42 +81,36 @@ pipeline {
       steps {
         dir(env.WORKSPACE) {
           sh './gradlew distribute'
-          //stash includes: 'build/distributions/*', name: 'distribution'
-          archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true, onlyIfSuccessful: true
         }
       }
     }
 
-    /*
-    stage('Release Checks') {
-      parallel {
-    */
-        stage('Release Check Short') {
-          steps {
-            dir(env.WORKSPACE) {
-              //unstash 'distribution'
-              sh './gradlew checkReleaseArchivesShort'
-            }
-          }
+    stage('Release Check Short') {
+      steps {
+        dir(env.WORKSPACE) {
+          sh './gradlew checkReleaseArchivesShort'
         }
-
-        stage('Release Check Extended') {
-          when {
-            beforeAgent true
-            branch 'master'
-          }
-          steps {
-            dir(env.WORKSPACE) {
-              echo "We are in master - executing the extended release archive check."
-              //unstash 'distribution'
-              sh './gradlew checkReleaseArchives'
-            }
-          }
-        }
-    /*
       }
     }
-    */
+
+    stage('Release Check Extended') {
+      when {
+        beforeAgent true
+        branch 'master'
+      }
+      steps {
+        dir(env.WORKSPACE) {
+          echo "We are in master - executing the extended release archive check."
+          sh './gradlew checkReleaseArchives'
+        }
+      }
+    }
+
+    stage('Archive Artifacts') {
+      steps {
+        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true, onlyIfSuccessful: true
+      }
+    }
 
     stage('Push to Stable') {
       when {
@@ -151,7 +146,7 @@ pipeline {
     }
 
     failure {
-      mail to: env.CHANGE_AUTHOR_EMAIL, subject: "Pipeline build ${BRANCH_NAME}:${BUILD_NUMBER} failed.", body: """
+      mail to: "${CHANGE_AUTHOR_EMAIL}", subject: "Pipeline build ${BRANCH_NAME}:${BUILD_NUMBER} failed.", body: """
       Dear ${CHANGE_AUTHOR},
       unfortunately, the Kieker build ${BUILD_NUMBER} for branch ${BRANCH_NAME} failed.
       More details can be found at ${BUILD_URL}.
@@ -159,9 +154,5 @@ pipeline {
       Jenkins
       """
     }
-    //changed  {}
-    //failure  {}
-    //success  {}
-    //unstable {}
   }
 }
