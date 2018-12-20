@@ -146,10 +146,10 @@ pipeline {
     }
 
     failure {
-      mail to: "${CHANGE_AUTHOR_EMAIL}", subject: "Pipeline build ${BRANCH_NAME}:${BUILD_NUMBER} failed.", body: """
-      Dear ${CHANGE_AUTHOR},
-      unfortunately, the Kieker build ${BUILD_NUMBER} for branch ${BRANCH_NAME} failed.
-      More details can be found at ${BUILD_URL}.
+      mail to: "${env.CHANGE_AUTHOR_EMAIL}", subject: "Pipeline build ${env.BRANCH_NAME}:${env.BUILD_NUMBER} failed.", body: """
+      Dear ${env.CHANGE_AUTHOR},
+      unfortunately, the Kieker build ${env.BUILD_NUMBER} for branch ${env.BRANCH_NAME} failed.
+      More details can be found at ${env.BUILD_URL}.
       Best,
       Jenkins
       """
