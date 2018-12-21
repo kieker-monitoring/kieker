@@ -108,11 +108,16 @@ pipeline {
 
     stage('Archive Artifacts') {
       steps {
-        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true, onlyIfSuccessful: true
+        dir(env.WORKSPACE) {
+          archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true, onlyIfSuccessful: true
+        }
       }
     }
 
     stage('Push to Stable') {
+      agent {
+        label 'kieker-docker-slave'
+      }
       when {
         beforeAgent true
         branch 'master'
@@ -143,16 +148,6 @@ pipeline {
   post {
     cleanup {
       deleteDir()
-    }
-
-    failure {
-      mail to: "${CHANGE_AUTHOR_EMAIL}", subject: "Pipeline build ${BRANCH_NAME}:${BUILD_NUMBER} failed.", body: """
-      Dear ${CHANGE_AUTHOR},
-      unfortunately, the Kieker build ${BUILD_NUMBER} for branch ${BRANCH_NAME} failed.
-      More details can be found at ${BUILD_URL}.
-      Best,
-      Jenkins
-      """
     }
   }
 }
