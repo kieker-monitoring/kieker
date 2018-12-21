@@ -4,13 +4,14 @@ pipeline {
 
   environment {
     DOCKER_ARGS = '--rm -u `id -u`'
+    AGENT_LABEL = 'kieker-slave-docker'
   }
 
   agent {
     docker {
       image 'kieker/kieker-build:openjdk8'
       args env.DOCKER_ARGS
-      label 'kieker-slave-docker'
+      label env.AGENT_LABEL
     }
   }
 
@@ -94,6 +95,9 @@ pipeline {
     }
 
     stage('Release Check Extended') {
+      agent {
+        label env.AGENT_LABEL
+      }
       when {
         beforeAgent true
         branch 'master'
@@ -108,11 +112,16 @@ pipeline {
 
     stage('Archive Artifacts') {
       steps {
-        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true, onlyIfSuccessful: true
+        dir(env.WORKSPACE) {
+          archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true, onlyIfSuccessful: true
+        }
       }
     }
 
     stage('Push to Stable') {
+      agent {
+        label env.AGENT_LABEL
+      }
       when {
         beforeAgent true
         branch 'master'
