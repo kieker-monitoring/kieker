@@ -40,7 +40,7 @@ pipeline {
     stage('Compile') {
       steps {
         dir(env.WORKSPACE) {
-          echo "label: ${env.AGENT_LABEL} - ${AGENT_LABEL}"
+          echo "label: ${env.AGENT_LABEL}"
           sh './gradlew compileJava'
           sh './gradlew compileTestJava'
         }
