@@ -11,7 +11,7 @@ pipeline {
     docker {
       image 'kieker/kieker-build:openjdk8'
       args env.DOCKER_ARGS
-      label env.AGENT_LABEL
+      label "${env.AGENT_LABEL}"
     }
   }
 
