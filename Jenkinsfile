@@ -11,7 +11,7 @@ pipeline {
     docker {
       image 'kieker/kieker-build:openjdk8'
       args env.DOCKER_ARGS
-      label "${env.AGENT_LABEL}"
+      label env.AGENT_LABEL
     }
   }
 
@@ -96,9 +96,6 @@ pipeline {
     }
 
     stage('Release Check Extended') {
-      agent {
-        label "${AGENT_LABEL}"
-      }
       when {
         beforeAgent true
         branch 'master'
@@ -120,9 +117,6 @@ pipeline {
     }
 
     stage('Push to Stable') {
-      agent {
-        label "${AGENT_LABEL}"
-      }
       when {
         beforeAgent true
         branch 'master'
