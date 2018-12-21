@@ -11,7 +11,7 @@ pipeline {
     docker {
       image 'kieker/kieker-build:openjdk8'
       args env.DOCKER_ARGS
-      label env.AGENT_LABEL
+      label "${env.AGENT_LABEL}"
     }
   }
 
@@ -96,7 +96,7 @@ pipeline {
 
     stage('Release Check Extended') {
       agent {
-        label env.AGENT_LABEL
+        label "${env.AGENT_LABEL}"
       }
       when {
         beforeAgent true
@@ -120,7 +120,7 @@ pipeline {
 
     stage('Push to Stable') {
       agent {
-        label env.AGENT_LABEL
+        label "${env.AGENT_LABEL}"
       }
       when {
         beforeAgent true
@@ -152,16 +152,6 @@ pipeline {
   post {
     cleanup {
       deleteDir()
-    }
-
-    failure {
-      mail to: "${env.CHANGE_AUTHOR_EMAIL}", subject: "Pipeline build ${env.BRANCH_NAME}:${env.BUILD_NUMBER} failed.", body: """
-      Dear ${env.CHANGE_AUTHOR},
-      unfortunately, the Kieker build ${env.BUILD_NUMBER} for branch ${env.BRANCH_NAME} failed.
-      More details can be found at ${env.BUILD_URL}.
-      Best,
-      Jenkins
-      """
     }
   }
 }
