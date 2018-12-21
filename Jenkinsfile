@@ -11,7 +11,7 @@ pipeline {
     docker {
       image 'kieker/kieker-build:openjdk8'
       args env.DOCKER_ARGS
-      label "${env.AGENT_LABEL}"
+      label env.AGENT_LABEL
     }
   }
 
@@ -40,6 +40,7 @@ pipeline {
     stage('Compile') {
       steps {
         dir(env.WORKSPACE) {
+          echo "label: ${env.AGENT_LABEL} - ${AGENT_LABEL}"
           sh './gradlew compileJava'
           sh './gradlew compileTestJava'
         }
@@ -96,7 +97,7 @@ pipeline {
 
     stage('Release Check Extended') {
       agent {
-        label "${env.AGENT_LABEL}"
+        label "${AGENT_LABEL}"
       }
       when {
         beforeAgent true
@@ -120,7 +121,7 @@ pipeline {
 
     stage('Push to Stable') {
       agent {
-        label "${env.AGENT_LABEL}"
+        label "${AGENT_LABEL}"
       }
       when {
         beforeAgent true
