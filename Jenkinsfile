@@ -4,14 +4,13 @@ pipeline {
 
   environment {
     DOCKER_ARGS = '--rm -u `id -u`'
-    AGENT_LABEL = 'kieker-slave-docker'
   }
 
   agent {
     docker {
       image 'kieker/kieker-build:openjdk8'
       args env.DOCKER_ARGS
-      label env.AGENT_LABEL
+      label 'kieker-slave-docker'
     }
   }
 
@@ -40,7 +39,6 @@ pipeline {
     stage('Compile') {
       steps {
         dir(env.WORKSPACE) {
-          echo "label: ${env.AGENT_LABEL}"
           sh './gradlew compileJava'
           sh './gradlew compileTestJava'
         }
@@ -117,6 +115,9 @@ pipeline {
     }
 
     stage('Push to Stable') {
+      agent {
+        label 'kieker-docker-slave'
+      }
       when {
         beforeAgent true
         branch 'master'
