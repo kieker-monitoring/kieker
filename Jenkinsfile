@@ -116,7 +116,7 @@ pipeline {
 
     stage('Push to Stable') {
       agent {
-        label 'kieker-docker-slave'
+        label 'kieker-slave-docker'
       }
       when {
         beforeAgent true
