@@ -50,8 +50,6 @@ pipeline {
         stage('Unit Test') {
           steps {
             sh './gradlew test'
-            junit '**/build/test-results/test/*.xml'
-
             step([
                 $class              : 'CloverPublisher',
                 cloverReportDir     : env.WORKSPACE + '/build/reports/clover',
@@ -60,6 +58,11 @@ pipeline {
                 unhealthyTarget     : [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
                 //failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
             ])
+          }
+          post {
+            always {
+              junit '**/build/test-results/test/*.xml'
+            }
           }
         }
 
@@ -93,6 +96,7 @@ pipeline {
         stage('Distribution Build') {
           steps {
             sh './gradlew distribute'
+            stash includes: 'build/libs/*.jar', name: 'upload'
           }
         }
 
@@ -121,8 +125,12 @@ pipeline {
             archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar',
               fingerprint: true,
               onlyIfSuccessful: true
-            stash includes: 'build/libs/*.jar', name: 'upload'
           }
+        }
+      }
+      post {
+        cleanup {
+          deleteDir()
         }
       }
     }
@@ -138,6 +146,11 @@ pipeline {
       steps {
         echo "We are in master - pushing to stable branch."
         sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+      }
+      post {
+        cleanup {
+          deleteDir()
+        }
       }
     }
 
@@ -165,12 +178,11 @@ pipeline {
           sh './gradlew uploadArchives'
         }
       }
-    }
-  }
-
-  post {
-    cleanup {
-      deleteDir()
+      post {
+        cleanup {
+          deleteDir()
+        }
+      }
     }
   }
 }
