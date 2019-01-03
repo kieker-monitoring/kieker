@@ -146,10 +146,8 @@ pipeline {
         branch 'master'
       }
       steps {
-        dir(env.WORKSPACE) {
-          echo "We are in master - pushing to stable branch."
-          sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
-        }
+        echo "We are in master - pushing to stable branch."
+        sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
       }
     }
 
