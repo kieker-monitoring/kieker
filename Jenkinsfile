@@ -113,7 +113,10 @@ pipeline {
     stage('Release Check Extended') {
       when {
         beforeAgent true
-        branch 'master'
+        anyOf {
+          branch 'master';
+          changeRequest target: 'master'
+        }
       }
       steps {
         dir(env.WORKSPACE) {
@@ -127,8 +130,8 @@ pipeline {
       steps {
         dir(env.WORKSPACE) {
           archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', 
-                           fingerprint: true, 
-                           onlyIfSuccessful: true
+          fingerprint: true, 
+          onlyIfSuccessful: true
         }
       }
     }
@@ -139,10 +142,7 @@ pipeline {
       }
       when {
         beforeAgent true
-        anyOf {
-          branch 'master';
-          changeRequest target: 'master'
-        }
+        branch 'master';
       }
       steps {
         echo "We are in master - pushing to stable branch."
