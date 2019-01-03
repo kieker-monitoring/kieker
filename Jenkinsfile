@@ -6,9 +6,7 @@ pipeline {
     DOCKER_ARGS = '--rm -u `id -u`'
   }
 
-  agent {
-    none
-  }
+  agent none
 
   options {
     buildDiscarder logRotator(artifactNumToKeepStr: '10')
