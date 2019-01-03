@@ -7,6 +7,9 @@ configurations {
 
 def aspectjVersion = '1.8.2'
 
+repositories { jcenter() }
+
+
 dependencies {
 	clover 'org.openclover:clover:4.2.0'
 
@@ -40,7 +43,10 @@ dependencies {
 	compile resolveLibrary('framework-libs/spring/spring-core-*.jar')
 	compile resolveLibrary('framework-libs/spring/spring-web-*.jar')
 	compile resolveLibrary('framework-libs/spring/spring-webmvc-*.jar')
-
+	
+	
+	//adding mockito
+	testImplementation 'org.mockito:mockito-core:2.7.22' 
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
 	testCompile resolveLibrary('framework-libs/spring/spring-beans-*.jar')
