@@ -39,74 +39,64 @@ pipeline {
 
     stage('Compile') {
       steps {
-        dir(env.WORKSPACE) {
-          sh './gradlew compileJava'
-          sh './gradlew compileTestJava'
-        }
+        sh './gradlew compileJava'
+        sh './gradlew compileTestJava'
       }
     }
 
 
     stage('Unit Test') {
       steps {
-        dir(env.WORKSPACE) {
-          sh './gradlew test'
-          junit '**/build/test-results/test/*.xml'
+        sh './gradlew test'
+        junit '**/build/test-results/test/*.xml'
 
-          step([
-		        $class: 'CloverPublisher',
-		        cloverReportDir: env.WORKSPACE + '/build/reports/clover',
-		        cloverReportFileName: 'clover.xml',
-		        healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80],   // optional, default is: method=70, conditional=80, statement=80
-		        unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
-		        //failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
-          ])
-        }
+        step([
+          $class: 'CloverPublisher',
+		      cloverReportDir: env.WORKSPACE + '/build/reports/clover',
+		      cloverReportFileName: 'clover.xml',
+		      healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80],   // optional, default is: method=70, conditional=80, statement=80
+		      unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
+		      //failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
+        ])
       }
     }
 
     stage('Static Analysis') {
       steps {
-        dir(env.WORKSPACE) {
-          sh './gradlew check'
+        sh './gradlew check'
 
-          // Report results of static analysis tools
-          checkstyle canComputeNew: false, 
-                     defaultEncoding: '', 
-                     healthy: '', 
-                     pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml', 
-                     unHealthy: ''
-
-          findbugs canComputeNew: false, 
+        // Report results of static analysis tools
+        checkstyle canComputeNew: false, 
                    defaultEncoding: '', 
-                   excludePattern: '', 
                    healthy: '', 
-                   includePattern: '', 
-                   pattern: 'kieker-analysis\\build\\reports\\findbugs\\*.xml,kieker-tools\\build\\reports\\findbugs\\*.xml,kieker-monitoring\\build\\reports\\findbugs\\*.xml,kieker-common\\build\\reports\\findbugs\\*.xml', 
+                   pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml', 
                    unHealthy: ''
 
-          pmd canComputeNew: false, 
-              defaultEncoding: '', 
-              healthy: '', 
-              pattern: 'kieker-analysis\\build\\reports\\pmd\\*.xml,kieker-tools\\build\\reports\\pmd\\*.xml,kieker-monitoring\\build\\reports\\pmd\\*.xml,kieker-common\\build\\reports\\pmd\\*.xml', 
-              unHealthy: ''
-        }
+        findbugs canComputeNew: false, 
+                 defaultEncoding: '', 
+                 excludePattern: '', 
+                 healthy: '', 
+                 includePattern: '', 
+                 pattern: 'kieker-analysis\\build\\reports\\findbugs\\*.xml,kieker-tools\\build\\reports\\findbugs\\*.xml,kieker-monitoring\\build\\reports\\findbugs\\*.xml,kieker-common\\build\\reports\\findbugs\\*.xml', 
+                 unHealthy: ''
+
+        pmd canComputeNew: false, 
+            defaultEncoding: '', 
+            healthy: '', 
+            pattern: 'kieker-analysis\\build\\reports\\pmd\\*.xml,kieker-tools\\build\\reports\\pmd\\*.xml,kieker-monitoring\\build\\reports\\pmd\\*.xml,kieker-common\\build\\reports\\pmd\\*.xml', 
+            unHealthy: ''
       }
     }
 
     stage('Distribution Build') {
       steps {
-        dir(env.WORKSPACE) {
-          sh './gradlew distribute'
-        }
+        sh './gradlew distribute'
       }
     }
 
     stage('Release Check Short') {
       steps {
-        dir(env.WORKSPACE) {
-          sh './gradlew checkReleaseArchivesShort'
-        }
+        sh './gradlew checkReleaseArchivesShort'
       }
     }
 
@@ -119,26 +109,23 @@ pipeline {
         }
       }
       steps {
-        dir(env.WORKSPACE) {
-          echo "We are in master - executing the extended release archive check."
-          sh './gradlew checkReleaseArchives'
-        }
+        echo "We are in master - executing the extended release archive check."
+        sh './gradlew checkReleaseArchives'
       }
     }
 
     stage('Archive Artifacts') {
       steps {
-        dir(env.WORKSPACE) {
-          archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', 
-          fingerprint: true, 
-          onlyIfSuccessful: true
-        }
+        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', 
+        fingerprint: true, 
+        onlyIfSuccessful: true
       }
     }
 
     stage('Push to Stable') {
       agent {
         label 'kieker-slave-docker'
+        docker {} // Override general docker section.
       }
       when {
         beforeAgent true
@@ -156,16 +143,14 @@ pipeline {
         branch 'master'
       }
       steps {
-        dir(env.WORKSPACE) {
-          withCredentials([
-              usernamePassword(
-                credentialsId: 'artifactupload', 
-                usernameVariable: 'kiekerMavenUser', 
-                passwordVariable: 'kiekerMavenPassword'
-              )
-          ]) {
-            sh './gradlew uploadArchives'
-          }
+        withCredentials([
+          usernamePassword(
+            credentialsId: 'artifactupload', 
+            usernameVariable: 'kiekerMavenUser', 
+            passwordVariable: 'kiekerMavenPassword'
+          )
+        ]) {
+          sh './gradlew uploadArchives'
         }
       }
     }
