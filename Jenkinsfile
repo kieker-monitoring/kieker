@@ -139,7 +139,10 @@ pipeline {
       }
       when {
         beforeAgent true
-        branch 'master'
+        anyOf {
+          branch 'master';
+          changeRequest target: 'master'
+        }
       }
       steps {
         echo "We are in master - pushing to stable branch."
