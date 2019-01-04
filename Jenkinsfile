@@ -18,7 +18,7 @@ pipeline {
   }
 
   stages {
-    stage('Docker Stages') {
+    stage('Default Docker Stages') {
       agent {
         docker {
           image 'kieker/kieker-build:openjdk8'
@@ -32,10 +32,6 @@ pipeline {
             changeRequest target: 'stable'
           }
           steps {
-            echo "BRANCH_NAME: ${BRANCH_NAME}"
-            echo "CHANGE_TARGET: ${CHANGE_TARGET}"
-            echo "NODE_NAME: ${NODE_NAME}"
-            echo "NODE_LABELS: ${NODE_LABELS}"
             error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
           }
         }
@@ -54,9 +50,8 @@ pipeline {
                 $class              : 'CloverPublisher',
                 cloverReportDir     : env.WORKSPACE + '/build/reports/clover',
                 cloverReportFileName: 'clover.xml',
-                healthyTarget       : [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80],   // optional, default is: method=70, conditional=80, statement=80
+                healthyTarget       : [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80],
                 unhealthyTarget     : [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
-                //failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
             ])
           }
           post {
@@ -115,7 +110,6 @@ pipeline {
             }
           }
           steps {
-            echo "We are in master - executing the extended release archive check."
             sh './gradlew checkReleaseArchives'
           }
         }
@@ -135,52 +129,51 @@ pipeline {
       }
     }
 
-    stage('Push to Stable') {
-      agent {
-        label 'kieker-slave-docker'
-      }
+    stage('Master Specific Stages') {
       when {
-        beforeAgent true
-        branch 'master';
-      }
-      steps {
-        echo "We are in master - pushing to stable branch."
-        sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
-      }
-      post {
-        cleanup {
-          deleteDir()
-        }
-      }
-    }
-
-    stage('Upload Snapshot Version') {
-      agent {
-        docker {
-          image 'kieker/kieker-build:openjdk8'
-          args env.DOCKER_ARGS
-          label 'kieker-slave-docker'
-        }
-      }
-      when { 
         beforeAgent true
         branch 'master'
       }
-      steps {
-        unstash 'upload'
-        withCredentials([
-          usernamePassword(
-            credentialsId: 'artifactupload', 
-            usernameVariable: 'kiekerMavenUser', 
-            passwordVariable: 'kiekerMavenPassword'
-          )
-        ]) {
-          sh './gradlew uploadArchives'
+      parallel {
+        stage('Push to Stable') {
+          agent {
+            label 'kieker-slave-docker'
+          }
+          steps {
+            sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+          }
+          post {
+            cleanup {
+              deleteDir()
+            }
+          }
         }
-      }
-      post {
-        cleanup {
-          deleteDir()
+
+        stage('Upload Snapshot Version') {
+          agent {
+            docker {
+              image 'kieker/kieker-build:openjdk8'
+              args env.DOCKER_ARGS
+              label 'kieker-slave-docker'
+            }
+          }
+          steps {
+            unstash 'upload'
+            withCredentials([
+              usernamePassword(
+                credentialsId: 'artifactupload', 
+                usernameVariable: 'kiekerMavenUser', 
+                passwordVariable: 'kiekerMavenPassword'
+              )
+            ]) {
+              sh './gradlew uploadArchives'
+            }
+          }
+          post {
+            cleanup {
+              deleteDir()
+            }
+          }
         }
       }
     }
