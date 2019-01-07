@@ -45,24 +45,6 @@ pipeline {
           }
         }
 
-        stage('Unit Test') {
-          steps {
-            sh './gradlew test'
-            step([
-                $class              : 'CloverPublisher',
-                cloverReportDir     : env.WORKSPACE + '/build/reports/clover',
-                cloverReportFileName: 'clover.xml',
-                healthyTarget       : [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80],
-                unhealthyTarget     : [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
-            ])
-          }
-          post {
-            always {
-              junit '**/build/test-results/test/*.xml'
-            }
-          }
-        }
-
         stage('Static Analysis') {
           steps {
             sh './gradlew check'
@@ -89,6 +71,25 @@ pipeline {
                 unHealthy: ''
           }
         }
+        
+        stage('Unit Test') {
+          steps {
+            sh './gradlew test'
+            step([
+                $class              : 'CloverPublisher',
+                cloverReportDir     : env.WORKSPACE + '/build/reports/clover',
+                cloverReportFileName: 'clover.xml',
+                healthyTarget       : [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80],
+                unhealthyTarget     : [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
+            ])
+          }
+          post {
+            always {
+              junit '**/build/test-results/test/*.xml'
+            }
+          }
+        }
+
 
         stage('Distribution Build') {
           steps {
@@ -97,22 +98,26 @@ pipeline {
           }
         }
 
-        stage('Release Check Short') {
-          steps {
-            sh './gradlew checkReleaseArchivesShort'
-          }
-        }
-
-        stage('Release Check Extended') {
-          when {
-            beforeAgent true
-            anyOf {
-              branch 'master';
-              changeRequest target: 'master'
+        stage('Release Checks') {
+          parallel {
+            stage('Release Check Short') {
+              steps {
+                sh './gradlew checkReleaseArchivesShort'
+              }
             }
-          }
-          steps {
-            sh './gradlew checkReleaseArchives'
+
+            stage('Release Check Extended') {
+              when {
+                beforeAgent true
+                anyOf {
+                  branch 'master';
+                  changeRequest target: 'master'
+                }
+              }
+              steps {
+                sh './gradlew checkReleaseArchives'
+              }
+            }
           }
         }
 
