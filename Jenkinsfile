@@ -102,15 +102,15 @@ pipeline {
     }
 
     stage('Release Checks') {
-      agent {
-        docker {
-          image 'kieker/kieker-build:openjdk8'
-          args env.DOCKER_ARGS
-          label 'kieker-slave-docker'
-        }
-      }
       parallel {
         stage('Release Check Short') {
+          agent {
+            docker {
+              image 'kieker/kieker-build:openjdk8'
+              args env.DOCKER_ARGS
+              label 'kieker-slave-docker'
+            }
+          }
           steps {
             unstash 'distributions'
             sh './gradlew checkReleaseArchivesShort'
@@ -123,6 +123,13 @@ pipeline {
         }
 
         stage('Release Check Extended') {
+          agent {
+            docker {
+              image 'kieker/kieker-build:openjdk8'
+              args env.DOCKER_ARGS
+              label 'kieker-slave-docker'
+            }
+          }
           when {
             beforeAgent true
             anyOf {
