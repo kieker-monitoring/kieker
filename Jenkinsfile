@@ -94,39 +94,66 @@ pipeline {
         stage('Distribution Build') {
           steps {
             sh './gradlew distribute'
-            stash includes: 'build/libs/*.jar', name: 'upload'
+            stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
+            stash includes: 'build/distributions/*', name: 'distributions'
+            stash includes: 'kieker-documentation/userguide/kieker-userguide.pdf', name: 'userguide'
           }
         }
+      }
 
-        stage('Release Checks') {
-          parallel {
-            stage('Release Check Short') {
-              steps {
-                sh './gradlew checkReleaseArchivesShort'
+      stage('Release Checks') {
+        agent {
+          docker {
+            image 'kieker/kieker-build:openjdk8'
+            args env.DOCKER_ARGS
+            label 'kieker-slave-docker'
+          }
+        }
+        parallel {
+          stage('Release Check Short') {
+            steps {
+              unstash 'distributions'
+              sh './gradlew checkReleaseArchivesShort'
+            }
+          }
+          post {
+            cleanup {
+              deleteDir()
+            }
+          }
+
+          stage('Release Check Extended') {
+            when {
+              beforeAgent true
+              anyOf {
+                branch 'master';
+                changeRequest target: 'master'
               }
             }
-
-            stage('Release Check Extended') {
-              when {
-                beforeAgent true
-                anyOf {
-                  branch 'master';
-                  changeRequest target: 'master'
-                }
-              }
-              steps {
-                sh './gradlew checkReleaseArchives'
-              }
+            steps {
+              unstash 'distributions'
+              sh './gradlew checkReleaseArchives'
+            }
+          }
+          post {
+            cleanup {
+              deleteDir()
             }
           }
         }
+      }
 
-        stage('Archive Artifacts') {
-          steps {
-            archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar',
-              fingerprint: true,
-              onlyIfSuccessful: true
-          }
+      stage('Archive Artifacts') {
+        agent {
+          label 'kieker-slave-docker'
+        }
+        steps {
+          unstash 'jarArtifacts'
+          unstash 'distributions'
+          unstash 'userguide'
+          archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar',
+            fingerprint: true,
+            onlyIfSuccessful: true
         }
       }
       post {
@@ -165,7 +192,7 @@ pipeline {
             }
           }
           steps {
-            unstash 'upload'
+            unstash 'jarArtifacts'
             withCredentials([
               usernamePassword(
                 credentialsId: 'artifactupload', 
