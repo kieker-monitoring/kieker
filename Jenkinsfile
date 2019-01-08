@@ -45,6 +45,24 @@ pipeline {
           }
         }
 
+        stage('Unit Test') {
+          steps {
+            sh './gradlew test'
+            step([
+                $class              : 'CloverPublisher',
+                cloverReportDir     : env.WORKSPACE + '/build/reports/clover',
+                cloverReportFileName: 'clover.xml',
+                healthyTarget       : [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80],
+                unhealthyTarget     : [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
+            ])
+          }
+          post {
+            always {
+              junit '**/build/test-results/test/*.xml'
+            }
+          }
+        }
+
         stage('Static Analysis') {
           steps {
             sh './gradlew check'
@@ -72,24 +90,6 @@ pipeline {
           }
         }
         
-        stage('Unit Test') {
-          steps {
-            sh './gradlew test'
-            step([
-                $class              : 'CloverPublisher',
-                cloverReportDir     : env.WORKSPACE + '/build/reports/clover',
-                cloverReportFileName: 'clover.xml',
-                healthyTarget       : [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80],
-                unhealthyTarget     : [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
-            ])
-          }
-          post {
-            always {
-              junit '**/build/test-results/test/*.xml'
-            }
-          }
-        }
-
         stage('Distribution Build') {
           steps {
             sh './gradlew distribute'
