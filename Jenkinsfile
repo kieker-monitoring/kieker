@@ -40,14 +40,14 @@ pipeline {
 
         stage('Compile') {
           steps {
-            sh './gradlew compileJava'
+            sh './gradlew --parallel compileJava'
             sh './gradlew compileTestJava'
           }
         }
 
         stage('Unit Test') {
           steps {
-            sh './gradlew test'
+            sh './gradlew --parallel test'
             step([
                 $class              : 'CloverPublisher',
                 cloverReportDir     : env.WORKSPACE + '/build/reports/clover',
@@ -65,7 +65,7 @@ pipeline {
 
         stage('Static Analysis') {
           steps {
-            sh './gradlew check'
+            sh './gradlew --parallel check'
 
             // Report results of static analysis tools
             checkstyle canComputeNew: false,
