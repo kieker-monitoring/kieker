@@ -40,7 +40,7 @@ pipeline {
 
         stage('Compile') {
           steps {
-            sh './gradlew --parallel compileJava'
+            sh './gradlew compileJava'
             sh './gradlew compileTestJava'
           }
         }
@@ -65,7 +65,7 @@ pipeline {
 
         stage('Static Analysis') {
           steps {
-            sh './gradlew --parallel check'
+            sh './gradlew check'
 
             // Report results of static analysis tools
             checkstyle canComputeNew: false,
