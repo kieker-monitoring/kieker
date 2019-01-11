@@ -805,11 +805,11 @@ def sourceContent = project.copySpec {
     into kiekerPackagenamebase + "-" + kiekerVersion
 }
 
-task checkReleaseArchivesShort(type: Exec, dependsOn: [distribute]) {
+task checkReleaseArchivesShort(type: Exec) {
     commandLine 'bin/dev/release-check-short.sh'
 }
 
-task checkReleaseArchives(type: Exec, dependsOn: [distribute]) {
+task checkReleaseArchives(type: Exec) {
     commandLine 'bin/dev/release-check-extended.sh'
 }
 
