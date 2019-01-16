@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
+//import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
@@ -87,14 +87,14 @@ public class ActivationParameterEvent extends AbstractMonitoringRecord implement
 	public ActivationParameterEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.pattern = deserializer.getString();
 		// load array sizes
-		int _parameterNames_size0 = deserializer.getInt();
+		final int _parameterNames_size0 = deserializer.getInt();
 		this.parameterNames = new String[_parameterNames_size0];
 		for (int i0=0;i0<_parameterNames_size0;i0++)
 			this.parameterNames[i0] = deserializer.getString();
 		
 		// load array sizes
-		int _parameters_size0 = deserializer.getInt();
-		int _parameters_size1 = deserializer.getInt();
+		final int _parameters_size0 = deserializer.getInt();
+		final int _parameters_size1 = deserializer.getInt();
 		this.parameters = new String[_parameters_size0][_parameters_size1];
 		for (int i0=0;i0<_parameters_size0;i0++)
 			for (int i1=0;i1<_parameters_size1;i1++)

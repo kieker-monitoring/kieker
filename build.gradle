@@ -209,7 +209,7 @@ subprojects {
         // enable logging for test runs
         testCompile 'ch.qos.logback:logback-classic:1.2.3'
 
-        testCompile 'org.mockito:mockito-core:2.+'
+        testCompile 'org.mockito:mockito-core:2.8.9'
         testCompile 'junit:junit:4.12'
         testCompile 'org.hamcrest:hamcrest-library:1.3'
     }
