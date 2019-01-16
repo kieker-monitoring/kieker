@@ -39,7 +39,7 @@ template IConstructorRecord : IOperationRecord
 
 @author 'Jan Waller' @since '1.6'
 template IEventRecord : IFlowRecord {
-    long timestamp = 0
+    changeable long timestamp = 0
 }
 
 @author 'Jan Waller' @since '1.6'

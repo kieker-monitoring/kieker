@@ -47,15 +47,22 @@ public class DirectoryScannerStage extends AbstractProducerStage<File> {
 	 */
 	@Override
 	protected void execute() {
-		for (final File directory : this.directories) {
-			if (directory.isDirectory()) {
-				this.scanDirectory(directory);
+		if (this.directories != null) {
+			for (final File directory : this.directories) {
+				this.logger.debug("Scanning directories in {} for Kieker logs", directory);
+				if (directory.isDirectory()) {
+					this.scanDirectory(directory);
+				}
 			}
+		} else {
+			this.logger.error("Cannot process an empty array of directories.");
 		}
+		this.workCompleted();
 	}
 
 	private void scanDirectory(final File directory) {
 		if (this.isKiekerDirectory(directory)) {
+			this.logger.debug("Reading log data from {}", directory.getAbsolutePath());
 			this.getOutputPort().send(directory);
 		} else {
 			for (final File subDirectory : directory.listFiles()) { // NOFB is guaranteed to be a directory

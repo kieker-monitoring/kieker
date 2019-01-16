@@ -17,7 +17,6 @@
 package kieker.test.analysisteetime.junit.plugin.filter.select;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
@@ -54,8 +53,6 @@ public class TestTypeFilter extends AbstractKiekerTest {
 	public void testFiltering() {
 		final TypeFilter typeFilter = new TypeFilter(ALLOWED_TYPES);
 		final List<Object> inputElements = new ArrayList<>();
-		final List<Object> validOutputElements = new ArrayList<>();
-		final List<Object> invalidOutputElements = new ArrayList<>();
 
 		// Make sure that the reader sends valid and invalid objects interleaved
 		for (int i = 0; i < Math.min(MATCHING_OBJECTS.length, MISMATCHING_OBJECTS.length); i++) {
@@ -63,16 +60,10 @@ public class TestTypeFilter extends AbstractKiekerTest {
 			inputElements.add(MISMATCHING_OBJECTS[i]);
 		}
 
-		StageTester.test(typeFilter)
-				.and().send(inputElements).to(typeFilter.getInputPort())
-				.and().receive(validOutputElements).from(typeFilter.getMatchingTypeOutputPort())
-				.and().receive(invalidOutputElements).from(typeFilter.getMismatchingTypeOutputPort())
-				.start();
+		StageTester.test(typeFilter).and().send(inputElements).to(typeFilter.getInputPort()).start();
 
-		// Make sure that valid objects are sent to the valid output port and that invalid objects are sent to the invalid output port
-		Assert.assertTrue("Type filter filtered matching types", validOutputElements.containsAll(Arrays.asList(MATCHING_OBJECTS)));
-		Assert.assertTrue("Type filter did not filter mismatching types", invalidOutputElements.containsAll(Arrays.asList(MISMATCHING_OBJECTS)));
-		Assert.assertEquals("Type filter sent too much to the match output port", MATCHING_OBJECTS.length, validOutputElements.size());
-		Assert.assertEquals("Type filter sent too much to the mismatch output port.", MISMATCHING_OBJECTS.length, invalidOutputElements.size());
+		Assert.assertThat("Type filter, valid data not correctly determined.", typeFilter.getMatchingTypeOutputPort(), StageTester.produces(MATCHING_OBJECTS));
+		Assert.assertThat("Type filter, invalid data not correctly determined.",
+				typeFilter.getMismatchingTypeOutputPort(), StageTester.produces(MISMATCHING_OBJECTS));
 	}
 }

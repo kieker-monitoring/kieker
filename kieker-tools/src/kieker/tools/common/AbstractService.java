@@ -23,7 +23,22 @@ import teetime.framework.Configuration;
 import teetime.framework.Execution;
 
 /**
- * Generic tool framework class.
+ * Generic tool and service framework class. A specific tool or service must implement the following functions:
+ * <ul>
+ * <li><code>protected T createTeetimeConfiguration()</code></li>
+ * <li><code>protected boolean checkParameters(final JCommander commander)</code></li>
+ * <li><code>protected File getConfigurationFile()</code></li>
+ * <li><code>protected boolean checkConfiguration(final Configuration kiekerConfiguration, final JCommander commander)</code></li>
+ * <li><code>protected void shutdownService()</code></li>
+ * </ul>
+ *
+ * Furthermore, you have to define a main method:
+ * <code>
+ * public static void main(final String[] args) {
+ *       final ExampleMain main = new ExampleMain();
+ *       System.exit(main.run("Example Tool", "Log label", args, main));
+ * }
+ * </code>
  *
  * @param <T>
  *            type of the teetime configuration to be used
@@ -58,18 +73,20 @@ public abstract class AbstractService<T extends Configuration, R extends Object>
 		if (this.checkConfiguration(this.kiekerConfiguration, commander)) {
 			final Execution<T> execution = new Execution<>(this.createTeetimeConfiguration());
 
-			this.shutdownHook(execution);
+			final Thread shutdownThread = this.shutdownHook(execution);
 
 			AbstractLegacyTool.LOGGER.debug("Running {}", label);
 
 			execution.executeBlocking();
+
+			Runtime.getRuntime().removeShutdownHook(shutdownThread);
 			this.shutdownService();
 
 			AbstractLegacyTool.LOGGER.debug("Done");
 
-			return SUCCESS_EXIT_CODE;
+			return AbstractLegacyTool.SUCCESS_EXIT_CODE;
 		} else {
-			return CONFIGURATION_ERROR;
+			return AbstractLegacyTool.CONFIGURATION_ERROR;
 		}
 	}
 
@@ -79,8 +96,8 @@ public abstract class AbstractService<T extends Configuration, R extends Object>
 	 * @param execution
 	 *            teetime execution
 	 */
-	private void shutdownHook(final Execution<T> execution) {
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() { // NOPMD is not a web app
+	private Thread shutdownHook(final Execution<T> execution) {
+		final Thread shutdownThread = new Thread(new Runnable() { // NOPMD is not a web app
 			/**
 			 * Thread to gracefully terminate service.
 			 */
@@ -91,8 +108,9 @@ public abstract class AbstractService<T extends Configuration, R extends Object>
 					AbstractService.this.shutdownService();
 				}
 			}
-		}));
-
+		});
+		Runtime.getRuntime().addShutdownHook(shutdownThread);
+		return shutdownThread;
 	}
 
 	/**
@@ -103,7 +121,6 @@ public abstract class AbstractService<T extends Configuration, R extends Object>
 	 * @throws ConfigurationException
 	 *             in case the creation fails
 	 */
-	protected abstract T createTeetimeConfiguration()
-			throws ConfigurationException;
+	protected abstract T createTeetimeConfiguration() throws ConfigurationException;
 
 }

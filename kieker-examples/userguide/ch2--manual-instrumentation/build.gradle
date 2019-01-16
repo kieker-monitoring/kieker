@@ -7,6 +7,12 @@ dependencies {
 	}
 }
 
+eclipse {
+  project {
+    name = 'Kieker Example 2 ch2--manual-instrumentation'
+  }
+}
+
 // Simplify the JAR's file name
 archivesBaseName = 'BookstoreApplicationMonitoringAnalysis'
 version = ''

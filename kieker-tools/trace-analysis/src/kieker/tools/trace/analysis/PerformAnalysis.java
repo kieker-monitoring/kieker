@@ -120,7 +120,7 @@ public class PerformAnalysis {
 		final String pathPrefix = this.computePrefix();
 
 		int numRequestedTasks = 0;
-		boolean retVal = true;
+		boolean successfulExecution = true;
 
 		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(),
 				this.analysisController);
@@ -258,22 +258,22 @@ public class PerformAnalysis {
 
 			this.printSystemEntities(pathPrefix, systemEntityFactory);
 
-			retVal = this.checkTerminationState(pathPrefix, allTraceProcessingComponents);
+			successfulExecution = this.checkTerminationState(pathPrefix, allTraceProcessingComponents);
 
-			if (retVal && this.settings.isPrintDeploymentEquivalenceClasses()) {
-				retVal = this.writeTraceEquivalenceReport(
+			if (successfulExecution && this.settings.isPrintDeploymentEquivalenceClasses()) {
+				successfulExecution = this.writeTraceEquivalenceReport(
 						pathPrefix + Constants.TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX + TXT_SUFFIX,
 						traceAllocationEquivClassFilter);
 			}
 
-			if (retVal && this.settings.isPrintAssemblyEquivalenceClasses()) {
-				retVal = this.writeTraceEquivalenceReport(
+			if (successfulExecution && this.settings.isPrintAssemblyEquivalenceClasses()) {
+				successfulExecution = this.writeTraceEquivalenceReport(
 						pathPrefix + Constants.TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX + TXT_SUFFIX,
 						traceAssemblyEquivClassFilter);
 			}
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			this.logger.error("An error occured", ex);
-			retVal = false;
+			successfulExecution = false;
 		} finally {
 			if (numRequestedTasks > 0) {
 				if (mtReconstrFilter != null) {
@@ -288,7 +288,7 @@ public class PerformAnalysis {
 			}
 		}
 
-		return retVal;
+		return successfulExecution;
 	}
 
 	private boolean checkTerminationState(final String pathPrefix, final List<AbstractTraceProcessingFilter> allTraceProcessingComponents)

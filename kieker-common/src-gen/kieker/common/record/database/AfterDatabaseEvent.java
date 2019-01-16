@@ -72,7 +72,7 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IEve
 	};
 	
 	/** property declarations. */
-	private final long timestamp;
+	private long timestamp;
 	private final String classSignature;
 	private long traceId;
 	private final int orderIndex;
@@ -221,6 +221,9 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IEve
 		return this.timestamp;
 	}
 	
+	public final void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
 	
 	public final String getClassSignature() {
 		return this.classSignature;

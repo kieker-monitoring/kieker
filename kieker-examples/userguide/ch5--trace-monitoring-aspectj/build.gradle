@@ -8,6 +8,12 @@ dependencies {
         }
 }
 
+eclipse {
+  project {
+    name = 'Kieker Example 4 ch5--trace-monitoring-aspectj'
+  }
+}
+
 // Simplify the JAR's file name
 archivesBaseName = 'BookstoreApplication'
 version = ''
