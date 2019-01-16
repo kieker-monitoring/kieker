@@ -55,8 +55,6 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 	}
 
 
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use

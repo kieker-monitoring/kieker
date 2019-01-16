@@ -130,8 +130,6 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	}
 
 
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
@@ -156,7 +154,6 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
 		serializer.putString(this.getHostname());
 		serializer.putString(this.getVmName());

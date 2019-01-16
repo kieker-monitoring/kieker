@@ -57,8 +57,6 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	}
 
 
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use

@@ -105,8 +105,6 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	}
 
 
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
@@ -124,7 +122,6 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
 		serializer.putLong(this.getTraceId());
 		serializer.putInt(this.getOrderIndex());

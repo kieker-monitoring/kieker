@@ -69,8 +69,6 @@ public abstract class AbstractThreadBasedEvent extends AbstractEvent implements 
 	}
 
 
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use

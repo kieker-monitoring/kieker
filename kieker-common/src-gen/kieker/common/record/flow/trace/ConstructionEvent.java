@@ -84,8 +84,6 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	}
 
 
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
@@ -103,7 +101,6 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
 		serializer.putLong(this.getTraceId());
 		serializer.putInt(this.getOrderIndex());

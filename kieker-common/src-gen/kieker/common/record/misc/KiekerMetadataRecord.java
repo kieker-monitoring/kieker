@@ -19,7 +19,6 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
-//import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
@@ -122,8 +121,6 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord  {
 	}
 
 
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
@@ -146,7 +143,6 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putString(this.getVersion());
 		serializer.putString(this.getControllerName());
 		serializer.putString(this.getHostname());

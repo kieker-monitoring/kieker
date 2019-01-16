@@ -93,8 +93,6 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 	}
 
 
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
@@ -111,7 +109,6 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getTraceId());
 		serializer.putLong(this.getThreadId());
 		serializer.putString(this.getSessionId());

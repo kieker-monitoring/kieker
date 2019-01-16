@@ -87,8 +87,6 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 	}
 
 
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
@@ -105,7 +103,6 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getTimestamp());
 		serializer.putLong(this.getThreadId());
 		serializer.putInt(this.getOrderIndex());

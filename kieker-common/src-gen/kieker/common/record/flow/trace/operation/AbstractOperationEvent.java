@@ -61,8 +61,6 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	}
 
 
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
