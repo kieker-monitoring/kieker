@@ -6,12 +6,13 @@ pipeline {
     DOCKER_ARGS = '--rm -u `id -u`'
   }
 
-  agent {
-    docker {
-      image 'kieker/kieker-build:openjdk8'
-      args env.DOCKER_ARGS
-      label 'kieker-slave-docker'
-    }
+  agent none
+
+  options {
+    buildDiscarder logRotator(artifactNumToKeepStr: '10')
+    timeout(time: 1, unit: 'HOURS')
+    retry(1)
+    parallelsAlwaysFailFast()
   }
 
   triggers {
@@ -19,68 +20,83 @@ pipeline {
   }
 
   stages {
-    stage('Precheck') {
-      when {
-        expression {
-          // if this is a PR against the 'stable' branch
-          (env.CHANGE_TARGET != null) && (env.CHANGE_TARGET == 'stable')
+    stage('Default Docker Stages') {
+      agent {
+        docker {
+          image 'kieker/kieker-build:openjdk8'
+          args env.DOCKER_ARGS
+          label 'kieker-slave-docker'
         }
       }
-      steps {
-        echo "BRANCH_NAME: ${BRANCH_NAME}"
-        echo "CHANGE_TARGET: ${CHANGE_TARGET}"
-        echo "NODE_NAME: ${NODE_NAME}"
-        echo "NODE_LABELS: ${NODE_LABELS}"
-        error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
-      }
-    }
-
-    stage('Compile') {
-      steps {
-        dir(env.WORKSPACE) {
-          sh './gradlew compileJava'
-          sh './gradlew compileTestJava'
+      stages {
+        stage('Precheck') {
+          when {
+            changeRequest target: 'stable'
+          }
+          steps {
+            error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
+          }
         }
-      }
-    }
 
-
-    stage('Unit Test') {
-      steps {
-        dir(env.WORKSPACE) {
-          sh './gradlew test'
-          junit '**/build/test-results/test/*.xml'
-
-          step([
-		        $class: 'CloverPublisher',
-		        cloverReportDir: env.WORKSPACE + '/build/reports/clover',
-		        cloverReportFileName: 'clover.xml',
-		        healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80],   // optional, default is: method=70, conditional=80, statement=80
-		        unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
-		        //failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
-          ])
+        stage('Compile') {
+          steps {
+            sh './gradlew compileJava'
+            sh './gradlew compileTestJava'
+          }
         }
-      }
-    }
 
-    stage('Static Analysis') {
-      steps {
-        dir(env.WORKSPACE) {
-          sh './gradlew check'
-
-          // Report results of static analysis tools
-          checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml', unHealthy: ''
-          findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: 'kieker-analysis\\build\\reports\\findbugs\\*.xml,kieker-tools\\build\\reports\\findbugs\\*.xml,kieker-monitoring\\build\\reports\\findbugs\\*.xml,kieker-common\\build\\reports\\findbugs\\*.xml', unHealthy: ''
-          pmd canComputeNew: false, defaultEncoding: '', healthy: '', pattern: 'kieker-analysis\\build\\reports\\pmd\\*.xml,kieker-tools\\build\\reports\\pmd\\*.xml,kieker-monitoring\\build\\reports\\pmd\\*.xml,kieker-common\\build\\reports\\pmd\\*.xml', unHealthy: ''
+        stage('Unit Test') {
+          steps {
+            sh './gradlew --parallel test'
+            step([
+                $class              : 'CloverPublisher',
+                cloverReportDir     : env.WORKSPACE + '/build/reports/clover',
+                cloverReportFileName: 'clover.xml',
+                healthyTarget       : [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80],
+                unhealthyTarget     : [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
+            ])
+          }
+          post {
+            always {
+              junit '**/build/test-results/test/*.xml'
+            }
+          }
         }
-      }
-    }
 
-    stage('Distribution Build') {
-      steps {
-        dir(env.WORKSPACE) {
-          sh './gradlew distribute'
-          archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar', fingerprint: true, onlyIfSuccessful: true
+        stage('Static Analysis') {
+          steps {
+            sh './gradlew check'
+
+            // Report results of static analysis tools
+            checkstyle canComputeNew: false,
+                defaultEncoding: '',
+                healthy: '',
+                pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml',
+                unHealthy: ''
+
+            findbugs canComputeNew: false,
+                defaultEncoding: '',
+                excludePattern: '',
+                healthy: '',
+                includePattern: '',
+                pattern: 'kieker-analysis\\build\\reports\\findbugs\\*.xml,kieker-tools\\build\\reports\\findbugs\\*.xml,kieker-monitoring\\build\\reports\\findbugs\\*.xml,kieker-common\\build\\reports\\findbugs\\*.xml',
+                unHealthy: ''
+
+            pmd canComputeNew: false,
+                defaultEncoding: '',
+                healthy: '',
+                pattern: 'kieker-analysis\\build\\reports\\pmd\\*.xml,kieker-tools\\build\\reports\\pmd\\*.xml,kieker-monitoring\\build\\reports\\pmd\\*.xml,kieker-common\\build\\reports\\pmd\\*.xml',
+                unHealthy: ''
+          }
+        }
+        
+        stage('Distribution Build') {
+          steps {
+            sh './gradlew distribute'
+            stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
+            stash includes: 'build/distributions/*', name: 'distributions'
+            stash includes: 'kieker-documentation/userguide/kieker-userguide.pdf', name: 'userguide'
+          }
         }
       }
     }
@@ -88,73 +104,118 @@ pipeline {
     stage('Release Checks') {
       parallel {
         stage('Release Check Short') {
+          agent {
+            docker {
+              image 'kieker/kieker-build:openjdk8'
+              args env.DOCKER_ARGS
+              label 'kieker-slave-docker'
+            }
+          }
           steps {
-            dir(env.WORKSPACE) {
-              sh './gradlew checkReleaseArchivesShort'
+            unstash 'distributions'
+            sh './gradlew checkReleaseArchivesShort'
+          }
+          post {
+            cleanup {
+              deleteDir()
             }
           }
         }
 
         stage('Release Check Extended') {
+          agent {
+            docker {
+              image 'kieker/kieker-build:openjdk8'
+              args env.DOCKER_ARGS
+              label 'kieker-slave-docker'
+            }
+          }
           when {
             beforeAgent true
-            branch 'master'
+            anyOf {
+              branch 'master';
+              changeRequest target: 'master'
+            }
           }
           steps {
-            dir(env.WORKSPACE) {
-              echo "We are in master - executing the extended release archive check."
-              sh './gradlew checkReleaseArchives'
+            unstash 'distributions'
+            sh './gradlew checkReleaseArchives'
+          }
+          post {
+            cleanup {
+              deleteDir()
             }
           }
         }
       }
     }
 
-    stage('Push to Stable') {
+    stage('Archive Artifacts') {
+      agent {
+        label 'kieker-slave-docker'
+      }
+      steps {
+        unstash 'jarArtifacts'
+        unstash 'distributions'
+        unstash 'userguide'
+        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar',
+            fingerprint: true,
+            onlyIfSuccessful: true
+      }
+      post {
+        cleanup {
+          deleteDir()
+        }
+      }
+    }
+
+    stage('Master Specific Stages') {
       when {
         beforeAgent true
         branch 'master'
       }
-      steps {
-        dir(env.WORKSPACE) {
-          echo "We are in master - pushing to stable branch."
-          sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+      parallel {
+        stage('Push to Stable') {
+          agent {
+            label 'kieker-slave-docker'
+          }
+          steps {
+            sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+          }
+          post {
+            cleanup {
+              deleteDir()
+            }
+          }
         }
-      }
-    }
 
-    stage('Upload Snapshot Version') {
-      when { 
-        beforeAgent true
-        branch 'master'
-      }
-      steps {
-        dir(env.WORKSPACE) {
-          withCredentials([usernamePassword(credentialsId: 'artifactupload', usernameVariable: 'kiekerMavenUser', passwordVariable: 'kiekerMavenPassword')]) {
-            sh './gradlew uploadArchives'
+        stage('Upload Snapshot Version') {
+          agent {
+            docker {
+              image 'kieker/kieker-build:openjdk8'
+              args env.DOCKER_ARGS
+              label 'kieker-slave-docker'
+            }
+          }
+          steps {
+            unstash 'jarArtifacts'
+            withCredentials([
+              usernamePassword(
+                credentialsId: 'artifactupload', 
+                usernameVariable: 'kiekerMavenUser', 
+                passwordVariable: 'kiekerMavenPassword'
+              )
+            ]) {
+              sh './gradlew uploadArchives'
+            }
+          }
+          post {
+            cleanup {
+              deleteDir()
+            }
           }
         }
       }
     }
-  }
-
-  post {
-    cleanup {
-      deleteDir()
-    }
-
-    failure {
-      mail to: env.CHANGE_AUTHOR_EMAIL, subject: "Pipeline build ${BRANCH_NAME}:${BUILD_NUMBER} failed.", body: """
-      Dear $CHANGE_AUTHOR,
-      unfortunately, the Kieker build ${BUILD_NUMBER} for branch ${BRANCH_NAME} failed.
-      More details can be found at ${BUILD_URL}.
-      Best,
-      Jenkins
-      """
-    }
-    //changed  {}
-    //failure  {}
-    //success  {}
-    //unstable {}
   }
 }

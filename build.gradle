@@ -668,13 +668,20 @@ task javadocJar(type: Jar, dependsOn: apidoc) {
     from apidoc.destinationDir
 }
 
-artifacts {
-    archives mainJar
-    archives emfJar
-    archives aspectJJar
 
-    archives sourcesJar
-    archives javadocJar
+def archMainJar = file("$buildDir/libs/kieker-${kiekerVersion}.jar")
+def archEmfJar = file("$buildDir/libs/kieker-${kiekerVersion}-emf.jar")
+def archAspectJJar = file("$buildDir/libs/kieker-${kiekerVersion}-aspectj.jar")
+def archSourcesJar = file("$buildDir/libs/kieker-${kiekerVersion}-sources.jar")
+def archJavaDocJar = file("$buildDir/libs/kieker-${kiekerVersion}-javadoc.jar")
+
+
+artifacts {
+    archives archMainJar
+    archives archEmfJar
+    archives archAspectJJar
+    archives archSourcesJar
+    archives archJavaDocJar
 }
 
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.',
@@ -798,11 +805,11 @@ def sourceContent = project.copySpec {
     into kiekerPackagenamebase + "-" + kiekerVersion
 }
 
-task checkReleaseArchivesShort(type: Exec, dependsOn: [distribute]) {
+task checkReleaseArchivesShort(type: Exec) {
     commandLine 'bin/dev/release-check-short.sh'
 }
 
-task checkReleaseArchives(type: Exec, dependsOn: [distribute]) {
+task checkReleaseArchives(type: Exec) {
     commandLine 'bin/dev/release-check-extended.sh'
 }
 
