@@ -50,7 +50,7 @@ public abstract class AbstractLegacyTool<T extends Object> {
 	public static final int USAGE_EXIT_CODE = 4;
 
 	/** logger for all tools. */
-	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractLegacyTool.class);
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass().getCanonicalName()); // NOPMD logging must not be static, confuses user
 
 	/** true if help should be displayed. */
 	protected boolean help = false; // NOPMD this is set to false for documentation purposes
@@ -82,7 +82,7 @@ public abstract class AbstractLegacyTool<T extends Object> {
 	 */
 	public int run(final String title, final String label, final String[] args, final T configuration) {
 		this.parameterConfiguration = configuration;
-		AbstractLegacyTool.LOGGER.debug(title);
+		this.logger.debug(title);
 
 		final JCommander commander = new JCommander(configuration);
 		try {
@@ -101,15 +101,15 @@ public abstract class AbstractLegacyTool<T extends Object> {
 					}
 				}
 			} else {
-				AbstractLegacyTool.LOGGER.error("Configuration Error"); // NOPMD
+				this.logger.error("Configuration Error"); // NOPMD
 				return CONFIGURATION_ERROR;
 			}
 		} catch (final ParameterException e) {
-			AbstractLegacyTool.LOGGER.error(e.getLocalizedMessage()); // NOPMD
+			this.logger.error(e.getLocalizedMessage()); // NOPMD
 			commander.usage();
 			return PARAMETER_ERROR;
 		} catch (final ConfigurationException e) {
-			AbstractLegacyTool.LOGGER.error(e.getLocalizedMessage()); // NOPMD
+			this.logger.error(e.getLocalizedMessage()); // NOPMD
 			commander.usage();
 			return CONFIGURATION_ERROR;
 		}

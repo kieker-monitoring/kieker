@@ -32,6 +32,7 @@ public class DirectoryScannerStage extends AbstractProducerStage<File> {
 
 	private final File[] directories;
 	private final FilenameFilter filter = new MapFileFilter();
+	private int numOfDirectories;
 
 	/**
 	 * Create a directory scanner.
@@ -57,12 +58,14 @@ public class DirectoryScannerStage extends AbstractProducerStage<File> {
 		} else {
 			this.logger.error("Cannot process an empty array of directories.");
 		}
+		this.logger.debug("Processed {} directories.", this.numOfDirectories);
 		this.workCompleted();
 	}
 
 	private void scanDirectory(final File directory) {
 		if (this.isKiekerDirectory(directory)) {
 			this.logger.debug("Reading log data from {}", directory.getAbsolutePath());
+			this.numOfDirectories++;
 			this.getOutputPort().send(directory);
 		} else {
 			for (final File subDirectory : directory.listFiles()) { // NOFB is guaranteed to be a directory
