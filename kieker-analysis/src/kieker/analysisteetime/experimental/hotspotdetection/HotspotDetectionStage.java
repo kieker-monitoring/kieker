@@ -38,7 +38,7 @@ import teetime.framework.AbstractConsumerStage;
  * This stage excepts traces at its input port and prints their operation calls to a given {@link PrintStream}, which
  * have the longest execution time without their children.
  *
- * The number of operation call that will be printed can be configured. The default print stream is {@link System.out}.
+ * The number of operation call that will be printed can be configured. The default print stream is System.out.
  *
  * @author Sören Henning, Stephan Lenga
  *
