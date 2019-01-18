@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
@@ -109,8 +108,6 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 	}
 
 
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
@@ -132,7 +129,6 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putLong(this.getTraceId());
 		serializer.putLong(this.getThreadId());
 		serializer.putString(this.getSessionId());
