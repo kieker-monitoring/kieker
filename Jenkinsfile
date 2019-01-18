@@ -42,8 +42,6 @@ pipeline {
           steps {
             sh './gradlew compileJava'
             sh './gradlew compileTestJava'
-            sh './gradlew build'
-            sh './gradlew distribute'
           }
         }
 
@@ -94,7 +92,7 @@ pipeline {
         
         stage('Distribution Build') {
           steps {
-            sh './gradlew distribute'
+            sh './gradlew build distribute'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
             stash includes: 'kieker-documentation/userguide/kieker-userguide.pdf', name: 'userguide'
