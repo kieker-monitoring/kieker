@@ -77,21 +77,21 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		if (this.parameterConfiguration.getIgnoreExecutionsBeforeDate() != null) {
-			LOGGER.info("Ignoring records before {} ({})", dateFormat.format(this.parameterConfiguration.getIgnoreExecutionsBeforeDate()),
+			logger.info("Ignoring records before {} ({})", dateFormat.format(this.parameterConfiguration.getIgnoreExecutionsBeforeDate()),
 					this.parameterConfiguration.getIgnoreExecutionsBeforeDate());
 		}
 		if (this.parameterConfiguration.getIgnoreExecutionsAfterDate() != null) {
-			LOGGER.info("Ignoring records after {} ({})", dateFormat.format(this.parameterConfiguration.getIgnoreExecutionsAfterDate()),
+			logger.info("Ignoring records after {} ({})", dateFormat.format(this.parameterConfiguration.getIgnoreExecutionsAfterDate()),
 					this.parameterConfiguration.getIgnoreExecutionsAfterDate());
 		}
 
-		this.parameterConfiguration.dumpConfiguration(LOGGER);
+		this.parameterConfiguration.dumpConfiguration(logger);
 
-		if (new PerformAnalysis(LOGGER, this.parameterConfiguration).dispatchTasks()) {
-			LOGGER.info("Analysis complete. See 'kieker.log' for details.");
+		if (new PerformAnalysis(logger, this.parameterConfiguration).dispatchTasks()) {
+			logger.info("Analysis complete. See 'kieker.log' for details.");
 			return SUCCESS_EXIT_CODE;
 		} else {
-			LOGGER.error("Analysis incomplete. See 'kieker.log' for details.");
+			logger.error("Analysis incomplete. See 'kieker.log' for details.");
 			return RUNTIME_ERROR;
 		}
 	}
@@ -134,7 +134,7 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 	 */
 	private boolean selectOrFilterTraces() {
 		if (this.checkNotEmpty(this.parameterConfiguration.getSelectTraces()) && this.checkNotEmpty(this.parameterConfiguration.getFilterTraces())) {
-			LOGGER.error("Trace Id selection and filtering are mutually exclusive");
+			logger.error("Trace Id selection and filtering are mutually exclusive");
 			return false;
 		} else if (this.parameterConfiguration.getSelectTraces() != null) {
 			final int numSelectedTraces = this.parameterConfiguration.getSelectTraces().size();
@@ -142,9 +142,9 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 				for (final Long idStr : this.parameterConfiguration.getSelectTraces()) {
 					this.parameterConfiguration.getSelectedTraces().add(idStr);
 				}
-				LOGGER.info("{} trace{} selected", numSelectedTraces, (numSelectedTraces > 1 ? "s" : "")); // NOCS
+				logger.info("{} trace{} selected", numSelectedTraces, (numSelectedTraces > 1 ? "s" : "")); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-				LOGGER.error("Failed to parse list of trace IDs: {}", this.parameterConfiguration.getSelectTraces().toArray().toString(), e);
+				logger.error("Failed to parse list of trace IDs: {}", this.parameterConfiguration.getSelectTraces().toArray().toString(), e);
 				return false;
 			}
 		} else if (this.parameterConfiguration.getFilterTraces() != null) {
@@ -156,9 +156,9 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 				for (final Long idStr : this.parameterConfiguration.getSelectTraces()) {
 					this.parameterConfiguration.getSelectedTraces().add(idStr);
 				}
-				LOGGER.info("{} trace{} filtered", numSelectedTraces, (numSelectedTraces > 1 ? "s" : "")); // NOCS
+				logger.info("{} trace{} filtered", numSelectedTraces, (numSelectedTraces > 1 ? "s" : "")); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-				LOGGER.error("Failed to parse list of trace IDs: {}", this.parameterConfiguration.getSelectTraces().toArray().toString(), e);
+				logger.error("Failed to parse list of trace IDs: {}", this.parameterConfiguration.getSelectTraces().toArray().toString(), e);
 				return false;
 			}
 		}
@@ -176,11 +176,11 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 		for (final File inputDir : this.parameterConfiguration.getInputDirs()) {
 			try {
 				if (!inputDir.exists()) {
-					LOGGER.error("The specified input directory '{}' does not exist", inputDir.getCanonicalPath());
+					logger.error("The specified input directory '{}' does not exist", inputDir.getCanonicalPath());
 					return false;
 				}
 				if (!inputDir.isDirectory() && !inputDir.getAbsolutePath().endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
-					LOGGER.error("The specified input directory '{}' is neither a directory nor a zip file", inputDir.getCanonicalPath());
+					logger.error("The specified input directory '{}' is neither a directory nor a zip file", inputDir.getCanonicalPath());
 					return false;
 				}
 				// check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons
@@ -195,12 +195,12 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 						}
 					}
 					if (!mapFileExists) {
-						LOGGER.error("The specified input directory '{}' is not a kieker log directory", inputDir.getCanonicalPath());
+						logger.error("The specified input directory '{}' is not a kieker log directory", inputDir.getCanonicalPath());
 						return false;
 					}
 				}
 			} catch (final IOException e) { // thrown by File.getCanonicalPath()
-				LOGGER.error("Error resolving name of input directory: '{}'", inputDir);
+				logger.error("Error resolving name of input directory: '{}'", inputDir);
 			}
 		}
 
