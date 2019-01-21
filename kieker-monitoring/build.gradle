@@ -44,17 +44,22 @@ dependencies {
 	compile resolveLibrary('framework-libs/spring/spring-web-*.jar')
 	compile resolveLibrary('framework-libs/spring/spring-webmvc-*.jar')
 	
-	//adding mockito
-	testImplementation 'org.mockito:mockito-core:2.7.1' 
-	testImplementation 'org.easymock:easymock:3.4'
-	//Adding PowerMock
-	testCompile 'junit:junit:4.12'
+	// testing
+	compile 'org.hamcrest:hamcrest-all:1.3'
+
+	compile 'org.javassist:javassist:3.24.1-GA'
+
+	compile 'junit:junit:4.12'
+
+	compile 'org.objenesis:objenesis:2.2'
 	
-	testCompile 'org.powermock:powermock-api-easymock:1.7.1'
-	testCompile 'org.powermock:powermock-api-mockito2:1.7.0RC4'
-	testCompile 'org.powermock:powermock-module-junit4-rule-agent:1.7.0RC4'
-	testCompile 'org.powermock:powermock-module-junit4-rule:1.7.0RC4'
-	testCompile 'org.powermock:powermock-module-junit4:1.7.0RC4'
+	compile 'org.easymock:easymock:3.4'
+	compile 'org.mockito:mockito-core:2.8.9' 
+	compile 'org.powermock:powermock-api-mockito2:1.7.+'
+	compile 'org.powermock:powermock-api-easymock:1.7.+' 
+	compile 'org.powermock:powermock-module-junit4:1.7.+' 
+	compile 'org.powermock:powermock-core:1.7.+'
+	compile 'org.powermock:powermock-module-junit4-rule:1.7.+' 
 	
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')

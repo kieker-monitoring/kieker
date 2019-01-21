@@ -15,128 +15,112 @@
  ***************************************************************************/
 package kieker.monitoring.writer.filesystem;
 
-import java.io.File;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import kieker.common.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
+
 /**
  * @author Danish Manzoor
  *
+ * @since 1.15
  */
-//@RunWith(PowerMockRunner.class)
-//@RunWith(PowerMockRunner.class)
-//@PrepareForTest(TextMapFileHandler.class)
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ File.class })
+// as we want to mock System classes, we must prepare the test class and not the
+// to be mocked classes, as this is done for other static classes
+// https://github.com/powermock/powermock/wiki/Mock-System
+@PrepareForTest({ TextMapFileHandler.class })
 public class TextMapFileHandlerTest {
 
-	private PrintWriter printWriter;
+	private final static String TEST_PATH = "this/is/a/test/path";
 
-	/**
-	 * Test method for
-	 * {@link kieker.monitoring.writer.filesystem.TextMapFileHandler#TextMapFileHandler(kieker.common.configuration.Configuration)}.
-	 */
-	@Test
-	public void testTextMapFileHandler() {
-		Assert.fail("Not yet implemented"); // TODO
+	public TextMapFileHandlerTest() {
+		// test class
 	}
 
 	/**
 	 * Test method for
 	 * {@link kieker.monitoring.writer.filesystem.TextMapFileHandler#create(java.nio.file.Path, java.nio.charset.Charset)}.
 	 */
-
 	@Test
-
 	public void testCreate() {
-		final Path path = null;
-		final Charset cs = null;
+		// final Files fileMock = EasyMock.createMock(Files.class);
+		//
+		// try {
+		// final Writer w = fileMock.newBufferedWriter(path, cs, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+		// this.printWriter = new PrintWriter(w);
+		//
+		// } catch (final IOException e) {
+		// throw new IllegalStateException("Error on mock for Kieker's mapping file.", e);
+		// }
 
-//		final Files fileMock = EasyMock.createMock(Files.class);
-//
-//		try {
-//			final Writer w = fileMock.newBufferedWriter(path, cs, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
-//			this.printWriter = new PrintWriter(w);
-//
-//		} catch (final IOException e) {
-//			throw new IllegalStateException("Error on mock for Kieker's mapping file.", e);
-//		}
+		PowerMockito.mockStatic(Files.class);
+		final Path location = Paths.get(TEST_PATH);
+		final Charset charset = Charset.defaultCharset();
 
-		final Files fileMock = PowerMock.createMock(Files.class);
-		try {
-			PowerMockito.whenNew(Files.class).withAnyArguments().thenReturn(fileMock);
-
-		} catch (final Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		final Writer dummyWriter = new DummyWriter();
+		final BufferedWriter writer = new BufferedWriter(dummyWriter);
 
 		try {
-//			this.printWriter = new PrintWriter(fileMock.createTempFile("abc", null, new File("D:/")));
-//			final Writer w = Files.newBufferedWriter(fileMock.createFile(path)); this is what I'm trying to do
-			final Writer w = Files.newBufferedWriter(Files.createFile(path));
-			this.printWriter = new PrintWriter(w);
-
+			PowerMockito.when(Files.newBufferedWriter(location, charset, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)).thenReturn(writer);
 		} catch (final IOException e) {
-			throw new IllegalStateException("Error on mock for Kieker's mapping file.", e);
+			Assert.fail(e.getLocalizedMessage());
 		}
+
+		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
+
+		final TextMapFileHandler handler = new TextMapFileHandler(configuration);
+
+		handler.create(location, charset);
+
+		handler.add(0, "my.event.EventClass");
+
+		// check dummy writer whether an appropriate string appeared
+
+		handler.close();
+
+		// check whether close was called.
 
 		// this is what I found on
 		// https://stackoverflow.com/questions/16035365/is-it-possible-to-use-powermock-to-mock-new-file-creation/16118611
 		// using easymock
 
 		// first, create a mock for File
-//		final File fileMock = EasyMock.createMock(File.class);
-//		EasyMock.expect(fileMock.getAbsolutePath()).andReturn("/my/fake/file/path");
-////		EasyMock.replay(fileMock);
-//
-//		// then return the mocked object if the constructor is invoked
-//		final Class<?>[] parameterTypes = new Class[] { String.class };
-//		try {
-//			PowerMock.expectNew(File.class, parameterTypes, EasyMock.isA(String.class)).andReturn(fileMock);
-//		} catch (final Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-////		PowerMock.replay(File.class);
-//		PowerMock.replay(fileMock, File.class);
-//		// try constructing a real File and check if the mock kicked in
-//		final String mockedFilePath = new File("/real/path/for/file").getAbsolutePath();
-//		Assert.assertEquals("/my/fake/file/path", mockedFilePath);
-//
-//		
+		// final File fileMock = EasyMock.createMock(File.class);
+		// EasyMock.expect(fileMock.getAbsolutePath()).andReturn("/my/fake/file/path");
+		//// EasyMock.replay(fileMock);
+		//
+		// // then return the mocked object if the constructor is invoked
+		// final Class<?>[] parameterTypes = new Class[] { String.class };
+		// try {
+		// PowerMock.expectNew(File.class, parameterTypes, EasyMock.isA(String.class)).andReturn(fileMock);
+		// } catch (final Exception e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		//
+		//// PowerMock.replay(File.class);
+		// PowerMock.replay(fileMock, File.class);
+		// // try constructing a real File and check if the mock kicked in
+		// final String mockedFilePath = new File("/real/path/for/file").getAbsolutePath();
+		// Assert.assertEquals("/my/fake/file/path", mockedFilePath);
+		//
+		//
 
-	}
-
-	/**
-	 * Test method for
-	 * {@link kieker.monitoring.writer.filesystem.TextMapFileHandler#close()}.
-	 */
-	@Test
-	public void testClose() {
-		Assert.fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link kieker.monitoring.writer.filesystem.TextMapFileHandler#add(int, java.lang.String)}.
-	 */
-	@Test
-	public void testAdd() {
-		Assert.fail("Not yet implemented"); // TODO
 	}
 
 }
