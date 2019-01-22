@@ -320,9 +320,7 @@ aspectjversion="$(grep "libAspectjVersion = " gradle.properties | sed s/.*=.//g)
 information "---------------------------------"
 information "Check binary releases"
 information "---------------------------------"
-PWD=`pwd`
-echo $PWD
-ls $PWD
+
 assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"
 BASE_TMP_DIR_ABS=$(pwd)
