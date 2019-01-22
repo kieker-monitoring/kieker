@@ -42,7 +42,7 @@ pipeline {
           steps {
             sh './gradlew compileJava'
             sh './gradlew compileTestJava'
-            sh './gradlew distribute'
+            sh './gradlew build distribute'
           }
         }
 
