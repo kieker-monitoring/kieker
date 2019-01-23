@@ -23,6 +23,7 @@ if [ $? -eq 0 ]; then
     ./gradlew compileJava compileTestJava &&\
     ./gradlew test &&\
     ./gradlew check &&\
+    ./gradlew build distribute &&\
     ./gradlew checkReleaseArchivesShort &&\
     ./gradlew checkReleaseArchives"
 else
