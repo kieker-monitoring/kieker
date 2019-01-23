@@ -118,9 +118,9 @@ public class BinaryEventDeserializer extends AbstractEventDeserializer {
 	private IMonitoringRecord deserializeRecord(final IValueDeserializer deserializer)
 			throws IOException {
 		final int clazzId = this.buffer.getInt();
-		final String recordClassName = this.registry.get(clazzId);
+		final String eventTypeName = this.registry.get(clazzId);
 
-		if (recordClassName == null) {
+		if (eventTypeName == null) {
 			LOGGER.error("Missing classname mapping for record type id '{}'",
 					clazzId);
 			return null; // we can't easily recover on errors
@@ -136,28 +136,33 @@ public class BinaryEventDeserializer extends AbstractEventDeserializer {
 			final long loggingTimestamp = this.buffer.getLong();
 
 			// identify record data
-			final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
-			if (this.buffer.remaining() < recordFactory.getRecordSizeInBytes()) {
+			final IRecordFactory<? extends IMonitoringRecord> eventTypeFactory = this.recordFactories.get(eventTypeName);
+			if (eventTypeFactory == null) {
+				LOGGER.error("Class type {} was not found. Cannot instantiate event type.", eventTypeName);
+				this.buffer.reset();
+				this.buffer.compact();
+				return null;
+			} else if (this.buffer.remaining() < eventTypeFactory.getRecordSizeInBytes()) {
 				// incomplete record, move back
 				this.buffer.reset();
 				this.buffer.compact();
 				return null;
 			} else {
 				try {
-					final IMonitoringRecord record = recordFactory.create(deserializer);
+					final IMonitoringRecord record = eventTypeFactory.create(deserializer);
 					record.setLoggingTimestamp(loggingTimestamp);
 					return record;
 				} catch (final RecordInstantiationException ex) { // This happens when dynamic
 					// arrays are used and the buffer
 					// does not hold the complete
 					// record.
-					LOGGER.warn("Failed to create: {} error {}", recordClassName, ex);
+					LOGGER.warn("Failed to create: {} error {}", eventTypeName, ex);
 					// incomplete record, move back
 					this.buffer.reset();
 					this.buffer.compact();
 					return null;
 				} catch (final BufferUnderflowException ex) {
-					LOGGER.warn("Failed to create: {} error {}", recordClassName, ex);
+					LOGGER.warn("Failed to create: {} error {}", eventTypeName, ex);
 					// incomplete record, move back
 					this.buffer.reset();
 					this.buffer.compact();
