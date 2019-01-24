@@ -374,31 +374,33 @@ mainSubprojects.each { project ->
                 println("  Info: " + pmdInfos)
                 println()
 
+                def eclipseUserHint = "\nNOTE: If you are using Eclipse, please make sure that you set it up properly as described at: https://github.com/kieker-monitoring/kieker#eclipse-setup-for-contributors"
+
                 // Fail build if Checkstyle thresholds are violated
                 if (csWarnings > Integer.valueOf(checkstyleWarningThreshold)) {
-                    throw new GradleException("There were checkstyle warnings exceeding the warning threshold! Warnings: " + csWarnings + " Threshold: " + checkstyleWarningThreshold)
+                    throw new GradleException("There were checkstyle warnings exceeding the warning threshold! Warnings: " + csWarnings + " Threshold: " + checkstyleWarningThreshold + "." + eclipseUserHint)
                 }
 
                 if (csErrors > Integer.valueOf(checkstyleErrorThreshold)) {
-                    throw new GradleException("There were checkstyle errors exceeding the error threshold! Errors: " + csErrors + " Threshold: " + checkstyleErrorThreshold)
+                    throw new GradleException("There were checkstyle errors exceeding the error threshold! Errors: " + csErrors + " Threshold: " + checkstyleErrorThreshold + "." + eclipseUserHint)
                 }
 
                 // Fail build if Findbugs thresholds are violated
                 if (fbWarnings > Integer.valueOf(findbugsWarningThreshold)) {
-                    throw new GradleException("There were findbugs warnings exceeding the warning threshold! Warnings: " + fbWarnings + " Threshold: " + findbugsWarningThreshold)
+                    throw new GradleException("There were findbugs warnings exceeding the warning threshold! Warnings: " + fbWarnings + " Threshold: " + findbugsWarningThreshold + ".")
                 }
 
                 if (fbErrors > Integer.valueOf(findbugsErrorThreshold)) {
-                    throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + fbErrors + " Threshold: " + findbugsErrorThreshold)
+                    throw new GradleException("There were findbugs errors exceeding the error threshold! Errors: " + fbErrors + " Threshold: " + findbugsErrorThreshold + ".")
                 }
 
                 // Fail build if PMD thresholds are violated
                 if (pmdWarnings > Integer.valueOf(pmdWarningThreshold)) {
-                    throw new GradleException("There were pmd warnings exceeding the warning threshold! Warnings: " + pmdWarnings + " Threshold: " + pmdWarningThreshold)
+                    throw new GradleException("There were pmd warnings exceeding the warning threshold! Warnings: " + pmdWarnings + " Threshold: " + pmdWarningThreshold + "." + eclipseUserHint)
                 }
 
                 if (pmdErrors > Integer.valueOf(pmdErrorThreshold)) {
-                    throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + pmdErrors + " Threshold: " + pmdErrorThreshold)
+                    throw new GradleException("There were pmd errors exceeding the error threshold! Errors: " + pmdErrors + " Threshold: " + pmdErrorThreshold + "." + eclipseUserHint)
                 }
             }
         }
@@ -411,34 +413,6 @@ mainSubprojects.each { project ->
 //mainSubprojects.tasks.check*.finalizedBy(checkThresholds)
 
 task checkThresholds(dependsOn: mainSubprojects.tasks["checkThresholds"])
-
-/*
-task htmlQualityReport() {
-    def javaVersion = JavaVersion.current()
-    def reportTypes = ['main', 'test']
-	def scautilJar = file("${rootDir}/${dirLib}/static-analysis/scautil-${javaVersion}.jar")
-
-    mainSubprojects.each { Project p ->
-        reportTypes.each { String type ->
-            def reports = p.projectDir.path + '/build/reports'
-            def checkstyleReportsFolder = "${reports}/checkstyle"
-            def findbugsReportsFolder = "${reports}/findbugs"
-            def pmdReportsFolder = "${reports}/pmd"
-
-            doLast {
-				p.javaexec {
-					main = '-jar'
-					args = ["$scautilJar", "${findbugsReportsFolder}/${type}.xml", "${checkstyleReportsFolder}/${type}.xml", 
-							"${pmdReportsFolder}/${type}.xml", "${reports}/${type}ReportSummary.html"]
-				}
-                println("The report summary for \'${type}\' can be found at ${reports}/${type}ReportSummary.html")
-            }
-        }
-    }
-}
-mainSubprojects.tasks.check*.finalizedBy(htmlQualityReport)
-htmlQualityReport.onlyIf { reportingCompatibleJavaVersionPresent() }
-*/
 
 
 def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
