@@ -194,7 +194,7 @@ function assert_files_exist_src {
 	assert_file_NOT_exists ".classpath"
 	assert_file_exists_regular ".checkstyle"
 	assert_file_exists_regular ".pmd"
-	assert_dir_exists ".settings/"
+	assert_file_NOT_exists ".settings/"
 	assert_file_exists_regular "kieker-documentation/README-bin"
 	assert_file_exists_regular "kieker-documentation/README-src"
 }
