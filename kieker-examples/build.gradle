@@ -337,6 +337,9 @@ task buildStandaloneExamplesAnalysisKax(type: GradleBuild, dependsOn: 'copyLibsS
 }
 
 task copyLibsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProject.mainJar]) {
+	from ('../kieker-tools/opad/build/libs') {
+		include "opad-${version}.jar"
+	}
 	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}
@@ -359,11 +362,15 @@ task copyScriptsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProje
 }
 
 task buildStandaloneExamplesAnalysisOpad(type: GradleBuild, dependsOn: [ 'copyLibsStandaloneExamplesAnalysisOpad', 'copyScriptsStandaloneExamplesAnalysisOpad' ]) {
+    println("++++++++++++++++++++++++++")
 	buildFile = 'analysis/opad-anomaly-detection/build.gradle'
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
 task copyLibsStandaloneExamplesAnalysisTraceAnalysis(type: Copy, dependsOn: [rootProject.mainJar]) {
+	from ('../kieker-tools/opad/build/libs') {
+		include "opad-${version}.jar"
+	}
 	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}

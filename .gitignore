@@ -20,24 +20,19 @@ plugin.xml
 /activemq-data
 /invalidTraceArtifacts-yyyyMMdd-HHmmssSSS.txt
 /messageTraces-yyyyMMdd-HHmmssSSS.txt
-/kieker-analysis/build
-/kieker-common/build
-/kieker-monitoring/build
-/kieker-tools/build
 /kieker-examples/userguide/ch2--bookstore-application/build
 /kieker-examples/userguide/ch2--bookstore-application/.gradle
-/kieker-examples/build
 /kieker-tools/*.log
 /kieker-tools/activemq-data
-/kieker-examples/userguide/build
 /kieker-analysis/*.log
-/kieker-checkstyle-extension/build
 /kieker-checkstyle-extension/bin
 /docs
 /javadoc
 .gradle
 /src-gen
 /test-gen
+**/build/**
+**/bin/**
 
 # IntelliJ
 .idea/

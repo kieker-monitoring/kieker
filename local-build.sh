@@ -9,7 +9,7 @@ rm -rf kieker-extension-kafka/bin/*
 rm -rf kieker-monitoring/bin/*
 rm -rf kieker-tools/bin/*
 
-./gradlew -S compileJava compileTestJava -x apidoc
+./gradlew -S compileJava compileTestJava jar -x apidoc
 
 echo "compile complete -> test"
 

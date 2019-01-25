@@ -41,9 +41,9 @@ import kieker.tools.trace.analysis.repository.TraceColorRepository.TraceColorRep
 import kieker.tools.trace.analysis.systemModel.AllocationComponent;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.tools.util.graph.DependencyGraphTestUtil;
-import kieker.test.tools.util.graph.GraphReceiverPlugin;
-import kieker.test.tools.util.graph.GraphTestSetup;
+import kieker.test.tools.util.bookstore.graph.DependencyGraphTestUtil;
+import kieker.test.tools.util.bookstore.graph.GraphReceiverPlugin;
+import kieker.test.tools.util.bookstore.graph.GraphTestSetup;
 
 /**
  * Test suite for the graph coloring filter.

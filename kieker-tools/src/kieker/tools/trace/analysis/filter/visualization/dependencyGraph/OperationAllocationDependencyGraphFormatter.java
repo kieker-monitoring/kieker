@@ -22,8 +22,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import kieker.tools.trace.analysis.Constants;
 import kieker.tools.trace.analysis.filter.visualization.AbstractGraphFormatter;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.trace.analysis.systemModel.AllocationComponent;
 import kieker.tools.trace.analysis.systemModel.ExecutionContainer;
@@ -39,7 +39,7 @@ import kieker.tools.trace.analysis.systemModel.util.AllocationComponentOperation
  */
 public class OperationAllocationDependencyGraphFormatter extends AbstractOperationDependencyGraphFormatter<OperationAllocationDependencyGraph> {
 
-	private static final String DEFAULT_FILE_NAME = Constants.ALLOCATION_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
+	private static final String DEFAULT_FILE_NAME = VisualizationConstants.ALLOCATION_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX + VisualizationConstants.DOT_FILE_SUFFIX;
 
 	/**
 	 * Creates a new formatter.
@@ -49,10 +49,8 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 	}
 
 	private ElementGrouping groupElements(final OperationAllocationDependencyGraph graph) {
-		final ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping =
-				new ConcurrentHashMap<ExecutionContainer, Set<AllocationComponent>>();
-		final ConcurrentMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping =
-				new ConcurrentHashMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>>();
+		final ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping = new ConcurrentHashMap<>();
+		final ConcurrentMap<AllocationComponent, Set<DependencyGraphNode<AllocationComponentOperationPair>>> operationGrouping = new ConcurrentHashMap<>();
 
 		for (final DependencyGraphNode<AllocationComponentOperationPair> vertex : graph.getVertices()) {
 			final AllocationComponent allocationComponent = vertex.getEntity().getAllocationComponent();
@@ -61,7 +59,7 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 			// Update map execution container -> allocation components
 			Set<AllocationComponent> allocationComponents = allocationComponentGrouping.get(executionContainer);
 			if (allocationComponents == null) {
-				allocationComponents = new HashSet<AllocationComponent>();
+				allocationComponents = new HashSet<>();
 				allocationComponentGrouping.put(executionContainer, allocationComponents);
 			}
 			allocationComponents.add(allocationComponent);
@@ -69,7 +67,7 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 			// Update map allocation component -> operations
 			Set<DependencyGraphNode<AllocationComponentOperationPair>> operations = operationGrouping.get(allocationComponent);
 			if (operations == null) {
-				operations = new HashSet<DependencyGraphNode<AllocationComponentOperationPair>>();
+				operations = new HashSet<>();
 				operationGrouping.put(allocationComponent, operations);
 			}
 			operations.add(vertex);
@@ -86,7 +84,7 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 		final StringBuilder builder = new StringBuilder();
 
 		builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ALLOCATION_COMPONENT).append("\\n")
-		       .append(component.getAssemblyComponent().getName()).append(':');
+				.append(component.getAssemblyComponent().getName()).append(':');
 
 		if (useShortLabels) {
 			builder.append("..");

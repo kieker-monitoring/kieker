@@ -9,6 +9,7 @@ dependencies {
 	// you need to ensure by yourself that the following jars are in the lib folder
 	compile fileTree('lib') {
 		include "kieker-*.jar"
+		include "opad-*.jar"
 		include "opencsv-*.jar"
 	}
 

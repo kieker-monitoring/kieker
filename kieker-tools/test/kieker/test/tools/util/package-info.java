@@ -13,4 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+/**
+ * @author Reiner Jung
+ *
+ */
 package kieker.test.tools.util;

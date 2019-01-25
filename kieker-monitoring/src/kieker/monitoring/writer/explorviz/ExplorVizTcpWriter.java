@@ -82,11 +82,13 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 	private final IWriterRegistry<String> writerRegistry;
 
 	/**
-	 * this adapter allows to use the new WriterRegistry with the legacy IRegistry
-	 * in {@link AbstractMonitoringRecord.registerStrings(..)}
+	 * Create explorviz writer.
+	 *
+	 * @param configuration
+	 *            configuration
+	 * @throws IOException
+	 *             on io error
 	 */
-	// private final RegisterAdapter<String> registerStringsAdapter;
-
 	public ExplorVizTcpWriter(final Configuration configuration) throws IOException {
 		super(configuration);
 		final String hostname = configuration.getStringProperty(CONFIG_HOSTNAME);

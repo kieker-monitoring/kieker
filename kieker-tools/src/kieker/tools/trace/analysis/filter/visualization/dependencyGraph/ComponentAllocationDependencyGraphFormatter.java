@@ -22,8 +22,8 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import kieker.tools.trace.analysis.Constants;
 import kieker.tools.trace.analysis.filter.visualization.AbstractGraphFormatter;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.trace.analysis.systemModel.AllocationComponent;
 import kieker.tools.trace.analysis.systemModel.ExecutionContainer;
@@ -31,14 +31,14 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Formatter class for component dependency graphs on the allocation level (see {@link ComponentAllocationDependencyGraph}) .
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public class ComponentAllocationDependencyGraphFormatter extends AbstractComponentDependencyGraphFormatter<ComponentAllocationDependencyGraph> {
 
-	private static final String DEFAULT_FILE_NAME = Constants.ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
+	private static final String DEFAULT_FILE_NAME = VisualizationConstants.ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX + VisualizationConstants.DOT_FILE_SUFFIX;
 
 	/**
 	 * Creates a new formatter.
@@ -49,15 +49,14 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 
 	private static ConcurrentMap<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> groupNodesByComponent(
 			final ComponentAllocationDependencyGraph graph) {
-		final ConcurrentMap<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> nodeMap =
-				new ConcurrentHashMap<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>>();
+		final ConcurrentMap<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> nodeMap = new ConcurrentHashMap<>();
 
 		for (final DependencyGraphNode<AllocationComponent> node : graph.getNodes()) {
 			final ExecutionContainer container = node.getEntity().getExecutionContainer();
 
 			List<DependencyGraphNode<AllocationComponent>> nodes = nodeMap.get(container);
 			if (nodes == null) {
-				nodes = new ArrayList<DependencyGraphNode<AllocationComponent>>();
+				nodes = new ArrayList<>();
 				nodeMap.put(container, nodes);
 			}
 
@@ -118,8 +117,8 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 		this.appendGraphHeader(builder);
 
 		// Group nodes by execution containers
-		final ConcurrentMap<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> nodeMap =
-				ComponentAllocationDependencyGraphFormatter.groupNodesByComponent(graph);
+		final ConcurrentMap<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> nodeMap = ComponentAllocationDependencyGraphFormatter
+				.groupNodesByComponent(graph);
 		for (final Entry<ExecutionContainer, List<DependencyGraphNode<AllocationComponent>>> entry : nodeMap.entrySet()) {
 			this.handleContainerEntry(entry, builder, useShortLabels);
 		}

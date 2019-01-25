@@ -36,7 +36,7 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
-import kieker.test.tools.util.filter.ExecutionSinkClass;
+import kieker.test.tools.util.bookstore.filter.ExecutionSinkClass;
 
 /**
  * @author Andre van Hoorn

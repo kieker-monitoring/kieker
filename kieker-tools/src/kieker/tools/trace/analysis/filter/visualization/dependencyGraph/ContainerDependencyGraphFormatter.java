@@ -16,21 +16,21 @@
 
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
-import kieker.tools.trace.analysis.Constants;
 import kieker.tools.trace.analysis.filter.visualization.AbstractGraphFormatter;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.trace.analysis.systemModel.ExecutionContainer;
 
 /**
  * Formatter for container dependency graphs.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFormatter<ContainerDependencyGraph> {
 
-	private static final String DEFAULT_FILE_NAME = Constants.CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
+	private static final String DEFAULT_FILE_NAME = VisualizationConstants.CONTAINER_DEPENDENCY_GRAPH_FN_PREFIX + VisualizationConstants.DOT_FILE_SUFFIX;
 
 	/**
 	 * Creates a new formatter.

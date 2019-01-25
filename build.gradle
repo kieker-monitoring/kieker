@@ -544,6 +544,11 @@ configurations.archives.artifacts.with { archives ->
     remove(jarArtifact)
 }
 
+/**
+ * Create bundle jars.
+ */
+ 
+/** Kieker jar without aspectj and emf. */
 task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
         description: "Assembles a jar archive containing all of Kieker's components, the user guide examples, the documentation etc."
 ) {
@@ -552,13 +557,16 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build
     configure licence
     configure aopxml
 
-    from configurations.resultJar.collect { it.isDirectory() ? it : zipTree(it) }
+    from configurations.resultJar.collect { 
+    	it.isDirectory() ? it : zipTree(it)
+    }
 
     manifest = project.manifest {
         from sharedManifest
     }
 }
 
+/** Kieker jar with emf libraries. */
 task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
         description: "Assembles a jar archive containing the contents of the mainJar task and additionally the Eclipse Modeling Framework (EMF). The resulting jar can directly be used for analyzing Kieker logs."
 ) {
@@ -596,6 +604,7 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build"
     }
 }
 
+/** Kieker jar with aspectJ tooling. */
 task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
         description: "Assembles a jar archive containing the contents of the mainJar task and additionally the aspect-oriented framework AspectJ. The resulting jar can directly be used for monitoring as javaagent."
 ) {
@@ -659,8 +668,12 @@ artifacts {
 }
 
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.',
-        dependsOn: [':distributeBinaryZip', ':distributeSourceZip', ':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
+    dependsOn: [':distributeBinaryZip', ':distributeSourceZip', ':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
 
+
+/**
+ * Collect binary content.
+ */
 def binaryContent = project.copySpec {
     from(projectDir) {
         include 'LICENSE'
@@ -671,6 +684,7 @@ def binaryContent = project.copySpec {
         include 'javadoc/**'
         include 'build/libs/*'
 
+        exclude 'bin/**/*.class'
         exclude '**/.gradle/**'
         exclude 'lib/static-analysis/'
         exclude 'bin/dev/release-check*'
@@ -691,6 +705,25 @@ def manualContent = project.copySpec {
     into kiekerPackagenamebase + "-" + kiekerVersion + "/doc"
 }
 
+/** collect tools for binary distribution. */
+def toolsContent = project.copySpec {
+    ['trace-analysis', 'trace-analysis-gui', 'log-replayer', 'resource-monitor', 'collector'].each {
+        from("kieker-tools/${it}/build/distributions") {
+            include "**"
+        }
+        into kiekerPackagenamebase + "-" + kiekerVersion + "/tools"
+    }
+}
+
+/** collect all libraries in kieker-tools. */
+def libraryContent = project.copySpec {
+    from('kieker-tools/**/build/libs') {
+    	include '**jar'
+    }
+    into kiekerPackagenamebase + "-" + kiekerVersion + "/build/libs"
+}
+
+/** collect example content for the binary distribution. */
 def exampleContent = project.copySpec {
 
     from('kieker-examples') {
@@ -731,19 +764,30 @@ task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandalone
     }
 }
 
+/**
+ * Compile the binary distribution.
+ */
+ 
+/** binary distribution in zip format. */
 task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
     classifier = 'binaries'
-    with binaryContent, manualContent, exampleContent, exampleJavaEEContent
+    with binaryContent, manualContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
 }
 
+/** binary distribution in tar.gz format. */
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
     classifier = 'binaries'
-    with binaryContent, manualContent, exampleContent, exampleJavaEEContent
+    with binaryContent, manualContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
 
     compression = Compression.GZIP
     extension = 'tar.gz'
 }
 
+/**
+ * Collect source content.
+ */
+ 
+/** collect all sources. */
 def sourceContent = project.copySpec {
     from(projectDir) {
         include '**/**' // '*' doesn't seem to include hidden files

@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of an {@link OutputStream} that redirects data received via
- * its {@link #write(int)} method to an instance of {@link Log}.
+ * its {@link #write(int)} method to an instance of {@link Logger}.
  *
  * @since 1.10
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld

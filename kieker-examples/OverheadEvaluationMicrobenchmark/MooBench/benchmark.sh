@@ -90,25 +90,19 @@ WRITER_CONFIG[1]="-Dkieker.monitoring.enabled=false -Dkieker.monitoring.writer=k
 TITLE[2]="No logging (null writer)"
 WRITER_CONFIG[2]="-Dkieker.monitoring.enabled=true -Dkieker.monitoring.writer=kieker.monitoring.writer.dump.DumpWriter"
 
-TITLE[3]="Logging (ASCII)"
-WRITER_CONFIG[3]="-Dkieker.monitoring.enabled=true -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsciiFileWriter -Dkieker.monitoring.writer.filesystem.AbstractFileWriter.customStoragePath=${DATA_DIR}/"
+TITLE[3]="Logging (Generic Text)"
+WRITER_CONFIG[3]="-Dkieker.monitoring.enabled=true -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter -Dkieker.monitoring.writer.filesystem.FileWriter.logStreamHandler=kieker.monitoring.writer.filesystem.TextLogStreamHandler -Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=${DATA_DIR}/"
 
-TITLE[4]="Logging (Generic Text)"
-WRITER_CONFIG[4]="-Dkieker.monitoring.enabled=true -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter -Dkieker.monitoring.writer.filesystem.FileWriter.logStreamHandler=kieker.monitoring.writer.filesystem.TextLogStreamHandler -Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=${DATA_DIR}/"
+TITLE[4]="Logging (Generic Bin)"
+WRITER_CONFIG[4]="-Dkieker.monitoring.enabled=true -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter -Dkieker.monitoring.writer.filesystem.FileWriter.logStreamHandler=kieker.monitoring.writer.filesystem.BinaryLogStreamHandler -Dkieker.monitoring.writer.filesystem.FileWriter.bufferSize=8192 -Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=${DATA_DIR}/"
 
-TITLE[5]="Logging (Bin)"
-WRITER_CONFIG[5]="-Dkieker.monitoring.enabled=true -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.BinaryFileWriter -Dkieker.monitoring.writer.filesystem.AbstractFileWriter.customStoragePath=${DATA_DIR}/"
+TITLE[5]="Logging (Dual TCP)"
+WRITER_CONFIG[5]="-Dkieker.monitoring.writer=kieker.monitoring.writer.tcp.DualSocketTcpWriter -Dkieker.monitoring.writer.tcp.DualSocketTcpWriter.port1=2345 -Dkieker.monitoring.writer.tcp.DualSocketTcpWriter.port2=2346"
+RECEIVER[5]="${BASE_DIR}/collector-2.0/bin/collector -p 2345 -p 2346"
 
-TITLE[6]="Logging (Generic Bin)"
-WRITER_CONFIG[6]="-Dkieker.monitoring.enabled=true -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter -Dkieker.monitoring.writer.filesystem.FileWriter.logStreamHandler=kieker.monitoring.writer.filesystem.BinaryLogStreamHandler -Dkieker.monitoring.writer.filesystem.FileWriter.bufferSize=8192 -Dkieker.monitoring.writer.filesystem.FileWriter.customStoragePath=${DATA_DIR}/"
-
-TITLE[7]="Logging (Dual TCP)"
-WRITER_CONFIG[7]="-Dkieker.monitoring.writer=kieker.monitoring.writer.tcp.DualSocketTcpWriter -Dkieker.monitoring.writer.tcp.DualSocketTcpWriter.port1=2345 -Dkieker.monitoring.writer.tcp.DualSocketTcpWriter.port2=2346"
-RECEIVER[7]="${BASE_DIR}/collector-2.0/bin/collector -p 2345 -p 2346"
-
-TITLE[8]="Logging (Single TCP)"
-WRITER_CONFIG[8]="-Dkieker.monitoring.writer=kieker.monitoring.writer.tcp.SingleSocketTcpWriter -Dkieker.monitoring.writer.tcp.SingleSocketTcpWriter.port=2345"
-RECEIVER[8]="${BASE_DIR}/collector-2.0/bin/collector -p 2345"
+TITLE[6]="Logging (Single TCP)"
+WRITER_CONFIG[6]="-Dkieker.monitoring.writer=kieker.monitoring.writer.tcp.SingleSocketTcpWriter -Dkieker.monitoring.writer.tcp.SingleSocketTcpWriter.port=2345"
+RECEIVER[6]="${BASE_DIR}/collector-2.0/bin/collector -p 2345"
 
 export COLLECTOR_OPTS="-Dlog4j.configuration=file://${BASE_DIR}/log4j.cfg"
 

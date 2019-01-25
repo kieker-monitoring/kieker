@@ -18,33 +18,33 @@ package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import java.util.concurrent.TimeUnit;
 
-import kieker.tools.trace.analysis.Constants;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.systemModel.AbstractMessage;
 
 /**
  * Abstract superclass for all node decorators.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.5
  */
 public abstract class AbstractNodeDecorator {
 
 	/**
 	 * Creates a node decorator from its option name.
-	 * 
+	 *
 	 * @param optionName
 	 *            The option name to create a decorator for
 	 * @return An appropriate node decorator or {@code null} if none can be determined
 	 */
 	public static AbstractNodeDecorator createFromName(final String optionName) {
-		if (Constants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(optionName)) {
+		if (VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(optionName)) {
 			return new ResponseTimeNodeDecorator(TimeUnit.NANOSECONDS);
-		} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_US.equals(optionName)) {
+		} else if (VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_US.equals(optionName)) {
 			return new ResponseTimeNodeDecorator(TimeUnit.MICROSECONDS);
-		} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_MS.equals(optionName)) {
+		} else if (VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS.equals(optionName)) {
 			return new ResponseTimeNodeDecorator(TimeUnit.MILLISECONDS);
-		} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(optionName)) {
+		} else if (VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(optionName)) {
 			return new ResponseTimeNodeDecorator(TimeUnit.SECONDS);
 		}
 		return null;
@@ -52,7 +52,7 @@ public abstract class AbstractNodeDecorator {
 
 	/**
 	 * Processes a message sent from the given source to the given target node.
-	 * 
+	 *
 	 * @param message
 	 *            The sent message
 	 * @param sourceNode

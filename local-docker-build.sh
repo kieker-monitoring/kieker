@@ -25,6 +25,7 @@ if [ $? -eq 0 ]; then
     ./gradlew check &&\
     ./gradlew build distribute &&\
     ./gradlew checkReleaseArchivesShort &&\
+    ./gradlew build distribute &&\
     ./gradlew checkReleaseArchives"
 else
   echo "You are not in the docker group."

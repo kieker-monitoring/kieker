@@ -1,15 +1,15 @@
 def documentBaseFilename = 'kieker-userguide'
 
 task fstLatexRun(type: Exec) {
-  commandLine 'pdflatex', documentBaseFilename
+  commandLine 'pdflatex', '-interaction=nonstopmode', documentBaseFilename
 }
 
 task sndLatexRun(type: Exec) {
-  commandLine 'pdflatex', documentBaseFilename
+  commandLine 'pdflatex', '-interaction=nonstopmode', documentBaseFilename
 }
 
 task thrdLatexRun(type: Exec) {
-  commandLine 'pdflatex', documentBaseFilename
+  commandLine 'pdflatex', '-interaction=nonstopmode', documentBaseFilename
 }
 
 task bibtexRun(type: Exec) {

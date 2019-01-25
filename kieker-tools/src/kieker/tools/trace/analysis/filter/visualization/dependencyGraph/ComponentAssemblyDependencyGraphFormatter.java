@@ -16,8 +16,8 @@
 
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
-import kieker.tools.trace.analysis.Constants;
 import kieker.tools.trace.analysis.filter.visualization.AbstractGraphFormatter;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.trace.analysis.systemModel.AssemblyComponent;
 
@@ -30,7 +30,7 @@ import kieker.tools.trace.analysis.systemModel.AssemblyComponent;
  */
 public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponentDependencyGraphFormatter<ComponentAssemblyDependencyGraph> {
 
-	private static final String DEFAULT_FILE_NAME = Constants.ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
+	private static final String DEFAULT_FILE_NAME = VisualizationConstants.ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX + VisualizationConstants.DOT_FILE_SUFFIX;
 
 	/**
 	 * Creates a new formatter.
@@ -69,7 +69,7 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 			final StringBuilder builder = new StringBuilder();
 
 			builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ASSEMBLY_COMPONENT).append("\\n")
-			       .append(component.getName()).append(':');
+					.append(component.getName()).append(':');
 
 			if (this.useShortLabels) {
 				builder.append("..").append(component.getType().getTypeName());

@@ -22,10 +22,10 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.tools.trace.analysis.Constants;
 import kieker.tools.trace.analysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.trace.analysis.filter.IGraphOutputtingFilter;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.trace.analysis.systemModel.AbstractMessage;
 import kieker.tools.trace.analysis.systemModel.AllocationComponent;
@@ -37,23 +37,23 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool<br>
- * 
+ *
  * This class has exactly one input port named "in". The data which is send to
  * this plugin is not delegated in any way.
- * 
+ *
  * @author Andre van Hoorn, Lena Stoever, Matthias Rohr,
- * 
+ *
  * @since 1.1
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
 public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilter<ExecutionContainer> {
 
-	private static final String CONFIGURATION_NAME = Constants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME;
+	private static final String CONFIGURATION_NAME = VisualizationConstants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME;
 
 	/**
 	 * Creates a new filter using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use.
 	 * @param projectContext
@@ -84,7 +84,7 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 			DependencyGraphNode<ExecutionContainer> receiverNode = this.getGraph().getNode(receiverContainer.getId());
 
 			if (senderNode == null) {
-				senderNode = new DependencyGraphNode<ExecutionContainer>(senderContainer.getId(), senderContainer, t.getTraceInformation(),
+				senderNode = new DependencyGraphNode<>(senderContainer.getId(), senderContainer, t.getTraceInformation(),
 						this.getOriginRetentionPolicy());
 				this.getGraph().addNode(senderContainer.getId(), senderNode);
 			} else {
@@ -92,7 +92,7 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 			}
 
 			if (receiverNode == null) {
-				receiverNode = new DependencyGraphNode<ExecutionContainer>(receiverContainer.getId(), receiverContainer, t.getTraceInformation(),
+				receiverNode = new DependencyGraphNode<>(receiverContainer.getId(), receiverContainer, t.getTraceInformation(),
 						this.getOriginRetentionPolicy());
 				this.getGraph().addNode(receiverContainer.getId(), receiverNode);
 			} else {
