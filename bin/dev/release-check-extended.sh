@@ -114,11 +114,11 @@ function check_bin_archive {
 		information "Found bytecode version ${javaVersion}, OK"
 	fi
 	
-	ls -l tools
+	CONVERTER_NAME=`ls tools/convert-logging-timestamp*tar`
 
-	extract_archive "tools/convert-logging-timestamp.tar"
+	extract_archive "${CONVERTER_NAME}"
 	
-        CONVERTER_SCRIPT=`ls convert-logging-timestamp/bin/convert-logging-timestamp*`
+        CONVERTER_SCRIPT=`ls convert-logging-timestamp*/bin/convert-logging-timestamp`
         
         echo $CONVERTER_SCRIPT
 
