@@ -51,7 +51,8 @@ public class DirectoryReaderStage extends AbstractConsumerStage<File> {
 	/**
 	 * Create a new directory reader stage.
 	 *
-	 * @param configuration configuration for the stage and its plugins
+	 * @param configuration
+	 *            configuration for the stage and its plugins
 	 */
 	public DirectoryReaderStage(final Configuration configuration) {
 		this.configuration = configuration;
@@ -76,8 +77,7 @@ public class DirectoryReaderStage extends AbstractConsumerStage<File> {
 
 			/** read log files. */
 			try {
-				Files.list(directory.toPath()).sorted().
-				forEach(logFilePath -> {
+				Files.list(directory.toPath()).sorted().forEach(logFilePath -> {
 					final File logFile = logFilePath.toFile();
 					final String logFileName = logFile.getName();
 					try {
@@ -96,9 +96,12 @@ public class DirectoryReaderStage extends AbstractConsumerStage<File> {
 	/**
 	 * Read a map file stream and initialize the registry.
 	 *
-	 * @param inputStream the input stream
-	 * @param logFileName the name of the log file used for user feedback
-	 * @param registry string registry
+	 * @param inputStream
+	 *            the input stream
+	 * @param logFileName
+	 *            the name of the log file used for user feedback
+	 * @param registry
+	 *            string registry
 	 */
 	private void readMapFile(final InputStream inputStream, final String mapFileName, final ReaderRegistry<String> registry) {
 		final Class<? extends AbstractDecompressionFilter> decompressionClass = FSReaderUtil.findDecompressionFilterByExtension(mapFileName);
@@ -128,9 +131,12 @@ public class DirectoryReaderStage extends AbstractConsumerStage<File> {
 	/**
 	 * Read a log file stream and produce Kieker events.
 	 *
-	 * @param inputStream the input stream
-	 * @param logFileName the name of the log file used for user feedback
-	 * @param registry string registry
+	 * @param inputStream
+	 *            the input stream
+	 * @param logFileName
+	 *            the name of the log file used for user feedback
+	 * @param registry
+	 *            string registry
 	 */
 	private void readLogFile(final InputStream inputStream, final String logFileName, final ReaderRegistry<String> registry) {
 		final Class<? extends AbstractDecompressionFilter> decompressionClass = FSReaderUtil.findDecompressionFilterByExtension(logFileName);
@@ -147,8 +153,8 @@ public class DirectoryReaderStage extends AbstractConsumerStage<File> {
 		if (deserializerClass != null) {
 			try {
 				final AbstractDecompressionFilter decompressionFilter = decompressionClass.getConstructor(Configuration.class).newInstance(this.configuration);
-				final AbstractEventDeserializer deserializer =
-						deserializerClass.getConstructor(Configuration.class, ReaderRegistry.class).newInstance(this.configuration, registry);
+				final AbstractEventDeserializer deserializer = deserializerClass.getConstructor(Configuration.class, ReaderRegistry.class)
+						.newInstance(this.configuration, registry);
 				deserializer.processDataStream(decompressionFilter.chainInputStream(inputStream), this.outputPort);
 			} catch (final IOException e) {
 				this.logger.error("Reading log file {} failed.", logFileName);
