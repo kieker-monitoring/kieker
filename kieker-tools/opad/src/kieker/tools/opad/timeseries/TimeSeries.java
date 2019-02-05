@@ -49,6 +49,8 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	 *            time of timeseries
 	 * @param deltaTimeUnit
 	 *            Time unit
+	 * @param frequency
+	 *            frequency of events
 	 * @param capacity
 	 *            length of timeseries
 	 */
