@@ -56,7 +56,7 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
 	public static final String CAUSE = "";
-	private static final long serialVersionUID = -8915416625127757824L;
+	private static final long serialVersionUID = 979011205753098958L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

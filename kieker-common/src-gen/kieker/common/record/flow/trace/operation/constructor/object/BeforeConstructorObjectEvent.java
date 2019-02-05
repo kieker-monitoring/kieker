@@ -50,7 +50,7 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 	
 	/** default constants. */
 	public static final int OBJECT_ID = 0;
-	private static final long serialVersionUID = 7983943598922128229L;
+	private static final long serialVersionUID = 8727889921214947462L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

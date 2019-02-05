@@ -43,7 +43,7 @@ public class MonitorExitEvent extends AbstractMonitorEvent  {
 		int.class, // AbstractMonitorEvent.lockId
 	};
 	
-	private static final long serialVersionUID = 1759820039181510209L;
+	private static final long serialVersionUID = 8964690500123760669L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

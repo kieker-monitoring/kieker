@@ -50,7 +50,7 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 	
 	/** default constants. */
 	public static final int OBJECT_ID = 0;
-	private static final long serialVersionUID = 1569131691754173288L;
+	private static final long serialVersionUID = 4036418273795790776L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
