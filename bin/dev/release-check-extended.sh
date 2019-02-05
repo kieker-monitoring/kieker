@@ -113,10 +113,18 @@ function check_bin_archive {
 	else
 		information "Found bytecode version ${javaVersion}, OK"
 	fi
+	
+	CONVERTER_NAME=`ls tools/convert-logging-timestamp*tar`
+
+	extract_archive "${CONVERTER_NAME}"
+	
+        CONVERTER_SCRIPT=`ls convert-logging-timestamp*/bin/convert-logging-timestamp`
+        
+        echo $CONVERTER_SCRIPT
 
 	# some basic tests with the tools
-	if ! (bin/convertLoggingTimestamp.sh --timestamps 1283156545581511026 1283156546127117246 | grep "Mon, 30 Aug 2010 08:22:25.581 +0000 (UTC)"); then
-		error "Unexpected result executing bin/convertLoggingTimestamp.sh"
+	if ! (${CONVERTER_SCRIPT} --timestamps 1283156545581511026 1283156546127117246 | grep "Mon, 30 Aug 2010 08:22:25.581 +0000 (UTC)"); then
+		error "Unexpected result executing convert-logging-timestamp"
 		exit 1
 	fi
 

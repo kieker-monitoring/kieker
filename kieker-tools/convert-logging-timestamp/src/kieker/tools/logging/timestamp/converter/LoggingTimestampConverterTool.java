@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.tools.loggingTimestampConverter;
+package kieker.tools.logging.timestamp.converter;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -49,7 +48,7 @@ public final class LoggingTimestampConverterTool extends AbstractCommandLineTool
 
 	@Override
 	protected void addAdditionalOptions(final Options options) {
-		final Option option = new Option(FLAG_TIMESTAMPS_PARAMETER, "timestamps", true,
+		final Option option = new Option(LoggingTimestampConverterTool.FLAG_TIMESTAMPS_PARAMETER, "timestamps", true,
 				"List of timestamps (UTC timezone) to convert");
 		option.setArgName("timestamp1 ... timestampN");
 		option.setRequired(false);
@@ -60,9 +59,10 @@ public final class LoggingTimestampConverterTool extends AbstractCommandLineTool
 
 	@Override
 	protected boolean readPropertiesFromCommandLine(final CommandLine commandLine) {
-		final String[] timestampsStr = commandLine.getOptionValues(FLAG_TIMESTAMPS_PARAMETER);
+		final String[] timestampsStr = commandLine
+				.getOptionValues(LoggingTimestampConverterTool.FLAG_TIMESTAMPS_PARAMETER);
 		if ((timestampsStr == null) || (timestampsStr.length == 0)) {
-			LOGGER.error("No timestamp passed as argument.");
+			LoggingTimestampConverterTool.LOGGER.error("No timestamp passed as argument.");
 			return false;
 		}
 
@@ -72,7 +72,7 @@ public final class LoggingTimestampConverterTool extends AbstractCommandLineTool
 			try {
 				this.timestampsLong[curIdx] = Long.parseLong(timestampsStr[curIdx]);
 			} catch (final NumberFormatException ex) {
-				LOGGER.error("Failed to parse timestamp: {}", timestampsStr[curIdx], ex);
+				LoggingTimestampConverterTool.LOGGER.error("Failed to parse timestamp: {}", timestampsStr[curIdx], ex);
 				return false;
 			}
 		}
@@ -87,8 +87,11 @@ public final class LoggingTimestampConverterTool extends AbstractCommandLineTool
 		final StringBuilder stringBuilder = new StringBuilder(estimatedNumberOfChars);
 
 		for (final long timestampLong : this.timestampsLong) {
-			stringBuilder.append(timestampLong).append(": ").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(timestampLong));
-			stringBuilder.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(timestampLong)).append(')').append(lineSeperator);
+			stringBuilder.append(timestampLong).append(": ")
+					.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(timestampLong));
+			stringBuilder.append(" (")
+					.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(timestampLong))
+					.append(')').append(lineSeperator);
 		}
 
 		System.out.print(stringBuilder.toString()); // NOPMD (System.out)

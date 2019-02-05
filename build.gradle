@@ -707,7 +707,7 @@ def manualContent = project.copySpec {
 
 /** collect tools for binary distribution. */
 def toolsContent = project.copySpec {
-    ['trace-analysis', 'trace-analysis-gui', 'log-replayer', 'resource-monitor', 'collector'].each {
+    ['trace-analysis', 'trace-analysis-gui', 'log-replayer', 'resource-monitor', 'collector', 'convert-logging-timestamp'].each {
         from("kieker-tools/${it}/build/distributions") {
             include "**"
         }
@@ -718,7 +718,7 @@ def toolsContent = project.copySpec {
 /** collect all libraries in kieker-tools. */
 def libraryContent = project.copySpec {
     from('kieker-tools/**/build/libs') {
-    	include '**jar'
+	include '**jar'
     }
     into kiekerPackagenamebase + "-" + kiekerVersion + "/build/libs"
 }
