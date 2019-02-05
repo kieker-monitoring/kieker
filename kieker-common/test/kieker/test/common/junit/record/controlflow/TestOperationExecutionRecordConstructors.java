@@ -41,6 +41,7 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
  */
 public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest {
 
+	/** test constructor. */
 	public TestOperationExecutionRecordConstructors() {
 		// empty default constructor
 	}

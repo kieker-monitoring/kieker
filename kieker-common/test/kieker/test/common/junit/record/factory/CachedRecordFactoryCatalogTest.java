@@ -53,12 +53,19 @@ public class CachedRecordFactoryCatalogTest extends AbstractKiekerTest {
 	private CachedRecordFactoryCatalog cachedRecordFactories;
 	private ByteBuffer buffer;
 
+	/** test constructor. */
 	public CachedRecordFactoryCatalogTest() {
 		// Nothing to do
 	}
 
+	/**
+	 * Initialization.
+	 *
+	 * @throws IllegalArgumentException
+	 *             when the byte buffer cannot be allocated.
+	 */
 	@Before
-	public void before() throws Exception {
+	public void before() throws IllegalArgumentException {
 		this.cachedRecordFactories = new CachedRecordFactoryCatalog();
 		this.buffer = ByteBuffer.allocateDirect(1024);
 	}

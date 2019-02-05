@@ -42,6 +42,9 @@ public class EnumTest {
 		// empty constructor
 	}
 
+	/**
+	 * Test enum behavior.
+	 */
 	@Test
 	public void twoValuesReturnDifferentInstances() {
 		final ExampleEnum[] firstCallToValues = ExampleEnum.values();
@@ -51,6 +54,9 @@ public class EnumTest {
 		// => values() returns a new array on each call which can be a performance problem.
 	}
 
+	/**
+	 * Test enum behavior.
+	 */
 	@Test
 	public void twoGetEnumConstantsReturnDifferentInstances() {
 		final Class<ExampleEnum> enumClass = ExampleEnum.class;

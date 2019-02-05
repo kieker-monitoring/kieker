@@ -27,7 +27,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class TestConfigurationPath extends AbstractKiekerTest {
@@ -52,6 +52,9 @@ public class TestConfigurationPath extends AbstractKiekerTest {
 		// empty default constructor
 	}
 
+	/**
+	 * Test for correct path conversion.
+	 */
 	@Test
 	public void testPath() {
 		Assert.assertTrue((paths.length % 2) == 0);

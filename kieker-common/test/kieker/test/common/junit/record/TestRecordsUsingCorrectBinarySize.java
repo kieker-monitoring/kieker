@@ -37,12 +37,27 @@ public class TestRecordsUsingCorrectBinarySize extends AbstractDynamicKiekerTest
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TestRecordsUsingCorrectBinarySize.class);
 
+	/** create test. */
 	public TestRecordsUsingCorrectBinarySize() {
 		// empty default constructor
 	}
 
+	/**
+	 * Test correct binary size of events/records.
+	 *
+	 * @throws ClassNotFoundException
+	 *             in case the class was not found
+	 * @throws IllegalArgumentException
+	 *             instantiation failed
+	 * @throws IllegalAccessException
+	 *             access was restricted
+	 * @throws NoSuchFieldException
+	 *             a property is used which does not exist
+	 * @throws SecurityException
+	 *             on access violations
+	 */
 	@Test
-	public void test() throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	public void testEventBinarySize() throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		final Collection<Class<?>> availableClasses = super.deliverAllAvailableClassesFromSourceDirectory();
 		final Collection<Class<?>> notAbstractClasses = super.filterOutAbstractClasses(availableClasses);
 		final Collection<Class<?>> filteredClasses = super.filterOutClassesNotExtending(IMonitoringRecord.class, notAbstractClasses);
