@@ -29,6 +29,18 @@ public final class AssertHelper {
 		// utility class
 	}
 
+	/**
+	 * Assert that the actual instance is really from the specified expected class.
+	 *
+	 * @param <T>
+	 *            java type
+	 *
+	 * @param expectedClazz
+	 *            class type to expect
+	 * @param actualInstance
+	 *            instance to be checked
+	 * @return true when the type matches
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T assertInstanceOf(final Class<T> expectedClazz, final Object actualInstance) {
 		Assert.assertEquals(expectedClazz, actualInstance.getClass());
