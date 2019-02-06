@@ -52,7 +52,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	
 	/** default constants. */
 	public static final int OBJECT_ID = 0;
-	private static final long serialVersionUID = -5115197861231353414L;
+	private static final long serialVersionUID = -2086826925207912224L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

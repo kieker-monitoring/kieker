@@ -41,7 +41,7 @@ public class SplitEvent extends AbstractTraceEvent  {
 		int.class, // ITraceRecord.orderIndex
 	};
 	
-	private static final long serialVersionUID = 3680330659838545906L;
+	private static final long serialVersionUID = 757022930650044358L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

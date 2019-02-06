@@ -58,7 +58,7 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IEve
 	public static final int ORDER_INDEX = -1;
 	public static final String RETURN_TYPE = "";
 	public static final String RETURN_VALUE = "";
-	private static final long serialVersionUID = -3115006839098290523L;
+	private static final long serialVersionUID = -6739598592315516823L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

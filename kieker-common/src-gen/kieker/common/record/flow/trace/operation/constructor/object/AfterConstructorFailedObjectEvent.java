@@ -52,7 +52,7 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	
 	/** default constants. */
 	public static final int OBJECT_ID = 0;
-	private static final long serialVersionUID = -8160283153301963516L;
+	private static final long serialVersionUID = -8957011715514297968L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

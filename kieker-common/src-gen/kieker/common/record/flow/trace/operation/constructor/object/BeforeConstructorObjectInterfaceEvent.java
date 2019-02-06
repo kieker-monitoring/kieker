@@ -52,7 +52,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	
 	/** default constants. */
 	public static final String INTERFACE = "";
-	private static final long serialVersionUID = -3985311495464960429L;
+	private static final long serialVersionUID = -4330598814273728600L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

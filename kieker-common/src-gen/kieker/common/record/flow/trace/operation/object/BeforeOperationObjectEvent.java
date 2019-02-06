@@ -50,7 +50,7 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 	
 	/** default constants. */
 	public static final int OBJECT_ID = 0;
-	private static final long serialVersionUID = 1420636123206687333L;
+	private static final long serialVersionUID = -6304010818559607110L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

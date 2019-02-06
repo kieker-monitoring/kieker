@@ -304,7 +304,19 @@ def parsePmdReport(File reportFile) {
     return [errors, warnings, infos]
 }
 
-mainSubprojects.each { project ->
+def checkSubprojects = [
+        project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'),
+        project(':kieker-tools'),
+        project(':kieker-tools:collector'),
+        project(':kieker-tools:log-replayer'),
+        project(':kieker-tools:opad'),
+        project(':kieker-tools:resource-monitor'),
+        project(':kieker-tools:trace-analysis'),
+        project(':kieker-tools:trace-analysis-gui'),
+        project(':kieker-extension-kafka')
+]
+
+checkSubprojects.each { project ->
     configure(project) {
 
         task checkThresholds(dependsOn: ["build"]) {

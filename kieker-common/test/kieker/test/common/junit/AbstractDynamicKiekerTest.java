@@ -42,6 +42,13 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 	private static final String DIR_NAME_TESTS = "test";
 	private static final String DIR_NAME_SOURCES = "src";
 
+	/**
+	 * Collect all available classes from the source directory.
+	 *
+	 * @return collection of class types
+	 * @throws ClassNotFoundException
+	 *             in case a class cannot be found
+	 */
 	protected Collection<Class<?>> deliverAllAvailableClassesFromSourceDirectory() throws ClassNotFoundException {
 		final String dirNameSourcesNormalized = super.modulePathToWorkingPath(DIR_NAME_SOURCES);
 
@@ -50,6 +57,13 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 		return this.transformClassNameToClasses(this.transformFilesToClassNames(javaFiles));
 	}
 
+	/**
+	 * Collect all available classes from the test source directory in the junit package.
+	 *
+	 * @return collection of class types
+	 * @throws ClassNotFoundException
+	 *             in case a class cannot be found
+	 */
 	protected Collection<Class<?>> deliverAllAvailableClassesFromTestDirectoryInJUnitPackage()
 			throws ClassNotFoundException {
 		final String dirNameTestsNormalized = super.modulePathToWorkingPath(DIR_NAME_TESTS);
@@ -105,6 +119,13 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 		return results;
 	}
 
+	/**
+	 * Filter collection for non abstract classes.
+	 *
+	 * @param classes
+	 *            all classes
+	 * @return returns a collection with non abstract classes only
+	 */
 	protected Collection<Class<?>> filterOutAbstractClasses(final Collection<Class<?>> classes) {
 		final Collection<Class<?>> results = new LinkedList<Class<?>>();
 
@@ -117,6 +138,15 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 		return results;
 	}
 
+	/**
+	 * Filter to scan only for classes inheriting superClass.
+	 *
+	 * @param superClass
+	 *            super type
+	 * @param classes
+	 *            all classes
+	 * @return returns a collection with classes derived from superClassq
+	 */
 	protected Collection<Class<?>> filterOutClassesNotExtending(final Class<?> superClass,
 			final Collection<Class<?>> classes) {
 		final Collection<Class<?>> results = new LinkedList<Class<?>>();
@@ -130,6 +160,15 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 		return results;
 	}
 
+	/**
+	 * Filter to scan only for classes not inheriting superClass.
+	 *
+	 * @param superClass
+	 *            super type
+	 * @param classes
+	 *            all classes
+	 * @return returns a collection with classes not derived from superClassq
+	 */
 	public Collection<Class<?>> filterOutClassesExtending(final Class<AbstractKiekerTest> superClass,
 			final Collection<Class<?>> classes) {
 		final Collection<Class<?>> results = new LinkedList<Class<?>>();
@@ -143,6 +182,15 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 		return results;
 	}
 
+	/**
+	 * Filter out classes which do not fit the fullly qualified class name pattern.
+	 *
+	 * @param pattern
+	 *            class name pattern
+	 * @param classes
+	 *            collection of classes
+	 * @return filtered collection of classes.
+	 */
 	protected Collection<Class<?>> filterOutClassesNotMatchingFullQualifiedClassNamePattern(final String pattern,
 			final Collection<Class<?>> classes) {
 		final Collection<Class<?>> results = new LinkedList<Class<?>>();

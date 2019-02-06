@@ -50,7 +50,7 @@ public class AfterOperationObjectEvent extends AfterOperationEvent implements IO
 	
 	/** default constants. */
 	public static final int OBJECT_ID = 0;
-	private static final long serialVersionUID = -7093759737098954458L;
+	private static final long serialVersionUID = 7594667411270642880L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

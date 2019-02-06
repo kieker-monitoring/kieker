@@ -46,7 +46,7 @@ public class AfterConstructorEvent extends AfterOperationEvent implements IConst
 		String.class, // IClassSignature.classSignature
 	};
 	
-	private static final long serialVersionUID = 1077036749032691794L;
+	private static final long serialVersionUID = 3775794408189728140L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

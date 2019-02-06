@@ -33,7 +33,7 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	/** default constants. */
 	public static final String OPERATION_SIGNATURE = "";
 	public static final String CLASS_SIGNATURE = "";
-	private static final long serialVersionUID = -4876224316055177674L;
+	private static final long serialVersionUID = -34090223642783143L;
 	
 		
 	/** property declarations. */

@@ -48,7 +48,7 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 		String.class, // IExceptionRecord.cause
 	};
 	
-	private static final long serialVersionUID = -4069763872765597698L;
+	private static final long serialVersionUID = 625847064598823017L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

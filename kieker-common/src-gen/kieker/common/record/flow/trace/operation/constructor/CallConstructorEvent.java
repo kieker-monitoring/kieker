@@ -50,7 +50,7 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		String.class, // ICallRecord.calleeClassSignature
 	};
 	
-	private static final long serialVersionUID = 8198255525819006580L;
+	private static final long serialVersionUID = 9163096253392108958L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

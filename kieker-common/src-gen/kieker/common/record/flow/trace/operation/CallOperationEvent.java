@@ -53,7 +53,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	/** default constants. */
 	public static final String CALLEE_OPERATION_SIGNATURE = "";
 	public static final String CALLEE_CLASS_SIGNATURE = "";
-	private static final long serialVersionUID = 1340141343488227597L;
+	private static final long serialVersionUID = 2408771186779452968L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {
