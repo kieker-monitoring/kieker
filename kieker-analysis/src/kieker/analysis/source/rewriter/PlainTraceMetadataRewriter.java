@@ -34,12 +34,12 @@ import teetime.framework.OutputPort;
  * {@link TraceMetadata} record.
  *
  * @author Reiner Jung
- *
+ * @since 1.15
  */
 public class PlainTraceMetadataRewriter implements ITraceMetadataRewriter {
 
 	private volatile long traceId;
-	private final Map<String, Map<Long, TraceMetadata>> metadatamap = new HashMap<>();
+	private final Map<String, Map<Long, TraceMetadata>> metadatamap = new HashMap<>(); // NOPMD no concurrent use of this class
 
 	/**
 	 * Create the plain trace rewriter.

@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.io;
 
-import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
 import kieker.common.exception.RecordInstantiationException;
@@ -103,14 +102,6 @@ public class TextValueDeserializer extends AbstractValueDeserializer implements 
 	public <T extends Enum<T>> T getEnumeration(final Class<T> clazz) throws RecordInstantiationException {
 		final int value = Integer.parseInt(this.readValue());
 		return this.enumerationValueOf(clazz, value);
-	}
-
-	@Override
-	public byte[] getBytes(final byte[] target) {
-		final char[] charTarget = new char[target.length]; // NOPMD plural name not relevant
-		this.buffer.get(charTarget);
-		ByteBuffer.wrap(target).asCharBuffer().put(charTarget);
-		return target;
 	}
 
 	private String readValue() {

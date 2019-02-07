@@ -48,6 +48,7 @@ public interface ITraceMetadataRewriter {
 	 *
 	 * @throws IOException
 	 *             might occur during connection
+	 * @since 1.15
 	 */
 	void rewrite(Connection connection, IMonitoringRecord record, long loggingTimestamp,
 			OutputPort<IMonitoringRecord> outputPort) throws IOException;

@@ -28,23 +28,23 @@ public class NetworkPatternEntry {
 
 	/**
 	 * Create one pattern entry.
-	 * 
+	 *
 	 * @param ipAddress
 	 *            the ip-address
 	 * @param mask
 	 *            the network mask
 	 */
-	public NetworkPatternEntry(final byte[] ipAddress, final byte[] mask) {
+	public NetworkPatternEntry(final byte[] ipAddress, final byte[] mask) { // NOPMD direct storing is acceptable
 		this.ipAddress = ipAddress;
 		this.mask = mask;
 	}
 
 	public final byte[] getIpAddress() {
-		return this.ipAddress;
+		return this.ipAddress; // NOPMD allowed as this is just a data structure
 	}
 
 	public final byte[] getMask() {
-		return this.mask;
+		return this.mask; // NOPMD allowed as this is just a data structure
 	}
 
 }

@@ -24,6 +24,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -66,6 +69,8 @@ public final class AmqpReader extends AbstractStringRegistryReaderPlugin {
 	public static final String CONFIG_PROPERTY_HEARTBEAT = "heartbeat";
 	/** The name of the configuration property for the cache duration (in seconds) for string registries. */
 	public static final String CONFIG_PROPERTY_CACHE_DURATION = "cacheDuration";
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(AmqpReader.class.getCanonicalName());
 
 	/** ID for registry records. */
 	private static final byte REGISTRY_RECORD_ID = (byte) 0xFF;

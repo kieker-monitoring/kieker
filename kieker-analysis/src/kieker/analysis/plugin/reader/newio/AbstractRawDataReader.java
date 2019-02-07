@@ -21,6 +21,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.newio.deserializer.IMonitoringRecordDeserializer;
@@ -36,6 +39,8 @@ import kieker.common.record.IMonitoringRecord;
  * @since 1.13
  */
 public abstract class AbstractRawDataReader extends AbstractReaderPlugin {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRawDataReader.class.getCanonicalName());
 
 	private final IMonitoringRecordDeserializer deserializer;
 

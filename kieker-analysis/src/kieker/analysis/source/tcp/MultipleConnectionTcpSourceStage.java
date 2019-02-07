@@ -40,7 +40,7 @@ import teetime.framework.AbstractProducerStage;
 
 /**
  * @author Reiner Jung
- *
+ * @since 1.15
  */
 public class MultipleConnectionTcpSourceStage extends AbstractProducerStage<IMonitoringRecord> {
 
@@ -171,13 +171,13 @@ public class MultipleConnectionTcpSourceStage extends AbstractProducerStage<IMon
 		final int clazzId = connection.getBuffer().getInt();
 
 		if (clazzId == -1) {
-			return this.registerRegistryEntry(connection, clazzId);
+			return this.registerRegistryEntry(connection);
 		} else {
 			return this.deserializeRecord(connection, clazzId);
 		}
 	}
 
-	private boolean registerRegistryEntry(final Connection connection, final int clazzId) {
+	private boolean registerRegistryEntry(final Connection connection) {
 		// identify string identifier and string length
 		if (connection.getBuffer().remaining() < (MultipleConnectionTcpSourceStage.INT_BYTES
 				+ MultipleConnectionTcpSourceStage.INT_BYTES)) {

@@ -27,8 +27,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.IProjectContext;
-import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -75,6 +77,8 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	/** This constant determines the default used output filename base. */
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT = "SequenceDiagram";
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(SequenceDiagramFilter.class.getCanonicalName());
+
 	/**
 	 * Path to the sequence.pic macros used to plot UML sequence diagrams. The
 	 * file must be in the classpath -- typically inside the jar.
@@ -103,14 +107,14 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			}
 			error = false;
 		} catch (final IOException exc) {
-			AbstractAnalysisComponent.LOGGER.error("Error while reading {}", SEQUENCE_PIC_PATH, exc);
+			AbstractTraceAnalysisFilter.LOGGER.error("Error while reading {}", SEQUENCE_PIC_PATH, exc);
 		} finally {
 			try {
 				if (reader != null) {
 					reader.close();
 				}
 			} catch (final IOException ex) {
-				AbstractAnalysisComponent.LOGGER.error("Failed to close input stream", ex);
+				AbstractTraceAnalysisFilter.LOGGER.error("Failed to close input stream", ex);
 			}
 			if (error) {
 				// sequence.pic must be provided on execution of pic2plot
@@ -277,7 +281,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				}
 			}
 		} else { // needs to be adjusted if a new mode is introduced
-			AbstractAnalysisComponent.LOGGER.error("Invalid mode: {}", sdMode);
+			LOGGER.error("Invalid mode: {}", sdMode);
 		}
 
 		ps.print("step();" + "\n");
@@ -298,7 +302,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				senderDotId = "O" + senderComponent.getId();
 				receiverDotId = "O" + receiverComponent.getId();
 			} else { // needs to be adjusted if a new mode is introduced
-				AbstractAnalysisComponent.LOGGER.error("Invalid mode: {}", sdMode);
+				LOGGER.error("Invalid mode: {}", sdMode);
 			}
 
 			if (me instanceof SynchronousCallMessage) {
@@ -326,7 +330,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				ps.print("rmessage(" + senderDotId + "," + receiverDotId + ", \"\");\n");
 				ps.print("inactive(" + senderDotId + ");\n");
 			} else {
-				AbstractAnalysisComponent.LOGGER.error("Message type not supported: {}", me.getClass().getName());
+				LOGGER.error("Message type not supported: {}", me.getClass().getName());
 			}
 		}
 		ps.print("inactive(" + rootDotId + ");\n");

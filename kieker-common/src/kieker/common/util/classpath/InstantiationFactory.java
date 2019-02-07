@@ -27,8 +27,6 @@ import kieker.common.exception.ConfigurationException;
 /**
  * This class encapsulates the creation of Kieker monitoring controllers.
  *
- * TODO integrate additional features from iObserve here
- *
  * @author Holger Knoche
  * @author Reiner Jung
  *

@@ -30,7 +30,6 @@ import kieker.common.registry.IRegistryListener;
  */
 public class WriterRegistry implements IWriterRegistry<String> {
 
-	// TODO introduce faster, non-boxing ObjectIntMap
 	private final Map<String, Integer> storage = new HashMap<String, Integer>(); // NOPMD (synchronization is not necessary)
 	/** id of the next value which will be registered. */
 	private int nextId;

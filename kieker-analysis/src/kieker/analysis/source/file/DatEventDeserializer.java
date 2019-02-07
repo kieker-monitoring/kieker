@@ -57,7 +57,7 @@ public class DatEventDeserializer extends AbstractEventDeserializer {
 
 	private final CharBuffer charBuffer;
 
-	private final String charset;
+	private final String charset; // NOPMD will be used for a future feature
 
 	private long lineNumber;
 
@@ -103,7 +103,8 @@ public class DatEventDeserializer extends AbstractEventDeserializer {
 	 *            byte buffer offset
 	 * @param numOfBufferedBytes
 	 *            number of read bytes from the last read operation
-	 * @param outputPort output port to be used for deserialized records
+	 * @param outputPort
+	 *            output port to be used for deserialized records
 	 *
 	 * @return mark in the buffer
 	 *
@@ -114,7 +115,7 @@ public class DatEventDeserializer extends AbstractEventDeserializer {
 	 * @throws UnknownRecordTypeException
 	 *             record type is unknown
 	 *
-	 * TODO for UTF-8 strings this will not work properly, as these might use 2 bytes
+	 *             TODO for UTF-8 strings this will not work properly, as these might use 2 bytes
 	 */
 	private int processBuffer(final byte[] buffer, final int offset,
 			final int numOfBufferedBytes, final OutputPort<IMonitoringRecord> outputPort) {

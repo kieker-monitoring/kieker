@@ -33,6 +33,7 @@ public interface ISourceCompositeStage {
 	 * get the output port of a source composite stage.
 	 *
 	 * @return the proper output port
+	 * @since 1.15
 	 */
 	OutputPort<IMonitoringRecord> getOutputPort();
 }

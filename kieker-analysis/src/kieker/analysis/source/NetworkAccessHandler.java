@@ -32,18 +32,26 @@ import org.slf4j.LoggerFactory;
  * Whereas ip-address can be IPv4 and IPv6.
  *
  * @author Reiner Jung
- *
+ * @since 1.15
  */
 public class NetworkAccessHandler implements IAccessHandler {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(NetworkPatternEntry.class.getCanonicalName());
 
-	private static final byte[] bytePattern = {
+	private static final byte[] BYTE_PATTERNS = {
 		(byte) 0x00, (byte) 0x80, (byte) 0xc0, (byte) 0xe0, (byte) 0xf0,
 		(byte) 0xf8, (byte) 0xfc, (byte) 0xfe, (byte) 0xff };
 
 	private final Collection<NetworkPatternEntry> patterns = new ArrayList<>();
 
+	/**
+	 * Create network access handler.
+	 *
+	 * @param networkPatterns
+	 *            list of ip/network patterns specifying allowed IP addresses
+	 * @throws UnknownHostException
+	 *             if the ip address cannot be resolved
+	 */
 	public NetworkAccessHandler(final Collection<String> networkPatterns) throws UnknownHostException {
 		for (final String pattern : networkPatterns) {
 			final String[] parts = pattern.split("/");
@@ -53,7 +61,7 @@ public class NetworkAccessHandler implements IAccessHandler {
 			if (parts.length == 2) {
 				width = Integer.valueOf(parts[1]);
 			} else {
-				width = address.getAddress().length == 4 ? 32 : 128;
+				width = address.getAddress().length == 4 ? 32 : 128; // NOCS
 			}
 			this.patterns.add(new NetworkPatternEntry(address.getAddress(), this.computeMask(address.getAddress().length, width)));
 		}
@@ -79,7 +87,7 @@ public class NetworkAccessHandler implements IAccessHandler {
 			i++;
 		}
 		if (remainingBitsToSet > 0) {
-			mask[i] = bytePattern[remainingBitsToSet];
+			mask[i] = BYTE_PATTERNS[remainingBitsToSet];
 		}
 
 		return mask;

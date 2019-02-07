@@ -31,6 +31,7 @@ public interface IAccessHandler {
 	 * @param remoteIpAddress
 	 *            the remote IP address
 	 * @return returns true when the address is accepted else false.
+	 * @since 1.15
 	 */
 	boolean acceptRemoteIpAddress(String remoteIpAddress);
 

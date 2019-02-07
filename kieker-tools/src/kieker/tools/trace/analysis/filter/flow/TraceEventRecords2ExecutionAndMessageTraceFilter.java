@@ -19,9 +19,9 @@ package kieker.tools.trace.analysis.filter.flow;
 import java.util.Stack;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -90,6 +90,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 	public static final String CONFIG_ENHANCE_JAVA_CONSTRUCTORS = "enhanceJavaConstructors";
 	public static final String CONFIG_ENHANCE_CALL_DETECTION = "enhanceCallDetection";
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(TraceEventRecords2ExecutionAndMessageTraceFilter.class.getCanonicalName());
 
 	private final boolean enhanceJavaConstructors;
 	private final boolean enhanceCallDetection;
@@ -199,7 +201,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	}
 
 	protected static Logger getLogger() {
-		return AbstractAnalysisComponent.LOGGER;
+		return LOGGER;
 	}
 
 	/**

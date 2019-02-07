@@ -26,7 +26,7 @@ import kieker.common.registry.reader.ReaderRegistry;
  * Represents one connection to read records from.
  *
  * @author Reiner Jung
- *
+ * @since 1.15
  */
 public class Connection {
 

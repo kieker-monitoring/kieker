@@ -15,7 +15,18 @@
  ***************************************************************************/
 package kieker.analysis.source;
 
+/**
+ * Allow access regardless of the specified ip address.
+ *
+ * @author Reiner Jung
+ * @since 1.15
+ */
 public class AllAccessHandler implements IAccessHandler {
+
+	/** default constructor. */
+	public AllAccessHandler() {
+		// no setup required
+	}
 
 	@Override
 	public boolean acceptRemoteIpAddress(final String remoteIpAddress) {

@@ -37,6 +37,17 @@ public class TestNetworkAccessHandler {
 	private static final String FIRST_NETWORK = "134.10.5.0/24";
 	private static final String SECOND_NETWORK = "134.10.4.0/23";
 
+	/** Create test object. */
+	public TestNetworkAccessHandler() {
+		// nothing to do
+	}
+
+	/**
+	 * Test if plain ip addresses are handled correctly by the NetworkAccessHandler.
+	 *
+	 * @throws UnknownHostException
+	 *             when the hostnames/ips cannot be resolved
+	 */
 	@Test
 	public void testPlainIP() throws UnknownHostException {
 		final Collection<String> networkPatterns = new ArrayList<String>();
@@ -48,6 +59,12 @@ public class TestNetworkAccessHandler {
 		Assert.assertEquals("Address should be rejected.", false, handler.acceptRemoteIpAddress(THIRD_ADDRESS));
 	}
 
+	/**
+	 * Test if aligned network addresses (3 byte addresses) are handled correctly by the NetworkAccessHandler.
+	 *
+	 * @throws UnknownHostException
+	 *             when the hostnames/ips cannot be resolved
+	 */
 	@Test
 	public void testAlignedNetmask() throws UnknownHostException {
 		final Collection<String> networkPatterns = new ArrayList<String>();
@@ -58,6 +75,12 @@ public class TestNetworkAccessHandler {
 		Assert.assertEquals("Address should be rejected.", false, handler.acceptRemoteIpAddress(THIRD_ADDRESS));
 	}
 
+	/**
+	 * Test if arbitrary network addresses (23 bits) are handled correctly by the NetworkAccessHandler.
+	 *
+	 * @throws UnknownHostException
+	 *             when the hostnames/ips cannot be resolved
+	 */
 	@Test
 	public void testArbitraryNetmask() throws UnknownHostException {
 		final Collection<String> networkPatterns = new ArrayList<String>();

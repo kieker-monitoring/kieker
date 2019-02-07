@@ -41,19 +41,19 @@ import fi.iki.elonen.NanoHTTPD;
  *
  * @author Reiner Jung
  *
- * @sincd 1.15
+ * @since 1.15
  */
 public class RestService extends NanoHTTPD {
 
 	private static final String KIEKER_PATH = "kieker";
 
-	private static Logger LOGGER = LoggerFactory.getLogger(RestService.class.getCanonicalName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(RestService.class.getCanonicalName());
 
 	private final CachedRecordFactoryCatalog recordFactories = CachedRecordFactoryCatalog.getInstance();
 
 	private final RestServiceStage stage;
 
-	private final IAccessHandler accessRestrictionHandler;
+	private final IAccessHandler accessHandler;
 
 	/**
 	 * Create a new rest service.
@@ -64,17 +64,18 @@ public class RestService extends NanoHTTPD {
 	 *            hostname to listen for when accessed (aka virtual host name); can be null
 	 * @param port
 	 *            port to listen on
-	 * @param accessRestrictionHandler
+	 * @param accessHandler
+	 *            handler for remote IP adresses checking whether the ip address should be accepted
 	 */
-	public RestService(final RestServiceStage stage, final String hostname, final int port, final IAccessHandler accessRestrictionHandler) {
+	public RestService(final RestServiceStage stage, final String hostname, final int port, final IAccessHandler accessHandler) {
 		super(hostname, port);
 		this.stage = stage;
-		this.accessRestrictionHandler = accessRestrictionHandler;
+		this.accessHandler = accessHandler;
 	}
 
 	@Override
 	public Response serve(final IHTTPSession session) {
-		if (this.accessRestrictionHandler.acceptRemoteIpAddress(session.getRemoteIpAddress())) {
+		if (this.accessHandler.acceptRemoteIpAddress(session.getRemoteIpAddress())) {
 			final Method method = session.getMethod();
 
 			if (Method.PUT.equals(method) || Method.POST.equals(method)) {

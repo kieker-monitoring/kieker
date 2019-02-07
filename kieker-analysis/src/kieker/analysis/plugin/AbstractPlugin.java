@@ -30,6 +30,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
@@ -56,6 +59,8 @@ import kieker.common.record.misc.KiekerMetadataRecord;
  */
 @Plugin
 public abstract class AbstractPlugin extends AbstractAnalysisComponent implements IPlugin {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPlugin.class.getCanonicalName());
 
 	private final ConcurrentHashMap<String, List<PluginInputPortReference>> registeredMethods;
 	private final ConcurrentHashMap<String, AbstractRepository> registeredRepositories;

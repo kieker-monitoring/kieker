@@ -20,25 +20,29 @@ import kieker.analysis.plugin.IPlugin;
 
 /**
  * This is the interface for web visualization filter plugins within Kieker.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
  */
 public interface IWebVisualizationFilterPlugin extends IPlugin {
 
 	/**
 	 * @since 1.9
+	 *
+	 * @return returns header
 	 */
 	public String getHeader();
 
 	/**
 	 * @since 1.9
+	 * @return returns initial content
 	 */
 	public String getInitialContent();
 
 	/**
 	 * @since 1.9
+	 * @return returns updated content
 	 */
 	public String getUpdatedContent();
 

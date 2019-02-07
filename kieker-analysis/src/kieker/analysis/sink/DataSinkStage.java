@@ -30,7 +30,7 @@ import teetime.framework.AbstractConsumerStage;
  * configuration object for the writer to be used.
  *
  * @author Reiner Jung
- *
+ * @since 1.15
  */
 public class DataSinkStage extends AbstractConsumerStage<IMonitoringRecord> {
 

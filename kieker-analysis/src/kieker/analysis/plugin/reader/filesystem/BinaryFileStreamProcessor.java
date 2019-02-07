@@ -55,6 +55,14 @@ public class BinaryFileStreamProcessor {
 
 	private final IMonitoringRecordReceiver recordReceiver;
 
+	/**
+	 * Create a binary file stream processor.
+	 *
+	 * @param stringRegistry
+	 *            reader registry
+	 * @param recordReceiver
+	 *            record receiver
+	 */
 	public BinaryFileStreamProcessor(final ReaderRegistry<String> stringRegistry, final IMonitoringRecordReceiver recordReceiver) {
 		this.stringRegistry = stringRegistry;
 		this.buffer = ByteBuffer.allocate(1024000);
@@ -66,8 +74,6 @@ public class BinaryFileStreamProcessor {
 	 *
 	 * @param inputStream
 	 *            data stream
-	 * @param outputPort
-	 *            filter output port
 	 * @throws IOException
 	 *             on io errors during reading
 	 * @throws MonitoringRecordException
@@ -157,7 +163,7 @@ public class BinaryFileStreamProcessor {
 					final IMonitoringRecord record = recordFactory.create(deserializer);
 					record.setLoggingTimestamp(loggingTimestamp);
 					return record;
-				} catch (final RecordInstantiationException ex) { // TODO this happens when dynamic
+				} catch (final RecordInstantiationException ex) { // This happens when dynamic
 					// arrays are used and the buffer
 					// does not hold the complete
 					// record.

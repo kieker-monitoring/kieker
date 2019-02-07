@@ -31,21 +31,27 @@ import kieker.common.exception.RecordInstantiationException;
  */
 public class JsonArrayValueDeserializer extends AbstractValueDeserializer implements IValueDeserializer {
 
-	final Iterator<JsonNode> values;
+	private final Iterator<JsonNode> values;
+
+	/**
+	 * Constructor for a serializer.
+	 *
+	 * @param array
+	 *            input array node
+	 */
+	protected JsonArrayValueDeserializer(final ArrayNode array) {
+		this.values = array.iterator();
+	}
 
 	/**
 	 * Factory method to create a json value deserializer.
 	 *
-	 * @param buffer
-	 *            serialization buffer
+	 * @param array
+	 *            input array node
 	 * @return the value deserializer
 	 */
 	public static JsonArrayValueDeserializer create(final ArrayNode array) {
 		return new JsonArrayValueDeserializer(array);
-	}
-
-	protected JsonArrayValueDeserializer(final ArrayNode array) {
-		this.values = array.iterator();
 	}
 
 	/*
@@ -147,17 +153,6 @@ public class JsonArrayValueDeserializer extends AbstractValueDeserializer implem
 	public <T extends Enum<T>> T getEnumeration(final Class<T> clazz) throws RecordInstantiationException {
 		final int value = this.values.next().asInt();
 		return this.enumerationValueOf(clazz, value);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see kieker.common.record.io.IValueDeserializer#getBytes(byte[])
-	 */
-	@Override
-	public byte[] getBytes(final byte[] target) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

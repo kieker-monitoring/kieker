@@ -35,7 +35,7 @@ public class NullStage extends AbstractConsumerStage<IMonitoringRecord> {
 	private long count;
 	private final boolean silent;
 
-	private final Map<Class<? extends IMonitoringRecord>, Integer> types = new HashMap<>();
+	private final Map<Class<? extends IMonitoringRecord>, Integer> types = new HashMap<>(); // NOPMD no concurrent access
 
 	/**
 	 * Null stage.
