@@ -38,7 +38,7 @@ import teetime.stage.io.Directory2FilesFilter;
  *
  * @since 1.14
  *
- * @deprecated since 1.15 remove 1.16 use {@link LogsReaderCompositeStage} instead
+ * @deprecated since 1.15 remove 1.16 use kieker.tools.source.LogsReaderCompositeStage instead
  */
 @Deprecated
 public final class Dir2RecordsFilter extends CompositeStage {

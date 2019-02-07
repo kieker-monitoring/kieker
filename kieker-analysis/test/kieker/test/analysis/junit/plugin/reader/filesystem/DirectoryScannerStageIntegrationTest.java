@@ -32,7 +32,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysisteetime.plugin.reader.filesystem.DirectoryScannerStage;
+import kieker.analysis.source.file.DirectoryScannerStage;
 
 import teetime.framework.AbstractStage;
 import teetime.framework.InputPort;

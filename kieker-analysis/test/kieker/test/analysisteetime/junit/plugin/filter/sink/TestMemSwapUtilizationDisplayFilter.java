@@ -24,7 +24,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysisteetime.plugin.filter.sink.MemSwapUtilizationDisplayFilter;
+import kieker.analysis.sink.display.MemSwapUtilizationDisplayFilter;
 import kieker.common.record.system.MemSwapUsageRecord;
 
 import kieker.test.common.junit.AbstractKiekerTest;

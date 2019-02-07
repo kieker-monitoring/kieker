@@ -21,11 +21,11 @@ import kieker.analysis.plugin.reader.depcompression.GZipDecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.NoneDecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.XZDecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.ZipDecompressionFilter;
-import kieker.analysisteetime.plugin.reader.filesystem.AbstractEventDeserializer;
-import kieker.analysisteetime.plugin.reader.filesystem.AbstractMapDeserializer;
-import kieker.analysisteetime.plugin.reader.filesystem.BinaryEventDeserializer;
-import kieker.analysisteetime.plugin.reader.filesystem.DatEventDeserializer;
-import kieker.analysisteetime.plugin.reader.filesystem.TextMapDeserializer;
+import kieker.analysis.source.file.AbstractEventDeserializer;
+import kieker.analysis.source.file.AbstractMapDeserializer;
+import kieker.analysis.source.file.BinaryEventDeserializer;
+import kieker.analysis.source.file.DatEventDeserializer;
+import kieker.analysis.source.file.TextMapDeserializer;
 import kieker.common.util.filesystem.FSUtil;
 
 /**

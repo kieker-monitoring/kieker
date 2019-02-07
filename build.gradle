@@ -308,6 +308,8 @@ def checkSubprojects = [
         project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'),
         project(':kieker-tools'),
         project(':kieker-tools:collector'),
+        project(':kieker-tools:convert-logging-timestamp'),
+        project(':kieker-tools:kdb'),
         project(':kieker-tools:log-replayer'),
         project(':kieker-tools:opad'),
         project(':kieker-tools:resource-monitor'),

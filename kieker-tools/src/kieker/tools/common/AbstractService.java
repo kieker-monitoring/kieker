@@ -17,7 +17,7 @@ package kieker.tools.common;
 
 import com.beust.jcommander.JCommander;
 
-import kieker.analysis.common.ConfigurationException;
+import kieker.common.exception.ConfigurationException;
 
 import teetime.framework.Configuration;
 import teetime.framework.Execution;

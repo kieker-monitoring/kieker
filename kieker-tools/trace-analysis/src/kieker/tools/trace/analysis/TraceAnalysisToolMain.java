@@ -25,7 +25,7 @@ import java.util.TimeZone;
 
 import com.beust.jcommander.JCommander;
 
-import kieker.analysis.common.ConfigurationException;
+import kieker.common.exception.ConfigurationException;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.tools.common.AbstractLegacyTool;
 import kieker.tools.common.DateConverter;

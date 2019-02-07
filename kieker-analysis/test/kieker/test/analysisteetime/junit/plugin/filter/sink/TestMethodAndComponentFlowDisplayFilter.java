@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.display.TagCloud;
-import kieker.analysisteetime.plugin.filter.sink.MethodAndComponentFlowDisplayFilter;
+import kieker.analysis.sink.display.MethodAndComponentFlowDisplayFilter;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
 import kieker.test.common.junit.AbstractKiekerTest;
