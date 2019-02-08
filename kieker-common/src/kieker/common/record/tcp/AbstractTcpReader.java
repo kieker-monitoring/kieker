@@ -36,7 +36,7 @@ public abstract class AbstractTcpReader implements Runnable {
 
 	private static final int CONNECTION_CLOSED_BY_CLIENT = -1;
 
-	protected final Logger logger;
+	protected final Logger logger; // NOPMD allows to use the subclass name while logging
 
 	private final int port;
 	private final int bufferCapacity;

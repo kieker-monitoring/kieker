@@ -158,11 +158,11 @@ public final class HTTPConnector extends AbstractConnector {
 					return;
 				}
 
-				final long timestamp = Integer.parseInt(rawTimestamp);
+				final long timestamp = Integer.parseInt(rawTimestamp); // NOPMD class deprecated, won't fix
 				final String[] values = Arrays.copyOf(rawValues, rawValues.length, String[].class);
 
 				// Try to deserialize a monitoring record from the given values
-				final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(classname);
+				final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(classname); // NOPMD class deprecated, won't fix
 
 				// final IMonitoringRecord record = AbstractMonitoringRecord.createFromStringArray(clazz, values);
 				// record.setLoggingTimestamp(timestamp);

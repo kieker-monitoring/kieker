@@ -80,10 +80,10 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 	public void run() {
 		this.active = true;
 		try {
-			final DataInputStream in = new DataInputStream(this.socket.getInputStream());
+			final DataInputStream dataInputStream = new DataInputStream(this.socket.getInputStream());
 			while (this.active) {
 				try {
-					this.recordQueue.put(this.deserialize(in));
+					this.recordQueue.put(this.deserialize(dataInputStream));
 				} catch (final InterruptedException e) {
 					this.active = false;
 					LOGGER.warn("Listener {} died.", Thread.currentThread().getId(), e);
@@ -95,7 +95,7 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 					LOGGER.info("Listener {} terminated at end of stream.", Thread.currentThread().getId());
 				}
 			}
-			in.close();
+			dataInputStream.close();
 			this.socket.close();
 		} catch (final IOException e) {
 			this.active = false;
@@ -106,16 +106,16 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 	/**
 	 * Deserialize a received record.
 	 *
-	 * @param in
+	 * @param dataInputStream
 	 *            the input data stream
 	 *
 	 * @return a new IMonitoringRecord
 	 * @throws Exception
 	 *             throws IOException when unknown record ID is read.
 	 */
-	private IMonitoringRecord deserialize(final DataInputStream in) throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
+	private IMonitoringRecord deserialize(final DataInputStream dataInputStream) throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 		try {
-			final Integer id = in.readInt();
+			final Integer id = dataInputStream.readInt();
 			final LookupEntity recordProperty = this.lookupEntityMap.get(id);
 			if (recordProperty != null) {
 				final Object[] values = new Object[recordProperty.getParameterTypes().length];
@@ -123,36 +123,36 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 				for (int i = 0; i < recordProperty.getParameterTypes().length; i++) {
 					final Class<?> parameterType = recordProperty.getParameterTypes()[i];
 					if (boolean.class.equals(parameterType)) {
-						values[i] = in.readBoolean();
+						values[i] = dataInputStream.readBoolean();
 					} else if (Boolean.class.equals(parameterType)) {
-						values[i] = Boolean.valueOf(in.readBoolean());
+						values[i] = Boolean.valueOf(dataInputStream.readBoolean());
 					} else if (byte.class.equals(parameterType)) {
-						values[i] = in.readByte();
+						values[i] = dataInputStream.readByte();
 					} else if (Byte.class.equals(parameterType)) {
-						values[i] = Byte.valueOf(in.readByte());
+						values[i] = Byte.valueOf(dataInputStream.readByte());
 					} else if (short.class.equals(parameterType)) { // NOPMD
-						values[i] = in.readShort();
+						values[i] = dataInputStream.readShort();
 					} else if (Short.class.equals(parameterType)) {
-						values[i] = Short.valueOf(in.readShort());
+						values[i] = Short.valueOf(dataInputStream.readShort());
 					} else if (int.class.equals(parameterType)) {
-						values[i] = in.readInt();
+						values[i] = dataInputStream.readInt();
 					} else if (Integer.class.equals(parameterType)) {
-						values[i] = Integer.valueOf(in.readInt());
+						values[i] = Integer.valueOf(dataInputStream.readInt());
 					} else if (long.class.equals(parameterType)) {
-						values[i] = in.readLong();
+						values[i] = dataInputStream.readLong();
 					} else if (Long.class.equals(parameterType)) {
-						values[i] = Long.valueOf(in.readLong());
+						values[i] = Long.valueOf(dataInputStream.readLong());
 					} else if (float.class.equals(parameterType)) {
-						values[i] = in.readFloat();
+						values[i] = dataInputStream.readFloat();
 					} else if (Float.class.equals(parameterType)) {
-						values[i] = Float.valueOf(in.readFloat());
+						values[i] = Float.valueOf(dataInputStream.readFloat());
 					} else if (double.class.equals(parameterType)) {
-						values[i] = in.readDouble();
+						values[i] = dataInputStream.readDouble();
 					} else if (Double.class.equals(parameterType)) {
-						values[i] = Double.valueOf(in.readDouble());
+						values[i] = Double.valueOf(dataInputStream.readDouble());
 					} else if (String.class.equals(parameterType)) {
-						final int bufLen = in.readInt();
-						in.readFully(this.buffer, 0, bufLen);
+						final int bufLen = dataInputStream.readInt();
+						dataInputStream.readFully(this.buffer, 0, bufLen);
 						values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
 					} else { // reference types
 						throw new ConnectorDataTransmissionException("References are not yet supported.");

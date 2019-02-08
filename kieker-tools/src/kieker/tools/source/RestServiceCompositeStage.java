@@ -52,7 +52,7 @@ public class RestServiceCompositeStage extends CompositeStage implements ISource
 	private static final String SERVICE_PORT = PREFIX + ".port";
 	private static final String ACCESS_HANDLER = PREFIX + ".accessHandler";
 
-	RestServiceStage serviceStage;
+	private final RestServiceStage serviceStage;
 
 	public RestServiceCompositeStage(final Configuration configuration) throws ConfigurationException {
 		final String hostname = configuration.getStringProperty(RestServiceCompositeStage.SERVICE_HOSTNAME);

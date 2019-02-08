@@ -17,6 +17,7 @@ package kieker.analysis.source.rest;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 
 import org.slf4j.Logger;
@@ -108,14 +109,17 @@ public class RestService extends NanoHTTPD {
 			if (size != null) {
 				final byte[] buffer = new byte[size];
 				final InputStream stream = session.getInputStream();
-				stream.read(buffer, 0, size);
+				if (stream.read(buffer, 0, size) == size) {
 
-				final String contentType = session.getHeaders().get("content-type");
+					final String contentType = session.getHeaders().get("content-type");
 
-				if ("application/json".equals(contentType)) {
-					return this.processJsonRequest(buffer);
+					if ("application/json".equals(contentType)) {
+						return this.processJsonRequest(buffer);
+					} else {
+						return NanoHTTPD.newFixedLengthResponse(Response.Status.BAD_REQUEST, MIME_PLAINTEXT, "JSON data expected");
+					}
 				} else {
-					return NanoHTTPD.newFixedLengthResponse(Response.Status.BAD_REQUEST, MIME_PLAINTEXT, "JSON data expected");
+					return NanoHTTPD.newFixedLengthResponse(Response.Status.BAD_REQUEST, MIME_PLAINTEXT, "Corrupted message");
 				}
 			} else {
 				return NanoHTTPD.newFixedLengthResponse(Response.Status.BAD_REQUEST, MIME_PLAINTEXT, "JSON data expected");
@@ -136,8 +140,12 @@ public class RestService extends NanoHTTPD {
 				return NanoHTTPD.newFixedLengthResponse(Response.Status.BAD_REQUEST, MIME_PLAINTEXT, "JSON array expected");
 			}
 		} catch (final IOException e) {
-			LOGGER.error("Parsing error for JSON message: {}", new String(buffer));
-			return NanoHTTPD.newFixedLengthResponse(Response.Status.BAD_REQUEST, MIME_PLAINTEXT, "Malformed JSON data");
+			try {
+				LOGGER.error("Parsing error for JSON message: {}", new String(buffer, "UTF-8"));
+				return NanoHTTPD.newFixedLengthResponse(Response.Status.BAD_REQUEST, MIME_PLAINTEXT, "Malformed JSON data");
+			} catch (final UnsupportedEncodingException e1) {
+				return NanoHTTPD.newFixedLengthResponse(Response.Status.BAD_REQUEST, MIME_PLAINTEXT, "Malformed JSON data, is not UTF-8");
+			}
 		}
 	}
 

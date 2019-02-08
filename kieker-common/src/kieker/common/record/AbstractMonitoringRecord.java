@@ -51,7 +51,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 
 	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> CACHED_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>(); // NOCS
 	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Class<?>[]> CACHED_KIEKERRECORD_TYPES = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Class<?>[]>(); // NOCS
-	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Constructor<? extends IMonitoringRecord>> CACHED_KIEKERRECORD_CONSTRUCTORS_OBJECT = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Constructor<? extends IMonitoringRecord>>(); // NOCS
 
 	// added by chw; differs only in the key type: from integer to string
 	private static final ConcurrentMap<String, Constructor<? extends IMonitoringRecord>> CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY_CHW = new ConcurrentHashMap<String, Constructor<? extends IMonitoringRecord>>(); // NOCS
@@ -331,9 +330,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 			try {
 				clazz = Class.forName(classname).asSubclass(IMonitoringRecord.class);
 				CACHED_KIEKERRECORDS.putIfAbsent(classname, clazz);
-			} catch (final ClassNotFoundException ex) {
-				throw new MonitoringRecordException("Failed to get record type of name " + classname, ex);
-			} catch (final ClassCastException ex) {
+			} catch (final ClassNotFoundException | ClassCastException ex) {
 				throw new MonitoringRecordException("Failed to get record type of name " + classname, ex);
 			}
 		}
@@ -363,15 +360,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 					types = clazz.newInstance().getValueTypes();
 				}
 				CACHED_KIEKERRECORD_TYPES.putIfAbsent(clazz, types);
-			} catch (final SecurityException ex) {
-				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
-			} catch (final NoSuchFieldException ex) {
-				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
-			} catch (final IllegalArgumentException ex) {
-				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
-			} catch (final IllegalAccessException ex) {
-				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
-			} catch (final InstantiationException ex) {
+			} catch (final SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException | InstantiationException ex) {
 				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
 			}
 		}
@@ -393,14 +382,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 */
 	public static final IMonitoringRecord createFromDeserializer(final String recordClassName, final IValueDeserializer deserializer)
 			throws BufferUnderflowException, MonitoringRecordException {
-		return AbstractMonitoringRecord.createFromDeserializerChw(recordClassName, deserializer);
-	}
-
-	/**
-	 * Copy of {@link #createFromByteBuffer}. However, the constructor cache's key is a string, not an integer
-	 */
-	private static final IMonitoringRecord createFromDeserializerChw(final String recordClassName, final IValueDeserializer deserializer)
-			throws MonitoringRecordException, BufferUnderflowException {
 		try {
 			Constructor<? extends IMonitoringRecord> constructor = CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY_CHW.get(recordClassName);
 
@@ -417,15 +398,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 			}
 
 			return constructor.newInstance(deserializer);
-		} catch (final SecurityException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + recordClassName, ex);
-		} catch (final NoSuchMethodException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + recordClassName, ex);
-		} catch (final IllegalArgumentException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + recordClassName, ex);
-		} catch (final InstantiationException ex) {
-			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + recordClassName, ex);
-		} catch (final IllegalAccessException ex) {
+		} catch (final SecurityException | NoSuchMethodException | IllegalArgumentException | InstantiationException | IllegalAccessException ex) {
 			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + recordClassName, ex);
 		} catch (final InvocationTargetException ex) {
 			final Throwable cause = ex.getCause();

@@ -59,7 +59,7 @@ public class NetworkAccessHandler implements IAccessHandler {
 			final InetAddress address = InetAddress.getByName(parts[0]);
 			final int width;
 			if (parts.length == 2) {
-				width = Integer.valueOf(parts[1]);
+				width = Integer.parseInt(parts[1]);
 			} else {
 				width = address.getAddress().length == 4 ? 32 : 128; // NOCS
 			}

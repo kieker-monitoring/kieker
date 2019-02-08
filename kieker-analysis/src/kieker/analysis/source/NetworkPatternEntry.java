@@ -21,7 +21,7 @@ package kieker.analysis.source;
  * @author Reiner Jung
  * @since 1.15
  */
-public class NetworkPatternEntry {
+public final class NetworkPatternEntry {
 
 	private final byte[] ipAddress;
 	private final byte[] mask;

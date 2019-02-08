@@ -37,7 +37,8 @@ public class DirectoryScannerStage extends AbstractProducerStage<File> {
 	/**
 	 * Create a directory scanner.
 	 *
-	 * @param directories array of directories to scan
+	 * @param directories
+	 *            array of directories to scan
 	 */
 	public DirectoryScannerStage(final File[] directories) { // NOPMD passing array is not an issue here, read only
 		this.directories = directories;
@@ -78,8 +79,8 @@ public class DirectoryScannerStage extends AbstractProducerStage<File> {
 
 	private boolean isKiekerDirectory(final File directory) {
 		if (directory.isDirectory()) {
-			if (directory.exists()) { // NOPMD collapsing is not useful
-				if (directory.listFiles(this.filter).length > 0) { // NOPMD collapsing is not useful
+			if (directory.exists()) { // NOPMD NOFB collapsing is not useful
+				if (directory.listFiles(this.filter).length > 0) { // NOPMD NOFB collapsing is not useful
 					return true;
 				}
 			}

@@ -90,7 +90,7 @@ public class JsonArrayValueDeserializer extends AbstractValueDeserializer implem
 	 * @see kieker.common.record.io.IValueDeserializer#getShort()
 	 */
 	@Override
-	public short getShort() throws NumberFormatException {
+	public short getShort() throws NumberFormatException { // NOPMD DSL supports short
 		return (short) this.values.next().asInt();
 	}
 

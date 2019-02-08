@@ -73,7 +73,7 @@ public class PlainTraceMetadataRewriter implements ITraceMetadataRewriter {
 				this.metadatamap.put(traceMetadata.getHostname(), map);
 			}
 			map.put(traceMetadata.getTraceId(), traceMetadata);
-			this.traceId++;
+			this.traceId++; // NOFB
 			outputPort.send(traceMetadata);
 		} else if (record instanceof ITraceRecord) {
 			final SocketAddress remoteAddress = connection.getChannel().getRemoteAddress();
