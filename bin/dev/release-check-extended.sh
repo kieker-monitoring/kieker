@@ -113,14 +113,12 @@ function check_bin_archive {
 	else
 		information "Found bytecode version ${javaVersion}, OK"
 	fi
-	
+
 	CONVERTER_NAME=`ls tools/convert-logging-timestamp*tar`
 
 	extract_archive "${CONVERTER_NAME}"
-	
+
         CONVERTER_SCRIPT=`ls convert-logging-timestamp*/bin/convert-logging-timestamp`
-        
-        echo $CONVERTER_SCRIPT
 
 	# some basic tests with the tools
 	if ! (${CONVERTER_SCRIPT} --timestamps 1283156545581511026 1283156546127117246 | grep "Mon, 30 Aug 2010 08:22:25.581 +0000 (UTC)"); then
@@ -212,11 +210,11 @@ information "Binary TGZ"
 BINTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.tar.gz)
 extract_archive_to ${BINTGZ} ${TMP_TGZ_DIR}
 
-diff -r ${TMP_TGZ_DIR} ${TMP_ZIP_DIR}
+diff -r "${TMP_TGZ_DIR}" "${TMP_ZIP_DIR}"
 DIFF_BIN_RESULT=$?
 
 # cleanup temporary folders we created for the comparison
-rm -rf ${TMP_BINZIP_DIR} ${TMP_GZ_DIR}
+rm -rf "${TMP_BINZIP_DIR}" "${TMP_GZ_DIR}"
 
 if [ ${DIFF_BIN_RESULT} -eq 0 ]; then
   information "The content of both binary archives is identical."
@@ -225,7 +223,7 @@ else
   error "The content of both binary archives is NOT identical."
   exit 1
 fi
-rm -rf ${DIR}
+rm -rf "${DIR}"
 
 #
 ## source releases
