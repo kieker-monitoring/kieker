@@ -54,6 +54,14 @@ public class RestServiceCompositeStage extends CompositeStage implements ISource
 
 	private final RestServiceStage serviceStage;
 
+	/**
+	 * Create a source composite stage for rest services.
+	 *
+	 * @param configuration
+	 *            configuration for the service
+	 * @throws ConfigurationException
+	 *             on configuration errors
+	 */
 	public RestServiceCompositeStage(final Configuration configuration) throws ConfigurationException {
 		final String hostname = configuration.getStringProperty(RestServiceCompositeStage.SERVICE_HOSTNAME);
 		final int port = configuration.getIntProperty(RestServiceCompositeStage.SERVICE_PORT);
