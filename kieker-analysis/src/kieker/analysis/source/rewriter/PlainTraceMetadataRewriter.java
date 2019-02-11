@@ -20,6 +20,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.analysis.source.tcp.Connection;
 import kieker.common.record.IMonitoringRecord;
@@ -38,7 +39,7 @@ import teetime.framework.OutputPort;
  */
 public class PlainTraceMetadataRewriter implements ITraceMetadataRewriter {
 
-	private volatile long traceId;
+	private volatile AtomicLong traceId;
 	private final Map<String, Map<Long, TraceMetadata>> metadatamap = new HashMap<>(); // NOPMD no concurrent use of this class
 
 	/**
@@ -66,14 +67,14 @@ public class PlainTraceMetadataRewriter implements ITraceMetadataRewriter {
 		record.setLoggingTimestamp(loggingTimestamp);
 		if (record instanceof TraceMetadata) {
 			final TraceMetadata traceMetadata = (TraceMetadata) record;
-			traceMetadata.setTraceId(this.traceId);
+			traceMetadata.setTraceId(this.traceId.get());
 			Map<Long, TraceMetadata> map = this.metadatamap.get(traceMetadata.getHostname());
 			if (map == null) {
 				map = new HashMap<>();
 				this.metadatamap.put(traceMetadata.getHostname(), map);
 			}
 			map.put(traceMetadata.getTraceId(), traceMetadata);
-			this.traceId++; // NOFB
+			this.traceId.incrementAndGet();
 			outputPort.send(traceMetadata);
 		} else if (record instanceof ITraceRecord) {
 			final SocketAddress remoteAddress = connection.getChannel().getRemoteAddress();
