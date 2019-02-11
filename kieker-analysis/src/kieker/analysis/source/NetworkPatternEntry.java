@@ -39,10 +39,16 @@ public final class NetworkPatternEntry {
 		this.mask = mask;
 	}
 
+	/**
+	 * @return returns the ip address
+	 */
 	public final byte[] getIpAddress() {
 		return this.ipAddress; // NOPMD allowed as this is just a data structure
 	}
 
+	/**
+	 * @return returns the netmask
+	 */
 	public final byte[] getMask() {
 		return this.mask; // NOPMD allowed as this is just a data structure
 	}
