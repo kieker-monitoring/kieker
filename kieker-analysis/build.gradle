@@ -14,11 +14,13 @@ dependencies {
 	compile project(':kieker-common')
 	compile project(':kieker-monitoring')
 
-	compile resolveLibrary('javax.jms-*.jar')				// old library; not available via maven repo
+	compile 'javax.jms:jms:1.1'
 	compile 'org.apache.cxf:cxf:2.6.17'							// cxf-bundle
-	compile resolveLibrary('org.eclipse.emf.common_*.jar')
-	compile resolveLibrary('org.eclipse.emf.ecore.xmi_*.jar')
-	compile resolveLibrary('org.eclipse.emf.ecore_*.jar')
+	
+	compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.common', version: '2.15.0'
+	compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.ecore.xmi', version: '2.15.0'
+	compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.ecore', version: '2.15.0'
+	
 	compile 'com.rabbitmq:amqp-client:4.2.1'
 	compile 'com.google.guava:guava:20.0'				// (21.0 and above require java 8) used by StringRegistryCache for amqp reader
 	compile 'org.tukaani:xz:1.6'	// decompression algorithms used by the readers
@@ -29,6 +31,7 @@ dependencies {
 				
 	emfJarConfig 'net.sourceforge.teetime:teetime:3.0'
 	emfJarConfig 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
+	
 	compile configurations.emfJarConfig
 
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest

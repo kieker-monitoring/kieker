@@ -13,7 +13,7 @@ dependencies {
 	compile project(':kieker-common')
 	
 	compile 'com.rabbitmq:amqp-client:4.2.1'
-	compile resolveLibrary('javax.jms-*.jar')
+        compile 'javax.jms:jms:1.1'
 	compile 'org.jctools:jctools-core:2.1.0'
 	
 	ajc "org.aspectj:aspectjtools:$aspectjVersion"
