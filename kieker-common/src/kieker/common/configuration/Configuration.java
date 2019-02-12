@@ -18,6 +18,7 @@ package kieker.common.configuration;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -381,26 +382,7 @@ public class Configuration extends Properties {
 		final boolean endsWithSlash = workingPathname.charAt(workingPathname.length() - 1) == '/';
 
 		// split the path apart
-		final String[] components = workingPathname.split("/");
-		final LinkedList<String> path = new LinkedList<String>(); // NOCS NOPMD
-
-		// resolve ., .., and //
-		for (final String component : components) {
-			if (".".equals(component)) {
-				continue;
-			} else if ("".equals(component)) {
-				// Drop empty elements
-				continue;
-			} else if ("..".equals(component)) {
-				if (!path.isEmpty() && !"..".equals(path.getLast())) {
-					path.removeLast();
-				} else {
-					path.add("..");
-				}
-			} else {
-				path.add(component);
-			}
-		}
+		final List<String> path = Configuration.generatePath(workingPathname);
 
 		// put it back together
 		final StringBuilder sb = new StringBuilder();
@@ -433,6 +415,32 @@ public class Configuration extends Properties {
 		}
 
 		return result;
+	}
+
+	private static List<String> generatePath(final String workingPathname) {
+		final String[] components = workingPathname.split("/");
+
+		final LinkedList<String> path = new LinkedList<String>(); // NOCS NOPMD
+
+		// resolve ., .., and //
+		for (final String component : components) {
+			if (".".equals(component)) {
+				continue;
+			} else if ("".equals(component)) {
+				// Drop empty elements
+				continue;
+			} else if ("..".equals(component)) {
+				if (!path.isEmpty() && !"..".equals(path.getLast())) {
+					path.removeLast();
+				} else {
+					path.add("..");
+				}
+			} else {
+				path.add(component);
+			}
+		}
+
+		return path;
 	}
 
 	/**

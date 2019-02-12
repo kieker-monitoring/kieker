@@ -24,7 +24,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysisteetime.plugin.filter.sink.ThreadsStatusDisplayFilter;
+import kieker.analysis.sink.display.ThreadsStatusDisplayFilter;
 import kieker.common.record.jvm.ThreadsStatusRecord;
 
 import kieker.test.common.junit.AbstractKiekerTest;

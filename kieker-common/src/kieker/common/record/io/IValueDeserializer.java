@@ -137,14 +137,4 @@ public interface IValueDeserializer {
 	 */
 	public <T extends Enum<T>> T getEnumeration(Class<T> clazz) throws RecordInstantiationException;
 
-	/**
-	 * Retrieves raw data from the underlying data source.
-	 *
-	 * @param target
-	 *            The array to store the data in
-	 * @return The retrieved data
-	 * @since 1.13
-	 */
-	public byte[] getBytes(byte[] target);
-
 }

@@ -55,6 +55,14 @@ public class BinaryFileStreamProcessor {
 
 	private final IMonitoringRecordReceiver recordReceiver;
 
+	/**
+	 * Create a binary file stream processor.
+	 *
+	 * @param stringRegistry
+	 *            reader registry
+	 * @param recordReceiver
+	 *            record receiver
+	 */
 	public BinaryFileStreamProcessor(final ReaderRegistry<String> stringRegistry, final IMonitoringRecordReceiver recordReceiver) {
 		this.stringRegistry = stringRegistry;
 		this.buffer = ByteBuffer.allocate(1024000);
@@ -66,8 +74,6 @@ public class BinaryFileStreamProcessor {
 	 *
 	 * @param inputStream
 	 *            data stream
-	 * @param outputPort
-	 *            filter output port
 	 * @throws IOException
 	 *             on io errors during reading
 	 * @throws MonitoringRecordException

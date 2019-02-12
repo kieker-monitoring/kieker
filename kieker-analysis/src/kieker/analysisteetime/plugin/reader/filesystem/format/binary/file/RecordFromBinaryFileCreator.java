@@ -41,8 +41,6 @@ import teetime.framework.OutputPort;
 /**
  * This is a record from file creator, hacked to replace the broken Kieker version.
  *
- * TODO The file directory reading facilities need some extra work to fix it.
- *
  * @author Christian Wulf -- initial contributor
  * @author Reiner Jung
  *
@@ -178,7 +176,7 @@ public class RecordFromBinaryFileCreator {
 					final IMonitoringRecord record = recordFactory.create(deserializer);
 					record.setLoggingTimestamp(loggingTimestamp);
 					return record;
-				} catch (final RecordInstantiationException ex) { // this happens when dynamic
+				} catch (final RecordInstantiationException ex) { // This happens when dynamic
 					// arrays are used and the buffer
 					// does not hold the complete
 					// record.

@@ -24,7 +24,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysisteetime.plugin.filter.sink.GCDisplayFilter;
+import kieker.analysis.sink.display.GCDisplayFilter;
 import kieker.common.record.jvm.GCRecord;
 
 import kieker.test.common.junit.AbstractKiekerTest;

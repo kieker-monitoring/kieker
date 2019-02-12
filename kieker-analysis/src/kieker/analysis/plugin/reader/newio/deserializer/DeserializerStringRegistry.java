@@ -31,7 +31,9 @@ public class DeserializerStringRegistry extends ReaderRegistry<String> {
 
 	/**
 	 * Creates a new deserializer string registry.
-	 * @param values The values to use
+	 *
+	 * @param values
+	 *            The values to use
 	 */
 	public DeserializerStringRegistry(final List<String> values) {
 		super();
@@ -39,10 +41,6 @@ public class DeserializerStringRegistry extends ReaderRegistry<String> {
 		for (final String value : values) {
 			this.register(key++, value);
 		}
-	}
-
-	public String get(final int i) {
-		return this.get(i);
 	}
 
 }

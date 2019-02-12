@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.tools.common;
 
-import kieker.analysis.common.ConfigurationException;
+import kieker.common.exception.ConfigurationException;
 
 import teetime.framework.Configuration;
 import teetime.framework.Execution;

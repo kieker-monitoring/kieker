@@ -96,7 +96,7 @@ public class PerformAnalysis {
 
 	private final AnalysisController analysisController = new AnalysisController();
 
-	private final Logger logger;
+	private final Logger logger; // NOPMD legacy dependency
 	private final TraceAnalysisConfiguration settings;
 
 	/**

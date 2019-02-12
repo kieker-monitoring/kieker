@@ -21,7 +21,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.converters.BaseConverter;
 
 /**
@@ -31,7 +30,7 @@ import com.beust.jcommander.converters.BaseConverter;
  *
  * @since 1.15
  */
-public class DateConverter extends BaseConverter<Long> implements IStringConverter<Long> {
+public class DateConverter extends BaseConverter<Long> {
 
 	/** The format pattern which is used to print the date. */
 	public static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";

@@ -16,6 +16,9 @@
 
 package kieker.tools.log.replayer.filter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -51,6 +54,8 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
 
 	public static final String CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN = "monitoringPropertiesFilename";
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringRecordLoggerFilter.class.getCanonicalName());
 
 	/**
 	 * The {@link MonitoringController} the records received via {@link #inputIMonitoringRecord(IMonitoringRecord)} are passed to.
