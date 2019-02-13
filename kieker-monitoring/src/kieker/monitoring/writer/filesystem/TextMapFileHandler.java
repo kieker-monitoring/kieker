@@ -30,8 +30,8 @@ import kieker.monitoring.writer.compression.ICompressionFilter;
 import kieker.monitoring.writer.compression.NoneCompressionFilter;
 
 /**
- * Handler for the map file used in Kieker.
- * Note: This version does not support compression for the map file right now.
+ * Handler for the map file used in Kieker. Note: This version does not support
+ * compression for the map file right now.
  *
  * @author Reiner Jung
  *
@@ -41,11 +41,20 @@ import kieker.monitoring.writer.compression.NoneCompressionFilter;
 public class TextMapFileHandler implements IMapFileHandler {
 
 	public static final String PREFIX = TextMapFileHandler.class.getName() + ".";
-	/** The name of the configuration key to select a compression for the record log files. */
+	/**
+	 * The name of the configuration key to select a compression for the record log
+	 * files.
+	 */
 	public static final String CONFIG_COMPRESSION_FILTER = PREFIX + "compression";
-	/** The name of the configuration determining whether to flush upon each incoming registry entry. */
+	/**
+	 * The name of the configuration determining whether to flush upon each incoming
+	 * registry entry.
+	 */
 	public static final String CONFIG_FLUSH_MAPFILE = PREFIX + "flush";
-	/** The name of the configuration key determining the buffer size of the output file stream. */
+	/**
+	 * The name of the configuration key determining the buffer size of the output
+	 * file stream.
+	 */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize";
 
 	private final ICompressionFilter compressionFilter;
@@ -54,16 +63,18 @@ public class TextMapFileHandler implements IMapFileHandler {
 
 	public TextMapFileHandler(final Configuration configuration) {
 		/** get compression filter main data. */
-		final String compressionFilterClassName = configuration.getStringProperty(CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
-		this.compressionFilter = ControllerFactory.getInstance(configuration).createAndInitialize(ICompressionFilter.class,
-				compressionFilterClassName, configuration);
+		final String compressionFilterClassName = configuration.getStringProperty(CONFIG_COMPRESSION_FILTER,
+				NoneCompressionFilter.class.getName());
+		this.compressionFilter = ControllerFactory.getInstance(configuration)
+				.createAndInitialize(ICompressionFilter.class, compressionFilterClassName, configuration);
 		this.flushMapFile = configuration.getBooleanProperty(CONFIG_FLUSH_MAPFILE, true);
 	}
 
 	@Override
 	public void create(final Path location, final Charset charset) {
 		try {
-			final Writer w = Files.newBufferedWriter(location, charset, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+			final Writer w = Files.newBufferedWriter(location, charset, StandardOpenOption.CREATE_NEW,
+					StandardOpenOption.WRITE);
 			this.printWriter = new PrintWriter(w);
 		} catch (final IOException e) {
 			throw new IllegalStateException("Error on creating Kieker's mapping file.", e);
@@ -83,7 +94,8 @@ public class TextMapFileHandler implements IMapFileHandler {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see kieker.monitoring.writer.filesystem.IMapFileHandler#add(int, java.lang.String)
+	 * @see kieker.monitoring.writer.filesystem.IMapFileHandler#add(int,
+	 * java.lang.String)
 	 */
 	@Override
 	public void add(final int id, final String eventClassName) {

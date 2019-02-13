@@ -33,10 +33,10 @@ import kieker.monitoring.writer.compression.NoneCompressionFilter;
  * @author Danish Manzoor
  *
  */
-public class TextLogStreamHandlerTest {
+
+public class BinaryLogStreamHandlerTest {
 
 //	Initializing parameters for TextlogStreamhandler object instance
-
 	Boolean flushLogFile = true;
 	Integer bufferSize = 10;
 	int runCheck = 0;
@@ -45,18 +45,16 @@ public class TextLogStreamHandlerTest {
 	WriterRegistry reg = new WriterRegistry(null);
 	final IMonitoringRecord record = new OperationExecutionRecord("testing", "abc", 1, 0, 1, "localhost", 123, 456);
 
-	/**
-	 * Test method for
-	 * {@link kieker.monitoring.writer.filesystem.TextLogStreamHandler#serialize(kieker.common.record.IMonitoringRecord, int)}.
-	 *
-	 *
-	 */
+	@Test
+	public void testClose() {
+		// test not required
+	}
+
 	@Test
 	public void testSerialize() throws IOException {
-
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		final TextLogStreamHandler handler = new TextLogStreamHandler(this.flushLogFile, this.bufferSize, this.charset,
-				this.compressionFilter, this.reg);
+		final BinaryLogStreamHandler handler = new BinaryLogStreamHandler(this.flushLogFile, this.bufferSize,
+				this.charset, this.compressionFilter, this.reg);
 
 		try {
 			// channel initializing
@@ -79,15 +77,10 @@ public class TextLogStreamHandlerTest {
 				this.testSerialize();
 			}
 		}
-
 	}
 
-	/**
-	 * Test method for
-	 * {@link kieker.monitoring.writer.filesystem.TextLogStreamHandler#TextLogStreamHandler(java.lang.Boolean, java.lang.Integer, java.nio.charset.Charset, kieker.monitoring.writer.compression.ICompressionFilter, kieker.common.registry.writer.WriterRegistry)}.
-	 */
 	@Test
-	public void testTextLogStreamHandler() {
+	public void testBinaryLogStreamHandler() {
 		// test not required
 	}
 

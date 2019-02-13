@@ -58,25 +58,19 @@ public class TextMapFileHandlerTest {
 	 */
 	@Test
 	public void testCreate() {
-		// final Files fileMock = EasyMock.createMock(Files.class);
-		//
-		// try {
-		// final Writer w = fileMock.newBufferedWriter(path, cs, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
-		// this.printWriter = new PrintWriter(w);
-		//
-		// } catch (final IOException e) {
-		// throw new IllegalStateException("Error on mock for Kieker's mapping file.", e);
-		// }
 
 		PowerMockito.mockStatic(Files.class);
 		final Path location = Paths.get(TEST_PATH);
 		final Charset charset = Charset.defaultCharset();
-
+		// defining dummy writer for mocking purposes
 		final Writer dummyWriter = new DummyWriter();
 		final BufferedWriter writer = new BufferedWriter(dummyWriter);
 
+		// mocking file.newBufferedWriter with our dummy writer
 		try {
-			PowerMockito.when(Files.newBufferedWriter(location, charset, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)).thenReturn(writer);
+			PowerMockito.when(
+					Files.newBufferedWriter(location, charset, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE))
+					.thenReturn(writer);
 		} catch (final IOException e) {
 			Assert.fail(e.getLocalizedMessage());
 		}
@@ -86,40 +80,21 @@ public class TextMapFileHandlerTest {
 		final TextMapFileHandler handler = new TextMapFileHandler(configuration);
 
 		handler.create(location, charset);
-
+		// adding dummy record
 		handler.add(0, "my.event.EventClass");
+		Assert.assertEquals("String doesnot match", "$0=my.event.EventClass",
+				((DummyWriter) dummyWriter).getBufferAsString());
+//		System.out.println(((DummyWriter) dummyWriter).getBufferAsString());
+		// adding dummy record 2
+		handler.add(1, "my.event.EventClass1");
+		Assert.assertEquals("String doesnot match", "$1=my.event.EventClass1",
+				((DummyWriter) dummyWriter).getBufferAsString());
+//		System.out.println(((DummyWriter) dummyWriter).getBufferAsString());
 
-		// check dummy writer whether an appropriate string appeared
-
+		// closing
 		handler.close();
 
 		// check whether close was called.
-
-		// this is what I found on
-		// https://stackoverflow.com/questions/16035365/is-it-possible-to-use-powermock-to-mock-new-file-creation/16118611
-		// using easymock
-
-		// first, create a mock for File
-		// final File fileMock = EasyMock.createMock(File.class);
-		// EasyMock.expect(fileMock.getAbsolutePath()).andReturn("/my/fake/file/path");
-		//// EasyMock.replay(fileMock);
-		//
-		// // then return the mocked object if the constructor is invoked
-		// final Class<?>[] parameterTypes = new Class[] { String.class };
-		// try {
-		// PowerMock.expectNew(File.class, parameterTypes, EasyMock.isA(String.class)).andReturn(fileMock);
-		// } catch (final Exception e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		//
-		//// PowerMock.replay(File.class);
-		// PowerMock.replay(fileMock, File.class);
-		// // try constructing a real File and check if the mock kicked in
-		// final String mockedFilePath = new File("/real/path/for/file").getAbsolutePath();
-		// Assert.assertEquals("/my/fake/file/path", mockedFilePath);
-		//
-		//
 
 	}
 
