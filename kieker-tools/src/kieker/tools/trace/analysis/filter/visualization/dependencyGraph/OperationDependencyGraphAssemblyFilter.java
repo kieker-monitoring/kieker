@@ -22,10 +22,10 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.tools.trace.analysis.Constants;
 import kieker.tools.trace.analysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.trace.analysis.filter.IGraphOutputtingFilter;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.trace.analysis.systemModel.AbstractMessage;
 import kieker.tools.trace.analysis.systemModel.AssemblyComponent;
@@ -41,22 +41,22 @@ import kieker.tools.trace.analysis.systemModel.util.AssemblyComponentOperationPa
 
 /**
  * Refactored copy from LogAnalysis-legacy tool<br>
- * 
+ *
  * This class has exactly one input port named "in". The data which is send to this plugin is not delegated in any way.
- * 
+ *
  * @author Andre van Hoorn, Lena Stoever, Matthias Rohr,
- * 
+ *
  * @since 1.2
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
 public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGraphFilter<AssemblyComponentOperationPair> {
 
-	private static final String CONFIGURATION_NAME = Constants.PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME;
+	private static final String CONFIGURATION_NAME = VisualizationConstants.PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME;
 
 	/**
 	 * Creates a new filter using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use.
 	 * @param projectContext
@@ -106,7 +106,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 			DependencyGraphNode<AssemblyComponentOperationPair> senderNode = this.getGraph().getNode(senderPair.getId());
 			DependencyGraphNode<AssemblyComponentOperationPair> receiverNode = this.getGraph().getNode(receiverPair.getId());
 			if (senderNode == null) {
-				senderNode = new DependencyGraphNode<AssemblyComponentOperationPair>(senderPair.getId(), senderPair, t.getTraceInformation(),
+				senderNode = new DependencyGraphNode<>(senderPair.getId(), senderPair, t.getTraceInformation(),
 						this.getOriginRetentionPolicy());
 
 				if (m.getSendingExecution().isAssumed()) {
@@ -119,7 +119,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 			}
 
 			if (receiverNode == null) {
-				receiverNode = new DependencyGraphNode<AssemblyComponentOperationPair>(receiverPair.getId(), receiverPair, t.getTraceInformation(),
+				receiverNode = new DependencyGraphNode<>(receiverPair.getId(), receiverPair, t.getTraceInformation(),
 						this.getOriginRetentionPolicy());
 
 				if (m.getReceivingExecution().isAssumed()) {

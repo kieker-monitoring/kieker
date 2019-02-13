@@ -58,7 +58,7 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 	public static final int ORDER_INDEX = -1;
 	public static final String PARAMETERS = "";
 	public static final String TECHNOLOGY = "";
-	private static final long serialVersionUID = -2138603925245500796L;
+	private static final long serialVersionUID = 3457043370101594469L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

@@ -38,6 +38,7 @@ public class RecordFactoryResolverTest extends AbstractKiekerTest {
 
 	private RecordFactoryResolver recordFactoryResolver;
 
+	/** test constructor. */
 	public RecordFactoryResolverTest() {
 		// Nothing to do
 	}

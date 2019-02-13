@@ -12,6 +12,12 @@ dependencies {
 	compile 'org.slf4j:slf4j-api:1.7.25'
 }
 
+eclipse {
+  project {
+    name = 'Kieker Example 3 ch3-4--custom-components'
+  }
+}
+
 // Simplify the JAR's file name
 archivesBaseName = 'BookstoreApplicationMonitoringAnalysis'
 version = ''

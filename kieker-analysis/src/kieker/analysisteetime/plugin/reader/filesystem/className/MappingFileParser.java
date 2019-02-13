@@ -57,7 +57,7 @@ public class MappingFileParser {
 	 * Closes the stream after reading.
 	 *
 	 * @param inputStream
-	 * @return
+	 * @return reader registry
 	 */
 	public ReaderRegistry<String> parseFromStream(final InputStream inputStream) {
 		final ReaderRegistry<String> classNameRegistry = new ReaderRegistry<>();

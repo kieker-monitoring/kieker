@@ -17,7 +17,7 @@ package kieker.tools.common;
 
 import com.beust.jcommander.JCommander;
 
-import kieker.analysis.common.ConfigurationException;
+import kieker.common.exception.ConfigurationException;
 
 import teetime.framework.Configuration;
 import teetime.framework.Execution;
@@ -75,18 +75,18 @@ public abstract class AbstractService<T extends Configuration, R extends Object>
 
 			final Thread shutdownThread = this.shutdownHook(execution);
 
-			AbstractLegacyTool.LOGGER.debug("Running {}", label);
+			this.logger.debug("Running {}", label);
 
 			execution.executeBlocking();
 
 			Runtime.getRuntime().removeShutdownHook(shutdownThread);
 			this.shutdownService();
 
-			AbstractLegacyTool.LOGGER.debug("Done");
+			this.logger.debug("Done");
 
-			return AbstractLegacyTool.SUCCESS_EXIT_CODE;
+			return SUCCESS_EXIT_CODE;
 		} else {
-			return AbstractLegacyTool.CONFIGURATION_ERROR;
+			return CONFIGURATION_ERROR;
 		}
 	}
 

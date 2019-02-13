@@ -16,15 +16,16 @@
 
 package kieker.common.util.classpath;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.exception.ConfigurationException;
 
 /**
  * This class encapsulates the creation of Kieker monitoring controllers.
- *
- * TODO integrate additional features from iObserve here
  *
  * @author Holger Knoche
  * @author Reiner Jung
@@ -92,6 +93,45 @@ public final class InstantiationFactory {
 	}
 
 	/**
+	 * This is a helper method trying to find, create and initialize the given class, using its
+	 * public constructor which accepts a single {@link Configuration}.
+	 *
+	 * @param implementedInterface
+	 *            This class defines the expected result of the method call.
+	 * @param className
+	 *            The name of the class to be created.
+	 * @param configuration
+	 *            The configuration which will be used to initialize the class in question.
+	 *
+	 * @return A new and initializes class instance if everything went well.
+	 *
+	 * @param <C>
+	 *            The type of the returned class.
+	 *
+	 * @throws ConfigurationException
+	 *             on configuration errors during instantiation
+	 */
+	public static <C> C createWithConfiguration(final Class<C> implementedInterface, final String className,
+			final kieker.common.configuration.Configuration configuration) throws ConfigurationException {
+		try {
+			final Class<?> clazz = Class.forName(className);
+			if (implementedInterface.isAssignableFrom(clazz)) {
+				final Class<?>[] parameterTypes = { kieker.common.configuration.Configuration.class };
+				return InstantiationFactory.instantiateClass(implementedInterface, clazz, parameterTypes,
+						configuration);
+			} else {
+				InstantiationFactory.LOGGER.error("Class '{}' has to implement '{}'.", className,
+						implementedInterface.getSimpleName());
+				throw new ConfigurationException("Requested class does not match interface.");
+			}
+		} catch (final ClassNotFoundException e) {
+			InstantiationFactory.LOGGER.error("{}: Class '{}' not found: {}", implementedInterface.getSimpleName(),
+					className, e.getLocalizedMessage());
+			throw new ConfigurationException(e);
+		}
+	}
+
+	/**
 	 * This is a helper method .
 	 *
 	 * @param c
@@ -132,5 +172,57 @@ public final class InstantiationFactory {
 			LOGGER.error("{}: Failed to load class for name '{}'", c.getSimpleName(), className, e);
 		}
 		return createdClass;
+	}
+
+	/**
+	 * Instantiate a class implementing the given interface.
+	 *
+	 * @param implementedInterface
+	 *            a class or interface defining the implementation interface
+	 * @param clazz
+	 *            the type to be instantiated
+	 * @param parameterTypes
+	 *            the signature for the constructor
+	 * @param parameters
+	 *            the matching parameter values for the constructor
+	 * @return returns an initialized instance of clazz
+	 *
+	 * @throws ConfigurationException
+	 *             in case the class could not be instantiated
+	 */
+	@SuppressWarnings("unchecked")
+	private static <C> C instantiateClass(final Class<C> implementedInterface, final Class<?> clazz, // NOPMD
+			final Class<?>[] parameterTypes, final Object... parameters) throws ConfigurationException { // NOPMD
+		// complexity necessary to check all types of errors
+		try {
+			return (C) clazz.getConstructor(parameterTypes).newInstance(parameters);
+		} catch (final InstantiationException e) {
+			InstantiationFactory.LOGGER.error("{}: Class '{}' cannot be instantiated (abstract class): {}",
+					implementedInterface.getSimpleName(), clazz.getName(), e.getLocalizedMessage());
+			throw new ConfigurationException(e);
+		} catch (final IllegalAccessException | SecurityException e) {
+			InstantiationFactory.LOGGER.error("{}: Access to class '{}' denied: {}",
+					implementedInterface.getSimpleName(), clazz.getName(), e.getLocalizedMessage());
+			throw new ConfigurationException(e);
+		} catch (final IllegalArgumentException e) {
+			InstantiationFactory.LOGGER.error(
+					"{}: Constructor signature of class '{}' does not match given parameters: {}",
+					implementedInterface.getSimpleName(), clazz.getName(), e.getLocalizedMessage());
+			throw new ConfigurationException(e);
+		} catch (final InvocationTargetException e) {
+			InstantiationFactory.LOGGER.error("{}: Constructor of class '{}' failed to initialite instance: {}",
+					implementedInterface.getSimpleName(), clazz.getName(), e.getLocalizedMessage());
+			throw new ConfigurationException(e);
+		} catch (final NoSuchMethodException e) {
+			final StringBuilder parameterTypeNames = new StringBuilder();
+			for (final Object parameter : parameters) {
+				parameterTypeNames.append(", ");
+				parameterTypeNames.append(parameter.getClass().getName());
+			}
+			InstantiationFactory.LOGGER.error(
+					"{}: Class '{}' has to implement a (public) constructor that accepts the signature {}.",
+					implementedInterface.getSimpleName(), clazz.getName(), parameterTypeNames.toString(), e);
+			throw new ConfigurationException(e);
+		}
 	}
 }

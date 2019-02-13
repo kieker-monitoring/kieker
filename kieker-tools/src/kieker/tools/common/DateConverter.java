@@ -21,10 +21,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.converters.BaseConverter;
-
-import kieker.tools.trace.analysis.Constants;
 
 /**
  * Converts parameter string representing a date value to timestamp.
@@ -33,10 +30,16 @@ import kieker.tools.trace.analysis.Constants;
  *
  * @since 1.15
  */
-public class DateConverter extends BaseConverter<Long> implements IStringConverter<Long> {
+public class DateConverter extends BaseConverter<Long> {
+
+	/** The format pattern which is used to print the date. */
+	public static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
+
+	/** Date format pattern used for information. */
+	public static final String HUMAN_READABLE_DATE_FORMAT = DATE_FORMAT_PATTERN.replaceAll("'", "") + " | timestamp"; // only for usage info
 
 	/** date format provider. */
-	private static final DateFormat DATE_FORMAT = new SimpleDateFormat(Constants.DATE_FORMAT_PATTERN, Locale.US);
+	private static final DateFormat DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.US);
 
 	static {
 		DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));

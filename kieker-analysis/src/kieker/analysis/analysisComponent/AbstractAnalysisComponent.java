@@ -41,8 +41,6 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	/** The name of the property for the name. This should normally only be used by Kieker. */
 	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
 
-	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractAnalysisComponent.class); // NOPMD (logger for inheriting classes)
-
 	private static final AtomicInteger UNNAMED_COUNTER = new AtomicInteger(0);
 
 	/** The project context (usually the analysis controller) of this component. */

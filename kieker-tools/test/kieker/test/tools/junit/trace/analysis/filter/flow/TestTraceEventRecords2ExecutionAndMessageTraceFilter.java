@@ -35,7 +35,7 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.tools.util.BookstoreExecutionFactory;
+import kieker.test.tools.util.bookstore.BookstoreExecutionFactory;
 
 /**
  * @author Andre van Hoorn

@@ -50,7 +50,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	
 	/** default constants. */
 	public static final String CAUSE = "";
-	private static final long serialVersionUID = -1887200574513819573L;
+	private static final long serialVersionUID = -235912152331253573L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

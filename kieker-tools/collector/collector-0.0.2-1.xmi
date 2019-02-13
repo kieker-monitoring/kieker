@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="ASCII"?>
+<hypergraph:ModularHypergraph xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:hypergraph="http://evaluation.se.cs.cau.de/hypergraph">
+  <nodes name="org.iobserve.collector.DataDumpStage.DataDumpStage java.lang.String" edges="//@edges.1 //@edges.2 //@edges.3 //@edges.4 //@edges.27">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.iobserve.collector.DataDumpStage.execute kieker.common.record.IMonitoringRecord" edges="//@edges.0 //@edges.5 //@edges.6">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.iobserve.collector.DataDumpStage.getCount " edges="//@edges.0 //@edges.19">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.iobserve.collector.CollectorMain.CollectorMain ">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.iobserve.collector.CollectorMain.main java.lang.String[]" edges="//@edges.7 //@edges.8 //@edges.9 //@edges.10 //@edges.11 //@edges.12 //@edges.13 //@edges.14 //@edges.15 //@edges.16 //@edges.17 //@edges.18 //@edges.19 //@edges.20 //@edges.21 //@edges.22">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.iobserve.collector.CollectorMain.createOptions " edges="//@edges.9 //@edges.23 //@edges.24 //@edges.25">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.iobserve.collector.SimpleBridgeConfiguration.SimpleBridgeConfiguration java.lang.String,I" edges="//@edges.13 //@edges.26 //@edges.27 //@edges.28 //@edges.29 //@edges.30">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.iobserve.collector.SimpleBridgeConfiguration.getCounter ">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="kieker.monitoring.core.configuration.ConfigurationFactory.createDefaultConfiguration " edges="//@edges.1">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="java.util.Properties.setProperty java.lang.String,java.lang.String" edges="//@edges.2">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="java.io.PrintStream.println java.lang.String" edges="//@edges.3 //@edges.6 //@edges.12">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="kieker.monitoring.core.controller.MonitoringController.createInstance kieker.common.configuration.Configuration" edges="//@edges.4">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="kieker.monitoring.core.controller.IWriterController.newMonitoringRecord kieker.common.record.IMonitoringRecord" edges="//@edges.5">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.apache.commons.cli.DefaultParser.DefaultParser " edges="//@edges.7">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.apache.commons.cli.CommandLineParser.parse org.apache.commons.cli.Options,java.lang.String[]" edges="//@edges.8">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.apache.commons.cli.CommandLine.getOptionValue java.lang.String" edges="//@edges.10">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="java.lang.Integer.parseInt java.lang.String" edges="//@edges.11">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="teetime.framework.Execution&lt;SimpleBridgeConfiguration>.Execution&lt;SimpleBridgeConfiguration> org.iobserve.collector.SimpleBridgeConfiguration" edges="//@edges.14">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="java.lang.Runtime.addShutdownHook java.lang.Thread" edges="//@edges.15">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="java.lang.Thread.Thread java.lang.Runnable" edges="//@edges.16">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.iobserve.collector.CollectorMain.Runnable$Lorg/iobserve/collector/CollectorMain$2528;..Runnable " edges="//@edges.17">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.iobserve.collector.CollectorMain.Runnable$Lorg/iobserve/collector/CollectorMain$2528;.run ">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="teetime.framework.Execution&lt;SimpleBridgeConfiguration>.executeBlocking " edges="//@edges.18">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="java.lang.Throwable.getMessage " edges="//@edges.20">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.apache.commons.cli.HelpFormatter.HelpFormatter " edges="//@edges.21">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.apache.commons.cli.HelpFormatter.printHelp java.lang.String,org.apache.commons.cli.Options" edges="//@edges.22">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.apache.commons.cli.Options.Options " edges="//@edges.23">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.apache.commons.cli.Options.addOption org.apache.commons.cli.Option" edges="//@edges.24">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.apache.commons.cli.Builder.build " edges="//@edges.25">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="org.iobserve.analysis.reader.MultipleConnectionTcpReaderStage.MultipleConnectionTcpReaderStage I,I" edges="//@edges.26">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="teetime.framework.CompositeStage.connectPorts teetime.framework.OutputPort&lt;? extends IMonitoringRecord>,teetime.framework.InputPort&lt;IMonitoringRecord>" edges="//@edges.28">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="teetime.framework.AbstractProducerStage&lt;IMonitoringRecord>.getOutputPort " edges="//@edges.29">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <nodes name="teetime.framework.AbstractConsumerStage&lt;IMonitoringRecord>.getInputPort " edges="//@edges.30">
+    <derivedFrom xsi:type="hypergraph:MethodTrace"/>
+  </nodes>
+  <edges name="org.iobserve.collector.DataDumpStage.count">
+    <derivedFrom xsi:type="hypergraph:FieldTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.DataDumpStage.DataDumpStage java.lang.String::kieker.monitoring.core.configuration.ConfigurationFactory.createDefaultConfiguration ">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.DataDumpStage.DataDumpStage java.lang.String::java.util.Properties.setProperty java.lang.String,java.lang.String">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.DataDumpStage.DataDumpStage java.lang.String::java.io.PrintStream.println java.lang.String">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.DataDumpStage.DataDumpStage java.lang.String::kieker.monitoring.core.controller.MonitoringController.createInstance kieker.common.configuration.Configuration">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.DataDumpStage.execute kieker.common.record.IMonitoringRecord::kieker.monitoring.core.controller.IWriterController.newMonitoringRecord kieker.common.record.IMonitoringRecord">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.DataDumpStage.execute kieker.common.record.IMonitoringRecord::java.io.PrintStream.println java.lang.String">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.main java.lang.String[]::org.apache.commons.cli.DefaultParser.DefaultParser ">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.main java.lang.String[]::org.apache.commons.cli.CommandLineParser.parse org.apache.commons.cli.Options,java.lang.String[]">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.main java.lang.String[]::org.iobserve.collector.CollectorMain.createOptions ">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.main java.lang.String[]::org.apache.commons.cli.CommandLine.getOptionValue java.lang.String">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.main java.lang.String[]::java.lang.Integer.parseInt java.lang.String">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.main java.lang.String[]::java.io.PrintStream.println java.lang.String">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.main java.lang.String[]::org.iobserve.collector.SimpleBridgeConfiguration.SimpleBridgeConfiguration java.lang.String,I">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.main java.lang.String[]::teetime.framework.Execution&lt;SimpleBridgeConfiguration>.Execution&lt;SimpleBridgeConfiguration> org.iobserve.collector.SimpleBridgeConfiguration">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.main java.lang.String[]::java.lang.Runtime.addShutdownHook java.lang.Thread">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.main java.lang.String[]::java.lang.Thread.Thread java.lang.Runnable">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.main java.lang.String[]::org.iobserve.collector.CollectorMain.Runnable$Lorg/iobserve/collector/CollectorMain$2528;..Runnable ">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.main java.lang.String[]::teetime.framework.Execution&lt;SimpleBridgeConfiguration>.executeBlocking ">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.main java.lang.String[]::org.iobserve.collector.DataDumpStage.getCount ">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.main java.lang.String[]::java.lang.Throwable.getMessage ">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.main java.lang.String[]::org.apache.commons.cli.HelpFormatter.HelpFormatter ">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.main java.lang.String[]::org.apache.commons.cli.HelpFormatter.printHelp java.lang.String,org.apache.commons.cli.Options">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.createOptions ::org.apache.commons.cli.Options.Options ">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.createOptions ::org.apache.commons.cli.Options.addOption org.apache.commons.cli.Option">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.CollectorMain.createOptions ::org.apache.commons.cli.Builder.build ">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.SimpleBridgeConfiguration.SimpleBridgeConfiguration java.lang.String,I::org.iobserve.analysis.reader.MultipleConnectionTcpReaderStage.MultipleConnectionTcpReaderStage I,I">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.SimpleBridgeConfiguration.SimpleBridgeConfiguration java.lang.String,I::org.iobserve.collector.DataDumpStage.DataDumpStage java.lang.String">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.SimpleBridgeConfiguration.SimpleBridgeConfiguration java.lang.String,I::teetime.framework.CompositeStage.connectPorts teetime.framework.OutputPort&lt;? extends IMonitoringRecord>,teetime.framework.InputPort&lt;IMonitoringRecord>">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.SimpleBridgeConfiguration.SimpleBridgeConfiguration java.lang.String,I::teetime.framework.AbstractProducerStage&lt;IMonitoringRecord>.getOutputPort ">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <edges name="org.iobserve.collector.SimpleBridgeConfiguration.SimpleBridgeConfiguration java.lang.String,I::teetime.framework.AbstractConsumerStage&lt;IMonitoringRecord>.getInputPort ">
+    <derivedFrom xsi:type="hypergraph:CallerCalleeTrace"/>
+  </edges>
+  <modules name="org.iobserve.collector.DataDumpStage" nodes="//@nodes.0 //@nodes.1 //@nodes.2">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="org.iobserve.collector.CollectorMain" nodes="//@nodes.3 //@nodes.4 //@nodes.5">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="org.iobserve.collector.SimpleBridgeConfiguration" nodes="//@nodes.6 //@nodes.7">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="kieker.monitoring.core.configuration.ConfigurationFactory" nodes="//@nodes.8" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="java.util.Properties" nodes="//@nodes.9" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="java.io.PrintStream" nodes="//@nodes.10" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="kieker.monitoring.core.controller.MonitoringController" nodes="//@nodes.11" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="kieker.monitoring.core.controller.IWriterController" nodes="//@nodes.12" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="org.apache.commons.cli.DefaultParser" nodes="//@nodes.13" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="org.apache.commons.cli.CommandLineParser" nodes="//@nodes.14" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="org.apache.commons.cli.CommandLine" nodes="//@nodes.15" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="java.lang.Integer" nodes="//@nodes.16" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="teetime.framework.Execution&lt;SimpleBridgeConfiguration>" nodes="//@nodes.17 //@nodes.22" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="java.lang.Runtime" nodes="//@nodes.18" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="java.lang.Thread" nodes="//@nodes.19" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="org.iobserve.collector.CollectorMain.Runnable$Lorg/iobserve/collector/CollectorMain$2528;" nodes="//@nodes.20 //@nodes.21" kind="ANONYMOUS">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="java.lang.Throwable" nodes="//@nodes.23" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="org.apache.commons.cli.HelpFormatter" nodes="//@nodes.24 //@nodes.25" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="org.apache.commons.cli.Options" nodes="//@nodes.26 //@nodes.27" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="org.apache.commons.cli.Builder" nodes="//@nodes.28" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="org.iobserve.analysis.reader.MultipleConnectionTcpReaderStage" nodes="//@nodes.29" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="teetime.framework.CompositeStage" nodes="//@nodes.30" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="teetime.framework.AbstractProducerStage&lt;IMonitoringRecord>" nodes="//@nodes.31" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+  <modules name="teetime.framework.AbstractConsumerStage&lt;IMonitoringRecord>" nodes="//@nodes.32" kind="FRAMEWORK">
+    <derivedFrom xsi:type="hypergraph:TypeTrace"/>
+  </modules>
+</hypergraph:ModularHypergraph>

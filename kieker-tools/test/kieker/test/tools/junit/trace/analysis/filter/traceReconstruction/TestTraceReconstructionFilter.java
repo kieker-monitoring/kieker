@@ -36,7 +36,7 @@ import kieker.tools.trace.analysis.systemModel.MessageTrace;
 import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.tools.util.ExecutionFactory;
+import kieker.test.tools.util.bookstore.ExecutionFactory;
 
 /**
  * A test for the {@link TraceReconstructionFilter}.

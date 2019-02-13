@@ -24,9 +24,9 @@ import org.junit.Test;
 /**
  * This JUnit test makes sure that all JUnit tests within Kieker extend the {@link AbstractKiekerTest}. The tests in question will be found using two criteria: They
  * have to be in a package containing the subpackage {@code junit} and their classname has to contain {@code Test}.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.7
  */
 public class TestJUnitTestsExtendingAbstractKiekerTest extends AbstractDynamicKiekerTest {
@@ -38,6 +38,12 @@ public class TestJUnitTestsExtendingAbstractKiekerTest extends AbstractDynamicKi
 		// empty default constructor
 	}
 
+	/**
+	 * Check whether all test inherit AbstractDynamicKiekerTest.
+	 *
+	 * @throws ClassNotFoundException
+	 *             in case a class is not found
+	 */
 	@Test
 	public void test() throws ClassNotFoundException {
 		final Collection<Class<?>> availableClasses = super.deliverAllAvailableClassesFromTestDirectoryInJUnitPackage();

@@ -55,10 +55,13 @@ function check_src_archive {
 	if (run_gradle apidoc | grep -v "src-gen" | grep "warning -"); then
 	    error "One or more JavaDoc warnings"
 	    exit 1
+	else
+	    information "OK"
 	fi
-	information "OK"
 
 	# now build release from source (including checks and tests)
+	echo "//////////////////////////////////////////////////////////"
+	run_gradle build
 	run_gradle distribute
 	# make sure that the expected files are present
 	assert_dir_exists "${DIST_JAR_DIR}"
@@ -104,18 +107,22 @@ function check_bin_archive {
 	unzip "${MAIN_JAR}" "${VERSION_CLASS_IN_JAR}"
 	assert_file_exists_regular "${VERSION_CLASS_IN_JAR}"
 
-	bytecodeVersion=$(javap -verbose ${VERSION_CLASS_IN_JAR} | grep -q "${javaVersion}")
-	information "Found bytecode version ${bytecodeVersion}"
-
 	if ! javap -verbose ${VERSION_CLASS_IN_JAR} | grep -q "${javaVersion}"; then
-		error "Unexpected bytecode version: ${bytecodeVersion}"
+		error "Unexpected bytecode version: ${javaVersion}"
 		exit 1
+	else
+		information "Found bytecode version ${javaVersion}, OK"
 	fi
-	information "Bytecode version is OK"
+
+	CONVERTER_NAME=`ls tools/convert-logging-timestamp*tar`
+
+	extract_archive "${CONVERTER_NAME}"
+
+        CONVERTER_SCRIPT=`ls convert-logging-timestamp*/bin/convert-logging-timestamp`
 
 	# some basic tests with the tools
-	if ! (bin/convertLoggingTimestamp.sh --timestamps 1283156545581511026 1283156546127117246 | grep "Mon, 30 Aug 2010 08:22:25.581 +0000 (UTC)"); then
-		error "Unexpected result executing bin/convertLoggingTimestamp.sh"
+	if ! (${CONVERTER_SCRIPT} --timestamps 1283156545581511026 1283156546127117246 | grep "Mon, 30 Aug 2010 08:22:25.581 +0000 (UTC)"); then
+		error "Unexpected result executing convert-logging-timestamp"
 		exit 1
 	fi
 
@@ -133,16 +140,16 @@ function check_bin_archive {
 		error "${PLOT_SCRIPT} does not exist or is not executable"
 		exit 1
 	    fi
-	    
-	    information ${PLOT_SCRIPT} "${ARCHDIR}" "."
+
+	    information "Executing ${PLOT_SCRIPT} ${ARCHDIR} ."
 
 	    if ! ${PLOT_SCRIPT} "${ARCHDIR}" "."; then # passing kieker dir and output dir
 		error "${PLOT_SCRIPT} returned with error"
 		exit 1
 	    fi
 
-            information "${REFERENCE_OUTPUT_DIR}"
-            
+            information "Output directory ${REFERENCE_OUTPUT_DIR}"
+
 	    for f in $(ls "${REFERENCE_OUTPUT_DIR}" | egrep "(dot$|pic$|html$|txt$)"); do
 		information "Comparing to reference file $f ... "
 		if test -z "$f"; then
@@ -203,11 +210,11 @@ information "Binary TGZ"
 BINTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.tar.gz)
 extract_archive_to ${BINTGZ} ${TMP_TGZ_DIR}
 
-diff -r ${TMP_TGZ_DIR} ${TMP_ZIP_DIR}
+diff -r "${TMP_TGZ_DIR}" "${TMP_ZIP_DIR}"
 DIFF_BIN_RESULT=$?
 
 # cleanup temporary folders we created for the comparison
-rm -rf ${TMP_BINZIP_DIR} ${TMP_GZ_DIR}
+rm -rf "${TMP_BINZIP_DIR}" "${TMP_GZ_DIR}"
 
 if [ ${DIFF_BIN_RESULT} -eq 0 ]; then
   information "The content of both binary archives is identical."
@@ -216,7 +223,7 @@ else
   error "The content of both binary archives is NOT identical."
   exit 1
 fi
-rm -rf ${DIR}
+rm -rf "${DIR}"
 
 #
 ## source releases

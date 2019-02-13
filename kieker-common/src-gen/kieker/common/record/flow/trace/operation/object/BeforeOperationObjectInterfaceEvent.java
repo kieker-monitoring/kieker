@@ -52,7 +52,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	
 	/** default constants. */
 	public static final String INTERFACE = "";
-	private static final long serialVersionUID = -8438691367718487460L;
+	private static final long serialVersionUID = 2900164578331713310L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

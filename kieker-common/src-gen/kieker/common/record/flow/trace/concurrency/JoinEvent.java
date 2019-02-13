@@ -45,7 +45,7 @@ public class JoinEvent extends AbstractTraceEvent  {
 	
 	/** default constants. */
 	public static final long JOINED_TRACE_ID = 0L;
-	private static final long serialVersionUID = -7303666475064047694L;
+	private static final long serialVersionUID = 5699964259392184696L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

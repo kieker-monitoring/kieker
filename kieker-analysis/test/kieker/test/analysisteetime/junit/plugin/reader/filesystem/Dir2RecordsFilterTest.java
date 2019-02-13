@@ -37,7 +37,9 @@ import teetime.stage.io.Printer;
  *
  * @since 1.14
  *
+ * @deprecated since 1.15 remove in 1.16
  */
+@Deprecated
 public class Dir2RecordsFilterTest {
 
 	public Dir2RecordsFilterTest() {

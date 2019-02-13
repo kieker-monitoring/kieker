@@ -57,7 +57,7 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	/** default constants. */
 	public static final int OBJECT_ID = 0;
 	public static final int CALLEE_OBJECT_ID = 0;
-	private static final long serialVersionUID = -567545225655603051L;
+	private static final long serialVersionUID = 8314260268662611478L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

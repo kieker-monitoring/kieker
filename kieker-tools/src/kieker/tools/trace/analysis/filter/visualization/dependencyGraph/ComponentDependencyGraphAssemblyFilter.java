@@ -22,10 +22,10 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.tools.trace.analysis.Constants;
 import kieker.tools.trace.analysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.trace.analysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.trace.analysis.filter.IGraphOutputtingFilter;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.systemModel.AbstractMessage;
 import kieker.tools.trace.analysis.systemModel.AssemblyComponent;
 import kieker.tools.trace.analysis.systemModel.MessageTrace;
@@ -35,23 +35,23 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool<br>
- * 
+ *
  * This class has exactly one input port named "in". The created graph is emitted through
  * the output port.
- * 
+ *
  * @author Andre van Hoorn, Lena Stoever, Matthias Rohr,
- * 
+ *
  * @since 1.2
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH))
 public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGraphFilter<AssemblyComponent> {
 
-	private static final String CONFIGURATION_NAME = Constants.PLOTASSEMBLYCOMPONENTDEPGRAPH_COMPONENT_NAME;
+	private static final String CONFIGURATION_NAME = VisualizationConstants.PLOTASSEMBLYCOMPONENTDEPGRAPH_COMPONENT_NAME;
 
 	/**
 	 * Creates a new filter using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use.
 	 * @param projectContext
@@ -79,7 +79,7 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 			DependencyGraphNode<AssemblyComponent> senderNode = this.getGraph().getNode(senderComponent.getId());
 			DependencyGraphNode<AssemblyComponent> receiverNode = this.getGraph().getNode(receiverComponent.getId());
 			if (senderNode == null) {
-				senderNode = new DependencyGraphNode<AssemblyComponent>(senderComponent.getId(), senderComponent, t.getTraceInformation(),
+				senderNode = new DependencyGraphNode<>(senderComponent.getId(), senderComponent, t.getTraceInformation(),
 						this.getOriginRetentionPolicy());
 
 				if (m.getSendingExecution().isAssumed()) {
@@ -92,7 +92,7 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 			}
 
 			if (receiverNode == null) {
-				receiverNode = new DependencyGraphNode<AssemblyComponent>(receiverComponent.getId(), receiverComponent, t.getTraceInformation(),
+				receiverNode = new DependencyGraphNode<>(receiverComponent.getId(), receiverComponent, t.getTraceInformation(),
 						this.getOriginRetentionPolicy());
 
 				if (m.getReceivingExecution().isAssumed()) {

@@ -194,7 +194,7 @@ function assert_files_exist_src {
 	assert_file_NOT_exists ".classpath"
 	assert_file_exists_regular ".checkstyle"
 	assert_file_exists_regular ".pmd"
-	assert_dir_exists ".settings/"
+	assert_file_NOT_exists ".settings/"
 	assert_file_exists_regular "kieker-documentation/README-bin"
 	assert_file_exists_regular "kieker-documentation/README-src"
 }
@@ -330,16 +330,16 @@ change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
 BINZIP=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.zip)
-check_bin_archive ${BINZIP}
-rm -rf ${DIR}
+check_bin_archive "${BINZIP}"
+rm -rf "${DIR}"
 
 information "Check tar.gz"
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
 BINTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.tar.gz)
-check_bin_archive ${BINTGZ}
-rm -rf ${DIR}
+check_bin_archive "${BINTGZ}"
+rm -rf "${DIR}"
 
 
 #
@@ -355,16 +355,16 @@ change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
 SRCZIP=$(ls ../../${DIST_RELEASE_DIR}/*-sources.zip)
-check_src_archive ${SRCZIP}
-rm -rf ${DIR}
+check_src_archive "${SRCZIP}"
+rm -rf "${DIR}"
 
 information "check tar.gz"
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
 SRCTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-sources.tar.gz)
-check_src_archive ${SRCTGZ}
-rm -rf ${DIR}
+check_src_archive "${SRCTGZ}"
+rm -rf "${DIR}"
 
 # end
 information "---------------------------------"

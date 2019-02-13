@@ -46,7 +46,7 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		String.class, // IClassSignature.classSignature
 	};
 	
-	private static final long serialVersionUID = 5792711083403520393L;
+	private static final long serialVersionUID = -7724172518672268698L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

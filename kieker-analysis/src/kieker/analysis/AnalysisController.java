@@ -716,7 +716,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             If the given project could not be loaded.
 	 */
 	public static final AnalysisControllerWithMapping createAnalysisController(final MIProject project, final ClassLoader classLoader) throws NullPointerException,
-	AnalysisConfigurationException {
+			AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController(project, classLoader);
 
 		return new AnalysisControllerWithMapping(controller, controller.pluginModelMap, controller.repositoryModelMap);
@@ -843,7 +843,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		 *
 		 * @since 1.5
 		 */
-		public void update(final AnalysisController controller, final STATE state);
+		void update(final AnalysisController controller, final STATE state);
 	}
 
 }

@@ -24,7 +24,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysisteetime.plugin.filter.sink.CPUUtilizationDisplayFilter;
+import kieker.analysis.sink.display.CPUUtilizationDisplayFilter;
 import kieker.common.record.system.CPUUtilizationRecord;
 
 import kieker.test.common.junit.AbstractKiekerTest;

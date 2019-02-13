@@ -28,8 +28,8 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.trace.analysis.systemModel.ExecutionTraceBasedSession;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.tools.util.filter.sessionReconstruction.SessionReconstructionTestSetup;
-import kieker.test.tools.util.filter.sessionReconstruction.SessionReconstructionTestUtil;
+import kieker.test.tools.util.bookstore.filter.sessionReconstruction.SessionReconstructionTestSetup;
+import kieker.test.tools.util.bookstore.filter.sessionReconstruction.SessionReconstructionTestUtil;
 
 /**
  * Test suite for the {@link kieker.tools.trace.analysis.filter.sessionReconstruction.SessionReconstructionFilter}.

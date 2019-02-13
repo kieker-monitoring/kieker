@@ -4,6 +4,7 @@ apply plugin: 'eclipse'
 dependencies {
 	compile fileTree('lib') {
 		include "kieker-*.jar"
+		include "opad-*.jar"
 	}
 }
 

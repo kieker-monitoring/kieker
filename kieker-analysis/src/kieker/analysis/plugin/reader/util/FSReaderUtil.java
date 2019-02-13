@@ -21,11 +21,11 @@ import kieker.analysis.plugin.reader.depcompression.GZipDecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.NoneDecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.XZDecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.ZipDecompressionFilter;
-import kieker.analysisteetime.plugin.reader.filesystem.AbstractEventDeserializer;
-import kieker.analysisteetime.plugin.reader.filesystem.AbstractMapDeserializer;
-import kieker.analysisteetime.plugin.reader.filesystem.BinaryEventDeserializer;
-import kieker.analysisteetime.plugin.reader.filesystem.DatEventDeserializer;
-import kieker.analysisteetime.plugin.reader.filesystem.TextMapDeserializer;
+import kieker.analysis.source.file.AbstractEventDeserializer;
+import kieker.analysis.source.file.AbstractMapDeserializer;
+import kieker.analysis.source.file.BinaryEventDeserializer;
+import kieker.analysis.source.file.DatEventDeserializer;
+import kieker.analysis.source.file.TextMapDeserializer;
 import kieker.common.util.filesystem.FSUtil;
 
 /**
@@ -41,9 +41,18 @@ public final class FSReaderUtil {
 		// private default constructor for factory class.
 	}
 
-	public static Class<? extends AbstractDecompressionFilter> findDecompressionFilterByExtension(final String name) {
-		final String extension = name.substring(name.lastIndexOf('.'));
+	private static String getExtension(final String name) {
+		final int suffixStartPosition = name.lastIndexOf('.');
 
+		if (suffixStartPosition == -1) {
+			return null;
+		} else {
+			return name.substring(suffixStartPosition);
+		}
+	}
+
+	public static Class<? extends AbstractDecompressionFilter> findDecompressionFilterByExtension(final String name) {
+		final String extension = FSReaderUtil.getExtension(name);
 		if (FSUtil.GZIP_FILE_EXTENSION.equals(extension)) {
 			return GZipDecompressionFilter.class;
 		} else if (FSUtil.DEFLATE_FILE_EXTENSION.equals(extension)) {
@@ -58,7 +67,7 @@ public final class FSReaderUtil {
 	}
 
 	public static boolean hasValidFileExtension(final String name) {
-		final String extension = name.substring(name.lastIndexOf('.'));
+		final String extension = FSReaderUtil.getExtension(name);
 		if (FSUtil.BINARY_FILE_EXTENSION.equals(extension) || FSUtil.DAT_FILE_EXTENSION.equals(extension)) {
 			return true;
 		} else {
@@ -67,7 +76,7 @@ public final class FSReaderUtil {
 	}
 
 	public static Class<? extends AbstractEventDeserializer> findEventDeserializer(final String logFileName) {
-		final String extension = logFileName.substring(logFileName.lastIndexOf('.'));
+		final String extension = FSReaderUtil.getExtension(logFileName);
 
 		if (FSUtil.DAT_FILE_EXTENSION.equals(extension)) {
 			return DatEventDeserializer.class;
@@ -79,7 +88,7 @@ public final class FSReaderUtil {
 	}
 
 	public static Class<? extends AbstractMapDeserializer> findMapDeserializer(final String mapFileName) {
-		final String extension = mapFileName.substring(mapFileName.lastIndexOf('.'));
+		final String extension = FSReaderUtil.getExtension(mapFileName);
 
 		if (FSUtil.MAP_FILE_EXTENSION.equals(extension)) {
 			return TextMapDeserializer.class;

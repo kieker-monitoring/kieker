@@ -1,0 +1,33 @@
+apply plugin: "com.github.hauner.jarTest"
+
+
+configurations {
+    resultJar
+}
+
+// Since the analysis component requires JRE 1.8, this "tools component" requires JRE 1.8, too.
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+	clover 'org.openclover:clover:4.2.0'
+
+	compile project(':kieker-tools')
+	compile configurations.resultJar
+	
+	testCompile project (path: ':kieker-common', configuration: 'testArchives')
+	testCompile project (path: ':kieker-tools', configuration: 'testArchives')
+}
+
+clover {
+	report {
+		html=true
+	}
+	
+}
+
+eclipse {
+	classpath {
+		defaultOutputDir = file('build-eclipse')
+	}
+}

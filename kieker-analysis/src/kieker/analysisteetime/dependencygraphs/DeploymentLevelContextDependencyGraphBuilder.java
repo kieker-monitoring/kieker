@@ -34,8 +34,14 @@ import kieker.analysisteetime.util.graph.IVertex;
  *
  * @since 1.14
  */
-class DeploymentLevelContextDependencyGraphBuilder extends AbstractDependencyGraphBuilder {
+public class DeploymentLevelContextDependencyGraphBuilder extends AbstractDependencyGraphBuilder {
 
+	/**
+	 * Create new graph builder.
+	 *
+	 * @param executionModel execution model
+	 * @param statisticsModel statistics model
+	 */
 	public DeploymentLevelContextDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel) {
 		super(executionModel, statisticsModel);
 	}

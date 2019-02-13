@@ -23,8 +23,8 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import kieker.tools.trace.analysis.Constants;
 import kieker.tools.trace.analysis.filter.visualization.AbstractGraphFormatter;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
 import kieker.tools.trace.analysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.trace.analysis.systemModel.AssemblyComponent;
 import kieker.tools.trace.analysis.systemModel.Operation;
@@ -39,7 +39,7 @@ import kieker.tools.trace.analysis.systemModel.util.AssemblyComponentOperationPa
  */
 public class OperationAssemblyDependencyGraphFormatter extends AbstractOperationDependencyGraphFormatter<OperationAssemblyDependencyGraph> {
 
-	private static final String DEFAULT_FILE_NAME = Constants.ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX + Constants.DOT_FILE_SUFFIX;
+	private static final String DEFAULT_FILE_NAME = VisualizationConstants.ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX + VisualizationConstants.DOT_FILE_SUFFIX;
 
 	/**
 	 * Creates a new formatter.

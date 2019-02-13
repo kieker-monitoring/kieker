@@ -83,8 +83,6 @@ public final class AMQPReader {
 	 *            The name of the configuration property for the AMQP queue name.
 	 * @param heartbeat
 	 *            The name of the configuration property for the heartbeat timeout.
-	 * @param logger
-	 *            Kieker log.
 	 * @param elementReceivedCallback
 	 *            The actual teetime stage which uses this class.
 	 */

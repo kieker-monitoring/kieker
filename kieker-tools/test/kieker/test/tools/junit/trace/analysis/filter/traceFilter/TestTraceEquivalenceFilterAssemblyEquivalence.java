@@ -27,7 +27,7 @@ import kieker.tools.trace.analysis.systemModel.ExecutionTrace;
 import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.tools.util.ExecutionFactory;
+import kieker.test.tools.util.bookstore.ExecutionFactory;
 
 /**
  * @author Andre van Hoorn

@@ -32,6 +32,7 @@ public class TestRecord extends AbstractMonitoringRecord {
 
 	private static final long serialVersionUID = 9088190056147961692L;
 
+	/** test constructor. */
 	public TestRecord() {
 		// Nothing to do
 	}

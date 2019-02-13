@@ -45,7 +45,7 @@ public class BeforeOperationEvent extends AbstractOperationEvent  {
 		String.class, // IClassSignature.classSignature
 	};
 	
-	private static final long serialVersionUID = 1370350773084931203L;
+	private static final long serialVersionUID = -4739205267677950144L;
 	
 	/** property name array. */
 	private static final String[] PROPERTY_NAMES = {

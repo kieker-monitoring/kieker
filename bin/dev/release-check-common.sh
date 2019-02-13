@@ -96,6 +96,8 @@ function extract_archive {
 		unzip -q "$1"
 	elif echo "$1" | grep "tar.gz"; then
 		tar -xzf "$1"
+	elif echo "$1" | grep "tar"; then
+		tar -xf "$1"
 	else
 		error "Archive '$1' is neither zip nor .tar.gz"
 		exit 1
