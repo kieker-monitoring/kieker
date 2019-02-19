@@ -3,7 +3,7 @@
 pipeline {
 
   environment {
-    DOCKER_ARGS = '--rm'
+    DOCKER_ARGS = ''
   }
 
   agent none
