@@ -16,8 +16,6 @@
 
 package kieker.monitoring.sampler.oshi.samplers;
 
-import org.hyperic.sigar.SigarException;
-
 import kieker.common.record.system.ResourceUtilizationRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
@@ -25,7 +23,6 @@ import kieker.monitoring.timer.ITimeSource;
 
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
-import oshi.hardware.CentralProcessor.TickType;
 import oshi.hardware.HardwareAbstractionLayer;
 
 /**
@@ -49,8 +46,9 @@ public class CPUsCombinedPercSampler extends AbstractOshiSampler {
 	 * {@link kieker.monitoring.sampler.oshi.OshiSamplerFactory#createSensorCPUsCombinedPerc()}
 	 * to acquire an instance rather than calling this constructor directly.
 	 *
-	 * @param sigar
-	 *            The systemInfo which will be used to retrieve the data.
+	 * @param hardwareAbstractionLayer
+	 *            The hardwareAbstractionLayer which will be used to retrieve the
+	 *            data.
 	 */
 	public CPUsCombinedPercSampler(final HardwareAbstractionLayer hardwareAbstractionLayer) {
 		super(hardwareAbstractionLayer);
@@ -60,7 +58,7 @@ public class CPUsCombinedPercSampler extends AbstractOshiSampler {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void sample(final IMonitoringController monitoringController) throws SigarException {
+	public void sample(final IMonitoringController monitoringController) {
 		if (!monitoringController.isMonitoringEnabled()) {
 			return;
 		}
@@ -68,23 +66,11 @@ public class CPUsCombinedPercSampler extends AbstractOshiSampler {
 			return;
 		}
 		final CentralProcessor centralProcessor = this.hardwareAbstractionLayer.getProcessor();
-		// centralProcessor.
-		final long[][] processorCpuLoadTicks = centralProcessor.getProcessorCpuLoadTicks();
 		final double[] cpuLoads = centralProcessor.getProcessorCpuLoadBetweenTicks();
 		final ITimeSource timesource = monitoringController.getTimeSource();
+
 		for (int i = 0; i < cpuLoads.length; i++) {
 			if (monitoringController.isProbeActivated(SignatureFactory.createCPUSignature(i))) {
-
-				final long[] curCPU = processorCpuLoadTicks[i];
-
-				final long userTick = curCPU[TickType.USER.getIndex()];
-				final long niceTick = curCPU[TickType.NICE.getIndex()];
-				final long systemTick = curCPU[TickType.SYSTEM.getIndex()];
-				final long waitTick = curCPU[TickType.IOWAIT.getIndex()];
-				final long stealTick = curCPU[TickType.STEAL.getIndex()];
-				final long irqTick = curCPU[TickType.IRQ.getIndex()];
-				final long idleTick = curCPU[TickType.IDLE.getIndex()];
-				final long softIrqTick = curCPU[TickType.SOFTIRQ.getIndex()];
 
 				final double combinedUtilization = cpuLoads[i];
 				final ResourceUtilizationRecord r = new ResourceUtilizationRecord(timesource.getTime(),

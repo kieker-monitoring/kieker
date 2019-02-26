@@ -61,7 +61,6 @@ public final class LoadAverageSampler extends AbstractOshiSampler {
 		if (!monitoringController.isProbeActivated(SignatureFactory.createLoadAverageSignature())) {
 			return;
 		}
-
 		final double[] loadAverage = this.hardwareAbstractionLayer.getProcessor().getSystemLoadAverage(3);
 		if (loadAverage.length != 3) {
 			return;

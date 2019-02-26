@@ -16,15 +16,12 @@
 
 package kieker.monitoring.sampler.oshi.samplers;
 
-import org.hyperic.sigar.SigarException;
-
 import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
 import kieker.monitoring.timer.ITimeSource;
 
 import oshi.hardware.CentralProcessor;
-import oshi.hardware.CentralProcessor.TickType;
 import oshi.hardware.HardwareAbstractionLayer;
 
 /**
@@ -37,6 +34,12 @@ import oshi.hardware.HardwareAbstractionLayer;
  *
  */
 public final class CPUsDetailedPercSampler extends AbstractOshiSampler {
+
+	/**
+	 * Converter for each CPU core. A converter converts tick values to relative
+	 * percentage values.
+	 */
+	private CPUsDetailedPercConverter[] converters;
 
 	/**
 	 * Constructs a new {@link AbstractOshiSampler} with given
@@ -57,28 +60,47 @@ public final class CPUsDetailedPercSampler extends AbstractOshiSampler {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void sample(final IMonitoringController monitoringController) throws SigarException {
+	public void sample(final IMonitoringController monitoringController) {
 		if (!monitoringController.isMonitoringEnabled()) {
 			return;
 		}
 		if (!monitoringController.isProbeActivated(SignatureFactory.createCPUSignature())) {
 			return;
 		}
-
 		final CentralProcessor centralProcessor = this.hardwareAbstractionLayer.getProcessor();
 		final long[][] processorLoadTicks = centralProcessor.getProcessorCpuLoadTicks();
-
+		if (this.converters == null) {
+			this.converters = new CPUsDetailedPercConverter[processorLoadTicks.length];
+			for (int i = 0; i < this.converters.length; i++) {
+				this.converters[i] = new CPUsDetailedPercConverter(i);
+			}
+		}
 		final ITimeSource timesource = monitoringController.getTimeSource();
 		for (int i = 0; i < processorLoadTicks.length; i++) {
 			if (monitoringController.isProbeActivated(SignatureFactory.createCPUSignature(i))) {
+				final CPUsDetailedPercConverter converter = this.converters[i];
 				final long[] plt = processorLoadTicks[i];
-				final long system = plt[TickType.SYSTEM.getIndex()];
-				final long wait = plt[TickType.IOWAIT.getIndex()];
-				final long nice = plt[TickType.NICE.getIndex()];
-				final long idle = plt[TickType.IDLE.getIndex()];
-				final long user = plt[TickType.USER.getIndex()];
-				final long irq = plt[TickType.IRQ.getIndex()];
-				final double combined = centralProcessor.getProcessorCpuLoadBetweenTicks()[i];
+				converter.passNewProcessorLoadTicks(plt);
+				converter.convertToPercentage();
+
+				final double system = converter.getSystemPerc();
+				final double wait = converter.getWaitPerc();
+				final double nice = converter.getNicePerc();
+				final double idle = converter.getIdlePerc();
+				final double user = converter.getUserPerc();
+				final double irq = converter.getIrqPerc();
+				final double combined = converter.getCombinedPerc();
+
+				// System.out.println("Core: " + converter.getCoreIndex());
+				// System.out.println("System: " + system);
+				// System.out.println("Wait: " + wait);
+				// System.out.println("Nice: " + nice);
+				// System.out.println("Idle: " + idle);
+				// System.out.println("User: " + user);
+				// System.out.println("IRQ: " + irq);
+				// System.out.println("Combined: " + combined);
+				// System.out.println("Combined Own: " + (system + wait + nice + user + irq));
+				// System.out.println("------------------------------------------");
 
 				final CPUUtilizationRecord r = new CPUUtilizationRecord(timesource.getTime(),
 						monitoringController.getHostname(), Integer.toString(i), user, system, wait, nice, irq,
