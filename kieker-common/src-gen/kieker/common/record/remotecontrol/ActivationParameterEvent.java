@@ -47,7 +47,7 @@ public class ActivationParameterEvent extends AbstractMonitoringRecord implement
 	private static final long serialVersionUID = -2801456957417446121L;
 	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"pattern",
 		"parameterNames",
 		"parameters",
@@ -133,7 +133,7 @@ public class ActivationParameterEvent extends AbstractMonitoringRecord implement
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

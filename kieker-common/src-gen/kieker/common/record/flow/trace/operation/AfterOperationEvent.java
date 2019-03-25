@@ -48,7 +48,7 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 	private static final long serialVersionUID = 8888716286291758775L;
 	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -111,7 +111,7 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

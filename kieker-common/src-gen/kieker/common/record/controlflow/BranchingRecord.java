@@ -48,7 +48,7 @@ public class BranchingRecord extends AbstractMonitoringRecord  {
 	private static final long serialVersionUID = 3957750090047819946L;
 	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"branchID",
 		"branchingOutcome",
@@ -111,7 +111,7 @@ public class BranchingRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

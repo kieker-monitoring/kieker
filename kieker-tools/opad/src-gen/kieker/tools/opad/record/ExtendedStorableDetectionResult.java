@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
+ * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	private static final long serialVersionUID = 3489846495430494003L;
 	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"applicationName",
 		"value",
 		"timestamp",
@@ -84,8 +84,6 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	}
 
 
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
@@ -102,7 +100,6 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putString(this.getApplicationName());
 		serializer.putDouble(this.getValue());
 		serializer.putLong(this.getTimestamp());
@@ -124,7 +121,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

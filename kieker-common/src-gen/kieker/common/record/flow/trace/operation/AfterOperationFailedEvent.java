@@ -53,7 +53,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	private static final long serialVersionUID = -235912152331253573L;
 	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -124,7 +124,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

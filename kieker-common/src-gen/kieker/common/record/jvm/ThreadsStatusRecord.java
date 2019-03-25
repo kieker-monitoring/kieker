@@ -52,7 +52,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	private static final long serialVersionUID = -9176980438135391329L;
 	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"hostname",
 		"vmName",
@@ -136,7 +136,7 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

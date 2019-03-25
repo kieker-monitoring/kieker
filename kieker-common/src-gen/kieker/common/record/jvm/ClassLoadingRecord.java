@@ -50,7 +50,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	private static final long serialVersionUID = -5955568375346711225L;
 	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"hostname",
 		"vmName",
@@ -127,7 +127,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

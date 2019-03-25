@@ -39,7 +39,7 @@ public class EmptyRecord extends AbstractMonitoringRecord  {
 	private static final long serialVersionUID = -177095911417362302L;
 	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 	};
 	
 	
@@ -80,7 +80,7 @@ public class EmptyRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

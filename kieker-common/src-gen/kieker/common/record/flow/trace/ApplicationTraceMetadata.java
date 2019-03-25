@@ -56,7 +56,7 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 	private static final long serialVersionUID = 7720995073835113293L;
 	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"traceId",
 		"threadId",
 		"sessionId",
@@ -131,7 +131,7 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

@@ -63,7 +63,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord  {
 	private static final long serialVersionUID = 638480390439299363L;
 	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"hostname",
 		"memTotal",
@@ -161,7 +161,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

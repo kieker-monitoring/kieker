@@ -43,7 +43,7 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 	private static final long serialVersionUID = 6888923121890229913L;
 	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"pattern",
 	};
 	
@@ -92,7 +92,7 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

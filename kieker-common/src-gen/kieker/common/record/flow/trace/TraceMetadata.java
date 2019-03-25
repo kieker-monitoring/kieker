@@ -64,7 +64,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 	private static final long serialVersionUID = 2517933148667588979L;
 	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"traceId",
 		"threadId",
 		"sessionId",
@@ -150,7 +150,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
+ * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
@@ -51,7 +50,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord  {
 	private static final long serialVersionUID = -758350040827117227L;
 	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"applicationName",
 		"value",
 		"timestamp",
@@ -89,8 +88,6 @@ public class StorableDetectionResult extends AbstractMonitoringRecord  {
 	}
 
 
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
@@ -110,7 +107,6 @@ public class StorableDetectionResult extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putString(this.getApplicationName());
 		serializer.putDouble(this.getValue());
 		serializer.putLong(this.getTimestamp());
@@ -131,7 +127,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

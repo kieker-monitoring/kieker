@@ -53,7 +53,7 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 	private static final long serialVersionUID = 8727889921214947462L;
 	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -124,7 +124,7 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
