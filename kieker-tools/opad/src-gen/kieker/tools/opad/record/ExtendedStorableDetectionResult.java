@@ -47,8 +47,6 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		double.class, // ExtendedStorableDetectionResult.anomalyThreshold
 	};
 	
-	private static final long serialVersionUID = 3489846495430494003L;
-	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"applicationName",
@@ -58,6 +56,8 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		"score",
 		"anomalyThreshold",
 	};
+	
+	private static final long serialVersionUID = 3489846495430494003L;
 	
 	/** property declarations. */
 	private final double anomalyThreshold;

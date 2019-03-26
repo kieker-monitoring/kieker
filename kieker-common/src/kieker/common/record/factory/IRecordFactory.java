@@ -51,6 +51,8 @@ public interface IRecordFactory<T> {
 	 * provide an array of all value names of an event type in definition order.
 	 *
 	 * @return returns an array of value names
+         *
+         * @since 1.15
 	 */
 	String[] getValueNames();
 
@@ -58,6 +60,8 @@ public interface IRecordFactory<T> {
 	 * provide an array of all value types of an event type in definition order.
 	 *
 	 * @return returns an array of value types
+         *
+         * @since 1.15
 	 */
 	Class<?>[] getValueTypes();
 

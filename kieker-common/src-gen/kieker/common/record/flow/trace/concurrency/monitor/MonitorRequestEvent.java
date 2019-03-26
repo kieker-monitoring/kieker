@@ -43,8 +43,6 @@ public class MonitorRequestEvent extends AbstractMonitorEvent  {
 		int.class, // AbstractMonitorEvent.lockId
 	};
 	
-	private static final long serialVersionUID = -2519565185218681768L;
-	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -52,6 +50,8 @@ public class MonitorRequestEvent extends AbstractMonitorEvent  {
 		"orderIndex",
 		"lockId",
 	};
+	
+	private static final long serialVersionUID = -2519565185218681768L;
 	
 	
 	/**

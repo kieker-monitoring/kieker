@@ -41,16 +41,16 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord  {
 		double.class, // NamedDoubleRecord.responseTime
 	};
 	
-	/** default constants. */
-	public static final String APPLICATION_NAME = "";
-	private static final long serialVersionUID = 3508131536785781597L;
-	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"applicationName",
 		"timestamp",
 		"responseTime",
 	};
+	
+	/** default constants. */
+	public static final String APPLICATION_NAME = "";
+	private static final long serialVersionUID = 3508131536785781597L;
 	
 	/** property declarations. */
 	private final String applicationName;

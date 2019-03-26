@@ -41,16 +41,16 @@ public class NamedTSPoint extends AbstractMonitoringRecord  {
 		String.class, // NamedTSPoint.name
 	};
 	
-	/** default constants. */
-	public static final String NAME = "";
-	private static final long serialVersionUID = 4302229080791508406L;
-	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"value",
 		"name",
 	};
+	
+	/** default constants. */
+	public static final String NAME = "";
+	private static final long serialVersionUID = 4302229080791508406L;
 	
 	/** property declarations. */
 	private final long timestamp;

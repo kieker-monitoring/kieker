@@ -38,14 +38,14 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IRemo
 		String.class, // IRemoteControlEvent.pattern
 	};
 	
-	/** default constants. */
-	public static final String PATTERN = "";
-	private static final long serialVersionUID = 8080379087547198579L;
-	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"pattern",
 	};
+	
+	/** default constants. */
+	public static final String PATTERN = "";
+	private static final long serialVersionUID = 8080379087547198579L;
 	
 	/** property declarations. */
 	private final String pattern;

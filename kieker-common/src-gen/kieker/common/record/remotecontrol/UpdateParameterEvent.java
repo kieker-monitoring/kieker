@@ -42,16 +42,16 @@ public class UpdateParameterEvent extends AbstractMonitoringRecord implements IR
 		String[][].class, // IRemoteParameterControlEvent.parameters
 	};
 	
-	/** default constants. */
-	public static final String PATTERN = "";
-	private static final long serialVersionUID = 1137182686796184866L;
-	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"pattern",
 		"parameterNames",
 		"parameters",
 	};
+	
+	/** default constants. */
+	public static final String PATTERN = "";
+	private static final long serialVersionUID = 1137182686796184866L;
 	
 	/** property declarations. */
 	private final String pattern;

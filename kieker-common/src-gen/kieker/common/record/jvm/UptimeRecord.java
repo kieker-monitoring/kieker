@@ -43,8 +43,6 @@ public class UptimeRecord extends AbstractJVMRecord  {
 		long.class, // UptimeRecord.uptimeMS
 	};
 	
-	private static final long serialVersionUID = 5233115844046765277L;
-	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -52,6 +50,8 @@ public class UptimeRecord extends AbstractJVMRecord  {
 		"vmName",
 		"uptimeMS",
 	};
+	
+	private static final long serialVersionUID = 5233115844046765277L;
 	
 	/** property declarations. */
 	private final long uptimeMS;

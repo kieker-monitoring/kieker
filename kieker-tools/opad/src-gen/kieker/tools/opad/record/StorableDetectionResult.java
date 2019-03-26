@@ -45,10 +45,6 @@ public class StorableDetectionResult extends AbstractMonitoringRecord  {
 		double.class, // StorableDetectionResult.score
 	};
 	
-	/** default constants. */
-	public static final String APPLICATION_NAME = "";
-	private static final long serialVersionUID = -758350040827117227L;
-	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"applicationName",
@@ -57,6 +53,10 @@ public class StorableDetectionResult extends AbstractMonitoringRecord  {
 		"forecast",
 		"score",
 	};
+	
+	/** default constants. */
+	public static final String APPLICATION_NAME = "";
+	private static final long serialVersionUID = -758350040827117227L;
 	
 	/** property declarations. */
 	private final String applicationName;

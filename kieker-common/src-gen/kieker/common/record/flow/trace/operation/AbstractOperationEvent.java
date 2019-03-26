@@ -30,12 +30,12 @@ import kieker.common.record.flow.IOperationRecord;
  */
 public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IOperationRecord {			
 	
+		
 	/** default constants. */
 	public static final String OPERATION_SIGNATURE = "";
 	public static final String CLASS_SIGNATURE = "";
 	private static final long serialVersionUID = -34090223642783143L;
 	
-		
 	/** property declarations. */
 	private final String operationSignature;
 	private final String classSignature;

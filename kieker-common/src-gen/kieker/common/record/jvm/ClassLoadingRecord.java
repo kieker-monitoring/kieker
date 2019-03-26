@@ -47,8 +47,6 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		long.class, // ClassLoadingRecord.unloadedClassCount
 	};
 	
-	private static final long serialVersionUID = -5955568375346711225L;
-	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -58,6 +56,8 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		"loadedClassCount",
 		"unloadedClassCount",
 	};
+	
+	private static final long serialVersionUID = -5955568375346711225L;
 	
 	/** property declarations. */
 	private final long totalLoadedClassCount;

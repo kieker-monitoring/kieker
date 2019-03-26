@@ -39,13 +39,13 @@ public class AggregationWindow extends AbstractMonitoringRecord  {
 		long.class, // AggregationWindow.windowEnd
 	};
 	
-	private static final long serialVersionUID = -6015104562956593414L;
-	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"windowStart",
 		"windowEnd",
 	};
+	
+	private static final long serialVersionUID = -6015104562956593414L;
 	
 	/** property declarations. */
 	private final long windowStart;
