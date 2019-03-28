@@ -46,16 +46,16 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		String.class, // IClassSignature.classSignature
 	};
 	
-	private static final long serialVersionUID = -7724172518672268698L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
 		"operationSignature",
 		"classSignature",
 	};
+	
+	private static final long serialVersionUID = -7724172518672268698L;
 	
 	
 	/**
@@ -112,7 +112,7 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

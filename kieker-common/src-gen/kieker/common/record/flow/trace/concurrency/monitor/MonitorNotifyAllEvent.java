@@ -43,15 +43,15 @@ public class MonitorNotifyAllEvent extends AbstractMonitorEvent  {
 		int.class, // AbstractMonitorEvent.lockId
 	};
 	
-	private static final long serialVersionUID = -4067130282311028374L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
 		"lockId",
 	};
+	
+	private static final long serialVersionUID = -4067130282311028374L;
 	
 	
 	/**
@@ -105,7 +105,7 @@ public class MonitorNotifyAllEvent extends AbstractMonitorEvent  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

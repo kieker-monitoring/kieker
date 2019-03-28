@@ -27,13 +27,18 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class CallConstructorObjectEventFactory implements IRecordFactory<CallConstructorObjectEvent> {
 	
-	
 	@Override
 	public CallConstructorObjectEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new CallConstructorObjectEvent(deserializer);
 	}
-	
-	
+	@Override
+			public String[] getValueNames() {
+				return CallConstructorObjectEvent.VALUE_NAMES; // NOPMD
+			}
+	@Override
+			public Class<?>[] getValueTypes() {
+				return CallConstructorObjectEvent.TYPES; // NOPMD
+			}
 	public int getRecordSizeInBytes() {
 		return CallConstructorObjectEvent.SIZE;
 	}

@@ -32,6 +32,7 @@ import kieker.common.record.flow.IClassSignature;
  */
 public abstract class AbstractThreadBasedEvent extends AbstractEvent implements IThreadBasedRecord, IOperationSignature, IClassSignature {			
 	
+		
 	/** default constants. */
 	public static final long THREAD_ID = -1L;
 	public static final int ORDER_INDEX = -1;
@@ -39,7 +40,6 @@ public abstract class AbstractThreadBasedEvent extends AbstractEvent implements 
 	public static final String CLASS_SIGNATURE = "";
 	private static final long serialVersionUID = -4756765331556509113L;
 	
-		
 	/** property declarations. */
 	private final long threadId;
 	private final int orderIndex;

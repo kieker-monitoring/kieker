@@ -30,12 +30,12 @@ import kieker.common.record.flow.ITraceRecord;
  */
 public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {			
 	
+		
 	/** default constants. */
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
 	private static final long serialVersionUID = 3123204150489927280L;
 	
-		
 	/** property declarations. */
 	private long traceId;
 	private final int orderIndex;

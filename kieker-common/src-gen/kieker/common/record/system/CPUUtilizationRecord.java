@@ -55,6 +55,20 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord  {
 		double.class, // CPUUtilizationRecord.idle
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"hostname",
+		"cpuID",
+		"user",
+		"system",
+		"wait",
+		"nice",
+		"irq",
+		"totalUtilization",
+		"idle",
+	};
+	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -67,20 +81,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord  {
 	public static final double TOTAL_UTILIZATION = 0.0;
 	public static final double IDLE = 0.0;
 	private static final long serialVersionUID = -7851990890838902217L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"hostname",
-		"cpuID",
-		"user",
-		"system",
-		"wait",
-		"nice",
-		"irq",
-		"totalUtilization",
-		"idle",
-	};
 	
 	/** property declarations. */
 	private final long timestamp;
@@ -181,7 +181,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

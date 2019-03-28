@@ -47,12 +47,8 @@ public class GCRecord extends AbstractJVMRecord  {
 		long.class, // GCRecord.collectionTimeMS
 	};
 	
-	/** default constants. */
-	public static final String GC_NAME = "";
-	private static final long serialVersionUID = -314644197119857213L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"hostname",
 		"vmName",
@@ -60,6 +56,10 @@ public class GCRecord extends AbstractJVMRecord  {
 		"collectionCount",
 		"collectionTimeMS",
 	};
+	
+	/** default constants. */
+	public static final String GC_NAME = "";
+	private static final long serialVersionUID = -314644197119857213L;
 	
 	/** property declarations. */
 	private final String gcName;
@@ -129,7 +129,7 @@ public class GCRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

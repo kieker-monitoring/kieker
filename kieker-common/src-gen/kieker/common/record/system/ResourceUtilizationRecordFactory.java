@@ -27,13 +27,18 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class ResourceUtilizationRecordFactory implements IRecordFactory<ResourceUtilizationRecord> {
 	
-	
 	@Override
 	public ResourceUtilizationRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new ResourceUtilizationRecord(deserializer);
 	}
-	
-	
+	@Override
+			public String[] getValueNames() {
+				return ResourceUtilizationRecord.VALUE_NAMES; // NOPMD
+			}
+	@Override
+			public Class<?>[] getValueTypes() {
+				return ResourceUtilizationRecord.TYPES; // NOPMD
+			}
 	public int getRecordSizeInBytes() {
 		return ResourceUtilizationRecord.SIZE;
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
+ * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import java.nio.BufferOverflowException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
@@ -42,16 +41,16 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord  {
 		double.class, // NamedDoubleRecord.responseTime
 	};
 	
-	/** default constants. */
-	public static final String APPLICATION_NAME = "";
-	private static final long serialVersionUID = 3508131536785781597L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"applicationName",
 		"timestamp",
 		"responseTime",
 	};
+	
+	/** default constants. */
+	public static final String APPLICATION_NAME = "";
+	private static final long serialVersionUID = 3508131536785781597L;
 	
 	/** property declarations. */
 	private final String applicationName;
@@ -75,8 +74,6 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord  {
 	}
 
 
-
-	
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
@@ -94,7 +91,6 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		//super.serialize(serializer);
 		serializer.putString(this.getApplicationName());
 		serializer.putLong(this.getTimestamp());
 		serializer.putDouble(this.getResponseTime());
@@ -113,7 +109,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

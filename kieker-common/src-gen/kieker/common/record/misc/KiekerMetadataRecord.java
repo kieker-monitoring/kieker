@@ -56,6 +56,18 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord  {
 	public static final String NO_HOSTNAME = "<no-hostname>";
 	public static final String NO_TIMESOURCE = "<no-timesource>";
 	public static final String NO_TIMEUNIT = "NANOSECONDS";
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"version",
+		"controllerName",
+		"hostname",
+		"experimentId",
+		"debugMode",
+		"timeOffset",
+		"timeUnit",
+		"numberOfRecords",
+	};
+	
 	/** default constants. */
 	public static final String VERSION = kieker.common.util.Version.getVERSION();
 	public static final String CONTROLLER_NAME = NO_CONTROLLERNAME;
@@ -66,18 +78,6 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord  {
 	public static final String TIME_UNIT = NO_TIMEUNIT;
 	public static final long NUMBER_OF_RECORDS = 0L;
 	private static final long serialVersionUID = 8241152536143822747L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"version",
-		"controllerName",
-		"hostname",
-		"experimentId",
-		"debugMode",
-		"timeOffset",
-		"timeUnit",
-		"numberOfRecords",
-	};
 	
 	/** property declarations. */
 	private final String version;
@@ -166,7 +166,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

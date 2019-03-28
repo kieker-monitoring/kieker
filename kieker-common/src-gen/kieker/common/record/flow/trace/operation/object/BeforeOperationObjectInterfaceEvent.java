@@ -50,12 +50,8 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		String.class, // IInterfaceRecord.interface
 	};
 	
-	/** default constants. */
-	public static final String INTERFACE = "";
-	private static final long serialVersionUID = 2900164578331713310L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -64,6 +60,10 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		"objectId",
 		"interface",
 	};
+	
+	/** default constants. */
+	public static final String INTERFACE = "";
+	private static final long serialVersionUID = 2900164578331713310L;
 	
 	/** property declarations. */
 	private final String _interface;
@@ -130,7 +130,7 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

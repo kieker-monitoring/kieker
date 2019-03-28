@@ -43,20 +43,20 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord  {
 		String.class, // HostApplicationMetaData.applicationName
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"systemName",
+		"ipAddress",
+		"hostname",
+		"applicationName",
+	};
+	
 	/** default constants. */
 	public static final String SYSTEM_NAME = "";
 	public static final String IP_ADDRESS = "";
 	public static final String HOSTNAME = "";
 	public static final String APPLICATION_NAME = "";
 	private static final long serialVersionUID = 5425789809172379297L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"systemName",
-		"ipAddress",
-		"hostname",
-		"applicationName",
-	};
 	
 	/** property declarations. */
 	private final String systemName;
@@ -121,7 +121,7 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
