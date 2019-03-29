@@ -59,7 +59,7 @@ public class CPUsDetailedPercConverter {
 	private double[] lastConversion;
 
 	/**
-	 * CPUsDetailedPercConverter constructor
+	 * CPUsDetailedPercConverter constructor.
 	 *
 	 * @param coreIndex
 	 *            holds the CPU core index
@@ -87,7 +87,7 @@ public class CPUsDetailedPercConverter {
 		}
 		if ((this.t0 == 0) || (this.processorLoadTicksT0 == null)) {
 			this.t0 = System.currentTimeMillis();
-			this.processorLoadTicksT0 = processorLoadTicks;
+			this.processorLoadTicksT0 = processorLoadTicks.clone();
 			return;
 		}
 		final long currentTime = System.currentTimeMillis();
@@ -97,7 +97,7 @@ public class CPUsDetailedPercConverter {
 		this.t0 = this.t1;
 		this.t1 = currentTime;
 		this.processorLoadTicksT0 = this.processorLoadTicksT1;
-		this.processorLoadTicksT1 = processorLoadTicks;
+		this.processorLoadTicksT1 = processorLoadTicks.clone();
 	}
 
 	/**
