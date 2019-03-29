@@ -49,7 +49,6 @@ dependencies {
 
 	testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
   compile group: 'com.github.oshi', name: 'oshi-core', version: '3.12.2'
-  compile 'org.slf4j:slf4j-nop:1.7.25'
 }
 
 clover {
