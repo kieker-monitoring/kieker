@@ -212,7 +212,7 @@ public class CPUsDetailedPercConverter {
 		if (this.lastConversion.length <= TickType.SOFTIRQ.getIndex()) {
 			return 0;
 		}
-		return this.lastConversion[TickType.USER.getIndex()] + this.lastConversion[TickType.SOFTIRQ.getIndex()];
+		return this.lastConversion[TickType.IRQ.getIndex()] + this.lastConversion[TickType.SOFTIRQ.getIndex()];
 	}
 
 	/**
