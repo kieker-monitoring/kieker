@@ -36,6 +36,7 @@ import oshi.hardware.NetworkIF;
  * .
  *
  * @author Matteo Sassano
+ * @since 1.14
  *
  */
 public final class NetworkUtilizationSampler extends AbstractOshiSampler {

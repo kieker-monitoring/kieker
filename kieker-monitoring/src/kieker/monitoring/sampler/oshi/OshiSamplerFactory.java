@@ -31,6 +31,7 @@ import oshi.hardware.HardwareAbstractionLayer;
  * {@link kieker.monitoring.sampler.oshi.samplers.AbstractOshiSampler}s.
  *
  * @author Matteo Sassano
+ * @since 1.14
  *
  */
 public enum OshiSamplerFactory implements IOshiSamplerFactory { // Singleton pattern (Effective Java #3)

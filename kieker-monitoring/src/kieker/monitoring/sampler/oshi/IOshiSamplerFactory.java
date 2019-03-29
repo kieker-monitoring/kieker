@@ -29,6 +29,7 @@ import kieker.monitoring.sampler.oshi.samplers.NetworkUtilizationSampler;
  * {@link kieker.monitoring.sampler.oshi.samplers.AbstractOshiSampler}s.
  *
  * @author Matteo Sassano
+ * @since 1.14
  *
  */
 public interface IOshiSamplerFactory {
@@ -36,6 +37,7 @@ public interface IOshiSamplerFactory {
 	/**
 	 * Creates an instance of {@link MemSwapUsageSampler}.
 	 *
+   * @since 1.14
 	 * @return the created instance.
 	 */
 	public MemSwapUsageSampler createSensorMemSwapUsage();
@@ -43,6 +45,7 @@ public interface IOshiSamplerFactory {
 	/**
 	 * Creates an instance of {@link CPUsDetailedPercSampler}.
 	 *
+   * @since 1.14
 	 * @return the created instance.
 	 */
 	public CPUsDetailedPercSampler createSensorCPUsDetailedPerc();
@@ -50,6 +53,7 @@ public interface IOshiSamplerFactory {
 	/**
 	 * Creates an instance of {@link CPUsCombinedPercSampler}.
 	 *
+   * @since 1.14
 	 * @return the created instance.
 	 */
 	public CPUsCombinedPercSampler createSensorCPUsCombinedPerc();
@@ -57,6 +61,7 @@ public interface IOshiSamplerFactory {
 	/**
 	 * Creates an instance of {@link LoadAverageSampler}.
 	 *
+   * @since 1.14
 	 * @return the created instance.
 	 */
 	public LoadAverageSampler createSensorLoadAverage();
@@ -64,6 +69,7 @@ public interface IOshiSamplerFactory {
 	/**
 	 * Creates an instance of {@link NetworkUtilizationSampler}.
 	 *
+   * @since 1.14
 	 * @return the created instance.
 	 */
 	public NetworkUtilizationSampler createSensorNetworkUtilization();
@@ -71,6 +77,7 @@ public interface IOshiSamplerFactory {
 	/**
 	 * Creates an instance of {@link DiskUsageSampler}.
 	 *
+   * @since 1.14
 	 * @return the created instance.
 	 */
 	public DiskUsageSampler createSensorDiskUsage();

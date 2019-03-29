@@ -35,6 +35,7 @@ import oshi.hardware.HardwareAbstractionLayer;
  * .
  *
  * @author Matteo Sassano
+ * @since 1.14
  *
  */
 public final class DiskUsageSampler extends AbstractOshiSampler {
