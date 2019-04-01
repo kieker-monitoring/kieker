@@ -92,20 +92,6 @@ public final class CPUsDetailedPercSampler extends AbstractOshiSampler {
 				final double irq = converter.getIrqPerc();
 				final double combined = centralProcessor.getProcessorCpuLoadBetweenTicks()[i];
 
-				// final double combined = converter.getCombinedPerc();
-
-				System.out.println("Core: " + converter.getCoreIndex());
-				System.out.println("System: " + system);
-				System.out.println("Wait: " + wait);
-				System.out.println("Nice: " + nice);
-				System.out.println("Idle: " + idle);
-				System.out.println("User: " + user);
-				System.out.println("IRQ: " + irq);
-				System.out.println("Combined: " + combined);
-				System.out.println("Combined Own: " + (system + wait + nice + user + irq));
-				System.out.println("Total: " + (system + wait + nice + user + irq + idle));
-				System.out.println("------------------------------------------");
-
 				final CPUUtilizationRecord r = new CPUUtilizationRecord(timesource.getTime(),
 						monitoringController.getHostname(), Integer.toString(i), user, system, wait, nice, irq,
 						combined, idle);
