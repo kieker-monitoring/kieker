@@ -34,8 +34,8 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.sampler.ISampler;
-import kieker.monitoring.sampler.sigar.ISigarSamplerFactory;
-import kieker.monitoring.sampler.sigar.SigarSamplerFactory;
+import kieker.monitoring.sampler.oshi.IOshiSamplerFactory;
+import kieker.monitoring.sampler.oshi.OshiSamplerFactory;
 import kieker.tools.AbstractCommandLineTool;
 
 /**
@@ -76,9 +76,9 @@ public final class ResourceMonitorMain extends AbstractCommandLineTool {
 	}
 
 	private ISampler[] createSamplers() {
-		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.INSTANCE;
-		return new ISampler[] { sigarFactory.createSensorCPUsDetailedPerc(), sigarFactory.createSensorMemSwapUsage(), sigarFactory.createSensorLoadAverage(),
-			sigarFactory.createSensorNetworkUtilization(), sigarFactory.createSensorDiskUsage(), };
+		final IOshiSamplerFactory oshiFactory = OshiSamplerFactory.INSTANCE;
+		return new ISampler[] { oshiFactory.createSensorCPUsDetailedPerc(), oshiFactory.createSensorMemSwapUsage(), oshiFactory.createSensorLoadAverage(),
+				oshiFactory.createSensorNetworkUtilization(), oshiFactory.createSensorDiskUsage(), };
 	}
 
 	private void initSensors() {
