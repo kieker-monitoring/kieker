@@ -54,8 +54,8 @@ public class JmsWriter extends AbstractMonitoringWriter {
 	public static final String CONFIG_CONTEXTFACTORYTYPE = PREFIX + "ContextFactoryType"; // NOCS (afterPREFIX)
 	public static final String CONFIG_FACTORYLOOKUPNAME = PREFIX + "FactoryLookupName"; // NOCS (afterPREFIX)
 	public static final String CONFIG_MESSAGETTL = PREFIX + "MessageTimeToLive"; // NOCS (afterPREFIX)
-    public static final String CONFIG_USERNAME = PREFIX + "Username"; // NOCS (afterPREFIX)
-    public static final String CONFIG_PASSWORD = PREFIX + "Password"; // NOCS (afterPREFIX)
+	public static final String CONFIG_USERNAME = PREFIX + "Username"; // NOCS (afterPREFIX)
+	public static final String CONFIG_PASSWORD = PREFIX + "Password"; // NOCS (afterPREFIX)
 
 	private final String configContextFactoryType;
 	private final String configProviderUrl;
@@ -100,12 +100,11 @@ public class JmsWriter extends AbstractMonitoringWriter {
 
 			final ConnectionFactory factory = (ConnectionFactory) context.lookup(this.configFactoryLookupName);
 
-
 			if (this.configUsername.isEmpty() && this.configPassword.isEmpty()) {
-                this.connection = factory.createConnection();
-            } else {
-                this.connection = factory.createConnection(this.configUsername, this.configPassword);
-            }
+				this.connection = factory.createConnection();
+			} else {
+				this.connection = factory.createConnection(this.configUsername, this.configPassword);
+			}
 
 			this.session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 			this.connection.start();

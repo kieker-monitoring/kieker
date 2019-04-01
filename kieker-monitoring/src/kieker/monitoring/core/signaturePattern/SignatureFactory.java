@@ -100,14 +100,14 @@ public final class SignatureFactory {
 	 * @param cpuid
 	 *            The id of the cpu.
 	 * @return
-	 *         A signature for the cpu.
+	 * 		A signature for the cpu.
 	 */
 	public static String createCPUSignature(final int cpuid) {
 		return new StringBuilder(8)
-		.append(PATTERN_PREFIX_CPU) // 4
-		.append(COLONS) // 2
-		.append(cpuid) // 2(?)
-		.toString();
+				.append(PATTERN_PREFIX_CPU) // 4
+				.append(COLONS) // 2
+				.append(cpuid) // 2(?)
+				.toString();
 	}
 
 	/**
@@ -235,7 +235,7 @@ public final class SignatureFactory {
 	 *            List of exceptions or pattern.
 	 *            Null or empty list, if no exceptions are required.
 	 * @return
-	 *         A signature which has been generated from the inputs.
+	 * 		A signature which has been generated from the inputs.
 	 *
 	 * @throws InvalidPatternException
 	 *             If any of the mandatory parameters is null.

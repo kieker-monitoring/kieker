@@ -115,4 +115,3 @@ public class TestCPUsCombinedPercSampler extends AbstractKiekerTest { // NOCS
 	}
 
 }
-

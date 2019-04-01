@@ -19,8 +19,6 @@ package kieker.monitoring.sampler.oshi.samplers;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import org.hyperic.sigar.SigarException;
-
 import kieker.common.record.system.DiskUsageRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
@@ -61,7 +59,7 @@ public final class DiskUsageSampler extends AbstractOshiSampler {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void sample(final IMonitoringController monitoringController) throws SigarException {
+	public void sample(final IMonitoringController monitoringController) {
 		if (!monitoringController.isMonitoringEnabled()) {
 			return;
 		}
@@ -119,7 +117,7 @@ public final class DiskUsageSampler extends AbstractOshiSampler {
 	}
 
 	private DiskUsageStatistic getCurrentDiskUsageStatistic(final ITimeSource timesource, final String deviceName,
-			final HWDiskStore hwDiskStore) throws SigarException {
+			final HWDiskStore hwDiskStore) {
 
 		final long currentTimestamp = timesource.getTime();
 
@@ -187,6 +185,5 @@ public final class DiskUsageSampler extends AbstractOshiSampler {
 		public long getWrites() {
 			return this.writes;
 		}
-
 	}
 }

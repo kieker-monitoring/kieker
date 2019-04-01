@@ -107,8 +107,8 @@ public class SystemResourceUsageServletContextListener extends AbstractRegularSa
 	protected ISampler[] createSamplers() {
 		final IOshiSamplerFactory oshiFactory = OshiSamplerFactory.INSTANCE;
 		return new ISampler[] { oshiFactory.createSensorCPUsDetailedPerc(), oshiFactory.createSensorMemSwapUsage(),
-				oshiFactory.createSensorDiskUsage(), oshiFactory.createSensorLoadAverage(),
-				oshiFactory.createSensorNetworkUtilization(), };
+			oshiFactory.createSensorDiskUsage(), oshiFactory.createSensorLoadAverage(),
+			oshiFactory.createSensorNetworkUtilization(), };
 	}
 
 }

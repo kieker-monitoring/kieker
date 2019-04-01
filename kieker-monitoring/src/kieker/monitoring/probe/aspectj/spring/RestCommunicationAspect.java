@@ -60,13 +60,13 @@ public class RestCommunicationAspect {
 	 * Pointcut listening to the request creation after the use of RestTemplate
 	 */
 	@Pointcut("execution(protected * org.springframework.http.client.support.HttpAccessor.createRequest(..))")
-	private void requestCreation() {	// NOPMD (pointcut)
+	private void requestCreation() { // NOPMD (pointcut)
 		// pointcut
 	}
 
 	/** Pointcut listening to the service method on incoming messages */
 	@Pointcut("execution(protected * org.springframework.web.servlet.FrameworkServlet.service(..))")
-	private void frameworkServletService() {	// NOPMD (pointcut)
+	private void frameworkServletService() { // NOPMD (pointcut)
 		// pointcut
 	}
 

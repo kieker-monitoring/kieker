@@ -46,7 +46,7 @@ public final class CPUsDetailedPercSampler extends AbstractOshiSampler {
 	 * Constructs a new {@link AbstractOshiSampler} with given
 	 * {@link HardwareAbstractionLayer} instance used to retrieve the sensor data.
 	 * Users should use the factory method
-	 * {@link kieker.monitoring.sampler.sigar.SigarSamplerFactory#createSensorCPUsDetailedPerc()}
+	 * {@link kieker.monitoring.sampler.oshi.OshiSamplerFactory#createSensorCPUsDetailedPerc()}
 	 * to acquire an instance rather than calling this constructor directly.
 	 *
 	 * @param hardwareAbstractionLayer

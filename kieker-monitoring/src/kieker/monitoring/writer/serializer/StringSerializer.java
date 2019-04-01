@@ -33,7 +33,7 @@ import kieker.common.record.IMonitoringRecord;
 public class StringSerializer extends AbstractMonitoringRecordSerializer {
 
 	private static final Charset CHARSET = Charset.forName("UTF-8");
-	
+
 	/**
 	 * Creates a new serializer using the given configuration.
 	 *
