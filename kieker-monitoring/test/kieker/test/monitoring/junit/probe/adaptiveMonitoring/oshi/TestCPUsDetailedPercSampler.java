@@ -34,6 +34,7 @@ import kieker.monitoring.core.signaturePattern.SignatureFactory;
 import kieker.monitoring.sampler.oshi.IOshiSamplerFactory;
 import kieker.monitoring.sampler.oshi.OshiSamplerFactory;
 import kieker.monitoring.sampler.oshi.samplers.CPUsDetailedPercSampler;
+
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.NamedListWriter;
 
@@ -41,7 +42,7 @@ import kieker.test.monitoring.util.NamedListWriter;
  *
  * @author Matteo Sassano
  *
- * @since 1.8
+ * @since 1.14
  */
 public class TestCPUsDetailedPercSampler extends AbstractKiekerTest { // NOCS
 
