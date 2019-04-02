@@ -62,10 +62,7 @@ public final class CPUsDetailedPercSampler extends AbstractOshiSampler {
 	 */
 	@Override
 	public void sample(final IMonitoringController monitoringController) {
-		if (!monitoringController.isMonitoringEnabled()) {
-			return;
-		}
-		if (!monitoringController.isProbeActivated(SignatureFactory.createCPUSignature())) {
+		if (!monitoringController.isMonitoringEnabled() || !monitoringController.isProbeActivated(SignatureFactory.createCPUSignature())) {
 			return;
 		}
 		final CentralProcessor centralProcessor = this.hardwareAbstractionLayer.getProcessor();

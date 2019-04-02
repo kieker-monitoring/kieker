@@ -56,19 +56,15 @@ public final class LoadAverageSampler extends AbstractOshiSampler {
 	 */
 	@Override
 	public void sample(final IMonitoringController monitoringController) throws SigarException {
-		if (!monitoringController.isMonitoringEnabled()) {
-			return;
-		}
-		if (!monitoringController.isProbeActivated(SignatureFactory.createLoadAverageSignature())) {
+		if (!monitoringController.isMonitoringEnabled() || !monitoringController.isProbeActivated(SignatureFactory.createLoadAverageSignature())) {
 			return;
 		}
 		final double[] loadAverage = this.hardwareAbstractionLayer.getProcessor().getSystemLoadAverage(3);
-		if (loadAverage.length != 3) {
-			return;
+		if (loadAverage.length == 3) {
+			final ITimeSource timesource = monitoringController.getTimeSource();
+			final LoadAverageRecord r = new LoadAverageRecord(timesource.getTime(), monitoringController.getHostname(),
+					loadAverage[0], loadAverage[1], loadAverage[2]);
+			monitoringController.newMonitoringRecord(r);
 		}
-		final ITimeSource timesource = monitoringController.getTimeSource();
-		final LoadAverageRecord r = new LoadAverageRecord(timesource.getTime(), monitoringController.getHostname(),
-				loadAverage[0], loadAverage[1], loadAverage[2]);
-		monitoringController.newMonitoringRecord(r);
 	}
 }

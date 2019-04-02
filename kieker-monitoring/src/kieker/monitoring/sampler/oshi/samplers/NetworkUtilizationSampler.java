@@ -63,13 +63,9 @@ public final class NetworkUtilizationSampler extends AbstractOshiSampler {
 	 */
 	@Override
 	public void sample(final IMonitoringController monitoringController) throws SigarException {
-		if (!monitoringController.isMonitoringEnabled()) {
+		if (!monitoringController.isMonitoringEnabled() || !monitoringController.isProbeActivated(SignatureFactory.createCPUSignature())) {
 			return;
 		}
-		if (!monitoringController.isProbeActivated(SignatureFactory.createNetworkUtilizationSignature())) {
-			return;
-		}
-
 		final NetworkIF[] networkInterfaces = this.hardwareAbstractionLayer.getNetworkIFs();
 		for (final NetworkIF networkIF : networkInterfaces) {
 

@@ -60,13 +60,9 @@ public final class DiskUsageSampler extends AbstractOshiSampler {
 	 */
 	@Override
 	public void sample(final IMonitoringController monitoringController) {
-		if (!monitoringController.isMonitoringEnabled()) {
+		if (!monitoringController.isMonitoringEnabled() || !monitoringController.isProbeActivated(SignatureFactory.createCPUSignature())) {
 			return;
 		}
-		if (!monitoringController.isProbeActivated(SignatureFactory.createDiskUsageSignature())) {
-			return;
-		}
-
 		final HWDiskStore[] hwDistStores = this.hardwareAbstractionLayer.getDiskStores();
 		for (final HWDiskStore hwDistStore : hwDistStores) {
 			final String deviceName = hwDistStore.getName();

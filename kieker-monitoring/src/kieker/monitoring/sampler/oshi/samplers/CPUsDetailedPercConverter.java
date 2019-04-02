@@ -79,25 +79,21 @@ public class CPUsDetailedPercConverter {
 	 *            the new measurements at the current time
 	 */
 	public void passNewProcessorLoadTicks(final long[] processorLoadTicks) {
-		if (processorLoadTicks == null) {
-			return;
-		}
-		if (processorLoadTicks.length == 0) {
+		if ((processorLoadTicks == null) || (processorLoadTicks.length == 0)) {
 			return;
 		}
 		if ((this.t0 == 0) || (this.processorLoadTicksT0 == null)) {
 			this.t0 = System.currentTimeMillis();
 			this.processorLoadTicksT0 = processorLoadTicks.clone();
-			return;
+		} else {
+			final long currentTime = System.currentTimeMillis();
+			if ((currentTime - this.t0) >= 1000) {
+				this.t0 = this.t1;
+				this.t1 = currentTime;
+				this.processorLoadTicksT0 = this.processorLoadTicksT1;
+				this.processorLoadTicksT1 = processorLoadTicks.clone();
+			}
 		}
-		final long currentTime = System.currentTimeMillis();
-		if ((currentTime - this.t0) < 1000) {
-			return;
-		}
-		this.t0 = this.t1;
-		this.t1 = currentTime;
-		this.processorLoadTicksT0 = this.processorLoadTicksT1;
-		this.processorLoadTicksT1 = processorLoadTicks.clone();
 	}
 
 	/**
@@ -168,10 +164,7 @@ public class CPUsDetailedPercConverter {
 	 * @return the system utilization of the given core.
 	 */
 	public double getSystemPerc() {
-		if ((this.lastConversion == null) || (this.lastConversion.length == 0)) {
-			return 0;
-		}
-		if (this.lastConversion.length <= TickType.SYSTEM.getIndex()) {
+		if ((this.lastConversion == null) || (this.lastConversion.length == 0) || (this.lastConversion.length <= TickType.SYSTEM.getIndex())) {
 			return 0;
 		}
 		return this.lastConversion[TickType.SYSTEM.getIndex()];
@@ -181,10 +174,7 @@ public class CPUsDetailedPercConverter {
 	 * @return the nice of the given core.
 	 */
 	public double getNicePerc() {
-		if ((this.lastConversion == null) || (this.lastConversion.length == 0)) {
-			return 0;
-		}
-		if (this.lastConversion.length <= TickType.NICE.getIndex()) {
+		if ((this.lastConversion == null) || (this.lastConversion.length == 0) || (this.lastConversion.length <= TickType.NICE.getIndex())) {
 			return 0;
 		}
 		return this.lastConversion[TickType.NICE.getIndex()];
@@ -194,10 +184,7 @@ public class CPUsDetailedPercConverter {
 	 * @return the I/O wait of the given core.
 	 */
 	public double getWaitPerc() {
-		if ((this.lastConversion == null) || (this.lastConversion.length == 0)) {
-			return 0;
-		}
-		if (this.lastConversion.length <= TickType.IOWAIT.getIndex()) {
+		if ((this.lastConversion == null) || (this.lastConversion.length == 0) || (this.lastConversion.length <= TickType.IOWAIT.getIndex())) {
 			return 0;
 		}
 		return this.lastConversion[TickType.IOWAIT.getIndex()];
@@ -207,10 +194,7 @@ public class CPUsDetailedPercConverter {
 	 * @return the user utilization of the given core.
 	 */
 	public double getUserPerc() {
-		if ((this.lastConversion == null) || (this.lastConversion.length == 0)) {
-			return 0;
-		}
-		if (this.lastConversion.length <= TickType.USER.getIndex()) {
+		if ((this.lastConversion == null) || (this.lastConversion.length == 0) || (this.lastConversion.length <= TickType.USER.getIndex())) {
 			return 0;
 		}
 		return this.lastConversion[TickType.USER.getIndex()];
@@ -220,13 +204,8 @@ public class CPUsDetailedPercConverter {
 	 * @return the IRQ of the given core.
 	 */
 	public double getIrqPerc() {
-		if ((this.lastConversion == null) || (this.lastConversion.length == 0)) {
-			return 0;
-		}
-		if (this.lastConversion.length <= TickType.IRQ.getIndex()) {
-			return 0;
-		}
-		if (this.lastConversion.length <= TickType.SOFTIRQ.getIndex()) {
+		if ((this.lastConversion == null) || (this.lastConversion.length == 0) || (this.lastConversion.length <= TickType.IRQ.getIndex())
+				|| (this.lastConversion.length <= TickType.SOFTIRQ.getIndex())) {
 			return 0;
 		}
 		return this.lastConversion[TickType.IRQ.getIndex()] + this.lastConversion[TickType.SOFTIRQ.getIndex()];
@@ -236,10 +215,7 @@ public class CPUsDetailedPercConverter {
 	 * @return the IDLE of the given core.
 	 */
 	public double getIdlePerc() {
-		if ((this.lastConversion == null) || (this.lastConversion.length == 0)) {
-			return 0;
-		}
-		if (this.lastConversion.length <= TickType.IDLE.getIndex()) {
+		if ((this.lastConversion == null) || (this.lastConversion.length == 0) || (this.lastConversion.length <= TickType.IDLE.getIndex())) {
 			return 0;
 		}
 		return this.lastConversion[TickType.IDLE.getIndex()];
