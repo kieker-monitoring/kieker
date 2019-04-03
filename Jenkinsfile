@@ -90,6 +90,7 @@ pipeline {
                   pattern: 'kieker-analysis\\build\\reports\\pmd\\*.xml,kieker-tools\\build\\reports\\pmd\\*.xml,kieker-monitoring\\build\\reports\\pmd\\*.xml,kieker-common\\build\\reports\\pmd\\*.xml',
                   unHealthy: ''
             }
+          }
         }
         
         stage('Distribution Build') {
