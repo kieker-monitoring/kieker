@@ -34,6 +34,9 @@ plugin.xml
 **/build/**
 **/bin/**
 
+# Eclipse
+**/.settings/**
+
 # IntelliJ
 .idea/
 *.iml

@@ -45,6 +45,15 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord  {
 		int.class, // BeforeReceivedRemoteEvent.orderIndex
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"callerTraceId",
+		"callerOrderIndex",
+		"traceId",
+		"orderIndex",
+	};
+	
 	/** default constants. */
 	public static final long TIMESTAMP = -1L;
 	public static final long CALLER_TRACE_ID = -1L;
@@ -52,15 +61,6 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord  {
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
 	private static final long serialVersionUID = -2469910628320520231L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"callerTraceId",
-		"callerOrderIndex",
-		"traceId",
-		"orderIndex",
-	};
 	
 	/** property declarations. */
 	private final long timestamp;
@@ -131,7 +131,7 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

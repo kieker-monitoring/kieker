@@ -51,6 +51,18 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord  {
 		long.class, // MemSwapUsageRecord.swapFree
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"hostname",
+		"memTotal",
+		"memUsed",
+		"memFree",
+		"swapTotal",
+		"swapUsed",
+		"swapFree",
+	};
+	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -61,18 +73,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord  {
 	public static final long SWAP_USED = 0L;
 	public static final long SWAP_FREE = 0L;
 	private static final long serialVersionUID = 638480390439299363L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"hostname",
-		"memTotal",
-		"memUsed",
-		"memFree",
-		"swapTotal",
-		"swapUsed",
-		"swapFree",
-	};
 	
 	/** property declarations. */
 	private final long timestamp;
@@ -161,7 +161,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

@@ -45,18 +45,18 @@ public class CompilationRecord extends AbstractJVMRecord  {
 		long.class, // CompilationRecord.totalCompilationTimeMS
 	};
 	
-	/** default constants. */
-	public static final String JIT_COMPILER_NAME = "";
-	private static final long serialVersionUID = 3634137431488075031L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"hostname",
 		"vmName",
 		"jitCompilerName",
 		"totalCompilationTimeMS",
 	};
+	
+	/** default constants. */
+	public static final String JIT_COMPILER_NAME = "";
+	private static final long serialVersionUID = 3634137431488075031L;
 	
 	/** property declarations. */
 	private final String jitCompilerName;
@@ -120,7 +120,7 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

@@ -27,13 +27,18 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class BeforeReceivedRemoteEventFactory implements IRecordFactory<BeforeReceivedRemoteEvent> {
 	
-	
 	@Override
 	public BeforeReceivedRemoteEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new BeforeReceivedRemoteEvent(deserializer);
 	}
-	
-	
+	@Override
+			public String[] getValueNames() {
+				return BeforeReceivedRemoteEvent.VALUE_NAMES; // NOPMD
+			}
+	@Override
+			public Class<?>[] getValueTypes() {
+				return BeforeReceivedRemoteEvent.TYPES; // NOPMD
+			}
 	public int getRecordSizeInBytes() {
 		return BeforeReceivedRemoteEvent.SIZE;
 	}

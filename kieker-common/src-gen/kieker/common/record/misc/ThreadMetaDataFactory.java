@@ -27,13 +27,18 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class ThreadMetaDataFactory implements IRecordFactory<ThreadMetaData> {
 	
-	
 	@Override
 	public ThreadMetaData create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new ThreadMetaData(deserializer);
 	}
-	
-	
+	@Override
+			public String[] getValueNames() {
+				return ThreadMetaData.VALUE_NAMES; // NOPMD
+			}
+	@Override
+			public Class<?>[] getValueTypes() {
+				return ThreadMetaData.TYPES; // NOPMD
+			}
 	public int getRecordSizeInBytes() {
 		return ThreadMetaData.SIZE;
 	}

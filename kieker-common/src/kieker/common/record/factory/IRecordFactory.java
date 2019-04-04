@@ -48,6 +48,24 @@ public interface IRecordFactory<T> {
 	T create(IValueDeserializer deserializer) throws RecordInstantiationException;
 
 	/**
+	 * provide an array of all value names of an event type in definition order.
+	 *
+	 * @return returns an array of value names
+         *
+         * @since 1.15
+	 */
+	String[] getValueNames();
+
+	/**
+	 * provide an array of all value types of an event type in definition order.
+	 *
+	 * @return returns an array of value types
+         *
+         * @since 1.15
+	 */
+	Class<?>[] getValueTypes();
+
+	/**
 	 * @return the size (in bytes) of the record in the serialized form, or a negative value represented by the constant {@link #UNKNOWN_RECORD_SIZE} if the
 	 *         size is unknown
 	 *         in advance.

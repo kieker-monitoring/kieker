@@ -69,6 +69,27 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord  {
 		double.class, // NetworkUtilizationRecord.rxPacketsPerSecond
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"hostname",
+		"interfaceName",
+		"speed",
+		"txBytesPerSecond",
+		"txCarrierPerSecond",
+		"txCollisionsPerSecond",
+		"txDroppedPerSecond",
+		"txErrorsPerSecond",
+		"txOverrunsPerSecond",
+		"txPacketsPerSecond",
+		"rxBytesPerSecond",
+		"rxDroppedPerSecond",
+		"rxErrorsPerSecond",
+		"rxFramePerSecond",
+		"rxOverrunsPerSecond",
+		"rxPacketsPerSecond",
+	};
+	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -88,27 +109,6 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord  {
 	public static final double RX_OVERRUNS_PER_SECOND = 0.0;
 	public static final double RX_PACKETS_PER_SECOND = 0.0;
 	private static final long serialVersionUID = 7799663712343478641L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"hostname",
-		"interfaceName",
-		"speed",
-		"txBytesPerSecond",
-		"txCarrierPerSecond",
-		"txCollisionsPerSecond",
-		"txDroppedPerSecond",
-		"txErrorsPerSecond",
-		"txOverrunsPerSecond",
-		"txPacketsPerSecond",
-		"rxBytesPerSecond",
-		"rxDroppedPerSecond",
-		"rxErrorsPerSecond",
-		"rxFramePerSecond",
-		"rxOverrunsPerSecond",
-		"rxPacketsPerSecond",
-	};
 	
 	/** property declarations. */
 	private final long timestamp;
@@ -251,7 +251,7 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
