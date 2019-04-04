@@ -69,16 +69,18 @@ pipeline {
           }
 	  post {
             always {
-            // Report results of static analysis tools
-            def checkstyle = scanForIssues tool: checkStyle(pattern: '**/target/checkstyle-result.xml')
-            publishIssues issues: [checkstyle]
+              script {
+                // Report results of static analysis tools
+                def checkstyle = scanForIssues tool: checkStyle(pattern: '**/target/checkstyle-result.xml')
+                publishIssues issues: [checkstyle]
     
-            def pmd = scanForIssues tool: pmdParser(pattern: '**/target/pmd.xml')
-            publishIssues issues: [pmd]
+                def pmd = scanForIssues tool: pmdParser(pattern: '**/target/pmd.xml')
+                publishIssues issues: [pmd]
       
-            publishIssues id: 'analysis', name: 'All Issues', 
-               issues: [checkstyle, pmd, spotbugs], 
-               filters: [includePackage('io.jenkins.plugins.analysis.*')]
+                publishIssues id: 'analysis', name: 'All Issues', 
+                   issues: [checkstyle, pmd, spotbugs], 
+                   filters: [includePackage('io.jenkins.plugins.analysis.*')]
+              }
             }
           }
         }
