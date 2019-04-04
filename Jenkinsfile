@@ -70,7 +70,6 @@ pipeline {
           }
 	  post {
             always {
-              script {
                 // Report results of static analysis tools
                 def checkstyle = scanForIssues tool: checkStyle(pattern: '**/target/checkstyle-result.xml')
                 publishIssues issues: [checkstyle]
@@ -81,7 +80,6 @@ pipeline {
                 publishIssues id: 'analysis', name: 'All Issues', 
                    issues: [checkstyle, pmd, spotbugs], 
                    filters: [includePackage('io.jenkins.plugins.analysis.*')]
-              }
             }
           }
         }
