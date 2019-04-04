@@ -27,18 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class GCRecordFactory implements IRecordFactory<GCRecord> {
 	
+
 	@Override
 	public GCRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new GCRecord(deserializer);
 	}
+
+
 	@Override
-			public String[] getValueNames() {
-				return GCRecord.VALUE_NAMES; // NOPMD
-			}
+	public String[] getValueNames() {
+		return GCRecord.VALUE_NAMES; // NOPMD
+	}
+
 	@Override
-			public Class<?>[] getValueTypes() {
-				return GCRecord.TYPES; // NOPMD
-			}
+	public Class<?>[] getValueTypes() {
+		return GCRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return GCRecord.SIZE;
 	}

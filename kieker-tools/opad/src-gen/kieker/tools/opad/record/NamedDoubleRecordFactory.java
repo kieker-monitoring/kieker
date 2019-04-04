@@ -27,18 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class NamedDoubleRecordFactory implements IRecordFactory<NamedDoubleRecord> {
 	
+
 	@Override
 	public NamedDoubleRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new NamedDoubleRecord(deserializer);
 	}
+
+
 	@Override
-			public String[] getValueNames() {
-				return NamedDoubleRecord.VALUE_NAMES; // NOPMD
-			}
+	public String[] getValueNames() {
+		return NamedDoubleRecord.VALUE_NAMES; // NOPMD
+	}
+
 	@Override
-			public Class<?>[] getValueTypes() {
-				return NamedDoubleRecord.TYPES; // NOPMD
-			}
+	public Class<?>[] getValueTypes() {
+		return NamedDoubleRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return NamedDoubleRecord.SIZE;
 	}

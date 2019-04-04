@@ -27,18 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class BranchingRecordFactory implements IRecordFactory<BranchingRecord> {
 	
+
 	@Override
 	public BranchingRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new BranchingRecord(deserializer);
 	}
+
+
 	@Override
-			public String[] getValueNames() {
-				return BranchingRecord.VALUE_NAMES; // NOPMD
-			}
+	public String[] getValueNames() {
+		return BranchingRecord.VALUE_NAMES; // NOPMD
+	}
+
 	@Override
-			public Class<?>[] getValueTypes() {
-				return BranchingRecord.TYPES; // NOPMD
-			}
+	public Class<?>[] getValueTypes() {
+		return BranchingRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return BranchingRecord.SIZE;
 	}
