@@ -159,7 +159,7 @@ subprojects {
         toolVersion = checkstyleVersion
         ignoreFailures = true
         showViolations = false
-
+        canRunOnFailed = true
         configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
         configDir = rootProject.file(dirConfig)
     }
