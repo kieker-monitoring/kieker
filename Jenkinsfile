@@ -38,6 +38,13 @@ pipeline {
           }
         }
 
+        stage('Initial Cleanup') {
+          steps {
+            // Make sure that no remainders from previous builds interfere.
+            sh './gradlew clean'
+          }
+        }
+
         stage('Compile') {
           steps {
             sh './gradlew compileJava'
