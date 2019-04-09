@@ -20,6 +20,14 @@ pipeline {
   }
 
   stages {
+    stage('Precheck') {
+      when {
+        changeRequest target: 'stable'
+      }
+      steps {
+        error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
+      }
+    }
     stage('Default Docker Stages') {
       agent {
         docker {
@@ -29,15 +37,6 @@ pipeline {
         }
       }
       stages {
-        stage('Precheck') {
-          when {
-            changeRequest target: 'stable'
-          }
-          steps {
-            error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
-          }
-        }
-
         stage('Initial Cleanup') {
           steps {
             // Make sure that no remainders from previous builds interfere.
