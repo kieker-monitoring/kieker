@@ -76,36 +76,18 @@ pipeline {
           post {
             always {
               // Report results of static analysis tools
-              
+              recordIssues(
+                enabledForFailure: true,
+                tools: [
+                  java(),
+                  javaDoc(),
 
-              recordIssues enabledForFailure: true, tool: checkStyle(pattern: '**/build/reports/checkstyle/*.xml')
-              recordIssues enabledForFailure: true, tool: findBugs(pattern: '**/build/reports/findbugs/*.xml')
-              recordIssues enabledForFailure: true, tool: pmdParser(pattern: '**/build/reports/pmd/*.xml')
+                  checkStyle(pattern: '**/build/reports/checkstyle/*.xml'),
+                  pmdParser(pattern: '**/build/reports/pmd/*.xml'),
+                  spotBugs(pattern: '**/build/reports/findbugs/*.xml')
+                ]
+              )
 
-              /**
-              checkstyle canComputeNew: false,
-                  canRunOnFailed: true,
-                  defaultEncoding: '',
-                  healthy: '',
-                  pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml',
-                  unHealthy: ''
-
-              findbugs canComputeNew: false,
-                  canRunOnFailed: true,
-                  defaultEncoding: '',
-                  excludePattern: '',
-                  healthy: '',
-                  includePattern: '',
-                  pattern: 'kieker-analysis\\build\\reports\\findbugs\\*.xml,kieker-tools\\build\\reports\\findbugs\\*.xml,kieker-monitoring\\build\\reports\\findbugs\\*.xml,kieker-common\\build\\reports\\findbugs\\*.xml',
-                  unHealthy: ''
-
-              pmd canComputeNew: false,
-                  canRunOnFailed: true,
-                  defaultEncoding: '',
-                  healthy: '',
-                  pattern: 'kieker-analysis\\build\\reports\\pmd\\*.xml,kieker-tools\\build\\reports\\pmd\\*.xml,kieker-monitoring\\build\\reports\\pmd\\*.xml,kieker-common\\build\\reports\\pmd\\*.xml',
-                  unHealthy: ''
-              **/
             }
           }
         }
