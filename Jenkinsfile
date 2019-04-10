@@ -83,13 +83,14 @@ pipeline {
                   java(),
                   javaDoc(),
                   checkStyle(
-                    pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml'
+                    pattern: '**/build/reports/checkstyle/*.xml'
                   ),
                   pmdParser(
-                    pattern: 'kieker-analysis\\build\\reports\\pmd\\*.xml,kieker-tools\\build\\reports\\pmd\\*.xml,kieker-monitoring\\build\\reports\\pmd\\*.xml,kieker-common\\build\\reports\\pmd\\*.xml'
+                    pattern: '**/build/reports/pmd/*.xml'
                   ),
                   spotBugs(
-                    pattern: 'kieker-analysis\\build\\reports\\findbugs\\*.xml,kieker-tools\\build\\reports\\findbugs\\*.xml,kieker-monitoring\\build\\reports\\findbugs\\*.xml,kieker-common\\build\\reports\\findbugs\\*.xml')
+                    pattern: '**/build/reports/findbugs/*.xml'                ]
+                  )
                 ]
               )
             }
