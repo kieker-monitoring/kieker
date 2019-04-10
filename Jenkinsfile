@@ -78,16 +78,16 @@ pipeline {
               // Report results of static analysis tools
               
 
-              def checkstyle = scanForIssues tool: checkStyle(pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml')
+              recordIssues enabledForFailure: true, tool: checkStyle(pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml')
 
-              /**
+              
               checkstyle canComputeNew: false,
                   canRunOnFailed: true,
                   defaultEncoding: '',
                   healthy: '',
                   pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml',
                   unHealthy: ''
-
+/**
               findbugs canComputeNew: false,
                   canRunOnFailed: true,
                   defaultEncoding: '',
