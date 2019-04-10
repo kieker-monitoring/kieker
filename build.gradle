@@ -147,6 +147,7 @@ subprojects {
         // the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
         toolVersion = pmdVersion
         ignoreFailures = true
+        
 
         // Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
         ruleSets = []
@@ -158,7 +159,7 @@ subprojects {
         toolVersion = checkstyleVersion
         ignoreFailures = true
         showViolations = false
-
+        
         configFile = resolveRelativeToParent(dirConfig, 'cs-conf.xml')
         configDir = rootProject.file(dirConfig)
     }
@@ -176,7 +177,7 @@ subprojects {
     tasks.withType(Pmd) {
         reports {
             xml.enabled = true
-            html.enabled = false
+            html.enabled = true
         }
         // the following line of code adds our custom PMD rules as jar file to the classpath
         pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
@@ -186,14 +187,14 @@ subprojects {
         reports {
             xml.enabled true
             html.enabled true
-            //html.stylesheet resources.text.fromFile('config/xsl/checkstyle-custom.xsl')
+            html.stylesheet resources.text.fromFile(rootProject.projectDir.path + '/config/checkstyle-noframes-severity-sorted.xsl')
         }
     }
 
     tasks.withType(FindBugs) {
         reports {
             xml.enabled = true
-            html.enabled = false
+            html.enabled = false // Can only enable either xml OR html
         }
     }
 

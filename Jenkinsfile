@@ -20,6 +20,14 @@ pipeline {
   }
 
   stages {
+    stage('Precheck') {
+      when {
+        changeRequest target: 'stable'
+      }
+      steps {
+        error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
+      }
+    }
     stage('Default Docker Stages') {
       agent {
         docker {
@@ -29,12 +37,10 @@ pipeline {
         }
       }
       stages {
-        stage('Precheck') {
-          when {
-            changeRequest target: 'stable'
-          }
+        stage('Initial Cleanup') {
           steps {
-            error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
+            // Make sure that no remainders from previous builds interfere.
+            sh './gradlew clean'
           }
         }
 
@@ -66,27 +72,28 @@ pipeline {
         stage('Static Analysis') {
           steps {
             sh './gradlew check'
-
-            // Report results of static analysis tools
-            checkstyle canComputeNew: false,
-                defaultEncoding: '',
-                healthy: '',
-                pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml',
-                unHealthy: ''
-
-            findbugs canComputeNew: false,
-                defaultEncoding: '',
-                excludePattern: '',
-                healthy: '',
-                includePattern: '',
-                pattern: 'kieker-analysis\\build\\reports\\findbugs\\*.xml,kieker-tools\\build\\reports\\findbugs\\*.xml,kieker-monitoring\\build\\reports\\findbugs\\*.xml,kieker-common\\build\\reports\\findbugs\\*.xml',
-                unHealthy: ''
-
-            pmd canComputeNew: false,
-                defaultEncoding: '',
-                healthy: '',
-                pattern: 'kieker-analysis\\build\\reports\\pmd\\*.xml,kieker-tools\\build\\reports\\pmd\\*.xml,kieker-monitoring\\build\\reports\\pmd\\*.xml,kieker-common\\build\\reports\\pmd\\*.xml',
-                unHealthy: ''
+          }
+          post {
+            always {
+              // Report results of static analysis tools
+            
+              recordIssues(
+                enabledForFailure: true,
+                tools: [
+                  java(),
+                  javaDoc(),
+                  checkStyle(
+                    pattern: '**/build/reports/checkstyle/*.xml'
+                  ),
+                  pmdParser(
+                    pattern: '**/build/reports/pmd/*.xml'
+                  ),
+                  spotBugs(
+                    pattern: '**/build/reports/findbugs/*.xml'
+                  )
+                ]
+              )
+            }
           }
         }
         
