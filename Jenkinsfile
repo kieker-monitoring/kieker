@@ -80,14 +80,14 @@ pipeline {
 
               recordIssues enabledForFailure: true, tool: checkStyle(pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml')
 
-              
+              /**
               checkstyle canComputeNew: false,
                   canRunOnFailed: true,
                   defaultEncoding: '',
                   healthy: '',
                   pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml',
                   unHealthy: ''
-/**
+
               findbugs canComputeNew: false,
                   canRunOnFailed: true,
                   defaultEncoding: '',
@@ -104,10 +104,6 @@ pipeline {
                   pattern: 'kieker-analysis\\build\\reports\\pmd\\*.xml,kieker-tools\\build\\reports\\pmd\\*.xml,kieker-monitoring\\build\\reports\\pmd\\*.xml,kieker-common\\build\\reports\\pmd\\*.xml',
                   unHealthy: ''
               **/
-
-              publishIssues id: 'static-analysis', name: 'All Issues',
-                  issues: [checkstyle] /** ,
-                  filters: [includePackage('io.jenkins.plugins.analysis.*')] */
             }
           }
         }
