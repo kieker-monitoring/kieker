@@ -78,7 +78,7 @@ pipeline {
               // Report results of static analysis tools
               
 
-              recordIssues enabledForFailure: true, tool: checkStyle(pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml')
+              def checkstyle = scanForIssues tool: checkStyle(pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml')
 
               /**
               checkstyle canComputeNew: false,
