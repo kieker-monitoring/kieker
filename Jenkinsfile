@@ -70,7 +70,7 @@ pipeline {
           }
 	  post {
             always {
-                recordIssues enabledForFailur: true, tool: checkStyle()
+                recordIssues enabledForFailure: true, tool: checkStyle()
             }
           }
         }
