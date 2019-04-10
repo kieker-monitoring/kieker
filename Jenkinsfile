@@ -76,48 +76,21 @@ pipeline {
           post {
             always {
               // Report results of static analysis tools
-              
+            
               recordIssues(
-                enabledForFailure: true, 
-                tool: checkStyle(
-                        pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml'
-                )
-              )
-
-              recordIssues( 
-                enabledForFailure: true, 
-                tool: pmdParser(
-                        pattern: 'kieker-analysis\\build\\reports\\pmd\\*.xml,kieker-tools\\build\\reports\\pmd\\*.xml,kieker-monitoring\\build\\reports\\pmd\\*.xml,kieker-common\\build\\reports\\pmd\\*.xml'
-                )
-              )
-
-              /**
-              checkstyle canComputeNew: false,
-                  canRunOnFailed: true,
-                  defaultEncoding: '',
-                  healthy: '',
-                  pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml',
-                  unHealthy: ''
-
-              findbugs canComputeNew: false,
-                  canRunOnFailed: true,
-                  defaultEncoding: '',
-                  excludePattern: '',
-                  healthy: '',
-                  includePattern: '',
-                  pattern: 'kieker-analysis\\build\\reports\\findbugs\\*.xml,kieker-tools\\build\\reports\\findbugs\\*.xml,kieker-monitoring\\build\\reports\\findbugs\\*.xml,kieker-common\\build\\reports\\findbugs\\*.xml',
-                  unHealthy: ''
-
-              pmd canComputeNew: false,
-                  canRunOnFailed: true,
-                  defaultEncoding: '',
-                  healthy: '',
-                  pattern: 'kieker-analysis\\build\\reports\\pmd\\*.xml,kieker-tools\\build\\reports\\pmd\\*.xml,kieker-monitoring\\build\\reports\\pmd\\*.xml,kieker-common\\build\\reports\\pmd\\*.xml',
-                  unHealthy: ''
-              **/
-
-              publishIssues id: 'static-analysis', name: 'All Issues',
-                  issues: [checkstyle, pmd]
+                enabledForFailure: true,
+                tools: [
+                  java(),
+                  javaDoc(),
+                  checkStyle(
+                    pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml'
+                  ),
+                  pmdParser(
+                    pattern: 'kieker-analysis\\build\\reports\\pmd\\*.xml,kieker-tools\\build\\reports\\pmd\\*.xml,kieker-monitoring\\build\\reports\\pmd\\*.xml,kieker-common\\build\\reports\\pmd\\*.xml'
+                  ),
+                  spotBugs(
+                    pattern: 'kieker-analysis\\build\\reports\\findbugs\\*.xml,kieker-tools\\build\\reports\\findbugs\\*.xml,kieker-monitoring\\build\\reports\\findbugs\\*.xml,kieker-common\\build\\reports\\findbugs\\*.xml')
+                ]
             }
           }
         }
