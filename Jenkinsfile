@@ -91,6 +91,7 @@ pipeline {
                   spotBugs(
                     pattern: 'kieker-analysis\\build\\reports\\findbugs\\*.xml,kieker-tools\\build\\reports\\findbugs\\*.xml,kieker-monitoring\\build\\reports\\findbugs\\*.xml,kieker-common\\build\\reports\\findbugs\\*.xml')
                 ]
+              )
             }
           }
         }
