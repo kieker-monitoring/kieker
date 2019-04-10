@@ -106,8 +106,8 @@ pipeline {
               **/
 
               publishIssues id: 'static-analysis', name: 'All Issues',
-                  issues: [checkstyle]/**,
-                  filters: [includePackage('io.jenkins.plugins.analysis.*')] */
+                  issues: [checkstyle],
+                  filters: [includePackage('io.jenkins.plugins.analysis.*')]
             }
           }
         }
