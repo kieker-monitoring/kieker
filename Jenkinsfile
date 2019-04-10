@@ -89,7 +89,7 @@ pipeline {
                     pattern: '**/build/reports/pmd/*.xml'
                   ),
                   spotBugs(
-                    pattern: '**/build/reports/findbugs/*.xml'                ]
+                    pattern: '**/build/reports/findbugs/*.xml'
                   )
                 ]
               )
