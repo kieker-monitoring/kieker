@@ -78,7 +78,7 @@ pipeline {
               // Report results of static analysis tools
               
 
-              recordIssues enabledforFailure: true, tool: checkStyle(pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml')
+              recordIssues enabledForFailure: true, tool: checkStyle(pattern: 'kieker-analysis\\build\\reports\\checkstyle\\*.xml,kieker-tools\\build\\reports\\checkstyle\\*.xml,kieker-monitoring\\build\\reports\\checkstyle\\*.xml,kieker-common\\build\\reports\\checkstyle\\*.xml')
 
               /**
               checkstyle canComputeNew: false,
@@ -106,8 +106,8 @@ pipeline {
               **/
 
               publishIssues id: 'static-analysis', name: 'All Issues',
-                  issues: [checkstyle],
-                  filters: [includePackage('io.jenkins.plugins.analysis.*')]
+                  issues: [checkstyle]/**,
+                  filters: [includePackage('io.jenkins.plugins.analysis.*')] */
             }
           }
         }
