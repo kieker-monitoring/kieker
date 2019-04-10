@@ -76,18 +76,23 @@ pipeline {
           post {
             always {
               // Report results of static analysis tools
+            
               recordIssues(
                 enabledForFailure: true,
                 tools: [
                   java(),
                   javaDoc(),
-
-                  checkStyle(pattern: '**/build/reports/checkstyle/*.xml'),
-                  pmdParser(pattern: '**/build/reports/pmd/*.xml'),
-                  spotBugs(pattern: '**/build/reports/findbugs/*.xml')
+                  checkStyle(
+                    pattern: '**/build/reports/checkstyle/*.xml'
+                  ),
+                  pmdParser(
+                    pattern: '**/build/reports/pmd/*.xml'
+                  ),
+                  spotBugs(
+                    pattern: '**/build/reports/findbugs/*.xml'
+                  )
                 ]
               )
-
             }
           }
         }
