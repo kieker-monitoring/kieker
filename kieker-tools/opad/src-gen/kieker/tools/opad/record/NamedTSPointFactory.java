@@ -27,18 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class NamedTSPointFactory implements IRecordFactory<NamedTSPoint> {
 	
+
 	@Override
 	public NamedTSPoint create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new NamedTSPoint(deserializer);
 	}
+
+
 	@Override
-			public String[] getValueNames() {
-				return NamedTSPoint.VALUE_NAMES; // NOPMD
-			}
+	public String[] getValueNames() {
+		return NamedTSPoint.VALUE_NAMES; // NOPMD
+	}
+
 	@Override
-			public Class<?>[] getValueTypes() {
-				return NamedTSPoint.TYPES; // NOPMD
-			}
+	public Class<?>[] getValueTypes() {
+		return NamedTSPoint.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return NamedTSPoint.SIZE;
 	}

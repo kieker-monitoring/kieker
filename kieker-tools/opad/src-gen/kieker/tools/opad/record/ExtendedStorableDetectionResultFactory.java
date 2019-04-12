@@ -27,18 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class ExtendedStorableDetectionResultFactory implements IRecordFactory<ExtendedStorableDetectionResult> {
 	
+
 	@Override
 	public ExtendedStorableDetectionResult create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new ExtendedStorableDetectionResult(deserializer);
 	}
+
+
 	@Override
-			public String[] getValueNames() {
-				return ExtendedStorableDetectionResult.VALUE_NAMES; // NOPMD
-			}
+	public String[] getValueNames() {
+		return ExtendedStorableDetectionResult.VALUE_NAMES; // NOPMD
+	}
+
 	@Override
-			public Class<?>[] getValueTypes() {
-				return ExtendedStorableDetectionResult.TYPES; // NOPMD
-			}
+	public Class<?>[] getValueTypes() {
+		return ExtendedStorableDetectionResult.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return ExtendedStorableDetectionResult.SIZE;
 	}

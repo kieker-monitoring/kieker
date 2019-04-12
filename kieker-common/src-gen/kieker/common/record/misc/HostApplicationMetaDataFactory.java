@@ -27,18 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class HostApplicationMetaDataFactory implements IRecordFactory<HostApplicationMetaData> {
 	
+
 	@Override
 	public HostApplicationMetaData create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new HostApplicationMetaData(deserializer);
 	}
+
+
 	@Override
-			public String[] getValueNames() {
-				return HostApplicationMetaData.VALUE_NAMES; // NOPMD
-			}
+	public String[] getValueNames() {
+		return HostApplicationMetaData.VALUE_NAMES; // NOPMD
+	}
+
 	@Override
-			public Class<?>[] getValueTypes() {
-				return HostApplicationMetaData.TYPES; // NOPMD
-			}
+	public Class<?>[] getValueTypes() {
+		return HostApplicationMetaData.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return HostApplicationMetaData.SIZE;
 	}
