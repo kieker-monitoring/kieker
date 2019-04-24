@@ -75,9 +75,10 @@ public class TestMemSwapUsageSampler extends AbstractKiekerTest { // NOCS
 		final String pattern = SignatureFactory.createMemSwapSignature();
 		this.monitoringController.deactivateProbe(pattern);
 
+		final int actualNumEvents = this.recordListFilledByListWriter.size();
 		Thread.sleep(2000); // sleep 2 seconds while being disabled
 		// There should be no new trigger events
-		final int numEventsWhileDisabled = this.recordListFilledByListWriter.size() - numEventsBeforeDisabled;
+		final int numEventsWhileDisabled = actualNumEvents - numEventsBeforeDisabled;
 
 		this.monitoringController.activateProbe(pattern);
 
