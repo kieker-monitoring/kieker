@@ -27,18 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class TimestampRecordFactory implements IRecordFactory<TimestampRecord> {
 	
+
 	@Override
 	public TimestampRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new TimestampRecord(deserializer);
 	}
+
+
 	@Override
-			public String[] getValueNames() {
-				return TimestampRecord.VALUE_NAMES; // NOPMD
-			}
+	public String[] getValueNames() {
+		return TimestampRecord.VALUE_NAMES; // NOPMD
+	}
+
 	@Override
-			public Class<?>[] getValueTypes() {
-				return TimestampRecord.TYPES; // NOPMD
-			}
+	public Class<?>[] getValueTypes() {
+		return TimestampRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return TimestampRecord.SIZE;
 	}

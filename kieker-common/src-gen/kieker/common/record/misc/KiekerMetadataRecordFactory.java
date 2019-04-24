@@ -27,18 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class KiekerMetadataRecordFactory implements IRecordFactory<KiekerMetadataRecord> {
 	
+
 	@Override
 	public KiekerMetadataRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new KiekerMetadataRecord(deserializer);
 	}
+
+
 	@Override
-			public String[] getValueNames() {
-				return KiekerMetadataRecord.VALUE_NAMES; // NOPMD
-			}
+	public String[] getValueNames() {
+		return KiekerMetadataRecord.VALUE_NAMES; // NOPMD
+	}
+
 	@Override
-			public Class<?>[] getValueTypes() {
-				return KiekerMetadataRecord.TYPES; // NOPMD
-			}
+	public Class<?>[] getValueTypes() {
+		return KiekerMetadataRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return KiekerMetadataRecord.SIZE;
 	}
