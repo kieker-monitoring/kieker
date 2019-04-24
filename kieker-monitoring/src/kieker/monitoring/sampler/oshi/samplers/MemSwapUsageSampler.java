@@ -57,7 +57,7 @@ public class MemSwapUsageSampler extends AbstractOshiSampler {
 	 */
 	@Override
 	public void sample(final IMonitoringController monitoringCtr) throws SigarException {
-		if (!monitoringCtr.isMonitoringEnabled() || !monitoringCtr.isProbeActivated(SignatureFactory.createCPUSignature())) {
+		if (!monitoringCtr.isMonitoringEnabled() || !monitoringCtr.isProbeActivated(SignatureFactory.createMemSwapSignature())) {
 			return;
 		}
 		final GlobalMemory globalMemory = this.hardwareAbstractionLayer.getMemory();
