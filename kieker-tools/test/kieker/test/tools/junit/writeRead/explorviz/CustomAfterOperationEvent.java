@@ -70,7 +70,7 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 
 	@Override
 	public Class<?>[] getValueTypes() { // NOPMD (not used method)
-		return TYPES;
+		return TYPES.clone();
 	}
 
 	@Override
@@ -90,10 +90,7 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 
 	@Override
 	public final boolean equals(final Object obj) { // not used method (needed for findbugs)
-		if (this == obj) {
-			return true;
-		}
-		return false;
+		return (this == obj);
 	}
 
 	@Override

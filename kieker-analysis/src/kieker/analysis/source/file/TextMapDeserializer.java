@@ -98,7 +98,7 @@ public class TextMapDeserializer extends AbstractMapDeserializer {
 		}
 		final String prevVal = registry.register(id, FSUtil.decodeNewline(value));
 		if (prevVal != null) {
-			LOGGER.error("Found addional entry for id='{', old value was '{}' new value is '{}'", id, prevVal, value);
+			LOGGER.error("Found additional entry for id='{}', old value was '{}' new value is '{}'", id, prevVal, value);
 		}
 	}
 

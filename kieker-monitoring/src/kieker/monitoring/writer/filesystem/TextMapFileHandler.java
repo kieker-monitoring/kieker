@@ -48,15 +48,12 @@ public class TextMapFileHandler implements IMapFileHandler {
 	/** The name of the configuration key determining the buffer size of the output file stream. */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize";
 
-	private final ICompressionFilter compressionFilter;
 	private PrintWriter printWriter;
 	private final boolean flushMapFile;
 
 	public TextMapFileHandler(final Configuration configuration) {
 		/** get compression filter main data. */
 		final String compressionFilterClassName = configuration.getStringProperty(CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
-		this.compressionFilter = ControllerFactory.getInstance(configuration).createAndInitialize(ICompressionFilter.class,
-				compressionFilterClassName, configuration);
 		this.flushMapFile = configuration.getBooleanProperty(CONFIG_FLUSH_MAPFILE, true);
 	}
 
