@@ -39,6 +39,9 @@ public class Connection {
 	/** Deserializer setup. */
 	private final IValueDeserializer deserializer;
 
+	/** Is true when there was an unrecoverable error with the stream. */
+	private boolean error;
+
 	/**
 	 * Create a connection for the given channel and utilizing the specified buffer size.
 	 *
@@ -51,6 +54,7 @@ public class Connection {
 		this.channel = channel;
 		this.buffer = ByteBuffer.allocateDirect(bufferSize);
 		this.deserializer = BinaryValueDeserializer.create(this.buffer, this.registry);
+		this.error = false;
 	}
 
 	public ReaderRegistry<String> getRegistry() {
@@ -67,6 +71,14 @@ public class Connection {
 
 	public IValueDeserializer getValueDeserializer() {
 		return this.deserializer;
+	}
+
+	public void setError(final boolean error) {
+		this.error = error;
+	}
+
+	public boolean isError() {
+		return this.error;
 	}
 
 }
