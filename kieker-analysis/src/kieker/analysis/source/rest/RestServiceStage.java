@@ -34,6 +34,16 @@ public class RestServiceStage extends AbstractProducerStage<IMonitoringRecord> {
 	private final int port;
 	private final IAccessHandler accessRestrictionHandler;
 
+	/**
+	 * Create a rest service stage.
+	 *
+	 * @param hostname
+	 *            hostname to listen to
+	 * @param port
+	 *            port to listen to
+	 * @param accessRestrictionHandler
+	 *            access restriction handler for connections
+	 */
 	public RestServiceStage(final String hostname, final int port, final IAccessHandler accessRestrictionHandler) {
 		this.hostname = hostname;
 		this.port = port;
