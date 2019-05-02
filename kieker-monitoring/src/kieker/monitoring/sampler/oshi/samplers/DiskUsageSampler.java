@@ -114,9 +114,7 @@ public final class DiskUsageSampler extends AbstractOshiSampler {
 
 	private DiskUsageStatistic getCurrentDiskUsageStatistic(final ITimeSource timesource, final String deviceName,
 			final HWDiskStore hwDiskStore) {
-
 		final long currentTimestamp = timesource.getTime();
-
 		final double queue = hwDiskStore.getCurrentQueueLength();
 		final long readBytes = hwDiskStore.getReadBytes();
 		final long reads = hwDiskStore.getReads();
