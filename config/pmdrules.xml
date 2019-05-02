@@ -79,6 +79,7 @@
 		<exclude name="DisallowRawTypeDeclaration" />
 		<exclude name="MissingPluralVariableName"/>
 		<exclude name="MissingUnitSuffix"/>
+    <exclude name="UnitTestMayNotExtendAnything"/>
 	</rule>
 
 	<!-- <rule ref="rulesets/java/logging-jakarta-commons.xml/GuardLogStatement"> -->
