@@ -127,25 +127,27 @@ public class TCPControllerTest {
 		this.tcpWriter.onStarting();
 
 		Assert.assertTrue(controller.activateProbe(pattern));
-		Assert.assertNull(controller.getParameters(pattern));
+		Assert.assertNull(controller.getAllParameters(pattern));
 
-		this.sendTCPEvent(new UpdateParameterEvent(pattern, parameterNames, parameters));
+		for (int i = 0; i < 3; i++) {
+			this.sendTCPEvent(new UpdateParameterEvent(pattern, parameterNames[i], parameters[i]));
+		}
 
-		while ((controller.getParameters(pattern) == null)) {
+		while ((controller.getAllParameters(pattern) == null)) {
 			Thread.yield();
 		}
 
-		Assert.assertTrue(controller.getParameters(pattern).size() == 3);
-		Assert.assertTrue(controller.getParameters(pattern).get(parameterNames[0]).get(1).equals(parameters[0][1]));
-		Assert.assertTrue(controller.getParameters(pattern).get(parameterNames[1]).get(2).equals(parameters[1][2]));
-		Assert.assertTrue(controller.getParameters(pattern).get(parameterNames[2]).get(0).equals(parameters[2][0]));
+		Assert.assertTrue(controller.getAllParameters(pattern).size() == 3);
+		Assert.assertTrue(controller.getAllParameters(pattern).get(parameterNames[0]).get(1).equals(parameters[0][1]));
+		Assert.assertTrue(controller.getAllParameters(pattern).get(parameterNames[1]).get(2).equals(parameters[1][2]));
+		Assert.assertTrue(controller.getAllParameters(pattern).get(parameterNames[2]).get(0).equals(parameters[2][0]));
 
 		this.sendTCPEvent(new DeactivationEvent(pattern));
-		while (controller.getParameters(pattern) != null) {
+		while (controller.getAllParameters(pattern) != null) {
 			Thread.yield();
 		}
 
-		Assert.assertNull(controller.getParameters(pattern));
+		Assert.assertNull(controller.getAllParameters(pattern));
 
 	}
 

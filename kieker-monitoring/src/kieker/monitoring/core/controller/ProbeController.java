@@ -314,7 +314,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Map<String, List<String>> getParameters(final String pattern) {
+	public Map<String, List<String>> getAllParameters(final String pattern) {
 		synchronized (this) {
 			return this.patternListParameters.get(pattern);
 		}
@@ -325,7 +325,17 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void deleteParameterEntry(final String pattern) {
+	public void deletePatternParameter(final String pattern, final String parameterName) {
+		synchronized (this) {
+			this.patternListParameters.get(pattern).remove(parameterName);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void clearPatternParameters(final String pattern) {
 		synchronized (this) {
 			this.patternListParameters.remove(pattern);
 		}
@@ -335,19 +345,9 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addParameterEntry(final String pattern, final String parameterName, final List<String> parameters) {
+	public void addPatternParameter(final String pattern, final String parameterName, final List<String> parameters) {
 		synchronized (this) {
 			this.patternListParameters.get(pattern).put(parameterName, parameters);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void addCompletePatternParameters(final String pattern, final Map<String, List<String>> parameterMap) {
-		synchronized (this) {
-			this.patternListParameters.put(pattern, parameterMap);
 		}
 	}
 

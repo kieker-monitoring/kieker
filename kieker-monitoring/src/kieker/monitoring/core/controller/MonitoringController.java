@@ -369,23 +369,23 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public Map<String, List<String>> getParameters(final String pattern) {
-		return this.probeController.getParameters(pattern);
+	public Map<String, List<String>> getAllParameters(final String pattern) {
+		return this.probeController.getAllParameters(pattern);
 	}
 
 	@Override
-	public void deleteParameterEntry(final String pattern) {
-		this.probeController.deleteParameterEntry(pattern);
+	public void deletePatternParameter(final String pattern, final String parameterName) {
+		this.probeController.deletePatternParameter(pattern, parameterName);
 	}
 
 	@Override
-	public void addParameterEntry(final String pattern, final String parameterName, final List<String> parameters) {
-		this.probeController.addParameterEntry(pattern, parameterName, parameters);
+	public void clearPatternParameters(final String pattern) {
+		this.probeController.clearPatternParameters(pattern);
 	}
 
 	@Override
-	public void addCompletePatternParameters(final String pattern, final Map<String, List<String>> parameterMap) {
-		this.probeController.addCompletePatternParameters(pattern, parameterMap);
+	public void addPatternParameter(final String pattern, final String parameterName, final List<String> parameters) {
+		this.probeController.addPatternParameter(pattern, parameterName, parameters);
 	}
 
 	// GET SINGLETON INSTANCE
