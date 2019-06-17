@@ -96,21 +96,36 @@ public interface IProbeController {
 	 * @since 1.14
 	 *
 	 */
-	public Map<String, List<String>> getParameters(final String pattern);
+	public Map<String, List<String>> getAllParameters(final String pattern);
 
 	/**
-	 * Deletes all parameters for one entry.
+	 * Deletes a parameter from the given pattern.
 	 *
 	 * @param pattern
 	 *            The parameters to be deleted.
+	 * @param parameterName
+	 *            The name of the parameter.
 	 *
 	 * @since 1.14
 	 *
 	 */
-	public void deleteParameterEntry(final String pattern);
+	public void deletePatternParameter(final String pattern, String parameterName);
 
 	/**
-	 * Adds or updates a parameter entry for a probe.
+	 * Deletes all parameters from the given pattern.
+	 *
+	 * @param pattern
+	 *            The parameters to be deleted.
+	 * @param parameterName
+	 *            The name of the parameter.
+	 *
+	 * @since 1.14
+	 *
+	 */
+	public void clearPatternParameters(final String pattern);
+
+	/**
+	 * Adds or updates a parameter for the given pattern.
 	 *
 	 * @param pattern
 	 *            The pattern of the probe.
@@ -121,19 +136,6 @@ public interface IProbeController {
 	 *
 	 * @since 1.14
 	 */
-	public void addParameterEntry(final String pattern, final String parameterName, final List<String> parameters);
-
-	/**
-	 * Overwrites all parameters for a given probe/pattern.
-	 *
-	 * @param pattern
-	 *            The pattern of the probe.
-	 * @param parameterMap
-	 *            The new parameters.
-	 *
-	 * @since 1.14
-	 *
-	 */
-	public void addCompletePatternParameters(final String pattern, final Map<String, List<String>> parameterMap);
+	public void addPatternParameter(final String pattern, final String parameterName, final List<String> parameters);
 
 }

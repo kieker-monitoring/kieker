@@ -6,8 +6,8 @@ template IRemoteControlEvent {
 }
 
 template IRemoteParameterControlEvent: IRemoteControlEvent{
-	string[] parameterNames
-	string[][] parameters
+	string name
+	string[] values
 }
 
 @author 'Marc Adolf' @since '1.14'
