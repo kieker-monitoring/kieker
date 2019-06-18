@@ -62,7 +62,7 @@ public class TCPController extends AbstractController implements IRemoteControll
 		try {
 			final int port = Integer.parseInt(configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_REMOTE_PORT));
 			this.tcpEnabled = configuration.getBooleanProperty(ConfigurationKeys.ACTIVATE_TCP);
-			this.tcpReader = new SingleSocketRecordReader(port, BUFFER_SIZE, TCPController.LOGGER, listener);
+			this.tcpReader = new SingleSocketRecordReader(port, BUFFER_SIZE, TCPController.LOGGER, true, listener);
 			TCPController.LOGGER.info("Setup of TCPController listening at {}", port);
 		} catch (final NumberFormatException e) {
 			this.tcpEnabled = false;

@@ -63,6 +63,25 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 		this.listener = listener;
 	}
 
+	/**
+	 * Create single socket reader.
+	 *
+	 * @param port
+	 *            port to listen to
+	 * @param bufferCapacity
+	 *            buffer capacity
+	 * @param logger
+	 *            logger to be used
+	 * @param respawn
+	 *            true when reader should respawn after lost connection
+	 * @param listener
+	 *            listener to trigger on received records
+	 */
+	public SingleSocketRecordReader(final int port, final int bufferCapacity, final Logger logger, final boolean respawn, final IRecordReceivedListener listener) {
+		super(port, bufferCapacity, logger, respawn);
+		this.listener = listener;
+	}
+
 	@Override
 	protected boolean onBufferReceived(final ByteBuffer buffer) {
 		// identify record class

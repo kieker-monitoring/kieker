@@ -42,6 +42,8 @@ public abstract class AbstractTcpReader implements Runnable {
 	private final int bufferCapacity;
 	private volatile boolean terminated;
 
+	private final boolean respawn;
+
 	/**
 	 * Constructs a new TCP reader.
 	 *
@@ -57,6 +59,27 @@ public abstract class AbstractTcpReader implements Runnable {
 		this.port = port;
 		this.bufferCapacity = bufferCapacity;
 		this.logger = logger;
+		this.respawn = false;
+	}
+
+	/**
+	 * Constructs a new TCP reader.
+	 *
+	 * @param port
+	 *            on which to listen for requests
+	 * @param bufferCapacity
+	 *            of the used read buffer
+	 * @param logger
+	 *            for notification to users and developers
+	 * @param respawn
+	 *            respawn reading after connection is lost
+	 */
+	public AbstractTcpReader(final int port, final int bufferCapacity, final Logger logger, final boolean respawn) {
+		super();
+		this.port = port;
+		this.bufferCapacity = bufferCapacity;
+		this.logger = logger;
+		this.respawn = respawn;
 	}
 
 	@Override
@@ -66,7 +89,7 @@ public abstract class AbstractTcpReader implements Runnable {
 			serversocket = ServerSocketChannel.open();
 			serversocket.socket().bind(new InetSocketAddress(this.port));
 
-			while (!this.terminated) {
+			do {
 				this.logger.debug("Listening on port {}", this.port);
 				final SocketChannel socketChannel = serversocket.accept();
 				try {
@@ -77,7 +100,7 @@ public abstract class AbstractTcpReader implements Runnable {
 				} finally {
 					socketChannel.close();
 				}
-			}
+			} while (!this.terminated && this.respawn);
 		} catch (final IOException ex) {
 			this.logger.error("Error while receiving control commands.", ex);
 		} finally {

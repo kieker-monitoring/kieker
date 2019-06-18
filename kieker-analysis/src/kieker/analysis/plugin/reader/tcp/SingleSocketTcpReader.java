@@ -36,7 +36,8 @@ import kieker.common.record.tcp.SingleSocketRecordReader;
 @Plugin(description = "A reader which reads records from a TCP port", outputPorts = {
 	@OutputPort(name = SingleSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the TCPReader")
 }, configuration = {
-	@Property(name = SingleSocketTcpReader.CONFIG_PROPERTY_NAME_PORT, defaultValue = "10133", description = "The first port of the server used for the TCP connection.")
+	@Property(name = SingleSocketTcpReader.CONFIG_PROPERTY_NAME_PORT, defaultValue = "10133",
+			description = "The first port of the server used for the TCP connection.")
 })
 public final class SingleSocketTcpReader extends AbstractReaderPlugin implements IRecordReceivedListener {
 
