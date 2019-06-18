@@ -44,7 +44,7 @@ import kieker.monitoring.writer.compression.NoneCompressionFilter;
  * @since 1.14
  *
  */
-public class FileWriter extends AbstractMonitoringWriter implements IRegistryListener<String>, IFileWriter {
+public class FileWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
 
 	public static final String PREFIX = FileWriter.class.getName() + ".";
 	/** The name of the configuration for the custom storage path if the writer is advised not to store in the temporary directory. */
@@ -80,8 +80,6 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 	private final long maxBytesInFile;
 	private final WriterRegistry writerRegistry;
 
-	private final Path folder;
-
 	/**
 	 * Create a generic file writer.
 	 *
@@ -106,7 +104,6 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 		final Path logFolder = KiekerLogFolder.buildKiekerLogFolder(configPathName, configuration);
 		try {
 			Files.createDirectories(logFolder);
-			this.folder = logFolder;
 		} catch (final IOException e) {
 			throw new IllegalStateException("Error on creating Kieker's log directory.", e);
 		}
@@ -207,11 +204,6 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 		} catch (final IOException ex) {
 			LOGGER.error("Closing logger failed.", ex);
 		}
-	}
-
-	@Override
-	public Path getLogFolder() {
-		return this.folder;
 	}
 
 }

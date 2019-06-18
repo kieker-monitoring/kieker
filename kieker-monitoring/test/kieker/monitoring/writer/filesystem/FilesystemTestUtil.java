@@ -17,6 +17,7 @@
 package kieker.monitoring.writer.filesystem;
 
 import java.io.File;
+import java.nio.file.Path;
 
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
@@ -38,13 +39,37 @@ final class FilesystemTestUtil {
 		}
 	}
 
-	public static <W extends AbstractMonitoringWriter & IFileWriter> File executeFileWriterTest(final int numRecordsToWrite, final W writer,
+	public static <W extends AbstractMonitoringWriter> void executeFileWriterTest(final int numRecordsToWrite, final W writer,
 			final EmptyRecord record) {
 		writer.onStarting();
 		FilesystemTestUtil.writeMonitoringRecords(writer, numRecordsToWrite, record);
 		writer.onTerminating();
+	}
 
-		return writer.getLogFolder().toFile();
+	public static void deleteContent(final Path writerPath) {
+		final File directory = writerPath.toFile();
+		for (final File content : directory.listFiles()) {
+			if (content.isDirectory()) {
+				FilesystemTestUtil.deleteDirectory(content);
+			} else {
+				FilesystemTestUtil.deleteFile(content);
+			}
+		}
+	}
+
+	private static void deleteDirectory(final File directory) {
+		for (final File content : directory.listFiles()) {
+			if (content.isDirectory()) {
+				FilesystemTestUtil.deleteDirectory(content);
+			} else {
+				FilesystemTestUtil.deleteFile(content);
+			}
+		}
+		directory.delete();
+	}
+
+	private static void deleteFile(final File file) {
+		file.delete();
 	}
 
 }
