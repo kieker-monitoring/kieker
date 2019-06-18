@@ -57,6 +57,7 @@ public class MonitoringCommandListener implements IRecordReceivedListener {
 	 * (de-)activation of probes.
 	 *
 	 * @param monitoringController
+	 *            monitoring controller
 	 */
 	public MonitoringCommandListener(final MonitoringController monitoringController) {
 		this.monitoringController = monitoringController;

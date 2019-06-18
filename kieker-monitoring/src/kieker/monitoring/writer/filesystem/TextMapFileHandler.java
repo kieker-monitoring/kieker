@@ -24,7 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
 import kieker.common.configuration.Configuration;
-import kieker.monitoring.core.controller.ControllerFactory;
+import kieker.common.util.classpath.InstantiationFactory;
 import kieker.monitoring.core.controller.ReceiveUnfilteredConfiguration;
 import kieker.monitoring.writer.compression.ICompressionFilter;
 import kieker.monitoring.writer.compression.NoneCompressionFilter;
@@ -55,7 +55,7 @@ public class TextMapFileHandler implements IMapFileHandler {
 	public TextMapFileHandler(final Configuration configuration) {
 		/** get compression filter main data. */
 		final String compressionFilterClassName = configuration.getStringProperty(CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
-		this.compressionFilter = ControllerFactory.getInstance(configuration).createAndInitialize(ICompressionFilter.class,
+		this.compressionFilter = InstantiationFactory.getInstance(configuration).createAndInitialize(ICompressionFilter.class,
 				compressionFilterClassName, configuration);
 		this.flushMapFile = configuration.getBooleanProperty(CONFIG_FLUSH_MAPFILE, true);
 	}

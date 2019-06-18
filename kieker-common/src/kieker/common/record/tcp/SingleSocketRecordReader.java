@@ -66,63 +66,71 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 	@Override
 	protected boolean onBufferReceived(final ByteBuffer buffer) {
 		// identify record class
-		if (buffer.remaining() < INT_BYTES) {
-			return false;
-		}
-		final int clazzId = buffer.getInt();
+		if (buffer.remaining() >= INT_BYTES) {
+			final int clazzId = buffer.getInt();
 
-		if (clazzId == -1) {
-			return this.registerRegistryEntry(buffer);
+			if (clazzId == -1) {
+				return this.registerEntry(buffer);
+			} else {
+				return this.deserializeRecord(clazzId, buffer);
+			}
 		} else {
-			return this.deserializeRecord(clazzId, buffer);
+			return false;
 		}
 	}
 
-	private boolean registerRegistryEntry(final ByteBuffer buffer) {
+	private boolean registerEntry(final ByteBuffer buffer) {
 		// identify string identifier and string length
-		if (buffer.remaining() < (INT_BYTES + INT_BYTES)) {
+		if (buffer.remaining() >= (INT_BYTES + INT_BYTES)) {
+			final int id = buffer.getInt(); // NOPMD (id must be read before stringLength)
+			final int stringLength = buffer.getInt();
+
+			if (buffer.remaining() < stringLength) {
+				return false;
+			} else {
+				final byte[] strBytes = new byte[stringLength];
+				buffer.get(strBytes);
+				final String string = new String(strBytes, ENCODING);
+
+				this.readerRegistry.register(id, string);
+
+				return true;
+			}
+		} else {
 			return false;
 		}
-
-		final int id = buffer.getInt(); // NOPMD (id must be read before stringLength)
-		final int stringLength = buffer.getInt();
-
-		if (buffer.remaining() < stringLength) {
-			return false;
-		}
-
-		final byte[] strBytes = new byte[stringLength];
-		buffer.get(strBytes);
-		final String string = new String(strBytes, ENCODING);
-
-		this.readerRegistry.register(id, string);
-		return true;
 	}
 
 	private boolean deserializeRecord(final int clazzId, final ByteBuffer buffer) {
 		// identify logging timestamp
-		if (buffer.remaining() < LONG_BYTES) {
+		if (buffer.remaining() >= LONG_BYTES) {
+			final long loggingTimestamp = buffer.getLong(); // NOPMD (timestamp must be read before checking the buffer for record size)
+
+			final String recordClassName = this.readerRegistry.get(clazzId);
+			if (recordClassName != null) {
+				// identify record data
+				final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
+
+				if (buffer.remaining() >= recordFactory.getRecordSizeInBytes()) {
+					try {
+						final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(buffer, this.readerRegistry));
+						record.setLoggingTimestamp(loggingTimestamp);
+
+						this.listener.onRecordReceived(record);
+					} catch (final RecordInstantiationException ex) {
+						super.logger.error("Failed to create: {}", recordClassName, ex);
+					}
+
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return true;
+			}
+		} else {
 			return false;
 		}
-		final long loggingTimestamp = buffer.getLong(); // NOPMD (timestamp must be read before checking the buffer for record size)
-
-		final String recordClassName = this.readerRegistry.get(clazzId);
-		// identify record data
-		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
-		if (buffer.remaining() < recordFactory.getRecordSizeInBytes()) {
-			return false;
-		}
-
-		try {
-			final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(buffer, this.readerRegistry));
-			record.setLoggingTimestamp(loggingTimestamp);
-
-			this.listener.onRecordReceived(record);
-		} catch (final RecordInstantiationException ex) {
-			super.logger.error("Failed to create: {}", recordClassName, ex);
-		}
-
-		return true;
 	}
 
 }

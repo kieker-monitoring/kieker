@@ -65,19 +65,21 @@ public abstract class AbstractTcpReader implements Runnable {
 		try {
 			serversocket = ServerSocketChannel.open();
 			serversocket.socket().bind(new InetSocketAddress(this.port));
-			this.logger.debug("Listening on port {}", this.port);
 
-			final SocketChannel socketChannel = serversocket.accept();
-			try {
-				final ByteBuffer buffer = ByteBuffer.allocateDirect(this.bufferCapacity);
-				while ((socketChannel.read(buffer) != CONNECTION_CLOSED_BY_CLIENT) && !this.terminated) {
-					this.process(buffer);
+			while (!this.terminated) {
+				this.logger.debug("Listening on port {}", this.port);
+				final SocketChannel socketChannel = serversocket.accept();
+				try {
+					final ByteBuffer buffer = ByteBuffer.allocateDirect(this.bufferCapacity);
+					while ((socketChannel.read(buffer) != CONNECTION_CLOSED_BY_CLIENT) && !this.terminated) {
+						this.process(buffer);
+					}
+				} finally {
+					socketChannel.close();
 				}
-			} finally {
-				socketChannel.close();
 			}
 		} catch (final IOException ex) {
-			this.logger.error("Error while reading.", ex);
+			this.logger.error("Error while receiving control commands.", ex);
 		} finally {
 			if (null != serversocket) {
 				try {
