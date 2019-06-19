@@ -46,30 +46,37 @@ final class FilesystemTestUtil {
 		writer.onTerminating();
 	}
 
-	public static void deleteContent(final Path writerPath) {
-		final File directory = writerPath.toFile();
-		for (final File content : directory.listFiles()) {
-			if (content.isDirectory()) {
-				FilesystemTestUtil.deleteDirectory(content);
-			} else {
-				FilesystemTestUtil.deleteFile(content);
+	public static boolean deleteContent(final Path writerPath) {
+		if (writerPath != null) {
+			boolean result = true;
+			final File directory = writerPath.toFile();
+			final File[] contents = directory.listFiles();
+			if (contents != null) {
+				for (final File content : contents) {
+					result &= FilesystemTestUtil.deleteObject(content);
+				}
 			}
+
+			return result;
+		} else {
+			return false;
 		}
 	}
 
-	private static void deleteDirectory(final File directory) {
-		for (final File content : directory.listFiles()) {
-			if (content.isDirectory()) {
-				FilesystemTestUtil.deleteDirectory(content);
-			} else {
-				FilesystemTestUtil.deleteFile(content);
+	private static boolean deleteObject(final File fsObject) { // NOFB directory is always a directory
+		if (fsObject.isDirectory()) {
+			boolean result = true;
+			final File[] contents = fsObject.listFiles();
+			if (contents != null) {
+				for (final File content : contents) { // NOFB directory is always a directory
+					result &= FilesystemTestUtil.deleteObject(content);
+				}
 			}
-		}
-		directory.delete();
-	}
 
-	private static void deleteFile(final File file) {
-		file.delete();
+			return fsObject.delete() && result;
+		} else {
+			return fsObject.delete();
+		}
 	}
 
 }
