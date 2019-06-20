@@ -57,17 +57,16 @@ public class TCPController extends AbstractController implements IRemoteControll
 	 */
 	protected TCPController(final Configuration configuration, final MonitoringController monitoringController) {
 		super(configuration);
-
 		final IRecordReceivedListener listener = new MonitoringCommandListener(monitoringController);
 		this.domain = configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_DOMAIN);
 		try {
 			final int port = Integer.parseInt(configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_REMOTE_PORT));
 			this.tcpEnabled = configuration.getBooleanProperty(ConfigurationKeys.ACTIVATE_TCP);
-			this.tcpReader = new SingleSocketRecordReader(port, BUFFER_SIZE, TCPController.LOGGER, listener);
-
+			this.tcpReader = new SingleSocketRecordReader(port, BUFFER_SIZE, TCPController.LOGGER, true, listener);
+			TCPController.LOGGER.info("Setup of TCPController listening at {}", port);
 		} catch (final NumberFormatException e) {
 			this.tcpEnabled = false;
-			TCPController.LOGGER.error("Could not parse port for the TCPController, deactivating this option. Received string was: {}",
+			TCPController.LOGGER.info("Could not parse port for the TCPController, deactivating this option. Received string was: {}",
 					configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_REMOTE_PORT));
 		}
 		this.thread = new Thread(this.tcpReader);

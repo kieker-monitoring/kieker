@@ -39,7 +39,7 @@ import kieker.monitoring.writer.tcp.SingleSocketTcpWriter;
  * @since 1.14
  *
  */
-public class TCPControllerTest {
+public class TCPControllerTest { // NOFB issues with integration test
 	private static Configuration configuration = new Configuration();
 	private static int port = 9753;
 	private static int timeoutInMs = 100;
@@ -76,7 +76,7 @@ public class TCPControllerTest {
 
 	@Before
 	public void initTest() {
-		port++;
+		port++; // NOFB write to static is necessary in this place
 		configuration.setProperty(ConfigurationKeys.ACTIVATE_TCP_REMOTE_PORT, port);
 		configuration.setProperty(SingleSocketTcpWriter.CONFIG_PORT, port);
 	}

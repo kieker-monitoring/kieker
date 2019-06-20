@@ -29,8 +29,8 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.registry.IRegistryListener;
 import kieker.common.registry.writer.WriterRegistry;
+import kieker.common.util.classpath.InstantiationFactory;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.core.controller.ControllerFactory;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.compression.ICompressionFilter;
 import kieker.monitoring.writer.compression.NoneCompressionFilter;
@@ -44,7 +44,7 @@ import kieker.monitoring.writer.compression.NoneCompressionFilter;
  * @since 1.14
  *
  */
-public class FileWriter extends AbstractMonitoringWriter implements IRegistryListener<String>, IFileWriter {
+public class FileWriter extends AbstractMonitoringWriter implements IRegistryListener<String> {
 
 	public static final String PREFIX = FileWriter.class.getName() + ".";
 	/** The name of the configuration for the custom storage path if the writer is advised not to store in the temporary directory. */
@@ -80,8 +80,6 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 	private final long maxBytesInFile;
 	private final WriterRegistry writerRegistry;
 
-	private final Path folder;
-
 	/**
 	 * Create a generic file writer.
 	 *
@@ -106,7 +104,6 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 		final Path logFolder = KiekerLogFolder.buildKiekerLogFolder(configPathName, configuration);
 		try {
 			Files.createDirectories(logFolder);
-			this.folder = logFolder;
 		} catch (final IOException e) {
 			throw new IllegalStateException("Error on creating Kieker's log directory.", e);
 		}
@@ -131,26 +128,26 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 
 		/** get compression filter main data. */
 		final String compressionFilterClassName = configuration.getStringProperty(CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
-		final ICompressionFilter compressionFilter = ControllerFactory.getInstance(configuration).createAndInitialize(ICompressionFilter.class,
+		final ICompressionFilter compressionFilter = InstantiationFactory.getInstance(configuration).createAndInitialize(ICompressionFilter.class,
 				compressionFilterClassName, configuration);
 
 		/** get map file handler. */
 		final String mapFileHandlerClassName = configuration.getStringProperty(CONFIG_MAP_FILE_HANDLER, TextMapFileHandler.class.getName());
-		this.mapFileHandler = ControllerFactory.getInstance(configuration).createAndInitialize(IMapFileHandler.class,
+		this.mapFileHandler = InstantiationFactory.getInstance(configuration).createAndInitialize(IMapFileHandler.class,
 				mapFileHandlerClassName, configuration);
 		this.mapFileHandler.create(logFolder.resolve(FSUtil.MAP_FILENAME), Charset.forName(charsetName));
 
 		/** get log stream handler. */
 		final String logHandlerClassName = configuration.getStringProperty(CONFIG_LOG_STREAM_HANDLER, TextLogStreamHandler.class.getName());
 		final Class<?>[] logHandlerSignature = { Boolean.class, Integer.class, Charset.class, ICompressionFilter.class, WriterRegistry.class };
-		this.logStreamHandler = ControllerFactory.getInstance(configuration).create(AbstractLogStreamHandler.class, logHandlerClassName, logHandlerSignature,
+		this.logStreamHandler = InstantiationFactory.getInstance(configuration).create(AbstractLogStreamHandler.class, logHandlerClassName, logHandlerSignature,
 				flushLogFile,
 				bufferSize, charset, compressionFilter, this.writerRegistry);
 
 		/** get log file handler. */
 		final String logFilePoolHandlerClassName = configuration.getStringProperty(CONFIG_LOG_POOL_FILE_HANDLER, RotatingLogFilePoolHandler.class.getName());
 		final Class<?>[] logFilePoolHandlerSignature = { Path.class, String.class, Integer.class, };
-		this.logFilePoolHandler = ControllerFactory.getInstance(configuration).create(ILogFilePoolHandler.class,
+		this.logFilePoolHandler = InstantiationFactory.getInstance(configuration).create(ILogFilePoolHandler.class,
 				logFilePoolHandlerClassName, logFilePoolHandlerSignature, logFolder, this.logStreamHandler.getFileExtension(), maxAmountOfFiles);
 
 		final Path outputFile = this.logFilePoolHandler.requestFile();
@@ -207,11 +204,6 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 		} catch (final IOException ex) {
 			LOGGER.error("Closing logger failed.", ex);
 		}
-	}
-
-	@Override
-	public Path getLogFolder() {
-		return this.folder;
 	}
 
 }

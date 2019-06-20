@@ -49,6 +49,22 @@ class ChunkWriterTask implements Runnable {
 
 	private final ChunkingCollector collector;
 
+	/**
+	 * Create a chunk writer task.
+	 *
+	 * @param collector
+	 *            collector for chunks
+	 * @param outputChunkSize
+	 *            size of the chunks
+	 * @param deferredWriteDelayMs
+	 *            write delay??
+	 * @param outputBufferSize
+	 *            buffer size
+	 * @param serializer
+	 *            serializer
+	 * @param writer
+	 *            data writer
+	 */
 	public ChunkWriterTask(final ChunkingCollector collector, final int outputChunkSize, final int deferredWriteDelayMs, final int outputBufferSize,
 			final IMonitoringRecordSerializer serializer,
 			final IRawDataWriter writer) {

@@ -42,7 +42,7 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
  */
 public class NewSingleSocketTcpWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
 
-	private static final String PORT1 = "10333";
+	private static final String PORT1 = "10334";
 	// private static final String PORT2 = "10334";
 
 	private volatile ListCollectionFilter<IMonitoringRecord> sinkFilter = null; // NOPMD (init for findbugs)

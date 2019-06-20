@@ -116,8 +116,6 @@ public interface IProbeController {
 	 *
 	 * @param pattern
 	 *            The parameters to be deleted.
-	 * @param parameterName
-	 *            The name of the parameter.
 	 *
 	 * @since 1.14
 	 *
