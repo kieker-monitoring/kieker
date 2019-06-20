@@ -369,8 +369,8 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public Map<String, List<String>> getAllParameters(final String pattern) {
-		return this.probeController.getAllParameters(pattern);
+	public Map<String, List<String>> getAllPatternParameters(final String pattern) {
+		return this.probeController.getAllPatternParameters(pattern);
 	}
 
 	@Override

@@ -96,20 +96,20 @@ public interface IProbeController {
 	 * @since 1.14
 	 *
 	 */
-	public Map<String, List<String>> getAllParameters(final String pattern);
+	public Map<String, List<String>> getAllPatternParameters(final String pattern);
 
 	/**
 	 * Deletes a parameter from the given pattern.
 	 *
 	 * @param pattern
 	 *            The parameters to be deleted.
-	 * @param parameterName
+	 * @param name
 	 *            The name of the parameter.
 	 *
 	 * @since 1.14
 	 *
 	 */
-	public void deletePatternParameter(final String pattern, String parameterName);
+	public void deletePatternParameter(final String pattern, String name);
 
 	/**
 	 * Deletes all parameters from the given pattern.
@@ -127,13 +127,13 @@ public interface IProbeController {
 	 *
 	 * @param pattern
 	 *            The pattern of the probe.
-	 * @param parameterName
+	 * @param name
 	 *            The name of the parameter.
-	 * @param parameters
+	 * @param values
 	 *            a List of entries for this parameter.
 	 *
 	 * @since 1.14
 	 */
-	public void addPatternParameter(final String pattern, final String parameterName, final List<String> parameters);
+	public void addPatternParameter(final String pattern, final String name, final List<String> values);
 
 }

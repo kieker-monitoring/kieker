@@ -29,6 +29,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -314,7 +315,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Map<String, List<String>> getAllParameters(final String pattern) {
+	public Map<String, List<String>> getAllPatternParameters(final String pattern) {
 		synchronized (this) {
 			return this.patternListParameters.get(pattern);
 		}
@@ -325,9 +326,12 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void deletePatternParameter(final String pattern, final String parameterName) {
+	public void deletePatternParameter(final String pattern, final String name) {
 		synchronized (this) {
-			this.patternListParameters.get(pattern).remove(parameterName);
+			final Map<String, List<String>> parameters = this.patternListParameters.get(pattern);
+			if (parameters != null) {
+				parameters.remove(name);
+			}
 		}
 	}
 
@@ -345,9 +349,14 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addPatternParameter(final String pattern, final String parameterName, final List<String> parameters) {
+	public void addPatternParameter(final String pattern, final String name, final List<String> values) {
 		synchronized (this) {
-			this.patternListParameters.get(pattern).put(parameterName, parameters);
+			Map<String, List<String>> parameters = this.patternListParameters.get(pattern);
+			if (parameters == null) {
+				parameters = new HashMap<String, List<String>>();
+				this.patternListParameters.put(pattern, parameters);
+			}
+			parameters.put(name, values);
 		}
 	}
 
