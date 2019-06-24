@@ -1,6 +1,18 @@
-/**
+/***************************************************************************
+ * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
  *
- */
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.monitoring.core.controller;
 
 import java.util.Arrays;
@@ -19,6 +31,7 @@ import kieker.monitoring.core.configuration.ConfigurationKeys;
 /**
  * @author Reiner Jung
  *
+ * @since 1.15
  */
 public class ProbeControllerTest {
 
@@ -29,6 +42,11 @@ public class ProbeControllerTest {
 
 	private ProbeController controller;
 
+	
+	public ProbeControllerTest() {
+		// nothing to be done on construction of the test
+	}
+	
 	@Before
 	public void setUp() {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
@@ -47,36 +65,21 @@ public class ProbeControllerTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.monitoring.core.controller.ProbeController#cleanup()}.
-	 */
-	@Ignore
-	@Test
-	public void testCleanup() {
-		Assert.fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link kieker.monitoring.core.controller.ProbeController#ProbeController(kieker.common.configuration.Configuration)}.
-	 */
-	@Ignore
-	@Test
-	public void testProbeController() {
-		Assert.fail("Not yet implemented");
-	}
-
-	/**
 	 * Test method for {@link kieker.monitoring.core.controller.ProbeController#activateProbe(java.lang.String)}.
 	 */
-	@Ignore
+	@Ignore // NOCS for now
 	@Test
 	public void testActivateProbe() {
+
+		this.controller.activateProbe("+" + CLASSNAME);
+
 		Assert.fail("Not yet implemented");
 	}
 
 	/**
 	 * Test method for {@link kieker.monitoring.core.controller.ProbeController#deactivateProbe(java.lang.String)}.
 	 */
-	@Ignore
+	@Ignore  // NOCS for now
 	@Test
 	public void testDeactivateProbe() {
 		Assert.fail("Not yet implemented");
@@ -85,7 +88,7 @@ public class ProbeControllerTest {
 	/**
 	 * Test method for {@link kieker.monitoring.core.controller.ProbeController#setProbePatternList(java.util.List, boolean)}.
 	 */
-	@Ignore
+	@Ignore  // NOCS for now
 	@Test
 	public void testSetProbePatternListListOfStringBoolean() {
 		Assert.fail("Not yet implemented");
@@ -94,7 +97,7 @@ public class ProbeControllerTest {
 	/**
 	 * Test method for {@link kieker.monitoring.core.controller.ProbeController#setProbePatternList(java.util.List)}.
 	 */
-	@Ignore
+	@Ignore  // NOCS for now
 	@Test
 	public void testSetProbePatternListListOfString() {
 		Assert.fail("Not yet implemented");
@@ -103,7 +106,7 @@ public class ProbeControllerTest {
 	/**
 	 * Test method for {@link kieker.monitoring.core.controller.ProbeController#getProbePatternList()}.
 	 */
-	@Ignore
+	@Ignore // NOCS for now we need to ignore it
 	@Test
 	public void testGetProbePatternList() {
 		final List<String> patterns = this.controller.getProbePatternList();
