@@ -51,6 +51,7 @@ public class IdGenerator {
 	}
 
 	/**
+	 * Generate an unique id.
 	 * (<i>thread-safe</i>)
 	 *
 	 * @return a unique identifier

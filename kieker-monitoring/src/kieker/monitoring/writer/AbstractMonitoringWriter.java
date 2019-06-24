@@ -29,9 +29,7 @@ import kieker.common.record.IMonitoringRecord;
  */
 public abstract class AbstractMonitoringWriter {
 
-	/**
-	 * The writer's configuration
-	 */
+	/** The writer's configuration. */
 	protected final Configuration configuration;
 
 	public AbstractMonitoringWriter(final Configuration configuration) {
