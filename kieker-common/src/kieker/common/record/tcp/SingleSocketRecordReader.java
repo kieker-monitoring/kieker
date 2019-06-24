@@ -136,11 +136,14 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 						record.setLoggingTimestamp(loggingTimestamp);
 
 						this.listener.onRecordReceived(record);
+						return true;
+					} catch (final java.nio.BufferUnderflowException ex) {
+						super.logger.warn("Cannot create missing data: {}", recordClassName, ex);
+						return false;
 					} catch (final RecordInstantiationException ex) {
 						super.logger.error("Failed to create: {}", recordClassName, ex);
+						return false;
 					}
-
-					return true;
 				} else {
 					return false;
 				}
