@@ -15,13 +15,13 @@
  ***************************************************************************/
 package kieker.monitoring.core.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
@@ -38,10 +38,11 @@ public class ProbeControllerTest {
 	private static final String WHITELIST = "whitelist";
 	private static final String BLACKLIST = "blacklist";
 	private static final String CLASSNAME = "example.Class";
-	private static final String OTHER_CLASSNAME = "example.Ohter";
+	private static final String OTHER_CLASSNAME = "example.Other";
+	private static final String OPERATION_SIGNATURE = "public void " + CLASSNAME + ".do(String)";
+	private static final String OTHER_OPERATION_SIGNATURE = "public void " + OTHER_CLASSNAME + ".do(int)";
 
 	private ProbeController controller;
-
 	
 	public ProbeControllerTest() {
 		// nothing to be done on construction of the test
@@ -52,7 +53,7 @@ public class ProbeControllerTest {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 
 		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, true);
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE, "/tmp");
+		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE, "/tmp/config");
 		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE, true);
 		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL, 100);
 		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_MAX_CACHE_SIZE, 10000);
@@ -67,65 +68,64 @@ public class ProbeControllerTest {
 	/**
 	 * Test method for {@link kieker.monitoring.core.controller.ProbeController#activateProbe(java.lang.String)}.
 	 */
-	@Ignore // NOCS for now
 	@Test
-	public void testActivateProbe() {
-
-		this.controller.activateProbe("+" + CLASSNAME);
-
-		Assert.fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link kieker.monitoring.core.controller.ProbeController#deactivateProbe(java.lang.String)}.
-	 */
-	@Ignore  // NOCS for now
-	@Test
-	public void testDeactivateProbe() {
-		Assert.fail("Not yet implemented");
+	public void testActivateDEactivateProbe() {
+		this.controller.activateProbe(OPERATION_SIGNATURE);
+		this.controller.activateProbe(OTHER_OPERATION_SIGNATURE);
+		Assert.assertTrue("Probe should be actived for " + OPERATION_SIGNATURE, this.controller.isProbeActivated(OPERATION_SIGNATURE));
+		Assert.assertTrue("Probe should be actived for " + OTHER_OPERATION_SIGNATURE, this.controller.isProbeActivated(OTHER_OPERATION_SIGNATURE));
+		
+		this.controller.deactivateProbe(OPERATION_SIGNATURE);
+		Assert.assertFalse("Probe should be deactived for " + OPERATION_SIGNATURE, this.controller.isProbeActivated(OPERATION_SIGNATURE));
 	}
 
 	/**
 	 * Test method for {@link kieker.monitoring.core.controller.ProbeController#setProbePatternList(java.util.List, boolean)}.
 	 */
-	@Ignore  // NOCS for now
 	@Test
 	public void testSetProbePatternListListOfStringBoolean() {
-		Assert.fail("Not yet implemented");
-	}
+		this.controller.deactivateProbe(OPERATION_SIGNATURE);
+		this.controller.deactivateProbe(OTHER_OPERATION_SIGNATURE);
+		
+		Assert.assertFalse("Probe should be deactived for " + OPERATION_SIGNATURE, this.controller.isProbeActivated(OPERATION_SIGNATURE));
+		Assert.assertFalse("Probe should be deactived for " + OTHER_OPERATION_SIGNATURE, this.controller.isProbeActivated(OTHER_OPERATION_SIGNATURE));
+		
+		final List<String> patternList = new ArrayList<>();
+		patternList.add(OPERATION_SIGNATURE);
+		patternList.add(OTHER_OPERATION_SIGNATURE);
 
-	/**
-	 * Test method for {@link kieker.monitoring.core.controller.ProbeController#setProbePatternList(java.util.List)}.
-	 */
-	@Ignore  // NOCS for now
-	@Test
-	public void testSetProbePatternListListOfString() {
-		Assert.fail("Not yet implemented");
+		this.controller.setProbePatternList(patternList , false);
+		
+		Assert.assertTrue("Probe should be actived for " + OPERATION_SIGNATURE, this.controller.isProbeActivated(OPERATION_SIGNATURE));
+		Assert.assertTrue("Probe should be actived for " + OTHER_OPERATION_SIGNATURE, this.controller.isProbeActivated(OTHER_OPERATION_SIGNATURE));
 	}
 
 	/**
 	 * Test method for {@link kieker.monitoring.core.controller.ProbeController#getProbePatternList()}.
 	 */
-	@Ignore // NOCS for now we need to ignore it
 	@Test
 	public void testGetProbePatternList() {
+		this.controller.setProbePatternList(new ArrayList<String>());
 		final List<String> patterns = this.controller.getProbePatternList();
 		Assert.assertEquals("Before storing patterns, list should be empty", 0, patterns.size());
 
-		final List<String> patternList = Arrays.asList(new String[] { "+" + CLASSNAME, "-" + OTHER_CLASSNAME });
+		final List<String> patternList = new ArrayList<>();
+		patternList.add("+" + OPERATION_SIGNATURE);
+		patternList.add("-" + OTHER_OPERATION_SIGNATURE);
 		this.controller.setProbePatternList(patternList, false);
 
 		final List<String> filledPatterns = this.controller.getProbePatternList();
 		Assert.assertEquals("Before storing patterns, list should be empty", 2, filledPatterns.size());
 
-		Assert.fail("Not yet implemented");
+		Assert.assertTrue("Probe should be actived for " + OPERATION_SIGNATURE, this.controller.isProbeActivated(OPERATION_SIGNATURE));
+		Assert.assertFalse("Probe should be deactived for " + OTHER_OPERATION_SIGNATURE, this.controller.isProbeActivated(OTHER_OPERATION_SIGNATURE));
 	}
 
 	/**
 	 * Test method for {@link kieker.monitoring.core.controller.ProbeController#getAllPatternParameters(java.lang.String)}.
 	 */
 	@Test
-	public void testGetAllPatternParameters() {
+	public void testGetAllPatternParameters() {		
 		final Map<String, List<String>> result = this.controller.getAllPatternParameters(CLASSNAME);
 		Assert.assertNull("There should be no patterns", result);
 

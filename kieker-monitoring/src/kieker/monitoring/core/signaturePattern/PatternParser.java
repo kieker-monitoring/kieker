@@ -101,7 +101,7 @@ public final class PatternParser {
 			if ((index == -1) || (index == (fqName.length() - 1))) {
 				throw new InvalidPatternException("Invalid fully qualified type or method name.");
 			}
-			final String fqType = fqName.substring(0, index);
+			final String fqClassName = fqName.substring(0, index);
 			final String methodName = fqName.substring(index + 1);
 
 			final String params = trimPattern.substring(openingParenthesis + 1, closingParenthesis).trim();
@@ -115,7 +115,7 @@ public final class PatternParser {
 
 			sb.append(PatternParser.parseModifierConstraintList(modifierList));
 			sb.append(PatternParser.parseRetType(tokens[numOfModifiers])); // first token after modifiers in the return type
-			sb.append(PatternParser.parseFQType(fqType));
+			sb.append(PatternParser.parseFQClassname(fqClassName));
 			sb.append("\\.");
 			sb.append(PatternParser.parseMethodName(methodName));
 			sb.append("\\(");
@@ -181,7 +181,7 @@ public final class PatternParser {
 			throw new InvalidPatternException("Invalid parameter list.");
 		} else {
 			try {
-				sb.append("(\\s)?").append(PatternParser.parseFQType(paramList[0])).append("(\\s)?");
+				sb.append("(\\s)?").append(PatternParser.parseFQClassname(paramList[0])).append("(\\s)?");
 			} catch (final InvalidPatternException ex) {
 				throw new InvalidPatternException("Invalid parameter list.", ex);
 			}
@@ -214,7 +214,7 @@ public final class PatternParser {
 		} else {
 			try {
 				regexBuilder.append(",?(\\s)?");
-				regexBuilder.append(PatternParser.parseFQType(parameter));
+				regexBuilder.append(PatternParser.parseFQClassname(parameter));
 				regexBuilder.append("(\\s)?");
 			} catch (final InvalidPatternException ex) {
 				throw new InvalidPatternException("Invalid parameter list.", ex);
@@ -244,14 +244,14 @@ public final class PatternParser {
 		return sb.toString();
 	}
 
-	private static final String parseFQType(final String fqType) throws InvalidPatternException {
-		if (fqType.contains("...") || fqType.endsWith(".") || (fqType.length() == 0)) {
+	private static final String parseFQClassname(final String fqClassname) throws InvalidPatternException {
+		if (fqClassname.contains("...") || fqClassname.endsWith(".") || (fqClassname.length() == 0)) {
 			throw new InvalidPatternException("Invalid fully qualified type.");
 		}
-		final String[] tokens = fqType.split("\\.");
+		final String[] tokens = fqClassname.split("\\.");
 		if (tokens.length == 1) {
 			try {
-				return PatternParser.parseIdentifier(fqType);
+				return PatternParser.parseIdentifier(fqClassname);
 			} catch (final InvalidPatternException ex) {
 				throw new InvalidPatternException("Invalid fully qualified type.", ex);
 			}
@@ -299,7 +299,7 @@ public final class PatternParser {
 			return "";
 		} else {
 			try {
-				return PatternParser.parseFQType(retType) + "\\s";
+				return PatternParser.parseFQClassname(retType) + "\\s";
 			} catch (final InvalidPatternException ex) {
 				throw new InvalidPatternException("Invalid return type.", ex);
 			}
