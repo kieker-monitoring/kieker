@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -182,12 +183,12 @@ public class ProbeControllerTest {
 		final Map<String, List<String>> resultB = this.controller.getAllPatternParameters(CLASSNAME);
 		Assert.assertNotNull("Should contain patterns", resultB);
 		Assert.assertEquals("Number of entries do not match", 2, resultB.size());
-		for (final String result : resultB.keySet()) {
-			if (BLACKLIST.equals(result)) {
-				final List<String> data = resultB.get(result);
+		for (final Entry<String, List<String>> entry : resultB.entrySet()) {
+			if (BLACKLIST.equals(entry.getKey())) {
+				final List<String> data = entry.getValue();
 				Assert.assertArrayEquals("Should contain a string", blacklistValues, data.toArray(new String[data.size()]));
-			} else if (WHITELIST.equals(result)) {
-				final List<String> data = resultB.get(result);
+			} else if (WHITELIST.equals(entry.getKey())) {
+				final List<String> data = entry.getValue();
 				Assert.assertArrayEquals("Should contain a string", whitelistValues, data.toArray(new String[data.size()]));
 			} else {
 				Assert.fail("Found parameters which have not be inserted before.");
