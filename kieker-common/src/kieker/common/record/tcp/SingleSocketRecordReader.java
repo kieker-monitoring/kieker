@@ -138,7 +138,7 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 						this.listener.onRecordReceived(record);
 						return true;
 					} catch (final java.nio.BufferUnderflowException ex) {
-						super.logger.warn("Cannot create {}; missing data in byte buffer.", recordClassName);
+						super.logger.warn("Cannot create {}; missing data in byte buffer. Buffer remaining {}", recordClassName, buffer.remaining());
 						return false;
 					} catch (final RecordInstantiationException ex) {
 						super.logger.error("Failed to create {}", recordClassName, ex);
