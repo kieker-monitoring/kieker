@@ -50,6 +50,10 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		int.class, // IObjectRecord.objectId
 	};
 	
+	/** default constants. */
+	public static final int OBJECT_ID = 0;
+	private static final long serialVersionUID = -8957011715514297968L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -60,10 +64,6 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		"cause",
 		"objectId",
 	};
-	
-	/** default constants. */
-	public static final int OBJECT_ID = 0;
-	private static final long serialVersionUID = -8957011715514297968L;
 	
 	/** property declarations. */
 	private final int objectId;

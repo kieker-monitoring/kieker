@@ -54,6 +54,11 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		int.class, // ICallObjectRecord.calleeObjectId
 	};
 	
+	/** default constants. */
+	public static final int OBJECT_ID = 0;
+	public static final int CALLEE_OBJECT_ID = 0;
+	private static final long serialVersionUID = -5117801163059454889L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -66,11 +71,6 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		"objectId",
 		"calleeObjectId",
 	};
-	
-	/** default constants. */
-	public static final int OBJECT_ID = 0;
-	public static final int CALLEE_OBJECT_ID = 0;
-	private static final long serialVersionUID = -5117801163059454889L;
 	
 	/** property declarations. */
 	private final int objectId;

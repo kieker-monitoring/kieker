@@ -48,6 +48,10 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		String.class, // IExceptionRecord.cause
 	};
 	
+	/** default constants. */
+	public static final String CAUSE = "";
+	private static final long serialVersionUID = -561668403011752179L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -57,10 +61,6 @@ public class AfterFailedThreadBasedEvent extends AbstractThreadBasedEvent implem
 		"classSignature",
 		"cause",
 	};
-	
-	/** default constants. */
-	public static final String CAUSE = "";
-	private static final long serialVersionUID = -561668403011752179L;
 	
 	/** property declarations. */
 	private final String cause;

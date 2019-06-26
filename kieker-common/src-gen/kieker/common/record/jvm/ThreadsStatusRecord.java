@@ -49,6 +49,8 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		long.class, // ThreadsStatusRecord.totalStartedThreadCount
 	};
 	
+	private static final long serialVersionUID = -9176980438135391329L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -59,8 +61,6 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		"peakThreadCount",
 		"totalStartedThreadCount",
 	};
-	
-	private static final long serialVersionUID = -9176980438135391329L;
 	
 	/** property declarations. */
 	private final long threadCount;

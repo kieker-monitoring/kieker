@@ -58,6 +58,17 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 	public static final long NO_TRACE_ID = -1L;
 	public static final long NO_TIMESTAMP = -1L;
 	public static final int NO_EOI_ESS = -1;
+	/** default constants. */
+	public static final String OPERATION_SIGNATURE = NO_OPERATION_SIGNATURE;
+	public static final String SESSION_ID = NO_SESSION_ID;
+	public static final long TRACE_ID = NO_TRACE_ID;
+	public static final long TIN = NO_TIMESTAMP;
+	public static final long TOUT = NO_TIMESTAMP;
+	public static final String HOSTNAME = NO_HOSTNAME;
+	public static final int EOI = NO_EOI_ESS;
+	public static final int ESS = NO_EOI_ESS;
+	private static final long serialVersionUID = -7768272829642950711L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"operationSignature",
@@ -69,17 +80,6 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 		"eoi",
 		"ess",
 	};
-	
-	/** default constants. */
-	public static final String OPERATION_SIGNATURE = NO_OPERATION_SIGNATURE;
-	public static final String SESSION_ID = NO_SESSION_ID;
-	public static final long TRACE_ID = NO_TRACE_ID;
-	public static final long TIN = NO_TIMESTAMP;
-	public static final long TOUT = NO_TIMESTAMP;
-	public static final String HOSTNAME = NO_HOSTNAME;
-	public static final int EOI = NO_EOI_ESS;
-	public static final int ESS = NO_EOI_ESS;
-	private static final long serialVersionUID = -7768272829642950711L;
 	
 	/** property declarations. */
 	private final String operationSignature;

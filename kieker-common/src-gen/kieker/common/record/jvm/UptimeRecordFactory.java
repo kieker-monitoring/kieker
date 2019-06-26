@@ -27,23 +27,18 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class UptimeRecordFactory implements IRecordFactory<UptimeRecord> {
 	
-
 	@Override
 	public UptimeRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new UptimeRecord(deserializer);
 	}
-
-
 	@Override
-	public String[] getValueNames() {
-		return UptimeRecord.VALUE_NAMES; // NOPMD
-	}
-
+			public String[] getValueNames() {
+				return UptimeRecord.VALUE_NAMES; // NOPMD
+			}
 	@Override
-	public Class<?>[] getValueTypes() {
-		return UptimeRecord.TYPES; // NOPMD
-	}
-
+			public Class<?>[] getValueTypes() {
+				return UptimeRecord.TYPES; // NOPMD
+			}
 	public int getRecordSizeInBytes() {
 		return UptimeRecord.SIZE;
 	}

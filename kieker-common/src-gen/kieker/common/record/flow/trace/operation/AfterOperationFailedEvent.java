@@ -48,6 +48,10 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		String.class, // IExceptionRecord.cause
 	};
 	
+	/** default constants. */
+	public static final String CAUSE = "";
+	private static final long serialVersionUID = -235912152331253573L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -57,10 +61,6 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		"classSignature",
 		"cause",
 	};
-	
-	/** default constants. */
-	public static final String CAUSE = "";
-	private static final long serialVersionUID = -235912152331253573L;
 	
 	/** property declarations. */
 	private final String cause;

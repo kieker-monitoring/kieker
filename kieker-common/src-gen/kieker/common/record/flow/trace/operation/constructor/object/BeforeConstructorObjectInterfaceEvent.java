@@ -50,6 +50,10 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		String.class, // IInterfaceRecord.interface
 	};
 	
+	/** default constants. */
+	public static final String INTERFACE = "";
+	private static final long serialVersionUID = -4330598814273728600L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -60,10 +64,6 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		"objectId",
 		"interface",
 	};
-	
-	/** default constants. */
-	public static final String INTERFACE = "";
-	private static final long serialVersionUID = -4330598814273728600L;
 	
 	/** property declarations. */
 	private final String _interface;

@@ -51,6 +51,15 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IEve
 		String.class, // AfterDatabaseEvent.returnValue
 	};
 	
+	/** default constants. */
+	public static final long TIMESTAMP = 0L;
+	public static final String CLASS_SIGNATURE = "";
+	public static final long TRACE_ID = -1L;
+	public static final int ORDER_INDEX = -1;
+	public static final String RETURN_TYPE = "";
+	public static final String RETURN_VALUE = "";
+	private static final long serialVersionUID = -6739598592315516823L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -60,15 +69,6 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IEve
 		"returnType",
 		"returnValue",
 	};
-	
-	/** default constants. */
-	public static final long TIMESTAMP = 0L;
-	public static final String CLASS_SIGNATURE = "";
-	public static final long TRACE_ID = -1L;
-	public static final int ORDER_INDEX = -1;
-	public static final String RETURN_TYPE = "";
-	public static final String RETURN_VALUE = "";
-	private static final long serialVersionUID = -6739598592315516823L;
 	
 	/** property declarations. */
 	private long timestamp;

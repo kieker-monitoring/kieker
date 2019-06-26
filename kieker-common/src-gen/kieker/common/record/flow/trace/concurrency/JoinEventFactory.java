@@ -27,23 +27,18 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class JoinEventFactory implements IRecordFactory<JoinEvent> {
 	
-
 	@Override
 	public JoinEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new JoinEvent(deserializer);
 	}
-
-
 	@Override
-	public String[] getValueNames() {
-		return JoinEvent.VALUE_NAMES; // NOPMD
-	}
-
+			public String[] getValueNames() {
+				return JoinEvent.VALUE_NAMES; // NOPMD
+			}
 	@Override
-	public Class<?>[] getValueTypes() {
-		return JoinEvent.TYPES; // NOPMD
-	}
-
+			public Class<?>[] getValueTypes() {
+				return JoinEvent.TYPES; // NOPMD
+			}
 	public int getRecordSizeInBytes() {
 		return JoinEvent.SIZE;
 	}

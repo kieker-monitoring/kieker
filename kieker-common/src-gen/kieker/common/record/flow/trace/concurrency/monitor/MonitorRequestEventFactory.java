@@ -27,23 +27,18 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class MonitorRequestEventFactory implements IRecordFactory<MonitorRequestEvent> {
 	
-
 	@Override
 	public MonitorRequestEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new MonitorRequestEvent(deserializer);
 	}
-
-
 	@Override
-	public String[] getValueNames() {
-		return MonitorRequestEvent.VALUE_NAMES; // NOPMD
-	}
-
+			public String[] getValueNames() {
+				return MonitorRequestEvent.VALUE_NAMES; // NOPMD
+			}
 	@Override
-	public Class<?>[] getValueTypes() {
-		return MonitorRequestEvent.TYPES; // NOPMD
-	}
-
+			public Class<?>[] getValueTypes() {
+				return MonitorRequestEvent.TYPES; // NOPMD
+			}
 	public int getRecordSizeInBytes() {
 		return MonitorRequestEvent.SIZE;
 	}

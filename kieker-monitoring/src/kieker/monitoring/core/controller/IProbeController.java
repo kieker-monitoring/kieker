@@ -31,8 +31,7 @@ public interface IProbeController {
 	 *
 	 * @param pattern
 	 *            pattern for the probe
-	 * @return
-	 * 		true on success
+	 * @return true on success
 	 *
 	 * @since 1.6
 	 */
@@ -43,8 +42,7 @@ public interface IProbeController {
 	 *
 	 * @param pattern
 	 *            pattern for the probe
-	 * @return
-	 * 		true on success
+	 * @return true on success
 	 *
 	 * @since 1.6
 	 */
@@ -53,12 +51,12 @@ public interface IProbeController {
 	/**
 	 * Tests if a probe is active.
 	 *
-	 * This test is ignorant of the fact whether monitoring itself is enabled/disabled/terminated.
+	 * This test is ignorant of the fact whether monitoring itself is
+	 * enabled/disabled/terminated.
 	 *
 	 * @param signature
 	 *            signature of the probe
-	 * @return
-	 * 		true if the probe with this signature is active
+	 * @return true if the probe with this signature is active
 	 *
 	 * @since 1.6
 	 */
@@ -68,26 +66,28 @@ public interface IProbeController {
 	 * Overwrites the current list of patterns with a new pattern list.
 	 *
 	 * @param patternList
-	 *            list of strings with patterns where each string starts either with a + or -. The list can be empty (in which case the internal pattern list and the
-	 *            internal cache are cleared) - but not null.
+	 *            list of strings with patterns where each string starts either with
+	 *            a + or -. The list can be empty (in which case the internal
+	 *            pattern list and the internal cache are cleared) - but not null.
 	 *
 	 * @since 1.6
 	 */
 	public void setProbePatternList(final List<String> patternList);
 
 	/**
-	 * Returns the current list of patterns with a prefix indicating whether the pattern is active or not.
+	 * Returns the current list of patterns with a prefix indicating whether the
+	 * pattern is active or not.
 	 *
-	 * @return
-	 * 		list of strings with patterns
-	 *         where each string starts either with a + or -
+	 * @return list of strings with patterns where each string starts either with a
+	 *         + or -
 	 *
 	 * @since 1.6
 	 */
 	public List<String> getProbePatternList();
 
 	/**
-	 * Looks up the parameters for a probe /the pattern of the probe and returns them, may be null.
+	 * Looks up the parameters for a probe /the pattern of the probe and returns
+	 * them, may be null.
 	 *
 	 * @param pattern
 	 *            The pattern of the probe.
@@ -135,5 +135,29 @@ public interface IProbeController {
 	 * @since 1.14
 	 */
 	public void addPatternParameter(final String pattern, final String name, final List<String> values);
+
+	/**
+	 * Add one value to a list of parameter values for a pattern.
+	 *
+	 * @param pattern
+	 *            identifying the pattern for the parameter
+	 * @param name
+	 *            name of the parameter
+	 * @param value
+	 *            value to be added to the list of parameter values.
+	 */
+	void addPatternParameterValue(final String pattern, final String name, final String value);
+
+	/**
+	 * Remove one value to a list of parameter values for a pattern.
+	 *
+	 * @param pattern
+	 *            identifying the pattern for the parameter
+	 * @param name
+	 *            name of the parameter
+	 * @param value
+	 *            value to be removed from the list of parameter values.
+	 */
+	void removePatternParameterValue(final String pattern, final String name, final String value);
 
 }

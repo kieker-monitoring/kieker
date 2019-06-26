@@ -45,6 +45,8 @@ public class BeforeThreadBasedEvent extends AbstractThreadBasedEvent  {
 		String.class, // IClassSignature.classSignature
 	};
 	
+	private static final long serialVersionUID = 5925125427812994180L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -53,8 +55,6 @@ public class BeforeThreadBasedEvent extends AbstractThreadBasedEvent  {
 		"operationSignature",
 		"classSignature",
 	};
-	
-	private static final long serialVersionUID = 5925125427812994180L;
 	
 	
 	/**

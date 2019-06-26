@@ -43,6 +43,13 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {
 		String.class, // BeforeSentRemoteEvent.technology
 	};
 	
+	/** default constants. */
+	public static final long TIMESTAMP = -1L;
+	public static final long TRACE_ID = -1L;
+	public static final int ORDER_INDEX = -1;
+	public static final String TECHNOLOGY = "<default-technology>";
+	private static final long serialVersionUID = 1817999525650163947L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -50,13 +57,6 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {
 		"orderIndex",
 		"technology",
 	};
-	
-	/** default constants. */
-	public static final long TIMESTAMP = -1L;
-	public static final long TRACE_ID = -1L;
-	public static final int ORDER_INDEX = -1;
-	public static final String TECHNOLOGY = "<default-technology>";
-	private static final long serialVersionUID = 1817999525650163947L;
 	
 	/** property declarations. */
 	private final long timestamp;

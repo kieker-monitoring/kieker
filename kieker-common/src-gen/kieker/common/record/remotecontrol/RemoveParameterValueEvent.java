@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.common.record.controlflow;
+package kieker.common.record.remotecontrol;
 
 import java.nio.BufferOverflowException;
 
@@ -22,57 +22,58 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
+import kieker.common.record.remotecontrol.IParameterValueEvent;
 
 /**
- * @author Andre van Hoorn, Jan Waller
+ * @author Reiner Jung
  * API compatibility: Kieker 1.15.0
  * 
- * @since 1.2
+ * @since 1.15
  */
-public class BranchingRecord extends AbstractMonitoringRecord  {			
+public class RemoveParameterValueEvent extends AbstractMonitoringRecord implements IParameterValueEvent {			
 	/** Descriptive definition of the serialization size of the record. */
-	public static final int SIZE = TYPE_SIZE_LONG // BranchingRecord.timestamp
-			 + TYPE_SIZE_INT // BranchingRecord.branchID
-			 + TYPE_SIZE_INT; // BranchingRecord.branchingOutcome
+	public static final int SIZE = TYPE_SIZE_STRING // IRemoteControlEvent.pattern
+			 + TYPE_SIZE_STRING // IParameterValueEvent.name
+			 + TYPE_SIZE_STRING; // IParameterValueEvent.value
 	
 	public static final Class<?>[] TYPES = {
-		long.class, // BranchingRecord.timestamp
-		int.class, // BranchingRecord.branchID
-		int.class, // BranchingRecord.branchingOutcome
+		String.class, // IRemoteControlEvent.pattern
+		String.class, // IParameterValueEvent.name
+		String.class, // IParameterValueEvent.value
 	};
 	
 	/** default constants. */
-	public static final long TIMESTAMP = 0L;
-	public static final int BRANCH_ID = 0;
-	public static final int BRANCHING_OUTCOME = 0;
-	private static final long serialVersionUID = 3957750090047819946L;
+	public static final String PATTERN = "";
+	public static final String NAME = "";
+	public static final String VALUE = "";
+	private static final long serialVersionUID = 3932734275237128548L;
 	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
-		"timestamp",
-		"branchID",
-		"branchingOutcome",
+		"pattern",
+		"name",
+		"value",
 	};
 	
 	/** property declarations. */
-	private final long timestamp;
-	private final int branchID;
-	private final int branchingOutcome;
+	private final String pattern;
+	private final String name;
+	private final String value;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
-	 * @param timestamp
-	 *            timestamp
-	 * @param branchID
-	 *            branchID
-	 * @param branchingOutcome
-	 *            branchingOutcome
+	 * @param pattern
+	 *            pattern
+	 * @param name
+	 *            name
+	 * @param value
+	 *            value
 	 */
-	public BranchingRecord(final long timestamp, final int branchID, final int branchingOutcome) {
-		this.timestamp = timestamp;
-		this.branchID = branchID;
-		this.branchingOutcome = branchingOutcome;
+	public RemoveParameterValueEvent(final String pattern, final String name, final String value) {
+		this.pattern = pattern == null?"":pattern;
+		this.name = name == null?"":name;
+		this.value = value == null?"":value;
 	}
 
 
@@ -82,10 +83,10 @@ public class BranchingRecord extends AbstractMonitoringRecord  {
 	 * @throws RecordInstantiationException 
 	 *            when the record could not be deserialized
 	 */
-	public BranchingRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
-		this.timestamp = deserializer.getLong();
-		this.branchID = deserializer.getInt();
-		this.branchingOutcome = deserializer.getInt();
+	public RemoveParameterValueEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		this.pattern = deserializer.getString();
+		this.name = deserializer.getString();
+		this.value = deserializer.getString();
 	}
 	
 	/**
@@ -93,9 +94,9 @@ public class BranchingRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-		serializer.putLong(this.getTimestamp());
-		serializer.putInt(this.getBranchID());
-		serializer.putInt(this.getBranchingOutcome());
+		serializer.putString(this.getPattern());
+		serializer.putString(this.getName());
+		serializer.putString(this.getValue());
 	}
 	
 	/**
@@ -138,17 +139,17 @@ public class BranchingRecord extends AbstractMonitoringRecord  {
 			return false;
 		}
 		
-		final BranchingRecord castedRecord = (BranchingRecord) obj;
+		final RemoveParameterValueEvent castedRecord = (RemoveParameterValueEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
 		}
-		if (this.getTimestamp() != castedRecord.getTimestamp()) {
+		if (!this.getPattern().equals(castedRecord.getPattern())) {
 			return false;
 		}
-		if (this.getBranchID() != castedRecord.getBranchID()) {
+		if (!this.getName().equals(castedRecord.getName())) {
 			return false;
 		}
-		if (this.getBranchingOutcome() != castedRecord.getBranchingOutcome()) {
+		if (!this.getValue().equals(castedRecord.getValue())) {
 			return false;
 		}
 		
@@ -160,25 +161,25 @@ public class BranchingRecord extends AbstractMonitoringRecord  {
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getBranchID());
-		code += ((int)this.getBranchingOutcome());
+		code += this.getPattern().hashCode();
+		code += this.getName().hashCode();
+		code += this.getValue().hashCode();
 		
 		return code;
 	}
 	
-	public final long getTimestamp() {
-		return this.timestamp;
+	public final String getPattern() {
+		return this.pattern;
 	}
 	
 	
-	public final int getBranchID() {
-		return this.branchID;
+	public final String getName() {
+		return this.name;
 	}
 	
 	
-	public final int getBranchingOutcome() {
-		return this.branchingOutcome;
+	public final String getValue() {
+		return this.value;
 	}
 	
 }

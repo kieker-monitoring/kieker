@@ -27,23 +27,18 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class AfterOperationFailedObjectEventFactory implements IRecordFactory<AfterOperationFailedObjectEvent> {
 	
-
 	@Override
 	public AfterOperationFailedObjectEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new AfterOperationFailedObjectEvent(deserializer);
 	}
-
-
 	@Override
-	public String[] getValueNames() {
-		return AfterOperationFailedObjectEvent.VALUE_NAMES; // NOPMD
-	}
-
+			public String[] getValueNames() {
+				return AfterOperationFailedObjectEvent.VALUE_NAMES; // NOPMD
+			}
 	@Override
-	public Class<?>[] getValueTypes() {
-		return AfterOperationFailedObjectEvent.TYPES; // NOPMD
-	}
-
+			public Class<?>[] getValueTypes() {
+				return AfterOperationFailedObjectEvent.TYPES; // NOPMD
+			}
 	public int getRecordSizeInBytes() {
 		return AfterOperationFailedObjectEvent.SIZE;
 	}

@@ -48,6 +48,10 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 		int.class, // IObjectRecord.objectId
 	};
 	
+	/** default constants. */
+	public static final int OBJECT_ID = 0;
+	private static final long serialVersionUID = -6304010818559607110L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -57,10 +61,6 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 		"classSignature",
 		"objectId",
 	};
-	
-	/** default constants. */
-	public static final int OBJECT_ID = 0;
-	private static final long serialVersionUID = -6304010818559607110L;
 	
 	/** property declarations. */
 	private final int objectId;

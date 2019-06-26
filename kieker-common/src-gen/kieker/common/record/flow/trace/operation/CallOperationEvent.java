@@ -50,6 +50,11 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		String.class, // ICallRecord.calleeClassSignature
 	};
 	
+	/** default constants. */
+	public static final String CALLEE_OPERATION_SIGNATURE = "";
+	public static final String CALLEE_CLASS_SIGNATURE = "";
+	private static final long serialVersionUID = 2408771186779452968L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -60,11 +65,6 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		"calleeOperationSignature",
 		"calleeClassSignature",
 	};
-	
-	/** default constants. */
-	public static final String CALLEE_OPERATION_SIGNATURE = "";
-	public static final String CALLEE_CLASS_SIGNATURE = "";
-	private static final long serialVersionUID = 2408771186779452968L;
 	
 	/** property declarations. */
 	private final String calleeOperationSignature;

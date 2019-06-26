@@ -36,11 +36,11 @@ public class EmptyRecord extends AbstractMonitoringRecord  {
 	public static final Class<?>[] TYPES = {
 	};
 	
+	private static final long serialVersionUID = -177095911417362302L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 	};
-	
-	private static final long serialVersionUID = -177095911417362302L;
 	
 	
 	/**

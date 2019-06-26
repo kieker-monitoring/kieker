@@ -27,23 +27,18 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class LoadAverageRecordFactory implements IRecordFactory<LoadAverageRecord> {
 	
-
 	@Override
 	public LoadAverageRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new LoadAverageRecord(deserializer);
 	}
-
-
 	@Override
-	public String[] getValueNames() {
-		return LoadAverageRecord.VALUE_NAMES; // NOPMD
-	}
-
+			public String[] getValueNames() {
+				return LoadAverageRecord.VALUE_NAMES; // NOPMD
+			}
 	@Override
-	public Class<?>[] getValueTypes() {
-		return LoadAverageRecord.TYPES; // NOPMD
-	}
-
+			public Class<?>[] getValueTypes() {
+				return LoadAverageRecord.TYPES; // NOPMD
+			}
 	public int getRecordSizeInBytes() {
 		return LoadAverageRecord.SIZE;
 	}

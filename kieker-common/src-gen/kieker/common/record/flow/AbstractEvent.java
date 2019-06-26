@@ -30,11 +30,11 @@ import kieker.common.record.flow.IEventRecord;
  */
 public abstract class AbstractEvent extends AbstractMonitoringRecord implements IEventRecord {			
 	
-		
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	private static final long serialVersionUID = -8847127127729394312L;
 	
+		
 	/** property declarations. */
 	private long timestamp;
 	

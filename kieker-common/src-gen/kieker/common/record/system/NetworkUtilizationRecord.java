@@ -69,6 +69,26 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord  {
 		double.class, // NetworkUtilizationRecord.rxPacketsPerSecond
 	};
 	
+	/** default constants. */
+	public static final long TIMESTAMP = 0L;
+	public static final String HOSTNAME = "";
+	public static final String INTERFACE_NAME = "";
+	public static final long SPEED = 0L;
+	public static final double TX_BYTES_PER_SECOND = 0.0;
+	public static final double TX_CARRIER_PER_SECOND = 0.0;
+	public static final double TX_COLLISIONS_PER_SECOND = 0.0;
+	public static final double TX_DROPPED_PER_SECOND = 0.0;
+	public static final double TX_ERRORS_PER_SECOND = 0.0;
+	public static final double TX_OVERRUNS_PER_SECOND = 0.0;
+	public static final double TX_PACKETS_PER_SECOND = 0.0;
+	public static final double RX_BYTES_PER_SECOND = 0.0;
+	public static final double RX_DROPPED_PER_SECOND = 0.0;
+	public static final double RX_ERRORS_PER_SECOND = 0.0;
+	public static final double RX_FRAME_PER_SECOND = 0.0;
+	public static final double RX_OVERRUNS_PER_SECOND = 0.0;
+	public static final double RX_PACKETS_PER_SECOND = 0.0;
+	private static final long serialVersionUID = 7799663712343478641L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -89,26 +109,6 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord  {
 		"rxOverrunsPerSecond",
 		"rxPacketsPerSecond",
 	};
-	
-	/** default constants. */
-	public static final long TIMESTAMP = 0L;
-	public static final String HOSTNAME = "";
-	public static final String INTERFACE_NAME = "";
-	public static final long SPEED = 0L;
-	public static final double TX_BYTES_PER_SECOND = 0.0;
-	public static final double TX_CARRIER_PER_SECOND = 0.0;
-	public static final double TX_COLLISIONS_PER_SECOND = 0.0;
-	public static final double TX_DROPPED_PER_SECOND = 0.0;
-	public static final double TX_ERRORS_PER_SECOND = 0.0;
-	public static final double TX_OVERRUNS_PER_SECOND = 0.0;
-	public static final double TX_PACKETS_PER_SECOND = 0.0;
-	public static final double RX_BYTES_PER_SECOND = 0.0;
-	public static final double RX_DROPPED_PER_SECOND = 0.0;
-	public static final double RX_ERRORS_PER_SECOND = 0.0;
-	public static final double RX_FRAME_PER_SECOND = 0.0;
-	public static final double RX_OVERRUNS_PER_SECOND = 0.0;
-	public static final double RX_PACKETS_PER_SECOND = 0.0;
-	private static final long serialVersionUID = 7799663712343478641L;
 	
 	/** property declarations. */
 	private final long timestamp;

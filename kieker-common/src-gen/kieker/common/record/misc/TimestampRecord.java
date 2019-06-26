@@ -37,14 +37,14 @@ public class TimestampRecord extends AbstractMonitoringRecord  {
 		long.class, // TimestampRecord.timestamp
 	};
 	
+	/** default constants. */
+	public static final long TIMESTAMP = 0L;
+	private static final long serialVersionUID = -6797766837645151845L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
 	};
-	
-	/** default constants. */
-	public static final long TIMESTAMP = 0L;
-	private static final long serialVersionUID = -6797766837645151845L;
 	
 	/** property declarations. */
 	private final long timestamp;

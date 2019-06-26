@@ -53,16 +53,6 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 	public static final int NO_PARENT_ORDER_INDEX = -1;
 	public static final String NO_SESSION_ID = "<no-session-id>";
 	public static final String NO_HOSTNAME = "<default-host>";
-	/** property name array. */
-	public static final String[] VALUE_NAMES = {
-		"traceId",
-		"threadId",
-		"sessionId",
-		"hostname",
-		"parentTraceId",
-		"parentOrderId",
-	};
-	
 	/** default constants. */
 	public static final long TRACE_ID = 0L;
 	public static final long THREAD_ID = 0L;
@@ -72,6 +62,16 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 	public static final int PARENT_ORDER_ID = NO_PARENT_ORDER_INDEX;
 	public static final int NEXT_ORDER_ID = 0;
 	private static final long serialVersionUID = 2517933148667588979L;
+	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"traceId",
+		"threadId",
+		"sessionId",
+		"hostname",
+		"parentTraceId",
+		"parentOrderId",
+	};
 	
 	/** property declarations. */
 	private long traceId;

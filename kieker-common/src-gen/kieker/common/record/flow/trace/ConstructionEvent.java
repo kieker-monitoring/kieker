@@ -45,6 +45,11 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 		int.class, // ConstructionEvent.objectId
 	};
 	
+	/** default constants. */
+	public static final String CLASS_SIGNATURE = "";
+	public static final int OBJECT_ID = 0;
+	private static final long serialVersionUID = 5435515970872711524L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -53,11 +58,6 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 		"classSignature",
 		"objectId",
 	};
-	
-	/** default constants. */
-	public static final String CLASS_SIGNATURE = "";
-	public static final int OBJECT_ID = 0;
-	private static final long serialVersionUID = 5435515970872711524L;
 	
 	/** property declarations. */
 	private final String classSignature;

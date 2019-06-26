@@ -53,6 +53,18 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 		double.class, // DiskUsageRecord.writesPerSecond
 	};
 	
+	/** default constants. */
+	public static final long TIMESTAMP = 0L;
+	public static final String HOSTNAME = "";
+	public static final String DEVICE_NAME = "";
+	public static final double QUEUE = 0.0;
+	public static final double READ_BYTES_PER_SECOND = 0.0;
+	public static final double READS_PER_SECOND = 0.0;
+	public static final double SERVICE_TIME = 0.0;
+	public static final double WRITE_BYTES_PER_SECOND = 0.0;
+	public static final double WRITES_PER_SECOND = 0.0;
+	private static final long serialVersionUID = 2474236414042988334L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -65,18 +77,6 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 		"writeBytesPerSecond",
 		"writesPerSecond",
 	};
-	
-	/** default constants. */
-	public static final long TIMESTAMP = 0L;
-	public static final String HOSTNAME = "";
-	public static final String DEVICE_NAME = "";
-	public static final double QUEUE = 0.0;
-	public static final double READ_BYTES_PER_SECOND = 0.0;
-	public static final double READS_PER_SECOND = 0.0;
-	public static final double SERVICE_TIME = 0.0;
-	public static final double WRITE_BYTES_PER_SECOND = 0.0;
-	public static final double WRITES_PER_SECOND = 0.0;
-	private static final long serialVersionUID = 2474236414042988334L;
 	
 	/** property declarations. */
 	private final long timestamp;

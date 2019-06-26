@@ -29,12 +29,12 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public abstract class AbstractJVMRecord extends AbstractMonitoringRecord  {			
 	
-		
 	/** default constants. */
 	public static final String HOSTNAME = "";
 	public static final String VM_NAME = "";
 	private static final long serialVersionUID = -961661872949303914L;
 	
+		
 	/** property declarations. */
 	private final long timestamp;
 	private final String hostname;

@@ -27,23 +27,18 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class DiskUsageRecordFactory implements IRecordFactory<DiskUsageRecord> {
 	
-
 	@Override
 	public DiskUsageRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new DiskUsageRecord(deserializer);
 	}
-
-
 	@Override
-	public String[] getValueNames() {
-		return DiskUsageRecord.VALUE_NAMES; // NOPMD
-	}
-
+			public String[] getValueNames() {
+				return DiskUsageRecord.VALUE_NAMES; // NOPMD
+			}
 	@Override
-	public Class<?>[] getValueTypes() {
-		return DiskUsageRecord.TYPES; // NOPMD
-	}
-
+			public Class<?>[] getValueTypes() {
+				return DiskUsageRecord.TYPES; // NOPMD
+			}
 	public int getRecordSizeInBytes() {
 		return DiskUsageRecord.SIZE;
 	}

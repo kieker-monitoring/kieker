@@ -27,23 +27,18 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class ActivationEventFactory implements IRecordFactory<ActivationEvent> {
 	
-
 	@Override
 	public ActivationEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new ActivationEvent(deserializer);
 	}
-
-
 	@Override
-	public String[] getValueNames() {
-		return ActivationEvent.VALUE_NAMES; // NOPMD
-	}
-
+			public String[] getValueNames() {
+				return ActivationEvent.VALUE_NAMES; // NOPMD
+			}
 	@Override
-	public Class<?>[] getValueTypes() {
-		return ActivationEvent.TYPES; // NOPMD
-	}
-
+			public Class<?>[] getValueTypes() {
+				return ActivationEvent.TYPES; // NOPMD
+			}
 	public int getRecordSizeInBytes() {
 		return ActivationEvent.SIZE;
 	}

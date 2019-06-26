@@ -46,6 +46,8 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		String.class, // IClassSignature.classSignature
 	};
 	
+	private static final long serialVersionUID = -7724172518672268698L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -54,8 +56,6 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		"operationSignature",
 		"classSignature",
 	};
-	
-	private static final long serialVersionUID = -7724172518672268698L;
 	
 	
 	/**

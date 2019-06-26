@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.common.record.flow.trace.operation.constructor;
+package kieker.common.record.remotecontrol;
 
 
 import kieker.common.exception.RecordInstantiationException;
@@ -21,25 +21,25 @@ import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
 
 /**
- * @author Jan Waller
+ * @author Reiner Jung
  * 
- * @since 1.6
+ * @since 1.15
  */
-public final class CallConstructorEventFactory implements IRecordFactory<CallConstructorEvent> {
+public final class RemoveParameterValueEventFactory implements IRecordFactory<RemoveParameterValueEvent> {
 	
 	@Override
-	public CallConstructorEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
-		return new CallConstructorEvent(deserializer);
+	public RemoveParameterValueEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		return new RemoveParameterValueEvent(deserializer);
 	}
 	@Override
 			public String[] getValueNames() {
-				return CallConstructorEvent.VALUE_NAMES; // NOPMD
+				return RemoveParameterValueEvent.VALUE_NAMES; // NOPMD
 			}
 	@Override
 			public Class<?>[] getValueTypes() {
-				return CallConstructorEvent.TYPES; // NOPMD
+				return RemoveParameterValueEvent.TYPES; // NOPMD
 			}
 	public int getRecordSizeInBytes() {
-		return CallConstructorEvent.SIZE;
+		return RemoveParameterValueEvent.SIZE;
 	}
 }

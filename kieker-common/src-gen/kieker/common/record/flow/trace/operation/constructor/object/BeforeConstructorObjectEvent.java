@@ -48,6 +48,10 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 		int.class, // IObjectRecord.objectId
 	};
 	
+	/** default constants. */
+	public static final int OBJECT_ID = 0;
+	private static final long serialVersionUID = 8727889921214947462L;
+	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -57,10 +61,6 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 		"classSignature",
 		"objectId",
 	};
-	
-	/** default constants. */
-	public static final int OBJECT_ID = 0;
-	private static final long serialVersionUID = 8727889921214947462L;
 	
 	/** property declarations. */
 	private final int objectId;
