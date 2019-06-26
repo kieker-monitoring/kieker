@@ -28,8 +28,8 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.misc.RegistryRecord;
-import kieker.common.record.tcp.AbstractTcpReader;
 import kieker.common.registry.reader.ReaderRegistry;
+import kieker.monitoring.core.controller.tcp.AbstractTcpReader;
 
 /**
  * This is a reader which reads the records from a TCP port. Compared to the {@link TCPReader}, it is more modular and faster in reading.

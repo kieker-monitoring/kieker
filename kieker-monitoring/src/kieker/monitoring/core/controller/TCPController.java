@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IRecordReceivedListener;
-import kieker.common.record.tcp.SingleSocketRecordReader;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.controller.tcp.SingleSocketRecordReader;
 import kieker.monitoring.listener.MonitoringCommandListener;
 
 /**
