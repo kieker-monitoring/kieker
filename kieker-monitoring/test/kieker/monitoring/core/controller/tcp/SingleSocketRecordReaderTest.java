@@ -54,6 +54,7 @@ public class SingleSocketRecordReaderTest {
 	private static final int BUFFER_CAPACITY = 6553500;
 	private static final Logger LOGGER = LoggerFactory.getLogger(SingleSocketRecordReaderTest.class);
 	private static final Integer CHUNK_SIZE = 1024;
+	private static final String DUMMY_IP_ADDRESS = "192.168.48.12";
 
 	/** test constructor. */
 	public SingleSocketRecordReaderTest() {
@@ -63,7 +64,7 @@ public class SingleSocketRecordReaderTest {
 	/** Test whether the buffer is processed corretly. */
 	@Test
 	public void testOnBufferReceived() {
-		final ByteBuffer buffer = ByteBuffer.allocate(BUFFER_CAPACITY);
+		final ByteBuffer buffer = ByteBuffer.allocate(SingleSocketRecordReaderTest.BUFFER_CAPACITY);
 
 		final ServerSocketChannel mockServerSocket = Mockito.mock(ServerSocketChannel.class);
 		// Set it first
@@ -72,13 +73,14 @@ public class SingleSocketRecordReaderTest {
 		try {
 			// Then mock it
 			Mockito.when(mockServerSocket.accept()).thenReturn(mockSocketChannel);
-			Mockito.when(mockSocketChannel.read(buffer)).thenReturn(CHUNK_SIZE);
+			Mockito.when(mockSocketChannel.read(buffer)).thenReturn(SingleSocketRecordReaderTest.CHUNK_SIZE);
 		} catch (final IOException e) {
 			Assert.fail(e.getMessage());
 		}
 
 		// create record
-		final ActivationParameterEvent event = new ActivationParameterEvent("classname", "whitelist", this.createValues(100000));
+		final ActivationParameterEvent event = new ActivationParameterEvent("classname", "whitelist",
+				this.createValues(100000));
 
 		final IRecordReceivedListener receiver = new IRecordReceivedListener() {
 
@@ -87,7 +89,9 @@ public class SingleSocketRecordReaderTest {
 				Assert.assertTrue("Records must match", record.equals(event));
 			}
 		};
-		final SingleSocketRecordReader reader = new SingleSocketRecordReader(RECEIVING_PORT, BUFFER_CAPACITY, LOGGER, receiver);
+		final SingleSocketRecordReader reader = new SingleSocketRecordReader(
+				SingleSocketRecordReaderTest.RECEIVING_PORT, SingleSocketRecordReaderTest.BUFFER_CAPACITY,
+				SingleSocketRecordReaderTest.LOGGER, receiver);
 
 		this.createData(buffer, event);
 
@@ -123,7 +127,7 @@ public class SingleSocketRecordReaderTest {
 	private String[] createValues(final int amount) {
 		final String[] values = new String[amount];
 		for (int i = 0; i < amount; i++) {
-			values[i] = "192.168.48.12";
+			values[i] = SingleSocketRecordReaderTest.DUMMY_IP_ADDRESS;
 		}
 		return values;
 	}

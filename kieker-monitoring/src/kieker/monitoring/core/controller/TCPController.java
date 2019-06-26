@@ -75,7 +75,7 @@ public class TCPController extends AbstractController implements IRemoteControll
 			this.readerThread = new Thread(this.tcpReader);
 		} catch (final NumberFormatException e) {
 			this.tcpEnabled = false;
-			this.readerThread = null;
+			this.readerThread = null; // NOPMD pmd considers this a code smell, however, necessary to satisfy CS rule
 			TCPController.LOGGER.info(
 					"Could not parse port for the TCPController, deactivating this option. Received string was: {}",
 					configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_REMOTE_PORT));

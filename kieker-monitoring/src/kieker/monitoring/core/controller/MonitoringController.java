@@ -408,7 +408,7 @@ public final class MonitoringController extends AbstractController implements IM
 	 * SINGLETON.
 	 */
 	private static final class LazyHolder { // NOCS
-		static final IMonitoringController INSTANCE = MonitoringController
+		static final IMonitoringController INSTANCE = MonitoringController // NOPMD default modifier
 				.createInstance(ConfigurationFactory.createSingletonConfiguration()); // NOPMD package
 	}
 

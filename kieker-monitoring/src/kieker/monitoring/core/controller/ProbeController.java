@@ -494,7 +494,8 @@ public class ProbeController extends AbstractController implements IProbeControl
 					if (lastModified > this.lastModifiedTimestamp) {
 						this.lastModifiedTimestamp = lastModified;
 						reader = new BufferedReader(
-								new InputStreamReader(new FileInputStream(file), ProbeController.ENCODING));
+								new InputStreamReader(new FileInputStream(file), ProbeController.ENCODING)); // NOPMD
+						// allow access to ENCODING
 						try {
 							ProbeController.this.setProbePatternList(this.readConfigFile(reader), false);
 							return;
@@ -525,7 +526,8 @@ public class ProbeController extends AbstractController implements IProbeControl
 							.getResource(this.configFilePathname);
 					if (null != configFileAsResource) {
 						reader = new BufferedReader(
-								new InputStreamReader(configFileAsResource.openStream(), ProbeController.ENCODING));
+								new InputStreamReader(configFileAsResource.openStream(), ProbeController.ENCODING)); // NOPMD
+						// allow access to ENCODING
 						try {
 							ProbeController.this.setProbePatternList(this.readConfigFile(reader), true);
 							return;

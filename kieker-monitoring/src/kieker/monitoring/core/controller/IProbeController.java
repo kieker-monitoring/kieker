@@ -145,6 +145,8 @@ public interface IProbeController {
 	 *            name of the parameter
 	 * @param value
 	 *            value to be added to the list of parameter values.
+	 * 
+	 * @since 1.15
 	 */
 	void addPatternParameterValue(final String pattern, final String name, final String value);
 
@@ -157,6 +159,8 @@ public interface IProbeController {
 	 *            name of the parameter
 	 * @param value
 	 *            value to be removed from the list of parameter values.
+	 * 
+	 * @since 1.15
 	 */
 	void removePatternParameterValue(final String pattern, final String name, final String value);
 
