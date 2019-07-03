@@ -30,6 +30,8 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
 
 /**
+ * Test probe controller.
+ * 
  * @author Reiner Jung
  *
  * @since 1.15
@@ -45,10 +47,12 @@ public class ProbeControllerTest {
 
 	private ProbeController controller;
 	
+	/** probe controller test. */
 	public ProbeControllerTest() {
 		// nothing to be done on construction of the test
 	}
 	
+	/** initialize setup before every test. */
 	@Before
 	public void setUp() {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();

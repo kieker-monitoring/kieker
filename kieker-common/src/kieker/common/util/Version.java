@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.common.util;
 
 /**
  * This class provides the method getVersion() which returns the version number
  * set during build (String replacement task within build.xml).
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since < 0.9
  */
 public final class Version {
@@ -36,7 +35,7 @@ public final class Version {
 
 	/**
 	 * Returns the version String.
-	 * 
+	 *
 	 * @return the version String.
 	 */
 	public static final String getVERSION() {
@@ -45,7 +44,7 @@ public final class Version {
 
 	/**
 	 * Returns the version String.
-	 * 
+	 *
 	 * @return the version String.
 	 */
 	public static final String getCOPYRIGHT() {
