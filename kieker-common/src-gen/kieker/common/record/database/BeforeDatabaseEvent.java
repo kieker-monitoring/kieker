@@ -51,15 +51,6 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 		String.class, // BeforeDatabaseEvent.technology
 	};
 	
-	/** default constants. */
-	public static final long TIMESTAMP = 0L;
-	public static final String CLASS_SIGNATURE = "";
-	public static final long TRACE_ID = -1L;
-	public static final int ORDER_INDEX = -1;
-	public static final String PARAMETERS = "";
-	public static final String TECHNOLOGY = "";
-	private static final long serialVersionUID = 3457043370101594469L;
-	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -69,6 +60,15 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 		"parameters",
 		"technology",
 	};
+	
+	/** default constants. */
+	public static final long TIMESTAMP = 0L;
+	public static final String CLASS_SIGNATURE = "";
+	public static final long TRACE_ID = -1L;
+	public static final int ORDER_INDEX = -1;
+	public static final String PARAMETERS = "";
+	public static final String TECHNOLOGY = "";
+	private static final long serialVersionUID = 3457043370101594469L;
 	
 	/** property declarations. */
 	private long timestamp;

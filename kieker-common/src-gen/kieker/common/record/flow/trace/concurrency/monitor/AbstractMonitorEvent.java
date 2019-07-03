@@ -29,11 +29,11 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {			
 	
+		
 	/** default constants. */
 	public static final int LOCK_ID = 0;
 	private static final long serialVersionUID = -5428034537740978080L;
 	
-		
 	/** property declarations. */
 	private final int lockId;
 	

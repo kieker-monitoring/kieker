@@ -45,8 +45,6 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 		String.class, // IClassSignature.classSignature
 	};
 	
-	private static final long serialVersionUID = 8888716286291758775L;
-	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -55,6 +53,8 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 		"operationSignature",
 		"classSignature",
 	};
+	
+	private static final long serialVersionUID = 8888716286291758775L;
 	
 	
 	/**

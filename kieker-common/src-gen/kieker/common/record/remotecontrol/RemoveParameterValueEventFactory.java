@@ -27,18 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class RemoveParameterValueEventFactory implements IRecordFactory<RemoveParameterValueEvent> {
 	
+
 	@Override
 	public RemoveParameterValueEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new RemoveParameterValueEvent(deserializer);
 	}
+
+
 	@Override
-			public String[] getValueNames() {
-				return RemoveParameterValueEvent.VALUE_NAMES; // NOPMD
-			}
+	public String[] getValueNames() {
+		return RemoveParameterValueEvent.VALUE_NAMES; // NOPMD
+	}
+
 	@Override
-			public Class<?>[] getValueTypes() {
-				return RemoveParameterValueEvent.TYPES; // NOPMD
-			}
+	public Class<?>[] getValueTypes() {
+		return RemoveParameterValueEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return RemoveParameterValueEvent.SIZE;
 	}

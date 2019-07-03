@@ -41,18 +41,18 @@ public class BranchingRecord extends AbstractMonitoringRecord  {
 		int.class, // BranchingRecord.branchingOutcome
 	};
 	
-	/** default constants. */
-	public static final long TIMESTAMP = 0L;
-	public static final int BRANCH_ID = 0;
-	public static final int BRANCHING_OUTCOME = 0;
-	private static final long serialVersionUID = 3957750090047819946L;
-	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"branchID",
 		"branchingOutcome",
 	};
+	
+	/** default constants. */
+	public static final long TIMESTAMP = 0L;
+	public static final int BRANCH_ID = 0;
+	public static final int BRANCHING_OUTCOME = 0;
+	private static final long serialVersionUID = 3957750090047819946L;
 	
 	/** property declarations. */
 	private final long timestamp;

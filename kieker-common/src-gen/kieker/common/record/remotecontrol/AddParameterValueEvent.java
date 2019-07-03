@@ -42,18 +42,18 @@ public class AddParameterValueEvent extends AbstractMonitoringRecord implements 
 		String.class, // IParameterValueEvent.value
 	};
 	
-	/** default constants. */
-	public static final String PATTERN = "";
-	public static final String NAME = "";
-	public static final String VALUE = "";
-	private static final long serialVersionUID = -5279430930031250890L;
-	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"pattern",
 		"name",
 		"value",
 	};
+	
+	/** default constants. */
+	public static final String PATTERN = "";
+	public static final String NAME = "";
+	public static final String VALUE = "";
+	private static final long serialVersionUID = -5279430930031250890L;
 	
 	/** property declarations. */
 	private final String pattern;

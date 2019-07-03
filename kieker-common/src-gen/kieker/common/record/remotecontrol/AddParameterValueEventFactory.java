@@ -27,18 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class AddParameterValueEventFactory implements IRecordFactory<AddParameterValueEvent> {
 	
+
 	@Override
 	public AddParameterValueEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new AddParameterValueEvent(deserializer);
 	}
+
+
 	@Override
-			public String[] getValueNames() {
-				return AddParameterValueEvent.VALUE_NAMES; // NOPMD
-			}
+	public String[] getValueNames() {
+		return AddParameterValueEvent.VALUE_NAMES; // NOPMD
+	}
+
 	@Override
-			public Class<?>[] getValueTypes() {
-				return AddParameterValueEvent.TYPES; // NOPMD
-			}
+	public Class<?>[] getValueTypes() {
+		return AddParameterValueEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return AddParameterValueEvent.SIZE;
 	}

@@ -59,8 +59,6 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		int.class, // MemoryRecord.objectPendingFinalizationCount
 	};
 	
-	private static final long serialVersionUID = -9025858519361306011L;
-	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -76,6 +74,8 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		"nonHeapInitBytes",
 		"objectPendingFinalizationCount",
 	};
+	
+	private static final long serialVersionUID = -9025858519361306011L;
 	
 	/** property declarations. */
 	private final long heapMaxBytes;

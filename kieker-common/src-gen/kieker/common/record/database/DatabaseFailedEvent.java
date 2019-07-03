@@ -50,14 +50,6 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 		String.class, // IExceptionRecord.cause
 	};
 	
-	/** default constants. */
-	public static final long TIMESTAMP = 0L;
-	public static final String CLASS_SIGNATURE = "";
-	public static final long TRACE_ID = -1L;
-	public static final int ORDER_INDEX = -1;
-	public static final String CAUSE = "";
-	private static final long serialVersionUID = 979011205753098958L;
-	
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -66,6 +58,14 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 		"orderIndex",
 		"cause",
 	};
+	
+	/** default constants. */
+	public static final long TIMESTAMP = 0L;
+	public static final String CLASS_SIGNATURE = "";
+	public static final long TRACE_ID = -1L;
+	public static final int ORDER_INDEX = -1;
+	public static final String CAUSE = "";
+	private static final long serialVersionUID = 979011205753098958L;
 	
 	/** property declarations. */
 	private long timestamp;
