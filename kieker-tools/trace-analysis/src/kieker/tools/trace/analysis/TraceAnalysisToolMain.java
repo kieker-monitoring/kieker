@@ -29,7 +29,7 @@ import kieker.common.exception.ConfigurationException;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.tools.common.AbstractLegacyTool;
 import kieker.tools.common.DateConverter;
-import kieker.tools.common.ParameterEvaluation;
+import kieker.tools.common.ParameterEvaluationUtils;
 
 /**
  * This is the main class to start the Kieker TraceAnalysisTool - the model synthesis and analysis tool to process the
@@ -110,7 +110,7 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 	@Override
 	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
 		return this.checkInputDirs(commander)
-				&& ParameterEvaluation.checkDirectory(this.parameterConfiguration.getOutputDir(), "Output", commander)
+				&& ParameterEvaluationUtils.checkDirectory(this.parameterConfiguration.getOutputDir(), "Output", commander)
 				&& this.selectOrFilterTraces();
 	}
 
