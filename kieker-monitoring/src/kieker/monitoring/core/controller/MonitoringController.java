@@ -150,13 +150,13 @@ public final class MonitoringController extends AbstractController implements IM
 						if (!monitoringController.isMonitoringTerminated()) {
 							// WONTFIX: We should not use a logger in shutdown hooks, logger may already be
 							// down! (#26)
-							LOGGER.info("ShutdownHook notifies controller to initiate shutdown.");
+							MonitoringController.LOGGER.info("ShutdownHook notifies controller to initiate shutdown.");
 							monitoringController.terminateMonitoring();
 							try {
-								monitoringController.waitForTermination(SHUTDOWN_DELAY_MILLIS);
+								monitoringController.waitForTermination(MonitoringController.SHUTDOWN_DELAY_MILLIS);
 							} catch (final InterruptedException e) {
 								// ignore since we cannot do anything at this point
-								LOGGER.warn("Shutdown was interrupted while waiting");
+								MonitoringController.LOGGER.warn("Shutdown was interrupted while waiting");
 							}
 							// LOG.info("ShutdownHook has finished."); // does not work anymore
 							// System.out.println("ShutdownHook has finished."); // works!
@@ -164,12 +164,12 @@ public final class MonitoringController extends AbstractController implements IM
 					}
 				});
 			} catch (final Exception e) { // NOPMD NOCS (Exception)
-				LOGGER.warn("Failed to add shutdownHook");
+				MonitoringController.LOGGER.warn("Failed to add shutdownHook");
 			}
 		} else {
-			LOGGER.warn("Shutdown Hook is disabled, loss of monitoring data might occur.");
+			MonitoringController.LOGGER.warn("Shutdown Hook is disabled, loss of monitoring data might occur.");
 		}
-		LOGGER.info(monitoringController.toString());
+		MonitoringController.LOGGER.info(monitoringController.toString());
 		return monitoringController;
 	}
 
@@ -196,7 +196,7 @@ public final class MonitoringController extends AbstractController implements IM
 
 	@Override
 	protected final void cleanup() {
-		LOGGER.info("Shutting down Monitoring Controller ({})", this.getName());
+		MonitoringController.LOGGER.info("Shutting down Monitoring Controller ({})", this.getName());
 		// this.saveMetadataAsRecord();
 		this.probeController.terminate();
 		this.timeSourceController.terminate();
@@ -247,7 +247,7 @@ public final class MonitoringController extends AbstractController implements IM
 
 	@Override
 	public final boolean terminateMonitoring() {
-		LOGGER.info("Terminating monitoring...");
+		MonitoringController.LOGGER.info("Terminating monitoring...");
 		return this.stateController.terminateMonitoring();
 	}
 
@@ -369,8 +369,8 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public Map<String, List<String>> getAllParameters(final String pattern) {
-		return this.probeController.getAllParameters(pattern);
+	public Map<String, List<String>> getAllPatternParameters(final String pattern) {
+		return this.probeController.getAllPatternParameters(pattern);
 	}
 
 	@Override
@@ -388,6 +388,16 @@ public final class MonitoringController extends AbstractController implements IM
 		this.probeController.addPatternParameter(pattern, parameterName, parameters);
 	}
 
+	@Override
+	public void addPatternParameterValue(final String pattern, final String name, final String value) {
+		this.probeController.addPatternParameterValue(pattern, name, value);
+	}
+
+	@Override
+	public void removePatternParameterValue(final String pattern, final String name, final String value) {
+		this.probeController.removePatternParameterValue(pattern, name, value);
+	}
+
 	// GET SINGLETON INSTANCE
 	// #############################
 	public static final IMonitoringController getInstance() {
@@ -398,7 +408,8 @@ public final class MonitoringController extends AbstractController implements IM
 	 * SINGLETON.
 	 */
 	private static final class LazyHolder { // NOCS
-		static final IMonitoringController INSTANCE = MonitoringController.createInstance(ConfigurationFactory.createSingletonConfiguration()); // NOPMD package
+		static final IMonitoringController INSTANCE = MonitoringController // NOPMD default modifier
+				.createInstance(ConfigurationFactory.createSingletonConfiguration()); // NOPMD package
 	}
 
 }

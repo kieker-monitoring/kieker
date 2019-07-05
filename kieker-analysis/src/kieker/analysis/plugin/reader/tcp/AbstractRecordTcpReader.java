@@ -25,8 +25,8 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryCatalog;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.BinaryValueDeserializer;
-import kieker.common.record.tcp.AbstractTcpReader;
 import kieker.common.registry.reader.ReaderRegistry;
+import kieker.monitoring.core.controller.tcp.AbstractTcpReader;
 
 /**
  *

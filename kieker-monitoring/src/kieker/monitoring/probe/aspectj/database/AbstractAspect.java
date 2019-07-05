@@ -171,7 +171,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	}
 
 	/**
-	 * Retrieves the className of the called method
+	 * Retrieves the className of the called method.
 	 *
 	 * @param currentJoinPoint the current joint point
 	 * @return returns the class name for the given joint point
@@ -182,7 +182,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	}
 
 	/**
-	 * Retrieves the return type of the called method
+	 * Retrieves the return type of the called method.
 	 *
 	 * @param className class name of a joint point
 	 * @return returns the return type of a joint point
@@ -193,7 +193,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	}
 
 	/**
-	 * Retrieves the passed arguments of the JoinPoint
+	 * Retrieves the passed arguments of the JoinPoint.
 	 *
 	 * @param currentJoinPoint the current joint point
 	 * @return returns the arguments for the given joint point
@@ -210,7 +210,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	}
 
 	/**
-	 * Retrieves the parameters of the called method
+	 * Retrieves the parameters of the called method.
 	 *
 	 * @param joinPointArgs
 	 * @return
@@ -235,7 +235,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	/**
 	 * Processes the return value of the called method based on the type and returns
-	 * a formatted string afterwards
+	 * a formatted string afterwards.
 	 *
 	 * @param returningObject
 	 * @param returnType
@@ -281,7 +281,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	/**
 	 * In case of a result set we are interested in the number of rows (affected
-	 * rows) by the executed statement
+	 * rows) by the executed statement.
 	 *
 	 * @param rawReturnValue
 	 * @return

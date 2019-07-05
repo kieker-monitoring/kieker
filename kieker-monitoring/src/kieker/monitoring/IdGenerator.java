@@ -30,7 +30,9 @@ import kieker.monitoring.core.controller.MonitoringController;
  */
 public class IdGenerator {
 
+	
 	private final AtomicInteger nextIdentifier = new AtomicInteger(0);
+	
 	/**
 	 * Represents a unique id prefix to distinguish identifiers used by other
 	 * JVMs/hosts.
@@ -49,6 +51,7 @@ public class IdGenerator {
 	}
 
 	/**
+	 * Generate an unique id.
 	 * (<i>thread-safe</i>)
 	 *
 	 * @return a unique identifier

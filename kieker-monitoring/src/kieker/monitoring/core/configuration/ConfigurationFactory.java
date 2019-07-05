@@ -16,11 +16,13 @@
 
 package kieker.monitoring.core.configuration;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -112,25 +114,25 @@ public final class ConfigurationFactory {
 	 * Returns the properties loaded from file propertiesFn with fallback on the default values. If the file does not
 	 * exists, a warning is logged and an empty configuration with fallback on the default configuration is returned.
 	 *
-	 * @param propertiesFn
+	 * @param filename
 	 *            The file which contains the properties.
 	 * @param defaultValues
 	 *            The configuration containing the default values.
 	 *
 	 * @return The created Configuration
 	 */
-	private static final Configuration loadConfigurationFromFile(final String propertiesFn,
+	private static final Configuration loadConfigurationFromFile(final String filename,
 			final Configuration defaultValues) {
 		final Configuration properties = new Configuration(defaultValues);
 		InputStream is = null; // NOPMD (null)
 		try {
 			try {
-				is = new FileInputStream(propertiesFn);
+				is =  Files.newInputStream(Paths.get(filename), StandardOpenOption.READ);
 			} catch (final FileNotFoundException ex) {
 				// if not found as absolute path try within the classpath
-				final URL resourceUrl = ConfigurationFactory.loadKiekerPropertiesFile(propertiesFn);
+				final URL resourceUrl = ConfigurationFactory.loadKiekerPropertiesFile(filename);
 				if (resourceUrl == null) {
-					LOGGER.warn("File '{}' not found", propertiesFn);
+					LOGGER.warn("File '{}' not found", filename);
 					return new Configuration(defaultValues);
 				}
 				is = resourceUrl.openStream();
@@ -138,7 +140,7 @@ public final class ConfigurationFactory {
 			properties.load(is);
 			return properties;
 		} catch (final IOException ex) {
-			LOGGER.error("Error reading file '{}'", propertiesFn, ex);
+			LOGGER.error("Error reading file '{}'", filename, ex);
 		} finally {
 			if (is != null) {
 				try {

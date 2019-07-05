@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.common.record.tcp;
+package kieker.monitoring.core.controller.tcp;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -30,7 +30,8 @@ import kieker.common.record.io.BinaryValueDeserializer;
 import kieker.common.registry.reader.ReaderRegistry;
 
 /**
- * Represents a TCP reader which reads and reconstructs Kieker records from a single TCP stream.
+ * Represents a TCP reader which reads and reconstructs Kieker records from a
+ * single TCP stream.
  *
  * @author Christian Wulf (chw)
  *
@@ -38,11 +39,9 @@ import kieker.common.registry.reader.ReaderRegistry;
  */
 public class SingleSocketRecordReader extends AbstractTcpReader {
 
-	private static final int INT_BYTES = AbstractMonitoringRecord.TYPE_SIZE_INT;
-	private static final int LONG_BYTES = AbstractMonitoringRecord.TYPE_SIZE_LONG;
 	private static final Charset ENCODING = Charset.forName("UTF-8");
 
-	private final ReaderRegistry<String> readerRegistry = new ReaderRegistry<String>();
+	private final ReaderRegistry<String> readerRegistry = new ReaderRegistry<>();
 	private final IRecordReceivedListener listener;
 	private final CachedRecordFactoryCatalog recordFactories = new CachedRecordFactoryCatalog();
 
@@ -58,7 +57,8 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 	 * @param listener
 	 *            listener to trigger on received records
 	 */
-	public SingleSocketRecordReader(final int port, final int bufferCapacity, final Logger logger, final IRecordReceivedListener listener) {
+	public SingleSocketRecordReader(final int port, final int bufferCapacity, final Logger logger,
+			final IRecordReceivedListener listener) {
 		super(port, bufferCapacity, logger);
 		this.listener = listener;
 	}
@@ -77,7 +77,8 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 	 * @param listener
 	 *            listener to trigger on received records
 	 */
-	public SingleSocketRecordReader(final int port, final int bufferCapacity, final Logger logger, final boolean respawn, final IRecordReceivedListener listener) {
+	public SingleSocketRecordReader(final int port, final int bufferCapacity, final Logger logger,
+			final boolean respawn, final IRecordReceivedListener listener) {
 		super(port, bufferCapacity, logger, respawn);
 		this.listener = listener;
 	}
@@ -85,7 +86,7 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 	@Override
 	protected boolean onBufferReceived(final ByteBuffer buffer) {
 		// identify record class
-		if (buffer.remaining() >= INT_BYTES) {
+		if (buffer.remaining() >= AbstractMonitoringRecord.TYPE_SIZE_INT) {
 			final int clazzId = buffer.getInt();
 
 			if (clazzId == -1) {
@@ -100,7 +101,7 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 
 	private boolean registerEntry(final ByteBuffer buffer) {
 		// identify string identifier and string length
-		if (buffer.remaining() >= (INT_BYTES + INT_BYTES)) {
+		if (buffer.remaining() >= (AbstractMonitoringRecord.TYPE_SIZE_INT * 2)) {
 			final int id = buffer.getInt(); // NOPMD (id must be read before stringLength)
 			final int stringLength = buffer.getInt();
 
@@ -109,7 +110,7 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 			} else {
 				final byte[] strBytes = new byte[stringLength];
 				buffer.get(strBytes);
-				final String string = new String(strBytes, ENCODING);
+				final String string = new String(strBytes, SingleSocketRecordReader.ENCODING);
 
 				this.readerRegistry.register(id, string);
 
@@ -122,25 +123,32 @@ public class SingleSocketRecordReader extends AbstractTcpReader {
 
 	private boolean deserializeRecord(final int clazzId, final ByteBuffer buffer) {
 		// identify logging timestamp
-		if (buffer.remaining() >= LONG_BYTES) {
-			final long loggingTimestamp = buffer.getLong(); // NOPMD (timestamp must be read before checking the buffer for record size)
+		if (buffer.remaining() >= AbstractMonitoringRecord.TYPE_SIZE_LONG) {
+			final long loggingTimestamp = buffer.getLong(); // NOPMD (timestamp must be read before checking the buffer
+															// for record size)
 
 			final String recordClassName = this.readerRegistry.get(clazzId);
 			if (recordClassName != null) {
 				// identify record data
-				final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
+				final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories
+						.get(recordClassName);
 
 				if (buffer.remaining() >= recordFactory.getRecordSizeInBytes()) {
 					try {
-						final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(buffer, this.readerRegistry));
+						final IMonitoringRecord record = recordFactory
+								.create(BinaryValueDeserializer.create(buffer, this.readerRegistry));
 						record.setLoggingTimestamp(loggingTimestamp);
 
 						this.listener.onRecordReceived(record);
+						return true;
+					} catch (final java.nio.BufferUnderflowException ex) {
+						super.logger.warn("Cannot create {}; missing data in byte buffer. Buffer remaining {}",
+								recordClassName, buffer.remaining());
+						return false;
 					} catch (final RecordInstantiationException ex) {
-						super.logger.error("Failed to create: {}", recordClassName, ex);
+						super.logger.error("Failed to create {}", recordClassName, ex);
+						return false;
 					}
-
-					return true;
 				} else {
 					return false;
 				}

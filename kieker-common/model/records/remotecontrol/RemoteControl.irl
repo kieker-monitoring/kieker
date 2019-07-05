@@ -24,4 +24,16 @@ entity ActivationParameterEvent : IRemoteParameterControlEvent {
 
 @author 'Marc Adolf' @since '1.14'
 entity UpdateParameterEvent : IRemoteParameterControlEvent {
-} 
+}
+
+@author 'Reiner Jung' @since '1.15'
+template IParameterValueEvent : IRemoteControlEvent {
+	string name
+	string value	
+}
+
+@author 'Reiner Jung' @since '1.15'
+entity AddParameterValueEvent : IParameterValueEvent
+
+@author 'Reiner Jung' @since '1.15'
+entity RemoveParameterValueEvent : IParameterValueEvent

@@ -24,7 +24,7 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IRecordReceivedListener;
-import kieker.common.record.tcp.SingleSocketRecordReader;
+import kieker.monitoring.core.controller.tcp.SingleSocketRecordReader;
 
 /**
  * This is a reader which reads the records from a TCP port.

@@ -52,13 +52,13 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExplorVizTcpWriter.class);
 
 	private static final String PREFIX = ExplorVizTcpWriter.class.getName() + ".";
-	/** configuration key for the hostname */
+	/** Configuration key for the hostname. */
 	public static final String CONFIG_HOSTNAME = PREFIX + "hostname"; // NOCS (afterPREFIX)
-	/** configuration key for the port */
+	/** Configuration key for the port. */
 	public static final String CONFIG_PORT = PREFIX + "port"; // NOCS (afterPREFIX)
-	/** configuration key for the size of the {@link #byteBuffer} */
+	/** Configuration key for the size of the {@link #byteBuffer}. */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
-	/** configuration key for {@link #flush} */
+	/** Configuration key for {@link #flush}. */
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
 	private static final byte HOST_APPLICATION_META_DATA_CLAZZ_ID = 0;
@@ -71,14 +71,14 @@ public class ExplorVizTcpWriter extends AbstractMonitoringWriter implements IReg
 
 	/**
 	 * <code>true</code> if the {@link #byteBuffer} should be flushed upon each new
-	 * incoming monitoring record
+	 * incoming monitoring record.
 	 */
 	private final boolean flush;
-	/** the buffer used for buffering monitoring and registry records */
+	/** The buffer used for buffering monitoring and registry records. */
 	private final ByteBuffer byteBuffer;
-	/** the channel used to write out monitoring and registry records */
+	/** The channel used to write out monitoring and registry records. */
 	private final WritableByteChannel socketChannel;
-	/** the registry used to compress string fields in monitoring records */
+	/** The registry used to compress string fields in monitoring records. */
 	private final IWriterRegistry<String> writerRegistry;
 
 	/**
