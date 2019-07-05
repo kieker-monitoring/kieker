@@ -55,7 +55,7 @@ public class AmqpWriter extends AbstractMonitoringWriter implements IRegistryLis
 	public static final byte REGULAR_RECORD_ID = (byte) 0x01;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AmqpWriter.class);
-	/** The default size for the buffer used to serialize records */
+	/** The default size for the buffer used to serialize records. */
 	private static final int DEFAULT_BUFFER_SIZE = 16384;
 	/** Size of the "envelope" data which is prepended before the actual record. */
 	private static final int SIZE_OF_ENVELOPE = 1 + 8;

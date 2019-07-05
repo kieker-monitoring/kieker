@@ -32,6 +32,7 @@ import kieker.monitoring.writer.dump.DumpWriter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
+ * This is partially and integration test for the writer controller.
  *
  * @author Christian Wulf
  *
@@ -42,10 +43,12 @@ public class WriterControllerTest {
 	private static final int THREAD_STATE_CHANGE_TIMEOUT_IN_MS = 1000;
 	private static final long CONTROLLER_TIMEOUT_IN_MS = 1000;
 
+	/** test constructor. */
 	public WriterControllerTest() {
-		super();
+		// nothing to be done here
 	}
 
+	/** Test whether the writer controller can handle misconfigurations. */
 	@Test(expected = IllegalStateException.class)
 	public void testInvalidWriterQueueConfiguration() {
 		final Configuration configuration = new Configuration();
@@ -54,10 +57,15 @@ public class WriterControllerTest {
 		new WriterController(configuration);
 	}
 
+	/**
+	 * Check whether blocking of the queue on insert works when queue is full.
+	 * 
+	 * @throws Exception on all kind of thread issues
+	 */
 	@Test
 	@SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
 	// @SuppressFBWarnings("SIC")
-	public void testBlockOnFailedInsertBehavior() throws Exception {
+	public void testBlockOnQueueIsFullInsertBehavior() throws Exception {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, DumpWriter.class.getName());
 		configuration.setProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_FQN,

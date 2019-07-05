@@ -74,7 +74,7 @@ public class DualSocketTcpWriter extends AbstractMonitoringWriter implements IRe
 	private final ByteBuffer recordBuffer;
 	/** the buffer used for buffering registry records. */
 	private final ByteBuffer stringRegistryBuffer;
-	/** the serializer to use for the incoming records */
+	/** The serializer to use for the incoming records. */
 	private final IValueSerializer serializer;
 
 	public DualSocketTcpWriter(final Configuration configuration) throws IOException {

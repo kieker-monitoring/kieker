@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.monitoring.core.controller;
 
 import java.io.IOException;
@@ -34,6 +33,7 @@ import kieker.monitoring.writer.dump.DumpWriter;
 import kieker.monitoring.writer.tcp.SingleSocketTcpWriter;
 
 /**
+ * TCPController integration test.
  *
  * @author Marc Adolf
  * @since 1.14
@@ -45,10 +45,16 @@ public class TCPControllerTest { // NOFB issues with integration test
 	private static int timeoutInMs = 100;
 	private SingleSocketTcpWriter tcpWriter;
 
+	/** test constructor. */
 	public TCPControllerTest() {
-		super();
+		// nothing to do here
 	}
 
+	/**
+	 * initialize configuration for TCP controller.
+	 * 
+	 * @throws IOException on io errors
+	 */
 	@BeforeClass
 	public static void init() throws IOException {
 		// setup for other depending parts
@@ -74,6 +80,9 @@ public class TCPControllerTest { // NOFB issues with integration test
 
 	}
 
+	/**
+	 * Initialize before every test.
+	 */
 	@Before
 	public void initTest() {
 		port++; // NOFB write to static is necessary in this place
@@ -81,6 +90,12 @@ public class TCPControllerTest { // NOFB issues with integration test
 		configuration.setProperty(SingleSocketTcpWriter.CONFIG_PORT, port);
 	}
 
+	/**
+	 * test activation and deactivation.
+	 * 
+	 * @throws IOException on TCP io errors
+	 * @throws InterruptedException when threads get terminated
+	 */
 	@Test(timeout = 30000)
 	public void testActivationAndDeactivation() throws IOException, InterruptedException {
 		final MonitoringController controller = MonitoringController.createInstance(TCPControllerTest.configuration);

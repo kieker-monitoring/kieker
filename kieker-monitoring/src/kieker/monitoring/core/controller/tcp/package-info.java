@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2018 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,34 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.monitoring.queue.putstrategy;
-
-import java.util.Queue;
-
-/**
- *
- * @author Christian Wulf
- *
- * @since 1.13
- */
-public interface PutStrategy { // NOCS //NOPMD (name without prefix "I" for reasons of readability)
-
-	/**
-	 * 
-	 * @param queue queue
-	 * @param element element
-	 * 
-	 * @param <E> element type
-	 *  
-	 * @throws InterruptedException on interruption of the queue
-	 * 
-	 * @since 1.13
-	 */
-	<E> void backoffOffer(Queue<E> queue, E element) throws InterruptedException;
-
-	/**
-	 * @since 1.13
-	 */
-	void signal();
-}
+package kieker.monitoring.core.controller.tcp;

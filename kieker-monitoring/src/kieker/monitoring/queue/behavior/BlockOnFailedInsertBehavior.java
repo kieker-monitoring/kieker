@@ -31,13 +31,16 @@ import org.slf4j.LoggerFactory;
  */
 public class BlockOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 
-	/** the logger for this class */
+	/** The logger for this class. */
 	private static final Logger LOGGER = LoggerFactory.getLogger(BlockOnFailedInsertBehavior.class);
-	/** the blocking queue to which elements should be inserted */
+	/** The blocking queue to which elements should be inserted. */
 	private final BlockingQueue<E> queue;
-	/** current number of blocked inserts */
+	/** Current number of blocked inserts. */
 	private int numBlocked;
 
+	/**
+	 * @param queue the blocking queue to use this insert behavior
+	 */
 	public BlockOnFailedInsertBehavior(final BlockingQueue<E> queue) {
 		this.queue = queue;
 	}
