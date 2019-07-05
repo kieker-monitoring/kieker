@@ -25,7 +25,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
 import kieker.tools.common.AbstractService;
 import kieker.tools.common.CommonConfigurationKeys;
-import kieker.tools.common.ParameterEvaluation;
+import kieker.tools.common.ParameterEvaluationUtils;
 
 /**
  * The collector allows to collect input from different input sources, including TCP and Kieker
@@ -66,7 +66,7 @@ public final class CollectorMain extends AbstractService<CollectorConfiguration,
 
 	@Override
 	protected boolean checkParameters(final JCommander commander) throws ConfigurationException {
-		return ParameterEvaluation.isFileReadable(this.configurationFile, "Configuration File", commander);
+		return ParameterEvaluationUtils.isFileReadable(this.configurationFile, "Configuration File", commander);
 	}
 
 	@Override

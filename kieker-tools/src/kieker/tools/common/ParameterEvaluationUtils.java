@@ -33,11 +33,12 @@ import com.beust.jcommander.JCommander;
  * @since 1.15
  *
  */
-public final class ParameterEvaluation {
+public final class ParameterEvaluationUtils {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ParameterEvaluation.class);
+	/** logger. */
+	private static final Logger LOGGER = LoggerFactory.getLogger(ParameterEvaluationUtils.class);
 
-	private ParameterEvaluation() {
+	private ParameterEvaluationUtils() {
 		// private constructor for utility class
 	}
 
@@ -55,19 +56,19 @@ public final class ParameterEvaluation {
 	 */
 	public static boolean checkDirectory(final File location, final String label, final JCommander commander) {
 		if (location == null) {
-			ParameterEvaluation.LOGGER.error("{} path not specified.", label);
+			ParameterEvaluationUtils.LOGGER.error("{} path not specified.", label);
 			commander.usage();
 			return false;
 		}
 		try {
 			if (!location.exists()) {
-				ParameterEvaluation.LOGGER.error("{} path {} does not exist.", label,
+				ParameterEvaluationUtils.LOGGER.error("{} path {} does not exist.", label,
 						location.getCanonicalPath());
 				commander.usage();
 				return false;
 			}
 			if (!location.isDirectory()) {
-				ParameterEvaluation.LOGGER.error("{} path {} is not a directory.", label,
+				ParameterEvaluationUtils.LOGGER.error("{} path {} is not a directory.", label,
 						location.getCanonicalPath());
 				commander.usage();
 				return false;
@@ -75,7 +76,7 @@ public final class ParameterEvaluation {
 
 			return true;
 		} catch (final IOException e) {
-			ParameterEvaluation.LOGGER.error("{} path {} cannot be checked. Cause {}", label, location, e.getLocalizedMessage());
+			ParameterEvaluationUtils.LOGGER.error("{} path {} cannot be checked. Cause {}", label, location, e.getLocalizedMessage());
 			return false;
 		}
 	}
@@ -94,27 +95,27 @@ public final class ParameterEvaluation {
 	 */
 	public static boolean isFileReadable(final File file, final String label, final JCommander commander) {
 		if (file == null) {
-			ParameterEvaluation.LOGGER.error("{} path not specified.", label);
+			ParameterEvaluationUtils.LOGGER.error("{} path not specified.", label);
 			commander.usage();
 			return false;
 		}
 		try {
 			if (!file.exists()) {
-				ParameterEvaluation.LOGGER.error("{} {} does not exist.", label, file.getCanonicalPath());
+				ParameterEvaluationUtils.LOGGER.error("{} {} does not exist.", label, file.getCanonicalPath());
 				return false;
 			}
 			if (!file.isFile()) {
-				ParameterEvaluation.LOGGER.error("{} {} is not a file.", label, file.getCanonicalPath());
+				ParameterEvaluationUtils.LOGGER.error("{} {} is not a file.", label, file.getCanonicalPath());
 				return false;
 			}
 			if (!file.canRead()) {
-				ParameterEvaluation.LOGGER.error("{} {} cannot be read.", label, file.getCanonicalPath());
+				ParameterEvaluationUtils.LOGGER.error("{} {} cannot be read.", label, file.getCanonicalPath());
 				return false;
 			}
 
 			return true;
 		} catch (final IOException e) {
-			ParameterEvaluation.LOGGER.error("{} {} cannot be checked. Cause {}", label, file, e.getLocalizedMessage());
+			ParameterEvaluationUtils.LOGGER.error("{} {} cannot be checked. Cause {}", label, file, e.getLocalizedMessage());
 			return false;
 		}
 	}
@@ -132,7 +133,7 @@ public final class ParameterEvaluation {
 		try {
 			return new URL(urlString);
 		} catch (final MalformedURLException e) {
-			ParameterEvaluation.LOGGER.error("{} Malformend URL {}", label, urlString);
+			ParameterEvaluationUtils.LOGGER.error("{} Malformend URL {}", label, urlString);
 			return null;
 		}
 

@@ -254,9 +254,10 @@ else
   error "The content of both source archives is NOT identical."
   exit 1
 fi
-if [ -d ${DIR} ] ; then
-        rm -rf "${DIR}"
-else
-        warning "${DIR} is not a directory"
-fi
+#fails sporadically for no apparent reason
+#if [ -d ${DIR} ] ; then
+#        rm -rf "${DIR}"
+#else
+#        warning "${DIR} is not a directory"
+#fi
 # end
