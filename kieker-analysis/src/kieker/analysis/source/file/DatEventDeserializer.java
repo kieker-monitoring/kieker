@@ -41,7 +41,7 @@ import teetime.framework.OutputPort;
  */
 public class DatEventDeserializer extends AbstractEventDeserializer {
 
-	public static final String PREFIX = BinaryEventDeserializer.class.getCanonicalName() + ".";
+	public static final String PREFIX = DatEventDeserializer.class.getCanonicalName() + ".";
 
 	public static final String BUFFER_SIZE = PREFIX + "bufferSize";
 
@@ -63,7 +63,7 @@ public class DatEventDeserializer extends AbstractEventDeserializer {
 
 	public DatEventDeserializer(final Configuration configuration, final ReaderRegistry<String> registry) {
 		super(configuration, registry);
-		final int bufferSize = configuration.getIntProperty(BinaryEventDeserializer.BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
+		final int bufferSize = configuration.getIntProperty(BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
 		this.charBuffer = CharBuffer.allocate(bufferSize);
 		this.charset = configuration.getStringProperty(CHARSET, DEFAULT_CHARSET);
 	}
