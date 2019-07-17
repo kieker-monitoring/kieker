@@ -135,6 +135,9 @@ public final class PatternParser {
 
 	private static final String parseMethodName(final String methodName) throws InvalidPatternException {
 		try {
+			if ("<init>".equals(methodName)) {
+				return "<init>";
+			}
 			return PatternParser.parseIdentifier(methodName);
 		} catch (final InvalidPatternException ex) {
 			throw new InvalidPatternException("Invalid method name.", ex);
