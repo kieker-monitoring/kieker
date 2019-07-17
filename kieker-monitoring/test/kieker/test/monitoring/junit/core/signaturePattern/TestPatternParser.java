@@ -235,9 +235,9 @@ public class TestPatternParser extends AbstractKiekerTest {
 
 	@Test
 	public void constructorTest() throws InvalidPatternException {
-		final String constructorPattern = "new ..*.*(..)"; // should match all constructors and nothing else
+		final String constructorPattern = "new ..*.<init>(..)"; // should match all constructors and nothing else
 
-		final String constructorSignature = "public package.Class.constructor()";
+		final String constructorSignature = "public package.Class.<init>()";
 		final String methodSignature = "public void package.Class.method()";
 
 		final Matcher constructorMatcher = PatternParser.parseToPattern(constructorPattern).matcher("");
@@ -250,7 +250,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addNativeNonNativeVariant("").addNativeNonNativeVariant("native")
 				.addreturnTypeVariant("")
 				.addfqClassNameVariant("package.Class").addfqClassNameVariant("").addfqClassNameVariant("Class")
-				.addoperationNameVariant("constructor").addoperationNameVariant("hierGehtAlles")
+				.addoperationNameVariant("<init>")
 				.addparameterListVariant("").addparameterListVariant("int").addparameterListVariant("int, Class");
 		final List<String> positiveSignatureList = positiveSignature.getSignatures();
 		for (final String signature : positiveSignatureList) {
