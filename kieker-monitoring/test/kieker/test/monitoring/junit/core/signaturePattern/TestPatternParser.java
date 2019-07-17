@@ -138,7 +138,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 		final String[] visibilities = { "public", "private", "package", "protected", "" };
 		final String[] staticNonStatics = { "static", "non_static", "" };
 		final String[] nativeNonNatives = { "native", "non_native", "" };
-		final String[] returnTypesOrNews = { "java.lang.String", "new", "*", "..*" };
+		final String[] returnTypes = { "java.lang.String", "*", "..*" };
 		final String[] fqClassNames = { "a.b.C", "a.b.*", "*", "..*" };
 		final String[] operationNames = { "doIt", "get*", "*" };
 		final String[] paramLists = { "", "*", "A, B", ".." };
@@ -161,7 +161,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 		final boolean[] visibilityMatches = { true, false, false, false, true };
 		final boolean[] staticNonStaticMatches = { true, false, true };
 		final boolean[] nativeNonNativeMatches = { true, false, true };
-		final boolean[] returnTypeOrNewMatches = { false, false, true, true };
+		final boolean[] returnTypeMatches = { false, true, true };
 		final boolean[] fqClassNameMatches = { false, false, false, true };
 		final boolean[] operationNameMatches = { false, false, true };
 		final boolean[] paramListMatches = { true, false, false, true };
@@ -179,7 +179,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 		for (int visibilityIdy = 0; visibilityIdy < visibilities.length; visibilityIdy++) {
 			for (int staticNonStaticIdx = 0; staticNonStaticIdx < staticNonStatics.length; staticNonStaticIdx++) { // NOCS
 				for (int nativeNonNativeIdx = 0; nativeNonNativeIdx < nativeNonNatives.length; nativeNonNativeIdx++) { // NOCS
-					for (int returnTypeOrNewIdx = 0; returnTypeOrNewIdx < returnTypesOrNews.length; returnTypeOrNewIdx++) { // NOCS
+					for (int returnTypeOrNewIdx = 0; returnTypeOrNewIdx < returnTypes.length; returnTypeOrNewIdx++) { // NOCS
 						for (int fqClassNameIdx = 0; fqClassNameIdx < fqClassNames.length; fqClassNameIdx++) { // NOCS
 							for (int operationNameIdx = 0; operationNameIdx < operationNames.length; operationNameIdx++) { // NOCS
 								for (int paramListIdx = 0; paramListIdx < paramLists.length; paramListIdx++) { // NOCS
@@ -196,7 +196,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 											if (nativeNonNatives[nativeNonNativeIdx].length() > 0) {
 												signatureBuilder.append(nativeNonNatives[nativeNonNativeIdx]).append(white);
 											}
-											signatureBuilder.append(returnTypesOrNews[returnTypeOrNewIdx]).append(white).append(fqClassNames[fqClassNameIdx])
+											signatureBuilder.append(returnTypes[returnTypeOrNewIdx]).append(white).append(fqClassNames[fqClassNameIdx])
 													.append('.').append(operationNames[operationNameIdx]).append(whiteOrEmpty).append('(').append(whiteOrEmpty);
 
 											if (paramLists[paramListIdx].length() > 0) {
@@ -209,13 +209,13 @@ public class TestPatternParser extends AbstractKiekerTest {
 											final boolean expected = visibilityMatches[visibilityIdy]
 													&& staticNonStaticMatches[staticNonStaticIdx]
 													&& nativeNonNativeMatches[nativeNonNativeIdx]
-													&& returnTypeOrNewMatches[returnTypeOrNewIdx]
+													&& returnTypeMatches[returnTypeOrNewIdx]
 													&& fqClassNameMatches[fqClassNameIdx]
 													&& operationNameMatches[operationNameIdx]
 													&& paramListMatches[paramListIdx];
 
 											this.checkCombination(signature, visibilities[visibilityIdy], staticNonStatics[staticNonStaticIdx],
-													nativeNonNatives[nativeNonNativeIdx], returnTypesOrNews[returnTypeOrNewIdx], fqClassNames[fqClassNameIdx],
+													nativeNonNatives[nativeNonNativeIdx], returnTypes[returnTypeOrNewIdx], fqClassNames[fqClassNameIdx],
 													operationNames[operationNameIdx], paramLists[paramListIdx]);
 
 											final Pattern pattern = PatternParser.parseToPattern(signature);

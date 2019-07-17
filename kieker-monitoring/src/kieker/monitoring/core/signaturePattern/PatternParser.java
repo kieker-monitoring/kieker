@@ -103,7 +103,10 @@ public final class PatternParser {
 			}
 			final String fqClassName = fqName.substring(0, index);
 			final String methodName = fqName.substring(index + 1);
-
+			if ("new".equals(tokens[numOfModifiers]) && !"<init>".equals(methodName)) {
+				throw new InvalidPatternException("Invalid constructor name - must always be <init>");
+			}
+			
 			final String params = trimPattern.substring(openingParenthesis + 1, closingParenthesis).trim();
 			final String throwsPattern;
 			final int throwsPatternStart = closingParenthesis + 1;
