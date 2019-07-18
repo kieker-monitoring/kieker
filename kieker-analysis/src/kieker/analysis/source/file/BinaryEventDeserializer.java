@@ -58,13 +58,13 @@ public class BinaryEventDeserializer extends AbstractEventDeserializer {
 
 	public BinaryEventDeserializer(final Configuration configuration, final ReaderRegistry<String> registry) {
 		super(configuration, registry);
-		final int bufferSize = configuration.getIntProperty(BinaryEventDeserializer.BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
+		final int bufferSize = configuration.getIntProperty(BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
 		this.buffer = ByteBuffer.allocate(bufferSize);
 	}
 
 	@Override
 	public void processDataStream(final InputStream chainInputStream, final OutputPort<IMonitoringRecord> outputPort) throws IOException {
-		final BinaryValueDeserializer deserializer = BinaryValueDeserializer.create(this.buffer , this.registry);
+		final BinaryValueDeserializer deserializer = BinaryValueDeserializer.create(this.buffer, this.registry);
 
 		boolean endOfStreamReached = false;
 		while (!endOfStreamReached) {
