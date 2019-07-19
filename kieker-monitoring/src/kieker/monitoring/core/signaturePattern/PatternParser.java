@@ -305,7 +305,14 @@ public final class PatternParser {
 			return "";
 		} else {
 			try {
-				return PatternParser.parseFQClassname(retType) + "\\s";
+				final int index = retType.indexOf('[');
+            			if (index != -1) {
+               				final String onlyIdentified = retType.substring(0, index);
+               				final String onlyArrayParenthesis = retType.substring(index).replace("[", "\\[").replace("]", "\\]");
+               				return PatternParser.parseFQClassname(onlyIdentified) + onlyArrayParenthesis + "\\s";
+            			} else {
+  					return PatternParser.parseFQClassname(retType) + "\\s";
+				}
 			} catch (final InvalidPatternException ex) {
 				throw new InvalidPatternException("Invalid return type.", ex);
 			}

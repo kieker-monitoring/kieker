@@ -232,6 +232,21 @@ public class TestPatternParser extends AbstractKiekerTest {
 			}
 		}
 	}
+	
+	@Test
+   public void testByteReturn() throws InvalidPatternException {
+      final String signatureByte = "public byte package.Class.method()";
+      final Pattern patternByte = PatternParser.parseToPattern("public byte package.Class.method()");
+      Assert.assertTrue(patternByte.matcher(signatureByte).matches());
+      
+      final String signatureArray = "public byte[] package.Class.method()";
+      final Pattern patternArray = PatternParser.parseToPattern("public byte[] package.Class.method()");
+      Assert.assertTrue(patternArray.matcher(signatureArray).matches());
+      
+      final String signatureDoubleArray = "public byte[][] package.Class.method()";
+      final Pattern patternDoubleArray = PatternParser.parseToPattern("public byte[][] package.Class.method()");
+      Assert.assertTrue(patternDoubleArray.matcher(signatureDoubleArray).matches());
+   }
 
 	@Test
 	public void constructorTest() throws InvalidPatternException {
