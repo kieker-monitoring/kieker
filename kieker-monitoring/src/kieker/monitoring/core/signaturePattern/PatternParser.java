@@ -227,6 +227,17 @@ public final class PatternParser {
 			}
 		}
 	}
+	
+	private static final String parseType(final String type) throws InvalidPatternException {
+		final int index = type.indexOf('[');
+		if (index != -1) {
+			final String onlyIdentified = type.substring(0, index);
+			final String onlyArrayParenthesis = type.substring(index).replace("[", "\\[").replace("]", "\\]");
+			return PatternParser.parseIdentifier(onlyIdentified) + onlyArrayParenthesis;
+		} else {
+			return PatternParser.parseIdentifier(type);
+		}
+	}
 
 	private static final String parseIdentifier(final String identifier) throws InvalidPatternException {
 		final char[] array = identifier.toCharArray();
@@ -257,7 +268,7 @@ public final class PatternParser {
 		final String[] tokens = fqClassname.split("\\.");
 		if (tokens.length == 1) {
 			try {
-				return PatternParser.parseIdentifier(fqClassname);
+				return PatternParser.parseType(fqClassname);
 			} catch (final InvalidPatternException ex) {
 				throw new InvalidPatternException("Invalid fully qualified type.", ex);
 			}
@@ -284,7 +295,7 @@ public final class PatternParser {
 				sb.append("(([\\p{javaJavaIdentifierPart}\\.])*\\.)?");
 			} else {
 				try {
-					sb.append(PatternParser.parseIdentifier(tokens[i]));
+					sb.append(PatternParser.parseType(tokens[i]));
 				} catch (final InvalidPatternException ex) {
 					throw new InvalidPatternException("Invalid fully qualified type.", ex);
 				}
@@ -292,7 +303,7 @@ public final class PatternParser {
 			}
 		}
 		try {
-			sb.append(PatternParser.parseIdentifier(tokens[length - 1]));
+			sb.append(PatternParser.parseType(tokens[length - 1]));
 		} catch (final InvalidPatternException ex) {
 			final InvalidPatternException newEx = new InvalidPatternException("Invalid fully qualified type.");
 			throw (InvalidPatternException) newEx.initCause(ex);
@@ -305,14 +316,7 @@ public final class PatternParser {
 			return "";
 		} else {
 			try {
-				final int index = retType.indexOf('[');
-            			if (index != -1) {
-               				final String onlyIdentified = retType.substring(0, index);
-               				final String onlyArrayParenthesis = retType.substring(index).replace("[", "\\[").replace("]", "\\]");
-               				return PatternParser.parseFQClassname(onlyIdentified) + onlyArrayParenthesis + "\\s";
-            			} else {
-  					return PatternParser.parseFQClassname(retType) + "\\s";
-				}
+  				return PatternParser.parseFQClassname(retType) + "\\s";
 			} catch (final InvalidPatternException ex) {
 				throw new InvalidPatternException("Invalid return type.", ex);
 			}
