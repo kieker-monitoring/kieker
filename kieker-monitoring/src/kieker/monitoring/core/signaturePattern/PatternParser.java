@@ -320,11 +320,10 @@ public final class PatternParser {
 			return PatternParser.parseNonEmptyModifierContraintList(modifierList);
 		}
 	}
-
-	private static String parseNonEmptyModifierContraintList(final String[] modifierList) throws InvalidPatternException {
-		final Map<String, Integer> allowedModifiersWithOrder = new HashMap<>(); // NOPMD (no conc.
-																				// access)
-		allowedModifiersWithOrder.put(MODIFIER_PUBLIC, 0);
+	
+	private static final Map<String, Integer> allowedModifiersWithOrder = new HashMap<>(); // NOPMD (no conc. access)
+	static {
+   		allowedModifiersWithOrder.put(MODIFIER_PUBLIC, 0);
 		allowedModifiersWithOrder.put(MODIFIER_PRIVATE, 0);
 		allowedModifiersWithOrder.put(MODIFIER_PROTECTED, 0);
 		allowedModifiersWithOrder.put(PACKAGE, 0);
@@ -338,6 +337,9 @@ public final class PatternParser {
 		allowedModifiersWithOrder.put(NON_SYNCHRONIZED, 4);
 		allowedModifiersWithOrder.put(NATIVE, 5);
 		allowedModifiersWithOrder.put(NON_NATIVE, 5);
+	}
+
+	private static String parseNonEmptyModifierContraintList(final String[] modifierList) throws InvalidPatternException {
 		final int numberOfModifiers = modifierList.length;
 		// test whether modifiers are allowed and in the correct order
 		Integer old = -1;
