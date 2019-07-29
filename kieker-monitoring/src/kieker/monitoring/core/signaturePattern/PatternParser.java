@@ -239,12 +239,10 @@ public final class PatternParser {
 			throw new InvalidPatternException("Identifier starts with invalid symbol.");
 		}
 		for (int i = 1; i < array.length; i++) {
-			if (Character.isJavaIdentifierPart(array[i])) {
-				if (array[i] != '$') {
-					sb.append(array[i]);
-				} else {
-					sb.append("\\").append(array[i]);
-				}
+			if (array[i] == '$') {
+				sb.append("\\").append(array[i]);
+			} else if (Character.isJavaIdentifierPart(array[i])) {
+				sb.append(array[i]);
 			} else if (array[i] == '*') {
 				sb.append("(\\p{javaJavaIdentifierPart})*");
 			} else {
