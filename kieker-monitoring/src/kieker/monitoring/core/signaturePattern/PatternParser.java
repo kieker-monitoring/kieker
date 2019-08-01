@@ -101,7 +101,7 @@ public final class PatternParser {
 			if ((index == -1) || (index == (fqName.length() - 1))) {
 				throw new InvalidPatternException("Invalid fully qualified type or method name.");
 			}
-			final String fqClassName = fqName.substring(0, index);
+			final String fqClassName = fqName.substring(0, index); // NOPMD declaring variable in this context is usefull
 			final String methodName = fqName.substring(index + 1);
 			if ("new".equals(tokens[numOfModifiers]) && !"<init>".equals(methodName)) {
 				throw new InvalidPatternException("Invalid constructor name - must always be <init>");
