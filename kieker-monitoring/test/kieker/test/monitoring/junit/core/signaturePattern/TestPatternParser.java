@@ -252,7 +252,6 @@ public class TestPatternParser extends AbstractKiekerTest {
    public void testArrayParameters() throws InvalidPatternException {
       final String signatureArray = "public void package.Class.method(byte[])";
       final Pattern patternArray = PatternParser.parseToPattern("public void package.Class.method(byte[])");
-      System.out.println(patternArray);
       Assert.assertTrue(patternArray.matcher(signatureArray).matches());
 
       final String signatureDoubleArray = "public void package.Class.method(byte[][])";
