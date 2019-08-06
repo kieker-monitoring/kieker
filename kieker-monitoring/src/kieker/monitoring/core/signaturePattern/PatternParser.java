@@ -45,6 +45,24 @@ public final class PatternParser {
 
 	private static final String FULLY_QUALFIED_NAME = "[\\p{javaJavaIdentifierPart}\\.])*\\p{javaJavaIdentifierPart}+";
 	private static final String SIMPLE_NAME = "(\\p{javaJavaIdentifierPart})+";
+	
+	private static final Map<String, Integer> ALLOWED_MODIFIER_WITH_ORDER = new HashMap<>(); // NOPMD (no conc. access)
+	static {
+   		ALLOWED_MODIFIER_WITH_ORDER.put(MODIFIER_PUBLIC, 0);
+		ALLOWED_MODIFIER_WITH_ORDER.put(MODIFIER_PRIVATE, 0);
+		ALLOWED_MODIFIER_WITH_ORDER.put(MODIFIER_PROTECTED, 0);
+		ALLOWED_MODIFIER_WITH_ORDER.put(PACKAGE, 0);
+		ALLOWED_MODIFIER_WITH_ORDER.put(ABSTRACT, 1);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NON_ABSTRACT, 1);
+		ALLOWED_MODIFIER_WITH_ORDER.put(STATIC, 2);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NON_STATIC, 2);
+		ALLOWED_MODIFIER_WITH_ORDER.put(FINAL, 3);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NON_FINAL, 3);
+		ALLOWED_MODIFIER_WITH_ORDER.put(SYNCHRONIZED, 4);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NON_SYNCHRONIZED, 4);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NATIVE, 5);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NON_NATIVE, 5);
+	}
 
 	/**
 	 * Private constructor to avoid initialization.
@@ -332,30 +350,12 @@ public final class PatternParser {
 		}
 	}
 	
-	private static final Map<String, Integer> allowedModifiersWithOrder = new HashMap<>(); // NOPMD (no conc. access)
-	static {
-   		allowedModifiersWithOrder.put(MODIFIER_PUBLIC, 0);
-		allowedModifiersWithOrder.put(MODIFIER_PRIVATE, 0);
-		allowedModifiersWithOrder.put(MODIFIER_PROTECTED, 0);
-		allowedModifiersWithOrder.put(PACKAGE, 0);
-		allowedModifiersWithOrder.put(ABSTRACT, 1);
-		allowedModifiersWithOrder.put(NON_ABSTRACT, 1);
-		allowedModifiersWithOrder.put(STATIC, 2);
-		allowedModifiersWithOrder.put(NON_STATIC, 2);
-		allowedModifiersWithOrder.put(FINAL, 3);
-		allowedModifiersWithOrder.put(NON_FINAL, 3);
-		allowedModifiersWithOrder.put(SYNCHRONIZED, 4);
-		allowedModifiersWithOrder.put(NON_SYNCHRONIZED, 4);
-		allowedModifiersWithOrder.put(NATIVE, 5);
-		allowedModifiersWithOrder.put(NON_NATIVE, 5);
-	}
-
 	private static String parseNonEmptyModifierContraintList(final String[] modifierList) throws InvalidPatternException {
 		final int numberOfModifiers = modifierList.length;
 		// test whether modifiers are allowed and in the correct order
 		Integer old = -1;
 		for (int i = 0; i < numberOfModifiers; i++) {
-			final Integer current = allowedModifiersWithOrder.get(modifierList[i]);
+			final Integer current = ALLOWED_MODIFIER_WITH_ORDER.get(modifierList[i]);
 			if ((null == current) || (current < old)) {
 				throw new InvalidPatternException("Invalid modifier");
 			}
