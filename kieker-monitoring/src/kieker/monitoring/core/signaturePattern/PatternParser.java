@@ -45,6 +45,24 @@ public final class PatternParser {
 
 	private static final String FULLY_QUALFIED_NAME = "[\\p{javaJavaIdentifierPart}\\.])*\\p{javaJavaIdentifierPart}+";
 	private static final String SIMPLE_NAME = "(\\p{javaJavaIdentifierPart})+";
+	
+	private static final Map<String, Integer> ALLOWED_MODIFIER_WITH_ORDER = new HashMap<>(); // NOPMD (no conc. access)
+	static {
+   		ALLOWED_MODIFIER_WITH_ORDER.put(MODIFIER_PUBLIC, 0);
+		ALLOWED_MODIFIER_WITH_ORDER.put(MODIFIER_PRIVATE, 0);
+		ALLOWED_MODIFIER_WITH_ORDER.put(MODIFIER_PROTECTED, 0);
+		ALLOWED_MODIFIER_WITH_ORDER.put(PACKAGE, 0);
+		ALLOWED_MODIFIER_WITH_ORDER.put(ABSTRACT, 1);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NON_ABSTRACT, 1);
+		ALLOWED_MODIFIER_WITH_ORDER.put(STATIC, 2);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NON_STATIC, 2);
+		ALLOWED_MODIFIER_WITH_ORDER.put(FINAL, 3);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NON_FINAL, 3);
+		ALLOWED_MODIFIER_WITH_ORDER.put(SYNCHRONIZED, 4);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NON_SYNCHRONIZED, 4);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NATIVE, 5);
+		ALLOWED_MODIFIER_WITH_ORDER.put(NON_NATIVE, 5);
+	}
 
 	/**
 	 * Private constructor to avoid initialization.
@@ -101,7 +119,7 @@ public final class PatternParser {
 			if ((index == -1) || (index == (fqName.length() - 1))) {
 				throw new InvalidPatternException("Invalid fully qualified type or method name.");
 			}
-			final String fqClassName = fqName.substring(0, index);
+			final String fqClassName = fqName.substring(0, index); // NOPMD declaring variable in this context is usefull
 			final String methodName = fqName.substring(index + 1);
 			if ("new".equals(tokens[numOfModifiers]) && !"<init>".equals(methodName)) {
 				throw new InvalidPatternException("Invalid constructor name - must always be <init>");
@@ -227,6 +245,17 @@ public final class PatternParser {
 			}
 		}
 	}
+	
+	private static final String parseType(final String type) throws InvalidPatternException {
+		final int index = type.indexOf('[');
+		if (index != -1) {
+			final String onlyIdentified = type.substring(0, index);
+			final String onlyArrayParenthesis = type.substring(index).replace("[", "\\[").replace("]", "\\]");
+			return PatternParser.parseIdentifier(onlyIdentified) + onlyArrayParenthesis;
+		} else {
+			return PatternParser.parseIdentifier(type);
+		}
+	}
 
 	private static final String parseIdentifier(final String identifier) throws InvalidPatternException {
 		final char[] array = identifier.toCharArray();
@@ -259,7 +288,7 @@ public final class PatternParser {
 		final String[] tokens = fqClassname.split("\\.");
 		if (tokens.length == 1) {
 			try {
-				return PatternParser.parseIdentifier(fqClassname);
+				return PatternParser.parseType(fqClassname);
 			} catch (final InvalidPatternException ex) {
 				throw new InvalidPatternException("Invalid fully qualified type.", ex);
 			}
@@ -286,7 +315,7 @@ public final class PatternParser {
 				sb.append("(([\\p{javaJavaIdentifierPart}\\.])*\\.)?");
 			} else {
 				try {
-					sb.append(PatternParser.parseIdentifier(tokens[i]));
+					sb.append(PatternParser.parseType(tokens[i]));
 				} catch (final InvalidPatternException ex) {
 					throw new InvalidPatternException("Invalid fully qualified type.", ex);
 				}
@@ -294,7 +323,7 @@ public final class PatternParser {
 			}
 		}
 		try {
-			sb.append(PatternParser.parseIdentifier(tokens[length - 1]));
+			sb.append(PatternParser.parseType(tokens[length - 1]));
 		} catch (final InvalidPatternException ex) {
 			final InvalidPatternException newEx = new InvalidPatternException("Invalid fully qualified type.");
 			throw (InvalidPatternException) newEx.initCause(ex);
@@ -307,7 +336,7 @@ public final class PatternParser {
 			return "";
 		} else {
 			try {
-				return PatternParser.parseFQClassname(retType) + "\\s";
+  				return PatternParser.parseFQClassname(retType) + "\\s";
 			} catch (final InvalidPatternException ex) {
 				throw new InvalidPatternException("Invalid return type.", ex);
 			}
@@ -322,29 +351,13 @@ public final class PatternParser {
 			return PatternParser.parseNonEmptyModifierContraintList(modifierList);
 		}
 	}
-
+	
 	private static String parseNonEmptyModifierContraintList(final String[] modifierList) throws InvalidPatternException {
-		final Map<String, Integer> allowedModifiersWithOrder = new HashMap<>(); // NOPMD (no conc.
-																				// access)
-		allowedModifiersWithOrder.put(MODIFIER_PUBLIC, 0);
-		allowedModifiersWithOrder.put(MODIFIER_PRIVATE, 0);
-		allowedModifiersWithOrder.put(MODIFIER_PROTECTED, 0);
-		allowedModifiersWithOrder.put(PACKAGE, 0);
-		allowedModifiersWithOrder.put(ABSTRACT, 1);
-		allowedModifiersWithOrder.put(NON_ABSTRACT, 1);
-		allowedModifiersWithOrder.put(STATIC, 2);
-		allowedModifiersWithOrder.put(NON_STATIC, 2);
-		allowedModifiersWithOrder.put(FINAL, 3);
-		allowedModifiersWithOrder.put(NON_FINAL, 3);
-		allowedModifiersWithOrder.put(SYNCHRONIZED, 4);
-		allowedModifiersWithOrder.put(NON_SYNCHRONIZED, 4);
-		allowedModifiersWithOrder.put(NATIVE, 5);
-		allowedModifiersWithOrder.put(NON_NATIVE, 5);
 		final int numberOfModifiers = modifierList.length;
 		// test whether modifiers are allowed and in the correct order
 		Integer old = -1;
 		for (int i = 0; i < numberOfModifiers; i++) {
-			final Integer current = allowedModifiersWithOrder.get(modifierList[i]);
+			final Integer current = ALLOWED_MODIFIER_WITH_ORDER.get(modifierList[i]);
 			if ((null == current) || (current < old)) {
 				throw new InvalidPatternException("Invalid modifier");
 			}
