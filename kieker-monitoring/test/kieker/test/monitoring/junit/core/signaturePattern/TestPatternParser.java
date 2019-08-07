@@ -234,30 +234,41 @@ public class TestPatternParser extends AbstractKiekerTest {
 	}
 	
 	@Test
-   public void testArrayReturn() throws InvalidPatternException {
-      final String signatureByte = "public byte package.Class.method()";
-      final Pattern patternByte = PatternParser.parseToPattern("public byte package.Class.method()");
-      Assert.assertTrue(patternByte.matcher(signatureByte).matches());
+	public void testInnerClass() throws InvalidPatternException {
+		final String signatureInner = "public void package.Class$InnnerClass.methodA()";
+		final Pattern patternInner = PatternParser.parseToPattern("public void package.Class$InnnerClass.methodA()");
+		Assert.assertTrue(patternInner.matcher(signatureInner).matches());
+	      
+		final String signatureDoubleInner = "public void package.Class$InnnerClass$InnerClassB.methodB()";
+		final Pattern patternDoubleInner = PatternParser.parseToPattern("public void package.Class$InnnerClass$InnerClassB.methodB()");
+		Assert.assertTrue(patternDoubleInner.matcher(signatureDoubleInner).matches());
+	}
+  
+  @Test
+  public void testArrayReturn() throws InvalidPatternException {
+    final String signatureByte = "public byte package.Class.method()";
+    final Pattern patternByte = PatternParser.parseToPattern("public byte package.Class.method()");
+    Assert.assertTrue(patternByte.matcher(signatureByte).matches());
       
-      final String signatureArray = "public byte[] package.Class.method()";
-      final Pattern patternArray = PatternParser.parseToPattern("public byte[] package.Class.method()");
-      Assert.assertTrue(patternArray.matcher(signatureArray).matches());
+    final String signatureArray = "public byte[] package.Class.method()";
+    final Pattern patternArray = PatternParser.parseToPattern("public byte[] package.Class.method()");
+    Assert.assertTrue(patternArray.matcher(signatureArray).matches());
       
-      final String signatureDoubleArray = "public byte[][] package.Class.method()";
-      final Pattern patternDoubleArray = PatternParser.parseToPattern("public byte[][] package.Class.method()");
-      Assert.assertTrue(patternDoubleArray.matcher(signatureDoubleArray).matches());
-   }
+    final String signatureDoubleArray = "public byte[][] package.Class.method()";
+    final Pattern patternDoubleArray = PatternParser.parseToPattern("public byte[][] package.Class.method()");
+    Assert.assertTrue(patternDoubleArray.matcher(signatureDoubleArray).matches());
+  }
 	
-   @Test
-   public void testArrayParameters() throws InvalidPatternException {
-      final String signatureArray = "public void package.Class.method(byte[])";
-      final Pattern patternArray = PatternParser.parseToPattern("public void package.Class.method(byte[])");
-      Assert.assertTrue(patternArray.matcher(signatureArray).matches());
+  @Test
+  public void testArrayParameters() throws InvalidPatternException {
+    final String signatureArray = "public void package.Class.method(byte[])";
+    final Pattern patternArray = PatternParser.parseToPattern("public void package.Class.method(byte[])");
+    Assert.assertTrue(patternArray.matcher(signatureArray).matches());
 
-      final String signatureDoubleArray = "public void package.Class.method(byte[][])";
-      final Pattern patternDoubleArray = PatternParser.parseToPattern("public void package.Class.method(byte[][])");
-      Assert.assertTrue(patternDoubleArray.matcher(signatureDoubleArray).matches());
-   }
+    final String signatureDoubleArray = "public void package.Class.method(byte[][])";
+    final Pattern patternDoubleArray = PatternParser.parseToPattern("public void package.Class.method(byte[][])");
+    Assert.assertTrue(patternDoubleArray.matcher(signatureDoubleArray).matches());
+  }
 
 	@Test
 	public void constructorTest() throws InvalidPatternException {
