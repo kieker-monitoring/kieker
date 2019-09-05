@@ -16,10 +16,8 @@
 
 package kieker.monitoring.listener;
 
+import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,14 +26,17 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IRecordReceivedListener;
 import kieker.common.record.remotecontrol.ActivationEvent;
 import kieker.common.record.remotecontrol.ActivationParameterEvent;
+import kieker.common.record.remotecontrol.AddParameterValueEvent;
 import kieker.common.record.remotecontrol.DeactivationEvent;
 import kieker.common.record.remotecontrol.IRemoteControlEvent;
 import kieker.common.record.remotecontrol.IRemoteParameterControlEvent;
+import kieker.common.record.remotecontrol.RemoveParameterValueEvent;
 import kieker.common.record.remotecontrol.UpdateParameterEvent;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
- * Represents a listener which is informed upon a event is received, which should.
+ * Represents a listener which is informed upon a event is received, which
+ * should.
  *
  * @author Marc Adolf
  * @since 1.14
@@ -54,11 +55,11 @@ public class MonitoringCommandListener implements IRecordReceivedListener {
 
 	/**
 	 * Creates a new listener for {@link RemoteControlEvent RemoteControlEvents}.
-	 * Relies on an existing {@link MonitoringController} to
-	 * transfer messages like the
-	 * (de-)activation of probes.
+	 * Relies on an existing {@link MonitoringController} to transfer messages like
+	 * the (de-)activation of probes.
 	 *
 	 * @param monitoringController
+	 *            monitoring controller
 	 */
 	public MonitoringCommandListener(final MonitoringController monitoringController) {
 		this.monitoringController = monitoringController;
@@ -72,45 +73,37 @@ public class MonitoringCommandListener implements IRecordReceivedListener {
 	 */
 	@Override
 	public void onRecordReceived(final IMonitoringRecord record) {
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Received new record: {}", record.getClass().getName());
-		}
+		MonitoringCommandListener.LOGGER.debug("Received new record: {}", record.getClass().getName());
+
 		if (!(record instanceof IRemoteControlEvent)) {
-			LOGGER.info("Received an event for the TCP monitoring controller, which is no remote control event");
+			MonitoringCommandListener.LOGGER
+					.info("Received an event for the TCP monitoring controller, which is no remote control event");
 		}
 		final String pattern = ((IRemoteControlEvent) record).getPattern();
 		if (record instanceof DeactivationEvent) {
 			this.monitoringController.deactivateProbe(pattern);
-			this.monitoringController.deleteParameterEntry(pattern);
+			this.monitoringController.clearPatternParameters(pattern);
 		} else if (record instanceof ActivationParameterEvent) {
-			final Map<String, List<String>> parameterMap = this.extractParameters((IRemoteParameterControlEvent) record);
-			this.monitoringController.addCompletePatternParameters(pattern, parameterMap);
+			final IRemoteParameterControlEvent event = (IRemoteParameterControlEvent) record;
+			this.monitoringController.addPatternParameter(pattern, event.getName(),
+					new LinkedList<>(Arrays.asList(event.getValues())));
 			this.monitoringController.activateProbe(pattern);
 		} else if (record instanceof ActivationEvent) {
-			this.monitoringController.deleteParameterEntry(pattern);
+			this.monitoringController.clearPatternParameters(pattern);
 			this.monitoringController.activateProbe(pattern);
+		} else if (record instanceof AddParameterValueEvent) {
+			final AddParameterValueEvent event = (AddParameterValueEvent) record;
+			this.monitoringController.addPatternParameterValue(pattern, event.getName(), event.getValue());
+		} else if (record instanceof RemoveParameterValueEvent) {
+			final RemoveParameterValueEvent event = (RemoveParameterValueEvent) record;
+			this.monitoringController.removePatternParameterValue(pattern, event.getName(), event.getValue());
 		} else if (record instanceof UpdateParameterEvent) {
-			final Map<String, List<String>> parameterMap = this.extractParameters((IRemoteParameterControlEvent) record);
-			this.monitoringController.addCompletePatternParameters(pattern, parameterMap);
+			final IRemoteParameterControlEvent event = (IRemoteParameterControlEvent) record;
+			this.monitoringController.addPatternParameter(pattern, event.getName(),
+					new LinkedList<>(Arrays.asList(event.getValues())));
 		} else {
-			LOGGER.info("Received unknown remote control event: {}", record.getClass().getName());
+			MonitoringCommandListener.LOGGER.info("Received unknown remote control event: {}",
+					record.getClass().getName());
 		}
-	}
-
-	private Map<String, List<String>> extractParameters(final IRemoteParameterControlEvent record) {
-		final Map<String, List<String>> parameterMap = new ConcurrentHashMap<>();
-		final String[] parameterNames = record.getParameterNames();
-		final String[][] parameters = record.getParameters();
-
-		for (int i = 0; i < parameterNames.length; i++) {
-			final List<String> paramterEntries = new LinkedList<>();
-			for (int j = 0; j < parameters[i].length; j++) {
-				paramterEntries.add(parameters[i][j]);
-			}
-			parameterMap.put(parameterNames[i], paramterEntries);
-		}
-
-		return parameterMap;
-
 	}
 }

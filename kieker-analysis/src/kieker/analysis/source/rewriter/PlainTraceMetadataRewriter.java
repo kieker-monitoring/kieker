@@ -39,7 +39,7 @@ import teetime.framework.OutputPort;
  */
 public class PlainTraceMetadataRewriter implements ITraceMetadataRewriter {
 
-	private volatile AtomicLong traceId;
+	private volatile AtomicLong traceId = new AtomicLong();
 	private final Map<String, Map<Long, TraceMetadata>> metadatamap = new HashMap<>(); // NOPMD no concurrent use of this class
 
 	/**

@@ -138,7 +138,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 		final String[] visibilities = { "public", "private", "package", "protected", "" };
 		final String[] staticNonStatics = { "static", "non_static", "" };
 		final String[] nativeNonNatives = { "native", "non_native", "" };
-		final String[] returnTypesOrNews = { "java.lang.String", "new", "*", "..*" };
+		final String[] returnTypes = { "java.lang.String", "*", "..*" };
 		final String[] fqClassNames = { "a.b.C", "a.b.*", "*", "..*" };
 		final String[] operationNames = { "doIt", "get*", "*" };
 		final String[] paramLists = { "", "*", "A, B", ".." };
@@ -161,7 +161,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 		final boolean[] visibilityMatches = { true, false, false, false, true };
 		final boolean[] staticNonStaticMatches = { true, false, true };
 		final boolean[] nativeNonNativeMatches = { true, false, true };
-		final boolean[] returnTypeOrNewMatches = { false, false, true, true };
+		final boolean[] returnTypeMatches = { false, true, true };
 		final boolean[] fqClassNameMatches = { false, false, false, true };
 		final boolean[] operationNameMatches = { false, false, true };
 		final boolean[] paramListMatches = { true, false, false, true };
@@ -179,7 +179,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 		for (int visibilityIdy = 0; visibilityIdy < visibilities.length; visibilityIdy++) {
 			for (int staticNonStaticIdx = 0; staticNonStaticIdx < staticNonStatics.length; staticNonStaticIdx++) { // NOCS
 				for (int nativeNonNativeIdx = 0; nativeNonNativeIdx < nativeNonNatives.length; nativeNonNativeIdx++) { // NOCS
-					for (int returnTypeOrNewIdx = 0; returnTypeOrNewIdx < returnTypesOrNews.length; returnTypeOrNewIdx++) { // NOCS
+					for (int returnTypeOrNewIdx = 0; returnTypeOrNewIdx < returnTypes.length; returnTypeOrNewIdx++) { // NOCS
 						for (int fqClassNameIdx = 0; fqClassNameIdx < fqClassNames.length; fqClassNameIdx++) { // NOCS
 							for (int operationNameIdx = 0; operationNameIdx < operationNames.length; operationNameIdx++) { // NOCS
 								for (int paramListIdx = 0; paramListIdx < paramLists.length; paramListIdx++) { // NOCS
@@ -196,7 +196,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 											if (nativeNonNatives[nativeNonNativeIdx].length() > 0) {
 												signatureBuilder.append(nativeNonNatives[nativeNonNativeIdx]).append(white);
 											}
-											signatureBuilder.append(returnTypesOrNews[returnTypeOrNewIdx]).append(white).append(fqClassNames[fqClassNameIdx])
+											signatureBuilder.append(returnTypes[returnTypeOrNewIdx]).append(white).append(fqClassNames[fqClassNameIdx])
 													.append('.').append(operationNames[operationNameIdx]).append(whiteOrEmpty).append('(').append(whiteOrEmpty);
 
 											if (paramLists[paramListIdx].length() > 0) {
@@ -209,13 +209,13 @@ public class TestPatternParser extends AbstractKiekerTest {
 											final boolean expected = visibilityMatches[visibilityIdy]
 													&& staticNonStaticMatches[staticNonStaticIdx]
 													&& nativeNonNativeMatches[nativeNonNativeIdx]
-													&& returnTypeOrNewMatches[returnTypeOrNewIdx]
+													&& returnTypeMatches[returnTypeOrNewIdx]
 													&& fqClassNameMatches[fqClassNameIdx]
 													&& operationNameMatches[operationNameIdx]
 													&& paramListMatches[paramListIdx];
 
 											this.checkCombination(signature, visibilities[visibilityIdy], staticNonStatics[staticNonStaticIdx],
-													nativeNonNatives[nativeNonNativeIdx], returnTypesOrNews[returnTypeOrNewIdx], fqClassNames[fqClassNameIdx],
+													nativeNonNatives[nativeNonNativeIdx], returnTypes[returnTypeOrNewIdx], fqClassNames[fqClassNameIdx],
 													operationNames[operationNameIdx], paramLists[paramListIdx]);
 
 											final Pattern pattern = PatternParser.parseToPattern(signature);
@@ -232,12 +232,49 @@ public class TestPatternParser extends AbstractKiekerTest {
 			}
 		}
 	}
+	
+	@Test
+	public void testInnerClass() throws InvalidPatternException {
+		final String signatureInner = "public void package.Class$InnnerClass.methodA()";
+		final Pattern patternInner = PatternParser.parseToPattern("public void package.Class$InnnerClass.methodA()");
+		Assert.assertTrue(patternInner.matcher(signatureInner).matches());
+	      
+		final String signatureDoubleInner = "public void package.Class$InnnerClass$InnerClassB.methodB()";
+		final Pattern patternDoubleInner = PatternParser.parseToPattern("public void package.Class$InnnerClass$InnerClassB.methodB()");
+		Assert.assertTrue(patternDoubleInner.matcher(signatureDoubleInner).matches());
+	}
+  
+  @Test
+  public void testArrayReturn() throws InvalidPatternException {
+    final String signatureByte = "public byte package.Class.method()";
+    final Pattern patternByte = PatternParser.parseToPattern("public byte package.Class.method()");
+    Assert.assertTrue(patternByte.matcher(signatureByte).matches());
+      
+    final String signatureArray = "public byte[] package.Class.method()";
+    final Pattern patternArray = PatternParser.parseToPattern("public byte[] package.Class.method()");
+    Assert.assertTrue(patternArray.matcher(signatureArray).matches());
+      
+    final String signatureDoubleArray = "public byte[][] package.Class.method()";
+    final Pattern patternDoubleArray = PatternParser.parseToPattern("public byte[][] package.Class.method()");
+    Assert.assertTrue(patternDoubleArray.matcher(signatureDoubleArray).matches());
+  }
+	
+  @Test
+  public void testArrayParameters() throws InvalidPatternException {
+    final String signatureArray = "public void package.Class.method(byte[])";
+    final Pattern patternArray = PatternParser.parseToPattern("public void package.Class.method(byte[])");
+    Assert.assertTrue(patternArray.matcher(signatureArray).matches());
+
+    final String signatureDoubleArray = "public void package.Class.method(byte[][])";
+    final Pattern patternDoubleArray = PatternParser.parseToPattern("public void package.Class.method(byte[][])");
+    Assert.assertTrue(patternDoubleArray.matcher(signatureDoubleArray).matches());
+  }
 
 	@Test
 	public void constructorTest() throws InvalidPatternException {
-		final String constructorPattern = "new ..*.*(..)"; // should match all constructors and nothing else
+		final String constructorPattern = "new ..*.<init>(..)"; // should match all constructors and nothing else
 
-		final String constructorSignature = "public package.Class.constructor()";
+		final String constructorSignature = "public package.Class.<init>()";
 		final String methodSignature = "public void package.Class.method()";
 
 		final Matcher constructorMatcher = PatternParser.parseToPattern(constructorPattern).matcher("");
@@ -250,7 +287,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addNativeNonNativeVariant("").addNativeNonNativeVariant("native")
 				.addreturnTypeVariant("")
 				.addfqClassNameVariant("package.Class").addfqClassNameVariant("").addfqClassNameVariant("Class")
-				.addoperationNameVariant("constructor").addoperationNameVariant("hierGehtAlles")
+				.addoperationNameVariant("<init>")
 				.addparameterListVariant("").addparameterListVariant("int").addparameterListVariant("int, Class");
 		final List<String> positiveSignatureList = positiveSignature.getSignatures();
 		for (final String signature : positiveSignatureList) {

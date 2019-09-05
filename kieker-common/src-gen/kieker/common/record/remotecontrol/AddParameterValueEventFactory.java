@@ -16,14 +16,35 @@
 package kieker.common.record.remotecontrol;
 
 
+import kieker.common.exception.RecordInstantiationException;
+import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.io.IValueDeserializer;
+
 /**
- * @author Generic Kieker
+ * @author Reiner Jung
  * 
  * @since 1.15
  */
-public interface IRemoteParameterControlEvent extends IRemoteControlEvent {
-	public String getName();
+public final class AddParameterValueEventFactory implements IRecordFactory<AddParameterValueEvent> {
 	
-	public String[] getValues();
-	
+
+	@Override
+	public AddParameterValueEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
+		return new AddParameterValueEvent(deserializer);
+	}
+
+
+	@Override
+	public String[] getValueNames() {
+		return AddParameterValueEvent.VALUE_NAMES; // NOPMD
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return AddParameterValueEvent.TYPES; // NOPMD
+	}
+
+	public int getRecordSizeInBytes() {
+		return AddParameterValueEvent.SIZE;
+	}
 }

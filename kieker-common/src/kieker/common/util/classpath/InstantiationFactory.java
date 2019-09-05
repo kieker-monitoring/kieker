@@ -76,7 +76,6 @@ public final class InstantiationFactory {
 		try {
 			final Class<?> clazz = Class.forName(className);
 			if (c.isAssignableFrom(clazz)) {
-				// TODO is flatten really necessary? We do not modify the configuration
 				createdClass = (C) clazz.getConstructor(Configuration.class).newInstance(configuration.flatten());
 			} else {
 				LOGGER.error("Class '{}' has to implement '{}'", className, c.getSimpleName());

@@ -38,10 +38,13 @@ import kieker.common.util.filesystem.FSUtil;
  * @since 0.95a
  */
 @Plugin(description = "A file system reader which reads records from multiple directories", outputPorts = {
-	@OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader") }, configuration = {
-		@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".", description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
-		@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false", description = "Ignore unknown records? Aborts if encountered and value is false.")
-	})
+	@OutputPort(name = FSReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the FSReader") },
+		configuration = {
+			@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".",
+					description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
+			@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false",
+					description = "Ignore unknown records? Aborts if encountered and value is false.")
+		})
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
 	/** The name of the output port delivering the record read by this plugin. */
@@ -136,7 +139,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			}
 			final IMonitoringRecord record = this.recordQueue.remove();
 			synchronized (record) { // with newMonitoringRecord()
-				record.notifyAll();
+				record.notifyAll(); // NOFB this is an issue, but the code is legacy
 			}
 			if (record == EOF) { // NOPMD (CompareObjectsWithEquals)
 				readingReaders--;
@@ -158,7 +161,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 				this.recordQueue.notifyAll();
 			}
 			try {
-				record.wait();
+				record.wait(); // NOFB this is an issue, but the code is legacy
 			} catch (final InterruptedException ex) {
 				// ignore InterruptedException
 			}
