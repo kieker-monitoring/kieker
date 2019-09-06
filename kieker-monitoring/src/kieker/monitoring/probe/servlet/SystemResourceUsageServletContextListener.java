@@ -17,17 +17,21 @@
 package kieker.monitoring.probe.servlet;
 
 import kieker.monitoring.core.sampler.ISampler;
-import kieker.monitoring.sampler.sigar.ISigarSamplerFactory;
+import kieker.monitoring.sampler.oshi.IOshiSamplerFactory;
+import kieker.monitoring.sampler.oshi.OshiSamplerFactory;
 import kieker.monitoring.sampler.sigar.SigarSamplerFactory;
 
 /**
  * <p>
- * Starts and stops the periodic logging of various system resource samplers provided by the {@link SigarSamplerFactory} as the Servlet is initialized and destroyed
- * respectively. <br/>
+ * Starts and stops the periodic logging of various system resource samplers
+ * provided by the {@link SigarSamplerFactory} as the Servlet is initialized and
+ * destroyed respectively. <br/>
  *
- * The initial delay and the sampling period (both given in seconds) can be configured via context-params in the web.xml file, as shown below.
+ * The initial delay and the sampling period (both given in seconds) can be
+ * configured via context-params in the web.xml file, as shown below.
  *
- * Note that the set of included samplers will be extended with new samplers becoming available in the {@link SigarSamplerFactory}.
+ * Note that the set of included samplers will be extended with new samplers
+ * becoming available in the {@link SigarSamplerFactory}.
  * </p>
  *
  * <p>
@@ -69,13 +73,17 @@ public class SystemResourceUsageServletContextListener extends AbstractRegularSa
 
 	/** Prefix for parameters used in the web.xml file. */
 	// NOTE that this declaration must be BEFORE the following public constants!
-	private static final String CONTEXT_PARAM_NAME_PREFIX = SystemResourceUsageServletContextListener.class.getSimpleName();
+	private static final String CONTEXT_PARAM_NAME_PREFIX = SystemResourceUsageServletContextListener.class
+			.getSimpleName();
 
 	/** Parameter name for the sampling interval to be used in the web.xml file. */
-	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl. order)
+	public static final String CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl.
+																										// order)
 			+ ".samplingIntervalSeconds";
 	/** Parameter name for the initial delay to be used in the web.xml file. */
-	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl. order)
+	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS
+																												// (decl.
+																												// order)
 			+ ".initialSamplingDelaySeconds";
 
 	/**
@@ -97,9 +105,10 @@ public class SystemResourceUsageServletContextListener extends AbstractRegularSa
 
 	@Override
 	protected ISampler[] createSamplers() {
-		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.INSTANCE;
-		return new ISampler[] { sigarFactory.createSensorCPUsDetailedPerc(), sigarFactory.createSensorMemSwapUsage(),
-			sigarFactory.createSensorDiskUsage(), sigarFactory.createSensorLoadAverage(), sigarFactory.createSensorNetworkUtilization(), };
+		final IOshiSamplerFactory oshiFactory = OshiSamplerFactory.INSTANCE;
+		return new ISampler[] { oshiFactory.createSensorCPUsDetailedPerc(), oshiFactory.createSensorMemSwapUsage(),
+			oshiFactory.createSensorDiskUsage(), oshiFactory.createSensorLoadAverage(),
+			oshiFactory.createSensorNetworkUtilization(), };
 	}
 
 }

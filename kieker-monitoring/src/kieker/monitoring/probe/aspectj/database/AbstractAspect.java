@@ -173,7 +173,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	/**
 	 * Retrieves the className of the called method.
 	 *
-	 * @param currentJoinPoint the current joint point
+	 * @param currentJoinPoint
+	 *            the current joint point
 	 * @return returns the class name for the given joint point
 	 */
 	public String getJoinPointClassName(final JoinPoint currentJoinPoint) {
@@ -184,7 +185,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	/**
 	 * Retrieves the return type of the called method.
 	 *
-	 * @param className class name of a joint point
+	 * @param className
+	 *            class name of a joint point
 	 * @return returns the return type of a joint point
 	 */
 	private String getJoinPointReturnType(final String className) {
@@ -195,7 +197,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	/**
 	 * Retrieves the passed arguments of the JoinPoint.
 	 *
-	 * @param currentJoinPoint the current joint point
+	 * @param currentJoinPoint
+	 *            the current joint point
 	 * @return returns the arguments for the given joint point
 	 */
 	public String getJoinPointArguments(final JoinPoint currentJoinPoint) {
