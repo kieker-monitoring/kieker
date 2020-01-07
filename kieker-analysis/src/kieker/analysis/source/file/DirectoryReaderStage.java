@@ -31,8 +31,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.registry.reader.ReaderRegistry;
 
-import teetime.framework.AbstractConsumerStage;
-import teetime.framework.OutputPort;
+import teetime.stage.basic.AbstractTransformation;
 
 /**
  * Read a kieker log directory. The filter receives a directory as input and
@@ -42,10 +41,9 @@ import teetime.framework.OutputPort;
  *
  * @since 1.15
  */
-public class DirectoryReaderStage extends AbstractConsumerStage<File> {
+public class DirectoryReaderStage extends AbstractTransformation<File, IMonitoringRecord> {
 
 	private final FilenameFilter mapFilter = new MapFileFilter();
-	private final OutputPort<IMonitoringRecord> outputPort = this.createOutputPort(IMonitoringRecord.class);
 	private final Configuration configuration;
 
 	/**
@@ -165,10 +163,6 @@ public class DirectoryReaderStage extends AbstractConsumerStage<File> {
 		} else {
 			this.logger.debug("Skipping file {}, as the extension indicates that it is not a log file.", logFileName);
 		}
-	}
-
-	public OutputPort<IMonitoringRecord> getOutputPort() {
-		return this.outputPort;
 	}
 
 }
