@@ -30,6 +30,7 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 /**
  * @author Danish Manzoor
  *
+ * @since 1.14
  */
 public class NoneCompressionFilterTest {
 

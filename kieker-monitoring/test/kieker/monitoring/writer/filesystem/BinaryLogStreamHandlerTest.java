@@ -17,6 +17,7 @@ package kieker.monitoring.writer.filesystem;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.BufferOverflowException;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 
@@ -25,6 +26,7 @@ import org.junit.Test;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.registry.IRegistryListener;
 import kieker.common.registry.writer.WriterRegistry;
 import kieker.monitoring.writer.compression.ICompressionFilter;
 import kieker.monitoring.writer.compression.NoneCompressionFilter;
@@ -32,18 +34,19 @@ import kieker.monitoring.writer.compression.NoneCompressionFilter;
 /**
  * @author Danish Manzoor
  *
+ * @since 1.14
  */
+public class BinaryLogStreamHandlerTest implements IRegistryListener<String> {
 
-public class BinaryLogStreamHandlerTest {
+	/** Initializing parameters for TextlogStreamhandler object instance. */
+	private final Boolean flushLogFile = true;
+	private final Charset charset = Charset.defaultCharset();
+	private final ICompressionFilter compressionFilter = new NoneCompressionFilter(null);
+	private final WriterRegistry reg = new WriterRegistry(this);
 
-//	Initializing parameters for TextlogStreamhandler object instance
-	Boolean flushLogFile = true;
-	Integer bufferSize = 10;
-	int runCheck = 0;
-	final Charset charset = Charset.defaultCharset();
-	final ICompressionFilter compressionFilter = new NoneCompressionFilter(null);
-	WriterRegistry reg = new WriterRegistry(null);
-	final IMonitoringRecord record = new OperationExecutionRecord("testing", "abc", 1, 0, 1, "localhost", 123, 456);
+	public BinaryLogStreamHandlerTest() {
+		// nothing to be done here.
+	}
 
 	@Test
 	public void testClose() {
@@ -51,37 +54,56 @@ public class BinaryLogStreamHandlerTest {
 	}
 
 	@Test
-	public void testSerialize() throws IOException {
+	public void testSerializeBufferTooTiny() throws IOException {
+		final IMonitoringRecord record = new OperationExecutionRecord("testing", "abc", 1, 0, 1, "localhost", 123, 456);
+
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		final BinaryLogStreamHandler handler = new BinaryLogStreamHandler(this.flushLogFile, this.bufferSize,
+		final BinaryLogStreamHandler handler = new BinaryLogStreamHandler(this.flushLogFile, 10,
 				this.charset, this.compressionFilter, this.reg);
 
 		try {
 			// channel initializing
 			handler.initialize(byteArrayOutputStream, Paths.get("test-filename"));
 			// serializing test record
-			handler.serialize(this.record, 2);
-			Assert.assertEquals("String doesnot match", "$2;-1;testing;abc;1;0;1;localhost;123;456",
+			handler.serialize(record, 2);
+			Assert.assertEquals("String does not match", "$2;-1;testing;abc;1;0;1;localhost;123;456",
 					byteArrayOutputStream.toString().trim());
-			System.out.println(byteArrayOutputStream.toString());
-
-		} catch (final Exception e) {
-			// as buffer size is to small it will always catch exception on first execution
-			System.out.println("BufferOverflow Exception Occurred");
+		} catch (final BufferOverflowException e) {
+			// as buffer size is to small it will always catch exception
 		} finally {
-			// runCheck a static variable to maintain execution count
-			if (this.runCheck == 0) {
-				this.bufferSize = 10240;
-				this.runCheck++;
-				byteArrayOutputStream.close();
-				this.testSerialize();
-			}
+			byteArrayOutputStream.close();
+		}
+	}
+
+	@Test
+	public void testSerializeBufferSufficient() throws IOException {
+		final IMonitoringRecord record = new OperationExecutionRecord("testing", "abc", 1, 0, 1, "localhost", 123, 456);
+
+		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		final BinaryLogStreamHandler handler = new BinaryLogStreamHandler(this.flushLogFile, 10240,
+				this.charset, this.compressionFilter, this.reg);
+
+		try {
+			// channel initializing
+			handler.initialize(byteArrayOutputStream, Paths.get("test-filename"));
+			// serializing test record
+			handler.serialize(record, 2);
+		} catch (final BufferOverflowException e) {
+			// as buffer size is to small it will always catch exception on first execution
+			Assert.fail("Buffer should have been sufficient, overflow error.");
+		} finally {
+			byteArrayOutputStream.close();
 		}
 	}
 
 	@Test
 	public void testBinaryLogStreamHandler() {
 		// test not required
+	}
+
+	@Override
+	public void onNewRegistryEntry(final String value, final int id) {
+		// ignore, as we only want to mock the serialization
 	}
 
 }

@@ -43,10 +43,10 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 // as we want to mock System classes, we must prepare the test class and not the
 // to be mocked classes, as this is done for other static classes
 // https://github.com/powermock/powermock/wiki/Mock-System
-@PrepareForTest({ TextMapFileHandler.class })
+@PrepareForTest({ TextMapFileHandler.class }) // NOCS
 public class TextMapFileHandlerTest {
 
-	private final static String TEST_PATH = "this/is/a/test/path";
+	private static final String TEST_PATH = "this/is/a/test/path";
 
 	public TextMapFileHandlerTest() {
 		// test class
@@ -84,12 +84,10 @@ public class TextMapFileHandlerTest {
 		handler.add(0, "my.event.EventClass");
 		Assert.assertEquals("String doesnot match", "$0=my.event.EventClass",
 				((DummyWriter) dummyWriter).getBufferAsString());
-//		System.out.println(((DummyWriter) dummyWriter).getBufferAsString());
 		// adding dummy record 2
 		handler.add(1, "my.event.EventClass1");
 		Assert.assertEquals("String doesnot match", "$1=my.event.EventClass1",
 				((DummyWriter) dummyWriter).getBufferAsString());
-//		System.out.println(((DummyWriter) dummyWriter).getBufferAsString());
 
 		// closing
 		handler.close();

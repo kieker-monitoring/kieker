@@ -17,6 +17,7 @@ package kieker.monitoring.writer.filesystem;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.BufferOverflowException;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 
@@ -35,15 +36,17 @@ import kieker.monitoring.writer.compression.NoneCompressionFilter;
  */
 public class TextLogStreamHandlerTest {
 
-//	Initializing parameters for TextlogStreamhandler object instance
+	// Initializing parameters for TextlogStreamhandler object instance
 
-	Boolean flushLogFile = true;
-	Integer bufferSize = 10;
-	int runCheck = 0;
-	final Charset charset = Charset.defaultCharset();
-	final ICompressionFilter compressionFilter = new NoneCompressionFilter(null);
-	WriterRegistry reg = new WriterRegistry(null);
-	final IMonitoringRecord record = new OperationExecutionRecord("testing", "abc", 1, 0, 1, "localhost", 123, 456);
+	private final Boolean flushLogFile = true;
+	private final Charset charset = Charset.defaultCharset();
+	private final ICompressionFilter compressionFilter = new NoneCompressionFilter(null);
+	private final WriterRegistry reg = new WriterRegistry(null);
+	private final IMonitoringRecord record = new OperationExecutionRecord("testing", "abc", 1, 0, 1, "localhost", 123, 456);
+
+	public TextLogStreamHandlerTest() {
+		// nothing to do here
+	}
 
 	/**
 	 * Test method for
@@ -52,10 +55,10 @@ public class TextLogStreamHandlerTest {
 	 *
 	 */
 	@Test
-	public void testSerialize() throws IOException {
+	public void testSerializeBufferTooTiny() throws IOException {
 
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		final TextLogStreamHandler handler = new TextLogStreamHandler(this.flushLogFile, this.bufferSize, this.charset,
+		final TextLogStreamHandler handler = new TextLogStreamHandler(this.flushLogFile, 10, this.charset,
 				this.compressionFilter, this.reg);
 
 		try {
@@ -68,18 +71,38 @@ public class TextLogStreamHandlerTest {
 			System.out.println(byteArrayOutputStream.toString());
 
 		} catch (final Exception e) {
-			// as buffer size is to small it will always catch exception on first execution
-			System.out.println("BufferOverflow Exception Occurred");
+			// as buffer size is to small it will always catch exception
 		} finally {
-			// runCheck a static variable to maintain execution count
-			if (this.runCheck == 0) {
-				this.bufferSize = 10240;
-				this.runCheck++;
-				byteArrayOutputStream.close();
-				this.testSerialize();
-			}
+			byteArrayOutputStream.close();
 		}
+	}
 
+	/**
+	 * Test method for
+	 * {@link kieker.monitoring.writer.filesystem.TextLogStreamHandler#serialize(kieker.common.record.IMonitoringRecord, int)}.
+	 *
+	 *
+	 */
+	@Test
+	public void testSerializeBufferSufficient() throws IOException {
+
+		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		final TextLogStreamHandler handler = new TextLogStreamHandler(this.flushLogFile, 102400, this.charset,
+				this.compressionFilter, this.reg);
+
+		try {
+			// channel initializing
+			handler.initialize(byteArrayOutputStream, Paths.get("test-filename"));
+			// serializing test record
+			handler.serialize(this.record, 2);
+			Assert.assertEquals("String doesnot match", "$2;-1;testing;abc;1;0;1;localhost;123;456",
+					byteArrayOutputStream.toString().trim());
+		} catch (final BufferOverflowException e) {
+			// as buffer size is to small it will always catch exception on first execution
+			Assert.fail("Buffer should have been sufficient, overflow error.");
+		} finally {
+			byteArrayOutputStream.close();
+		}
 	}
 
 	/**
