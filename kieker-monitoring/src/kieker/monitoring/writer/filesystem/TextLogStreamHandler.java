@@ -53,13 +53,13 @@ public class TextLogStreamHandler extends AbstractLogStreamHandler {
 	 * @param flushLogFile
 	 *            activate flush after every record
 	 * @param bufferSize
-	              write buffer size
+	 *            write buffer size
 	 * @param charset
-	              charset
+	 *            charset
 	 * @param compressionFilter
-	              compression filter
+	 *            compression filter
 	 * @param writerRegistry
-	              dummy writer registry, not used in the text log
+	 *            dummy writer registry, not used in the text log
 	 */
 	public TextLogStreamHandler(final Boolean flushLogFile, final Integer bufferSize, final Charset charset, final ICompressionFilter compressionFilter,
 			final WriterRegistry writerRegistry) { // NOPMD writerRegistry is API and not used for text serialization
