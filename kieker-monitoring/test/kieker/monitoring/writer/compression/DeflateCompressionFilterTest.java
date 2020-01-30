@@ -35,6 +35,10 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
  */
 public class DeflateCompressionFilterTest {
 
+	public DeflateCompressionFilterTest() {
+		// nothing to do
+	}
+
 	/**
 	 * Test method for
 	 * {@link kieker.monitoring.writer.compression.DeflateCompressionFilter#DeflateCompressionFilter(kieker.common.configuration.Configuration)}.

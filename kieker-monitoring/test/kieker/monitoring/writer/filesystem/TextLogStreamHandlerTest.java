@@ -33,6 +33,7 @@ import kieker.monitoring.writer.compression.NoneCompressionFilter;
 /**
  * @author Danish Manzoor
  *
+ * @since 1.15
  */
 public class TextLogStreamHandlerTest {
 
@@ -70,7 +71,7 @@ public class TextLogStreamHandlerTest {
 					byteArrayOutputStream.toString().trim());
 			System.out.println(byteArrayOutputStream.toString());
 
-		} catch (final Exception e) {
+		} catch (final BufferOverflowException e) {
 			// as buffer size is to small it will always catch exception
 		} finally {
 			byteArrayOutputStream.close();

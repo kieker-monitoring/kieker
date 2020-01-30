@@ -23,13 +23,13 @@ import java.nio.CharBuffer;
 /**
  * @author Reiner Jung
  *
- * @since 1.14
+ * @since 1.15
  */
 public class DummyWriter extends Writer {
 
 	// defining buffer to act as a file alternative
-	final ByteBuffer dataBuffer = ByteBuffer.allocate(819200);
-	CharBuffer buffers = this.dataBuffer.asCharBuffer();
+	private final ByteBuffer dataBuffer = ByteBuffer.allocate(819200);
+	private final CharBuffer buffers = this.dataBuffer.asCharBuffer();
 
 	public DummyWriter() {
 		super();

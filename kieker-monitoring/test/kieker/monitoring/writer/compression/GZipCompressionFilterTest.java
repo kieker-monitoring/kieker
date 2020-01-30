@@ -35,6 +35,10 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
  */
 public class GZipCompressionFilterTest {
 
+	public GZipCompressionFilterTest() {
+		// nothing to do
+	}
+
 	/**
 	 * Test method for
 	 * {@link kieker.monitoring.writer.compression.GZipCompressionFilter#GZipCompressionFilter(kieker.common.configuration.Configuration)}.
@@ -73,7 +77,7 @@ public class GZipCompressionFilterTest {
 			gzip.write(inputData);
 			gzip.close();
 
-//			 Checking if byteArrayOutputStreamR is equal to byteArrayOutputStream
+			// Checking if byteArrayOutputStreamR is equal to byteArrayOutputStream
 			Assert.assertArrayEquals("Expected result does not match with actual result",
 					byteArrayOutputStreamR.toByteArray(), byteArrayOutputStream.toByteArray());
 

@@ -33,9 +33,13 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 /**
  * @author Danish Manzoor
  *
- * @since 1.14
+ * @since 1.15
  */
 public class XZCompressionFilterTest {
+
+	public XZCompressionFilterTest() {
+		// nothing to do
+	}
 
 	/**
 	 * Test method for

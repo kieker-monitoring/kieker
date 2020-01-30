@@ -34,6 +34,10 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
  */
 public class NoneCompressionFilterTest {
 
+	public NoneCompressionFilterTest() {
+		// nothing to do
+	}
+
 	/**
 	 * Test method for
 	 * {@link kieker.monitoring.writer.compression.NoneCompressionFilter#NoneCompressionFilter(kieker.common.configuration.Configuration)}.
@@ -64,7 +68,7 @@ public class NoneCompressionFilterTest {
 			// Closing stream
 			value.close();
 
-//			 Checking if input byte array is equal to byteArrayOutputStream
+			// Checking if input byte array is equal to byteArrayOutputStream
 			Assert.assertArrayEquals("Expected result does not match with actual result", inputData,
 					byteArrayOutputStream.toByteArray());
 		} catch (final IOException e) {
