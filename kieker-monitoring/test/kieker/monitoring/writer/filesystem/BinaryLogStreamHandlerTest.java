@@ -65,8 +65,7 @@ public class BinaryLogStreamHandlerTest implements IRegistryListener<String> {
 			handler.initialize(byteArrayOutputStream, Paths.get("test-filename"));
 			// serializing test record
 			handler.serialize(record, 2);
-			Assert.assertEquals("String does not match", "$2;-1;testing;abc;1;0;1;localhost;123;456",
-					byteArrayOutputStream.toString().trim());
+			Assert.fail("Code should trigger an exception and not reach this point.");
 		} catch (final BufferOverflowException e) { // NOPMD
 			// as buffer size is to small it will always catch exception
 		} finally {
@@ -87,6 +86,7 @@ public class BinaryLogStreamHandlerTest implements IRegistryListener<String> {
 			handler.initialize(byteArrayOutputStream, Paths.get("test-filename"));
 			// serializing test record
 			handler.serialize(record, 2);
+			// may add a test here
 		} catch (final BufferOverflowException e) {
 			// as buffer size is to small it will always catch exception on first execution
 			Assert.fail("Buffer should have been sufficient, overflow error.");

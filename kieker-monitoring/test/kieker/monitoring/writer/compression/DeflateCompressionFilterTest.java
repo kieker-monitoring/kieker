@@ -18,6 +18,7 @@ package kieker.monitoring.writer.compression;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.zip.InflaterOutputStream;
@@ -55,7 +56,7 @@ public class DeflateCompressionFilterTest {
 	@Test
 	public void testChainOutputStream() {
 		final String inputStr = "Hello World";
-		final byte[] inputData = inputStr.getBytes();
+		final byte[] inputData = inputStr.getBytes(Charset.defaultCharset());
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		final InflaterOutputStream inflaterOutputStream = new InflaterOutputStream(byteArrayOutputStream);
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();

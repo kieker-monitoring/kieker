@@ -18,6 +18,7 @@ package kieker.monitoring.writer.compression;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.zip.GZIPOutputStream;
@@ -56,7 +57,7 @@ public class GZipCompressionFilterTest {
 	public void testChainOutputStream() {
 
 		final String inputStr = "Hello World";
-		final byte[] inputData = inputStr.getBytes();
+		final byte[] inputData = inputStr.getBytes(Charset.defaultCharset());
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		// Stream replicating constructor in test
 		final ByteArrayOutputStream byteArrayOutputStreamR = new ByteArrayOutputStream();

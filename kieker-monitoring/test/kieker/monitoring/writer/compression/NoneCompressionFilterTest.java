@@ -18,6 +18,7 @@ package kieker.monitoring.writer.compression;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -54,7 +55,7 @@ public class NoneCompressionFilterTest {
 	@Test
 	public void testChainOutputStream() {
 		final String inputStr = "Hello World";
-		final byte[] inputData = inputStr.getBytes();
+		final byte[] inputData = inputStr.getBytes(Charset.defaultCharset());
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 		final NoneCompressionFilter unit = new NoneCompressionFilter(configuration);
@@ -69,7 +70,7 @@ public class NoneCompressionFilterTest {
 			value.close();
 
 			// Checking if input byte array is equal to byteArrayOutputStream
-			Assert.assertArrayEquals("Expected result does not match with actual result", inputData,
+			Assert.assertArrayEquals("Expected result does not match with actual result.", inputData,
 					byteArrayOutputStream.toByteArray());
 		} catch (final IOException e) {
 			e.printStackTrace();
@@ -84,13 +85,12 @@ public class NoneCompressionFilterTest {
 	@Test
 	public void testGetExtension() {
 		// Expected extension
-		final String type = null;
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 		final NoneCompressionFilter unit = new NoneCompressionFilter(configuration);
 		// Extension Returned
 		final String value = unit.getExtension();
 		// Checking expected and returned extension
-		Assert.assertEquals("Wrong extension returned", type, value);
+		Assert.assertNull("This should not return a unit extension.", value);
 
 	}
 
