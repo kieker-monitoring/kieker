@@ -58,7 +58,6 @@ public class TextMapFileHandlerTest {
 	 */
 	@Test
 	public void testCreate() {
-
 		PowerMockito.mockStatic(Files.class);
 		final Path location = Paths.get(TEST_PATH);
 		final Charset charset = Charset.defaultCharset();

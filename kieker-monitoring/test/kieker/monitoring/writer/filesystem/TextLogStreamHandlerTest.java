@@ -38,8 +38,6 @@ import kieker.monitoring.writer.compression.NoneCompressionFilter;
 public class TextLogStreamHandlerTest {
 
 	// Initializing parameters for TextlogStreamhandler object instance
-
-	private final Boolean flushLogFile = true;
 	private final Charset charset = Charset.defaultCharset();
 	private final ICompressionFilter compressionFilter = new NoneCompressionFilter(null);
 	private final WriterRegistry reg = new WriterRegistry(null);
@@ -57,9 +55,8 @@ public class TextLogStreamHandlerTest {
 	 */
 	@Test
 	public void testSerializeBufferTooTiny() throws IOException {
-
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		final TextLogStreamHandler handler = new TextLogStreamHandler(this.flushLogFile, 10, this.charset,
+		final TextLogStreamHandler handler = new TextLogStreamHandler(true, 10, this.charset,
 				this.compressionFilter, this.reg);
 
 		try {
@@ -69,9 +66,7 @@ public class TextLogStreamHandlerTest {
 			handler.serialize(this.record, 2);
 			Assert.assertEquals("String doesnot match", "$2;-1;testing;abc;1;0;1;localhost;123;456",
 					byteArrayOutputStream.toString().trim());
-			System.out.println(byteArrayOutputStream.toString());
-
-		} catch (final BufferOverflowException e) {
+		} catch (final BufferOverflowException e) { // NOPMD exception must be caught, as it is intended
 			// as buffer size is to small it will always catch exception
 		} finally {
 			byteArrayOutputStream.close();
@@ -86,9 +81,8 @@ public class TextLogStreamHandlerTest {
 	 */
 	@Test
 	public void testSerializeBufferSufficient() throws IOException {
-
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		final TextLogStreamHandler handler = new TextLogStreamHandler(this.flushLogFile, 102400, this.charset,
+		final TextLogStreamHandler handler = new TextLogStreamHandler(true, 102400, this.charset,
 				this.compressionFilter, this.reg);
 
 		try {

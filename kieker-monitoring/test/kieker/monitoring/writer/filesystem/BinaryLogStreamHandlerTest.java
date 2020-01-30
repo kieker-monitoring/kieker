@@ -39,7 +39,6 @@ import kieker.monitoring.writer.compression.NoneCompressionFilter;
 public class BinaryLogStreamHandlerTest implements IRegistryListener<String> {
 
 	/** Initializing parameters for TextlogStreamhandler object instance. */
-	private final Boolean flushLogFile = true;
 	private final Charset charset = Charset.defaultCharset();
 	private final ICompressionFilter compressionFilter = new NoneCompressionFilter(null);
 	private final WriterRegistry reg = new WriterRegistry(this);
@@ -58,7 +57,7 @@ public class BinaryLogStreamHandlerTest implements IRegistryListener<String> {
 		final IMonitoringRecord record = new OperationExecutionRecord("testing", "abc", 1, 0, 1, "localhost", 123, 456);
 
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		final BinaryLogStreamHandler handler = new BinaryLogStreamHandler(this.flushLogFile, 10,
+		final BinaryLogStreamHandler handler = new BinaryLogStreamHandler(true, 10,
 				this.charset, this.compressionFilter, this.reg);
 
 		try {
@@ -80,7 +79,7 @@ public class BinaryLogStreamHandlerTest implements IRegistryListener<String> {
 		final IMonitoringRecord record = new OperationExecutionRecord("testing", "abc", 1, 0, 1, "localhost", 123, 456);
 
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		final BinaryLogStreamHandler handler = new BinaryLogStreamHandler(this.flushLogFile, 10240,
+		final BinaryLogStreamHandler handler = new BinaryLogStreamHandler(true, 10240,
 				this.charset, this.compressionFilter, this.reg);
 
 		try {

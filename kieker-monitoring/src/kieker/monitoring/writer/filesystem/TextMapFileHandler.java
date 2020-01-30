@@ -48,7 +48,7 @@ public class TextMapFileHandler implements IMapFileHandler {
 	/** The name of the configuration key determining the buffer size of the output file stream. */
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize";
 
-	private final ICompressionFilter compressionFilter;
+	private final ICompressionFilter compressionFilter; // NOPMD this is a future feature
 	private PrintWriter printWriter;
 	private final boolean flushMapFile;
 

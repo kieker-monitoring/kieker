@@ -42,10 +42,8 @@ public class DummyWriter extends Writer {
 	 */
 	@Override
 	public void write(final char[] cbuf, final int off, final int len) throws IOException {
-
 		// write records in buffer
 		this.buffers.append(CharBuffer.wrap(cbuf));
-
 	}
 
 	/*
@@ -54,7 +52,9 @@ public class DummyWriter extends Writer {
 	 * @see java.io.Writer#flush()
 	 */
 	@Override
-	public void flush() throws IOException {}
+	public void flush() throws IOException {
+		// ignore, mockup
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -63,7 +63,7 @@ public class DummyWriter extends Writer {
 	 */
 	@Override
 	public void close() throws IOException {
-
+		// ignore, mockup
 	}
 
 	public String getBufferAsString() {
