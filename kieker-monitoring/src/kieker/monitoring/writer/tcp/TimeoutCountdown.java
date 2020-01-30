@@ -29,7 +29,7 @@ class TimeoutCountdown {
 	private long currentTimeoutInNs;
 
 	/**
-	 * @param initialTimeoutInNs	
+	 * @param initialTimeoutInNs
 	 */
 	public TimeoutCountdown(final long initialTimeoutInNs) {
 		this.currentTimeoutInNs = initialTimeoutInNs;

@@ -28,19 +28,22 @@ import kieker.monitoring.timer.ITimeSource;
 /**
  * Logs detailed utilization statistics for each CPU in the system, retrieved
  * from {@link CpuPerc}, as {@link CPUUtilizationRecord}s via
- * {@link kieker.monitoring.core.controller.IMonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)} .
- * 
+ * {@link kieker.monitoring.core.controller.IMonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)}
+ * .
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.3
  */
 public final class CPUsDetailedPercSampler extends AbstractSigarSampler {
 
 	/**
-	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy} instance used to retrieve the sensor data. Users
-	 * should use the factory method {@link kieker.monitoring.sampler.sigar.SigarSamplerFactory#createSensorCPUsDetailedPerc()} to acquire an
-	 * instance rather than calling this constructor directly.
-	 * 
+	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy}
+	 * instance used to retrieve the sensor data. Users should use the factory
+	 * method
+	 * {@link kieker.monitoring.sampler.sigar.SigarSamplerFactory#createSensorCPUsDetailedPerc()}
+	 * to acquire an instance rather than calling this constructor directly.
+	 *
 	 * @param sigar
 	 *            The sigar proxy which will be used to retrieve the data.
 	 */
@@ -66,10 +69,12 @@ public final class CPUsDetailedPercSampler extends AbstractSigarSampler {
 			if (monitoringController.isProbeActivated(SignatureFactory.createCPUSignature(i))) {
 				final CpuPerc curCPU = cpus[i];
 				// final double combinedUtilization = curCPU.getCombined();
-				final CPUUtilizationRecord r = new CPUUtilizationRecord(timesource.getTime(), monitoringController.getHostname(), Integer.toString(i),
-						curCPU.getUser(), curCPU.getSys(), curCPU.getWait(), curCPU.getNice(), curCPU.getIrq(), curCPU.getCombined(), curCPU.getIdle());
+				final CPUUtilizationRecord r = new CPUUtilizationRecord(timesource.getTime(),
+						monitoringController.getHostname(), Integer.toString(i), curCPU.getUser(), curCPU.getSys(),
+						curCPU.getWait(), curCPU.getNice(), curCPU.getIrq(), curCPU.getCombined(), curCPU.getIdle());
 				monitoringController.newMonitoringRecord(r);
-				// CPUsDetailedPercSampler.log.info("Sigar utilization: " + combinedUtilization + "; " + " Record: " + r);
+				// CPUsDetailedPercSampler.log.info("Sigar utilization: " + combinedUtilization
+				// + "; " + " Record: " + r);
 			}
 		}
 	}

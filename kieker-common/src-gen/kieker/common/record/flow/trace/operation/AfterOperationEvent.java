@@ -45,16 +45,16 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 		String.class, // IClassSignature.classSignature
 	};
 	
-	private static final long serialVersionUID = 8888716286291758775L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
 		"operationSignature",
 		"classSignature",
 	};
+	
+	private static final long serialVersionUID = 8888716286291758775L;
 	
 	
 	/**
@@ -111,7 +111,7 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

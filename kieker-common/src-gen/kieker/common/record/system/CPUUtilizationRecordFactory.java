@@ -27,13 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class CPUUtilizationRecordFactory implements IRecordFactory<CPUUtilizationRecord> {
 	
-	
+
 	@Override
 	public CPUUtilizationRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new CPUUtilizationRecord(deserializer);
 	}
-	
-	
+
+
+	@Override
+	public String[] getValueNames() {
+		return CPUUtilizationRecord.VALUE_NAMES; // NOPMD
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return CPUUtilizationRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return CPUUtilizationRecord.SIZE;
 	}

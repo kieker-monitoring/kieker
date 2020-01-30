@@ -28,8 +28,8 @@ import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.classpath.InstantiationFactory;
 import kieker.common.util.thread.DaemonThreadFactory;
-import kieker.monitoring.core.controller.ControllerFactory;
 import kieker.monitoring.core.controller.ReceiveUnfilteredConfiguration;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.raw.IRawDataWriter;
@@ -109,6 +109,12 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 	private final int taskRunInterval;
 	private final ChunkWriterTask writerTask;
 
+	/**
+	 * Create a chunking collector.
+	 *
+	 * @param configuration
+	 *            kieker configuration with all parameters
+	 */
 	public ChunkingCollector(final Configuration configuration) {
 		super(configuration);
 
@@ -121,7 +127,7 @@ public class ChunkingCollector extends AbstractMonitoringWriter {
 		this.scheduledExecutor = Executors.newScheduledThreadPool(NUMBER_OF_WORKERS, new DaemonThreadFactory());
 
 		// Instantiate serializer and writer
-		final ControllerFactory controllerFactory = ControllerFactory.getInstance(configuration);
+		final InstantiationFactory controllerFactory = InstantiationFactory.getInstance(configuration);
 		final String serializerName = configuration.getStringProperty(CONFIG_SERIALIZER_CLASSNAME);
 		final IMonitoringRecordSerializer serializer = controllerFactory.createAndInitialize(IMonitoringRecordSerializer.class, serializerName, configuration);
 		final String writerName = configuration.getStringProperty(CONFIG_WRITER_CLASSNAME);

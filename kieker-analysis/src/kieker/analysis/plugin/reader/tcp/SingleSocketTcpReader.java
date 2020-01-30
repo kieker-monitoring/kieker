@@ -24,7 +24,7 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IRecordReceivedListener;
-import kieker.common.record.tcp.SingleSocketRecordReader;
+import kieker.monitoring.core.controller.tcp.SingleSocketRecordReader;
 
 /**
  * This is a reader which reads the records from a TCP port.
@@ -36,7 +36,8 @@ import kieker.common.record.tcp.SingleSocketRecordReader;
 @Plugin(description = "A reader which reads records from a TCP port", outputPorts = {
 	@OutputPort(name = SingleSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the TCPReader")
 }, configuration = {
-	@Property(name = SingleSocketTcpReader.CONFIG_PROPERTY_NAME_PORT, defaultValue = "10133", description = "The first port of the server used for the TCP connection.")
+	@Property(name = SingleSocketTcpReader.CONFIG_PROPERTY_NAME_PORT, defaultValue = "10133",
+			description = "The first port of the server used for the TCP connection.")
 })
 public final class SingleSocketTcpReader extends AbstractReaderPlugin implements IRecordReceivedListener {
 

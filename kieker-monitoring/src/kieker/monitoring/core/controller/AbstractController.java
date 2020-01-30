@@ -19,6 +19,7 @@ package kieker.monitoring.core.controller;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.util.classpath.InstantiationFactory;
 
 /**
  * @author Jan Waller
@@ -113,6 +114,6 @@ public abstract class AbstractController {
 	 *            The type of the returned class.
 	 */
 	protected static final <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration) {
-		return ControllerFactory.getInstance(configuration).createAndInitialize(c, classname, configuration);
+		return InstantiationFactory.getInstance(configuration).createAndInitialize(c, classname, configuration);
 	}
 }

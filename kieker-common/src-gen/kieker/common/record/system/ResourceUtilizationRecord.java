@@ -43,20 +43,20 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord  {
 		double.class, // ResourceUtilizationRecord.utilization
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"hostname",
+		"resourceName",
+		"utilization",
+	};
+	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String RESOURCE_NAME = "";
 	public static final double UTILIZATION = 0.0;
 	private static final long serialVersionUID = 193790554451565711L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"hostname",
-		"resourceName",
-		"utilization",
-	};
 	
 	/** property declarations. */
 	private final long timestamp;
@@ -121,7 +121,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

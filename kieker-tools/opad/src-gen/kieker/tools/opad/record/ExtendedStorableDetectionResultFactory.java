@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2018 iObserve Project (https://www.iobserve-devops.net)
+ * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,13 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class ExtendedStorableDetectionResultFactory implements IRecordFactory<ExtendedStorableDetectionResult> {
 	
-	
+
 	@Override
 	public ExtendedStorableDetectionResult create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new ExtendedStorableDetectionResult(deserializer);
 	}
-	
-	
+
+
+	@Override
+	public String[] getValueNames() {
+		return ExtendedStorableDetectionResult.VALUE_NAMES; // NOPMD
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return ExtendedStorableDetectionResult.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return ExtendedStorableDetectionResult.SIZE;
 	}

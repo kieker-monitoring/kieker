@@ -27,13 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class NetworkUtilizationRecordFactory implements IRecordFactory<NetworkUtilizationRecord> {
 	
-	
+
 	@Override
 	public NetworkUtilizationRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new NetworkUtilizationRecord(deserializer);
 	}
-	
-	
+
+
+	@Override
+	public String[] getValueNames() {
+		return NetworkUtilizationRecord.VALUE_NAMES; // NOPMD
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return NetworkUtilizationRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return NetworkUtilizationRecord.SIZE;
 	}

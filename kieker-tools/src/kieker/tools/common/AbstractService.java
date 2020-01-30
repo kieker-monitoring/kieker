@@ -79,7 +79,9 @@ public abstract class AbstractService<T extends Configuration, R extends Object>
 
 			execution.executeBlocking();
 
-			Runtime.getRuntime().removeShutdownHook(shutdownThread);
+			if (!shutdownThread.isAlive()) {
+				Runtime.getRuntime().removeShutdownHook(shutdownThread);
+			}
 			this.shutdownService();
 
 			this.logger.debug("Done");

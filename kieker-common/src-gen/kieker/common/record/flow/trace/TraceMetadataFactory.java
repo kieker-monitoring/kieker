@@ -27,13 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class TraceMetadataFactory implements IRecordFactory<TraceMetadata> {
 	
-	
+
 	@Override
 	public TraceMetadata create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new TraceMetadata(deserializer);
 	}
-	
-	
+
+
+	@Override
+	public String[] getValueNames() {
+		return TraceMetadata.VALUE_NAMES; // NOPMD
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return TraceMetadata.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return TraceMetadata.SIZE;
 	}

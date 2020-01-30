@@ -19,6 +19,8 @@ package kieker.monitoring.writer.filesystem;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
@@ -46,6 +48,8 @@ public class GenericBinaryFileWriterTest {
 
 	private Configuration configuration;
 
+	private Path writerPath;
+
 	public GenericBinaryFileWriterTest() {
 		super();
 	}
@@ -55,6 +59,7 @@ public class GenericBinaryFileWriterTest {
 	 */
 	@Before
 	public void before() {
+		this.writerPath = Paths.get(this.tmpFolder.getRoot().getAbsolutePath());
 		this.configuration = new Configuration();
 		this.configuration.setProperty(ConfigurationKeys.HOST_NAME, "testHostName");
 		this.configuration.setProperty(ConfigurationKeys.CONTROLLER_NAME, "testControllerName");
@@ -63,7 +68,7 @@ public class GenericBinaryFileWriterTest {
 		this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "2");
 		this.configuration.setProperty(FileWriter.CONFIG_MAXLOGFILES, String.valueOf(Integer.MAX_VALUE));
 		this.configuration.setProperty(FileWriter.CONFIG_MAXLOGSIZE, String.valueOf(Integer.MAX_VALUE));
-		this.configuration.setProperty(FileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
+		this.configuration.setProperty(FileWriter.CONFIG_PATH, this.writerPath.toString());
 		this.configuration.setProperty(FileWriter.CONFIG_LOG_STREAM_HANDLER, BinaryLogStreamHandler.class.getName());
 
 		this.configuration.setProperty(FileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
@@ -81,9 +86,10 @@ public class GenericBinaryFileWriterTest {
 		this.configuration.setProperty(FileWriter.CONFIG_COMPRESSION_FILTER, NoneCompressionFilter.class.getName());
 
 		// test execution
-		final FileWriter writer = new FileWriter(this.configuration);
+		new FileWriter(this.configuration);
 		// test assertion
-		Assert.assertTrue(Files.exists(writer.getLogFolder()));
+		final Path kiekerPath = Files.list(this.writerPath).findFirst().get();
+		Assert.assertTrue(Files.exists(kiekerPath));
 	}
 
 	/**
@@ -104,7 +110,8 @@ public class GenericBinaryFileWriterTest {
 		writer.onTerminating();
 
 		// test assertion
-		final File storePath = writer.getLogFolder().toFile();
+		final Path kiekerPath = Files.list(this.writerPath).findFirst().get();
+		final File storePath = kiekerPath.toFile();
 
 		final File[] mapFiles = storePath.listFiles(FileExtensionFilter.MAP);
 		Assert.assertNotNull(mapFiles);
@@ -135,7 +142,8 @@ public class GenericBinaryFileWriterTest {
 		writer.onTerminating();
 
 		// test assertion
-		final File storePath = writer.getLogFolder().toFile();
+		final Path kiekerPath = Files.list(this.writerPath).findFirst().get();
+		final File storePath = kiekerPath.toFile();
 
 		final File[] mapFiles = storePath.listFiles(FileExtensionFilter.MAP);
 		Assert.assertNotNull(mapFiles);
@@ -167,7 +175,8 @@ public class GenericBinaryFileWriterTest {
 		writer.onTerminating();
 
 		// test assertion
-		final File storePath = writer.getLogFolder().toFile();
+		final Path kiekerPath = Files.list(this.writerPath).findFirst().get();
+		final File storePath = kiekerPath.toFile();
 
 		final File[] mapFiles = storePath.listFiles(FileExtensionFilter.MAP);
 		Assert.assertNotNull(mapFiles);
@@ -208,13 +217,16 @@ public class GenericBinaryFileWriterTest {
 				final EmptyRecord record = new EmptyRecord();
 
 				// test execution
-				final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer, record);
+				FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer, record);
+				final File storePath = Files.list(this.writerPath).findFirst().get().toFile();
 
 				// test assertion
 				final String reasonMessage = "Passed arguments: maxLogFiles=" + maxLogFiles + ", numRecordsToWrite=" + numRecordsToWrite;
 				final File[] recordFiles = storePath.listFiles(FileExtensionFilter.BIN);
 				Assert.assertNotNull(recordFiles);
 				Assert.assertThat(reasonMessage, recordFiles.length, CoreMatchers.is(expectedNumRecordFiles));
+
+				FilesystemTestUtil.deleteContent(this.writerPath);
 			}
 		}
 	}
@@ -253,13 +265,16 @@ public class GenericBinaryFileWriterTest {
 			final FileWriter writer = new FileWriter(this.configuration);
 
 			// test execution
-			final File storePath = FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer, record);
+			FilesystemTestUtil.executeFileWriterTest(numRecordsToWrite, writer, record);
+			final File storePath = Files.list(this.writerPath).findFirst().get().toFile();
 
 			// test assertion
 			final String reasonMessage = "Passed arguments: maxMegaBytesPerFile=" + maxMegaBytesPerFile + ", megaBytesToWrite=" + megaBytesToWrite;
 			final File[] recordFiles = storePath.listFiles(FileExtensionFilter.BIN);
 			Assert.assertNotNull(recordFiles);
 			Assert.assertThat(reasonMessage, recordFiles.length, CoreMatchers.is(expectedNumRecordFiles));
+
+			FilesystemTestUtil.deleteContent(this.writerPath);
 		}
 	}
 
@@ -271,23 +286,11 @@ public class GenericBinaryFileWriterTest {
 		final String passedConfigPathName = this.tmpFolder.getRoot().getAbsolutePath();
 		this.configuration.setProperty(FileWriter.CONFIG_PATH, passedConfigPathName);
 
-		final FileWriter writer = new FileWriter(this.configuration);
+		new FileWriter(this.configuration);
 
-		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(passedConfigPathName));
-	}
+		final Path kiekerPath = Files.list(Paths.get(passedConfigPathName)).findFirst().get();
 
-	/**
-	 * Test empty log directory property.
-	 */
-	@Test
-	public void testEmptyConfigPath() throws IOException {
-		final String passedConfigPathName = "";
-		this.configuration.setProperty(FileWriter.CONFIG_PATH, passedConfigPathName);
-
-		final FileWriter writer = new FileWriter(this.configuration);
-
-		final String defaultDir = System.getProperty("java.io.tmpdir");
-		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
+		Assert.assertThat(kiekerPath.toAbsolutePath().toString(), CoreMatchers.startsWith(passedConfigPathName));
 	}
 
 	/**
@@ -301,10 +304,11 @@ public class GenericBinaryFileWriterTest {
 		final String passedConfigPathName = this.tmpFolder.newFile().getAbsolutePath();
 		this.configuration.setProperty(FileWriter.CONFIG_PATH, passedConfigPathName);
 
-		final FileWriter writer = new FileWriter(this.configuration);
+		new FileWriter(this.configuration);
 
 		final String defaultDir = System.getProperty("java.io.tmpdir");
-		Assert.assertThat(writer.getLogFolder().toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
+		final Path kiekerPath = Files.list(Paths.get(passedConfigPathName)).findFirst().get();
+		Assert.assertThat(kiekerPath.toAbsolutePath().toString(), CoreMatchers.startsWith(defaultDir));
 	}
 
 }

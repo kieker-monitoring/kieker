@@ -48,10 +48,8 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 		String.class, // IExceptionRecord.cause
 	};
 	
-	private static final long serialVersionUID = 625847064598823017L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -59,6 +57,8 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 		"classSignature",
 		"cause",
 	};
+	
+	private static final long serialVersionUID = 625847064598823017L;
 	
 	
 	/**
@@ -118,7 +118,7 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

@@ -51,12 +51,8 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 	
 	/** user-defined constants. */
 	public static final String NO_APPLICATION_NAME = "<no-application-name>";
-	/** default constants. */
-	public static final String APPLICATION_NAME = NO_APPLICATION_NAME;
-	private static final long serialVersionUID = 7720995073835113293L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"traceId",
 		"threadId",
 		"sessionId",
@@ -65,6 +61,10 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 		"parentOrderId",
 		"applicationName",
 	};
+	
+	/** default constants. */
+	public static final String APPLICATION_NAME = NO_APPLICATION_NAME;
+	private static final long serialVersionUID = 7720995073835113293L;
 	
 	/** property declarations. */
 	private final String applicationName;
@@ -131,7 +131,7 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

@@ -27,13 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class BeforeOperationEventFactory implements IRecordFactory<BeforeOperationEvent> {
 	
-	
+
 	@Override
 	public BeforeOperationEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new BeforeOperationEvent(deserializer);
 	}
-	
-	
+
+
+	@Override
+	public String[] getValueNames() {
+		return BeforeOperationEvent.VALUE_NAMES; // NOPMD
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return BeforeOperationEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return BeforeOperationEvent.SIZE;
 	}

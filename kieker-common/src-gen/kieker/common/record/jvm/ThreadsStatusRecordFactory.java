@@ -27,13 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class ThreadsStatusRecordFactory implements IRecordFactory<ThreadsStatusRecord> {
 	
-	
+
 	@Override
 	public ThreadsStatusRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new ThreadsStatusRecord(deserializer);
 	}
-	
-	
+
+
+	@Override
+	public String[] getValueNames() {
+		return ThreadsStatusRecord.VALUE_NAMES; // NOPMD
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return ThreadsStatusRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return ThreadsStatusRecord.SIZE;
 	}

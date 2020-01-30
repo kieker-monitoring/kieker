@@ -68,6 +68,7 @@ dependencies {
 	testRuntime resolveLibrary('framework-libs/spring/spring-expression-*.jar')
 
 	testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
+  compile group: 'com.github.oshi', name: 'oshi-core', version: '3.12.2'
 }
 
 clover {

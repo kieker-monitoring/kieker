@@ -50,12 +50,8 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		int.class, // IObjectRecord.objectId
 	};
 	
-	/** default constants. */
-	public static final int OBJECT_ID = 0;
-	private static final long serialVersionUID = -2086826925207912224L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -64,6 +60,10 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		"cause",
 		"objectId",
 	};
+	
+	/** default constants. */
+	public static final int OBJECT_ID = 0;
+	private static final long serialVersionUID = -2086826925207912224L;
 	
 	/** property declarations. */
 	private final int objectId;
@@ -130,7 +130,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

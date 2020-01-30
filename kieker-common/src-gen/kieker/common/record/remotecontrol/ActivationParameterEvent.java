@@ -33,45 +33,46 @@ import kieker.common.record.remotecontrol.IRemoteParameterControlEvent;
 public class ActivationParameterEvent extends AbstractMonitoringRecord implements IRemoteParameterControlEvent {			
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // IRemoteControlEvent.pattern
-			 + TYPE_SIZE_STRING // IRemoteParameterControlEvent.parameterNames
-			 + TYPE_SIZE_STRING; // IRemoteParameterControlEvent.parameters
+			 + TYPE_SIZE_STRING // IRemoteParameterControlEvent.name
+			 + TYPE_SIZE_STRING; // IRemoteParameterControlEvent.values
 	
 	public static final Class<?>[] TYPES = {
 		String.class, // IRemoteControlEvent.pattern
-		String[].class, // IRemoteParameterControlEvent.parameterNames
-		String[][].class, // IRemoteParameterControlEvent.parameters
+		String.class, // IRemoteParameterControlEvent.name
+		String[].class, // IRemoteParameterControlEvent.values
+	};
+	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"pattern",
+		"name",
+		"values",
 	};
 	
 	/** default constants. */
 	public static final String PATTERN = "";
-	private static final long serialVersionUID = -2801456957417446121L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"pattern",
-		"parameterNames",
-		"parameters",
-	};
+	public static final String NAME = "";
+	private static final long serialVersionUID = 4522862409472272138L;
 	
 	/** property declarations. */
 	private final String pattern;
-	private final String[] parameterNames;
-	private final String[][] parameters;
+	private final String name;
+	private final String[] values;
 	
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
 	 * @param pattern
 	 *            pattern
-	 * @param parameterNames
-	 *            parameterNames
-	 * @param parameters
-	 *            parameters
+	 * @param name
+	 *            name
+	 * @param values
+	 *            values
 	 */
-	public ActivationParameterEvent(final String pattern, final String[] parameterNames, final String[][] parameters) {
+	public ActivationParameterEvent(final String pattern, final String name, final String[] values) {
 		this.pattern = pattern == null?"":pattern;
-		this.parameterNames = parameterNames;
-		this.parameters = parameters;
+		this.name = name == null?"":name;
+		this.values = values;
 	}
 
 
@@ -83,19 +84,12 @@ public class ActivationParameterEvent extends AbstractMonitoringRecord implement
 	 */
 	public ActivationParameterEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.pattern = deserializer.getString();
+		this.name = deserializer.getString();
 		// load array sizes
-		final int _parameterNames_size0 = deserializer.getInt();
-		this.parameterNames = new String[_parameterNames_size0];
-		for (int i0=0;i0<_parameterNames_size0;i0++)
-			this.parameterNames[i0] = deserializer.getString();
-		
-		// load array sizes
-		final int _parameters_size0 = deserializer.getInt();
-		final int _parameters_size1 = deserializer.getInt();
-		this.parameters = new String[_parameters_size0][_parameters_size1];
-		for (int i0=0;i0<_parameters_size0;i0++)
-			for (int i1=0;i1<_parameters_size1;i1++)
-				this.parameters[i0][i1] = deserializer.getString();
+		final int _values_size0 = deserializer.getInt();
+		this.values = new String[_values_size0];
+		for (int i0=0;i0<_values_size0;i0++)
+			this.values[i0] = deserializer.getString();
 	}
 	
 	/**
@@ -104,20 +98,12 @@ public class ActivationParameterEvent extends AbstractMonitoringRecord implement
 	@Override
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		serializer.putString(this.getPattern());
+		serializer.putString(this.getName());
 		// store array sizes
-		int _parameterNames_size0 = this.getParameterNames().length;
-		serializer.putInt(_parameterNames_size0);
-		for (int i0=0;i0<_parameterNames_size0;i0++)
-			serializer.putString(this.getParameterNames()[i0]);
-		
-		// store array sizes
-		int _parameters_size0 = this.getParameters().length;
-		serializer.putInt(_parameters_size0);
-		int _parameters_size1 = this.getParameters()[0].length;
-		serializer.putInt(_parameters_size1);
-		for (int i0=0;i0<_parameters_size0;i0++)
-			for (int i1=0;i1<_parameters_size1;i1++)
-				serializer.putString(this.getParameters()[i0][i1]);
+		int _values_size0 = this.getValues().length;
+		serializer.putInt(_values_size0);
+		for (int i0=0;i0<_values_size0;i0++)
+			serializer.putString(this.getValues()[i0]);
 	}
 	
 	/**
@@ -133,7 +119,7 @@ public class ActivationParameterEvent extends AbstractMonitoringRecord implement
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
@@ -167,30 +153,18 @@ public class ActivationParameterEvent extends AbstractMonitoringRecord implement
 		if (!this.getPattern().equals(castedRecord.getPattern())) {
 			return false;
 		}
-		// get array length
-		int _parameterNames_size0 = this.getParameterNames().length;
-		if (_parameterNames_size0 != castedRecord.getParameterNames().length) {
+		if (!this.getName().equals(castedRecord.getName())) {
 			return false;
 		}
-		for (int i0=0;i0<_parameterNames_size0;i0++)
-			if (!this.getParameterNames()[i0].equals(castedRecord.getParameterNames()[i0])) {
+		// get array length
+		int _values_size0 = this.getValues().length;
+		if (_values_size0 != castedRecord.getValues().length) {
+			return false;
+		}
+		for (int i0=0;i0<_values_size0;i0++)
+			if (!this.getValues()[i0].equals(castedRecord.getValues()[i0])) {
 				return false;
 			}
-		
-		// get array length
-		int _parameters_size0 = this.getParameters().length;
-		if (_parameters_size0 != castedRecord.getParameters().length) {
-			return false;
-		}
-		int _parameters_size1 = this.getParameters()[0].length;
-		if (_parameters_size1 != castedRecord.getParameters()[0].length) {
-			return false;
-		}
-		for (int i0=0;i0<_parameters_size0;i0++)
-			for (int i1=0;i1<_parameters_size1;i1++)
-				if (!this.getParameters()[i0][i1].equals(castedRecord.getParameters()[i0][i1])) {
-					return false;
-				}
 		
 		return true;
 	}
@@ -201,19 +175,11 @@ public class ActivationParameterEvent extends AbstractMonitoringRecord implement
 	public int hashCode() {
 		int code = 0;
 		code += this.getPattern().hashCode();
+		code += this.getName().hashCode();
 		// get array length
-		for (int i0=0;i0 < this.parameterNames.length;i0++) {
-			for (int i1=0;i1 < this.parameterNames.length;i1++) {
-				code += this.getParameterNames()[i0].hashCode();
-			}
-		}
-		
-		// get array length
-		for (int i0=0;i0 < this.parameters.length;i0++) {
-			for (int i1=0;i1 < this.parameters.length;i1++) {
-				for (int i2=0;i2 < this.parameters.length;i2++) {
-					code += this.getParameters()[i0][i1].hashCode();
-				}
+		for (int i0=0;i0 < this.values.length;i0++) {
+			for (int i1=0;i1 < this.values.length;i1++) {
+				code += this.getValues()[i0].hashCode();
 			}
 		}
 		
@@ -225,13 +191,13 @@ public class ActivationParameterEvent extends AbstractMonitoringRecord implement
 	}
 	
 	
-	public final String[] getParameterNames() {
-		return this.parameterNames;
+	public final String getName() {
+		return this.name;
 	}
 	
 	
-	public final String[][] getParameters() {
-		return this.parameters;
+	public final String[] getValues() {
+		return this.values;
 	}
 	
 }

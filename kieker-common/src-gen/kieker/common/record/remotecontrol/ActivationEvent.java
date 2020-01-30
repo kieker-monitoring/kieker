@@ -38,14 +38,14 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 		String.class, // IRemoteControlEvent.pattern
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"pattern",
+	};
+	
 	/** default constants. */
 	public static final String PATTERN = "";
 	private static final long serialVersionUID = 6888923121890229913L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"pattern",
-	};
 	
 	/** property declarations. */
 	private final String pattern;
@@ -92,7 +92,7 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

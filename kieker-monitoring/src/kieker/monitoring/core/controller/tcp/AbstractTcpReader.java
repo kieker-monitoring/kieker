@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.common.record.tcp;
+package kieker.monitoring.core.controller.tcp;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -42,6 +42,8 @@ public abstract class AbstractTcpReader implements Runnable {
 	private final int bufferCapacity;
 	private volatile boolean terminated;
 
+	private final boolean respawn;
+
 	/**
 	 * Constructs a new TCP reader.
 	 *
@@ -57,6 +59,27 @@ public abstract class AbstractTcpReader implements Runnable {
 		this.port = port;
 		this.bufferCapacity = bufferCapacity;
 		this.logger = logger;
+		this.respawn = false;
+	}
+
+	/**
+	 * Constructs a new TCP reader.
+	 *
+	 * @param port
+	 *            on which to listen for requests
+	 * @param bufferCapacity
+	 *            of the used read buffer
+	 * @param logger
+	 *            for notification to users and developers
+	 * @param respawn
+	 *            respawn reading after connection is lost
+	 */
+	public AbstractTcpReader(final int port, final int bufferCapacity, final Logger logger, final boolean respawn) {
+		super();
+		this.port = port;
+		this.bufferCapacity = bufferCapacity;
+		this.logger = logger;
+		this.respawn = respawn;
 	}
 
 	@Override
@@ -65,19 +88,21 @@ public abstract class AbstractTcpReader implements Runnable {
 		try {
 			serversocket = ServerSocketChannel.open();
 			serversocket.socket().bind(new InetSocketAddress(this.port));
-			this.logger.debug("Listening on port {}", this.port);
 
-			final SocketChannel socketChannel = serversocket.accept();
-			try {
-				final ByteBuffer buffer = ByteBuffer.allocateDirect(this.bufferCapacity);
-				while ((socketChannel.read(buffer) != CONNECTION_CLOSED_BY_CLIENT) && !this.terminated) {
-					this.process(buffer);
+			do {
+				this.logger.debug("Listening on port {}", this.port);
+				final SocketChannel socketChannel = serversocket.accept();
+				try {
+					final ByteBuffer buffer = ByteBuffer.allocateDirect(this.bufferCapacity);
+					while ((socketChannel.read(buffer) != CONNECTION_CLOSED_BY_CLIENT) && !this.terminated) {
+						this.process(buffer);
+					}
+				} finally {
+					socketChannel.close();
 				}
-			} finally {
-				socketChannel.close();
-			}
+			} while (!this.terminated && this.respawn);
 		} catch (final IOException ex) {
-			this.logger.error("Error while reading.", ex);
+			this.logger.error("Error while receiving control commands.", ex);
 		} finally {
 			if (null != serversocket) {
 				try {

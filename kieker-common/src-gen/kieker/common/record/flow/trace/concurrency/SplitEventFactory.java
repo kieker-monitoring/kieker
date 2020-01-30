@@ -27,13 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class SplitEventFactory implements IRecordFactory<SplitEvent> {
 	
-	
+
 	@Override
 	public SplitEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new SplitEvent(deserializer);
 	}
-	
-	
+
+
+	@Override
+	public String[] getValueNames() {
+		return SplitEvent.VALUE_NAMES; // NOPMD
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return SplitEvent.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return SplitEvent.SIZE;
 	}

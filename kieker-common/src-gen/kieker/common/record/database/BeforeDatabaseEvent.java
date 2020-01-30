@@ -51,6 +51,16 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 		String.class, // BeforeDatabaseEvent.technology
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"classSignature",
+		"traceId",
+		"orderIndex",
+		"parameters",
+		"technology",
+	};
+	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String CLASS_SIGNATURE = "";
@@ -59,16 +69,6 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 	public static final String PARAMETERS = "";
 	public static final String TECHNOLOGY = "";
 	private static final long serialVersionUID = 3457043370101594469L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"classSignature",
-		"traceId",
-		"orderIndex",
-		"parameters",
-		"technology",
-	};
 	
 	/** property declarations. */
 	private long timestamp;
@@ -145,7 +145,7 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

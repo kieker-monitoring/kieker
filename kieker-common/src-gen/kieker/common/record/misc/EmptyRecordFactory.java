@@ -27,13 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class EmptyRecordFactory implements IRecordFactory<EmptyRecord> {
 	
-	
+
 	@Override
 	public EmptyRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new EmptyRecord(deserializer);
 	}
-	
-	
+
+
+	@Override
+	public String[] getValueNames() {
+		return EmptyRecord.VALUE_NAMES; // NOPMD
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return EmptyRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return EmptyRecord.SIZE;
 	}

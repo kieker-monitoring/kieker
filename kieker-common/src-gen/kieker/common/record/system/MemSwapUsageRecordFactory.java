@@ -27,13 +27,23 @@ import kieker.common.record.io.IValueDeserializer;
  */
 public final class MemSwapUsageRecordFactory implements IRecordFactory<MemSwapUsageRecord> {
 	
-	
+
 	@Override
 	public MemSwapUsageRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new MemSwapUsageRecord(deserializer);
 	}
-	
-	
+
+
+	@Override
+	public String[] getValueNames() {
+		return MemSwapUsageRecord.VALUE_NAMES; // NOPMD
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return MemSwapUsageRecord.TYPES; // NOPMD
+	}
+
 	public int getRecordSizeInBytes() {
 		return MemSwapUsageRecord.SIZE;
 	}

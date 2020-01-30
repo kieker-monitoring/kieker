@@ -90,7 +90,7 @@ public class SingleSocketTcpWriterTest {
 
 	@Test(expected = ConnectionTimeoutException.class)
 	public void reconnectingShouldFail() throws Exception {
-		this.configuration.setProperty(SingleSocketTcpWriter.CONFIG_CONN_TIMEOUT_IN_MS, 200);
+		this.configuration.setProperty(SingleSocketTcpWriter.CONFIG_CONN_TIMEOUT_IN_MS, 200); // NOFB
 
 		final SingleSocketTcpWriter writer = new SingleSocketTcpWriter(this.configuration);
 		try {

@@ -409,6 +409,17 @@
 		<Field name="TYPES" />
 		<Bug pattern="MS_PKGPROTECT, MS_MUTABLE_ARRAY" />
 	</Match>
+	<!-- For the public VALUE_NAMES field of our records. -->
+	<Match>
+		<Class name="~kieker.common.record.*" />
+		<Field name="VALUE_NAMES" />
+		<Bug pattern="MS_PKGPROTECT, MS_MUTABLE_ARRAY" />
+	</Match>
+	<Match>
+		<Class name="~kieker.tools.opad.record.*" />
+		<Field name="VALUE_NAMES" />
+		<Bug pattern="MS_PKGPROTECT, MS_MUTABLE_ARRAY" />
+	</Match>
 
 	<Match>
 		<Class name="kieker.tools.resourceMonitor.ResourceMonitor$1" />

@@ -9,7 +9,7 @@ dependencies {
 	compile project(":kieker-analysis")
 	compile project(":kieker-tools")
 	
-	compile "com.beust:jcommander:1.60"
+	compile "com.beust:jcommander:1.71"
 	
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
 	testCompile project (path: ':kieker-tools', configuration: 'testArchives')

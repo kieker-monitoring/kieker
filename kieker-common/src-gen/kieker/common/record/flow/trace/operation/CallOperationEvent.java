@@ -50,13 +50,8 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		String.class, // ICallRecord.calleeClassSignature
 	};
 	
-	/** default constants. */
-	public static final String CALLEE_OPERATION_SIGNATURE = "";
-	public static final String CALLEE_CLASS_SIGNATURE = "";
-	private static final long serialVersionUID = 2408771186779452968L;
-	
 	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
+	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"traceId",
 		"orderIndex",
@@ -65,6 +60,11 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		"calleeOperationSignature",
 		"calleeClassSignature",
 	};
+	
+	/** default constants. */
+	public static final String CALLEE_OPERATION_SIGNATURE = "";
+	public static final String CALLEE_CLASS_SIGNATURE = "";
+	private static final long serialVersionUID = 2408771186779452968L;
 	
 	/** property declarations. */
 	private final String calleeOperationSignature;
@@ -134,7 +134,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**

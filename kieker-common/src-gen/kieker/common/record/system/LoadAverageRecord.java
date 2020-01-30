@@ -45,6 +45,15 @@ public class LoadAverageRecord extends AbstractMonitoringRecord  {
 		double.class, // LoadAverageRecord.fifteenMinLoadAverage
 	};
 	
+	/** property name array. */
+	public static final String[] VALUE_NAMES = {
+		"timestamp",
+		"hostname",
+		"oneMinLoadAverage",
+		"fiveMinLoadAverage",
+		"fifteenMinLoadAverage",
+	};
+	
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
@@ -52,15 +61,6 @@ public class LoadAverageRecord extends AbstractMonitoringRecord  {
 	public static final double FIVE_MIN_LOAD_AVERAGE = 0.0;
 	public static final double FIFTEEN_MIN_LOAD_AVERAGE = 0.0;
 	private static final long serialVersionUID = -664763923774505966L;
-	
-	/** property name array. */
-	private static final String[] PROPERTY_NAMES = {
-		"timestamp",
-		"hostname",
-		"oneMinLoadAverage",
-		"fiveMinLoadAverage",
-		"fifteenMinLoadAverage",
-	};
 	
 	/** property declarations. */
 	private final long timestamp;
@@ -131,7 +131,7 @@ public class LoadAverageRecord extends AbstractMonitoringRecord  {
 	 */
 	@Override
 	public String[] getValueNames() {
-		return PROPERTY_NAMES; // NOPMD
+		return VALUE_NAMES; // NOPMD
 	}
 	
 	/**
