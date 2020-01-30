@@ -67,7 +67,7 @@ public class BinaryLogStreamHandlerTest implements IRegistryListener<String> {
 			handler.serialize(record, 2);
 			Assert.assertEquals("String does not match", "$2;-1;testing;abc;1;0;1;localhost;123;456",
 					byteArrayOutputStream.toString().trim());
-		} catch (final BufferOverflowException e) {
+		} catch (final BufferOverflowException e) { // NOPMD
 			// as buffer size is to small it will always catch exception
 		} finally {
 			byteArrayOutputStream.close();
