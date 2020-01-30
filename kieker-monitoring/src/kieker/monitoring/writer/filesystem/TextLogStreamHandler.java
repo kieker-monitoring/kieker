@@ -30,8 +30,8 @@ import kieker.monitoring.writer.WriterUtil;
 import kieker.monitoring.writer.compression.ICompressionFilter;
 
 /**
- * Create log files following the Kieker DAT format of semicolon separated
- * values. The handler supports compression.
+ * Create log files following the Kieker DAT format of semicolon separated values.
+ * The handler supports compression.
  *
  * @author Reiner Jung
  *
@@ -50,17 +50,19 @@ public class TextLogStreamHandler extends AbstractLogStreamHandler {
 	/**
 	 * Create a text log stream handler.
 	 *
-	 * @param flushLogFile activate flush after every record
-	 * @param bufferSize write buffer size
-	 * @param charset charset
-	 * @param compressionFilter compression filter
-	 * @param writerRegistry dummy writer registry, not used in the text log
+	 * @param flushLogFile
+	 *            activate flush after every record
+	 * @param bufferSize
+	              write buffer size
+	 * @param charset
+	              charset
+	 * @param compressionFilter
+	              compression filter
+	 * @param writerRegistry
+	              dummy writer registry, not used in the text log
 	 */
-	public TextLogStreamHandler(final Boolean flushLogFile, final Integer bufferSize, final Charset charset,
-			final ICompressionFilter compressionFilter, final WriterRegistry writerRegistry) { // NOPMD writerRegistry
-																								// is API and not used
-																								// for text
-																								// serialization
+	public TextLogStreamHandler(final Boolean flushLogFile, final Integer bufferSize, final Charset charset, final ICompressionFilter compressionFilter,
+			final WriterRegistry writerRegistry) { // NOPMD writerRegistry is API and not used for text serialization
 		super(flushLogFile, bufferSize, charset, compressionFilter, writerRegistry);
 
 		this.buffer = CharBuffer.allocate(bufferSize);
@@ -82,7 +84,6 @@ public class TextLogStreamHandler extends AbstractLogStreamHandler {
 
 		try {
 			while (this.buffer.hasRemaining()) {
-				System.out.println(this.buffer.toString());
 				this.numOfBytes += this.outputChannel.write(this.charset.encode(this.buffer));
 			}
 			this.numOfEntries++;
