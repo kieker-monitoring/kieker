@@ -8,25 +8,44 @@ Please refer to the Kieker User Guide for details on using Kieker.
 * 1.14 (March 11, 2020)
 - New features (selection)
   - Integration of a novel pipes-and-filter framework and filters in 
-    Kieker.Analysis based on TeeTime (teetime-framework.github.io). Additional
-    documentation will be added. Currently, the TeeTime-based framework and 
-    filters exist in parallel to the existing infrastructure. The long-term 
-    plan is that the TeeTime-based infrastructure replaces the existing one.
-  - New file system writer to replace the existing ones in the next Kieker 
-    release
+    Kieker.Analysis based on TeeTime (teetime-framework.github.io
+    version 3.0). Additional documentation will be added. Currently, the
+    TeeTime-based framework and filters exist in parallel to the
+    existing infrastructure. The long-term plan is that the
+    TeeTime-based infrastructure replaces the existing one.
+  - New file system writer to replace the existing ones in the next
+    Kieker release
+  - Generic file writer supporting different compression types
   - Monitoring support for Spring-based REST communication with AspectJ
   - Support for enums in IRL
-  - Support for additional compression algorithms in the file writers and 
-    readers
+  - Support for additional compression algorithms in the file writers 
+    and readers
+  - New TeeTime reader stages with common interface to use them in
+    tools
+  - Introduced new Kieker tool framework covering commandline and
+    configurations file evaluation (see Writing Tools and Services)
+  - Added monitoring of database calls (including the SQL statement)
+  - Introduced new data bridge tool, called collector
   - Ensuring support for Java 7, 8, 9, and 10
 - Improvements and refactorings
   - Moved the Kafka readers and writers into a separate Gradle module. 
     This is supposed to be a schematic example and other technology-specific 
     modules are to follow. The goal is to improve the dependency management.
+  - Many cleanups and improved test coverage
+  - Restructuring of sub-projects tools have now separate projects and
+    shared tool features can be found in kieker-tools
 - Infrastructure
-  - Included Clover test coverage tool, migrated from FindBugs to SpotBugs
-  - Replacing Jar file dependencies to Maven Central dependencies (ongoing)
-- Bug fixes and improvements to code, performance, tests, documentation, examples
+  - Included Clover test coverage tool, migrated from FindBugs to
+    SpotBugs
+  - Replacing Jar file dependencies to Maven Central dependencies
+    (ongoing)
+  - Switched to Jenkins declarative pipeline
+  - Updated the build system to provide separate bundles for all tools
+- Documentation
+  - Updated and new documetation are now located in the Kieker wiki
+    https://kieker-monitoring.atlassian.net/wiki/spaces/DOC/overview
+- Bug fixes and improvements to code, performance, tests, documentation,
+  examples
 
 * 1.13 (October 4, 2017)
 - New features (selection)
