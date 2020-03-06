@@ -141,6 +141,7 @@ pipeline {
             beforeAgent true
             anyOf {
               branch 'master';
+              branch '*-RC';
               changeRequest target: 'master'
             }
           }
