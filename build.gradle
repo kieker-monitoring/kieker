@@ -451,6 +451,7 @@ task updateLicenseHeaderYear() {
 task replaceHardCodedVersionNames() {
     doLast {
         regexpReplaceInFiles(project.file("bin/dev/release-check-short.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+	regexpReplaceInFiles(project.file("bin/generateGraph.cmd"), "kieker-.*-emf.jar", "kieker-${version}-emf.jar")
     }
 }
 compileJava.dependsOn replaceHardCodedVersionNames

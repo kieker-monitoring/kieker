@@ -19,7 +19,11 @@ echo "test -> check"
 
 ./gradlew -S check -x apidoc
 
-echo "check -> release short"
+echo "check -> distribute"
+
+./gradlew -S distribute
+
+echo "distribute -> release short"
 
 ./gradlew checkReleaseArchivesShort -x apidoc
 

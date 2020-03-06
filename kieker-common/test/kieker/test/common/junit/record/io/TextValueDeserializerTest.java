@@ -21,7 +21,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.io.TextValueDeserializer;
-
+import kieker.common.util.Version;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
@@ -35,7 +35,7 @@ public class TextValueDeserializerTest extends AbstractKiekerTest { // NOCS NOPM
 
 	@Test
 	public void testCreateAndReadKiekerMonitoringRecord() {
-		final String string = "$0;1521828677048314440;1.14-SNAPSHOT;SingleCatBuyer;stockholm;1;false;0;NANOSECONDS;0";
+		final String string = "$0;1521828677048314440;"+Version.getVERSION()+";SingleCatBuyer;stockholm;1;false;0;NANOSECONDS;0";
 		final CharBuffer buffer = CharBuffer.wrap(string.toCharArray());
 
 		final char lead = buffer.get();
@@ -46,7 +46,7 @@ public class TextValueDeserializerTest extends AbstractKiekerTest { // NOCS NOPM
 
 		Assert.assertEquals("record id error", deserializer.getInt(), 0);
 		Assert.assertEquals("logging timestamp error", deserializer.getLong(), 1521828677048314440L);
-		Assert.assertEquals("version error", deserializer.getString(), "1.14-SNAPSHOT");
+		Assert.assertEquals("version error", deserializer.getString(), Version.getVERSION());
 		Assert.assertEquals("controller name error", deserializer.getString(), "SingleCatBuyer");
 		Assert.assertEquals("hostname error", deserializer.getString(), "stockholm");
 		Assert.assertEquals("experiment id error", deserializer.getInt(), 1);
