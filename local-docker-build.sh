@@ -19,6 +19,7 @@ groups | grep docker >/dev/null
 if [ $? -eq 0 ]; then
   docker run -u `id -u` --rm -v `pwd`:/opt/kieker kieker/kieker-build:openjdk8 /bin/bash -c "\
     cd /opt/kieker;\
+    export GRADLE_USER_HOME=/opt/kieker;\
     ./gradlew clean && \
     ./gradlew compileJava compileTestJava &&\
     ./gradlew test &&\
