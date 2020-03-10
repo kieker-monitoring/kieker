@@ -576,7 +576,7 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build
     configure aopxml
 
     from configurations.resultJar.collect { 
-    	it.isDirectory() ? it : zipTree(it)
+        it.isDirectory() ? it : zipTree(it)
     }
 
     manifest = project.manifest {
@@ -731,6 +731,10 @@ def toolsContent = project.copySpec {
         }
         into kiekerPackagenamebase + "-" + kiekerVersion + "/tools"
     }
+    from("kieker-tools") {
+        include "README.md"
+    }
+    into kiekerPackagenamebase + "-" + kiekerVersion + "/tools"
 }
 
 /** collect all libraries in kieker-tools. */
