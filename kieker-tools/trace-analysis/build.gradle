@@ -2,13 +2,32 @@ apply plugin: 'application'
 
 mainClassName='kieker.tools.trace.analysis.TraceAnalysisToolMain'
 
+applicationDefaultJvmArgs = ["-Dlog4j.configuration=file:///#APP_HOME/log4j.cfg"]
+
+startScripts {
+    doLast {
+        unixScript.text = unixScript.text.replace('#APP_HOME', '$APP_HOME') 
+        windowsScript.text = windowsScript.text.replace('#APP_HOME', '%PORT%') //untested
+    }
+}
+
+distributions {
+    main {
+        baseName = 'trace-analysis'
+        contents {
+            from { '../log4j.cfg' }
+        }
+    }
+}
+
 dependencies {
 	clover 'org.openclover:clover:4.2.0'
 
-	compile project(':kieker-common')
+	compile project(":kieker-common")
 	compile project(":kieker-tools")
+
 	compile "com.beust:jcommander:1.71"
-		
+	
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
 	testCompile project (path: ':kieker-tools', configuration: 'testArchives')
 }
