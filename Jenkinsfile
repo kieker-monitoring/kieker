@@ -33,7 +33,7 @@ pipeline {
         docker {
           image 'kieker/kieker-build:openjdk8'
           args env.DOCKER_ARGS
-          label 'kieker-slave-docker'
+          label 'build-node3'
         }
       }
       stages {
