@@ -9,7 +9,7 @@ appender("FILE", FileAppender) {
   filter(ThresholdFilter) {
     level=INFO
   }
-  file = "testFile.log"
+  file = "kieker.log"
   append = true
   encoder(PatternLayoutEncoder) {
     pattern = "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
