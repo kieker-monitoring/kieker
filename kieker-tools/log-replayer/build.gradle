@@ -2,24 +2,6 @@ apply plugin: 'application'
 
 mainClassName='kieker.tools.log.replayer.FilesystemLogReplayerStarter'
 
-applicationDefaultJvmArgs = ["-Dlog4j.configuration=file:///#APP_HOME/log4j.cfg"]
-
-startScripts {
-    doLast {
-        unixScript.text = unixScript.text.replace('#APP_HOME', '$APP_HOME') 
-        windowsScript.text = windowsScript.text.replace('#APP_HOME', '%PORT%') //untested
-    }
-}
-
-distributions {
-    main {
-        baseName = 'log-replayer'
-        contents {
-            from { '../log4j.cfg' }
-        }
-    }
-}
-
 dependencies {
 	clover 'org.openclover:clover:4.2.0'
 
