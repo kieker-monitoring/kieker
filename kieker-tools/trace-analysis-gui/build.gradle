@@ -1,5 +1,7 @@
 apply plugin: 'application'
 
+distTar.enabled=false
+
 mainClassName='kieker.tools.trace.analysis.ui.TraceAnalysisGUI'
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

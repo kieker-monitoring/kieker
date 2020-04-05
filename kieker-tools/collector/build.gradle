@@ -1,5 +1,7 @@
 apply plugin: 'application'
 
+distTar.enabled=false
+
 mainClassName='kieker.tools.collector.CollectorMain'
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]

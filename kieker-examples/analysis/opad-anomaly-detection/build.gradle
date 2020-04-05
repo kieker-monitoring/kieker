@@ -27,6 +27,8 @@ dependencies {
 	runtime 'org.apache.commons:commons-lang3:3.6'
 }
 
+distTar.enabled=false
+
 // Simplify the JAR's file name
 archivesBaseName = 'OpadAnomalyExample'
 version = ''

@@ -17,6 +17,8 @@ dependencies {
 	}
 }
 
+distTar.enabled=false
+
 // Simplify the JAR's file name
 archivesBaseName = 'BookstoreApplication'
 version = ''

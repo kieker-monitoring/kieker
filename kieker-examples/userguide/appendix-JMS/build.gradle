@@ -19,6 +19,8 @@ eclipse {
 
 def monitoringConfigurationActiveMQ = 'META-INF/kieker.monitoring.properties-activemq'
 
+distTar.enabled=false
+
 // Simplify the JAR's file name
 archivesBaseName = 'JMSMonitoringAnalysis'
 version = ''

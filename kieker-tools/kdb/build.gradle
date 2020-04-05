@@ -1,5 +1,7 @@
 apply plugin: 'application'
 
+distTar.enabled=false
+
 mainClassName='kieker.tools.bridge.cli.CLIServerMain'
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
