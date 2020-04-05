@@ -114,7 +114,7 @@ function check_bin_archive {
 		information "Found bytecode version ${javaVersion}, OK"
 	fi
 
-	CONVERTER_NAME=`ls tools/convert-logging-timestamp*tar`
+	CONVERTER_NAME=`ls tools/convert-logging-timestamp*zip`
 
 	extract_archive "${CONVERTER_NAME}"
 
