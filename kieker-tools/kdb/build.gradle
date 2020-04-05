@@ -2,6 +2,8 @@ apply plugin: 'application'
 
 mainClassName='kieker.tools.bridge.cli.CLIServerMain'
 
+sourceSets.main.resources.srcDirs = [ '../resources' ]
+
 dependencies {
 	clover 'org.openclover:clover:4.2.0'
 

@@ -9,6 +9,10 @@ configurations {
 dependencies {
 	clover 'org.openclover:clover:4.2.0'
 
+	compile 'ch.qos.logback:logback-classic:1.1.7'
+	compile 'org.slf4j:slf4j-api:1.7.30'
+	compile 'org.codehaus.groovy:groovy-all:3.0.2'
+
 	jms 'commons-logging:commons-logging:1.2'
 
 	amqp 'commons-logging:commons-logging:1.2'
