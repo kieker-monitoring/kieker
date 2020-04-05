@@ -21,6 +21,7 @@ archivesBaseName = 'SigarMonitoringAnalysis'
 version = ''
 	
 sourceSets.main.java.srcDirs = ['src']
+sourceSets.main.resources.srcDirs = [ '../resources' ]
 
 task runMonitoring(type: JavaExec) {
 	main = 'kieker.examples.userguide.appendixSigar.MonitoringStarter'

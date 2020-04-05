@@ -13,6 +13,7 @@ archivesBaseName = 'BookstoreApplication'
 version = ''
 
 sourceSets.main.java.srcDirs = ['src']
+sourceSets.main.resources.srcDirs = [ '../../resources' ]
 
 mainClassName = 'kieker.examples.monitoring.customTimeSource.BookstoreStarter'
 

@@ -13,6 +13,7 @@ archivesBaseName = 'TraceAnalysis'
 version = ''
 
 sourceSets.main.java.srcDirs = ['src']
+sourceSets.main.resources.srcDirs = [ '../../resources' ]
 
 mainClassName = 'kieker.examples.analysis.traceanalysis.TraceAnalysisStarter'
 

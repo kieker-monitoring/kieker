@@ -15,6 +15,7 @@ archivesBaseName = 'SigarMonitoring'
 version = ''
 	
 sourceSets.main.java.srcDirs = ['src']
+sourceSets.main.resources.srcDirs = [ '../../resources' ]
 
 mainClassName = 'kieker.examples.monitoring.sigar.MonitoringStarter'
 

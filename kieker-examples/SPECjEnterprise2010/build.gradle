@@ -8,6 +8,7 @@ sourceSets {
 		}
 	}
 }
+sourceSets.main.resources.srcDirs = [ '../resources' ]
 
 libsDirName = '../dist'
 archivesBaseName = 'KiekerInstr'

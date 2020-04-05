@@ -20,7 +20,7 @@ archivesBaseName = 'KafkaMonitoringAnalysis'
 version = ''
 	
 sourceSets.main.java.srcDirs = ['src']
-sourceSets.main.resources.srcDirs = ['src-resources']
+sourceSets.main.resources.srcDirs = ['src-resources', '../resources' ]
 
 def monitoringConfiguration = {
   main = 'kieker.examples.userguide.appendixKafka.BookstoreStarter'

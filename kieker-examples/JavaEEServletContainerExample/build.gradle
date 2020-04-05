@@ -8,6 +8,9 @@ sourceSets {
   }
 }
 
+
+sourceSets.main.resources.srcDirs = [ '../resources' ]
+
 webAppDirName = 'livedemo-source/WebContent'
 
 repositories {
@@ -18,7 +21,7 @@ dependencies {
   compile fileTree('livedemo-source/lib') {
     include '*.jar'
   }
-  compile 'org.slf4j:slf4j-api:1.7.25'
+  compile 'org.slf4j:slf4j-api:1.7.30'
 }
 
 task unwar(type: Copy) {

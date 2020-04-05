@@ -19,7 +19,7 @@ archivesBaseName = 'BookstoreApplication'
 version = ''
 	
 sourceSets.main.java.srcDirs = ['src']
-sourceSets.main.resources.srcDirs = ['src-resources']
+sourceSets.main.resources.srcDirs = ['src-resources', '../resources' ]
 
 mainClassName = 'kieker.examples.userguide.ch5bookstore.BookstoreStarter'
 
@@ -41,7 +41,7 @@ task runExampleFlowEvents(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	args = [System.getProperty("analysis.directory", ".")]
 	jvmArgs = ["-javaagent:lib/kieker-1.14-aspectj.jar",
-			   '-Dkieker.monitoring.writer.filesystem.AsciiFileWriter.QueueSize=30000',
+			   '-Dkieker.monitoring.core.controller.WriterController.RecordQueueSize=30000',
 			   //'-Dorg.aspectj.weaver.showWeaveInfo=true', 
 			   '-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-event.xml'
 			   ]

@@ -13,7 +13,7 @@ dependencies {
 		include "opencsv-*.jar"
 	}
 
-	compile 'org.slf4j:slf4j-api:1.7.25'
+	compile 'org.slf4j:slf4j-api:1.7.30'
 
 	//compile 'com.opencsv:opencsv:4.0'
 
@@ -32,6 +32,7 @@ archivesBaseName = 'OpadAnomalyExample'
 version = ''
 
 sourceSets.main.java.srcDirs = ['src']
+sourceSets.main.resources.srcDirs = [ '../../resources' ]
 
 mainClassName = 'kieker.examples.analysis.opad.ExperimentStarter'
 
