@@ -706,6 +706,7 @@ def binaryContent = project.copySpec {
         exclude '**/.gradle/**'
         exclude 'lib/static-analysis/'
         exclude 'bin/dev/release-check*'
+        exclude 'caches/**'
     }
     from('kieker-documentation') {
         include 'README-bin'
@@ -829,6 +830,7 @@ def sourceContent = project.copySpec {
         exclude 'build-eclipse/'
         exclude '**/.gradle/**'
         exclude '**/*.log'
+        exclude 'caches/**'
         // Exclude all JAR-files in the 'kieker-examples' folder except for the opencsv JAR and the JARs in the JavaEEServletContainerExample directory
         exclude {
             jars ->

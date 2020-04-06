@@ -6,11 +6,11 @@ EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testd
 
 TOOL_DIR=`mktemp -d`
 
-TAR_NAME="${KIEKER_DIR}/tools/trace-analysis-1.14.tar"
+ZIP_NAME="${KIEKER_DIR}/tools/trace-analysis-1.14.zip"
 
-( cd ${TOOL_DIR} ; tar -xvpf ${TAR_NAME} )
+( cd ${TOOL_DIR} ; unzip ${ZIP_NAME} )
 
-TOOL_NAME=`basename ${TAR_NAME} | sed 's/\.tar$//g'`
+TOOL_NAME=`basename ${ZIP_NAME} | sed 's/\.zip$//g'`
 
 TRACE_ANALYSIS_SH=${TOOL_DIR}/$TOOL_NAME/bin/trace-analysis
 
