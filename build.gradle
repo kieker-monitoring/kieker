@@ -30,12 +30,10 @@ configurations {
 
 dependencies {
     resultJar project(path: ':kieker-tools', configuration: 'resultJar')
-    // project(':kieker-tools').configurations.resultJar does not work
     resultJar 'org.jctools:jctools-core:2.1.0'
     resultJar 'org.slf4j:slf4j-api:1.7.25'
 
     emfJarConfig project(path: ':kieker-analysis', configuration: 'emfJarConfig')
-    // project(':kieker-analysis').configurations.resultJar does not work
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
@@ -831,6 +829,7 @@ def sourceContent = project.copySpec {
         exclude '**/.gradle/**'
         exclude '**/*.log'
         exclude 'caches/**'
+        exclude 'docs/**'
         // Exclude all JAR-files in the 'kieker-examples' folder except for the opencsv JAR and the JARs in the JavaEEServletContainerExample directory
         exclude {
             jars ->

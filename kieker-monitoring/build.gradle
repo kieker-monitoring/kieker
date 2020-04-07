@@ -7,7 +7,10 @@ configurations {
 
 def aspectjVersion = '1.8.2'
 
-repositories { jcenter() }
+repositories {
+	jcenter()
+	maven { url "https://mvnrepository.com/artifact/org.powermock/powermock-api-mockito2" }
+}
 
 
 dependencies {
@@ -68,7 +71,7 @@ dependencies {
 	testRuntime resolveLibrary('framework-libs/spring/spring-expression-*.jar')
 
 	testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
-  compile group: 'com.github.oshi', name: 'oshi-core', version: '3.12.2'
+	compile group: 'com.github.oshi', name: 'oshi-core', version: '3.12.2'
 }
 
 clover {
