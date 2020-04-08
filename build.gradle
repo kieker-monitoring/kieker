@@ -830,6 +830,7 @@ def sourceContent = project.copySpec {
         exclude '**/*.log'
         exclude 'caches/**'
         exclude 'docs/**'
+	exclude '**/?/**'
         // Exclude all JAR-files in the 'kieker-examples' folder except for the opencsv JAR and the JARs in the JavaEEServletContainerExample directory
         exclude {
             jars ->
