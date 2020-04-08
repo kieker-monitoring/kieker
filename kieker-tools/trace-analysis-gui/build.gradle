@@ -1,5 +1,8 @@
 apply plugin: 'application'
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 distTar.enabled=false
 
 mainClassName='kieker.tools.trace.analysis.ui.TraceAnalysisGUI'

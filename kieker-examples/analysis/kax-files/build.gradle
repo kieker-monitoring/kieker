@@ -1,5 +1,6 @@
-apply plugin: 'application'
-apply plugin: 'eclipse'
+plugins {
+	id 'application'
+}
 
 dependencies {
         // you need to ensure by yourself that the following jars are in the lib folder
