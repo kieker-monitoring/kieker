@@ -60,10 +60,10 @@ allprojects {
      * wrapper script manually. Note that this tasks also
      * creates/updates the wrapper scripts in subdirectories.
      * */
-    task wrapper(type: Wrapper) {
-        description = 'Downloads the Gradle wrapper scripts.'
-        gradleVersion = '3.3'
-    }
+//    task wrapper(type: Wrapper) {
+//        description = 'Downloads the Gradle wrapper scripts.'
+//        gradleVersion = '3.3'
+//    }
 
     repositories {    // must be above subprojects {}
         mavenCentral()
@@ -162,15 +162,15 @@ subprojects {
         configDir = rootProject.file(dirConfig)
     }
 
-    apply plugin: 'findbugs'
-    findbugs {
-        toolVersion = fbVersion
-        ignoreFailures = true
-        effort = "max"
-        reportLevel = "low"
-
-        excludeFilter = resolveRelativeToParent(dirConfig, 'fb-filter.xml')
-    }
+//    apply plugin: 'findbugs'
+//    findbugs {
+//        toolVersion = fbVersion
+//        ignoreFailures = true
+//        effort = "max"
+//        reportLevel = "low"
+//
+//        excludeFilter = resolveRelativeToParent(dirConfig, 'fb-filter.xml')
+//    }
 
     tasks.withType(Pmd) {
         reports {
@@ -189,12 +189,12 @@ subprojects {
         }
     }
 
-    tasks.withType(FindBugs) {
-        reports {
-            xml.enabled = true
-            html.enabled = false // Can only enable either xml OR html
-        }
-    }
+//    tasks.withType(FindBugs) {
+//        reports {
+//            xml.enabled = true
+//            html.enabled = false // Can only enable either xml OR html
+//        }
+//    }
 
     // Those are some dependencies which are needed by all subprojects
     dependencies {
@@ -573,9 +573,12 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build
     configure licence
     configure aopxml
 
-    from configurations.resultJar.collect { 
+    from configurations.resultJar.allArtifacts.collect {
+    	println "++" 
         it.isDirectory() ? it : zipTree(it)
     }
+
+    println "tuut"
 
     manifest = project.manifest {
         from sharedManifest
@@ -598,7 +601,7 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build"
         include "org.eclipse.emf.ecore.xmi_${libEmfVersion}.LICENSE"
     }
 
-    from configurations.resultJar.collect { it.isDirectory() ? it : zipTree(it) }
+    from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
 
     def emfJarsTree = fileTree(dir: 'lib', include: '*emf*.jar').collect {
         zipTree(it)
@@ -613,7 +616,7 @@ task emfJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build"
         exclude "modeling32.png"
     }
 
-    from configurations.emfJarConfig.collect { it.isDirectory() ? it : zipTree(it) }
+    from configurations.emfJarConfig.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
 
     manifest = project.manifest {
         from sharedManifest
@@ -635,7 +638,7 @@ task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "bu
     }
     from file("lib/aspectjweaver-${libAspectjVersion}.LICENSE")
 
-    from configurations.resultJar.collect { it.isDirectory() ? it : zipTree(it) }
+    from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
 
     manifest = project.manifest {
         from sharedManifest
