@@ -181,4 +181,22 @@ public class BranchingRecord extends AbstractMonitoringRecord  {
 		return this.branchingOutcome;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "BranchingRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "branchID = ";
+		result += this.getBranchID() + ", ";
+		
+		result += "branchingOutcome = ";
+		result += this.getBranchingOutcome() + ", ";
+		
+		return result;
+	}
 }

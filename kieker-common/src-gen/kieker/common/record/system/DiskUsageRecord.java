@@ -295,4 +295,40 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 		return this.writesPerSecond;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "DiskUsageRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "deviceName = ";
+		result += this.getDeviceName() + ", ";
+		
+		result += "queue = ";
+		result += this.getQueue() + ", ";
+		
+		result += "readBytesPerSecond = ";
+		result += this.getReadBytesPerSecond() + ", ";
+		
+		result += "readsPerSecond = ";
+		result += this.getReadsPerSecond() + ", ";
+		
+		result += "serviceTime = ";
+		result += this.getServiceTime() + ", ";
+		
+		result += "writeBytesPerSecond = ";
+		result += this.getWriteBytesPerSecond() + ", ";
+		
+		result += "writesPerSecond = ";
+		result += this.getWritesPerSecond() + ", ";
+		
+		return result;
+	}
 }

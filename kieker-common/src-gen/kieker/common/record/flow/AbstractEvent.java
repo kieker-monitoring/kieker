@@ -104,4 +104,16 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	public final void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "AbstractEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		return result;
+	}
 }

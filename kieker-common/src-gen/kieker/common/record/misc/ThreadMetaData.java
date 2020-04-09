@@ -161,4 +161,19 @@ public class ThreadMetaData extends AbstractMonitoringRecord  {
 		return this.threadId;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "ThreadMetaData: ";
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "threadId = ";
+		result += this.getThreadId() + ", ";
+		
+		return result;
+	}
 }

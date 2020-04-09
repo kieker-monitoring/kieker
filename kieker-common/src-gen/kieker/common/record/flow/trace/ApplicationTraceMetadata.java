@@ -211,4 +211,34 @@ public class ApplicationTraceMetadata extends TraceMetadata  {
 		return this.applicationName;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "ApplicationTraceMetadata: ";
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "threadId = ";
+		result += this.getThreadId() + ", ";
+		
+		result += "sessionId = ";
+		result += this.getSessionId() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "parentTraceId = ";
+		result += this.getParentTraceId() + ", ";
+		
+		result += "parentOrderId = ";
+		result += this.getParentOrderId() + ", ";
+		
+		result += "applicationName = ";
+		result += this.getApplicationName() + ", ";
+		
+		return result;
+	}
 }

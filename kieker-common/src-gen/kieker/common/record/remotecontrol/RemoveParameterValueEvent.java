@@ -182,4 +182,22 @@ public class RemoveParameterValueEvent extends AbstractMonitoringRecord implemen
 		return this.value;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "RemoveParameterValueEvent: ";
+		result += "pattern = ";
+		result += this.getPattern() + ", ";
+		
+		result += "name = ";
+		result += this.getName() + ", ";
+		
+		result += "value = ";
+		result += this.getValue() + ", ";
+		
+		return result;
+	}
 }

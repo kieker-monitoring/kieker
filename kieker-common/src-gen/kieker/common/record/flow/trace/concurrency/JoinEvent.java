@@ -175,4 +175,25 @@ public class JoinEvent extends AbstractTraceEvent  {
 		return this.joinedTraceId;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "JoinEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "joinedTraceId = ";
+		result += this.getJoinedTraceId() + ", ";
+		
+		return result;
+	}
 }

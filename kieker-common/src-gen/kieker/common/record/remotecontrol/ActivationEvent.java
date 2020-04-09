@@ -144,4 +144,16 @@ public class ActivationEvent extends AbstractMonitoringRecord implements IRemote
 		return this.pattern;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "ActivationEvent: ";
+		result += "pattern = ";
+		result += this.getPattern() + ", ";
+		
+		return result;
+	}
 }

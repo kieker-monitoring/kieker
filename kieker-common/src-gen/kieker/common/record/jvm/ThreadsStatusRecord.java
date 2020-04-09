@@ -227,4 +227,34 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		return this.totalStartedThreadCount;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "ThreadsStatusRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "vmName = ";
+		result += this.getVmName() + ", ";
+		
+		result += "threadCount = ";
+		result += this.getThreadCount() + ", ";
+		
+		result += "daemonThreadCount = ";
+		result += this.getDaemonThreadCount() + ", ";
+		
+		result += "peakThreadCount = ";
+		result += this.getPeakThreadCount() + ", ";
+		
+		result += "totalStartedThreadCount = ";
+		result += this.getTotalStartedThreadCount() + ", ";
+		
+		return result;
+	}
 }

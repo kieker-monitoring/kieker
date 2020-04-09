@@ -240,4 +240,40 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 		return this.calleeObjectId;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "CallConstructorObjectEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "operationSignature = ";
+		result += this.getOperationSignature() + ", ";
+		
+		result += "classSignature = ";
+		result += this.getClassSignature() + ", ";
+		
+		result += "calleeOperationSignature = ";
+		result += this.getCalleeOperationSignature() + ", ";
+		
+		result += "calleeClassSignature = ";
+		result += this.getCalleeClassSignature() + ", ";
+		
+		result += "objectId = ";
+		result += this.getObjectId() + ", ";
+		
+		result += "calleeObjectId = ";
+		result += this.getCalleeObjectId() + ", ";
+		
+		return result;
+	}
 }

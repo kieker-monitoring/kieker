@@ -248,4 +248,31 @@ public class BeforeDatabaseEvent extends AbstractMonitoringRecord implements IEv
 		return this.technology;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "BeforeDatabaseEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "classSignature = ";
+		result += this.getClassSignature() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "parameters = ";
+		result += this.getParameters() + ", ";
+		
+		result += "technology = ";
+		result += this.getTechnology() + ", ";
+		
+		return result;
+	}
 }

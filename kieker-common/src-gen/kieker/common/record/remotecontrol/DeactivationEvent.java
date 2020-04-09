@@ -144,4 +144,16 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IRemo
 		return this.pattern;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "DeactivationEvent: ";
+		result += "pattern = ";
+		result += this.getPattern() + ", ";
+		
+		return result;
+	}
 }

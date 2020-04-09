@@ -124,4 +124,14 @@ public class EmptyRecord extends AbstractMonitoringRecord  {
 		return code;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "EmptyRecord: ";
+		
+		return result;
+	}
 }

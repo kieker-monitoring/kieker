@@ -143,4 +143,16 @@ public class TimestampRecord extends AbstractMonitoringRecord  {
 		return this.timestamp;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "TimestampRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		return result;
+	}
 }

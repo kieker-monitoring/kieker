@@ -200,4 +200,25 @@ public class HostApplicationMetaData extends AbstractMonitoringRecord  {
 		return this.applicationName;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "HostApplicationMetaData: ";
+		result += "systemName = ";
+		result += this.getSystemName() + ", ";
+		
+		result += "ipAddress = ";
+		result += this.getIpAddress() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "applicationName = ";
+		result += this.getApplicationName() + ", ";
+		
+		return result;
+	}
 }

@@ -200,4 +200,25 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord  {
 		return this.utilization;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "ResourceUtilizationRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "resourceName = ";
+		result += this.getResourceName() + ", ";
+		
+		result += "utilization = ";
+		result += this.getUtilization() + ", ";
+		
+		return result;
+	}
 }

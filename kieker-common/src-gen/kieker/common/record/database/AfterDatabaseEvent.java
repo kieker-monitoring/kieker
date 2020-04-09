@@ -248,4 +248,31 @@ public class AfterDatabaseEvent extends AbstractMonitoringRecord implements IEve
 		return this.returnValue;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "AfterDatabaseEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "classSignature = ";
+		result += this.getClassSignature() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "returnType = ";
+		result += this.getReturnType() + ", ";
+		
+		result += "returnValue = ";
+		result += this.getReturnValue() + ", ";
+		
+		return result;
+	}
 }

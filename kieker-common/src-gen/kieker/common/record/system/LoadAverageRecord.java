@@ -219,4 +219,28 @@ public class LoadAverageRecord extends AbstractMonitoringRecord  {
 		return this.fifteenMinLoadAverage;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "LoadAverageRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "oneMinLoadAverage = ";
+		result += this.getOneMinLoadAverage() + ", ";
+		
+		result += "fiveMinLoadAverage = ";
+		result += this.getFiveMinLoadAverage() + ", ";
+		
+		result += "fifteenMinLoadAverage = ";
+		result += this.getFifteenMinLoadAverage() + ", ";
+		
+		return result;
+	}
 }
