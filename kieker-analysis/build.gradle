@@ -16,19 +16,19 @@ dependencies {
 	api project(':kieker-monitoring')
 
 	implementation resolveLibrary('javax.jms-*.jar')				// old library; not available via maven repo
-	implementation 'org.apache.cxf:cxf:2.6.17'							// cxf-bundle
-	implementation resolveLibrary('org.eclipse.emf.common_*.jar')
-	implementation resolveLibrary('org.eclipse.emf.ecore.xmi_*.jar')
-	implementation resolveLibrary('org.eclipse.emf.ecore_*.jar')
-	implementation 'com.rabbitmq:amqp-client:4.2.1'
-	implementation 'com.google.guava:guava:20.0'				// (21.0 and above require java 8) used by StringRegistryCache for amqp reader
+	api 'org.apache.cxf:cxf:2.6.17'			// cxf-bundle
+	api resolveLibrary('org.eclipse.emf.common_*.jar')
+	api resolveLibrary('org.eclipse.emf.ecore.xmi_*.jar')
+	api resolveLibrary('org.eclipse.emf.ecore_*.jar')
+	api 'com.rabbitmq:amqp-client:4.2.1'
+	api 'com.google.guava:guava:20.0'				// (21.0 and above require java 8) used by StringRegistryCache for amqp reader
 	implementation 'org.tukaani:xz:1.6'	// decompression algorithms used by the readers
 		
 	implementation 'org.nanohttpd:nanohttpd:2.3.0'
 			
 	implementation 'org.slf4j:slf4j-api:1.7.25'
 				
-	emfJarConfig 'net.sourceforge.teetime:teetime:3.0'
+	api 'net.sourceforge.teetime:teetime:3.0'
 	emfJarConfig 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
 	implementation configurations.emfJarConfig
 

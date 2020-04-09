@@ -1,11 +1,38 @@
-apply plugin: 'eclipse'
+apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: "com.github.hauner.jarTest"
 
-configurations {
-	ajc
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "io.freefair.gradle:aspectj-plugin:5.0.0-rc6"
+  }
 }
 
-def aspectjVersion = '1.8.2'
+apply plugin: "io.freefair.aspectj.post-compile-weaving"
+
+repositories {
+    mavenCentral()
+}
+
+project.ext {
+    aspectjVersion = "1.8.2"
+}
+
+configurations {
+    ajc
+    aspects
+    aspectCompile
+    compile{
+        extendsFrom aspects
+    }
+}
+
+// def aspectjVersion = '1.8.2'
 
 repositories {
 	jcenter()
@@ -58,11 +85,14 @@ dependencies {
 	
 	compile 'org.easymock:easymock:3.4'
 	compile 'org.mockito:mockito-core:2.8.9' 
-	compile 'org.powermock:powermock-api-mockito2:1.7.+'
-	compile 'org.powermock:powermock-api-easymock:1.7.+' 
-	compile 'org.powermock:powermock-module-junit4:1.7.+' 
-	compile 'org.powermock:powermock-core:1.7.+'
-	compile 'org.powermock:powermock-module-junit4-rule:1.7.+' 
+	compile 'org.powermock:powermock-api-mockito2:2.0.7'
+	compile 'org.powermock:powermock-api-easymock:2.0.7' 
+	compile 'org.powermock:powermock-module-junit4:2.0.7' 
+	compile 'org.powermock:powermock-core:2.0.7'
+	compile 'org.powermock:powermock-module-junit4-rule:2.0.7' 
+	
+	compile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
+	compile group: 'javax.jws', name: 'javax.jws-api', version: '1.1'
 	
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
@@ -79,12 +109,6 @@ clover {
 		html=true
 	}
 	
-}
-
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
 }
 
 task iajc(dependsOn: classes) {
@@ -114,6 +138,6 @@ task iajc(dependsOn: classes) {
     }   
 }
 
-compileJava.doLast {
-    tasks.iajc.execute()
-}
+//compileJava.doLast {
+//    tasks.iajc.execute()
+//}
