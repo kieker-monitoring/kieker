@@ -9,6 +9,10 @@ configurations {
 dependencies {
 	clover 'org.openclover:clover:4.2.0'
 
+	compile 'ch.qos.logback:logback-classic:1.1.7'
+	compile 'org.slf4j:slf4j-api:1.7.30'
+	compile 'org.codehaus.groovy:groovy-all:3.0.2'
+
 	jms 'commons-logging:commons-logging:1.2'
 
 	amqp 'commons-logging:commons-logging:1.2'
@@ -74,6 +78,14 @@ task replaceHardCodedVersionNames() {
 	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
 	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/README.txt"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
 	regexpReplaceInFiles(project.file("userguide/ch3-4--custom-components/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
+	
+	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141008-101258768-UTC-repairEventBasedTraces-example-plots.sh"), "trace-analysis-.*.tar", "trace-analysis-${rootProject.version}.tar")
+	regexpReplaceInFiles(project.file("OverheadEvaluationMicrobenchmark/MooBench/config"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC-example-plots.sh"), "trace-analysis-.*.tar", "trace-analysis-${rootProject.version}.tar")
+	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141009-160413833-UTC-operationExecutionsConstructors-example-plots.sh"), "trace-analysis-.*.tar", "trace-analysis-${rootProject.version}.tar")
+	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141008-101258768-UTC-example-plots.sh"), "trace-analysis-.*.tar", "trace-analysis-${rootProject.version}.tar")
+	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20141009-163010944-UTC-constructor-events-example-plots.sh"), "trace-analysis-.*.tar", "trace-analysis-${rootProject.version}.tar")
+	
 	regexpReplaceInFiles(project.file("monitoring/probe-spring/.classpath"), "aspectjweaver-.*.jar", "aspectjweaver-${libAspectjVersion}.jar")
   }
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -281,4 +281,37 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord  {
 		return this.numberOfRecords;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "KiekerMetadataRecord: ";
+		result += "version = ";
+		result += this.getVersion() + ", ";
+		
+		result += "controllerName = ";
+		result += this.getControllerName() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "experimentId = ";
+		result += this.getExperimentId() + ", ";
+		
+		result += "debugMode = ";
+		result += this.isDebugMode() + ", ";
+		
+		result += "timeOffset = ";
+		result += this.getTimeOffset() + ", ";
+		
+		result += "timeUnit = ";
+		result += this.getTimeUnit() + ", ";
+		
+		result += "numberOfRecords = ";
+		result += this.getNumberOfRecords() + ", ";
+		
+		return result;
+	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -283,4 +283,37 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord  {
 		return this.ess;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "OperationExecutionRecord: ";
+		result += "operationSignature = ";
+		result += this.getOperationSignature() + ", ";
+		
+		result += "sessionId = ";
+		result += this.getSessionId() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "tin = ";
+		result += this.getTin() + ", ";
+		
+		result += "tout = ";
+		result += this.getTout() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "eoi = ";
+		result += this.getEoi() + ", ";
+		
+		result += "ess = ";
+		result += this.getEss() + ", ";
+		
+		return result;
+	}
 }

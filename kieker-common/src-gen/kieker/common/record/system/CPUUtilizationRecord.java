@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -314,4 +314,43 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord  {
 		return this.idle;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "CPUUtilizationRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "cpuID = ";
+		result += this.getCpuID() + ", ";
+		
+		result += "user = ";
+		result += this.getUser() + ", ";
+		
+		result += "system = ";
+		result += this.getSystem() + ", ";
+		
+		result += "wait = ";
+		result += this.getWait() + ", ";
+		
+		result += "nice = ";
+		result += this.getNice() + ", ";
+		
+		result += "irq = ";
+		result += this.getIrq() + ", ";
+		
+		result += "totalUtilization = ";
+		result += this.getTotalUtilization() + ", ";
+		
+		result += "idle = ";
+		result += this.getIdle() + ", ";
+		
+		return result;
+	}
 }

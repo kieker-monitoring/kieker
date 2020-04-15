@@ -16,7 +16,7 @@ Documentation on how to use Kieker can be found here: [Kieker Documentation](htt
 
 ## Development and Contribution
 
-Gradle is used as the build tool. A `build.gradle` file is provided.
+Gradle is used as the build tool. A `build.gradle` file is provided. From the command-line, please use the provided Gradle wrapper script, e.g., on Unix-based systems, run `./gradlew clean build -x check -x test` to build without executing checks and tests.
 
 For issue tracking and bug reports, JIRA is used at <https://kieker-monitoring.atlassian.net/>. 
  

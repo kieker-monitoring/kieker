@@ -24,9 +24,9 @@ dependencies {
 	
 	compile 'com.beust:jcommander:1.71'
 	
-	compile group: 'log4j', name: 'log4j', version: '1.2.17'
-	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-	compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
+	compile 'ch.qos.logback:logback-classic:1.1.7'
+	compile 'org.slf4j:slf4j-api:1.7.30'
+	compile 'org.codehaus.groovy:groovy-all:3.0.2'
 
 	compile resolveLibrary('jgraphx-*.jar')				// this artifact is not available on our repositories
 	compile resolveLibrary('Rsession-*.jar')
@@ -34,10 +34,8 @@ dependencies {
 	compile resolveLibrary('REngine-*.jar')
 	compile resolveLibrary('reflections-*.jar')
 	compile resolveLibrary('activemq-core-*.jar')
-	//compile group: 'org.eclipse.jetty',	name: 'jetty-server', version: '8.1.16.v20140903'
 	
 	// Some dependencies for the HTTP connector of the KDB
-	//compile fileTree(dir: 'lib/jetty', include: 'jetty-*.jar')
 	compile fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
 
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
@@ -46,11 +44,6 @@ dependencies {
 	testCompile project (path: ':kieker-analysis', configuration: 'testArchives')
 	// this project depends on the tests of kieker-analysis, e.g., it requires the class NamedListWriter
 	testCompile project (path: ':kieker-monitoring', configuration: 'testArchives')
-
-	//testRuntime org.apache.derby:derby:10.13.1.1
-	//testRuntime resolveLibrary('geronimo-j2ee-management_1.1_spec-*.jar')
-	//testRuntime resolveLibrary('kahadb-*.jar')
-	//testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
 }
 
 clover {

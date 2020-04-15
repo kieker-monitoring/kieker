@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -295,4 +295,40 @@ public class DiskUsageRecord extends AbstractMonitoringRecord  {
 		return this.writesPerSecond;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "DiskUsageRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "deviceName = ";
+		result += this.getDeviceName() + ", ";
+		
+		result += "queue = ";
+		result += this.getQueue() + ", ";
+		
+		result += "readBytesPerSecond = ";
+		result += this.getReadBytesPerSecond() + ", ";
+		
+		result += "readsPerSecond = ";
+		result += this.getReadsPerSecond() + ", ";
+		
+		result += "serviceTime = ";
+		result += this.getServiceTime() + ", ";
+		
+		result += "writeBytesPerSecond = ";
+		result += this.getWriteBytesPerSecond() + ", ";
+		
+		result += "writesPerSecond = ";
+		result += this.getWritesPerSecond() + ", ";
+		
+		return result;
+	}
 }

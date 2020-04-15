@@ -1,7 +1,16 @@
 apply plugin: 'application'
 apply plugin: 'eclipse'
 
+repositories {
+	mavenCentral() 
+        jcenter() 
+}
+
 dependencies {
+        compile 'ch.qos.logback:logback-classic:1.1.7'
+        compile 'org.slf4j:slf4j-api:1.7.30'
+        compile 'org.codehaus.groovy:groovy-all:3.0.2'
+
 	compile fileTree('lib') {
 		include "aopalliance-*.jar"
 		include "spring-aop-*.jar"
@@ -17,12 +26,14 @@ dependencies {
 	}
 }
 
+distTar.enabled=false
+
 // Simplify the JAR's file name
 archivesBaseName = 'BookstoreApplication'
 version = ''
 	
 sourceSets.main.java.srcDirs = ['src']
-sourceSets.main.resources.srcDirs = ['src-resources']
+sourceSets.main.resources.srcDirs = ['src-resources', '../../resources' ]
 
 mainClassName = 'kieker.examples.monitoring.spring.BookstoreStarter'
 

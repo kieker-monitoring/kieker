@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -211,4 +211,31 @@ public class GCRecord extends AbstractJVMRecord  {
 		return this.collectionTimeMS;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "GCRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "vmName = ";
+		result += this.getVmName() + ", ";
+		
+		result += "gcName = ";
+		result += this.getGcName() + ", ";
+		
+		result += "collectionCount = ";
+		result += this.getCollectionCount() + ", ";
+		
+		result += "collectionTimeMS = ";
+		result += this.getCollectionTimeMS() + ", ";
+		
+		return result;
+	}
 }
