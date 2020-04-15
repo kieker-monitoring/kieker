@@ -115,7 +115,7 @@ pipeline {
             docker {
               image 'kieker/kieker-build:openjdk8'
               args env.DOCKER_ARGS
-              label 'kieker-slave-docker'
+              label 'build-node3'
             }
           }
           steps {
@@ -134,7 +134,7 @@ pipeline {
             docker {
               image 'kieker/kieker-build:openjdk8'
               args env.DOCKER_ARGS
-              label 'kieker-slave-docker'
+              label 'build-node3'
             }
           }
           when {
@@ -160,7 +160,7 @@ pipeline {
 
     stage('Archive Artifacts') {
       agent {
-        label 'kieker-slave-docker'
+        label 'build-node3'
       }
       steps {
         unstash 'jarArtifacts'
@@ -185,7 +185,7 @@ pipeline {
       parallel {
         stage('Push to Stable') {
           agent {
-            label 'kieker-slave-docker'
+            label 'build-node3'
           }
           steps {
             sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
@@ -202,7 +202,7 @@ pipeline {
             docker {
               image 'kieker/kieker-build:openjdk8'
               args env.DOCKER_ARGS
-              label 'kieker-slave-docker'
+              label 'build-node3'
             }
           }
           steps {
