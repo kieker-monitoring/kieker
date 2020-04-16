@@ -250,7 +250,7 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(128);
 		return sb.append(super.toString()).
-			append("\n\t\t").append("logFolder").append("='").
+			append("\n\t\t").append(FileWriter.PREFIX).append("actualStoragePath").append("='").
 			append(this.logFolderName).append('\'').
 			toString();
 	}
