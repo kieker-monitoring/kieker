@@ -10,7 +10,7 @@ Alternatively, you can compile the sources and start the application using
 'gradle' with the given 'build.gradle' file:
 
 Run example:
- $ gradle runMonitoringAndAnalysis
+ $ gradle runExampleOperationExecutions
 
 In order to re-compile the sources into BookstoreApplication.jar, run the 
 following command:
