@@ -5,7 +5,7 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
-* 1.14 (March 11, 2020)
+* 1.14 (May 11, 2020)
 - New features (selection)
   - Integration of a novel pipes-and-filter framework and filters in 
     Kieker.Analysis based on TeeTime (teetime-framework.github.io
