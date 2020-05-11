@@ -33,13 +33,20 @@ dependencies {
 	
 	compile 'org.tukaani:xz:1.6'	// compression algorithms used by the file writers
 
-	compile 'org.apache.cxf:cxf-bundle-minimal:2.6.15'
+    compile 'org.apache.cxf:cxf-bundle-minimal:2.6.15'
+	// Likely needed for an update: compile 'org.apache.cxf:cxf:3.3.6'
+	// Likely needed for an update: compile 'org.apache.cxf:cxf-rt-bindings-soap:3.3.6'
+	// Likely needed for an update: compile 'org.apache.cxf:cxf-rt-frontend-jaxws:3.3.6'
+	
 	compile resolveLibrary('framework-libs/jsr311-api-1.1.1.jar')
 	compile resolveLibrary('framework-libs/javax.ws.rs-api-2.0.1.jar')
 	compile resolveLibrary('framework-libs/jersey/jersey-server-1.19.jar')
 	compile resolveLibrary('framework-libs/jersey/jersey-client-1.19.jar')
 	compile resolveLibrary('framework-libs/jersey/jersey-apache-client4-1.19.jar')
+	
 	compile resolveLibrary('framework-libs/javax.servlet-*.jar')
+	// We can probably replace that by: compile 'javax.servlet:javax.servlet-api:3.0.1'
+	
 	compile resolveLibrary('framework-libs/spring/aopalliance-*.jar')
 	compile resolveLibrary('framework-libs/spring/spring-beans-*.jar')
 	compile resolveLibrary('framework-libs/spring/spring-context-*.jar')
@@ -67,10 +74,12 @@ dependencies {
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
 	testCompile resolveLibrary('framework-libs/spring/spring-beans-*.jar')
-
 	testRuntime resolveLibrary('framework-libs/spring/spring-expression-*.jar')
 
-	testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
+    testCompile 'org.eclipse.jetty:jetty-server:9.4.28.v20200408'
+    testCompile 'org.eclipse.jetty:jetty-webapp:9.4.28.v20200408'
+    testCompile 'org.eclipse.jetty:apache-jsp:9.4.28.v20200408'
+	
 	compile group: 'com.github.oshi', name: 'oshi-core', version: '3.12.2'
 }
 
