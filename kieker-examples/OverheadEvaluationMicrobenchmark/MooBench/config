@@ -8,7 +8,7 @@ RSCRIPT_PATH="${BASE_DIR}/r/stats.csv.r"
 
 DATA_DIR="${BASE_DIR}/data"
 RESULTS_DIR="${BASE_DIR}/results-kieker"
-AGENT="${BASE_DIR}/lib/kieker-1.14-aspectj.jar"
+AGENT="${BASE_DIR}/lib/kieker-1.15-SNAPSHOT-aspectj.jar"
 MOOBENCH="${BASE_DIR}/moobench-2.0-all.jar"
 
 # in-jar locations
