@@ -12,7 +12,7 @@ fi
 REMOTE_NODE="$1"
 
 # The following constant specifies location and name of the benchmarked jar file relative to the workspace.
-BENCHMARKED_JAR=build/libs/kieker-1.14-SNAPSHOT-aspectj.jar
+BENCHMARKED_JAR=build/libs/kieker-1.15-SNAPSHOT-aspectj.jar
 
 # The following constants specify location and name of the MooBench folder
 MOOBENCH_FOLDER=${BASE_DIR}/MooBench

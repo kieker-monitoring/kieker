@@ -4,11 +4,15 @@ apply plugin: 'eclipse'
 repositories {
         mavenCentral()
         maven {
-      		url "https://plugins.gradle.org/m2/"
-   	}
+		url "https://plugins.gradle.org/m2/"
+	}
+        jcenter() 
 }
 
 dependencies {
+        compile 'ch.qos.logback:logback-classic:1.1.7'
+        compile 'org.slf4j:slf4j-api:1.7.30'
+        compile 'org.codehaus.groovy:groovy-all:3.0.2'
 
 	compile 'com.google.guava:guava:20.0'				// (21.0 and above require java 8) used by StringRegistryCache for amqp reader
 
@@ -17,7 +21,7 @@ dependencies {
 		include "commons-logging-*.jar"
 		include "amqp-client-*.jar"
 		include "slf4j-api-*.jar"
-  }
+	}
 }
 
 eclipse {
@@ -28,12 +32,14 @@ eclipse {
 
 def monitoringConfigurationAMQP = 'META-INF/kieker.monitoring.properties'
 
+distTar.enabled=false
+
 // Simplify the JAR's file name
 archivesBaseName = 'AMQPMonitoringAnalysis'
 version = ''
 	
 sourceSets.main.java.srcDirs = ['src']
-sourceSets.main.resources.srcDirs = ['src-resources']
+sourceSets.main.resources.srcDirs = ['src-resources', '../resources' ]
 
 def monitoringConfiguration = {
   main = 'kieker.examples.userguide.appendixAMQP.BookstoreStarter'

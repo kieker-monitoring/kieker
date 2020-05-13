@@ -1,12 +1,17 @@
 apply plugin: 'application'
 
+distTar.enabled=false
+
 mainClassName='kieker.tools.bridge.cli.CLIServerMain'
+
+sourceSets.main.resources.srcDirs = [ '../resources' ]
 
 dependencies {
 	clover 'org.openclover:clover:4.2.0'
 
 	compile project(":kieker-common")
 	compile project(":kieker-tools")
+
 	compile "com.beust:jcommander:1.71"
 	
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')

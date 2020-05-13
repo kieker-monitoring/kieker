@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -447,4 +447,64 @@ public class NetworkUtilizationRecord extends AbstractMonitoringRecord  {
 		return this.rxPacketsPerSecond;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "NetworkUtilizationRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "interfaceName = ";
+		result += this.getInterfaceName() + ", ";
+		
+		result += "speed = ";
+		result += this.getSpeed() + ", ";
+		
+		result += "txBytesPerSecond = ";
+		result += this.getTxBytesPerSecond() + ", ";
+		
+		result += "txCarrierPerSecond = ";
+		result += this.getTxCarrierPerSecond() + ", ";
+		
+		result += "txCollisionsPerSecond = ";
+		result += this.getTxCollisionsPerSecond() + ", ";
+		
+		result += "txDroppedPerSecond = ";
+		result += this.getTxDroppedPerSecond() + ", ";
+		
+		result += "txErrorsPerSecond = ";
+		result += this.getTxErrorsPerSecond() + ", ";
+		
+		result += "txOverrunsPerSecond = ";
+		result += this.getTxOverrunsPerSecond() + ", ";
+		
+		result += "txPacketsPerSecond = ";
+		result += this.getTxPacketsPerSecond() + ", ";
+		
+		result += "rxBytesPerSecond = ";
+		result += this.getRxBytesPerSecond() + ", ";
+		
+		result += "rxDroppedPerSecond = ";
+		result += this.getRxDroppedPerSecond() + ", ";
+		
+		result += "rxErrorsPerSecond = ";
+		result += this.getRxErrorsPerSecond() + ", ";
+		
+		result += "rxFramePerSecond = ";
+		result += this.getRxFramePerSecond() + ", ";
+		
+		result += "rxOverrunsPerSecond = ";
+		result += this.getRxOverrunsPerSecond() + ", ";
+		
+		result += "rxPacketsPerSecond = ";
+		result += this.getRxPacketsPerSecond() + ", ";
+		
+		return result;
+	}
 }

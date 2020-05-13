@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2017 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
@@ -46,6 +47,7 @@ import kieker.test.monitoring.util.NamedListWriter;
  *
  * @since 1.5
  */
+@Ignore // https://kieker-monitoring.atlassian.net/browse/KIEKER-1515
 public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	// private static final Log LOG = LogFactory.getLog(TestSpringMethodInterceptor.class);
 

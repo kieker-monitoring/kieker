@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2019 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -182,4 +182,22 @@ public class AddParameterValueEvent extends AbstractMonitoringRecord implements 
 		return this.value;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "AddParameterValueEvent: ";
+		result += "pattern = ";
+		result += this.getPattern() + ", ";
+		
+		result += "name = ";
+		result += this.getName() + ", ";
+		
+		result += "value = ";
+		result += this.getValue() + ", ";
+		
+		return result;
+	}
 }

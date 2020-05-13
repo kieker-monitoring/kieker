@@ -30,12 +30,10 @@ configurations {
 
 dependencies {
     resultJar project(path: ':kieker-tools', configuration: 'resultJar')
-    // project(':kieker-tools').configurations.resultJar does not work
     resultJar 'org.jctools:jctools-core:2.1.0'
     resultJar 'org.slf4j:slf4j-api:1.7.25'
 
     emfJarConfig project(path: ':kieker-analysis', configuration: 'emfJarConfig')
-    // project(':kieker-analysis').configurations.resultJar does not work
 }
 
 // We have multiple subprojects - but we do not want all of them in our JAR files.
@@ -443,7 +441,7 @@ task updateLicenseHeaderYear() {
     doLast {
         FileTree tree = fileTree(dir: '.', include: '**/*.java')
         tree.each { File file ->
-            regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2017 Kieker Project')
+            regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2020 Kieker Project')
         }
     }
 }
@@ -451,6 +449,7 @@ task updateLicenseHeaderYear() {
 task replaceHardCodedVersionNames() {
     doLast {
         regexpReplaceInFiles(project.file("bin/dev/release-check-short.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+	regexpReplaceInFiles(project.file("bin/generateGraph.cmd"), "kieker-.*-emf.jar", "kieker-${version}-emf.jar")
     }
 }
 compileJava.dependsOn replaceHardCodedVersionNames
@@ -575,7 +574,7 @@ task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build
     configure aopxml
 
     from configurations.resultJar.collect { 
-    	it.isDirectory() ? it : zipTree(it)
+        it.isDirectory() ? it : zipTree(it)
     }
 
     manifest = project.manifest {
@@ -705,6 +704,7 @@ def binaryContent = project.copySpec {
         exclude '**/.gradle/**'
         exclude 'lib/static-analysis/'
         exclude 'bin/dev/release-check*'
+        exclude 'caches/**'
     }
     from('kieker-documentation') {
         include 'README-bin'
@@ -730,6 +730,10 @@ def toolsContent = project.copySpec {
         }
         into kiekerPackagenamebase + "-" + kiekerVersion + "/tools"
     }
+    from("kieker-tools") {
+        include "README.md"
+    }
+    into kiekerPackagenamebase + "-" + kiekerVersion + "/tools"
 }
 
 /** collect all libraries in kieker-tools. */
@@ -824,6 +828,9 @@ def sourceContent = project.copySpec {
         exclude 'build-eclipse/'
         exclude '**/.gradle/**'
         exclude '**/*.log'
+        exclude 'caches/**'
+        exclude 'docs/**'
+	exclude '**/?/**'
         // Exclude all JAR-files in the 'kieker-examples' folder except for the opencsv JAR and the JARs in the JavaEEServletContainerExample directory
         exclude {
             jars ->

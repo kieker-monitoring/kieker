@@ -3,9 +3,14 @@ apply plugin: 'eclipse'
 
 repositories {
 	mavenCentral() 
+        jcenter() 
 }
 
 dependencies {
+        compile 'ch.qos.logback:logback-classic:1.1.7'
+        compile 'org.slf4j:slf4j-api:1.7.30'
+        compile 'org.codehaus.groovy:groovy-all:3.0.2'
+
 	// you need to ensure by yourself that the following jars are in the lib folder
 	compile fileTree('lib') {
 		include "kieker-*.jar"
@@ -13,7 +18,7 @@ dependencies {
 		include "opencsv-*.jar"
 	}
 
-	compile 'org.slf4j:slf4j-api:1.7.25'
+	compile 'org.slf4j:slf4j-api:1.7.30'
 
 	//compile 'com.opencsv:opencsv:4.0'
 
@@ -27,11 +32,14 @@ dependencies {
 	runtime 'org.apache.commons:commons-lang3:3.6'
 }
 
+distTar.enabled=false
+
 // Simplify the JAR's file name
 archivesBaseName = 'OpadAnomalyExample'
 version = ''
 
 sourceSets.main.java.srcDirs = ['src']
+sourceSets.main.resources.srcDirs = [ '../../resources' ]
 
 mainClassName = 'kieker.examples.analysis.opad.ExperimentStarter'
 
