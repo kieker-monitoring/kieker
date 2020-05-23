@@ -41,6 +41,7 @@ pipeline {
           steps {
             // Make sure that no remainders from previous builds interfere.
             sh './gradlew clean'
+            sh 'git clean -fxd'
           }
         }
 

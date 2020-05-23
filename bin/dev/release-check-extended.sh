@@ -185,7 +185,7 @@ function check_bin_archive {
 ##
 
 TMP_ZIP_DIR=zip
-TMP_TGZ_DIR=tgz
+#TMP_TGZ_DIR=tgz
 
 #
 ## binary releases
@@ -206,24 +206,25 @@ information "Binary ZIP"
 BINZIP=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.zip)
 extract_archive_to ${BINZIP} ${TMP_ZIP_DIR}
 
-information "Binary TGZ"
-BINTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.tar.gz)
-extract_archive_to ${BINTGZ} ${TMP_TGZ_DIR}
+#information "Binary TGZ"
+#BINTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.tar.gz)
+#extract_archive_to ${BINTGZ} ${TMP_TGZ_DIR}
 
-diff -r "${TMP_TGZ_DIR}" "${TMP_ZIP_DIR}"
-DIFF_BIN_RESULT=$?
+#diff -r "${TMP_TGZ_DIR}" "${TMP_ZIP_DIR}"
+#DIFF_BIN_RESULT=$?
 
 # cleanup temporary folders we created for the comparison
-rm -rf "${TMP_BINZIP_DIR}" "${TMP_GZ_DIR}"
+rm -rf "${TMP_BINZIP_DIR}"
+# "${TMP_GZ_DIR}"
 
-if [ ${DIFF_BIN_RESULT} -eq 0 ]; then
-  information "The content of both binary archives is identical."
-  check_bin_archive "${BINTGZ}"
-else
-  error "The content of both binary archives is NOT identical."
-  exit 1
-fi
-rm -rf "${DIR}"
+#if [ ${DIFF_BIN_RESULT} -eq 0 ]; then
+#  information "The content of both binary archives is identical."
+#  check_bin_archive "${BINTGZ}"
+#else
+#  error "The content of both binary archives is NOT identical."
+#  exit 1
+#fi
+#rm -rf "${DIR}"
 
 #
 ## source releases
@@ -240,19 +241,19 @@ information "Source ZIP"
 SRCZIP=$(ls ../../${DIST_RELEASE_DIR}/*-sources.zip)
 extract_archive_to ${SRCZIP} ${TMP_ZIP_DIR}
 
-information "Source TGZ"
-SRCTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-sources.tar.gz)
-extract_archive_to ${SRCTGZ} ${TMP_TGZ_DIR}
+#information "Source TGZ"
+#SRCTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-sources.tar.gz)
+#extract_archive_to ${SRCTGZ} ${TMP_TGZ_DIR}
 
-diff -r ${TMP_TGZ_DIR} ${TMP_ZIP_DIR}
-DIFF_SRC_RESULT=$?
+#diff -r ${TMP_TGZ_DIR} ${TMP_ZIP_DIR}
+#DIFF_SRC_RESULT=$?
 
-if [ ${DIFF_SRC_RESULT} -eq 0 ]; then
-  information "The content of both source archives is identical."
-  check_src_archive "${SRCTGZ}"
-else
-  error "The content of both source archives is NOT identical."
-  exit 1
+#if [ ${DIFF_SRC_RESULT} -eq 0 ]; then
+#  information "The content of both source archives is identical."
+#  check_src_archive "${SRCTGZ}"
+#else
+#  error "The content of both source archives is NOT identical."
+#  exit 1
 fi
 #fails sporadically for no apparent reason
 #if [ -d ${DIR} ] ; then
