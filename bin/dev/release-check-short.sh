@@ -282,7 +282,9 @@ function check_src_archive {
     assert_no_duplicate_files_in_archive "$1"
 
 	information "Decompressing archive '$1' ..."
+	df
 	extract_archive_n_cd "$1"
+	df
 	touch $(basename "$1") # just to mark where this dir comes from
 
     assert_files_exist_src
@@ -320,6 +322,8 @@ aspectjversion="$(grep "libAspectjVersion = " gradle.properties | sed s/.*=.//g)
 information "---------------------------------"
 information "Check binary releases"
 information "---------------------------------"
+
+df
 
 assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"

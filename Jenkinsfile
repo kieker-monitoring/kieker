@@ -120,6 +120,7 @@ pipeline {
           }
           steps {
             unstash 'distributions'
+            sh 'df'
             sh './gradlew checkReleaseArchivesShort'
           }
           post {
