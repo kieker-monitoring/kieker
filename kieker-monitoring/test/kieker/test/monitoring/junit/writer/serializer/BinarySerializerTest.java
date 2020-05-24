@@ -87,6 +87,7 @@ public class BinarySerializerTest {
 	}
 
 	@Test
+	@Ignore
 	public void testMultipleRecords() throws InterruptedException {
 		final String testId = "testMultipleRecords";
 		final int recordCount = 15;
