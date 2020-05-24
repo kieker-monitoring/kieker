@@ -254,7 +254,7 @@ extract_archive_to ${SRCZIP} ${TMP_ZIP_DIR}
 #else
 #  error "The content of both source archives is NOT identical."
 #  exit 1
-fi
+#fi
 #fails sporadically for no apparent reason
 #if [ -d ${DIR} ] ; then
 #        rm -rf "${DIR}"
