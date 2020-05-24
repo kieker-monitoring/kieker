@@ -50,7 +50,7 @@ public class BinarySerializerTest {
 	}
 
 	@Test
-	@Ignore
+	@Ignore // NOCS
 	public void testSingleRecord() throws IOException, InterruptedException {
 		final String testId = "testSingleRecord";
 		final int recordCount = 1;
@@ -87,7 +87,7 @@ public class BinarySerializerTest {
 	}
 
 	@Test
-	@Ignore
+	@Ignore // NOCS
 	public void testMultipleRecords() throws InterruptedException {
 		final String testId = "testMultipleRecords";
 		final int recordCount = 15;
