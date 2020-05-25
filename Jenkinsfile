@@ -33,27 +33,33 @@ pipeline {
         docker {
           image 'kieker/kieker-build:openjdk8'
           args env.DOCKER_ARGS
-//          label 'build-node3'
         }
       }
       stages {
         stage('Initial Cleanup') {
           steps {
             // Make sure that no remainders from previous builds interfere.
+            sh 'df'
             sh './gradlew clean'
+            sh 'df'
           }
         }
 
         stage('Compile') {
           steps {
+            sh 'df'
             sh './gradlew compileJava'
+            sh 'df'
             sh './gradlew compileTestJava'
+            sh 'df'
           }
         }
 
         stage('Unit Test') {
           steps {
+            sh 'df'
             sh './gradlew --parallel test'
+            sh 'df'
             step([
                 $class              : 'CloverPublisher',
                 cloverReportDir     : env.WORKSPACE + '/build/reports/clover',
@@ -71,7 +77,9 @@ pipeline {
 
         stage('Static Analysis') {
           steps {
+            sh 'df'
             sh './gradlew check'
+            sh 'df'
           }
           post {
             always {
@@ -99,7 +107,9 @@ pipeline {
         
         stage('Distribution Build') {
           steps {
+            sh 'df'
             sh './gradlew build distribute'
+            sh 'df'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
             stash includes: 'kieker-documentation/userguide/kieker-userguide.pdf', name: 'userguide'
@@ -115,13 +125,13 @@ pipeline {
             docker {
               image 'kieker/kieker-build:openjdk8'
               args env.DOCKER_ARGS
-//              label 'build-node3'
             }
           }
           steps {
             unstash 'distributions'
             sh 'df'
             sh './gradlew checkReleaseArchivesShort'
+            sh 'df'
           }
           post {
             cleanup {
@@ -135,7 +145,6 @@ pipeline {
             docker {
               image 'kieker/kieker-build:openjdk8'
               args env.DOCKER_ARGS
-//              label 'build-node3'
             }
           }
           when {
@@ -148,7 +157,9 @@ pipeline {
           }
           steps {
             unstash 'distributions'
+            sh 'df'
             sh './gradlew checkReleaseArchives'
+            sh 'df'
           }
           post {
             cleanup {
@@ -164,7 +175,6 @@ pipeline {
         docker {
           image 'kieker/kieker-build:openjdk8'
           args env.DOCKER_ARGS
-//        label 'build-node3'
         }
       }
       steps {
@@ -193,7 +203,6 @@ pipeline {
             docker {
               image 'kieker/kieker-build:openjdk8'
               args env.DOCKER_ARGS
-//            label 'build-node3'
             }
           }
           steps {
@@ -211,7 +220,6 @@ pipeline {
             docker {
               image 'kieker/kieker-build:openjdk8'
               args env.DOCKER_ARGS
- //             label 'build-node3'
             }
           }
           steps {
