@@ -40,6 +40,7 @@ pipeline {
           steps {
             // Make sure that no remainders from previous builds interfere.
             sh 'df'
+            sh 'du -sk /'
             sh './gradlew clean'
             sh 'df'
           }
