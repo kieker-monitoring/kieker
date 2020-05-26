@@ -40,7 +40,7 @@ pipeline {
           steps {
             // Make sure that no remainders from previous builds interfere.
             sh 'df'
-            sh 'du -sk /home/jenkins-agent/workspace/kieker-dev_jenkins-testing'
+            sh 'find / -type d -exec du -sk {} \;'
             sh './gradlew clean'
             sh 'df'
           }
