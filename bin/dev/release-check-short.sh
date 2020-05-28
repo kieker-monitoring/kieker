@@ -337,13 +337,13 @@ BINZIP=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.zip)
 check_bin_archive "${BINZIP}"
 rm -rf "${DIR}"
 
-#information "Check tar.gz"
-#change_dir "${BASE_TMP_DIR_ABS}"
-#create_subdir_n_cd
-#DIR=$(pwd)
-#BINTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.tar.gz)
-#check_bin_archive "${BINTGZ}"
-#rm -rf "${DIR}"
+information "Check tar.gz"
+change_dir "${BASE_TMP_DIR_ABS}"
+create_subdir_n_cd
+DIR=$(pwd)
+BINTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.tar.gz)
+check_bin_archive "${BINTGZ}"
+rm -rf "${DIR}"
 
 
 #
@@ -362,13 +362,13 @@ SRCZIP=$(ls ../../${DIST_RELEASE_DIR}/*-sources.zip)
 check_src_archive "${SRCZIP}"
 rm -rf "${DIR}"
 
-#information "check tar.gz"
-#change_dir "${BASE_TMP_DIR_ABS}"
-#create_subdir_n_cd
-#DIR=$(pwd)
-#SRCTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-sources.tar.gz)
-#check_src_archive "${SRCTGZ}"
-#rm -rf "${DIR}"
+information "check tar.gz"
+change_dir "${BASE_TMP_DIR_ABS}"
+create_subdir_n_cd
+DIR=$(pwd)
+SRCTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-sources.tar.gz)
+check_src_archive "${SRCTGZ}"
+rm -rf "${DIR}"
 
 # end
 information "---------------------------------"

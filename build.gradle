@@ -684,8 +684,7 @@ artifacts {
 }
 
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.',
-    dependsOn: [':distributeBinaryZip', ':distributeSourceZip', ':replaceHardCodedVersionNames'])
-//    dependsOn: [':distributeBinaryZip', ':distributeSourceZip', ':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
+    dependsOn: [':distributeBinaryZip', ':distributeSourceZip', ':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
 
 
 /**

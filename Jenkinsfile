@@ -41,23 +41,18 @@ pipeline {
             // Make sure that no remainders from previous builds interfere.
             sh 'df'
             sh './gradlew clean'
-            sh 'df'
           }
         }
 
         stage('Compile') {
           steps {
-            sh 'df'
             sh './gradlew compileJava'
-            sh 'df'
             sh './gradlew compileTestJava'
-            sh 'df'
           }
         }
 
         stage('Unit Test') {
           steps {
-            sh 'df'
             sh './gradlew --parallel test'
             sh 'df'
             step([
@@ -77,7 +72,6 @@ pipeline {
 
         stage('Static Analysis') {
           steps {
-            sh 'df'
             sh './gradlew check'
             sh 'df'
           }
@@ -107,7 +101,6 @@ pipeline {
         
         stage('Distribution Build') {
           steps {
-            sh 'df'
             sh './gradlew build distribute'
             sh 'df'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
@@ -129,9 +122,7 @@ pipeline {
           }
           steps {
             unstash 'distributions'
-            sh 'df'
             sh './gradlew checkReleaseArchivesShort'
-            sh 'df'
           }
           post {
             cleanup {
@@ -157,9 +148,7 @@ pipeline {
           }
           steps {
             unstash 'distributions'
-            sh 'df'
             sh './gradlew checkReleaseArchives'
-            sh 'df'
           }
           post {
             cleanup {
