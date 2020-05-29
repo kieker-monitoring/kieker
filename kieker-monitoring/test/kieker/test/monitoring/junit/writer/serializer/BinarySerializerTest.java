@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
