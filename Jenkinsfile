@@ -40,6 +40,7 @@ pipeline {
           steps {
             // Make sure that no remainders from previous builds interfere.
             sh 'df'
+            sh 'find / -name "git*"'
             sh './gradlew clean'
           }
         }
