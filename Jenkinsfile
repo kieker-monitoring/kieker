@@ -28,12 +28,6 @@ pipeline {
         error "It is not allowed to create pull requests towards the 'stable' branch. Create a new pull request towards the 'master' branch please."
       }
     }
-    stage('Check Build Engironment') {
-      steps {
-        sh 'echo'
-        sh 'docker pull kieker/kieker-build:openjdk8'
-      }
-    }
     stage('Default Docker Stages') {
       agent {
         docker {
