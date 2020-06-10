@@ -1,8 +1,12 @@
 def documentBaseFilename = 'kieker-userguide'
 
-task fstLatexRun(type: Exec) {
+task prepareLatex(type: Exec) {
   environment TEXMFVAR: "/opt/kieker/texmf/"
   commandLine 'mkdir', '/opt/kieker/texmf'
+}
+
+task fstLatexRun(type: Exec) {
+  environment TEXMFVAR: "/opt/kieker/texmf/"
   commandLine 'pdflatex', '-interaction=nonstopmode', documentBaseFilename
 }
 
