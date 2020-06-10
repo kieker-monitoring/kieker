@@ -30,6 +30,7 @@ pipeline {
     }
     stage('Check Build Engironment') {
       steps {
+        sh 'echo'
         sh 'docker pull kieker/kieker-build:openjdk8'
       }
     }
