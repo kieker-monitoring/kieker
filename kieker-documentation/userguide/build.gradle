@@ -52,6 +52,7 @@ task buildDocumentation(dependsOn: replaceHardCodedVersionNames) {
   outputs.file file(documentBaseFilename + '.pdf')
   
   doLast {
+     tasks.prepareLatex.execute()
      tasks.fstLatexRun.execute()
      tasks.bibtexRun.execute()
      tasks.sndLatexRun.execute()
