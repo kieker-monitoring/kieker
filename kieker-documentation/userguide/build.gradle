@@ -3,7 +3,7 @@ def documentBaseFilename = 'kieker-userguide'
 task prepareLatex(type: Exec) {
   println System.env.HOME
   environment TEXMFVAR: System.env.HOME + "texmf/"
-  commandLine 'mkdir', 'texmf'
+  commandLine 'mkdir', '-p', 'texmf'
 }
 
 task fstLatexRun(type: Exec) {
