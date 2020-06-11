@@ -47,6 +47,8 @@ pipeline {
 
         stage('Compile') {
           steps {
+            sh 'pwd'
+            sh 'set'
             sh './gradlew compileJava'
             sh './gradlew compileTestJava'
           }
