@@ -44,7 +44,7 @@ function change_dir {
 
 # create tmp subdir in the current directory and change to it
 function create_subdir_n_cd {
-	TMPDIR=$(mktemp -d --tmpdir="$(pwd)")
+	TMPDIR=$(mktemp -d -t "$(pwd)")
 	information "Created temp dir '${TMPDIR}'"
 	change_dir "${TMPDIR}"
 }

@@ -323,8 +323,6 @@ information "---------------------------------"
 information "Check binary releases"
 information "---------------------------------"
 
-df
-
 assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"
 BASE_TMP_DIR_ABS=$(pwd)
