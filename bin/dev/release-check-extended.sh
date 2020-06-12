@@ -164,7 +164,7 @@ function check_bin_archive {
 		        information "OK"
 		        continue;
 		    fi
-		    if ! diff --context=5	 left.tmp right.tmp; then
+		    if ! diff left.tmp right.tmp; then
 		        error "Detected deviation between files: '$f', '${REFERENCE_OUTPUT_DIR}/${f}'"
 		        exit 1
 		    else

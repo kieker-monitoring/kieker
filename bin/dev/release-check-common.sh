@@ -44,7 +44,7 @@ function change_dir {
 
 # create tmp subdir in the current directory and change to it
 function create_subdir_n_cd {
-	TMPDIR=$(mktemp -d -t "$(pwd)")
+	TMPDIR=$(mktemp -d -p "$(pwd)")
 	information "Created temp dir '${TMPDIR}'"
 	change_dir "${TMPDIR}"
 }
@@ -93,7 +93,7 @@ function extract_archive {
 	fi
 
 	if echo "$1" | grep "zip"; then
-		unzip -q "$1"
+		unzip -o -q "$1"
 	elif echo "$1" | grep "tar.gz"; then
 		tar -xzf "$1"
 	elif echo "$1" | grep "tar"; then
