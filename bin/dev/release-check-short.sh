@@ -66,7 +66,7 @@ function assert_zip_file_content_contains {
 	error "File '$1' is missing or not a regular file"
 	exit 1
     fi
-    CONTENT=$(unzip -c $1 $2)
+    CONTENT=$(unzip -p $1 $2)
     if ! (echo ${CONTENT} | grep -q "$3"); then
 	error "'$3' not found in '$2' (itself contained in '$1')"
 	exit 1
@@ -322,8 +322,6 @@ aspectjversion="$(grep "libAspectjVersion = " gradle.properties | sed s/.*=.//g)
 information "---------------------------------"
 information "Check binary releases"
 information "---------------------------------"
-
-df
 
 assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"

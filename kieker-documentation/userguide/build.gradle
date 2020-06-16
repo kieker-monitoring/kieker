@@ -1,14 +1,23 @@
 def documentBaseFilename = 'kieker-userguide'
 
+task prepareLatex(type: Exec) {
+  println System.env.PWD
+  environment TEXMFVAR: System.env.PWD + "/texmf/"
+  commandLine 'mkdir', '-p', 'texmf'
+}
+
 task fstLatexRun(type: Exec) {
+  environment TEXMFVAR: System.env.PWD + "/texmf/"
   commandLine 'pdflatex', '-interaction=nonstopmode', documentBaseFilename
 }
 
 task sndLatexRun(type: Exec) {
+  environment TEXMFVAR: System.env.PWD + "/texmf/"
   commandLine 'pdflatex', '-interaction=nonstopmode', documentBaseFilename
 }
 
 task thrdLatexRun(type: Exec) {
+  environment TEXMFVAR: System.env.PWD + "/texmf/"
   commandLine 'pdflatex', '-interaction=nonstopmode', documentBaseFilename
 }
 
@@ -44,6 +53,7 @@ task buildDocumentation(dependsOn: replaceHardCodedVersionNames) {
   outputs.file file(documentBaseFilename + '.pdf')
   
   doLast {
+     tasks.prepareLatex.execute()
      tasks.fstLatexRun.execute()
      tasks.bibtexRun.execute()
      tasks.sndLatexRun.execute()
