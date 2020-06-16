@@ -817,6 +817,7 @@ def exampleJavaEEContent = project.copySpec {
 }
 
 /** binary distribution in zip format. */
+<<<<<<< HEAD
 task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, 'kieker-examples:buildStandaloneExamples']) {
 	classifier = 'binaries'
 	with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
@@ -826,6 +827,19 @@ task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distrib
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, 'kieker-examples:buildStandaloneExamples']) {
 	classifier = 'binaries'
 	with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
+=======
+task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, //'kieker-documentation:userguide:buildDocumentation', 
+prepareExamplesForDistribution]) {
+    classifier = 'binaries'
+    with binaryContent, manualContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
+}
+
+/** binary distribution in tar.gz format. */
+task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, //'kieker-documentation:userguide:buildDocumentation', 
+prepareExamplesForDistribution]) {
+    classifier = 'binaries'
+    with binaryContent, manualContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
+>>>>>>> 340f5861c (Minor changes)
 
 	compression = Compression.GZIP
 	archiveExtension = 'tar.gz'
