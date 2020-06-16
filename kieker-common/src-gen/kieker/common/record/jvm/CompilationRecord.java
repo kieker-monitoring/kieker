@@ -193,4 +193,28 @@ public class CompilationRecord extends AbstractJVMRecord  {
 		return this.totalCompilationTimeMS;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "CompilationRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "vmName = ";
+		result += this.getVmName() + ", ";
+		
+		result += "jitCompilerName = ";
+		result += this.getJitCompilerName() + ", ";
+		
+		result += "totalCompilationTimeMS = ";
+		result += this.getTotalCompilationTimeMS() + ", ";
+		
+		return result;
+	}
 }

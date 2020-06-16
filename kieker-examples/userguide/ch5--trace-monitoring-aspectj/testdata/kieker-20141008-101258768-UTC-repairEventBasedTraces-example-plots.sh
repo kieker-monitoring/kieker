@@ -6,9 +6,9 @@ EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testd
 
 TOOL_DIR=`mktemp -d`
 
-ZIP_NAME="${KIEKER_DIR}/tools/trace-analysis-1.14.zip"
+ZIP_NAME="${KIEKER_DIR}/tools/trace-analysis-1.15-SNAPSHOT.zip"
 
-( cd ${TOOL_DIR} ; unzip ${ZIP_NAME} )
+( cd ${TOOL_DIR} ; unzip -o ${ZIP_NAME} )
 
 TOOL_NAME=`basename ${ZIP_NAME} | sed 's/\.zip$//g'`
 

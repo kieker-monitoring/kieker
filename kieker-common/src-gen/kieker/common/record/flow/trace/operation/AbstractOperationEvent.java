@@ -136,4 +136,28 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		return this.classSignature;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "AbstractOperationEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "operationSignature = ";
+		result += this.getOperationSignature() + ", ";
+		
+		result += "classSignature = ";
+		result += this.getClassSignature() + ", ";
+		
+		return result;
+	}
 }

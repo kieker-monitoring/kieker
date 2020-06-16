@@ -19,6 +19,7 @@ package kieker.test.monitoring.junit.probe.cxf.executions;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -33,6 +34,7 @@ import kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseOutInterceptor;
  *
  * @since 1.6
  */
+@Ignore // https://kieker-monitoring.atlassian.net/browse/KIEKER-1826
 public class TestCXFClientServerInterceptorsNoSessionRegisteredBefore extends AbstractTestCXFClientServerInterceptors {
 
 	/**

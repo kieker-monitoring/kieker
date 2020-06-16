@@ -200,4 +200,27 @@ public class ActivationParameterEvent extends AbstractMonitoringRecord implement
 		return this.values;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "ActivationParameterEvent: ";
+		result += "pattern = ";
+		result += this.getPattern() + ", ";
+		
+		result += "name = ";
+		result += this.getName() + ", ";
+		
+		result += "values = ";
+		// store array sizes
+		int _values_size0 = this.getValues().length;
+		result += "{ ";
+		for (int i0=0;i0<_values_size0;i0++)
+			result += this.getValues()[i0] + ", ";
+		result += " }";
+		
+		return result;
+	}
 }

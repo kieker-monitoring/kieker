@@ -225,4 +225,34 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		return this.calleeClassSignature;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "CallOperationEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "operationSignature = ";
+		result += this.getOperationSignature() + ", ";
+		
+		result += "classSignature = ";
+		result += this.getClassSignature() + ", ";
+		
+		result += "calleeOperationSignature = ";
+		result += this.getCalleeOperationSignature() + ", ";
+		
+		result += "calleeClassSignature = ";
+		result += this.getCalleeClassSignature() + ", ";
+		
+		return result;
+	}
 }

@@ -127,4 +127,22 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		return this.orderIndex;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "AbstractTraceEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		return result;
+	}
 }

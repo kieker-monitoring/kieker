@@ -317,4 +317,49 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		return this.objectPendingFinalizationCount;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "MemoryRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "vmName = ";
+		result += this.getVmName() + ", ";
+		
+		result += "heapMaxBytes = ";
+		result += this.getHeapMaxBytes() + ", ";
+		
+		result += "heapUsedBytes = ";
+		result += this.getHeapUsedBytes() + ", ";
+		
+		result += "heapCommittedBytes = ";
+		result += this.getHeapCommittedBytes() + ", ";
+		
+		result += "heapInitBytes = ";
+		result += this.getHeapInitBytes() + ", ";
+		
+		result += "nonHeapMaxBytes = ";
+		result += this.getNonHeapMaxBytes() + ", ";
+		
+		result += "nonHeapUsedBytes = ";
+		result += this.getNonHeapUsedBytes() + ", ";
+		
+		result += "nonHeapCommittedBytes = ";
+		result += this.getNonHeapCommittedBytes() + ", ";
+		
+		result += "nonHeapInitBytes = ";
+		result += this.getNonHeapInitBytes() + ", ";
+		
+		result += "objectPendingFinalizationCount = ";
+		result += this.getObjectPendingFinalizationCount() + ", ";
+		
+		return result;
+	}
 }

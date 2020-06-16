@@ -200,4 +200,25 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {
 		return this.technology;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "BeforeSentRemoteEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "technology = ";
+		result += this.getTechnology() + ", ";
+		
+		return result;
+	}
 }

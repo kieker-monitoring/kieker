@@ -120,4 +120,25 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 		return this.lockId;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "AbstractMonitorEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "lockId = ";
+		result += this.getLockId() + ", ";
+		
+		return result;
+	}
 }

@@ -3,7 +3,7 @@
 # include common variables and functions
 source "$(dirname $0)/release-check-common.sh"
 
-KIEKER_VERSION="1.14"
+KIEKER_VERSION="1.15-SNAPSHOT"
 
 # lists the files included in an archive without extracting it
 function cat_archive_content {
@@ -66,7 +66,7 @@ function assert_zip_file_content_contains {
 	error "File '$1' is missing or not a regular file"
 	exit 1
     fi
-    CONTENT=$(unzip -c $1 $2)
+    CONTENT=$(unzip -p $1 $2)
     if ! (echo ${CONTENT} | grep -q "$3"); then
 	error "'$3' not found in '$2' (itself contained in '$1')"
 	exit 1
@@ -282,7 +282,9 @@ function check_src_archive {
     assert_no_duplicate_files_in_archive "$1"
 
 	information "Decompressing archive '$1' ..."
+	df
 	extract_archive_n_cd "$1"
+	df
 	touch $(basename "$1") # just to mark where this dir comes from
 
     assert_files_exist_src

@@ -206,4 +206,34 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		return this._interface;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "BeforeConstructorObjectInterfaceEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "operationSignature = ";
+		result += this.getOperationSignature() + ", ";
+		
+		result += "classSignature = ";
+		result += this.getClassSignature() + ", ";
+		
+		result += "objectId = ";
+		result += this.getObjectId() + ", ";
+		
+		result += "interface = ";
+		result += this.getInterface() + ", ";
+		
+		return result;
+	}
 }

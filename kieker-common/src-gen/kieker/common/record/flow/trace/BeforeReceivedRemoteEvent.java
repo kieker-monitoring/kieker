@@ -219,4 +219,28 @@ public class BeforeReceivedRemoteEvent extends AbstractMonitoringRecord  {
 		return this.orderIndex;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "BeforeReceivedRemoteEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "callerTraceId = ";
+		result += this.getCallerTraceId() + ", ";
+		
+		result += "callerOrderIndex = ";
+		result += this.getCallerOrderIndex() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		return result;
+	}
 }

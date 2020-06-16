@@ -32,14 +32,15 @@ pipeline {
       agent {
         docker {
           image 'kieker/kieker-build:openjdk8'
+          alwaysPull true
           args env.DOCKER_ARGS
-          label 'kieker-slave-docker'
         }
       }
       stages {
         stage('Initial Cleanup') {
           steps {
             // Make sure that no remainders from previous builds interfere.
+            sh 'df'
             sh './gradlew clean'
           }
         }
@@ -54,6 +55,7 @@ pipeline {
         stage('Unit Test') {
           steps {
             sh './gradlew --parallel test'
+            sh 'df'
             step([
                 $class              : 'CloverPublisher',
                 cloverReportDir     : env.WORKSPACE + '/build/reports/clover',
@@ -72,6 +74,7 @@ pipeline {
         stage('Static Analysis') {
           steps {
             sh './gradlew check'
+            sh 'df'
           }
           post {
             always {
@@ -100,6 +103,7 @@ pipeline {
         stage('Distribution Build') {
           steps {
             sh './gradlew build distribute'
+            sh 'df'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
             stash includes: 'kieker-documentation/userguide/kieker-userguide.pdf', name: 'userguide'
@@ -115,7 +119,6 @@ pipeline {
             docker {
               image 'kieker/kieker-build:openjdk8'
               args env.DOCKER_ARGS
-              label 'kieker-slave-docker'
             }
           }
           steps {
@@ -134,7 +137,6 @@ pipeline {
             docker {
               image 'kieker/kieker-build:openjdk8'
               args env.DOCKER_ARGS
-              label 'kieker-slave-docker'
             }
           }
           when {
@@ -160,7 +162,10 @@ pipeline {
 
     stage('Archive Artifacts') {
       agent {
-        label 'kieker-slave-docker'
+        docker {
+          image 'kieker/kieker-build:openjdk8'
+          args env.DOCKER_ARGS
+        }
       }
       steps {
         unstash 'jarArtifacts'
@@ -185,7 +190,10 @@ pipeline {
       parallel {
         stage('Push to Stable') {
           agent {
-            label 'kieker-slave-docker'
+            docker {
+              image 'kieker/kieker-build:openjdk8'
+              args env.DOCKER_ARGS
+            }
           }
           steps {
             sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
@@ -202,7 +210,6 @@ pipeline {
             docker {
               image 'kieker/kieker-build:openjdk8'
               args env.DOCKER_ARGS
-              label 'kieker-slave-docker'
             }
           }
           steps {

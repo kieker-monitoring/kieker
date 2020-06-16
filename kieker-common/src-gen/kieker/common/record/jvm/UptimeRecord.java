@@ -173,4 +173,25 @@ public class UptimeRecord extends AbstractJVMRecord  {
 		return this.uptimeMS;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "UptimeRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "vmName = ";
+		result += this.getVmName() + ", ";
+		
+		result += "uptimeMS = ";
+		result += this.getUptimeMS() + ", ";
+		
+		return result;
+	}
 }

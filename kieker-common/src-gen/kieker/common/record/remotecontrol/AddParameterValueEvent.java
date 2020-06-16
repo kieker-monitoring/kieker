@@ -182,4 +182,22 @@ public class AddParameterValueEvent extends AbstractMonitoringRecord implements 
 		return this.value;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "AddParameterValueEvent: ";
+		result += "pattern = ";
+		result += this.getPattern() + ", ";
+		
+		result += "name = ";
+		result += this.getName() + ", ";
+		
+		result += "value = ";
+		result += this.getValue() + ", ";
+		
+		return result;
+	}
 }

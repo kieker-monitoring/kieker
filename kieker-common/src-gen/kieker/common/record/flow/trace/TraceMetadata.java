@@ -259,4 +259,31 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IFlowReco
 		return this.nextOrderId++;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "TraceMetadata: ";
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "threadId = ";
+		result += this.getThreadId() + ", ";
+		
+		result += "sessionId = ";
+		result += this.getSessionId() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "parentTraceId = ";
+		result += this.getParentTraceId() + ", ";
+		
+		result += "parentOrderId = ";
+		result += this.getParentOrderId() + ", ";
+		
+		return result;
+	}
 }

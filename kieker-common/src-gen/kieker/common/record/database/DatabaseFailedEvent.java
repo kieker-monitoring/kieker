@@ -230,4 +230,28 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 		return this.cause;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "DatabaseFailedEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "classSignature = ";
+		result += this.getClassSignature() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "cause = ";
+		result += this.getCause() + ", ";
+		
+		return result;
+	}
 }

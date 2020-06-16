@@ -165,4 +165,25 @@ public class MonitorWaitEvent extends AbstractMonitorEvent  {
 		return code;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "MonitorWaitEvent: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "traceId = ";
+		result += this.getTraceId() + ", ";
+		
+		result += "orderIndex = ";
+		result += this.getOrderIndex() + ", ";
+		
+		result += "lockId = ";
+		result += this.getLockId() + ", ";
+		
+		return result;
+	}
 }

@@ -276,4 +276,37 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord  {
 		return this.swapFree;
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		String result = "MemSwapUsageRecord: ";
+		result += "timestamp = ";
+		result += this.getTimestamp() + ", ";
+		
+		result += "hostname = ";
+		result += this.getHostname() + ", ";
+		
+		result += "memTotal = ";
+		result += this.getMemTotal() + ", ";
+		
+		result += "memUsed = ";
+		result += this.getMemUsed() + ", ";
+		
+		result += "memFree = ";
+		result += this.getMemFree() + ", ";
+		
+		result += "swapTotal = ";
+		result += this.getSwapTotal() + ", ";
+		
+		result += "swapUsed = ";
+		result += this.getSwapUsed() + ", ";
+		
+		result += "swapFree = ";
+		result += this.getSwapFree() + ", ";
+		
+		return result;
+	}
 }
