@@ -33,8 +33,8 @@ pipeline {
         docker {
           image 'kieker/kieker-build:openjdk8'
           alwaysPull true
-          args env.DOCKER_ARGS
-//          args "-v ${env.WORKSPACE}/pw:/etc/passwd"
+//          args env.DOCKER_ARGS
+          args '-v ' + WORKSPACE + '/pw:/etc/passwd'
         }
       }
       stages {
