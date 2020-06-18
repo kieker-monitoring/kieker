@@ -6,7 +6,7 @@ pipeline {
 
   environment {
     DOCKER_ARGS = ''
-    GRADLE_USER_HOME = WORKSPACE
+    GRADLE_USER_HOME = env.WORKSPACE
   }
 
   options {
