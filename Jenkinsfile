@@ -6,6 +6,7 @@ pipeline {
 
   environment {
     DOCKER_ARGS = ''
+    GRADLE_USER_HOME = WORKSPACE
   }
 
   options {
@@ -42,7 +43,6 @@ pipeline {
           steps {
             // Make sure that no remainders from previous builds interfere.
             sh 'df'
-            sh 'printenv | sort'
             sh './gradlew clean'
           }
         }
