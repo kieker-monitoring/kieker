@@ -4,15 +4,13 @@ pipeline {
 
   environment {
     DOCKER_ARGS = ''
+    BASE_DIR="""${sh(
+                returnStdout: true,
+                script: 'pwd'
+            )}"""
   }
 
-  agent {
-        docker {
-          image 'kieker/kieker-build:openjdk8'
-          alwaysPull true
-          args env.DOCKER_ARGS
-        }
-  }
+  agent none
 
   options {
     buildDiscarder logRotator(artifactNumToKeepStr: '10')
@@ -40,7 +38,7 @@ pipeline {
           image 'kieker/kieker-build:openjdk8'
           alwaysPull true
 //          args env.DOCKER_ARGS
-          args '-v ' + env.WORKSPACE + '/pw:/etc/passwd'
+          args '-v ' + BASE_DIR + '/pw:/etc/passwd'
         }
       }
       stages {
