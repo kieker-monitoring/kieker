@@ -45,6 +45,12 @@ pipeline {
           }
         }
 
+        stage('V') {
+          sshagent(['kieker-key']) {
+            sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):experiment'            
+          }
+        }
+
         stage('Compile') {
           steps {
             sh './gradlew compileJava'
