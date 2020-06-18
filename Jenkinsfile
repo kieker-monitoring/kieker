@@ -6,7 +6,6 @@ pipeline {
 
   environment {
     DOCKER_ARGS = ''
-    GRADLE_USER_HOME = env.WORKSPACE
   }
 
   options {
@@ -35,7 +34,7 @@ pipeline {
           image 'kieker/kieker-build:openjdk8'
           alwaysPull true
 //          args env.DOCKER_ARGS
-          args '-v ' + WORKSPACE + '/pw:/etc/passwd'
+          args '-v ' + WORKSPACE + '/pw:/etc/passwd -e GRADLE_USER_HOME=' + WORKSPACE 
         }
       }
       stages {
