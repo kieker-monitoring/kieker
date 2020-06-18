@@ -6,10 +6,6 @@ pipeline {
 
   environment {
     DOCKER_ARGS = ''
-    BASE_DIR="""${sh(
-                returnStdout: true,
-                script: 'pwd'
-            )}"""
   }
 
   options {
@@ -38,7 +34,7 @@ pipeline {
           image 'kieker/kieker-build:openjdk8'
           alwaysPull true
 //          args env.DOCKER_ARGS
-          args '-v ' + BASE_DIR + '/pw:/etc/passwd'
+          args '-v ' + WORKSPACE + '/pw:/etc/passwd'
         }
       }
       stages {
