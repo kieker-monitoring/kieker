@@ -3,7 +3,7 @@
 pipeline {
 
   environment {
-    DOCKER_ARGS = '-v ' + env.WORKSPACE + '/pw:/etc/passwd'
+    DOCKER_ARGS = "-v ${env.WORKSPACE}/pw:/etc/passwd"
   }
 
   agent none
