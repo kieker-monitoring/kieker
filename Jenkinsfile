@@ -2,7 +2,7 @@
 
 pipeline {
 
-  agent node
+  agent { label 'build-node4' }
 
   environment {
     DOCKER_ARGS = ''
