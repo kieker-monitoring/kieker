@@ -2,6 +2,8 @@
 
 pipeline {
 
+  agent node
+
   environment {
     DOCKER_ARGS = ''
     BASE_DIR="""${sh(
@@ -9,8 +11,6 @@ pipeline {
                 script: 'pwd'
             )}"""
   }
-
-  agent none
 
   options {
     buildDiscarder logRotator(artifactNumToKeepStr: '10')
