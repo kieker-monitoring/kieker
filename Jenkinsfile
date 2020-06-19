@@ -2,11 +2,11 @@
 
 pipeline {
 
+  agent { label 'build-node4' }
+
   environment {
     DOCKER_ARGS = ''
   }
-
-  agent none
 
   options {
     buildDiscarder logRotator(artifactNumToKeepStr: '10')
@@ -192,11 +192,13 @@ pipeline {
           agent {
             docker {
               image 'kieker/kieker-build:openjdk8'
-              args env.DOCKER_ARGS
+              args '-v ' + WORKSPACE + '/pw:/etc/passwd -e GRADLE_USER_HOME=' + WORKSPACE + ' -e HOME=' + WORKSPACE
             }
           }
           steps {
-            sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+            sshagent(['kieker-key']) {
+              sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+            }
           }
           post {
             cleanup {
