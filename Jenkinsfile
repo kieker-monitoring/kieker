@@ -2,7 +2,7 @@
 
 pipeline {
 
-  agent { label 'build-node4' }
+  agent node
 
   environment {
     DOCKER_ARGS = ''
@@ -190,10 +190,7 @@ pipeline {
       parallel {
         stage('Push to Stable') {
           agent {
-            docker {
-              image 'kieker/kieker-build:openjdk8'
-              args '-v ' + WORKSPACE + '/pw:/etc/passwd -e GRADLE_USER_HOME=' + WORKSPACE + ' -e HOME=' + WORKSPACE
-            }
+             label 'build-node4'
           }
           steps {
             sshagent(['kieker-key']) {
