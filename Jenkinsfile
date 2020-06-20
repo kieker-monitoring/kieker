@@ -2,7 +2,7 @@
 
 pipeline {
 
-  agent node
+  agent none
 
   environment {
     DOCKER_ARGS = ''
