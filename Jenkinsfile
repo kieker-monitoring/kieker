@@ -47,8 +47,10 @@ pipeline {
 
         stage('Compile') {
           steps {
+            sh 'df'
             sh './gradlew compileJava'
             sh './gradlew compileTestJava'
+            sh 'df'
           }
         }
 
@@ -73,6 +75,7 @@ pipeline {
 
         stage('Static Analysis') {
           steps {
+            sh 'df'
             sh './gradlew check'
             sh 'df'
           }
@@ -102,6 +105,7 @@ pipeline {
         
         stage('Distribution Build') {
           steps {
+            sh 'df'
             sh './gradlew build distribute'
             sh 'df'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
