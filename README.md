@@ -8,6 +8,15 @@ discovery.
 
 Detailed information about Kieker is provided at http://kieker-monitoring.net/
 
+## Citation
+
+If you use this software, please cite
+
+- Wilhelm Hasselbring and André van Hoorn (2020) "Kieker: A monitoring framework for software engineering research". Software Impacts, 5. https://doi.org/10.1016/j.simpa.2020.100019
+
+- André van Hoorn, Jan Waller, and Wilhelm Hasselbring (2012) "Kieker: A Framework for Application Performance Monitoring and Dynamic Software Analysis". In: 3rd joint ACM/SPEC International Conference on Performance Engineering (ICPE 2012), April 22-25, 2012, Boston, Massachusetts, USA. https://doi.org/10.1145/2188286.2188326
+
+
 ## Usage
 
 Kieker releases (stable, nightly, etc.) can be downloaded from our website's [Download Section](http://kieker-monitoring.net/download).
