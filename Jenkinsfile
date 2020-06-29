@@ -182,6 +182,7 @@ pipeline {
       post {
         cleanup {
           deleteDir()
+          cleanWs()
         }
       }
     }
@@ -204,6 +205,7 @@ pipeline {
           post {
             cleanup {
               deleteDir()
+              cleanWs()
             }
           }
         }
