@@ -198,8 +198,13 @@ pipeline {
              label 'build-node4'
           }
           steps {
-            sshagent(['kieker-key']) {
-              sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+            sshagent(credentials: ['kieker-key']) {
+              sh("""
+                    #!/usr/bin/env bash
+                    set +x
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable
+                 """)
             }
           }
           post {
