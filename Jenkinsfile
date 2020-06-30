@@ -199,12 +199,12 @@ pipeline {
           }
           steps {
             sshagent(credentials: ['kieker-key']) {
-              sh("""
+              sh('''
                     #!/usr/bin/env bash
                     set +x
                     export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
                     git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable
-                 """)
+                 ''')
             }
           }
           post {
