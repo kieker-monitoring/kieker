@@ -28,4 +28,3 @@ guest:x:405:100:guest:/dev/null:/sbin/nologin
 nobody:x:65534:65534:nobody:/:/sbin/nologin
 kiekerci:x:2030:100:kiekerci:/tmp:/bin/sh
 
-
