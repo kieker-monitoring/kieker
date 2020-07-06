@@ -2,7 +2,7 @@
 
 pipeline {
 
-  agent { label 'build-node4' }
+  agent none
 
   environment {
     DOCKER_ARGS = ''
@@ -47,8 +47,10 @@ pipeline {
 
         stage('Compile') {
           steps {
+            sh 'df'
             sh './gradlew compileJava'
             sh './gradlew compileTestJava'
+            sh 'df'
           }
         }
 
@@ -73,6 +75,7 @@ pipeline {
 
         stage('Static Analysis') {
           steps {
+            sh 'df'
             sh './gradlew check'
             sh 'df'
           }
@@ -102,6 +105,7 @@ pipeline {
         
         stage('Distribution Build') {
           steps {
+            sh 'df'
             sh './gradlew build distribute'
             sh 'df'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
@@ -178,6 +182,7 @@ pipeline {
       post {
         cleanup {
           deleteDir()
+          cleanWs()
         }
       }
     }
@@ -190,19 +195,22 @@ pipeline {
       parallel {
         stage('Push to Stable') {
           agent {
-            docker {
-              image 'kieker/kieker-build:openjdk8'
-              args '-v ' + WORKSPACE + '/pw:/etc/passwd -e GRADLE_USER_HOME=' + WORKSPACE + ' -e HOME=' + WORKSPACE
-            }
+             label 'build-node4'
           }
           steps {
-            sshagent(['kieker-key']) {
-              sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+            sshagent(credentials: ['kieker-key']) {
+              sh('''
+                    #!/usr/bin/env bash
+                    set +x
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable
+                 ''')
             }
           }
           post {
             cleanup {
               deleteDir()
+              cleanWs()
             }
           }
         }
