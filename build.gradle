@@ -1046,8 +1046,7 @@ uploadArchives {
                 authentication(userName: mavenUser, password: mavenPassword)
             }
             println project.snapshotRepoUrl
-            snapshotRepository(url: "file:///opt/kieker/snapshot") {
-//            snapshotRepository(url: project.snapshotRepoUrl) {
+            snapshotRepository(url: project.snapshotRepoUrl) {
                 authentication(userName: mavenUser, password: mavenPassword)
             }
         }
