@@ -16,6 +16,7 @@ If you use this software, please cite
 
 - André van Hoorn, Jan Waller, and Wilhelm Hasselbring (2012) "Kieker: A Framework for Application Performance Monitoring and Dynamic Software Analysis". In: 3rd joint ACM/SPEC International Conference on Performance Engineering (ICPE 2012), April 22-25, 2012, Boston, Massachusetts, USA. https://doi.org/10.1145/2188286.2188326
 
+BibTeX entries are provides as [Kieker BibTeX file](Kieker.bib)
 
 ## Usage
 
