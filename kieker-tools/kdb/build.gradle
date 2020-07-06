@@ -30,3 +30,7 @@ eclipse {
 		defaultOutputDir = file('build-eclipse')
 	}
 }
+
+task uploadArchives {
+	println 'kdb skipped'
+}

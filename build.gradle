@@ -933,6 +933,7 @@ project.ext {
     snapshotRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
 }
 
+
 uploadArchives {
     repositories {
         mavenDeployer {
@@ -1036,16 +1037,17 @@ uploadArchives {
             if (System.env.kiekerMavenUser != null) {
                 mavenUser = System.env.kiekerMavenUser
             }
-
             def mavenPassword = "NoMavenPassword"
             if (System.env.kiekerMavenPassword != null) {
                 mavenPassword = System.env.kiekerMavenPassword
             }
-
+            
             repository(url: project.releaseRepoUrl) {
                 authentication(userName: mavenUser, password: mavenPassword)
             }
-            snapshotRepository(url: project.snapshotRepoUrl) {
+            println project.snapshotRepoUrl
+            snapshotRepository(url: "file:///opt/kieker/snapshot") {
+//            snapshotRepository(url: project.snapshotRepoUrl) {
                 authentication(userName: mavenUser, password: mavenPassword)
             }
         }
