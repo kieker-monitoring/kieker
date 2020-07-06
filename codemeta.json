@@ -30,7 +30,7 @@
         {
             "@type": "Person",
             "@id": "https://orcid.org/0000-0003-2567-6077",
-            "givenName": "André",
+            "givenName": "Andre",
             "familyName": "van Hoorn",
             "email": "van.hoorn@informatik.uni-stuttgart.de",
             "affiliation": {
