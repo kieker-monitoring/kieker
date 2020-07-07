@@ -8,34 +8,54 @@ as well
 (`Contact <http://kieker-monitoring.net/support/%7D%7BContact>`__ us
 directly if you are interested in Kieker support for other platforms).
 
-The figure below the framework's composition based on the two main
-components *KiekerMonitoringPart* and *KiekerAnalysisPart*.
+A general introduction can be found in :ref:`introduction`.
 
-.. image:: images/kieker-architecture-overview.svg
-   :width: 600
 
-- The *KiekerMonitoringPart* component is responsible for program
-  instrumentation, data collection, and logging. Its core is the
-  *MonitoringController*.
-- The component *KiekerAnalysisPart* is responsible for reading,
-  analyzing, and visualizing the monitoring data. Its core is the
-  *AnalysisController* which manages the life-cycle of the
-  pipe-and-filter architecture of analysis plugins, including monitoring
-  readers and analysis filters.
+Licensing
+---------
 
-Please note that older programs might use a *AnalysisController* setup
-while new analyses and tools reply on :ref:`architecture-java-analysis-and-tools-api`.
+**Kieker** is licensed under the Apache License, Version 2.0. You may
+obtain a copy of the license at http://www.apache.org/licenses/LICENSE-2.0
 
--  In case you want to learn how to apply Kieker to a Java application,
-   you find an tutorial under :ref:`getting-started`.
--  For more advanced uses you may consult :ref:`tutorials`
--  All tools are documented under :ref:`kieker-tools`
--  More documentation and API and other programming languages can be
-   found below
+The **Kieker** source and binary release archives include a number of
+third-party libraries. Appendix~\ref{appendix:libraries} lists these
+libraries along with information on the licenses. 
+The ``lib/`` directory of the release archives contains a ``.LICENSE``
+file for each third-party library, pointing to the respective license
+text.
+
+Citing Kieker
+-------------
+
+When referencing Kieker resources in your publications, we would be
+happy if you respected the following guidelines:
+
+- When referencing the Kieker project, please cite our [IPCE-2012]_ 
+  paper and/or our 2009 technical report [TR-0921]_. Also, you might
+  want to add a reference to our web site
+  (\url{http://kieker-monitoring.net/}) like
+  ::
+  
+    @MISC{KiekerWebSite,
+      author = {{Kieker Project}},
+      title = {Kieker web site},
+      year = CURYEAR,
+      url = {http://kieker-monitoring.net/}
+    }
+  
+- When referencing this user guide, e.g., when reprinting contents, 
+  please use a proper citation.
+  
+.. [IPCE-2012] Paper on IPCE2012_ (BibTeX)
+.. _IPCE2012: references/kieker-ipce-2012.bib
+.. [TR-0921] Technical report TR0921_ (BibTeX)
+.. _TR0921: references/tr-0921.bib
+
 
 Table of Contents
 -----------------
 
+-  :ref:`introduction`
 -  :ref:`getting-started`
 -  :ref:`tutorials`
 -  :ref:`instrumenting-software`
