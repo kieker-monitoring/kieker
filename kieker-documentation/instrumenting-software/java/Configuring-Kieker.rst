@@ -53,18 +53,19 @@ as follows:
   
   java -Dkieker.monitoring.configuration=<ANY-DIR>/my.kieker.monitoring.properties [...]
 
-Alternatively, a file named \file{kieker.monitoring.properties} %
-can be placed in a directory called \dir{META-INF/} located in the classpath. %
-The available configuration properties can also be passed as JVM %
-arguments, e.g., \lstinline{-Dkieker.monitoring.enabled=true}. %
+Alternatively, a file named ``kieker.monitoring.properties``
+can be placed in a directory called ``META-INF/`` located in the classpath.
+The available configuration properties can also be passed as JVM
+arguments, e.g., ``-Dkieker.monitoring.enabled=true``.
 
-\subsection*{Configurations for Non-Singleton Instances}
+Configurations for Non-Singleton Instances
+------------------------------------------
 
-The class \class{Configuration} provides factory methods to create %
-\class{Configuration} objects according to the default configuration %
-or loaded from a specified properties file: \method{createDefaultConfiguration}, %
-\method{createConfigurationFromFile}, and \method{createSingletonConfiguration}. %
-Note, that JVM parameters are only evaluated when using the factory method %
-\method{createSingletonConfiguration}. %
-The returned \class{Configuration} objects can be adjusted by setting %
-single property values using the method \method{setProperty}. %
+The class **Configuration** provides factory methods to create
+**Configuration** objects according to the default configuration
+or loaded from a specified properties file: ``createDefaultConfiguration``,
+``createConfigurationFromFile``, and ``createSingletonConfiguration``.
+Note, that JVM parameters are only evaluated when using the factory method
+``createSingletonConfiguration``.
+The returned ``Configuration`` objects can be adjusted by setting
+single property values using the method ``setProperty``.
