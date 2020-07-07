@@ -31,6 +31,10 @@ eclipse {
 	}
 }
 
+task uploadArchives {
+	println 'trace-analysis skipped'
+}
+
 task replaceHardCodedVersionNames() {
   doLast {
 	regexpReplaceInFiles(project.file("test/kieker/test/tools/manual/TestTCPReader.java"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
