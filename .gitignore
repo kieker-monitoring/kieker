@@ -1,6 +1,9 @@
 # do not ignore the whole ".settings" folder.
 # For example, save actions should be used by all contributors (see org.eclipse.jdt.ui.prefs).
 # And the formatter (see **/.settings/org.eclipse.jdt.core.prefs)
+**/daemon/**
+**/caches/**
+**/\?/**
 **/.settings/edu.umd.cs.findbugs.core.prefs
 **/.settings/org.eclipse.buildship.core.prefs
 .project
