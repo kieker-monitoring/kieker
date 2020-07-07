@@ -27,7 +27,7 @@ source code. For rare cases, where no such technique is applicable,
 Related Topics
 --------------
 
-- Adaptive Monitoring
+- :ref:`instrumenting-software-adaptive-monitoring`
 - Creating Probes
 - Creating new Event Types
 

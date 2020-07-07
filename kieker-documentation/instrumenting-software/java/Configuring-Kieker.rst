@@ -27,3 +27,44 @@ Configuring Kieker
    -  UNIX based named pipes (local transfer)
    -  Database writer (experimental)
    -  AMQP protocol message support (transfer to remote host)
+   
+**Kieker Monitoring** instances can be configured by properties files, 
+**Configuration** objects, and by passing property values as JVM
+arguments. If no configuration is specified, a default configuration is
+used. 
+The default configuration can be found here including documentation for
+all properties. Additional information can be found within the
+documentation of the **Monitoring Controller**, **Monitoring Probes**
+and **Monitoring Writers**.
+The default configuration properties file, which  can be used as a
+template for custom configurations, is provided by the
+file ``kieker.monitoring.example.properties`` in the directory
+``examples/`` directory of the binary release.
+
+
+Configurations for Singleton Instances
+--------------------------------------
+
+In order to use a custom configuration file, its location needs to be
+passed to the JVM using the parameter *kieker.monitoring.configuration*
+as follows:
+
+.. code-block:: shell
+  
+  java -Dkieker.monitoring.configuration=<ANY-DIR>/my.kieker.monitoring.properties [...]
+
+Alternatively, a file named \file{kieker.monitoring.properties} %
+can be placed in a directory called \dir{META-INF/} located in the classpath. %
+The available configuration properties can also be passed as JVM %
+arguments, e.g., \lstinline{-Dkieker.monitoring.enabled=true}. %
+
+\subsection*{Configurations for Non-Singleton Instances}
+
+The class \class{Configuration} provides factory methods to create %
+\class{Configuration} objects according to the default configuration %
+or loaded from a specified properties file: \method{createDefaultConfiguration}, %
+\method{createConfigurationFromFile}, and \method{createSingletonConfiguration}. %
+Note, that JVM parameters are only evaluated when using the factory method %
+\method{createSingletonConfiguration}. %
+The returned \class{Configuration} objects can be adjusted by setting %
+single property values using the method \method{setProperty}. %
