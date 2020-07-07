@@ -1,0 +1,56 @@
+TODO List
+=========
+
+
+
+Chapter 2
+-- done --
+
+Chapter 3 
+- Monitoring Controller 3.1-3.1.6 API (done)
+- JMX MBean Access
+  - Check whether this still works.
+  - Copy to API and to Instrumenting Software
+- Configuration 
+  - add to instrumenting software
+- Monitoring Records
+  - Records in Java API (hint to generator)
+  - How to generate new records? (tutorial)
+- Monitoring Probes
+  - How to write probes (tutorial)
+  - General structure of probes (extending kieker/java)
+- Monitoring Writers
+  Beschreibt die Writer. Dazu haben wir schon einen Artikel in
+  Confluence der aktuell ist ganz im Gegensatz zu dem Teil. Das
+  ist aber auf jeden Fall API.
+
+Chapter 4
+-- done --
+
+Chapter 5
+-- done --
+
+Appendix B
+- already exists in Confluence in a newer version
+- adapt links
+- merge content
+
+Appendix C
+- JMS/Active MQ könnte ein Tutorial werden
+
+Appendix D 
+- Using the AMQP Writer and Reader (Tutorial)
+
+Appendix E
+- Sigar (das ist wohl obsolet)
+
+Appendix F
+- Kieker default configuration refer to real file on github
+  
+Appendix G
+- Move source code listings to approriate locations in the document
+
+Appendix H
+- Copy console outputs to the appropriate locations in the document.
+- Fix outputs before copying, e.g., AsciiFileWriter does no longer exist.
+
