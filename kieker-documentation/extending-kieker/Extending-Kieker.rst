@@ -8,6 +8,7 @@ necessary features you have in mind. In that case, you can extend Kieker.
 In this section we explain how to extend Kieker in many different ways:
 
 - How to write new
+  - Records
   - Probes
   - Stages
   - Features of Stages
