@@ -16,13 +16,13 @@ mind to add **Kieker** to the classpath when calling ``jconsole`` so
 that the MBean works correctly. The Figure below
 shows two screenshots of the MBean access using ``jconsole``.
 
-.. figure:: images/jmxbean-monitoringcontroller-attributes.png
+.. figure:: ../../images/jmxbean-monitoringcontroller-attributes.png
    :width: 50%
    :align: left
    
    Attributes
    
-.. figure:: images/jmxbean-monitoringcontroller-operations.png
+.. figure:: ../../images/jmxbean-monitoringcontroller-operations.png
    :width: 50%
    :align: right
 
@@ -37,7 +37,7 @@ the corresponding configuration properties must be set to *true*
 (listing below). The ``\monitoringPropertiesFile`` includes additional
 JMX-related configuration properties.
 
-.. code-block::
+.. code-block:: parameter
 
    ## Whether any JMX functionality is available
    kieker.monitoring.jmx=true

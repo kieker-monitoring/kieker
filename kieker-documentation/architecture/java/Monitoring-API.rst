@@ -12,7 +12,7 @@ component ist the **Monitoring Controller** which utilizes
    Maybe add an overview graphic here.
 
 - :ref:`java-monitoring-controller-api`
-- :ref:`java-writers-api`
+- :ref:`java-writer-api`
 - :ref:`java-probes-api`
 - :ref:`java-records-api`
 

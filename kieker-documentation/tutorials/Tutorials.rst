@@ -5,12 +5,20 @@ Tutorials
 
 Collection of reoccurring tasks when using Kieker.
 
--  :ref:`tutorials-how-to-pass-the-monitoring-configuration-to-kieker`
--  :ref:`tutorials-how-to-contribute-documentation`
--  :ref:`tutorials-how-to-configure-kieker-within-java-applications`
--  :ref:`tutorials-how-to-write-tests-for-your-own-kieker-probes`
--  :ref:`tutorials-how-to-apply-kieker-in-java-ee-environments`
--  :ref:`tutorials-how-to-perform-trace-analysis`
+.. toctree::
+   :maxdepth: 1
+   
+   How-to-Apply-Insturmentation.rst
+   How-to-contribute-Documentation.rst
+   Java-Servlet-Container-Example.rst
+   How-to-apply-Kieker-in-Java-EE-Environments.rst
+   How-to-pass-the-monitoring-configuration-to-Kieker.rst
+   How-to-collect-Traces-from-Servlets.rst
+   How-to-perform-Trace-Analysis.rst
+   How-to-configure-Kieker-within-Java-Applications-and--Services.rst
+   How-to-Write-Tests-for-Your-own-Kieker-Probes.rst
+   How-to-Use-JMS-for-Monitoring.rst
+   How-to-use-AMQP-Reader-and-Writer.rst
 
 
 
