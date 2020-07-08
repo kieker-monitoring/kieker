@@ -1,4 +1,4 @@
-.. _architecture-single-socket-tcp-writer:
+.. _architecture-java-single-socket-tcp-writer:
 
 Single Socket TCP Writer 
 ========================

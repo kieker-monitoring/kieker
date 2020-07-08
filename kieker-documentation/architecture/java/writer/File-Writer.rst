@@ -1,4 +1,4 @@
-.. _architecture-file-writer:
+.. _architecture-java-file-writer:
 
 File Writer 
 ===========
