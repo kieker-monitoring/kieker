@@ -21,18 +21,15 @@ directory.
 Currently supported event sources (readers):
 
 -  TCP via the
-   `MultipleConnectionTcpSourceCompositeStage <Receive-Events-via-TCP.rst>`__
+   `MultipleConnectionTcpSourceCompositeStage <Receive-Events-via-TCP.rst>`_
 -  log files
    ```LogsReaderCompositeStage`` <Receive-Events-from-Log-Files.rst>`__
 -  HTTP/REST via the `RestServiceCompositeStage <Receive-Events-via-HTTP.rst>`__
 
-| 
 
 == =============== ==================
--c --configuration   Configuration file
+-c --configuration Configuration file
 == =============== ==================
-
-| 
 
 **TCP to File**
 
@@ -40,91 +37,67 @@ Currently supported event sources (readers):
 
 # TCP server for multiple connections
 
-kieker.tools.source=kieker.tools.source.MultipleConnectionTcpSourceCompositeStage
-
-kieker.tools.source.MultipleConnectionTcpSourceCompositeStage.port=9876
-
-kieker.tools.source.MultipleConnectionTcpSourceCompositeStage.capacity=8192
-
-## define output
-
-## The name of the Kieker instance.
-
-kieker.monitoring.name=KIEKER
-
-## Auto detect hostname for the writer
-
-kieker.monitoring.hostname=
-
-## Output metadata record
-
-kieker.monitoring.metadata=true
-
-## Data sink stage
-
-## Choose FileWriter
-
-kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter
-
-## output path
-
-kieker.monitoring.writer.filesystem.FileWriter.customStoragePath=$COLLECTOR_DATA_DIR/
-
-kieker.monitoring.writer.filesystem.FileWriter.charsetName=UTF-8
-
-## Number of entries per file
-
-kieker.monitoring.writer.filesystem.FileWriter.maxEntriesInFile=25000
-
-## Limit of the log file size; -1 no limit
-
-kieker.monitoring.writer.filesystem.FileWriter.maxLogSize=-1
-
-## Limit number of log files; -1 no limit
-
-kieker.monitoring.writer.filesystem.FileWriter.maxLogFiles=-1
-
-## Map files are written as text files
-
-kieker.monitoring.writer.filesystem.FileWriter.mapFileHandler=kieker.monitoring.writer.filesystem.TextMapFileHandler
-
-## Flush map file after each record
-
-kieker.monitoring.writer.filesystem.TextMapFileHandler.flush=true
-
-## Do not compress the map file
-
-kieker.monitoring.writer.filesystem.TextMapFileHandler.compression=kieker.monitoring.writer.compression.NoneCompressionFilter
-
-## Log file pool handler
-
-kieker.monitoring.writer.filesystem.FileWriter.logFilePoolHandler=kieker.monitoring.writer.filesystem.RotatingLogFilePoolHandler
-
-## Text log for record data
-
-kieker.monitoring.writer.filesystem.FileWriter.logStreamHandler=kieker.monitoring.writer.filesystem.TextLogStreamHandler
-
-## Do not compress the log file
-
-kieker.monitoring.writer.filesystem.TextLogStreamHandler.compression=kieker.monitoring.writer.compression.NoneCompressionFilter
-
-## Flush log data after every record
-
-kieker.monitoring.writer.filesystem.FileWriter.flush=true
-
-## buffer size. The log buffer size must be big enough to hold the
-biggest record
-
-kieker.monitoring.writer.filesystem.FileWriter.bufferSize=81920
-
-| 
+.. code::
+  
+  kieker.tools.source=kieker.tools.source.MultipleConnectionTcpSourceCompositeStage
+  kieker.tools.source.MultipleConnectionTcpSourceCompositeStage.port=9876
+  kieker.tools.source.MultipleConnectionTcpSourceCompositeStage.capacity=8192
+  
+  ## define output
+  
+  ## The name of the Kieker instance.
+  kieker.monitoring.name=KIEKER
+  
+  ## Auto detect hostname for the writer
+  kieker.monitoring.hostname=
+  
+  ## Output metadata record
+  kieker.monitoring.metadata=true
+  
+  ## Data sink stage
+  ## Choose FileWriter
+  kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter
+  
+  ## output path
+  kieker.monitoring.writer.filesystem.FileWriter.customStoragePath=$COLLECTOR_DATA_DIR/
+  kieker.monitoring.writer.filesystem.FileWriter.charsetName=UTF-8
+  
+  ## Number of entries per file
+  kieker.monitoring.writer.filesystem.FileWriter.maxEntriesInFile=25000
+  
+  ## Limit of the log file size; -1 no limit
+  kieker.monitoring.writer.filesystem.FileWriter.maxLogSize=-1
+  
+  ## Limit number of log files; -1 no limit
+  kieker.monitoring.writer.filesystem.FileWriter.maxLogFiles=-1
+  
+  ## Map files are written as text files
+  kieker.monitoring.writer.filesystem.FileWriter.mapFileHandler=kieker.monitoring.writer.filesystem.TextMapFileHandler
+  
+  ## Flush map file after each record
+  kieker.monitoring.writer.filesystem.TextMapFileHandler.flush=true
+  
+  ## Do not compress the map file
+  kieker.monitoring.writer.filesystem.TextMapFileHandler.compression=kieker.monitoring.writer.compression.NoneCompressionFilter
+  
+  ## Log file pool handler
+  kieker.monitoring.writer.filesystem.FileWriter.logFilePoolHandler=kieker.monitoring.writer.filesystem.RotatingLogFilePoolHandler
+  
+  ## Text log for record data
+  kieker.monitoring.writer.filesystem.FileWriter.logStreamHandler=kieker.monitoring.writer.filesystem.TextLogStreamHandler
+  
+  ## Do not compress the log file
+  kieker.monitoring.writer.filesystem.TextLogStreamHandler.compression=kieker.monitoring.writer.compression.NoneCompressionFilter
+  
+  ## Flush log data after every record
+  kieker.monitoring.writer.filesystem.FileWriter.flush=true
+  
+  ## buffer size. The log buffer size must be big enough to hold the biggest record
+  kieker.monitoring.writer.filesystem.FileWriter.bufferSize=81920
 
 Instead of generating text log files, you may use the
 ``BinaryLogStreamHandler`` to produce binary output. Also can specify a
 compression algorithm for the log and map files, or use a totally
 different Kieker writer. For more details on the writer see `File
-Writer <File-Writer.rst>`__.
+Writer <File-Writer.rst>`_.
 
-| 
-
-| 

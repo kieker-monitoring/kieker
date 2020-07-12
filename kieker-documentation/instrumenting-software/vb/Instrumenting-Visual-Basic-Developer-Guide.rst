@@ -3,8 +3,6 @@
 AspectLegacy (Visual Basic 6) Developer Guide 
 =============================================
 
-Created by Andre van Hoorn, last modified on Oct 03, 2016
-
 Layered Architecture
 --------------------
 
@@ -17,7 +15,6 @@ language-independent layer (core) and an adapting language-dependent
 layer for any related programming language:
 
 .. image:: ../../images/weaver-layers.png
-   :width: 600px
 
 The lower layer (which can be considered a single core-component, since
 it is implemented as an own Java package) provides the generic
@@ -32,7 +29,6 @@ provides the configuration functionality for all currently supported
 languages:
 
 .. image:: ../../images/weaver-layers-gui.png
-   :width: 600px
 
 Components of the core layer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -83,14 +79,14 @@ summarizes all compiler options. Since the compiler unit makes use of
 the weaver unit, it additionally delegates certain method calls to the
 facade provided by the weaver package.
 
-` <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/attachment/wiki/dynamod.aspectlegacy/DeveloperGuide/weaver_core_packages.png>`__
+`<https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/attachment/wiki/dynamod.aspectlegacy/DeveloperGuide/weaver_core_packages.png>`_
 
 Code compilation will be usually done by invoking an external compiler
 or IDE. Therefore, the configuration files of the weaver might be
 adjusted (see section `Configuration
-management <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/UserGuide#Configurationmanagement>`__
+management <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/UserGuide#Configurationmanagement>`_
 of the `User
-Guide <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/UserGuide>`__).
+Guide <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/UserGuide>`_).
 
 Language-dependent enhancements through the upper layer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -124,9 +120,9 @@ adapted, the following steps must be done:
    only single-line-comments are supported in text-based weaving, which
    includes for example lines with leading "//" in Java, "REM" or "'" in
    Visual Basic 6, or "*" in Cobol (see section `Limitations/Future
-   Work <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/UserGuide#LimitationsFutureWork>`__
+   Work <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/UserGuide#LimitationsFutureWork>`_
    of the `User
-   Guide <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/UserGuide>`__).
+   Guide <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/UserGuide>`_).
    For making this class language-dependent, the methods mentioned above
    must be implemented by a sub-class, related to the considered
    language. A good way for implementing the required functionality of

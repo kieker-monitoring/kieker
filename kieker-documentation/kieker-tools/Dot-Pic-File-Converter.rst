@@ -11,7 +11,7 @@ and pic2plot.
 Usage
 -----
 
-Example: dotPic−fileConverter .bat C:\Temp pdf png ps
+Example: ``dotPic−fileConverter .bat C:\Temp pdf png ps``
 
 Example
 -------
@@ -19,12 +19,15 @@ Example
 The following command converts each .dot and .pic file located in the
 directory out/to files in .pdf and .png format:
 
-dotPic-fileConverter.sh out/ pdf png
+.. code::
+  
+  dotPic-fileConverter.sh out/ pdf png
 
 Listing A.7: Execution under UNIX-like systems
 
-| 
-
-dotPic-fileConverter.bat out\\ pdf png
+.. code::
+  
+  dotPic-fileConverter.bat out\ pdf png
 
 Listing A.8: Execution under Windows
+

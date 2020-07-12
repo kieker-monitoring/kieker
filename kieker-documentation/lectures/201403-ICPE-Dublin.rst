@@ -8,7 +8,7 @@ Information
 
 The 2-hour tutorial was held on March 23, 2014 at the ` 5th ACM/SPEC
 International Conference on Performance
-Engineering <http://icpe2014.ipd.kit.edu/>`__ in Dublin, Irland.
+Engineering <http://icpe2014.ipd.kit.edu/>`_ in Dublin, Irland.
 
 Presenters:
 
@@ -22,13 +22,13 @@ Material provided outside this Wiki page:
 -  Kieker and Kieker.WebGUI release archives (binary and doc):
    http://kieker-monitoring.net/download/
 -  Kieker user guide:
-   ` kieker-1.8_userguide.pdf <http://eprints.uni-kiel.de/16537/37/kieker-1.8_userguide.pdf>`__
+   `kieker-1.8_userguide.pdf <http://eprints.uni-kiel.de/16537/37/kieker-1.8_userguide.pdf>`_
 -  Presentation slides:
 
    1. Original slides with overlays:
-      ` 20140323-ICPE-Tutorial-slides.pdf <http://eprints.uni-kiel.de/23928/2/20140323-ICPE-Tutorial-slides.pdf>`__
+      `20140323-ICPE-Tutorial-slides.pdf <http://eprints.uni-kiel.de/23928/2/20140323-ICPE-Tutorial-slides.pdf>`_
    2. Handout versions:
-      ` 20140323-ICPE-Tutorial-handout.pdf <http://eprints.uni-kiel.de/23928/1/20140323-ICPE-Tutorial-handout.pdf>`__
+      `20140323-ICPE-Tutorial-handout.pdf <http://eprints.uni-kiel.de/23928/1/20140323-ICPE-Tutorial-handout.pdf>`_
 
 Schedule
 --------

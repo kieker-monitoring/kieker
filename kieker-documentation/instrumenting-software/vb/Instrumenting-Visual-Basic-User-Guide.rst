@@ -23,26 +23,29 @@ The properties of each component are hierarchically composed; whenever
 the value of any property is requested, the properties-sources will be
 searched in the following order:
 
-1. User-defined properties file at a file system location (passed as a
+#. User-defined properties file at a file system location (passed as a
    parameter to the weaver, see section `Command-line or
-   GUI-based <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/UserGuide#Command-lineorGUI-based>`__);
+   GUI-based <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/UserGuide#Command-lineorGUI-based>`_);
    the file might contain any re-definitions of the available properties
    of sources 2.) or 3.).
-
-1. User-defined properties file (with a predefined name), located in the
+#. User-defined properties file (with a predefined name), located in the
    working directory of the weaver; the file might contain any
    re-definitions of the available default properties of source 3.). The
    required names of the properties files to be located in the working
    directory are as follows:
-
-   | 
-
+   
+   ======================================= ================================================================================
+   dynamod.aspectlegacy.gui.properties     (default) GUI properties, for futural usage only.
+   dynamod.aspectlegacy.logging.properties (default) logging properties for selection of the messages to be logged.
+   dynamod.aspectlegacy.weaver.properties  (default) weaver properties for specification of general flags, selections etc.
+   ======================================= ================================================================================
+   
    Each of those files contains a set of key/value pairs, as they are
    used in Java resource bundles. A complete overview of the available
    properties is given by the files themselves, since all properties
    have been commented completely there (just have a look).
 
-1. Default properties always present in the weaver.
+#. Default properties always present in the weaver.
 
 Command-line or GUI-based
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -71,18 +74,15 @@ certain parameters. Some of them are necessary, and some of them are
 optional. The following parameters are available (denoted in short, long
 format):
 
-| 
 
-====================
-=====================================================================================================================================================
+==================== =====================================================================================================================================================
 -s,--source-project    Path to the source project to be woven (required, if GUI is disabled).
 -a,--aspects-project   Path to the aspects project (required, if GUI is disabled).
 -o,--output-dir        Path to the output directory for the woven project (required, if GUI is disabled).
 -g,--gui               (Optional) usage of the graphical user interface (GUI); as an optional parameter, a properties-file might be passed for individual GUI-configuration.
 -w,--weaver            (Optional) properties file for weaver configuration.
 -l,--logging           (Optional) properties file for logging configuration.
-====================
-=====================================================================================================================================================
+==================== =====================================================================================================================================================
 
 The paths can either be relative to the current weaver location or
 absolute. The paths of the input projects might denote directories or
@@ -181,7 +181,7 @@ If enabled, the weaver ensures that the files to be woven or copied from
 the source- and aspects-projects differ from each other regarding their
 name. This test will be done for each file if and only if the file has
 not been filtered out (see section `Exclude patterns for files (filename
-filter) <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/UserGuide#Excludepatternsforfilesfilenamefilter>`__).
+filter) <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/UserGuide#Excludepatternsforfilesfilenamefilter>`_).
 
 -  References have to be valid:
 
@@ -193,9 +193,9 @@ Additional language-dependent tests might be necessary, for example, the
 requirement of Visual Basic 6 project-files ending with ".vbp"; those
 tests have to be done in the upper, language-dependent layer (see
 section `Layered
-architecture <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/DeveloperGuide#Layeredarchitecture>`__
+architecture <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/DeveloperGuide#Layeredarchitecture>`_
 of the `Developer
-Guide <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/DeveloperGuide>`__).
+Guide <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/DeveloperGuide>`_).
 
 Weaver options
 ^^^^^^^^^^^^^^
@@ -275,12 +275,10 @@ Overview
 
 When the weaver application is started with the "-g" parameter (see the
 `Quickstart for Visual Basic
-6 <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/QuickStartVB6>`__),
+6 <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/QuickStartVB6>`_),
 the following configuration window will be displayed:
 
-| 
-
-|image0|
+.. image:: ../../images/weaver-gui.png
 
 The initial settings will be in accordance with the configuration
 properties, as they are defined by default or transmitted by the user
@@ -314,9 +312,7 @@ Language
 For setting the language, a combo-box is provided, which contains all
 languages supported by the weaver:
 
-| 
-
-|image1|
+.. image:: ../../images/aspect-compiler-language.png
 
 There must be at least one supported language available; if no further
 languages are supported, the combo-box is disabled, and the only
@@ -329,9 +325,7 @@ The weaving-type must be selected by clicking the related radio button;
 currently, only text-based weaving is available, so this is for futural
 usage only:
 
-| 
-
-|image2|
+.. image:: ../../images/aspect-compiler-weaving-type.png
 
 Projects
 ^^^^^^^^
@@ -340,13 +334,12 @@ For defining the locations of the projects within the file system, the
 GUI provides file-choosers, which will be shown whenever one of the
 "Select"-buttons is being clicked:
 
-|image3|
+.. image:: ../../images/aspect-compiler-projects.png
 
 Some language like Visual Basic 6 need project-files, other languages do
 not. It depends on the selected language whether a project-file or a
 project directory must be determined.
 
-.. _options-1:
 
 Options
 ~~~~~~~
@@ -361,28 +354,20 @@ Since all of these option values are boolean, the related part of the
 GUI contains a tabbed overview, with a tab for each option group,
 supporting check-boxes for setting the values easily:
 
-|image4|
+.. image:: ../../images/aspect-compiler-options.png
 
 Furthermore, the options panel provides input masks for the encoding
 type as well as for the line-break type to be used:
 
-| 
+.. image:: ../../images/aspect-compiler-encoding-type.png
 
-|image5|
-
-| 
-
-| 
-
-|image6|
+.. image:: ../../images/aspect-compiler-line-break.png
 
 Finally, an input field for exclude file patterns is included (see
 section `Exclude patterns for files (filename
-filter) <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/UserGuide#Excludepatternsforfilesfilenamefilter>`__):
+filter) <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/UserGuide#Excludepatternsforfilesfilenamefilter>`_):
 
-| 
-
-|image7|
+.. image:: ../../images/aspect-compiler-exclude-files.png
 
 Control Panel
 ~~~~~~~~~~~~~
@@ -390,22 +375,16 @@ Control Panel
 The control panel holds the control for all processes to be started or
 stopped:
 
-| 
-
-|image8|
+.. image:: ../../images/aspect-compiler-start.png
 
 The following options are available:
 
-| 
-
-===============
-=====================================================================================================================================================
+=============== =====================================================================================================================================================
 *Start*           - Start the weaving process.
 *Cleanup files*   - Delete all newly created files/directories of the latest weaving-process; this will not delete any files/directories, which existed already before.
 *Clear log*       - Clear the logging display (see section Logging window).
 *Exit*            - Quit application.
-===============
-=====================================================================================================================================================
+=============== =====================================================================================================================================================
 
 Logging window
 ~~~~~~~~~~~~~~
@@ -413,33 +392,25 @@ Logging window
 The logging window displays the information generated by any running
 task of the weaver:
 
-| 
-
-|image9|
+.. image:: ../../images/aspect-compiler-logging.png
 
 The content will be displayed multi-coloured, whereas the colours are
 assigned as follows:
 
-| 
-
-===========
-==============================================================================
-*Black*       - General informations (e.g. confirmation message for a finished process).
-*Light red*   - Fatal errors (whenever an exception makes the weaver stopping an operation).
-===========
-==============================================================================
+=========== ==============================================================================
+*Black*     - General informations (e.g. confirmation message for a finished process).
+*Light red* - Fatal errors (whenever an exception makes the weaver stopping an operation).
+=========== ==============================================================================
 
 Optional log-messages (see section `Logging
-options <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/UserGuide#Loggingoptions>`__):
-
-| 
+options <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/UserGuide#Loggingoptions>`_):
 
 ============ ===============================
-*Dark red*     - Clean-up messages.
-*Green*        - Compiler messages.
-*Purple*       - Verification messages.
-*Dark blue*    - Code-transformation messages.
-*Light blue*   - Weaver file-access messages.
+*Dark red*   - Clean-up messages.
+*Green*      - Compiler messages.
+*Purple*     - Verification messages.
+*Dark blue*  - Code-transformation messages.
+*Light blue* - Weaver file-access messages.
 ============ ===============================
 
 Limitations / Future Work
@@ -486,38 +457,3 @@ AST-based weaving should be used to ensure that the source code is
 parsed correctly, for the ability to detect "complex" syntactical
 constructs split on multiple lines (comments, split commands etc.).
 
-Attachments:
-------------
-
-| |image10| `weaver_gui.png <attachments/27000880/35454995.png>`__
-  (image/png)
-| |image11|
-  `weaver_gui_language.png <attachments/27000880/35454996.png>`__
-  (image/png)
-| |image12|
-  `weaver_gui_weavingtype.png <attachments/27000880/35454997.png>`__
-  (image/png)
-| |image13|
-  `weaver_gui_projects.png <attachments/27000880/35454998.png>`__
-  (image/png)
-| |image14|
-  `weaver_gui_weaveroptions.png <attachments/27000880/35454999.png>`__
-  (image/png)
-| |image15|
-  `weaver_gui_encoding.png <attachments/27000880/35455002.png>`__
-  (image/png)
-| |image16|
-  `weaver_gui_linebreak.png <attachments/27000880/35455001.png>`__
-  (image/png)
-| |image17|
-  `weaver_gui_encoding.png <attachments/27000880/35455000.png>`__
-  (image/png)
-| |image18|
-  `weaver_gui_filefilter.png <attachments/27000880/35455003.png>`__
-  (image/png)
-| |image19|
-  `weaver_gui_control.png <attachments/27000880/35455004.png>`__
-  (image/png)
-| |image20|
-  `weaver_gui_logging.png <attachments/27000880/35455005.png>`__
-  (image/png)

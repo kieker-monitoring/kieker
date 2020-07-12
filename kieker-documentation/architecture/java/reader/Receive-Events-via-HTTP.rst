@@ -22,12 +22,12 @@ the composite stage ``kieker.tools.source.RestServiceCompositeStage``
    -  ``AllAccessHandler``
    -  ``NetworkAccessHandler`` (experimental)
 
-| **Format of the events**
+**Format of the events**
 
 [ "RecordClassName", all parameters ]
 
 **Further reading**
 
 -  Source code
-   `RestServiceCompositeStage.java <https://github.com/kieker-monitoring/kieker/blob/master/kieker-tools/src/kieker/tools/source/RestServiceCompositeStage.java>`__
+   `RestServiceCompositeStage.java <https://github.com/kieker-monitoring/kieker/blob/master/kieker-tools/src/kieker/tools/source/RestServiceCompositeStage.java>`_
 

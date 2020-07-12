@@ -17,12 +17,16 @@ programming. They allow the introduction of probes without changing the
 source code. For rare cases, where no such technique is applicable,
 **Kieker** can be introduced manually.
 
--  :ref:`instrumenting-software-java`
--  :ref:`instrumenting-software-c`
--  :ref:`instrumenting-software-perl`
--  Instrumentation of Python (upcoming)
--  :ref:`instrumenting-software-kieker4com`
--  :ref:`instrumenting-software-kieker4net`
+.. toctree::
+   :maxdepth: 1
+   
+   java/Java.rst
+   c/C.rst
+   perl/Perl.rst
+   python/Python.rst
+   com/COM.rst
+   vb/VB.rst
+   net/NET.rst
 
 Related Topics
 --------------

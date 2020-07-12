@@ -15,6 +15,10 @@ interface **IMonitoringRecord** and serialization and deserialization must
 use **IValueSerializer** and **IValueDeserializer** to serialize and
 deserialize values based on a specific theme.
 
+.. todo::
+  
+  References in the text block above are not resolved.
+
 IMonitoringRecord API
 ---------------------
 
@@ -56,11 +60,9 @@ In detail the following methods must be defined.
   ``public int getSize();`` 
 
 Additionally, the class must contain three static variables called
-- ``SIZE`` representing the size of the record based on its static part.
-  Thus, it does not reflect the real size when dynamic arrays are used.
+- ``SIZE`` representing the size of the record based on its static part. Thus, it does not reflect the real size when dynamic arrays are used.
 - ``TYPES`` array of all types which is returned by ``getValueTypes``.
-- ``VALUE_NAMES`` array of all attribute names which is returned by
-  ``getValueNames``.
+- ``VALUE_NAMES`` array of all attribute names which is returned by ``getValueNames``.
 
 The class **EntryLevelBeforeOperationEvent** in the Listing below, is an
 example of a custom monitoring record type. It is based on an existing
@@ -70,8 +72,8 @@ endpoints.
 
 In our DSL, this record looks like this:
 
-..code-block:: java
-
+.. code-block:: irl
+  
   template IPayloadCharacterization {
           string[] parameters
           string[] values
@@ -107,8 +109,7 @@ More details on the DSL can be found in the DSL documentation.
 
 The class inherits attributes from **BeforeOperationEvent** which in
 turn inherits attributes from different types. These are
-- ``timestamp`` time when the event occured (as opposed to loggingTimeStamp
-  which represents the time when the event was logged.
+- ``timestamp`` time when the event occured (as opposed to loggingTimeStamp which represents the time when the event was logged.
 - ``traceId`` the id of the trace this record belongs to.
 - ``orderIndex`` the sequence number of the event within the trace.
 - ``operationSignature`` the operation to be executed.

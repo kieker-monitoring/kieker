@@ -5,7 +5,7 @@ Receive Events via TCP from Multiple Sources (MultipleConnectionTcpSourceComposi
 
 Created by Reiner Jung, last modified on Nov 18, 2019
 
- Allows multiple probes from different execution environments to send
+Allows multiple probes from different execution environments to send
 their events to one stage.
 
 -  All data is received in a binary format using network byte order (big
@@ -35,5 +35,5 @@ Format of a record
 Further details can be found
 
 -  Source code
-   `MultipleConnectionTcpSourceCompositeStage.java <https://github.com/kieker-monitoring/kieker/blob/master/kieker-tools/src/kieker/tools/source/MultipleConnectionTcpSourceCompositeStage.java>`__
+   `MultipleConnectionTcpSourceCompositeStage.java <https://github.com/kieker-monitoring/kieker/blob/master/kieker-tools/src/kieker/tools/source/MultipleConnectionTcpSourceCompositeStage.java>`_
 -  Java Doc

@@ -4,6 +4,7 @@ How to contribute Documentation
 ===============================
 
 .. todo::
+  
   This must be replaced to fit the current docuemtnation with restructured text.
 
 Here are some tips to get you started. You can edit this page to see how
@@ -28,16 +29,16 @@ it works!
 
 **On this page:**
 
--  `1. Create a page <#HowtocontributeDocumentation-1.Createapage>`__
+-  `1. Create a page <#HowtocontributeDocumentation-1.Createapage>`_
 -  `2. Add to your
-   page <#HowtocontributeDocumentation-2.Addtoyourpage>`__
+   page <#HowtocontributeDocumentation-2.Addtoyourpage>`_
 -  `3. Organise your
-   pages <#HowtocontributeDocumentation-3.Organiseyourpages>`__
+   pages <#HowtocontributeDocumentation-3.Organiseyourpages>`_
 
    -  `Change the page
-      order <#HowtocontributeDocumentation-Changethepageorder>`__
-   -  `Add labels <#HowtocontributeDocumentation-Addlabels>`__
-   -  `Make templates <#HowtocontributeDocumentation-Maketemplates>`__
+      order <#HowtocontributeDocumentation-Changethepageorder>`_
+   -  `Add labels <#HowtocontributeDocumentation-Addlabels>`_
+   -  `Make templates <#HowtocontributeDocumentation-Maketemplates>`_
 
 3. Organise your pages
 ----------------------
@@ -65,17 +66,17 @@ Standardise and speed up the page creation process with templates. You
 can create and format a template with page layouts, standard headings
 and instructional text for hints and guidelines. Check out our sample
 page on "`How to make a
-Template <How-to-make-a-Template.rst>`__"
+Template <How-to-make-a-Template.rst>`_"
 
 **Related pages**
 
 -  Page:
 
    `How to contribute
-   Documentation </wiki/spaces/DOC/pages/18939911/How+to+contribute+Documentation>`__
+   Documentation </wiki/spaces/DOC/pages/18939911/How+to+contribute+Documentation>`_
 
 -  Page:
 
    `How to make a
-   Template </wiki/spaces/DOC/pages/18939912/How+to+make+a+Template>`__
+   Template </wiki/spaces/DOC/pages/18939912/How+to+make+a+Template>`_
 

@@ -9,8 +9,7 @@ data.
 Usage
 -----
 
-== ===================================================== ======
-=================================================================================================================================================================================================
+== ===================================================== ====== =================================================================================================================================================================================================
    --addDescriptions                                            Adds descriptions to elements according to the given file as a properties file (key: component ID, e.g., @1; value: description)
 -d --debug                                               false  Prints additional debug information.
    --filter-traces                                              Consider only the traces not identified by the list of trace IDs. Defaults to no traces.
@@ -45,8 +44,7 @@ Usage
    --short-labels                                        false  If selected, abbreviated labels (e.g., package names) are used in the visualizations.
    --traceColoring                                              Color traces according to the given color map given as a properties file (key: trace ID, value: color in hex format, e.g., 0xff0000 for red; use trace ID 'default' to specify the default color)
 -v --verbose                                             false  Verbosely prints additional information
-== ===================================================== ======
-=================================================================================================================================================================================================
+== ===================================================== ====== =================================================================================================================================================================================================
 
 Example
 -------
@@ -54,32 +52,27 @@ Example
 The following commands generate a deployment-level operation dependency
 graph and convert it to pdf format:
 
-trace-analysis
-
---inputdirs
-examples/userguide/ch5–trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC
-
---outputdir .
-
---plot-Deployment-Operation-Dependency-Graph
-
-dot -T pdf deploymentOperationDependencyGraph.dot >
-deploymentOperationDependencyGraph.pdf
+.. code::
+  
+  trace-analysis
+    --inputdirs
+        examples/userguide/ch5–trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC
+    --outputdir .
+    --plot-Deployment-Operation-Dependency-Graph
+  
+  dot -T pdf deploymentOperationDependencyGraph.dot > deploymentOperationDependencyGraph.pdf
 
 Listing A.5: Execution under UNIX-like systems
 
-| 
-
-trace-analysis.bat
-
---inputdirs
-..\examples\userguide\ch5–trace-monitoring-aspectj\testdata\kieker-20100830-082225522-UTC
-
---outputdir .
-
---plot-Deployment-Operation-Dependency-Graph
-
-dot -T pdf deploymentOperationDependencyGraph.dot >
-deploymentOperationDependencyGraph.pdf
+.. code::
+  
+  trace-analysis.bat
+    --inputdirs
+      ..\examples\userguide\ch5–trace-monitoring-aspectj\testdata\kieker-20100830-082225522-UTC
+    --outputdir .
+    --plot-Deployment-Operation-Dependency-Graph
+  
+  dot -T pdf deploymentOperationDependencyGraph.dot > deploymentOperationDependencyGraph.pdf
 
 Listing A.6: Execution under Windows
+

@@ -7,17 +7,16 @@ Table of Contents
 ^^^^^^^^^^^^^^^^^
 
 1. `AspectLegacy Quick Start (Visual Basic
-   6) <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/QuickStartVB6#AspectLegacyQuickStartVisualBasic6>`__
+   6) <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/QuickStartVB6#AspectLegacyQuickStartVisualBasic6>`_
 
    1. `Introduction to the "Bookstore"
-      Example <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/QuickStartVB6#IntroductiontotheBookstoreExample>`__
-   2. `Installation <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/QuickStartVB6#Installation>`__
+      Example <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/QuickStartVB6#IntroductiontotheBookstoreExample>`_
+   2. `Installation <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/QuickStartVB6#Installation>`_
    3. `Weaving the "Bookstore"
-      Example <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/QuickStartVB6#WeavingtheBookstoreExample>`__
+      Example <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/QuickStartVB6#WeavingtheBookstoreExample>`_
    4. `Enhanced
-      parameters <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/QuickStartVB6#Enhancedparameters>`__
+      parameters <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/QuickStartVB6#Enhancedparameters>`_
 
-| 
 
 This section describes the steps to be done for installing the
 AspectLegacy tool. Note that the tool works under Linux as well as under
@@ -47,35 +46,32 @@ It is assumed that you have already installed a VB6 IDE under Windows.
 
 -  At first, you have to download the AspectLegacy binary distribution
    archive ("dynamod.aspectlegacy-1.0_binaries"), which is available
-   ` here <http://sourceforge.net/projects/dynamod/files/dynamod.aspectlegacy/1.0/>`__
+   `here <http://sourceforge.net/projects/dynamod/files/dynamod.aspectlegacy/1.0/>`_
    as a .zip- as well as a .tar.gz-file.
 
 -  Extract the downloaded archive to an arbitrary location; the content
    will be placed into a (sub-)directory "dynamod.aspectlegacy-1.0"
    containing the following elements:
 
-|image0|
+.. image:: ../../images/structure_archive.png
 
 The content of the sub-folders is as follows:
 
 ========== ==========================================================
-**Folder**   **Content**
-bin          Binary files (script files)
-dist         Distribution files, contains the installer for the weaver.
-examples     Examples for Cobol (futural feature) and Visual Basic 6.
-lib          Required libraries.
+**Folder** **Content**
+bin        Binary files (script files)
+dist       Distribution files, contains the installer for the weaver.
+examples   Examples for Cobol (futural feature) and Visual Basic 6.
+lib        Required libraries.
 ========== ==========================================================
-
-| 
 
 -  Start the installer by double-clicking the
    "dynamod.aspectlegacy-1.0-installer-WIN32.jar" file, which is located
    in the "dist"-directory.
 
 -  Select the language to be used for the installation process:
-
-   | 
-   | |image1|
+   
+.. image:: ../../images/inst_language.png
 
 Note that the language only affects the installation process, not the
 aspect legacy application itself, which is always in english.
@@ -83,37 +79,29 @@ aspect legacy application itself, which is always in english.
 -  Afterwards, you will be asked for the target location of the
    application files:
 
-| 
-
-|image2|
+.. image:: ../../images/inst_target.png
 
 The default directory is "C:\Program Files\AspectLegacy", which should
 be preferably chosen. In case the target directory does not exist, its
 creation has to be confirmed:
 
-| 
-
-|image3|
+.. image:: ../../images/inst_createdir.png
 
 -  After the target directory has been confirmed, the installation
    process will start:
 
-|image4|
+.. image:: ../../images/inst_process.png
 
 After the installation process finishes successfully, the "Next"-button
 will be enabled:
 
-| 
-
-|image5|
+.. image:: ../../images/inst_finished.png
 
 -  Click the "Next" button to start the registration process. In this
    step, a key will be added to the registry, hence you are asked to
    confirm the modification:
 
-| 
-
-|image6|
+.. image:: ../../images/inst_register1_reg_confirm.png
 
 Click the "Yes"-button for allowing the installer to add the necessary
 key to the registry.
@@ -125,7 +113,7 @@ key to the registry.
    contains a new sub-directory with the following structure, looking
    similar to the one of the distribution archive:
 
-|image7|
+.. image:: ../../images/structure_application.png
 
 -  In the "bin" directory, you will find several batch-files,
    respectively the script files for starting the weaver application.
@@ -134,7 +122,7 @@ Weaving the "Bookstore" Example
 -------------------------------
 
 It is assumed that you have already performed the steps described in the
-`Installation <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/QuickStartVB6#Installation>`__
+`Installation <https://build.se.informatik.uni-kiel.de/DynaMod-tools/trac/wiki/dynamod.aspectlegacy/QuickStartVB6#Installation>`_
 section, so that an installed version of the AspectLegacy exists.
 
 The following steps are required for starting the AspectLegacy
@@ -243,27 +231,3 @@ starts the GUI of the weaver as well as the command above, with
 individual properties for weaving and logging; these properties might be
 even passed, if no GUI is used.
 
-Attachments:
-------------
-
-| |image8| `structure_archive.PNG <attachments/27000877/35454991.png>`__
-  (image/png)
-| |image9| `inst_language.PNG <attachments/27000877/35454985.png>`__
-  (image/png)
-| |image10| `inst_target.PNG <attachments/27000877/35454986.png>`__
-  (image/png)
-| |image11| `inst_createdir.PNG <attachments/27000877/35454987.png>`__
-  (image/png)
-| |image12| `inst_process.PNG <attachments/27000877/35454988.png>`__
-  (image/png)
-| |image13| `inst_finished.PNG <attachments/27000877/35454989.png>`__
-  (image/png)
-| |image14|
-  `inst_register1_reg_confirm.PNG <attachments/27000877/35454990.png>`__
-  (image/png)
-| |image15|
-  `structure_archive.PNG <attachments/27000877/35454984.png>`__
-  (image/png)
-| |image16|
-  `structure_application.PNG <attachments/27000877/35454992.png>`__
-  (image/png)

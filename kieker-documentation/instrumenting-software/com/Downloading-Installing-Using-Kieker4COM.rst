@@ -7,9 +7,9 @@ Downloading Kieker4COM
 ======================
 
 -  Kieker4COM install archives are provided by the `nightly
-   build <http://kieker.uni-kiel.de/jenkins/job/kieker4com-nightly-release/lastSuccessfulBuild/artifact/dist/release/>`__
+   build <http://kieker.uni-kiel.de/jenkins/job/kieker4com-nightly-release/lastSuccessfulBuild/artifact/dist/release/>`_
 -  The sources are available via the `Git repository
-   \`kieker4com\` <https://build.se.informatik.uni-kiel.de/kieker/4com>`__
+   kieker4com <https://build.se.informatik.uni-kiel.de/kieker/4com>`_
 
 Installing Kieker4COM
 =====================
@@ -22,8 +22,8 @@ perform a restart before starting a new installation process!
 
 Double-click on the downloaded file to start the installer.
 
-You may need to allow the execution of the ` Java Virtual
-Machine <http://en.wikipedia.org/wiki/Java_Virtual_Machine>`__ required
+You may need to allow the execution of the `Java Virtual
+Machine <http://en.wikipedia.org/wiki/Java_Virtual_Machine>`_ required
 for the installation program.
 
 2. Language Selection
@@ -32,9 +32,7 @@ for the installation program.
 In the following dialog, you can select the language used in the
 installation wizard. Currently, *German* and *English* are supported.
 
-| 
-
-|image0|
+.. image:: ../../images/01-lang.png
 
 3. Installation Directory
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -44,11 +42,9 @@ installation directory. Currently, our recommendation is to keep the
 default value. In the following step, this step of creating the
 installation directory requires an additional confirmation.
 
-| 
+.. image:: ../../images/02-installdir.png
 
-|image1|
-
-|image2|
+.. image:: ../../images/03-confirm-installdir.png
 
 4. Installation of Kieker4COM Binaries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -56,9 +52,7 @@ installation directory requires an additional confirmation.
 After having confirmed the installation in the previous step, the
 installer copies the Kieker4COM binaries to the selected directory.
 
-| 
-
-|image3|
+.. image:: ../../images/04-copy-done.png
 
 5. Selection of J-Integra COM License File
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -72,9 +66,7 @@ license <http://j-integra.intrinsyc.com/pricing.asp>`__.
 Please select the file system location of the J-Integra COM license file
 and confirm your selection.
 
-| 
-
-|image4|
+.. image:: ../../images/05-select-license.png
 
 6. Registration of Kieker4COM and Completion of Installation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -84,21 +76,13 @@ service in the Windows registry, the activation of the J-Integra COM
 installation included with Kieker4COM, as well as an initial start of
 the Kieker4COM service.
 
-| 
+.. image:: ../../images/06-confirm-registry.png
 
-|image5|
+.. image:: ../../images/07-registry-confirmed.png
 
-| 
+.. image:: ../../images/08-dll-success.png
 
-|image6|
-
-| 
-
-|image7|
-
-| 
-
-|image8|
+.. image:: ../../images/09-success.png
 
 Testing the Kieker4COM installation
 ===================================
@@ -127,7 +111,7 @@ Generating Monitoring Data with the bookstore-woven example project
 
 The following figure shows the directory contents:
 
-|image9|
+.. image:: ../../images/50-bookstore-woven-project.png
 
 **UPDATE:** In newer versions, the example directory includes a
 pre-compiled Bookstore.exe which can be started directly without the
@@ -137,27 +121,23 @@ Import the project into the Visual Basic 6 IDE by opening the project
 file Bookstore.vbp. Having started the example, the following debug
 messages should appear in the *Immediate Window* (Ctrl+G):
 
-|image10|
+.. image:: ../../images/51-immediate-window.png
 
 The Kieker monitoring log is written to a directory named like
 kieker-<timestamp> located in the %TEMP% directory (e.g.,
-C:\Users\voorn\AppData\Local\Temp).
+`C:\Users\voorn\AppData\Local\Temp`).
 
-| 
-
-|image11|
+.. image:: ../../images/52-log-dir.png
 
 This Kieker file system monitoring log can now be processed by the
 Kieker.TraceAnalysis tool, just like monitoring logs from Java or .NET
 systems. An example monitoring log is contained in the
-examples\vb6\monitoring-logs\\ directory.
+examples\vb6\monitoring-logs\ directory.
 
 A KiekerCOM.log file with log messages is written to the %USERPROFILE%
 directory.
 
-| 
-
-|image12|
+.. image:: ../../images/53-log4log.png
 
 The following diagrams were created by the following calls to the
 Kieker.TraceAnalysis tool:
@@ -167,11 +147,9 @@ C:\Program Files\kieker4COM\bin>trace-analysis.bat -i
 -o %TEMP% -p bla --plot-Assembly-Component-Dependency-Graph
 --plot-Assembly-Component-Dependency-Graph
 
-| 
+.. image:: ../../images/com-assemblyComponentDependencyGraph.png
 
-|image13|
-
-|image14|
+.. image:: ../../images/com-assemblySequenceDiagram-2.png 
 
 Log messages are written to a kieker.log file in the %USERPROFILE%
 directory.
@@ -194,9 +172,7 @@ You may need to allow the execution of the ` Java Virtual
 Machine <http://en.wikipedia.org/wiki/Java_Virtual_Machine>`__ required
 for the uninstaller.
 
-| 
-
-|image15|
+.. image:: ../../images/90-start-uninstaller.png 
 
 2. Confirm Uninstallation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -208,13 +184,9 @@ uninstall process.
 The uninstaller reports the successful deregistration of the Kieker4COM
 service and the successfull completion of the uninstallation process.
 
-| 
+.. image:: ../../images/92-confirm-uninstall.png
 
-|image16|
-
-| 
-
-|image17|
+.. image:: ../../images/94-uninstall-complete.png
 
 3. Manual Deletion of the Kieker4COM Installation Directory
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -233,53 +205,3 @@ Important note for Subsequent Reinstallation
 **You should restart your system after an uninstallation before starting
 a subsequent installation.**
 
-Attachments:
-------------
-
-| |image18| `01-lang.png <attachments/24215558/35455007.png>`__
-  (image/png)
-| |image19| `02-installdir.png <attachments/24215558/35455008.png>`__
-  (image/png)
-| |image20|
-  `03-confirm-installdir.png <attachments/24215558/35455010.png>`__
-  (image/png)
-| |image21| `04-copy-done.png <attachments/24215558/35455011.png>`__
-  (image/png)
-| |image22|
-  `05-select-license.png <attachments/24215558/35455012.png>`__
-  (image/png)
-| |image23|
-  `06-confirm-registry.png <attachments/24215558/35455013.png>`__
-  (image/png)
-| |image24|
-  `07-registry-confirmed.png <attachments/24215558/35455014.png>`__
-  (image/png)
-| |image25| `08-dll-success.png <attachments/24215558/35455015.png>`__
-  (image/png)
-| |image26| `09-success.png <attachments/24215558/35455016.png>`__
-  (image/png)
-| |image27|
-  `50-bookstore-woven-project.png <attachments/24215558/35455017.png>`__
-  (image/png)
-| |image28|
-  `51-immediate-window.png <attachments/24215558/35455018.png>`__
-  (image/png)
-| |image29| `52-log-dir.png <attachments/24215558/35455019.png>`__
-  (image/png)
-| |image30| `53-log4log.png <attachments/24215558/35455020.png>`__
-  (image/png)
-| |image31|
-  `assemblyComponentDependencyGraph.png <attachments/24215558/35455021.png>`__
-  (image/png)
-| |image32|
-  `assemblySequenceDiagram-2.png <attachments/24215558/35455022.png>`__
-  (image/png)
-| |image33|
-  `90-start-uninstaller.png <attachments/24215558/35455023.png>`__
-  (image/png)
-| |image34|
-  `92-confirm-uninstall.png <attachments/24215558/35455024.png>`__
-  (image/png)
-| |image35|
-  `94-uninstall-complete.png <attachments/24215558/35455025.png>`__
-  (image/png)

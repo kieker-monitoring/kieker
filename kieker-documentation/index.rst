@@ -17,7 +17,7 @@ Table of Contents
    :maxdepth: 1
 
    introduction
-   getting-started/GettingStarted.rst
+   getting-started/Getting-Started.rst
    tutorials/Tutorials.rst
    instrumenting-software/Instrumenting-Software.rst
    analyzing-monitoring-data/Analyzing-Monitoring-Data.rst
@@ -26,7 +26,6 @@ Table of Contents
    extending-kieker/Extending-Kieker.rst
    architecture/Architecture.rst
    lectures/Lectures.rst
-   references/References.rst
    related-work/Related-Work.rst
 
 
@@ -50,7 +49,7 @@ When referencing Kieker resources in your publications, we would be
 happy if you respected the following guidelines:
 
 - When referencing the Kieker project, please cite our `IPCE-2012 <references/kieker-ipce-2012.bib>`_
-  paper and/or our 2009 technical report [`TR-0921 <references/tr-0921.bib>`_. Also, you might
+  paper and/or our 2009 technical report [`TR-0921 <references/tr-0921.bib>`_]. Also, you might
   want to add a reference to our web site
   (<http://kieker-monitoring.net/>) like
   ::

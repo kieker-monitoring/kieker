@@ -4,23 +4,26 @@ Kieker4NET
 ==========
 
 Kieker4NET is a Kieker adapter supporting monitoring of programming
-languages based on Microsoft's .NET
-platform\ ` <https://en.wikipedia.org/wiki/Component_Object_Model>`__.
+languages based on Microsoft's `.NET platform <https://en.wikipedia.org/wiki/Component_Object_Model>`_.
 The adapter has been developed as a part of the
-`DynaMod <http://kosse-sh.de/dynamod>`__ research project. It has been
+`DynaMod <http://kosse-sh.de/dynamod>`_ research project. It has been
 tested particularly with C#.
 
-Installation of Kieker4NET (work in progress)
-=============================================
+..note::
+  
+  This adapter has not been used for some time.
+
+Installation of Kieker4NET
+--------------------------
 
 Requirements
-------------
+~~~~~~~~~~~~
 
 1. ` JNBridgePro <http://www.jnbridge.com/>`__ license
 2. PostSharp license
 
 JNBridge Download and Licensing
--------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 JNBridePro can be downloaded from
 ` http://www.jnbridge.com/bin/downloads.php?pr=1&id=0 <http://www.jnbridge.com/bin/downloads.php?pr=1&id=0>`__.
@@ -63,7 +66,3 @@ required on the machine creating the .NET proxy for the
 kieker-<version>.jar. It also include the JNBridePro plugins for Visual
 Studio 2005, 2008, and 2010.
 
-Download PostSharp license
---------------------------
-
--  ...

@@ -13,31 +13,32 @@ readers and receivers in three different ways.
 
 -  Directly use the respective TeeTime-based filters from
    kieker-analysis (see `kieker-analysis source
-   stages) <https://github.com/kieker-monitoring/kieker/tree/master/kieker-analysis/src/kieker/analysis/source>`__.
+   stages) <https://github.com/kieker-monitoring/kieker/tree/master/kieker-analysis/src/kieker/analysis/source>`_.
    They can be configured in Java via parameters.
 -  Use the composite stages provided by the kieker-tools (see
    `kieker-tools composite
-   stages) <https://github.com/kieker-monitoring/kieker/tree/master/kieker-tools/src/kieker/tools/source>`__.
+   stages) <https://github.com/kieker-monitoring/kieker/tree/master/kieker-tools/src/kieker/tools/source>`_.
    They take all their configuration via a Kieker configuration object.
 -  Use the receiver instantiation factory (see
-   `SourceStageFactory) <https://github.com/kieker-monitoring/kieker/blob/master/kieker-tools/src/kieker/tools/source/SourceStageFactory.java>`__.
+   `SourceStageFactory) <https://github.com/kieker-monitoring/kieker/blob/master/kieker-tools/src/kieker/tools/source/SourceStageFactory.java>`_.
    It allows to select and configure a receiver stage based on a
    configuration object. In case you use the configuration file feature
    for your tool (see `Writing Tools and
-   Services <Writing-Tools-and-Services.rst>`__) then you can
+   Services <Writing-Tools-and-Services.rst>`_) then you can
    use the factory to setup the event receiving part in one line. The
-   `collector <https://github.com/kieker-monitoring/kieker/tree/master/kieker-tools/collector/src/kieker/tools/collector>`__
+   `collector <https://github.com/kieker-monitoring/kieker/tree/master/kieker-tools/collector/src/kieker/tools/collector>`_
    is a good example to implement such tool.
 
 -  `Receive Events from Log
-   Files <Receive-Events-from-Log-Files.rst>`__
+   Files <Receive-Events-from-Log-Files.rst>`_
 -  `Receive Events via TCP from Multiple Sources
-   (MultipleConnectionTcpSourceCompositeStage) <Receive-Events-via-TCP.rst>`__
--  `Receive Events via AMQP (AMQPReaderStage) <Receive-Events-via-AMQP.rst>`__
--  `Receive Events via JMS (JMSReaderStage) <Receive-Events-via-JMS.rst>`__
+   (MultipleConnectionTcpSourceCompositeStage) <Receive-Events-via-TCP.rst>`_
+-  `Receive Events via AMQP (AMQPReaderStage) <Receive-Events-via-AMQP.rst>`_
+-  `Receive Events via JMS (JMSReaderStage) <Receive-Events-via-JMS.rst>`_
 -  `Receive Events via HTTP/JSON
-   (RestServiceCompositeStage) <Receive-Events-via-HTTP.rst>`__
+   (RestServiceCompositeStage) <Receive-Events-via-HTTP.rst>`_
 -  `Writing Tools and
-   Services <Writing-Tools-and-Services.rst>`__
+   Services <Writing-Tools-and-Services.rst>`_
 -  `Writing UI and Web
-   Tools <Writing-UI-and-Web-Tools.rst>`__
+   Tools <Writing-UI-and-Web-Tools.rst>`_
+

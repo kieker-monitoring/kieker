@@ -11,10 +11,19 @@ component ist the **Monitoring Controller** which utilizes
 .. note::
    Maybe add an overview graphic here.
 
-- :ref:`java-monitoring-controller-api`
-- :ref:`java-writer-api`
-- :ref:`java-probes-api`
-- :ref:`java-records-api`
-
-
+.. toctree::
+  :maxdepth: 1
+  
+  Monitoring-Controller-API.rst
+  Monitoring-Records-API.rst
+  Monitoring-Probes-API.rst
+  Analysis-and-Tools-API.rst
+  writer/Java-Writer-API.rst
+  writer/File-Writer.rst
+  writer/Single-Socket-TCP-Writer.rst
+  reader/Receive-Events-from-Log-Files.rst
+  reader/Receive-Events-via-AMQP.rst
+  reader/Receive-Events-via-HTTP.rst
+  reader/Receive-Events-via-JMS.rst
+  reader/Receive-Events-via-TCP.rst
 

@@ -3,10 +3,9 @@
 Configuring Kieker
 ==================
 
-- Kieker uses a configuration file kieker.monitoring.properties
+- Kieker uses a configuration file `kieker.monitoring.properties`
 - Must be placed depending on application type (see related)
 - Different options to log data (refer to real info where by crosslink)
-
 
 .. todo::
    Add the following info to kieker configuration.

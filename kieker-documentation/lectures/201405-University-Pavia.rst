@@ -8,8 +8,8 @@ Information
 
 The tutorial was held on May 21, 2014 as a 3-hour guest lecture in the
 ` course "Enterprise Digital
-Infrastructure" <http://eecs.unipv.it/degrees/computer-engineering/enterprise-digital-infrastructure/>`__,
-` University of Pavia <http://eecs.unipv.it/>`__, Pavia, Italy.
+Infrastructure" <http://eecs.unipv.it/degrees/computer-engineering/enterprise-digital-infrastructure/>`_,
+` University of Pavia <http://eecs.unipv.it/>`_, Pavia, Italy.
 
 Title: Dynamic Analysis of Software Systems with Kieker: A Hands-On
 Lecture
@@ -25,13 +25,13 @@ Material provided outside this Wiki page:
 -  Kieker and Kieker.WebGUI release archives (binary and doc):
    http://kieker-monitoring.net/download/
 -  Kieker user guide:
-   ` kieker-1.9_userguide.pdf <http://eprints.uni-kiel.de/16537/49/kieker-1.9_userguide.pdf>`__
+   ` kieker-1.9_userguide.pdf <http://eprints.uni-kiel.de/16537/49/kieker-1.9_userguide.pdf>`_
 -  Presentation slides:
 
    1. Original slides with overlays:
-      ` 20140521-KiekerLectureUPavia-slides.pdf <http://eprints.uni-kiel.de/24622/2/20140521-KiekerLectureUPavia-slides.pdf>`__
+      ` 20140521-KiekerLectureUPavia-slides.pdf <http://eprints.uni-kiel.de/24622/2/20140521-KiekerLectureUPavia-slides.pdf>`_
    2. Handout versions:
-      ` 20140521-KiekerLectureUPavia-handout.pdf <http://eprints.uni-kiel.de/24622/1/20140521-KiekerLectureUPavia-handout.pdf>`__
+      ` 20140521-KiekerLectureUPavia-handout.pdf <http://eprints.uni-kiel.de/24622/1/20140521-KiekerLectureUPavia-handout.pdf>`_
 
 Schedule
 --------
@@ -88,7 +88,7 @@ Quick Start
       annotations)
 
       1. (Partially workaround due to
-         `#1292 <http://kieker.uni-kiel.de/trac/ticket/1292>`__)
+         `#1292 <http://kieker.uni-kiel.de/trac/ticket/1292>`_)
       2. Copy lib/ folder (including kieker-1.9_aspectj.jar) from
          ch5--trace-monitoring-aspectj/ to ch2--bookstore-application
       3. Create directory src/META-INF

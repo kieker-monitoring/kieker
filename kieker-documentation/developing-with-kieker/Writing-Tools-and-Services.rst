@@ -33,99 +33,68 @@ properties.
 
 A typical main class looks like:
 
-public MyToolMain extends AbstractService<MyTeetimeConfiguration,
-MyParameterSettings> {
-
-/*\*
-
-\* This is a simple main class which does not need to be instantiated.
-
-\*/
-
-private MyToolMain() {
-
-}
-
-/*\*
-
-\* main functions.
-
-\*
-
-\* @param args
-
-\* arguments are ignored
-
-\*/
-
-public static void main(final String[] args) {
-
-java.lang.System.exit(new MyToolMain().run("Application Title",
-
-"Logger Label", args, new MyParameterSettings()));
-
-}
-
-@Override
-
-protected MyTeetimeConfiguration createTeetimeConfiguration() throws
-ConfigurationException {
-
-/*\* do some preparatory stuff. \*/
-
-return new MyTeetimeConfiguration(...);
-
-}
-
-@Override
-
-protected boolean checkParameters(final JCommander commander) throws
-ConfigurationException {
-
-return true; // only if all parameters check out
-
-}
-
-@Override
-
-protected void shutdownService() {
-
-// empty, no special shutdown required
-
-}
-
-@Override
-
-protected File getConfigurationFile() {
-
-return this.parameterConfiguration.getConfigurationFile();
-
-}
-
-@Override
-
-protected boolean checkConfiguration(final Configuration configuration,
-final JCommander commander) {
-
-return true; // only if every configuration file option checks out
-
-}
-
-}
+.. code-block:: java
+  
+  public MyToolMain extends AbstractService<MyTeetimeConfiguration,
+     MyParameterSettings> {
+     
+    /*
+     * This is a simple main class which does not need to be instantiated.
+     */
+    private MyToolMain() {
+    }
+    
+    /*
+     * main functions.
+     *
+     * @param args arguments are ignored
+     */
+    public static void main(final String[] args) {
+       java.lang.System.exit(new MyToolMain().run("Application Title",
+          "Logger Label", args, new MyParameterSettings()));
+    }
+    
+    @Override
+    protected MyTeetimeConfiguration createTeetimeConfiguration() throws
+       ConfigurationException {
+       /* do some preparatory stuff. */
+       return new MyTeetimeConfiguration(...);
+    }
+    
+    @Override
+    protected boolean checkParameters(final JCommander commander) throws
+       ConfigurationException {
+       return true; // only if all parameters check out
+    }
+    
+    @Override
+    protected void shutdownService() {
+       // empty, no special shutdown required
+    }
+    
+    @Override
+    protected File getConfigurationFile() {
+       return this.parameterConfiguration.getConfigurationFile();
+    }
+    
+    @Override
+    protected boolean checkConfiguration(final Configuration configuration,
+       final JCommander commander) {
+       return true; // only if every configuration file option checks out
+    }
+  }
 
 A example Teetime configuration looks like:
 
-public class MyTeetimeConfiguration extends Configuration {
-
-  public MyTeetimeConfiguration(...) {
-
-SomeStange stage1 = new SomeStage();
-
-SomeOtherStage stage2 = new SomeOtherStage();
-
-this.connectPorts(stage1.getOutputPort(), stage2.getInputPort());
-
-  }
-
-}
+.. code-block:: java
+  
+  public class MyTeetimeConfiguration extends Configuration {
+     
+     public MyTeetimeConfiguration(...) {
+        SomeStange stage1 = new SomeStage();
+        SomeOtherStage stage2 = new SomeOtherStage();
+        
+        this.connectPorts(stage1.getOutputPort(), stage2.getInputPort());
+     }
+  }
 

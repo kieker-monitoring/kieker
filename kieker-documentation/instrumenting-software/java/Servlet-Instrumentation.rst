@@ -19,8 +19,16 @@ framework functionality..
 Servlet Context Listener
 ------------------------
 
+.. todo::
+  
+  Add how to add context listeners here (iObserve)
+
 HTTP Session Listener
 ---------------------
+
+.. todo::
+  
+  Add how to add session listeners here (Kieker, iObserve)
 
 Servlet Filter
 --------------

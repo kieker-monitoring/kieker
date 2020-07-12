@@ -65,7 +65,8 @@ Logging of Data
 
 The last step uses the logging facility of the ``MonitoringController``.
 
-.. code-block:: java
-  
+.. code-block::
+    
   MONITORING_CONTROLLER.newMonitoringRecord(e);
+
 

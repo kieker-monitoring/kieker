@@ -8,7 +8,7 @@ including creating and using probes, writers, samplers and related
 topics.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    Configuring-Kieker.rst   
    Manual-Instrumentation.rst

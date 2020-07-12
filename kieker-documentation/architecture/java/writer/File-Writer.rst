@@ -10,13 +10,8 @@ pool strategies can be used, i.e., a user can collect all information or
 use a log rotation scheme where the amount of space used by logs is
 limited.
 
-| 
-
-| 
-
-|image0|
-
-| 
+.. image:: ../../../images/file-writer-architecture.svg
+   :width: 600px
 
 File Writer Configuration
 -------------------------
@@ -30,10 +25,10 @@ To use the new FileWriter set
 
 ``kieker.monitoring.writer=kieker.monitoring.writer.FileWriter``
 
-| in your ``kieker.monitoring.properties`` file.
-| In order to use a custom directory, set ``customStoragePath`` to a
-  existing directory. Kieker will then write its log folders into this
-  directory.
+in your ``kieker.monitoring.properties`` file.
+In order to use a custom directory, set ``customStoragePath`` to a
+existing directory. Kieker will then write its log folders into this
+directory.
 
 ``kieker.monitoring.writer.filesystem.FileWriter.customStoragePath=``
 
@@ -127,4 +122,3 @@ and XZ compression. The corresponding classes are:
 You can write your own compression filter utilizing the
 ``ICompressionFilter`` interface.
 
-| 

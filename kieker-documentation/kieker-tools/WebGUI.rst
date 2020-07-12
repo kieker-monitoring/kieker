@@ -29,19 +29,16 @@ be used in a common browser by multiple users at a time.
 As the tool is a web application, it is developed as a JavaEE
 application using JavaServer Faces for the most part. For advanced
 visual components and themes the open source component framework
-Primefaces (` http://primefaces.org <http://primefaces.org>`__) is used.
-Spring
-(` http://www.springsource.org/ <http://www.springsource.org/>`__) is
-used as a dependency framework. Spring security
-(` http://static.springsource.org/spring-security/site/index.html <http://static.springsource.org/spring-security/site/index.rst>`__)
+`Primefaces <http://primefaces.org>`_ is used.
+`Spring <http://www.springsource.org/>`_ is
+used as a dependency framework. `Spring security <http://static.springsource.org/spring-security/site/index.rst>`_
 is the security framework to check authentications and authorizations.
 In order to provide human-readable URLs, the URL Rewrite Filter
-PrettyFaces
-(` http://ocpsoft.org/prettyfaces/ <http://ocpsoft.org/prettyfaces/>`__)
+`PrettyFaces <http://ocpsoft.org/prettyfaces/>`_
 is used. The Kieler layout algorithms are used to layout graphs within
 the application. Furthermore the GUI has naturally a direct dependency
-to the Kieker framework itself. The used build management tool is Apache
-Maven (` http://maven.apache.org <http://maven.apache.org>`__).
+to the Kieker framework itself. The used build management tool is `Apache
+Maven <http://maven.apache.org>`_.
 
 2.3 Licensing Issues
 --------------------
@@ -56,9 +53,7 @@ should furthermore have a corresponding .LICENSE file in the lib folder.
 The Kieker.WebGUI is a typical multi layered web application. The
 architecture can be seen in the following figure.
 
-| 
-
-|image0|
+.. image:: ../images/kieker-webgui-architecture.png
 
 3.1 Web Layer
 -------------

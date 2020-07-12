@@ -17,8 +17,7 @@ MacOS, etc. and one with ``.bat`` extension for Windows.
 To change the logging setup you can either change that file or define
 additional options with the JAVA_OPTS environment variable, e.g.,
 
-export
-JAVA_OPTS="-Dlog4j.configuration=file:///full/path/to/logger/config/log4j.cfg"
+``export JAVA_OPTS="-Dlog4j.configuration=file:///full/path/to/logger/config/log4j.cfg"``
 
 or use the tool specific ``_OPTS`` variable, e.g.,
 ``TRACE_ANALYSIS_OPTS`` for the ``trace-analysis`` tool.
@@ -26,14 +25,12 @@ or use the tool specific ``_OPTS`` variable, e.g.,
 Furthermore, you can use both variables to pass additional JVM
 parameters and options to a tool.
 
--  `WebGUI <WebGUI.rst>`__
--  `Trace Analysis Tool <Trace-Analysis-Tool.rst>`__
--  `Convert Logging
-   Timestamps <Convert-Logging-Timestamps.rst>`__
--  `Log Replayer <Log-Replayer.rst>`__
--  `Collector - Kieker Data
-   Bridge <Collector---Kieker-Data-Bridge.rst>`__
--  `Resource Monitor <Resource-Monitor.rst>`__
--  `Trace Analysis -- GUI <Trace-Analysis----GUI.rst>`__
--  `Dot-Pic File Converter <Dot-Pic-File-Converter.rst>`__
+-  `WebGUI <WebGUI.rst>`_
+-  `Trace Analysis Tool <Trace-Analysis-Tool.rst>`_
+-  `Convert Logging Timestamps <Convert-Logging-Timestamps.rst>`_
+-  `Log Replayer <Log-Replayer.rst>`_
+-  `Collector - Kieker Data Bridge <Collector---Kieker-Data-Bridge.rst>`_
+-  `Resource Monitor <Resource-Monitor.rst>`_
+-  `Trace Analysis -- GUI <Trace-Analysis----GUI.rst>`_
+-  `Dot-Pic File Converter <Dot-Pic-File-Converter.rst>`_
 

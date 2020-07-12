@@ -3,6 +3,10 @@
 Kieker Data Bridge 
 ==================
 
+.. note::
+  
+  The Kieker Data Bridge is deprecated. Use instead the collector.
+
 The Kieker Data Bridge (KDB) is designed to support different sources of
 monitoring records and to be embeddable in other tools such as Eclipse.
 In general the KDB receives records online through a connector, converts
@@ -15,7 +19,7 @@ Architecture
 The architecture of the KDB comprises the ServiceContainer and various
 connectors implementing the IServiceConnector interface.
 
-|image0|
+
 
 The IServiceConnector interface has three methods
 

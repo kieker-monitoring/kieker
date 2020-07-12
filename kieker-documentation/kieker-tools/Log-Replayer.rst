@@ -27,8 +27,7 @@ usage: kieker.tools.logReplayer.FilesystemLogReplayerStarter [−a
 
 [−n <num>] [−r <true|false>] [−v]
 
-== =========================================================== =====
-============================================================================================================================================
+== =========================================================== ===== ============================================================================================================================================
 −a −−realtime−acceleration−factor <factor>                           Factor by which to accelerate (>1.0) or slow down (<1.0) the replay in real time mode (defaults to 1.0, i .e ., no acceleration /slow down).
 −c −−monitoring.configuration <\path\to\monitoring.properties>       Configuration to use for the Kieker monitoring instance
 −d −−debug                                                     false prints additional debug information
@@ -40,8 +39,7 @@ usage: kieker.tools.logReplayer.FilesystemLogReplayerStarter [−a
 −n −−realtime−worker−threads <num>                             1     Number of worker threads used in realtime mode
 −r −−realtime <true|false>                                           Replay log data in realtime
 −v −−verbose                                                         verbosely prints additional information
-== =========================================================== =====
-============================================================================================================================================
+== =========================================================== ===== ============================================================================================================================================
 
 Example
 -------
@@ -49,28 +47,21 @@ Example
 The following command replays the monitoring testdata included in the
 binary release to another directory:
 
-``logReplay``
-
---inputdirs
-examples/userguide/ch5–trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC
-
---keep-logging-timestamps true
-
---realtime false
+.. code::
+  
+  logReplay --inputdirs
+     examples/userguide/ch5–trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC
+     --keep-logging-timestamps true
+     --realtime false
 
 Listing A.3: Execution under UNIX-like systems
 
-| 
-
-``logReplay.bat``
-
---inputdirs
-..\examples\userguide\ch5–trace-monitoring-aspectj\testdata\kieker-20100830-082225522-UTC
-
---keep-logging-timestamps true
-
---realtime false
+.. code::
+  
+  logReplay.bat --inputdirs
+     ..\examples\userguide\ch5–trace-monitoring-aspectj\testdata\kieker-20100830-082225522-UTC
+     --keep-logging-timestamps true
+     --realtime false
 
 Listing A.4: Execution under Windows
 
-| 
