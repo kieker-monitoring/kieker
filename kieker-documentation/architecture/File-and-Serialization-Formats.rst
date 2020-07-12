@@ -1,6 +1,6 @@
-.. _architecture-file-and-serialization-formats.
+.. _architecture-file-and-serialization-formats:
 
-File and Serialization Formats 
+File and Serialization Formats
 ==============================
 
 While the Kieker architectures discuss the specific architectures of
@@ -9,6 +9,24 @@ language independent file formats and serialization formats, which helps
 to implement new readers and writers for new and already supported
 languages. As Kieker works with predefined records called events, these
 types must be mentioned in serialization.
+
+
+Type Mapping
+------------
+
+=========== ======= =============== =============
+Kieker Type Java    C               Python
+=========== ======= =============== =============
+boolean     boolean (unsigned) char int          
+byte        byte    char            int          
+short       short   short           int          
+int         int     int             int          
+long        long    long            int          
+float       float   float           float (64bit)
+double      double  double          float (64bit)
+char        char    short           int          
+string      String  const char*     str          
+=========== ======= =============== =============
 
 Binary Format Description
 -------------------------
@@ -26,21 +44,19 @@ Binary Value Serialization
 
 Basic types are serialized as follows:
 
-=======
-====================================================================
-======= =============== =============
-boolean signed 8-bit (0 = false, 1 = true)                                   boolean (unsigned) char int          
-byte    signed 8-bit                                                         byte    char            int          
-short   signed 16-bit, big endian                                            short   short           int          
-int     signed 32-bit, big endian                                            int     int             int          
-long    signed 64-bit, big endian                                            long    long            int          
-float   32-bit IEEE 754 floating point                                       float   float           float (64bit)
-double  64-bit IEEE 754 floating point                                       double  double          float (64bit)
-char    16-bit unicode character (unsigned)                                  char    short           int          
-string  signed 32-bit, referring to the id of the string in the lookup table String  const char\*    str          
-=======
-====================================================================
-======= =============== =============
+=========== ====================================================================
+Kieker Type Serialization                                                       
+=========== ====================================================================
+boolean     signed 8-bit (0 = false, 1 = true)                                          
+byte        signed 8-bit                                                                
+short       signed 16-bit, big endian                                                   
+int         signed 32-bit, big endian                                                     
+long        signed 64-bit, big endian                                                    
+float       32-bit IEEE 754 floating point                                      
+double      64-bit IEEE 754 floating point                                      
+char        16-bit unicode character (unsigned)                                           
+string      signed 32-bit, referring to the id of the string in the lookup table          
+=========== ====================================================================
 
 Fixed size arrays are serialized by a sequence of entries with the exact
 number of entries.
@@ -70,4 +86,7 @@ Each event is prefixed by
 Text Format Description
 -----------------------
 
-| 
+.. todo::
+
+   Missing text format description.
+

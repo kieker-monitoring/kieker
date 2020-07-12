@@ -10,7 +10,8 @@ running in a Java Servlet container -- in this case
 `Jetty <http://www.eclipse.org/jetty/>`. Monitoring probes based on the
 Java Servlet API, Spring and AspectJ are used to monitor execution,
 trace, and session data (see also instrumenting-software-aspectj_).
-
+                                  
+                                  
 Prerequisites
 -------------
 
@@ -20,6 +21,7 @@ Prerequisites
   application and the **Kieker**-based demo analysis application known
   from the `Kieker Homepage <http://demo.kieker-monitoring.net/>`.
 - Switch to this directory or copy it to a suitable location.
+
 
 Instrumenting Servlets
 ----------------------
@@ -116,8 +118,9 @@ above.
    http://localhost:8080/jpetstore/.
    **Kieker** initialization messages should appear in the console output.
    
-   .. image:: ../images/jpetstore-example-FFscrsh
+   .. image:: ../images/jpetstore-example-FFscrsh.png
       :width: 500px
+
 #. Browse through the application to generate some monitoring data.
 #. In this example, **Kieker** is configured to write the monitoring data
    to JMX in order to communicate with the **Kieker**-based demo analysis
