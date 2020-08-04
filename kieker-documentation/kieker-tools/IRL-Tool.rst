@@ -1,3 +1,5 @@
+.. _kieker-tools-irl:
+
 Instrumentation Record Language
 ===============================
 

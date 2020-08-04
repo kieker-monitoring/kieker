@@ -28,7 +28,7 @@ parameters set, but which does not provide a command line option for
 such configuration file can add
 ``-Dkieker.monitoring.configuration=$CONFIGUATION_FILE`` to the java
 invocation statement. In many
-`gradle <https://docs.gradle.org/current/userguide/application_plugin.rst>`_-based
+`gradle <https://docs.gradle.org/current/userguide/application_plugin.html>`_-based
 builds this can be achieved by using the ``*_OPTS`` environment
 variable. The * represents the name of the tool.
 

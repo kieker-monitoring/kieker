@@ -34,8 +34,7 @@ Conceptual Directory Structure
          shutdown hook if this is possible
       *  **Writer controller** which coordinates sending data somewhere
          or storing data in a file following the Kieker file formats
-         (see `File and Serialization
-         Formats <File-and-Serialization-Formats.rst>`__).
+         (see :ref:`architecture-file-and-serialization-formats`).
          The writer controller might support different **writers** for
          different purposes which can be configured at runtime or
          compile time, depending on the language.

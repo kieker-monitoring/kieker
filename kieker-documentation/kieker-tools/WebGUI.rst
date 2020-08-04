@@ -31,7 +31,7 @@ application using JavaServer Faces for the most part. For advanced
 visual components and themes the open source component framework
 `Primefaces <http://primefaces.org>`_ is used.
 `Spring <http://www.springsource.org/>`_ is
-used as a dependency framework. `Spring security <http://static.springsource.org/spring-security/site/index.rst>`_
+used as a dependency framework. `Spring security <http://static.springsource.org/spring-security/site/index.html>`_
 is the security framework to check authentications and authorizations.
 In order to provide human-readable URLs, the URL Rewrite Filter
 `PrettyFaces <http://ocpsoft.org/prettyfaces/>`_

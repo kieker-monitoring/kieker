@@ -18,28 +18,30 @@ applications are:
 Usage
 -----
 
-usage: kieker.tools.logReplayer.FilesystemLogReplayerStarter [−a
-<factor>] [−c <\path\to\monitoring.properties>] [−d] [−h] [−i <dir1
+usage: kieker.tools.logReplayer.FilesystemLogReplayerStarter [-a
+<factor>] [-c <\path\to\monitoring.properties>] [-d] [-h] [-i <dir1
 ...dirN>]
 
-[−−ignore−records−after−date <yyyyMMdd−HHmmss>]
-[−−ignore−records−before−date <yyyyMMdd−HHmmss>] [−k <true|false>]
+[--ignore-records-after-date <yyyyMMdd-HHmmss>]
+[--ignore-records-before-date <yyyyMMdd-HHmmss>] [-k <true|false>]
 
-[−n <num>] [−r <true|false>] [−v]
+[-n <num>] [-r <true|false>] [-v]
 
-== =========================================================== ===== ============================================================================================================================================
-−a −−realtime−acceleration−factor <factor>                           Factor by which to accelerate (>1.0) or slow down (<1.0) the replay in real time mode (defaults to 1.0, i .e ., no acceleration /slow down).
-−c −−monitoring.configuration <\path\to\monitoring.properties>       Configuration to use for the Kieker monitoring instance
-−d −−debug                                                     false prints additional debug information
-−h −−help                                                      false prints the usage information for the tool , including available options
-−i −−inputdirs <dir1 ... dirN>                                       Log directories to read data from
-   −−ignore−records−after−date <yyyyMMdd−HHmmss>                     Records logged after this date (UTC timezone) are ignored (disabled by default).
-   −−ignore−records−before−date <yyyyMMdd−HHmmss>                    Records logged before this date (UTC timezone) are ignored (disabled by default).
-−k −−keep−logging−timestamps <true|false>                      true  Replay the original logging timestamps ( defaults to true )?
-−n −−realtime−worker−threads <num>                             1     Number of worker threads used in realtime mode
-−r −−realtime <true|false>                                           Replay log data in realtime
-−v −−verbose                                                         verbosely prints additional information
-== =========================================================== ===== ============================================================================================================================================
+===== =========================================================== ======== =================================================================================================================================================================================================
+Short Long Option                                                 Required Description
+===== =========================================================== ======== =================================================================================================================================================================================================
+-a    --realtime-acceleration-factor <factor>                              Factor by which to accelerate (>1.0) or slow down (<1.0) the replay in real time mode (defaults to 1.0, i .e ., no acceleration /slow down).
+-c    --monitoring.configuration <\path\to\monitoring.properties>          Configuration to use for the Kieker monitoring instance
+-d    --debug                                                     false    prints additional debug information
+-h    --help                                                      false    prints the usage information for the tool , including available options
+-i    --inputdirs <dir1 ... dirN>                                          Log directories to read data from
+      --ignore-records-after-date <yyyyMMdd-HHmmss>                        Records logged after this date (UTC timezone) are ignored (disabled by default).
+      --ignore-records-before-date <yyyyMMdd-HHmmss>                       Records logged before this date (UTC timezone) are ignored (disabled by default).
+-k    --keep-logging-timestamps <true|false>                      true     Replay the original logging timestamps ( defaults to true )?
+-n    --realtime-worker-threads <num>                             1        Number of worker threads used in realtime mode
+-r    --realtime <true|false>                                              Replay log data in realtime
+-v    --verbose                                                            verbosely prints additional information
+===== =========================================================== ======== ============================================================================================================================================
 
 Example
 -------

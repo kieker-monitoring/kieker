@@ -5,8 +5,7 @@ Using Kieker Trace-Analysis
 
 Kieker comes with a wide range of analysis stages which can be used to
 analyze monitoring data. There is extensive documentation on how to
-build tools with **Kieker** analysis in `Writing Tools and
-Services <https://kieker-monitoring.atlassian.net/wiki/spaces/DOC/pages/290586640/Writing+Tools+and+Services>`__.
+build tools with **Kieker** analysis in :ref:`developing-with-kieker-writing-tools-and-services`.
 For this Getting Started chapter, we want to focus on using existing
 tooling, specifically the *trace-analysis* tool.
 
@@ -104,12 +103,10 @@ The examples presented in this section were generated based on the
 monitoring data which can be found in the
 directory ``examples/userguide/ch5-trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC/``.
 It consists of 1635 traces of the Bookstore application with
-AspectJ-based instrumentation, as described in the `AspectJ
-Instrumentation
-Example <AspectJ-Instrumentation-Example.rst>`__. In order to
-illustrate the visualization of distributed traces, the hostname of
-the ``Catalog``'s method ``getBook`` was probabilistically changed to
-a second hostname. The output can be found in the
+AspectJ-based instrumentation, as described in the `gt-aspectj-instrumentation-example`.
+In order to illustrate the visualization of distributed traces, the
+hostname of the ``Catalog``'s method ``getBook`` was probabilistically
+changed to a second hostname. The output can be found in the
 directory ``examples/userguide/ch5-trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC-example-plots/``.
 
 .. todo::

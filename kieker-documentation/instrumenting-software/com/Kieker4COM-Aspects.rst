@@ -3,8 +3,7 @@
 Kieker4COM Aspects 
 ==================
 
-Please see
-`Getting Started <Downloading-Installing-Using-Kieker4COM.rst>`_
+Please see :ref:`getting-started`
 to learn how to install and use Kieker4COM. The pathes mentioned in this
 document refer to the installation directory.
 

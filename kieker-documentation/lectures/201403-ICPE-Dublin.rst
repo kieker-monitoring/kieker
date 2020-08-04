@@ -1,4 +1,4 @@
-.. _icpe-dublin:
+.. _lectures-icpe-dublin:
 
 201403-ICPE-Dublin 
 ==================

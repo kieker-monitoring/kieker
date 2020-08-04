@@ -2,3 +2,5 @@
 
 Trace Analysis -- GUI 
 =====================
+
+UI to control the trace-analysis tool.

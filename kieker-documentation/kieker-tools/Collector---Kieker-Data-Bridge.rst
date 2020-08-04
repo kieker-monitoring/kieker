@@ -20,30 +20,33 @@ directory.
 
 Currently supported event sources (readers):
 
--  TCP via the
-   `MultipleConnectionTcpSourceCompositeStage <Receive-Events-via-TCP.rst>`_
--  log files
-   ```LogsReaderCompositeStage`` <Receive-Events-from-Log-Files.rst>`__
--  HTTP/REST via the `RestServiceCompositeStage <Receive-Events-via-HTTP.rst>`__
+-  :ref:`architecture-receive-events-via-tcp`
+-  :ref:`architecture-receive-events-from-log-files`
+-  :ref:`architecture-receive-events-via-http`
 
+===== =============== ======== ==================
+Short Long Option     Required Description
+===== =============== ======== ==================
+-c    --configuration true     Configuration file
+===== =============== ======== ==================
 
-== =============== ==================
--c --configuration Configuration file
-== =============== ==================
+Example configuration
+---------------------
 
-**TCP to File**
+Receive data via TCP (binary encoding) and log the files without 
+compression to text files.
 
-## define input
-
-# TCP server for multiple connections
-
-.. code::
+.. code-block:: shell
+  
+  # TCP servcer for multiple connections
+  
+  ## Define input
   
   kieker.tools.source=kieker.tools.source.MultipleConnectionTcpSourceCompositeStage
   kieker.tools.source.MultipleConnectionTcpSourceCompositeStage.port=9876
   kieker.tools.source.MultipleConnectionTcpSourceCompositeStage.capacity=8192
   
-  ## define output
+  ## Kieker settings
   
   ## The name of the Kieker instance.
   kieker.monitoring.name=KIEKER
@@ -54,10 +57,12 @@ Currently supported event sources (readers):
   ## Output metadata record
   kieker.monitoring.metadata=true
   
-  ## Data sink stage
-  ## Choose FileWriter
+  ## Define output
+  
+  ## Data sink stage (FileWriter)
   kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter
   
+  ## FileWriter settings
   ## output path
   kieker.monitoring.writer.filesystem.FileWriter.customStoragePath=$COLLECTOR_DATA_DIR/
   kieker.monitoring.writer.filesystem.FileWriter.charsetName=UTF-8
@@ -98,6 +103,4 @@ Currently supported event sources (readers):
 Instead of generating text log files, you may use the
 ``BinaryLogStreamHandler`` to produce binary output. Also can specify a
 compression algorithm for the log and map files, or use a totally
-different Kieker writer. For more details on the writer see `File
-Writer <File-Writer.rst>`_.
-
+different Kieker writer. For more details on the writer see `architecture-java-file-writer`.

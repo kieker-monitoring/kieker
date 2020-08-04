@@ -1,4 +1,4 @@
-.. _university-pavia:
+.. _lectures-university-pavia:
  
 201405-University-Pavia 
 =======================

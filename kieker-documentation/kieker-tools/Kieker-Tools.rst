@@ -25,12 +25,17 @@ or use the tool specific ``_OPTS`` variable, e.g.,
 Furthermore, you can use both variables to pass additional JVM
 parameters and options to a tool.
 
--  `WebGUI <WebGUI.rst>`_
--  `Trace Analysis Tool <Trace-Analysis-Tool.rst>`_
--  `Convert Logging Timestamps <Convert-Logging-Timestamps.rst>`_
--  `Log Replayer <Log-Replayer.rst>`_
--  `Collector - Kieker Data Bridge <Collector---Kieker-Data-Bridge.rst>`_
--  `Resource Monitor <Resource-Monitor.rst>`_
--  `Trace Analysis -- GUI <Trace-Analysis----GUI.rst>`_
--  `Dot-Pic File Converter <Dot-Pic-File-Converter.rst>`_
+-  :ref:`kieker-tools-webgui` (deprecated)
+-  :ref:`kieker-tools-trace-analysis-tool`
+-  :ref:`kieker-tools-convert-logging-timestamps`
+-  :ref:`kieker-tools-log-replayer`
+-  :ref:`kieker-tools-collector`
+-  :ref:`kieker-tools-kdb` (deprecated)
+-  :ref:`kieker-tools-resource-monitor`
+-  :ref:`kieker-tools-trace-analysis-gui`
+-  :ref:`kieker-tools-irl`
+-  :ref:`kieker-tools-dot-pic-file-converter`
+
+Please note there are other tools available for Kieker which are not
+bundled with Kieker.
 

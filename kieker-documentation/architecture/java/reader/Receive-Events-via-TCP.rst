@@ -3,8 +3,6 @@
 Receive Events via TCP from Multiple Sources (MultipleConnectionTcpSourceCompositeStage) 
 ========================================================================================
 
-Created by Reiner Jung, last modified on Nov 18, 2019
-
 Allows multiple probes from different execution environments to send
 their events to one stage.
 
@@ -36,4 +34,4 @@ Further details can be found
 
 -  Source code
    `MultipleConnectionTcpSourceCompositeStage.java <https://github.com/kieker-monitoring/kieker/blob/master/kieker-tools/src/kieker/tools/source/MultipleConnectionTcpSourceCompositeStage.java>`_
--  Java Doc
+-  `Java Doc <http://api.kieker-monitoring.net/1.14/kieker/tools/source/MultipleConnectionTcpSourceCompositeStage.html>`_

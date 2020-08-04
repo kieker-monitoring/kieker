@@ -17,39 +17,36 @@ sequence and dependency diagrams.
 In this tutorial, we will instrument a Java Servlet application with
 interceptors and AspectJ. For other options to generate traces in Java
 and other programming languages, please consult the respective pages in
-`Analyzing Monitoring Data <Analyzing-Monitoring-Data.rst>`__
-and `How to apply Kieker in Java EE
-Environments <How-to-apply-Kieker-in-Java-EE-Environments.rst>`__.
+:ref:`tutorials-how-to-perform-trace-analysis`
+and :ref:`tutorials-how-to-apply-kieker-in-java-ee-environments`.
 
 We use the ``OperationExecutionRecord`` from the ``controlflow`` package
 to collect trace information. There is also an alternative
 ``flow``-based set of monitoring events which can be used alternatively.
 However, they are not used in this tutorial. More information on
-monitoring traces can be found in `Application Traces in
-Java <Application-Traces-in-Java.rst>`__ .
+monitoring traces can be found in `tutorials-how-to-perform-trace-analysis`.
 
 The ``OperationExecutionRecord`` attributes ``operationName``, ``tin``,
 and ``tout`` represent the full qualified name of the operation
 including the class name, the time before execution of the operation and
 the time after the execution, respectively (see JavaDoc
-`OperationExecutionRecord <http://api.kieker-monitoring.net/1.14/kieker/common/record/controlflow/OperationExecutionRecord.rst>`__).
+`OperationExecutionRecord <http://api.kieker-monitoring.net/1.14/kieker/common/record/controlflow/OperationExecutionRecord.html>`__).
 The attributes ``traceId`` and ``sessionId`` are used to store trace and
 session information; ``eoi`` and ``ess`` contain control-flow
 information needed to reconstruct traces from monitoring data. For
 details please refer to the technical report and
-`JavaDoc <http://api.kieker-monitoring.net/1.14/kieker/common/record/controlflow/OperationExecutionRecord.rst>`__.
+`JavaDoc <http://api.kieker-monitoring.net/1.14/kieker/common/record/controlflow/OperationExecutionRecord.html>`__.
 
 Prerequisites
 -------------
 
--  A basic understanding of how Kieker performs monitoring (see `Getting
-   Started <Getting-Started_290291826.rst>`__)
+-  A basic understanding of how Kieker performs monitoring (see :ref:`getting-started`)
 -  Basic knowledge of AspectJ, i.e., that it is an aspect-oriented
    approach and technology
 -  Basic knowledge what a Servlet application is
 -  Docker, in case you want to use docker to run the example (optional)
 -  Download the Servlet Engine
-   `Jetty <https://www.eclipse.org/jetty/download.rst>`__ (tested with
+   `Jetty <https://www.eclipse.org/jetty/download.html>`__ (tested with
    9.4.30)
 
 Getting JPetStore
