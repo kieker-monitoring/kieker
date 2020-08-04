@@ -164,41 +164,6 @@ function assert_files_exist_common {
 	information OK
 }
 
-# Asserts the existence of files in the src release
-function assert_files_exist_src {
-	assert_files_exist_common
-	assert_file_exists_regular "Jenkinsfile"
-	assert_dir_exists "lib/static-analysis/"
-	assert_file_NOT_exists "dist/"
-	assert_file_NOT_exists_recursive "build"
-	assert_dir_NOT_exists "javadoc"
-
-	assert_file_NOT_exists "META-INF/"
-
-	assert_file_NOT_exists "kieker-examples/userguide/ch2--manual-instrumentation/lib/*.jar"
-	assert_file_NOT_exists "kieker-examples/userguide/ch3-4--custom-components/lib/*.jar"
-	assert_file_NOT_exists "kieker-examples/userguide/ch5--trace-monitoring-aspectj/lib/*.jar"
-	assert_file_NOT_exists "kieker-examples/userguide/appendix-JMS/lib/*.jar"
-	assert_file_NOT_exists "kieker-examples/userguide/appendix-Sigar/lib/*.jar"
-
-	assert_file_exists_regular "kieker-examples/JavaEEServletContainerExample/build.gradle"
-	assert_file_exists_regular "kieker-examples/JavaEEServletContainerExample/livedemo-source/"
-	assert_file_NOT_exists "kieker-examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-*.jar"
-
-	assert_file_exists_regular "config/javadoc-header/javadoc.css"
-	assert_file_exists_regular "config/javadoc-header/kieker-javadoc-header.png"
-	assert_file_exists_regular "kieker-eclipse.importorder"
-	assert_file_exists_regular "kieker-eclipse-cleanup.xml"
-	assert_file_exists_regular "kieker-eclipse-formatter.xml"
-	assert_file_NOT_exists ".project"
-	assert_file_NOT_exists ".classpath"
-	assert_file_exists_regular ".checkstyle"
-	assert_file_exists_regular ".pmd"
-	assert_file_NOT_exists ".settings/"
-	assert_file_exists_regular "kieker-documentation/README-bin"
-	assert_file_exists_regular "kieker-documentation/README-src"
-}
-
 # Asserts the existence of files in the bin release and some basic checks on the Kieker jars
 function assert_files_exist_bin {
 	assert_files_exist_common
@@ -270,26 +235,6 @@ function assert_files_exist_bin {
 	assert_file_NOT_exists "kieker-documentation/README-src"
 }
 
-function check_src_archive {
-	if [ -z "$1" ]; then
-		error "No source archive provided"
-		exit 1
-	fi
-
-    assert_file_exists_regular "$1"
-    assert_no_duplicate_files_in_archive "$1"
-
-	information "Decompressing archive '$1' ..."
-	df
-	extract_archive_n_cd "$1"
-	df
-	touch $(basename "$1") # just to mark where this dir comes from
-
-    assert_files_exist_src
-	assert_all_sh_scripts_executable
-}
-
-
 
 function check_bin_archive {
 	if [ -z "$1" ]; then
@@ -339,31 +284,6 @@ create_subdir_n_cd
 DIR=$(pwd)
 BINTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.tar.gz)
 check_bin_archive "${BINTGZ}"
-rm -rf "${DIR}"
-
-
-#
-## source releases
-#
-
-information "---------------------------------"
-information "Check source releases"
-information "---------------------------------"
-
-information "check zip"
-change_dir "${BASE_TMP_DIR_ABS}"
-create_subdir_n_cd
-DIR=$(pwd)
-SRCZIP=$(ls ../../${DIST_RELEASE_DIR}/*-sources.zip)
-check_src_archive "${SRCZIP}"
-rm -rf "${DIR}"
-
-information "check tar.gz"
-change_dir "${BASE_TMP_DIR_ABS}"
-create_subdir_n_cd
-DIR=$(pwd)
-SRCTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-sources.tar.gz)
-check_src_archive "${SRCTGZ}"
 rm -rf "${DIR}"
 
 # end

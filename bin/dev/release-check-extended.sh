@@ -40,55 +40,6 @@ function extract_archive_to {
 	fi
 }
 
-function check_src_archive {
-	if [ -z "$1" ]; then
-		error "No source archive provided"
-		exit 1
-	fi
-
-	information "Decompressing archive '$1' ..."
-	extract_archive_n_cd "$1"
-	touch $(basename "$1") # just to mark where this dir comes from
-
-	# Making sure that no JavaDoc warnings reported by the `javadoc` tool
-	information "Making sure that no JavaDoc warnings (ignoring generated sources) ..."
-	if (run_gradle apidoc | grep -v "src-gen" | grep "warning -"); then
-	    error "One or more JavaDoc warnings"
-	    exit 1
-	else
-	    information "OK"
-	fi
-
-	# now build release from source (including checks and tests)
-	echo "//////////////////////////////////////////////////////////"
-	run_gradle build
-	run_gradle distribute
-	# make sure that the expected files are present
-	assert_dir_exists "${DIST_JAR_DIR}"
-	assert_dir_exists "${DIST_RELEASE_DIR}"
-	assert_file_exists_regular $(ls "${DIST_JAR_DIR}/kieker-"*".jar" | grep -v emf | grep -v aspectj ) # the core jar
-	assert_file_exists_regular "${DIST_JAR_DIR}/kieker-"*"-aspectj.jar"
-	assert_file_exists_regular "${DIST_JAR_DIR}/kieker-"*"-emf.jar"
-	assert_file_NOT_exists "${DIST_JAR_DIR}/kieker-monitoring-servlet-"*".war"
-
-	# check bytecode version of classes contained in jar
-	information "Making sure that bytecode version of class in jar is $javaVersion"
-	MAIN_JAR=$(ls "${DIST_JAR_DIR}/kieker-"*".jar" | grep -E "kieker-[^-]*(-SNAPSHOT)?.jar")
-	assert_file_exists_regular ${MAIN_JAR}
-
-	VERSION_CLASS=$(find kieker-common/build -name "Version.class")
-	assert_file_exists_regular "${VERSION_CLASS}"
-
-	bytecodeVersion="$(javap -verbose ${VERSION_CLASS} | grep -q "${javaVersion}")"
-	information "Found ${bytecodeVersion}"
-
-	if ! javap -verbose ${VERSION_CLASS} | grep -q "${javaVersion}"; then
-		error "Unexpected bytecode version: ${bytecodeVersion}"
-		exit 1
-	fi
-	information "OK"
-}
-
 function check_bin_archive {
 	if [ -z "$1" ]; then
 		error "No source archive provided"
@@ -225,39 +176,4 @@ else
 fi
 rm -rf "${DIR}"
 
-#
-## source releases
-#
-information "--------------------------------"
-information "Source Releases"
-information "--------------------------------"
-
-change_dir "${BASE_TMP_DIR_ABS}"
-create_subdir_n_cd
-DIR=$(pwd)
-
-information "Source ZIP"
-SRCZIP=$(ls ../../${DIST_RELEASE_DIR}/*-sources.zip)
-extract_archive_to ${SRCZIP} ${TMP_ZIP_DIR}
-
-information "Source TGZ"
-SRCTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-sources.tar.gz)
-extract_archive_to ${SRCTGZ} ${TMP_TGZ_DIR}
-
-diff -r ${TMP_TGZ_DIR} ${TMP_ZIP_DIR}
-DIFF_SRC_RESULT=$?
-
-if [ ${DIFF_SRC_RESULT} -eq 0 ]; then
-  information "The content of both source archives is identical."
-  check_src_archive "${SRCTGZ}"
-else
-  error "The content of both source archives is NOT identical."
-  exit 1
-fi
-#fails sporadically for no apparent reason
-#if [ -d ${DIR} ] ; then
-#        rm -rf "${DIR}"
-#else
-#        warning "${DIR} is not a directory"
-#fi
 # end
