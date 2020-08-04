@@ -110,7 +110,6 @@ pipeline {
             sh 'df'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
-            stash includes: 'kieker-documentation/userguide/kieker-userguide.pdf', name: 'userguide'
           }
         }
       }
@@ -174,8 +173,7 @@ pipeline {
       steps {
         unstash 'jarArtifacts'
         unstash 'distributions'
-        unstash 'userguide'
-        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar',
+        archiveArtifacts artifacts: 'build/distributions/*,build/libs/*.jar',
             fingerprint: true,
             onlyIfSuccessful: true
       }
