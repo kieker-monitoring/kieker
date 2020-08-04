@@ -16,13 +16,6 @@ include 'kieker-tools:trace-analysis-gui'
 include 'kieker-extension-kafka'
 include 'kieker-checkstyle-extension'
 include 'kieker-examples'
-//include	'kieker-documentation:userguide'
-include 'kieker-examples:analysis'
-include 'kieker-examples:JavaEEServletContainerExample'
-include 'kieker-examples:monitoring'
-include 'kieker-examples:OverheadEvaluationMicrobenchmark'
-include 'kieker-examples:resources'
-include 'kieker-examples:SPECjEnterprise2010'
-include 'kieker-examples:userguide'
+
 
 		

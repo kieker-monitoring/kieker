@@ -711,14 +711,6 @@ def binaryContent = project.copySpec {
     into kiekerPackagenamebase + "-" + kiekerVersion
 }
 
-def manualContent = project.copySpec {
-    from('kieker-documentation/userguide') {
-        include 'kieker-userguide.pdf'
-        rename 'kieker-userguide.pdf', "kieker-${kiekerVersion}-userguide.pdf"
-    }
-    into kiekerPackagenamebase + "-" + kiekerVersion + "/doc"
-}
-
 /** collect tools for binary distribution. */
 def toolsContent = project.copySpec {
     ['trace-analysis', 'trace-analysis-gui', 'log-replayer', 'resource-monitor', 'collector', 'convert-logging-timestamp'].each {
@@ -788,15 +780,15 @@ task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandalone
  */
  
 /** binary distribution in zip format. */
-task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar,  prepareExamplesForDistribution]) {
+task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, prepareExamplesForDistribution]) {
     classifier = 'binaries'
-    with binaryContent, manualContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
+    with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
 }
 
 /** binary distribution in tar.gz format. */
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, prepareExamplesForDistribution]) {
     classifier = 'binaries'
-    with binaryContent, manualContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
+    with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
 
     compression = Compression.GZIP
     archiveExtension = 'tar.gz'
@@ -931,7 +923,7 @@ project.ext {
     snapshotRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
 }
 
-/*
+
 uploadArchives {
     repositories {
         mavenDeployer {
@@ -1035,19 +1027,19 @@ uploadArchives {
             if (System.env.kiekerMavenUser != null) {
                 mavenUser = System.env.kiekerMavenUser
             }
-
             def mavenPassword = "NoMavenPassword"
             if (System.env.kiekerMavenPassword != null) {
                 mavenPassword = System.env.kiekerMavenPassword
             }
-
+            
             repository(url: project.releaseRepoUrl) {
                 authentication(userName: mavenUser, password: mavenPassword)
             }
+            println project.snapshotRepoUrl
             snapshotRepository(url: project.snapshotRepoUrl) {
                 authentication(userName: mavenUser, password: mavenPassword)
             }
         }
     }
 }
-*/
+

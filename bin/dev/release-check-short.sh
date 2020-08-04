@@ -202,7 +202,6 @@ function assert_files_exist_src {
 # Asserts the existence of files in the bin release and some basic checks on the Kieker jars
 function assert_files_exist_bin {
 	assert_files_exist_common
-	assert_file_exists_regular "doc/kieker-"*"-userguide.pdf"
 
 	information "Making sure (recursively) that 'build' only exists with build/libs/ ..."
 	if find | grep "/build/" | grep -v "build/libs"; then
@@ -257,7 +256,6 @@ function assert_files_exist_bin {
 	assert_file_NOT_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/"
 	assert_file_NOT_exists "bin/dev/release-check*"
-	assert_file_NOT_exists "doc/userguide/"
 	assert_file_NOT_exists "src/"
 	assert_file_NOT_exists "test/"
 	assert_file_NOT_exists "kieker-eclipse.importorder"

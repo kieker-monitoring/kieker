@@ -2,15 +2,15 @@
 
 pipeline {
 
+  agent none
+
   environment {
     DOCKER_ARGS = ''
   }
 
-  agent none
-
   options {
     buildDiscarder logRotator(artifactNumToKeepStr: '10')
-    timeout(time: 90, unit: 'MINUTES')
+    timeout(time: 150, unit: 'MINUTES')
     retry(1)
     parallelsAlwaysFailFast()
   }
@@ -47,8 +47,10 @@ pipeline {
 
         stage('Compile') {
           steps {
+            sh 'df'
             sh './gradlew compileJava'
             sh './gradlew compileTestJava'
+            sh 'df'
           }
         }
 
@@ -73,6 +75,7 @@ pipeline {
 
         stage('Static Analysis') {
           steps {
+            sh 'df'
             sh './gradlew check'
             sh 'df'
           }
@@ -102,11 +105,11 @@ pipeline {
         
         stage('Distribution Build') {
           steps {
+            sh 'df'
             sh './gradlew build distribute'
             sh 'df'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
-            stash includes: 'kieker-documentation/userguide/kieker-userguide.pdf', name: 'userguide'
           }
         }
       }
@@ -170,14 +173,14 @@ pipeline {
       steps {
         unstash 'jarArtifacts'
         unstash 'distributions'
-        unstash 'userguide'
-        archiveArtifacts artifacts: 'build/distributions/*,kieker-documentation/userguide/kieker-userguide.pdf,build/libs/*.jar',
+        archiveArtifacts artifacts: 'build/distributions/*,build/libs/*.jar',
             fingerprint: true,
             onlyIfSuccessful: true
       }
       post {
         cleanup {
           deleteDir()
+          cleanWs()
         }
       }
     }
@@ -190,17 +193,22 @@ pipeline {
       parallel {
         stage('Push to Stable') {
           agent {
-            docker {
-              image 'kieker/kieker-build:openjdk8'
-              args env.DOCKER_ARGS
-            }
+             label 'build-node4'
           }
           steps {
-            sh 'git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable'
+            sshagent(credentials: ['kieker-key']) {
+              sh('''
+                    #!/usr/bin/env bash
+                    set +x
+                    export GIT_SSH_COMMAND="ssh -oStrictHostKeyChecking=no"
+                    git push git@github.com:kieker-monitoring/kieker.git $(git rev-parse HEAD):stable
+                 ''')
+            }
           }
           post {
             cleanup {
               deleteDir()
+              cleanWs()
             }
           }
         }

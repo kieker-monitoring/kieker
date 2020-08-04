@@ -28,3 +28,13 @@ clover {
 	
 }
 
+eclipse {
+	classpath {
+		defaultOutputDir = file('build-eclipse')
+	}
+}
+
+task uploadArchives {
+	println 'kdb skipped'
+}
+

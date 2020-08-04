@@ -29,3 +29,12 @@ clover {
 	
 }
 
+eclipse {
+	classpath {
+		defaultOutputDir = file('build-eclipse')
+	}
+}
+
+task uploadArchives {
+	println 'collector skipped'
+}
