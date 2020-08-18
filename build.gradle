@@ -714,9 +714,7 @@ def binaryContent = project.copySpec {
     into kiekerPackagenamebase + "-" + kiekerVersion
 }
 
-/** collect tools for binary distribution. */
-def toolsContent = project.copySpec {
-    def tools = [
+def tools = [
     	'collector', 
     	'convert-logging-timestamp',
     	'kdb',
@@ -726,21 +724,29 @@ def toolsContent = project.copySpec {
     	'trace-analysis-gui' 
     ]
     
+/** collect jars. */
+def toolsContent = project.copySpec {
+    tools.each {
+        from("kieker-tools/${it}/build/libs") {
+            include "**"
+        }
+    }
+    into kiekerPackagenamebase + "-" + kiekerVersion + "/tools/lib"
+}
+    
+    
+/** collect tools for binary distribution. */
+def scriptContent = project.copySpec {
+    
     tools.each {
         from("kieker-tools/${it}/build/scripts") {
             include "**"
-        }
-        into kiekerPackagenamebase + "-" + kiekerVersion + "/tools"
-    }
-    tools.each {
-        from("kieker-tools/${it}/build") {
-            include "libs/**"
         }
     }
     from("kieker-tools") {
         include "README.md"
     }
-    into kiekerPackagenamebase + "-" + kiekerVersion + "/tools"
+    into kiekerPackagenamebase + "-" + kiekerVersion + "/tools/bin"
 }
 
 /** collect all libraries in kieker-tools. */
@@ -796,16 +802,21 @@ task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandalone
  * Compile the binary distribution.
  */
  
+task copyRuntimeLibs(type: Copy) {
+    from configurations.resultJar
+    into kiekerPackagenamebase + "-" + kiekerVersion + "/tools/lib"
+}
+ 
 /** binary distribution in zip format. */
-task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, prepareExamplesForDistribution]) {
+task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [copyRuntimeLibs, mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, prepareExamplesForDistribution]) {
     classifier = 'binaries'
-    with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
+    with binaryContent, scriptContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
 }
 
 /** binary distribution in tar.gz format. */
-task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, prepareExamplesForDistribution]) {
+task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [copyRuntimeLibs, mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, prepareExamplesForDistribution]) {
     classifier = 'binaries'
-    with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
+    with binaryContent, scriptContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
 
     compression = Compression.GZIP
     extension = 'tar.gz'
