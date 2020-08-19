@@ -29,12 +29,6 @@ clover {
 	
 }
 
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
-}
-
 task uploadArchives {
 	println 'convert-logging-timestamp skipped'
 }

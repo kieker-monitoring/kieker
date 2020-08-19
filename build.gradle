@@ -779,10 +779,12 @@ def exampleJavaEEContent = project.copySpec {
 }
 
 // examples should be build separately
-task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandaloneExamples']) {
-     doLast {
-    }
-}
+// TODO deactivated for now
+task prepareExamplesForDistribution() { }
+//task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandaloneExamples']) {
+//     doLast {
+//    }
+//}
 
 /**
  * Compile the binary distribution.
@@ -916,38 +918,26 @@ project.ext {
     snapshotRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
 }
 
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                groupId = 'net.kieker-monitoring'
+                artifactId = 'kieker'
+                version = '1.15-SNAPSHOT'
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            pom.artifactId = 'kieker'
-            pom.groupId = 'net.kieker-monitoring'
-
-            pom.project {
-                parent {
-                    groupId = 'org.sonatype.oss'
-                    artifactId = 'oss-parent'
-                    version = '7'
-                }
-
-                packaging = 'jar'
                 name = 'Kieker Monitoring and Analysis Framework'
                 description = 'Kieker: Application Performance Monitoring and Dynamic Software Analysis'
                 url = 'http://kieker-monitoring.net'
-                inceptionYear = '2006'
-
-                organization {
-                    name = 'Kieker Project'
-                    url = 'http://kieker-monitoring.net'
-                }
+//                properties = [
+//                    myProp: "value",
+//                    "prop.with.dots": "anotherValue"
+//                ]
 
                 licenses {
                     license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution 'repo'
+                        name = 'The Apache Software License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                     }
                 }
 
@@ -973,66 +963,133 @@ uploadArchives {
                         email = 'christian.wulf@email.uni-kiel.de'
                     }
                 }
-
-                mailingLists {
-                    mailingList {
-                        name = 'Kieker-developers'
-                        subscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-developers'
-                        unsubscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-developers'
-                        post = 'kieker-developers@lists.sourceforge.net'
-                        archive = 'http://sourceforge.net/mailarchive/forum.php?forum_name=kieker-developers'
-                    }
-                    mailingList {
-                        name = 'Kieker-tickets'
-                        subscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-tickets'
-                        unsubscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-tickets'
-                        post = 'kieker-tickets@lists.sourceforge.net'
-                        archive = 'http://sourceforge.net/mailarchive/forum.php?forum_name=kieker-tickets'
-                    }
-                    mailingList {
-                        name = 'Kieker-users'
-                        subscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-users'
-                        unsubscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-users'
-                        post = 'kieker-users@lists.sourceforge.net'
-                        archive = 'http://sourceforge.net/mailarchive/forum.php?forum_name=kieker-users'
-                    }
-                }
-
+                
                 scm {
                     connection = 'scm:git:https://github.com/kieker-monitoring/kieker.git'
-                    developerConnection 'scm:git:git@github.com:kieker-monitoring/kieker.git'
+                    developerConnection = 'scm:git:git@github.com:kieker-monitoring/kieker.git'
                     url = 'https://github.com/kieker-monitoring/kieker'
                 }
-
-                issueManagement {
-                    system = 'Jira'
-                    url = 'https://kieker-monitoring.atlassian.net/'
-                }
-
-                ciManagement {
-                    system = 'Jenkins'
-                    url = 'https://build.se.informatik.uni-kiel.de/jenkins/job/kieker-monitoring/'
-                }
-            }
-
-            // The following properties should be defined in ~/.gradle/gradle.properties (neede only for Maven upload)
-            def mavenUser = "NoMavenUser"
-            if (System.env.kiekerMavenUser != null) {
-                mavenUser = System.env.kiekerMavenUser
-            }
-            def mavenPassword = "NoMavenPassword"
-            if (System.env.kiekerMavenPassword != null) {
-                mavenPassword = System.env.kiekerMavenPassword
-            }
-            
-            repository(url: project.releaseRepoUrl) {
-                authentication(userName: mavenUser, password: mavenPassword)
-            }
-            println project.snapshotRepoUrl
-            snapshotRepository(url: project.snapshotRepoUrl) {
-                authentication(userName: mavenUser, password: mavenPassword)
             }
         }
     }
 }
 
+
+// uploadArchives {
+//     repositories {
+//         mavenDeployer {
+//             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+// 
+//             pom.artifactId = 'kieker'
+//             pom.groupId = 'net.kieker-monitoring'
+// 
+//             pom.project {
+//                 parent {
+//                     groupId = 'org.sonatype.oss'
+//                     artifactId = 'oss-parent'
+//                     version = '7'
+//                 }
+// 
+//                 packaging = 'jar'
+//                 name = 'Kieker Monitoring and Analysis Framework'
+//                 description = 'Kieker: Application Performance Monitoring and Dynamic Software Analysis'
+//                 url = 'http://kieker-monitoring.net'
+//                 inceptionYear = '2006'
+// 
+//                 organization {
+//                     name = 'Kieker Project'
+//                     url = 'http://kieker-monitoring.net'
+//                 }
+// 
+//                 licenses {
+//                     license {
+//                         name 'The Apache Software License, Version 2.0'
+//                         url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//                         distribution 'repo'
+//                     }
+//                 }
+// 
+//                 developers {
+//                     developer {
+//                         id = 'thomas.duellmann'
+//                         name = 'Thomas F. Duellmann'
+//                         email = 'duellmann@informatik.uni-stuttgart.de'
+//                     }
+//                     developer {
+//                         id = 'andre.van.hoorn'
+//                         name = 'Andre van Hoorn'
+//                         email = 'van.hoorn@informatik.uni-stuttgart.de'
+//                     }
+//                     developer {
+//                         id = 'reiner.jung'
+//                         name = 'Reiner Jung'
+//                         email = 'reiner.jung@email.uni-kiel.de'
+//                     }
+//                     developer {
+//                         id = 'christian.wulf'
+//                         name = 'Christian Wulf'
+//                         email = 'christian.wulf@email.uni-kiel.de'
+//                     }
+//                 }
+// 
+//                 mailingLists {
+//                     mailingList {
+//                         name = 'Kieker-developers'
+//                         subscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-developers'
+//                         unsubscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-developers'
+//                         post = 'kieker-developers@lists.sourceforge.net'
+//                         archive = 'http://sourceforge.net/mailarchive/forum.php?forum_name=kieker-developers'
+//                     }
+//                     mailingList {
+//                         name = 'Kieker-tickets'
+//                         subscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-tickets'
+//                         unsubscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-tickets'
+//                         post = 'kieker-tickets@lists.sourceforge.net'
+//                         archive = 'http://sourceforge.net/mailarchive/forum.php?forum_name=kieker-tickets'
+//                     }
+//                     mailingList {
+//                         name = 'Kieker-users'
+//                         subscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-users'
+//                         unsubscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-users'
+//                         post = 'kieker-users@lists.sourceforge.net'
+//                         archive = 'http://sourceforge.net/mailarchive/forum.php?forum_name=kieker-users'
+//                     }
+//                 }
+// 
+//                 scm {
+//                     connection = 'scm:git:https://github.com/kieker-monitoring/kieker.git'
+//                     developerConnection 'scm:git:git@github.com:kieker-monitoring/kieker.git'
+//                     url = 'https://github.com/kieker-monitoring/kieker'
+//                 }
+// 
+//                 issueManagement {
+//                     system = 'Jira'
+//                     url = 'https://kieker-monitoring.atlassian.net/'
+//                 }
+// 
+//                 ciManagement {
+//                     system = 'Jenkins'
+//                     url = 'https://build.se.informatik.uni-kiel.de/jenkins/job/kieker-monitoring/'
+//                 }
+//             }
+// 
+//             // The following properties should be defined in ~/.gradle/gradle.properties (neede only for Maven upload)
+//             def mavenUser = "NoMavenUser"
+//             if (System.env.kiekerMavenUser != null) {
+//                 mavenUser = System.env.kiekerMavenUser
+//             }
+//             def mavenPassword = "NoMavenPassword"
+//             if (System.env.kiekerMavenPassword != null) {
+//                 mavenPassword = System.env.kiekerMavenPassword
+//             }
+//             
+//             repository(url: project.releaseRepoUrl) {
+//                 authentication(userName: mavenUser, password: mavenPassword)
+//             }
+//             println project.snapshotRepoUrl
+//             snapshotRepository(url: project.snapshotRepoUrl) {
+//                 authentication(userName: mavenUser, password: mavenPassword)
+//             }
+//         }
+//     }
+// }
