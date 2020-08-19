@@ -798,7 +798,6 @@ task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distrib
 
 /** binary distribution in tar.gz format. */
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, prepareExamplesForDistribution]) {
-    println "-- tgz --"
     classifier = 'binaries'
     with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
 
