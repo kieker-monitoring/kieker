@@ -4,6 +4,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 distTar.enabled=false
+distZip.enabled=true
 
 mainClassName='kieker.tools.resource.monitor.ResourceMonitorMain'
 
@@ -22,12 +23,6 @@ clover {
 		html=true
 	}
 	
-}
-
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
 }
 
 task uploadArchives {

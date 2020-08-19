@@ -4,6 +4,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 distTar.enabled=false
+distZip.enabled=true
 
 mainClassName='kieker.tools.logging.timestamp.converter.LoggingTimestampConverterTool'
 
