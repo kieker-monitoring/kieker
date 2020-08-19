@@ -1,7 +1,6 @@
 apply plugin: "com.github.hauner.jarTest"
 
 configurations {
-        toolConfiguation
 	resultJar	// all dependencies in this config are included into all jars. This is necessary for the scripts in bin/ to work, e.g., convertLoggingTimestamp.
 }
 
