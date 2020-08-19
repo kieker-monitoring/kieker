@@ -26,7 +26,6 @@ eclipse {
 configurations {
     resultJar
     emfJarConfig
-    toolConfiguation
 }
 
 dependencies {
@@ -716,38 +715,26 @@ def binaryContent = project.copySpec {
 }
 
 def tools = [
-    	'collector', 
-    	'convert-logging-timestamp',
-    	'kdb',
-    	'log-replayer',
-    	'resource-monitor',
-    	'trace-analysis',
-    	'trace-analysis-gui' 
-    ]
-    
-/** collect jars. */
+	'collector', 
+	'convert-logging-timestamp',
+	'kdb', 
+	'log-replayer', 
+	'resource-monitor', 
+	'trace-analysis', 
+	'trace-analysis-gui'
+]
+
+/** collect tools for binary distribution. */
 def toolsContent = project.copySpec {
     tools.each {
-        from("kieker-tools/${it}/build/libs") {
-            include "**"
-        }
-    }
-    into kiekerPackagenamebase + "-" + kiekerVersion + "/tools/lib"
-}
-    
-    
-/** collect tools for binary distribution. */
-def scriptContent = project.copySpec {
-    
-    tools.each {
-        from("kieker-tools/${it}/build/scripts") {
+        from("kieker-tools/${it}/build/distributions") {
             include "**"
         }
     }
     from("kieker-tools") {
         include "README.md"
     }
-    into kiekerPackagenamebase + "-" + kiekerVersion + "/tools/bin"
+    into kiekerPackagenamebase + "-" + kiekerVersion + "/tools"
 }
 
 /** collect all libraries in kieker-tools. */
@@ -803,28 +790,17 @@ task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandalone
  * Compile the binary distribution.
  */
  
-task copyRuntimeLibs(type: Copy) {
-    print "HELLO\n"
-    project.configurations.toolConfiguation.collect {
-      println it
-    }
-    println "FISH"
-    project.childProjects['kieker-tools'].allprojects {
-       println "tool " + it
-    }
-    into kiekerPackagenamebase + "-" + kiekerVersion + "/tools/lib"
-}
- 
 /** binary distribution in zip format. */
-task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, prepareExamplesForDistribution, copyRuntimeLibs]) {
+task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, prepareExamplesForDistribution]) {
     classifier = 'binaries'
-    with binaryContent, scriptContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
+    with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
 }
 
 /** binary distribution in tar.gz format. */
-task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, prepareExamplesForDistribution, copyRuntimeLibs]) {
+task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, sourcesJar, javadocJar, prepareExamplesForDistribution]) {
+    println "-- tgz --"
     classifier = 'binaries'
-    with binaryContent, scriptContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
+    with binaryContent, toolsContent, libraryContent, exampleContent, exampleJavaEEContent
 
     compression = Compression.GZIP
     extension = 'tar.gz'

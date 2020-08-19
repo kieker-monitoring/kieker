@@ -1,16 +1,11 @@
 apply plugin: 'application'
 
 distTar.enabled=false
-distZip.enabled=false
+distZip.enabled=true
 
 mainClassName='kieker.tools.collector.CollectorMain'
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
-
-configurations {
-   toolConfiguation
-   	toolConfiguration.extendsFrom(compile)
-}
 
 dependencies {
 	clover 'org.openclover:clover:4.2.0'

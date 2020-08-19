@@ -1,6 +1,7 @@
 apply plugin: 'application'
 
 distTar.enabled=false
+distZip.enabled=true
 
 mainClassName='kieker.tools.bridge.cli.CLIServerMain'
 
@@ -23,12 +24,6 @@ clover {
 		html=true
 	}
 	
-}
-
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
 }
 
 task uploadArchives {

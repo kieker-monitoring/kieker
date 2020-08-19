@@ -1,7 +1,7 @@
 apply plugin: 'application'
 
 distTar.enabled=false
-distZip.enabled=false
+distZip.enabled=true
 
 mainClassName='kieker.tools.logging.timestamp.converter.LoggingTimestampConverterTool'
 
