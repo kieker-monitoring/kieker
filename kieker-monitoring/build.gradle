@@ -44,7 +44,7 @@ dependencies {
 	clover 'org.openclover:clover:4.2.0'
 
 	compile project(':kieker-common')
-	
+
 	compile 'com.rabbitmq:amqp-client:4.2.1'
 	compile resolveLibrary('javax.jms-*.jar')
 	compile 'org.jctools:jctools-core:2.1.0'
@@ -65,13 +65,23 @@ dependencies {
 	// Likely needed for an update: compile 'org.apache.cxf:cxf-rt-bindings-soap:3.3.6'
 	// Likely needed for an update: compile 'org.apache.cxf:cxf-rt-frontend-jaxws:3.3.6'
 	
-	compile resolveLibrary('framework-libs/jsr311-api-1.1.1.jar')
-	compile resolveLibrary('framework-libs/javax.ws.rs-api-2.0.1.jar')
-	compile resolveLibrary('framework-libs/jersey/jersey-server-1.19.jar')
-	compile resolveLibrary('framework-libs/jersey/jersey-client-1.19.jar')
-	compile resolveLibrary('framework-libs/jersey/jersey-apache-client4-1.19.jar')
+	//compile resolveLibrary('framework-libs/jsr311-api-1.1.1.jar')
+	//compile resolveLibrary('framework-libs/javax.ws.rs-api-2.0.1.jar')
+	//compile resolveLibrary('framework-libs/jersey/jersey-server-1.19.jar')
+	//compile resolveLibrary('framework-libs/jersey/jersey-client-1.19.jar')
+	//compile resolveLibrary('framework-libs/jersey/jersey-apache-client4-1.19.jar')
 	
-	compile resolveLibrary('framework-libs/javax.servlet-*.jar')
+	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-server
+	compile group: 'org.glassfish.jersey.core', name: 'jersey-server', version: '3.0.0-M6'
+	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common
+	compile group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '3.0.0-M6'
+	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client
+	compile group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '3.0.0-M6'
+	
+	// https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+		
+	//compile resolveLibrary('framework-libs/javax.servlet-*.jar')
 	// We can probably replace that by: compile 'javax.servlet:javax.servlet-api:3.0.1'
 	
 	compile resolveLibrary('framework-libs/spring/aopalliance-*.jar')

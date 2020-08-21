@@ -29,8 +29,6 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationKeys;
 import kieker.monitoring.writer.dump.DumpWriter;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
  * This is partially and integration test for the writer controller.
  *
@@ -63,7 +61,7 @@ public class WriterControllerTest {
 	 * @throws Exception on all kind of thread issues
 	 */
 	@Test
-	@SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
+	//@SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
 	// @SuppressFBWarnings("SIC")
 	public void testBlockOnQueueIsFullInsertBehavior() throws Exception {
 		final Configuration configuration = new Configuration();

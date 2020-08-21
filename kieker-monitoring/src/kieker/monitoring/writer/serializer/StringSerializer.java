@@ -20,11 +20,13 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Collection;
 
-import kieker.common.configuration.Configuration;
+import javax.security.auth.login.Configuration;
+
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * String serializer for monitoring records based on the record's toString method.
+ * String serializer for monitoring records based on the record's toString
+ * method.
  *
  * @author Holger Knoche
  *
@@ -37,15 +39,14 @@ public class StringSerializer extends AbstractMonitoringRecordSerializer {
 	/**
 	 * Creates a new serializer using the given configuration.
 	 *
-	 * @param configuration
-	 *            The configuration to use
+	 * @param configuration The configuration to use
 	 */
 	public StringSerializer(final Configuration configuration) {
 		super(configuration);
 	}
 
 	private static byte[] stringBuilderToBytes(final StringBuilder builder) {
-		return builder.toString().getBytes(CHARSET);
+		return builder.toString().getBytes(StringSerializer.CHARSET);
 	}
 
 	@Override
@@ -61,12 +62,8 @@ public class StringSerializer extends AbstractMonitoringRecordSerializer {
 	}
 
 	private StringBuilder appendSingleRecord(final IMonitoringRecord record, final StringBuilder builder) {
-		builder.append(record.getClass().getName());
-		builder.append(';');
-		builder.append(record.getLoggingTimestamp());
-		builder.append(';');
-		builder.append(record.toString());
-		builder.append('\n');
+		builder.append(record.getClass().getName()).append(';').append(record.getLoggingTimestamp()).append(';')
+				.append(record.toString()).append('\n');
 
 		return builder;
 	}

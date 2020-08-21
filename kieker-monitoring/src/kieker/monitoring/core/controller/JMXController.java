@@ -56,7 +56,7 @@ public final class JMXController extends AbstractController implements IRemoteCo
 	private final JMXImplementation usedJMXImplementation;
 
 	private static enum JMXImplementation {
-		Fallback, Sun
+		FALLBACK, SUN
 	}
 
 	/**
@@ -73,7 +73,7 @@ public final class JMXController extends AbstractController implements IRemoteCo
 		JMXConnectorServer serverTmp = null;
 		ServerNotificationListener serverNotificationListenerTmp = null;
 		String portTmp = "0";
-		JMXImplementation usedJMXImplementationTmp = JMXImplementation.Fallback;
+		JMXImplementation usedJMXImplementationTmp = JMXImplementation.FALLBACK;
 		this.domain = configuration.getStringProperty(ConfigurationKeys.ACTIVATE_JMX_DOMAIN);
 		this.jmxEnabled = configuration.getBooleanProperty(ConfigurationKeys.ACTIVATE_JMX);
 		if (this.jmxEnabled) {
@@ -86,7 +86,7 @@ public final class JMXController extends AbstractController implements IRemoteCo
 						final Properties jmxProperties = configuration.getPropertiesStartingWith("com.sun.management.jmxremote");
 						serverTmp = (JMXConnectorServer) Class.forName("sun.management.jmxremote.ConnectorBootstrap")
 								.getMethod("initialize", String.class, Properties.class).invoke(null, portTmp, jmxProperties);
-						usedJMXImplementationTmp = JMXImplementation.Sun;
+						usedJMXImplementationTmp = JMXImplementation.SUN;
 					} catch (final Exception ignoreErrors) { // NOPMD NOCS (IllegalCatchCheck)
 						if (configuration.getBooleanProperty(ConfigurationKeys.ACTIVATE_JMX_REMOTE_FALLBACK)) { // NOCS (NestedIf)
 							LOGGER.warn("Failed to initialize remote JMX server, falling back to default implementation");
@@ -216,7 +216,7 @@ public final class JMXController extends AbstractController implements IRemoteCo
 			sb.append("\tJMX remote access available:\n\t\tService URL: '");
 			final JMXServiceURL url = this.server.getAddress();
 			switch (this.usedJMXImplementation) { // NOPMD (extend in the future)
-			case Sun:
+			case SUN:
 				try {
 					sb.append(new JMXServiceURL(url.getProtocol(), url.getHost(), url.getPort(), "/jndi/rmi://" + url.getHost() + ":" + this.port + "/" + "jmxrmi")
 							.toString());

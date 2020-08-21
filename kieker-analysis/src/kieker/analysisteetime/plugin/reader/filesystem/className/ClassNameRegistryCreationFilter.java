@@ -22,7 +22,6 @@ import java.io.FileNotFoundException;
 
 import kieker.common.registry.reader.ReaderRegistry;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
@@ -59,7 +58,7 @@ public class ClassNameRegistryCreationFilter extends AbstractConsumerStage<File>
 	}
 
 	@Override
-	@SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION") // Stream is closed by parseFromStream(..) method
+	// @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION") // Stream is closed by parseFromStream(..) method
 	protected void execute(final File inputDir) {
 		final File mappingFile = this.mappingFileParser.findMappingFile(inputDir);
 		if (mappingFile == null) {

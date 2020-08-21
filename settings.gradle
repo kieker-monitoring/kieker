@@ -14,7 +14,7 @@ include 'kieker-tools:resource-monitor'
 include 'kieker-tools:trace-analysis'
 include 'kieker-tools:trace-analysis-gui'
 include 'kieker-extension-kafka'
-include 'kieker-checkstyle-extension'
+// include 'kieker-checkstyle-extension'
 // include 'kieker-examples'
 
 

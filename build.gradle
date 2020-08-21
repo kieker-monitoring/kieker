@@ -8,6 +8,7 @@ buildscript {
     dependencies {
         classpath 'gradle.plugin.gradle-plugins:jartest:1.0.1'            // necessary to depend tests on tests
         classpath 'com.bmuschko:gradle-clover-plugin:2.2.5'
+        classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.5.0"
     }
 }
 
@@ -34,7 +35,10 @@ dependencies {
 // FIXME the jar tasks should handle this requirement instead.
 // Otherwise, we need to add a new project twice: once in the settings.gradle and once in this file.
 def mainSubprojects = [
-        project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools'),
+        project(':kieker-common'),
+        project(':kieker-monitoring'),
+        project(':kieker-analysis'),
+        project(':kieker-tools'),
         project(':kieker-extension-kafka')
 ]
 
@@ -47,18 +51,6 @@ clover {
 allprojects {
     version = kiekerVersion
 
-    /*
-     * This task should only be executed when updating to a
-     * newer Gradle version. Note that manual changes to the
-     * previous scripts will need to be merged to the new
-     * wrapper script manually. Note that this tasks also
-     * creates/updates the wrapper scripts in subdirectories.
-     * */
-//    task wrapper(type: Wrapper) {
-//        description = 'Downloads the Gradle wrapper scripts.'
-//        gradleVersion = '3.3'
-//    }
-
     repositories {    // must be above subprojects {}
         mavenCentral()
         jcenter() // for mockito
@@ -69,8 +61,8 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'com.bmuschko.clover'
 
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
     // Encoding should be UTF-8
     compileJava.options.encoding = 'UTF-8'
@@ -139,7 +131,7 @@ subprojects {
         // the used PMD version should be the same version as the PMD Eclipse plugin (https://marketplace.eclipse.org/content/eclipse-pmd) uses
         toolVersion = pmdVersion
         ignoreFailures = true
-        
+        consoleOutput = true
 
         // Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
         ruleSets = []
@@ -156,15 +148,24 @@ subprojects {
         configDirectory = rootProject.file(dirConfig)
     }
 
-//    apply plugin: 'findbugs'
-//    findbugs {
-//        toolVersion = fbVersion
-//        ignoreFailures = true
-//        effort = "max"
-//        reportLevel = "low"
-//
-//        excludeFilter = resolveRelativeToParent(dirConfig, 'fb-filter.xml')
-//    }
+    //apply plugin: "com.github.spotbugs"
+    //spotbugs {
+    //   toolVersion = spotbugsVersion
+    //   ignoreFailures = false
+    //   showStackTraces = true
+    //   showProgress = false
+    //   effort = 'max'
+    //   reportLevel = 'low'
+       // visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
+       // omitVisitors = [ 'FindNonShortCircuit' ]
+       // reportsDir = file("$buildDir/spotbugs")
+       // includeFilter = file("include.xml")
+    //   excludeFilter = resolveRelativeToParent(dirConfig, 'fb-filter.xml')
+       // onlyAnalyze = [ 'com.foobar.MyClass', 'com.foobar.mypkg.*' ]
+       // maxHeapSize = '1g'
+       // extraArgs = [ '-nested:false' ]
+       // jvmArgs = [ '-Duser.language=ja' ]
+    //}
 
     tasks.withType(Pmd) {
         reports {
@@ -172,7 +173,7 @@ subprojects {
             html.enabled = true
         }
         // the following line of code adds our custom PMD rules as jar file to the classpath
-        pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
+        //pmdClasspath += rootProject.files("config/custom_pmd_rules/pmd.ruleset-1.0.0-SNAPSHOT.jar")
     }
 
     tasks.withType(Checkstyle) {
@@ -183,7 +184,7 @@ subprojects {
         }
     }
 
-//    tasks.withType(FindBugs) {
+//    tasks.withType(Spotbugs) {
 //        reports {
 //            xml.enabled = true
 //            html.enabled = false // Can only enable either xml OR html
@@ -192,10 +193,10 @@ subprojects {
 
     // Those are some dependencies which are needed by all subprojects
     dependencies {
-        checkstyle project(':kieker-checkstyle-extension')
+        // checkstyle project(':kieker-checkstyle-extension')
 
         // compile-time dependency due to the annotation SuppressFBWarnings()
-        implementation "com.google.code.findbugs:findbugs:${fbVersion}"
+        //implementation "com.google.code.findbugs:findbugs:${fbVersion}"
 
         implementation 'org.slf4j:slf4j-api:1.7.25'
 

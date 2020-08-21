@@ -57,8 +57,6 @@ import kieker.tools.bridge.connector.tcp.TCPClientConnector;
 import kieker.tools.bridge.connector.tcp.TCPMultiServerConnector;
 import kieker.tools.bridge.connector.tcp.TCPSingleServerConnector;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
  * The command line server of the KDB.
  *
@@ -467,7 +465,7 @@ public final class CLIServerMain { // NOPMD
 	 * @param code
 	 *            the exit code
 	 */
-	@SuppressFBWarnings(justification = "exit necessary here to indicate cause to shell")
+	//@SuppressFBWarnings(justification = "exit necessary here to indicate cause to shell")
 	private void usage(final JCommander commander, final int exitCode, final String message) {
 		final StringBuilder out = new StringBuilder();
 		commander.usage(out, message);

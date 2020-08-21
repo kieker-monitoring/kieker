@@ -29,8 +29,6 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
  * A writer that prints incoming records to the specified PrintStream.
  *
@@ -61,7 +59,7 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 	 * @param configuration
 	 *            The configuration which will be used to initialize this writer.
 	 */
-	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
+	// @SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	public PrintStreamWriter(final Configuration configuration) {
 		super(configuration);
 		this.configPrintStreamName = configuration.getStringProperty(STREAM);
