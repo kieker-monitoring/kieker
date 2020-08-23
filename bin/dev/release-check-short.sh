@@ -146,8 +146,9 @@ function assert_files_exist_common {
 	information OK
 
 	# make sure that specified AspectJ version matches the present files
-	assert_file_exists_regular "lib/aspectjrt-${aspectjversion}.jar"
-	assert_file_exists_regular "lib/aspectjweaver-${aspectjversion}.jar"
+	# TODO these files should no longer be bundled, as they can be fetched automatically
+	#assert_file_exists_regular "lib/aspectjrt-${aspectjversion}.jar"
+	#assert_file_exists_regular "lib/aspectjweaver-${aspectjversion}.jar"
 
 	information "Making sure that for each gradle script, the Gradle wrapper environment exists ..."
 	for d in $(find -name "build.gradle" -exec dirname {} \;); do
