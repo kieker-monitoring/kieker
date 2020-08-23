@@ -28,7 +28,7 @@ import kieker.analysis.plugin.reader.filesystem.AsciiLogReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.writer.compression.NoneCompressionFilter;
@@ -82,7 +82,7 @@ public class AsciiWriterReaderTest {
 	private List<IMonitoringRecord> testAsciiCommunication(final List<IMonitoringRecord> records, final String compressionMethod) throws Exception {
 		// 2. define monitoring config
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, FileWriter.class.getName());
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, FileWriter.class.getName());
 		config.setProperty(WriterController.RECORD_QUEUE_SIZE, "128");
 		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
 		config.setProperty(FileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());

@@ -20,8 +20,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Collection;
 
-import javax.security.auth.login.Configuration;
-
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
 /**

@@ -29,7 +29,7 @@ import org.junit.rules.TemporaryFolder;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.writer.print.PrintStreamWriter;
@@ -91,7 +91,7 @@ public class BasicPrintStreamWriterTestFile {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(WriterController.RECORD_QUEUE_SIZE, "128");
 		config.setProperty(WriterController.RECORD_QUEUE_INSERT_BEHAVIOR, "1");
-		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, PrintStreamWriter.class.getName());
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, PrintStreamWriter.class.getName());
 		config.setProperty(PrintStreamWriter.STREAM, outputFileName);
 		final MonitoringController monitoringController = MonitoringController.createInstance(config);
 

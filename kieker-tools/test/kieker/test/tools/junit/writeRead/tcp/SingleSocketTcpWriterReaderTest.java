@@ -28,7 +28,7 @@ import kieker.analysis.plugin.reader.tcp.SingleSocketTcpReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.tcp.SingleSocketTcpWriter;
@@ -67,7 +67,7 @@ public class SingleSocketTcpWriterReaderTest extends AbstractWriterReaderTest { 
 		Thread.sleep(1000);
 
 		final Configuration monitoringConfig = ConfigurationFactory.createDefaultConfiguration();
-		monitoringConfig.setProperty(ConfigurationKeys.WRITER_CLASSNAME, SingleSocketTcpWriter.class.getName());
+		monitoringConfig.setProperty(ConfigurationConstants.WRITER_CLASSNAME, SingleSocketTcpWriter.class.getName());
 		monitoringConfig.setProperty(SingleSocketTcpWriter.CONFIG_PORT, SingleSocketTcpWriterReaderTest.PORT1);
 		return MonitoringController.createInstance(monitoringConfig);
 	}

@@ -26,7 +26,7 @@ import org.junit.Test;
 import kieker.Await;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.writer.dump.DumpWriter;
 
 /**
@@ -50,7 +50,7 @@ public class WriterControllerTest {
 	@Test(expected = IllegalStateException.class)
 	public void testInvalidWriterQueueConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, "invalid writer queue fully qualified name");
+		configuration.setProperty(ConfigurationConstants.WRITER_CLASSNAME, "invalid writer queue fully qualified name");
 
 		new WriterController(configuration);
 	}
@@ -65,7 +65,7 @@ public class WriterControllerTest {
 	// @SuppressFBWarnings("SIC")
 	public void testBlockOnQueueIsFullInsertBehavior() throws Exception {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(ConfigurationKeys.WRITER_CLASSNAME, DumpWriter.class.getName());
+		configuration.setProperty(ConfigurationConstants.WRITER_CLASSNAME, DumpWriter.class.getName());
 		configuration.setProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_FQN,
 				MpscArrayQueue.class.getName());
 		configuration.setProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_SIZE, "1");

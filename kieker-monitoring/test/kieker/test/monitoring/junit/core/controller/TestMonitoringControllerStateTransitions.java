@@ -20,7 +20,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
@@ -40,7 +40,7 @@ public class TestMonitoringControllerStateTransitions extends AbstractKiekerTest
 	@Test
 	public void testMonitoringEnabledToDisabled() {
 		final Configuration configuration = DummyWriterConfigurationFactory.createDefaultConfigurationWithDummyWriter();
-		configuration.setProperty(ConfigurationKeys.MONITORING_ENABLED, "true");
+		configuration.setProperty(ConfigurationConstants.MONITORING_ENABLED, "true");
 		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 
 		// Check values when enabled
@@ -63,7 +63,7 @@ public class TestMonitoringControllerStateTransitions extends AbstractKiekerTest
 	@Test
 	public void testMonitoringDisabledToEnabled() {
 		final Configuration configuration = DummyWriterConfigurationFactory.createDefaultConfigurationWithDummyWriter();
-		configuration.setProperty(ConfigurationKeys.MONITORING_ENABLED, "false");
+		configuration.setProperty(ConfigurationConstants.MONITORING_ENABLED, "false");
 		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 		// Check values when disabled
 		Assert.assertEquals("Unexpected monitoringEnabled value", false, kieker.isMonitoringEnabled());
@@ -85,7 +85,7 @@ public class TestMonitoringControllerStateTransitions extends AbstractKiekerTest
 	@Test
 	public void testMonitoringEnabledToTerminated() {
 		final Configuration configuration = DummyWriterConfigurationFactory.createDefaultConfigurationWithDummyWriter();
-		configuration.setProperty(ConfigurationKeys.MONITORING_ENABLED, "true");
+		configuration.setProperty(ConfigurationConstants.MONITORING_ENABLED, "true");
 		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 		// Change to terminated
 		kieker.terminateMonitoring();
@@ -103,7 +103,7 @@ public class TestMonitoringControllerStateTransitions extends AbstractKiekerTest
 	@Test
 	public void testMonitoringDisabledToTerminated() {
 		final Configuration configuration = DummyWriterConfigurationFactory.createDefaultConfigurationWithDummyWriter();
-		configuration.setProperty(ConfigurationKeys.MONITORING_ENABLED, "false");
+		configuration.setProperty(ConfigurationConstants.MONITORING_ENABLED, "false");
 		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 		// Change to terminated
 		kieker.terminateMonitoring();

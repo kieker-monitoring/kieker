@@ -27,7 +27,7 @@ import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 
 /**
  * Test probe controller.
@@ -57,12 +57,12 @@ public class ProbeControllerTest {
 	public void setUp() {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, true);
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE, "/tmp/config");
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE, true);
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL, 100);
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_MAX_CACHE_SIZE, 10000);
-		configuration.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR, 3);
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED, true);
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE, "/tmp/config");
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE, true);
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL, 100);
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_MAX_CACHE_SIZE, 10000);
+		configuration.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR, 3);
 
 		final MonitoringController monitoringController = MonitoringController.createInstance(configuration);
 

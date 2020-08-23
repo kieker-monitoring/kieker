@@ -30,7 +30,7 @@ import kieker.analysis.plugin.reader.jms.JmsReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.jms.JmsWriter;
@@ -52,7 +52,7 @@ public class BasicJMSWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 		final AnalysisController analysisController = new AnalysisController();
 
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, JmsWriter.class.getName());
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, JmsWriter.class.getName());
 		config.setProperty(JmsWriter.CONFIG_CONTEXTFACTORYTYPE, FakeInitialContextFactory.class.getName());
 		config.setProperty(JmsWriter.CONFIG_FACTORYLOOKUPNAME, "ConnectionFactory");
 		final MonitoringController ctrl = MonitoringController.createInstance(config);

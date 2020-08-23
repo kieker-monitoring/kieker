@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -50,12 +50,12 @@ public final class StateController extends AbstractController implements IStateC
 	 */
 	protected StateController(final Configuration configuration) {
 		super(configuration);
-		this.name = configuration.getStringProperty(ConfigurationKeys.CONTROLLER_NAME);
-		this.experimentId.set(configuration.getIntProperty(ConfigurationKeys.EXPERIMENT_ID));
-		this.applicationName = configuration.getStringProperty(ConfigurationKeys.APPLICATION_NAME);
-		this.monitoringEnabled = configuration.getBooleanProperty(ConfigurationKeys.MONITORING_ENABLED);
-		this.debug = configuration.getBooleanProperty(ConfigurationKeys.DEBUG);
-		String hostnameTmp = configuration.getStringProperty(ConfigurationKeys.HOST_NAME);
+		this.name = configuration.getStringProperty(ConfigurationConstants.CONTROLLER_NAME);
+		this.experimentId.set(configuration.getIntProperty(ConfigurationConstants.EXPERIMENT_ID));
+		this.applicationName = configuration.getStringProperty(ConfigurationConstants.APPLICATION_NAME);
+		this.monitoringEnabled = configuration.getBooleanProperty(ConfigurationConstants.MONITORING_ENABLED);
+		this.debug = configuration.getBooleanProperty(ConfigurationConstants.DEBUG);
+		String hostnameTmp = configuration.getStringProperty(ConfigurationConstants.HOST_NAME);
 		if (hostnameTmp.length() == 0) {
 			hostnameTmp = "<UNKNOWN>";
 			try {
