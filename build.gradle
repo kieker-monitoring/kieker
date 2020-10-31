@@ -779,13 +779,12 @@ def exampleJavaEEContent = project.copySpec {
     into kiekerPackagenamebase + "-" + kiekerVersion + "/examples/JavaEEServletContainerExample/jetty"
 }
 
-// examples should be build separately
-// TODO deactivated for now
-task prepareExamplesForDistribution() { }
-//task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandaloneExamples']) {
-//     doLast {
-//    }
-//}
+// Build the examples separately 
+// TODO reenable
+task prepareExamplesForDistribution() { // (dependsOn: ['kieker-examples:buildStandaloneExamples']) {
+     doLast {
+     }
+}
 
 /**
  * Compile the binary distribution.
@@ -926,7 +925,6 @@ publishing {
                 groupId = 'net.kieker-monitoring'
                 artifactId = 'kieker'
                 version = '1.15-SNAPSHOT'
-
                 name = 'Kieker Monitoring and Analysis Framework'
                 description = 'Kieker: Application Performance Monitoring and Dynamic Software Analysis'
                 url = 'http://kieker-monitoring.net'
@@ -974,7 +972,6 @@ publishing {
         }
     }
 }
-
 
 // uploadArchives {
 //     repositories {
