@@ -714,13 +714,22 @@ def binaryContent = project.copySpec {
     into kiekerPackagenamebase + "-" + kiekerVersion
 }
 
+def tools = [
+	'collector', 
+	'convert-logging-timestamp',
+	'kdb', 
+	'log-replayer', 
+	'resource-monitor', 
+	'trace-analysis', 
+	'trace-analysis-gui'
+]
+
 /** collect tools for binary distribution. */
 def toolsContent = project.copySpec {
-    ['trace-analysis', 'trace-analysis-gui', 'log-replayer', 'resource-monitor', 'collector', 'convert-logging-timestamp'].each {
+    tools.each {
         from("kieker-tools/${it}/build/distributions") {
             include "**"
         }
-        into kiekerPackagenamebase + "-" + kiekerVersion + "/tools"
     }
     from("kieker-tools") {
         include "README.md"
@@ -839,14 +848,6 @@ def sourceContent = project.copySpec {
     into kiekerPackagenamebase + "-" + kiekerVersion
 }
 
-task checkReleaseArchivesShort(type: Exec) {
-    commandLine 'bin/dev/release-check-short.sh'
-}
-
-task checkReleaseArchives(type: Exec) {
-    commandLine 'bin/dev/release-check-extended.sh'
-}
-
 task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
     description = 'Distributes source archive.'
     classifier = 'sources'
@@ -894,14 +895,6 @@ task enableRTests() {
     }
 }
 distribute.mustRunAfter enableRTests
-
-task jenkinsBuild(dependsOn: [mainJar, emfJar, aspectJJar]) {
-    description = 'Builds and tests the JAR files of the Kieker Framework'
-}
-
-task jenkinsNightlyBuild(dependsOn: [startRServe, enableRTests, distribute, checkReleaseArchives]) {
-    description = 'Builds and tests the release of the Kieker Framework'
-}
 
 // For signing, the following properties (e.g., provided in ~/.gradle/gradle.properties) are needed
 //signing.keyId=8E97E26A

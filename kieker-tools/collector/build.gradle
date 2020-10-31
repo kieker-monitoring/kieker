@@ -1,6 +1,7 @@
 apply plugin: 'application'
 
 distTar.enabled=false
+distZip.enabled=true
 
 mainClassName='kieker.tools.collector.CollectorMain'
 
@@ -24,12 +25,6 @@ clover {
 		html=true
 	}
 	
-}
-
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
 }
 
 task uploadArchives {

@@ -1,4 +1,3 @@
-apply plugin: 'eclipse'
 apply plugin: "com.github.hauner.jarTest"
 
 configurations {
@@ -51,11 +50,5 @@ clover {
 		html=true
 	}
 	
-}
-
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
 }
 

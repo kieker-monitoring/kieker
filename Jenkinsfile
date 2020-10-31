@@ -126,7 +126,7 @@ pipeline {
           }
           steps {
             unstash 'distributions'
-            sh './gradlew checkReleaseArchivesShort'
+            sh 'bin/dev/release-check-short.sh'
           }
           post {
             cleanup {
@@ -152,7 +152,7 @@ pipeline {
           }
           steps {
             unstash 'distributions'
-            sh './gradlew checkReleaseArchives'
+            sh 'bin/dev/release-check-extended.sh'
           }
           post {
             cleanup {
