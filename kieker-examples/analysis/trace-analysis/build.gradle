@@ -6,11 +6,17 @@ repositories {
 }
 
 dependencies {
-        compile 'ch.qos.logback:logback-classic:1.1.7'
-        compile 'org.slf4j:slf4j-api:1.7.30'
-        compile 'org.codehaus.groovy:groovy-all:3.0.2'
+        implementation 'ch.qos.logback:logback-classic:1.1.7'
+        implementation 'org.slf4j:slf4j-api:1.7.30'
+        implementation 'org.codehaus.groovy:groovy-all:3.0.2'
 
-	compile fileTree('lib') {
+	implementation files ('../../kieker-common/build/libs/kieker-common-1.15-SNAPSHOT.jar', 
+	        '../../kieker-monitoring/build/libs/kieker-monitoring-1.15-SNAPSHOT.jar',
+		'../../kieker-tools/build/libs/kieker-tools-1.15-SNAPSHOT.jar',
+	        '../../kieker-analysis/build/libs/kieker-analysis-1.15-SNAPSHOT.jar')
+
+
+	implementation fileTree('lib') {
 		include "kieker-*.jar"
 		include "opad-*.jar"
 	}
