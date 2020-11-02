@@ -27,7 +27,9 @@ dependencies {
 	implementation 'org.nanohttpd:nanohttpd:2.3.0'
 			
 	implementation 'org.slf4j:slf4j-api:1.7.25'
-				
+
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'	
+			
 	api 'net.sourceforge.teetime:teetime:3.0'
 	emfJarConfig 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
 	implementation configurations.emfJarConfig
