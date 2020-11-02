@@ -7,7 +7,7 @@ source "$(dirname $0)/release-check-common.sh"
 # 51=Java 1.7
 # 52=Java 1.8
 # 53=Java 1.9
-javaVersion="major version: 51"
+javaVersion="major version: 52"
 
 # build with ant (target may be passed as $1)
 function run_gradle {
@@ -59,7 +59,8 @@ function check_bin_archive {
 	assert_file_exists_regular "${VERSION_CLASS_IN_JAR}"
 
 	if ! javap -verbose ${VERSION_CLASS_IN_JAR} | grep -q "${javaVersion}"; then
-		error "Unexpected bytecode version: ${javaVersion}"
+		found=`javap -verbose ${VERSION_CLASS_IN_JAR} | grep -q "major version:"` 
+		error "Unexpected bytecode version: ${found}  expected: ${javaVersion}"
 		exit 1
 	else
 		information "Found bytecode version ${javaVersion}, OK"

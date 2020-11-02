@@ -1,5 +1,8 @@
 apply plugin: 'application'
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 distTar.enabled=false
 distZip.enabled=true
 
@@ -28,3 +31,4 @@ clover {
 task uploadArchives {
 	println 'log-replayer skipped'
 }
+

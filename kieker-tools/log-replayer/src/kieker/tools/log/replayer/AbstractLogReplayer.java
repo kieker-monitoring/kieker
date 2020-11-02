@@ -27,7 +27,7 @@ import kieker.analysis.plugin.filter.record.RealtimeRecordDelayFilter;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.tools.log.replayer.filter.MonitoringRecordLoggerFilter;
 
 /**
@@ -153,7 +153,7 @@ public abstract class AbstractLogReplayer {
 				recordLoggerConfig.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, this.monitoringConfigurationFile);
 			}
 			recordLoggerConfig.setProperty(
-					ConfigurationKeys.AUTO_SET_LOGGINGTSTAMP,
+					ConfigurationConstants.AUTO_SET_LOGGINGTSTAMP,
 					Boolean.toString(!this.keepOriginalLoggingTimestamps));
 			final MonitoringRecordLoggerFilter recordLogger = new MonitoringRecordLoggerFilter(recordLoggerConfig, analysisInstance);
 

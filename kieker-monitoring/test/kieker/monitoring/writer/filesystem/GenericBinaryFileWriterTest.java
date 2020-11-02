@@ -32,7 +32,7 @@ import org.junit.rules.TemporaryFolder;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.filesystem.FileExtensionFilter;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.writer.compression.NoneCompressionFilter;
 import kieker.monitoring.writer.compression.ZipCompressionFilter;
 
@@ -61,8 +61,8 @@ public class GenericBinaryFileWriterTest {
 	public void before() {
 		this.writerPath = Paths.get(this.tmpFolder.getRoot().getAbsolutePath());
 		this.configuration = new Configuration();
-		this.configuration.setProperty(ConfigurationKeys.HOST_NAME, "testHostName");
-		this.configuration.setProperty(ConfigurationKeys.CONTROLLER_NAME, "testControllerName");
+		this.configuration.setProperty(ConfigurationConstants.HOST_NAME, "testHostName");
+		this.configuration.setProperty(ConfigurationConstants.CONTROLLER_NAME, "testControllerName");
 
 		this.configuration.setProperty(FileWriter.CONFIG_CHARSET_NAME, "UTF-8");
 		this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "2");

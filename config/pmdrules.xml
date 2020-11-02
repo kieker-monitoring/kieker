@@ -18,7 +18,6 @@
 	<rule ref="rulesets/internal/all-java.xml">
 		<exclude name="AvoidCatchingNPE" />
 		<exclude name="AvoidDuplicateLiterals" />
-		<exclude name="AvoidFinalLocalVariable" />
 		<exclude name="AvoidInstantiatingObjectsInLoops" />
 		<exclude name="AvoidLiteralsInIfCondition" />
 		<exclude name="AvoidThrowingNullPointerException" />
@@ -54,15 +53,15 @@
 		<exclude name="TooManyMethods" />
 		<exclude name="UnnecessaryConstructor" />
 		<exclude name="UnnecessaryModifier" />
-		<exclude name="UnnecessaryFinalModifier" />
 		<exclude name="UseObjectForClearerAPI" />
 		<exclude name="UseProperClassLoader" />
+		<exclude name="UseUnderscoresInNumericLiterals" />
 		<exclude name="UselessParentheses" />
 		<exclude name="UselessQualifiedThis"/>
 		<exclude name="UseVarargs" />
 	</rule>
 
-	<rule ref="rulesets/java/comments.xml/CommentRequired">
+	<rule ref="category/java/documentation.xml/CommentRequired">
 		<!-- <priority>5</priority> -->
 		<properties>
 			<property name="violationSuppressXPath"
@@ -73,14 +72,15 @@
 		</properties>
 	</rule>
 
-	<rule ref="rulesets/chw/basic.xml">
-		<exclude name="NonHeaderCommentSize" />
+<!-- Removed temporarily, as no longer compatible with current PMD -->
+<!--	<rule ref="rulesets/chw/basic.xml">
+		<exclude name="NonHeaderCommentSize" /> -->
 		<!-- enable "DisallowRawTypeDeclaration" on demand; contains a bug currently (05.05.2018) -->
-		<exclude name="DisallowRawTypeDeclaration" />
+<!--		<exclude name="DisallowRawTypeDeclaration" />
 		<exclude name="MissingPluralVariableName"/>
 		<exclude name="MissingUnitSuffix"/>
-    <exclude name="UnitTestMayNotExtendAnything"/>
-	</rule>
+		<exclude name="UnitTestMayNotExtendAnything"/>
+	</rule>-->
 
 	<!-- <rule ref="rulesets/java/logging-jakarta-commons.xml/GuardLogStatement"> -->
 	<!-- <priority>3</priority> -->

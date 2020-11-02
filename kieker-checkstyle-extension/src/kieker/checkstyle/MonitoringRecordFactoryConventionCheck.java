@@ -16,6 +16,7 @@
 
 package kieker.checkstyle;
 
+import com.puppycrawl.tools.checkstyle.DetailAstImpl;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
@@ -43,7 +44,7 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 	 * This field contains the (constant) tree to detect the type (this is necessary
 	 * as this is a little bit more nested).
 	 */
-	private static final DetailAST TYPE_AST;
+	private static final DetailAstImpl TYPE_AST;
 
 	private static final String FACTORY_FST_NAME = "IMonitoringRecord";
 	private static final String FACTORY_SND_NAME = "Factory";
@@ -55,38 +56,38 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 
 	static {
 		// Assemble the type tree
-		TYPE_AST = new DetailAST();
-		TYPE_AST.initialize(TokenTypes.TYPE, "");
+		TYPE_AST = new DetailAstImpl();
+		MonitoringRecordFactoryConventionCheck.TYPE_AST.initialize(TokenTypes.TYPE, "");
 
-		final DetailAST arrDecl = new DetailAST();
+		final DetailAstImpl arrDecl = new DetailAstImpl();
 		arrDecl.initialize(TokenTypes.ARRAY_DECLARATOR, "");
-		TYPE_AST.addChild(arrDecl);
+		MonitoringRecordFactoryConventionCheck.TYPE_AST.addChild(arrDecl);
 
-		final DetailAST ident = new DetailAST();
+		final DetailAstImpl ident = new DetailAstImpl();
 		arrDecl.addChild(ident);
-		ident.initialize(TokenTypes.IDENT, FIELD_TYPE_NAME);
+		ident.initialize(TokenTypes.IDENT, MonitoringRecordFactoryConventionCheck.FIELD_TYPE_NAME);
 
-		final DetailAST typeArgs = new DetailAST();
+		final DetailAstImpl typeArgs = new DetailAstImpl();
 		arrDecl.addChild(typeArgs);
 		typeArgs.initialize(TokenTypes.TYPE_ARGUMENTS, "");
 
-		final DetailAST genStart = new DetailAST();
+		final DetailAstImpl genStart = new DetailAstImpl();
 		typeArgs.addChild(genStart);
 		genStart.initialize(TokenTypes.GENERIC_START, "");
 
-		final DetailAST typeArg = new DetailAST();
+		final DetailAstImpl typeArg = new DetailAstImpl();
 		typeArgs.addChild(typeArg);
 		typeArg.initialize(TokenTypes.TYPE_ARGUMENT, "");
 
-		final DetailAST wildcard = new DetailAST();
+		final DetailAstImpl wildcard = new DetailAstImpl();
 		typeArg.addChild(wildcard);
 		wildcard.initialize(TokenTypes.WILDCARD_TYPE, "");
 
-		final DetailAST genEnd = new DetailAST();
+		final DetailAstImpl genEnd = new DetailAstImpl();
 		typeArgs.addChild(genEnd);
 		genEnd.initialize(TokenTypes.GENERIC_END, "");
 
-		final DetailAST rBrack = new DetailAST();
+		final DetailAstImpl rBrack = new DetailAstImpl();
 		arrDecl.addChild(rBrack);
 		rBrack.initialize(TokenTypes.RBRACK, "");
 	}
@@ -119,8 +120,7 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 	/**
 	 * This method checks the fields of the record.
 	 *
-	 * @param ast
-	 *            The record class.
+	 * @param ast The record class.
 	 */
 	private void checkFields(final DetailAST ast) {
 		DetailAST child = ast.findFirstToken(TokenTypes.OBJBLOCK).findFirstToken(TokenTypes.VARIABLE_DEF);
@@ -141,8 +141,7 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 	/**
 	 * This method checks the constructors of the record.
 	 *
-	 * @param ast
-	 *            The record class.
+	 * @param ast The record class.
 	 */
 	private void checkConstructors(final DetailAST ast) {
 		DetailAST child = ast.findFirstToken(TokenTypes.OBJBLOCK).findFirstToken(TokenTypes.CTOR_DEF);
@@ -163,8 +162,7 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 	/**
 	 * Checks whether the given field is valid or not.
 	 *
-	 * @param field
-	 *            The field to check.
+	 * @param field The field to check.
 	 *
 	 * @return true if and only if the field is a valid one.
 	 */
@@ -172,13 +170,13 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 		final String ident = field.findFirstToken(TokenTypes.IDENT).getText();
 
 		// Is the name correct?
-		if (FIELD_NAME.equals(ident)) {
+		if (MonitoringRecordFactoryConventionCheck.FIELD_NAME.equals(ident)) {
 			final DetailAST modifiers = field.findFirstToken(TokenTypes.MODIFIERS);
 
 			// Check whether the field is static and final
 			if (modifiers.branchContains(TokenTypes.LITERAL_STATIC) && modifiers.branchContains(TokenTypes.FINAL)) {
 				return MonitoringRecordFactoryConventionCheck.treeCompare(field.findFirstToken(TokenTypes.TYPE),
-						TYPE_AST);
+						MonitoringRecordFactoryConventionCheck.TYPE_AST);
 			}
 		}
 
@@ -190,10 +188,8 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 	 * necessary as the available methods do not work as expected for this special
 	 * case.
 	 *
-	 * @param actual
-	 *            The actual tree.
-	 * @param expected
-	 *            The expected tree.
+	 * @param actual   The actual tree.
+	 * @param expected The expected tree.
 	 *
 	 * @return true if and only if the trees are (more or less) equal.
 	 */
@@ -230,8 +226,7 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 	/**
 	 * Checks whether the given constructor seems to be a valid one or not.
 	 *
-	 * @param constructor
-	 *            The constructor in question.
+	 * @param constructor The constructor in question.
 	 *
 	 * @return true if and only if the constructor seems to be valid.
 	 */
@@ -245,7 +240,7 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 			final DetailAST fstParArr = fstParType.findFirstToken(TokenTypes.ARRAY_DECLARATOR);
 			if (fstParArr != null) {
 				final DetailAST fstParIdent = fstParArr.findFirstToken(TokenTypes.IDENT);
-				return fstParIdent.getText().equals(CONSTRUCTOR_PARAMETER);
+				return fstParIdent.getText().equals(MonitoringRecordFactoryConventionCheck.CONSTRUCTOR_PARAMETER);
 			}
 		}
 
@@ -256,8 +251,7 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 	 * This method finds out whether the given class implements the record factory
 	 * or not.
 	 *
-	 * @param clazz
-	 *            The class in question.
+	 * @param clazz The class in question.
 	 *
 	 * @return true if and only if the class implements the record factory.
 	 */
@@ -273,7 +267,8 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 					final String fstClauseIdent = clause.getFirstChild().getText();
 					final String sndClauseIdent = clause.getLastChild().getText();
 
-					return (FACTORY_FST_NAME.equals(fstClauseIdent)) && (FACTORY_SND_NAME.equals(sndClauseIdent));
+					return (MonitoringRecordFactoryConventionCheck.FACTORY_FST_NAME.equals(fstClauseIdent))
+							&& (MonitoringRecordFactoryConventionCheck.FACTORY_SND_NAME.equals(sndClauseIdent));
 				}
 
 				clause = clause.getNextSibling();
@@ -285,8 +280,7 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 	/**
 	 * Setter for the property {@link #ignoreAbstractClasses}.
 	 *
-	 * @param ignoreAbstractClasses
-	 *            The new value of the property.
+	 * @param ignoreAbstractClasses The new value of the property.
 	 */
 	public void setIgnoreAbstractClasses(final boolean ignoreAbstractClasses) {
 		this.ignoreAbstractClasses = ignoreAbstractClasses;
@@ -294,11 +288,11 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 
 	@Override
 	public int[] getAcceptableTokens() {
-		return getDefaultTokens();
+		return this.getDefaultTokens();
 	}
 
 	@Override
 	public int[] getRequiredTokens() {
-		return getDefaultTokens();
+		return this.getDefaultTokens();
 	}
 }

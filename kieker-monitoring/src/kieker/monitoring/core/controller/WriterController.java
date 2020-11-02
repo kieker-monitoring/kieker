@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.queue.BlockingQueueDecorator;
 import kieker.monitoring.queue.behavior.BlockOnFailedInsertBehavior;
 import kieker.monitoring.queue.behavior.BypassQueueBehavior;
@@ -92,15 +92,15 @@ public final class WriterController extends AbstractController implements IWrite
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param configuration
-	 *            The configuration for the controller.
+	 * @param configuration The configuration for the controller.
 	 */
 	public WriterController(final Configuration configuration) {
 		super(configuration);
-		this.logMetadataRecord = configuration.getBooleanProperty(ConfigurationKeys.META_DATA);
+		this.logMetadataRecord = configuration.getBooleanProperty(ConfigurationConstants.META_DATA);
 
-		this.queueCapacity = configuration.getIntProperty(PREFIX + RECORD_QUEUE_SIZE);
-		final String queueFqn = configuration.getStringProperty(PREFIX + RECORD_QUEUE_FQN);
+		this.queueCapacity = configuration.getIntProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_SIZE);
+		final String queueFqn = configuration
+				.getStringProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_FQN);
 
 		final Queue<IMonitoringRecord> queue = this.newQueue(queueFqn, this.queueCapacity);
 		if (queue instanceof BlockingQueue) {
@@ -111,7 +111,7 @@ public final class WriterController extends AbstractController implements IWrite
 			this.writerQueue = new BlockingQueueDecorator<>(queue, putStrategy, takeStrategy);
 		}
 
-		final String writerClassName = configuration.getStringProperty(ConfigurationKeys.WRITER_CLASSNAME);
+		final String writerClassName = configuration.getStringProperty(ConfigurationConstants.WRITER_CLASSNAME);
 		this.monitoringWriter = AbstractController.createAndInitialize(AbstractMonitoringWriter.class, writerClassName,
 				configuration);
 		if (this.monitoringWriter == null) {
@@ -123,10 +123,11 @@ public final class WriterController extends AbstractController implements IWrite
 
 		this.monitoringWriterThread = new MonitoringWriterThread(this.monitoringWriter, this.writerQueue);
 
-		int recordQueueInsertBehavior = configuration.getIntProperty(PREFIX + RECORD_QUEUE_INSERT_BEHAVIOR);
+		int recordQueueInsertBehavior = configuration
+				.getIntProperty(WriterController.PREFIX + WriterController.RECORD_QUEUE_INSERT_BEHAVIOR);
 		if ((recordQueueInsertBehavior < 0) || (recordQueueInsertBehavior > 5)) {
-			LOGGER.warn("Unknown value '{}' for {}{}; using default value 0", recordQueueInsertBehavior, PREFIX,
-					RECORD_QUEUE_INSERT_BEHAVIOR);
+			WriterController.LOGGER.warn("Unknown value '{}' for {}{}; using default value 0",
+					recordQueueInsertBehavior, WriterController.PREFIX, WriterController.RECORD_QUEUE_INSERT_BEHAVIOR);
 			recordQueueInsertBehavior = 0;
 		}
 
@@ -191,10 +192,8 @@ public final class WriterController extends AbstractController implements IWrite
 	// }
 
 	/**
-	 * @param queueFqn
-	 *            the fully qualified queue name
-	 * @param capacity
-	 *            the (initial) capacity of the queue
+	 * @param queueFqn the fully qualified queue name
+	 * @param capacity the (initial) capacity of the queue
 	 * @return a new instance of the queue indicated by its <code>queueFQN</code>.
 	 *         Such instance is created by invoking the constructor with a single
 	 *         parameter of type <code>int</code>.
@@ -209,16 +208,16 @@ public final class WriterController extends AbstractController implements IWrite
 			final Constructor<? extends Queue> constructor = queueClass.getConstructor(int.class);
 			return constructor.newInstance(capacity);
 		} catch (final ClassNotFoundException | InstantiationException e) {
-			LOGGER.warn("An exception occurred", e);
+			WriterController.LOGGER.warn("An exception occurred", e);
 			throw new IllegalStateException(e);
 		} catch (final NoSuchMethodException | SecurityException e) {
-			LOGGER.warn("An exception occurred", e);
+			WriterController.LOGGER.warn("An exception occurred", e);
 			throw new IllegalStateException(e);
 		} catch (final IllegalAccessException | IllegalArgumentException e) {
-			LOGGER.warn("An exception occurred", e);
+			WriterController.LOGGER.warn("An exception occurred", e);
 			throw new IllegalStateException(e);
 		} catch (final InvocationTargetException e) {
-			LOGGER.warn("An exception occurred", e);
+			WriterController.LOGGER.warn("An exception occurred", e);
 			throw new IllegalStateException(e);
 		}
 	}
@@ -230,7 +229,7 @@ public final class WriterController extends AbstractController implements IWrite
 
 	@Override
 	protected final void init() {
-		LOGGER.debug("Initializing Writer Controller");
+		WriterController.LOGGER.debug("Initializing Writer Controller");
 
 		if (this.monitoringWriterThread != null) {
 			this.monitoringWriterThread.start();
@@ -239,7 +238,7 @@ public final class WriterController extends AbstractController implements IWrite
 
 	@Override
 	protected final void cleanup() {
-		LOGGER.debug("Shutting down Writer Controller");
+		WriterController.LOGGER.debug("Shutting down Writer Controller");
 
 		if (this.monitoringWriterThread != null) {
 			this.monitoringWriterThread.terminate();
@@ -259,7 +258,7 @@ public final class WriterController extends AbstractController implements IWrite
 				.append("WriterController:").append("\n\tQueue type: ").append(this.writerQueue.getClass())
 				.append("\n\tQueue capacity: ").append(this.queueCapacity)
 				.append("\n\tInsert behavior (a.k.a. QueueFullBehavior): ").append(this.insertBehavior.toString())
-				.append("\n");
+				.append('\n');
 		if (this.monitoringWriter != null) {
 			sb.append(this.monitoringWriter.toString());
 		} else {
@@ -273,7 +272,7 @@ public final class WriterController extends AbstractController implements IWrite
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		final boolean recordSent = this.insertBehavior.insert(record);
 		if (!recordSent) {
-			LOGGER.error("Error writing the monitoring data. Will terminate monitoring!");
+			WriterController.LOGGER.error("Error writing the monitoring data. Will terminate monitoring!");
 			this.terminate();
 		}
 

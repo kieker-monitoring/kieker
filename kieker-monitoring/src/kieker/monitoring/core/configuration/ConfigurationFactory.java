@@ -56,25 +56,25 @@ public final class ConfigurationFactory {
 	 * @return the configuration for the singleton controller
 	 */
 	public static final Configuration createSingletonConfiguration() {
-		LOGGER.debug("Searching for JVM argument '{}' ...", ConfigurationKeys.CUSTOM_PROPERTIES_LOCATION_JVM);
+		LOGGER.debug("Searching for JVM argument '{}' ...", ConfigurationConstants.CUSTOM_PROPERTIES_LOCATION_JVM);
 		final Configuration defaultConfiguration = ConfigurationFactory.defaultConfiguration();
 		// ignore default default-name and set to KIEKER-SINGLETON
-		defaultConfiguration.setProperty(ConfigurationKeys.CONTROLLER_NAME, "KIEKER-SINGLETON");
+		defaultConfiguration.setProperty(ConfigurationConstants.CONTROLLER_NAME, "KIEKER-SINGLETON");
 		// Searching for configuration file location passed to JVM
-		String configurationFile = System.getProperty(ConfigurationKeys.CUSTOM_PROPERTIES_LOCATION_JVM);
+		String configurationFile = System.getProperty(ConfigurationConstants.CUSTOM_PROPERTIES_LOCATION_JVM);
 		final Configuration loadConfiguration;
 		if (configurationFile != null) {
 			LOGGER.info("Loading configuration from JVM-specified location: '{}'", configurationFile);
 			loadConfiguration = ConfigurationFactory.loadConfigurationFromFile(configurationFile, defaultConfiguration);
 		} else {
 			// No JVM property; Trying to find configuration file in classpath
-			configurationFile = ConfigurationKeys.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
+			configurationFile = ConfigurationConstants.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
 			LOGGER.info("Loading properties from properties file in classpath: '{}'", configurationFile);
 			loadConfiguration = ConfigurationFactory.loadConfigurationFromResource(configurationFile,
 					defaultConfiguration);
 		}
 		// 1.JVM-params -> 2.properties file -> 3.default properties file
-		return ConfigurationFactory.getSystemPropertiesStartingWith(ConfigurationKeys.PREFIX, loadConfiguration);
+		return ConfigurationFactory.getSystemPropertiesStartingWith(ConfigurationConstants.PREFIX, loadConfiguration);
 	}
 
 	/**
@@ -107,7 +107,7 @@ public final class ConfigurationFactory {
 	 * @return The created Configuration
 	 */
 	private static final Configuration defaultConfiguration() {
-		return ConfigurationFactory.loadConfigurationFromResource(ConfigurationKeys.DEFAULT_PROPERTIES_LOCATION_CLASSPATH, null);
+		return ConfigurationFactory.loadConfigurationFromResource(ConfigurationConstants.DEFAULT_PROPERTIES_LOCATION_CLASSPATH, null);
 	}
 
 	/**

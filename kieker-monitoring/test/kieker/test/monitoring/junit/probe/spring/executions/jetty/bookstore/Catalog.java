@@ -16,14 +16,11 @@
 
 package kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.meta.When;
-
 import org.springframework.stereotype.Service;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 @Service
@@ -38,13 +35,11 @@ public class Catalog {
 
 	/**
 	 * A dummy method returning just a book with a constant string.
-	 * 
-	 * @param complexQuery
-	 *            Some dummy parameter which is not used in fact.
-	 * 
+	 *
+	 * @param complexQuery Some dummy parameter which is not used in fact.
+	 *
 	 * @return A new book.
 	 */
-	@CheckReturnValue(when = When.NEVER)
 	public Book getBook(final boolean complexQuery) {
 		return new Book("Kieker 1.5 User Guide");
 	}

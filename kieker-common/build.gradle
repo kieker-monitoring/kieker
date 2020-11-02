@@ -1,5 +1,5 @@
-apply plugin: 'eclipse'
 apply plugin: "com.github.hauner.jarTest"
+apply plugin: 'java'
 
 dependencies {
 	// no project-specific dependencies
@@ -7,6 +7,7 @@ dependencies {
 	
 	compile 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
 	compile 'com.fasterxml.jackson.core:jackson-core:2.9.8'
+	compile 'org.slf4j:slf4j-api:1.7.25'
 }
 
 clover {
@@ -16,12 +17,6 @@ clover {
 	
 }
 
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
-}
-
 task replaceHardCodedVersionNames() {
   doLast {
 	regexpReplaceInFiles(project.file("src/kieker/common/util/Version.java"), "VERSION = \".*?\"", "VERSION = \"${version}\"")
@@ -29,7 +24,3 @@ task replaceHardCodedVersionNames() {
 }
 
 compileJava.dependsOn replaceHardCodedVersionNames
-
-clean.doFirst {
-	delete "${projectDir}/bin/build-eclipse/"
-}

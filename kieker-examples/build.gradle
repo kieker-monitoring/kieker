@@ -59,7 +59,6 @@ task buildStandaloneExamples(dependsOn: [
 					 'buildStandaloneExamplesMonitoringAspectJ',
 					 'buildStandaloneExamplesMonitoringAdaptive',
 					 'buildStandaloneExamplesMonitoringTimesource',
-					 'buildStandaloneExamplesAnalysisKax',
 					 'buildStandaloneExamplesAnalysisOpad',
 					 'buildStandaloneExamplesAnalysisTraceAnalysis',
 					 'buildStandaloneExamplesUserguideAppendixJavaEE', 
@@ -92,7 +91,6 @@ task replaceHardCodedVersionNames() {
 
 task replaceAbsoluteByRelativePathsEclipse {
   doLast {
-    regexpReplaceInFiles(project.file("analysis/kax-files/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("analysis/opad-anomaly-detection/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("analysis/trace-analysis/.classpath"), "path=\".*/lib/", "path=\"lib/")
 	regexpReplaceInFiles(project.file("monitoring/probe-spring/.classpath"), "path=\".*/lib/", "path=\"lib/")
@@ -336,18 +334,6 @@ task buildStandaloneExamplesMonitoringTimesource(type: GradleBuild, dependsOn: '
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
-task copyLibsStandaloneExamplesAnalysisKax(type: Copy, dependsOn: [rootProject.emfJar]) {
-	from ('../build/libs') {
-		include "kieker-${version}-emf.jar"
-	}
-	into 'analysis/kax-files/lib/'
-}
-
-task buildStandaloneExamplesAnalysisKax(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesAnalysisKax') {
-	buildFile = 'analysis/kax-files/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
-}
-
 task copyLibsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProject.mainJar]) {
 	from ('../kieker-tools/opad/build/libs') {
 		include "opad-${version}.jar"
@@ -408,7 +394,6 @@ task cleanStandaloneExamples(dependsOn: [
 					 'cleanStandaloneExamplesMonitoringAspectJ',
 					 'cleanStandaloneExamplesMonitoringAdaptive',
 					 'cleanStandaloneExamplesMonitoringTimesource',
-					 'cleanStandaloneExamplesAnalysisKax',
 					 'cleanStandaloneExamplesAnalysisOpad',
 					 'cleanStandaloneExamplesAnalysisTraceAnalysis',
 					 'cleanStandaloneExamplesUserguideAppendixJavaEE']) {
@@ -509,12 +494,6 @@ task cleanStandaloneExamplesMonitoringTimesource(type: GradleBuild) {
 	buildFile = 'monitoring/custom-timesource/build.gradle'
 	tasks = ['clean']
 	delete fileTree(dir: 'monitoring/custom-timesource/lib', include: '*.jar')
-}
-
-task cleanStandaloneExamplesAnalysisKax(type: GradleBuild) {
-	buildFile = 'analysis/kax-files/build.gradle'
-	tasks = ['clean']
-	delete fileTree(dir: 'analysis/kax-files/lib', include: '*.jar')
 }
 
 task cleanStandaloneExamplesAnalysisOpad(type: GradleBuild) {

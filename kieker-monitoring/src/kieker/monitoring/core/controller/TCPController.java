@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IRecordReceivedListener;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.controller.tcp.SingleSocketRecordReader;
 import kieker.monitoring.listener.MonitoringCommandListener;
 
@@ -63,13 +63,13 @@ public class TCPController extends AbstractController implements IRemoteControll
 
 		final int bufferSize = configuration.getIntProperty(TCPController.BUFFER_SIZE,
 				TCPController.DEFAULT_BUFFER_SIZE);
-		this.domain = configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_DOMAIN);
+		this.domain = configuration.getStringProperty(ConfigurationConstants.ACTIVATE_TCP_DOMAIN);
 
 		final IRecordReceivedListener listener = new MonitoringCommandListener(monitoringController);
 		try {
 			final int port = Integer
-					.parseInt(configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_REMOTE_PORT));
-			this.tcpEnabled = configuration.getBooleanProperty(ConfigurationKeys.ACTIVATE_TCP);
+					.parseInt(configuration.getStringProperty(ConfigurationConstants.ACTIVATE_TCP_REMOTE_PORT));
+			this.tcpEnabled = configuration.getBooleanProperty(ConfigurationConstants.ACTIVATE_TCP);
 			this.tcpReader = new SingleSocketRecordReader(port, bufferSize, TCPController.LOGGER, true, listener);
 			TCPController.LOGGER.info("Setup of TCPController listening at {}", port);
 			this.readerThread = new Thread(this.tcpReader);
@@ -78,7 +78,7 @@ public class TCPController extends AbstractController implements IRemoteControll
 			this.readerThread = null; // NOPMD pmd considers this a code smell, however, necessary to satisfy CS rule
 			TCPController.LOGGER.info(
 					"Could not parse port for the TCPController, deactivating this option. Received string was: {}",
-					configuration.getStringProperty(ConfigurationKeys.ACTIVATE_TCP_REMOTE_PORT));
+					configuration.getStringProperty(ConfigurationConstants.ACTIVATE_TCP_REMOTE_PORT));
 		}
 	}
 

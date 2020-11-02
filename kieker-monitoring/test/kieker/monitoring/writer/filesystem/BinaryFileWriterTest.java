@@ -33,7 +33,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.common.util.filesystem.FileExtensionFilter;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.writer.compression.NoneCompressionFilter;
 import kieker.monitoring.writer.compression.ZipCompressionFilter;
 
@@ -63,8 +63,8 @@ public class BinaryFileWriterTest {
 		this.writerPath = Paths.get(this.tmpFolder.getRoot().getAbsolutePath());
 
 		this.configuration = new Configuration();
-		this.configuration.setProperty(ConfigurationKeys.HOST_NAME, "testHostName");
-		this.configuration.setProperty(ConfigurationKeys.CONTROLLER_NAME, "testControllerName");
+		this.configuration.setProperty(ConfigurationConstants.HOST_NAME, "testHostName");
+		this.configuration.setProperty(ConfigurationConstants.CONTROLLER_NAME, "testControllerName");
 		this.configuration.setProperty(FileWriter.CONFIG_BUFFERSIZE, "8192");
 		this.configuration.setProperty(FileWriter.CONFIG_CHARSET_NAME, "UTF-8");
 		this.configuration.setProperty(FileWriter.CONFIG_MAXENTRIESINFILE, "-1");
@@ -345,8 +345,8 @@ public class BinaryFileWriterTest {
 
 		new FileWriter(this.configuration);
 
-		final String hostName = this.configuration.getStringProperty(ConfigurationKeys.HOST_NAME);
-		final String controllerName = this.configuration.getStringProperty(ConfigurationKeys.CONTROLLER_NAME);
+		final String hostName = this.configuration.getStringProperty(ConfigurationConstants.HOST_NAME);
+		final String controllerName = this.configuration.getStringProperty(ConfigurationConstants.CONTROLLER_NAME);
 		final Path kiekerPath = Files.list(this.writerPath).findFirst().get();
 
 		Assert.assertThat(kiekerPath.getFileName().toString(), CoreMatchers.startsWith(FSUtil.FILE_PREFIX));

@@ -27,7 +27,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.system.MemSwapUsageRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
@@ -99,9 +99,9 @@ public class TestMemSwapUsageSampler extends AbstractKiekerTest { // NOCS
 
 	private IMonitoringController createMonitoringController() {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED, "true");
-		config.setProperty(ConfigurationKeys.META_DATA, "false");
-		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, NamedListWriter.class.getName());
+		config.setProperty(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED, "true");
+		config.setProperty(ConfigurationConstants.META_DATA, "false");
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
 		return MonitoringController.createInstance(config);
 	}

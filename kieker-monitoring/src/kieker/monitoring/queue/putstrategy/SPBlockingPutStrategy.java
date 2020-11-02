@@ -20,8 +20,6 @@ import java.util.Queue;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.LockSupport;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
  * This take strategy blocks if the queue is full.
  * <br>
@@ -33,7 +31,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class SPBlockingPutStrategy implements PutStrategy {
 
-	@SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
+	// @SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
 	public volatile int storeFence = 0; // NOCS // NOPMD (necessary for synchronization)
 
 	private final AtomicReference<Thread> t = new AtomicReference<Thread>(null);

@@ -18,31 +18,34 @@ package kieker.monitoring.core.registry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 public enum SessionRegistry { // Singleton (Effective Java #3)
 	/** The singleton instance. */
 	INSTANCE;
 
-	private final ThreadLocal<String> threadLocalSessionId = new ThreadLocal<String>();
+	private final ThreadLocal<String> threadLocalSessionId = new ThreadLocal<>();
 
-	private SessionRegistry() {}
+	private SessionRegistry() {
+	}
 
 	/**
-	 * Used by the spring aspect to explicitly register a sessionid that is to be collected within a servlet method (that knows the request object).
-	 * The thread is responsible for invalidating the stored curTraceId using the method unsetThreadLocalSessionId()!
-	 * 
-	 * @param sessionId
-	 *            The session ID.
+	 * Used by the spring aspect to explicitly register a sessionid that is to be
+	 * collected within a servlet method (that knows the request object). The thread
+	 * is responsible for invalidating the stored curTraceId using the method
+	 * unsetThreadLocalSessionId()!
+	 *
+	 * @param sessionId The session ID.
 	 */
 	public final void storeThreadLocalSessionId(final String sessionId) {
 		this.threadLocalSessionId.set(sessionId);
 	}
 
 	/**
-	 * This method returns the thread-local traceid previously registered using the method registerTraceId(curTraceId).
-	 * 
+	 * This method returns the thread-local traceid previously registered using the
+	 * method registerTraceId(curTraceId).
+	 *
 	 * @return the sessionid. null if no session registered.
 	 */
 	public final String recallThreadLocalSessionId() {

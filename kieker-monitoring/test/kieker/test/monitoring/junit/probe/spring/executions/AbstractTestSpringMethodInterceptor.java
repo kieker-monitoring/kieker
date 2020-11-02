@@ -35,7 +35,7 @@ import org.junit.rules.TemporaryFolder;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
@@ -78,7 +78,7 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 	@Before
 	public void init() throws IOException {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, FileWriter.class.getName());
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, FileWriter.class.getName());
 		config.setProperty(FileWriter.CONFIG_PATH, this.tmpFolder.getRoot().getAbsolutePath());
 		this.monitoringCtrl = MonitoringController.createInstance(config);
 

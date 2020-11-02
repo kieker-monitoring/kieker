@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.timer.ITimeSource;
 
 /**
@@ -42,7 +42,7 @@ public final class TimeSourceController extends AbstractController implements IT
 	 */
 	protected TimeSourceController(final Configuration configuration) {
 		super(configuration);
-		this.timeSource = AbstractController.createAndInitialize(ITimeSource.class, configuration.getStringProperty(ConfigurationKeys.TIMER_CLASSNAME),
+		this.timeSource = AbstractController.createAndInitialize(ITimeSource.class, configuration.getStringProperty(ConfigurationConstants.TIMER_CLASSNAME),
 				configuration);
 		if (this.timeSource == null) {
 			this.terminate();

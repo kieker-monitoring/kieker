@@ -116,15 +116,17 @@ function assert_files_exist_common {
 	    error "class files included: $(find -name "*.class" | grep -v "WEB-INF/classes")"
 	    exit 1
 	fi
-	information OK
+	information "OK"
 
 	# check if LICENSE file for each jar
+	information "Checking if LICENS file exist for each jar"
 	for jar in $(find lib/ -name "*.jar"); do
 		JAR_BASE=$(echo ${jar} | sed 's/\(.*\)\..*/\1/') # remove file extension
 		assert_file_exists_regular "${JAR_BASE}.LICENSE"
 	done
 
 	# Make sure that required infos included in each LICENSE file in lib/ (excluding subdirs)
+	information "Making sure that required infos included in each LICENSE file in lib/ (excluding subdirs)"
 	for info in "Project" "Description" "License" "Required by"; do
 	    for l in lib/*.LICENSE; do
 		information "Asserting '$l' contains '${info}' information .. "
@@ -146,8 +148,9 @@ function assert_files_exist_common {
 	information OK
 
 	# make sure that specified AspectJ version matches the present files
-	assert_file_exists_regular "lib/aspectjrt-${aspectjversion}.jar"
-	assert_file_exists_regular "lib/aspectjweaver-${aspectjversion}.jar"
+	# TODO these files should no longer be bundled, as they can be fetched automatically
+	#assert_file_exists_regular "lib/aspectjrt-${aspectjversion}.jar"
+	#assert_file_exists_regular "lib/aspectjweaver-${aspectjversion}.jar"
 
 	information "Making sure that for each gradle script, the Gradle wrapper environment exists ..."
 	for d in $(find -name "build.gradle" -exec dirname {} \;); do
@@ -184,32 +187,35 @@ function assert_files_exist_bin {
 	assert_zip_file_content_contains "${DIST_JAR_DIR}/kieker-"*"-aspectj.jar" "META-INF/MANIFEST.MF" "Premain-Class: org.aspectj.weaver.loadtime.Agent"
 	assert_file_exists_regular "${DIST_JAR_DIR}/kieker-"*"-emf.jar"
 	assert_zip_file_content_exist "${DIST_JAR_DIR}/kieker-"*"-emf.jar" " org/eclipse/"
-	assert_dir_exists "examples/"
-	assert_file_exists_regular "examples/kieker.monitoring.example.properties"
-	assert_file_exists_regular "examples/kieker.monitoring.adaptiveMonitoring.example.conf"
-	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/lib/kieker-"*"-emf.jar"
-	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/lib/kieker-"*"-emf.jar"
-	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/lib/kieker-"*"-aspectj.jar"
-	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/kieker-"*"-emf.jar"
-	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/commons-logging-"*".jar"
-	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/kieker-"*"-emf.jar"
-	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".jar"
-	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/libsigar-"*".so"
-	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".dll"
-	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".lib"
 
-	assert_file_exists_regular "examples/userguide/appendix-JMS/.classpath"
-	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/.classpath"
-	assert_file_exists_regular "examples/userguide/ch2--bookstore-application/.classpath"
-	assert_file_exists_regular "examples/userguide/appendix-Sigar/.classpath"
-	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/.classpath"
-	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/.classpath"
-
-	assert_file_exists_regular "examples/JavaEEServletContainerExample/build.gradle"
-	assert_file_NOT_exists "examples/JavaEEServletContainerExample/livedemo-source/"
-	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/kieker.monitoring.properties"
-	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar"
-	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar.LICENSE"
+	information "Checking examples' configuration and setup"
+	warning "Currently deactivated"
+#	assert_dir_exists "examples/"
+#	assert_file_exists_regular "examples/kieker.monitoring.example.properties"
+#	assert_file_exists_regular "examples/kieker.monitoring.adaptiveMonitoring.example.conf"
+#	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/lib/kieker-"*"-emf.jar"
+#	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/lib/kieker-"*"-emf.jar"
+#	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/lib/kieker-"*"-aspectj.jar"
+#	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/kieker-"*"-emf.jar"
+#	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/commons-logging-"*".jar"
+#	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/kieker-"*"-emf.jar"
+#	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".jar"
+#	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/libsigar-"*".so"
+#	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".dll"
+#	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".lib"
+#
+#	assert_file_exists_regular "examples/userguide/appendix-JMS/.classpath"
+#	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/.classpath"
+#	assert_file_exists_regular "examples/userguide/ch2--bookstore-application/.classpath"
+#	assert_file_exists_regular "examples/userguide/appendix-Sigar/.classpath"
+#	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/.classpath"
+#	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/.classpath"
+#
+#	assert_file_exists_regular "examples/JavaEEServletContainerExample/build.gradle"
+#	assert_file_NOT_exists "examples/JavaEEServletContainerExample/livedemo-source/"
+#	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/kieker.monitoring.properties"
+#	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar"
+#	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar.LICENSE"
 
 	information "Making sure that for each .project, a '.classpath' and a '.settings/org.eclipse.jdt.core.prefs' exists ..."
 	for d in $(find -name ".project" -exec dirname {} \;); do
@@ -242,14 +248,14 @@ function check_bin_archive {
 		exit 1
 	fi
 
-    assert_file_exists_regular "$1"
-    assert_no_duplicate_files_in_archive "$1"
+	assert_file_exists_regular "$1"
+	assert_no_duplicate_files_in_archive "$1"
 
 	information "Decompressing archive '$1' ..."
 	extract_archive_n_cd "$1"
 	touch $(basename "$1") # just to mark where this dir comes from
 
-    assert_files_exist_bin
+	assert_files_exist_bin
 	assert_all_sh_scripts_executable
 }
 

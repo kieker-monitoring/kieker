@@ -1,5 +1,8 @@
 apply plugin: 'application'
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 distTar.enabled=false
 distZip.enabled=true
 
@@ -26,12 +29,7 @@ clover {
 	
 }
 
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
-}
-
 task uploadArchives {
 	println 'convert-logging-timestamp skipped'
 }
+

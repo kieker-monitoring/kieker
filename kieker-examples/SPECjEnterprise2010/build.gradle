@@ -1,5 +1,4 @@
 apply plugin: 'java'
-apply plugin: 'eclipse'
 
 repositories {
 	mavenCentral() 
@@ -7,11 +6,11 @@ repositories {
 }
 
 dependencies {
-        compile 'ch.qos.logback:logback-classic:1.1.7'
-        compile 'org.slf4j:slf4j-api:1.7.30'
-        compile 'org.codehaus.groovy:groovy-all:3.0.2'
+        implementation 'ch.qos.logback:logback-classic:1.1.7'
+        implementation 'org.slf4j:slf4j-api:1.7.30'
+        implementation 'org.codehaus.groovy:groovy-all:3.0.2'
 
-	compile fileTree('lib') {
+	implementation fileTree('lib') {
 		include 'kieker-*-emf.jar'
 	}
 }

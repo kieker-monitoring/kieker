@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.common.configuration.Configuration;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 
@@ -50,7 +50,7 @@ public final class SamplingController extends AbstractController implements ISam
 	 */
 	protected SamplingController(final Configuration configuration) {
 		super(configuration);
-		final int threadPoolSize = configuration.getIntProperty(ConfigurationKeys.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
+		final int threadPoolSize = configuration.getIntProperty(ConfigurationConstants.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
 		if (threadPoolSize > 0) {
 			this.periodicSensorsPoolExecutor = new ScheduledThreadPoolExecutor(threadPoolSize, new DaemonThreadFactory(), new RejectedExecutionHandler());
 			// this.periodicSensorsPoolExecutor.setMaximumPoolSize(threadPoolSize); // not used in this class

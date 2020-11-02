@@ -1,11 +1,38 @@
-apply plugin: 'eclipse'
+apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: "com.github.hauner.jarTest"
 
-configurations {
-	ajc
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "io.freefair.gradle:aspectj-plugin:5.0.0-rc6"
+  }
 }
 
-def aspectjVersion = '1.8.2'
+apply plugin: "io.freefair.aspectj.post-compile-weaving"
+
+repositories {
+    mavenCentral()
+}
+
+project.ext {
+    aspectjVersion = "1.9.6"
+}
+
+configurations {
+    ajc
+    aspects
+    aspectCompile
+    compile{
+        extendsFrom aspects
+    }
+}
+
+// def aspectjVersion = '1.8.2'
 
 repositories {
 	jcenter()
@@ -17,7 +44,7 @@ dependencies {
 	clover 'org.openclover:clover:4.2.0'
 
 	compile project(':kieker-common')
-	
+
 	compile 'com.rabbitmq:amqp-client:4.2.1'
 	compile resolveLibrary('javax.jms-*.jar')
 	compile 'org.jctools:jctools-core:2.1.0'
@@ -38,13 +65,23 @@ dependencies {
 	// Likely needed for an update: compile 'org.apache.cxf:cxf-rt-bindings-soap:3.3.6'
 	// Likely needed for an update: compile 'org.apache.cxf:cxf-rt-frontend-jaxws:3.3.6'
 	
-	compile resolveLibrary('framework-libs/jsr311-api-1.1.1.jar')
-	compile resolveLibrary('framework-libs/javax.ws.rs-api-2.0.1.jar')
-	compile resolveLibrary('framework-libs/jersey/jersey-server-1.19.jar')
-	compile resolveLibrary('framework-libs/jersey/jersey-client-1.19.jar')
-	compile resolveLibrary('framework-libs/jersey/jersey-apache-client4-1.19.jar')
+	//compile resolveLibrary('framework-libs/jsr311-api-1.1.1.jar')
+	//compile resolveLibrary('framework-libs/javax.ws.rs-api-2.0.1.jar')
+	//compile resolveLibrary('framework-libs/jersey/jersey-server-1.19.jar')
+	//compile resolveLibrary('framework-libs/jersey/jersey-client-1.19.jar')
+	//compile resolveLibrary('framework-libs/jersey/jersey-apache-client4-1.19.jar')
 	
-	compile resolveLibrary('framework-libs/javax.servlet-*.jar')
+	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-server
+	compile group: 'org.glassfish.jersey.core', name: 'jersey-server', version: '3.0.0-M6'
+	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common
+	compile group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '3.0.0-M6'
+	// https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client
+	compile group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '3.0.0-M6'
+	
+	// https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+		
+	//compile resolveLibrary('framework-libs/javax.servlet-*.jar')
 	// We can probably replace that by: compile 'javax.servlet:javax.servlet-api:3.0.1'
 	
 	compile resolveLibrary('framework-libs/spring/aopalliance-*.jar')
@@ -65,11 +102,14 @@ dependencies {
 	
 	compile 'org.easymock:easymock:3.4'
 	compile 'org.mockito:mockito-core:2.8.9' 
-	compile 'org.powermock:powermock-api-mockito2:1.7.+'
-	compile 'org.powermock:powermock-api-easymock:1.7.+' 
-	compile 'org.powermock:powermock-module-junit4:1.7.+' 
-	compile 'org.powermock:powermock-core:1.7.+'
-	compile 'org.powermock:powermock-module-junit4-rule:1.7.+' 
+	compile 'org.powermock:powermock-api-mockito2:2.0.7'
+	compile 'org.powermock:powermock-api-easymock:2.0.7' 
+	compile 'org.powermock:powermock-module-junit4:2.0.7' 
+	compile 'org.powermock:powermock-core:2.0.7'
+	compile 'org.powermock:powermock-module-junit4-rule:2.0.7' 
+	
+	compile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
+	compile group: 'javax.jws', name: 'javax.jws-api', version: '1.1'
 	
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testCompile project (path: ':kieker-common', configuration: 'testArchives')
@@ -88,12 +128,6 @@ clover {
 		html=true
 	}
 	
-}
-
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
 }
 
 task iajc(dependsOn: classes) {
@@ -123,6 +157,6 @@ task iajc(dependsOn: classes) {
     }   
 }
 
-compileJava.doLast {
-    tasks.iajc.execute()
-}
+//compileJava.doLast {
+//    tasks.iajc.execute()
+//}

@@ -36,8 +36,6 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.Version;
 import kieker.monitoring.writer.filesystem.FileWriter;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
  * An integration test for AspectJ-based probes.
  *
@@ -56,7 +54,7 @@ public class AbstractAspectTest { // NOCS NOPMD (abstract class)
 
 	// why is this test deactivated?
 	// @Test
-	@SuppressFBWarnings(value = "UI_INHERITANCE_UNSAFE_GETRESOURCE", justification = "no problem since we use getResource without package name prefix")
+	//@SuppressFBWarnings(value = "UI_INHERITANCE_UNSAFE_GETRESOURCE", justification = "no problem since we use getResource without package name prefix")
 	public void testMonitoring() throws Exception { // NOPMD (rules/java/junit.html#JUnitTestContainsTooManyAsserts)
 		final URL resource = this.getClass().getResource("/kieker.monitoring.probe.aspectj.flow.operationExecution");
 		final File workingDirectory = new File(resource.toURI());

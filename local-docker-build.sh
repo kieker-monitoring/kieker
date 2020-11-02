@@ -24,10 +24,7 @@ if [ $? -eq 0 ]; then
     ./gradlew compileJava compileTestJava &&\
     ./gradlew test &&\
     ./gradlew check &&\
-    ./gradlew build distribute &&\
-    ./gradlew checkReleaseArchivesShort &&\
-    ./gradlew build distribute &&\
-    ./gradlew checkReleaseArchives"
+    ./gradlew build distribute"
 else
   echo "You are not in the docker group."
 fi

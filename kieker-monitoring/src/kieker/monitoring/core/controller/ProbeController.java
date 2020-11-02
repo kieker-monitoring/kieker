@@ -20,12 +20,14 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,7 +50,7 @@ import org.slf4j.LoggerFactory;
 import kieker.common.configuration.Configuration;
 import kieker.common.util.map.BoundedConcurrentHashMap;
 import kieker.common.util.map.BoundedConcurrentHashMap.BoundedCacheBehaviour;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.monitoring.core.signaturePattern.InvalidPatternException;
 import kieker.monitoring.core.signaturePattern.PatternEntry;
 import kieker.monitoring.core.signaturePattern.PatternParser;
@@ -79,21 +81,21 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 * Creates a new instance of this class using the given configuration to
 	 * initialize the class.
 	 *
-	 * @param configuration
-	 *            The configuration used to initialize this controller.
+	 * @param configuration The configuration used to initialize this controller.
 	 */
 	protected ProbeController(final Configuration configuration) {
 		super(configuration);
-		this.enabled = configuration.getBooleanProperty(ConfigurationKeys.ADAPTIVE_MONITORING_ENABLED);
+		this.enabled = configuration.getBooleanProperty(ConfigurationConstants.ADAPTIVE_MONITORING_ENABLED);
 		if (this.enabled) {
-			this.configFilePathname = configuration.getPathProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE);
+			this.configFilePathname = configuration
+					.getPathProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE);
 			this.configFileUpdate = configuration
-					.getBooleanProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE);
+					.getBooleanProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE);
 			this.configFileReadIntervall = configuration
-					.getIntProperty(ConfigurationKeys.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL);
-			this.maxCacheSize = configuration.getIntProperty(ConfigurationKeys.ADAPTIVE_MONITORING_MAX_CACHE_SIZE);
+					.getIntProperty(ConfigurationConstants.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL);
+			this.maxCacheSize = configuration.getIntProperty(ConfigurationConstants.ADAPTIVE_MONITORING_MAX_CACHE_SIZE);
 			this.boundedCacheBehaviour = configuration
-					.getIntProperty(ConfigurationKeys.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR);
+					.getIntProperty(ConfigurationConstants.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR);
 			if (this.maxCacheSize >= 0) {
 				// Bounded cache
 				final BoundedConcurrentHashMap.BoundedCacheBehaviour behaviour;
@@ -109,7 +111,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 					break;
 				default:
 					ProbeController.LOGGER.warn("Unexpected value for property '{}'. Using default value 0.",
-							ConfigurationKeys.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR);
+							ConfigurationConstants.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR);
 
 					behaviour = BoundedCacheBehaviour.IGNORE_NEW_ENTRIES;
 					break;
@@ -119,7 +121,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 					cacheSize = this.maxCacheSize;
 				} else {
 					ProbeController.LOGGER.warn("Invalid value for property '{}'. Using default value 100.",
-							ConfigurationKeys.ADAPTIVE_MONITORING_MAX_CACHE_SIZE);
+							ConfigurationConstants.ADAPTIVE_MONITORING_MAX_CACHE_SIZE);
 
 					cacheSize = 100;
 				}
@@ -154,7 +156,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 				if ((this.configFileReadIntervall > 0) && (null == scheduler)) {
 					ProbeController.LOGGER.warn(
 							"Failed to enable regular reading of adaptive monitoring config file. '{}' must be > 0!",
-							ConfigurationKeys.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
+							ConfigurationConstants.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
 				}
 			}
 		}
@@ -229,11 +231,9 @@ public class ProbeController extends AbstractController implements IProbeControl
 	/**
 	 * Sets the list of probe patterns.
 	 *
-	 * @param strPatternList
-	 *            The new list with pattern strings.
+	 * @param strPatternList The new list with pattern strings.
 	 *
-	 * @param updateConfig
-	 *            Whether the pattern file should be updated or not.
+	 * @param updateConfig   Whether the pattern file should be updated or not.
 	 */
 	protected void setProbePatternList(final List<String> strPatternList, final boolean updateConfig) {
 		if (!this.enabled) {
@@ -394,8 +394,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 * This method tests if the given signature matches a pattern and completes
 	 * accordingly the signatureCache map.
 	 *
-	 * @param signature
-	 *            The signature to match.
+	 * @param signature The signature to match.
 	 */
 	private boolean matchesPattern(final String signature) {
 		synchronized (this) {
@@ -442,7 +441,8 @@ public class ProbeController extends AbstractController implements IProbeControl
 		PrintWriter pw = null;
 		try {
 			pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(this.configFilePathname, false), ProbeController.ENCODING)));
+					Files.newOutputStream(Paths.get(this.configFilePathname), StandardOpenOption.CREATE),
+					ProbeController.ENCODING)));
 			pw.print("## Adaptive Monitoring Config File: ");
 			pw.println(this.configFilePathname);
 			pw.print("## written on: ");

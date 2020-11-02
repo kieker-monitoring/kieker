@@ -1,11 +1,5 @@
-apply plugin: 'eclipse'
+apply plugin: 'java'
 apply plugin: 'java-library'
-
-eclipse {
-	classpath {
-		defaultOutputDir = file('build-eclipse')
-	}
-}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8

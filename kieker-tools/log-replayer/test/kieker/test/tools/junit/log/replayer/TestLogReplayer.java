@@ -36,7 +36,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.record.system.MemSwapUsageRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.configuration.ConfigurationKeys;
+import kieker.monitoring.core.configuration.ConfigurationConstants;
 import kieker.tools.log.replayer.AbstractLogReplayer;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -83,10 +83,10 @@ public class TestLogReplayer extends AbstractKiekerTest {
 		this.replayList.add(new EmptyRecord());
 
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationKeys.META_DATA, "false");
+		config.setProperty(ConfigurationConstants.META_DATA, "false");
 		final String listName = NamedListWriter.FALLBACK_LIST_NAME;
 		this.recordListFilledByListWriter = NamedListWriter.createNamedList(listName);
-		config.setProperty(ConfigurationKeys.WRITER_CLASSNAME, NamedListWriter.class.getName());
+		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		// Doesn't work because property not known to Kieker: System.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
 		this.monitoringConfigurationFile = this.tmpFolder.newFile("moitoring.properties");
 		final FileOutputStream fos = new FileOutputStream(this.monitoringConfigurationFile);
