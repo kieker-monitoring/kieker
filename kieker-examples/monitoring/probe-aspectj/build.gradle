@@ -2,7 +2,8 @@ apply plugin: 'application'
 
 repositories {
 	mavenCentral() 
-        jcenter() 
+        jcenter()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 dependencies {
@@ -10,7 +11,7 @@ dependencies {
         compile 'org.slf4j:slf4j-api:1.7.30'
         compile 'org.codehaus.groovy:groovy-all:3.0.2'
 
-	compile fileTree('lib') {
+	implementation fileTree('lib') {
 		include "kieker-1.15-SNAPSHOT-aspectj.jar"
 	}
 }
@@ -31,7 +32,7 @@ jar {
 		attributes 'Main-Class': mainClassName
 	}
 }
-	
+
 task runMonitoring(type: JavaExec) {
 	main = mainClassName
 	classpath = sourceSets.main.runtimeClasspath

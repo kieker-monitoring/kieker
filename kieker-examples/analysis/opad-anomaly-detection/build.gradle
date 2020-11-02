@@ -1,26 +1,29 @@
-apply plugin: 'application'
+plugins {
+	id 'application'
+}
 
 repositories {
 	mavenCentral() 
-        jcenter() 
+        jcenter()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 dependencies {
-        compile 'ch.qos.logback:logback-classic:1.1.7'
-        compile 'org.slf4j:slf4j-api:1.7.30'
-        compile 'org.codehaus.groovy:groovy-all:3.0.2'
+        implementation 'ch.qos.logback:logback-classic:1.1.7'
+        implementation 'org.slf4j:slf4j-api:1.7.30'
+        implementation 'org.codehaus.groovy:groovy-all:3.0.2'
 
-        compile 'net.kieker-monitoring:kieker:1.15-SNAPSHOT'
+        implementation 'net.kieker-monitoring:kieker:1.15-SNAPSHOT'
 
 	// you need to ensure by yourself that the following jars are in the lib folder
-	compile fileTree('lib') {
+	implementation fileTree('lib') {
 		include "opad-*.jar"
 		include "opencsv-*.jar"
 	}
 
-	compile 'org.slf4j:slf4j-api:1.7.30'
+	implementation 'org.slf4j:slf4j-api:1.7.30'
 
-	//compile 'com.opencsv:opencsv:4.0'
+	//implementation 'com.opencsv:opencsv:4.0'
 
 	runtime fileTree('lib') {
 		include 'REngine-*.jar'
