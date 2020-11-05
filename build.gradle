@@ -779,9 +779,8 @@ def exampleJavaEEContent = project.copySpec {
     into kiekerPackagenamebase + "-" + kiekerVersion + "/examples/JavaEEServletContainerExample/jetty"
 }
 
-// Build the examples separately 
-// TODO reenable
-task prepareExamplesForDistribution() { // (dependsOn: ['kieker-examples:buildStandaloneExamples']) {
+// Build the examples separately
+task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandaloneExamples']) {
      doLast {
      }
 }

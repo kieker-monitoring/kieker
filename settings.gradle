@@ -15,8 +15,7 @@ include 'kieker-tools:trace-analysis'
 include 'kieker-tools:trace-analysis-gui'
 include 'kieker-extension-kafka'
 include 'kieker-checkstyle-extension'
-// temporarily disabled, as examples build is broken.
-//include 'kieker-examples'
+include 'kieker-examples'
 
 // excluded as they are separate project
 // include 'kieker-examples:analysis:opad-anomaly-detection'

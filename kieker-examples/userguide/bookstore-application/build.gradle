@@ -11,12 +11,6 @@ dependencies {
         compile 'org.codehaus.groovy:groovy-all:3.0.2'
 }
 
-eclipse {
-  project {
-    name = 'Kieker Example 1 ch2--bookstore-application'
-  }
-}
-
 distTar.enabled=false
 
 // Simplify the JAR's file name
