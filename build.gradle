@@ -7,16 +7,16 @@ buildscript {
 
     dependencies {
         classpath 'gradle.plugin.gradle-plugins:jartest:1.0.1'            // necessary to depend tests on tests
-        classpath 'com.bmuschko:gradle-clover-plugin:2.2.5'
         classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.5.0"
     }
 }
 
-apply plugin: 'java'        // required for compileJava.dependsOn, manifest etc.
-apply plugin: 'java-library'
-apply plugin: 'maven-publish'
-apply plugin: 'signing'
-apply plugin: 'com.bmuschko.clover'
+plugins {
+	id 'java'        // required for compileJava.dependsOn, manifest etc.
+	id 'java-library'
+	id 'maven-publish'
+	id 'signing'
+}
 
 configurations {
     resultJar
@@ -42,12 +42,6 @@ def mainSubprojects = [
         project(':kieker-extension-kafka')
 ]
 
-clover {
-    report {
-        html = true
-    }
-}
-
 allprojects {
     version = kiekerVersion
 
@@ -59,10 +53,9 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'com.bmuschko.clover'
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = sourceVersion
+    targetCompatibility = targetVersion
 
     // Encoding should be UTF-8
     compileJava.options.encoding = 'UTF-8'
@@ -95,10 +88,6 @@ subprojects {
                 runtimeClasspath += main.runtimeClasspath + test.runtimeClasspath
             }
         }
-    }
-
-    clover {
-
     }
 
     test {
@@ -558,22 +547,22 @@ configurations.archives.artifacts.with { archives ->
 /**
  * Create bundle jars.
  */
+
+task createArtifacts(dependsOn: [ 'mainJar', 'aspectJJar', 'emfJar', 'sourcesJar', 'javadocJar']) {}
  
 /** Kieker jar without aspectj and emf. */
 task mainJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "build",
         description: "Assembles a jar archive containing all of Kieker's components, the user guide examples, the documentation etc."
 ) {
+    classifier = 'jar'
     // default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
     configure allArtifacts
     configure licence
     configure aopxml
 
     from configurations.resultJar.allArtifacts.collect {
-    	println "++" 
         it.isDirectory() ? it : zipTree(it)
     }
-
-    println "tuut"
 
     manifest = project.manifest {
         from sharedManifest
@@ -631,7 +620,7 @@ task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "bu
     from fileTree(dir: 'lib', include: 'aspectjweaver-*.jar').collect {
         zipTree(it)
     }
-    from file("lib/aspectjweaver-${libAspectjVersion}.LICENSE")
+    from file("lib/aspectjweaver-${aspectjVersion}.LICENSE")
 
     from configurations.resultJar.allArtifacts.collect { it.isDirectory() ? it : zipTree(it) }
 
@@ -643,10 +632,10 @@ task aspectJJar(type: Jar, dependsOn: mainSubprojects.tasks["build"], group: "bu
         )
         attributes(
                 "Specification-Title": "AspectJ Weaver Classes",
-                "Specification-Version": libAspectjVersion,
+                "Specification-Version": aspectjVersion,
                 "Specification-Vendor": "aspectj.org",
                 "Implementation-Title": "org.aspectj.weaver",
-                "Implementation-Version": libAspectjVersion,
+                "Implementation-Version": aspectjVersion,
                 "Implementation-Vendor": "aspectj.org",
                 "Can-Redefine-Classes": "true",
                 "Premain-Class": "org.aspectj.weaver.loadtime.Agent",
@@ -663,22 +652,6 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 task javadocJar(type: Jar, dependsOn: apidoc) {
     classifier = 'javadoc'
     from apidoc.destinationDir
-}
-
-
-def archMainJar = file("$buildDir/libs/kieker-${kiekerVersion}.jar")
-def archEmfJar = file("$buildDir/libs/kieker-${kiekerVersion}-emf.jar")
-def archAspectJJar = file("$buildDir/libs/kieker-${kiekerVersion}-aspectj.jar")
-def archSourcesJar = file("$buildDir/libs/kieker-${kiekerVersion}-sources.jar")
-def archJavaDocJar = file("$buildDir/libs/kieker-${kiekerVersion}-javadoc.jar")
-
-
-artifacts {
-    archives archMainJar
-    archives archEmfJar
-    archives archAspectJJar
-    archives archSourcesJar
-    archives archJavaDocJar
 }
 
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.',
@@ -917,9 +890,23 @@ project.ext {
     snapshotRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
 }
 
+artifacts {
+    archives mainJar
+    archives emfJar
+    archives aspectJJar
+    archives sourcesJar
+    archives javadocJar
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
+	    artifact mainJar
+	    artifact emfJar
+	    artifact aspectJJar
+	    artifact sourcesJar
+	    artifact javadocJar
+	       	    
             pom {
                 groupId = 'net.kieker-monitoring'
                 artifactId = 'kieker'
