@@ -16,17 +16,21 @@
 
 package kieker.test.tools.junit.writeRead.jms;
 
+import javax.jms.CompletionListener;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageProducer;
 
 /**
- * This class is part of a very basic fake JMS message broker. It uses a very simple design to deliver messages synchronously from a singleton producer to a
- * singleton consumer. It has only been designed for test purposes ({@link BasicJMSWriterReaderTest}) and should <b>not</b> be used outside this test.
- * 
+ * This class is part of a very basic fake JMS message broker. It uses a very
+ * simple design to deliver messages synchronously from a singleton producer to
+ * a singleton consumer. It has only been designed for test purposes
+ * ({@link BasicJMSWriterReaderTest}) and should <b>not</b> be used outside this
+ * test.
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 public class FakeMessageProducer implements MessageProducer {
@@ -35,9 +39,8 @@ public class FakeMessageProducer implements MessageProducer {
 
 	/**
 	 * Default constructor.
-	 * 
-	 * @param consumer
-	 *            The consumer.
+	 *
+	 * @param consumer The consumer.
 	 */
 	public FakeMessageProducer(final FakeMessageConsumer consumer) {
 		this.consumer = consumer;
@@ -127,7 +130,8 @@ public class FakeMessageProducer implements MessageProducer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void send(final Destination arg0, final Message arg1, final int arg2, final int arg3, final long arg4) throws JMSException {
+	public void send(final Destination arg0, final Message arg1, final int arg2, final int arg3, final long arg4)
+			throws JMSException {
 		// No code necessary
 	}
 
@@ -169,6 +173,45 @@ public class FakeMessageProducer implements MessageProducer {
 	@Override
 	public void setTimeToLive(final long arg0) throws JMSException {
 		// No code necessary
+	}
+
+	@Override
+	public void setDeliveryDelay(final long deliveryDelay) throws JMSException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public long getDeliveryDelay() throws JMSException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void send(final Message message, final CompletionListener completionListener) throws JMSException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void send(final Message message, final int deliveryMode, final int priority, final long timeToLive,
+			final CompletionListener completionListener) throws JMSException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void send(final Destination destination, final Message message, final CompletionListener completionListener)
+			throws JMSException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void send(final Destination destination, final Message message, final int deliveryMode, final int priority,
+			final long timeToLive, final CompletionListener completionListener) throws JMSException {
+		// TODO Auto-generated method stub
+
 	}
 
 }
