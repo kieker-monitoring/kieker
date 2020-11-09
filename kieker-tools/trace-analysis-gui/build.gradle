@@ -1,4 +1,6 @@
-apply plugin: 'application'
+plugins {
+	id 'application'
+}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -11,22 +13,13 @@ mainClassName='kieker.tools.trace.analysis.ui.TraceAnalysisGUI'
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
 dependencies {
-	clover 'org.openclover:clover:4.2.0'
+	implementation project(":kieker-tools")
+	implementation project(":kieker-tools:trace-analysis")
 
-	compile project(":kieker-tools")
-	compile project(":kieker-tools:trace-analysis")
-
-	compile "com.beust:jcommander:1.71"
+	implementation "com.beust:jcommander:${jcommanderVersion}"
 	
-	testCompile project (path: ':kieker-common', configuration: 'testArchives')
-	testCompile project (path: ':kieker-tools', configuration: 'testArchives')
-}
-
-clover {
-	report {
-		html=true
-	}
-	
+	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
+	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')
 }
 
 task uploadArchives {

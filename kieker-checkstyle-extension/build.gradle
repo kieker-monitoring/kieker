@@ -7,16 +7,8 @@ plugins {
     targetCompatibility = 1.8
 
 dependencies {
-	clover 'org.openclover:clover:4.2.0'
-
 	// checkstyleVersion is set in kieker/gradle.properties
 	implementation "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
-	runtime "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
+	runtimeOnly "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }
 
-clover {
-	report {
-		html=true
-	}
-	
-}

@@ -1,30 +1,30 @@
-apply plugin: 'java'
-apply plugin: 'java-library'
+plugins {
+	id 'java'
+	id 'java-library'
+}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 // In this section you declare where to find the dependencies of your project
 repositories {
-    // Use jcenter for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots/'
-    }
+	// Use jcenter for resolving your dependencies.
+	// You can declare any Maven/Ivy/file repository here.
+	jcenter()
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 }
 
 dependencies {
 	api project(':kieker-monitoring')
 	api project(':kieker-analysis')
 
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    //api 'net.kieker-monitoring:kieker:1.13-SNAPSHOT'
+	// This dependency is exported to consumers, that is to say found on their compile classpath.
+	// api 'net.kieker-monitoring:kieker:1.13-SNAPSHOT'
 
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation 'org.apache.kafka:kafka-clients:0.11.0.1'
+	// This dependency is used internally, and not exposed to consumers on their own compile classpath.
+	implementation 'org.apache.kafka:kafka-clients:0.11.0.1'
 
-    // Use JUnit test framework
-    //testImplementation 'junit:junit:4.12'
+	// Use JUnit test framework
+	// testImplementation 'junit:junit:4.12'
 }
 

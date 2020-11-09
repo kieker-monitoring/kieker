@@ -5,13 +5,7 @@ apply plugin: 'java-library'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-configurations {
-	emfJarConfig	// all dependencies in this config are included into the emf jar. This is necessary for the scripts in bin/ to work.
-}
-
 dependencies {
-	clover 'org.openclover:clover:4.2.0'
-
 	api project(':kieker-common')
 	api project(':kieker-monitoring')
 
@@ -21,7 +15,7 @@ dependencies {
 	api resolveLibrary('org.eclipse.emf.ecore.xmi_*.jar')
 	api resolveLibrary('org.eclipse.emf.ecore_*.jar')
 	api 'com.rabbitmq:amqp-client:4.2.1'
-	api 'com.google.guava:guava:20.0'				// (21.0 and above require java 8) used by StringRegistryCache for amqp reader
+	api 'com.google.guava:guava:21.0'	// used by StringRegistryCache for amqp reader
 	implementation 'org.tukaani:xz:1.6'	// decompression algorithms used by the readers
 		
 	implementation 'org.nanohttpd:nanohttpd:2.3.0'
@@ -31,20 +25,11 @@ dependencies {
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'	
 			
 	api 'net.sourceforge.teetime:teetime:3.0'
-	emfJarConfig 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
-	implementation configurations.emfJarConfig
-
+	implementation 'com.tinkerpop.blueprints:blueprints-core:2.6.0'
+	
 	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
 	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
 	
 	testRuntimeOnly 'org.apache.derby:derby:10.13.1.1'	// (10.13.1.1 and above require Java 8)
-}
-
-
-clover {
-	report {
-		html=true
-	}
-	
 }
 
