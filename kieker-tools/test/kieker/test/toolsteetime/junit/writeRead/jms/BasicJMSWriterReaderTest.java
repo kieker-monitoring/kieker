@@ -29,13 +29,14 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.misc.EmptyRecord;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.jms.JmsWriter;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
+import kieker.test.tools.junit.writeRead.jms.FakeInitialContextFactory;
 
 import teetime.framework.test.StageTester;
 
@@ -91,7 +92,7 @@ public class BasicJMSWriterReaderTest {
 		// Need to terminate explicitly, because otherwise, the monitoring log directory
 		// cannot be removed
 		monCtrl.terminateMonitoring();
-		monCtrl.waitForTermination(TIMEOUT_IN_MS);
+		monCtrl.waitForTermination(BasicJMSWriterReaderTest.TIMEOUT_IN_MS);
 	}
 
 	protected void checkControllerStateBeforeRecordsPassedToController(
