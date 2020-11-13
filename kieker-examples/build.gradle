@@ -13,7 +13,7 @@ task buildStandaloneExamples(dependsOn: [
 					// 'buildStandaloneExamplesMonitoringSpring',
 					// 'buildStandaloneExamplesMonitoringManual',
 					// 'buildStandaloneExamplesMonitoringAspectJ',
-					// 'buildStandaloneExamplesMonitoringAdaptive',
+					'buildStandaloneExamplesMonitoringAdaptive',
 					// 'buildStandaloneExamplesMonitoringTimesource',
 					// 'buildStandaloneExamplesAnalysisTraceAnalysis',
 					// 'buildStandaloneExamplesUserguideAppendixJavaEE', 
@@ -242,7 +242,7 @@ task copyLibsStandaloneExamplesMonitoringAdaptive(type: Copy, dependsOn: [rootPr
 
 task buildStandaloneExamplesMonitoringAdaptive(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringAdaptive') {
 	buildFile = 'monitoring/adaptive-monitoring/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 task copyLibsStandaloneExamplesMonitoringTimesource(type: Copy, dependsOn: [rootProject.aspectJJar]) {
@@ -280,7 +280,7 @@ task cleanStandaloneExamples(dependsOn: [
 					// 'cleanStandaloneExamplesMonitoringSpring',
 					// 'cleanStandaloneExamplesMonitoringManual',
 					// 'cleanStandaloneExamplesMonitoringAspectJ',
-					// 'cleanStandaloneExamplesMonitoringAdaptive',
+					'cleanStandaloneExamplesMonitoringAdaptive',
 					// 'cleanStandaloneExamplesMonitoringTimesource',
 					// 'cleanStandaloneExamplesAnalysisTraceAnalysis',
 					// 'cleanStandaloneExamplesUserguideAppendixJavaEE'
