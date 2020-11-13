@@ -6,11 +6,9 @@ task buildStandaloneExamples(dependsOn: [
 					// 'buildStandaloneExamplesUserguideCh2Instr', 
 					// 'buildStandaloneExamplesUserguideCh34',
 					// 'buildStandaloneExamplesUserguideCh5',
-					// 'buildStandaloneExamplesUserguideAppendixSigar',
 					// 'buildStandaloneExamplesUserguideAppendixJMS', 
 					// 'buildStandaloneExamplesUserguideAppendixAMQP',
 					// 'buildStandaloneExamplesUserguideAppendixKafka',
-					// 'buildStandaloneExamplesMonitoringSigar',
 					// 'buildStandaloneExamplesMonitoringJVM',
 					// 'buildStandaloneExamplesMonitoringSpring',
 					// 'buildStandaloneExamplesMonitoringManual',
@@ -92,22 +90,6 @@ task buildStandaloneExamplesUserguideCh5(type: GradleBuild, dependsOn: 'copyLibs
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
-// TODO remove
-task copyLibsStandaloneExamplesUserguideAppendixSigar(type: Copy, dependsOn: [rootProject.emfJar]) {
-	from ('../build/libs') {
-		include "kieker-${version}-emf.jar"
-	}
-	from ('../lib/sigar') {
-		include "*"
-	}
-	into 'userguide/appendix-Sigar/lib/'
-}
-
-task buildStandaloneExamplesUserguideAppendixSigar(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixSigar') {
-	buildFile = 'userguide/appendix-Sigar/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
-}
-
 // JMS example
 // FIXME
 task copyLibsStandaloneExamplesUserguideAppendixJMS(type: Copy, dependsOn: [rootProject.emfJar]) {
@@ -164,6 +146,7 @@ task copyLiveDemoLibsStandaloneExamplesUserguideAppendixJavaEE(type: Copy, depen
 	into 'JavaEEServletContainerExample/livedemo-source/lib'
 }
 
+// TODO replace sigar
 task copyJettyLibsStandaloneExamplesUserguideAppendixJavaEE(type: Copy, dependsOn: [rootProject.aspectJJar]) {
 	from ('../build/libs') {
 		include "kieker-${version}-aspectj.jar"
@@ -186,22 +169,6 @@ task buildStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild, dependsOn
 // ----------------------------------------------
 // Examples for specific technologies and methods
 // ----------------------------------------------
-
-// TODO remove sigar examples
-task copyLibsStandaloneExamplesMonitoringSigar(type: Copy, dependsOn: [rootProject.mainJar]) {
-	from ('../build/libs') {
-		include "kieker-${version}.jar"
-	}
-	from ('../lib/sigar') {
-		include "*"
-	}
-	into 'monitoring/sampler-sigar/lib/'
-}
-
-task buildStandaloneExamplesMonitoringSigar(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringSigar') {
-	buildFile = 'monitoring/sampler-sigar/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
-}
 
 // JVM sampler example
 task copyLibsStandaloneExamplesMonitoringJVM(type: Copy, dependsOn: [rootProject.mainJar]) {
@@ -307,10 +274,8 @@ task cleanStandaloneExamples(dependsOn: [
 					// 'cleanStandaloneExamplesUserguideCh2Instr', 
 					// 'cleanStandaloneExamplesUserguideCh34',
 					// 'cleanStandaloneExamplesUserguideCh5',
-					// 'cleanStandaloneExamplesUserguideAppendixSigar',
 					// 'cleanStandaloneExamplesUserguideAppendixJMS',
 					// 'cleanStandaloneExamplesUserguideAppendixAMQP',  
-					// 'cleanStandaloneExamplesMonitoringSigar',
 					// 'cleanStandaloneExamplesMonitoringJVM',
 					// 'cleanStandaloneExamplesMonitoringSpring',
 					// 'cleanStandaloneExamplesMonitoringManual',
@@ -348,13 +313,6 @@ task cleanStandaloneExamplesUserguideCh5(type: GradleBuild) {
 	delete fileTree(dir: 'userguide/ch5--trace-monitoring-aspectj/lib', include: '*.jar')
 }
 
-task cleanStandaloneExamplesUserguideAppendixSigar(type: GradleBuild) {
-	buildFile = 'userguide/appendix-Sigar/build.gradle'
-	tasks = ['clean']
-	delete fileTree(dir: 'userguide/appendix-Sigar/lib', include: '*.jar')
-	delete fileTree(dir: 'userguide/appendix-Sigar/lib', include: '*sigar*')
-}
-
 task cleanStandaloneExamplesUserguideAppendixJMS(type: GradleBuild) {
 	buildFile = 'userguide/appendix-JMS/build.gradle'
 	tasks = ['clean']
@@ -367,20 +325,14 @@ task cleanStandaloneExamplesUserguideAppendixAMQP(type: GradleBuild) {
 	delete fileTree(dir: 'userguide/appendix-AMQP/lib', include: '*.jar')
 }
 
+// TODO replace sigar with oshi
 task cleanStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild) {
 	buildFile = 'JavaEEServletContainerExample/build.gradle'
 	tasks = ['clean']
 	delete fileTree(dir: 'JavaEEServletContainerExample/livedemo-source/lib', include: '*kieker*.jar')
-	delete fileTree(dir: 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib', include: '*sigar*')
+	// delete fileTree(dir: 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib', include: '*sigar*')
 	delete fileTree(dir: 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib', include: 'kieker*')
 	delete 'JavaEEServletContainerExample/jetty/webapps/livedemo.war'
-}
-
-task cleanStandaloneExamplesMonitoringSigar(type: GradleBuild) {
-	buildFile = 'monitoring/sampler-sigar/build.gradle'
-	tasks = ['clean']
-	delete fileTree(dir: 'monitoring/sampler-sigar/lib', include: '*.jar')
-	delete fileTree(dir: 'monitoring/sampler-sigar/lib', include: '*sigar*')
 }
 
 task cleanStandaloneExamplesMonitoringJVM(type: GradleBuild) {
