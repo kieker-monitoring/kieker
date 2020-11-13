@@ -42,12 +42,10 @@ dependencies {
 	// Some dependencies for the HTTP connector of the KDB
 	implementation fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
 
-	// this project depends on the tests of kieker-common, e.g., it requires the class AbstractKiekerTest
-	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
-	// this project depends on the tests of kieker-analysis, e.g., it requires the class BookstoreEventRecordFactory
-	testImplementation project (path: ':kieker-analysis', configuration: 'testArchives')
-	// this project depends on the tests of kieker-analysis, e.g., it requires the class NamedListWriter
-	testImplementation project (path: ':kieker-monitoring', configuration: 'testArchives')
+    testImplementation 'junit:junit:4.12'
+
+	testImplementation project(':kieker-common').sourceSets.test.output
+	testImplementation project(':kieker-analysis').sourceSets.test.output
 }
 
 
