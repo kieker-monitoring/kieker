@@ -1,6 +1,5 @@
-probe-aspectj
+# probe-aspectj
 
-Description:
 This example shows how to use AspectJ-probes for monitoring applications.
 
 

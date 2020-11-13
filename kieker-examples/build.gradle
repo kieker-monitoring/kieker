@@ -12,7 +12,7 @@ task buildStandaloneExamples(dependsOn: [
 					// 'buildStandaloneExamplesMonitoringJVM',
 					// 'buildStandaloneExamplesMonitoringSpring',
 					// 'buildStandaloneExamplesMonitoringManual',
-					// 'buildStandaloneExamplesMonitoringAspectJ',
+					'buildStandaloneExamplesMonitoringAspectJ',
 					'buildStandaloneExamplesMonitoringAdaptive',
 					// 'buildStandaloneExamplesMonitoringTimesource',
 					// 'buildStandaloneExamplesAnalysisTraceAnalysis',
@@ -61,7 +61,7 @@ task copyLibsStandaloneExamplesUserguideCh2Instr(type: Copy, dependsOn: [rootPro
 
 task buildStandaloneExamplesUserguideCh2Instr(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideCh2Instr') {
 	buildFile = 'userguide/ch2--manual-instrumentation/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 // TODO rework, fix README
@@ -74,7 +74,7 @@ task copyLibsStandaloneExamplesUserguideCh34(type: Copy, dependsOn: [rootProject
 
 task buildStandaloneExamplesUserguideCh34(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideCh34') {
 	buildFile = 'userguide/ch3-4--custom-components/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 // TODO aspectJ and trace example
@@ -87,7 +87,7 @@ task copyLibsStandaloneExamplesUserguideCh5(type: Copy, dependsOn: [rootProject.
 
 task buildStandaloneExamplesUserguideCh5(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideCh5') {
 	buildFile = 'userguide/ch5--trace-monitoring-aspectj/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 // JMS example
@@ -103,7 +103,7 @@ task copyLibsStandaloneExamplesUserguideAppendixJMS(type: Copy, dependsOn: [root
 
 task buildStandaloneExamplesUserguideAppendixJMS(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixJMS') {
 	buildFile = 'userguide/appendix-JMS/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 // AMQP example
@@ -180,7 +180,7 @@ task copyLibsStandaloneExamplesMonitoringJVM(type: Copy, dependsOn: [rootProject
 
 task buildStandaloneExamplesMonitoringJVM(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringJVM') {
 	buildFile = 'monitoring/sampler-jvm/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 // Spring tutorial example
@@ -205,7 +205,7 @@ task copyLibsStandaloneExamplesMonitoringSpring(type: Copy, dependsOn: [rootProj
 
 task buildStandaloneExamplesMonitoringSpring(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringSpring') {
 	buildFile = 'monitoring/probe-spring/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 // 
@@ -218,7 +218,7 @@ task copyLibsStandaloneExamplesMonitoringManual(type: Copy, dependsOn: [rootProj
 
 task buildStandaloneExamplesMonitoringManual(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringManual') {
 	buildFile = 'monitoring/probe-manual/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 task copyLibsStandaloneExamplesMonitoringAspectJ(type: Copy, dependsOn: [rootProject.aspectJJar]) {
@@ -230,7 +230,7 @@ task copyLibsStandaloneExamplesMonitoringAspectJ(type: Copy, dependsOn: [rootPro
 
 task buildStandaloneExamplesMonitoringAspectJ(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringAspectJ') {
 	buildFile = 'monitoring/probe-aspectj/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 task copyLibsStandaloneExamplesMonitoringAdaptive(type: Copy, dependsOn: [rootProject.aspectJJar]) {
@@ -266,7 +266,7 @@ task copyLibsStandaloneExamplesAnalysisTraceAnalysis(type: Copy, dependsOn: [roo
 
 task buildStandaloneExamplesAnalysisTraceAnalysis(type: GradleBuild, dependsOn: [ 'copyLibsStandaloneExamplesAnalysisTraceAnalysis']) {
 	buildFile = 'analysis/trace-analysis/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 task cleanStandaloneExamples(dependsOn: [
@@ -279,7 +279,7 @@ task cleanStandaloneExamples(dependsOn: [
 					// 'cleanStandaloneExamplesMonitoringJVM',
 					// 'cleanStandaloneExamplesMonitoringSpring',
 					// 'cleanStandaloneExamplesMonitoringManual',
-					// 'cleanStandaloneExamplesMonitoringAspectJ',
+					'cleanStandaloneExamplesMonitoringAspectJ',
 					'cleanStandaloneExamplesMonitoringAdaptive',
 					// 'cleanStandaloneExamplesMonitoringTimesource',
 					// 'cleanStandaloneExamplesAnalysisTraceAnalysis',
