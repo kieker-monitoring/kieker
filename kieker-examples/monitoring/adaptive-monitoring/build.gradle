@@ -13,9 +13,9 @@ dependencies {
 
 	implementation 'net.kieker-monitoring:kieker:1.15-SNAPSHOT'
 
-	implementation fileTree('lib') {
-		include "kieker-1.15-SNAPSHOT-aspectj.jar"
-	}
+        implementation fileTree('lib') {
+                include "lib/kieker-1.15-SNAPSHOT-aspectj.jar"
+        }
 }
 
 distTar.enabled=false
