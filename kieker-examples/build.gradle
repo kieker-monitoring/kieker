@@ -17,7 +17,6 @@ task buildStandaloneExamples(dependsOn: [
 					// 'buildStandaloneExamplesMonitoringAspectJ',
 					// 'buildStandaloneExamplesMonitoringAdaptive',
 					// 'buildStandaloneExamplesMonitoringTimesource',
-					// 'buildStandaloneExamplesAnalysisOpad',
 					// 'buildStandaloneExamplesAnalysisTraceAnalysis',
 					// 'buildStandaloneExamplesUserguideAppendixJavaEE', 
 					// 'replaceAbsoluteByRelativePathsEclipse'
@@ -291,40 +290,7 @@ task buildStandaloneExamplesMonitoringTimesource(type: GradleBuild, dependsOn: '
 	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
-task copyLibsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProject.mainJar]) {
-	from ('../kieker-tools/opad/build/libs') {
-		include "opad-${version}.jar"
-	}
-	from ('../build/libs') {
-		include "kieker-${version}.jar"
-	}
-//	from configurations.opad
-	from ('../lib') {
-		include 'REngine-*.jar'
-		include 'Rserve-*.jar'
-		include 'Rsession-*.jar'
-	}
-	into 'analysis/opad-anomaly-detection/lib/'
-}
-
-task copyScriptsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProject.mainJar]) {
-	from ('../bin/dev') {
-		include "rserve-control.sh"
-		include "rserve-control.bat"
-		include "RserveStart.R"
-	}
-	into 'analysis/opad-anomaly-detection/'
-}
-
-task buildStandaloneExamplesAnalysisOpad(type: GradleBuild, dependsOn: [ 'copyLibsStandaloneExamplesAnalysisOpad', 'copyScriptsStandaloneExamplesAnalysisOpad' ]) {
-	buildFile = 'analysis/opad-anomaly-detection/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
-}
-
 task copyLibsStandaloneExamplesAnalysisTraceAnalysis(type: Copy, dependsOn: [rootProject.mainJar]) {
-	from ('../kieker-tools/opad/build/libs') {
-		include "opad-${version}.jar"
-	}
 	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}
@@ -351,7 +317,6 @@ task cleanStandaloneExamples(dependsOn: [
 					// 'cleanStandaloneExamplesMonitoringAspectJ',
 					// 'cleanStandaloneExamplesMonitoringAdaptive',
 					// 'cleanStandaloneExamplesMonitoringTimesource',
-					// 'cleanStandaloneExamplesAnalysisOpad',
 					// 'cleanStandaloneExamplesAnalysisTraceAnalysis',
 					// 'cleanStandaloneExamplesUserguideAppendixJavaEE'
 					]) {
@@ -452,16 +417,6 @@ task cleanStandaloneExamplesMonitoringTimesource(type: GradleBuild) {
 	buildFile = 'monitoring/custom-timesource/build.gradle'
 	tasks = ['clean']
 	delete fileTree(dir: 'monitoring/custom-timesource/lib', include: '*.jar')
-}
-
-task cleanStandaloneExamplesAnalysisOpad(type: GradleBuild) {
-	buildFile = 'analysis/opad-anomaly-detection/build.gradle'
-	tasks = ['clean']
-	delete fileTree(dir: 'userguide/analysis/opad-anomaly-detection/lib', include: '*.jar')
-	delete 'userguide/analysis/opad-anomaly-detection/rserve-control.sh'
-	delete 'userguide/analysis/opad-anomaly-detection/rserve-control.bat'
-	delete 'userguide/analysis/opad-anomaly-detection/RserveStart.R'
-
 }
 
 task cleanStandaloneExamplesAnalysisTraceAnalysis(type: GradleBuild) {
