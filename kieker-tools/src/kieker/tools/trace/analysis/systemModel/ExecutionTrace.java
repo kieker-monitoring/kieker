@@ -57,7 +57,8 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param traceId The ID of this trace.
+	 * @param traceId
+	 *            The ID of this trace.
 	 */
 	public ExecutionTrace(final long traceId) {
 		super(traceId);
@@ -66,8 +67,10 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param traceId   The ID of this trace.
-	 * @param sessionId The ID of the current session.
+	 * @param traceId
+	 *            The ID of this trace.
+	 * @param sessionId
+	 *            The ID of the current session.
 	 */
 	public ExecutionTrace(final long traceId, final String sessionId) {
 		super(traceId, sessionId);
@@ -76,11 +79,13 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Adds an execution to the trace.
 	 *
-	 * @param execution The execution object which will be added to this trace.
+	 * @param execution
+	 *            The execution object which will be added to this trace.
 	 *
-	 * @throws InvalidTraceException If the traceId of the passed Execution object
-	 *                               is not the same as the traceId of this
-	 *                               ExecutionTrace object.
+	 * @throws InvalidTraceException
+	 *             If the traceId of the passed Execution object
+	 *             is not the same as the traceId of this
+	 *             ExecutionTrace object.
 	 */
 	public void add(final Execution execution) throws InvalidTraceException {
 		synchronized (this) {
@@ -116,12 +121,14 @@ public class ExecutionTrace extends AbstractTrace {
 	 * execution of this method. After this, the stored reference is returned ---
 	 * unless executions are added to the trace afterwards.
 	 *
-	 * @param rootExecution The root execution object.
+	 * @param rootExecution
+	 *            The root execution object.
 	 *
 	 * @return The resulting message trace.
 	 *
-	 * @throws InvalidTraceException If the given execution is somehow inconsistent
-	 *                               or invalid.
+	 * @throws InvalidTraceException
+	 *             If the given execution is somehow inconsistent
+	 *             or invalid.
 	 */
 	public MessageTrace toMessageTrace(final Execution rootExecution) throws InvalidTraceException {
 		synchronized (this) {
@@ -368,7 +375,8 @@ public class ExecutionTrace extends AbstractTrace {
 	 * Returns whether this Execution Trace and the passed Object are equal. Two
 	 * execution traces are equal if the set of contained executions is equal.
 	 *
-	 * @param obj The object to be compared for equality with this.
+	 * @param obj
+	 *            The object to be compared for equality with this.
 	 *
 	 * @return true if and only if the two objects are equal.
 	 */
@@ -421,8 +429,10 @@ public class ExecutionTrace extends AbstractTrace {
 		 * {@link TreeSet#equals(Object)} utilized in
 		 * {@link ExecutionTrace#equals(Object)}.
 		 *
-		 * @param e1 The first execution object.
-		 * @param e2 The second execution object.
+		 * @param e1
+		 *            The first execution object.
+		 * @param e2
+		 *            The second execution object.
 		 *
 		 * @return -1 if e1 < e2, 1 if e1 > e2, 0 otherwise.
 		 */

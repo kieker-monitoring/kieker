@@ -42,14 +42,16 @@ public class ExecutionEnvironmentRepository extends AbstractRepository {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param systemFactory The system factory.
+	 * @param systemFactory
+	 *            The system factory.
 	 */
 	public ExecutionEnvironmentRepository(final SystemModelRepository systemFactory) {
 		super(systemFactory);
 	}
 
 	/**
-	 * @param namedIdentifier The identifier to search for.
+	 * @param namedIdentifier
+	 *            The identifier to search for.
 	 *
 	 * @return The instance for the passed namedIdentifier; null if no instance with
 	 *         this namedIdentifier.
@@ -62,7 +64,8 @@ public class ExecutionEnvironmentRepository extends AbstractRepository {
 	 * Returns the instance for the passed container ID; null if no instance with
 	 * this ID.
 	 *
-	 * @param containerId The ID to search for.
+	 * @param containerId
+	 *            The ID to search for.
 	 *
 	 * @return The container for the given ID if it exists; null otherwise.
 	 */
@@ -73,8 +76,10 @@ public class ExecutionEnvironmentRepository extends AbstractRepository {
 	/**
 	 * This method creates a new execution container and registers it as well.
 	 *
-	 * @param namedIdentifier The identifier of the new container.
-	 * @param name            The name of the new container.
+	 * @param namedIdentifier
+	 *            The identifier of the new container.
+	 * @param name
+	 *            The name of the new container.
 	 *
 	 * @return The newly created execution container.
 	 */

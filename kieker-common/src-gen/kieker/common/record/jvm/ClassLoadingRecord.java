@@ -22,22 +22,21 @@ import kieker.common.record.jvm.AbstractJVMRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Nils Christian Ehmke
- * API compatibility: Kieker 1.15.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.10
  */
-public class ClassLoadingRecord extends AbstractJVMRecord  {			
+public class ClassLoadingRecord extends AbstractJVMRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AbstractJVMRecord.timestamp
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.hostname
-			 + TYPE_SIZE_STRING // AbstractJVMRecord.vmName
-			 + TYPE_SIZE_LONG // ClassLoadingRecord.totalLoadedClassCount
-			 + TYPE_SIZE_INT // ClassLoadingRecord.loadedClassCount
-			 + TYPE_SIZE_LONG; // ClassLoadingRecord.unloadedClassCount
-	
+			+ TYPE_SIZE_STRING // AbstractJVMRecord.hostname
+			+ TYPE_SIZE_STRING // AbstractJVMRecord.vmName
+			+ TYPE_SIZE_LONG // ClassLoadingRecord.totalLoadedClassCount
+			+ TYPE_SIZE_INT // ClassLoadingRecord.loadedClassCount
+			+ TYPE_SIZE_LONG; // ClassLoadingRecord.unloadedClassCount
+
 	public static final Class<?>[] TYPES = {
 		long.class, // AbstractJVMRecord.timestamp
 		String.class, // AbstractJVMRecord.hostname
@@ -46,7 +45,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		int.class, // ClassLoadingRecord.loadedClassCount
 		long.class, // ClassLoadingRecord.unloadedClassCount
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -56,14 +55,14 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		"loadedClassCount",
 		"unloadedClassCount",
 	};
-	
+
 	private static final long serialVersionUID = -5955568375346711225L;
-	
+
 	/** property declarations. */
 	private final long totalLoadedClassCount;
 	private final int loadedClassCount;
 	private final long unloadedClassCount;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -80,19 +79,19 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	 * @param unloadedClassCount
 	 *            unloadedClassCount
 	 */
-	public ClassLoadingRecord(final long timestamp, final String hostname, final String vmName, final long totalLoadedClassCount, final int loadedClassCount, final long unloadedClassCount) {
+	public ClassLoadingRecord(final long timestamp, final String hostname, final String vmName, final long totalLoadedClassCount, final int loadedClassCount,
+			final long unloadedClassCount) {
 		super(timestamp, hostname, vmName);
 		this.totalLoadedClassCount = totalLoadedClassCount;
 		this.loadedClassCount = loadedClassCount;
 		this.unloadedClassCount = unloadedClassCount;
 	}
 
-
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public ClassLoadingRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		super(deserializer);
@@ -100,7 +99,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		this.loadedClassCount = deserializer.getInt();
 		this.unloadedClassCount = deserializer.getLong();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -113,7 +112,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		serializer.putInt(this.getLoadedClassCount());
 		serializer.putLong(this.getUnloadedClassCount());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -121,7 +120,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -129,7 +128,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -138,7 +137,6 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -153,7 +151,7 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final ClassLoadingRecord castedRecord = (ClassLoadingRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -176,40 +174,38 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		if (this.getUnloadedClassCount() != castedRecord.getUnloadedClassCount()) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
+		code += ((int) this.getTimestamp());
 		code += this.getHostname().hashCode();
 		code += this.getVmName().hashCode();
-		code += ((int)this.getTotalLoadedClassCount());
-		code += ((int)this.getLoadedClassCount());
-		code += ((int)this.getUnloadedClassCount());
-		
+		code += ((int) this.getTotalLoadedClassCount());
+		code += ((int) this.getLoadedClassCount());
+		code += ((int) this.getUnloadedClassCount());
+
 		return code;
 	}
-	
+
 	public final long getTotalLoadedClassCount() {
 		return this.totalLoadedClassCount;
 	}
-	
-	
+
 	public final int getLoadedClassCount() {
 		return this.loadedClassCount;
 	}
-	
-	
+
 	public final long getUnloadedClassCount() {
 		return this.unloadedClassCount;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -218,22 +214,22 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		String result = "ClassLoadingRecord: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		result += "hostname = ";
 		result += this.getHostname() + ", ";
-		
+
 		result += "vmName = ";
 		result += this.getVmName() + ", ";
-		
+
 		result += "totalLoadedClassCount = ";
 		result += this.getTotalLoadedClassCount() + ", ";
-		
+
 		result += "loadedClassCount = ";
 		result += this.getLoadedClassCount() + ", ";
-		
+
 		result += "unloadedClassCount = ";
 		result += this.getUnloadedClassCount() + ", ";
-		
+
 		return result;
 	}
 }

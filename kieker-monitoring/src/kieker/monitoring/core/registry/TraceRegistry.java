@@ -61,7 +61,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	 * Gets a Trace for the current thread. If no trace is active, null is returned.
 	 *
 	 * @return
-	 * 		Trace object or null
+	 *         Trace object or null
 	 */
 	public final TraceMetadata getTrace() {
 		return this.traceStorage.get();
@@ -71,7 +71,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	 * This creates a new unique Trace object and registers it.
 	 *
 	 * @return
-	 * 		Trace object
+	 *         Trace object
 	 */
 	public final ApplicationTraceMetadata registerTrace() {
 		final TraceMetadata enclosingTrace = this.getTrace();

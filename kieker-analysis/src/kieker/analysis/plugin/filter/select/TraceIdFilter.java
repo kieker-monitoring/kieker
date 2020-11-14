@@ -44,16 +44,16 @@ import kieker.common.record.flow.trace.TraceMetadata;
  * @since 1.2
  */
 @Plugin(description = "A filter allowing to filter incoming objects based on their trace ID",
-outputPorts = {
-	@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards events with matching trace IDs", eventTypes = {
-		AbstractTraceEvent.class, TraceMetadata.class, OperationExecutionRecord.class }),
-	@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, description = "Forwards events with trace IDs not matching", eventTypes = {
-		AbstractTraceEvent.class, TraceMetadata.class, OperationExecutionRecord.class })
-},
-configuration = {
-	@Property(name = TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, defaultValue = "true"),
-	@Property(name = TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, defaultValue = "")
-})
+		outputPorts = {
+			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards events with matching trace IDs", eventTypes = {
+				AbstractTraceEvent.class, TraceMetadata.class, OperationExecutionRecord.class }),
+			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, description = "Forwards events with trace IDs not matching", eventTypes = {
+				AbstractTraceEvent.class, TraceMetadata.class, OperationExecutionRecord.class })
+		},
+		configuration = {
+			@Property(name = TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, defaultValue = "true"),
+			@Property(name = TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, defaultValue = "")
+		})
 public final class TraceIdFilter extends AbstractFilterPlugin {
 	/** The name of the input port accepting flow records. */
 	public static final String INPUT_PORT_NAME_FLOW = "monitoringRecordsFlow";

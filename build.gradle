@@ -291,6 +291,7 @@ def parsePmdReport(File reportFile) {
 def checkSubprojects = [
     project(':kieker-common'),
     project(':kieker-monitoring'),
+    project(':kieker-model'),
     project(':kieker-analysis'),
     project(':kieker-tools'),
     project(':kieker-tools:collector'),

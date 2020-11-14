@@ -53,7 +53,8 @@ public class TCPControllerTest { // NOFB issues with integration test
 	/**
 	 * initialize configuration for TCP controller.
 	 * 
-	 * @throws IOException on io errors
+	 * @throws IOException
+	 *             on io errors
 	 */
 	@BeforeClass
 	public static void init() throws IOException {
@@ -93,8 +94,10 @@ public class TCPControllerTest { // NOFB issues with integration test
 	/**
 	 * test activation and deactivation.
 	 * 
-	 * @throws IOException on TCP io errors
-	 * @throws InterruptedException when threads get terminated
+	 * @throws IOException
+	 *             on TCP io errors
+	 * @throws InterruptedException
+	 *             when threads get terminated
 	 */
 	@Test(timeout = 30000)
 	public void testActivationAndDeactivation() throws IOException, InterruptedException {

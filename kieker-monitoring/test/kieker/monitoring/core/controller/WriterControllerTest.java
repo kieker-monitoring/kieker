@@ -58,10 +58,11 @@ public class WriterControllerTest {
 	/**
 	 * Check whether blocking of the queue on insert works when queue is full.
 	 * 
-	 * @throws Exception on all kind of thread issues
+	 * @throws Exception
+	 *             on all kind of thread issues
 	 */
 	@Test
-	//@SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
+	// @SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
 	// @SuppressFBWarnings("SIC")
 	public void testBlockOnQueueIsFullInsertBehavior() throws Exception {
 		final Configuration configuration = new Configuration();

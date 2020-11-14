@@ -54,8 +54,8 @@ public class RecordFromTextLineCreator {
 	}
 
 	public IMonitoringRecord createRecordFromLine(final File textFile, final String line) throws MonitoringRecordException, IllegalRecordFormatException,
-	MappingException,
-	UnknownRecordTypeException {
+			MappingException,
+			UnknownRecordTypeException {
 		this.charBuffer.put(line);
 		return this.createRecord(this.classNameRegistryRepository.get(textFile.getParentFile()));
 
@@ -85,4 +85,3 @@ public class RecordFromTextLineCreator {
 		}
 	}
 }
-

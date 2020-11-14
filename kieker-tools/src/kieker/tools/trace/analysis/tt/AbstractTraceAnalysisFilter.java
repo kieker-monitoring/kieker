@@ -117,7 +117,8 @@ public abstract class AbstractTraceAnalysisFilter<T> extends AbstractConsumerSta
 	 * Prints a debug message to the logger. The output is prepended by a header
 	 * which includes the name of this plugin instance.
 	 *
-	 * @param lines The lines to be printed.
+	 * @param lines
+	 *            The lines to be printed.
 	 */
 	protected void printDebugLogMessage(final String[] lines) {
 		if (this.logger.isDebugEnabled()) {

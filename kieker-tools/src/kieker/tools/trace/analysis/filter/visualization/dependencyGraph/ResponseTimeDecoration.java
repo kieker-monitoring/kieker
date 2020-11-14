@@ -125,17 +125,17 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 	public String createFormattedOutput() {
 		final StringBuilder sb = new StringBuilder(30);
 		sb.append("min: ")
-		  .append(this.getMinimalResponseTime())
-		  .append(this.timeUnitShortname)
-		  .append(", avg: ")
-		  .append(Math.round(this.getAverageResponseTime()))
-		  .append(this.timeUnitShortname)
-		  .append(", max: ")
-		  .append(this.getMaximalResponseTime())
-		  .append(this.timeUnitShortname)
-		  .append(",\\ntotal: ")
-		  .append(this.getTotalResponseTime())
-		  .append(this.timeUnitShortname);
+				.append(this.getMinimalResponseTime())
+				.append(this.timeUnitShortname)
+				.append(", avg: ")
+				.append(Math.round(this.getAverageResponseTime()))
+				.append(this.timeUnitShortname)
+				.append(", max: ")
+				.append(this.getMaximalResponseTime())
+				.append(this.timeUnitShortname)
+				.append(",\\ntotal: ")
+				.append(this.getTotalResponseTime())
+				.append(this.timeUnitShortname);
 		return sb.toString();
 	}
 

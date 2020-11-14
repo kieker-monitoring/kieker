@@ -41,7 +41,7 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  */
 @Deprecated
 @Plugin(repositoryPorts = {
-		@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
 public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 
 	public static final String CONFIG_PROPERTY_VALUE_VERBOSE = "false";
@@ -58,8 +58,10 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param configuration  The configuration for this component.
-	 * @param projectContext The project context for this component.
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
 	 */
 	public AbstractTraceAnalysisFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -147,7 +149,8 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	 * Prints a debug message to the logger. The output is prepended by a header
 	 * which includes the name of this plugin instance.
 	 *
-	 * @param lines The lines to be printed.
+	 * @param lines
+	 *            The lines to be printed.
 	 */
 	protected void printDebugLogMessage(final String[] lines) {
 		if (AbstractTraceAnalysisFilter.LOGGER.isDebugEnabled()) {

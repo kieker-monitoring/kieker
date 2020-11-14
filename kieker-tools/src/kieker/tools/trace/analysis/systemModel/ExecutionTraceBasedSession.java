@@ -36,7 +36,8 @@ public class ExecutionTraceBasedSession extends AbstractSession<ExecutionTrace> 
 	/**
 	 * Creates a new execution trace-based session with the given session ID.
 	 *
-	 * @param sessionId The session ID to use
+	 * @param sessionId
+	 *            The session ID to use
 	 */
 	public ExecutionTraceBasedSession(final String sessionId) {
 		super(sessionId);

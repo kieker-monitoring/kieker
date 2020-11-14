@@ -34,8 +34,10 @@ public class TraceInformation {
 	/**
 	 * Creates a new trace information object using the given data.
 	 *
-	 * @param traceId   The trace ID to use
-	 * @param sessionId The session ID to use
+	 * @param traceId
+	 *            The trace ID to use
+	 * @param sessionId
+	 *            The session ID to use
 	 */
 	public TraceInformation(final long traceId, final String sessionId) {
 		this.traceId = traceId;

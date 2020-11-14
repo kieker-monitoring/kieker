@@ -69,7 +69,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	 * Creates a new instance of this class using the given parameters.
 	 *
 	 *
-	 * @param repository              access to the model repository
+	 * @param repository
+	 *            access to the model repository
 	 * @param enhanceJavaConstructors
 	 * @param enhanceCallDetection
 	 * @param ignoreAssumedCalls
@@ -272,7 +273,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		 * removed call statement, an assumed execution is generated using the timestamp
 		 * of the last recursive operation event.
 		 *
-		 * @param lastEvent The last processed operation event
+		 * @param lastEvent
+		 *            The last processed operation event
 		 * @throws InvalidTraceException
 		 */
 		private void closeOpenCalls(final AbstractOperationEvent lastEvent) throws InvalidTraceException {
@@ -448,8 +450,10 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			/**
 			 * Creates a new instance of this class using the given parameters.
 			 *
-			 * @param executionIndex The execution order index.
-			 * @param stackDepth     The execution stack size.
+			 * @param executionIndex
+			 *            The execution order index.
+			 * @param stackDepth
+			 *            The execution stack size.
 			 */
 			public ExecutionInformation(final int executionIndex, final int stackDepth) {
 				this.eoi = executionIndex;

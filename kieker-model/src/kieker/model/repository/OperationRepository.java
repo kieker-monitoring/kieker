@@ -39,21 +39,23 @@ public class OperationRepository extends AbstractRepository {
 			TypeRepository.ROOT_COMPONENT, OperationRepository.ROOT_SIGNATURE);
 
 	private final Map<String, Operation> operationsByName = new Hashtable<>(); // NOPMD
-																								// (UseConcurrentHashMap)
+																				// (UseConcurrentHashMap)
 	private final Map<Integer, Operation> operationsById = new Hashtable<>(); // NOPMD
-																								// (UseConcurrentHashMap)
+																				// (UseConcurrentHashMap)
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param systemFactory The system factory.
+	 * @param systemFactory
+	 *            The system factory.
 	 */
 	public OperationRepository(final SystemModelRepository systemFactory) {
 		super(systemFactory);
 	}
 
 	/**
-	 * @param namedIdentifier The identifier to search for.
+	 * @param namedIdentifier
+	 *            The identifier to search for.
 	 *
 	 * @return The instance for the passed namedIdentifier; null if no instance with
 	 *         this namedIdentifier.

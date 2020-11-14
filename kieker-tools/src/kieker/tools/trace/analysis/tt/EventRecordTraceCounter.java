@@ -58,8 +58,10 @@ public class EventRecordTraceCounter extends AbstractStage {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param configuration  The configuration for this component.
-	 * @param projectContext The project context for this component.
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
 	 */
 	public EventRecordTraceCounter(final boolean logInvalidTraces) {
 		this.logInvalidTraces = logInvalidTraces;
@@ -95,7 +97,8 @@ public class EventRecordTraceCounter extends AbstractStage {
 	 * This method can be used to report a trace which has been processed
 	 * successfully.
 	 *
-	 * @param traceId The ID of the processed trace.
+	 * @param traceId
+	 *            The ID of the processed trace.
 	 */
 	protected final void reportSuccess(final long traceId) {
 		synchronized (this) {
@@ -109,7 +112,8 @@ public class EventRecordTraceCounter extends AbstractStage {
 	 * This method can be used to report a trace which has <b>not</b> been processed
 	 * successfully.
 	 *
-	 * @param traceId The ID of the processed trace.
+	 * @param traceId
+	 *            The ID of the processed trace.
 	 */
 	protected final void reportError(final long traceId) {
 		synchronized (this) {

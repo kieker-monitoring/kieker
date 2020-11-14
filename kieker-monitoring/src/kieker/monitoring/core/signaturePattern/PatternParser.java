@@ -45,10 +45,10 @@ public final class PatternParser {
 
 	private static final String FULLY_QUALFIED_NAME = "[\\p{javaJavaIdentifierPart}\\.])*\\p{javaJavaIdentifierPart}+";
 	private static final String SIMPLE_NAME = "(\\p{javaJavaIdentifierPart})+";
-	
+
 	private static final Map<String, Integer> ALLOWED_MODIFIER_WITH_ORDER = new HashMap<>(); // NOPMD (no conc. access)
 	static {
-   		ALLOWED_MODIFIER_WITH_ORDER.put(MODIFIER_PUBLIC, 0);
+		ALLOWED_MODIFIER_WITH_ORDER.put(MODIFIER_PUBLIC, 0);
 		ALLOWED_MODIFIER_WITH_ORDER.put(MODIFIER_PRIVATE, 0);
 		ALLOWED_MODIFIER_WITH_ORDER.put(MODIFIER_PROTECTED, 0);
 		ALLOWED_MODIFIER_WITH_ORDER.put(PACKAGE, 0);
@@ -124,7 +124,7 @@ public final class PatternParser {
 			if ("new".equals(tokens[numOfModifiers]) && !"<init>".equals(methodName)) {
 				throw new InvalidPatternException("Invalid constructor name - must always be <init>");
 			}
-			
+
 			final String params = trimPattern.substring(openingParenthesis + 1, closingParenthesis).trim();
 			final String throwsPattern;
 			final int throwsPatternStart = closingParenthesis + 1;
@@ -245,7 +245,7 @@ public final class PatternParser {
 			}
 		}
 	}
-	
+
 	private static final String parseType(final String type) throws InvalidPatternException {
 		final int index = type.indexOf('[');
 		if (index != -1) {
@@ -336,7 +336,7 @@ public final class PatternParser {
 			return "";
 		} else {
 			try {
-  				return PatternParser.parseFQClassname(retType) + "\\s";
+				return PatternParser.parseFQClassname(retType) + "\\s";
 			} catch (final InvalidPatternException ex) {
 				throw new InvalidPatternException("Invalid return type.", ex);
 			}
@@ -351,7 +351,7 @@ public final class PatternParser {
 			return PatternParser.parseNonEmptyModifierContraintList(modifierList);
 		}
 	}
-	
+
 	private static String parseNonEmptyModifierContraintList(final String[] modifierList) throws InvalidPatternException {
 		final int numberOfModifiers = modifierList.length;
 		// test whether modifiers are allowed and in the correct order

@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.misc;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,13 +25,11 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.5
  */
 public final class TimestampRecordFactory implements IRecordFactory<TimestampRecord> {
-	
 
 	@Override
 	public TimestampRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new TimestampRecord(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

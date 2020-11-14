@@ -41,9 +41,9 @@ public final class TraceEventRecords {
 	 *            The trace events to be stored in this object.
 	 */
 	public TraceEventRecords(final TraceMetadata trace, final AbstractTraceEvent[] traceEvents) { // NOPMD (stored directly)
-//		if (null == trace) {
-//			throw new NullPointerException("trace is null");
-//		}
+		// if (null == trace) {
+		// throw new NullPointerException("trace is null");
+		// }
 		if (null == traceEvents) {
 			throw new NullPointerException("traceEvents is null");
 		}
@@ -84,15 +84,9 @@ public final class TraceEventRecords {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(64);
-		sb.append(super.toString()).
-			append("\n\tTrace (count=").append(this.count).
-			append("): ").
-			append(this.trace);
+		sb.append(super.toString()).append("\n\tTrace (count=").append(this.count).append("): ").append(this.trace);
 		for (final AbstractTraceEvent traceEvent : this.traceEvents) {
-			sb.append("\n\t").
-				append(traceEvent.getClass().getSimpleName()).
-				append(": ").
-				append(traceEvent);
+			sb.append("\n\t").append(traceEvent.getClass().getSimpleName()).append(": ").append(traceEvent);
 		}
 		sb.append('\n');
 		return sb.toString();
@@ -126,7 +120,7 @@ public final class TraceEventRecords {
 		} else if (!this.trace.equals(other.trace)) {
 			return false;
 		}
-		
+
 		return Arrays.equals(this.traceEvents, other.traceEvents);
 	}
 }

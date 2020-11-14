@@ -121,8 +121,8 @@ public class ExecutionFactory {
 
 		// Register allocation component (if it hasn't been registered before)
 		final String allocationName = componentInstanceName + "::" + executionContainerName;
-		AllocationComponent allocationComponentA =
-				this.systemEntityFactory.getAllocationFactory().lookupAllocationComponentInstanceByNamedIdentifier(allocationName);
+		AllocationComponent allocationComponentA = this.systemEntityFactory.getAllocationFactory()
+				.lookupAllocationComponentInstanceByNamedIdentifier(allocationName);
 		if (allocationComponentA == null) {
 			allocationComponentA = this.systemEntityFactory.getAllocationFactory().createAndRegisterAllocationComponentInstance(allocationName,
 					assemblyComponentA, containerC);

@@ -37,7 +37,7 @@ import kieker.tools.trace.analysis.filter.AbstractTraceProcessingFilter;
  */
 @Deprecated
 @Plugin(description = "Counts and reports the number of incoming valid/invalid event record traces", configuration = {
-		@Property(name = EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID, defaultValue = "true") })
+	@Property(name = EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID, defaultValue = "true") })
 public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 
 	/** This is the name of the input port receiving valid record traces. */
@@ -58,8 +58,10 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param configuration  The configuration for this component.
-	 * @param projectContext The project context for this component.
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
 	 */
 	public EventRecordTraceCounter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -81,10 +83,11 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	/**
 	 * This method represents the input port for the valid traces.
 	 *
-	 * @param validTrace The next trace.
+	 * @param validTrace
+	 *            The next trace.
 	 */
 	@InputPort(name = EventRecordTraceCounter.INPUT_PORT_NAME_VALID, eventTypes = {
-			TraceEventRecords.class }, description = "Receives valid event record traces")
+		TraceEventRecords.class }, description = "Receives valid event record traces")
 	public void inputValidTrace(final TraceEventRecords validTrace) {
 		super.reportSuccess(validTrace.getTraceMetadata().getTraceId());
 	}
@@ -92,10 +95,11 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	/**
 	 * This method represents the input port for the invalid traces.
 	 *
-	 * @param invalidTrace The next trace.
+	 * @param invalidTrace
+	 *            The next trace.
 	 */
 	@InputPort(name = EventRecordTraceCounter.INPUT_PORT_NAME_INVALID, eventTypes = {
-			TraceEventRecords.class }, description = "Receives invalid event record traces")
+		TraceEventRecords.class }, description = "Receives invalid event record traces")
 	public void inputInvalidTrace(final TraceEventRecords invalidTrace) {
 		if (this.logInvalidTraces) {
 			this.logger.error("Invalid trace: {}", invalidTrace);

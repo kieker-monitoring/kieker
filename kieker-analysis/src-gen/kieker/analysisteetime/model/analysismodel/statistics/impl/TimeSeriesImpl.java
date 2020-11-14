@@ -28,9 +28,9 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.statistics.impl.TimeSeriesImpl#getName <em>Name</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.statistics.impl.TimeSeriesImpl#getUnit <em>Unit</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.statistics.impl.TimeSeriesImpl#getValues <em>Values</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.statistics.impl.TimeSeriesImpl#getName <em>Name</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.statistics.impl.TimeSeriesImpl#getUnit <em>Unit</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.statistics.impl.TimeSeriesImpl#getValues <em>Values</em>}</li>
  * </ul>
  *
  * @generated
@@ -40,6 +40,7 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -50,6 +51,7 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -60,6 +62,7 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 	 * The default value of the '{@link #getUnit() <em>Unit</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getUnit()
 	 * @generated
 	 * @ordered
@@ -70,6 +73,7 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 	 * The cached value of the '{@link #getUnit() <em>Unit</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getUnit()
 	 * @generated
 	 * @ordered
@@ -80,6 +84,7 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 	 * The cached value of the '{@link #getValues() <em>Values</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getValues()
 	 * @generated
 	 * @ordered
@@ -89,6 +94,7 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected TimeSeriesImpl() {
@@ -98,6 +104,7 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -108,6 +115,7 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String getName() {
@@ -117,6 +125,7 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Object getUnit() {
@@ -126,6 +135,7 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setUnit(Object newUnit) {
@@ -138,6 +148,7 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EList<V> getValues() {
@@ -150,17 +161,18 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.TIME_SERIES__NAME:
-				return getName();
-			case StatisticsPackage.TIME_SERIES__UNIT:
-				return getUnit();
-			case StatisticsPackage.TIME_SERIES__VALUES:
-				return getValues();
+		case StatisticsPackage.TIME_SERIES__NAME:
+			return getName();
+		case StatisticsPackage.TIME_SERIES__UNIT:
+			return getUnit();
+		case StatisticsPackage.TIME_SERIES__VALUES:
+			return getValues();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -168,19 +180,20 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.TIME_SERIES__UNIT:
-				setUnit(newValue);
-				return;
-			case StatisticsPackage.TIME_SERIES__VALUES:
-				getValues().clear();
-				getValues().addAll((Collection<? extends V>)newValue);
-				return;
+		case StatisticsPackage.TIME_SERIES__UNIT:
+			setUnit(newValue);
+			return;
+		case StatisticsPackage.TIME_SERIES__VALUES:
+			getValues().clear();
+			getValues().addAll((Collection<? extends V>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -188,17 +201,18 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.TIME_SERIES__UNIT:
-				setUnit(UNIT_EDEFAULT);
-				return;
-			case StatisticsPackage.TIME_SERIES__VALUES:
-				getValues().clear();
-				return;
+		case StatisticsPackage.TIME_SERIES__UNIT:
+			setUnit(UNIT_EDEFAULT);
+			return;
+		case StatisticsPackage.TIME_SERIES__VALUES:
+			getValues().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -206,17 +220,18 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.TIME_SERIES__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case StatisticsPackage.TIME_SERIES__UNIT:
-				return UNIT_EDEFAULT == null ? unit != null : !UNIT_EDEFAULT.equals(unit);
-			case StatisticsPackage.TIME_SERIES__VALUES:
-				return values != null && !values.isEmpty();
+		case StatisticsPackage.TIME_SERIES__NAME:
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case StatisticsPackage.TIME_SERIES__UNIT:
+			return UNIT_EDEFAULT == null ? unit != null : !UNIT_EDEFAULT.equals(unit);
+		case StatisticsPackage.TIME_SERIES__VALUES:
+			return values != null && !values.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -224,11 +239,13 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
@@ -239,4 +256,4 @@ public class TimeSeriesImpl<V extends Value, U extends Unit<V>> extends MinimalE
 		return result.toString();
 	}
 
-} //TimeSeriesImpl
+} // TimeSeriesImpl

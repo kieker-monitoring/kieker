@@ -26,17 +26,18 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedComponentMapEntryImpl#getTypedKey <em>Key</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedComponentMapEntryImpl#getTypedValue <em>Value</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedComponentMapEntryImpl#getTypedKey <em>Key</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.deployment.impl.EStringToDeployedComponentMapEntryImpl#getTypedValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<String,DeployedComponent> {
+public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<String, DeployedComponent> {
 	/**
 	 * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getTypedKey()
 	 * @generated
 	 * @ordered
@@ -47,6 +48,7 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getTypedKey()
 	 * @generated
 	 * @ordered
@@ -57,6 +59,7 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getTypedValue()
 	 * @generated
 	 * @ordered
@@ -66,6 +69,7 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected EStringToDeployedComponentMapEntryImpl() {
@@ -75,6 +79,7 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -85,6 +90,7 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String getTypedKey() {
@@ -94,6 +100,7 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setTypedKey(String newKey) {
@@ -106,6 +113,7 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeployedComponent getTypedValue() {
@@ -115,14 +123,19 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetTypedValue(DeployedComponent newValue, NotificationChain msgs) {
 		DeployedComponent oldValue = value;
 		value = newValue;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE, oldValue, newValue);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE,
+					oldValue, newValue);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
@@ -130,32 +143,36 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setTypedValue(DeployedComponent newValue) {
 		if (newValue != value) {
 			NotificationChain msgs = null;
 			if (value != null)
-				msgs = ((InternalEObject)value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE, null, msgs);
+				msgs = ((InternalEObject) value).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE,
+						null, msgs);
 			if (newValue != null)
-				msgs = ((InternalEObject)newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE, null, msgs);
+				msgs = ((InternalEObject) newValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE,
+						null, msgs);
 			msgs = basicSetTypedValue(newValue, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE, newValue, newValue));
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE:
-				return basicSetTypedValue(null, msgs);
+		case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE:
+			return basicSetTypedValue(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -163,15 +180,16 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__KEY:
-				return getTypedKey();
-			case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE:
-				return getTypedValue();
+		case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__KEY:
+			return getTypedKey();
+		case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE:
+			return getTypedValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -179,17 +197,18 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__KEY:
-				setTypedKey((String)newValue);
-				return;
-			case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE:
-				setTypedValue((DeployedComponent)newValue);
-				return;
+		case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__KEY:
+			setTypedKey((String) newValue);
+			return;
+		case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE:
+			setTypedValue((DeployedComponent) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -197,17 +216,18 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__KEY:
-				setTypedKey(KEY_EDEFAULT);
-				return;
-			case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE:
-				setTypedValue((DeployedComponent)null);
-				return;
+		case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__KEY:
+			setTypedKey(KEY_EDEFAULT);
+			return;
+		case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE:
+			setTypedValue((DeployedComponent) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -215,15 +235,16 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__KEY:
-				return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
-			case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE:
-				return value != null;
+		case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__KEY:
+			return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
+		case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY__VALUE:
+			return value != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -231,11 +252,13 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (key: ");
@@ -247,6 +270,7 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected int hash = -1;
@@ -254,6 +278,7 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public int getHash() {
@@ -267,6 +292,7 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setHash(int hash) {
@@ -276,6 +302,7 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String getKey() {
@@ -285,6 +312,7 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setKey(String key) {
@@ -294,6 +322,7 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeployedComponent getValue() {
@@ -303,6 +332,7 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeployedComponent setValue(DeployedComponent value) {
@@ -314,12 +344,13 @@ public class EStringToDeployedComponentMapEntryImpl extends MinimalEObjectImpl.C
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	public EMap<String, DeployedComponent> getEMap() {
 		EObject container = eContainer();
-		return container == null ? null : (EMap<String, DeployedComponent>)container.eGet(eContainmentFeature());
+		return container == null ? null : (EMap<String, DeployedComponent>) container.eGet(eContainmentFeature());
 	}
 
-} //EStringToDeployedComponentMapEntryImpl
+} // EStringToDeployedComponentMapEntryImpl

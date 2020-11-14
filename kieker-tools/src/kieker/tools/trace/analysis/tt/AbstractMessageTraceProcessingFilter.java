@@ -34,8 +34,10 @@ public abstract class AbstractMessageTraceProcessingFilter extends AbstractTrace
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param configuration  The configuration for this component.
-	 * @param projectContext The project context for this component.
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
 	 */
 	public AbstractMessageTraceProcessingFilter(final SystemModelRepository repository) {
 		super(repository);

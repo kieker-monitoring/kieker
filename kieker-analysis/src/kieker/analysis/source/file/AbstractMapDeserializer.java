@@ -34,7 +34,8 @@ public abstract class AbstractMapDeserializer {
 	/**
 	 * Create an abstract map deserializer.
 	 *
-	 * @param configuration configuration
+	 * @param configuration
+	 *            configuration
 	 */
 	public AbstractMapDeserializer(final Configuration configuration) {
 		this.configuration = configuration;
@@ -43,9 +44,12 @@ public abstract class AbstractMapDeserializer {
 	/**
 	 * Read a string map from an input stream and initialize the specified registry with the values.
 	 *
-	 * @param inputStream the input stream
-	 * @param registry the string registry
-	 * @param mapFileName the associated file name used for error and debug output
+	 * @param inputStream
+	 *            the input stream
+	 * @param registry
+	 *            the string registry
+	 * @param mapFileName
+	 *            the associated file name used for error and debug output
 	 */
 	public abstract void processDataStream(final InputStream inputStream, final ReaderRegistry<String> registry, String mapFileName);
 }

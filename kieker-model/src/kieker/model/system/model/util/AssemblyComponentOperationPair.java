@@ -37,9 +37,12 @@ public class AssemblyComponentOperationPair implements ISystemModelElement {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param id                The ID of this pair.
-	 * @param operation         The operation.
-	 * @param assemblyComponent The assembly component.
+	 * @param id
+	 *            The ID of this pair.
+	 * @param operation
+	 *            The operation.
+	 * @param assemblyComponent
+	 *            The assembly component.
 	 */
 	public AssemblyComponentOperationPair(final int id, final Operation operation,
 			final AssemblyComponent assemblyComponent) {

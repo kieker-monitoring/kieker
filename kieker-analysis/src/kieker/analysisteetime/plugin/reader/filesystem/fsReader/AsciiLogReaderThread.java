@@ -58,8 +58,6 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 
 	private final TextFileStreamProcessor textFileStreamProcessor;
 
-
-
 	/**
 	 * Creates a new instance of this class.
 	 *
@@ -183,8 +181,6 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 			}
 		}
 	}
-
-
 
 	@Override
 	protected FileExtensionFilter getFileExtensionFilter() {

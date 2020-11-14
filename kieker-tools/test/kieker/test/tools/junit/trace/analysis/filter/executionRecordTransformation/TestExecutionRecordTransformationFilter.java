@@ -85,8 +85,7 @@ public class TestExecutionRecordTransformationFilter extends AbstractKiekerTest 
 			Assert.assertEquals("Hostnames differ", opExec.getHostname(), exec.getAllocationComponent().getExecutionContainer().getName());
 			Assert.assertEquals("Session ID's differ", opExec.getSessionId(), exec.getSessionId());
 			Assert.assertEquals("Trace ID's differ", opExec.getTraceId(), exec.getTraceId());
-			final ClassOperationSignaturePair opExecClassOperationSignature =
-					ClassOperationSignaturePair.splitOperationSignatureStr(opExec.getOperationSignature());
+			final ClassOperationSignaturePair opExecClassOperationSignature = ClassOperationSignaturePair.splitOperationSignatureStr(opExec.getOperationSignature());
 			Assert.assertEquals("Class/Component type names differ", opExecClassOperationSignature.getFqClassname(),
 					exec.getAllocationComponent().getAssemblyComponent().getType().getFullQualifiedName());
 			Assert.assertEquals("Signatures differ", opExecClassOperationSignature.getSignature(), exec.getOperation().getSignature());

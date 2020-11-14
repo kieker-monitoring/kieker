@@ -60,9 +60,11 @@ public class SessionReconstructionFilter extends AbstractConsumerStage<Execution
 	/**
 	 * Creates a new session reconstruction filter using the given configuration.
 	 *
-	 * @param timeunit     used time unit, e.g., NANOSECONDS
-	 * @param maxThinkTime max time to collect session information (null implies
-	 *                     Long.MAX_VALUE)
+	 * @param timeunit
+	 *            used time unit, e.g., NANOSECONDS
+	 * @param maxThinkTime
+	 *            max time to collect session information (null implies
+	 *            Long.MAX_VALUE)
 	 */
 	public SessionReconstructionFilter(final TimeUnit timeunit, final Long maxThinkTime) {
 		this.timeunit = timeunit;
@@ -114,7 +116,8 @@ public class SessionReconstructionFilter extends AbstractConsumerStage<Execution
 	/**
 	 * Processes an incoming execution.
 	 *
-	 * @param executionTrace The execution trace to process.
+	 * @param executionTrace
+	 *            The execution trace to process.
 	 */
 	@Override
 	protected void execute(final ExecutionTrace executionTrace) throws Exception {

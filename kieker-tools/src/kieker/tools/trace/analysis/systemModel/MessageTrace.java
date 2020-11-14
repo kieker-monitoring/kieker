@@ -40,8 +40,10 @@ public class MessageTrace extends AbstractTrace {
 	/**
 	 * Creates a new message trace from the given data.
 	 *
-	 * @param traceId The ID for this message trace
-	 * @param seq     The messages contained in this message trace
+	 * @param traceId
+	 *            The ID for this message trace
+	 * @param seq
+	 *            The messages contained in this message trace
 	 */
 	public MessageTrace(final long traceId, final List<AbstractMessage> seq) {
 		this(traceId, AbstractTrace.DEFAULT_SESSION_ID, seq);
@@ -50,9 +52,12 @@ public class MessageTrace extends AbstractTrace {
 	/**
 	 * Creates a new message trace from the given data.
 	 *
-	 * @param traceId   The ID for this trace.
-	 * @param sessionId The ID of the current session.
-	 * @param seq       The list of messages this trace consists of.
+	 * @param traceId
+	 *            The ID for this trace.
+	 * @param sessionId
+	 *            The ID of the current session.
+	 * @param seq
+	 *            The list of messages this trace consists of.
 	 */
 	public MessageTrace(final long traceId, final String sessionId, final List<AbstractMessage> seq) {
 		super(traceId, sessionId);

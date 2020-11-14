@@ -40,9 +40,12 @@ public class ComponentType {
 	 * requests implementation of equals and hashCode in pairs* Creates a new
 	 * instance of this class using the given parameters.
 	 *
-	 * @param id          The ID of the component type.
-	 * @param packageName The package name.
-	 * @param typeName    The type name.
+	 * @param id
+	 *            The ID of the component type.
+	 * @param packageName
+	 *            The package name.
+	 * @param typeName
+	 *            The type name.
 	 */
 	public ComponentType(final int id, final String packageName, final String typeName) {
 		this.id = id;
@@ -53,9 +56,11 @@ public class ComponentType {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param id                    The ID of the component type.
-	 * @param fullqualifiedTypeName The fully qualified name of the type, separated
-	 *                              with '.'.
+	 * @param id
+	 *            The ID of the component type.
+	 * @param fullqualifiedTypeName
+	 *            The fully qualified name of the type, separated
+	 *            with '.'.
 	 */
 	public ComponentType(final int id, final String fullqualifiedTypeName) {
 		this.id = id;
@@ -132,7 +137,8 @@ public class ComponentType {
 	/**
 	 * This method adds a given operation to the list of available operations.
 	 *
-	 * @param op The operation to be added.
+	 * @param op
+	 *            The operation to be added.
 	 *
 	 * @return The added operation.
 	 */

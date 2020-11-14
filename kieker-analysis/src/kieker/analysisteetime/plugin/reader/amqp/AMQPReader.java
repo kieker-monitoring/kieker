@@ -80,14 +80,18 @@ public final class AMQPReader {
 	/**
 	 * Creates a new logic module for an AMQP reader.
 	 *
-	 * @param uri                     The name of the configuration property for the
-	 *                                server URI.
-	 * @param queueName               The name of the configuration property for the
-	 *                                AMQP queue name.
-	 * @param heartbeat               The name of the configuration property for the
-	 *                                heartbeat timeout.
-	 * @param elementReceivedCallback The actual teetime stage which uses this
-	 *                                class.
+	 * @param uri
+	 *            The name of the configuration property for the
+	 *            server URI.
+	 * @param queueName
+	 *            The name of the configuration property for the
+	 *            AMQP queue name.
+	 * @param heartbeat
+	 *            The name of the configuration property for the
+	 *            heartbeat timeout.
+	 * @param elementReceivedCallback
+	 *            The actual teetime stage which uses this
+	 *            class.
 	 */
 	public AMQPReader(final String uri, final String queueName, final int heartbeat,
 			final Consumer<IMonitoringRecord> elementReceivedCallback) {

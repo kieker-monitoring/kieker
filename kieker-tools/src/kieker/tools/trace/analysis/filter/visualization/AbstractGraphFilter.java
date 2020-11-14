@@ -78,8 +78,8 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 	}
 
 	@Override
-	protected void notifyNewIncomingConnection(final String inputPortName, final AbstractPlugin connectedPlugin, final String outputPortName) throws
-			AnalysisConfigurationException {
+	protected void notifyNewIncomingConnection(final String inputPortName, final AbstractPlugin connectedPlugin, final String outputPortName)
+			throws AnalysisConfigurationException {
 		final Set<AbstractPlugin> predecessors = connectedPlugin.getIncomingPlugins(true);
 		predecessors.add(connectedPlugin);
 

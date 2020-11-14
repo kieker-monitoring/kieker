@@ -55,7 +55,8 @@ public class TextFileStreamProcessor {
 
 	private final ReaderRegistry<String> stringRegistry;
 
-	public TextFileStreamProcessor(final boolean ignoreUnknownRecordTypes, final ReaderRegistry<String> stringRegistry, final IMonitoringRecordReceiver recordReceiver) {
+	public TextFileStreamProcessor(final boolean ignoreUnknownRecordTypes, final ReaderRegistry<String> stringRegistry,
+			final IMonitoringRecordReceiver recordReceiver) {
 		this.ignoreUnknownRecordTypes = ignoreUnknownRecordTypes;
 		this.recordReceiver = recordReceiver;
 		this.terminated = false;
@@ -124,7 +125,7 @@ public class TextFileStreamProcessor {
 	 */
 	private int processBuffer(final byte[] buffer, final int offset,
 			final int numOfBufferedBytes)
-					throws MappingException, MonitoringRecordException, UnknownRecordTypeException {
+			throws MappingException, MonitoringRecordException, UnknownRecordTypeException {
 		int i = offset;
 		int mark = 0;
 		while (i < numOfBufferedBytes) {

@@ -92,7 +92,8 @@ public final class WriterController extends AbstractController implements IWrite
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param configuration The configuration for the controller.
+	 * @param configuration
+	 *            The configuration for the controller.
 	 */
 	public WriterController(final Configuration configuration) {
 		super(configuration);
@@ -192,8 +193,10 @@ public final class WriterController extends AbstractController implements IWrite
 	// }
 
 	/**
-	 * @param queueFqn the fully qualified queue name
-	 * @param capacity the (initial) capacity of the queue
+	 * @param queueFqn
+	 *            the fully qualified queue name
+	 * @param capacity
+	 *            the (initial) capacity of the queue
 	 * @return a new instance of the queue indicated by its <code>queueFQN</code>.
 	 *         Such instance is created by invoking the constructor with a single
 	 *         parameter of type <code>int</code>.

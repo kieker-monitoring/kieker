@@ -22,41 +22,40 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Tillmann Carlos Bielefeld
- * API compatibility: Kieker 1.15.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.10
  */
-public class NamedTSPoint extends AbstractMonitoringRecord  {			
+public class NamedTSPoint extends AbstractMonitoringRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // NamedTSPoint.timestamp
-			 + TYPE_SIZE_DOUBLE // NamedTSPoint.value
-			 + TYPE_SIZE_STRING; // NamedTSPoint.name
-	
+			+ TYPE_SIZE_DOUBLE // NamedTSPoint.value
+			+ TYPE_SIZE_STRING; // NamedTSPoint.name
+
 	public static final Class<?>[] TYPES = {
 		long.class, // NamedTSPoint.timestamp
 		double.class, // NamedTSPoint.value
 		String.class, // NamedTSPoint.name
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
 		"value",
 		"name",
 	};
-	
+
 	/** default constants. */
 	public static final String NAME = "";
 	private static final long serialVersionUID = 4302229080791508406L;
-	
+
 	/** property declarations. */
 	private final long timestamp;
 	private final double value;
 	private final String name;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -70,22 +69,21 @@ public class NamedTSPoint extends AbstractMonitoringRecord  {
 	public NamedTSPoint(final long timestamp, final double value, final String name) {
 		this.timestamp = timestamp;
 		this.value = value;
-		this.name = name == null?"":name;
+		this.name = name == null ? "" : name;
 	}
-
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public NamedTSPoint(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
 		this.value = deserializer.getDouble();
 		this.name = deserializer.getString();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -95,7 +93,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord  {
 		serializer.putDouble(this.getValue());
 		serializer.putString(this.getName());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -103,7 +101,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -111,7 +109,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord  {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -120,7 +118,6 @@ public class NamedTSPoint extends AbstractMonitoringRecord  {
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -135,7 +132,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final NamedTSPoint castedRecord = (NamedTSPoint) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -149,34 +146,33 @@ public class NamedTSPoint extends AbstractMonitoringRecord  {
 		if (!this.getName().equals(castedRecord.getName())) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getValue());
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getValue());
 		code += this.getName().hashCode();
-		
+
 		return code;
 	}
-	
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-	
-	
+
 	public final double getValue() {
 		return this.value;
 	}
-	
-	
+
 	public final String getName() {
 		return this.name;
 	}
-	
+
 }

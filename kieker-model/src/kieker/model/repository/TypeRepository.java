@@ -44,7 +44,8 @@ public class TypeRepository extends AbstractRepository {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param systemFactory The system factory.
+	 * @param systemFactory
+	 *            The system factory.
 	 */
 	public TypeRepository(final SystemModelRepository systemFactory) {
 		super(systemFactory);
@@ -54,7 +55,8 @@ public class TypeRepository extends AbstractRepository {
 	 * Returns the instance for the passed namedIdentifier; null if no instance with
 	 * this namedIdentifier.
 	 *
-	 * @param namedIdentifier The identifier to search for.
+	 * @param namedIdentifier
+	 *            The identifier to search for.
 	 *
 	 * @return The corresponding component type if available; null otherwise.
 	 */
@@ -67,8 +69,10 @@ public class TypeRepository extends AbstractRepository {
 	/**
 	 * Creates and registers a component type that has not been registered yet.
 	 *
-	 * @param namedIdentifier   The identifier of the new component type.
-	 * @param fullqualifiedName The fully qualfieid name of the new component type.
+	 * @param namedIdentifier
+	 *            The identifier of the new component type.
+	 * @param fullqualifiedName
+	 *            The fully qualfieid name of the new component type.
 	 *
 	 * @return the created component type
 	 */

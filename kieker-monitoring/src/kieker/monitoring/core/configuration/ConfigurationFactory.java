@@ -127,7 +127,7 @@ public final class ConfigurationFactory {
 		InputStream is = null; // NOPMD (null)
 		try {
 			try {
-				is =  Files.newInputStream(Paths.get(filename), StandardOpenOption.READ);
+				is = Files.newInputStream(Paths.get(filename), StandardOpenOption.READ);
 			} catch (final FileNotFoundException ex) {
 				// if not found as absolute path try within the classpath
 				final URL resourceUrl = ConfigurationFactory.loadKiekerPropertiesFile(filename);

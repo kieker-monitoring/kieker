@@ -40,7 +40,8 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * Default constructor.
 	 *
-	 * @param consumer The consumer.
+	 * @param consumer
+	 *            The consumer.
 	 */
 	public FakeMessageProducer(final FakeMessageConsumer consumer) {
 		this.consumer = consumer;

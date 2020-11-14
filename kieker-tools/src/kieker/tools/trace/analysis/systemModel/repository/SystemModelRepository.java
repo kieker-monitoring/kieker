@@ -45,8 +45,8 @@ import kieker.tools.trace.analysis.systemModel.Operation;
 		description = "Model manager for Kieker's component model ")
 public class SystemModelRepository extends AbstractRepository {
 
-	public static final Execution ROOT_EXECUTION =
-			new Execution(OperationRepository.ROOT_OPERATION, AllocationRepository.ROOT_ALLOCATION_COMPONENT, -1, "-1", -1, -1, -1, -1, false);
+	public static final Execution ROOT_EXECUTION = new Execution(OperationRepository.ROOT_OPERATION, AllocationRepository.ROOT_ALLOCATION_COMPONENT, -1, "-1", -1,
+			-1, -1, -1, false);
 
 	public static final String ROOT_NODE_LABEL = "'Entry'";
 

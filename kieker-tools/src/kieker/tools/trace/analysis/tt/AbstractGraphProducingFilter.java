@@ -30,7 +30,8 @@ import kieker.tools.trace.analysis.filter.visualization.graph.NoOriginRetentionP
  * @author Holger Knoche
  * @author Reiner Jung -- teetime port
  *
- * @param <G> The graph type created by this filter
+ * @param <G>
+ *            The graph type created by this filter
  *
  * @since 1.6
  */
@@ -46,9 +47,12 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	 * Creates a new graph-producing filter using the given configuration and the
 	 * given graph.
 	 *
-	 * @param configuration  The configuration to use
-	 * @param projectContext The project context to use.
-	 * @param graph          The (usually empty) graph to produce / extend
+	 * @param configuration
+	 *            The configuration to use
+	 * @param projectContext
+	 *            The project context to use.
+	 * @param graph
+	 *            The (usually empty) graph to produce / extend
 	 */
 	public AbstractGraphProducingFilter(final SystemModelRepository repository, final G graph) {
 		super(repository);
@@ -63,12 +67,12 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	public abstract String getConfigurationName();
 
 	// TODO this implies that all content is send on termination
-//	@Override
-//	public void terminate(final boolean error) {
-//		if (!error) {
-//			this.deliver(this.getGraphOutputPortName(), this.getGraph());
-//		}
-//	}
+	// @Override
+	// public void terminate(final boolean error) {
+	// if (!error) {
+	// this.deliver(this.getGraphOutputPortName(), this.getGraph());
+	// }
+	// }
 
 	@Override
 	public String getGraphOutputPortName() {

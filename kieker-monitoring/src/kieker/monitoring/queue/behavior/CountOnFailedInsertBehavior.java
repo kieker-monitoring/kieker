@@ -27,7 +27,8 @@ import org.slf4j.LoggerFactory;
  *
  * @since 1.13
  *
- * @param <E> the type of the element which should be inserted into the queue.
+ * @param <E>
+ *            the type of the element which should be inserted into the queue.
  */
 public class CountOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 

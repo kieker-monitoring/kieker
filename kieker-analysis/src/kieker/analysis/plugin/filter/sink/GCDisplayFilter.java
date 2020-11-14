@@ -33,11 +33,10 @@ import kieker.common.record.jvm.GCRecord;
  *
  * @since 1.10
  */
-@Plugin(configuration =
-		@Property(
-				name = GCDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
-				defaultValue = GCDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
-				description = "Sets the number of max plot entries per record entry"))
+@Plugin(configuration = @Property(
+		name = GCDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+		defaultValue = GCDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
+		description = "Sets the number of max plot entries per record entry"))
 public class GCDisplayFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";

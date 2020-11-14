@@ -32,8 +32,9 @@ public class InvalidExecutionTrace {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param invalidExecutionTrace The execution trace which will be wrapped as
-	 *                              invalid.
+	 * @param invalidExecutionTrace
+	 *            The execution trace which will be wrapped as
+	 *            invalid.
 	 */
 	public InvalidExecutionTrace(final ExecutionTrace invalidExecutionTrace) {
 		this.invalidExecutionTraceArtifacts = invalidExecutionTrace;

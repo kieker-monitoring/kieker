@@ -39,7 +39,8 @@ import kieker.common.record.IMonitoringRecord;
 @Plugin(description = "A reader which reads records via an in-memory pipe", outputPorts = {
 	@OutputPort(name = PipeReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the PipeReader")
 }, configuration = {
-	@Property(name = PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, defaultValue = PipeReader.CONFIG_PROPERTY_VALUE_PIPENAME_DEFAULT, description = "The name of the pipe used to read data.")
+	@Property(name = PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, defaultValue = PipeReader.CONFIG_PROPERTY_VALUE_PIPENAME_DEFAULT,
+			description = "The name of the pipe used to read data.")
 })
 public final class PipeReader extends AbstractReaderPlugin implements IPipeReader {
 

@@ -81,8 +81,8 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		final TimestampFilter timestampStage = new TimestampFilter(leftBorder, rightBorder);
 
 		StageTester.test(timestampStage).and()
-		.send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
-		.start();
+				.send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
+				.start();
 
 		Assert.assertThat(timestampStage.getRecordsWithinTimePeriodOutputPort(), StageTester.producesNothing());
 		Assert.assertThat(timestampStage.getRecordsOutsideTimePeriodOutputPort(), StageTester.produces(TestTimestampFilter.EVENT));
@@ -100,8 +100,8 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		final TimestampFilter timestampStage = new TimestampFilter(leftBorder, rightBorder);
 
 		StageTester.test(timestampStage)
-		.and().send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
-		.start();
+				.and().send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
+				.start();
 
 		Assert.assertThat(timestampStage.getRecordsWithinTimePeriodOutputPort(), StageTester.producesNothing());
 		Assert.assertThat(timestampStage.getRecordsOutsideTimePeriodOutputPort(), StageTester.produces(TestTimestampFilter.EVENT));
@@ -118,8 +118,8 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		final TimestampFilter timestampStage = new TimestampFilter(leftBorder, rightBorder);
 
 		StageTester.test(timestampStage).and()
-		.send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
-		.start();
+				.send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
+				.start();
 
 		Assert.assertThat(timestampStage.getRecordsWithinTimePeriodOutputPort(), StageTester.produces(TestTimestampFilter.EVENT));
 		Assert.assertThat(timestampStage.getRecordsOutsideTimePeriodOutputPort(), StageTester.producesNothing());
@@ -136,8 +136,8 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		final TimestampFilter timestampStage = new TimestampFilter(leftBorder, rightBorder);
 
 		StageTester.test(timestampStage).and()
-		.send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
-		.start();
+				.send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
+				.start();
 
 		Assert.assertThat(timestampStage.getRecordsWithinTimePeriodOutputPort(), StageTester.produces(TestTimestampFilter.EVENT));
 		Assert.assertThat(timestampStage.getRecordsOutsideTimePeriodOutputPort(), StageTester.producesNothing());
@@ -155,8 +155,8 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		final TimestampFilter timestampStage = new TimestampFilter(leftBorder, rightBorder);
 
 		StageTester.test(timestampStage).and()
-		.send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
-		.start();
+				.send(TestTimestampFilter.EVENT).to(timestampStage.getMonitoringRecordsCombinedInputPort())
+				.start();
 
 		Assert.assertThat(timestampStage.getRecordsWithinTimePeriodOutputPort(), StageTester.produces(TestTimestampFilter.EVENT));
 		Assert.assertThat(timestampStage.getRecordsOutsideTimePeriodOutputPort(), StageTester.producesNothing());

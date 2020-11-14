@@ -41,9 +41,11 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 	/**
 	 * The second "default constructor".
 	 *
-	 * @param configuration  The configuration for this component.
-	 * @param projectContext The project context for this component. The component
-	 *                       will be registered.
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component. The component
+	 *            will be registered.
 	 */
 	public AbstractRepository(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);

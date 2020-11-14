@@ -45,8 +45,7 @@ public final class LoggingTimestampConverter {
 	/**
 	 * Private constructor to avoid instantiation.
 	 */
-	private LoggingTimestampConverter() {
-	}
+	private LoggingTimestampConverter() {}
 
 	/**
 	 * Converts a timestamp representing the number of nanoseconds since Jan 1, 1970
@@ -56,7 +55,8 @@ public final class LoggingTimestampConverter {
 	 * not guaranteed that the string can be reconverted using the
 	 * convertDatetimeStringToUTCLoggingTimestamp(..) method.
 	 *
-	 * @param loggingTimestamp The timestamp to be converted in nanoseconds.
+	 * @param loggingTimestamp
+	 *            The timestamp to be converted in nanoseconds.
 	 * @return a human-readable datetime string (UTC timezone) which represents the
 	 *         passed timestamp
 	 */
@@ -76,7 +76,8 @@ public final class LoggingTimestampConverter {
 	 * not guaranteed that the string can be reconverted using the
 	 * convertDatetimeStringToUTCLoggingTimestamp(..) method.
 	 *
-	 * @param loggingTimestamp The timestamp to be converted.
+	 * @param loggingTimestamp
+	 *            The timestamp to be converted.
 	 * @return a human-readable datetime string (local timezone) which represents
 	 *         the passed timestamp
 	 */
@@ -92,9 +93,11 @@ public final class LoggingTimestampConverter {
 	 * into a timestamp representing the number of nanoseconds since Jan 1, 1970
 	 * UTC.
 	 *
-	 * @param utcString The string to be converted.
+	 * @param utcString
+	 *            The string to be converted.
 	 * @return a timestamp which represents the passed time
-	 * @throws ParseException If the specified string cannot be parsed.
+	 * @throws ParseException
+	 *             If the specified string cannot be parsed.
 	 */
 	public static final long convertDatetimeStringToUTCLoggingTimestamp(final String utcString) throws ParseException {
 		final DateFormat dateFormat = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN, Locale.US);
@@ -106,9 +109,11 @@ public final class LoggingTimestampConverter {
 	 * Converts a datetime string of format <i>yyyyMMdd-HHmmss</i> (UTC timezone)
 	 * into a Date object.
 	 *
-	 * @param utcString The string to be converted.
+	 * @param utcString
+	 *            The string to be converted.
 	 * @return a Date object which represents the passed time
-	 * @throws ParseException If the specified string cannot be parsed.
+	 * @throws ParseException
+	 *             If the specified string cannot be parsed.
 	 */
 	public static final Date convertDatetimeStringToUTCDate(final String utcString) throws ParseException {
 		final DateFormat dateFormat = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN, Locale.US);

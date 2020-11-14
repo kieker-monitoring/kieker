@@ -27,7 +27,9 @@ public final class MappingException extends Exception {
 
 	/**
 	 * Create a mapping exception.
-	 * @param text error message
+	 * 
+	 * @param text
+	 *            error message
 	 */
 	public MappingException(final String text) {
 		super(text);

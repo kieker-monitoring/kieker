@@ -35,7 +35,8 @@ public class MessageTraceBasedSession extends AbstractSession<MessageTrace> {
 	/**
 	 * Creates a new message trace-based session with the given session ID.
 	 *
-	 * @param sessionId The session ID to use
+	 * @param sessionId
+	 *            The session ID to use
 	 */
 	public MessageTraceBasedSession(final String sessionId) {
 		super(sessionId);

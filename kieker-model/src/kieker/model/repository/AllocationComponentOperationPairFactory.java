@@ -42,7 +42,8 @@ public class AllocationComponentOperationPairFactory extends AbstractRepository 
 	 *
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param systemFactory The repository for this component.
+	 * @param systemFactory
+	 *            The repository for this component.
 	 */
 	public AllocationComponentOperationPairFactory(final SystemModelRepository systemFactory) {
 		super(systemFactory);
@@ -51,9 +52,11 @@ public class AllocationComponentOperationPairFactory extends AbstractRepository 
 	/**
 	 * Returns a corresponding pair instance (existing or newly created).
 	 *
-	 * @param allocationComponent The first element of the pair (the allocation
-	 *                            component).
-	 * @param operation           The second element of the pair (the operation).
+	 * @param allocationComponent
+	 *            The first element of the pair (the allocation
+	 *            component).
+	 * @param operation
+	 *            The second element of the pair (the operation).
 	 *
 	 * @return A (possible new) pair containing both elements.
 	 */
@@ -70,9 +73,11 @@ public class AllocationComponentOperationPairFactory extends AbstractRepository 
 	/**
 	 * Creates a new pair using both elements and registers it was well.
 	 *
-	 * @param operation           The second element of the pair (the operation).
-	 * @param allocationComponent The first element of the pair (the allocation
-	 *                            component).
+	 * @param operation
+	 *            The second element of the pair (the operation).
+	 * @param allocationComponent
+	 *            The first element of the pair (the allocation
+	 *            component).
 	 *
 	 * @return The newly created pair.
 	 */
@@ -86,7 +91,8 @@ public class AllocationComponentOperationPairFactory extends AbstractRepository 
 	 * Returns the instance for the passed factory name; null if no instance with
 	 * this factory name exists.
 	 *
-	 * @param namedIdentifier The identifier to search for.
+	 * @param namedIdentifier
+	 *            The identifier to search for.
 	 *
 	 * @return The corresponding pair to the given identifier if it exists, null
 	 *         otherwise.
@@ -99,7 +105,8 @@ public class AllocationComponentOperationPairFactory extends AbstractRepository 
 	 * Returns the instance for the passed ID; null if no instance with this ID is
 	 * available.
 	 *
-	 * @param id The ID of the instance in question.
+	 * @param id
+	 *            The ID of the instance in question.
 	 *
 	 * @return The corresponding pair to the given ID if it exists, null otherwise.
 	 */

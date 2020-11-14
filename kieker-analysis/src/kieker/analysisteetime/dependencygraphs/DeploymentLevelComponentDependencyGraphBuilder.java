@@ -38,8 +38,10 @@ public class DeploymentLevelComponentDependencyGraphBuilder extends AbstractDepe
 	/**
 	 * Create a new graph builder.
 	 *
-	 * @param executionModel execution model
-	 * @param statisticsModel statistics model
+	 * @param executionModel
+	 *            execution model
+	 * @param statisticsModel
+	 *            statistics model
 	 */
 	public DeploymentLevelComponentDependencyGraphBuilder(final ExecutionModel executionModel, final StatisticsModel statisticsModel) {
 		super(executionModel, statisticsModel);

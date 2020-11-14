@@ -5,19 +5,20 @@
 // Generated on: 2016.02.25 at 12:10:48 PM CET 
 //
 
-
 package org.graphdrawing.graphml;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for endpoint.type.type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
+ * Java class for endpoint.type.type.
+ * 
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * 
  * <pre>
  * &lt;simpleType name="endpoint.type.type">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}NMTOKEN">
@@ -33,29 +34,28 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum EndpointTypeType {
 
-    @XmlEnumValue("in")
-    IN("in"),
-    @XmlEnumValue("out")
-    OUT("out"),
-    @XmlEnumValue("undir")
-    UNDIR("undir");
-    private final String value;
+	@XmlEnumValue("in")
+	IN("in"), @XmlEnumValue("out")
+	OUT("out"), @XmlEnumValue("undir")
+	UNDIR("undir");
 
-    EndpointTypeType(String v) {
-        value = v;
-    }
+	private final String value;
 
-    public String value() {
-        return value;
-    }
+	EndpointTypeType(String v) {
+		value = v;
+	}
 
-    public static EndpointTypeType fromValue(String v) {
-        for (EndpointTypeType c: EndpointTypeType.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
+	public String value() {
+		return value;
+	}
+
+	public static EndpointTypeType fromValue(String v) {
+		for (EndpointTypeType c : EndpointTypeType.values()) {
+			if (c.value.equals(v)) {
+				return c;
+			}
+		}
+		throw new IllegalArgumentException(v);
+	}
 
 }

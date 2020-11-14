@@ -48,7 +48,8 @@ public abstract class AbstractTrace {
 	 * Creates a new abstract trace with the given trace ID and a default session
 	 * ID.
 	 *
-	 * @param traceId The trace ID to use for the new trace
+	 * @param traceId
+	 *            The trace ID to use for the new trace
 	 */
 	public AbstractTrace(final long traceId) {
 		this(traceId, AbstractTrace.DEFAULT_SESSION_ID);
@@ -57,8 +58,10 @@ public abstract class AbstractTrace {
 	/**
 	 * Creates a new abstract trace with the given parameters.
 	 *
-	 * @param traceId   The trace ID to use for the new trace
-	 * @param sessionId The session ID to use for the new trace
+	 * @param traceId
+	 *            The trace ID to use for the new trace
+	 * @param sessionId
+	 *            The session ID to use for the new trace
 	 */
 	public AbstractTrace(final long traceId, final String sessionId) {
 		this.traceInformation = new TraceInformation(traceId, sessionId);

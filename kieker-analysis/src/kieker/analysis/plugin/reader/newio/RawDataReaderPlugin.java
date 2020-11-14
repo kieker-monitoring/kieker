@@ -141,7 +141,7 @@ public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDat
 
 	private <C> C instantiateDeserializer(final Class<C> clazz, final Configuration configuration,
 			final IProjectContext context) throws InstantiationException, IllegalAccessException,
-	IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		final Configuration configurationToPass = configuration.flatten();
 
 		return clazz.getConstructor(Configuration.class, IProjectContext.class).newInstance(configurationToPass,

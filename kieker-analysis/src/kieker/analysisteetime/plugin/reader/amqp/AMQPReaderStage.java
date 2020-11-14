@@ -36,11 +36,14 @@ public class AMQPReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 	/**
 	 * Creates a new AMQP reader.
 	 *
-	 * @param uri       The name of the configuration property for the server URI.
-	 * @param queueName The name of the configuration property for the AMQP queue
-	 *                  name.
-	 * @param heartbeat The name of the configuration property for the heartbeat
-	 *                  timeout.
+	 * @param uri
+	 *            The name of the configuration property for the server URI.
+	 * @param queueName
+	 *            The name of the configuration property for the AMQP queue
+	 *            name.
+	 * @param heartbeat
+	 *            The name of the configuration property for the heartbeat
+	 *            timeout.
 	 */
 	public AMQPReaderStage(final String uri, final String queueName, final int heartbeat) {
 		this.readerLogic = new AMQPReader(uri, queueName, heartbeat, this::deliverRecord);
@@ -66,7 +69,8 @@ public class AMQPReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 	/**
 	 * Send a record to the stage's output port.
 	 *
-	 * @param monitoringRecord The record to deliver.
+	 * @param monitoringRecord
+	 *            The record to deliver.
 	 */
 	private void deliverRecord(final IMonitoringRecord monitoringRecord) {
 		this.outputPort.send(monitoringRecord);

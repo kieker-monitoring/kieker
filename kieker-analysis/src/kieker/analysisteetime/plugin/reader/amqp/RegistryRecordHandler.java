@@ -49,7 +49,8 @@ public class RegistryRecordHandler implements Runnable {
 	/**
 	 * Creates a new registry record handler for the given registry.
 	 *
-	 * @param stringRegistry The string registry to operate on
+	 * @param stringRegistry
+	 *            The string registry to operate on
 	 */
 	public RegistryRecordHandler(final ReaderRegistry<String> stringRegistry) {
 		this.stringRegistry = stringRegistry;
@@ -71,7 +72,8 @@ public class RegistryRecordHandler implements Runnable {
 	/**
 	 * Enqueues an unparsed registry record for processing.
 	 *
-	 * @param buffer The unparsed data in an appropriately positioned byte buffer
+	 * @param buffer
+	 *            The unparsed data in an appropriately positioned byte buffer
 	 */
 	public void enqueueRegistryRecord(final ByteBuffer buffer) {
 		try {

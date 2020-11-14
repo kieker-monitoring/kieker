@@ -90,12 +90,16 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter<Exe
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param repository          the system model repository
-	 * @param timeunit            the used time unit, e.g., NANOSECONDS
-	 * @param ignoreInvalidTraces set whether invalid traces should be ignored
-	 *                            (true), or the filter must terminate (false)
-	 * @param maxTraceDuration    max time duration for a trace, if null
-	 *                            Long.MAX_VALUE
+	 * @param repository
+	 *            the system model repository
+	 * @param timeunit
+	 *            the used time unit, e.g., NANOSECONDS
+	 * @param ignoreInvalidTraces
+	 *            set whether invalid traces should be ignored
+	 *            (true), or the filter must terminate (false)
+	 * @param maxTraceDuration
+	 *            max time duration for a trace, if null
+	 *            Long.MAX_VALUE
 	 */
 	public TraceReconstructionFilter(final SystemModelRepository repository, final TimeUnit timeunit,
 			final boolean ignoreInvalidTraces, final Long maxTraceDuration) {
@@ -183,12 +187,14 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter<Exe
 	 * this filter (message trace and execution trace output ports, or invalid
 	 * execution trace output port respectively).
 	 *
-	 * @param executionTrace The execution trace to transform.
+	 * @param executionTrace
+	 *            The execution trace to transform.
 	 *
-	 * @throws ExecutionEventProcessingException if the passed execution trace is
-	 *                                           invalid and this filter is
-	 *                                           configured to fail on the
-	 *                                           occurrence of invalid traces.
+	 * @throws ExecutionEventProcessingException
+	 *             if the passed execution trace is
+	 *             invalid and this filter is
+	 *             configured to fail on the
+	 *             occurrence of invalid traces.
 	 */
 	private void processExecutionTrace(final ExecutionTrace executionTrace) throws ExecutionEventProcessingException {
 		final long curTraceId = executionTrace.getTraceId();

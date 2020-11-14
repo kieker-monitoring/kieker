@@ -44,8 +44,10 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param configuration  The configuration for this component.
-	 * @param projectContext The project context for this component.
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
 	 */
 	public AbstractTraceProcessingFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -55,7 +57,8 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	 * This method can be used to report a trace which has been processed
 	 * successfully.
 	 *
-	 * @param traceId The ID of the processed trace.
+	 * @param traceId
+	 *            The ID of the processed trace.
 	 */
 	protected final void reportSuccess(final long traceId) {
 		synchronized (this) {
@@ -69,7 +72,8 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	 * This method can be used to report a trace which has <b>not</b> been processed
 	 * successfully.
 	 *
-	 * @param traceId The ID of the processed trace.
+	 * @param traceId
+	 *            The ID of the processed trace.
 	 */
 	protected final void reportError(final long traceId) {
 		synchronized (this) {

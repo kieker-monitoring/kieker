@@ -37,11 +37,10 @@ import kieker.common.record.system.MemSwapUsageRecord;
  * 
  * @since 1.8
  */
-@Plugin(configuration =
-		@Property(
-				name = MemSwapUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
-				defaultValue = MemSwapUtilizationDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
-				description = "Sets the number of max plot entries per record entry"))
+@Plugin(configuration = @Property(
+		name = MemSwapUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+		defaultValue = MemSwapUtilizationDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
+		description = "Sets the number of max plot entries per record entry"))
 public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	/** The name of the input port receiving incoming events. */

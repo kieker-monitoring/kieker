@@ -61,7 +61,7 @@ public class MessageTrace extends AbstractTrace {
 
 		// no need to sort: seq is already sorted - actually
 		// however, the reply message has the same timestamp as its associated call message
-		//		Collections.sort(seq, new MessageComparator());
+		// Collections.sort(seq, new MessageComparator());
 
 		this.messages = seq;
 

@@ -59,8 +59,8 @@ public class ETSForecasterTest extends AbstractKiekerRTest {
 			expectedValues.add(curVal);
 		}
 
-		final TimeSeries<Double> ts =
-				new TimeSeries<Double>(ETSForecasterTest.START_TIME, TimeUnit.NANOSECONDS, ETSForecasterTest.DELTA_TIME_MILLIS, TimeUnit.MILLISECONDS);
+		final TimeSeries<Double> ts = new TimeSeries<Double>(ETSForecasterTest.START_TIME, TimeUnit.NANOSECONDS, ETSForecasterTest.DELTA_TIME_MILLIS,
+				TimeUnit.MILLISECONDS);
 		ts.appendAll(values);
 
 		final ETSForecaster forecaster = new ETSForecaster(ts, ETSForecasterTest.CONFIDENCE_LEVEL);

@@ -37,7 +37,8 @@ public abstract class AbstractTraceProcessingFilter<T> extends AbstractTraceAnal
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param systemModelRepository the model repository to be used
+	 * @param systemModelRepository
+	 *            the model repository to be used
 	 */
 	public AbstractTraceProcessingFilter(final SystemModelRepository systemModelRepository) {
 		super(systemModelRepository);
@@ -47,7 +48,8 @@ public abstract class AbstractTraceProcessingFilter<T> extends AbstractTraceAnal
 	 * This method can be used to report a trace which has been processed
 	 * successfully.
 	 *
-	 * @param traceId The ID of the processed trace.
+	 * @param traceId
+	 *            The ID of the processed trace.
 	 */
 	protected final void reportSuccess(final long traceId) {
 		synchronized (this) {
@@ -61,7 +63,8 @@ public abstract class AbstractTraceProcessingFilter<T> extends AbstractTraceAnal
 	 * This method can be used to report a trace which has <b>not</b> been processed
 	 * successfully.
 	 *
-	 * @param traceId The ID of the processed trace.
+	 * @param traceId
+	 *            The ID of the processed trace.
 	 */
 	protected final void reportError(final long traceId) {
 		synchronized (this) {

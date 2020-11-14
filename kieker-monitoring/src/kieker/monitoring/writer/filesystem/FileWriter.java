@@ -107,7 +107,8 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 	/**
 	 * Create a generic file writer.
 	 *
-	 * @param configuration Kieker configuration object.
+	 * @param configuration
+	 *            Kieker configuration object.
 	 * @throws IOException
 	 */
 	public FileWriter(final Configuration configuration) throws IOException {
@@ -169,7 +170,7 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 		final String logHandlerClassName = configuration.getStringProperty(FileWriter.CONFIG_LOG_STREAM_HANDLER,
 				TextLogStreamHandler.class.getName());
 		final Class<?>[] logHandlerSignature = { Boolean.class, Integer.class, Charset.class, ICompressionFilter.class,
-				WriterRegistry.class };
+			WriterRegistry.class };
 		this.logStreamHandler = InstantiationFactory.getInstance(configuration).create(AbstractLogStreamHandler.class,
 				logHandlerClassName, logHandlerSignature, flushLogFile, bufferSize, charset, compressionFilter,
 				this.writerRegistry);
@@ -249,9 +250,7 @@ public class FileWriter extends AbstractMonitoringWriter implements IRegistryLis
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(128);
-		return sb.append(super.toString()).
-			append("\n\t\t").append(FileWriter.PREFIX).append("actualStoragePath").append("='").
-			append(this.logFolderName).append('\'').
-			toString();
+		return sb.append(super.toString()).append("\n\t\t").append(FileWriter.PREFIX).append("actualStoragePath").append("='").append(this.logFolderName)
+				.append('\'').toString();
 	}
 }

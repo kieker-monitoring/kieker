@@ -43,7 +43,8 @@ public class AssemblyComponentOperationPairFactory extends AbstractRepository {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param systemFactory The system factory.
+	 * @param systemFactory
+	 *            The system factory.
 	 */
 	public AssemblyComponentOperationPairFactory(final SystemModelRepository systemFactory) {
 		super(systemFactory);
@@ -52,8 +53,10 @@ public class AssemblyComponentOperationPairFactory extends AbstractRepository {
 	/**
 	 * Returns a corresponding pair instance (existing or newly created).
 	 *
-	 * @param assemblyComponent The assemble component for the pair.
-	 * @param operation         The operation for the pair.
+	 * @param assemblyComponent
+	 *            The assemble component for the pair.
+	 * @param operation
+	 *            The operation for the pair.
 	 *
 	 * @return The corresponding pair instance if it exists, otherwise a new one.
 	 */
@@ -71,14 +74,16 @@ public class AssemblyComponentOperationPairFactory extends AbstractRepository {
 	 * Returns the instance for the passed factory name; null if no instance with
 	 * this factory name.
 	 *
-	 * @param namedIdentifier The identifier to search for.
+	 * @param namedIdentifier
+	 *            The identifier to search for.
 	 */
 	private AssemblyComponentOperationPair getPairByNamedIdentifier(final String namedIdentifier) {
 		return this.pairsByName.get(namedIdentifier);
 	}
 
 	/**
-	 * @param id The ID of the instance in question.
+	 * @param id
+	 *            The ID of the instance in question.
 	 *
 	 * @return The instance for the passed ID; null if no instance with this ID is
 	 *         available.

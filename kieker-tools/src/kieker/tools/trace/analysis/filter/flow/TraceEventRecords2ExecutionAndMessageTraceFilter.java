@@ -60,16 +60,21 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  */
 @Deprecated
 @Plugin(description = "Transforms incoming TraceEventRecords into execution and message traces", outputPorts = {
-		@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Outputs transformed execution traces", eventTypes = {
+	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Outputs transformed execution traces",
+			eventTypes = {
 				ExecutionTrace.class }),
-		@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Outputs transformed message traces", eventTypes = {
+	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Outputs transformed message traces",
+			eventTypes = {
 				MessageTrace.class }),
-		@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces", eventTypes = {
-				InvalidExecutionTrace.class }) }, repositoryPorts = {
-						@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) }, configuration = {
-								@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_JAVA_CONSTRUCTORS, defaultValue = "true"),
-								@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_CALL_DETECTION, defaultValue = "true"),
-								@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_IGNORE_ASSUMED, defaultValue = "false") })
+	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces",
+			eventTypes = {
+				InvalidExecutionTrace.class }) },
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) },
+		configuration = {
+			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_JAVA_CONSTRUCTORS, defaultValue = "true"),
+			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_CALL_DETECTION, defaultValue = "true"),
+			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_IGNORE_ASSUMED, defaultValue = "false") })
 public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTraceProcessingFilter {
 
 	/** This is the name of the input port receiving new trace events. */
@@ -97,8 +102,10 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param configuration  The configuration for this component.
-	 * @param projectContext The project context for this component.
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
 	 */
 	public TraceEventRecords2ExecutionAndMessageTraceFilter(final Configuration configuration,
 			final IProjectContext projectContext) {
@@ -133,10 +140,12 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	 * This method represents the input port, processing incoming trace event
 	 * records.
 	 *
-	 * @param traceEventRecords The next trace event record.
+	 * @param traceEventRecords
+	 *            The next trace event record.
 	 */
-	@InputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE, description = "Receives TraceEvents to be transformed", eventTypes = {
-			TraceEventRecords.class })
+	@InputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE, description = "Receives TraceEvents to be transformed",
+			eventTypes = {
+				TraceEventRecords.class })
 	public void inputTraceEvents(final TraceEventRecords traceEventRecords) {
 		final TraceMetadata trace = traceEventRecords.getTraceMetadata();
 		if (trace == null) {
@@ -329,7 +338,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		 * removed call statement, an assumed execution is generated using the timestamp
 		 * of the last recursive operation event.
 		 *
-		 * @param lastEvent The last processed operation event
+		 * @param lastEvent
+		 *            The last processed operation event
 		 * @throws InvalidTraceException
 		 */
 		private void closeOpenCalls(final AbstractOperationEvent lastEvent) throws InvalidTraceException {
@@ -506,8 +516,10 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			/**
 			 * Creates a new instance of this class using the given parameters.
 			 *
-			 * @param executionIndex The execution order index.
-			 * @param stackDepth     The execution stack size.
+			 * @param executionIndex
+			 *            The execution order index.
+			 * @param stackDepth
+			 *            The execution stack size.
 			 */
 			public ExecutionInformation(final int executionIndex, final int stackDepth) {
 				this.eoi = executionIndex;

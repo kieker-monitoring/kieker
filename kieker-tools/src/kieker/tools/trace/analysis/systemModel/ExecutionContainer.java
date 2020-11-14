@@ -37,9 +37,12 @@ public class ExecutionContainer implements ISystemModelElement {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param id     The ID of this container.
-	 * @param parent The parent of this container.
-	 * @param name   The name of this container.
+	 * @param id
+	 *            The ID of this container.
+	 * @param parent
+	 *            The parent of this container.
+	 * @param name
+	 *            The name of this container.
 	 */
 	public ExecutionContainer(final int id, final ExecutionContainer parent, final String name) {
 		this.id = id;
@@ -86,7 +89,8 @@ public class ExecutionContainer implements ISystemModelElement {
 	/**
 	 * This method adds a given container to the list of child containers.
 	 *
-	 * @param container The new child container.
+	 * @param container
+	 *            The new child container.
 	 */
 	public final void addChildContainer(final ExecutionContainer container) {
 		this.childContainers.add(this);

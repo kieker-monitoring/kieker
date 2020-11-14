@@ -52,13 +52,15 @@ import kieker.common.record.IMonitoringRecord;
  *
  * @since 0.95a
  */
-@Plugin(description = "A reader which reads records from a (remove or local) JMS queue", dependencies = "This plugin needs the file 'javax.jms-*.jar'.", outputPorts = {
-	@OutputPort(name = JmsReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JmsReader")
-}, configuration = {
-	@Property(name = JmsReader.CONFIG_PROPERTY_NAME_PROVIDERURL, defaultValue = "tcp://127.0.0.1:61616/"),
-	@Property(name = JmsReader.CONFIG_PROPERTY_NAME_DESTINATION, defaultValue = "queue1"),
-	@Property(name = JmsReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, defaultValue = "org.apache.activemq.jndi.ActiveMQInitialContextFactory")
-})
+@Plugin(description = "A reader which reads records from a (remove or local) JMS queue", dependencies = "This plugin needs the file 'javax.jms-*.jar'.",
+		outputPorts = {
+			@OutputPort(name = JmsReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JmsReader")
+		},
+		configuration = {
+			@Property(name = JmsReader.CONFIG_PROPERTY_NAME_PROVIDERURL, defaultValue = "tcp://127.0.0.1:61616/"),
+			@Property(name = JmsReader.CONFIG_PROPERTY_NAME_DESTINATION, defaultValue = "queue1"),
+			@Property(name = JmsReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, defaultValue = "org.apache.activemq.jndi.ActiveMQInitialContextFactory")
+		})
 public final class JmsReader extends AbstractReaderPlugin {
 
 	/** The name of the output port delivering the received records. */

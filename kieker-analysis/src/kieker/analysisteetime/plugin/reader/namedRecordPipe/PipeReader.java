@@ -42,8 +42,10 @@ public class PipeReader extends AbstractProducerStage<IMonitoringRecord> impleme
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param configuration  The configuration for this component.
-	 * @param projectContext The project context for this component.
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
 	 */
 	public PipeReader(final String pipeName) {
 
@@ -76,7 +78,8 @@ public class PipeReader extends AbstractProducerStage<IMonitoringRecord> impleme
 	/**
 	 * This method sends a given records directly to the output port.
 	 *
-	 * @param rec The new record object.
+	 * @param rec
+	 *            The new record object.
 	 * @return true if and only if the record has been delivered.
 	 */
 	@Override

@@ -136,7 +136,7 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 			final IOriginRetentionPolicy originPolicy) {
 		synchronized (this) {
 			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
-			isAssumed ? this.assumedOutgoingDependencies : this.outgoingDependencies; // NOCS (inline ?)
+					isAssumed ? this.assumedOutgoingDependencies : this.outgoingDependencies; // NOCS (inline ?)
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(destination.getId());
 			if (e == null) {
@@ -184,7 +184,7 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 			final IOriginRetentionPolicy originPolicy) {
 		synchronized (this) {
 			final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> relevantDependencies = // NOPMD(UseConcurrentHashMap)
-			isAssumed ? this.assumedIncomingDependencies : this.incomingDependencies; // NOCS (inline ?)
+					isAssumed ? this.assumedIncomingDependencies : this.incomingDependencies; // NOCS (inline ?)
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(source.getId());
 			if (e == null) {

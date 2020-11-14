@@ -30,7 +30,8 @@ import kieker.tools.trace.analysis.filter.visualization.graph.NoOriginRetentionP
  *
  * @author Holger Knoche
  *
- * @param <G> The graph type created by this filter
+ * @param <G>
+ *            The graph type created by this filter
  *
  * @since 1.6
  * @deprecated 1.15 ported to teetime
@@ -49,9 +50,12 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	 * Creates a new graph-producing filter using the given configuration and the
 	 * given graph.
 	 *
-	 * @param configuration  The configuration to use
-	 * @param projectContext The project context to use.
-	 * @param graph          The (usually empty) graph to produce / extend
+	 * @param configuration
+	 *            The configuration to use
+	 * @param projectContext
+	 *            The project context to use.
+	 * @param graph
+	 *            The (usually empty) graph to produce / extend
 	 */
 	public AbstractGraphProducingFilter(final Configuration configuration, final IProjectContext projectContext,
 			final G graph) {

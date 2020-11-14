@@ -41,9 +41,12 @@ public class Operation {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param id            The ID of this operation.
-	 * @param componentType The type of the component of this operation.
-	 * @param signature     The signature of this operation.
+	 * @param id
+	 *            The ID of this operation.
+	 * @param componentType
+	 *            The type of the component of this operation.
+	 * @param signature
+	 *            The signature of this operation.
 	 */
 	public Operation(final int id, final ComponentType componentType, final Signature signature) {
 		this.id = id;
@@ -81,7 +84,8 @@ public class Operation {
 	/**
 	 * Two Operation objects are equal if their ids are equal.
 	 *
-	 * @param obj The object to be compared for equality with this
+	 * @param obj
+	 *            The object to be compared for equality with this
 	 * @return true if the two objects are equal.
 	 */
 	@Override

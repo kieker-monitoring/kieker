@@ -49,7 +49,8 @@ public class InvalidExecutionTraceWriterSink extends AbstractTraceProcessingFilt
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @throws IOException If the write stream could not be prepared.
+	 * @throws IOException
+	 *             If the write stream could not be prepared.
 	 */
 	public InvalidExecutionTraceWriterSink(final SystemModelRepository repository, final File outputFile)
 			throws IOException {

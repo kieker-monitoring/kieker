@@ -125,9 +125,9 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 			eventTypes = { MessageTrace.class })
 	public void inputMessageTraces(final MessageTrace mt) {
 		try {
-			final TraceCallTreeNode rootNode =
-					new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR, true, mt,
-							NoOriginRetentionPolicy.createInstance()); // rootNode
+			final TraceCallTreeNode rootNode = new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR,
+					true, mt,
+					NoOriginRetentionPolicy.createInstance()); // rootNode
 			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new IPairFactory<AllocationComponentOperationPair>() {
 
 				@Override

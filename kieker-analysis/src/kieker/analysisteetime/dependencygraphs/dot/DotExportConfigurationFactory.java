@@ -45,7 +45,8 @@ public class DotExportConfigurationFactory {
 	/**
 	 * Uses TO_STRING of {@link kieker.analysisteetime.dependencygraphs.vertextypes.IVertexTypeMapper} as second default argument.
 	 *
-	 * @param nameBuilder label for the builder
+	 * @param nameBuilder
+	 *            label for the builder
 	 */
 	public DotExportConfigurationFactory(final NameBuilder nameBuilder) {
 		this(nameBuilder, IVertexTypeMapper.TO_STRING);

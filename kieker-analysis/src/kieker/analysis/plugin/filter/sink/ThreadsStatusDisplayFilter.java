@@ -33,8 +33,7 @@ import kieker.common.record.jvm.ThreadsStatusRecord;
  *
  * @since 1.10
  */
-@Plugin(configuration =
-@Property(
+@Plugin(configuration = @Property(
 		name = ThreadsStatusDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
 		defaultValue = ThreadsStatusDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
 		description = "Sets the number of max plot entries per record entry"))

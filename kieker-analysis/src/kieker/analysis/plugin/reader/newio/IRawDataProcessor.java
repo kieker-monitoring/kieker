@@ -26,17 +26,17 @@ import java.nio.ByteBuffer;
  * @since 1.13
  */
 public interface IRawDataProcessor {
-	
+
 	/**
 	 * Decodes the given raw data and delivers the decoded records.
 	 * 
 	 * @param rawData
 	 *            The raw data to decode
-	 *            
+	 * 
 	 * @since 1.13
 	 */
 	public void decodeAndDeliverRecords(byte[] rawData);
-	
+
 	/**
 	 * Decodes the given raw data and delivers the decoded records.
 	 * 
@@ -44,7 +44,7 @@ public interface IRawDataProcessor {
 	 *            The raw data to decode
 	 * @param dataSize
 	 *            The size of the contained data
-	 *            
+	 * 
 	 * @since 1.13
 	 */
 	public void decodeAndDeliverRecords(final ByteBuffer rawData, final int dataSize);

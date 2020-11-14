@@ -37,9 +37,12 @@ public class AllocationComponentOperationPair implements ISystemModelElement {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param id                  The ID of this pair.
-	 * @param operation           The operation.
-	 * @param allocationComponent The allocation component.
+	 * @param id
+	 *            The ID of this pair.
+	 * @param operation
+	 *            The operation.
+	 * @param allocationComponent
+	 *            The allocation component.
 	 */
 	public AllocationComponentOperationPair(final int id, final Operation operation,
 			final AllocationComponent allocationComponent) {

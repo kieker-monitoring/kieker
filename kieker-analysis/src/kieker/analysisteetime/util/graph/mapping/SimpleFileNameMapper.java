@@ -37,8 +37,10 @@ public class SimpleFileNameMapper implements Function<IGraph, String> {
 	/**
 	 * Create a simple file mapper.
 	 *
-	 * @param outputDirectory output directory path
-	 * @param fileExtension file extension for the graph
+	 * @param outputDirectory
+	 *            output directory path
+	 * @param fileExtension
+	 *            file extension for the graph
 	 */
 	public SimpleFileNameMapper(final String outputDirectory, final FileExtension fileExtension) {
 		this.outputDirectory = outputDirectory;

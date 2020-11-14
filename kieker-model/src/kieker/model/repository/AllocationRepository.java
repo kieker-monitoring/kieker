@@ -43,7 +43,8 @@ public class AllocationRepository extends AbstractRepository {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param systemFactory The system factory.
+	 * @param systemFactory
+	 *            The system factory.
 	 */
 	public AllocationRepository(final SystemModelRepository systemFactory) {
 		super(systemFactory);
@@ -53,7 +54,8 @@ public class AllocationRepository extends AbstractRepository {
 	 * Returns the instance for the passed factoryIdentifier; null if no instance
 	 * with this factoryIdentifier.
 	 *
-	 * @param namedIdentifier The identifier to search for.
+	 * @param namedIdentifier
+	 *            The identifier to search for.
 	 *
 	 * @return The corresponding instance if it exists.
 	 */

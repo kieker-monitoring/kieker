@@ -53,7 +53,8 @@ public abstract class AbstractVertex<V extends AbstractVertex<V, E, O>, E extend
 	/**
 	 * Returns the decoration of this vertex of the given type.
 	 * 
-	 * @param <DecorationT> decoration type.
+	 * @param <DecorationT>
+	 *            decoration type.
 	 * @param type
 	 *            The type of the desired decoration
 	 * @return The given decoration or {@code null} if no such type exists

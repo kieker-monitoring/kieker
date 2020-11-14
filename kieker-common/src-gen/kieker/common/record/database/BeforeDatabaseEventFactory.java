@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.database;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,13 +25,11 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.14
  */
 public final class BeforeDatabaseEventFactory implements IRecordFactory<BeforeDatabaseEvent> {
-	
 
 	@Override
 	public BeforeDatabaseEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new BeforeDatabaseEvent(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

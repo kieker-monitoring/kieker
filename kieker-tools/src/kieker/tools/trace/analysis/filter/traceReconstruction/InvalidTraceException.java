@@ -32,7 +32,8 @@ public class InvalidTraceException extends Exception {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param message The message of this exception.
+	 * @param message
+	 *            The message of this exception.
 	 */
 	public InvalidTraceException(final String message) {
 		super(message);
@@ -41,8 +42,10 @@ public class InvalidTraceException extends Exception {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param message The message of this exception.
-	 * @param t       The cause of this exception.
+	 * @param message
+	 *            The message of this exception.
+	 * @param t
+	 *            The cause of this exception.
 	 */
 	public InvalidTraceException(final String message, final Throwable t) {
 		super(message, t);

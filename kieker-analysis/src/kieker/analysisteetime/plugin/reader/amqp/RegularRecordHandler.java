@@ -52,9 +52,11 @@ public class RegularRecordHandler implements Runnable, IRecordReceivedListener {
 	/**
 	 * Creates a new regular record handler.
 	 *
-	 * @param readerLogic    The reader logic class to send the instantiated records
-	 *                       to
-	 * @param stringRegistry The string registry to use
+	 * @param readerLogic
+	 *            The reader logic class to send the instantiated records
+	 *            to
+	 * @param stringRegistry
+	 *            The string registry to use
 	 */
 	public RegularRecordHandler(final AMQPReader readerLogic, final ReaderRegistry<String> stringRegistry) {
 		this.readerLogic = readerLogic;
@@ -79,7 +81,8 @@ public class RegularRecordHandler implements Runnable, IRecordReceivedListener {
 	/**
 	 * Enqueues an unparsed regular record for processing.
 	 *
-	 * @param buffer The unparsed data in an appropriately positioned byte buffer
+	 * @param buffer
+	 *            The unparsed data in an appropriately positioned byte buffer
 	 */
 	public void enqueueRegularRecord(final ByteBuffer buffer) {
 		try {

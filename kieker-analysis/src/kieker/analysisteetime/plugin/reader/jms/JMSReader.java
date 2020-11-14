@@ -63,18 +63,23 @@ public final class JMSReader {
 	/**
 	 * Creates a new logic module for the Consumer.
 	 *
-	 * @param jmsProviderUrl          The name of the configuration determining the
-	 *                                JMS provider URL, e.g.
-	 *                                {@code tcp://localhost:3035/}
-	 * @param jmsDestination          The name of the configuration determining the
-	 *                                JMS destination, e.g. {@code queue1}.
-	 * @param jmsFactoryLookupName    The name of the configuration determining the
-	 *                                name of the used JMS factory, e.g.
-	 *                                {@code org.exolab.jms.jndi.InitialContextFactory}.
-	 * @param elementReceivedCallback The actual teetime stage which uses this
-	 *                                class.
+	 * @param jmsProviderUrl
+	 *            The name of the configuration determining the
+	 *            JMS provider URL, e.g.
+	 *            {@code tcp://localhost:3035/}
+	 * @param jmsDestination
+	 *            The name of the configuration determining the
+	 *            JMS destination, e.g. {@code queue1}.
+	 * @param jmsFactoryLookupName
+	 *            The name of the configuration determining the
+	 *            name of the used JMS factory, e.g.
+	 *            {@code org.exolab.jms.jndi.InitialContextFactory}.
+	 * @param elementReceivedCallback
+	 *            The actual teetime stage which uses this
+	 *            class.
 	 *
-	 * @throws IllegalArgumentException If one of the properties is empty.
+	 * @throws IllegalArgumentException
+	 *             If one of the properties is empty.
 	 */
 	public JMSReader(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName,
 			final Consumer<IMonitoringRecord> elementReceivedCallback) throws IllegalArgumentException {

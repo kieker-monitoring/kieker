@@ -43,7 +43,8 @@ public class AssemblyRepository extends AbstractRepository {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param systemFactory The system factory.
+	 * @param systemFactory
+	 *            The system factory.
 	 */
 	public AssemblyRepository(final SystemModelRepository systemFactory) {
 		super(systemFactory);
@@ -53,7 +54,8 @@ public class AssemblyRepository extends AbstractRepository {
 	 * Returns the instance for the passed ID; null if no instance with this ID
 	 * exists.
 	 *
-	 * @param containerId The ID to search for.
+	 * @param containerId
+	 *            The ID to search for.
 	 *
 	 * @return The component for the given ID if it exists; null otherwise.
 	 */
@@ -65,7 +67,8 @@ public class AssemblyRepository extends AbstractRepository {
 	 * Returns the instance for the passed factoryIdentifier; null if no instance
 	 * with this factoryIdentifier.
 	 *
-	 * @param namedIdentifier The identifier to search for.
+	 * @param namedIdentifier
+	 *            The identifier to search for.
 	 *
 	 * @return The component for the given identifier if it exists; null otherwise.
 	 */
@@ -76,8 +79,10 @@ public class AssemblyRepository extends AbstractRepository {
 	/**
 	 * Creates a new assembly component instance and registers it as well.
 	 *
-	 * @param namedIdentifier The identifier of the new component.
-	 * @param componentType   The new component type.
+	 * @param namedIdentifier
+	 *            The identifier of the new component.
+	 * @param componentType
+	 *            The new component type.
 	 *
 	 * @return The newly created assembly component.
 	 */

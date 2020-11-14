@@ -62,8 +62,8 @@ import kieker.common.record.misc.KiekerMetadataRecord;
  */
 @Deprecated
 @kieker.analysis.annotation.AnalysisController(configuration = {
-		@Property(name = IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "NANOSECONDS"),
-		@Property(name = IProjectContext.CONFIG_PROPERTY_NAME_PROJECT_NAME, defaultValue = "AnalysisProject") })
+	@Property(name = IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "NANOSECONDS"),
+	@Property(name = IProjectContext.CONFIG_PROPERTY_NAME_PROJECT_NAME, defaultValue = "AnalysisProject") })
 public final class AnalysisController implements IAnalysisController { // NOPMD (really long class)
 
 	static final Logger LOG = LoggerFactory.getLogger(AnalysisController.class); // NOPMD package for inner class
@@ -129,7 +129,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * Constructs an {@link AnalysisController} instance using the given parameter.
 	 *
-	 * @param projectName The name of the project.
+	 * @param projectName
+	 *            The name of the project.
 	 */
 	public AnalysisController(final String projectName) {
 		this(AnalysisController.createConfigurationWithProjectName(projectName));
@@ -140,16 +141,19 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * given file to load an analysis model. The given file should therefore be an
 	 * instance of the analysis meta model.
 	 *
-	 * @param file The configuration file for the analysis.
+	 * @param file
+	 *            The configuration file for the analysis.
 	 *
-	 * @throws IOException                    If the given file could not be loaded
-	 *                                        or is not a valid kax-configuration
-	 *                                        file.
-	 * @throws AnalysisConfigurationException If one or more plugins or repositories
-	 *                                        could not be created, one or more
-	 *                                        properties of the plugins are invalid
-	 *                                        or if a connection between two filters
-	 *                                        is not allowed.
+	 * @throws IOException
+	 *             If the given file could not be loaded
+	 *             or is not a valid kax-configuration
+	 *             file.
+	 * @throws AnalysisConfigurationException
+	 *             If one or more plugins or repositories
+	 *             could not be created, one or more
+	 *             properties of the plugins are invalid
+	 *             or if a connection between two filters
+	 *             is not allowed.
 	 */
 	public AnalysisController(final File file) throws IOException, AnalysisConfigurationException {
 		this(file, AnalysisController.class.getClassLoader());
@@ -161,17 +165,21 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * the objects. The given file should therefore be an instance of the analysis
 	 * meta model.
 	 *
-	 * @param file        The configuration file for the analysis.
-	 * @param classLoader The classloader used to initialize the plugins etc.
+	 * @param file
+	 *            The configuration file for the analysis.
+	 * @param classLoader
+	 *            The classloader used to initialize the plugins etc.
 	 *
-	 * @throws IOException                    If the given file could not be loaded
-	 *                                        or is not a valid kax-configuration
-	 *                                        file.
-	 * @throws AnalysisConfigurationException If one or more plugins or repositories
-	 *                                        could not be created, one or more
-	 *                                        properties of the plugins are invalid
-	 *                                        or if a connection between two filters
-	 *                                        is not allowed.
+	 * @throws IOException
+	 *             If the given file could not be loaded
+	 *             or is not a valid kax-configuration
+	 *             file.
+	 * @throws AnalysisConfigurationException
+	 *             If one or more plugins or repositories
+	 *             could not be created, one or more
+	 *             properties of the plugins are invalid
+	 *             or if a connection between two filters
+	 *             is not allowed.
 	 */
 	public AnalysisController(final File file, final ClassLoader classLoader)
 			throws IOException, AnalysisConfigurationException {
@@ -182,10 +190,13 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * Creates a new instance of the class {@link AnalysisController} but uses the
 	 * given instance of {@link MIProject} to construct the analysis.
 	 *
-	 * @param project The project instance for the analysis.
-	 * @throws AnalysisConfigurationException If the given project could not be
-	 *                                        loaded.
-	 * @throws NullPointerException           If the project is null.
+	 * @param project
+	 *            The project instance for the analysis.
+	 * @throws AnalysisConfigurationException
+	 *             If the given project could not be
+	 *             loaded.
+	 * @throws NullPointerException
+	 *             If the project is null.
 	 */
 	public AnalysisController(final MIProject project) throws NullPointerException, AnalysisConfigurationException {
 		this(project, AnalysisController.class.getClassLoader());
@@ -195,11 +206,15 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * Creates a new instance of the class {@link AnalysisController} but uses the
 	 * given instance of @link{Project} to construct the analysis.
 	 *
-	 * @param project     The project instance for the analysis.
-	 * @param classLoader The class loader used for the initializing.
-	 * @throws NullPointerException           If the project is null.
-	 * @throws AnalysisConfigurationException If the given project could not be
-	 *                                        loaded.
+	 * @param project
+	 *            The project instance for the analysis.
+	 * @param classLoader
+	 *            The class loader used for the initializing.
+	 * @throws NullPointerException
+	 *             If the project is null.
+	 * @throws AnalysisConfigurationException
+	 *             If the given project could not be
+	 *             loaded.
 	 */
 	public AnalysisController(final MIProject project, final ClassLoader classLoader)
 			throws NullPointerException, AnalysisConfigurationException {
@@ -215,8 +230,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * Constructs an {@link AnalysisController} instance using the given parameter.
 	 *
-	 * @param configuration The global configuration of this analysis. All plugins
-	 *                      can indirectly access it.
+	 * @param configuration
+	 *            The global configuration of this analysis. All plugins
+	 *            can indirectly access it.
 	 */
 	public AnalysisController(final Configuration configuration) {
 		this.globalConfiguration = this.validateConfiguration(configuration.flatten(this.getDefaultConfiguration()));
@@ -226,7 +242,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * This simple helper method validates the configuration object.
 	 *
-	 * @param configuration The configuration object to check and (perhaps) update.
+	 * @param configuration
+	 *            The configuration object to check and (perhaps) update.
 	 * @return The configuration object.
 	 */
 	private Configuration validateConfiguration(final Configuration configuration) {
@@ -246,8 +263,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * This simple helper method create a new configuration object which is empty
 	 * except for an entry containing the given project name.
 	 *
-	 * @param projectName The project name to be stored in the new configuration
-	 *                    object.
+	 * @param projectName
+	 *            The project name to be stored in the new configuration
+	 *            object.
 	 * @return The configuration object.
 	 */
 	private static final Configuration createConfigurationWithProjectName(final String projectName) {
@@ -281,7 +299,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *
 	 * Currently this method only logs all details.
 	 *
-	 * @param record the KiekerMetadataRecord containing the information
+	 * @param record
+	 *            the KiekerMetadataRecord containing the information
 	 */
 	public final void handleKiekerMetadataRecord(final KiekerMetadataRecord record) {
 		AnalysisController.LOG.info(
@@ -331,11 +350,14 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * This method can be used to load the configuration from a given meta model
 	 * instance.
 	 *
-	 * @param mProject    The instance to be used for configuration.
-	 * @param classLoader The instance of {@link java.lang.ClassLoader} used for
-	 *                    creating the necessary components.
-	 * @throws AnalysisConfigurationException If the given project represents
-	 *                                        somehow an invalid configuration.
+	 * @param mProject
+	 *            The instance to be used for configuration.
+	 * @param classLoader
+	 *            The instance of {@link java.lang.ClassLoader} used for
+	 *            creating the necessary components.
+	 * @throws AnalysisConfigurationException
+	 *             If the given project represents
+	 *             somehow an invalid configuration.
 	 */
 	private final void loadFromModelProject(final MIProject mProject, final ClassLoader classLoader)
 			throws AnalysisConfigurationException {
@@ -588,10 +610,12 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * Registers the given reader with this analysis instance. <b>This method is for
 	 * internal use only!</b>
 	 *
-	 * @param reader The reader to register with this analysis.
+	 * @param reader
+	 *            The reader to register with this analysis.
 	 *
-	 * @throws IllegalStateException If the analysis has already been started when
-	 *                               this method is called.
+	 * @throws IllegalStateException
+	 *             If the analysis has already been started when
+	 *             this method is called.
 	 */
 	public final void registerReader(final AbstractReaderPlugin reader) throws IllegalStateException {
 		if (this.state != STATE.READY) {
@@ -609,10 +633,12 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * Registers the given filter with this analysis instance. <b>This method is for
 	 * internal use only!</b>
 	 *
-	 * @param filter The filter to register with this analysis.
+	 * @param filter
+	 *            The filter to register with this analysis.
 	 *
-	 * @throws IllegalStateException If the analysis has already been started when
-	 *                               this method is called.
+	 * @throws IllegalStateException
+	 *             If the analysis has already been started when
+	 *             this method is called.
 	 */
 	public final void registerFilter(final AbstractFilterPlugin filter) throws IllegalStateException {
 		if (this.state != STATE.READY) {
@@ -633,10 +659,12 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * Registers the given repository with this analysis instance. <b>This method is
 	 * for internal use only!</b>
 	 *
-	 * @param repository The repository to register with this analysis.
+	 * @param repository
+	 *            The repository to register with this analysis.
 	 *
-	 * @throws IllegalStateException If the analysis has already been started when
-	 *                               this method is called.
+	 * @throws IllegalStateException
+	 *             If the analysis has already been started when
+	 *             this method is called.
 	 */
 	public final void registerRepository(final AbstractRepository repository) throws IllegalStateException {
 		if (this.state != STATE.READY) {
@@ -695,9 +723,11 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * This method can be used to load a meta model instance from a given file.
 	 *
-	 * @param file The file to be loaded.
+	 * @param file
+	 *            The file to be loaded.
 	 * @return An instance of <code>MIProject</code> if everything went well.
-	 * @throws IOException If something during loading went wrong.
+	 * @throws IOException
+	 *             If something during loading went wrong.
 	 */
 	public static final MIProject loadFromFile(final File file) throws IOException {
 		try {
@@ -720,9 +750,12 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * This method can be used to save the given instance of <code>MIProject</code>
 	 * within a given file.
 	 *
-	 * @param file    The file to be used for the storage.
-	 * @param project The project to be stored.
-	 * @throws IOException In case of errors.
+	 * @param file
+	 *            The file to be used for the storage.
+	 * @param project
+	 *            The project to be stored.
+	 * @throws IOException
+	 *             In case of errors.
 	 */
 	public static final void saveToFile(final File file, final MIProject project) throws IOException {
 		try {
@@ -741,12 +774,16 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@link MIProject} and the actual analysis. It calls the constructor
 	 * {@code AnalysisController(MIProject, ClassLoader)}.
 	 *
-	 * @param project     The project to be loaded.
-	 * @param classLoader The class loader used to load the instances.
+	 * @param project
+	 *            The project to be loaded.
+	 * @param classLoader
+	 *            The class loader used to load the instances.
 	 * @return The newly created controller and the mapping.
-	 * @throws NullPointerException           If the project is null.
-	 * @throws AnalysisConfigurationException If the given project could not be
-	 *                                        loaded.
+	 * @throws NullPointerException
+	 *             If the project is null.
+	 * @throws AnalysisConfigurationException
+	 *             If the given project could not be
+	 *             loaded.
 	 */
 	public static final AnalysisControllerWithMapping createAnalysisController(final MIProject project,
 			final ClassLoader classLoader) throws NullPointerException, AnalysisConfigurationException {
@@ -758,7 +795,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * This method tries to atomically register the given name for a component.
 	 *
-	 * @param name The component name to register
+	 * @param name
+	 *            The component name to register
 	 *
 	 * @return true if and only if the given name is not already used and could now
 	 *         be registered.
@@ -786,11 +824,14 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		/**
 		 * Creates a new instance of this class using the given parameters.
 		 *
-		 * @param controller    The analysis controller to be stored in this container.
-		 * @param pluginMap     The mapping between actual plugins and their model
-		 *                      counterparts.
-		 * @param repositoryMap The mapping between actual repositories and their model
-		 *                      counterparts.
+		 * @param controller
+		 *            The analysis controller to be stored in this container.
+		 * @param pluginMap
+		 *            The mapping between actual plugins and their model
+		 *            counterparts.
+		 * @param repositoryMap
+		 *            The mapping between actual repositories and their model
+		 *            counterparts.
 		 */
 		public AnalysisControllerWithMapping(final AnalysisController controller,
 				final Map<MIPlugin, AbstractPlugin> pluginMap,
@@ -872,8 +913,10 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		/**
 		 * This method will be called for every update of the state.
 		 *
-		 * @param controller The controller which updated its state.
-		 * @param state      The new state of the given controller.
+		 * @param controller
+		 *            The controller which updated its state.
+		 * @param state
+		 *            The new state of the given controller.
 		 *
 		 * @since 1.5
 		 */

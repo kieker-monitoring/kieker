@@ -29,7 +29,8 @@ public abstract class AbstractExecutionTraceProcessingFilter<T> extends Abstract
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param systemModelRepository the used system model repository
+	 * @param systemModelRepository
+	 *            the used system model repository
 	 */
 	public AbstractExecutionTraceProcessingFilter(final SystemModelRepository systemModelRepository) {
 		super(systemModelRepository);

@@ -38,7 +38,8 @@ public class StringSerializer extends AbstractMonitoringRecordSerializer {
 	/**
 	 * Creates a new serializer using the given configuration.
 	 *
-	 * @param configuration The configuration to use
+	 * @param configuration
+	 *            The configuration to use
 	 */
 	public StringSerializer(final Configuration configuration) {
 		super(configuration);

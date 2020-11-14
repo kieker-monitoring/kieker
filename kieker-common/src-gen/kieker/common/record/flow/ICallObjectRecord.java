@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.flow;
 
-
 /**
  * @author Jan Waller
  * 
@@ -23,7 +22,7 @@ package kieker.common.record.flow;
  */
 public interface ICallObjectRecord extends ICallRecord, IObjectRecord {
 	public int getCallerObjectId();
-	
+
 	public int getCalleeObjectId();
-	
+
 }

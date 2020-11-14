@@ -42,8 +42,10 @@ import kieker.monitoring.core.controller.tcp.AbstractTcpReader;
 	@OutputPort(name = DualSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
 		IMonitoringRecord.class }, description = "Output Port of the DualSocketTcpReader")
 }, configuration = {
-	@Property(name = DualSocketTcpReader.CONFIG_PROPERTY_NAME_PORT1, defaultValue = "10133", description = "The first port of the server used for the TCP connection."),
-	@Property(name = DualSocketTcpReader.CONFIG_PROPERTY_NAME_PORT2, defaultValue = "10134", description = "The second port of the server used for the TCP connection.")
+	@Property(name = DualSocketTcpReader.CONFIG_PROPERTY_NAME_PORT1, defaultValue = "10133",
+			description = "The first port of the server used for the TCP connection."),
+	@Property(name = DualSocketTcpReader.CONFIG_PROPERTY_NAME_PORT2, defaultValue = "10134",
+			description = "The second port of the server used for the TCP connection.")
 })
 public class DualSocketTcpReader extends AbstractReaderPlugin {
 

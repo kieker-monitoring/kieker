@@ -37,8 +37,10 @@ public abstract class AbstractInvalidExecutionTraceProcessingFilter extends Abst
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param configuration  The configuration for this component.
-	 * @param projectContext The project context for this component.
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
 	 */
 	public AbstractInvalidExecutionTraceProcessingFilter(final Configuration configuration,
 			final IProjectContext projectContext) {

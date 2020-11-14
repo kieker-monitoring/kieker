@@ -35,7 +35,8 @@ public abstract class AbstractRepository { // NOPMD (abstract without abstract)
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param systemFactory The system factory.
+	 * @param systemFactory
+	 *            The system factory.
 	 */
 	public AbstractRepository(final SystemModelRepository systemFactory) {
 		this.systemFactory = systemFactory;

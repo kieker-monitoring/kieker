@@ -138,7 +138,8 @@ public class FSDirectoryReader implements Runnable {
 						final Class<? extends AbstractDecompressionFilter> clazz = FSReaderUtil.findDecompressionFilterByExtension(inputFile.getName());
 
 						final Configuration configuration = new Configuration();
-						final AbstractDecompressionFilter decompressionFilter = InstantiationFactory.getInstance(configuration).createAndInitialize(AbstractDecompressionFilter.class, clazz.getCanonicalName(), configuration);
+						final AbstractDecompressionFilter decompressionFilter = InstantiationFactory.getInstance(configuration)
+								.createAndInitialize(AbstractDecompressionFilter.class, clazz.getCanonicalName(), configuration);
 						this.processBinaryInputFile(inputFile, decompressionFilter);
 					} catch (final IllegalArgumentException ex) {
 						LOGGER.warn("Unknown file extension for file {}", inputFile);

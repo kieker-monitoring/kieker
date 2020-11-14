@@ -49,16 +49,25 @@ public class Execution {
 	/**
 	 * Creates a new Execution instance.
 	 *
-	 * @param op                  The operation of the execution.
-	 * @param allocationComponent The allocation component.
-	 * @param traceId             The ID of the trace.
-	 * @param sessionId           The ID of the session.
-	 * @param eoi                 The execution order index.
-	 * @param ess                 The execution stack size.
-	 * @param tin                 The timestamp the execution started.
-	 * @param tout                The timestamp the execution finished.
-	 * @param assumed             Determines whether the execution is assumed or
-	 *                            not.
+	 * @param op
+	 *            The operation of the execution.
+	 * @param allocationComponent
+	 *            The allocation component.
+	 * @param traceId
+	 *            The ID of the trace.
+	 * @param sessionId
+	 *            The ID of the session.
+	 * @param eoi
+	 *            The execution order index.
+	 * @param ess
+	 *            The execution stack size.
+	 * @param tin
+	 *            The timestamp the execution started.
+	 * @param tout
+	 *            The timestamp the execution finished.
+	 * @param assumed
+	 *            Determines whether the execution is assumed or
+	 *            not.
 	 */
 	public Execution(final Operation op, final AllocationComponent allocationComponent, final long traceId,
 			final String sessionId, final int eoi, final int ess, final long tin, final long tout,
@@ -87,15 +96,23 @@ public class Execution {
 	/**
 	 * Creates a new Execution instance. The sessionId is set to a default value.
 	 *
-	 * @param op                  The operation of the execution.
-	 * @param allocationComponent The allocation component.
-	 * @param traceId             The ID of the trace.
-	 * @param eoi                 The execution order index.
-	 * @param ess                 The execution stack size.
-	 * @param tin                 The timestamp the execution started.
-	 * @param tout                The timestamp the execution finished.
-	 * @param assumed             Determines whether the execution is assumed or
-	 *                            not.
+	 * @param op
+	 *            The operation of the execution.
+	 * @param allocationComponent
+	 *            The allocation component.
+	 * @param traceId
+	 *            The ID of the trace.
+	 * @param eoi
+	 *            The execution order index.
+	 * @param ess
+	 *            The execution stack size.
+	 * @param tin
+	 *            The timestamp the execution started.
+	 * @param tout
+	 *            The timestamp the execution finished.
+	 * @param assumed
+	 *            Determines whether the execution is assumed or
+	 *            not.
 	 */
 	public Execution(final Operation op, final AllocationComponent allocationComponent, final long traceId,
 			final int eoi, final int ess, final long tin, final long tout, final boolean assumed) {
@@ -149,7 +166,8 @@ public class Execution {
 	 * and fields. All fields but the {@link #isAssumed()} are considered for
 	 * comparison.
 	 *
-	 * @param obj The object to be compared with this instance.
+	 * @param obj
+	 *            The object to be compared with this instance.
 	 *
 	 * @return true if and only if the current object and the given object have
 	 *         equal values.
