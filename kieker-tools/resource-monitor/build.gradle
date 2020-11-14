@@ -1,7 +1,9 @@
-apply plugin: 'application'
+plugins {
+	id 'application'
+}
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = sourceVersion
+targetCompatibility = targetVersion
 
 distTar.enabled=false
 distZip.enabled=true
@@ -11,19 +13,13 @@ mainClassName='kieker.tools.resource.monitor.ResourceMonitorMain'
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
 dependencies {
-	clover 'org.openclover:clover:4.2.0'
+	implementation project(":kieker-tools")
 
-	compile project(":kieker-tools")
-
-	compile "com.beust:jcommander:1.71"
-}
-
-clover {
-	report {
-		html=true
-	}
+	implementation "com.beust:jcommander:${jcommanderVersion}"
+	implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
 	
 }
+
 
 task uploadArchives {
 	println 'resource-monitor skipped'

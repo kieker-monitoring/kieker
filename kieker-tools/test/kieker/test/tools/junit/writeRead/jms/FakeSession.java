@@ -38,17 +38,20 @@ import javax.jms.Topic;
 import javax.jms.TopicSubscriber;
 
 /**
- * This class is part of a very basic fake JMS message broker. It uses a very simple design to deliver messages synchronously from a singleton producer to a
- * singleton consumer. It has only been designed for test purposes ({@link BasicJMSWriterReaderTest}) and should <b>not</b> be used outside this test.
- * 
+ * This class is part of a very basic fake JMS message broker. It uses a very
+ * simple design to deliver messages synchronously from a singleton producer to
+ * a singleton consumer. It has only been designed for test purposes
+ * ({@link BasicJMSWriterReaderTest}) and should <b>not</b> be used outside this
+ * test.
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 public class FakeSession implements Session {
 
 	private static final FakeMessageConsumer CONSUMER = new FakeMessageConsumer();
-	private static final FakeMessageProducer PRODUCER = new FakeMessageProducer(CONSUMER);
+	private static final FakeMessageProducer PRODUCER = new FakeMessageProducer(FakeSession.CONSUMER);
 
 	/**
 	 * Default constructor.
@@ -102,7 +105,7 @@ public class FakeSession implements Session {
 	 */
 	@Override
 	public MessageConsumer createConsumer(final Destination arg0) throws JMSException {
-		return CONSUMER;
+		return FakeSession.CONSUMER;
 	}
 
 	/**
@@ -117,7 +120,8 @@ public class FakeSession implements Session {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public MessageConsumer createConsumer(final Destination arg0, final String arg1, final boolean arg2) throws JMSException {
+	public MessageConsumer createConsumer(final Destination arg0, final String arg1, final boolean arg2)
+			throws JMSException {
 		return null;
 	}
 
@@ -133,7 +137,8 @@ public class FakeSession implements Session {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TopicSubscriber createDurableSubscriber(final Topic arg0, final String arg1, final String arg2, final boolean arg3) throws JMSException {
+	public TopicSubscriber createDurableSubscriber(final Topic arg0, final String arg1, final String arg2,
+			final boolean arg3) throws JMSException {
 		return null;
 	}
 
@@ -176,7 +181,7 @@ public class FakeSession implements Session {
 	 */
 	@Override
 	public MessageProducer createProducer(final Destination arg0) throws JMSException {
-		return PRODUCER;
+		return FakeSession.PRODUCER;
 	}
 
 	/**
@@ -299,6 +304,46 @@ public class FakeSession implements Session {
 	@Override
 	public void unsubscribe(final String arg0) throws JMSException {
 		// No code necessary
+	}
+
+	@Override
+	public MessageConsumer createSharedConsumer(final Topic topic, final String sharedSubscriptionName)
+			throws JMSException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MessageConsumer createSharedConsumer(final Topic topic, final String sharedSubscriptionName,
+			final String messageSelector) throws JMSException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MessageConsumer createDurableConsumer(final Topic topic, final String name) throws JMSException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MessageConsumer createDurableConsumer(final Topic topic, final String name, final String messageSelector,
+			final boolean noLocal) throws JMSException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MessageConsumer createSharedDurableConsumer(final Topic topic, final String name) throws JMSException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MessageConsumer createSharedDurableConsumer(final Topic topic, final String name,
+			final String messageSelector) throws JMSException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

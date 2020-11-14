@@ -18,14 +18,18 @@ package kieker.test.tools.junit.writeRead.jms;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
+import javax.jms.JMSContext;
 import javax.jms.JMSException;
 
 /**
- * This class is part of a very basic fake JMS message broker. It uses a very simple design to deliver messages synchronously from a singleton producer to a
- * singleton consumer. It has only been designed for test purposes ({@link BasicJMSWriterReaderTest}) and should <b>not</b> be used outside this test.
- * 
+ * This class is part of a very basic fake JMS message broker. It uses a very
+ * simple design to deliver messages synchronously from a singleton producer to
+ * a singleton consumer. It has only been designed for test purposes
+ * ({@link BasicJMSWriterReaderTest}) and should <b>not</b> be used outside this
+ * test.
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 public class FakeConnectionFactory implements ConnectionFactory {
@@ -50,6 +54,30 @@ public class FakeConnectionFactory implements ConnectionFactory {
 	 */
 	@Override
 	public Connection createConnection(final String arg0, final String arg1) throws JMSException {
+		return null;
+	}
+
+	@Override
+	public JMSContext createContext() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public JMSContext createContext(final String userName, final String password) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public JMSContext createContext(final String userName, final String password, final int sessionMode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public JMSContext createContext(final int sessionMode) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
