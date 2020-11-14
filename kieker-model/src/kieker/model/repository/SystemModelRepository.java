@@ -22,7 +22,6 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
-import kieker.common.configuration.Configuration;
 import kieker.model.system.model.AllocationComponent;
 import kieker.model.system.model.AssemblyComponent;
 import kieker.model.system.model.ComponentType;
@@ -58,11 +57,8 @@ public class SystemModelRepository extends AbstractRepository {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 *
-	 * @param configuration  The configuration to use for this repository.
-	 * @param projectContext The project context to use for this repository.
 	 */
-	public SystemModelRepository(final Configuration configuration) {
+	public SystemModelRepository() {
 		super(null);
 
 		this.typeRepositoryFactory = new TypeRepository(this);
@@ -167,12 +163,15 @@ public class SystemModelRepository extends AbstractRepository {
 	/**
 	 * Writes the contents of this system model to an HTML file.
 	 *
-	 * @param outputFn file system location of the output file (as accepted by
-	 *                 {@link java.io.File#File(String)}).
+	 * @param outputFn
+	 *            file system location of the output file (as accepted by
+	 *            {@link java.io.File#File(String)}).
 	 *
-	 * @throws FileNotFoundException        If the given file is somehow invalid.
-	 * @throws UnsupportedEncodingException If the used default encoding is not
-	 *                                      supported.
+	 * @throws FileNotFoundException
+	 *             If the given file is somehow invalid.
+	 * @throws UnsupportedEncodingException
+	 *             If the used default encoding is not
+	 *             supported.
 	 */
 	public void saveSystemToHTMLFile(final String outputFn) throws FileNotFoundException, UnsupportedEncodingException {
 		final PrintStream ps = new PrintStream(new FileOutputStream(outputFn), false, SystemModelRepository.ENCODING);
@@ -199,9 +198,9 @@ public class SystemModelRepository extends AbstractRepository {
 				}
 			}
 			final String[] cells = new String[] {
-					this.htmlEntityLabel(type.getId(), Integer.toString(type.getId()), EntityType.COMPONENT_TYPE),
-					SystemModelRepository.simpleHTMLEscape(type.getPackageName()),
-					SystemModelRepository.simpleHTMLEscape(type.getTypeName()), opListBuilder.toString(), };
+				this.htmlEntityLabel(type.getId(), Integer.toString(type.getId()), EntityType.COMPONENT_TYPE),
+				SystemModelRepository.simpleHTMLEscape(type.getPackageName()),
+				SystemModelRepository.simpleHTMLEscape(type.getTypeName()), opListBuilder.toString(), };
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);
@@ -216,12 +215,12 @@ public class SystemModelRepository extends AbstractRepository {
 						.append("</li>");
 			}
 			final String[] cells = new String[] {
-					this.htmlEntityLabel(op.getId(), Integer.toString(op.getId()), EntityType.OPERATION),
-					this.htmlEntityRef(op.getComponentType().getId(),
-							SystemModelRepository.simpleHTMLEscape(op.getComponentType().getFullQualifiedName()),
-							EntityType.COMPONENT_TYPE),
-					SystemModelRepository.simpleHTMLEscape(op.getSignature().getName()), paramListStrBuild.toString(),
-					SystemModelRepository.simpleHTMLEscape(op.getSignature().getReturnType()), };
+				this.htmlEntityLabel(op.getId(), Integer.toString(op.getId()), EntityType.OPERATION),
+				this.htmlEntityRef(op.getComponentType().getId(),
+						SystemModelRepository.simpleHTMLEscape(op.getComponentType().getFullQualifiedName()),
+						EntityType.COMPONENT_TYPE),
+				SystemModelRepository.simpleHTMLEscape(op.getSignature().getName()), paramListStrBuild.toString(),
+				SystemModelRepository.simpleHTMLEscape(op.getSignature().getReturnType()), };
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);
@@ -230,11 +229,11 @@ public class SystemModelRepository extends AbstractRepository {
 		final Collection<AssemblyComponent> assemblyComponents = this.assemblyFactory.getAssemblyComponentInstances();
 		for (final AssemblyComponent ac : assemblyComponents) {
 			final String[] cells = new String[] {
-					this.htmlEntityLabel(ac.getId(), Integer.toString(ac.getId()), EntityType.ASSEMBLY_COMPONENT),
-					ac.getName(),
-					this.htmlEntityRef(ac.getType().getId(),
-							SystemModelRepository.simpleHTMLEscape(ac.getType().getFullQualifiedName()),
-							EntityType.COMPONENT_TYPE), };
+				this.htmlEntityLabel(ac.getId(), Integer.toString(ac.getId()), EntityType.ASSEMBLY_COMPONENT),
+				ac.getName(),
+				this.htmlEntityRef(ac.getType().getId(),
+						SystemModelRepository.simpleHTMLEscape(ac.getType().getFullQualifiedName()),
+						EntityType.COMPONENT_TYPE), };
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);
@@ -243,9 +242,9 @@ public class SystemModelRepository extends AbstractRepository {
 		final Collection<ExecutionContainer> containers = this.executionEnvironmentFactory.getExecutionContainers();
 		for (final ExecutionContainer container : containers) {
 			final String[] cells = new String[] {
-					this.htmlEntityLabel(container.getId(), Integer.toString(container.getId()),
-							EntityType.EXECUTION_CONTAINER),
-					SystemModelRepository.simpleHTMLEscape(container.getName()), };
+				this.htmlEntityLabel(container.getId(), Integer.toString(container.getId()),
+						EntityType.EXECUTION_CONTAINER),
+				SystemModelRepository.simpleHTMLEscape(container.getName()), };
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);
@@ -256,16 +255,16 @@ public class SystemModelRepository extends AbstractRepository {
 				.getAllocationComponentInstances();
 		for (final AllocationComponent allocationComponent : allocationComponentInstances) {
 			final String[] cells = new String[] {
-					this.htmlEntityLabel(allocationComponent.getId(), Integer.toString(allocationComponent.getId()),
-							EntityType.ALLOCATION_COMPONENT),
-					this.htmlEntityRef(allocationComponent.getAssemblyComponent().getId(),
-							SystemModelRepository
-									.simpleHTMLEscape(allocationComponent.getAssemblyComponent().toString()),
-							EntityType.ALLOCATION_COMPONENT),
-					this.htmlEntityRef(allocationComponent.getExecutionContainer().getId(),
-							SystemModelRepository
-									.simpleHTMLEscape(allocationComponent.getExecutionContainer().getName()),
-							EntityType.EXECUTION_CONTAINER), };
+				this.htmlEntityLabel(allocationComponent.getId(), Integer.toString(allocationComponent.getId()),
+						EntityType.ALLOCATION_COMPONENT),
+				this.htmlEntityRef(allocationComponent.getAssemblyComponent().getId(),
+						SystemModelRepository
+								.simpleHTMLEscape(allocationComponent.getAssemblyComponent().toString()),
+						EntityType.ALLOCATION_COMPONENT),
+				this.htmlEntityRef(allocationComponent.getExecutionContainer().getId(),
+						SystemModelRepository
+								.simpleHTMLEscape(allocationComponent.getExecutionContainer().getName()),
+						EntityType.EXECUTION_CONTAINER), };
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);
