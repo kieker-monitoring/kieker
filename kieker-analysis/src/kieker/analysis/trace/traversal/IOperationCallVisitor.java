@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.trace.traversal;
+package kieker.analysis.trace.traversal;
 
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 

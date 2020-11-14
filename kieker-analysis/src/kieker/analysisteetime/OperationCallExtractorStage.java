@@ -16,15 +16,16 @@
 
 package kieker.analysisteetime;
 
+import kieker.analysis.trace.traversal.IOperationCallVisitor;
+import kieker.analysis.trace.traversal.TraceTraverser;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
-import kieker.analysisteetime.trace.traversal.IOperationCallVisitor;
-import kieker.analysisteetime.trace.traversal.TraceTraverser;
 
 import teetime.stage.basic.AbstractTransformation;
 
 /**
- * This stage accepts {@link Trace}s at its input port and sends all {@link OperationCall}s in this Traces to its output port.
+ * This stage accepts {@link Trace}s at its input port and sends all
+ * {@link OperationCall}s in this Traces to its output port.
  *
  * @author Sören Henning
  *

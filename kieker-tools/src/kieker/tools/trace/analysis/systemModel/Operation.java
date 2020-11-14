@@ -17,7 +17,7 @@
 package kieker.tools.trace.analysis.systemModel;
 
 import kieker.common.util.signature.Signature;
-import kieker.model.repository.AbstractRepository;
+import kieker.tools.trace.analysis.systemModel.repository.AbstractSystemSubRepository;
 
 /**
  * This class represents an operation within the trace analysis tool. It
@@ -26,11 +26,13 @@ import kieker.model.repository.AbstractRepository;
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class Operation {
 
 	/** The ID for the root operation. */
-	public static final int ROOT_OPERATION_ID = AbstractRepository.ROOT_ELEMENT_ID;
+	public static final int ROOT_OPERATION_ID = AbstractSystemSubRepository.ROOT_ELEMENT_ID;
 
 	private final int id;
 	private final ComponentType componentType;

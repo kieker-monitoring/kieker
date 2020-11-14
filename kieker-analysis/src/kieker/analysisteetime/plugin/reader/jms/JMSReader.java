@@ -46,7 +46,9 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn, Matthias Rohr, Lars Bluemke
  *
  * @since 0.95a
+ * @deprecated 1.15 moved to final destination in kieker.analysis.source.jms
  */
+@Deprecated
 public final class JMSReader {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(JMSReader.class);
@@ -61,20 +63,18 @@ public final class JMSReader {
 	/**
 	 * Creates a new logic module for the Consumer.
 	 *
-	 * @param jmsProviderUrl
-	 *            The name of the configuration determining the JMS provider URL,
-	 *            e.g. {@code tcp://localhost:3035/}
-	 * @param jmsDestination
-	 *            The name of the configuration determining the JMS destination,
-	 *            e.g. {@code queue1}.
-	 * @param jmsFactoryLookupName
-	 *            The name of the configuration determining the name of the used JMS
-	 *            factory, e.g. {@code org.exolab.jms.jndi.InitialContextFactory}.
-	 * @param elementReceivedCallback
-	 *            The actual teetime stage which uses this class.
+	 * @param jmsProviderUrl          The name of the configuration determining the
+	 *                                JMS provider URL, e.g.
+	 *                                {@code tcp://localhost:3035/}
+	 * @param jmsDestination          The name of the configuration determining the
+	 *                                JMS destination, e.g. {@code queue1}.
+	 * @param jmsFactoryLookupName    The name of the configuration determining the
+	 *                                name of the used JMS factory, e.g.
+	 *                                {@code org.exolab.jms.jndi.InitialContextFactory}.
+	 * @param elementReceivedCallback The actual teetime stage which uses this
+	 *                                class.
 	 *
-	 * @throws IllegalArgumentException
-	 *             If one of the properties is empty.
+	 * @throws IllegalArgumentException If one of the properties is empty.
 	 */
 	public JMSReader(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName,
 			final Consumer<IMonitoringRecord> elementReceivedCallback) throws IllegalArgumentException {
@@ -100,8 +100,8 @@ public final class JMSReader {
 	 * it is assumed that reading has finished before this method returns. The
 	 * method should indicate an error by the return value false.
 	 *
-	 * In asynchronous scenarios, the {@link #terminate()} method can be used
-	 * to initiate the termination of this method.
+	 * In asynchronous scenarios, the {@link #terminate()} method can be used to
+	 * initiate the termination of this method.
 	 *
 	 * @return true if reading was successful; false if an error occurred
 	 *
@@ -131,24 +131,24 @@ public final class JMSReader {
 				// ActiveMQ/HornetQ sometimes)
 				destination = session.createQueue(this.jmsDestination);
 				if (destination == null) { //
-					LOGGER.error("Failed to lookup queue '{}' via JNDI: {} AND failed to create queue",
+					JMSReader.LOGGER.error("Failed to lookup queue '{}' via JNDI: {} AND failed to create queue",
 							this.jmsDestination, exc.getMessage());
 					throw exc; // will be catched below to abort the read method
 				}
 			}
 
-			LOGGER.info("Listening to destination: {} at {} !\n***\n\n", destination, this.jmsProviderUrl);
+			JMSReader.LOGGER.info("Listening to destination: {} at {} !\n***\n\n", destination, this.jmsProviderUrl);
 			final MessageConsumer receiver = session.createConsumer(destination);
 			receiver.setMessageListener(new JMSMessageListener());
 
 			// start the connection to enable message delivery
 			connection.start();
 
-			LOGGER.info("JMSReader started and waits for incoming monitoring events!");
+			JMSReader.LOGGER.info("JMSReader started and waits for incoming monitoring events!");
 			this.block();
-			LOGGER.info("Woke up by shutdown");
+			JMSReader.LOGGER.info("Woke up by shutdown");
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			LOGGER.error("Error in read()", ex);
+			JMSReader.LOGGER.error("Error in read()", ex);
 			retVal = false;
 		} finally {
 			try {
@@ -156,7 +156,7 @@ public final class JMSReader {
 					connection.close();
 				}
 			} catch (final JMSException ex) {
-				LOGGER.error("Failed to close JMS", ex);
+				JMSReader.LOGGER.error("Failed to close JMS", ex);
 			}
 		}
 		return retVal;
@@ -189,7 +189,7 @@ public final class JMSReader {
 	 * Terminates the reader logic and returns iff termination was successful.
 	 */
 	public void terminate() {
-		LOGGER.info("Shutdown of JMSReader requested.");
+		JMSReader.LOGGER.info("Shutdown of JMSReader requested.");
 		this.unblock();
 	}
 

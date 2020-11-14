@@ -22,11 +22,13 @@ import java.util.Collections;
 
 /**
  * This class represents the type of a component within the trace analysis tool.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class ComponentType {
 	private final int id;
 	private final String packageName;
@@ -34,14 +36,13 @@ public class ComponentType {
 	private final Collection<Operation> operations = Collections.synchronizedList(new ArrayList<Operation>());
 
 	/**
-	 // NOCS requests implementation of equals and hashCode in pairs// NOCS requests implementation of equals and hashCode in pairs* Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param id
-	 *            The ID of the component type.
-	 * @param packageName
-	 *            The package name.
-	 * @param typeName
-	 *            The type name.
+	 * // NOCS requests implementation of equals and hashCode in pairs// NOCS
+	 * requests implementation of equals and hashCode in pairs* Creates a new
+	 * instance of this class using the given parameters.
+	 *
+	 * @param id          The ID of the component type.
+	 * @param packageName The package name.
+	 * @param typeName    The type name.
 	 */
 	public ComponentType(final int id, final String packageName, final String typeName) {
 		this.id = id;
@@ -51,11 +52,10 @@ public class ComponentType {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param id
-	 *            The ID of the component type.
-	 * @param fullqualifiedTypeName
-	 *            The fully qualified name of the type, separated with '.'.
+	 *
+	 * @param id                    The ID of the component type.
+	 * @param fullqualifiedTypeName The fully qualified name of the type, separated
+	 *                              with '.'.
 	 */
 	public ComponentType(final int id, final String fullqualifiedTypeName) {
 		this.id = id;
@@ -81,7 +81,7 @@ public class ComponentType {
 
 	/**
 	 * Delivers the ID of the component type.
-	 * 
+	 *
 	 * @return The ID.
 	 */
 	public final int getId() {
@@ -90,7 +90,7 @@ public class ComponentType {
 
 	/**
 	 * Delivers the name of the type.
-	 * 
+	 *
 	 * @return The type name.
 	 */
 	public final String getTypeName() {
@@ -99,7 +99,7 @@ public class ComponentType {
 
 	/**
 	 * Delivers the package name of this type.
-	 * 
+	 *
 	 * @return The package name.
 	 */
 	public final String getPackageName() {
@@ -107,8 +107,9 @@ public class ComponentType {
 	}
 
 	/**
-	 * Delivers the full qualified name of this type (the packages are separated with '.').
-	 * 
+	 * Delivers the full qualified name of this type (the packages are separated
+	 * with '.').
+	 *
 	 * @return The full qualified name.
 	 */
 	public final String getFullQualifiedName() {
@@ -119,8 +120,9 @@ public class ComponentType {
 	}
 
 	/**
-	 * Delivers a collection containing the available operations within this component type.
-	 * 
+	 * Delivers a collection containing the available operations within this
+	 * component type.
+	 *
 	 * @return The operations.
 	 */
 	public final Collection<Operation> getOperations() {
@@ -129,10 +131,9 @@ public class ComponentType {
 
 	/**
 	 * This method adds a given operation to the list of available operations.
-	 * 
-	 * @param op
-	 *            The operation to be added.
-	 * 
+	 *
+	 * @param op The operation to be added.
+	 *
 	 * @return The added operation.
 	 */
 	public final Operation addOperation(final Operation op) {

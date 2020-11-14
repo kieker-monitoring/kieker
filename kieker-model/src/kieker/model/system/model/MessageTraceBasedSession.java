@@ -14,26 +14,26 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.trace.analysis.systemModel;
+package kieker.model.system.model;
 
 import java.util.Comparator;
 
-import kieker.tools.trace.analysis.systemModel.util.TraceStartTimestampComparator;
+import kieker.model.system.model.util.TraceStartTimestampComparator;
 
 /**
- * Specialized sub-class for sessions based on message traces (see {@link MessageTrace}).
- * 
+ * Specialized sub-class for sessions based on message traces (see
+ * {@link MessageTrace}).
+ *
  * @author Holger Knoche
  * @since 1.10
- * 
+ *
  */
 public class MessageTraceBasedSession extends AbstractSession<MessageTrace> {
 
 	/**
 	 * Creates a new message trace-based session with the given session ID.
-	 * 
-	 * @param sessionId
-	 *            The session ID to use
+	 *
+	 * @param sessionId The session ID to use
 	 */
 	public MessageTraceBasedSession(final String sessionId) {
 		super(sessionId);

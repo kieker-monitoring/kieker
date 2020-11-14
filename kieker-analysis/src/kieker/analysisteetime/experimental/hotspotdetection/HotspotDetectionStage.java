@@ -26,19 +26,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import kieker.analysis.trace.traversal.IOperationCallVisitor;
+import kieker.analysis.trace.traversal.TraceTraverser;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
-import kieker.analysisteetime.trace.traversal.IOperationCallVisitor;
-import kieker.analysisteetime.trace.traversal.TraceTraverser;
 
 import teetime.framework.AbstractConsumerStage;
 
 /**
  *
- * This stage excepts traces at its input port and prints their operation calls to a given {@link PrintStream}, which
- * have the longest execution time without their children.
+ * This stage excepts traces at its input port and prints their operation calls
+ * to a given {@link PrintStream}, which have the longest execution time without
+ * their children.
  *
- * The number of operation call that will be printed can be configured. The default print stream is System.out.
+ * The number of operation call that will be printed can be configured. The
+ * default print stream is System.out.
  *
  * @author Sören Henning, Stephan Lenga
  *
@@ -56,8 +58,8 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 	private final PrintStream printStream;
 
 	public HotspotDetectionStage() {
-		this.maxOutput = DEFAULT_MAX_OUTPUT;
-		this.printStream = DEFAULT_PRINT_STREAM;
+		this.maxOutput = HotspotDetectionStage.DEFAULT_MAX_OUTPUT;
+		this.printStream = HotspotDetectionStage.DEFAULT_PRINT_STREAM;
 	}
 
 	public HotspotDetectionStage(final int maxOutput, final PrintStream printStream) {
@@ -82,9 +84,9 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 		final Map<OperationCall, Duration> sortedMap = HotspotDetectionStage.sortMapByValue(this.durationsWithoutChild);
 		sortedMap.entrySet().stream().limit(this.maxOutput).map(
 				e -> e.getKey().getOperation().getComponent().getAssemblyComponent().getComponentType().getSignature()
-				+ " " + e.getKey().getOperation().getAssemblyOperation().getOperationType().getSignature()
-				+ ": " + e.getValue().toString())
-		.forEach(this.printStream::println);
+						+ " " + e.getKey().getOperation().getAssemblyOperation().getOperationType().getSignature()
+						+ ": " + e.getValue().toString())
+				.forEach(this.printStream::println);
 	}
 
 	// BETTER Put to some kind of MapUtil class

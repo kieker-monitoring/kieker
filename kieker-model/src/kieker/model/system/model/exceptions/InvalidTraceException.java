@@ -22,9 +22,7 @@ package kieker.model.system.model.exceptions;
  * @author Andre van Hoorn
  *
  * @since 0.95a
- * @deprecated 1.15 moved to kieker-model
  */
-@Deprecated
 public class InvalidTraceException extends Exception {
 
 	private static final long serialVersionUID = 1893L;

@@ -20,6 +20,8 @@ import java.io.File;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
+import kieker.analysis.trace.reconstruction.TraceReconstructorStage;
+import kieker.analysis.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.analysisteetime.OperationCallExtractorStage;
 import kieker.analysisteetime.dependencygraphs.DependencyGraphCreatorStage;
 import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependencyGraphBuilderFactory;
@@ -43,8 +45,6 @@ import kieker.analysisteetime.signature.SignatureExtractor;
 import kieker.analysisteetime.statistics.CallStatisticsStage;
 import kieker.analysisteetime.statistics.FullReponseTimeStatisticsStage;
 import kieker.analysisteetime.statistics.StatisticsModel;
-import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
-import kieker.analysisteetime.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.analysisteetime.util.graph.IGraph;
 import kieker.analysisteetime.util.graph.export.dot.DotFileWriterStage;
 import kieker.analysisteetime.util.graph.export.graphml.GraphMLFileWriterStage;
@@ -56,7 +56,8 @@ import teetime.stage.basic.distributor.Distributor;
 import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
 
 /**
- * This is an executable TeeTime {@link Configuration} to create dependency graphs.
+ * This is an executable TeeTime {@link Configuration} to create dependency
+ * graphs.
  *
  * @author Sören Henning
  *
@@ -66,9 +67,12 @@ import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
 public class DependencyGraphConfiguration extends Configuration {
 
 	private static final String PREFIX = DependencyGraphConfiguration.class.getName();
-	private static final String KEY_IMPORT_DIRECTORY = System.getProperty(PREFIX + ".importDirectory");
-	private static final String KEY_TIME_UNIT_OF_RECODS = System.getProperty(PREFIX + ".timeUnitOfRecods");
-	private static final String KEY_EXPORT_DIRECTORY = System.getProperty(PREFIX + ".exportDirectory");
+	private static final String KEY_IMPORT_DIRECTORY = System
+			.getProperty(DependencyGraphConfiguration.PREFIX + ".importDirectory");
+	private static final String KEY_TIME_UNIT_OF_RECODS = System
+			.getProperty(DependencyGraphConfiguration.PREFIX + ".timeUnitOfRecods");
+	private static final String KEY_EXPORT_DIRECTORY = System
+			.getProperty(DependencyGraphConfiguration.PREFIX + ".exportDirectory");
 
 	private static final DotExportConfigurationFactory DOT_EXPORT_CONFIGURATION_FACTORY = new DotExportConfigurationFactory(
 			NameBuilder.forJavaShortOperations());
@@ -81,7 +85,8 @@ public class DependencyGraphConfiguration extends Configuration {
 	private final SignatureExtractor signatureExtractor = SignatureExtractor.forJava();
 
 	public DependencyGraphConfiguration() {
-		this(KEY_IMPORT_DIRECTORY, KEY_TIME_UNIT_OF_RECODS, KEY_EXPORT_DIRECTORY);
+		this(DependencyGraphConfiguration.KEY_IMPORT_DIRECTORY, DependencyGraphConfiguration.KEY_TIME_UNIT_OF_RECODS,
+				DependencyGraphConfiguration.KEY_EXPORT_DIRECTORY);
 	}
 
 	public DependencyGraphConfiguration(final String importDirectory, final String timeUnitOfRecods,
@@ -116,7 +121,8 @@ public class DependencyGraphConfiguration extends Configuration {
 		// graph export stages
 		final Distributor<IGraph> distributor = new Distributor<>(new CopyByReferenceStrategy());
 		final DotFileWriterStage dotFileWriterStage = new DotFileWriterStage(exportDirectory.getPath(),
-				DOT_EXPORT_CONFIGURATION_FACTORY.createForDeploymentLevelOperationDependencyGraph());
+				DependencyGraphConfiguration.DOT_EXPORT_CONFIGURATION_FACTORY
+						.createForDeploymentLevelOperationDependencyGraph());
 		final GraphMLFileWriterStage graphMLFileWriterStage = new GraphMLFileWriterStage(exportDirectory.getPath());
 
 		super.connectPorts(reader.getOutputPort(), allowedRecordsFilter.getInputPort());
@@ -139,7 +145,8 @@ public class DependencyGraphConfiguration extends Configuration {
 		final File importDirectory = new File(args[0]);
 		final File exportDirectory = new File(args[1]);
 
-		final DependencyGraphConfiguration configuration = new DependencyGraphConfiguration(importDirectory, ChronoUnit.NANOS, exportDirectory);
+		final DependencyGraphConfiguration configuration = new DependencyGraphConfiguration(importDirectory,
+				ChronoUnit.NANOS, exportDirectory);
 		final Execution<DependencyGraphConfiguration> execution = new Execution<>(configuration);
 		execution.executeBlocking();
 	}

@@ -21,6 +21,10 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.function.Function;
 
+import kieker.analysis.trace.graph.TraceToGraphTransformerStage;
+import kieker.analysis.trace.graph.dot.DotTraceGraphFileWriterStage;
+import kieker.analysis.trace.reconstruction.TraceReconstructorStage;
+import kieker.analysis.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.analysisteetime.dependencygraphs.DependencyGraphCreatorStage;
 import kieker.analysisteetime.dependencygraphs.DeploymentLevelOperationDependencyGraphBuilderFactory;
 import kieker.analysisteetime.dependencygraphs.dot.DotExportConfigurationFactory;
@@ -45,10 +49,6 @@ import kieker.analysisteetime.signature.SignatureExtractor;
 import kieker.analysisteetime.statistics.CallStatisticsStage;
 import kieker.analysisteetime.statistics.FullReponseTimeStatisticsStage;
 import kieker.analysisteetime.statistics.StatisticsModel;
-import kieker.analysisteetime.trace.graph.TraceToGraphTransformerStage;
-import kieker.analysisteetime.trace.graph.dot.DotTraceGraphFileWriterStage;
-import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
-import kieker.analysisteetime.trace.reconstruction.TraceStatisticsDecoratorStage;
 import kieker.analysisteetime.util.graph.export.dot.DotExportConfiguration;
 import kieker.analysisteetime.util.graph.export.dot.DotFileWriterStage;
 import kieker.analysisteetime.util.stage.trigger.TriggerOnTerminationStage;
@@ -91,7 +91,8 @@ public class ExampleConfiguration extends Configuration {
 		final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
 		final StaticModelsAssemblerStage staticModelsAssembler = new StaticModelsAssemblerStage(this.typeModel,
 				this.assemblyModel, this.deploymentModel, this.signatureExtractor);
-		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel, timeUnitOfRecods);
+		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(this.deploymentModel,
+				timeUnitOfRecods);
 		final TraceStatisticsDecoratorStage traceStatisticsDecorator = new TraceStatisticsDecoratorStage();
 
 		final OperationCallExtractorStage operationCallExtractor = new OperationCallExtractorStage();
@@ -105,7 +106,8 @@ public class ExampleConfiguration extends Configuration {
 		final TraceToGraphTransformerStage traceToGraphTransformer = new TraceToGraphTransformerStage();
 		final DotTraceGraphFileWriterStage dotTraceGraphFileWriter = DotTraceGraphFileWriterStage
 				.create(exportDirectory);
-		// final GraphMLFileWriterStage graphMLTraceGraphFileWriter = new GraphMLFileWriterStage(exportDirectory.getPath());
+		// final GraphMLFileWriterStage graphMLTraceGraphFileWriter = new
+		// GraphMLFileWriterStage(exportDirectory.getPath());
 		final Distributor<Trace> traceDistributor = new Distributor<>(new CopyByReferenceStrategy());
 		final TriggerOnTerminationStage onTerminationTrigger = new TriggerOnTerminationStage();
 

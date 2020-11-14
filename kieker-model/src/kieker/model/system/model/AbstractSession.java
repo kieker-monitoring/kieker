@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.trace.analysis.systemModel;
+package kieker.model.system.model;
 
 import java.util.Collections;
 import java.util.Comparator;

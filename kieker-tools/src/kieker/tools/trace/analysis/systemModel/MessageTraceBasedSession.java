@@ -21,19 +21,21 @@ import java.util.Comparator;
 import kieker.tools.trace.analysis.systemModel.util.TraceStartTimestampComparator;
 
 /**
- * Specialized sub-class for sessions based on message traces (see {@link MessageTrace}).
- * 
+ * Specialized sub-class for sessions based on message traces (see
+ * {@link MessageTrace}).
+ *
  * @author Holger Knoche
  * @since 1.10
- * 
+ *
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class MessageTraceBasedSession extends AbstractSession<MessageTrace> {
 
 	/**
 	 * Creates a new message trace-based session with the given session ID.
-	 * 
-	 * @param sessionId
-	 *            The session ID to use
+	 *
+	 * @param sessionId The session ID to use
 	 */
 	public MessageTraceBasedSession(final String sessionId) {
 		super(sessionId);

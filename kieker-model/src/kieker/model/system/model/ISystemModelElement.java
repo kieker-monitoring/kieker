@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.trace.analysis.systemModel;
+package kieker.model.system.model;
 
 /**
  * Abstract supertype for all entities in the system model.

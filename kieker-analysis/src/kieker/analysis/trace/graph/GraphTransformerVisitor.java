@@ -14,13 +14,13 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.trace.graph;
+package kieker.analysis.trace.graph;
 
+import kieker.analysis.trace.traversal.IOperationCallVisitor;
 import kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.OperationType;
-import kieker.analysisteetime.trace.traversal.IOperationCallVisitor;
 import kieker.analysisteetime.util.ObjectIdentifierRegistry;
 import kieker.analysisteetime.util.graph.IEdge;
 import kieker.analysisteetime.util.graph.IGraph;
@@ -82,7 +82,8 @@ public class GraphTransformerVisitor implements IOperationCallVisitor {
 		if (thisVertex == null) {
 			throw new IllegalStateException("Target vertex not found (operationCall:" + operationCall + ").");
 		} else if (parentVertex == null) {
-			throw new IllegalStateException("Source vertex not found (operationCall:" + operationCall.getParent() + ").");
+			throw new IllegalStateException(
+					"Source vertex not found (operationCall:" + operationCall.getParent() + ").");
 		}
 
 		final IEdge edge = this.graph.addEdge(null, parentVertex, thisVertex);

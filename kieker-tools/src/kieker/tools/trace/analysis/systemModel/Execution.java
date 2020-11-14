@@ -21,13 +21,15 @@ package kieker.tools.trace.analysis.systemModel;
  *
  * Note that no assumptions about the {@link java.util.concurrent.TimeUnit} used
  * for the timestamps are made
- * ({@link kieker.model.system.model.Execution#getTin()} and
- * {@link kieker.model.system.model.Execution#getTout()}).
+ * ({@link kieker.tools.trace.analysis.systemModel.Execution#getTin()} and
+ * {@link kieker.tools.trace.analysis.systemModel.Execution#getTout()}).
  *
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class Execution {
 
 	/** This constant marks that an execution has no session ID. */

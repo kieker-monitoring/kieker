@@ -37,12 +37,15 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.registry.reader.ReaderRegistry;
 
 /**
- * Logic module for the reader stage that reads monitoring records from an AMQP queue.
+ * Logic module for the reader stage that reads monitoring records from an AMQP
+ * queue.
  *
  * @author Holger Knoche, Lars Bluemke, Sören Henning
  *
  * @since 1.12
+ * @deprecated 1.15 has been moved to final location kieker.analysis.source.amqp
  */
+@Deprecated
 public final class AMQPReader {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AMQPReader.class);
@@ -77,16 +80,17 @@ public final class AMQPReader {
 	/**
 	 * Creates a new logic module for an AMQP reader.
 	 *
-	 * @param uri
-	 *            The name of the configuration property for the server URI.
-	 * @param queueName
-	 *            The name of the configuration property for the AMQP queue name.
-	 * @param heartbeat
-	 *            The name of the configuration property for the heartbeat timeout.
-	 * @param elementReceivedCallback
-	 *            The actual teetime stage which uses this class.
+	 * @param uri                     The name of the configuration property for the
+	 *                                server URI.
+	 * @param queueName               The name of the configuration property for the
+	 *                                AMQP queue name.
+	 * @param heartbeat               The name of the configuration property for the
+	 *                                heartbeat timeout.
+	 * @param elementReceivedCallback The actual teetime stage which uses this
+	 *                                class.
 	 */
-	public AMQPReader(final String uri, final String queueName, final int heartbeat, final Consumer<IMonitoringRecord> elementReceivedCallback) {
+	public AMQPReader(final String uri, final String queueName, final int heartbeat,
+			final Consumer<IMonitoringRecord> elementReceivedCallback) {
 		this.uri = uri;
 		this.queueName = queueName;
 		this.heartbeat = heartbeat;
@@ -125,10 +129,11 @@ public final class AMQPReader {
 	}
 
 	private void handleInitializationError(final Throwable e) {
-		LOGGER.error("An error occurred initializing the AMQP reader: {}", e);
+		AMQPReader.LOGGER.error("An error occurred initializing the AMQP reader: {}", e);
 	}
 
-	private Connection createConnection() throws IOException, TimeoutException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {
+	private Connection createConnection()
+			throws IOException, TimeoutException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {
 		final ConnectionFactory connectionFactory = new ConnectionFactory();
 
 		connectionFactory.setUri(this.uri);
@@ -164,20 +169,20 @@ public final class AMQPReader {
 					this.regularRecordHandler.enqueueRegularRecord(buffer);
 					break;
 				default:
-					if (LOGGER.isErrorEnabled()) {
-						LOGGER.error(String.format("Unknown record type: %02x", recordType));
+					if (AMQPReader.LOGGER.isErrorEnabled()) {
+						AMQPReader.LOGGER.error(String.format("Unknown record type: %02x", recordType));
 					}
 					break;
 				}
 			}
 		} catch (final IOException e) {
-			LOGGER.error("Error while reading from queue {}", this.queueName, e);
+			AMQPReader.LOGGER.error("Error while reading from queue {}", this.queueName, e);
 			return false;
 		} catch (final InterruptedException e) {
-			LOGGER.error("Consumer was interrupted on queue {}", this.queueName, e);
+			AMQPReader.LOGGER.error("Consumer was interrupted on queue {}", this.queueName, e);
 			return false;
 		} catch (final ShutdownSignalException e) {
-			LOGGER.info("Consumer was shut down while waiting on queue {}", this.queueName, e);
+			AMQPReader.LOGGER.info("Consumer was shut down while waiting on queue {}", this.queueName, e);
 			return true;
 		}
 
@@ -192,7 +197,7 @@ public final class AMQPReader {
 			this.terminated = true;
 			this.connection.close();
 		} catch (final IOException e) {
-			LOGGER.error("IO error while trying to close the connection.", e);
+			AMQPReader.LOGGER.error("IO error while trying to close the connection.", e);
 		}
 	}
 

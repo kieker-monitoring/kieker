@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.trace.reconstruction;
+package kieker.analysis.trace.reconstruction;
 
 import java.time.temporal.TemporalUnit;
 import java.util.Optional;
@@ -29,9 +29,9 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import teetime.stage.basic.AbstractTransformation;
 
 /**
- * Reconstruct traces based on the incoming instances of {@code IFlowRecord}. Currently only {@link TraceMetadata}, {@link BeforeOperationEvent} and
- * {@link AfterOperationEvent}
- * instances are supported.
+ * Reconstruct traces based on the incoming instances of {@code IFlowRecord}.
+ * Currently only {@link TraceMetadata}, {@link BeforeOperationEvent} and
+ * {@link AfterOperationEvent} instances are supported.
  *
  * @author Nils Christian Ehmke, Sören Henning
  *
@@ -48,8 +48,10 @@ public class TraceReconstructorStage extends AbstractTransformation<IFlowRecord,
 
 	// "activateAdditionalLogChecks" not yet implemented
 	//
-	// public TraceReconstructorStage(final DeploymentModel deploymentModel, final boolean activateAdditionalLogChecks, final TemporalUnit temporalUnit) {
-	// this.traceReconstructor = new TraceReconstructor(deploymentModel, activateAdditionalLogChecks, temporalUnit);
+	// public TraceReconstructorStage(final DeploymentModel deploymentModel, final
+	// boolean activateAdditionalLogChecks, final TemporalUnit temporalUnit) {
+	// this.traceReconstructor = new TraceReconstructor(deploymentModel,
+	// activateAdditionalLogChecks, temporalUnit);
 	// }
 
 	@Override
@@ -59,7 +61,8 @@ public class TraceReconstructorStage extends AbstractTransformation<IFlowRecord,
 		} else if (record instanceof BeforeOperationEvent) {
 			this.traceReconstructor.handleBeforeOperationEventRecord((BeforeOperationEvent) record);
 		} else if (record instanceof AfterOperationEvent) {
-			final Optional<Trace> trace = this.traceReconstructor.handleAfterOperationEventRecord((AfterOperationEvent) record);
+			final Optional<Trace> trace = this.traceReconstructor
+					.handleAfterOperationEventRecord((AfterOperationEvent) record);
 			// trace.ifPresent(this.outputPort::send);
 			if (trace.isPresent()) {
 				this.outputPort.send(trace.get());

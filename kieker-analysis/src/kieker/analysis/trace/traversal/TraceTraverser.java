@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.trace.traversal;
+package kieker.analysis.trace.traversal;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -23,8 +23,9 @@ import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
 
 /**
- * A class that traverses {@link Trace}s along with one or multiple {@link IOperationCallVisitor}s. It calls the visitor(s) for every {@link OperationCall} within the
- * trace.
+ * A class that traverses {@link Trace}s along with one or multiple
+ * {@link IOperationCallVisitor}s. It calls the visitor(s) for every
+ * {@link OperationCall} within the trace.
  *
  * @author Sören Henning
  *
@@ -47,7 +48,8 @@ public class TraceTraverser {
 		this.handleOperationCallsRecursively(trace.getRootOperationCall(), visitors);
 	}
 
-	private void handleOperationCallsRecursively(final OperationCall operationCall, final Collection<IOperationCallVisitor> visitors) {
+	private void handleOperationCallsRecursively(final OperationCall operationCall,
+			final Collection<IOperationCallVisitor> visitors) {
 		for (final IOperationCallVisitor visitor : visitors) {
 			visitor.visit(operationCall);
 		}

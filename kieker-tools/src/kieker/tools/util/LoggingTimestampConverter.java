@@ -26,14 +26,18 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- * This is a utility class which can be used to convert timestamps, for example by transforming a simple timestamp into a human-readable datetime string.
- * 
+ * This is a utility class which can be used to convert timestamps, for example
+ * by transforming a simple timestamp into a human-readable datetime string.
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.2
+ * @deprecated 1.15 moved to kieker-common
  */
+@Deprecated
 public final class LoggingTimestampConverter {
-	// private static final Log log = LogFactory.getLog(LoggingTimestampConverter.class);
+	// private static final Log log =
+	// LogFactory.getLog(LoggingTimestampConverter.class);
 
 	private static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
 	private static final String DATE_FORMAT_PATTERN2 = "EEE, d MMM yyyy HH:mm:ss.SSS Z";
@@ -41,60 +45,59 @@ public final class LoggingTimestampConverter {
 	/**
 	 * Private constructor to avoid instantiation.
 	 */
-	private LoggingTimestampConverter() {}
+	private LoggingTimestampConverter() {
+	}
 
 	/**
-	 * Converts a timestamp representing the number of nanoseconds since Jan 1,
-	 * 1970 UTC into a human-readable datetime string given in the UTC timezone.
-	 * 
-	 * Note that no guarantees are made about the actual format.
-	 * Particularly, it is not guaranteed that the string can be reconverted
-	 * using the convertDatetimeStringToUTCLoggingTimestamp(..) method.
-	 * 
-	 * @param loggingTimestamp
-	 *            The timestamp to be converted in nanoseconds.
-	 * @return a human-readable datetime string (UTC timezone) which represents the passed timestamp
+	 * Converts a timestamp representing the number of nanoseconds since Jan 1, 1970
+	 * UTC into a human-readable datetime string given in the UTC timezone.
+	 *
+	 * Note that no guarantees are made about the actual format. Particularly, it is
+	 * not guaranteed that the string can be reconverted using the
+	 * convertDatetimeStringToUTCLoggingTimestamp(..) method.
+	 *
+	 * @param loggingTimestamp The timestamp to be converted in nanoseconds.
+	 * @return a human-readable datetime string (UTC timezone) which represents the
+	 *         passed timestamp
 	 */
 	public static final String convertLoggingTimestampToUTCString(final long loggingTimestamp) {
 		final Calendar c = new GregorianCalendar();
 		c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000));
-		final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN2, Locale.US);
+		final DateFormat dateFormat = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN2, Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		return dateFormat.format(c.getTime()) + " (UTC)";
 	}
 
 	/**
-	 * Converts a timestamp representing the number of nanoseconds since Jan 1,
-	 * 1970 UTC into a human-readable datetime string given in the local timezone.
-	 * 
-	 * Note that no guarantees are made about the actual format.
-	 * Particularly, it is not guaranteed that the string can be reconverted
-	 * using the convertDatetimeStringToUTCLoggingTimestamp(..) method.
-	 * 
-	 * @param loggingTimestamp
-	 *            The timestamp to be converted.
-	 * @return a human-readable datetime string (local timezone) which represents the passed timestamp
+	 * Converts a timestamp representing the number of nanoseconds since Jan 1, 1970
+	 * UTC into a human-readable datetime string given in the local timezone.
+	 *
+	 * Note that no guarantees are made about the actual format. Particularly, it is
+	 * not guaranteed that the string can be reconverted using the
+	 * convertDatetimeStringToUTCLoggingTimestamp(..) method.
+	 *
+	 * @param loggingTimestamp The timestamp to be converted.
+	 * @return a human-readable datetime string (local timezone) which represents
+	 *         the passed timestamp
 	 */
 	public static final String convertLoggingTimestampLocalTimeZoneString(final long loggingTimestamp) {
 		final Calendar c = new GregorianCalendar();
 		c.setTimeInMillis(loggingTimestamp / ((long) 1000 * 1000));
-		final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN2, Locale.US);
+		final DateFormat dateFormat = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN2, Locale.US);
 		return dateFormat.format(c.getTime()) + " (local time)";
 	}
 
 	/**
 	 * Converts a datetime string of format <i>yyyyMMdd-HHmmss</i> (UTC timezone)
-	 * into a timestamp representing the number of nanoseconds
-	 * since Jan 1, 1970 UTC.
-	 * 
-	 * @param utcString
-	 *            The string to be converted.
+	 * into a timestamp representing the number of nanoseconds since Jan 1, 1970
+	 * UTC.
+	 *
+	 * @param utcString The string to be converted.
 	 * @return a timestamp which represents the passed time
-	 * @throws ParseException
-	 *             If the specified string cannot be parsed.
+	 * @throws ParseException If the specified string cannot be parsed.
 	 */
 	public static final long convertDatetimeStringToUTCLoggingTimestamp(final String utcString) throws ParseException {
-		final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.US);
+		final DateFormat dateFormat = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN, Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		return dateFormat.parse(utcString).getTime();
 	}
@@ -102,15 +105,13 @@ public final class LoggingTimestampConverter {
 	/**
 	 * Converts a datetime string of format <i>yyyyMMdd-HHmmss</i> (UTC timezone)
 	 * into a Date object.
-	 * 
-	 * @param utcString
-	 *            The string to be converted.
+	 *
+	 * @param utcString The string to be converted.
 	 * @return a Date object which represents the passed time
-	 * @throws ParseException
-	 *             If the specified string cannot be parsed.
+	 * @throws ParseException If the specified string cannot be parsed.
 	 */
 	public static final Date convertDatetimeStringToUTCDate(final String utcString) throws ParseException {
-		final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.US);
+		final DateFormat dateFormat = new SimpleDateFormat(LoggingTimestampConverter.DATE_FORMAT_PATTERN, Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		return dateFormat.parse(utcString);
 	}

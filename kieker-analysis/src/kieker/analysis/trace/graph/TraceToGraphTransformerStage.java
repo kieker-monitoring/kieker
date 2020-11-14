@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.analysisteetime.trace.graph;
+package kieker.analysis.trace.graph;
 
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
 import kieker.analysisteetime.util.graph.IGraph;

@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.trace.graph.dot;
+package kieker.analysis.trace.graph.dot;
 
 import java.util.Collection;
 import java.util.function.Function;
@@ -24,7 +24,8 @@ import kieker.analysisteetime.util.graph.IVertex;
 
 /**
  * This class is a {@link Function} that maps a {@link IVertex} to a label. The
- * desired format is: container + "::\\n" + "@" + stackDepth + ":" + component + "\\n" + name;
+ * desired format is: container + "::\\n" + "@" + stackDepth + ":" + component +
+ * "\\n" + name;
  * {@code <DeploymentContext>::\\n@<StackDepth>:<Component>\\n<FullOperationSignature>}
  *
  * @author Sören Henning
@@ -68,24 +69,15 @@ public class NodeLabelMapper implements Function<IVertex, String> {
 
 		// BETTER this could be extracted
 		final StringBuilder signature = new StringBuilder();
-		signature.append(modifiers.stream().collect(Collectors.joining(" ")))
-		.append(' ')
-		.append(vertex.getProperty("returnType").toString())
-		.append(' ')
-		.append(vertex.getProperty("name").toString())
-		.append('(')
-		.append(parameters.stream().collect(Collectors.joining(", ")))
-		.append(')');
+		signature.append(modifiers.stream().collect(Collectors.joining(" "))).append(' ')
+				.append(vertex.getProperty("returnType").toString()).append(' ')
+				.append(vertex.getProperty("name").toString()).append('(')
+				.append(parameters.stream().collect(Collectors.joining(", "))).append(')');
 
 		final StringBuilder label = new StringBuilder() // NOPMD (.append(<>.toString() + "...") does not make sense)
-				.append(vertex.getProperty("deploymentContext").toString())
-				.append("::\\n")
-				.append('@')
-				.append(vertex.getProperty("stackDepth").toString())
-				.append(':')
-				.append(vertex.getProperty("component").toString())
-				.append("\\n")
-				.append(signature);
+				.append(vertex.getProperty("deploymentContext").toString()).append("::\\n").append('@')
+				.append(vertex.getProperty("stackDepth").toString()).append(':')
+				.append(vertex.getProperty("component").toString()).append("\\n").append(signature);
 
 		return label.toString();
 	}

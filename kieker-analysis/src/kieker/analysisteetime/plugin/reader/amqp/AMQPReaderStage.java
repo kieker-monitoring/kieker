@@ -26,7 +26,9 @@ import teetime.framework.AbstractProducerStage;
  * @author Holger Knoche, Lars Bluemke, Sören Henning
  *
  * @since 1.12
+ * @deprecated 1.15 has been moved to final location kieker.analysis.source.amqp
  */
+@Deprecated
 public class AMQPReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 
 	private final AMQPReader readerLogic;
@@ -34,12 +36,11 @@ public class AMQPReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 	/**
 	 * Creates a new AMQP reader.
 	 *
-	 * @param uri
-	 *            The name of the configuration property for the server URI.
-	 * @param queueName
-	 *            The name of the configuration property for the AMQP queue name.
-	 * @param heartbeat
-	 *            The name of the configuration property for the heartbeat timeout.
+	 * @param uri       The name of the configuration property for the server URI.
+	 * @param queueName The name of the configuration property for the AMQP queue
+	 *                  name.
+	 * @param heartbeat The name of the configuration property for the heartbeat
+	 *                  timeout.
 	 */
 	public AMQPReaderStage(final String uri, final String queueName, final int heartbeat) {
 		this.readerLogic = new AMQPReader(uri, queueName, heartbeat, this::deliverRecord);
@@ -51,7 +52,8 @@ public class AMQPReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 	}
 
 	/**
-	 * Terminates the reader logic by returning from read method and terminates the execution of the stage.
+	 * Terminates the reader logic by returning from read method and terminates the
+	 * execution of the stage.
 	 * <p>
 	 * {@inheritDoc}
 	 */
@@ -64,8 +66,7 @@ public class AMQPReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 	/**
 	 * Send a record to the stage's output port.
 	 *
-	 * @param monitoringRecord
-	 *            The record to deliver.
+	 * @param monitoringRecord The record to deliver.
 	 */
 	private void deliverRecord(final IMonitoringRecord monitoringRecord) {
 		this.outputPort.send(monitoringRecord);

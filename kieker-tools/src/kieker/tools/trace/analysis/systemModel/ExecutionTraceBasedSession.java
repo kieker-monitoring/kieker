@@ -22,19 +22,21 @@ import kieker.tools.trace.analysis.systemModel.util.TraceStartTimestampComparato
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
- * Specialized sub-class for sessions which are derived from execution traces (see {@link ExecutionTrace}).
- * 
+ * Specialized sub-class for sessions which are derived from execution traces
+ * (see {@link ExecutionTrace}).
+ *
  * @author Holger Knoche
  * @since 1.10
- * 
+ *
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class ExecutionTraceBasedSession extends AbstractSession<ExecutionTrace> {
 
 	/**
 	 * Creates a new execution trace-based session with the given session ID.
-	 * 
-	 * @param sessionId
-	 *            The session ID to use
+	 *
+	 * @param sessionId The session ID to use
 	 */
 	public ExecutionTraceBasedSession(final String sessionId) {
 		super(sessionId);
@@ -51,9 +53,11 @@ public class ExecutionTraceBasedSession extends AbstractSession<ExecutionTrace> 
 		synchronized (this) {
 			strBuild.append("SessionId ").append(this.getSessionId());
 			strBuild.append(" (startTime=").append(this.getStartTimestamp());
-			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.getStartTimestamp()));
+			strBuild.append(" (")
+					.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.getStartTimestamp()));
 			strBuild.append("); endTime=").append(this.getEndTimestamp());
-			strBuild.append(" (").append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.getEndTimestamp()));
+			strBuild.append(" (")
+					.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.getEndTimestamp()));
 			strBuild.append("):\n");
 			for (final ExecutionTrace t : this.getStateContainedTraces()) {
 				strBuild.append('{');

@@ -23,7 +23,9 @@ import java.util.Comparator;
  * @author Christian Wulf (chw)
  *
  * @since 1.14
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 class MessageComparator implements Comparator<AbstractMessage>, Serializable {
 
 	/**

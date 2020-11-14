@@ -18,18 +18,20 @@ package kieker.tools.trace.analysis.systemModel;
 
 /**
  * Abstract supertype for all entities in the system model.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public interface ISystemModelElement {
 
 	/**
 	 * Returns a textual identifier for this object (e.g., its name).
-	 * 
+	 *
 	 * @return See above
-	 * 
+	 *
 	 * @since 1.6
 	 */
 	public String getIdentifier();

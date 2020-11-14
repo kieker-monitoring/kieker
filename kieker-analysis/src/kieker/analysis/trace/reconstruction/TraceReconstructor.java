@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.trace.reconstruction;
+package kieker.analysis.trace.reconstruction;
 
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
@@ -30,9 +30,9 @@ import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
 /**
- * Reconstruct traces based on the incoming instances of {@code IFlowRecord}. Currently only {@link TraceMetadata}, {@link BeforeOperationEvent} and
- * {@link AfterOperationEvent}
- * instances are supported.
+ * Reconstruct traces based on the incoming instances of {@code IFlowRecord}.
+ * Currently only {@link TraceMetadata}, {@link BeforeOperationEvent} and
+ * {@link AfterOperationEvent} instances are supported.
  *
  * @author Nils Christian Ehmke, Sören Henning
  *
@@ -41,7 +41,8 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 final class TraceReconstructor {
 
 	private final DeploymentModel deploymentModel;
-	private final Map<Long, TraceReconstructionBuffer> traceBuffers = new HashMap<>(); // NOPMD (no concurrent access intended)
+	private final Map<Long, TraceReconstructionBuffer> traceBuffers = new HashMap<>(); // NOPMD (no concurrent access
+																						// intended)
 	private final List<TraceReconstructionBuffer> faultyTraceBuffers = new ArrayList<>();
 	// private final boolean activateAdditionalLogChecks;
 	private int danglingRecords;
@@ -54,7 +55,8 @@ final class TraceReconstructor {
 
 	// "activateAdditionalLogChecks" not yet implemented
 	//
-	// public TraceReconstructor(final DeploymentModel deploymentRoot, final boolean activateAdditionalLogChecks, final TemporalUnit temporalUnit) {
+	// public TraceReconstructor(final DeploymentModel deploymentRoot, final boolean
+	// activateAdditionalLogChecks, final TemporalUnit temporalUnit) {
 	// this.deploymentModel = deploymentRoot;
 	// this.activateAdditionalLogChecks = activateAdditionalLogChecks;
 	// this.temporalUnit = temporalUnit;
@@ -70,7 +72,8 @@ final class TraceReconstructor {
 
 	public void handleTraceMetadataRecord(final TraceMetadata record) {
 		final long traceID = record.getTraceId();
-		final TraceReconstructionBuffer newTraceBuffer = new TraceReconstructionBuffer(this.deploymentModel, record, this.temporalUnit);
+		final TraceReconstructionBuffer newTraceBuffer = new TraceReconstructionBuffer(this.deploymentModel, record,
+				this.temporalUnit);
 
 		this.traceBuffers.put(traceID, newTraceBuffer);
 	}

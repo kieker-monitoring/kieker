@@ -14,19 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.trace.analysis.systemModel;
+package kieker.model.system.model;
 
-import kieker.tools.trace.analysis.systemModel.repository.AbstractSystemSubRepository;
-import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
-import kieker.tools.trace.analysis.systemModel.repository.TypeRepository;
+import kieker.model.repository.AbstractRepository;
+import kieker.model.repository.SystemModelRepository;
+import kieker.model.repository.TypeRepository;
 
 /**
  * This class represents a root assembly component.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
- * 
+ *
  */
 public class RootAssemblyComponent extends AssemblyComponent {
 
@@ -34,7 +34,7 @@ public class RootAssemblyComponent extends AssemblyComponent {
 	 * Creates a new root assembly component.
 	 */
 	public RootAssemblyComponent() {
-		super(AbstractSystemSubRepository.ROOT_ELEMENT_ID, SystemModelRepository.ROOT_NODE_LABEL, TypeRepository.ROOT_COMPONENT);
+		super(AbstractRepository.ROOT_ELEMENT_ID, SystemModelRepository.ROOT_NODE_LABEL, TypeRepository.ROOT_COMPONENT);
 	}
 
 	@Override

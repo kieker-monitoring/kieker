@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.trace.analysis.systemModel;
+package kieker.model.system.model;
 
 /**
  * A specified class of messages which represent synchronous replies.

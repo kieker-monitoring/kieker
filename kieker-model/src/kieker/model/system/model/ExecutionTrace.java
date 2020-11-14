@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.trace.analysis.systemModel;
+package kieker.model.system.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,13 +27,15 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 
-import kieker.tools.trace.analysis.filter.traceReconstruction.InvalidTraceException;
-import kieker.tools.util.LoggingTimestampConverter;
+import kieker.common.util.dataformat.LoggingTimestampConverter;
+import kieker.model.system.model.exceptions.InvalidTraceException;
 
 /**
- * This class is a container for a whole trace of executions (represented as instances of {@link Execution}).
+ * This class is a container for a whole trace of executions (represented as
+ * instances of {@link Execution}).
  *
- * Note that no assumptions about the {@link java.util.concurrent.TimeUnit} used for the timestamps are made.
+ * Note that no assumptions about the {@link java.util.concurrent.TimeUnit} used
+ * for the timestamps are made.
  *
  * @author Andre van Hoorn
  *
@@ -53,8 +55,7 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param traceId
-	 *            The ID of this trace.
+	 * @param traceId The ID of this trace.
 	 */
 	public ExecutionTrace(final long traceId) {
 		super(traceId);
@@ -63,10 +64,8 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param traceId
-	 *            The ID of this trace.
-	 * @param sessionId
-	 *            The ID of the current session.
+	 * @param traceId   The ID of this trace.
+	 * @param sessionId The ID of the current session.
 	 */
 	public ExecutionTrace(final long traceId, final String sessionId) {
 		super(traceId, sessionId);
@@ -75,12 +74,11 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Adds an execution to the trace.
 	 *
-	 * @param execution
-	 *            The execution object which will be added to this trace.
+	 * @param execution The execution object which will be added to this trace.
 	 *
-	 * @throws InvalidTraceException
-	 *             If the traceId of the passed Execution object is not the same as the traceId of this ExecutionTrace
-	 *             object.
+	 * @throws InvalidTraceException If the traceId of the passed Execution object
+	 *                               is not the same as the traceId of this
+	 *                               ExecutionTrace object.
 	 */
 	public void add(final Execution execution) throws InvalidTraceException {
 		synchronized (this) {
@@ -112,16 +110,16 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Returns the message trace representation for this trace.<br/>
 	 *
-	 * The transformation to a message trace is only computed during the first execution of this method. After this, the
-	 * stored reference is returned --- unless executions are added to the trace afterwards.
+	 * The transformation to a message trace is only computed during the first
+	 * execution of this method. After this, the stored reference is returned ---
+	 * unless executions are added to the trace afterwards.
 	 *
-	 * @param rootExecution
-	 *            The root execution object.
+	 * @param rootExecution The root execution object.
 	 *
 	 * @return The resulting message trace.
 	 *
-	 * @throws InvalidTraceException
-	 *             If the given execution is somehow inconsistent or invalid.
+	 * @throws InvalidTraceException If the given execution is somehow inconsistent
+	 *                               or invalid.
 	 */
 	public MessageTrace toMessageTrace(final Execution rootExecution) throws InvalidTraceException {
 		synchronized (this) {
@@ -143,7 +141,8 @@ public class ExecutionTrace extends AbstractTrace {
 					final InvalidTraceException ex = new InvalidTraceException("First execution must have ess "
 							+ "0 (found " + curE.getEss() + ")\n Causing execution: " + curE);
 					// don't log and throw
-					// LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
+					// LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack
+					// trace here
 					throw ex;
 				}
 				expectingEntryCall = false; // now we're happy
@@ -152,7 +151,8 @@ public class ExecutionTrace extends AbstractTrace {
 							"Eois must increment by 1 --" + "but found sequence <" + prevEoi + "," + curE.getEoi() + ">"
 									+ "(Execution: " + curE + ")");
 					// don't log and throw
-					// LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
+					// LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack
+					// trace here
 					throw ex;
 				}
 				prevEoi = curE.getEoi();
@@ -209,7 +209,8 @@ public class ExecutionTrace extends AbstractTrace {
 					"Ess are only allowed to increment by 1 --" + "but found sequence <" + prevE.getEss() + ","
 							+ curE.getEss() + ">" + "(Execution: " + curE + ")");
 			// don't log and throw
-			// LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack trace here
+			// LOG.error("Found invalid trace:" + ex.getMessage()); // don't need the stack
+			// trace here
 			throw ex;
 		} else {
 			final String errorMessage = "Unexpected trace: " + prevE + " and " + curE;
@@ -222,10 +223,12 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Returns a sorted set (unmodifiable) of {@link Execution}s in this trace.
 	 *
-	 * Note that the returned data structure is the (wrapped )internal data structure of this {@link ExecutionTrace}
-	 * object, to which further elements may be added by the
-	 * {@link kieker.tools.trace.analysis.systemModel.ExecutionTrace#add(Execution)} method. Consider to create a copy of
-	 * the returned list, while synchronizing on this (i.e., the {@link ExecutionTrace}) object.
+	 * Note that the returned data structure is the (wrapped )internal data
+	 * structure of this {@link ExecutionTrace} object, to which further elements
+	 * may be added by the
+	 * {@link kieker.model.system.model.ExecutionTrace#add(Execution)} method.
+	 * Consider to create a copy of the returned list, while synchronizing on this
+	 * (i.e., the {@link ExecutionTrace}) object.
 	 *
 	 * @return the sorted set of {@link Execution}s in this trace
 	 */
@@ -237,7 +240,8 @@ public class ExecutionTrace extends AbstractTrace {
 	}
 
 	/**
-	 * Returns the length of this trace in terms of the number of contained executions.
+	 * Returns the length of this trace in terms of the number of contained
+	 * executions.
 	 *
 	 * @return the length of this trace.
 	 */
@@ -266,7 +270,8 @@ public class ExecutionTrace extends AbstractTrace {
 	}
 
 	/**
-	 * Returns the maximum execution stack size (ess) value, i.e., the maximum stack depth, within the trace.
+	 * Returns the maximum execution stack size (ess) value, i.e., the maximum stack
+	 * depth, within the trace.
 	 *
 	 * @return the maximum ess; -1 if the trace contains no executions.
 	 */
@@ -301,8 +306,9 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Returns the duration of this (possibly incomplete) trace.
 	 *
-	 * This value is the difference between the maximum tout and the minimum tin value. Note that no specific
-	 * assumptions about the {@link java.util.concurrent.TimeUnit} are made.
+	 * This value is the difference between the maximum tout and the minimum tin
+	 * value. Note that no specific assumptions about the
+	 * {@link java.util.concurrent.TimeUnit} are made.
 	 *
 	 * @return the duration of this trace.
 	 */
@@ -315,8 +321,8 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Returns the maximum timestamp value of an execution return in this trace.
 	 *
-	 * Notice that you should need use this value to reason about the control flow --- particularly in distributed
-	 * scenarios.
+	 * Notice that you should need use this value to reason about the control flow
+	 * --- particularly in distributed scenarios.
 	 *
 	 * @return the maxmum timestamp value; -1 if the trace contains no executions.
 	 */
@@ -329,8 +335,8 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Returns the minimum timestamp of an execution start in this trace.
 	 *
-	 * Notice that you should need use this value to reason about the control flow --- particularly in distributed
-	 * scenarios.
+	 * Notice that you should need use this value to reason about the control flow
+	 * --- particularly in distributed scenarios.
 	 *
 	 * @return the minimum timestamp value; -1 if the trace contains no executions.
 	 */
@@ -357,11 +363,10 @@ public class ExecutionTrace extends AbstractTrace {
 	}
 
 	/**
-	 * Returns whether this Execution Trace and the passed Object are equal. Two execution traces are equal if the set
-	 * of contained executions is equal.
+	 * Returns whether this Execution Trace and the passed Object are equal. Two
+	 * execution traces are equal if the set of contained executions is equal.
 	 *
-	 * @param obj
-	 *            The object to be compared for equality with this.
+	 * @param obj The object to be compared for equality with this.
 	 *
 	 * @return true if and only if the two objects are equal.
 	 */
@@ -385,7 +390,8 @@ public class ExecutionTrace extends AbstractTrace {
 	}
 
 	/**
-	 * Returns an instance of the {@link Comparator} used by the internal {@link TreeSet} to compare {@link Execution}s.
+	 * Returns an instance of the {@link Comparator} used by the internal
+	 * {@link TreeSet} to compare {@link Execution}s.
 	 *
 	 * @return A comparator instance to compare execution objects.
 	 */
@@ -408,13 +414,13 @@ public class ExecutionTrace extends AbstractTrace {
 		}
 
 		/**
-		 * Note that this method is not only used by {@link ExecutionTrace#add(Execution)} but also by
-		 * {@link TreeSet#equals(Object)} utilized in {@link ExecutionTrace#equals(Object)}.
+		 * Note that this method is not only used by
+		 * {@link ExecutionTrace#add(Execution)} but also by
+		 * {@link TreeSet#equals(Object)} utilized in
+		 * {@link ExecutionTrace#equals(Object)}.
 		 *
-		 * @param e1
-		 *            The first execution object.
-		 * @param e2
-		 *            The second execution object.
+		 * @param e1 The first execution object.
+		 * @param e2 The second execution object.
 		 *
 		 * @return -1 if e1 < e2, 1 if e1 > e2, 0 otherwise.
 		 */

@@ -16,14 +16,18 @@
 
 package kieker.tools.trace.analysis.systemModel;
 
+import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
+
 /**
  * An abstract base for messages which can later be used and combined in a
- * {@link kieker.model.system.model.MessageTrace}.
+ * {@link kieker.tools.trace.analysis.systemModel.MessageTrace}.
  *
  * @author Andre van Hoorn
  *
  * @since 0.95a
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public abstract class AbstractMessage {
 
 	private final long timestamp;
@@ -78,13 +82,13 @@ public abstract class AbstractMessage {
 
 		strBuild.append(this.timestamp).append(' ');
 		if (this.getSendingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
-			strBuild.append(ModelFactory.ROOT_NODE_LABEL);
+			strBuild.append(SystemModelRepository.ROOT_NODE_LABEL);
 		} else {
 			strBuild.append(this.getSendingExecution());
 		}
 		strBuild.append(" --> ");
 		if (this.getReceivingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
-			strBuild.append(ModelFactory.ROOT_NODE_LABEL);
+			strBuild.append(SystemModelRepository.ROOT_NODE_LABEL);
 		} else {
 			strBuild.append(this.getReceivingExecution());
 		}

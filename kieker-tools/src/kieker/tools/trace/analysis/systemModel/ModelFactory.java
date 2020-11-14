@@ -19,7 +19,9 @@ package kieker.tools.trace.analysis.systemModel;
  * @author Reiner Jung
  *
  * @since 1.15
+ * @deprecated 1.15 model moved to new subproject
  */
+@Deprecated
 public final class ModelFactory {
 
 	public static final String ROOT_NODE_LABEL = "'Entry'";

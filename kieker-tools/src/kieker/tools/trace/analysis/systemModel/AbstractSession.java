@@ -28,9 +28,10 @@ import java.util.TreeSet;
  * @author Holger Knoche
  * @since 1.10
  *
- * @param <T>
- *            The concrete type of trace this session is based on
+ * @param <T> The concrete type of trace this session is based on
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public abstract class AbstractSession<T extends AbstractTrace> {
 
 	private final SortedSet<T> containedTraces; // protected visibility to avoid synthetic access
@@ -44,12 +45,11 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 	/**
 	 * Creates a new abstract session with the given session ID.
 	 *
-	 * @param sessionId
-	 *            The session ID for this session
+	 * @param sessionId The session ID for this session
 	 */
 	public AbstractSession(final String sessionId) {
 		this.sessionId = sessionId;
-		this.containedTraces = new TreeSet<T>(this.getOrderComparator());
+		this.containedTraces = new TreeSet<>(this.getOrderComparator());
 	}
 
 	/**
@@ -64,8 +64,7 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 	/**
 	 * Adds a trace to this session.
 	 *
-	 * @param trace
-	 *            The trace to add.
+	 * @param trace The trace to add.
 	 */
 	public void addTrace(final T trace) {
 		this.state.addTrace(trace);
@@ -145,10 +144,12 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 
 	}
 
-	// Note: currently synthetic-accesses to variables are used. Do not use the respective getter methods!
+	// Note: currently synthetic-accesses to variables are used. Do not use the
+	// respective getter methods!
 	private class ModifiableState implements ISessionState<T> {
 
-		// avoid warnings creating objects of this type without an explicit (default) constructor
+		// avoid warnings creating objects of this type without an explicit (default)
+		// constructor
 		public ModifiableState() {
 			super();
 		}

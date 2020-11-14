@@ -40,6 +40,7 @@ import kieker.analysis.plugin.filter.select.TraceIdFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
+import kieker.model.data.ExecutionTrace;
 import kieker.tools.common.ConvertLegacyValues;
 import kieker.tools.trace.analysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.trace.analysis.filter.AbstractMessageTraceProcessingFilter;
@@ -76,7 +77,6 @@ import kieker.tools.trace.analysis.filter.visualization.sequenceDiagram.Sequence
 import kieker.tools.trace.analysis.filter.visualization.traceColoring.TraceColoringFilter;
 import kieker.tools.trace.analysis.repository.DescriptionRepository;
 import kieker.tools.trace.analysis.repository.TraceColorRepository;
-import kieker.tools.trace.analysis.systemModel.ExecutionTrace;
 import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**

@@ -34,7 +34,9 @@ import kieker.common.registry.reader.ReaderRegistry;
  * @author Holger Knoche
  *
  * @since 1.12
+ * @deprecated 1.15 has been moved to final location kieker.analysis.source.amqp
  */
+@Deprecated
 public class RegularRecordHandler implements Runnable, IRecordReceivedListener {
 
 	/** Default queue size for the regular record queue. */
@@ -45,15 +47,14 @@ public class RegularRecordHandler implements Runnable, IRecordReceivedListener {
 	private final AMQPReader readerLogic;
 	private final RecordDeserializer recordDeserializer;
 
-	private final BlockingQueue<ByteBuffer> queue = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
+	private final BlockingQueue<ByteBuffer> queue = new ArrayBlockingQueue<>(RegularRecordHandler.DEFAULT_QUEUE_SIZE);
 
 	/**
 	 * Creates a new regular record handler.
 	 *
-	 * @param readerLogic
-	 *            The reader logic class to send the instantiated records to
-	 * @param stringRegistry
-	 *            The string registry to use
+	 * @param readerLogic    The reader logic class to send the instantiated records
+	 *                       to
+	 * @param stringRegistry The string registry to use
 	 */
 	public RegularRecordHandler(final AMQPReader readerLogic, final ReaderRegistry<String> stringRegistry) {
 		this.readerLogic = readerLogic;
@@ -70,7 +71,7 @@ public class RegularRecordHandler implements Runnable, IRecordReceivedListener {
 
 				this.recordDeserializer.deserializeRecord(classId, nextRecord);
 			} catch (final InterruptedException e) {
-				LOGGER.error("Regular record handler was interrupted", e);
+				RegularRecordHandler.LOGGER.error("Regular record handler was interrupted", e);
 			}
 		}
 	}
@@ -78,14 +79,13 @@ public class RegularRecordHandler implements Runnable, IRecordReceivedListener {
 	/**
 	 * Enqueues an unparsed regular record for processing.
 	 *
-	 * @param buffer
-	 *            The unparsed data in an appropriately positioned byte buffer
+	 * @param buffer The unparsed data in an appropriately positioned byte buffer
 	 */
 	public void enqueueRegularRecord(final ByteBuffer buffer) {
 		try {
 			this.queue.put(buffer);
 		} catch (final InterruptedException e) {
-			LOGGER.error("Record queue was interrupted", e);
+			RegularRecordHandler.LOGGER.error("Record queue was interrupted", e);
 		}
 	}
 

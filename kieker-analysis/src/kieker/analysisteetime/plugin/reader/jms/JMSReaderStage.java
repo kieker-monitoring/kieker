@@ -28,7 +28,9 @@ import teetime.framework.AbstractProducerStage;
  * @author Andre van Hoorn, Matthias Rohr, Lars Bluemke
  *
  * @since 0.95a
+ * @deprecated 1.15 moved to final destination in kieker.analysis.source.jms
  */
+@Deprecated
 public class JMSReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 
 	private final JMSReader readerLogic;
@@ -36,15 +38,13 @@ public class JMSReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 	/**
 	 * Creates a new JMSReader.
 	 *
-	 * @param jmsProviderUrl
-	 *            The name of the configuration determining the JMS provider URL,
-	 *            e.g. {@code tcp://localhost:3035/}
-	 * @param jmsDestination
-	 *            The name of the configuration determining the JMS destination,
-	 *            e.g. {@code queue1}.
-	 * @param jmsFactoryLookupName
-	 *            The name of the configuration determining the name of the used JMS
-	 *            factory, e.g. {@code org.exolab.jms.jndi.InitialContextFactory}.
+	 * @param jmsProviderUrl       The name of the configuration determining the JMS
+	 *                             provider URL, e.g. {@code tcp://localhost:3035/}
+	 * @param jmsDestination       The name of the configuration determining the JMS
+	 *                             destination, e.g. {@code queue1}.
+	 * @param jmsFactoryLookupName The name of the configuration determining the
+	 *                             name of the used JMS factory, e.g.
+	 *                             {@code org.exolab.jms.jndi.InitialContextFactory}.
 	 */
 	public JMSReaderStage(final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
 		this.readerLogic = new JMSReader(jmsProviderUrl, jmsDestination, jmsFactoryLookupName, this::deliverRecord);
@@ -69,8 +69,7 @@ public class JMSReaderStage extends AbstractProducerStage<IMonitoringRecord> {
 	/**
 	 * Send the read records to the output port.
 	 *
-	 * @param monitoringRecord
-	 *            The record to deliver.
+	 * @param monitoringRecord The record to deliver.
 	 */
 	private void deliverRecord(final IMonitoringRecord monitoringRecord) {
 		this.outputPort.send(monitoringRecord);

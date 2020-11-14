@@ -14,22 +14,23 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.trace.analysis.systemModel;
+package kieker.model.system.model;
 
 import kieker.common.util.signature.Signature;
-import kieker.tools.trace.analysis.systemModel.repository.AbstractSystemSubRepository;
+import kieker.model.repository.AbstractRepository;
 
 /**
- * This class represents an operation within the trace analysis tool. It consists of the component type and a signature.
- * 
+ * This class represents an operation within the trace analysis tool. It
+ * consists of the component type and a signature.
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 public class Operation {
 
 	/** The ID for the root operation. */
-	public static final int ROOT_OPERATION_ID = AbstractSystemSubRepository.ROOT_ELEMENT_ID;
+	public static final int ROOT_OPERATION_ID = AbstractRepository.ROOT_ELEMENT_ID;
 
 	private final int id;
 	private final ComponentType componentType;
@@ -37,13 +38,10 @@ public class Operation {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param id
-	 *            The ID of this operation.
-	 * @param componentType
-	 *            The type of the component of this operation.
-	 * @param signature
-	 *            The signature of this operation.
+	 *
+	 * @param id            The ID of this operation.
+	 * @param componentType The type of the component of this operation.
+	 * @param signature     The signature of this operation.
 	 */
 	public Operation(final int id, final ComponentType componentType, final Signature signature) {
 		this.id = id;
@@ -53,7 +51,7 @@ public class Operation {
 
 	/**
 	 * Delivers the ID of the operation.
-	 * 
+	 *
 	 * @return The ID.
 	 */
 	public final int getId() {
@@ -62,7 +60,7 @@ public class Operation {
 
 	/**
 	 * Delivers the component type of the operation.
-	 * 
+	 *
 	 * @return The component type.
 	 */
 	public final ComponentType getComponentType() {
@@ -71,7 +69,7 @@ public class Operation {
 
 	/**
 	 * Delivers the signature of the operation.
-	 * 
+	 *
 	 * @return The signature.
 	 */
 	public final Signature getSignature() {
@@ -80,9 +78,8 @@ public class Operation {
 
 	/**
 	 * Two Operation objects are equal if their ids are equal.
-	 * 
-	 * @param obj
-	 *            The object to be compared for equality with this
+	 *
+	 * @param obj The object to be compared for equality with this
 	 * @return true if the two objects are equal.
 	 */
 	@Override

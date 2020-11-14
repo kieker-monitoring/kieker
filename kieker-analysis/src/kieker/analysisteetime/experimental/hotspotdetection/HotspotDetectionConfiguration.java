@@ -19,6 +19,7 @@ package kieker.analysisteetime.experimental.hotspotdetection;
 import java.io.File;
 import java.time.temporal.ChronoUnit;
 
+import kieker.analysis.trace.reconstruction.TraceReconstructorStage;
 import kieker.analysisteetime.model.AssemblyModelAssemblerStage;
 import kieker.analysisteetime.model.DeploymentModelAssemblerStage;
 import kieker.analysisteetime.model.TypeModelAssemblerStage;
@@ -31,7 +32,6 @@ import kieker.analysisteetime.model.analysismodel.type.TypeModel;
 import kieker.analysisteetime.recordreading.ReadingComposite;
 import kieker.analysisteetime.signature.JavaComponentSignatureExtractor;
 import kieker.analysisteetime.signature.JavaOperationSignatureExtractor;
-import kieker.analysisteetime.trace.reconstruction.TraceReconstructorStage;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
 
@@ -39,7 +39,8 @@ import teetime.framework.Configuration;
 import teetime.stage.InstanceOfFilter;
 
 /**
- * Configuration for a hotspot detection based on the longest execution time of methods without children.
+ * Configuration for a hotspot detection based on the longest execution time of
+ * methods without children.
  *
  * @author Sören Henning, Stephan Lenga
  *
@@ -57,12 +58,16 @@ public class HotspotDetectionConfiguration extends Configuration {
 		final ReadingComposite reader = new ReadingComposite(importDirectory);
 		// BETTER consider if KiekerMetadataRecord has to be processed
 		// final AllowedRecordsFilter allowedRecordsFilter = new AllowedRecordsFilter();
-		final InstanceOfFilter<IMonitoringRecord, IFlowRecord> instanceOfFilter = new InstanceOfFilter<>(IFlowRecord.class);
-		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(typeModel, new JavaComponentSignatureExtractor(),
-				new JavaOperationSignatureExtractor());
-		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(typeModel, assemblyModel);
-		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(assemblyModel, deploymentModel);
-		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(deploymentModel, ChronoUnit.NANOS);
+		final InstanceOfFilter<IMonitoringRecord, IFlowRecord> instanceOfFilter = new InstanceOfFilter<>(
+				IFlowRecord.class);
+		final TypeModelAssemblerStage typeModelAssembler = new TypeModelAssemblerStage(typeModel,
+				new JavaComponentSignatureExtractor(), new JavaOperationSignatureExtractor());
+		final AssemblyModelAssemblerStage assemblyModelAssembler = new AssemblyModelAssemblerStage(typeModel,
+				assemblyModel);
+		final DeploymentModelAssemblerStage deploymentModelAssembler = new DeploymentModelAssemblerStage(assemblyModel,
+				deploymentModel);
+		final TraceReconstructorStage traceReconstructor = new TraceReconstructorStage(deploymentModel,
+				ChronoUnit.NANOS);
 		final HotspotDetectionStage hotspotDetector = new HotspotDetectionStage();
 
 		// Connect the stages

@@ -18,20 +18,21 @@ package kieker.tools.trace.analysis.filter.traceReconstruction;
 
 /**
  * This exception can be used to mark an invalid trace.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 0.95a
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class InvalidTraceException extends Exception {
 
 	private static final long serialVersionUID = 1893L;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param message
-	 *            The message of this exception.
+	 *
+	 * @param message The message of this exception.
 	 */
 	public InvalidTraceException(final String message) {
 		super(message);
@@ -39,11 +40,9 @@ public class InvalidTraceException extends Exception {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param message
-	 *            The message of this exception.
-	 * @param t
-	 *            The cause of this exception.
+	 *
+	 * @param message The message of this exception.
+	 * @param t       The cause of this exception.
 	 */
 	public InvalidTraceException(final String message, final Throwable t) {
 		super(message, t);

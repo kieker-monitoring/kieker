@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.trace.graph.dot;
+package kieker.analysis.trace.graph.dot;
 
 import java.io.File;
 
@@ -37,7 +37,8 @@ public class DotTraceGraphFileWriterStage extends DotFileWriterStage { // NOPMD 
 	public static DotTraceGraphFileWriterStage create(final File outputDirectory) {
 		final DotExportConfiguration.Builder exportConfigurationBuilder = new DotExportConfiguration.Builder();
 		exportConfigurationBuilder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, g -> "none");
-		exportConfigurationBuilder.addEdgeAttribute(DotEdgeAttribute.LABEL, e -> e.getProperty("orderIndex").toString() + '.');
+		exportConfigurationBuilder.addEdgeAttribute(DotEdgeAttribute.LABEL,
+				e -> e.getProperty("orderIndex").toString() + '.');
 		exportConfigurationBuilder.addNodeAttribute(DotNodeAttribute.LABEL, new NodeLabelMapper());
 		final DotExportConfiguration exportConfiguration = exportConfigurationBuilder.build();
 

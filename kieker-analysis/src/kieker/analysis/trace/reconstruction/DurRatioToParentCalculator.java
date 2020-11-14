@@ -14,10 +14,10 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.trace.reconstruction;
+package kieker.analysis.trace.reconstruction;
 
+import kieker.analysis.trace.traversal.IOperationCallVisitor;
 import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
-import kieker.analysisteetime.trace.traversal.IOperationCallVisitor;
 
 /**
  * @author Sören Henning

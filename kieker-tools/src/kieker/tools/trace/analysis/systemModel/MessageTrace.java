@@ -21,12 +21,15 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * This class is a container for a whole trace of messages (represented as actual instances of {@link AbstractMessage}).
+ * This class is a container for a whole trace of messages (represented as
+ * actual instances of {@link AbstractMessage}).
  *
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class MessageTrace extends AbstractTrace {
 
 	private final List<AbstractMessage> messages;
@@ -37,10 +40,8 @@ public class MessageTrace extends AbstractTrace {
 	/**
 	 * Creates a new message trace from the given data.
 	 *
-	 * @param traceId
-	 *            The ID for this message trace
-	 * @param seq
-	 *            The messages contained in this message trace
+	 * @param traceId The ID for this message trace
+	 * @param seq     The messages contained in this message trace
 	 */
 	public MessageTrace(final long traceId, final List<AbstractMessage> seq) {
 		this(traceId, AbstractTrace.DEFAULT_SESSION_ID, seq);
@@ -49,19 +50,17 @@ public class MessageTrace extends AbstractTrace {
 	/**
 	 * Creates a new message trace from the given data.
 	 *
-	 * @param traceId
-	 *            The ID for this trace.
-	 * @param sessionId
-	 *            The ID of the current session.
-	 * @param seq
-	 *            The list of messages this trace consists of.
+	 * @param traceId   The ID for this trace.
+	 * @param sessionId The ID of the current session.
+	 * @param seq       The list of messages this trace consists of.
 	 */
 	public MessageTrace(final long traceId, final String sessionId, final List<AbstractMessage> seq) {
 		super(traceId, sessionId);
 
 		// no need to sort: seq is already sorted - actually
-		// however, the reply message has the same timestamp as its associated call message
-		//		Collections.sort(seq, new MessageComparator());
+		// however, the reply message has the same timestamp as its associated call
+		// message
+		// Collections.sort(seq, new MessageComparator());
 
 		this.messages = seq;
 
@@ -82,7 +81,8 @@ public class MessageTrace extends AbstractTrace {
 	}
 
 	/**
-	 * Returns the message sequence contained in this trace as an (unmodifiable) list.
+	 * Returns the message sequence contained in this trace as an (unmodifiable)
+	 * list.
 	 *
 	 * @return See above
 	 */

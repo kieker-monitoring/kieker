@@ -14,16 +14,16 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.trace.analysis.systemModel;
+package kieker.model.system.model;
 
-import kieker.tools.trace.analysis.systemModel.repository.AbstractSystemSubRepository;
-import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
+import kieker.model.repository.AbstractRepository;
+import kieker.model.repository.SystemModelRepository;
 
 /**
  * Specific subtype for the root execution container.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public class RootExecutionContainer extends ExecutionContainer {
@@ -32,7 +32,7 @@ public class RootExecutionContainer extends ExecutionContainer {
 	 * Creates a new root execution container.
 	 */
 	public RootExecutionContainer() {
-		super(AbstractSystemSubRepository.ROOT_ELEMENT_ID, null, SystemModelRepository.ROOT_NODE_LABEL);
+		super(AbstractRepository.ROOT_ELEMENT_ID, null, SystemModelRepository.ROOT_NODE_LABEL);
 	}
 
 	@Override

@@ -18,20 +18,22 @@ package kieker.tools.trace.analysis.systemModel;
 
 /**
  * This object represents an somehow invalid trace of executions.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.2
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class InvalidExecutionTrace {
 
 	private final ExecutionTrace invalidExecutionTraceArtifacts;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param invalidExecutionTrace
-	 *            The execution trace which will be wrapped as invalid.
+	 *
+	 * @param invalidExecutionTrace The execution trace which will be wrapped as
+	 *                              invalid.
 	 */
 	public InvalidExecutionTrace(final ExecutionTrace invalidExecutionTrace) {
 		this.invalidExecutionTraceArtifacts = invalidExecutionTrace;
@@ -39,7 +41,7 @@ public class InvalidExecutionTrace {
 
 	/**
 	 * Delivers the wrapped execution trace.
-	 * 
+	 *
 	 * @return The execution trace artifacts.
 	 */
 	public ExecutionTrace getInvalidExecutionTraceArtifacts() {
@@ -66,6 +68,7 @@ public class InvalidExecutionTrace {
 		if (this == obj) {
 			return true;
 		}
-		return ((InvalidExecutionTrace) obj).getInvalidExecutionTraceArtifacts().equals(this.invalidExecutionTraceArtifacts);
+		return ((InvalidExecutionTrace) obj).getInvalidExecutionTraceArtifacts()
+				.equals(this.invalidExecutionTraceArtifacts);
 	}
 }

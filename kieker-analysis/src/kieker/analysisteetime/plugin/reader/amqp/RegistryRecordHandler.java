@@ -33,7 +33,9 @@ import kieker.common.registry.reader.ReaderRegistry;
  * @author Holger Knoche
  *
  * @since 1.12
+ * @deprecated 1.15 has been moved to final location kieker.analysis.source.amqp
  */
+@Deprecated
 public class RegistryRecordHandler implements Runnable {
 
 	/** The default queue size for the registry record queue. */
@@ -42,13 +44,12 @@ public class RegistryRecordHandler implements Runnable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RegistryRecordHandler.class);
 
 	private final ReaderRegistry<String> stringRegistry;
-	private final BlockingQueue<ByteBuffer> queue = new ArrayBlockingQueue<>(DEFAULT_QUEUE_SIZE);
+	private final BlockingQueue<ByteBuffer> queue = new ArrayBlockingQueue<>(RegistryRecordHandler.DEFAULT_QUEUE_SIZE);
 
 	/**
 	 * Creates a new registry record handler for the given registry.
 	 *
-	 * @param stringRegistry
-	 *            The string registry to operate on
+	 * @param stringRegistry The string registry to operate on
 	 */
 	public RegistryRecordHandler(final ReaderRegistry<String> stringRegistry) {
 		this.stringRegistry = stringRegistry;
@@ -62,7 +63,7 @@ public class RegistryRecordHandler implements Runnable {
 
 				this.readRegistryRecord(nextRecord);
 			} catch (final InterruptedException e) {
-				LOGGER.error("Registry record handler was interrupted", e);
+				RegistryRecordHandler.LOGGER.error("Registry record handler was interrupted", e);
 			}
 		}
 	}
@@ -70,14 +71,13 @@ public class RegistryRecordHandler implements Runnable {
 	/**
 	 * Enqueues an unparsed registry record for processing.
 	 *
-	 * @param buffer
-	 *            The unparsed data in an appropriately positioned byte buffer
+	 * @param buffer The unparsed data in an appropriately positioned byte buffer
 	 */
 	public void enqueueRegistryRecord(final ByteBuffer buffer) {
 		try {
 			this.queue.put(buffer);
 		} catch (final InterruptedException e) {
-			LOGGER.error("Record queue was interrupted", e);
+			RegistryRecordHandler.LOGGER.error("Record queue was interrupted", e);
 		}
 	}
 
@@ -85,7 +85,7 @@ public class RegistryRecordHandler implements Runnable {
 		try {
 			RegistryRecord.registerRecordInRegistry(buffer, this.stringRegistry);
 		} catch (final BufferUnderflowException e) {
-			LOGGER.error("Buffer underflow while reading registry record", e);
+			RegistryRecordHandler.LOGGER.error("Buffer underflow while reading registry record", e);
 		}
 	}
 

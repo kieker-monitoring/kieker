@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.trace.reconstruction;
+package kieker.analysis.trace.reconstruction;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -52,7 +52,8 @@ public class TraceReconstructionBuffer {
 	private OperationCall root;
 	private OperationCall current;
 
-	public TraceReconstructionBuffer(final DeploymentModel deploymentModel, final TraceMetadata traceMetadata, final TemporalUnit temporalUnit) {
+	public TraceReconstructionBuffer(final DeploymentModel deploymentModel, final TraceMetadata traceMetadata,
+			final TemporalUnit temporalUnit) {
 		this.deploymentModel = deploymentModel;
 		this.traceMetadata = traceMetadata;
 		this.temporalUnit = temporalUnit; // ChronoUnit.NANOS;
@@ -65,7 +66,8 @@ public class TraceReconstructionBuffer {
 		final Instant start = Instants.createFromEpochTimestamp(record.getTimestamp(), this.temporalUnit);
 		newCall.setStart(start);
 
-		final DeploymentContext context = this.deploymentModel.getDeploymentContexts().get(this.traceMetadata.getHostname());
+		final DeploymentContext context = this.deploymentModel.getDeploymentContexts()
+				.get(this.traceMetadata.getHostname());
 		final DeployedComponent component = context.getComponents().get(record.getClassSignature());
 		final DeployedOperation operation = component.getContainedOperations().get(record.getOperationSignature());
 		newCall.setOperation(operation);
@@ -98,7 +100,9 @@ public class TraceReconstructionBuffer {
 		// BETTER handle additional log checks
 		//
 		// if (TraceReconstructor.this.activateAdditionalLogChecks) {
-		// if (!beforeEvent.getOperationSignature().equals(record.getOperationSignature())) {
+		// if
+		// (!beforeEvent.getOperationSignature().equals(record.getOperationSignature()))
+		// {
 		// TraceReconstructor.this.faultyTraceBuffers.add(this);
 		// TraceReconstructor.this.traceBuffers.remove(this.traceID);
 		// }

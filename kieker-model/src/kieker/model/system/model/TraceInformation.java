@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.trace.analysis.systemModel;
+package kieker.model.system.model;
 
 /**
  * This class stores trace meta-information, such as the trace ID. This kept separate from the actual trace
