@@ -24,11 +24,13 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * This is an abstract base for filters processing traces.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
+ * @deprecated 1.15 has been ported to teetime
  */
+@Deprecated
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysisFilter {
 
@@ -41,21 +43,19 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @param projectContext
-	 *            The project context for this component.
+	 *
+	 * @param configuration  The configuration for this component.
+	 * @param projectContext The project context for this component.
 	 */
 	public AbstractTraceProcessingFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
 
 	/**
-	 * This method can be used to report a trace which has been processed successfully.
-	 * 
-	 * @param traceId
-	 *            The ID of the processed trace.
+	 * This method can be used to report a trace which has been processed
+	 * successfully.
+	 *
+	 * @param traceId The ID of the processed trace.
 	 */
 	protected final void reportSuccess(final long traceId) {
 		synchronized (this) {
@@ -66,10 +66,10 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	}
 
 	/**
-	 * This method can be used to report a trace which has <b>not</b> been processed successfully.
-	 * 
-	 * @param traceId
-	 *            The ID of the processed trace.
+	 * This method can be used to report a trace which has <b>not</b> been processed
+	 * successfully.
+	 *
+	 * @param traceId The ID of the processed trace.
 	 */
 	protected final void reportError(final long traceId) {
 		synchronized (this) {
@@ -81,7 +81,7 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 
 	/**
 	 * Delivers the number of traces which have been processed successfully.
-	 * 
+	 *
 	 * @return The number of traces.
 	 */
 	public final int getSuccessCount() {
@@ -91,8 +91,9 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	}
 
 	/**
-	 * Delivers the number of traces which have <b>not</b> been processed successfully.
-	 * 
+	 * Delivers the number of traces which have <b>not</b> been processed
+	 * successfully.
+	 *
 	 * @return The number of traces.
 	 */
 	public final int getErrorCount() {
@@ -103,7 +104,7 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 
 	/**
 	 * Delivers the total number of traces which have been processed.
-	 * 
+	 *
 	 * @return The number of traces.
 	 */
 	public final int getTotalCount() {
@@ -113,8 +114,9 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 	}
 
 	/**
-	 * Delivers the ID of the last trace which has <b>not</b> been processed successfully.
-	 * 
+	 * Delivers the ID of the last trace which has <b>not</b> been processed
+	 * successfully.
+	 *
 	 * @return The trace ID.
 	 */
 	public final long getLastTraceIdError() {
@@ -125,7 +127,7 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 
 	/**
 	 * Delivers the ID of the last trace which has been processed successfully.
-	 * 
+	 *
 	 * @return The trace ID.
 	 */
 	public final long getLastTraceIdSuccess() {
@@ -136,8 +138,9 @@ public abstract class AbstractTraceProcessingFilter extends AbstractTraceAnalysi
 
 	/**
 	 * Returns a user-addressed status message to be logged by the calling tool.
-	 * Extending classes may override this method but should call the then-inherited method first.
-	 * 
+	 * Extending classes may override this method but should call the then-inherited
+	 * method first.
+	 *
 	 */
 	public void printStatusMessage() {
 		synchronized (this) {

@@ -26,11 +26,13 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * This is an abstract base for components which process message traces.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
+ * @deprecated 1.15 has been ported to teetime
  */
+@Deprecated
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractMessageTraceProcessingFilter extends AbstractTraceProcessingFilter {
 
@@ -39,22 +41,21 @@ public abstract class AbstractMessageTraceProcessingFilter extends AbstractTrace
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @param projectContext
-	 *            The project context for this component.
+	 *
+	 * @param configuration  The configuration for this component.
+	 * @param projectContext The project context for this component.
 	 */
-	public AbstractMessageTraceProcessingFilter(final Configuration configuration, final IProjectContext projectContext) {
+	public AbstractMessageTraceProcessingFilter(final Configuration configuration,
+			final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
 
 	/**
 	 * This is the (abstract) input port for the incoming message traces.
-	 * 
-	 * @param mt
-	 *            The incoming message trace.
+	 *
+	 * @param mt The incoming message trace.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed", eventTypes = { MessageTrace.class })
+	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed", eventTypes = {
+			MessageTrace.class })
 	public abstract void inputMessageTraces(final MessageTrace mt);
 }
