@@ -9,12 +9,12 @@ task buildStandaloneExamples(dependsOn: [
 					// 'buildStandaloneExamplesUserguideAppendixJMS', 
 					// 'buildStandaloneExamplesUserguideAppendixAMQP',
 					// 'buildStandaloneExamplesUserguideAppendixKafka',
-					// 'buildStandaloneExamplesMonitoringJVM',
-					// 'buildStandaloneExamplesMonitoringSpring',
-					// 'buildStandaloneExamplesMonitoringManual',
+					'buildStandaloneExamplesMonitoringJVM',
+					'buildStandaloneExamplesMonitoringSpring',
+					'buildStandaloneExamplesMonitoringManual',
 					'buildStandaloneExamplesMonitoringAspectJ',
 					'buildStandaloneExamplesMonitoringAdaptive',
-					// 'buildStandaloneExamplesMonitoringTimesource',
+					'buildStandaloneExamplesMonitoringTimesource',
 					// 'buildStandaloneExamplesAnalysisTraceAnalysis',
 					// 'buildStandaloneExamplesUserguideAppendixJavaEE', 
 					// 'replaceAbsoluteByRelativePathsEclipse'
@@ -188,17 +188,8 @@ task copyLibsStandaloneExamplesMonitoringSpring(type: Copy, dependsOn: [rootProj
 	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}
-//	from configurations.spring
 	from ('../lib') {
 		include "aspectjweaver-*.jar"
-	}
-	from ('../lib/framework-libs/spring/') {
-		include "aopalliance-*.jar"
-		include "spring-aop-*.jar"
-		include "spring-beans-*.jar"
-		include "spring-context-*.jar"
-		include "spring-core-*.jar"
-		include "spring-expression-*.jar"
 	}
 	into 'monitoring/probe-spring/lib/'
 }
@@ -254,7 +245,7 @@ task copyLibsStandaloneExamplesMonitoringTimesource(type: Copy, dependsOn: [root
 
 task buildStandaloneExamplesMonitoringTimesource(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringTimesource') {
 	buildFile = 'monitoring/custom-timesource/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 task copyLibsStandaloneExamplesAnalysisTraceAnalysis(type: Copy, dependsOn: [rootProject.mainJar]) {
@@ -276,12 +267,12 @@ task cleanStandaloneExamples(dependsOn: [
 					// 'cleanStandaloneExamplesUserguideCh5',
 					// 'cleanStandaloneExamplesUserguideAppendixJMS',
 					// 'cleanStandaloneExamplesUserguideAppendixAMQP',  
-					// 'cleanStandaloneExamplesMonitoringJVM',
-					// 'cleanStandaloneExamplesMonitoringSpring',
-					// 'cleanStandaloneExamplesMonitoringManual',
+					'cleanStandaloneExamplesMonitoringJVM',
+					'cleanStandaloneExamplesMonitoringSpring',
+					'cleanStandaloneExamplesMonitoringManual',
 					'cleanStandaloneExamplesMonitoringAspectJ',
 					'cleanStandaloneExamplesMonitoringAdaptive',
-					// 'cleanStandaloneExamplesMonitoringTimesource',
+					'cleanStandaloneExamplesMonitoringTimesource',
 					// 'cleanStandaloneExamplesAnalysisTraceAnalysis',
 					// 'cleanStandaloneExamplesUserguideAppendixJavaEE'
 					]) {
