@@ -1,4 +1,11 @@
-apply plugin: 'application'
+plugins {
+	id 'application'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+def springVersion = '5.3.1'
 
 repositories {
 	mavenCentral() 
@@ -11,18 +18,27 @@ dependencies {
         implementation 'org.slf4j:slf4j-api:1.7.30'
         implementation 'org.codehaus.groovy:groovy-all:3.0.2'
 
-	implementation fileTree('lib') {
-		include "aopalliance-*.jar"
-		include "spring-aop-*.jar"
-		include "spring-beans-*.jar"
-		include "spring-context-*.jar"
-		include "spring-core-*.jar"
-		include "spring-expression-*.jar"
-	}
+	implementation 'net.kieker-monitoring:kieker:1.15-SNAPSHOT'
+
+	// https://mvnrepository.com/artifact/org.springframework/spring-expression
+	implementation "org.springframework:spring-aop:${springVersion}"
+	implementation "org.springframework:spring-beans:${springVersion}"
+	implementation "org.springframework:spring-context:${springVersion}"
+	implementation "org.springframework:spring-core:${springVersion}"
+	implementation "org.springframework:spring-expression:${springVersion}"
+
+	// https://mvnrepository.com/artifact/aopalliance/aopalliance
+	implementation 'aopalliance:aopalliance:1.0'
+
+	// https://mvnrepository.com/artifact/org.aspectj/aspectjweaver
+	runtime group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.6'
+
+	// https://mvnrepository.com/artifact/commons-logging/commons-logging
+	runtime group: 'commons-logging', name: 'commons-logging', version: '1.2'
+	
+
 	runtime fileTree('lib') {
-		include "kieker-*.jar"
-		include "aspectjweaver-*.jar"
-		include "commons-logging-*.jar"
+		include "kieker-1.15-SNAPSHOT-aspectj.jar"
 	}
 }
 

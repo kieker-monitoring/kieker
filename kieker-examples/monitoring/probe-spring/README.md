@@ -1,7 +1,6 @@
-# Custom Timesource
+# Spring Instrumentation
 
-This example show how to use a custom timesource while monitoring an
-application.
+This example shows how to instrument spring-based applications.
 
 1. Copy the `kieker-1.15-SNAPSHOT-aspectj.jar` from the distribution
    to the `lib` folder.
