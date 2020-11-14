@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.trace.aggregation;
+package kieker.analysis.trace.aggregation;
 
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
 

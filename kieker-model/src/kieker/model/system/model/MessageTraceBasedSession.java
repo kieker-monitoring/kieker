@@ -14,33 +14,34 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysisteetime.trace.aggregation;
+package kieker.tools.trace.analysis.systemModel;
 
-import kieker.analysisteetime.model.analysismodel.trace.Trace;
+import java.util.Comparator;
 
-import teetime.stage.basic.AbstractTransformation;
+import kieker.tools.trace.analysis.systemModel.util.TraceStartTimestampComparator;
 
 /**
- * This class is a TeeTime stage that accepts {@link AggregatedTraceWrapper} elements at its input port
- * and send sends their containing aggregated trace to the stage�s output port if
- * {@link AggregatedTraceWrapper#isFirst()} returns true.
- *
- * @author Sören Henning
- *
- * @since 1.14
+ * Specialized sub-class for sessions based on message traces (see {@link MessageTrace}).
+ * 
+ * @author Holger Knoche
+ * @since 1.10
+ * 
  */
-public class AggregatedTraceUnwrapperStage extends AbstractTransformation<AggregatedTraceWrapper, Trace> {
+public class MessageTraceBasedSession extends AbstractSession<MessageTrace> {
 
-	public AggregatedTraceUnwrapperStage() {
-		super();
+	/**
+	 * Creates a new message trace-based session with the given session ID.
+	 * 
+	 * @param sessionId
+	 *            The session ID to use
+	 */
+	public MessageTraceBasedSession(final String sessionId) {
+		super(sessionId);
 	}
 
 	@Override
-	protected void execute(final AggregatedTraceWrapper wrapper) {
-		if (wrapper.isFirst()) {
-			final Trace trace = wrapper.getTrace();
-			this.outputPort.send(trace);
-		}
+	protected Comparator<? super MessageTrace> getOrderComparator() {
+		return new TraceStartTimestampComparator();
 	}
 
 }

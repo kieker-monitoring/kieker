@@ -16,9 +16,10 @@
 
 package kieker.tools.trace.analysis.systemModel;
 
+import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
+
 /**
- * An abstract base for messages which can later be used and combined in a
- * {@link kieker.model.system.model.MessageTrace}.
+ * An abstract base for messages which can later be used and combined in a {@link kieker.tools.trace.analysis.systemModel.MessageTrace}.
  *
  * @author Andre van Hoorn
  *
@@ -33,11 +34,12 @@ public abstract class AbstractMessage {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param timestamp          The timestamp of the message.
-	 * @param sendingExecution   The {@link Execution} object which sent the
-	 *                           message.
-	 * @param receivingExecution The {@link Execution} object which received the
-	 *                           message.
+	 * @param timestamp
+	 *            The timestamp of the message.
+	 * @param sendingExecution
+	 *            The {@link Execution} object which sent the message.
+	 * @param receivingExecution
+	 *            The {@link Execution} object which received the message.
 	 */
 	public AbstractMessage(final long timestamp, final Execution sendingExecution, final Execution receivingExecution) {
 		this.timestamp = timestamp;
@@ -76,15 +78,16 @@ public abstract class AbstractMessage {
 	public String toString() {
 		final StringBuilder strBuild = new StringBuilder();
 
-		strBuild.append(this.timestamp).append(' ');
+		strBuild.append(this.timestamp)
+				.append(' ');
 		if (this.getSendingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
-			strBuild.append(ModelFactory.ROOT_NODE_LABEL);
+			strBuild.append(SystemModelRepository.ROOT_NODE_LABEL);
 		} else {
 			strBuild.append(this.getSendingExecution());
 		}
 		strBuild.append(" --> ");
 		if (this.getReceivingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
-			strBuild.append(ModelFactory.ROOT_NODE_LABEL);
+			strBuild.append(SystemModelRepository.ROOT_NODE_LABEL);
 		} else {
 			strBuild.append(this.getReceivingExecution());
 		}

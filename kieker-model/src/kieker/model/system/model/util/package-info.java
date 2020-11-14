@@ -13,9 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-/**
- * The original legacy reader implementation <code>ListReader</code> has been removed as of v1.14. Use
- * {@link teetime.stage.InitialElementProducer} instead.
- */
-package kieker.analysisteetime.plugin.reader.list;
+package kieker.model.system.model.util;
