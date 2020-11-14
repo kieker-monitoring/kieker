@@ -27,11 +27,14 @@ import javax.jms.Session;
 import javax.jms.Topic;
 
 /**
- * This class is part of a very basic fake JMS message broker. It uses a very simple design to deliver messages synchronously from a singleton producer to a
- * singleton consumer. It has only been designed for test purposes ({@link BasicJMSWriterReaderTest}) and should <b>not</b> be used outside this test.
- * 
+ * This class is part of a very basic fake JMS message broker. It uses a very
+ * simple design to deliver messages synchronously from a singleton producer to
+ * a singleton consumer. It has only been designed for test purposes
+ * ({@link BasicJMSWriterReaderTest}) and should <b>not</b> be used outside this
+ * test.
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 public class FakeConnection implements Connection {
@@ -55,7 +58,8 @@ public class FakeConnection implements Connection {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ConnectionConsumer createConnectionConsumer(final Destination arg0, final String arg1, final ServerSessionPool arg2, final int arg3) throws JMSException {
+	public ConnectionConsumer createConnectionConsumer(final Destination arg0, final String arg1,
+			final ServerSessionPool arg2, final int arg3) throws JMSException {
 		return null;
 	}
 
@@ -63,8 +67,8 @@ public class FakeConnection implements Connection {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ConnectionConsumer createDurableConnectionConsumer(final Topic arg0, final String arg1, final String arg2, final ServerSessionPool arg3, final int arg4)
-			throws JMSException {
+	public ConnectionConsumer createDurableConnectionConsumer(final Topic arg0, final String arg1, final String arg2,
+			final ServerSessionPool arg3, final int arg4) throws JMSException {
 		return null;
 	}
 
@@ -130,6 +134,34 @@ public class FakeConnection implements Connection {
 	@Override
 	public void stop() throws JMSException {
 		// No code necessary
+	}
+
+	@Override
+	public Session createSession(final int sessionMode) throws JMSException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Session createSession() throws JMSException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ConnectionConsumer createSharedConnectionConsumer(final Topic topic, final String subscriptionName,
+			final String messageSelector, final ServerSessionPool sessionPool, final int maxMessages)
+			throws JMSException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ConnectionConsumer createSharedDurableConnectionConsumer(final Topic topic, final String subscriptionName,
+			final String messageSelector, final ServerSessionPool sessionPool, final int maxMessages)
+			throws JMSException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -24,11 +24,14 @@ import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
 
 /**
- * This class is part of a very basic fake JMS message broker. It uses a very simple design to deliver messages synchronously from a singleton producer to a
- * singleton consumer. It has only been designed for test purposes ({@link BasicJMSWriterReaderTest}) and should <b>not</b> be used outside this test.
- * 
+ * This class is part of a very basic fake JMS message broker. It uses a very
+ * simple design to deliver messages synchronously from a singleton producer to
+ * a singleton consumer. It has only been designed for test purposes
+ * ({@link BasicJMSWriterReaderTest}) and should <b>not</b> be used outside this
+ * test.
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 public class FakeObjectMessage implements ObjectMessage {
@@ -417,6 +420,30 @@ public class FakeObjectMessage implements ObjectMessage {
 	@Override
 	public void setObject(final Serializable object) throws JMSException {
 		this.object = object;
+	}
+
+	@Override
+	public long getJMSDeliveryTime() throws JMSException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setJMSDeliveryTime(final long deliveryTime) throws JMSException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public <T> T getBody(final Class<T> c) throws JMSException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isBodyAssignableTo(final Class c) throws JMSException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

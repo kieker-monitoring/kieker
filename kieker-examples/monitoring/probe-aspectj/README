@@ -1,9 +1,0 @@
-probe-aspectj
-
-Description:
-This example shows how to use AspectJ-probes for monitoring applications.
-
-
-1. Execute the gradle build
-   - Linux: ./gradlew runMonitoring
-   - Windows: gradlew.bat runMonitoring

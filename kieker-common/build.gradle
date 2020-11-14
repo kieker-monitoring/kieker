@@ -1,21 +1,14 @@
-apply plugin: "com.github.hauner.jarTest"
-apply plugin: 'java'
+plugins {
+	id "com.github.hauner.jarTest"
+	id 'java'
+}
 
 dependencies {
-	// no project-specific dependencies
-	clover 'org.openclover:clover:4.2.0'
-	
-	compile 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
-	compile 'com.fasterxml.jackson.core:jackson-core:2.9.8'
-	compile 'org.slf4j:slf4j-api:1.7.25'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.9.8'
+	implementation 'org.slf4j:slf4j-api:1.7.25'
 }
 
-clover {
-	report {
-		html=true
-	}
-	
-}
 
 task replaceHardCodedVersionNames() {
   doLast {

@@ -1,4 +1,6 @@
-apply plugin: 'application'
+plugins {
+	'application'
+}
 
 repositories {
 	mavenCentral() 
@@ -13,12 +15,6 @@ dependencies {
 	compile fileTree('lib') {
 		include 'kieker-*-emf.jar'
 	}
-}
-
-eclipse {
-  project {
-    name = 'Kieker Example 3 ch3-4--custom-components'
-  }
 }
 
 distTar.enabled=false

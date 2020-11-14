@@ -1,8 +1,0 @@
-custom-timesource
-
-Description:
-This example show how to use a custom timesource while monitoring an application.
-
-1. Execute the gradle build
-   - Linux: ./gradlew runMonitoring
-   - Windows: gradlew.bat runMonitoring

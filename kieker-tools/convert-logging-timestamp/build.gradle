@@ -1,4 +1,6 @@
-apply plugin: 'application'
+plugins {
+	id 'application'
+}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -11,22 +13,17 @@ mainClassName='kieker.tools.logging.timestamp.converter.LoggingTimestampConverte
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
 dependencies {
-	clover 'org.openclover:clover:4.2.0'
+	implementation project(":kieker-common")
+	implementation project(":kieker-tools")
 
-	compile project(":kieker-common")
-	compile project(":kieker-tools")
+	implementation "com.beust:jcommander:${jcommanderVersion}"
 
-	compile "com.beust:jcommander:1.71"
+	// TODO this can be removed when all tools have been ported to jcommander
+	// https://mvnrepository.com/artifact/commons-cli/commons-cli
+	implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
 	
-	testCompile project (path: ':kieker-common', configuration: 'testArchives')
-	testCompile project (path: ':kieker-tools', configuration: 'testArchives')
-}
-
-clover {
-	report {
-		html=true
-	}
-	
+	testImplementation project (path: ':kieker-common', configuration: 'testArchives')
+	testImplementation project (path: ':kieker-tools', configuration: 'testArchives')
 }
 
 task uploadArchives {

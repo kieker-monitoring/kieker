@@ -29,13 +29,14 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.misc.EmptyRecord;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.jms.JmsWriter;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
+import kieker.test.tools.junit.writeRead.jms.FakeInitialContextFactory;
 
 import teetime.framework.test.StageTester;
 
@@ -63,6 +64,7 @@ public class BasicJMSWriterReaderTest {
 		config.setProperty(ConfigurationConstants.WRITER_CLASSNAME, JmsWriter.class.getName());
 		config.setProperty(JmsWriter.CONFIG_CONTEXTFACTORYTYPE, FakeInitialContextFactory.class.getName());
 		config.setProperty(JmsWriter.CONFIG_FACTORYLOOKUPNAME, "ConnectionFactory");
+		config.setProperty(ConfigurationConstants.META_DATA, "false");
 		final MonitoringController monCtrl = MonitoringController.createInstance(config);
 
 		// Start the reader
@@ -84,14 +86,15 @@ public class BasicJMSWriterReaderTest {
 
 		final List<IMonitoringRecord> outputRecords = jmsReaderThread.getOutputList();
 
-		// Inspect records (sublist is used to exclude the KiekerMetadataRecord sent by
-		// the monitoring controller)
-		Assert.assertEquals("Unexpected set of records", inputRecords, outputRecords.subList(1, outputRecords.size()));
-
+		// Inspect records
+		Assert.assertEquals("Different number of records", inputRecords.size(), outputRecords.size());
+		for (int i = 0; i < inputRecords.size(); i++) {
+			Assert.assertEquals("Records are different " + i, inputRecords.get(i), outputRecords.get(i));
+		}
 		// Need to terminate explicitly, because otherwise, the monitoring log directory
 		// cannot be removed
 		monCtrl.terminateMonitoring();
-		monCtrl.waitForTermination(TIMEOUT_IN_MS);
+		monCtrl.waitForTermination(BasicJMSWriterReaderTest.TIMEOUT_IN_MS);
 	}
 
 	protected void checkControllerStateBeforeRecordsPassedToController(
