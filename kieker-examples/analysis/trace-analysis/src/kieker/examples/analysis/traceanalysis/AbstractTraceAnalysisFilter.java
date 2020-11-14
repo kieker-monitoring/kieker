@@ -13,17 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+package kieker.examples.analysis.traceanalysis;
 
-package kieker.tools.trace.analysis.filter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import kieker.analysis.IProjectContext;
-import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.RepositoryPort;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
-import kieker.common.configuration.Configuration;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.signature.Signature;
 import kieker.tools.trace.analysis.systemModel.AllocationComponent;
 import kieker.tools.trace.analysis.systemModel.AssemblyComponent;
@@ -32,41 +24,22 @@ import kieker.tools.trace.analysis.systemModel.Execution;
 import kieker.tools.trace.analysis.systemModel.ExecutionContainer;
 import kieker.tools.trace.analysis.systemModel.Operation;
 import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
+import teetime.framework.AbstractConsumerStage;
 
 /**
  * @author Andre van Hoorn
+ * @author Reiner Jung
  *
- * @since 1.2
+ * @since 1.15
  */
-@Plugin(repositoryPorts = { @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
-public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
-
-	public static final String CONFIG_PROPERTY_VALUE_VERBOSE = "false";
-
-	/** The name of the repository port for the system model repository. */
-	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
-
-	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractTraceAnalysisFilter.class); // NOPMD (inherited constructor)
-
-	private volatile SystemModelRepository systemEntityFactory;
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 *
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @param projectContext
-	 *            The project context for this component.
-	 */
-	public AbstractTraceAnalysisFilter(final Configuration configuration, final IProjectContext projectContext) {
-		super(configuration, projectContext);
+public abstract class AbstractTraceAnalysisFilter extends AbstractConsumerStage<OperationExecutionRecord> {
+	
+	private volatile SystemModelRepository systemModelRepository;
+	
+	public AbstractTraceAnalysisFilter(SystemModelRepository systemModelRepository) {
+		this.systemModelRepository = systemModelRepository;
 	}
-
-	@Override
-	public Configuration getCurrentConfiguration() {
-		return new Configuration();
-	}
-
+	
 	public static final Execution createExecutionByEntityNames(final SystemModelRepository systemModelRepository,
 			final String executionContainerName, final String assemblyComponentTypeName, final String componentTypeName,
 			final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
@@ -120,14 +93,14 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	protected final Execution createExecutionByEntityNames(final String executionContainerName, final String assemblyComponentTypeName,
 			final String componentTypeName, final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
 			final long tin, final long tout, final boolean assumed) {
-		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.getSystemEntityFactory(), executionContainerName, assemblyComponentTypeName,
+		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.systemModelRepository, executionContainerName, assemblyComponentTypeName,
 				componentTypeName, operationSignature, traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
 	protected final Execution createExecutionByEntityNames(final String executionContainerName, final String assemblyComponentTypeName,
 			final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
 			final long tin, final long tout, final boolean assumed) {
-		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.getSystemEntityFactory(), executionContainerName, assemblyComponentTypeName,
+		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.systemModelRepository, executionContainerName, assemblyComponentTypeName,
 				assemblyComponentTypeName, operationSignature, traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
@@ -138,35 +111,25 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	 *            The lines to be printed.
 	 */
 	protected void printDebugLogMessage(final String[] lines) {
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("");
-			LOGGER.debug("#");
-			LOGGER.debug("# Plugin: " + this.getClass().getName());
+		if (logger.isDebugEnabled()) {
+			logger.debug("");
+			logger.debug("#");
+			logger.debug("# Plugin: " + this.getClass().getName());
 			for (final String l : lines) {
-				LOGGER.debug(l);
+				logger.debug(l);
 			}
 		}
 	}
 
 	protected void printErrorLogMessage(final String[] lines) {
-		if (LOGGER.isErrorEnabled()) {
-			LOGGER.error("");
-			LOGGER.error("#");
-			LOGGER.error("# Plugin: " + this.getClass().getName());
+		if (logger.isErrorEnabled()) {
+			logger.error("");
+			logger.error("#");
+			logger.error("# Plugin: " + this.getClass().getName());
 			for (final String l : lines) {
-				LOGGER.error(l);
+				logger.error(l);
 			}
 		}
-	}
-
-	public final SystemModelRepository getSystemEntityFactory() {
-		if (this.systemEntityFactory == null) {
-			this.systemEntityFactory = (SystemModelRepository) this.getRepository(REPOSITORY_PORT_NAME_SYSTEM_MODEL);
-		}
-		if (this.systemEntityFactory == null) {
-			LOGGER.error("Failed to connect to system model repository via repository port '{}' (not connected?)", REPOSITORY_PORT_NAME_SYSTEM_MODEL);
-		}
-		return this.systemEntityFactory;
 	}
 
 }
