@@ -25,6 +25,7 @@ import kieker.model.system.model.InvalidExecutionTrace;
 import kieker.tools.trace.analysis.tt.AbstractTraceProcessingFilter;
 
 /**
+ * TODO can be merged with the other two TraceWriteFilters using generics
  * Writes invalid execution traces to a specified file.
  *
  * @author Andre van Hoorn
@@ -33,13 +34,6 @@ import kieker.tools.trace.analysis.tt.AbstractTraceProcessingFilter;
  * @since 1.2
  */
 public class InvalidExecutionTraceWriterSink extends AbstractTraceProcessingFilter<InvalidExecutionTrace> {
-
-	/**
-	 * This is the name of the input port receiving new (invalid) execution traces.
-	 */
-	public static final String INPUT_PORT_NAME_INVALID_EXECUTION_TRACES = "invalidExecutionTraces";
-	/** The name of the configuration determining the output file name. */
-	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN = "outputFn";
 
 	private static final String ENCODING = "UTF-8";
 

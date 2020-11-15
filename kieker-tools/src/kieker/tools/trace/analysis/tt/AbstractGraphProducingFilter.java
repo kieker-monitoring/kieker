@@ -17,7 +17,6 @@ package kieker.tools.trace.analysis.tt;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.model.repository.SystemModelRepository;
-import kieker.tools.trace.analysis.filter.IGraphOutputtingFilter;
 import kieker.tools.trace.analysis.filter.IGraphProducingFilter;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraphElement;
@@ -38,7 +37,8 @@ import kieker.tools.trace.analysis.filter.visualization.graph.NoOriginRetentionP
 public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?, ?>>
 		extends AbstractMessageTraceProcessingFilter implements IGraphProducingFilter<G> {
 
-	private static final String INCOMPATIBLE_RETENTION_ERROR_TEMPLATE = "%s: The current retention policy %s is incompatible with the requested retention policy %s.";
+	private static final String INCOMPATIBLE_RETENTION_ERROR_TEMPLATE = "%s: The current retention policy %s is "
+			+ "incompatible with the requested retention policy %s.";
 
 	private final G graph;
 	private IOriginRetentionPolicy originRetentionPolicy = NoOriginRetentionPolicy.createInstance();
@@ -47,10 +47,8 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	 * Creates a new graph-producing filter using the given configuration and the
 	 * given graph.
 	 *
-	 * @param configuration
-	 *            The configuration to use
-	 * @param projectContext
-	 *            The project context to use.
+	 * @param repository
+	 *            model repository
 	 * @param graph
 	 *            The (usually empty) graph to produce / extend
 	 */
@@ -66,18 +64,10 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	 */
 	public abstract String getConfigurationName();
 
-	// TODO this implies that all content is send on termination
 	// @Override
-	// public void terminate(final boolean error) {
-	// if (!error) {
-	// this.deliver(this.getGraphOutputPortName(), this.getGraph());
+	// public void onTerminating() {
+	// this.outputPort.send(this.getGraph());
 	// }
-	// }
-
-	@Override
-	public String getGraphOutputPortName() {
-		return IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH;
-	}
 
 	/**
 	 * Delivers the graph stored in this filter.

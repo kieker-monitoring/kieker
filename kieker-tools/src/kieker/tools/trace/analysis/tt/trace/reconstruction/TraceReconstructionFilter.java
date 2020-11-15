@@ -106,7 +106,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter<Exe
 		super(repository);
 
 		this.timeunit = timeunit;
-		this.maxTraceDuration = this.timeunit.convert(maxTraceDuration == null ? Long.MAX_VALUE : maxTraceDuration,
+		this.maxTraceDuration = this.timeunit.convert(maxTraceDuration == null ? Long.MAX_VALUE : maxTraceDuration, // NOCS
 				timeunit);
 		this.ignoreInvalidTraces = ignoreInvalidTraces;
 

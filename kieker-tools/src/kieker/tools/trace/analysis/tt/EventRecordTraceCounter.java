@@ -33,6 +33,8 @@ import teetime.framework.InputPort;
  */
 public class EventRecordTraceCounter extends AbstractStage {
 
+	private static final long TRACE_ID_IF_NONE = -1;
+
 	private final InputPort<TraceEventRecords> validEventRecordTracePort = this
 			.createInputPort(TraceEventRecords.class);
 	private final InputPort<TraceEventRecords> invalidEventRecordTracePort = this
@@ -45,23 +47,13 @@ public class EventRecordTraceCounter extends AbstractStage {
 	private long lastTraceIdSuccess = -1;
 	private long lastTraceIdError = -1;
 
-	/**
-	 * This is the name of the configuration determining whether to log invalid
-	 * traces or not.
-	 */
-	public static final String CONFIG_PROPERTY_NAME_LOG_INVALID = "logInvalidTraces";
-
-	private static final long TRACE_ID_IF_NONE = -1;
-
 	private final boolean logInvalidTraces;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @param projectContext
-	 *            The project context for this component.
+	 * @param logInvalidTraces
+	 *            if true invalid traces are logged in the error log
 	 */
 	public EventRecordTraceCounter(final boolean logInvalidTraces) {
 		this.logInvalidTraces = logInvalidTraces;

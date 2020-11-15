@@ -40,14 +40,14 @@ import teetime.framework.OutputPort;
  */
 public class SessionReconstructionFilter extends AbstractConsumerStage<ExecutionTrace> {
 
-	private final OutputPort<ExecutionTraceBasedSession> outputPort = this
-			.createOutputPort(ExecutionTraceBasedSession.class);
-
 	/**
 	 * Default size for all priority queues. This is only needed because there is no
 	 * priority queue constructor that only takes a comparator.
 	 */
 	private static final int DEFAULT_QUEUE_SIZE = 16;
+
+	private final OutputPort<ExecutionTraceBasedSession> outputPort = this
+			.createOutputPort(ExecutionTraceBasedSession.class);
 
 	private final TimeUnit timeunit;
 

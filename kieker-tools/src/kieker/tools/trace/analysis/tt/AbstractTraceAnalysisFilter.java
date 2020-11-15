@@ -30,6 +30,9 @@ import teetime.framework.AbstractConsumerStage;
  * @author Andre van Hoorn
  * @author Reiner Jung -- ported to teetime
  *
+ * @param <T>
+ *            TODO
+ *
  * @since 1.15
  */
 public abstract class AbstractTraceAnalysisFilter<T> extends AbstractConsumerStage<T> {
