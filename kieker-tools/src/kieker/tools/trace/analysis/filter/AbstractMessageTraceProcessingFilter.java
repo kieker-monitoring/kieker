@@ -59,7 +59,6 @@ public abstract class AbstractMessageTraceProcessingFilter extends AbstractTrace
 	 *            The incoming message trace.
 	 */
 	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed",
-			eventTypes = {
-				MessageTrace.class })
+			eventTypes = MessageTrace.class)
 	public abstract void inputMessageTraces(final MessageTrace mt);
 }

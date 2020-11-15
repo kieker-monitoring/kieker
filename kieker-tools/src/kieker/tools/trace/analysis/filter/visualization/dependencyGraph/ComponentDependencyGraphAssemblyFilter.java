@@ -68,7 +68,7 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	@InputPort(
 			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
 			description = "Receives message traces to be processed",
-			eventTypes = { MessageTrace.class })
+			eventTypes = MessageTrace.class)
 	public void inputMessageTraces(final MessageTrace t) {
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
 			if (m instanceof SynchronousReplyMessage) {

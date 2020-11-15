@@ -46,8 +46,7 @@ import kieker.tools.trace.analysis.systemModel.ExecutionTraceBasedSession;
 @Deprecated
 @Plugin(description = "Reconstructs sessions from execution or message traces", outputPorts = {
 	@OutputPort(name = SessionReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_SESSIONS, description = "Reconstructed execution trace-based sessions",
-			eventTypes = {
-				ExecutionTraceBasedSession.class }) },
+			eventTypes = ExecutionTraceBasedSession.class) },
 		configuration = {
 			@Property(name = SessionReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_THINK_TIME, defaultValue = "500000"),
 			@Property(name = SessionReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = SessionReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT) })
@@ -189,8 +188,8 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 	 * @param executionTrace
 	 *            The execution trace to process.
 	 */
-	@InputPort(name = SessionReconstructionFilter.INPUT_PORT_NAME_EXECUTION_TRACES, description = "Receives execution traces", eventTypes = {
-		ExecutionTrace.class })
+	@InputPort(name = SessionReconstructionFilter.INPUT_PORT_NAME_EXECUTION_TRACES, description = "Receives execution traces",
+			eventTypes = ExecutionTrace.class)
 	public void processExecutionTrace(final ExecutionTrace executionTrace) {
 		synchronized (this) {
 			// Purge timed-out sessions before processing the next trace

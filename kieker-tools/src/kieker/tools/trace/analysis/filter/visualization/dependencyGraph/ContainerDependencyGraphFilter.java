@@ -46,7 +46,7 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  * @since 1.1
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
-		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
+		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = AbstractGraph.class))
 public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilter<ExecutionContainer> {
 
 	private static final String CONFIGURATION_NAME = VisualizationConstants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME;
@@ -70,7 +70,7 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 	@InputPort(
 			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
 			description = "Receives the message traces to be processed",
-			eventTypes = { MessageTrace.class })
+			eventTypes = MessageTrace.class)
 	public void inputMessageTraces(final MessageTrace t) {
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
 			if (m instanceof SynchronousReplyMessage) {

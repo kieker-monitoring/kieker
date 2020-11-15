@@ -41,7 +41,8 @@ import kieker.tools.trace.analysis.filter.visualization.graph.NoOriginRetentionP
 public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?, ?>>
 		extends AbstractMessageTraceProcessingFilter implements IGraphProducingFilter<G> {
 
-	private static final String INCOMPATIBLE_RETENTION_ERROR_TEMPLATE = "%s: The current retention policy %s is incompatible with the requested retention policy %s.";
+	private static final String INCOMPATIBLE_RETENTION_ERROR_TEMPLATE = "%s: The current retention policy %s "
+			+ "is incompatible with the requested retention policy %s.";
 
 	private final G graph;
 	private IOriginRetentionPolicy originRetentionPolicy = NoOriginRetentionPolicy.createInstance();

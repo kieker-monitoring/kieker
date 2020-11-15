@@ -186,7 +186,7 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	 * @param graph
 	 *            The graph to save
 	 */
-	@InputPort(name = INPUT_PORT_NAME_GRAPHS, eventTypes = { AbstractGraph.class })
+	@InputPort(name = INPUT_PORT_NAME_GRAPHS, eventTypes = AbstractGraph.class)
 	public void writeGraph(final AbstractGraph<?, ?, ?> graph) {
 		final AbstractGraphFormatter<?> graphFormatter = GraphWriterPlugin.createFormatter(graph);
 		final String specification = graphFormatter.createFormattedRepresentation(graph, this.includeWeights, this.useShortLabels, this.plotLoops);

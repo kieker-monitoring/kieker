@@ -172,8 +172,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 
 	@Override
 	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed",
-			eventTypes = {
-				MessageTrace.class })
+			eventTypes = MessageTrace.class)
 	public void inputMessageTraces(final MessageTrace mt) {
 		try {
 			SequenceDiagramFilter.writePicForMessageTrace(mt,

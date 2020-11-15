@@ -50,8 +50,7 @@ import kieker.tools.trace.analysis.systemModel.ISystemModelElement;
  */
 @Plugin(name = "", description = "This filter attaches decorations to graph entities",
 		repositoryPorts = @RepositoryPort(name = DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_PORT_NAME, repositoryType = DescriptionRepository.class),
-		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = {
-			AbstractGraph.class }))
+		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = AbstractGraph.class))
 public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, O, ISystemModelElement>, E extends AbstractEdge<V, E, O>, O> extends
 		AbstractGraphFilter<AbstractGraph<V, E, O>, V, E, O> implements IGraphVisitor<V, E> {
 

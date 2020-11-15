@@ -44,8 +44,9 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  */
 @Deprecated
 @Plugin(description = "A filter transforming OperationExecutionRecords into Execution objects", outputPorts = {
-	@OutputPort(name = ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, description = "Provides transformed executions", eventTypes = {
-		Execution.class }) }, repositoryPorts = {
+	@OutputPort(name = ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, description = "Provides transformed executions",
+			eventTypes = Execution.class) },
+		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
 public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFilter {
 
@@ -80,8 +81,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 	 *            The next operation execution record.
 	 */
 	@InputPort(name = ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS, description = "Receives operation execution records to be transformed",
-			eventTypes = {
-				OperationExecutionRecord.class })
+			eventTypes = OperationExecutionRecord.class)
 	public void inputOperationExecutionRecords(final OperationExecutionRecord execRec) {
 		final String operationSignature = execRec.getOperationSignature();
 		final boolean isConstructor = operationSignature.contains(Signature.CONSTRUCTOR_METHOD_NAME);

@@ -98,7 +98,7 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	 * @param et
 	 *            The next execution trace.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_EXECUTION_TRACES, description = "Receives the execution traces to be written", eventTypes = { ExecutionTrace.class })
+	@InputPort(name = INPUT_PORT_NAME_EXECUTION_TRACES, description = "Receives the execution traces to be written", eventTypes = ExecutionTrace.class)
 	public void newExecutionTrace(final ExecutionTrace et) {
 		ExecutionTraceWriterFilter.this.ps.println(et.toString());
 		ExecutionTraceWriterFilter.this.reportSuccess(et.getTraceId());

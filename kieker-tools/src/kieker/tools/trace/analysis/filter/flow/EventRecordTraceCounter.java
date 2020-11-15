@@ -86,8 +86,8 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	 * @param validTrace
 	 *            The next trace.
 	 */
-	@InputPort(name = EventRecordTraceCounter.INPUT_PORT_NAME_VALID, eventTypes = {
-		TraceEventRecords.class }, description = "Receives valid event record traces")
+	@InputPort(name = EventRecordTraceCounter.INPUT_PORT_NAME_VALID, eventTypes = TraceEventRecords.class,
+			description = "Receives valid event record traces")
 	public void inputValidTrace(final TraceEventRecords validTrace) {
 		super.reportSuccess(validTrace.getTraceMetadata().getTraceId());
 	}
@@ -98,8 +98,8 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	 * @param invalidTrace
 	 *            The next trace.
 	 */
-	@InputPort(name = EventRecordTraceCounter.INPUT_PORT_NAME_INVALID, eventTypes = {
-		TraceEventRecords.class }, description = "Receives invalid event record traces")
+	@InputPort(name = EventRecordTraceCounter.INPUT_PORT_NAME_INVALID, eventTypes = TraceEventRecords.class,
+			description = "Receives invalid event record traces")
 	public void inputInvalidTrace(final TraceEventRecords invalidTrace) {
 		if (this.logInvalidTraces) {
 			this.logger.error("Invalid trace: {}", invalidTrace);

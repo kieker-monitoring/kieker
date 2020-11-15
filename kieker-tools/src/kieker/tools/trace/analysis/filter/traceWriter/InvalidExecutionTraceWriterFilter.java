@@ -99,8 +99,8 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 	 * @param et
 	 *            The next execution trace.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_INVALID_EXECUTION_TRACES, description = "Receives the invalid execution traces to be written", eventTypes = {
-		InvalidExecutionTrace.class })
+	@InputPort(name = INPUT_PORT_NAME_INVALID_EXECUTION_TRACES, description = "Receives the invalid execution traces to be written",
+			eventTypes = InvalidExecutionTrace.class)
 	public void newInvalidExecutionTrace(final InvalidExecutionTrace et) {
 		InvalidExecutionTraceWriterFilter.this.ps.println(et.getInvalidExecutionTraceArtifacts().toString());
 		InvalidExecutionTraceWriterFilter.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());

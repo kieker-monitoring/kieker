@@ -103,8 +103,8 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 	 * {@inheritDoc}
 	 */
 	@Override
-	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives message traces to be processed", eventTypes = {
-		MessageTrace.class })
+	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives message traces to be processed",
+			eventTypes = MessageTrace.class)
 	public void inputMessageTraces(final MessageTrace mt) {
 		MessageTraceWriterFilter.this.ps.println(mt.toString());
 		MessageTraceWriterFilter.this.reportSuccess(mt.getTraceId());

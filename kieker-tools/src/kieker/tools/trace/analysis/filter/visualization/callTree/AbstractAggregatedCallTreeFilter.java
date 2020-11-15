@@ -161,9 +161,9 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	}
 
 	@Override
-	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed",
-			eventTypes = {
-				MessageTrace.class })
+	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
+			description = "Receives the message traces to be processed",
+			eventTypes = MessageTrace.class)
 	public void inputMessageTraces(final MessageTrace trace) {
 		synchronized (this) {
 			try {

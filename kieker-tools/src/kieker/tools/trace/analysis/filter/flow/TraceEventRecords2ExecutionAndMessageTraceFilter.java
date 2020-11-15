@@ -61,14 +61,11 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 @Deprecated
 @Plugin(description = "Transforms incoming TraceEventRecords into execution and message traces", outputPorts = {
 	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Outputs transformed execution traces",
-			eventTypes = {
-				ExecutionTrace.class }),
+			eventTypes = ExecutionTrace.class),
 	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Outputs transformed message traces",
-			eventTypes = {
-				MessageTrace.class }),
+			eventTypes = MessageTrace.class),
 	@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces",
-			eventTypes = {
-				InvalidExecutionTrace.class }) },
+			eventTypes = InvalidExecutionTrace.class) },
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) },
 		configuration = {
@@ -144,8 +141,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	 *            The next trace event record.
 	 */
 	@InputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE, description = "Receives TraceEvents to be transformed",
-			eventTypes = {
-				TraceEventRecords.class })
+			eventTypes = TraceEventRecords.class)
 	public void inputTraceEvents(final TraceEventRecords traceEventRecords) {
 		final TraceMetadata trace = traceEventRecords.getTraceMetadata();
 		if (trace == null) {

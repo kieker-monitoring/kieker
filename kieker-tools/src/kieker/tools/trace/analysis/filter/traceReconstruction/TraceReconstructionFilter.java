@@ -47,11 +47,12 @@ import kieker.tools.util.LoggingTimestampConverter;
  * @since 1.1
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with the reconstructed traces", outputPorts = {
-	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Reconstructed Message Traces", eventTypes = { MessageTrace.class }),
-	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Reconstructed Execution Traces", eventTypes = {
-		ExecutionTrace.class }),
-	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces", eventTypes = {
-		InvalidExecutionTrace.class })
+	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Reconstructed Message Traces",
+			eventTypes = MessageTrace.class),
+	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Reconstructed Execution Traces",
+			eventTypes = ExecutionTrace.class),
+	@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces",
+			eventTypes = InvalidExecutionTrace.class)
 }, repositoryPorts = {
 	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 }, configuration = {
@@ -108,8 +109,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			final long t1LowestTin = t1.getTraceAsSortedExecutionSet().first().getTin();
 			final long t2LowestTin = t2.getTraceAsSortedExecutionSet().first().getTin();
 
-			// Multiple traces may have an equal tin timestamp value. In order to provide an absolute ordering of the keys, we take the traceId as a second ordering
-			// key.
+			// Multiple traces may have an equal tin timestamp value. In order to provide an absolute ordering
+			// of the keys, we take the traceId as a second ordering key.
 			if (t1LowestTin != t2LowestTin) {
 				return t1LowestTin < t2LowestTin ? -1 : 1; // NOCS
 			}
@@ -189,7 +190,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	 * @param execution
 	 *            The next execution.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_EXECUTIONS, description = "Receives the executions to be processed", eventTypes = { Execution.class })
+	@InputPort(name = INPUT_PORT_NAME_EXECUTIONS, description = "Receives the executions to be processed",
+			eventTypes = Execution.class)
 	public void inputExecutions(final Execution execution) {
 		synchronized (this) {
 			if (this.terminated || (this.traceProcessingErrorOccured && !this.ignoreInvalidTraces)) {
@@ -204,7 +206,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
 			if (executionTrace != null) { // trace (artifacts) exists already;
 				if (!this.timeoutMap.remove(executionTrace)) { // remove from timeoutMap. Will be re-added below
-					this.logger.error("Missing entry for trace in timeoutMap: {} PendingTraces and timeoutMap are now longer consistent!", executionTrace);
+					this.logger.error("Missing entry for trace in timeoutMap: {} PendingTraces and timeoutMap are now longer consistent!",
+							executionTrace);
 					this.reportError(traceId);
 				}
 			} else { // create and add new trace
@@ -244,8 +247,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			// If the polled trace is invalid, the following method toMessageTrace(..) throws an exception
 			final MessageTrace mt = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
-			// Transformation successful and the trace is for itself valid. However, this trace may actually contain the [0,0] execution and thus complete a trace
-			// that has timed out before and has thus been considered an invalid trace.
+			// Transformation successful and the trace is for itself valid. However, this trace may actually contain the [0,0]
+			// execution and thus complete a trace that has timed out before and has thus been considered an invalid trace.
 			if (!this.invalidTraces.contains(mt.getTraceId())) {
 				// Not completing part of an invalid trace
 				super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, mt);
@@ -324,7 +327,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				if (!error || (this.traceProcessingErrorOccured && !this.ignoreInvalidTraces)) {
 					this.processTimeoutQueue();
 				} else {
-					this.logger.info("Terminate called with error an flag set or a trace processing occurred; won't process timeoutqueue any more.");
+					this.logger.info("Terminate called with error an flag set or a trace processing"
+							+ " occurred; won't process timeoutqueue any more.");
 				}
 			} catch (final ExecutionEventProcessingException ex) {
 				this.traceProcessingErrorOccured = true;
@@ -339,11 +343,15 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			super.printStatusMessage();
 			if ((this.getSuccessCount() > 0) || (this.getErrorCount() > 0)) {
 				final String minTinStr = new StringBuilder().append(this.minTin).append(" (")
-						.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.minTin))).append(",")
-						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTin)).append(")").toString();
+						.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.minTin)))
+						.append(",")
+						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTin))
+						.append(")").toString();
 				final String maxToutStr = new StringBuilder().append(this.maxTout).append(" (")
-						.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.maxTout))).append(",")
-						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout)).append(")").toString();
+						.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.maxTout)))
+						.append(",")
+						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout))
+						.append(")").toString();
 				LOGGER.debug("First timestamp: {}", minTinStr);
 				LOGGER.debug("Last timestamp: {}", maxToutStr);
 			}

@@ -42,12 +42,12 @@ import kieker.tools.trace.analysis.systemModel.util.AllocationComponentOperation
 /**
  * Plugin providing the creation of calling trees both for individual traces
  * and an aggregated form for multiple traces.<br>
- * 
+ *
  * This class has exactly one input port named "in". The data which is sent to
  * this plugin is not delegated in any way.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 @Plugin(description = "A filter allowing to write the incoming data into a calling tree",
@@ -75,7 +75,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -122,7 +122,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	@InputPort(
 			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
 			description = "Receives the message traces to be processed",
-			eventTypes = { MessageTrace.class })
+			eventTypes = MessageTrace.class)
 	public void inputMessageTraces(final MessageTrace mt) {
 		try {
 			final TraceCallTreeNode rootNode = new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR,

@@ -26,4 +26,7 @@ public final class ModelFactory {
 
 	public static final String ROOT_NODE_LABEL = "'Entry'";
 
+	private ModelFactory() {
+		// utility class
+	}
 }
