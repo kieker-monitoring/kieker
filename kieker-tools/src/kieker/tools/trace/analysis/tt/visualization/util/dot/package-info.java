@@ -13,4 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.trace.analysis.tt.repository;
+package kieker.tools.trace.analysis.tt.visualization.util.dot;
