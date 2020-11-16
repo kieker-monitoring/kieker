@@ -294,15 +294,15 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter<Exe
 				final String minTinStr = new StringBuilder().append(this.minTin).append(" (")
 						.append(LoggingTimestampConverter
 								.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.minTin)))
-						.append(",")
+						.append(',')
 						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.minTin))
-						.append(")").toString();
+						.append(')').toString();
 				final String maxToutStr = new StringBuilder().append(this.maxTout).append(" (")
 						.append(LoggingTimestampConverter
 								.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.maxTout)))
-						.append(",")
+						.append(',')
 						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout))
-						.append(")").toString();
+						.append(')').toString();
 				this.logger.debug("First timestamp: {}", minTinStr);
 				this.logger.debug("Last timestamp: {}", maxToutStr);
 			}

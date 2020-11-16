@@ -49,7 +49,7 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 	 * Creates a new filter with the given configuration.
 	 */
 	public AbstractGraphFilter() {
-
+		// nothing to be done here
 	}
 
 	protected abstract IOriginRetentionPolicy getDesiredOriginRetentionPolicy() throws AnalysisConfigurationException;

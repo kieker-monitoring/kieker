@@ -16,11 +16,11 @@
 package kieker.tools.trace.analysis.tt.visualization;
 
 import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -50,8 +50,6 @@ import teetime.framework.AbstractConsumerStage;
  * @since 1.6
  */
 public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?, ?>> {
-
-	private static final String ENCODING = "UTF-8";
 
 	private static final String NO_SUITABLE_FORMATTER_MESSAGE_TEMPLATE = "No formatter type defined for graph type %s.";
 	private static final String INSTANTIATION_ERROR_MESSAGE_TEMPLATE = "Could not instantiate formatter type %s for graph type %s.";
@@ -112,17 +110,8 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 		try {
 			final Constructor<? extends AbstractGraphFormatter<?>> constructor = formatterClass.getConstructor();
 			return constructor.newInstance();
-		} catch (final SecurityException e) {
-			GraphWriterPlugin.handleInstantiationException(graph.getClass(), formatterClass, e);
-		} catch (final NoSuchMethodException e) {
-			GraphWriterPlugin.handleInstantiationException(graph.getClass(), formatterClass, e);
-		} catch (final IllegalArgumentException e) {
-			GraphWriterPlugin.handleInstantiationException(graph.getClass(), formatterClass, e);
-		} catch (final InstantiationException e) {
-			GraphWriterPlugin.handleInstantiationException(graph.getClass(), formatterClass, e);
-		} catch (final IllegalAccessException e) {
-			GraphWriterPlugin.handleInstantiationException(graph.getClass(), formatterClass, e);
-		} catch (final InvocationTargetException e) {
+		} catch (final SecurityException | NoSuchMethodException | IllegalArgumentException | InstantiationException | IllegalAccessException
+				| InvocationTargetException e) {
 			GraphWriterPlugin.handleInstantiationException(graph.getClass(), formatterClass, e);
 		}
 
@@ -152,7 +141,7 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 		final String fileName = this.outputPathName + this.getOutputFileName(graphFormatter);
 		BufferedWriter writer = null;
 		try {
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), ENCODING));
+			writer = Files.newBufferedWriter(Paths.get(fileName));
 			writer.write(specification);
 			writer.flush();
 		} catch (final IOException e) {

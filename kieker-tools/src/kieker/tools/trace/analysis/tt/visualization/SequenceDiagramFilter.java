@@ -17,12 +17,13 @@ package kieker.tools.trace.analysis.tt.visualization;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -328,15 +329,12 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	 *            Determines whether to use short labels or not.
 	 * @param outputFilename
 	 *            The name of the file in which the code will be written.
-	 *
-	 * @throws FileNotFoundException
-	 *             If the given file is somehow invalid.
-	 * @throws UnsupportedEncodingException
-	 *             If the used default encoding is not supported.
+	 * @throws IOException
+	 *             on io errors
 	 */
 	public static void writePicForMessageTrace(final MessageTrace msgTrace, final SDModes sdMode,
-			final String outputFilename, final boolean shortLabels) throws FileNotFoundException, UnsupportedEncodingException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFilename), false, ENCODING);
+			final String outputFilename, final boolean shortLabels) throws IOException {
+		final PrintStream ps = new PrintStream(Files.newOutputStream(Paths.get(outputFilename)), false, ENCODING);
 		SequenceDiagramFilter.picFromMessageTrace(msgTrace, sdMode, ps, shortLabels);
 		ps.flush();
 		ps.close();
