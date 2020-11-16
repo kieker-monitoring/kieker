@@ -33,7 +33,7 @@ import kieker.model.system.model.MessageTrace;
 import kieker.model.system.model.exceptions.InvalidTraceException;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.tools.util.bookstore.tt.ExecutionFactory;
+import kieker.test.tools.util.tt.bookstore.ExecutionFactory;
 
 import teetime.framework.test.StageTester;
 

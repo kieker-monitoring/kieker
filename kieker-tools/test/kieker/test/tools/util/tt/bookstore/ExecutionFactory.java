@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.util.bookstore.tt;
+package kieker.test.tools.util.tt.bookstore;
 
 import org.junit.Assert;
 

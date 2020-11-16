@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.test.analysis.util.plugin.filter.flow;
+package kieker.test.tools.util.tt.bookstore;
 
-import kieker.analysis.plugin.filter.flow.TraceEventRecords;
+import kieker.analysis.stage.flow.TraceEventRecords;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.concurrency.SplitEvent;

@@ -35,9 +35,9 @@ public class EventRecordTraceCounter extends AbstractStage {
 
 	private static final long TRACE_ID_IF_NONE = -1;
 
-	private final InputPort<TraceEventRecords> validEventRecordTracePort = this
+	private final InputPort<TraceEventRecords> validEventRecordTraceInputPort = this
 			.createInputPort(TraceEventRecords.class);
-	private final InputPort<TraceEventRecords> invalidEventRecordTracePort = this
+	private final InputPort<TraceEventRecords> invalidEventRecordTraceInputPort = this
 			.createInputPort(TraceEventRecords.class);
 
 	private int numTracesProcessed;
@@ -61,11 +61,11 @@ public class EventRecordTraceCounter extends AbstractStage {
 
 	@Override
 	protected void execute() throws Exception {
-		final TraceEventRecords validTrace = this.validEventRecordTracePort.receive();
+		final TraceEventRecords validTrace = this.validEventRecordTraceInputPort.receive();
 		if (validTrace != null) {
 			this.reportSuccess(validTrace.getTraceMetadata().getTraceId());
 		}
-		final TraceEventRecords invalidTrace = this.invalidEventRecordTracePort.receive();
+		final TraceEventRecords invalidTrace = this.invalidEventRecordTraceInputPort.receive();
 		if (invalidTrace != null) {
 			if (this.logInvalidTraces) {
 				this.logger.error("Invalid trace: {}", invalidTrace);
@@ -113,6 +113,14 @@ public class EventRecordTraceCounter extends AbstractStage {
 			this.numTracesFailed++;
 			this.numTracesProcessed++;
 		}
+	}
+
+	public InputPort<TraceEventRecords> getInvalidEventRecordTraceInputPort() {
+		return this.invalidEventRecordTraceInputPort;
+	}
+
+	public InputPort<TraceEventRecords> getValidEventRecordTraceInputPort() {
+		return this.validEventRecordTraceInputPort;
 	}
 
 	/**

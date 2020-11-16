@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.test.analysis.junit.plugin.filter.flow;
 
 import org.junit.Assert;
