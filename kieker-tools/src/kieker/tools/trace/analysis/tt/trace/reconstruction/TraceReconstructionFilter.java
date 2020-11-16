@@ -36,7 +36,8 @@ import kieker.tools.trace.analysis.tt.AbstractTraceProcessingFilter;
 import teetime.framework.OutputPort;
 
 /**
- * TODO documentation
+ * This is a trace reconstruction filter.
+ * TODO documentation.
  *
  * @author Andre van Hoorn
  * @author Reiner Jung -- ported to teetime
@@ -45,9 +46,9 @@ import teetime.framework.OutputPort;
  */
 public class TraceReconstructionFilter extends AbstractTraceProcessingFilter<Execution> {
 
-	private final OutputPort<MessageTrace> messageTracePort = this.createOutputPort(MessageTrace.class);
-	private final OutputPort<ExecutionTrace> executionTracePort = this.createOutputPort(ExecutionTrace.class);
-	private final OutputPort<InvalidExecutionTrace> invalidExecutionTracePort = this
+	private final OutputPort<MessageTrace> messageTraceOutputPort = this.createOutputPort(MessageTrace.class);
+	private final OutputPort<ExecutionTrace> executionTraceOutputPort = this.createOutputPort(ExecutionTrace.class);
+	private final OutputPort<InvalidExecutionTrace> invalidExecutionTraceOutputPort = this
 			.createOutputPort(InvalidExecutionTrace.class);
 
 	/** The used time unit. */
@@ -208,18 +209,18 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter<Exe
 			// that has timed out before and has thus been considered an invalid trace.
 			if (!this.invalidTraces.contains(messageTrace.getTraceId())) {
 				// Not completing part of an invalid trace
-				this.messageTracePort.send(messageTrace);
-				this.executionTracePort.send(executionTrace);
+				this.messageTraceOutputPort.send(messageTrace);
+				this.executionTraceOutputPort.send(executionTrace);
 				this.reportSuccess(curTraceId);
 			} else {
 				// mt is the completing part of an invalid trace
-				this.invalidExecutionTracePort.send(new InvalidExecutionTrace(executionTrace));
+				this.invalidExecutionTraceOutputPort.send(new InvalidExecutionTrace(executionTrace));
 				// the statistics have been updated on the first
 				// occurrence of artifacts of this trace
 			}
 		} catch (final InvalidTraceException ex) {
 			// Transformation failed (i.e., trace invalid)
-			this.invalidExecutionTracePort.send(new InvalidExecutionTrace(executionTrace));
+			this.invalidExecutionTraceOutputPort.send(new InvalidExecutionTrace(executionTrace));
 			final String transformationError = "Failed to transform execution trace to message trace (ID: " + curTraceId
 					+ "). \n" + "Reason: " + ex.getMessage() + "\n Trace: " + executionTrace;
 			if (!this.invalidTraces.contains(curTraceId)) {
@@ -276,12 +277,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter<Exe
 		synchronized (this) {
 			try {
 				this.terminated = true;
-				if (this.traceProcessingErrorOccured && !this.ignoreInvalidTraces) {
-					this.processTimeoutQueue();
-				} else {
-					this.logger.info(
-							"Terminate called with error an flag set or a trace processing occurred; won't process timeoutqueue any more.");
-				}
+				this.processTimeoutQueue();
 			} catch (final ExecutionEventProcessingException ex) {
 				this.traceProcessingErrorOccured = true;
 				this.logger.error("Error processing timeout queue", ex);
@@ -311,6 +307,18 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter<Exe
 				this.logger.debug("Last timestamp: {}", maxToutStr);
 			}
 		}
+	}
+
+	public OutputPort<MessageTrace> getMessageTraceOutputPort() {
+		return this.messageTraceOutputPort;
+	}
+
+	public OutputPort<ExecutionTrace> getExecutionTraceOutputPort() {
+		return this.executionTraceOutputPort;
+	}
+
+	public OutputPort<InvalidExecutionTrace> getInvalidExecutionTraceOutputPort() {
+		return this.invalidExecutionTraceOutputPort;
 	}
 
 }

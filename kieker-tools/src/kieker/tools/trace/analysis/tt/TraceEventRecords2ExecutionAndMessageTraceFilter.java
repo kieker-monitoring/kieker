@@ -19,7 +19,7 @@ import java.util.Stack;
 
 import org.slf4j.Logger;
 
-import kieker.analysis.plugin.filter.flow.TraceEventRecords;
+import kieker.analysis.stage.flow.TraceEventRecords;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.concurrency.SplitEvent;
@@ -56,9 +56,9 @@ import teetime.framework.OutputPort;
  */
 public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTraceProcessingFilter<TraceEventRecords> {
 
-	private final OutputPort<ExecutionTrace> executionTracePort = this.createOutputPort(ExecutionTrace.class);
-	private final OutputPort<MessageTrace> messageTracePort = this.createOutputPort(MessageTrace.class);
-	private final OutputPort<InvalidExecutionTrace> invlaidExecutionTracePort = this
+	private final OutputPort<ExecutionTrace> executionTraceOutputPort = this.createOutputPort(ExecutionTrace.class);
+	private final OutputPort<MessageTrace> messageTraceOutputPort = this.createOutputPort(MessageTrace.class);
+	private final OutputPort<InvalidExecutionTrace> invlaidExecutionTraceOutputPort = this
 			.createOutputPort(InvalidExecutionTrace.class);
 
 	private final boolean enhanceJavaConstructors;
@@ -140,23 +140,34 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 				}
 			} catch (final InvalidTraceException ex) {
 				this.logger.error("Failed to reconstruct trace.", ex);
-				this.invlaidExecutionTracePort.send(new InvalidExecutionTrace(executionTrace));
+				this.invlaidExecutionTraceOutputPort.send(new InvalidExecutionTrace(executionTrace));
 				return;
 			}
 		}
 		try {
 			traceEventRecordHandler.finish();
 			final MessageTrace messageTrace = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
-			this.executionTracePort.send(executionTrace);
-			this.messageTracePort.send(messageTrace);
+			this.executionTraceOutputPort.send(executionTrace);
+			this.messageTraceOutputPort.send(messageTrace);
 			super.reportSuccess(executionTrace.getTraceId());
 		} catch (final InvalidTraceException ex) {
 			this.logger.warn("Failed to convert to message trace: {}", ex.getMessage()); // do not pass 'ex' to log.warn
 																							// because this makes the
 																							// output verbose (#584)
-			this.invlaidExecutionTracePort.send(new InvalidExecutionTrace(executionTrace));
+			this.invlaidExecutionTraceOutputPort.send(new InvalidExecutionTrace(executionTrace));
 		}
+	}
 
+	public OutputPort<ExecutionTrace> getExecutionTraceOutputPort() {
+		return this.executionTraceOutputPort;
+	}
+
+	public OutputPort<InvalidExecutionTrace> getInvlaidExecutionTraceOutputPort() {
+		return this.invlaidExecutionTraceOutputPort;
+	}
+
+	public OutputPort<MessageTrace> getMessageTraceOutputPort() {
+		return this.messageTraceOutputPort;
 	}
 
 	/**

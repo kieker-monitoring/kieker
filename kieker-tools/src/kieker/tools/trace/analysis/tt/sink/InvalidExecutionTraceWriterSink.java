@@ -43,6 +43,11 @@ public class InvalidExecutionTraceWriterSink extends AbstractTraceProcessingFilt
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
+	 * @param repository
+	 *            system model repository
+	 * @param outputFile
+	 *            file handle for the output file
+	 *
 	 * @throws IOException
 	 *             If the write stream could not be prepared.
 	 */
@@ -65,8 +70,8 @@ public class InvalidExecutionTraceWriterSink extends AbstractTraceProcessingFilt
 	public void printStatusMessage() {
 		super.printStatusMessage();
 		final int numTraces = this.getSuccessCount();
-		this.logger.debug("Wrote {} execution trace artifact{} to file '{}'", numTraces, (numTraces > 1 ? "s" : ""),
-				this.outputFilename); // NOCS
+		this.logger.debug("Wrote {} execution trace artifact{} to file '{}'", numTraces, (numTraces > 1 ? "s" : ""), // NOCS
+				this.outputFilename);
 	}
 
 	/**

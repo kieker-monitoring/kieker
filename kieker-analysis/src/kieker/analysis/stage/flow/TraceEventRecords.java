@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.filter.flow;
+package kieker.analysis.stage.flow;
 
 import java.util.Arrays;
 
@@ -23,11 +23,9 @@ import kieker.common.record.flow.trace.TraceMetadata;
 
 /**
  * @author Jan Waller
- *
+ * 
  * @since 1.5
- * @deprecated 1.15 moved to new location kieker.analysis.filter.flow
  */
-@Deprecated
 public final class TraceEventRecords {
 	private final TraceMetadata trace;
 	private final AbstractTraceEvent[] traceEvents;
@@ -36,7 +34,7 @@ public final class TraceEventRecords {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 *
+	 * 
 	 * @param trace
 	 *            The trace to be stored in this object.
 	 * @param traceEvents
@@ -55,7 +53,7 @@ public final class TraceEventRecords {
 
 	/**
 	 * Delivers the stored traces.
-	 *
+	 * 
 	 * @return The traces currently stored in this object.
 	 */
 	public TraceMetadata getTraceMetadata() {
@@ -64,7 +62,7 @@ public final class TraceEventRecords {
 
 	/**
 	 * Delivers the stored trace events.
-	 *
+	 * 
 	 * @return The trace events currently stored in this object.
 	 */
 	public AbstractTraceEvent[] getTraceEvents() {

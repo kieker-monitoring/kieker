@@ -14,18 +14,18 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.util.bookstore;
+package kieker.test.tools.util.bookstore.tt;
 
 import org.junit.Assert;
 
 import kieker.common.util.signature.Signature;
-import kieker.tools.trace.analysis.systemModel.AllocationComponent;
-import kieker.tools.trace.analysis.systemModel.AssemblyComponent;
-import kieker.tools.trace.analysis.systemModel.ComponentType;
-import kieker.tools.trace.analysis.systemModel.Execution;
-import kieker.tools.trace.analysis.systemModel.ExecutionContainer;
-import kieker.tools.trace.analysis.systemModel.Operation;
-import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
+import kieker.model.repository.SystemModelRepository;
+import kieker.model.system.model.AllocationComponent;
+import kieker.model.system.model.AssemblyComponent;
+import kieker.model.system.model.ComponentType;
+import kieker.model.system.model.Execution;
+import kieker.model.system.model.ExecutionContainer;
+import kieker.model.system.model.Operation;
 
 /**
  * This factory class can be used to create artificial executions.
@@ -33,9 +33,7 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn
  *
  * @since 1.2
- * @deprecated 1.15 adapted to new model location
  */
-@Deprecated
 public class ExecutionFactory {
 
 	private static final String DEFAULT_STRING = "N/A";

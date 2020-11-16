@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.filter.flow;
+package kieker.analysis.stage.flow;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -24,16 +24,13 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
-import kieker.analysis.IProjectContext;
-import kieker.analysis.plugin.annotation.InputPort;
-import kieker.analysis.plugin.annotation.OutputPort;
-import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.Property;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
-import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
+
+import teetime.framework.AbstractStage;
+import teetime.framework.InputPort;
+import teetime.framework.OutputPort;
 
 /**
  * This filter collects incoming traces for a specified amount of time. Any
@@ -48,50 +45,17 @@ import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
  * @author Jan Waller, Florian Biss
  *
  * @since 1.9
- * @deprecated 1.15 ported to teetime kieker.analysis.filter.flow
  */
-@Deprecated
-@Plugin(description = "This filter tries to aggregate similar Traces into a single trace.", outputPorts = {
-	@OutputPort(name = TraceAggregationFilter.OUTPUT_PORT_NAME_TRACES, description = "Output port for the processed traces", eventTypes = {
-		TraceEventRecords.class }) }, configuration = {
-			@Property(name = TraceAggregationFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = TraceAggregationFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-			@Property(name = TraceAggregationFilter.CONFIG_PROPERTY_NAME_MAX_COLLECTION_DURATION,
-					defaultValue = TraceAggregationFilter.CONFIG_PROPERTY_VALUE_MAX_COLLECTION_DURATION) })
-public class TraceAggregationFilter extends AbstractFilterPlugin {
-	/**
-	 * The name of the output port delivering the valid traces.
-	 */
-	public static final String OUTPUT_PORT_NAME_TRACES = "tracesOut";
+public class TraceAggregationFilter extends AbstractStage {
 
-	/**
-	 * The name of the input port receiving the trace records.
-	 */
-	public static final String INPUT_PORT_NAME_TRACES = "tracesIn";
+	/** Output port for the processed traces. */
+	private final OutputPort<TraceEventRecords> tracesOutputPort = this.createOutputPort(TraceEventRecords.class);
 
-	/**
-	 * The name of the property determining the time unit.
-	 */
-	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
+	/** Input port receiving the trace records. */
+	private final InputPort<TraceEventRecords> tracesInputPort = this.createInputPort();
 
-	/**
-	 * Clock input for timeout handling.
-	 */
-	public static final String INPUT_PORT_NAME_TIME_EVENT = "timestamp";
-
-	/**
-	 * The default value of the time unit property (nanoseconds).
-	 */
-	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
-
-	/**
-	 * The name of the property determining the maximal trace timeout.
-	 */
-	public static final String CONFIG_PROPERTY_NAME_MAX_COLLECTION_DURATION = "maxCollectionDuration";
-
-	/**
-	 * The default value of the property determining the maximal trace timeout.
-	 */
-	public static final String CONFIG_PROPERTY_VALUE_MAX_COLLECTION_DURATION = "5000000000"; // 5s
+	/** Clock input for timeout handling. */
+	private final InputPort<Long> timestampInputPort = this.createInputPort(Long.class);
 
 	private final TimeUnit timeunit;
 	private final long maxCollectionDuration;
@@ -106,34 +70,25 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 	 * @param projectContext
 	 *            The project context for this component.
 	 */
-	public TraceAggregationFilter(final Configuration configuration, final IProjectContext projectContext) {
-		super(configuration, projectContext);
+	public TraceAggregationFilter(final TimeUnit timeunit, final long maxCollectionDuration) {
+		super();
 
-		this.timeunit = super.recordsTimeUnitFromProjectContext;
-
-		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT);
-		TimeUnit configTimeunit;
-		try {
-			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
-		} catch (final IllegalArgumentException ex) {
-			this.logger.warn("{} is no valid TimeUnit! Using inherited value of {} instead.", configTimeunitProperty, this.timeunit.name());
-			configTimeunit = this.timeunit;
-		}
-		this.maxCollectionDuration = this.timeunit
-				.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_COLLECTION_DURATION), configTimeunit);
+		this.timeunit = timeunit;
+		this.maxCollectionDuration = this.timeunit.convert(maxCollectionDuration, timeunit);
 		this.trace2buffer = new TreeMap<>(new TraceComperator());
 	}
 
-	/**
-	 * This method is the input port for the timeout.
-	 *
-	 * @param timestamp
-	 *            The timestamp
-	 */
-	@InputPort(name = INPUT_PORT_NAME_TIME_EVENT, description = "Time signal for timeouts", eventTypes = { Long.class })
-	public void newEvent(final Long timestamp) {
-		synchronized (this) {
-			this.processTimeoutQueue(timestamp);
+	@Override
+	protected void execute() throws Exception {
+		final Long timestamp = this.timestampInputPort.receive();
+		if (timestamp != null) {
+			synchronized (this) {
+				this.processTimeoutQueue(timestamp);
+			}
+		}
+		final TraceEventRecords traceEventRecords = this.tracesInputPort.receive();
+		if (traceEventRecords != null) {
+			this.newEvent(traceEventRecords);
 		}
 	}
 
@@ -143,9 +98,7 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 	 * @param traceEventRecords
 	 *            incoming TraceEventRecords
 	 */
-	@InputPort(name = INPUT_PORT_NAME_TRACES, description = "Collect identical traces and aggregate them.", eventTypes = {
-		TraceEventRecords.class })
-	public void newEvent(final TraceEventRecords traceEventRecords) {
+	private void newEvent(final TraceEventRecords traceEventRecords) {
 		final long timestamp = this.timeunit.convert(System.nanoTime(), TimeUnit.NANOSECONDS);
 		synchronized (this) {
 			TraceAggregationBuffer traceBuffer = this.trace2buffer.get(traceEventRecords);
@@ -161,16 +114,17 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void terminate(final boolean error) {
+	public void onTerminating() {
 		synchronized (this) {
 			for (final Entry<TraceEventRecords, TraceAggregationBuffer> entry : this.trace2buffer.entrySet()) {
 				final TraceAggregationBuffer buffer = entry.getValue();
 				final TraceEventRecords record = buffer.getTraceEventRecords();
 				record.setCount(buffer.getCount());
-				super.deliver(OUTPUT_PORT_NAME_TRACES, record);
+				this.tracesOutputPort.send(record);
 			}
 			this.trace2buffer.clear();
 		}
+		super.onTerminating();
 	}
 
 	private void processTimeoutQueue(final long timestamp) {
@@ -181,22 +135,10 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 			if (traceBuffer.getBufferCreatedTimestamp() <= bufferTimeout) {
 				final TraceEventRecords record = traceBuffer.getTraceEventRecords();
 				record.setCount(traceBuffer.getCount());
-				super.deliver(OUTPUT_PORT_NAME_TRACES, record);
+				this.tracesOutputPort.send(record);
 			}
 			iterator.remove();
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_COLLECTION_DURATION,
-				String.valueOf(this.maxCollectionDuration));
-		return configuration;
 	}
 
 	/**

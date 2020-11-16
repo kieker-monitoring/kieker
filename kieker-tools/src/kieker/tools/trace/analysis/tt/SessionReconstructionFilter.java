@@ -68,7 +68,7 @@ public class SessionReconstructionFilter extends AbstractConsumerStage<Execution
 	 */
 	public SessionReconstructionFilter(final TimeUnit timeunit, final Long maxThinkTime) {
 		this.timeunit = timeunit;
-		this.maxThinkTime = this.timeunit.convert(maxThinkTime == 0 ? Long.MAX_VALUE : maxThinkTime, timeunit);
+		this.maxThinkTime = this.timeunit.convert(maxThinkTime == 0 ? Long.MAX_VALUE : maxThinkTime, timeunit); // NOCS
 
 		if (this.maxThinkTime < 0) {
 			throw new IllegalArgumentException("maxThinkTime must not be negative (found: " + this.maxThinkTime + ")");

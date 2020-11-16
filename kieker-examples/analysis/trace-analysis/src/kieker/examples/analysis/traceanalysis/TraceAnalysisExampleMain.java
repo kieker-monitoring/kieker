@@ -18,14 +18,11 @@ package kieker.examples.analysis.traceanalysis;
 import java.io.File;
 
 import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.converters.FileConverter;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.ConfigurationException;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.tools.common.AbstractService;
-import kieker.tools.common.CommonConfigurationKeys;
-import kieker.tools.common.ParameterEvaluationUtils;
 import kieker.tools.source.LogsReaderCompositeStage;
 
 /**
@@ -57,8 +54,8 @@ public final class TraceAnalysisExampleMain extends AbstractService<TeeTimeConfi
 	 *            arguments are ignored
 	 */
 	public static void main(final String[] args) {
-		final CollectorMain collector = new CollectorMain();
-		System.exit(collector.run("Collector", "collector", args, collector));
+		final TraceAnalysisExampleMain traceAnalysisExample = new TraceAnalysisExampleMain();
+		System.exit(traceAnalysisExample.run("Trace Analysis", "trace-analysis", args, traceAnalysisExample));
 	}
 
 	@Override
@@ -75,11 +72,17 @@ public final class TraceAnalysisExampleMain extends AbstractService<TeeTimeConfi
 	protected File getConfigurationFile() {
 		return null;
 	}
+	
+	@Override
+	protected kieker.common.configuration.Configuration readConfiguration() {
+		Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
+		configuration.setProperty(LogsReaderCompositeStage.LOG_DIRECTORIES, INPUT_MONITORING_LOG_OER);
+		
+		return configuration;
+	}
 
 	@Override
 	protected boolean checkConfiguration(final Configuration configuration, final JCommander commander) {
-		configuration.setProperty(LogsReaderCompositeStage.LOG_DIRECTORIES, INPUT_MONITORING_LOG_OER);
-		
 		return true;
 	}
 

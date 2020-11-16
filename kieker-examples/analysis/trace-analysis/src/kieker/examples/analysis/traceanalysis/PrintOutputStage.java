@@ -13,38 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+package kieker.examples.analysis.traceanalysis;
 
-package kieker.tools.trace.analysis.filter.traceFilter;
-
-import kieker.tools.trace.analysis.systemModel.ExecutionTrace;
+import teetime.framework.AbstractConsumerStage;
 
 /**
- * @author Andre van Hoorn
- *
- * @since 1.2
- * @deprecated 1.15 ported to teetime
+ * @author Reiner Jung
+ * @since 1.15
  */
-@Deprecated
-abstract class AbstractExecutionTraceHashContainer { // NOPMD (abstract class without abstract methods)
+public class PrintOutputStage extends AbstractConsumerStage<Object> {
 
-	private final ExecutionTrace executionTrace;
-
-	/**
-	 * Abstract constructor to initialize the container.
-	 *
-	 * @param t
-	 *            The execution trace to be stored in this container.
-	 */
-	public AbstractExecutionTraceHashContainer(final ExecutionTrace t) {
-		this.executionTrace = t;
-	}
-
-	/**
-	 * Delivers the stored execution trace.
-	 *
-	 * @return The content of this container.
-	 */
-	public ExecutionTrace getExecutionTrace() {
-		return this.executionTrace;
+	protected void execute(Object element) throws Exception {
+		System.out.println(String.format("(%s) %s", element.getClass(), element.toString()));
 	}
 }

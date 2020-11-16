@@ -15,7 +15,12 @@
  ***************************************************************************/
 
 /**
+ * This package contains all processing filters bundled with kieker.
+ *
+ * Note: currently most filters are kept in kieker.analysisteetime as they are classified as experimental.
+ *
  * @author Reiner Jung
+ * @since 1.15
  *
  */
-package kieker.tools.trace.analysis.tt.trace;
+package kieker.analysis.stage.flow;

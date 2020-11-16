@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.tools.trace.analysis.tt;
 
-import kieker.analysis.plugin.filter.flow.TraceEventRecords;
+import kieker.analysis.stage.flow.TraceEventRecords;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.TraceMetadata;
 

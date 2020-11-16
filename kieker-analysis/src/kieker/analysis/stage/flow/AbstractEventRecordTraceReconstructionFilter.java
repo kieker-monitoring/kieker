@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.analysis.plugin.filter.flow;
+package kieker.analysis.stage.flow;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,13 +33,6 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.analysis.IProjectContext;
-import kieker.analysis.plugin.annotation.InputPort;
-import kieker.analysis.plugin.annotation.OutputPort;
-import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.Property;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
-import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.ConstructionEvent;
@@ -59,79 +51,33 @@ import kieker.common.record.flow.trace.operation.object.AfterOperationFailedObje
 import kieker.common.record.flow.trace.operation.object.AfterOperationObjectEvent;
 import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectEvent;
 
+import teetime.framework.AbstractStage;
+import teetime.framework.InputPort;
+import teetime.framework.OutputPort;
+
 /**
+ * Trace Reconstruction Filter (Event) to reconstruct event based (flow) traces.
+ *
  * @author Jan Waller
+ * @author Reiner Jung -- teetime port
  *
  * @since 1.6
- * @deprecated 1.15 ported to teetime kieker.analysis.filter.flow
  */
-@Deprecated
-@Plugin(name = "Trace Reconstruction Filter (Event)", description = "Filter to reconstruct event based (flow) traces", outputPorts = {
-	@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, description = "Outputs valid traces", eventTypes = {
-		TraceEventRecords.class }),
-	@OutputPort(name = EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID, description = "Outputs traces missing crucial records", eventTypes = {
-		TraceEventRecords.class }) }, configuration = {
-			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
-					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
-					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
-			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT,
-					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
-			@Property(name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES, defaultValue = "false") })
-public final class EventRecordTraceReconstructionFilter extends AbstractFilterPlugin {
-	/**
-	 * The name of the output port delivering the valid traces.
-	 */
-	public static final String OUTPUT_PORT_NAME_TRACE_VALID = "validTraces";
-	/**
-	 * The name of the output port delivering the invalid traces.
-	 */
-	public static final String OUTPUT_PORT_NAME_TRACE_INVALID = "invalidTraces";
-	/**
-	 * The name of the input port receiving the trace records.
-	 */
-	public static final String INPUT_PORT_NAME_TRACE_RECORDS = "traceRecords";
-	/**
-	 * The name of the input port receiving the trace records.
-	 */
-	public static final String INPUT_PORT_NAME_TRACEEVENT_RECORDS = "traceEventRecords";
-	/**
-	 * The name of the input port receiving the trace records.
-	 */
-	public static final String INPUT_PORT_NAME_TIME_EVENT = "timestamps";
+public class AbstractEventRecordTraceReconstructionFilter extends AbstractStage {
+	/** Output port delivering the valid traces. */
+	private final OutputPort<TraceEventRecords> validTracesOutputPort = this.createOutputPort(TraceEventRecords.class);
 
-	/**
-	 * The name of the property determining the time unit.
-	 */
-	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
-	/**
-	 * The name of the property determining the maximal trace duration.
-	 */
-	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION = "maxTraceDuration";
-	/**
-	 * The name of the property determining the maximal trace timeout.
-	 */
-	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT = "maxTraceTimeout";
-	/**
-	 * The default value of the properties for the maximal trace duration and
-	 * timeout.
-	 */
-	public static final String CONFIG_PROPERTY_VALUE_MAX_TIME = "9223372036854775807"; // String.valueOf(Long.MAX_VALUE)
-	/**
-	 * The default value of the time unit property (nanoseconds).
-	 */
-	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
-	/**
-	 * This is the name of the property determining whether to repair BeforeEvents
-	 * with missing AfterEvents (e.g. because of software crash) or not.
-	 */
-	public static final String CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES = "repairEventBasedTraces";
+	/** Output port delivering the invalid traces. */
+	private final OutputPort<TraceEventRecords> invalidTracesOutputPort = this.createOutputPort(TraceEventRecords.class);
+
+	/** Input port receiving the trace records. */
+	private final InputPort<Long> timestampsInputPort;
 
 	private final TimeUnit timeunit;
 	private final long maxTraceDuration;
 	private final long maxTraceTimeout;
 	private final boolean hasTimeout;
-	private final boolean repairEventBasedTracesEnabled;
+	private final boolean repairEventBasedTraces;
 	private long maxEncounteredLoggingTimestamp = -1;
 
 	private final Map<Long, TraceBuffer> traceId2trace;
@@ -139,69 +85,59 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @param projectContext
-	 *            The project context for this component.
+	 * @param timeUnit
+	 *            property determining the time unit
+	 * @param repairEventBasedTraces
+	 *            repair traces where AfterEvents are missing
+	 * @param maxTraceDuration
+	 *            max trace duration
+	 * @param maxTraceTimeout
+	 *            max trace timeout, if set to Long.MAX_VALUE no timeout is used
 	 */
-	public EventRecordTraceReconstructionFilter(final Configuration configuration,
-			final IProjectContext projectContext) {
-		super(configuration, projectContext);
+	public AbstractEventRecordTraceReconstructionFilter(final TimeUnit timeUnit, final boolean repairEventBasedTraces, final long maxTraceDuration,
+			final long maxTraceTimeout) {
+		super();
+		this.timeunit = timeUnit;
 
-		this.timeunit = super.recordsTimeUnitFromProjectContext;
-
-		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT);
-		TimeUnit configTimeunit;
-		try {
-			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
-		} catch (final IllegalArgumentException ex) {
-			this.logger.warn("{} is no valid TimeUnit! Using inherited value of {} instead.", configTimeunitProperty,
-					this.timeunit.name());
-			configTimeunit = this.timeunit;
-		}
-
-		this.repairEventBasedTracesEnabled = configuration
-				.getBooleanProperty(CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES);
-		this.maxTraceDuration = this.timeunit
-				.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION), configTimeunit);
-		this.maxTraceTimeout = this.timeunit
-				.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT), configTimeunit);
+		this.repairEventBasedTraces = repairEventBasedTraces;
+		this.maxTraceDuration = this.timeunit.convert(maxTraceDuration, timeUnit);
+		this.maxTraceTimeout = this.timeunit.convert(maxTraceTimeout, timeUnit);
 		this.hasTimeout = (this.maxTraceTimeout != Long.MAX_VALUE) || (this.maxTraceDuration != Long.MAX_VALUE);
+		if (this.hasTimeout) {
+			this.timestampsInputPort = this.createInputPort(Long.class);
+		} else {
+			this.timestampsInputPort = null;
+		}
 		this.traceId2trace = new ConcurrentHashMap<>();
 	}
 
-	/**
-	 * This method is the input port for the timeout.
-	 *
-	 * @param timestamp
-	 *            The timestamp
-	 */
-	@InputPort(name = INPUT_PORT_NAME_TIME_EVENT, description = "Input port for a periodic time signal", eventTypes = {
-		Long.class })
-	public void newEvent(final Long timestamp) {
-		synchronized (this) {
-			if (this.hasTimeout) {
-				this.processTimeoutQueue(timestamp);
+	@Override
+	protected void execute() throws Exception {
+		if (!this.hasTimeout) {
+			final Long timestamp = this.timestampsInputPort.receive();
+			if (timestamp != null) {
+				synchronized (this) {
+					if (this.hasTimeout) {
+						this.processTimeoutQueue(timestamp);
+					}
+				}
 			}
 		}
 	}
 
+	public OutputPort<TraceEventRecords> getInvalidTracesOutputPort() {
+		return this.invalidTracesOutputPort;
+	}
+
+	public OutputPort<TraceEventRecords> getValidTracesOutputPort() {
+		return this.validTracesOutputPort;
+	}
+
 	/**
-	 * This method is the input port for the new events for this filter.
-	 *
-	 * @param traceEventRecords
-	 *            The new record to handle.
+	 * @return Return input port for a periodic time signal.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_TRACEEVENT_RECORDS, description = "Reconstruct traces from incoming traces", eventTypes = {
-		TraceEventRecords.class })
-	public void newTraceEventRecord(final TraceEventRecords traceEventRecords) {
-		final TraceMetadata trace = traceEventRecords.getTraceMetadata();
-		if (null != trace) {
-			this.newEvent(trace);
-		}
-		for (final AbstractTraceEvent record : traceEventRecords.getTraceEvents()) {
-			this.newEvent(record);
-		}
+	public InputPort<Long> getTimestampsInputPort() {
+		return this.timestampsInputPort;
 	}
 
 	/**
@@ -210,9 +146,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 * @param record
 	 *            The new record to handle.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_TRACE_RECORDS, description = "Reconstruct traces from incoming flow records", eventTypes = {
-		TraceMetadata.class, AbstractTraceEvent.class })
-	public void newEvent(final IFlowRecord record) {
+	protected void newFlowRecordEvent(final IFlowRecord record) {
 		final Long traceId;
 		TraceBuffer traceBuffer;
 		final long loggingTimestamp;
@@ -224,7 +158,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					traceBuffer = this.traceId2trace.get(traceId);
 					if (traceBuffer == null) { // NOCS (DCL)
 						traceBuffer = new TraceBuffer();
-						traceBuffer.setRepairEventBasedTracesEnabled(this.repairEventBasedTracesEnabled);
+						traceBuffer.setRepairEventBasedTracesEnabled(this.repairEventBasedTraces);
 						this.traceId2trace.put(traceId, traceBuffer);
 					}
 				}
@@ -239,7 +173,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					traceBuffer = this.traceId2trace.get(traceId);
 					if (traceBuffer == null) { // NOCS (DCL)
 						traceBuffer = new TraceBuffer();
-						traceBuffer.setRepairEventBasedTracesEnabled(this.repairEventBasedTracesEnabled);
+						traceBuffer.setRepairEventBasedTracesEnabled(this.repairEventBasedTraces);
 						this.traceId2trace.put(traceId, traceBuffer);
 					}
 				}
@@ -253,7 +187,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			synchronized (this) { // has to be synchronized because of timeout cleanup
 				this.traceId2trace.remove(traceId);
 			}
-			super.deliver(OUTPUT_PORT_NAME_TRACE_VALID, traceBuffer.toTraceEvents());
+			this.validTracesOutputPort.send(traceBuffer.toTraceEvents());
 		}
 		if (this.hasTimeout) {
 			synchronized (this) {
@@ -271,25 +205,26 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void terminate(final boolean error) {
+	public void onTerminating() {
 		synchronized (this) {
 			final Collection<Long> sortedTraceIds = this.getSortedTraceIds(this.traceId2trace.keySet());
 
 			for (final Long traceId : sortedTraceIds) {
 				final TraceBuffer traceBuffer = this.traceId2trace.get(traceId);
-				if (this.repairEventBasedTracesEnabled && !traceBuffer.getEventStack().isEmpty()) {
+				if (this.repairEventBasedTraces && !traceBuffer.getEventStack().isEmpty()) {
 					traceBuffer.repairAllBeforeEventsLeftInStackAtTermination();
 				}
 
 				if (traceBuffer.isInvalid()) {
-					super.deliver(OUTPUT_PORT_NAME_TRACE_INVALID, traceBuffer.toTraceEvents());
+					this.invalidTracesOutputPort.send(traceBuffer.toTraceEvents());
 				} else {
-					super.deliver(OUTPUT_PORT_NAME_TRACE_VALID, traceBuffer.toTraceEvents());
+					this.validTracesOutputPort.send(traceBuffer.toTraceEvents());
 				}
 			}
 
 			this.traceId2trace.clear();
 		}
+		super.onTerminating();
 	}
 
 	// only called within synchronized! We assume timestamps >= 0
@@ -305,9 +240,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					|| (traceBuffer.getMinLoggingTimestamp() <= duration)) { // max duration is gone
 
 				if (traceBuffer.isInvalid()) {
-					super.deliver(OUTPUT_PORT_NAME_TRACE_INVALID, traceBuffer.toTraceEvents());
+					this.invalidTracesOutputPort.send(traceBuffer.toTraceEvents());
 				} else {
-					super.deliver(OUTPUT_PORT_NAME_TRACE_VALID, traceBuffer.toTraceEvents());
+					this.validTracesOutputPort.send(traceBuffer.toTraceEvents());
 				}
 
 				this.traceId2trace.remove(traceId);
@@ -328,20 +263,6 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		return copiedKeys;
 		// return keys;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, String.valueOf(this.maxTraceDuration));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, String.valueOf(this.maxTraceTimeout));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES,
-				Boolean.toString(this.repairEventBasedTracesEnabled));
-		return configuration;
 	}
 
 	/**

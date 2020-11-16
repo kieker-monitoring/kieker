@@ -23,4 +23,4 @@
  * @since 1.15
  *
  */
-package kieker.analysis.filter;
+package kieker.analysis.stage;

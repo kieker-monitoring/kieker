@@ -16,15 +16,17 @@
 package kieker.tools.trace.analysis.tt;
 
 import kieker.model.repository.SystemModelRepository;
+import kieker.model.system.model.ExecutionTrace;
 
 /**
+ * TODO this class might be obsolete
  * This is the abstract base for a filter processing execution traces.
  *
  * @author Andre van Hoorn
  *
  * @since 1.1
  */
-public abstract class AbstractExecutionTraceProcessingFilter<T> extends AbstractTraceProcessingFilter<T> {
+public abstract class AbstractExecutionTraceProcessingFilter extends AbstractTraceProcessingFilter<ExecutionTrace> {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.

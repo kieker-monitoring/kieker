@@ -13,35 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.tools.trace.analysis.tt.trace.execution;
-
-import kieker.model.system.model.ExecutionTrace;
 
 /**
- * @author Andre van Hoorn
+ * This package contains all processing filters bundled with kieker.
  *
- * @since 1.2
+ * Note: currently most filters are kept in kieker.analysisteetime as they are classified as experimental.
+ *
+ * @author Reiner Jung
+ * @since 1.15
+ *
  */
-abstract class AbstractExecutionTraceHashContainer { // NOPMD (abstract class without abstract methods)
-
-	private final ExecutionTrace executionTrace;
-
-	/**
-	 * Abstract constructor to initialize the container.
-	 *
-	 * @param t
-	 *            The execution trace to be stored in this container.
-	 */
-	public AbstractExecutionTraceHashContainer(final ExecutionTrace t) {
-		this.executionTrace = t;
-	}
-
-	/**
-	 * Delivers the stored execution trace.
-	 *
-	 * @return The content of this container.
-	 */
-	public ExecutionTrace getExecutionTrace() {
-		return this.executionTrace;
-	}
-}
+package kieker.analysis.stage.general;

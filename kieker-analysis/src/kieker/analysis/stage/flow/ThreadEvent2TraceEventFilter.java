@@ -13,17 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.plugin.filter.flow;
+package kieker.analysis.stage.flow;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import kieker.analysis.IProjectContext;
-import kieker.analysis.plugin.annotation.InputPort;
-import kieker.analysis.plugin.annotation.OutputPort;
-import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
-import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.thread.AfterFailedThreadBasedEvent;
 import kieker.common.record.flow.thread.AfterThreadBasedEvent;
@@ -34,32 +28,28 @@ import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.common.record.misc.ThreadMetaData;
 
+import teetime.framework.AbstractConsumerStage;
+import teetime.framework.OutputPort;
+
 /**
  * @author Christian Wulf (chw)
  *
  * @since 1.13
- * @deprecated 1.15 ported teetime kieker.analysis.filter.flow
  */
-@Deprecated
-@Plugin(name = "Thread Event to Trace Event Filter (Event)", description = "Filter to transform threadId-based events to traceId-based events", outputPorts = {
-	@OutputPort(name = ThreadEvent2TraceEventFilter.OUTPUT_PORT_NAME_DEFAULT, description = "Outputs monitoring records", eventTypes = {
-		IMonitoringRecord.class }) })
-public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
+public class ThreadEvent2TraceEventFilter extends AbstractConsumerStage<IMonitoringRecord> {
 
-	public static final String INPUT_PORT_NAME_DEFAULT = "defaultInputPort";
-	public static final String OUTPUT_PORT_NAME_DEFAULT = "defaultOutputPort";
+	private final OutputPort<IMonitoringRecord> outputPort = this.createOutputPort(IMonitoringRecord.class);
 
 	private final Map<Long, String> hostNames = new HashMap<>(); // NOPMD (not thread-safe)
 	private final Map<Long, MonitoredTrace> monitoredTraces = new HashMap<>(); // NOPMD (not thread-safe)
 	private int currentTraceId; // NOPMD (not thread-safe)
 
-	public ThreadEvent2TraceEventFilter(final Configuration configuration, final IProjectContext projectContext) {
-		super(configuration, projectContext);
+	public ThreadEvent2TraceEventFilter() {
+		super();
 	}
 
-	@InputPort(name = INPUT_PORT_NAME_DEFAULT, description = "Input port for a threadId-based event", eventTypes = {
-		IMonitoringRecord.class })
-	public void readInput(final IMonitoringRecord event) {
+	@Override
+	protected void execute(final IMonitoringRecord event) throws Exception {
 		if (event instanceof BeforeThreadBasedEvent) {
 			final BeforeThreadBasedEvent originalEvent = (BeforeThreadBasedEvent) event;
 
@@ -71,7 +61,7 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 					originalEvent.getClassSignature());
 			newEvent.setLoggingTimestamp(originalEvent.getLoggingTimestamp());
 
-			super.deliver(OUTPUT_PORT_NAME_DEFAULT, newEvent);
+			this.outputPort.send(newEvent);
 		} else if (event instanceof AfterThreadBasedEvent) {
 			final AfterThreadBasedEvent originalEvent = (AfterThreadBasedEvent) event;
 
@@ -82,7 +72,7 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 					originalEvent.getClassSignature());
 			newEvent.setLoggingTimestamp(originalEvent.getLoggingTimestamp());
 
-			super.deliver(OUTPUT_PORT_NAME_DEFAULT, newEvent);
+			this.outputPort.send(newEvent);
 		} else if (event instanceof AfterFailedThreadBasedEvent) {
 			final AfterFailedThreadBasedEvent originalEvent = (AfterFailedThreadBasedEvent) event;
 
@@ -93,7 +83,7 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 					originalEvent.getClassSignature(), originalEvent.getCause());
 			newEvent.setLoggingTimestamp(originalEvent.getLoggingTimestamp());
 
-			super.deliver(OUTPUT_PORT_NAME_DEFAULT, newEvent);
+			this.outputPort.send(newEvent);
 		} else if (event instanceof ThreadMetaData) {
 			final ThreadMetaData threadMetaData = (ThreadMetaData) event;
 
@@ -102,7 +92,7 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 			this.hostNames.put(threadId, hostName);
 		} else {
 			// pass through all other record types
-			super.deliver(OUTPUT_PORT_NAME_DEFAULT, event);
+			this.outputPort.send(event);
 		}
 	}
 
@@ -122,7 +112,7 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 					hostName, -1, -1);
 			traceMetadata.setLoggingTimestamp(synthesizedLoggingTimestamp);
 
-			super.deliver(OUTPUT_PORT_NAME_DEFAULT, traceMetadata);
+			this.outputPort.send(traceMetadata);
 		} else {
 			monitoredTrace = this.monitoredTraces.get(threadId);
 		}
@@ -141,11 +131,6 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 		return monitoredTrace;
 	}
 
-	@Override
-	public Configuration getCurrentConfiguration() {
-		return new Configuration(this.configuration);
-	}
-
 	private static class MonitoredTrace {
 		public final int identifier; // NOCS (private field)
 		public int currentStackSize; // NOCS (private field)
@@ -153,5 +138,12 @@ public class ThreadEvent2TraceEventFilter extends AbstractFilterPlugin {
 		public MonitoredTrace(final int identifier) {
 			this.identifier = identifier;
 		}
+	}
+
+	/**
+	 * @return Monitoring records port.
+	 */
+	public OutputPort<IMonitoringRecord> getOutputPort() {
+		return this.outputPort;
 	}
 }

@@ -22,7 +22,7 @@ import java.io.PrintStream;
 
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.ExecutionTrace;
-import kieker.tools.trace.analysis.tt.AbstractExecutionTraceProcessingFilter;
+import kieker.tools.trace.analysis.tt.AbstractTraceProcessingFilter;
 
 /**
  * This class has exactly one input port named "in". The data which is send to
@@ -33,7 +33,7 @@ import kieker.tools.trace.analysis.tt.AbstractExecutionTraceProcessingFilter;
  *
  * @since 1.2
  */
-public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessingFilter<ExecutionTrace> {
+public class ExecutionTraceWriterFilter extends AbstractTraceProcessingFilter<ExecutionTrace> {
 
 	private static final String ENCODING = "UTF-8";
 
