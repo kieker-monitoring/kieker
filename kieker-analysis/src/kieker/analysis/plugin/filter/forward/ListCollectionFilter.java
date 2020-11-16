@@ -42,8 +42,8 @@ import kieker.common.configuration.Configuration;
  */
 @Deprecated
 @Plugin(programmaticOnly = true, description = "A filter collecting incoming objects in a list (mostly used in testing scenarios)",
-		outputPorts = @OutputPort(name = ListCollectionFilter.OUTPUT_PORT_NAME, eventTypes = {
-			Object.class }, description = "Provides each incoming object"),
+		outputPorts = @OutputPort(name = ListCollectionFilter.OUTPUT_PORT_NAME,
+				eventTypes = Object.class, description = "Provides each incoming object"),
 		configuration = {
 			@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES,
 					defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES, description = "Sets the maximum number of stored values."),

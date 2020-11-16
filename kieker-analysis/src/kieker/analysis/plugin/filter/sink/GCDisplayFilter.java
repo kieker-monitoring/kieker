@@ -75,7 +75,7 @@ public class GCDisplayFilter extends AbstractFilterPlugin {
 	 * @param record
 	 *            The record to display and relay.
 	 */
-	@InputPort(name = GCDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { GCRecord.class })
+	@InputPort(name = GCDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = GCRecord.class)
 	public void input(final GCRecord record) {
 		this.updateDisplays(record);
 	}

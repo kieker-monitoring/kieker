@@ -33,9 +33,9 @@ import kieker.common.record.system.CPUUtilizationRecord;
 
 /**
  * This is a filter which accepts {@link CPUUtilizationRecord} instances and provides different views to visualize them.
- * 
+ *
  * @author Bjoern Weissenfels, Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 @Plugin(configuration = {
@@ -85,7 +85,7 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 		this.xyplot = new XYPlot(this.numberOfEntries);
 	}
 
-	@InputPort(name = CPUUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { CPUUtilizationRecord.class })
+	@InputPort(name = CPUUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = CPUUtilizationRecord.class)
 	public void input(final CPUUtilizationRecord record) {
 		this.updateDisplays(record);
 	}

@@ -42,7 +42,9 @@ import kieker.common.util.filesystem.FileExtensionFilter;
  * @author Reiner Jung -- added modern log reading deserializer
  *
  * @since 1.2
+ * @deprecated 1.15 replaced by new teetime log reading facility
  */
+@Deprecated
 class AsciiLogReaderThread extends AbstractLogReaderThread {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AsciiLogReaderThread.class);

@@ -42,8 +42,8 @@ import kieker.common.record.IMonitoringRecord;
  */
 @Deprecated
 @Plugin(description = "A filter to reduce the memory footprint of strings used in records",
-		outputPorts = @OutputPort(name = StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = {
-			Object.class }))
+		outputPorts = @OutputPort(name = StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object",
+				eventTypes = Object.class))
 public final class StringBufferFilter extends AbstractFilterPlugin {
 
 	/** The name of the input port for the incoming events. */
@@ -71,8 +71,8 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 	}
 
 	@SuppressWarnings("unchecked")
-	@InputPort(name = StringBufferFilter.INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be buffered and forwarded", eventTypes = {
-		Object.class })
+	@InputPort(name = StringBufferFilter.INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be buffered and forwarded",
+			eventTypes = Object.class)
 	public final void inputEvent(final Object object) {
 		if (object instanceof String) {
 			super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, this.kiekerHashMap.get((String) object));

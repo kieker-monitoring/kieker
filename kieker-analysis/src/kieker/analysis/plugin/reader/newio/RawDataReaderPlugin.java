@@ -40,8 +40,9 @@ import kieker.common.record.IMonitoringRecord;
  *
  */
 @Plugin(description = "Generic reader plugin for raw data.", outputPorts = {
-	@OutputPort(name = RawDataReaderPlugin.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Output port for the decoded records") }, configuration = {
+	@OutputPort(name = RawDataReaderPlugin.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Output port for the decoded records") },
+		configuration = {
 			@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_DESERIALIZER, defaultValue = "", description = "Class name of the deserializer to use"),
 			@Property(name = RawDataReaderPlugin.CONFIG_PROPERTY_READER, defaultValue = "", description = "Class name of the reader to use") })
 public class RawDataReaderPlugin extends AbstractReaderPlugin implements IRawDataProcessor {

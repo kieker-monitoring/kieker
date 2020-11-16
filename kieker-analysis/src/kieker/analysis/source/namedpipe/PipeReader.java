@@ -40,10 +40,8 @@ public class PipeReader extends AbstractProducerStage<IMonitoringRecord> impleme
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @param projectContext
-	 *            The project context for this component.
+	 * @param pipeName
+	 *            name of the pipe
 	 */
 	public PipeReader(final String pipeName) {
 
@@ -67,6 +65,10 @@ public class PipeReader extends AbstractProducerStage<IMonitoringRecord> impleme
 		// No need to initialize since we receive asynchronously
 		try {
 			this.terminationLatch.await();
+			if (this.pipe != null) {
+				this.pipe.close();
+			}
+			this.workCompleted();
 			this.logger.info("Pipe closed. Will terminate.");
 		} catch (final InterruptedException ex) {
 			this.logger.error("Received InterruptedException", ex);
@@ -94,18 +96,6 @@ public class PipeReader extends AbstractProducerStage<IMonitoringRecord> impleme
 	public void notifyPipeClosed() {
 		// Notify main thread
 		this.terminationLatch.countDown();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void terminateStage() {
-		// will lead to notifyPipeClosed() and the subsequent termination of read()
-		if (this.pipe != null) {
-			this.pipe.close();
-		}
-		super.terminateStage();
 	}
 
 }

@@ -63,7 +63,7 @@ import teetime.framework.OutputPort;
  *
  * @since 1.6
  */
-public class AbstractEventRecordTraceReconstructionFilter extends AbstractStage {
+public abstract class AbstractEventRecordTraceReconstructionFilter extends AbstractStage {
 	/** Output port delivering the valid traces. */
 	private final OutputPort<TraceEventRecords> validTracesOutputPort = this.createOutputPort(TraceEventRecords.class);
 

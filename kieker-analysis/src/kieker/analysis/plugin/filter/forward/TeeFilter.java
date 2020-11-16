@@ -40,8 +40,8 @@ import kieker.common.configuration.Configuration;
  * @since 1.2
  */
 @Plugin(description = "A filter to print the object to a configured stream",
-		outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = {
-			Object.class }),
+		outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object",
+				eventTypes = Object.class),
 		configuration = {
 			@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_STREAM, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT,
 					description = "The name of the stream used to print the incoming data (special values are STDOUT, STDERR, STDlog, and NULL; "
@@ -202,8 +202,8 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	 * @param object
 	 *            The new object.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be logged and forwarded", eventTypes = {
-		Object.class })
+	@InputPort(name = INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be logged and forwarded",
+			eventTypes = Object.class)
 	public final void inputEvent(final Object object) {
 		if (this.active) {
 			final StringBuilder sb = new StringBuilder(128);

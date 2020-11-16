@@ -59,7 +59,7 @@ public class MethodAndComponentFlowDisplayFilter extends AbstractFilterPlugin {
 	 * @param record
 	 *            The record to display and relay.
 	 */
-	@InputPort(name = MethodAndComponentFlowDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { OperationExecutionRecord.class })
+	@InputPort(name = MethodAndComponentFlowDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = OperationExecutionRecord.class)
 	public void input(final OperationExecutionRecord record) {
 		final String shortClassName = ClassOperationSignaturePair.splitOperationSignatureStr(record.getOperationSignature()).getSimpleClassname();
 		final String methodName = shortClassName + '.' + this.extractMethodName(record.getOperationSignature());

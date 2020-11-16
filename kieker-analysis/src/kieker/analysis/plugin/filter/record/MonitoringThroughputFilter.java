@@ -36,12 +36,13 @@ import kieker.common.record.IMonitoringRecord;
  * @since 1.8
  */
 @Plugin(description = "A filter computing the throughput of the monitoring", outputPorts = {
-	@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_RELAYED_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Provides each incoming record"),
-	@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_UNCOUNTED_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Provides each not counted record"),
-	@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT, eventTypes = {
-		Long.class }, description = "Provides throughput within last interval") }, configuration = {
+	@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_RELAYED_RECORDS,
+			eventTypes = IMonitoringRecord.class, description = "Provides each incoming record"),
+	@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_UNCOUNTED_RECORDS,
+			eventTypes = IMonitoringRecord.class, description = "Provides each not counted record"),
+	@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT,
+			eventTypes = Long.class, description = "Provides throughput within last interval") },
+		configuration = {
 			@Property(name = MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = MonitoringThroughputFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
 			@Property(name = MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE,
 					defaultValue = MonitoringThroughputFilter.CONFIG_PROPERTY_VALUE_INTERVAL_SIZE_ONE_SECOND) })
@@ -100,8 +101,8 @@ public class MonitoringThroughputFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
-	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Receives incoming records to calculate the throughput")
+	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Receives incoming records to calculate the throughput")
 	public final void inputRecord(final IMonitoringRecord record) {
 		// we assume a more or less linear order of incoming records
 		final long timestamp = record.getLoggingTimestamp();

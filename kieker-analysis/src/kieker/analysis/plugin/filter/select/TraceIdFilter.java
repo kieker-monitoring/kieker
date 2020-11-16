@@ -45,8 +45,8 @@ import kieker.common.record.flow.trace.TraceMetadata;
  */
 @Plugin(description = "A filter allowing to filter incoming objects based on their trace ID",
 		outputPorts = {
-			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards events with matching trace IDs", eventTypes = {
-				AbstractTraceEvent.class, TraceMetadata.class, OperationExecutionRecord.class }),
+			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards events with matching trace IDs",
+					eventTypes = { AbstractTraceEvent.class, TraceMetadata.class, OperationExecutionRecord.class }),
 			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, description = "Forwards events with trace IDs not matching", eventTypes = {
 				AbstractTraceEvent.class, TraceMetadata.class, OperationExecutionRecord.class })
 		},
@@ -157,7 +157,7 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 	 *            The next record.
 	 */
 	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives execution events to be selected by trace ID",
-			eventTypes = { OperationExecutionRecord.class })
+			eventTypes = OperationExecutionRecord.class)
 	public void inputOperationExecutionRecord(final OperationExecutionRecord record) {
 		if (this.acceptId(record.getTraceId())) {
 			super.deliver(OUTPUT_PORT_NAME_MATCH, record);

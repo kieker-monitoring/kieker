@@ -77,7 +77,7 @@ public class ThreadsStatusDisplayFilter extends AbstractFilterPlugin {
 	 * @param record
 	 *            The record to display and relay.
 	 */
-	@InputPort(name = ThreadsStatusDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { ThreadsStatusRecord.class })
+	@InputPort(name = ThreadsStatusDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = ThreadsStatusRecord.class)
 	public void input(final ThreadsStatusRecord record) {
 		this.updateDisplays(record);
 	}

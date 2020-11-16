@@ -32,9 +32,9 @@ import kieker.common.record.system.MemSwapUsageRecord;
 
 /**
  * This is a filter which accepts {@link MemSwapUsageRecord} instances and provides different views to visualize them.
- * 
+ *
  * @author Bjoern Weissenfels, Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 @Plugin(configuration = @Property(
@@ -66,7 +66,7 @@ public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this filter.
 	 * @param projectContext
@@ -86,11 +86,11 @@ public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	/**
 	 * This method represents the input port receiving the incoming events.
-	 * 
+	 *
 	 * @param record
 	 *            The record to display and relay.
 	 */
-	@InputPort(name = MemSwapUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { MemSwapUsageRecord.class })
+	@InputPort(name = MemSwapUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = MemSwapUsageRecord.class)
 	public void input(final MemSwapUsageRecord record) {
 		this.updateDisplays(record);
 	}

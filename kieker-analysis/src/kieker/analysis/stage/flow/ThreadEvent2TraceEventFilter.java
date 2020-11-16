@@ -131,6 +131,13 @@ public class ThreadEvent2TraceEventFilter extends AbstractConsumerStage<IMonitor
 		return monitoredTrace;
 	}
 
+	/**
+	 * @return Monitoring records port.
+	 */
+	public OutputPort<IMonitoringRecord> getOutputPort() {
+		return this.outputPort;
+	}
+
 	private static class MonitoredTrace {
 		public final int identifier; // NOCS (private field)
 		public int currentStackSize; // NOCS (private field)
@@ -138,12 +145,5 @@ public class ThreadEvent2TraceEventFilter extends AbstractConsumerStage<IMonitor
 		public MonitoredTrace(final int identifier) {
 			this.identifier = identifier;
 		}
-	}
-
-	/**
-	 * @return Monitoring records port.
-	 */
-	public OutputPort<IMonitoringRecord> getOutputPort() {
-		return this.outputPort;
 	}
 }

@@ -34,7 +34,8 @@ import kieker.monitoring.core.controller.tcp.SingleSocketRecordReader;
  * @since 1.13
  */
 @Plugin(description = "A reader which reads records from a TCP port", outputPorts = {
-	@OutputPort(name = SingleSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the TCPReader")
+	@OutputPort(name = SingleSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Output Port of the TCPReader")
 }, configuration = {
 	@Property(name = SingleSocketTcpReader.CONFIG_PROPERTY_NAME_PORT, defaultValue = "10133",
 			description = "The first port of the server used for the TCP connection.")

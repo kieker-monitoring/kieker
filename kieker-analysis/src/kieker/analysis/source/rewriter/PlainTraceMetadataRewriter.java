@@ -57,7 +57,6 @@ public class PlainTraceMetadataRewriter implements ITraceMetadataRewriter {
 	 * TraceMetadata record.
 	 *
 	 * @param record
-	 * @return
 	 * @throws IOException
 	 */
 	@Override

@@ -65,10 +65,10 @@ public class TraceAggregationFilter extends AbstractStage {
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @param projectContext
-	 *            The project context for this component.
+	 * @param timeunit
+	 *            timeunit used in traces
+	 * @param maxCollectionDuration
+	 *            max duration of a trace
 	 */
 	public TraceAggregationFilter(final TimeUnit timeunit, final long maxCollectionDuration) {
 		super();

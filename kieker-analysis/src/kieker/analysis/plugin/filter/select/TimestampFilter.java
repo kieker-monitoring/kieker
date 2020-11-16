@@ -172,8 +172,9 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	 * @param record
 	 *            The new incoming record.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by a specific timestamp selector", eventTypes = {
-		IEventRecord.class, TraceMetadata.class })
+	@InputPort(name = INPUT_PORT_NAME_FLOW,
+			description = "Receives trace events to be selected by a specific timestamp selector",
+			eventTypes = { IEventRecord.class, TraceMetadata.class })
 	public final void inputTraceEvent(final IFlowRecord record) {
 		final long timestamp;
 
@@ -200,9 +201,9 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	 * @param execution
 	 *            The new incoming execution object.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives trace events to be selected by a specific timestamp selector (based on tin and tout)",
-			eventTypes = {
-				OperationExecutionRecord.class })
+	@InputPort(name = INPUT_PORT_NAME_EXECUTION,
+			description = "Receives trace events to be selected by a specific timestamp selector (based on tin and tout)",
+			eventTypes = OperationExecutionRecord.class)
 	public final void inputOperationExecutionRecord(final OperationExecutionRecord execution) {
 		if (this.inRange(execution.getTin()) && this.inRange(execution.getTout())) {
 			super.deliver(OUTPUT_PORT_NAME_WITHIN_PERIOD, execution);

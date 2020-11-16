@@ -14,25 +14,11 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.trace.traversal;
-
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
-
 /**
- * @author Sören Henning
+ * Containing all record/event source stages of Kieker based on TeeTime.
  *
- * @since 1.14
+ * @author Reiner Jung
+ *
+ * @since 1.15
  */
-public interface IOperationCallVisitor {
-
-	// BETTER Make this generic for aggregated traces
-
-	/**
-	 *
-	 * @param operationCall
-	 *            operation call
-	 * @since 1.14
-	 */
-	public void visit(OperationCall operationCall);
-
-}
+package kieker.analysis.source.namedpipe;

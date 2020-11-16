@@ -41,7 +41,7 @@ import kieker.common.util.classpath.InstantiationFactory;
  * @since 1.5
  */
 @Plugin(description = "A reader which reads records from a database", outputPorts = {
-	@OutputPort(name = DbReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the DBReader")
+	@OutputPort(name = DbReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class, description = "Output Port of the DBReader")
 }, configuration = {
 	@Property(name = DbReader.CONFIG_PROPERTY_NAME_DRIVERCLASSNAME, defaultValue = "org.apache.derby.jdbc.EmbeddedDriver",
 			description = "The classname of the driver used for the connection."),

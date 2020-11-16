@@ -14,25 +14,13 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.trace.traversal;
-
-import kieker.analysisteetime.model.analysismodel.trace.OperationCall;
-
 /**
- * @author Sören Henning
+ * This package contains all processing filters bundled with kieker.
  *
- * @since 1.14
+ * Note: currently most filters are kept in kieker.analysisteetime as they are classified as experimental.
+ *
+ * @author Reiner Jung
+ * @since 1.15
+ *
  */
-public interface IOperationCallVisitor {
-
-	// BETTER Make this generic for aggregated traces
-
-	/**
-	 *
-	 * @param operationCall
-	 *            operation call
-	 * @since 1.14
-	 */
-	public void visit(OperationCall operationCall);
-
-}
+package kieker.analysis.trace.graph;

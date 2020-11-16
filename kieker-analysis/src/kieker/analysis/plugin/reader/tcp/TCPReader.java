@@ -49,7 +49,7 @@ import kieker.common.registry.reader.ReaderRegistry;
  * @since 1.8
  */
 @Plugin(description = "A reader which reads records from a TCP port", outputPorts = {
-	@OutputPort(name = TCPReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the TCPReader")
+	@OutputPort(name = TCPReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class, description = "Output Port of the TCPReader")
 }, configuration = {
 	@Property(name = TCPReader.CONFIG_PROPERTY_NAME_PORT1, defaultValue = "10133", description = "The first port of the server used for the TCP connection."),
 	@Property(name = TCPReader.CONFIG_PROPERTY_NAME_PORT2, defaultValue = "10134", description = "The second port of the server used for the TCP connection.")

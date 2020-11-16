@@ -54,7 +54,7 @@ import kieker.common.record.IMonitoringRecord;
  */
 @Plugin(description = "A reader which reads records from a (remove or local) JMS queue", dependencies = "This plugin needs the file 'javax.jms-*.jar'.",
 		outputPorts = {
-			@OutputPort(name = JmsReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the JmsReader")
+			@OutputPort(name = JmsReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class, description = "Output Port of the JmsReader")
 		},
 		configuration = {
 			@Property(name = JmsReader.CONFIG_PROPERTY_NAME_PROVIDERURL, defaultValue = "tcp://127.0.0.1:61616/"),

@@ -37,10 +37,12 @@ import kieker.monitoring.core.controller.tcp.AbstractTcpReader;
  * @author Jan Waller, Christian Wulf
  *
  * @since 1.13
+ * @deprecated 1.15 will no longer support dual socket in future
  */
+@Deprecated
 @Plugin(description = "A reader which reads records from a TCP port", outputPorts = {
-	@OutputPort(name = DualSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Output Port of the DualSocketTcpReader")
+	@OutputPort(name = DualSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Output Port of the DualSocketTcpReader")
 }, configuration = {
 	@Property(name = DualSocketTcpReader.CONFIG_PROPERTY_NAME_PORT1, defaultValue = "10133",
 			description = "The first port of the server used for the TCP connection."),
