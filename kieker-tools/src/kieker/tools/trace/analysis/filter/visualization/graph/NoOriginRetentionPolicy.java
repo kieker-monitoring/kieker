@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.graph;
 
 /**
  * The no-origin-retention policy represents the intention that no origins should be retained at all
  * and corresponds to the kind {@link kieker.tools.trace.analysis.filter.visualization.graph.OriginRetentionPolicyKind#NONE}.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public final class NoOriginRetentionPolicy extends AbstractOriginRetentionPolicy {
@@ -50,7 +49,7 @@ public final class NoOriginRetentionPolicy extends AbstractOriginRetentionPolicy
 
 	/**
 	 * Factory method for the no-origin-retention policy.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public static NoOriginRetentionPolicy createInstance() {

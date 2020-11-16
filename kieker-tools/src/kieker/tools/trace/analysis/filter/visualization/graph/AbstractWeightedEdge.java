@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.graph;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,16 +20,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Abstract superclass for weighted edges in the visualization package. This class provides weights for the
  * edge itself and both source and target ends.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @param <V>
  *            The type of the graph's vertices
  * @param <E>
  *            The type of the graph's edges
  * @param <O>
  *            The type of object from which the graph's elements originate
- * 
+ *
  * @since 1.6
  */
 public abstract class AbstractWeightedEdge<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends AbstractEdge<V, E, O> {
@@ -41,7 +40,7 @@ public abstract class AbstractWeightedEdge<V extends AbstractVertex<V, E, O>, E 
 
 	/**
 	 * Creates a new weighted edge between the given vertices.
-	 * 
+	 *
 	 * @param source
 	 *            The source vertex of the edge
 	 * @param target
@@ -57,7 +56,7 @@ public abstract class AbstractWeightedEdge<V extends AbstractVertex<V, E, O>, E 
 
 	/**
 	 * Return this edge's source weight.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public AtomicInteger getSourceWeight() {
@@ -66,7 +65,7 @@ public abstract class AbstractWeightedEdge<V extends AbstractVertex<V, E, O>, E 
 
 	/**
 	 * Return this edge's target weight.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public AtomicInteger getTargetWeight() {
@@ -75,7 +74,7 @@ public abstract class AbstractWeightedEdge<V extends AbstractVertex<V, E, O>, E 
 
 	/**
 	 * Returns this edge's weight.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public AtomicInteger getWeight() {
