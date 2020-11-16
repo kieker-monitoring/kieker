@@ -52,7 +52,9 @@ import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
  * @author Holger Knoche
  *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(name = "Graph writer plugin", description = "Generic plugin for writing graphs to files", configuration = {
 	@Property(name = GraphWriterPlugin.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, defaultValue = "true"),
 	@Property(name = GraphWriterPlugin.CONFIG_PROPERTY_NAME_SHORTLABELS, defaultValue = "true"),

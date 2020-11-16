@@ -49,7 +49,9 @@ import kieker.tools.trace.analysis.filter.visualization.graph.IOriginRetentionPo
  * @author Holger Knoche
  *
  * @since 1.6
+ * @deprecated 1.15 moved to teetime
  */
+@Deprecated
 @Plugin
 public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends
 		AbstractFilterPlugin implements IGraphOutputtingFilter<G> {
