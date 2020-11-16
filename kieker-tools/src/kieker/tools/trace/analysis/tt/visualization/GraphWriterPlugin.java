@@ -25,18 +25,18 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.tools.trace.analysis.filter.visualization.AbstractGraphFormatter;
-import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraph;
-import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraphFormatter;
-import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.ComponentAssemblyDependencyGraph;
-import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.ComponentAssemblyDependencyGraphFormatter;
-import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.ContainerDependencyGraph;
-import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.ContainerDependencyGraphFormatter;
-import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.OperationAllocationDependencyGraph;
-import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.OperationAllocationDependencyGraphFormatter;
-import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.OperationAssemblyDependencyGraph;
-import kieker.tools.trace.analysis.filter.visualization.dependencyGraph.OperationAssemblyDependencyGraphFormatter;
 import kieker.tools.trace.analysis.filter.visualization.exception.GraphFormattingException;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
+import kieker.tools.trace.analysis.tt.visualization.dependency.graph.ComponentAllocationDependencyGraph;
+import kieker.tools.trace.analysis.tt.visualization.dependency.graph.ComponentAllocationDependencyGraphFormatter;
+import kieker.tools.trace.analysis.tt.visualization.dependency.graph.ComponentAssemblyDependencyGraph;
+import kieker.tools.trace.analysis.tt.visualization.dependency.graph.ComponentAssemblyDependencyGraphFormatter;
+import kieker.tools.trace.analysis.tt.visualization.dependency.graph.ContainerDependencyGraph;
+import kieker.tools.trace.analysis.tt.visualization.dependency.graph.ContainerDependencyGraphFormatter;
+import kieker.tools.trace.analysis.tt.visualization.dependency.graph.OperationAllocationDependencyGraph;
+import kieker.tools.trace.analysis.tt.visualization.dependency.graph.OperationAllocationDependencyGraphFormatter;
+import kieker.tools.trace.analysis.tt.visualization.dependency.graph.OperationAssemblyDependencyGraph;
+import kieker.tools.trace.analysis.tt.visualization.dependency.graph.OperationAssemblyDependencyGraphFormatter;
 
 import teetime.framework.AbstractConsumerStage;
 

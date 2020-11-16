@@ -23,14 +23,16 @@ import kieker.tools.trace.analysis.systemModel.TraceInformation;
 
 /**
  * This class represents a weighted but bidirected edge within a dependency graph.
- * 
+ *
  * @param <T>
  *            The type of the entity stored in the nodes linked by this edge.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public class WeightedBidirectionalDependencyGraphEdge<T extends ISystemModelElement> extends
 		AbstractWeightedEdge<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, TraceInformation> {
 
@@ -38,7 +40,7 @@ public class WeightedBidirectionalDependencyGraphEdge<T extends ISystemModelElem
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param source
 	 *            The source of this edge.
 	 * @param target

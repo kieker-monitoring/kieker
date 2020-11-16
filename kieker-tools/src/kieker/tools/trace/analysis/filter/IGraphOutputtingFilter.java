@@ -20,14 +20,16 @@ import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
 
 /**
  * Interface for graph-outputting filters.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @param <G>
  *            The type of the output graph
- * 
+ *
  * @since 1.6
+ * @deprecated 1.15 has no ressemblence in the teetime port
  */
+@Deprecated
 public interface IGraphOutputtingFilter<G extends AbstractGraph<?, ?, ?>> {
 
 	/**
@@ -37,9 +39,9 @@ public interface IGraphOutputtingFilter<G extends AbstractGraph<?, ?, ?>> {
 
 	/**
 	 * Returns the name of the port this filter uses to emit the graph.
-	 * 
+	 *
 	 * @return See above
-	 * 
+	 *
 	 * @since 1.6
 	 */
 	public String getGraphOutputPortName();

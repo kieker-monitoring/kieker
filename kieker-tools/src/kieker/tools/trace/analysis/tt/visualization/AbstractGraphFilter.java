@@ -15,13 +15,7 @@
  ***************************************************************************/
 package kieker.tools.trace.analysis.tt.visualization;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.plugin.AbstractPlugin;
-import kieker.tools.trace.analysis.filter.IGraphProducingFilter;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractEdge;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractVertex;
@@ -51,42 +45,11 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 
 	private final OutputPort<G> outputPort = this.createOutputPort();
 
-	private final List<IGraphProducingFilter<?>> producers = new ArrayList<>();
-
 	/**
 	 * Creates a new filter with the given configuration.
 	 */
 	public AbstractGraphFilter() {
 
-	}
-
-	protected void notifyNewIncomingConnection(final String inputPortName, final AbstractPlugin connectedPlugin, final String outputPortName)
-			throws AnalysisConfigurationException {
-		final Set<AbstractPlugin> predecessors = connectedPlugin.getIncomingPlugins(true);
-		predecessors.add(connectedPlugin);
-
-		for (final AbstractPlugin plugin : predecessors) {
-			if (!(plugin instanceof IGraphProducingFilter)) {
-				continue;
-			}
-
-			final IGraphProducingFilter<?> graphProducer = (IGraphProducingFilter<?>) plugin;
-			this.producers.add(graphProducer);
-		}
-	}
-
-	public boolean init() {
-		// Request the desired origin retention policy from the known producers
-		try {
-			for (final IGraphProducingFilter<?> producer : this.producers) {
-				producer.requestOriginRetentionPolicy(this.getDesiredOriginRetentionPolicy());
-			}
-		} catch (final AnalysisConfigurationException e) {
-			this.logger.error(e.getMessage(), e);
-			return false;
-		}
-
-		return true;
 	}
 
 	protected abstract IOriginRetentionPolicy getDesiredOriginRetentionPolicy() throws AnalysisConfigurationException;
@@ -101,6 +64,10 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 	protected void execute(final G graph) throws Exception {
 		final G processedGraph = this.performConcreteGraphProcessing(graph);
 		this.outputPort.send(processedGraph);
+	}
+
+	public OutputPort<G> getOutputPort() {
+		return this.outputPort;
 	}
 
 	/**

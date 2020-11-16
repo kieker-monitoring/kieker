@@ -17,7 +17,6 @@ package kieker.tools.trace.analysis.tt;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.model.repository.SystemModelRepository;
-import kieker.tools.trace.analysis.filter.IGraphProducingFilter;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraphElement;
 import kieker.tools.trace.analysis.filter.visualization.graph.IOriginRetentionPolicy;
@@ -56,13 +55,6 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 		super(repository);
 		this.graph = graph;
 	}
-
-	/**
-	 * Returns this filter's configuration name.
-	 *
-	 * @return See above
-	 */
-	public abstract String getConfigurationName();
 
 	// @Override
 	// public void onTerminating() {

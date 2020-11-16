@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import java.util.ArrayList;
@@ -31,22 +30,24 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool.
- * 
+ *
  * @param <T>
  *            subtype of a ISystemModelElement
- * 
+ *
  * @author Andre van Hoorn, Lena Stoever, Matthias Rohr,
- * 
+ *
  * @since 1.1
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElement> extends AbstractGraphProducingFilter<AbstractDependencyGraph<T>> {
 
-	private final List<AbstractNodeDecorator> decorators = new ArrayList<AbstractNodeDecorator>();
+	private final List<AbstractNodeDecorator> decorators = new ArrayList<>();
 
 	/**
 	 * Creates a new abstract dependency graph filter using the given data.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use for this filter.
 	 * @param projectContext
@@ -60,7 +61,7 @@ public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElemen
 
 	/**
 	 * Adds a node decorator to this graph.
-	 * 
+	 *
 	 * @param decorator
 	 *            The decorator to add
 	 */
@@ -70,7 +71,7 @@ public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElemen
 
 	/**
 	 * This is a helper method to invoke all decorators and send them a message.
-	 * 
+	 *
 	 * @param message
 	 *            The message to send the decorators.
 	 * @param sourceNode
@@ -86,12 +87,12 @@ public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElemen
 
 	/**
 	 * Determines whether the given edge is assumed or not.
-	 * 
+	 *
 	 * @param source
 	 *            The source of the edge.
 	 * @param target
 	 *            The target of the edge.
-	 * 
+	 *
 	 * @return true iff the edge is assumed (which means in fact that either the source or the target or both are assumed).
 	 */
 	protected boolean isDependencyAssumed(final DependencyGraphNode<?> source, final DependencyGraphNode<?> target) {

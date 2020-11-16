@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import java.util.ArrayList;
@@ -31,31 +30,33 @@ import kieker.tools.trace.analysis.systemModel.repository.AbstractSystemSubRepos
 
 /**
  * This class represents a single node within a dependency graph.
- * 
+ *
  * @param <T>
  *            The type of the entity to be stored in this node.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public class DependencyGraphNode<T extends ISystemModelElement> extends
 		AbstractPayloadedVertex<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, TraceInformation, T> {
 
 	public static final int ROOT_NODE_ID = AbstractSystemSubRepository.ROOT_ELEMENT_ID;
 
 	private final int id;
-	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> incomingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
-	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> outgoingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> incomingDependencies = new ConcurrentHashMap<>(); // NOPMD(UseConcurrentHashMap)//NOCS
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> outgoingDependencies = new ConcurrentHashMap<>(); // NOPMD(UseConcurrentHashMap)//NOCS
 
-	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedIncomingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
-	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedOutgoingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedIncomingDependencies = new ConcurrentHashMap<>(); // NOPMD(UseConcurrentHashMap)//NOCS
+	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> assumedOutgoingDependencies = new ConcurrentHashMap<>(); // NOPMD(UseConcurrentHashMap)//NOCS
 
 	private volatile boolean assumed; // false
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param id
 	 *            The ID of this node.
 	 * @param entity
@@ -108,7 +109,7 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 
 	/**
 	 * Adds an outgoing dependency to this node. The dependency will be marked as not assumed.
-	 * 
+	 *
 	 * @param destination
 	 *            The destination of the dependency.
 	 * @param origin
@@ -122,7 +123,7 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 
 	/**
 	 * Adds an outgoing dependency to this node.
-	 * 
+	 *
 	 * @param destination
 	 *            The destination of the dependency.
 	 * @param isAssumed
@@ -140,7 +141,7 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(destination.getId());
 			if (e == null) {
-				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, destination, origin, originPolicy);
+				e = new WeightedBidirectionalDependencyGraphEdge<>(this, destination, origin, originPolicy);
 
 				if (isAssumed) {
 					e.setAssumed();
@@ -156,7 +157,7 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 
 	/**
 	 * Adds an incoming dependency to this node. The dependency will be marked as not assumed.
-	 * 
+	 *
 	 * @param source
 	 *            The source of the dependency.
 	 * @param origin
@@ -170,7 +171,7 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 
 	/**
 	 * Adds an incoming dependency to this node.
-	 * 
+	 *
 	 * @param source
 	 *            The source of the dependency.
 	 * @param isAssumed
@@ -188,7 +189,7 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 
 			WeightedBidirectionalDependencyGraphEdge<T> e = relevantDependencies.get(source.getId());
 			if (e == null) {
-				e = new WeightedBidirectionalDependencyGraphEdge<T>(this, source, origin, originPolicy);
+				e = new WeightedBidirectionalDependencyGraphEdge<>(this, source, origin, originPolicy);
 				relevantDependencies.put(source.getId(), e);
 			} else {
 				originPolicy.handleOrigin(e, origin);
@@ -226,7 +227,7 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 
 	@Override
 	public Collection<WeightedBidirectionalDependencyGraphEdge<T>> getOutgoingEdges() {
-		final Collection<WeightedBidirectionalDependencyGraphEdge<T>> edges = new ArrayList<WeightedBidirectionalDependencyGraphEdge<T>>();
+		final Collection<WeightedBidirectionalDependencyGraphEdge<T>> edges = new ArrayList<>();
 
 		edges.addAll(this.getOutgoingDependencies());
 		edges.addAll(this.getAssumedOutgoingDependencies());
