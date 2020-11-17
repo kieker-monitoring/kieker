@@ -33,6 +33,10 @@ import kieker.tools.trace.analysis.systemModel.Operation;
 @Deprecated
 public abstract class AbstractOperationDependencyGraphFormatter<T extends AbstractDependencyGraph<?>> extends AbstractDependencyGraphFormatter<T> {
 
+	public AbstractOperationDependencyGraphFormatter() {
+		// default constructor
+	}
+
 	private String createOperationSignature(final Operation operation) {
 		final StringBuilder builder = new StringBuilder();
 		final Signature signature = operation.getSignature();

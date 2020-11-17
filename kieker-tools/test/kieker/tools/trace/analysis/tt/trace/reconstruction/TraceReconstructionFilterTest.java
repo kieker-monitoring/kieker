@@ -44,35 +44,35 @@ import teetime.framework.test.StageTester;
  *
  * @since 1.2
  */
-public class TestTraceReconstructionFilter extends AbstractKiekerTest {
+public class TraceReconstructionFilterTest extends AbstractKiekerTest {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(TestTraceReconstructionFilter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TraceReconstructionFilterTest.class);
 	private static final long TRACE_ID = 62298L;
 	private static final String SESSION_ID = "Y2zm6CRc";
 
 	// Executions of a valid trace
-	private final Execution exec0_0__bookstore_searchBook; // NOCS
-	private final Execution exec1_1__catalog_getBook; // NOCS
-	private final Execution exec2_1__crm_getOrders; // NOCS
-	private final Execution exec3_2__catalog_getBook; // NOCS
+	private final Execution exec0_0__bookstore_searchBook; // NOCS NOPMD
+	private final Execution exec1_1__catalog_getBook; // NOCS NOPMD
+	private final Execution exec2_1__crm_getOrders; // NOCS NOPMD
+	private final Execution exec3_2__catalog_getBook; // NOCS NOPMD
 
 	/**
 	 * Creates a new instance of this class.
 	 */
-	public TestTraceReconstructionFilter() {
+	public TraceReconstructionFilterTest() {
 		final SystemModelRepository systemEntityFactory = new SystemModelRepository();
 		final ExecutionFactory executionFactory = new ExecutionFactory(systemEntityFactory);
 
 		// Manually create Executions for a trace
-		this.exec0_0__bookstore_searchBook = executionFactory.genExecution("Bookstore", "bookstore", "searchBook", TestTraceReconstructionFilter.TRACE_ID,
-				TestTraceReconstructionFilter.SESSION_ID, 1 * (1000 * 1000), 10 * (1000 * 1000), 0, 0);
+		this.exec0_0__bookstore_searchBook = executionFactory.genExecution("Bookstore", "bookstore", "searchBook", TraceReconstructionFilterTest.TRACE_ID,
+				TraceReconstructionFilterTest.SESSION_ID, 1 * (1000 * 1000), 10 * (1000 * 1000), 0, 0);
 
-		this.exec1_1__catalog_getBook = executionFactory.genExecution("Catalog", "catalog", "getBook", TestTraceReconstructionFilter.TRACE_ID,
-				TestTraceReconstructionFilter.SESSION_ID, 2 * (1000 * 1000), 4 * (1000 * 1000), 1, 1);
-		this.exec2_1__crm_getOrders = executionFactory.genExecution("CRM", "crm", "getOrders", TestTraceReconstructionFilter.TRACE_ID,
-				TestTraceReconstructionFilter.SESSION_ID, 5 * (1000 * 1000), 8 * (1000 * 1000), 2, 1);
-		this.exec3_2__catalog_getBook = executionFactory.genExecution("Catalog", "catalog", "getBook", TestTraceReconstructionFilter.TRACE_ID,
-				TestTraceReconstructionFilter.SESSION_ID, 6 * (1000 * 1000), 7 * (1000 * 1000), 3, 2);
+		this.exec1_1__catalog_getBook = executionFactory.genExecution("Catalog", "catalog", "getBook", TraceReconstructionFilterTest.TRACE_ID,
+				TraceReconstructionFilterTest.SESSION_ID, 2 * (1000 * 1000), 4 * (1000 * 1000), 1, 1);
+		this.exec2_1__crm_getOrders = executionFactory.genExecution("CRM", "crm", "getOrders", TraceReconstructionFilterTest.TRACE_ID,
+				TraceReconstructionFilterTest.SESSION_ID, 5 * (1000 * 1000), 8 * (1000 * 1000), 2, 1);
+		this.exec3_2__catalog_getBook = executionFactory.genExecution("Catalog", "catalog", "getBook", TraceReconstructionFilterTest.TRACE_ID,
+				TraceReconstructionFilterTest.SESSION_ID, 6 * (1000 * 1000), 7 * (1000 * 1000), 3, 2);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	 */
 	private ExecutionTrace genValidBookstoreTrace() throws InvalidTraceException {
 		// Create an Execution Trace and add Executions in arbitrary order
-		final ExecutionTrace executionTrace = new ExecutionTrace(TestTraceReconstructionFilter.TRACE_ID, TestTraceReconstructionFilter.SESSION_ID);
+		final ExecutionTrace executionTrace = new ExecutionTrace(TraceReconstructionFilterTest.TRACE_ID, TraceReconstructionFilterTest.SESSION_ID);
 
 		executionTrace.add(this.exec3_2__catalog_getBook);
 		executionTrace.add(this.exec2_1__crm_getOrders);
@@ -143,9 +143,9 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	 */
 	private ExecutionTrace genBrokenBookstoreTraceEssSkip(final ExecutionFactory executionFactory) throws InvalidTraceException {
 		// Create an Execution Trace and add Executions in arbitrary order
-		final ExecutionTrace executionTrace = new ExecutionTrace(TestTraceReconstructionFilter.TRACE_ID, TestTraceReconstructionFilter.SESSION_ID);
-		final Execution exec1_1__catalog_getBook__broken = executionFactory.genExecution("Catalog", "catalog", "getBook", // NOCS
-				TestTraceReconstructionFilter.TRACE_ID, TestTraceReconstructionFilter.SESSION_ID, 2 * (1000 * 1000), 4 * (1000 * 1000), 1, 3); // NOCS
+		final ExecutionTrace executionTrace = new ExecutionTrace(TraceReconstructionFilterTest.TRACE_ID, TraceReconstructionFilterTest.SESSION_ID);
+		final Execution exec1_1__catalog_getBook__broken = executionFactory.genExecution("Catalog", "catalog", "getBook", // NOCS NOPMD
+				TraceReconstructionFilterTest.TRACE_ID, TraceReconstructionFilterTest.SESSION_ID, 2 * (1000 * 1000), 4 * (1000 * 1000), 1, 3); // NOCS
 
 		// (MagicNumberCheck)
 		Assert.assertFalse("Invalid test", exec1_1__catalog_getBook__broken.equals(this.exec1_1__catalog_getBook));
@@ -180,7 +180,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", invalidExecutionTrace.getDuration() <= filter
 				.getMaxTraceDuration());
 
-		TestTraceReconstructionFilter.LOGGER.info("This test triggers a FATAL warning about an ess skip <0,3> which can simply be ignored because it is desired");
+		TraceReconstructionFilterTest.LOGGER.info("This test triggers a FATAL warning about an ess skip <0,3> which can simply be ignored because it is desired");
 
 		final Execution[] events = invalidExecutionTrace.getTraceAsSortedExecutionSet()
 				.toArray(new Execution[invalidExecutionTrace.getTraceAsSortedExecutionSet().size()]);

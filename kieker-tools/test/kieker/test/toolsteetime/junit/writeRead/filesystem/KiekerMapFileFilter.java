@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.test.toolsteetime.junit.writeRead.filesystem;
 
 import java.io.File;
@@ -23,9 +22,9 @@ import kieker.common.util.filesystem.FSUtil;
 
 /**
  * This filter accepts only kieker.map files. All other files are declined.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 class KiekerMapFileFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
@@ -39,12 +38,12 @@ class KiekerMapFileFilter implements FilenameFilter { // NOPMD (TestClassWithout
 
 	/**
 	 * Accepts the {@value #MAP_FILENAME} file in a monitoring log directory.
-	 * 
+	 *
 	 * @param dir
 	 *            The directory of the file to be checked - it is currently not really used.
 	 * @param name
 	 *            the name of the file to be checked.
-	 * 
+	 *
 	 * @return true if and only if the given file name is equals to the name of a kieker.map file.
 	 */
 	@Override

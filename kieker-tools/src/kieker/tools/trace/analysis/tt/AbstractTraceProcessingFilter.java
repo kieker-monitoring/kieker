@@ -23,6 +23,9 @@ import kieker.model.repository.SystemModelRepository;
  * @author Andre van Hoorn
  * @author Reiner Jung -- ported to TeeTime
  *
+ * @param <T>
+ *            an AbstractTrace type
+ *
  * @since 1.1
  */
 public abstract class AbstractTraceProcessingFilter<T> extends AbstractTraceAnalysisFilter<T> {

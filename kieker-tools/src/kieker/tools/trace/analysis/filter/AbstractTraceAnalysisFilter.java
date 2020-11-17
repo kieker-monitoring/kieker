@@ -78,7 +78,7 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 			final int ess, final long tin, final long tout, final boolean assumed) {
 		final String allocationComponentName = new StringBuilder(executionContainerName).append("::")
 				.append(assemblyComponentTypeName).toString();
-		final String operationFactoryName = new StringBuilder(componentTypeName).append(".").append(operationSignature)
+		final String operationFactoryName = new StringBuilder(componentTypeName).append('.').append(operationSignature)
 				.toString();
 
 		AllocationComponent allocInst = systemModelRepository.getAllocationFactory()

@@ -424,25 +424,21 @@ public class FakeObjectMessage implements ObjectMessage {
 
 	@Override
 	public long getJMSDeliveryTime() throws JMSException {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void setJMSDeliveryTime(final long deliveryTime) throws JMSException {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public <T> T getBody(final Class<T> c) throws JMSException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean isBodyAssignableTo(final Class c) throws JMSException {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

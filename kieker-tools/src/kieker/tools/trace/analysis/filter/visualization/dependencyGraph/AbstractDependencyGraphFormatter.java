@@ -47,6 +47,10 @@ public abstract class AbstractDependencyGraphFormatter<G extends AbstractDepende
 	private static final String CONTAINER_NODE_ID_PREFIX = "container";
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 
+	public AbstractDependencyGraphFormatter() {
+		// default constructor
+	}
+
 	@Override
 	protected String formatGraph(final G graph, final boolean includeWeights, final boolean useShortLabels, final boolean plotLoops) {
 		return this.formatDependencyGraph(graph, includeWeights, useShortLabels, plotLoops);

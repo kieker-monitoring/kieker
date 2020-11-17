@@ -31,7 +31,7 @@ import teetime.framework.AbstractConsumerStage;
  * @author Reiner Jung -- ported to teetime
  *
  * @param <T>
- *            TODO
+ *            flow or operation execution types
  *
  * @since 1.15
  */
@@ -49,7 +49,7 @@ public abstract class AbstractTraceAnalysisFilter<T> extends AbstractConsumerSta
 			final int ess, final long tin, final long tout, final boolean assumed) {
 		final String allocationComponentName = new StringBuilder(executionContainerName).append("::")
 				.append(assemblyComponentTypeName).toString();
-		final String operationFactoryName = new StringBuilder(componentTypeName).append(".").append(operationSignature)
+		final String operationFactoryName = new StringBuilder(componentTypeName).append('.').append(operationSignature)
 				.toString();
 
 		AllocationComponent allocInst = systemModelRepository.getAllocationFactory()

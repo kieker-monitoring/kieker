@@ -17,6 +17,7 @@
 package kieker.tools.trace.analysis.filter.visualization.callTree;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import kieker.analysis.IProjectContext;
@@ -125,7 +126,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
 			description = "Receives the message traces to be processed",
 			eventTypes = MessageTrace.class)
-	public void inputMessageTraces(final MessageTrace mt) {
+	public void inputMessageTraces(final MessageTrace mt) throws IOException {
 		try {
 			final TraceCallTreeNode rootNode = new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR,
 					true, mt,

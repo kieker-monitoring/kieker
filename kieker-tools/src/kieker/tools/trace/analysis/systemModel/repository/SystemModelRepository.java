@@ -16,10 +16,10 @@
 
 package kieker.tools.trace.analysis.systemModel.repository;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collection;
 
 import kieker.analysis.IProjectContext;
@@ -35,9 +35,9 @@ import kieker.tools.trace.analysis.systemModel.Operation;
 
 /**
  * This repository is a model manager for the Kieker's component model. It consists of multiple "sub"repositories.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
  */
 @Repository(
@@ -62,7 +62,7 @@ public class SystemModelRepository extends AbstractRepository {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration to use for this repository.
 	 * @param projectContext
@@ -94,7 +94,7 @@ public class SystemModelRepository extends AbstractRepository {
 
 	/**
 	 * Delivering the factory managing the available operations.
-	 * 
+	 *
 	 * @return The operation factory.
 	 */
 	public final OperationRepository getOperationFactory() {
@@ -103,7 +103,7 @@ public class SystemModelRepository extends AbstractRepository {
 
 	/**
 	 * Delivering the factory managing the available component types.
-	 * 
+	 *
 	 * @return The types factory.
 	 */
 	public final TypeRepository getTypeRepositoryFactory() {
@@ -172,17 +172,14 @@ public class SystemModelRepository extends AbstractRepository {
 
 	/**
 	 * Writes the contents of this system model to an HTML file.
-	 * 
+	 *
 	 * @param outputFn
 	 *            file system location of the output file (as accepted by {@link java.io.File#File(String)}).
-	 * 
-	 * @throws FileNotFoundException
-	 *             If the given file is somehow invalid.
-	 * @throws UnsupportedEncodingException
-	 *             If the used default encoding is not supported.
+	 * @throws IOException
+	 *             on io error
 	 */
-	public void saveSystemToHTMLFile(final String outputFn) throws FileNotFoundException, UnsupportedEncodingException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFn), false, ENCODING);
+	public void saveSystemToHTMLFile(final String outputFn) throws IOException {
+		final PrintStream ps = new PrintStream(Files.newOutputStream(Paths.get(outputFn)), false, ENCODING);
 		ps.println("<html><head><title>System Model Reconstructed by Kieker.TraceAnalysis</title>");
 		ps.println("<style type=\"text/css\">\n"
 				+ ".colTitle {font-size: 11px; background: linear-gradient(to bottom, #FDFDFD, #DDDDDD) transparent }\n"
@@ -205,7 +202,7 @@ public class SystemModelRepository extends AbstractRepository {
 							.append("</li>");
 				}
 			}
-			final String[] cells = new String[] {
+			final String[] cells = {
 				this.htmlEntityLabel(type.getId(), Integer.toString(type.getId()), EntityType.COMPONENT_TYPE),
 				SystemModelRepository.simpleHTMLEscape(type.getPackageName()), SystemModelRepository.simpleHTMLEscape(type.getTypeName()),
 				opListBuilder.toString(), };
@@ -220,7 +217,7 @@ public class SystemModelRepository extends AbstractRepository {
 			for (final String paramType : op.getSignature().getParamTypeList()) {
 				paramListStrBuild.append("<li>").append(SystemModelRepository.simpleHTMLEscape(paramType)).append("</li>");
 			}
-			final String[] cells = new String[] {
+			final String[] cells = {
 				this.htmlEntityLabel(op.getId(), Integer.toString(op.getId()), EntityType.OPERATION),
 				this.htmlEntityRef(op.getComponentType().getId(), SystemModelRepository.simpleHTMLEscape(op.getComponentType().getFullQualifiedName()),
 						EntityType.COMPONENT_TYPE),
@@ -233,7 +230,7 @@ public class SystemModelRepository extends AbstractRepository {
 		this.printOpenHtmlTable(ps, "Assembly Components", new String[] { "ID", "Name", "Component type" });
 		final Collection<AssemblyComponent> assemblyComponents = this.assemblyFactory.getAssemblyComponentInstances();
 		for (final AssemblyComponent ac : assemblyComponents) {
-			final String[] cells = new String[] {
+			final String[] cells = {
 				this.htmlEntityLabel(ac.getId(), Integer.toString(ac.getId()), EntityType.ASSEMBLY_COMPONENT),
 				ac.getName(),
 				this.htmlEntityRef(ac.getType().getId(), SystemModelRepository.simpleHTMLEscape(ac.getType().getFullQualifiedName()), EntityType.COMPONENT_TYPE), };
@@ -244,7 +241,7 @@ public class SystemModelRepository extends AbstractRepository {
 		this.printOpenHtmlTable(ps, "Execution Containers", new String[] { "ID", "Name" });
 		final Collection<ExecutionContainer> containers = this.executionEnvironmentFactory.getExecutionContainers();
 		for (final ExecutionContainer container : containers) {
-			final String[] cells = new String[] {
+			final String[] cells = {
 				this.htmlEntityLabel(container.getId(), Integer.toString(container.getId()), EntityType.EXECUTION_CONTAINER),
 				SystemModelRepository.simpleHTMLEscape(container.getName()), };
 			this.printHtmlTableRow(ps, cells);
@@ -254,7 +251,7 @@ public class SystemModelRepository extends AbstractRepository {
 		this.printOpenHtmlTable(ps, "Deployment Components", new String[] { "ID", "Assembly component", "Execution container" });
 		final Collection<AllocationComponent> allocationComponentInstances = this.allocationFactory.getAllocationComponentInstances();
 		for (final AllocationComponent allocationComponent : allocationComponentInstances) {
-			final String[] cells = new String[] {
+			final String[] cells = {
 				this.htmlEntityLabel(allocationComponent.getId(), Integer.toString(allocationComponent.getId()),
 						EntityType.ALLOCATION_COMPONENT),
 				this.htmlEntityRef(allocationComponent.getAssemblyComponent().getId(),

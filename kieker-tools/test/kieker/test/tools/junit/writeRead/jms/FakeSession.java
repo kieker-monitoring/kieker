@@ -309,40 +309,34 @@ public class FakeSession implements Session {
 	@Override
 	public MessageConsumer createSharedConsumer(final Topic topic, final String sharedSubscriptionName)
 			throws JMSException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public MessageConsumer createSharedConsumer(final Topic topic, final String sharedSubscriptionName,
 			final String messageSelector) throws JMSException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public MessageConsumer createDurableConsumer(final Topic topic, final String name) throws JMSException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public MessageConsumer createDurableConsumer(final Topic topic, final String name, final String messageSelector,
 			final boolean noLocal) throws JMSException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public MessageConsumer createSharedDurableConsumer(final Topic topic, final String name) throws JMSException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public MessageConsumer createSharedDurableConsumer(final Topic topic, final String name,
 			final String messageSelector) throws JMSException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

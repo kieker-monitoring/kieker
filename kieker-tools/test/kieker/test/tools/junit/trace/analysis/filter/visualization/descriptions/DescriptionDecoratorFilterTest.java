@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.test.tools.junit.trace.analysis.filter.visualization.descriptions;
 
 import java.util.ArrayList;
@@ -46,9 +45,9 @@ import kieker.test.tools.util.bookstore.graph.GraphTestSetup;
 
 /**
  * Test suite for the description decorator filter.
- * 
+ *
  * @author Holger Knoche, Nils Christian Ehmke
- * 
+ *
  * @since 1.6
  */
 public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
@@ -78,7 +77,7 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 
 	/**
 	 * Initializes the test setup.
-	 * 
+	 *
 	 * @throws AnalysisConfigurationException
 	 *             If the preparation of the analysis failed.
 	 */
@@ -105,7 +104,7 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 	}
 
 	private static List<OperationExecutionRecord> createExecutionRecords() {
-		final List<OperationExecutionRecord> records = new ArrayList<OperationExecutionRecord>();
+		final List<OperationExecutionRecord> records = new ArrayList<>();
 		int eoi = -1;
 		int time = 0;
 
@@ -116,7 +115,7 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 	}
 
 	private static DescriptionRepository prepareDescriptionRepository(final AnalysisController analysisController) {
-		final ConcurrentMap<String, String> descriptions = new ConcurrentHashMap<String, String>();
+		final ConcurrentMap<String, String> descriptions = new ConcurrentHashMap<>();
 
 		descriptions.put(EXPECTED_ALLOCATION_COMPONENT_NAME_1, DESCRIPTION_1);
 		descriptions.put(EXPECTED_ALLOCATION_COMPONENT_NAME_2, DESCRIPTION_2);

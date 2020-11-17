@@ -16,9 +16,9 @@
 package kieker.tools.trace.analysis.tt.sink;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
 
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.InvalidExecutionTrace;
@@ -55,7 +55,7 @@ public class InvalidExecutionTraceWriterSink extends AbstractTraceProcessingFilt
 			throws IOException {
 		super(repository);
 
-		this.printStream = new PrintStream(new FileOutputStream(outputFile), false,
+		this.printStream = new PrintStream(Files.newOutputStream(outputFile.toPath()), false,
 				InvalidExecutionTraceWriterSink.ENCODING);
 		this.outputFilename = outputFile.getCanonicalPath();
 	}

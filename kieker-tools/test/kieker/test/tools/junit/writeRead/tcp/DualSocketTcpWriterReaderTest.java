@@ -27,8 +27,8 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.tcp.DualSocketTcpReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.tcp.DualSocketTcpWriter;
@@ -58,7 +58,7 @@ public class DualSocketTcpWriterReaderTest extends AbstractWriterReaderTest { //
 		readerConfig.setProperty(DualSocketTcpReader.CONFIG_PROPERTY_NAME_PORT1, DualSocketTcpWriterReaderTest.PORT1);
 		readerConfig.setProperty(DualSocketTcpReader.CONFIG_PROPERTY_NAME_PORT2, DualSocketTcpWriterReaderTest.PORT2);
 		final DualSocketTcpReader tcpReader = new DualSocketTcpReader(readerConfig, this.analysisController);
-		this.sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), this.analysisController);
+		this.sinkFilter = new ListCollectionFilter<>(new Configuration(), this.analysisController);
 		this.analysisController.connect(tcpReader, DualSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
 		this.analysisThread = new AnalysisControllerThread(this.analysisController);
 		this.analysisThread.start();

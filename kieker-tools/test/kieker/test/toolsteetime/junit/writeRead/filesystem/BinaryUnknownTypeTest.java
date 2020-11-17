@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.test.toolsteetime.junit.writeRead.filesystem;
 
 import java.util.LinkedList;
@@ -28,8 +27,8 @@ import org.junit.rules.TemporaryFolder;
 import kieker.analysisteetime.plugin.reader.filesystem.fsReader.BinaryLogReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.writer.compression.NoneCompressionFilter;

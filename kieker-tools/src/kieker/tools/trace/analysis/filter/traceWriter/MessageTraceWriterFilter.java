@@ -16,9 +16,10 @@
 
 package kieker.tools.trace.analysis.filter.traceWriter;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -36,7 +37,9 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn
  *
  * @since 1.2
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(description = "A filter allowing to write the incoming MessageTraces into a configured file", repositoryPorts = {
 	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 }, configuration = {
@@ -67,7 +70,7 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 		super(configuration, projectContext);
 
 		this.outputFn = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN);
-		this.ps = new PrintStream(new FileOutputStream(this.outputFn), false, ENCODING);
+		this.ps = new PrintStream(Files.newOutputStream(Paths.get(this.outputFn)), false, ENCODING);
 	}
 
 	@Override

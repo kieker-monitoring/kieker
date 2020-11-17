@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.test.tools.junit.trace.analysis.filter.visualization.traceColoring;
 
 import java.util.ArrayList;
@@ -47,9 +46,9 @@ import kieker.test.tools.util.bookstore.graph.GraphTestSetup;
 
 /**
  * Test suite for the graph coloring filter.
- * 
+ *
  * @author Holger Knoche, Nils Christian Ehmke
- * 
+ *
  * @since 1.6
  */
 public class TraceColoringFilterTest extends AbstractKiekerTest {
@@ -85,7 +84,7 @@ public class TraceColoringFilterTest extends AbstractKiekerTest {
 
 	/**
 	 * Prepares the setup for the test.
-	 * 
+	 *
 	 * @throws AnalysisConfigurationException
 	 *             If the setup of the filters failed.
 	 */
@@ -108,7 +107,7 @@ public class TraceColoringFilterTest extends AbstractKiekerTest {
 	}
 
 	private static TraceColorRepository prepareTraceColorRepository(final AnalysisController analysisController) {
-		final ConcurrentMap<Long, Color> colorMap = new ConcurrentHashMap<Long, Color>();
+		final ConcurrentMap<Long, Color> colorMap = new ConcurrentHashMap<>();
 		colorMap.put(TRACE_ID_1, HIGHLIGHT_COLOR);
 		colorMap.put(TRACE_ID_2, HIGHLIGHT_COLOR_2);
 
@@ -122,7 +121,7 @@ public class TraceColoringFilterTest extends AbstractKiekerTest {
 	}
 
 	private static List<OperationExecutionRecord> createExecutionRecords() {
-		final List<OperationExecutionRecord> records = new ArrayList<OperationExecutionRecord>();
+		final List<OperationExecutionRecord> records = new ArrayList<>();
 		int time = 0;
 
 		int eoi = 0;
@@ -143,7 +142,7 @@ public class TraceColoringFilterTest extends AbstractKiekerTest {
 
 	/**
 	 * This method tests whether the trace coloring works or not. It uses the nodes resulting from the test setup and checks them against the expected colors.
-	 * 
+	 *
 	 * @throws AnalysisConfigurationException
 	 *             If the assembled test setup is somehow invalid.
 	 */

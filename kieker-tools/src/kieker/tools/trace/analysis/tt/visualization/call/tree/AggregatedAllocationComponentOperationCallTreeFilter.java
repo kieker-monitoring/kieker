@@ -47,7 +47,7 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 	 */
 	public AggregatedAllocationComponentOperationCallTreeFilter(final SystemModelRepository repository, final boolean includeWeights,
 			final boolean shortLabels, final String dotOutputFile) {
-		super(repository, includeWeights, includeWeights, dotOutputFile);
+		super(repository, includeWeights, shortLabels, dotOutputFile);
 
 		this.setRoot(new AggregatedAllocationComponentOperationCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				AllocationComponentOperationPairFactory.ROOT_PAIR, true, null, NoOriginRetentionPolicy.createInstance()));
@@ -57,9 +57,9 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 	protected AllocationComponentOperationPair concreteCreatePair(final SynchronousCallMessage callMsg) {
 		final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 		final Operation op = callMsg.getReceivingExecution().getOperation();
-		final AllocationComponentOperationPair destination = AggregatedAllocationComponentOperationCallTreeFilter.this.getSystemModelRepository()
+
+		return AggregatedAllocationComponentOperationCallTreeFilter.this.getSystemModelRepository()
 				.getAllocationPairFactory().getPairInstanceByPair(allocationComponent, op); // will never be null!
-		return destination;
 	}
 }
 

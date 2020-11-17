@@ -27,15 +27,15 @@ import javax.jms.MessageListener;
 /**
  * This class is part of a very basic fake JMS message broker. It uses a very simple design to deliver messages synchronously from a singleton producer to a
  * singleton consumer. It has only been designed for test purposes ( {@link BasicJMSWriterReaderTest}) and should <b>not</b> be used outside this test.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 public class FakeMessageConsumer implements MessageConsumer {
 
 	private MessageListener messageListener;
-	private final BlockingQueue<Message> messages = new LinkedBlockingQueue<Message>();
+	private final BlockingQueue<Message> messages = new LinkedBlockingQueue<>();
 
 	/**
 	 * Default constructor.
@@ -47,7 +47,7 @@ public class FakeMessageConsumer implements MessageConsumer {
 
 	/**
 	 * Add a message from the producer to the consumer queue.
-	 * 
+	 *
 	 * @param message
 	 *            the message to add to the internal queue
 	 */

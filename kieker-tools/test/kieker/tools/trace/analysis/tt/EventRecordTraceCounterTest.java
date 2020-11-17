@@ -24,6 +24,12 @@ import kieker.test.tools.util.tt.bookstore.BookstoreEventRecordFactory;
 
 import teetime.framework.test.StageTester;
 
+/**
+ *
+ * @author Reiner Jung
+ *
+ * @since 1.15
+ */
 public class EventRecordTraceCounterTest {
 
 	public EventRecordTraceCounterTest() {

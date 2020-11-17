@@ -178,40 +178,34 @@ public class FakeMessageProducer implements MessageProducer {
 
 	@Override
 	public void setDeliveryDelay(final long deliveryDelay) throws JMSException {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public long getDeliveryDelay() throws JMSException {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void send(final Message message, final CompletionListener completionListener) throws JMSException {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void send(final Message message, final int deliveryMode, final int priority, final long timeToLive,
 			final CompletionListener completionListener) throws JMSException {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void send(final Destination destination, final Message message, final CompletionListener completionListener)
 			throws JMSException {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void send(final Destination destination, final Message message, final int deliveryMode, final int priority,
 			final long timeToLive, final CompletionListener completionListener) throws JMSException {
-		// TODO Auto-generated method stub
 
 	}
 

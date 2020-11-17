@@ -31,6 +31,10 @@ import kieker.tools.trace.analysis.systemModel.AbstractMessage;
 @Deprecated
 public abstract class AbstractNodeDecorator {
 
+	public AbstractNodeDecorator() {
+		// default constructor
+	}
+
 	/**
 	 * Creates a node decorator from its option name.
 	 *

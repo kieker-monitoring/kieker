@@ -16,6 +16,8 @@
 
 package kieker.tools.trace.analysis.filter;
 
+import java.io.IOException;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -57,8 +59,10 @@ public abstract class AbstractMessageTraceProcessingFilter extends AbstractTrace
 	 *
 	 * @param mt
 	 *            The incoming message trace.
+	 * @throws IOException
+	 *             on io errors while writing dot files
 	 */
 	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed",
 			eventTypes = MessageTrace.class)
-	public abstract void inputMessageTraces(final MessageTrace mt);
+	public abstract void inputMessageTraces(final MessageTrace mt) throws IOException;
 }

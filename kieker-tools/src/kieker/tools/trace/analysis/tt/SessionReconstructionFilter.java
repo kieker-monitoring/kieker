@@ -49,8 +49,6 @@ public class SessionReconstructionFilter extends AbstractConsumerStage<Execution
 	private final OutputPort<ExecutionTraceBasedSession> outputPort = this
 			.createOutputPort(ExecutionTraceBasedSession.class);
 
-	private final TimeUnit timeunit;
-
 	private final long maxThinkTime;
 
 	private final ConcurrentHashMap<String, ExecutionTraceBasedSession> openExecutionBasedSessions = new ConcurrentHashMap<>();
@@ -67,12 +65,15 @@ public class SessionReconstructionFilter extends AbstractConsumerStage<Execution
 	 *            Long.MAX_VALUE)
 	 */
 	public SessionReconstructionFilter(final TimeUnit timeunit, final Long maxThinkTime) {
-		this.timeunit = timeunit;
-		this.maxThinkTime = this.timeunit.convert(maxThinkTime == 0 ? Long.MAX_VALUE : maxThinkTime, timeunit); // NOCS
+		this.maxThinkTime = timeunit.convert(maxThinkTime == 0 ? Long.MAX_VALUE : maxThinkTime, timeunit); // NOCS
 
 		if (this.maxThinkTime < 0) {
 			throw new IllegalArgumentException("maxThinkTime must not be negative (found: " + this.maxThinkTime + ")");
 		}
+	}
+
+	public OutputPort<ExecutionTraceBasedSession> getOutputPort() {
+		return this.outputPort;
 	}
 
 	private void dispatchCompletedSession(final ExecutionTraceBasedSession session) {

@@ -67,14 +67,14 @@ public final class BookstoreEventRecordFactory {
 			final String hostname) {
 		int curOrderIndex = 0;
 
-		final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS
-		final BeforeOperationEvent entry1_1__catalog_getBook; // NOCS
-		final AfterOperationEvent exit1_1__catalog_getBook; // NOCS
-		final BeforeOperationEvent entry2_1__crm_getOrders; // NOCS
-		final BeforeOperationEvent entry3_2__catalog_getBook; // NOCS
-		final AfterOperationEvent exit3_2__catalog_getBook; // NOCS
-		final AfterOperationEvent exit2_1__crm_getOrders; // NOCS
-		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS
+		final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS NOPMD
+		final BeforeOperationEvent entry1_1__catalog_getBook; // NOCS NOPMD
+		final AfterOperationEvent exit1_1__catalog_getBook; // NOCS NOPMD
+		final BeforeOperationEvent entry2_1__crm_getOrders; // NOCS NOPMD
+		final BeforeOperationEvent entry3_2__catalog_getBook; // NOCS NOPMD
+		final AfterOperationEvent exit3_2__catalog_getBook; // NOCS NOPMD
+		final AfterOperationEvent exit2_1__crm_getOrders; // NOCS NOPMD
+		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS NOPMD
 
 		entry0_0__bookstore_searchBook = new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
 				traceId, curOrderIndex++,
@@ -110,7 +110,7 @@ public final class BookstoreEventRecordFactory {
 				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
 		final TraceMetadata trace = new TraceMetadata(traceId, -1, sessionId, hostname, -1, -1);
-		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
+		final AbstractTraceEvent[] events = {
 			entry0_0__bookstore_searchBook,
 			entry1_1__catalog_getBook,
 			exit1_1__catalog_getBook,
@@ -142,17 +142,17 @@ public final class BookstoreEventRecordFactory {
 			final String hostname) {
 		int curOrderIndex = 0;
 
-		final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS
-		final CallOperationEvent call1_1__catalog_getBook; // NOCS
-		final BeforeOperationEvent entry1_1__catalog_getBook; // NOCS
-		final AfterOperationEvent exit1_1__catalog_getBook; // NOCS
-		final CallOperationEvent call2_1__crm_getOrders; // NOCS
-		final BeforeOperationEvent entry2_1__crm_getOrders; // NOCS
-		final CallOperationEvent call3_2__catalog_getBook; // NOCS
-		final BeforeOperationEvent entry3_2__catalog_getBook; // NOCS
-		final AfterOperationEvent exit3_2__catalog_getBook; // NOCS
-		final AfterOperationEvent exit2_1__crm_getOrders; // NOCS
-		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS
+		final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS NOPMD
+		final CallOperationEvent call1_1__catalog_getBook; // NOCS NOPMD
+		final BeforeOperationEvent entry1_1__catalog_getBook; // NOCS NOPMD
+		final AfterOperationEvent exit1_1__catalog_getBook; // NOCS NOPMD
+		final CallOperationEvent call2_1__crm_getOrders; // NOCS NOPMD
+		final BeforeOperationEvent entry2_1__crm_getOrders; // NOCS NOPMD
+		final CallOperationEvent call3_2__catalog_getBook; // NOCS NOPMD
+		final BeforeOperationEvent entry3_2__catalog_getBook; // NOCS NOPMD
+		final AfterOperationEvent exit3_2__catalog_getBook; // NOCS NOPMD
+		final AfterOperationEvent exit2_1__crm_getOrders; // NOCS NOPMD
+		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS NOPMD
 
 		entry0_0__bookstore_searchBook = new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
 				traceId, curOrderIndex++,
@@ -206,7 +206,7 @@ public final class BookstoreEventRecordFactory {
 				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
 		final TraceMetadata trace = new TraceMetadata(traceId, -1, sessionId, hostname, -1, -1);
-		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
+		final AbstractTraceEvent[] events = {
 			entry0_0__bookstore_searchBook,
 			call1_1__catalog_getBook,
 			entry1_1__catalog_getBook,
@@ -242,17 +242,17 @@ public final class BookstoreEventRecordFactory {
 			final String hostname) {
 		int curOrderIndex = 0;
 
-		final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS
-		final CallOperationEvent call1_1__catalog_getBook; // NOCS
-		final BeforeOperationEvent entry1_1__catalog_getBook; // NOCS
-		final AfterOperationEvent exit1_1__catalog_getBook; // NOCS
-		final CallOperationEvent call2_1__crm_getOrders; // NOCS
+		final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS NOPMD
+		final CallOperationEvent call1_1__catalog_getBook; // NOCS NOPMD
+		final BeforeOperationEvent entry1_1__catalog_getBook; // NOCS NOPMD
+		final AfterOperationEvent exit1_1__catalog_getBook; // NOCS NOPMD
+		final CallOperationEvent call2_1__crm_getOrders; // NOCS NOPMD
 		// assumed to be uninstrumented: final BeforeOperationEvent entry2_1__crm_getOrders; // NOCS
-		final CallOperationEvent call3_2__catalog_getBook; // NOCS
-		final BeforeOperationEvent entry3_2__catalog_getBook; // NOCS
-		final AfterOperationEvent exit3_2__catalog_getBook; // NOCS
+		final CallOperationEvent call3_2__catalog_getBook; // NOCS NOPMD
+		final BeforeOperationEvent entry3_2__catalog_getBook; // NOCS NOPMD
+		final AfterOperationEvent exit3_2__catalog_getBook; // NOCS NOPMD
 		// assumed to be uninstrumented: final AfterOperationEvent exit2_1__crm_getOrders; // NOCS
-		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS
+		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS NOPMD
 
 		entry0_0__bookstore_searchBook = new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
 				traceId, curOrderIndex++,
@@ -305,7 +305,7 @@ public final class BookstoreEventRecordFactory {
 				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
 		final TraceMetadata trace = new TraceMetadata(traceId, -1, sessionId, hostname, -1, -1);
-		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
+		final AbstractTraceEvent[] events = {
 			entry0_0__bookstore_searchBook,
 			call1_1__catalog_getBook,
 			entry1_1__catalog_getBook,
@@ -341,8 +341,8 @@ public final class BookstoreEventRecordFactory {
 			final String hostname) {
 		int curOrderIndex = 0;
 
-		final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS
-		final CallOperationEvent call1_1__catalog_getBook; // NOCS
+		final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS NOPMD
+		final CallOperationEvent call1_1__catalog_getBook; // NOCS NOPMD
 		// assumed to be uninstrumented: final BeforeOperationEvent entry1_1__catalog_getBook; // NOCS
 		// assumed to be uninstrumented: final AfterOperationEvent exit1_1__catalog_getBook; // NOCS
 		// assumed to be uninstrumented: final CallOperationEvent call2_1__crm_getOrders; // NOCS
@@ -351,7 +351,7 @@ public final class BookstoreEventRecordFactory {
 		// assumed to be uninstrumented: final BeforeOperationEvent entry3_2__catalog_getBook; // NOCS
 		// assumed to be uninstrumented: final AfterOperationEvent exit3_2__catalog_getBook; // NOCS
 		// assumed to be uninstrumented: final AfterOperationEvent exit2_1__crm_getOrders; // NOCS
-		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS
+		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS NOPMD
 
 		entry0_0__bookstore_searchBook = new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
 				traceId, curOrderIndex++,
@@ -369,7 +369,7 @@ public final class BookstoreEventRecordFactory {
 				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
 		final TraceMetadata trace = new TraceMetadata(traceId, -1, sessionId, hostname, -1, -1);
-		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
+		final AbstractTraceEvent[] events = {
 			entry0_0__bookstore_searchBook,
 			call1_1__catalog_getBook,
 			exit0_0__bookstore_searchBook,
@@ -397,11 +397,11 @@ public final class BookstoreEventRecordFactory {
 			final String hostname) {
 		int curOrderIndex = 0;
 
-		final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS
-		final CallOperationEvent call1_1__catalog_getBook; // NOCS
+		final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS NOPMD
+		final CallOperationEvent call1_1__catalog_getBook; // NOCS NOPMD
 		// assumed to be uninstrumented: final BeforeOperationEvent entry1_1__catalog_getBook; // NOCS
 		// assumed to be uninstrumented: final AfterOperationEvent exit1_1__catalog_getBook; // NOCS
-		final CallOperationEvent call2_1__crm_getOrders; // NOCS
+		final CallOperationEvent call2_1__crm_getOrders; // NOCS NOPMD
 		final SplitEvent disturbEvent; // this caused to break the reconstruction once ...
 		// assumed to be uninstrumented: final BeforeOperationEvent entry2_1__crm_getOrders; // NOCS
 		// assumed to be uninstrumented: final CallOperationEvent call3_2__catalog_getBook; // NOCS
@@ -434,7 +434,7 @@ public final class BookstoreEventRecordFactory {
 				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
 		final TraceMetadata trace = new TraceMetadata(traceId, -1, sessionId, hostname, -1, -1);
-		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
+		final AbstractTraceEvent[] events = {
 			entry0_0__bookstore_searchBook,
 			call1_1__catalog_getBook,
 			disturbEvent,
@@ -464,17 +464,17 @@ public final class BookstoreEventRecordFactory {
 			final String hostname) {
 		int curOrderIndex = 0;
 
-		final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS
+		final BeforeOperationEvent entry0_0__bookstore_searchBook; // NOCS NOPMD
 		// assumed to be uninstrumented: final CallOperationEvent call1_1__catalog_getBook; // NOCS
 		// assumed to be uninstrumented: final BeforeOperationEvent entry1_1__catalog_getBook; // NOCS
 		// assumed to be uninstrumented: final AfterOperationEvent exit1_1__catalog_getBook; // NOCS
-		final CallOperationEvent call2_1__crm_getOrders; // NOCS
+		final CallOperationEvent call2_1__crm_getOrders; // NOCS NOPMD
 		// assumed to be uninstrumented: final BeforeOperationEvent entry2_1__crm_getOrders; // NOCS
-		final CallOperationEvent call3_2__catalog_getBook; // NOCS
+		final CallOperationEvent call3_2__catalog_getBook; // NOCS NOPMD
 		// assumed to be uninstrumented: final BeforeOperationEvent entry3_2__catalog_getBook; // NOCS
 		// assumed to be uninstrumented: final AfterOperationEvent exit3_2__catalog_getBook; // NOCS
 		// assumed to be uninstrumented: final AfterOperationEvent exit2_1__crm_getOrders; // NOCS
-		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS
+		final AfterOperationEvent exit0_0__bookstore_searchBook; // NOCS NOPMD
 
 		entry0_0__bookstore_searchBook = new BeforeOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
 				traceId, curOrderIndex++,
@@ -499,7 +499,7 @@ public final class BookstoreEventRecordFactory {
 				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
 		final TraceMetadata trace = new TraceMetadata(traceId, -1, sessionId, hostname, -1, -1);
-		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
+		final AbstractTraceEvent[] events = {
 			entry0_0__bookstore_searchBook,
 			call2_1__crm_getOrders,
 			call3_2__catalog_getBook,
@@ -528,9 +528,9 @@ public final class BookstoreEventRecordFactory {
 		// assumed to be uninstrumented: final CallOperationEvent call1_1__catalog_getBook; // NOCS
 		// assumed to be uninstrumented: final BeforeOperationEvent entry1_1__catalog_getBook; // NOCS
 		// assumed to be uninstrumented: final AfterOperationEvent exit1_1__catalog_getBook; // NOCS
-		final CallOperationEvent call2_1__crm_getOrders; // NOCS
+		final CallOperationEvent call2_1__crm_getOrders; // NOCS NOPMD
 		// assumed to be uninstrumented: final BeforeOperationEvent entry2_1__crm_getOrders; // NOCS
-		final CallOperationEvent call3_2__catalog_getBook; // NOCS
+		final CallOperationEvent call3_2__catalog_getBook; // NOCS NOPMD
 		// assumed to be uninstrumented: final BeforeOperationEvent entry3_2__catalog_getBook; // NOCS
 		// assumed to be uninstrumented: final AfterOperationEvent exit3_2__catalog_getBook; // NOCS
 		// assumed to be uninstrumented: final AfterOperationEvent exit2_1__crm_getOrders; // NOCS
@@ -551,7 +551,7 @@ public final class BookstoreEventRecordFactory {
 				BookstoreOperationExecutionRecordFactory.FQ_CLASS_CATALOG);
 
 		final TraceMetadata trace = new TraceMetadata(traceId, -1, sessionId, hostname, -1, -1);
-		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
+		final AbstractTraceEvent[] events = {
 			call2_1__crm_getOrders,
 			call3_2__catalog_getBook,
 		};

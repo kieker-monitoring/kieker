@@ -27,9 +27,9 @@ import kieker.tools.trace.analysis.systemModel.Execution;
 
 /**
  * This is just a simple helper class which collects {@link Execution}s.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.5
  */
 public class ExecutionSinkClass extends AbstractFilterPlugin {
@@ -42,11 +42,11 @@ public class ExecutionSinkClass extends AbstractFilterPlugin {
 	/**
 	 * This list will contain the records this plugin received.
 	 */
-	private final CopyOnWriteArrayList<Execution> lst = new CopyOnWriteArrayList<Execution>();
+	private final CopyOnWriteArrayList<Execution> lst = new CopyOnWriteArrayList<>();
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this plugin. It will not be used.
 	 * @param projectContext
@@ -66,18 +66,18 @@ public class ExecutionSinkClass extends AbstractFilterPlugin {
 
 	/**
 	 * This method represents the input ports for the execution objects.
-	 * 
+	 *
 	 * @param data
 	 *            The next execution.
 	 */
-	@InputPort(name = ExecutionSinkClass.INPUT_PORT_NAME, eventTypes = { Execution.class })
+	@InputPort(name = ExecutionSinkClass.INPUT_PORT_NAME, eventTypes = Execution.class)
 	public void doJob(final Object data) {
 		this.lst.add((Execution) data);
 	}
 
 	/**
 	 * Delivers the list containing the received records.
-	 * 
+	 *
 	 * @return The list with the records.
 	 */
 	public List<Execution> getExecutions() {

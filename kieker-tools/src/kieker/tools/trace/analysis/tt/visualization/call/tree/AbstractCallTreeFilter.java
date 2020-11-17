@@ -75,7 +75,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		final String componentTypePackagePrefx = component.getType().getPackageName();
 		final String componentTypeIdentifier = component.getType().getTypeName();
 
-		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(":");
+		final StringBuilder strBuild = new StringBuilder(assemblyComponentName).append(':');
 		if (!shortLabels) {
 			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
@@ -107,7 +107,7 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		final String componentTypeIdentifier = component.getAssemblyComponent().getType().getTypeName();
 
 		final StringBuilder strBuild = new StringBuilder(resourceContainerName).append("::\\n")
-				.append(assemblyComponentName).append(":");
+				.append(assemblyComponentName).append(':');
 		if (!shortLabels) {
 			strBuild.append(componentTypePackagePrefx).append('.');
 		} else {
