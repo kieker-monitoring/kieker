@@ -24,7 +24,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysisteetime.plugin.reader.jms.JMSReaderStage;
+import kieker.analysis.source.jms.JMSReaderStage;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
@@ -151,24 +151,4 @@ public class BasicJMSWriterReaderTest {
 			return this.outputElements;
 		}
 	}
-
-	// private static class AnalysisConfiguration extends
-	// teetime.framework.Configuration {
-	// private final JMSReaderStage jmsReaderStage;
-	// private final CollectorSink<IMonitoringRecord> collectorSink;
-	//
-	// public AnalysisConfiguration(final String jmsProviderUrl, final String
-	// jmsDestination,
-	// final String jmsFactoryLookupName) {
-	// this.jmsReaderStage = new JMSReaderStage(jmsProviderUrl, jmsDestination,
-	// jmsFactoryLookupName);
-	// this.collectorSink = new CollectorSink<>();
-	//
-	// this.from(this.jmsReaderStage).end(this.collectorSink);
-	// }
-	//
-	// public List<IMonitoringRecord> getOutputElements() {
-	// return this.collectorSink.getElements();
-	// }
-	// }
 }

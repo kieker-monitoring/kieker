@@ -36,7 +36,7 @@ import teetime.framework.test.StageTester;
  *
  * @since 1.5
  */
-class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
+public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 
 	private static final long TRACE_ID = 4563L;
 	private static final String SESSION_ID = "y2zGAI0VX"; // Same Session ID for all traces
