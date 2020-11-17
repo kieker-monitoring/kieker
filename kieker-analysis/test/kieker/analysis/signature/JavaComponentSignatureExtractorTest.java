@@ -21,7 +21,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.signature.JavaComponentSignatureExtractor;
 import kieker.analysisteetime.model.analysismodel.type.ComponentType;
 import kieker.analysisteetime.model.analysismodel.type.TypeFactory;
 

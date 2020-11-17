@@ -23,8 +23,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.time.events.RecordCurrentTimeEventGenerationFilter;
-import kieker.analysis.time.events.TimestampCurrentTimeEventGenerationFilter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.record.misc.TimestampRecord;

@@ -19,7 +19,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.stage.flow.TraceEventRecords;
-import kieker.analysis.trace.EventRecordTraceCounter;
 import kieker.analysis.util.bookstore.BookstoreEventRecordFactory;
 
 import teetime.framework.test.StageTester;

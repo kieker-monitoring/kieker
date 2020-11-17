@@ -28,7 +28,6 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.ExampleConfiguration;
 import kieker.analysis.model.DeploymentModelPrinter;
 import kieker.analysis.util.ComposedKey;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;

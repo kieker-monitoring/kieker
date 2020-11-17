@@ -22,8 +22,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.trace.AbstractTraceAnalysisFilter;
-import kieker.analysis.trace.ExecutionRecordTransformationFilter;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.model.repository.SystemModelRepository;
