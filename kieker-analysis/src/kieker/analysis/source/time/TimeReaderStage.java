@@ -41,7 +41,7 @@ import teetime.framework.OutputPort;
  *
  * @since 1.8
  */
-public class TimeReaderStage<T> extends AbstractProducerStage<T> {
+public class TimeReaderStage extends AbstractProducerStage<Object> {
 
 	private final OutputPort<Long> timestampsOutputPort = this.createOutputPort(Long.class);
 	private final OutputPort<TimestampRecord> timestampsRecordOutputPort = this.createOutputPort(TimestampRecord.class);
@@ -73,10 +73,8 @@ public class TimeReaderStage<T> extends AbstractProducerStage<T> {
 	private boolean repeatEvent() {
 		if (this.infinite) {
 			return true;
-		} else if (this.numberOfImpulses > 0) {
-			return true;
 		} else {
-			return false;
+			return this.numberOfImpulses > 0;
 		}
 	}
 

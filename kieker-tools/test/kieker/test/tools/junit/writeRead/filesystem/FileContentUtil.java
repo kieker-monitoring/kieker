@@ -26,7 +26,7 @@ import org.junit.Assert;
 
 import kieker.common.util.filesystem.FSUtil;
 
-import kieker.test.tools.util.StringUtils;
+import kieker.test.analysis.util.StringUtils;
 
 /**
  * @author Christian Wulf

@@ -31,14 +31,11 @@ import kieker.common.record.IMonitoringRecord;
  * Every record received is cloned and each detected String is buffered in a
  * shared area in order to save memory.
  *
- * TODO note this filter does not work anymore, as it uses deprecated API. As reader already user a string registry (binary), this filter duplicates effort.
- * It only is useful for text logs, which are usually small. However, this feature could and should be integrated into the text file reader.
- *
  * @author Jan Waller
  *
  * @since 1.6
  *
- * @deprecated since 1.15 should be removed in 1.16 after feature transfer to reader
+ * @deprecated since 1.15 should be removed in 1.16 does not work anyway
  */
 @Deprecated
 @Plugin(description = "A filter to reduce the memory footprint of strings used in records",

@@ -65,10 +65,8 @@ public class TimeSourceStage extends AbstractProducerStage<Long> {
 	private boolean repeatEvent() {
 		if (this.infinite) {
 			return true;
-		} else if (this.numberOfImpulses > 0) {
-			return true;
 		} else {
-			return false;
+			return this.numberOfImpulses > 0;
 		}
 	}
 

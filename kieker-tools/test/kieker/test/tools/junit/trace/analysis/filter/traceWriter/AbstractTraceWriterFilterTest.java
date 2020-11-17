@@ -38,9 +38,9 @@ import kieker.tools.trace.analysis.systemModel.ExecutionTrace;
 import kieker.tools.trace.analysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
+import kieker.test.analysis.util.StringUtils;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.tools.util.StringUtils;
 import kieker.test.tools.util.bookstore.BookstoreExecutionFactory;
 
 /**

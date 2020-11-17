@@ -24,6 +24,8 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.analysis.plugin.reader.filesystem.BinaryLogReader;
+import kieker.analysis.tt.writeRead.TestDataRepository;
+import kieker.analysis.tt.writeRead.TestProbe;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
@@ -37,8 +39,6 @@ import kieker.monitoring.writer.filesystem.BinaryLogStreamHandler;
 import kieker.monitoring.writer.filesystem.FileWriter;
 
 import kieker.test.tools.junit.writeRead.TestAnalysis;
-import kieker.test.tools.junit.writeRead.TestDataRepository;
-import kieker.test.tools.junit.writeRead.TestProbe;
 
 /**
  * @author Christian Wulf

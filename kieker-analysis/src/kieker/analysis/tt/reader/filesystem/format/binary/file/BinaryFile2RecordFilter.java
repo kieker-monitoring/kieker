@@ -84,7 +84,6 @@ public class BinaryFile2RecordFilter extends AbstractConsumerStage<File> {
 		final Class<? extends AbstractDecompressionFilter> clazz = FSReaderUtil.findDecompressionFilterByExtension(name);
 
 		try {
-			// TODO we should pass a configuration object here
 			final AbstractDecompressionFilter filter = clazz.getConstructor(Configuration.class).newInstance(new Configuration());
 			final DataInputStream inputStream = new DataInputStream(filter.chainInputStream(new FileInputStream(binaryFile)));
 			try {

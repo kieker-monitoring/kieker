@@ -29,6 +29,8 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 
 import kieker.analysis.plugin.reader.jmx.JmxReader;
+import kieker.analysis.tt.writeRead.TestDataRepository;
+import kieker.analysis.tt.writeRead.TestProbe;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
@@ -38,8 +40,6 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.jmx.JmxWriter;
 
 import kieker.test.tools.junit.writeRead.TestAnalysis;
-import kieker.test.tools.junit.writeRead.TestDataRepository;
-import kieker.test.tools.junit.writeRead.TestProbe;
 
 /**
  * @author Jan Waller, Christian Wulf
