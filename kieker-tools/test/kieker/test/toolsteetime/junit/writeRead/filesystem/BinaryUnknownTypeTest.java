@@ -24,7 +24,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import kieker.analysisteetime.plugin.reader.filesystem.fsReader.BinaryLogReader;
+import kieker.analysis.tt.reader.filesystem.fsReader.BinaryLogReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationConstants;

@@ -3,9 +3,11 @@
 package kieker.analysisteetime.model.analysismodel.execution.util;
 
 import java.util.Map;
+
+import kieker.analysis.util.ComposedKey;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 import kieker.analysisteetime.model.analysismodel.execution.*;
-import kieker.analysisteetime.util.ComposedKey;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 

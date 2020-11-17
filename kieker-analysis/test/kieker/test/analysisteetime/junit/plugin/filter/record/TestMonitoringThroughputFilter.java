@@ -23,7 +23,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysisteetime.plugin.filter.record.MonitoringThroughputFilter;
+import kieker.analysis.stage.events.MonitoringThroughputFilter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 

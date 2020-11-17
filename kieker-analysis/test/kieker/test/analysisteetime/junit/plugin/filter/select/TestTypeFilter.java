@@ -22,7 +22,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysisteetime.plugin.filter.select.TypeFilter;
+import kieker.analysis.stage.select.TypeFilter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 

@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.stage.flow.TraceEventRecords;
+import kieker.analysis.trace.TraceEventRecords2ExecutionAndMessageTraceFilter;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.Execution;
 import kieker.model.system.model.ExecutionTrace;

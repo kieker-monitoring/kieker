@@ -15,10 +15,10 @@
  ***************************************************************************/
 package kieker.test.tools.util.tt.bookstore;
 
+import kieker.analysis.trace.AbstractTraceAnalysisFilter;
 import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.Execution;
-import kieker.tools.trace.analysis.tt.AbstractTraceAnalysisFilter;
 
 import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 

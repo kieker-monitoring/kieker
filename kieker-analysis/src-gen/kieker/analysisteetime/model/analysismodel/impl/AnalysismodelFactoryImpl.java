@@ -5,8 +5,9 @@ package kieker.analysisteetime.model.analysismodel.impl;
 import java.time.Duration;
 import java.time.Instant;
 
+import kieker.analysis.util.ComposedKey;
 import kieker.analysisteetime.model.analysismodel.*;
-import kieker.analysisteetime.util.ComposedKey;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;

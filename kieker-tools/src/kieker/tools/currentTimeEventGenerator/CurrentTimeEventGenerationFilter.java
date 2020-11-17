@@ -49,7 +49,9 @@ import kieker.common.record.misc.TimestampRecord;
  * @author Andre van Hoorn
  *
  * @since 1.3
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(description = "Generates time events with a given resolution based on the timestamps of incoming IMonitoringRecords", outputPorts = {
 	@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, eventTypes = TimestampRecord.class,
 			description = "Provides current time events"),

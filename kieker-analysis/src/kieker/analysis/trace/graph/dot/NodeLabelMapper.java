@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import kieker.analysisteetime.util.graph.IVertex;
+import kieker.analysis.graph.IVertex;
 
 /**
  * This class is a {@link Function} that maps a {@link IVertex} to a label. The

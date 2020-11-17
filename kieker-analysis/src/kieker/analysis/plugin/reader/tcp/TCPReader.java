@@ -47,7 +47,9 @@ import kieker.common.registry.reader.ReaderRegistry;
  * @author Jan Waller
  *
  * @since 1.8
+ * @deprecated 1.15 replaced in the TeeTime port by a generic TCP stage
  */
+@Deprecated
 @Plugin(description = "A reader which reads records from a TCP port", outputPorts = {
 	@OutputPort(name = TCPReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class, description = "Output Port of the TCPReader")
 }, configuration = {

@@ -39,7 +39,9 @@ import kieker.common.configuration.Configuration;
  * @author Andre van Hoorn, Jan Waller
  *
  * @since 1.6
+ * @deprecated 1.15 This helper class is not necessary to test TeeTime based stages
  */
+@Deprecated
 @Plugin(
 		programmaticOnly = true,
 		description = "A reader that can be prefilled programmatically and that provides these records (mostly used in testing scenarios)",

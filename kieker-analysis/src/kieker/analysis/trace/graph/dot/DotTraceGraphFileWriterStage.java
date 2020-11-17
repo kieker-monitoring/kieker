@@ -18,10 +18,10 @@ package kieker.analysis.trace.graph.dot;
 
 import java.io.File;
 
-import kieker.analysisteetime.util.graph.export.dot.DotExportConfiguration;
-import kieker.analysisteetime.util.graph.export.dot.DotFileWriterStage;
-import kieker.analysisteetime.util.graph.util.dot.attributes.DotEdgeAttribute;
-import kieker.analysisteetime.util.graph.util.dot.attributes.DotNodeAttribute;
+import kieker.analysis.graph.export.dot.DotExportConfiguration;
+import kieker.analysis.graph.export.dot.DotFileWriterStage;
+import kieker.analysis.graph.util.dot.attributes.DotEdgeAttribute;
+import kieker.analysis.graph.util.dot.attributes.DotNodeAttribute;
 
 /**
  * @author Sören Henning

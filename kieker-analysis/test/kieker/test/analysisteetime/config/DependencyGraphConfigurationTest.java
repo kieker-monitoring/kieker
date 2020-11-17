@@ -22,7 +22,7 @@ import java.time.temporal.ChronoUnit;
 
 import org.junit.Test;
 
-import kieker.analysisteetime.config.DependencyGraphConfiguration;
+import kieker.analysis.configuration.DependencyGraphConfiguration;
 
 import kieker.test.analysisteetime.ExampleConfigurationTest;
 

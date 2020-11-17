@@ -39,7 +39,9 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn
  *
  * @since 1.2
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(description = "Puts the incoming traces into equivalence classes", outputPorts = {
 	@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES, description = "Message Traces",
 			eventTypes = MessageTrace.class),

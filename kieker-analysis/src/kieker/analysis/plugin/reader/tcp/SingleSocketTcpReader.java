@@ -32,7 +32,9 @@ import kieker.monitoring.core.controller.tcp.SingleSocketRecordReader;
  * @author Christian Wulf
  *
  * @since 1.13
+ * @deprecated 1.15 replaced in the TeeTime port by a generic TCP stage
  */
+@Deprecated
 @Plugin(description = "A reader which reads records from a TCP port", outputPorts = {
 	@OutputPort(name = SingleSocketTcpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
 			description = "Output Port of the TCPReader")

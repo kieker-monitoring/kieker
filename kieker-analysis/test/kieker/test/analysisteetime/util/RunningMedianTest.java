@@ -21,7 +21,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import kieker.analysisteetime.util.RunningMedian;
+import kieker.analysis.util.RunningMedian;
 
 /**
  * @author Sören Henning

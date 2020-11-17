@@ -23,12 +23,14 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.trace.ExecutionRecordTransformationFilter;
+import kieker.analysis.trace.SessionReconstructionFilter;
+import kieker.analysis.trace.trace.reconstruction.TraceReconstructionFilter;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.Execution;
 import kieker.model.system.model.ExecutionTrace;
 import kieker.model.system.model.ExecutionTraceBasedSession;
-import kieker.tools.trace.analysis.tt.trace.reconstruction.TraceReconstructionFilter;
 
 import teetime.framework.test.StageTester;
 

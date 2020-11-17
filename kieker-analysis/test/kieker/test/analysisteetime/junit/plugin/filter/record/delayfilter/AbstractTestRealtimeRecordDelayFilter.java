@@ -24,8 +24,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysisteetime.plugin.filter.forward.AnalysisThroughputFilter;
-import kieker.analysisteetime.plugin.filter.record.delayfilter.RealtimeRecordDelayFilter;
+import kieker.analysis.stage.events.delayfilter.RealtimeRecordDelayFilter;
+import kieker.analysis.stage.forward.AnalysisThroughputFilter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 

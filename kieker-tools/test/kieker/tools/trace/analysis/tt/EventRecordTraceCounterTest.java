@@ -19,6 +19,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.stage.flow.TraceEventRecords;
+import kieker.analysis.trace.EventRecordTraceCounter;
 
 import kieker.test.tools.util.tt.bookstore.BookstoreEventRecordFactory;
 

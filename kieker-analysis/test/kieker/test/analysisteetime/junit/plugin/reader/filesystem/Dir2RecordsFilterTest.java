@@ -20,8 +20,8 @@ import java.io.File;
 
 import org.junit.Test;
 
-import kieker.analysisteetime.plugin.reader.filesystem.Dir2RecordsFilter;
-import kieker.analysisteetime.plugin.reader.filesystem.className.ClassNameRegistryRepository;
+import kieker.analysis.tt.reader.filesystem.Dir2RecordsFilter;
+import kieker.analysis.tt.reader.filesystem.className.ClassNameRegistryRepository;
 import kieker.common.record.IMonitoringRecord;
 
 import teetime.framework.AbstractStage;

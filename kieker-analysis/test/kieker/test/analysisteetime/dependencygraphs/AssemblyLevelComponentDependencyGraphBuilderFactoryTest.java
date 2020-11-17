@@ -21,12 +21,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysisteetime.dependencygraphs.AssemblyLevelComponentDependencyGraphBuilder;
-import kieker.analysisteetime.dependencygraphs.AssemblyLevelComponentDependencyGraphBuilderFactory;
-import kieker.analysisteetime.dependencygraphs.IDependencyGraphBuilder;
+import kieker.analysis.graph.dependency.AssemblyLevelComponentDependencyGraphBuilder;
+import kieker.analysis.graph.dependency.AssemblyLevelComponentDependencyGraphBuilderFactory;
+import kieker.analysis.graph.dependency.IDependencyGraphBuilder;
+import kieker.analysis.statistics.StatisticsModel;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionFactory;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionModel;
-import kieker.analysisteetime.statistics.StatisticsModel;
 
 /**
  * @author Sören Henning
@@ -54,7 +54,7 @@ public class AssemblyLevelComponentDependencyGraphBuilderFactoryTest {
 	}
 
 	/**
-	 * Test method for {@link kieker.analysisteetime.dependencygraphs.AssemblyLevelComponentDependencyGraphBuilderFactory#createDependencyGraphBuilder()}.
+	 * Test method for {@link kieker.analysis.graph.dependency.AssemblyLevelComponentDependencyGraphBuilderFactory#createDependencyGraphBuilder()}.
 	 */
 	@Test
 	public void testCreateDependencyGraphBuilder() {

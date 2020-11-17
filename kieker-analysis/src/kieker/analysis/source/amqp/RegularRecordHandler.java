@@ -23,8 +23,8 @@ import java.util.concurrent.BlockingQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.analysisteetime.plugin.reader.IRecordReceivedListener;
-import kieker.analysisteetime.plugin.reader.RecordDeserializer;
+import kieker.analysis.tt.reader.IRecordReceivedListener;
+import kieker.analysis.tt.reader.RecordDeserializer;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.registry.reader.ReaderRegistry;
 

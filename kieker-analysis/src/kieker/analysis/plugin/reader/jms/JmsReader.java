@@ -51,7 +51,9 @@ import kieker.common.record.IMonitoringRecord;
  * @author Andre van Hoorn, Matthias Rohr
  *
  * @since 0.95a
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(description = "A reader which reads records from a (remove or local) JMS queue", dependencies = "This plugin needs the file 'javax.jms-*.jar'.",
 		outputPorts = {
 			@OutputPort(name = JmsReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class, description = "Output Port of the JmsReader")

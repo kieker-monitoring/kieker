@@ -2,11 +2,12 @@
  */
 package kieker.analysisteetime.model.analysismodel.execution.impl;
 
+import kieker.analysis.util.ComposedKey;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
 
 import kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation;
 import kieker.analysisteetime.model.analysismodel.execution.ExecutionPackage;
-import kieker.analysisteetime.util.ComposedKey;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 

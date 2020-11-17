@@ -10,6 +10,7 @@ targetCompatibility = 1.8
 dependencies {
 	api project(':kieker-common')
 	api project(':kieker-monitoring')
+	api project(':kieker-model')
 
 	implementation resolveLibrary('javax.jms-*.jar')				// old library; not available via maven repo
 	api 'org.apache.cxf:cxf:2.6.17'			// cxf-bundle

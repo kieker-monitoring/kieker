@@ -16,10 +16,10 @@
 
 package kieker.analysis.trace.graph;
 
+import kieker.analysis.graph.IGraph;
 import kieker.analysis.trace.traversal.IOperationCallVisitor;
 import kieker.analysis.trace.traversal.TraceTraverser;
 import kieker.analysisteetime.model.analysismodel.trace.Trace;
-import kieker.analysisteetime.util.graph.IGraph;
 
 /**
  * @author Sören Henning

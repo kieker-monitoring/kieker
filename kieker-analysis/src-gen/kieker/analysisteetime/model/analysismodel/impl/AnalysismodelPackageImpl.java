@@ -5,6 +5,7 @@ package kieker.analysisteetime.model.analysismodel.impl;
 import java.time.Duration;
 import java.time.Instant;
 
+import kieker.analysis.util.ComposedKey;
 import kieker.analysisteetime.model.analysismodel.AnalysismodelFactory;
 import kieker.analysisteetime.model.analysismodel.AnalysismodelPackage;
 import kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage;
@@ -27,7 +28,7 @@ import kieker.analysisteetime.model.analysismodel.trace.impl.TracePackageImpl;
 
 import kieker.analysisteetime.model.analysismodel.type.TypePackage;
 import kieker.analysisteetime.model.analysismodel.type.impl.TypePackageImpl;
-import kieker.analysisteetime.util.ComposedKey;
+
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
 
