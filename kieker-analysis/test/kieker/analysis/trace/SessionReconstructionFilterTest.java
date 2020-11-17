@@ -23,7 +23,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.trace.trace.reconstruction.TraceReconstructionFilter;
+import kieker.analysis.trace.reconstruction.TraceReconstructionFilter;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.Execution;

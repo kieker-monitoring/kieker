@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.trace.trace.reconstruction;
+package kieker.analysis.trace.reconstruction;
 
 import java.util.Comparator;
 import java.util.Hashtable;

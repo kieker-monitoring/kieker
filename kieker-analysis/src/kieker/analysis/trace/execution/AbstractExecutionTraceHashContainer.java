@@ -13,9 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+package kieker.analysis.trace.execution;
+
+import kieker.model.system.model.ExecutionTrace;
 
 /**
- * @author Reiner Jung
+ * @author Andre van Hoorn
  *
+ * @since 1.2
  */
-package kieker.analysis.trace.trace.execution;
+abstract class AbstractExecutionTraceHashContainer { // NOPMD (abstract class without abstract methods)
+
+	private final ExecutionTrace executionTrace;
+
+	/**
+	 * Abstract constructor to initialize the container.
+	 *
+	 * @param t
+	 *            The execution trace to be stored in this container.
+	 */
+	public AbstractExecutionTraceHashContainer(final ExecutionTrace t) {
+		this.executionTrace = t;
+	}
+
+	/**
+	 * Delivers the stored execution trace.
+	 *
+	 * @return The content of this container.
+	 */
+	public ExecutionTrace getExecutionTrace() {
+		return this.executionTrace;
+	}
+}

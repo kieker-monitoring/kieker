@@ -14,3 +14,64 @@
  * limitations under the License.
  ***************************************************************************/
 package kieker.analysis.trace.execution;
+
+import kieker.analysis.trace.AbstractTraceAnalysisFilter;
+import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.util.signature.ClassOperationSignaturePair;
+import kieker.common.util.signature.Signature;
+import kieker.model.repository.SystemModelRepository;
+import kieker.model.system.model.Execution;
+
+import teetime.framework.OutputPort;
+
+/**
+ * Transforms {@link OperationExecutionRecord}s into {@link Execution}
+ * objects.<br>
+ *
+ * This class has exactly one input port and one output port. It receives
+ * objects inheriting from {@link OperationExecutionRecord}. The received object
+ * is transformed into an instance of {@link Execution}.
+ *
+ * @author Andre van Hoorn
+ * @author Reiner Jung -- teetime port
+ *
+ * @since 1.1
+ */
+public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFilter<OperationExecutionRecord> {
+
+	private final OutputPort<Execution> outputPort = this.createOutputPort(Execution.class);
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 *
+	 * @param repository
+	 *            system model repository
+	 */
+	public ExecutionRecordTransformationFilter(final SystemModelRepository repository) {
+		super(repository);
+	}
+
+	/**
+	 * This method represents the input port, processing incoming operation
+	 * execution records.
+	 *
+	 * @param operationExecutionRecord
+	 *            The next operation execution record.
+	 */
+	@Override
+	protected void execute(final OperationExecutionRecord operationExecutionRecord) throws Exception {
+		final String operationSignature = operationExecutionRecord.getOperationSignature();
+		final boolean isConstructor = operationSignature.contains(Signature.CONSTRUCTOR_METHOD_NAME);
+
+		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair
+				.splitOperationSignatureStr(operationExecutionRecord.getOperationSignature(), isConstructor);
+
+		final Execution execution = this.createExecutionByEntityNames(operationExecutionRecord.getHostname(),
+				fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
+				operationExecutionRecord.getTraceId(), operationExecutionRecord.getSessionId(), operationExecutionRecord.getEoi(),
+				operationExecutionRecord.getEss(), operationExecutionRecord.getTin(),
+				operationExecutionRecord.getTout(), false);
+		this.outputPort.send(execution);
+	}
+
+}

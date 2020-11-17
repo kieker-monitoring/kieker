@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.trace.trace.execution;
+package kieker.analysis.trace.execution;
 
 import java.util.Iterator;
 

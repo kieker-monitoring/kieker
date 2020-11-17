@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.trace.trace.execution;
+package kieker.analysis.trace.execution;
 
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
