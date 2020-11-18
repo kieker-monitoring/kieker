@@ -1,4 +1,6 @@
-apply plugin: 'application'
+plugins {
+	id 'application'
+}
 
 repositories {
 	mavenCentral() 
@@ -11,9 +13,7 @@ dependencies {
         implementation 'org.slf4j:slf4j-api:1.7.30'
         implementation 'org.codehaus.groovy:groovy-all:3.0.2'
 
-	implementation fileTree('lib') {
-		include "kieker-*.jar"
-	}
+	implementation 'net.kieker-monitoring:kieker:1.15-SNAPSHOT'
 }
 
 distTar.enabled=false

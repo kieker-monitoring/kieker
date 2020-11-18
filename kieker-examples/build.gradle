@@ -6,17 +6,15 @@ task buildStandaloneExamples(dependsOn: [
 					// 'buildStandaloneExamplesUserguideCh2Instr', 
 					// 'buildStandaloneExamplesUserguideCh34',
 					// 'buildStandaloneExamplesUserguideCh5',
-					// 'buildStandaloneExamplesUserguideAppendixSigar',
 					// 'buildStandaloneExamplesUserguideAppendixJMS', 
 					// 'buildStandaloneExamplesUserguideAppendixAMQP',
 					// 'buildStandaloneExamplesUserguideAppendixKafka',
-					// 'buildStandaloneExamplesMonitoringSigar',
-					// 'buildStandaloneExamplesMonitoringJVM',
-					// 'buildStandaloneExamplesMonitoringSpring',
-					// 'buildStandaloneExamplesMonitoringManual',
-					// 'buildStandaloneExamplesMonitoringAspectJ',
-					// 'buildStandaloneExamplesMonitoringAdaptive',
-					// 'buildStandaloneExamplesMonitoringTimesource',
+					'buildStandaloneExamplesMonitoringJVM',
+					'buildStandaloneExamplesMonitoringSpring',
+					'buildStandaloneExamplesMonitoringManual',
+					'buildStandaloneExamplesMonitoringAspectJ',
+					'buildStandaloneExamplesMonitoringAdaptive',
+					'buildStandaloneExamplesMonitoringTimesource',
 					// 'buildStandaloneExamplesAnalysisTraceAnalysis',
 					// 'buildStandaloneExamplesUserguideAppendixJavaEE', 
 					// 'replaceAbsoluteByRelativePathsEclipse'
@@ -63,7 +61,7 @@ task copyLibsStandaloneExamplesUserguideCh2Instr(type: Copy, dependsOn: [rootPro
 
 task buildStandaloneExamplesUserguideCh2Instr(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideCh2Instr') {
 	buildFile = 'userguide/ch2--manual-instrumentation/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 // TODO rework, fix README
@@ -76,7 +74,7 @@ task copyLibsStandaloneExamplesUserguideCh34(type: Copy, dependsOn: [rootProject
 
 task buildStandaloneExamplesUserguideCh34(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideCh34') {
 	buildFile = 'userguide/ch3-4--custom-components/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 // TODO aspectJ and trace example
@@ -89,23 +87,7 @@ task copyLibsStandaloneExamplesUserguideCh5(type: Copy, dependsOn: [rootProject.
 
 task buildStandaloneExamplesUserguideCh5(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideCh5') {
 	buildFile = 'userguide/ch5--trace-monitoring-aspectj/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
-}
-
-// TODO remove
-task copyLibsStandaloneExamplesUserguideAppendixSigar(type: Copy, dependsOn: [rootProject.emfJar]) {
-	from ('../build/libs') {
-		include "kieker-${version}-emf.jar"
-	}
-	from ('../lib/sigar') {
-		include "*"
-	}
-	into 'userguide/appendix-Sigar/lib/'
-}
-
-task buildStandaloneExamplesUserguideAppendixSigar(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixSigar') {
-	buildFile = 'userguide/appendix-Sigar/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 // JMS example
@@ -121,7 +103,7 @@ task copyLibsStandaloneExamplesUserguideAppendixJMS(type: Copy, dependsOn: [root
 
 task buildStandaloneExamplesUserguideAppendixJMS(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixJMS') {
 	buildFile = 'userguide/appendix-JMS/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 // AMQP example
@@ -164,6 +146,7 @@ task copyLiveDemoLibsStandaloneExamplesUserguideAppendixJavaEE(type: Copy, depen
 	into 'JavaEEServletContainerExample/livedemo-source/lib'
 }
 
+// TODO replace sigar
 task copyJettyLibsStandaloneExamplesUserguideAppendixJavaEE(type: Copy, dependsOn: [rootProject.aspectJJar]) {
 	from ('../build/libs') {
 		include "kieker-${version}-aspectj.jar"
@@ -187,22 +170,6 @@ task buildStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild, dependsOn
 // Examples for specific technologies and methods
 // ----------------------------------------------
 
-// TODO remove sigar examples
-task copyLibsStandaloneExamplesMonitoringSigar(type: Copy, dependsOn: [rootProject.mainJar]) {
-	from ('../build/libs') {
-		include "kieker-${version}.jar"
-	}
-	from ('../lib/sigar') {
-		include "*"
-	}
-	into 'monitoring/sampler-sigar/lib/'
-}
-
-task buildStandaloneExamplesMonitoringSigar(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringSigar') {
-	buildFile = 'monitoring/sampler-sigar/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
-}
-
 // JVM sampler example
 task copyLibsStandaloneExamplesMonitoringJVM(type: Copy, dependsOn: [rootProject.mainJar]) {
 	from ('../build/libs') {
@@ -213,7 +180,7 @@ task copyLibsStandaloneExamplesMonitoringJVM(type: Copy, dependsOn: [rootProject
 
 task buildStandaloneExamplesMonitoringJVM(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringJVM') {
 	buildFile = 'monitoring/sampler-jvm/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 // Spring tutorial example
@@ -221,24 +188,15 @@ task copyLibsStandaloneExamplesMonitoringSpring(type: Copy, dependsOn: [rootProj
 	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}
-//	from configurations.spring
 	from ('../lib') {
 		include "aspectjweaver-*.jar"
-	}
-	from ('../lib/framework-libs/spring/') {
-		include "aopalliance-*.jar"
-		include "spring-aop-*.jar"
-		include "spring-beans-*.jar"
-		include "spring-context-*.jar"
-		include "spring-core-*.jar"
-		include "spring-expression-*.jar"
 	}
 	into 'monitoring/probe-spring/lib/'
 }
 
 task buildStandaloneExamplesMonitoringSpring(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringSpring') {
 	buildFile = 'monitoring/probe-spring/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 // 
@@ -251,7 +209,7 @@ task copyLibsStandaloneExamplesMonitoringManual(type: Copy, dependsOn: [rootProj
 
 task buildStandaloneExamplesMonitoringManual(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringManual') {
 	buildFile = 'monitoring/probe-manual/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 task copyLibsStandaloneExamplesMonitoringAspectJ(type: Copy, dependsOn: [rootProject.aspectJJar]) {
@@ -263,7 +221,7 @@ task copyLibsStandaloneExamplesMonitoringAspectJ(type: Copy, dependsOn: [rootPro
 
 task buildStandaloneExamplesMonitoringAspectJ(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringAspectJ') {
 	buildFile = 'monitoring/probe-aspectj/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 task copyLibsStandaloneExamplesMonitoringAdaptive(type: Copy, dependsOn: [rootProject.aspectJJar]) {
@@ -275,7 +233,7 @@ task copyLibsStandaloneExamplesMonitoringAdaptive(type: Copy, dependsOn: [rootPr
 
 task buildStandaloneExamplesMonitoringAdaptive(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringAdaptive') {
 	buildFile = 'monitoring/adaptive-monitoring/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 task copyLibsStandaloneExamplesMonitoringTimesource(type: Copy, dependsOn: [rootProject.aspectJJar]) {
@@ -287,7 +245,7 @@ task copyLibsStandaloneExamplesMonitoringTimesource(type: Copy, dependsOn: [root
 
 task buildStandaloneExamplesMonitoringTimesource(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringTimesource') {
 	buildFile = 'monitoring/custom-timesource/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 task copyLibsStandaloneExamplesAnalysisTraceAnalysis(type: Copy, dependsOn: [rootProject.mainJar]) {
@@ -299,7 +257,7 @@ task copyLibsStandaloneExamplesAnalysisTraceAnalysis(type: Copy, dependsOn: [roo
 
 task buildStandaloneExamplesAnalysisTraceAnalysis(type: GradleBuild, dependsOn: [ 'copyLibsStandaloneExamplesAnalysisTraceAnalysis']) {
 	buildFile = 'analysis/trace-analysis/build.gradle'
-	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
+	tasks = ['jar']
 }
 
 task cleanStandaloneExamples(dependsOn: [
@@ -307,16 +265,14 @@ task cleanStandaloneExamples(dependsOn: [
 					// 'cleanStandaloneExamplesUserguideCh2Instr', 
 					// 'cleanStandaloneExamplesUserguideCh34',
 					// 'cleanStandaloneExamplesUserguideCh5',
-					// 'cleanStandaloneExamplesUserguideAppendixSigar',
 					// 'cleanStandaloneExamplesUserguideAppendixJMS',
 					// 'cleanStandaloneExamplesUserguideAppendixAMQP',  
-					// 'cleanStandaloneExamplesMonitoringSigar',
-					// 'cleanStandaloneExamplesMonitoringJVM',
-					// 'cleanStandaloneExamplesMonitoringSpring',
-					// 'cleanStandaloneExamplesMonitoringManual',
-					// 'cleanStandaloneExamplesMonitoringAspectJ',
-					// 'cleanStandaloneExamplesMonitoringAdaptive',
-					// 'cleanStandaloneExamplesMonitoringTimesource',
+					'cleanStandaloneExamplesMonitoringJVM',
+					'cleanStandaloneExamplesMonitoringSpring',
+					'cleanStandaloneExamplesMonitoringManual',
+					'cleanStandaloneExamplesMonitoringAspectJ',
+					'cleanStandaloneExamplesMonitoringAdaptive',
+					'cleanStandaloneExamplesMonitoringTimesource',
 					// 'cleanStandaloneExamplesAnalysisTraceAnalysis',
 					// 'cleanStandaloneExamplesUserguideAppendixJavaEE'
 					]) {
@@ -348,13 +304,6 @@ task cleanStandaloneExamplesUserguideCh5(type: GradleBuild) {
 	delete fileTree(dir: 'userguide/ch5--trace-monitoring-aspectj/lib', include: '*.jar')
 }
 
-task cleanStandaloneExamplesUserguideAppendixSigar(type: GradleBuild) {
-	buildFile = 'userguide/appendix-Sigar/build.gradle'
-	tasks = ['clean']
-	delete fileTree(dir: 'userguide/appendix-Sigar/lib', include: '*.jar')
-	delete fileTree(dir: 'userguide/appendix-Sigar/lib', include: '*sigar*')
-}
-
 task cleanStandaloneExamplesUserguideAppendixJMS(type: GradleBuild) {
 	buildFile = 'userguide/appendix-JMS/build.gradle'
 	tasks = ['clean']
@@ -367,20 +316,14 @@ task cleanStandaloneExamplesUserguideAppendixAMQP(type: GradleBuild) {
 	delete fileTree(dir: 'userguide/appendix-AMQP/lib', include: '*.jar')
 }
 
+// TODO replace sigar with oshi
 task cleanStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild) {
 	buildFile = 'JavaEEServletContainerExample/build.gradle'
 	tasks = ['clean']
 	delete fileTree(dir: 'JavaEEServletContainerExample/livedemo-source/lib', include: '*kieker*.jar')
-	delete fileTree(dir: 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib', include: '*sigar*')
+	// delete fileTree(dir: 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib', include: '*sigar*')
 	delete fileTree(dir: 'JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib', include: 'kieker*')
 	delete 'JavaEEServletContainerExample/jetty/webapps/livedemo.war'
-}
-
-task cleanStandaloneExamplesMonitoringSigar(type: GradleBuild) {
-	buildFile = 'monitoring/sampler-sigar/build.gradle'
-	tasks = ['clean']
-	delete fileTree(dir: 'monitoring/sampler-sigar/lib', include: '*.jar')
-	delete fileTree(dir: 'monitoring/sampler-sigar/lib', include: '*sigar*')
 }
 
 task cleanStandaloneExamplesMonitoringJVM(type: GradleBuild) {
