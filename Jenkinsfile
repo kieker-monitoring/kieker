@@ -94,9 +94,9 @@ pipeline {
                   pmdParser(
                     pattern: '**/build/reports/pmd/*.xml'
                   ),
-                  spotBugs(
-                    pattern: '**/build/reports/findbugs/*.xml'
-                  )
+                  //spotBugs(
+                  //  pattern: '**/build/reports/findbugs/*.xml'
+                  //)
                 ]
               )
             }
