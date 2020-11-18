@@ -16,6 +16,7 @@ plugins {
 	id 'java-library'
 	id 'maven-publish'
 	id 'signing'
+	id 'jacoco'
 }
 
 configurations {
@@ -53,6 +54,7 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
+	apply plugin: 'jacoco'
 
     sourceCompatibility = sourceVersion
     targetCompatibility = targetVersion
@@ -90,22 +92,41 @@ subprojects {
         }
     }
 
-    test {
-        systemProperty "java.io.tmpdir", "${buildDir}"
-        ignoreFailures = false
-        maxHeapSize = "2g"            // Set limit to prevent Travis-CI build to crash
+	test {
+		finalizedBy jacocoTestReport // report is always generated after tests run
 
-        testLogging {
-            showCauses = 'true'
-            exceptionFormat = 'full'
-            showExceptions = 'true'
-            showStandardStreams = 'true'
-        }
+		systemProperty "java.io.tmpdir", "${buildDir}"
+		ignoreFailures = false
+		maxHeapSize = "2g"            // Set limit to prevent Travis-CI build to crash
 
-        afterTest { desc, result ->
-            println "Executed test ${desc.name} [${desc.className}] with result: ${result.resultType}"
-        }
-    }
+		testLogging {
+			showCauses = 'true'
+			exceptionFormat = 'full'
+			showExceptions = 'true'
+			showStandardStreams = 'true'
+		}
+
+		jacoco {
+			enabled = true
+		}
+
+		afterTest { desc, result ->
+			println "Executed test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+		}
+	}
+
+	jacoco {
+		toolVersion = '0.8.6'
+	}
+
+	jacocoTestReport {
+		dependsOn test // tests are required to run before generating the report
+		reports {
+			xml.enabled = false
+			csv.enabled = false
+			html.enabled = true
+		}
+	}
 
     task integrationTest(type: Test) {
         testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
