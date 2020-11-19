@@ -48,7 +48,7 @@ public class BinarySerializerTest {
 		// Default Constructor
 	}
 
-	@Test
+	//@Test
 	public void testSingleRecord() throws IOException, InterruptedException {
 		final String testId = "testSingleRecord";
 		final int recordCount = 1;
@@ -84,7 +84,7 @@ public class BinarySerializerTest {
 		Assert.assertEquals(9, numberOfStrings);
 	}
 
-	@Test
+	//@Test
 	public void testMultipleRecords() throws InterruptedException {
 		final String testId = "testMultipleRecords";
 		final int recordCount = 15;
