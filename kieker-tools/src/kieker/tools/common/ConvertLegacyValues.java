@@ -61,7 +61,7 @@ public final class ConvertLegacyValues {
 	 * @return returns an array of strings
 	 */
 	public static String[] listToArray(final List<String> list) {
-		return list.toArray(new String[list.size()]);
+		return list.toArray(new String[0]);
 	}
 
 }

@@ -37,12 +37,17 @@ import kieker.common.record.misc.EmptyRecord;
  * @author Andre van Hoorn, Jan Waller
  *
  * @since 0.95a
+ * @deprecated 1.15 replaced by teetime file reading facilities
  */
+@Deprecated
 @Plugin(description = "A file system reader which reads records from multiple directories", outputPorts = {
-	@OutputPort(name = AsciiLogReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Output Port of the reader") }, configuration = {
-			@Property(name = AsciiLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".", description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
-			@Property(name = AsciiLogReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false", description = "Ignore unknown records? Aborts if encountered and value is false.")
+	@OutputPort(name = AsciiLogReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Output Port of the reader") },
+		configuration = {
+			@Property(name = AsciiLogReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".",
+					description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
+			@Property(name = AsciiLogReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false",
+					description = "Ignore unknown records? Aborts if encountered and value is false.")
 		})
 public class AsciiLogReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 

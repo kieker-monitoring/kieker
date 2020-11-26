@@ -18,22 +18,26 @@ package kieker.tools.trace.analysis.systemModel;
 
 /**
  * A specified class of messages which represent synchronous calls.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class SynchronousCallMessage extends AbstractMessage {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param timestamp
 	 *            The timestamp of the message.
 	 * @param sendingExecution
-	 *            The {@link Execution} object which sent the message.
+	 *            The {@link Execution} object which sent the
+	 *            message.
 	 * @param receivingExecution
-	 *            The {@link Execution} object which received the message.
+	 *            The {@link Execution} object which received the
+	 *            message.
 	 */
 	public SynchronousCallMessage(final long timestamp, final Execution sendingExecution,
 			final Execution receivingExecution) {

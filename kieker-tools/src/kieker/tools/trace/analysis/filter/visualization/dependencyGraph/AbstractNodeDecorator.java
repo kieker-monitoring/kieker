@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import java.util.concurrent.TimeUnit;
@@ -27,8 +26,14 @@ import kieker.tools.trace.analysis.systemModel.AbstractMessage;
  * @author Holger Knoche
  *
  * @since 1.5
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public abstract class AbstractNodeDecorator {
+
+	public AbstractNodeDecorator() {
+		// default constructor
+	}
 
 	/**
 	 * Creates a node decorator from its option name.

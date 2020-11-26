@@ -61,7 +61,8 @@ public class DirectoryScannerStageIntegrationTest {
 	}
 
 	/**
-	 * @throws java.io.IOException on errors
+	 * @throws java.io.IOException
+	 *             on errors
 	 */
 	@Before
 	public void setUp() throws IOException {
@@ -92,7 +93,8 @@ public class DirectoryScannerStageIntegrationTest {
 	}
 
 	/**
-	 * @throws java.io.IOException on errors
+	 * @throws java.io.IOException
+	 *             on errors
 	 */
 	@After
 	public void tearDown() throws IOException {

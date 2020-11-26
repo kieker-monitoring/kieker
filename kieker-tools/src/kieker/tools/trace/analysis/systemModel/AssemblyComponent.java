@@ -17,11 +17,13 @@
 package kieker.tools.trace.analysis.systemModel;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class AssemblyComponent implements ISystemModelElement {
 	private final int id;
 	private final String name;
@@ -29,7 +31,7 @@ public class AssemblyComponent implements ISystemModelElement {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param id
 	 *            The ID of this assembly component.
 	 * @param name
@@ -78,7 +80,7 @@ public class AssemblyComponent implements ISystemModelElement {
 
 	/**
 	 * Denotes whether this assembly component is a root component.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public boolean isRootComponent() {

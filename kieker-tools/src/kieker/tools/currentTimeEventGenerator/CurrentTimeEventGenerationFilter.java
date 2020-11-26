@@ -49,14 +49,17 @@ import kieker.common.record.misc.TimestampRecord;
  * @author Andre van Hoorn
  *
  * @since 1.3
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(description = "Generates time events with a given resolution based on the timestamps of incoming IMonitoringRecords", outputPorts = {
-	@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, eventTypes = {
-		TimestampRecord.class }, description = "Provides current time events"),
-	@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_VALUE, eventTypes = {
-		Long.class }, description = "Provides current time values")
+	@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, eventTypes = TimestampRecord.class,
+			description = "Provides current time events"),
+	@OutputPort(name = CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_VALUE, eventTypes = Long.class,
+			description = "Provides current time values")
 }, configuration = {
-	@Property(name = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+	@Property(name = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
+			defaultValue = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
 	@Property(name = CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, defaultValue = "1000")
 })
 public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
@@ -133,8 +136,8 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	 * @param record
 	 *            The next record.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_NEW_RECORD, eventTypes = {
-		IMonitoringRecord.class }, description = "Receives a new record and extracts the logging timestamp as a time event")
+	@InputPort(name = INPUT_PORT_NAME_NEW_RECORD, eventTypes = IMonitoringRecord.class,
+			description = "Receives a new record and extracts the logging timestamp as a time event")
 	public void inputRecord(final IMonitoringRecord record) {
 		this.inputTimestamp(record.getLoggingTimestamp());
 	}
@@ -146,7 +149,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	 * @param timestamp
 	 *            The next timestamp.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_NEW_TIMESTAMP, description = "Receives a new timestamp as a time event", eventTypes = { Long.class })
+	@InputPort(name = INPUT_PORT_NAME_NEW_TIMESTAMP, description = "Receives a new timestamp as a time event", eventTypes = Long.class)
 	public void inputTimestamp(final Long timestamp) {
 		if (timestamp < 0) {
 			this.logger.warn("Received timestamp value < 0: " + timestamp);

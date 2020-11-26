@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.flow;
 
-
 /**
  * @author Florian Fittkau
  * 
@@ -23,5 +22,5 @@ package kieker.common.record.flow;
  */
 public interface IInterfaceRecord extends IFlowRecord {
 	public String getInterface();
-	
+
 }

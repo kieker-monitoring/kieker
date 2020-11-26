@@ -96,6 +96,5 @@ public final class ConfigurationConstants {
 	/**
 	 * Factory class. Avoid instantiation.
 	 */
-	private ConfigurationConstants() {
-	}
+	private ConfigurationConstants() {}
 }

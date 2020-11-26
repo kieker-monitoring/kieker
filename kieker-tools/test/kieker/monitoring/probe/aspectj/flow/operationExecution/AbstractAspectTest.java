@@ -54,7 +54,7 @@ public class AbstractAspectTest { // NOCS NOPMD (abstract class)
 
 	// why is this test deactivated?
 	// @Test
-	//@SuppressFBWarnings(value = "UI_INHERITANCE_UNSAFE_GETRESOURCE", justification = "no problem since we use getResource without package name prefix")
+	// @SuppressFBWarnings(value = "UI_INHERITANCE_UNSAFE_GETRESOURCE", justification = "no problem since we use getResource without package name prefix")
 	public void testMonitoring() throws Exception { // NOPMD (rules/java/junit.html#JUnitTestContainsTooManyAsserts)
 		final URL resource = this.getClass().getResource("/kieker.monitoring.probe.aspectj.flow.operationExecution");
 		final File workingDirectory = new File(resource.toURI());
@@ -73,6 +73,12 @@ public class AbstractAspectTest { // NOCS NOPMD (abstract class)
 		Assert.assertThat(records, Matchers.hasSize(16 - 1));
 	}
 
+	/**
+	 * Some logging class.
+	 *
+	 * @author Christian Wulf
+	 *
+	 */
 	private static class AspectjMonitoringToAsciiFileLog {
 
 		private static final String JAVA_COMMAND = "java"; // C:/Program Files/Java/jre7/bin/
@@ -123,6 +129,12 @@ public class AbstractAspectTest { // NOCS NOPMD (abstract class)
 
 	}
 
+	/**
+	 * Filter to filter out directories containing META-INF.
+	 *
+	 * @author Christian Wulf
+	 *
+	 */
 	private static class NonMetaInfDirectoryFilter implements FileFilter { // NOCS (no ctor)
 		@Override
 		public boolean accept(final File pathname) {

@@ -35,13 +35,16 @@ public class NoneDecompressionFilter extends AbstractDecompressionFilter {
 	/**
 	 * Create dummy decompression filter.
 	 *
-	 * @param configuration configuration for the filter
+	 * @param configuration
+	 *            configuration for the filter
 	 */
 	public NoneDecompressionFilter(final Configuration configuration) {
 		super(configuration);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.reader.depcompression.IDecompressionFilter#chainInputStream(java.io.OutputStream)
 	 */
 	@Override
@@ -49,7 +52,9 @@ public class NoneDecompressionFilter extends AbstractDecompressionFilter {
 		return new DataInputStream(inputStream);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.reader.depcompression.IDecompressionFilter#getExtension()
 	 */
 	@Override

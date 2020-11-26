@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.util.Switch;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
+ * 
  * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage
  * @generated
  */
@@ -28,6 +29,7 @@ public class DeploymentSwitch<T> extends Switch<T> {
 	 * The cached model package
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected static DeploymentPackage modelPackage;
@@ -36,6 +38,7 @@ public class DeploymentSwitch<T> extends Switch<T> {
 	 * Creates an instance of the switch.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeploymentSwitch() {
@@ -48,7 +51,9 @@ public class DeploymentSwitch<T> extends Switch<T> {
 	 * Checks whether this is a switch for the given package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param ePackage the package in question.
+	 * 
+	 * @param ePackage
+	 *            the package in question.
 	 * @return whether this is a switch for the given package.
 	 * @generated
 	 */
@@ -61,55 +66,67 @@ public class DeploymentSwitch<T> extends Switch<T> {
 	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the first non-null result returned by a <code>caseXXX</code> call.
 	 * @generated
 	 */
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case DeploymentPackage.DEPLOYMENT_MODEL: {
-				DeploymentModel deploymentModel = (DeploymentModel)theEObject;
-				T result = caseDeploymentModel(deploymentModel);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DeploymentPackage.ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY: {
-				@SuppressWarnings("unchecked") Map.Entry<String, DeploymentContext> eStringToDeploymentContextMapEntry = (Map.Entry<String, DeploymentContext>)theEObject;
-				T result = caseEStringToDeploymentContextMapEntry(eStringToDeploymentContextMapEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DeploymentPackage.DEPLOYMENT_CONTEXT: {
-				DeploymentContext deploymentContext = (DeploymentContext)theEObject;
-				T result = caseDeploymentContext(deploymentContext);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY: {
-				@SuppressWarnings("unchecked") Map.Entry<String, DeployedComponent> eStringToDeployedComponentMapEntry = (Map.Entry<String, DeployedComponent>)theEObject;
-				T result = caseEStringToDeployedComponentMapEntry(eStringToDeployedComponentMapEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DeploymentPackage.DEPLOYED_COMPONENT: {
-				DeployedComponent deployedComponent = (DeployedComponent)theEObject;
-				T result = caseDeployedComponent(deployedComponent);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DeploymentPackage.ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY: {
-				@SuppressWarnings("unchecked") Map.Entry<String, DeployedOperation> eStringToDeployedOperationMapEntry = (Map.Entry<String, DeployedOperation>)theEObject;
-				T result = caseEStringToDeployedOperationMapEntry(eStringToDeployedOperationMapEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DeploymentPackage.DEPLOYED_OPERATION: {
-				DeployedOperation deployedOperation = (DeployedOperation)theEObject;
-				T result = caseDeployedOperation(deployedOperation);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			default: return defaultCase(theEObject);
+		case DeploymentPackage.DEPLOYMENT_MODEL: {
+			DeploymentModel deploymentModel = (DeploymentModel) theEObject;
+			T result = caseDeploymentModel(deploymentModel);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case DeploymentPackage.ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY: {
+			@SuppressWarnings("unchecked")
+			Map.Entry<String, DeploymentContext> eStringToDeploymentContextMapEntry = (Map.Entry<String, DeploymentContext>) theEObject;
+			T result = caseEStringToDeploymentContextMapEntry(eStringToDeploymentContextMapEntry);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case DeploymentPackage.DEPLOYMENT_CONTEXT: {
+			DeploymentContext deploymentContext = (DeploymentContext) theEObject;
+			T result = caseDeploymentContext(deploymentContext);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY: {
+			@SuppressWarnings("unchecked")
+			Map.Entry<String, DeployedComponent> eStringToDeployedComponentMapEntry = (Map.Entry<String, DeployedComponent>) theEObject;
+			T result = caseEStringToDeployedComponentMapEntry(eStringToDeployedComponentMapEntry);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case DeploymentPackage.DEPLOYED_COMPONENT: {
+			DeployedComponent deployedComponent = (DeployedComponent) theEObject;
+			T result = caseDeployedComponent(deployedComponent);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case DeploymentPackage.ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY: {
+			@SuppressWarnings("unchecked")
+			Map.Entry<String, DeployedOperation> eStringToDeployedOperationMapEntry = (Map.Entry<String, DeployedOperation>) theEObject;
+			T result = caseEStringToDeployedOperationMapEntry(eStringToDeployedOperationMapEntry);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case DeploymentPackage.DEPLOYED_OPERATION: {
+			DeployedOperation deployedOperation = (DeployedOperation) theEObject;
+			T result = caseDeployedOperation(deployedOperation);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		default:
+			return defaultCase(theEObject);
 		}
 	}
 
@@ -119,7 +136,9 @@ public class DeploymentSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Model</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -134,7 +153,9 @@ public class DeploymentSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EString To Deployment Context Map Entry</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -149,7 +170,9 @@ public class DeploymentSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Context</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -164,7 +187,9 @@ public class DeploymentSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EString To Deployed Component Map Entry</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -179,7 +204,9 @@ public class DeploymentSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Deployed Component</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -194,7 +221,9 @@ public class DeploymentSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EString To Deployed Operation Map Entry</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -209,7 +238,9 @@ public class DeploymentSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Deployed Operation</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
@@ -224,7 +255,9 @@ public class DeploymentSwitch<T> extends Switch<T> {
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch, but this is the last case anyway.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
+	 * 
+	 * @param object
+	 *            the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject)
 	 * @generated
@@ -234,4 +267,4 @@ public class DeploymentSwitch<T> extends Switch<T> {
 		return null;
 	}
 
-} //DeploymentSwitch
+} // DeploymentSwitch

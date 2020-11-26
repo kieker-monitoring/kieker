@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.database;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,13 +25,11 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.14
  */
 public final class DatabaseFailedEventFactory implements IRecordFactory<DatabaseFailedEvent> {
-	
 
 	@Override
 	public DatabaseFailedEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new DatabaseFailedEvent(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

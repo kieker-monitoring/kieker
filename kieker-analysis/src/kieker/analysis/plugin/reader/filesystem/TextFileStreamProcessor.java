@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
-import kieker.analysisteetime.plugin.reader.filesystem.util.MappingException;
+import kieker.analysis.tt.reader.filesystem.util.MappingException;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.exception.UnknownRecordTypeException;
 import kieker.common.record.IMonitoringRecord;
@@ -36,8 +36,9 @@ import kieker.common.registry.reader.ReaderRegistry;
  * @author Reiner Jung
  *
  * @since 1.15
- *
+ * @deprecated 1.15 replaced by teetime log reading facilities
  */
+@Deprecated
 public class TextFileStreamProcessor {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TextFileStreamProcessor.class);
@@ -55,7 +56,8 @@ public class TextFileStreamProcessor {
 
 	private final ReaderRegistry<String> stringRegistry;
 
-	public TextFileStreamProcessor(final boolean ignoreUnknownRecordTypes, final ReaderRegistry<String> stringRegistry, final IMonitoringRecordReceiver recordReceiver) {
+	public TextFileStreamProcessor(final boolean ignoreUnknownRecordTypes, final ReaderRegistry<String> stringRegistry,
+			final IMonitoringRecordReceiver recordReceiver) {
 		this.ignoreUnknownRecordTypes = ignoreUnknownRecordTypes;
 		this.recordReceiver = recordReceiver;
 		this.terminated = false;
@@ -124,7 +126,7 @@ public class TextFileStreamProcessor {
 	 */
 	private int processBuffer(final byte[] buffer, final int offset,
 			final int numOfBufferedBytes)
-					throws MappingException, MonitoringRecordException, UnknownRecordTypeException {
+			throws MappingException, MonitoringRecordException, UnknownRecordTypeException {
 		int i = offset;
 		int mark = 0;
 		while (i < numOfBufferedBytes) {

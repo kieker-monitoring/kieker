@@ -22,19 +22,22 @@ import kieker.tools.trace.analysis.systemModel.repository.TypeRepository;
 
 /**
  * This class represents a root assembly component.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
- * 
+ *
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class RootAssemblyComponent extends AssemblyComponent {
 
 	/**
 	 * Creates a new root assembly component.
 	 */
 	public RootAssemblyComponent() {
-		super(AbstractSystemSubRepository.ROOT_ELEMENT_ID, SystemModelRepository.ROOT_NODE_LABEL, TypeRepository.ROOT_COMPONENT);
+		super(AbstractSystemSubRepository.ROOT_ELEMENT_ID, SystemModelRepository.ROOT_NODE_LABEL,
+				TypeRepository.ROOT_COMPONENT);
 	}
 
 	@Override

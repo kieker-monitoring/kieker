@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.flow;
 
-
 /**
  * @author Jan Waller
  * 

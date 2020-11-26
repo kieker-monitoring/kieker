@@ -47,9 +47,11 @@ import kieker.common.registry.reader.ReaderRegistry;
  * @author Jan Waller
  *
  * @since 1.8
+ * @deprecated 1.15 replaced in the TeeTime port by a generic TCP stage
  */
+@Deprecated
 @Plugin(description = "A reader which reads records from a TCP port", outputPorts = {
-	@OutputPort(name = TCPReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Output Port of the TCPReader")
+	@OutputPort(name = TCPReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class, description = "Output Port of the TCPReader")
 }, configuration = {
 	@Property(name = TCPReader.CONFIG_PROPERTY_NAME_PORT1, defaultValue = "10133", description = "The first port of the server used for the TCP connection."),
 	@Property(name = TCPReader.CONFIG_PROPERTY_NAME_PORT2, defaultValue = "10134", description = "The second port of the server used for the TCP connection.")
@@ -143,7 +145,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 		final int clazzId = buffer.getInt();
 		final long loggingTimestamp = buffer.getLong();
 		try { // NOCS (Nested try-catch)
-			// final IMonitoringRecord record = AbstractMonitoringRecord.createFromByteBuffer(clazzid, buffer, this.stringRegistry);
+				// final IMonitoringRecord record = AbstractMonitoringRecord.createFromByteBuffer(clazzid, buffer, this.stringRegistry);
 			final String recordClassName = this.stringRegistry.get(clazzId);
 			final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactoryCatalog.get(recordClassName);
 			final IMonitoringRecord record = recordFactory.create(BinaryValueDeserializer.create(buffer, this.stringRegistry));

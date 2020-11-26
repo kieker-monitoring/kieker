@@ -49,8 +49,10 @@ public final class CSUtility {
 	 * This method checks whether the given component has a javadoc comment with a
 	 * valid since tag.
 	 *
-	 * @param check The current check.
-	 * @param ast   The component to check for the tag.
+	 * @param check
+	 *            The current check.
+	 * @param ast
+	 *            The component to check for the tag.
 	 *
 	 * @return true if and only if there is a since tag in the javadoc comment of
 	 *         the given component.
@@ -80,7 +82,8 @@ public final class CSUtility {
 	 * This method extracts all method definitions from the given class (or
 	 * interface).
 	 *
-	 * @param ast The class (or interface).
+	 * @param ast
+	 *            The class (or interface).
 	 *
 	 * @return A collection of available methods.
 	 */
@@ -104,7 +107,8 @@ public final class CSUtility {
 	 * Checks whether the "parent" (the containing element) of the method is an
 	 * interface or not.
 	 *
-	 * @param ast The method to check.
+	 * @param ast
+	 *            The method to check.
 	 *
 	 * @return true if and only if the method is contained in an interface.
 	 */
@@ -115,7 +119,8 @@ public final class CSUtility {
 	/**
 	 * Checks whether the given class is marked as private or not.
 	 *
-	 * @param clazz The class to check.
+	 * @param clazz
+	 *            The class to check.
 	 *
 	 * @return true if and only if the class contains a private modifier.
 	 */
@@ -128,7 +133,8 @@ public final class CSUtility {
 	/**
 	 * Checks whether the given class is marked as abstract or not.
 	 *
-	 * @param clazz The class to check.
+	 * @param clazz
+	 *            The class to check.
 	 *
 	 * @return true if and only if the class contains an abstract modifier.
 	 */

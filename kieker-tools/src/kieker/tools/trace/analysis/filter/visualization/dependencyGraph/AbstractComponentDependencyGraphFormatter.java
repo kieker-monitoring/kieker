@@ -28,7 +28,9 @@ import kieker.tools.trace.analysis.systemModel.AllocationComponent;
  *            The graph type this formatter is for
  *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public abstract class AbstractComponentDependencyGraphFormatter<G extends AbstractDependencyGraph<?>> extends AbstractDependencyGraphFormatter<G> {
 
 	/**
@@ -47,7 +49,7 @@ public abstract class AbstractComponentDependencyGraphFormatter<G extends Abstra
 		final AllocationComponent component = node.getEntity();
 
 		builder.append(stereotype).append("\\n")
-		       .append(component.getAssemblyComponent().getName()).append(':');
+				.append(component.getAssemblyComponent().getName()).append(':');
 
 		if (useShortLabels) {
 			builder.append("..");

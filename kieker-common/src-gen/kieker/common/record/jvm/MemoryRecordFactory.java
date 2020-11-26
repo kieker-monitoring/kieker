@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.jvm;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,13 +25,11 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.10
  */
 public final class MemoryRecordFactory implements IRecordFactory<MemoryRecord> {
-	
 
 	@Override
 	public MemoryRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new MemoryRecord(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

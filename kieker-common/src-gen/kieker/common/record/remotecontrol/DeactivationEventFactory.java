@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.remotecontrol;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,13 +25,11 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.14
  */
 public final class DeactivationEventFactory implements IRecordFactory<DeactivationEvent> {
-	
 
 	@Override
 	public DeactivationEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new DeactivationEvent(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

@@ -43,7 +43,7 @@ public class TestAnalysis {
 
 		final AbstractReaderPlugin reader = this.newReader(readerClass, configuration, this.analysisController);
 		final String outputPortName = reader.getAllOutputPortNames()[0];
-		this.sinkPlugin = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), this.analysisController);
+		this.sinkPlugin = new ListCollectionFilter<>(new Configuration(), this.analysisController);
 
 		this.analysisController.connect(reader, outputPortName, this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 

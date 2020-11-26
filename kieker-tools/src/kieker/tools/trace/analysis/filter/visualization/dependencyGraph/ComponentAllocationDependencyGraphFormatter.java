@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import java.util.ArrayList;
@@ -35,7 +34,9 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  * @author Holger Knoche
  *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public class ComponentAllocationDependencyGraphFormatter extends AbstractComponentDependencyGraphFormatter<ComponentAllocationDependencyGraph> {
 
 	private static final String DEFAULT_FILE_NAME = VisualizationConstants.ALLOCATION_COMPONENT_DEPENDENCY_GRAPH_FN_PREFIX + VisualizationConstants.DOT_FILE_SUFFIX;

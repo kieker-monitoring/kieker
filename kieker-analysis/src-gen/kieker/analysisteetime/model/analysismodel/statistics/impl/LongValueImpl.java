@@ -19,7 +19,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.statistics.impl.LongValueImpl#getMeasurement <em>Measurement</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.statistics.impl.LongValueImpl#getMeasurement <em>Measurement</em>}</li>
  * </ul>
  *
  * @generated
@@ -29,6 +29,7 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	 * The default value of the '{@link #getMeasurement() <em>Measurement</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getMeasurement()
 	 * @generated
 	 * @ordered
@@ -39,6 +40,7 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	 * The cached value of the '{@link #getMeasurement() <em>Measurement</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getMeasurement()
 	 * @generated
 	 * @ordered
@@ -48,6 +50,7 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected LongValueImpl() {
@@ -57,6 +60,7 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -67,6 +71,7 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public long getMeasurement() {
@@ -76,6 +81,7 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setMeasurement(long newMeasurement) {
@@ -88,13 +94,14 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case StatisticsPackage.LONG_VALUE__MEASUREMENT:
-				return getMeasurement();
+		case StatisticsPackage.LONG_VALUE__MEASUREMENT:
+			return getMeasurement();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -102,14 +109,15 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case StatisticsPackage.LONG_VALUE__MEASUREMENT:
-				setMeasurement((Long)newValue);
-				return;
+		case StatisticsPackage.LONG_VALUE__MEASUREMENT:
+			setMeasurement((Long) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -117,14 +125,15 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.LONG_VALUE__MEASUREMENT:
-				setMeasurement(MEASUREMENT_EDEFAULT);
-				return;
+		case StatisticsPackage.LONG_VALUE__MEASUREMENT:
+			setMeasurement(MEASUREMENT_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -132,13 +141,14 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case StatisticsPackage.LONG_VALUE__MEASUREMENT:
-				return measurement != MEASUREMENT_EDEFAULT;
+		case StatisticsPackage.LONG_VALUE__MEASUREMENT:
+			return measurement != MEASUREMENT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -146,11 +156,13 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (measurement: ");
@@ -159,4 +171,4 @@ public class LongValueImpl extends ValueImpl implements LongValue {
 		return result.toString();
 	}
 
-} //LongValueImpl
+} // LongValueImpl

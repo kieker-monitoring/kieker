@@ -47,7 +47,6 @@ pipeline {
 
         stage('Compile') {
           steps {
-            sh 'df'
             sh './gradlew compileJava'
             sh './gradlew compileTestJava'
             sh 'df'
@@ -57,14 +56,6 @@ pipeline {
         stage('Unit Test') {
           steps {
             sh './gradlew --parallel test'
-            sh 'df'
-            step([
-                $class              : 'CloverPublisher',
-                cloverReportDir     : env.WORKSPACE + '/build/reports/clover',
-                cloverReportFileName: 'clover.xml',
-                healthyTarget       : [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80],
-                unhealthyTarget     : [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
-            ])
           }
           post {
             always {
@@ -75,9 +66,7 @@ pipeline {
 
         stage('Static Analysis') {
           steps {
-            sh 'df'
             sh './gradlew check'
-            sh 'df'
           }
           post {
             always {
@@ -105,9 +94,7 @@ pipeline {
         
         stage('Distribution Build') {
           steps {
-            sh 'df'
             sh './gradlew build distribute'
-            sh 'df'
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
           }

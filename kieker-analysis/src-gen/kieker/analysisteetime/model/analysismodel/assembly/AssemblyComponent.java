@@ -16,8 +16,8 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getAssemblyOperations <em>Assembly Operations</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getComponentType <em>Component Type</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getAssemblyOperations <em>Assembly Operations</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getComponentType <em>Component Type</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage#getAssemblyComponent()
@@ -35,9 +35,11 @@ public interface AssemblyComponent extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Assembly Operations</em>' map.
 	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage#getAssemblyComponent_AssemblyOperations()
-	 * @model mapType="kieker.analysisteetime.model.analysismodel.assembly.EStringToAssemblyOperationMapEntry<org.eclipse.emf.ecore.EString, kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation>" ordered="false"
+	 * @model mapType="kieker.analysisteetime.model.analysismodel.assembly.EStringToAssemblyOperationMapEntry<org.eclipse.emf.ecore.EString,
+	 *        kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation>" ordered="false"
 	 * @generated
 	 */
 	EMap<String, AssemblyOperation> getAssemblyOperations();
@@ -50,6 +52,7 @@ public interface AssemblyComponent extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Component Type</em>' reference.
 	 * @see #setComponentType(ComponentType)
 	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage#getAssemblyComponent_ComponentType()
@@ -62,7 +65,9 @@ public interface AssemblyComponent extends EObject {
 	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyComponent#getComponentType <em>Component Type</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Component Type</em>' reference.
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Component Type</em>' reference.
 	 * @see #getComponentType()
 	 * @generated
 	 */

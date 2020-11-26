@@ -17,7 +17,8 @@
 package kieker.common.util.dataformat;
 
 /**
- * Format identifiers used by Kieker. 
+ * Format identifiers used by Kieker.
+ * 
  * @author Holger Knoche
  * @since 1.13
  */
@@ -28,13 +29,13 @@ public enum FormatIdentifier {
 	DEFAULT_BINARY_FORMAT(0x44464C54);
 
 	private final int identifierValue;
-	
+
 	private FormatIdentifier(final int identifierValue) {
 		this.identifierValue = identifierValue;
 	}
-	
+
 	public int getIdentifierValue() {
 		return this.identifierValue;
 	}
-	
+
 }

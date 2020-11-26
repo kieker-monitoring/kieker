@@ -26,30 +26,30 @@ import kieker.common.record.remotecontrol.IRemoteControlEvent;
 
 /**
  * @author Marc Adolf
- * API compatibility: Kieker 1.15.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.14
  */
-public class DeactivationEvent extends AbstractMonitoringRecord implements IRemoteControlEvent {			
+public class DeactivationEvent extends AbstractMonitoringRecord implements IRemoteControlEvent {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING; // IRemoteControlEvent.pattern
-	
+
 	public static final Class<?>[] TYPES = {
 		String.class, // IRemoteControlEvent.pattern
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"pattern",
 	};
-	
+
 	/** default constants. */
 	public static final String PATTERN = "";
 	private static final long serialVersionUID = 8080379087547198579L;
-	
+
 	/** property declarations. */
 	private final String pattern;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -57,20 +57,19 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IRemo
 	 *            pattern
 	 */
 	public DeactivationEvent(final String pattern) {
-		this.pattern = pattern == null?"":pattern;
+		this.pattern = pattern == null ? "" : pattern;
 	}
-
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public DeactivationEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.pattern = deserializer.getString();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -78,7 +77,7 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IRemo
 	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
 		serializer.putString(this.getPattern());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -86,7 +85,7 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IRemo
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -94,7 +93,7 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IRemo
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -103,7 +102,6 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IRemo
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -118,7 +116,7 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IRemo
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final DeactivationEvent castedRecord = (DeactivationEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -126,9 +124,10 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IRemo
 		if (!this.getPattern().equals(castedRecord.getPattern())) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -136,15 +135,14 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IRemo
 	public int hashCode() {
 		int code = 0;
 		code += this.getPattern().hashCode();
-		
+
 		return code;
 	}
-	
+
 	public final String getPattern() {
 		return this.pattern;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -153,7 +151,7 @@ public class DeactivationEvent extends AbstractMonitoringRecord implements IRemo
 		String result = "DeactivationEvent: ";
 		result += "pattern = ";
 		result += this.getPattern() + ", ";
-		
+
 		return result;
 	}
 }

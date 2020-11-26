@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.graph;
 
 /**
  * This enumeration contains origin retention policy kinds, i.e. types of origin retention policies.
  * These policies are implemented by subtypes of {@link AbstractOriginRetentionPolicy}, this enum just
  * serves as the basis for the order relation.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public enum OriginRetentionPolicyKind {

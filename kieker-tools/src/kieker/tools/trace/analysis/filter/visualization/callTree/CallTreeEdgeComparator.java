@@ -23,7 +23,9 @@ import java.util.Comparator;
  * @author Christian Wulf (chw)
  *
  * @since 1.14
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 class CallTreeEdgeComparator implements Comparator<WeightedDirectedCallTreeEdge<?>>, Serializable {
 
 	/**

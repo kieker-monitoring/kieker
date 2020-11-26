@@ -23,8 +23,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.impl.TraceImpl#getTraceID <em>Trace ID</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.trace.impl.TraceImpl#getRootOperationCall <em>Root Operation Call</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.trace.impl.TraceImpl#getTraceID <em>Trace ID</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.trace.impl.TraceImpl#getRootOperationCall <em>Root Operation Call</em>}</li>
  * </ul>
  *
  * @generated
@@ -34,6 +34,7 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	 * The default value of the '{@link #getTraceID() <em>Trace ID</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getTraceID()
 	 * @generated
 	 * @ordered
@@ -44,6 +45,7 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	 * The cached value of the '{@link #getTraceID() <em>Trace ID</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getTraceID()
 	 * @generated
 	 * @ordered
@@ -54,6 +56,7 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	 * The cached value of the '{@link #getRootOperationCall() <em>Root Operation Call</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getRootOperationCall()
 	 * @generated
 	 * @ordered
@@ -63,6 +66,7 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected TraceImpl() {
@@ -72,6 +76,7 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -82,6 +87,7 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public long getTraceID() {
@@ -91,6 +97,7 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setTraceID(long newTraceID) {
@@ -103,6 +110,7 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public OperationCall getRootOperationCall() {
@@ -112,14 +120,19 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetRootOperationCall(OperationCall newRootOperationCall, NotificationChain msgs) {
 		OperationCall oldRootOperationCall = rootOperationCall;
 		rootOperationCall = newRootOperationCall;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TracePackage.TRACE__ROOT_OPERATION_CALL, oldRootOperationCall, newRootOperationCall);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TracePackage.TRACE__ROOT_OPERATION_CALL, oldRootOperationCall,
+					newRootOperationCall);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
 		return msgs;
 	}
@@ -127,32 +140,34 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setRootOperationCall(OperationCall newRootOperationCall) {
 		if (newRootOperationCall != rootOperationCall) {
 			NotificationChain msgs = null;
 			if (rootOperationCall != null)
-				msgs = ((InternalEObject)rootOperationCall).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - TracePackage.TRACE__ROOT_OPERATION_CALL, null, msgs);
+				msgs = ((InternalEObject) rootOperationCall).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - TracePackage.TRACE__ROOT_OPERATION_CALL, null, msgs);
 			if (newRootOperationCall != null)
-				msgs = ((InternalEObject)newRootOperationCall).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - TracePackage.TRACE__ROOT_OPERATION_CALL, null, msgs);
+				msgs = ((InternalEObject) newRootOperationCall).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - TracePackage.TRACE__ROOT_OPERATION_CALL, null, msgs);
 			msgs = basicSetRootOperationCall(newRootOperationCall, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, TracePackage.TRACE__ROOT_OPERATION_CALL, newRootOperationCall, newRootOperationCall));
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case TracePackage.TRACE__ROOT_OPERATION_CALL:
-				return basicSetRootOperationCall(null, msgs);
+		case TracePackage.TRACE__ROOT_OPERATION_CALL:
+			return basicSetRootOperationCall(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -160,15 +175,16 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case TracePackage.TRACE__TRACE_ID:
-				return getTraceID();
-			case TracePackage.TRACE__ROOT_OPERATION_CALL:
-				return getRootOperationCall();
+		case TracePackage.TRACE__TRACE_ID:
+			return getTraceID();
+		case TracePackage.TRACE__ROOT_OPERATION_CALL:
+			return getRootOperationCall();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -176,17 +192,18 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case TracePackage.TRACE__TRACE_ID:
-				setTraceID((Long)newValue);
-				return;
-			case TracePackage.TRACE__ROOT_OPERATION_CALL:
-				setRootOperationCall((OperationCall)newValue);
-				return;
+		case TracePackage.TRACE__TRACE_ID:
+			setTraceID((Long) newValue);
+			return;
+		case TracePackage.TRACE__ROOT_OPERATION_CALL:
+			setRootOperationCall((OperationCall) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -194,17 +211,18 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case TracePackage.TRACE__TRACE_ID:
-				setTraceID(TRACE_ID_EDEFAULT);
-				return;
-			case TracePackage.TRACE__ROOT_OPERATION_CALL:
-				setRootOperationCall((OperationCall)null);
-				return;
+		case TracePackage.TRACE__TRACE_ID:
+			setTraceID(TRACE_ID_EDEFAULT);
+			return;
+		case TracePackage.TRACE__ROOT_OPERATION_CALL:
+			setRootOperationCall((OperationCall) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -212,15 +230,16 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case TracePackage.TRACE__TRACE_ID:
-				return traceID != TRACE_ID_EDEFAULT;
-			case TracePackage.TRACE__ROOT_OPERATION_CALL:
-				return rootOperationCall != null;
+		case TracePackage.TRACE__TRACE_ID:
+			return traceID != TRACE_ID_EDEFAULT;
+		case TracePackage.TRACE__ROOT_OPERATION_CALL:
+			return rootOperationCall != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -228,11 +247,13 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (traceID: ");
@@ -241,4 +262,4 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 		return result.toString();
 	}
 
-} //TraceImpl
+} // TraceImpl

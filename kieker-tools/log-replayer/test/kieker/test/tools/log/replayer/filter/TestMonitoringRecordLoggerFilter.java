@@ -40,6 +40,7 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.AsciiLogReader;
 import kieker.analysis.plugin.reader.list.ListReader;
+import kieker.analysis.tt.writeRead.filesystem.KiekerLogDirFilter;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
@@ -51,7 +52,6 @@ import kieker.tools.log.replayer.filter.MonitoringRecordLoggerFilter;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.tools.junit.writeRead.filesystem.KiekerLogDirFilter;
 
 /**
  * Tests the {@link MonitoringRecordLoggerFilter}.

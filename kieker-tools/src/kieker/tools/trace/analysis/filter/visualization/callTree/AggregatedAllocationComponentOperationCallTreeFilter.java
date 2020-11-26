@@ -36,7 +36,9 @@ import kieker.tools.trace.analysis.systemModel.util.AllocationComponentOperation
  * @author Andre van Hoorn
  *
  * @since 1.1
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated allocation component operation call tree",
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)

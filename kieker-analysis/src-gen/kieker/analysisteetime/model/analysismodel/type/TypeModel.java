@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.type.TypeModel#getComponentTypes <em>Component Types</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.type.TypeModel#getComponentTypes <em>Component Types</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.type.TypePackage#getTypeModel()
@@ -33,9 +33,11 @@ public interface TypeModel extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Component Types</em>' map.
 	 * @see kieker.analysisteetime.model.analysismodel.type.TypePackage#getTypeModel_ComponentTypes()
-	 * @model mapType="kieker.analysisteetime.model.analysismodel.type.EStringToComponentTypeMapEntry<org.eclipse.emf.ecore.EString, kieker.analysisteetime.model.analysismodel.type.ComponentType>" ordered="false"
+	 * @model mapType="kieker.analysisteetime.model.analysismodel.type.EStringToComponentTypeMapEntry<org.eclipse.emf.ecore.EString,
+	 *        kieker.analysisteetime.model.analysismodel.type.ComponentType>" ordered="false"
 	 * @generated
 	 */
 	EMap<String, ComponentType> getComponentTypes();

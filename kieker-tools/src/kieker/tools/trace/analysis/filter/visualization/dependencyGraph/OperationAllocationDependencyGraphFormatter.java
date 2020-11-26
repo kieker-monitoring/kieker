@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import java.util.HashSet;
@@ -36,7 +35,9 @@ import kieker.tools.trace.analysis.systemModel.util.AllocationComponentOperation
  * @author Holger Knoche
  *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public class OperationAllocationDependencyGraphFormatter extends AbstractOperationDependencyGraphFormatter<OperationAllocationDependencyGraph> {
 
 	private static final String DEFAULT_FILE_NAME = VisualizationConstants.ALLOCATION_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX + VisualizationConstants.DOT_FILE_SUFFIX;

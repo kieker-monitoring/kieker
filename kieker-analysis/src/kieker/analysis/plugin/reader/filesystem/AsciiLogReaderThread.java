@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
-import kieker.analysisteetime.plugin.reader.filesystem.util.MappingException;
+import kieker.analysis.tt.reader.filesystem.util.MappingException;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.exception.UnknownRecordTypeException;
 import kieker.common.registry.reader.ReaderRegistry;
@@ -42,7 +42,9 @@ import kieker.common.util.filesystem.FileExtensionFilter;
  * @author Reiner Jung -- added modern log reading deserializer
  *
  * @since 1.2
+ * @deprecated 1.15 replaced by new teetime log reading facility
  */
+@Deprecated
 class AsciiLogReaderThread extends AbstractLogReaderThread {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AsciiLogReaderThread.class);
@@ -53,8 +55,6 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 	private final boolean shouldDecompress;
 
 	private final TextFileStreamProcessor textFileStreamProcessor;
-
-
 
 	/**
 	 * Creates a new instance of this class.
@@ -170,8 +170,6 @@ class AsciiLogReaderThread extends AbstractLogReaderThread {
 			LOGGER.error("Error reading {} {}", inputFile, e);
 		}
 	}
-
-
 
 	@Override
 	protected FileExtensionFilter getFileExtensionFilter() {

@@ -44,14 +44,17 @@ public class XZDecompressionFilter extends AbstractDecompressionFilter {
 	/**
 	 * Create a new XZ decompression filter.
 	 *
-	 * @param configuration configuration settings
+	 * @param configuration
+	 *            configuration settings
 	 */
 	public XZDecompressionFilter(final Configuration configuration) {
 		super(configuration);
 		this.bufferSize = configuration.getIntProperty(BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.reader.depcompression.IDecompressionFilter#chainInputStream(java.io.OutputStream)
 	 */
 	@Override
@@ -59,7 +62,9 @@ public class XZDecompressionFilter extends AbstractDecompressionFilter {
 		return new BufferedInputStream(new XZInputStream(inputStream, this.bufferSize));
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.reader.depcompression.IDecompressionFilter#getExtension()
 	 */
 	@Override

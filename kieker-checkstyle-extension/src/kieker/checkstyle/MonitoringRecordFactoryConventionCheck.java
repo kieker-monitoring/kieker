@@ -120,7 +120,8 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 	/**
 	 * This method checks the fields of the record.
 	 *
-	 * @param ast The record class.
+	 * @param ast
+	 *            The record class.
 	 */
 	private void checkFields(final DetailAST ast) {
 		DetailAST child = ast.findFirstToken(TokenTypes.OBJBLOCK).findFirstToken(TokenTypes.VARIABLE_DEF);
@@ -141,7 +142,8 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 	/**
 	 * This method checks the constructors of the record.
 	 *
-	 * @param ast The record class.
+	 * @param ast
+	 *            The record class.
 	 */
 	private void checkConstructors(final DetailAST ast) {
 		DetailAST child = ast.findFirstToken(TokenTypes.OBJBLOCK).findFirstToken(TokenTypes.CTOR_DEF);
@@ -162,7 +164,8 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 	/**
 	 * Checks whether the given field is valid or not.
 	 *
-	 * @param field The field to check.
+	 * @param field
+	 *            The field to check.
 	 *
 	 * @return true if and only if the field is a valid one.
 	 */
@@ -188,8 +191,10 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 	 * necessary as the available methods do not work as expected for this special
 	 * case.
 	 *
-	 * @param actual   The actual tree.
-	 * @param expected The expected tree.
+	 * @param actual
+	 *            The actual tree.
+	 * @param expected
+	 *            The expected tree.
 	 *
 	 * @return true if and only if the trees are (more or less) equal.
 	 */
@@ -226,7 +231,8 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 	/**
 	 * Checks whether the given constructor seems to be a valid one or not.
 	 *
-	 * @param constructor The constructor in question.
+	 * @param constructor
+	 *            The constructor in question.
 	 *
 	 * @return true if and only if the constructor seems to be valid.
 	 */
@@ -251,7 +257,8 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 	 * This method finds out whether the given class implements the record factory
 	 * or not.
 	 *
-	 * @param clazz The class in question.
+	 * @param clazz
+	 *            The class in question.
 	 *
 	 * @return true if and only if the class implements the record factory.
 	 */
@@ -280,7 +287,8 @@ public class MonitoringRecordFactoryConventionCheck extends AbstractCheck {
 	/**
 	 * Setter for the property {@link #ignoreAbstractClasses}.
 	 *
-	 * @param ignoreAbstractClasses The new value of the property.
+	 * @param ignoreAbstractClasses
+	 *            The new value of the property.
 	 */
 	public void setIgnoreAbstractClasses(final boolean ignoreAbstractClasses) {
 		this.ignoreAbstractClasses = ignoreAbstractClasses;

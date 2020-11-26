@@ -14,8 +14,8 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getName <em>Name</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getComponents <em>Components</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getName <em>Name</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getComponents <em>Components</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeploymentContext()
@@ -33,9 +33,11 @@ public interface DeploymentContext extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Components</em>' map.
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeploymentContext_Components()
-	 * @model mapType="kieker.analysisteetime.model.analysismodel.deployment.EStringToDeployedComponentMapEntry<org.eclipse.emf.ecore.EString, kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent>" ordered="false"
+	 * @model mapType="kieker.analysisteetime.model.analysismodel.deployment.EStringToDeployedComponentMapEntry<org.eclipse.emf.ecore.EString,
+	 *        kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent>" ordered="false"
 	 * @generated
 	 */
 	EMap<String, DeployedComponent> getComponents();
@@ -48,6 +50,7 @@ public interface DeploymentContext extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeploymentContext_Name()
@@ -60,7 +63,9 @@ public interface DeploymentContext extends EObject {
 	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeploymentContext#getName <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Name</em>' attribute.
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
 	 * @generated
 	 */

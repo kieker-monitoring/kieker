@@ -42,7 +42,7 @@ public class DateConverter extends BaseConverter<Long> {
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.US);
 
 	static {
-		DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
+		DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC")); // NOPMD synchronized access
 	}
 
 	/**

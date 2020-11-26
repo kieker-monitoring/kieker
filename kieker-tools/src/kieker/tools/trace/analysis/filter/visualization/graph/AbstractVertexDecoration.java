@@ -13,21 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.graph;
 
 /**
  * This is an abstract base for vertex decorations.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.5
  */
 public abstract class AbstractVertexDecoration {
 
+	public AbstractVertexDecoration() {
+		// default constructor
+	}
+
 	/**
 	 * Creates formatted output for this decoration.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public abstract String createFormattedOutput();

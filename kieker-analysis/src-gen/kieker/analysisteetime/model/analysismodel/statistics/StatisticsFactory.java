@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EFactory;
  * The <b>Factory</b> for the model.
  * It provides a create method for each non-abstract class of the model.
  * <!-- end-user-doc -->
+ * 
  * @see kieker.analysisteetime.model.analysismodel.statistics.StatisticsPackage
  * @generated
  */
@@ -17,6 +18,7 @@ public interface StatisticsFactory extends EFactory {
 	 * The singleton instance of the factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	StatisticsFactory eINSTANCE = kieker.analysisteetime.model.analysismodel.statistics.impl.StatisticsFactoryImpl.init();
@@ -25,6 +27,7 @@ public interface StatisticsFactory extends EFactory {
 	 * Returns a new object of class '<em>Statistics</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Statistics</em>'.
 	 * @generated
 	 */
@@ -34,6 +37,7 @@ public interface StatisticsFactory extends EFactory {
 	 * Returns a new object of class '<em>Time Series</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Time Series</em>'.
 	 * @generated
 	 */
@@ -43,6 +47,7 @@ public interface StatisticsFactory extends EFactory {
 	 * Returns a new object of class '<em>Int Value</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Int Value</em>'.
 	 * @generated
 	 */
@@ -52,6 +57,7 @@ public interface StatisticsFactory extends EFactory {
 	 * Returns a new object of class '<em>Long Value</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Long Value</em>'.
 	 * @generated
 	 */
@@ -61,6 +67,7 @@ public interface StatisticsFactory extends EFactory {
 	 * Returns a new object of class '<em>Float Value</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Float Value</em>'.
 	 * @generated
 	 */
@@ -70,6 +77,7 @@ public interface StatisticsFactory extends EFactory {
 	 * Returns a new object of class '<em>Double Value</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return a new object of class '<em>Double Value</em>'.
 	 * @generated
 	 */
@@ -79,9 +87,10 @@ public interface StatisticsFactory extends EFactory {
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the package supported by this factory.
 	 * @generated
 	 */
 	StatisticsPackage getStatisticsPackage();
 
-} //StatisticsFactory
+} // StatisticsFactory

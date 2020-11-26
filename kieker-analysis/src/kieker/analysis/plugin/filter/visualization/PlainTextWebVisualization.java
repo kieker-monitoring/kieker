@@ -22,7 +22,7 @@ import kieker.common.configuration.Configuration;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.9
  */
 public final class PlainTextWebVisualization extends AbstractWebVisualizationFilterPlugin {
@@ -64,11 +64,11 @@ public final class PlainTextWebVisualization extends AbstractWebVisualizationFil
 
 	/**
 	 * This method represents the input port for the incoming objects.
-	 * 
+	 *
 	 * @param event
 	 *            The new incoming object.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = { Object.class })
+	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = Object.class)
 	public final void inputEvents(final Object event) {
 		this.currentObject = event;
 	}

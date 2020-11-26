@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.statistics.Statistics#getTimeSeries <em>Time Series</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.statistics.Statistics#getTimeSeries <em>Time Series</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.statistics.StatisticsPackage#getStatistics()
@@ -32,6 +32,7 @@ public interface Statistics extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Time Series</em>' reference list.
 	 * @see kieker.analysisteetime.model.analysismodel.statistics.StatisticsPackage#getStatistics_TimeSeries()
 	 * @model

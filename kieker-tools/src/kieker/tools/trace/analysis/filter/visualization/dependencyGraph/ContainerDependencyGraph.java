@@ -13,23 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import kieker.tools.trace.analysis.systemModel.ExecutionContainer;
 
 /**
  * This class represents container dependency graphs.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public class ContainerDependencyGraph extends AbstractDependencyGraph<ExecutionContainer> {
 
 	/**
 	 * Creates a new graph with the given root entity.
-	 * 
+	 *
 	 * @param rootEntity
 	 *            The root entity to use for this graph
 	 */

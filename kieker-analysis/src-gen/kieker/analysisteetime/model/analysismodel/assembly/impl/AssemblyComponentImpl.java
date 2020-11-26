@@ -28,8 +28,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyComponentImpl#getAssemblyOperations <em>Assembly Operations</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyComponentImpl#getComponentType <em>Component Type</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyComponentImpl#getAssemblyOperations <em>Assembly Operations</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.assembly.impl.AssemblyComponentImpl#getComponentType <em>Component Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -39,6 +39,7 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * The cached value of the '{@link #getAssemblyOperations() <em>Assembly Operations</em>}' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getAssemblyOperations()
 	 * @generated
 	 * @ordered
@@ -49,6 +50,7 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	 * The cached value of the '{@link #getComponentType() <em>Component Type</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getComponentType()
 	 * @generated
 	 * @ordered
@@ -58,6 +60,7 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected AssemblyComponentImpl() {
@@ -67,6 +70,7 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -77,11 +81,13 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EMap<String, AssemblyOperation> getAssemblyOperations() {
 		if (assemblyOperations == null) {
-			assemblyOperations = new EcoreEMap<String,AssemblyOperation>(AssemblyPackage.Literals.ESTRING_TO_ASSEMBLY_OPERATION_MAP_ENTRY, EStringToAssemblyOperationMapEntryImpl.class, this, AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS);
+			assemblyOperations = new EcoreEMap<String, AssemblyOperation>(AssemblyPackage.Literals.ESTRING_TO_ASSEMBLY_OPERATION_MAP_ENTRY,
+					EStringToAssemblyOperationMapEntryImpl.class, this, AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS);
 		}
 		return assemblyOperations;
 	}
@@ -89,12 +95,13 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public ComponentType getComponentType() {
 		if (componentType != null && componentType.eIsProxy()) {
-			InternalEObject oldComponentType = (InternalEObject)componentType;
-			componentType = (ComponentType)eResolveProxy(oldComponentType);
+			InternalEObject oldComponentType = (InternalEObject) componentType;
+			componentType = (ComponentType) eResolveProxy(oldComponentType);
 			if (componentType != oldComponentType) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AssemblyPackage.ASSEMBLY_COMPONENT__COMPONENT_TYPE, oldComponentType, componentType));
@@ -106,6 +113,7 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public ComponentType basicGetComponentType() {
@@ -115,6 +123,7 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setComponentType(ComponentType newComponentType) {
@@ -127,13 +136,14 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
-				return ((InternalEList<?>)getAssemblyOperations()).basicRemove(otherEnd, msgs);
+		case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
+			return ((InternalEList<?>) getAssemblyOperations()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -141,17 +151,21 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
-				if (coreType) return getAssemblyOperations();
-				else return getAssemblyOperations().map();
-			case AssemblyPackage.ASSEMBLY_COMPONENT__COMPONENT_TYPE:
-				if (resolve) return getComponentType();
-				return basicGetComponentType();
+		case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
+			if (coreType)
+				return getAssemblyOperations();
+			else
+				return getAssemblyOperations().map();
+		case AssemblyPackage.ASSEMBLY_COMPONENT__COMPONENT_TYPE:
+			if (resolve)
+				return getComponentType();
+			return basicGetComponentType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -159,17 +173,18 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
-				((EStructuralFeature.Setting)getAssemblyOperations()).set(newValue);
-				return;
-			case AssemblyPackage.ASSEMBLY_COMPONENT__COMPONENT_TYPE:
-				setComponentType((ComponentType)newValue);
-				return;
+		case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
+			((EStructuralFeature.Setting) getAssemblyOperations()).set(newValue);
+			return;
+		case AssemblyPackage.ASSEMBLY_COMPONENT__COMPONENT_TYPE:
+			setComponentType((ComponentType) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -177,17 +192,18 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
-				getAssemblyOperations().clear();
-				return;
-			case AssemblyPackage.ASSEMBLY_COMPONENT__COMPONENT_TYPE:
-				setComponentType((ComponentType)null);
-				return;
+		case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
+			getAssemblyOperations().clear();
+			return;
+		case AssemblyPackage.ASSEMBLY_COMPONENT__COMPONENT_TYPE:
+			setComponentType((ComponentType) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -195,17 +211,18 @@ public class AssemblyComponentImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
-				return assemblyOperations != null && !assemblyOperations.isEmpty();
-			case AssemblyPackage.ASSEMBLY_COMPONENT__COMPONENT_TYPE:
-				return componentType != null;
+		case AssemblyPackage.ASSEMBLY_COMPONENT__ASSEMBLY_OPERATIONS:
+			return assemblyOperations != null && !assemblyOperations.isEmpty();
+		case AssemblyPackage.ASSEMBLY_COMPONENT__COMPONENT_TYPE:
+			return componentType != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //AssemblyComponentImpl
+} // AssemblyComponentImpl

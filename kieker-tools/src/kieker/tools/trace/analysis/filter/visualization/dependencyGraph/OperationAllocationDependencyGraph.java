@@ -13,23 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import kieker.tools.trace.analysis.systemModel.util.AllocationComponentOperationPair;
 
 /**
  * This class represents operation dependency graphs on the allocation level.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public class OperationAllocationDependencyGraph extends AbstractDependencyGraph<AllocationComponentOperationPair> {
 
 	/**
 	 * Creates a new graph with the given root entity.
-	 * 
+	 *
 	 * @param rootEntity
 	 *            The root entity to use for this graph
 	 */

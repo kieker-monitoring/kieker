@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Factory</b>.
  * <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFactory {
@@ -24,16 +25,16 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static DeploymentFactory init() {
 		try {
-			DeploymentFactory theDeploymentFactory = (DeploymentFactory)EPackage.Registry.INSTANCE.getEFactory(DeploymentPackage.eNS_URI);
+			DeploymentFactory theDeploymentFactory = (DeploymentFactory) EPackage.Registry.INSTANCE.getEFactory(DeploymentPackage.eNS_URI);
 			if (theDeploymentFactory != null) {
 				return theDeploymentFactory;
 			}
-		}
-		catch (Exception exception) {
+		} catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new DeploymentFactoryImpl();
@@ -43,6 +44,7 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	 * Creates an instance of the factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeploymentFactoryImpl() {
@@ -52,26 +54,35 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case DeploymentPackage.DEPLOYMENT_MODEL: return createDeploymentModel();
-			case DeploymentPackage.ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY: return (EObject)createEStringToDeploymentContextMapEntry();
-			case DeploymentPackage.DEPLOYMENT_CONTEXT: return createDeploymentContext();
-			case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY: return (EObject)createEStringToDeployedComponentMapEntry();
-			case DeploymentPackage.DEPLOYED_COMPONENT: return createDeployedComponent();
-			case DeploymentPackage.ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY: return (EObject)createEStringToDeployedOperationMapEntry();
-			case DeploymentPackage.DEPLOYED_OPERATION: return createDeployedOperation();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		case DeploymentPackage.DEPLOYMENT_MODEL:
+			return createDeploymentModel();
+		case DeploymentPackage.ESTRING_TO_DEPLOYMENT_CONTEXT_MAP_ENTRY:
+			return (EObject) createEStringToDeploymentContextMapEntry();
+		case DeploymentPackage.DEPLOYMENT_CONTEXT:
+			return createDeploymentContext();
+		case DeploymentPackage.ESTRING_TO_DEPLOYED_COMPONENT_MAP_ENTRY:
+			return (EObject) createEStringToDeployedComponentMapEntry();
+		case DeploymentPackage.DEPLOYED_COMPONENT:
+			return createDeployedComponent();
+		case DeploymentPackage.ESTRING_TO_DEPLOYED_OPERATION_MAP_ENTRY:
+			return (EObject) createEStringToDeployedOperationMapEntry();
+		case DeploymentPackage.DEPLOYED_OPERATION:
+			return createDeployedOperation();
+		default:
+			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeploymentModel createDeploymentModel() {
@@ -82,6 +93,7 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Map.Entry<String, DeploymentContext> createEStringToDeploymentContextMapEntry() {
@@ -92,6 +104,7 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeploymentContext createDeploymentContext() {
@@ -102,6 +115,7 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Map.Entry<String, DeployedComponent> createEStringToDeployedComponentMapEntry() {
@@ -112,6 +126,7 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeployedComponent createDeployedComponent() {
@@ -122,6 +137,7 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Map.Entry<String, DeployedOperation> createEStringToDeployedOperationMapEntry() {
@@ -132,6 +148,7 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeployedOperation createDeployedOperation() {
@@ -142,15 +159,17 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeploymentPackage getDeploymentPackage() {
-		return (DeploymentPackage)getEPackage();
+		return (DeploymentPackage) getEPackage();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @deprecated
 	 * @generated
 	 */
@@ -159,4 +178,4 @@ public class DeploymentFactoryImpl extends EFactoryImpl implements DeploymentFac
 		return DeploymentPackage.eINSTANCE;
 	}
 
-} //DeploymentFactoryImpl
+} // DeploymentFactoryImpl

@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.controlflow;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,13 +25,11 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.2
  */
 public final class BranchingRecordFactory implements IRecordFactory<BranchingRecord> {
-	
 
 	@Override
 	public BranchingRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new BranchingRecord(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

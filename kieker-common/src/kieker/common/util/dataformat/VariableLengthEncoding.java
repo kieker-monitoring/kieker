@@ -30,7 +30,7 @@ public final class VariableLengthEncoding {
 	private VariableLengthEncoding() {
 		// Empty constructor
 	}
-	
+
 	/**
 	 * Encodes a given int value using a variable-length encoding. Each encoded byte starts
 	 * with an indicator bit, followed by 7 data bits. The data bits are stored in lsb-first

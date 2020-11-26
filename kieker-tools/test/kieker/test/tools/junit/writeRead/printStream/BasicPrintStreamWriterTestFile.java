@@ -26,17 +26,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import kieker.analysis.tt.writeRead.TestDataRepository;
+import kieker.analysis.tt.writeRead.TestProbe;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.controller.WriterController;
 import kieker.monitoring.writer.print.PrintStreamWriter;
 
-import kieker.test.tools.junit.writeRead.TestDataRepository;
-import kieker.test.tools.junit.writeRead.TestProbe;
-import kieker.test.tools.util.StringUtils;
+import kieker.test.analysis.util.StringUtils;
 
 /**
  * @author Andre van Hoorn, Christian Wulf
@@ -110,7 +110,7 @@ public class BasicPrintStreamWriterTestFile {
 		// 7. read actual records
 		// We cannot do anything meaningful here, because there's nothing like a PrintStreamReader.
 		// We'll return an empty List and use our own buffer when evaluating the result.
-		return new ArrayList<IMonitoringRecord>();
+		return new ArrayList<>();
 	}
 
 }

@@ -2,7 +2,6 @@
  */
 package kieker.analysisteetime.model.analysismodel.statistics;
 
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Double Value</b></em>'.
@@ -12,7 +11,7 @@ package kieker.analysisteetime.model.analysismodel.statistics;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.statistics.DoubleValue#getMeasurement <em>Measurement</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.statistics.DoubleValue#getMeasurement <em>Measurement</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.statistics.StatisticsPackage#getDoubleValue()
@@ -28,6 +27,7 @@ public interface DoubleValue extends Value {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Measurement</em>' attribute.
 	 * @see #setMeasurement(double)
 	 * @see kieker.analysisteetime.model.analysismodel.statistics.StatisticsPackage#getDoubleValue_Measurement()
@@ -40,7 +40,9 @@ public interface DoubleValue extends Value {
 	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.statistics.DoubleValue#getMeasurement <em>Measurement</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Measurement</em>' attribute.
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Measurement</em>' attribute.
 	 * @see #getMeasurement()
 	 * @generated
 	 */

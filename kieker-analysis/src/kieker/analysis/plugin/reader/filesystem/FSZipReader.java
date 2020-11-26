@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kieker.analysis.plugin.reader.util.IMonitoringRecordReceiver;
-import kieker.analysisteetime.plugin.reader.filesystem.util.MappingException;
+import kieker.analysis.tt.reader.filesystem.util.MappingException;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.exception.UnknownRecordTypeException;
 import kieker.common.registry.reader.ReaderRegistry;
@@ -42,7 +42,9 @@ import kieker.common.util.filesystem.FSUtil;
  * @author Jan Waller
  *
  * @since 1.7
+ * @deprecated 1.15 replaced by teetime log reading facilities
  */
+@Deprecated
 public final class FSZipReader implements Runnable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FSZipReader.class);
 

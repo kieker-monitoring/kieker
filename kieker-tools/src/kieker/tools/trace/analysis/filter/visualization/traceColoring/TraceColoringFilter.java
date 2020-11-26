@@ -53,11 +53,12 @@ import kieker.tools.trace.analysis.systemModel.TraceInformation;
  *            The type of the graph's edges
  *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(name = "Trace coloring filter", description = "Colors graph elements that can uniquely associated to a trace according to the color repository",
 		repositoryPorts = @RepositoryPort(name = TraceColoringFilter.COLOR_REPOSITORY_PORT_NAME, repositoryType = TraceColorRepository.class),
-		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = {
-			AbstractGraph.class }))
+		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = AbstractGraph.class))
 public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation>, E extends AbstractEdge<V, E, TraceInformation>> extends
 		AbstractGraphFilter<AbstractGraph<V, E, TraceInformation>, V, E, TraceInformation> implements IGraphVisitor<V, E> {
 

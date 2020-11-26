@@ -40,7 +40,9 @@ import kieker.common.registry.reader.ReaderRegistry;
  * @author Reiner Jung
  *
  * @since 1.15
+ * @deprecated 1.15 replaced by teetime log reading facilities
  */
+@Deprecated
 public class BinaryFileStreamProcessor {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BinaryFileStreamProcessor.class);

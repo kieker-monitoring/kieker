@@ -21,8 +21,8 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.analysisteetime.plugin.filter.record.delayfilter.RealtimeRecordDelayFilter;
-import kieker.analysisteetime.plugin.filter.select.timestampfilter.TimestampFilter;
+import kieker.analysis.stage.events.delayfilter.RealtimeRecordDelayFilter;
+import kieker.analysis.stage.select.timestampfilter.TimestampFilter;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.log.replayer.teetime.filter.MonitoringRecordLoggerFilter;
 

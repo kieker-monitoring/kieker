@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.callTree;
 
 import java.util.ArrayList;
@@ -27,14 +26,16 @@ import kieker.tools.trace.analysis.systemModel.MessageTrace;
 
 /**
  * This is an abstract base for a single node within a call tree.
- * 
+ *
  * @param <T>
  *            The type of the entity to be stored in the node.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
+ * @deprecated 1.15 moved to new location
  */
+@Deprecated
 public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCallTreeNode<T>, WeightedDirectedCallTreeEdge<T>, MessageTrace> {
 
 	private final T entity;
@@ -46,7 +47,7 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 
 	/**
 	 * This constructor uses the given parameters to initialize the fields of this class.
-	 * 
+	 *
 	 * @param id
 	 *            The identifier of this node.
 	 * @param entity
@@ -67,7 +68,7 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 
 	/**
 	 * Delivers the stored entity.
-	 * 
+	 *
 	 * @return The content of this node.
 	 */
 	public final T getEntity() {
@@ -76,7 +77,7 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 
 	/**
 	 * Delivers the child edges.
-	 * 
+	 *
 	 * @return A collection containing the child edges.
 	 */
 	public final Collection<WeightedDirectedCallTreeEdge<T>> getChildEdges() {
@@ -85,7 +86,7 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 
 	/**
 	 * Append edge to *sorted* list of children.
-	 * 
+	 *
 	 * @param destination
 	 *            The edge to add to the list of children edges.
 	 */
@@ -101,7 +102,7 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 
 	/**
 	 * Tells whether the current node is a root node.
-	 * 
+	 *
 	 * @return true if and only if the current node has to be interpreted as a root node.
 	 */
 	public final boolean isRootNode() {

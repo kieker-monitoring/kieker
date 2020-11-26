@@ -22,51 +22,45 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Andre van Hoorn, Jan Waller
- * API compatibility: Kieker 1.15.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 0.95a
  */
-public class EmptyRecord extends AbstractMonitoringRecord  {			
+public class EmptyRecord extends AbstractMonitoringRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = 0;
-	
+
 	public static final Class<?>[] TYPES = {
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 	};
-	
+
 	private static final long serialVersionUID = -177095911417362302L;
-	
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
 	 */
-	public EmptyRecord() {
-	}
-
+	public EmptyRecord() {}
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
-	public EmptyRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {
-	}
-	
+	public EmptyRecord(final IValueDeserializer deserializer) throws RecordInstantiationException {}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {
-	}
-	
+	public void serialize(final IValueSerializer serializer) throws BufferOverflowException {}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -74,7 +68,7 @@ public class EmptyRecord extends AbstractMonitoringRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -82,7 +76,7 @@ public class EmptyRecord extends AbstractMonitoringRecord  {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -91,7 +85,6 @@ public class EmptyRecord extends AbstractMonitoringRecord  {
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -106,32 +99,32 @@ public class EmptyRecord extends AbstractMonitoringRecord  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final EmptyRecord castedRecord = (EmptyRecord) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		
+
 		return code;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public String toString() {
 		String result = "EmptyRecord: ";
-		
+
 		return result;
 	}
 }

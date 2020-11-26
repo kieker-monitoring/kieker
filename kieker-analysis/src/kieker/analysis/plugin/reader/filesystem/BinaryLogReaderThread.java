@@ -42,7 +42,9 @@ import kieker.common.util.filesystem.FileExtensionFilter;
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
  *
  * @since 1.2
+ * @deprecated 1.15 replaced by teetime log reading facilities
  */
+@Deprecated
 class BinaryLogReaderThread extends AbstractLogReaderThread {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BinaryLogReaderThread.class);

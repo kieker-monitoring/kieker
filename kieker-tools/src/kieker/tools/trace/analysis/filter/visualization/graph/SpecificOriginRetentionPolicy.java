@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.graph;
 
 import java.util.HashSet;
@@ -25,14 +24,14 @@ import java.util.Set;
  * retention policies are united by uniting the underlying sets. Instead of calculating the union set,
  * however, the two policies are chained together using an implicit union/or operator to provide a
  * higher flexibility.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
  */
 public class SpecificOriginRetentionPolicy extends AbstractOriginRetentionPolicy {
 
-	private final Set<Object> selectedOrigins = new HashSet<Object>();
+	private final Set<Object> selectedOrigins = new HashSet<>();
 
 	private IOriginRetentionPolicy successor;
 
@@ -90,7 +89,7 @@ public class SpecificOriginRetentionPolicy extends AbstractOriginRetentionPolicy
 
 	/**
 	 * Factory method for the specific origin retention policy.
-	 * 
+	 *
 	 * @param selectedOrigins
 	 *            The origins to retain
 	 * @return See above

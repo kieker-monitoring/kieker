@@ -23,8 +23,8 @@ import org.junit.Assert;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.print.PrintStreamWriter;
@@ -75,7 +75,7 @@ public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReader
 	protected List<IMonitoringRecord> readEvents() {
 		// We cannot do anything meaningful here, because there's nothing like a PrintStreamReader. We'll return an empty List and use our own buffer when evaluating
 		// the result.
-		return new ArrayList<IMonitoringRecord>();
+		return new ArrayList<>();
 	}
 
 	protected void checkRecords(final String outputString, final List<IMonitoringRecord> eventsPassedToController) {

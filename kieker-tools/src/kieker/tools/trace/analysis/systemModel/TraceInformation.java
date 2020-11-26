@@ -16,13 +16,16 @@
 package kieker.tools.trace.analysis.systemModel;
 
 /**
- * This class stores trace meta-information, such as the trace ID. This kept separate from the actual trace
- * information to allow references to traces without the need to keep the trace itself.
+ * This class stores trace meta-information, such as the trace ID. This kept
+ * separate from the actual trace information to allow references to traces
+ * without the need to keep the trace itself.
  *
  * @author Holger Knoche
  *
  * @since 1.6
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class TraceInformation {
 
 	private final long traceId;
@@ -70,7 +73,8 @@ public class TraceInformation {
 			return false;
 		}
 
-		// The equality currently relies only on the trace ID to facilitate trace coloring.
+		// The equality currently relies only on the trace ID to facilitate trace
+		// coloring.
 		final TraceInformation otherTraceInformation = (TraceInformation) other;
 		return this.getTraceId() == otherTraceInformation.getTraceId();
 	}

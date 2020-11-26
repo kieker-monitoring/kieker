@@ -38,15 +38,15 @@ import kieker.tools.trace.analysis.systemModel.ExecutionTrace;
 import kieker.tools.trace.analysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
+import kieker.test.analysis.util.StringUtils;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.tools.util.StringUtils;
 import kieker.test.tools.util.bookstore.BookstoreExecutionFactory;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
@@ -80,7 +80,7 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 
 	/**
 	 * Initializes the test setup.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@Before
@@ -135,7 +135,7 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 	}
 
 	private List<Object> createTraces() throws InvalidTraceException {
-		final List<Object> traces = new ArrayList<Object>(3);
+		final List<Object> traces = new ArrayList<>(3);
 		traces.add(this.createValidExecutionTrace());
 		traces.add(this.createInvalidExecutionTrace());
 		traces.add(this.createExecutionTraceForValidMessageTrace().toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
@@ -146,7 +146,7 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 	public void testIt() throws Exception {
 		final AbstractTraceProcessingFilter filter = this.provideWriterFilter(this.outputFile.getAbsolutePath(), this.analysisController);
 
-		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), this.analysisController);
+		final ListReader<Object> reader = new ListReader<>(new Configuration(), this.analysisController);
 		final List<Object> eventList = this.createTraces();
 		reader.addAllObjects(eventList);
 

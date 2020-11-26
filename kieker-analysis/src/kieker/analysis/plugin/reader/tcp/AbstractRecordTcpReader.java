@@ -33,7 +33,9 @@ import kieker.monitoring.core.controller.tcp.AbstractTcpReader;
  * @author Christian Wulf (chw)
  *
  * @since 1.13
+ * @deprecated 1.15 not relevant for the TeeTime port
  */
+@Deprecated
 public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 
 	private static final int INT_BYTES = AbstractMonitoringRecord.TYPE_SIZE_INT;
@@ -45,8 +47,9 @@ public abstract class AbstractRecordTcpReader extends AbstractTcpReader {
 
 	/**
 	 * Default constructor with <code>port=10133</code> and <code>bufferCapacity=65535</code> and <code>new CachedRecordFactoryCatalog()</code>.
+	 *
 	 * @param logger
-	 *            logger for the TCP reader	 
+	 *            logger for the TCP reader
 	 * @param stringRegistry
 	 *            string registry for the reader
 	 */

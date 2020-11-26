@@ -21,11 +21,13 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Specific subtype for the root execution container.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.6
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class RootExecutionContainer extends ExecutionContainer {
 
 	/**

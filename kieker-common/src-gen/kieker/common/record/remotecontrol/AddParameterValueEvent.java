@@ -26,40 +26,40 @@ import kieker.common.record.remotecontrol.IParameterValueEvent;
 
 /**
  * @author Reiner Jung
- * API compatibility: Kieker 1.15.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.15
  */
-public class AddParameterValueEvent extends AbstractMonitoringRecord implements IParameterValueEvent {			
+public class AddParameterValueEvent extends AbstractMonitoringRecord implements IParameterValueEvent {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // IRemoteControlEvent.pattern
-			 + TYPE_SIZE_STRING // IParameterValueEvent.name
-			 + TYPE_SIZE_STRING; // IParameterValueEvent.value
-	
+			+ TYPE_SIZE_STRING // IParameterValueEvent.name
+			+ TYPE_SIZE_STRING; // IParameterValueEvent.value
+
 	public static final Class<?>[] TYPES = {
 		String.class, // IRemoteControlEvent.pattern
 		String.class, // IParameterValueEvent.name
 		String.class, // IParameterValueEvent.value
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"pattern",
 		"name",
 		"value",
 	};
-	
+
 	/** default constants. */
 	public static final String PATTERN = "";
 	public static final String NAME = "";
 	public static final String VALUE = "";
 	private static final long serialVersionUID = -5279430930031250890L;
-	
+
 	/** property declarations. */
 	private final String pattern;
 	private final String name;
 	private final String value;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -71,24 +71,23 @@ public class AddParameterValueEvent extends AbstractMonitoringRecord implements 
 	 *            value
 	 */
 	public AddParameterValueEvent(final String pattern, final String name, final String value) {
-		this.pattern = pattern == null?"":pattern;
-		this.name = name == null?"":name;
-		this.value = value == null?"":value;
+		this.pattern = pattern == null ? "" : pattern;
+		this.name = name == null ? "" : name;
+		this.value = value == null ? "" : value;
 	}
-
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public AddParameterValueEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.pattern = deserializer.getString();
 		this.name = deserializer.getString();
 		this.value = deserializer.getString();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -98,7 +97,7 @@ public class AddParameterValueEvent extends AbstractMonitoringRecord implements 
 		serializer.putString(this.getName());
 		serializer.putString(this.getValue());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -106,7 +105,7 @@ public class AddParameterValueEvent extends AbstractMonitoringRecord implements 
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -114,7 +113,7 @@ public class AddParameterValueEvent extends AbstractMonitoringRecord implements 
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -123,7 +122,6 @@ public class AddParameterValueEvent extends AbstractMonitoringRecord implements 
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -138,7 +136,7 @@ public class AddParameterValueEvent extends AbstractMonitoringRecord implements 
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final AddParameterValueEvent castedRecord = (AddParameterValueEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -152,9 +150,10 @@ public class AddParameterValueEvent extends AbstractMonitoringRecord implements 
 		if (!this.getValue().equals(castedRecord.getValue())) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -164,25 +163,22 @@ public class AddParameterValueEvent extends AbstractMonitoringRecord implements 
 		code += this.getPattern().hashCode();
 		code += this.getName().hashCode();
 		code += this.getValue().hashCode();
-		
+
 		return code;
 	}
-	
+
 	public final String getPattern() {
 		return this.pattern;
 	}
-	
-	
+
 	public final String getName() {
 		return this.name;
 	}
-	
-	
+
 	public final String getValue() {
 		return this.value;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -191,13 +187,13 @@ public class AddParameterValueEvent extends AbstractMonitoringRecord implements 
 		String result = "AddParameterValueEvent: ";
 		result += "pattern = ";
 		result += this.getPattern() + ", ";
-		
+
 		result += "name = ";
 		result += this.getName() + ", ";
-		
+
 		result += "value = ";
 		result += this.getValue() + ", ";
-		
+
 		return result;
 	}
 }

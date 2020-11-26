@@ -27,27 +27,30 @@ import kieker.tools.trace.analysis.filter.visualization.graph.NoOriginRetentionP
 
 /**
  * Abstract superclass for graph-producing filters.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @param <G>
  *            The graph type created by this filter
- * 
+ *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin
-public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?, ?>> extends AbstractMessageTraceProcessingFilter implements
-		IGraphProducingFilter<G> {
+public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?, ?>>
+		extends AbstractMessageTraceProcessingFilter implements IGraphProducingFilter<G> {
 
-	private static final String INCOMPATIBLE_RETENTION_ERROR_TEMPLATE =
-			"%s: The current retention policy %s is incompatible with the requested retention policy %s.";
+	private static final String INCOMPATIBLE_RETENTION_ERROR_TEMPLATE = "%s: The current retention policy %s "
+			+ "is incompatible with the requested retention policy %s.";
 
 	private final G graph;
 	private IOriginRetentionPolicy originRetentionPolicy = NoOriginRetentionPolicy.createInstance();
 
 	/**
-	 * Creates a new graph-producing filter using the given configuration and the given graph.
-	 * 
+	 * Creates a new graph-producing filter using the given configuration and the
+	 * given graph.
+	 *
 	 * @param configuration
 	 *            The configuration to use
 	 * @param projectContext
@@ -55,7 +58,8 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	 * @param graph
 	 *            The (usually empty) graph to produce / extend
 	 */
-	public AbstractGraphProducingFilter(final Configuration configuration, final IProjectContext projectContext, final G graph) {
+	public AbstractGraphProducingFilter(final Configuration configuration, final IProjectContext projectContext,
+			final G graph) {
 		super(configuration, projectContext);
 
 		this.graph = graph;
@@ -63,7 +67,7 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 
 	/**
 	 * Returns this filter's configuration name.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public abstract String getConfigurationName();
@@ -77,12 +81,12 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 
 	@Override
 	public String getGraphOutputPortName() {
-		return OUTPUT_PORT_NAME_GRAPH;
+		return IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH;
 	}
 
 	/**
 	 * Delivers the graph stored in this filter.
-	 * 
+	 *
 	 * @return The graph.
 	 */
 	protected G getGraph() {
@@ -94,9 +98,12 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	}
 
 	@Override
-	public void requestOriginRetentionPolicy(final IOriginRetentionPolicy policy) throws AnalysisConfigurationException {
+	public void requestOriginRetentionPolicy(final IOriginRetentionPolicy policy)
+			throws AnalysisConfigurationException {
 		if (!this.originRetentionPolicy.isCompatibleWith(policy)) {
-			throw new AnalysisConfigurationException(String.format(INCOMPATIBLE_RETENTION_ERROR_TEMPLATE, this, this.originRetentionPolicy, policy));
+			throw new AnalysisConfigurationException(
+					String.format(AbstractGraphProducingFilter.INCOMPATIBLE_RETENTION_ERROR_TEMPLATE, this,
+							this.originRetentionPolicy, policy));
 		}
 
 		this.originRetentionPolicy = this.originRetentionPolicy.uniteWith(policy);

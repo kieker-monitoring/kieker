@@ -24,11 +24,13 @@ import kieker.tools.trace.analysis.systemModel.Execution;
 /**
  * Response time decoration for graph vertices. This decoration extracts response times from executions and keeps track of the minimal, maximal and average response
  * time.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @since 1.5
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public class ResponseTimeDecoration extends AbstractVertexDecoration {
 
 	private final TimeUnit executionTimeunit;
@@ -42,7 +44,7 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 
 	/**
 	 * Creates a new response time decoration.
-	 * 
+	 *
 	 * @param executionTimeunit
 	 *            The time unit which tells how to interpret the times of the executions.
 	 * @param displayTimeunit
@@ -72,7 +74,7 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 
 	/**
 	 * Registers a given execution for the decorated vertex.
-	 * 
+	 *
 	 * @param execution
 	 *            The execution to register
 	 */
@@ -92,7 +94,7 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 
 	/**
 	 * Returns the minimal response time (in ms) registered by this decoration.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public long getMinimalResponseTime() {
@@ -101,7 +103,7 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 
 	/**
 	 * Returns the maximal response time (in ms) registered by this decoration.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public long getMaximalResponseTime() {
@@ -110,7 +112,7 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 
 	/**
 	 * Returns the average response time (in ms) registered by this decoration.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public double getAverageResponseTime() {
@@ -125,17 +127,17 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 	public String createFormattedOutput() {
 		final StringBuilder sb = new StringBuilder(30);
 		sb.append("min: ")
-		  .append(this.getMinimalResponseTime())
-		  .append(this.timeUnitShortname)
-		  .append(", avg: ")
-		  .append(Math.round(this.getAverageResponseTime()))
-		  .append(this.timeUnitShortname)
-		  .append(", max: ")
-		  .append(this.getMaximalResponseTime())
-		  .append(this.timeUnitShortname)
-		  .append(",\\ntotal: ")
-		  .append(this.getTotalResponseTime())
-		  .append(this.timeUnitShortname);
+				.append(this.getMinimalResponseTime())
+				.append(this.timeUnitShortname)
+				.append(", avg: ")
+				.append(Math.round(this.getAverageResponseTime()))
+				.append(this.timeUnitShortname)
+				.append(", max: ")
+				.append(this.getMaximalResponseTime())
+				.append(this.timeUnitShortname)
+				.append(",\\ntotal: ")
+				.append(this.getTotalResponseTime())
+				.append(this.timeUnitShortname);
 		return sb.toString();
 	}
 

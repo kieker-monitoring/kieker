@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.callTree;
 
 import kieker.tools.trace.analysis.filter.visualization.graph.AbstractWeightedEdge;
@@ -22,19 +21,21 @@ import kieker.tools.trace.analysis.systemModel.MessageTrace;
 
 /**
  * This class represents a weighted and directed edge within a call tree.
- * 
+ *
  * @param <T>
  *            The type of the entity to be stored in the nodes linked by this edge.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
+ * @deprecated 1.15 moved to new location
  */
+@Deprecated
 public class WeightedDirectedCallTreeEdge<T> extends AbstractWeightedEdge<AbstractCallTreeNode<T>, WeightedDirectedCallTreeEdge<T>, MessageTrace> {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param source
 	 *            The source of this edge.
 	 * @param target

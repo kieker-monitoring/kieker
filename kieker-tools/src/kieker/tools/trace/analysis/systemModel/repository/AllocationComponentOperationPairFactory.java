@@ -31,9 +31,9 @@ import kieker.tools.trace.analysis.systemModel.util.AllocationComponentOperation
  * @since 1.1
  */
 public class AllocationComponentOperationPairFactory extends AbstractSystemSubRepository {
-	public static final AllocationComponentOperationPair ROOT_PAIR =
-			new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID, OperationRepository.ROOT_OPERATION,
-					AllocationRepository.ROOT_ALLOCATION_COMPONENT);
+	public static final AllocationComponentOperationPair ROOT_PAIR = new AllocationComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+			OperationRepository.ROOT_OPERATION,
+			AllocationRepository.ROOT_ALLOCATION_COMPONENT);
 
 	private final Map<String, AllocationComponentOperationPair> pairsByName = new Hashtable<String, AllocationComponentOperationPair>(); // NOPMD
 	private final Map<Integer, AllocationComponentOperationPair> pairsById = new Hashtable<Integer, AllocationComponentOperationPair>(); // NOPMD

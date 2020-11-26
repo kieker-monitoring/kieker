@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import java.util.Collection;
@@ -27,37 +26,39 @@ import kieker.tools.trace.analysis.systemModel.TraceInformation;
 
 /**
  * Abstract superclass for dependency graphs.
- * 
+ *
  * @param <T>
  *            The type of the nodes' payload
- * 
+ *
  * @author Andre van Hoorn, Lena St&ouml;ver
- * 
+ *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 public abstract class AbstractDependencyGraph<T extends ISystemModelElement> extends
 		AbstractGraph<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, TraceInformation> {
 
-	private final Map<Integer, DependencyGraphNode<T>> nodes = new ConcurrentHashMap<Integer, DependencyGraphNode<T>>(); // NOPMD (UseConcurrentHashMap)
+	private final Map<Integer, DependencyGraphNode<T>> nodes = new ConcurrentHashMap<>(); // NOPMD (UseConcurrentHashMap)
 	private final DependencyGraphNode<T> rootNode;
 
 	/**
 	 * Creates a new dependency graph with the given root entity.
-	 * 
+	 *
 	 * @param rootEntity
 	 *            The entity from which the root node originates
 	 */
 	public AbstractDependencyGraph(final T rootEntity) {
-		this.rootNode = new DependencyGraphNode<T>(DependencyGraphNode.ROOT_NODE_ID, rootEntity, null, NoOriginRetentionPolicy.createInstance());
+		this.rootNode = new DependencyGraphNode<>(DependencyGraphNode.ROOT_NODE_ID, rootEntity, null, NoOriginRetentionPolicy.createInstance());
 		this.nodes.put(DependencyGraphNode.ROOT_NODE_ID, this.rootNode);
 	}
 
 	/**
 	 * Delivers the node with the given key.
-	 * 
+	 *
 	 * @param i
 	 *            The key to search for.
-	 * 
+	 *
 	 * @return The corresponding node to the given key if it exists, null otherwise.
 	 */
 	protected final DependencyGraphNode<T> getNode(final int i) {
@@ -66,7 +67,7 @@ public abstract class AbstractDependencyGraph<T extends ISystemModelElement> ext
 
 	/**
 	 * Adds a node to this graph.
-	 * 
+	 *
 	 * @param i
 	 *            The key of the node.
 	 * @param node
@@ -78,7 +79,7 @@ public abstract class AbstractDependencyGraph<T extends ISystemModelElement> ext
 
 	/**
 	 * Returns this graph's root node.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public final DependencyGraphNode<T> getRootNode() {
@@ -87,7 +88,7 @@ public abstract class AbstractDependencyGraph<T extends ISystemModelElement> ext
 
 	/**
 	 * Returns all nodes contained in this graph.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public Collection<DependencyGraphNode<T>> getNodes() {
@@ -96,7 +97,7 @@ public abstract class AbstractDependencyGraph<T extends ISystemModelElement> ext
 
 	/**
 	 * Returns the number of nodes contained in this graph.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public int size() {

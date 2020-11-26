@@ -25,6 +25,7 @@ import kieker.common.util.filesystem.FSUtil;
 
 /**
  * Decompression filter for stream reading stages providing Zip-decompression.
+ * 
  * @author Reiner Jung
  *
  * @since 1.15
@@ -42,14 +43,17 @@ public class ZipDecompressionFilter extends AbstractDecompressionFilter {
 	/**
 	 * Create zip decompression filter.
 	 *
-	 * @param configuration filter configuration
+	 * @param configuration
+	 *            filter configuration
 	 */
 	public ZipDecompressionFilter(final Configuration configuration) {
 		super(configuration);
 		this.bufferSize = configuration.getIntProperty(BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.reader.depcompression.IDecompressionFilter#chainInputStream(java.io.OutputStream)
 	 */
 	@Override
@@ -59,7 +63,9 @@ public class ZipDecompressionFilter extends AbstractDecompressionFilter {
 		return new BufferedInputStream(zipStream, this.bufferSize);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.reader.depcompression.IDecompressionFilter#getExtension()
 	 */
 	@Override

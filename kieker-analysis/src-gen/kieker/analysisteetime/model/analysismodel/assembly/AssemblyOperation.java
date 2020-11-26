@@ -14,7 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation#getOperationType <em>Operation Type</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation#getOperationType <em>Operation Type</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage#getAssemblyOperation()
@@ -30,6 +30,7 @@ public interface AssemblyOperation extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Operation Type</em>' reference.
 	 * @see #setOperationType(OperationType)
 	 * @see kieker.analysisteetime.model.analysismodel.assembly.AssemblyPackage#getAssemblyOperation_OperationType()
@@ -42,7 +43,9 @@ public interface AssemblyOperation extends EObject {
 	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.assembly.AssemblyOperation#getOperationType <em>Operation Type</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Operation Type</em>' reference.
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Operation Type</em>' reference.
 	 * @see #getOperationType()
 	 * @generated
 	 */
@@ -51,8 +54,11 @@ public interface AssemblyOperation extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.emf.ecore.EObject container = this.eContainer();\r\nif (container != null) {\r\n\torg.eclipse.emf.ecore.EObject containerContainer = container.eContainer();\r\n\tif (containerContainer != null) {\r\n\t\treturn (AssemblyComponent) containerContainer ;\r\n\t}\r\n}\r\nreturn null;\r\n'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.emf.ecore.EObject container = this.eContainer();\r\nif (container != null)
+	 *        {\r\n\torg.eclipse.emf.ecore.EObject containerContainer = container.eContainer();\r\n\tif (containerContainer != null) {\r\n\t\treturn
+	 *        (AssemblyComponent) containerContainer ;\r\n\t}\r\n}\r\nreturn null;\r\n'"
 	 * @generated
 	 */
 	AssemblyComponent getAssemblyComponent();

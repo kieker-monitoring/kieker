@@ -17,11 +17,11 @@
 package kieker.tools.trace.analysis.filter.visualization;
 
 import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -52,7 +52,9 @@ import kieker.tools.trace.analysis.filter.visualization.graph.AbstractGraph;
  * @author Holger Knoche
  *
  * @since 1.6
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(name = "Graph writer plugin", description = "Generic plugin for writing graphs to files", configuration = {
 	@Property(name = GraphWriterPlugin.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, defaultValue = "true"),
 	@Property(name = GraphWriterPlugin.CONFIG_PROPERTY_NAME_SHORTLABELS, defaultValue = "true"),
@@ -84,8 +86,6 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	 * Name of the plugin's graph input port.
 	 */
 	public static final String INPUT_PORT_NAME_GRAPHS = "inputGraph";
-
-	private static final String ENCODING = "UTF-8";
 
 	private static final String NO_SUITABLE_FORMATTER_MESSAGE_TEMPLATE = "No formatter type defined for graph type %s.";
 	private static final String INSTANTIATION_ERROR_MESSAGE_TEMPLATE = "Could not instantiate formatter type %s for graph type %s.";
@@ -153,17 +153,8 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 		try {
 			final Constructor<? extends AbstractGraphFormatter<?>> constructor = formatterClass.getConstructor();
 			return constructor.newInstance();
-		} catch (final SecurityException e) {
-			GraphWriterPlugin.handleInstantiationException(graph.getClass(), formatterClass, e);
-		} catch (final NoSuchMethodException e) {
-			GraphWriterPlugin.handleInstantiationException(graph.getClass(), formatterClass, e);
-		} catch (final IllegalArgumentException e) {
-			GraphWriterPlugin.handleInstantiationException(graph.getClass(), formatterClass, e);
-		} catch (final InstantiationException e) {
-			GraphWriterPlugin.handleInstantiationException(graph.getClass(), formatterClass, e);
-		} catch (final IllegalAccessException e) {
-			GraphWriterPlugin.handleInstantiationException(graph.getClass(), formatterClass, e);
-		} catch (final InvocationTargetException e) {
+		} catch (final SecurityException | NoSuchMethodException | IllegalArgumentException | InstantiationException | IllegalAccessException
+				| InvocationTargetException e) {
 			GraphWriterPlugin.handleInstantiationException(graph.getClass(), formatterClass, e);
 		}
 
@@ -186,14 +177,14 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	 * @param graph
 	 *            The graph to save
 	 */
-	@InputPort(name = INPUT_PORT_NAME_GRAPHS, eventTypes = { AbstractGraph.class })
+	@InputPort(name = INPUT_PORT_NAME_GRAPHS, eventTypes = AbstractGraph.class)
 	public void writeGraph(final AbstractGraph<?, ?, ?> graph) {
 		final AbstractGraphFormatter<?> graphFormatter = GraphWriterPlugin.createFormatter(graph);
 		final String specification = graphFormatter.createFormattedRepresentation(graph, this.includeWeights, this.useShortLabels, this.plotLoops);
 		final String fileName = this.outputPathName + this.getOutputFileName(graphFormatter);
 		BufferedWriter writer = null;
 		try {
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), ENCODING));
+			writer = Files.newBufferedWriter(Paths.get(fileName));
 			writer.write(specification);
 			writer.flush();
 		} catch (final IOException e) {

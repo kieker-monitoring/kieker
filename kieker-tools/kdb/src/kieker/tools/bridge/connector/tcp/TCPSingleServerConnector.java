@@ -42,7 +42,8 @@ import kieker.tools.bridge.connector.ConnectorProperty;
  * @deprecated since 1.15 removed in 1.16 replaced by collector
  */
 @Deprecated
-@ConnectorProperty(cmdName = "tcp-single-server", name = "TCP Single Server Connector", description = "TCP server for binary Kieker records. Accepts only one connection.")
+@ConnectorProperty(cmdName = "tcp-single-server", name = "TCP Single Server Connector",
+		description = "TCP server for binary Kieker records. Accepts only one connection.")
 public class TCPSingleServerConnector extends AbstractConnector {
 
 	/** Constant holding the name of the port configuration property. */
