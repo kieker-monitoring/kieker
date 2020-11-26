@@ -78,7 +78,7 @@ public final class ResourceMonitorMain extends AbstractCommandLineTool {
 	private ISampler[] createSamplers() {
 		final IOshiSamplerFactory oshiFactory = OshiSamplerFactory.INSTANCE;
 		return new ISampler[] { oshiFactory.createSensorCPUsDetailedPerc(), oshiFactory.createSensorMemSwapUsage(), oshiFactory.createSensorLoadAverage(),
-				oshiFactory.createSensorNetworkUtilization(), oshiFactory.createSensorDiskUsage(), };
+			oshiFactory.createSensorNetworkUtilization(), oshiFactory.createSensorDiskUsage(), };
 	}
 
 	private void initSensors() {

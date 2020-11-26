@@ -21,8 +21,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.execution.impl.AggregatedInvocationImpl#getSource <em>Source</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.execution.impl.AggregatedInvocationImpl#getTarget <em>Target</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.execution.impl.AggregatedInvocationImpl#getSource <em>Source</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.execution.impl.AggregatedInvocationImpl#getTarget <em>Target</em>}</li>
  * </ul>
  *
  * @generated
@@ -32,6 +32,7 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	 * The cached value of the '{@link #getSource() <em>Source</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getSource()
 	 * @generated
 	 * @ordered
@@ -42,6 +43,7 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	 * The cached value of the '{@link #getTarget() <em>Target</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getTarget()
 	 * @generated
 	 * @ordered
@@ -51,6 +53,7 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected AggregatedInvocationImpl() {
@@ -60,6 +63,7 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -70,12 +74,13 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeployedOperation getSource() {
 		if (source != null && source.eIsProxy()) {
-			InternalEObject oldSource = (InternalEObject)source;
-			source = (DeployedOperation)eResolveProxy(oldSource);
+			InternalEObject oldSource = (InternalEObject) source;
+			source = (DeployedOperation) eResolveProxy(oldSource);
 			if (source != oldSource) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ExecutionPackage.AGGREGATED_INVOCATION__SOURCE, oldSource, source));
@@ -87,6 +92,7 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeployedOperation basicGetSource() {
@@ -96,6 +102,7 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setSource(DeployedOperation newSource) {
@@ -108,12 +115,13 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeployedOperation getTarget() {
 		if (target != null && target.eIsProxy()) {
-			InternalEObject oldTarget = (InternalEObject)target;
-			target = (DeployedOperation)eResolveProxy(oldTarget);
+			InternalEObject oldTarget = (InternalEObject) target;
+			target = (DeployedOperation) eResolveProxy(oldTarget);
 			if (target != oldTarget) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ExecutionPackage.AGGREGATED_INVOCATION__TARGET, oldTarget, target));
@@ -125,6 +133,7 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeployedOperation basicGetTarget() {
@@ -134,6 +143,7 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setTarget(DeployedOperation newTarget) {
@@ -146,17 +156,20 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ExecutionPackage.AGGREGATED_INVOCATION__SOURCE:
-				if (resolve) return getSource();
-				return basicGetSource();
-			case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
-				if (resolve) return getTarget();
-				return basicGetTarget();
+		case ExecutionPackage.AGGREGATED_INVOCATION__SOURCE:
+			if (resolve)
+				return getSource();
+			return basicGetSource();
+		case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
+			if (resolve)
+				return getTarget();
+			return basicGetTarget();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -164,17 +177,18 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ExecutionPackage.AGGREGATED_INVOCATION__SOURCE:
-				setSource((DeployedOperation)newValue);
-				return;
-			case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
-				setTarget((DeployedOperation)newValue);
-				return;
+		case ExecutionPackage.AGGREGATED_INVOCATION__SOURCE:
+			setSource((DeployedOperation) newValue);
+			return;
+		case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
+			setTarget((DeployedOperation) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -182,17 +196,18 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ExecutionPackage.AGGREGATED_INVOCATION__SOURCE:
-				setSource((DeployedOperation)null);
-				return;
-			case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
-				setTarget((DeployedOperation)null);
-				return;
+		case ExecutionPackage.AGGREGATED_INVOCATION__SOURCE:
+			setSource((DeployedOperation) null);
+			return;
+		case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
+			setTarget((DeployedOperation) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -200,22 +215,23 @@ public class AggregatedInvocationImpl extends MinimalEObjectImpl.Container imple
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ExecutionPackage.AGGREGATED_INVOCATION__SOURCE:
-				return source != null;
-			case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
-				return target != null;
+		case ExecutionPackage.AGGREGATED_INVOCATION__SOURCE:
+			return source != null;
+		case ExecutionPackage.AGGREGATED_INVOCATION__TARGET:
+			return target != null;
 		}
 		return super.eIsSet(featureID);
 	}
-	
+
 	@Override
 	public String toString() {
 		return String.format("%s: [%s->%s]", this.getClass().getName(), source, target);
 	}
 
-} //AggregatedInvocationImpl
+} // AggregatedInvocationImpl

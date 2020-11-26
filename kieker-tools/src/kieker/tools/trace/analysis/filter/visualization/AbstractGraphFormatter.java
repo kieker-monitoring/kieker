@@ -25,19 +25,23 @@ import kieker.tools.trace.analysis.filter.visualization.graph.Color;
 
 /**
  * Abstract superclass for all graph formatters.
- * 
+ *
  * @author Holger Knoche
- * 
+ *
  * @param <G>
  *            The graph type this formatter is for
- * 
+ *
  * @since 1.6
  */
 public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 
+	public AbstractGraphFormatter() {
+		// nothing to be done here
+	}
+
 	/**
 	 * Creates a formatted representation of the given graph.
-	 * 
+	 *
 	 * @param graph
 	 *            The graph to format
 	 * @param includeWeights
@@ -46,7 +50,7 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 	 *            Determines whether to use short labels or not.
 	 * @param plotLoops
 	 *            Determines whether to plot loops or not.
-	 * 
+	 *
 	 * @return A formatted representation of the graph
 	 */
 	@SuppressWarnings("unchecked")
@@ -57,7 +61,7 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 
 	/**
 	 * This method encapsulates the concrete graph formatting.
-	 * 
+	 *
 	 * @param graph
 	 *            The input graph to format
 	 * @param includeWeights
@@ -66,7 +70,7 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 	 *            Determines whether to use short labels or not.
 	 * @param plotLoops
 	 *            Determines whether to plot loops or not.
-	 * 
+	 *
 	 * @return A textual specification of the input graph
 	 */
 	protected abstract String formatGraph(G graph, final boolean includeWeights, final boolean useShortLabels, final boolean plotLoops);
@@ -96,7 +100,7 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 
 	/**
 	 * Utility function to format the decorations attached to a vertex.
-	 * 
+	 *
 	 * @param builder
 	 *            The builder to send the output to
 	 * @param vertex
@@ -112,14 +116,14 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 
 	/**
 	 * Returns the default file name suggested by this formatter.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public abstract String getDefaultFileName();
 
 	/**
 	 * Returns the dot (graphviz) representation of the given color.
-	 * 
+	 *
 	 * @param color
 	 *            The color to convert
 	 * @return The dot representation of the given color

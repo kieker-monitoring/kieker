@@ -30,18 +30,18 @@ import kieker.common.record.flow.IExceptionRecord;
 
 /**
  * @author Christian Zirkelbach (czi@informatik.uni-kiel.de)
- * API compatibility: Kieker 1.15.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.14
  */
-public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEventRecord, IFlowRecord, IClassSignature, ITraceRecord, IExceptionRecord {			
+public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEventRecord, IFlowRecord, IClassSignature, ITraceRecord, IExceptionRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
-			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_LONG // ITraceRecord.traceId
-			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING; // IExceptionRecord.cause
-	
+			+ TYPE_SIZE_STRING // IClassSignature.classSignature
+			+ TYPE_SIZE_LONG // ITraceRecord.traceId
+			+ TYPE_SIZE_INT // ITraceRecord.orderIndex
+			+ TYPE_SIZE_STRING; // IExceptionRecord.cause
+
 	public static final Class<?>[] TYPES = {
 		long.class, // IEventRecord.timestamp
 		String.class, // IClassSignature.classSignature
@@ -49,7 +49,7 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 		int.class, // ITraceRecord.orderIndex
 		String.class, // IExceptionRecord.cause
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -58,7 +58,7 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 		"orderIndex",
 		"cause",
 	};
-	
+
 	/** default constants. */
 	public static final long TIMESTAMP = 0L;
 	public static final String CLASS_SIGNATURE = "";
@@ -66,14 +66,14 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 	public static final int ORDER_INDEX = -1;
 	public static final String CAUSE = "";
 	private static final long serialVersionUID = 979011205753098958L;
-	
+
 	/** property declarations. */
 	private long timestamp;
 	private final String classSignature;
 	private long traceId;
 	private final int orderIndex;
 	private final String cause;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -90,18 +90,17 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 	 */
 	public DatabaseFailedEvent(final long timestamp, final String classSignature, final long traceId, final int orderIndex, final String cause) {
 		this.timestamp = timestamp;
-		this.classSignature = classSignature == null?CLASS_SIGNATURE:classSignature;
+		this.classSignature = classSignature == null ? CLASS_SIGNATURE : classSignature;
 		this.traceId = traceId;
 		this.orderIndex = orderIndex;
-		this.cause = cause == null?CAUSE:cause;
+		this.cause = cause == null ? CAUSE : cause;
 	}
-
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public DatabaseFailedEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -110,7 +109,7 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 		this.orderIndex = deserializer.getInt();
 		this.cause = deserializer.getString();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -122,7 +121,7 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 		serializer.putInt(this.getOrderIndex());
 		serializer.putString(this.getCause());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -130,7 +129,7 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -138,7 +137,7 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -147,7 +146,6 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -162,7 +160,7 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final DatabaseFailedEvent castedRecord = (DatabaseFailedEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -182,55 +180,53 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 		if (!this.getCause().equals(castedRecord.getCause())) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
+		code += ((int) this.getTimestamp());
 		code += this.getClassSignature().hashCode();
-		code += ((int)this.getTraceId());
-		code += ((int)this.getOrderIndex());
+		code += ((int) this.getTraceId());
+		code += ((int) this.getOrderIndex());
 		code += this.getCause().hashCode();
-		
+
 		return code;
 	}
-	
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-	
+
 	public final void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}
-	
+
 	public final String getClassSignature() {
 		return this.classSignature;
 	}
-	
-	
+
 	public final long getTraceId() {
 		return this.traceId;
 	}
-	
+
 	public final void setTraceId(long traceId) {
 		this.traceId = traceId;
 	}
-	
+
 	public final int getOrderIndex() {
 		return this.orderIndex;
 	}
-	
-	
+
 	public final String getCause() {
 		return this.cause;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -239,19 +235,19 @@ public class DatabaseFailedEvent extends AbstractMonitoringRecord implements IEv
 		String result = "DatabaseFailedEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		result += "classSignature = ";
 		result += this.getClassSignature() + ", ";
-		
+
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-		
+
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-		
+
 		result += "cause = ";
 		result += this.getCause() + ", ";
-		
+
 		return result;
 	}
 }

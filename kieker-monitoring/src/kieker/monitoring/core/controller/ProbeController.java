@@ -81,7 +81,8 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 * Creates a new instance of this class using the given configuration to
 	 * initialize the class.
 	 *
-	 * @param configuration The configuration used to initialize this controller.
+	 * @param configuration
+	 *            The configuration used to initialize this controller.
 	 */
 	protected ProbeController(final Configuration configuration) {
 		super(configuration);
@@ -231,9 +232,11 @@ public class ProbeController extends AbstractController implements IProbeControl
 	/**
 	 * Sets the list of probe patterns.
 	 *
-	 * @param strPatternList The new list with pattern strings.
+	 * @param strPatternList
+	 *            The new list with pattern strings.
 	 *
-	 * @param updateConfig   Whether the pattern file should be updated or not.
+	 * @param updateConfig
+	 *            Whether the pattern file should be updated or not.
 	 */
 	protected void setProbePatternList(final List<String> strPatternList, final boolean updateConfig) {
 		if (!this.enabled) {
@@ -394,7 +397,8 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 * This method tests if the given signature matches a pattern and completes
 	 * accordingly the signatureCache map.
 	 *
-	 * @param signature The signature to match.
+	 * @param signature
+	 *            The signature to match.
 	 */
 	private boolean matchesPattern(final String signature) {
 		synchronized (this) {

@@ -5,7 +5,6 @@
 // Generated on: 2016.02.25 at 12:10:48 PM CET 
 //
 
-
 package org.graphdrawing.graphml;
 
 import java.util.ArrayList;
@@ -16,15 +15,16 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
  * 
- *       Complex type for the <graphml> element.
- *     
+ * Complex type for the <graphml> element.
  * 
- * <p>Java class for graphml.type complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * Java class for graphml.type complex type.
+ * 
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="graphml.type">
@@ -50,101 +50,103 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "graphml.type", propOrder = {
-    "desc",
-    "key",
-    "graphOrData"
+	"desc",
+	"key",
+	"graphOrData"
 })
 public class GraphmlType {
 
-    protected String desc;
-    protected List<KeyType> key;
-    @XmlElements({
-        @XmlElement(name = "graph", type = GraphType.class),
-        @XmlElement(name = "data", type = DataType.class)
-    })
-    protected List<Object> graphOrData;
+	protected String desc;
+	protected List<KeyType> key;
+	@XmlElements({
+		@XmlElement(name = "graph", type = GraphType.class),
+		@XmlElement(name = "data", type = DataType.class)
+	})
+	protected List<Object> graphOrData;
 
-    /**
-     * Gets the value of the desc property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDesc() {
-        return desc;
-    }
+	/**
+	 * Gets the value of the desc property.
+	 * 
+	 * @return
+	 *         possible object is
+	 *         {@link String }
+	 * 
+	 */
+	public String getDesc() {
+		return desc;
+	}
 
-    /**
-     * Sets the value of the desc property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDesc(String value) {
-        this.desc = value;
-    }
+	/**
+	 * Sets the value of the desc property.
+	 * 
+	 * @param value
+	 *            allowed object is
+	 *            {@link String }
+	 * 
+	 */
+	public void setDesc(String value) {
+		this.desc = value;
+	}
 
-    /**
-     * Gets the value of the key property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the key property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getKey().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link KeyType }
-     * 
-     * 
-     */
-    public List<KeyType> getKey() {
-        if (key == null) {
-            key = new ArrayList<KeyType>();
-        }
-        return this.key;
-    }
+	/**
+	 * Gets the value of the key property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list,
+	 * not a snapshot. Therefore any modification you make to the
+	 * returned list will be present inside the JAXB object.
+	 * This is why there is not a <CODE>set</CODE> method for the key property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getKey().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list
+	 * {@link KeyType }
+	 * 
+	 * 
+	 */
+	public List<KeyType> getKey() {
+		if (key == null) {
+			key = new ArrayList<KeyType>();
+		}
+		return this.key;
+	}
 
-    /**
-     * Gets the value of the graphOrData property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the graphOrData property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getGraphOrData().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link GraphType }
-     * {@link DataType }
-     * 
-     * 
-     */
-    public List<Object> getGraphOrData() {
-        if (graphOrData == null) {
-            graphOrData = new ArrayList<Object>();
-        }
-        return this.graphOrData;
-    }
+	/**
+	 * Gets the value of the graphOrData property.
+	 * 
+	 * <p>
+	 * This accessor method returns a reference to the live list,
+	 * not a snapshot. Therefore any modification you make to the
+	 * returned list will be present inside the JAXB object.
+	 * This is why there is not a <CODE>set</CODE> method for the graphOrData property.
+	 * 
+	 * <p>
+	 * For example, to add a new item, do as follows:
+	 * 
+	 * <pre>
+	 * getGraphOrData().add(newItem);
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * Objects of the following type(s) are allowed in the list
+	 * {@link GraphType }
+	 * {@link DataType }
+	 * 
+	 * 
+	 */
+	public List<Object> getGraphOrData() {
+		if (graphOrData == null) {
+			graphOrData = new ArrayList<Object>();
+		}
+		return this.graphOrData;
+	}
 
 }

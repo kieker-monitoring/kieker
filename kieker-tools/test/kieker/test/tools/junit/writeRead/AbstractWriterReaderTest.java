@@ -23,13 +23,13 @@ import java.util.List;
 
 import org.junit.Test;
 
+import kieker.analysis.util.bookstore.BookstoreEventRecordFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
-import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**

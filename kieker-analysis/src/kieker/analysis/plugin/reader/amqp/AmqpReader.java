@@ -48,14 +48,15 @@ import kieker.common.record.IMonitoringRecord;
  * @since 1.12
  */
 @Plugin(description = "A plugin that reads monitoring records from an AMQP queue", outputPorts = {
-	@OutputPort(name = AmqpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Output port of the AMQP reader") }, configuration = {
+	@OutputPort(name = AmqpReader.OUTPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Output port of the AMQP reader") },
+		configuration = {
 			@Property(name = AmqpReader.CONFIG_PROPERTY_URI, defaultValue = "amqp://localhost", description = "Server URI of the AMQP server"),
 			@Property(name = AmqpReader.CONFIG_PROPERTY_QUEUENAME, defaultValue = "kieker", description = "AMQP queue name"),
 			@Property(name = AmqpReader.CONFIG_PROPERTY_HEARTBEAT, defaultValue = "60", description = "Heartbeat interval (in seconds)"),
 			@Property(name = AmqpReader.CONFIG_PROPERTY_CACHE_DURATION, defaultValue = "60", description = "Cache duration (in seconds) for string registries")
 
-})
+		})
 public final class AmqpReader extends AbstractStringRegistryReaderPlugin {
 
 	/** The name of the output port delivering the received records. */

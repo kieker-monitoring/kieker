@@ -47,7 +47,6 @@ pipeline {
 
         stage('Compile') {
           steps {
-            sh 'df'
             sh './gradlew compileJava'
             sh './gradlew compileTestJava'
             sh 'df'
@@ -88,9 +87,9 @@ pipeline {
                   pmdParser(
                     pattern: '**/build/reports/pmd/*.xml'
                   ),
-                  spotBugs(
-                    pattern: '**/build/reports/findbugs/*.xml'
-                  )
+                  //spotBugs(
+                  //  pattern: '**/build/reports/findbugs/*.xml'
+                  //)
                 ]
               )
             }
@@ -100,7 +99,10 @@ pipeline {
         stage('Distribution Build') {
           steps {
             sh './gradlew build distribute'
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
           }

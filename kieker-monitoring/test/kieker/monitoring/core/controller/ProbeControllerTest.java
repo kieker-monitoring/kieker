@@ -46,12 +46,12 @@ public class ProbeControllerTest {
 	private static final String OTHER_OPERATION_SIGNATURE = "public void " + OTHER_CLASSNAME + ".do(int)";
 
 	private ProbeController controller;
-	
+
 	/** probe controller test. */
 	public ProbeControllerTest() {
 		// nothing to be done on construction of the test
 	}
-	
+
 	/** initialize setup before every test. */
 	@Before
 	public void setUp() {
@@ -79,7 +79,7 @@ public class ProbeControllerTest {
 		this.controller.activateProbe(OTHER_OPERATION_SIGNATURE);
 		Assert.assertTrue("Probe should be actived for " + OPERATION_SIGNATURE, this.controller.isProbeActivated(OPERATION_SIGNATURE));
 		Assert.assertTrue("Probe should be actived for " + OTHER_OPERATION_SIGNATURE, this.controller.isProbeActivated(OTHER_OPERATION_SIGNATURE));
-		
+
 		this.controller.deactivateProbe(OPERATION_SIGNATURE);
 		Assert.assertFalse("Probe should be deactived for " + OPERATION_SIGNATURE, this.controller.isProbeActivated(OPERATION_SIGNATURE));
 	}
@@ -91,16 +91,16 @@ public class ProbeControllerTest {
 	public void testSetProbePatternListListOfStringBoolean() {
 		this.controller.deactivateProbe(OPERATION_SIGNATURE);
 		this.controller.deactivateProbe(OTHER_OPERATION_SIGNATURE);
-		
+
 		Assert.assertFalse("Probe should be deactived for " + OPERATION_SIGNATURE, this.controller.isProbeActivated(OPERATION_SIGNATURE));
 		Assert.assertFalse("Probe should be deactived for " + OTHER_OPERATION_SIGNATURE, this.controller.isProbeActivated(OTHER_OPERATION_SIGNATURE));
-		
+
 		final List<String> patternList = new ArrayList<>();
 		patternList.add(OPERATION_SIGNATURE);
 		patternList.add(OTHER_OPERATION_SIGNATURE);
 
-		this.controller.setProbePatternList(patternList , false);
-		
+		this.controller.setProbePatternList(patternList, false);
+
 		Assert.assertTrue("Probe should be actived for " + OPERATION_SIGNATURE, this.controller.isProbeActivated(OPERATION_SIGNATURE));
 		Assert.assertTrue("Probe should be actived for " + OTHER_OPERATION_SIGNATURE, this.controller.isProbeActivated(OTHER_OPERATION_SIGNATURE));
 	}
@@ -130,7 +130,7 @@ public class ProbeControllerTest {
 	 * Test method for {@link kieker.monitoring.core.controller.ProbeController#getAllPatternParameters(java.lang.String)}.
 	 */
 	@Test
-	public void testGetAllPatternParameters() {		
+	public void testGetAllPatternParameters() {
 		final Map<String, List<String>> result = this.controller.getAllPatternParameters(CLASSNAME);
 		Assert.assertNull("There should be no patterns", result);
 

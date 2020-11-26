@@ -15,8 +15,8 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAssemblyComponent <em>Assembly Component</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getContainedOperations <em>Contained Operations</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAssemblyComponent <em>Assembly Component</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getContainedOperations <em>Contained Operations</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeployedComponent()
@@ -32,6 +32,7 @@ public interface DeployedComponent extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Assembly Component</em>' reference.
 	 * @see #setAssemblyComponent(AssemblyComponent)
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeployedComponent_AssemblyComponent()
@@ -41,10 +42,13 @@ public interface DeployedComponent extends EObject {
 	AssemblyComponent getAssemblyComponent();
 
 	/**
-	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAssemblyComponent <em>Assembly Component</em>}' reference.
+	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.deployment.DeployedComponent#getAssemblyComponent <em>Assembly Component</em>}'
+	 * reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Assembly Component</em>' reference.
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Assembly Component</em>' reference.
 	 * @see #getAssemblyComponent()
 	 * @generated
 	 */
@@ -60,9 +64,11 @@ public interface DeployedComponent extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Contained Operations</em>' map.
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#getDeployedComponent_ContainedOperations()
-	 * @model mapType="kieker.analysisteetime.model.analysismodel.deployment.EStringToDeployedOperationMapEntry<org.eclipse.emf.ecore.EString, kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation>" ordered="false"
+	 * @model mapType="kieker.analysisteetime.model.analysismodel.deployment.EStringToDeployedOperationMapEntry<org.eclipse.emf.ecore.EString,
+	 *        kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation>" ordered="false"
 	 * @generated
 	 */
 	EMap<String, DeployedOperation> getContainedOperations();
@@ -70,8 +76,11 @@ public interface DeployedComponent extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @model kind="operation"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.emf.ecore.EObject container = this.eContainer();\r\nif (container != null) {\r\n\torg.eclipse.emf.ecore.EObject containerContainer = container.eContainer();\r\n\tif (containerContainer != null) {\r\n\t\treturn (DeploymentContext) containerContainer ;\r\n\t}\r\n}\r\nreturn null;\r\n'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='org.eclipse.emf.ecore.EObject container = this.eContainer();\r\nif (container != null)
+	 *        {\r\n\torg.eclipse.emf.ecore.EObject containerContainer = container.eContainer();\r\n\tif (containerContainer != null) {\r\n\t\treturn
+	 *        (DeploymentContext) containerContainer ;\r\n\t}\r\n}\r\nreturn null;\r\n'"
 	 * @generated
 	 */
 	DeploymentContext getDeploymentContext();

@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.system;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,13 +25,11 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.12
  */
 public final class DiskUsageRecordFactory implements IRecordFactory<DiskUsageRecord> {
-	
 
 	@Override
 	public DiskUsageRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new DiskUsageRecord(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

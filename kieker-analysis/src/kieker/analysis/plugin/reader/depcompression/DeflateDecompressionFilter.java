@@ -43,14 +43,17 @@ public class DeflateDecompressionFilter extends AbstractDecompressionFilter {
 	/**
 	 * Create a deflate decompression filter.
 	 *
-	 * @param configuration configuration for the filter
+	 * @param configuration
+	 *            configuration for the filter
 	 */
 	public DeflateDecompressionFilter(final Configuration configuration) {
 		super(configuration);
 		this.bufferSize = configuration.getIntProperty(BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.reader.depcompression.IDecompressionFilter#chainInputStream(java.io.OutputStream)
 	 */
 	@Override
@@ -58,7 +61,9 @@ public class DeflateDecompressionFilter extends AbstractDecompressionFilter {
 		return new BufferedInputStream(new InflaterInputStream(inputStream), this.bufferSize);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.reader.depcompression.IDecompressionFilter#getExtension()
 	 */
 	@Override

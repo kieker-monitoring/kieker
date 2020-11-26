@@ -25,22 +25,27 @@ import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
 
 /**
- * This class should be used as a base for every repository used within <i>Kieker</i>.
- * 
+ * This class should be used as a base for every repository used within
+ * <i>Kieker</i>.
+ *
  * @author Nils Christian Ehmke?
- * 
+ *
  * @since 1.5
+ * @deprecated 1.15 can be removed when all tools and filters have been ported
+ *             to TeeTime
  */
+@Deprecated
 @Repository
 public abstract class AbstractRepository extends AbstractAnalysisComponent implements IRepository {
 
 	/**
 	 * The second "default constructor".
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
-	 *            The project context for this component. The component will be registered.
+	 *            The project context for this component. The component
+	 *            will be registered.
 	 */
 	public AbstractRepository(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -54,8 +59,9 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 	}
 
 	/**
-	 * This method delivers an instance of {@code Configuration} containing the default properties for this class.
-	 * 
+	 * This method delivers an instance of {@code Configuration} containing the
+	 * default properties for this class.
+	 *
 	 * @return The default properties.
 	 */
 	@Override
@@ -64,7 +70,8 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 		// Get the annotation from the class
 		final Repository repoAnnotation = this.getClass().getAnnotation(Repository.class);
 		final Property[] propertyAnnotations = repoAnnotation.configuration();
-		// Run through all properties within the annotation and add them to the configuration object
+		// Run through all properties within the annotation and add them to the
+		// configuration object
 		for (final Property property : propertyAnnotations) {
 			defaultConfiguration.setProperty(property.name(), property.defaultValue());
 		}

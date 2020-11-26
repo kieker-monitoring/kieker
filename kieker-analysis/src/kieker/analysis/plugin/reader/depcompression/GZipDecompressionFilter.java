@@ -41,14 +41,17 @@ public class GZipDecompressionFilter extends AbstractDecompressionFilter {
 	/**
 	 * Create new gzip decompression filter.
 	 *
-	 * @param configuration configuration for the filter
+	 * @param configuration
+	 *            configuration for the filter
 	 */
 	public GZipDecompressionFilter(final Configuration configuration) {
 		super(configuration);
 		this.bufferSize = configuration.getIntProperty(BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.reader.depcompression.IDecompressionFilter#chainInputStream(java.io.OutputStream)
 	 */
 	@Override
@@ -56,7 +59,9 @@ public class GZipDecompressionFilter extends AbstractDecompressionFilter {
 		return new BufferedInputStream(new GZIPInputStream(inputStream), this.bufferSize);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysis.plugin.reader.depcompression.IDecompressionFilter#getExtension()
 	 */
 	@Override

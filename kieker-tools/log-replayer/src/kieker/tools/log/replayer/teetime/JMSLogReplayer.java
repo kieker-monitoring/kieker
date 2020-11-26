@@ -18,7 +18,7 @@ package kieker.tools.log.replayer.teetime;
 
 import java.util.concurrent.TimeUnit;
 
-import kieker.analysisteetime.plugin.reader.jms.JMSReaderStage;
+import kieker.analysis.tt.reader.jms.JMSReaderStage;
 import kieker.common.record.IMonitoringRecord;
 
 import teetime.framework.AbstractProducerStage;

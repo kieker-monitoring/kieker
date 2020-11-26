@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.flow;
 
-
 /**
  * @author Christian Wulf
  * 
@@ -23,7 +22,7 @@ package kieker.common.record.flow;
  */
 public interface IThreadBasedRecord extends IFlowRecord {
 	public long getThreadId();
-	
+
 	public int getOrderIndex();
-	
+
 }

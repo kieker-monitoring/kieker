@@ -29,8 +29,7 @@ public class TestRealtimeRecordDelayFilterAccelerationFaster extends AbstractTes
 	private static final long[] EVENT_TIME_OFFSETS_SECONDS = { 0L, 4L, 12L, 14L, 18L, 22L };
 
 	// intervals of length INTERVAL_SIZE_NANOS relative to start time
-	private static final long[] EXPECTED_THROUGHPUT_LIST_OFFSET_SECS_INTERVAL_5SECS =
-	{
+	private static final long[] EXPECTED_THROUGHPUT_LIST_OFFSET_SECS_INTERVAL_5SECS = {
 		2L, // i.e., in interval (0,5(
 		3L, // i.e., in interval (5,10(
 		1L, // i.e., in interval (10,15(

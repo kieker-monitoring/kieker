@@ -19,7 +19,7 @@ package kieker.tools.log.replayer.teetime;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-import kieker.analysisteetime.plugin.reader.filesystem.fsReader.FSReader;
+import kieker.analysis.tt.reader.filesystem.fsReader.FSReader;
 import kieker.common.record.IMonitoringRecord;
 
 import teetime.framework.AbstractProducerStage;

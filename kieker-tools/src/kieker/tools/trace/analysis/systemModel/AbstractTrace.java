@@ -22,7 +22,9 @@ package kieker.tools.trace.analysis.systemModel;
  * @author Andre van Hoorn
  *
  * @since 1.2
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public abstract class AbstractTrace {
 
 	/**
@@ -39,17 +41,18 @@ public abstract class AbstractTrace {
 	 * Default constructor.
 	 */
 	protected AbstractTrace() {
-		this(-1, DEFAULT_SESSION_ID);
+		this(-1, AbstractTrace.DEFAULT_SESSION_ID);
 	}
 
 	/**
-	 * Creates a new abstract trace with the given trace ID and a default session ID.
+	 * Creates a new abstract trace with the given trace ID and a default session
+	 * ID.
 	 *
 	 * @param traceId
 	 *            The trace ID to use for the new trace
 	 */
 	public AbstractTrace(final long traceId) {
-		this(traceId, DEFAULT_SESSION_ID);
+		this(traceId, AbstractTrace.DEFAULT_SESSION_ID);
 	}
 
 	/**

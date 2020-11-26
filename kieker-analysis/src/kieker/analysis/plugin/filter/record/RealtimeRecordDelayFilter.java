@@ -43,8 +43,9 @@ import kieker.common.record.IMonitoringRecord;
  * @since 1.6
  */
 @Plugin(description = "Forwards incoming records with delays computed from the timestamp values", outputPorts = {
-	@OutputPort(name = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Outputs the delayed records") }, configuration = {
+	@OutputPort(name = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS,
+			eventTypes = IMonitoringRecord.class, description = "Outputs the delayed records") },
+		configuration = {
 			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_NUM_WORKERS, defaultValue = "1"),
 			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, defaultValue = "5"),
 			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS, defaultValue = "2"),
@@ -159,8 +160,8 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	 * @param monitoringRecord
 	 *            The next monitoring record.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = {
-		IMonitoringRecord.class }, description = "Receives the records to be delayed")
+	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class,
+			description = "Receives the records to be delayed")
 	public final void inputRecord(final IMonitoringRecord monitoringRecord) {
 		final long currentTime = this.timer.getCurrentTime(this.timeunit);
 

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import kieker.analysis.IProjectContext;
@@ -42,7 +41,9 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn, Lena Stoever, Matthias Rohr,
  *
  * @since 1.2
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH))
 public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGraphFilter<AssemblyComponent> {
@@ -68,7 +69,7 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	@InputPort(
 			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
 			description = "Receives message traces to be processed",
-			eventTypes = { MessageTrace.class })
+			eventTypes = MessageTrace.class)
 	public void inputMessageTraces(final MessageTrace t) {
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
 			if (m instanceof SynchronousReplyMessage) {

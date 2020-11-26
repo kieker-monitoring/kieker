@@ -36,7 +36,8 @@ public class Catalog {
 	/**
 	 * A dummy method returning just a book with a constant string.
 	 *
-	 * @param complexQuery Some dummy parameter which is not used in fact.
+	 * @param complexQuery
+	 *            Some dummy parameter which is not used in fact.
 	 *
 	 * @return A new book.
 	 */

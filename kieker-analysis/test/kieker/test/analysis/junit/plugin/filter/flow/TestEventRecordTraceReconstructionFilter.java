@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.test.analysis.junit.plugin.filter.flow;
 
 import org.junit.Assert;
@@ -66,7 +65,7 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 	 *             If the internally assembled analysis is in an invalid state.
 	 */
 	private void runTest(final TraceEventRecords records, final long maxTraceDuration, final long maxTraceTimeout) throws IllegalStateException,
-	AnalysisConfigurationException {
+			AnalysisConfigurationException {
 		final IAnalysisController controller = new AnalysisController();
 
 		final ListReader<Object> reader = new ListReader<>(new Configuration(), controller);
@@ -95,7 +94,7 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 	}
 
 	private void runTestFailed(final TraceEventRecords records, final long maxTraceDuration, final long maxTraceTimeout) throws IllegalStateException,
-	AnalysisConfigurationException {
+			AnalysisConfigurationException {
 		final IAnalysisController controller = new AnalysisController();
 
 		final ListReader<Object> reader = new ListReader<>(new Configuration(), controller);

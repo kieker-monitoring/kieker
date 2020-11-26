@@ -33,7 +33,7 @@ public abstract class AbstractDecompressionFilter {
 	 * @param configuration
 	 *            Kieker configuration object
 	 */
-	public AbstractDecompressionFilter(final Configuration configuration) {  // NOPMD block warning of unused configuration parameter
+	public AbstractDecompressionFilter(final Configuration configuration) { // NOPMD block warning of unused configuration parameter
 
 	}
 

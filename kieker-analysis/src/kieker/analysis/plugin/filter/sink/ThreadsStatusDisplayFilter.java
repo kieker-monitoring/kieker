@@ -33,8 +33,7 @@ import kieker.common.record.jvm.ThreadsStatusRecord;
  *
  * @since 1.10
  */
-@Plugin(configuration =
-@Property(
+@Plugin(configuration = @Property(
 		name = ThreadsStatusDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
 		defaultValue = ThreadsStatusDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
 		description = "Sets the number of max plot entries per record entry"))
@@ -78,7 +77,7 @@ public class ThreadsStatusDisplayFilter extends AbstractFilterPlugin {
 	 * @param record
 	 *            The record to display and relay.
 	 */
-	@InputPort(name = ThreadsStatusDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { ThreadsStatusRecord.class })
+	@InputPort(name = ThreadsStatusDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = ThreadsStatusRecord.class)
 	public void input(final ThreadsStatusRecord record) {
 		this.updateDisplays(record);
 	}

@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.test.tools.junit.bridge;
 
-import kieker.test.tools.junit.writeRead.jms.FakeInitialContextFactory;
+import kieker.analysis.tt.writeRead.jms.FakeInitialContextFactory;
 
 /**
  * Common configuration parameters for all bridge tests.

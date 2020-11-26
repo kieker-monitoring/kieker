@@ -28,7 +28,7 @@ import java.util.concurrent.ThreadFactory;
 public class DaemonThreadFactory implements ThreadFactory {
 
 	/**
-	 * Creates a new daemon thread factory. 
+	 * Creates a new daemon thread factory.
 	 */
 	public DaemonThreadFactory() {
 		// Do nothing
@@ -43,5 +43,5 @@ public class DaemonThreadFactory implements ThreadFactory {
 
 		return thread;
 	}
-	
+
 }

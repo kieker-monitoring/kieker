@@ -18,14 +18,18 @@ package kieker.tools.trace.analysis.systemModel;
 
 /**
  * This class represents an execution within the trace analysis tool.
- * 
- * Note that no assumptions about the {@link java.util.concurrent.TimeUnit} used for the
- * timestamps are made ({@link kieker.tools.trace.analysis.systemModel.Execution#getTin()} and {@link kieker.tools.trace.analysis.systemModel.Execution#getTout()}).
- * 
+ *
+ * Note that no assumptions about the {@link java.util.concurrent.TimeUnit} used
+ * for the timestamps are made
+ * ({@link kieker.tools.trace.analysis.systemModel.Execution#getTin()} and
+ * {@link kieker.tools.trace.analysis.systemModel.Execution#getTout()}).
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.1
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public class Execution {
 
 	/** This constant marks that an execution has no session ID. */
@@ -44,7 +48,7 @@ public class Execution {
 
 	/**
 	 * Creates a new Execution instance.
-	 * 
+	 *
 	 * @param op
 	 *            The operation of the execution.
 	 * @param allocationComponent
@@ -62,10 +66,12 @@ public class Execution {
 	 * @param tout
 	 *            The timestamp the execution finished.
 	 * @param assumed
-	 *            Determines whether the execution is assumed or not.
+	 *            Determines whether the execution is assumed or
+	 *            not.
 	 */
-	public Execution(final Operation op, final AllocationComponent allocationComponent, final long traceId, final String sessionId, final int eoi, final int ess,
-			final long tin, final long tout, final boolean assumed) {
+	public Execution(final Operation op, final AllocationComponent allocationComponent, final long traceId,
+			final String sessionId, final int eoi, final int ess, final long tin, final long tout,
+			final boolean assumed) {
 		if (op == null) {
 			throw new NullPointerException("argument op must not be null");
 		}
@@ -89,7 +95,7 @@ public class Execution {
 
 	/**
 	 * Creates a new Execution instance. The sessionId is set to a default value.
-	 * 
+	 *
 	 * @param op
 	 *            The operation of the execution.
 	 * @param allocationComponent
@@ -105,11 +111,12 @@ public class Execution {
 	 * @param tout
 	 *            The timestamp the execution finished.
 	 * @param assumed
-	 *            Determines whether the execution is assumed or not.
+	 *            Determines whether the execution is assumed or
+	 *            not.
 	 */
-	public Execution(final Operation op, final AllocationComponent allocationComponent, final long traceId, final int eoi, final int ess, final long tin,
-			final long tout, final boolean assumed) {
-		this(op, allocationComponent, traceId, NO_SESSION_ID, eoi, ess, tin, tout, assumed);
+	public Execution(final Operation op, final AllocationComponent allocationComponent, final long traceId,
+			final int eoi, final int ess, final long tin, final long tout, final boolean assumed) {
+		this(op, allocationComponent, traceId, Execution.NO_SESSION_ID, eoi, ess, tin, tout, assumed);
 	}
 
 	public final AllocationComponent getAllocationComponent() {
@@ -129,9 +136,9 @@ public class Execution {
 	}
 
 	/**
-	 * Returns the sessionId and a default sessionId if no sessionId assigned.
-	 * The return value won't be null.
-	 * 
+	 * Returns the sessionId and a default sessionId if no sessionId assigned. The
+	 * return value won't be null.
+	 *
 	 * @return the sessionId.
 	 */
 	public final String getSessionId() {
@@ -155,13 +162,15 @@ public class Execution {
 	}
 
 	/**
-	 * Compares this {@link Execution} with the given object with respect to type and fields. All
-	 * fields but the {@link #isAssumed()} are considered for comparison.
-	 * 
+	 * Compares this {@link Execution} with the given object with respect to type
+	 * and fields. All fields but the {@link #isAssumed()} are considered for
+	 * comparison.
+	 *
 	 * @param obj
 	 *            The object to be compared with this instance.
-	 * 
-	 * @return true if and only if the current object and the given object have equal values.
+	 *
+	 * @return true if and only if the current object and the given object have
+	 *         equal values.
 	 */
 	@Override
 	public boolean equals(final Object obj) {
@@ -172,8 +181,9 @@ public class Execution {
 			return true;
 		}
 		final Execution other = (Execution) obj;
-		return this.allocationComponent.equals(other.allocationComponent) && this.operation.equals(other.operation) && this.sessionId.equals(other.sessionId)
-				&& (this.traceId == other.traceId) && (this.eoi == other.eoi) && (this.ess == other.ess) && (this.tin == other.tin) && (this.tout == other.tout)
+		return this.allocationComponent.equals(other.allocationComponent) && this.operation.equals(other.operation)
+				&& this.sessionId.equals(other.sessionId) && (this.traceId == other.traceId) && (this.eoi == other.eoi)
+				&& (this.ess == other.ess) && (this.tin == other.tin) && (this.tout == other.tout)
 				&& (this.assumed == other.assumed);
 	}
 
@@ -181,7 +191,9 @@ public class Execution {
 	public int hashCode() {
 		int hash = 3;
 		hash = (43 * hash) + (this.operation != null ? this.operation.hashCode() : 0); // NOCS (inline ?)
-		hash = (43 * hash) + (this.allocationComponent != null ? this.allocationComponent.hashCode() : 0); // NOCS (inline ?)
+		hash = (43 * hash) + (this.allocationComponent != null ? this.allocationComponent.hashCode() : 0); // NOCS
+																											// (inline
+																											// ?)
 		hash = (43 * hash) + (int) (this.traceId ^ (this.traceId >>> 32));
 		hash = (43 * hash) + (this.sessionId != null ? this.sessionId.hashCode() : 0); // NOCS (inline ?)
 		hash = (43 * hash) + this.eoi;
@@ -195,12 +207,10 @@ public class Execution {
 	@Override
 	public String toString() {
 		final StringBuilder strBuild = new StringBuilder(128);
-		strBuild.append(this.traceId)
-		        .append('[').append(this.eoi).append(',').append(this.ess).append("] ")
-		        .append(this.tin).append('-').append(this.tout).append(' ')
-		        .append(this.allocationComponent.toString()).append('.')
-		        .append(this.operation.getSignature().getName()).append(' ')
-		        .append((this.sessionId != null) ? this.sessionId : NO_SESSION_ID); // NOCS
+		strBuild.append(this.traceId).append('[').append(this.eoi).append(',').append(this.ess).append("] ")
+				.append(this.tin).append('-').append(this.tout).append(' ').append(this.allocationComponent.toString())
+				.append('.').append(this.operation.getSignature().getName()).append(' ')
+				.append((this.sessionId != null) ? this.sessionId : Execution.NO_SESSION_ID); // NOCS
 
 		if (this.assumed) {
 			strBuild.append(" (assumed)");

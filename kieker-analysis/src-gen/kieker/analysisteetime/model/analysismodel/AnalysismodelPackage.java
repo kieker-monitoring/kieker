@@ -10,13 +10,14 @@ import org.eclipse.emf.ecore.EPackage;
  * The <b>Package</b> for the model.
  * It contains accessors for the meta objects to represent
  * <ul>
- *   <li>each class,</li>
- *   <li>each feature of each class,</li>
- *   <li>each operation of each class,</li>
- *   <li>each enum,</li>
- *   <li>and each data type</li>
+ * <li>each class,</li>
+ * <li>each feature of each class,</li>
+ * <li>each operation of each class,</li>
+ * <li>each enum,</li>
+ * <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
+ * 
  * @see kieker.analysisteetime.model.analysismodel.AnalysismodelFactory
  * @model kind="package"
  * @generated
@@ -26,6 +27,7 @@ public interface AnalysismodelPackage extends EPackage {
 	 * The package name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	String eNAME = "analysismodel";
@@ -34,6 +36,7 @@ public interface AnalysismodelPackage extends EPackage {
 	 * The package namespace URI.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	String eNS_URI = "platform:/resource/Kieker/model/analysismodel.ecore";
@@ -42,6 +45,7 @@ public interface AnalysismodelPackage extends EPackage {
 	 * The package namespace name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	String eNS_PREFIX = "analysismodel";
@@ -50,6 +54,7 @@ public interface AnalysismodelPackage extends EPackage {
 	 * The singleton instance of the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	AnalysismodelPackage eINSTANCE = kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl.init();
@@ -58,6 +63,7 @@ public interface AnalysismodelPackage extends EPackage {
 	 * The meta object id for the '<em>Instant</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see java.time.Instant
 	 * @see kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl#getInstant()
 	 * @generated
@@ -68,18 +74,19 @@ public interface AnalysismodelPackage extends EPackage {
 	 * The meta object id for the '<em>Duration</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see java.time.Duration
 	 * @see kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl#getDuration()
 	 * @generated
 	 */
 	int DURATION = 1;
 
-
 	/**
 	 * The meta object id for the '<em>Composed Key</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see kieker.analysisteetime.util.ComposedKey
+	 * 
+	 * @see kieker.analysis.util.ComposedKey
 	 * @see kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl#getComposedKey()
 	 * @generated
 	 */
@@ -89,6 +96,7 @@ public interface AnalysismodelPackage extends EPackage {
 	 * Returns the meta object for data type '{@link java.time.Instant <em>Instant</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the meta object for data type '<em>Instant</em>'.
 	 * @see java.time.Instant
 	 * @model instanceClass="java.time.Instant"
@@ -100,6 +108,7 @@ public interface AnalysismodelPackage extends EPackage {
 	 * Returns the meta object for data type '{@link java.time.Duration <em>Duration</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the meta object for data type '<em>Duration</em>'.
 	 * @see java.time.Duration
 	 * @model instanceClass="java.time.Duration"
@@ -108,11 +117,12 @@ public interface AnalysismodelPackage extends EPackage {
 	EDataType getDuration();
 
 	/**
-	 * Returns the meta object for data type '{@link kieker.analysisteetime.util.ComposedKey <em>Composed Key</em>}'.
+	 * Returns the meta object for data type '{@link kieker.analysis.util.ComposedKey <em>Composed Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the meta object for data type '<em>Composed Key</em>'.
-	 * @see kieker.analysisteetime.util.ComposedKey
+	 * @see kieker.analysis.util.ComposedKey
 	 * @model instanceClass="kieker.analysisteetime.util.ComposedKey" typeParameters="F S"
 	 * @generated
 	 */
@@ -122,6 +132,7 @@ public interface AnalysismodelPackage extends EPackage {
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
@@ -131,13 +142,14 @@ public interface AnalysismodelPackage extends EPackage {
 	 * <!-- begin-user-doc -->
 	 * Defines literals for the meta objects that represent
 	 * <ul>
-	 *   <li>each class,</li>
-	 *   <li>each feature of each class,</li>
-	 *   <li>each operation of each class,</li>
-	 *   <li>each enum,</li>
-	 *   <li>and each data type</li>
+	 * <li>each class,</li>
+	 * <li>each feature of each class,</li>
+	 * <li>each operation of each class,</li>
+	 * <li>each enum,</li>
+	 * <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	interface Literals {
@@ -145,6 +157,7 @@ public interface AnalysismodelPackage extends EPackage {
 		 * The meta object literal for the '<em>Instant</em>' data type.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 * 
 		 * @see java.time.Instant
 		 * @see kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl#getInstant()
 		 * @generated
@@ -155,6 +168,7 @@ public interface AnalysismodelPackage extends EPackage {
 		 * The meta object literal for the '<em>Duration</em>' data type.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 * 
 		 * @see java.time.Duration
 		 * @see kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl#getDuration()
 		 * @generated
@@ -165,7 +179,8 @@ public interface AnalysismodelPackage extends EPackage {
 		 * The meta object literal for the '<em>Composed Key</em>' data type.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see kieker.analysisteetime.util.ComposedKey
+		 * 
+		 * @see kieker.analysis.util.ComposedKey
 		 * @see kieker.analysisteetime.model.analysismodel.impl.AnalysismodelPackageImpl#getComposedKey()
 		 * @generated
 		 */
@@ -173,4 +188,4 @@ public interface AnalysismodelPackage extends EPackage {
 
 	}
 
-} //AnalysismodelPackage
+} // AnalysismodelPackage

@@ -48,12 +48,16 @@ import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
  * @author Jan Waller, Florian Biss
  *
  * @since 1.9
+ * @deprecated 1.15 ported to teetime kieker.analysis.filter.flow
  */
+@Deprecated
 @Plugin(description = "This filter tries to aggregate similar Traces into a single trace.", outputPorts = {
-	@OutputPort(name = TraceAggregationFilter.OUTPUT_PORT_NAME_TRACES, description = "Output port for the processed traces", eventTypes = {
-		TraceEventRecords.class }) }, configuration = {
+	@OutputPort(name = TraceAggregationFilter.OUTPUT_PORT_NAME_TRACES, description = "Output port for the processed traces",
+			eventTypes = TraceEventRecords.class) },
+		configuration = {
 			@Property(name = TraceAggregationFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = TraceAggregationFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
-			@Property(name = TraceAggregationFilter.CONFIG_PROPERTY_NAME_MAX_COLLECTION_DURATION, defaultValue = TraceAggregationFilter.CONFIG_PROPERTY_VALUE_MAX_COLLECTION_DURATION) })
+			@Property(name = TraceAggregationFilter.CONFIG_PROPERTY_NAME_MAX_COLLECTION_DURATION,
+					defaultValue = TraceAggregationFilter.CONFIG_PROPERTY_VALUE_MAX_COLLECTION_DURATION) })
 public class TraceAggregationFilter extends AbstractFilterPlugin {
 	/**
 	 * The name of the output port delivering the valid traces.
@@ -127,7 +131,7 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 	 * @param timestamp
 	 *            The timestamp
 	 */
-	@InputPort(name = INPUT_PORT_NAME_TIME_EVENT, description = "Time signal for timeouts", eventTypes = { Long.class })
+	@InputPort(name = INPUT_PORT_NAME_TIME_EVENT, description = "Time signal for timeouts", eventTypes = Long.class)
 	public void newEvent(final Long timestamp) {
 		synchronized (this) {
 			this.processTimeoutQueue(timestamp);
@@ -140,8 +144,8 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 	 * @param traceEventRecords
 	 *            incoming TraceEventRecords
 	 */
-	@InputPort(name = INPUT_PORT_NAME_TRACES, description = "Collect identical traces and aggregate them.", eventTypes = {
-		TraceEventRecords.class })
+	@InputPort(name = INPUT_PORT_NAME_TRACES, description = "Collect identical traces and aggregate them.",
+			eventTypes = TraceEventRecords.class)
 	public void newEvent(final TraceEventRecords traceEventRecords) {
 		final long timestamp = this.timeunit.convert(System.nanoTime(), TimeUnit.NANOSECONDS);
 		synchronized (this) {

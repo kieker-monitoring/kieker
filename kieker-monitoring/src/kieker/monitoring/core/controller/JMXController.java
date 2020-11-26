@@ -63,7 +63,8 @@ public final class JMXController extends AbstractController implements IRemoteCo
 	 * Create a new JMX controller. Note: The error handling in this block is
 	 * correct, see ticket #293
 	 *
-	 * @param configuration the Kieker configuration facitlity
+	 * @param configuration
+	 *            the Kieker configuration facitlity
 	 */
 	protected JMXController(final Configuration configuration) {
 		super(configuration);
@@ -90,7 +91,7 @@ public final class JMXController extends AbstractController implements IRemoteCo
 						usedJMXImplementationTmp = JMXImplementation.SUN;
 					} catch (final Exception ignoreErrors) { // NOPMD NOCS (IllegalCatchCheck)
 						if (configuration.getBooleanProperty(ConfigurationConstants.ACTIVATE_JMX_REMOTE_FALLBACK)) { // NOCS
-																												// (NestedIf)
+							// (NestedIf)
 							JMXController.LOGGER.warn(
 									"Failed to initialize remote JMX server, falling back to default implementation");
 							// Fallback to default Implementation

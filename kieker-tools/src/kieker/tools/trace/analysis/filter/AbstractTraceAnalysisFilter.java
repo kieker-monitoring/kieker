@@ -37,8 +37,11 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn
  *
  * @since 1.2
+ * @deprecated 1.15 has been ported to teetime
  */
-@Plugin(repositoryPorts = { @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
+@Deprecated
+@Plugin(repositoryPorts = {
+	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
 public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 
 	public static final String CONFIG_PROPERTY_VALUE_VERBOSE = "false";
@@ -46,7 +49,9 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	/** The name of the repository port for the system model repository. */
 	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
 
-	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractTraceAnalysisFilter.class); // NOPMD (inherited constructor)
+	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractTraceAnalysisFilter.class); // NOPMD
+																										// (inherited
+																										// constructor)
 
 	private volatile SystemModelRepository systemEntityFactory;
 
@@ -69,10 +74,12 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 
 	public static final Execution createExecutionByEntityNames(final SystemModelRepository systemModelRepository,
 			final String executionContainerName, final String assemblyComponentTypeName, final String componentTypeName,
-			final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
-			final long tin, final long tout, final boolean assumed) {
-		final String allocationComponentName = new StringBuilder(executionContainerName).append("::").append(assemblyComponentTypeName).toString();
-		final String operationFactoryName = new StringBuilder(componentTypeName).append(".").append(operationSignature).toString();
+			final Signature operationSignature, final long traceId, final String sessionId, final int eoi,
+			final int ess, final long tin, final long tout, final boolean assumed) {
+		final String allocationComponentName = new StringBuilder(executionContainerName).append("::")
+				.append(assemblyComponentTypeName).toString();
+		final String operationFactoryName = new StringBuilder(componentTypeName).append('.').append(operationSignature)
+				.toString();
 
 		AllocationComponent allocInst = systemModelRepository.getAllocationFactory()
 				.lookupAllocationComponentInstanceByNamedIdentifier(allocationComponentName);
@@ -80,11 +87,12 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 			AssemblyComponent assemblyComponent = systemModelRepository.getAssemblyFactory()
 					.lookupAssemblyComponentInstanceByNamedIdentifier(assemblyComponentTypeName);
 			if (assemblyComponent == null) { // assembly instance doesn't exist
-				ComponentType componentType = systemModelRepository.getTypeRepositoryFactory().lookupComponentTypeByNamedIdentifier(assemblyComponentTypeName);
+				ComponentType componentType = systemModelRepository.getTypeRepositoryFactory()
+						.lookupComponentTypeByNamedIdentifier(assemblyComponentTypeName);
 				if (componentType == null) { // NOPMD NOCS (NestedIf)
 					// Component type doesn't exist
-					componentType = systemModelRepository.getTypeRepositoryFactory().createAndRegisterComponentType(assemblyComponentTypeName,
-							assemblyComponentTypeName);
+					componentType = systemModelRepository.getTypeRepositoryFactory()
+							.createAndRegisterComponentType(assemblyComponentTypeName, assemblyComponentTypeName);
 				}
 				assemblyComponent = systemModelRepository.getAssemblyFactory()
 						.createAndRegisterAssemblyComponentInstance(assemblyComponentTypeName, componentType);
@@ -95,14 +103,15 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 				execContainer = systemModelRepository.getExecutionEnvironmentFactory()
 						.createAndRegisterExecutionContainer(executionContainerName, executionContainerName);
 			}
-			allocInst = systemModelRepository.getAllocationFactory()
-					.createAndRegisterAllocationComponentInstance(allocationComponentName, assemblyComponent, execContainer);
+			allocInst = systemModelRepository.getAllocationFactory().createAndRegisterAllocationComponentInstance(
+					allocationComponentName, assemblyComponent, execContainer);
 		}
 
-		Operation op = systemModelRepository.getOperationFactory().lookupOperationByNamedIdentifier(operationFactoryName);
+		Operation op = systemModelRepository.getOperationFactory()
+				.lookupOperationByNamedIdentifier(operationFactoryName);
 		if (op == null) { // Operation doesn't exist
-			op = systemModelRepository.getOperationFactory()
-					.createAndRegisterOperation(operationFactoryName, allocInst.getAssemblyComponent().getType(), operationSignature);
+			op = systemModelRepository.getOperationFactory().createAndRegisterOperation(operationFactoryName,
+					allocInst.getAssemblyComponent().getType(), operationSignature);
 			allocInst.getAssemblyComponent().getType().addOperation(op);
 		}
 
@@ -111,60 +120,69 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 
 	public static final Execution createExecutionByEntityNames(final SystemModelRepository systemModelRepository,
 			final String executionContainerName, final String assemblyComponentTypeName,
-			final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
-			final long tin, final long tout, final boolean assumed) {
-		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(systemModelRepository, executionContainerName, assemblyComponentTypeName,
-				assemblyComponentTypeName, operationSignature, traceId, sessionId, eoi, ess, tin, tout, assumed);
+			final Signature operationSignature, final long traceId, final String sessionId, final int eoi,
+			final int ess, final long tin, final long tout, final boolean assumed) {
+		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(systemModelRepository, executionContainerName,
+				assemblyComponentTypeName, assemblyComponentTypeName, operationSignature, traceId, sessionId, eoi, ess,
+				tin, tout, assumed);
 	}
 
-	protected final Execution createExecutionByEntityNames(final String executionContainerName, final String assemblyComponentTypeName,
-			final String componentTypeName, final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
-			final long tin, final long tout, final boolean assumed) {
-		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.getSystemEntityFactory(), executionContainerName, assemblyComponentTypeName,
-				componentTypeName, operationSignature, traceId, sessionId, eoi, ess, tin, tout, assumed);
+	protected final Execution createExecutionByEntityNames(final String executionContainerName,
+			final String assemblyComponentTypeName, final String componentTypeName, final Signature operationSignature,
+			final long traceId, final String sessionId, final int eoi, final int ess, final long tin, final long tout,
+			final boolean assumed) {
+		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.getSystemEntityFactory(),
+				executionContainerName, assemblyComponentTypeName, componentTypeName, operationSignature, traceId,
+				sessionId, eoi, ess, tin, tout, assumed);
 	}
 
-	protected final Execution createExecutionByEntityNames(final String executionContainerName, final String assemblyComponentTypeName,
-			final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
-			final long tin, final long tout, final boolean assumed) {
-		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.getSystemEntityFactory(), executionContainerName, assemblyComponentTypeName,
-				assemblyComponentTypeName, operationSignature, traceId, sessionId, eoi, ess, tin, tout, assumed);
+	protected final Execution createExecutionByEntityNames(final String executionContainerName,
+			final String assemblyComponentTypeName, final Signature operationSignature, final long traceId,
+			final String sessionId, final int eoi, final int ess, final long tin, final long tout,
+			final boolean assumed) {
+		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.getSystemEntityFactory(),
+				executionContainerName, assemblyComponentTypeName, assemblyComponentTypeName, operationSignature,
+				traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
 	/**
-	 * Prints a debug message to the logger. The output is prepended by a header which includes the name of this plugin instance.
+	 * Prints a debug message to the logger. The output is prepended by a header
+	 * which includes the name of this plugin instance.
 	 *
 	 * @param lines
 	 *            The lines to be printed.
 	 */
 	protected void printDebugLogMessage(final String[] lines) {
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("");
-			LOGGER.debug("#");
-			LOGGER.debug("# Plugin: " + this.getName());
+		if (AbstractTraceAnalysisFilter.LOGGER.isDebugEnabled()) {
+			AbstractTraceAnalysisFilter.LOGGER.debug("");
+			AbstractTraceAnalysisFilter.LOGGER.debug("#");
+			AbstractTraceAnalysisFilter.LOGGER.debug("# Plugin: " + this.getClass().getName());
 			for (final String l : lines) {
-				LOGGER.debug(l);
+				AbstractTraceAnalysisFilter.LOGGER.debug(l);
 			}
 		}
 	}
 
 	protected void printErrorLogMessage(final String[] lines) {
-		if (LOGGER.isErrorEnabled()) {
-			LOGGER.error("");
-			LOGGER.error("#");
-			LOGGER.error("# Plugin: " + this.getName());
+		if (AbstractTraceAnalysisFilter.LOGGER.isErrorEnabled()) {
+			AbstractTraceAnalysisFilter.LOGGER.error("");
+			AbstractTraceAnalysisFilter.LOGGER.error("#");
+			AbstractTraceAnalysisFilter.LOGGER.error("# Plugin: " + this.getClass().getName());
 			for (final String l : lines) {
-				LOGGER.error(l);
+				AbstractTraceAnalysisFilter.LOGGER.error(l);
 			}
 		}
 	}
 
 	public final SystemModelRepository getSystemEntityFactory() {
 		if (this.systemEntityFactory == null) {
-			this.systemEntityFactory = (SystemModelRepository) this.getRepository(REPOSITORY_PORT_NAME_SYSTEM_MODEL);
+			this.systemEntityFactory = (SystemModelRepository) this
+					.getRepository(AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL);
 		}
 		if (this.systemEntityFactory == null) {
-			LOGGER.error("Failed to connect to system model repository via repository port '{}' (not connected?)", REPOSITORY_PORT_NAME_SYSTEM_MODEL);
+			AbstractTraceAnalysisFilter.LOGGER.error(
+					"Failed to connect to system model repository via repository port '{}' (not connected?)",
+					AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL);
 		}
 		return this.systemEntityFactory;
 	}

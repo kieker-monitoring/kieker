@@ -22,27 +22,26 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.io.IValueDeserializer;
 import kieker.common.record.io.IValueSerializer;
 
-
 /**
  * @author Felix Eichhorst
- * API compatibility: Kieker 1.15.0
+ *         API compatibility: Kieker 1.15.0
  * 
  * @since 1.14
  */
-public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {			
+public class BeforeSentRemoteEvent extends AbstractMonitoringRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // BeforeSentRemoteEvent.timestamp
-			 + TYPE_SIZE_LONG // BeforeSentRemoteEvent.traceId
-			 + TYPE_SIZE_INT // BeforeSentRemoteEvent.orderIndex
-			 + TYPE_SIZE_STRING; // BeforeSentRemoteEvent.technology
-	
+			+ TYPE_SIZE_LONG // BeforeSentRemoteEvent.traceId
+			+ TYPE_SIZE_INT // BeforeSentRemoteEvent.orderIndex
+			+ TYPE_SIZE_STRING; // BeforeSentRemoteEvent.technology
+
 	public static final Class<?>[] TYPES = {
 		long.class, // BeforeSentRemoteEvent.timestamp
 		long.class, // BeforeSentRemoteEvent.traceId
 		int.class, // BeforeSentRemoteEvent.orderIndex
 		String.class, // BeforeSentRemoteEvent.technology
 	};
-	
+
 	/** property name array. */
 	public static final String[] VALUE_NAMES = {
 		"timestamp",
@@ -50,20 +49,20 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {
 		"orderIndex",
 		"technology",
 	};
-	
+
 	/** default constants. */
 	public static final long TIMESTAMP = -1L;
 	public static final long TRACE_ID = -1L;
 	public static final int ORDER_INDEX = -1;
 	public static final String TECHNOLOGY = "<default-technology>";
 	private static final long serialVersionUID = 1817999525650163947L;
-	
+
 	/** property declarations. */
 	private final long timestamp;
 	private final long traceId;
 	private final int orderIndex;
 	private final String technology;
-	
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -80,15 +79,14 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {
 		this.timestamp = timestamp;
 		this.traceId = traceId;
 		this.orderIndex = orderIndex;
-		this.technology = technology == null?TECHNOLOGY:technology;
+		this.technology = technology == null ? TECHNOLOGY : technology;
 	}
-
 
 	/**
 	 * @param deserializer
 	 *            The deserializer to use
-	 * @throws RecordInstantiationException 
-	 *            when the record could not be deserialized
+	 * @throws RecordInstantiationException
+	 *             when the record could not be deserialized
 	 */
 	public BeforeSentRemoteEvent(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		this.timestamp = deserializer.getLong();
@@ -96,7 +94,7 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {
 		this.orderIndex = deserializer.getInt();
 		this.technology = deserializer.getString();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -107,7 +105,7 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {
 		serializer.putInt(this.getOrderIndex());
 		serializer.putString(this.getTechnology());
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -115,7 +113,7 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -123,7 +121,7 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {
 	public String[] getValueNames() {
 		return VALUE_NAMES; // NOPMD
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -132,7 +130,6 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {
 		return SIZE;
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -147,7 +144,7 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		final BeforeSentRemoteEvent castedRecord = (BeforeSentRemoteEvent) obj;
 		if (this.getLoggingTimestamp() != castedRecord.getLoggingTimestamp()) {
 			return false;
@@ -164,43 +161,40 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {
 		if (!this.getTechnology().equals(castedRecord.getTechnology())) {
 			return false;
 		}
-		
+
 		return true;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
 		int code = 0;
-		code += ((int)this.getTimestamp());
-		code += ((int)this.getTraceId());
-		code += ((int)this.getOrderIndex());
+		code += ((int) this.getTimestamp());
+		code += ((int) this.getTraceId());
+		code += ((int) this.getOrderIndex());
 		code += this.getTechnology().hashCode();
-		
+
 		return code;
 	}
-	
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-	
-	
+
 	public final long getTraceId() {
 		return this.traceId;
 	}
-	
-	
+
 	public final int getOrderIndex() {
 		return this.orderIndex;
 	}
-	
-	
+
 	public final String getTechnology() {
 		return this.technology;
 	}
-	
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -209,16 +203,16 @@ public class BeforeSentRemoteEvent extends AbstractMonitoringRecord  {
 		String result = "BeforeSentRemoteEvent: ";
 		result += "timestamp = ";
 		result += this.getTimestamp() + ", ";
-		
+
 		result += "traceId = ";
 		result += this.getTraceId() + ", ";
-		
+
 		result += "orderIndex = ";
 		result += this.getOrderIndex() + ", ";
-		
+
 		result += "technology = ";
 		result += this.getTechnology() + ", ";
-		
+
 		return result;
 	}
 }

@@ -19,12 +19,15 @@ package kieker.tools.trace.analysis.systemModel;
 import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
- * An abstract base for messages which can later be used and combined in a {@link kieker.tools.trace.analysis.systemModel.MessageTrace}.
+ * An abstract base for messages which can later be used and combined in a
+ * {@link kieker.tools.trace.analysis.systemModel.MessageTrace}.
  *
  * @author Andre van Hoorn
  *
  * @since 0.95a
+ * @deprecated 1.15 moved to kieker-model
  */
+@Deprecated
 public abstract class AbstractMessage {
 
 	private final long timestamp;
@@ -37,9 +40,11 @@ public abstract class AbstractMessage {
 	 * @param timestamp
 	 *            The timestamp of the message.
 	 * @param sendingExecution
-	 *            The {@link Execution} object which sent the message.
+	 *            The {@link Execution} object which sent the
+	 *            message.
 	 * @param receivingExecution
-	 *            The {@link Execution} object which received the message.
+	 *            The {@link Execution} object which received the
+	 *            message.
 	 */
 	public AbstractMessage(final long timestamp, final Execution sendingExecution, final Execution receivingExecution) {
 		this.timestamp = timestamp;
@@ -78,8 +83,7 @@ public abstract class AbstractMessage {
 	public String toString() {
 		final StringBuilder strBuild = new StringBuilder();
 
-		strBuild.append(this.timestamp)
-				.append(' ');
+		strBuild.append(this.timestamp).append(' ');
 		if (this.getSendingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
 			strBuild.append(SystemModelRepository.ROOT_NODE_LABEL);
 		} else {

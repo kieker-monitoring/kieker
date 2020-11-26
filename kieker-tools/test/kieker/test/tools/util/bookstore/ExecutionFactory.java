@@ -29,11 +29,13 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 
 /**
  * This factory class can be used to create artificial executions.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.2
+ * @deprecated 1.15 adapted to new model location
  */
+@Deprecated
 public class ExecutionFactory {
 
 	private static final String DEFAULT_STRING = "N/A";
@@ -41,7 +43,7 @@ public class ExecutionFactory {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param systemEntityFactory
 	 *            The system model repository.
 	 */
@@ -51,7 +53,7 @@ public class ExecutionFactory {
 
 	/**
 	 * Creates an execution object with the given parameters.
-	 * 
+	 *
 	 * @param componentTypeName
 	 *            The type name of the component.
 	 * @param componentInstanceName
@@ -78,7 +80,7 @@ public class ExecutionFactory {
 	 *            The execution order index.
 	 * @param ess
 	 *            The execution stack size.
-	 * 
+	 *
 	 * @return An artificial execution.
 	 */
 	public Execution genExecution(final String componentTypeName, final String componentInstanceName, final String executionContainerName,
@@ -121,8 +123,8 @@ public class ExecutionFactory {
 
 		// Register allocation component (if it hasn't been registered before)
 		final String allocationName = componentInstanceName + "::" + executionContainerName;
-		AllocationComponent allocationComponentA =
-				this.systemEntityFactory.getAllocationFactory().lookupAllocationComponentInstanceByNamedIdentifier(allocationName);
+		AllocationComponent allocationComponentA = this.systemEntityFactory.getAllocationFactory()
+				.lookupAllocationComponentInstanceByNamedIdentifier(allocationName);
 		if (allocationComponentA == null) {
 			allocationComponentA = this.systemEntityFactory.getAllocationFactory().createAndRegisterAllocationComponentInstance(allocationName,
 					assemblyComponentA, containerC);
@@ -135,7 +137,7 @@ public class ExecutionFactory {
 
 	/**
 	 * Creates an Execution object initialized with the passed values. The remaining values of the Execution object are assigned default values.
-	 * 
+	 *
 	 * @param componentTypeName
 	 *            The type name of the component in question.
 	 * @param componentInstanceName
@@ -154,7 +156,7 @@ public class ExecutionFactory {
 	 *            The execution order index.
 	 * @param ess
 	 *            The execution stack size.
-	 * 
+	 *
 	 * @return The created Execution object
 	 */
 	public Execution genExecution(final String componentTypeName, final String componentInstanceName, final String operationName, final long traceId,
@@ -167,7 +169,7 @@ public class ExecutionFactory {
 
 	/**
 	 * Creates an Execution object initialized with the passed values. The remaining values of the Execution object are assigned default values.
-	 * 
+	 *
 	 * @param componentTypeName
 	 *            The type name of the component in question.
 	 * @param componentInstanceName
@@ -188,7 +190,7 @@ public class ExecutionFactory {
 	 *            The execution order index.
 	 * @param ess
 	 *            The execution stack size.
-	 * 
+	 *
 	 * @return The created Execution object
 	 */
 	public Execution genExecution(final String componentTypeName, final String componentInstanceName, final String hostName, final String operationName,
@@ -201,7 +203,7 @@ public class ExecutionFactory {
 	 * Creates an Execution object initialized with the passed values.
 	 * The remaining values of the Execution object are assigned default
 	 * values.
-	 * 
+	 *
 	 * @param traceId
 	 *            The trace ID.
 	 * @param sessionId
@@ -214,7 +216,7 @@ public class ExecutionFactory {
 	 *            The execution order index.
 	 * @param ess
 	 *            The execution stack size.
-	 * 
+	 *
 	 * @return The created Execution object
 	 */
 	public Execution genExecution(final long traceId, final String sessionId, final long tin, final long tout, final int eoi, final int ess) {

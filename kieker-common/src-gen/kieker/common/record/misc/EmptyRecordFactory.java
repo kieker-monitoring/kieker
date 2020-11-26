@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.misc;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,13 +25,11 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 0.95a
  */
 public final class EmptyRecordFactory implements IRecordFactory<EmptyRecord> {
-	
 
 	@Override
 	public EmptyRecord create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new EmptyRecord(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

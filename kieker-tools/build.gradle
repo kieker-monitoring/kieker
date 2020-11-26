@@ -11,6 +11,7 @@ targetCompatibility = 1.8
 dependencies {
 	implementation project(':kieker-common')
 	api project(':kieker-analysis')
+	api project(':kieker-model')
 	api project(':kieker-monitoring')	
 
 	implementation 'org.apache.commons:commons-math3:3.6.1'	// used by OPAD

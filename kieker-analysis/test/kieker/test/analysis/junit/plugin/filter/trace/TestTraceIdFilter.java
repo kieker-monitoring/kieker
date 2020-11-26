@@ -80,9 +80,9 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig, controller);
 		final ListCollectionFilter<AbstractTraceEvent> sinkPlugin = new ListCollectionFilter<AbstractTraceEvent>(new Configuration(), controller);
 
-		final TraceEventRecords traceEvents =
-				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass, TestTraceIdFilter.SESSION_ID,
-						TestTraceIdFilter.HOSTNAME);
+		final TraceEventRecords traceEvents = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdNotToPass,
+				TestTraceIdFilter.SESSION_ID,
+				TestTraceIdFilter.HOSTNAME);
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
@@ -173,8 +173,8 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 		final TraceIdFilter filter = new TraceIdFilter(filterConfig, controller);
 		final ListCollectionFilter<AbstractTraceEvent> sinkPlugin = new ListCollectionFilter<AbstractTraceEvent>(new Configuration(), controller);
 
-		final TraceEventRecords trace =
-				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID, TestTraceIdFilter.HOSTNAME);
+		final TraceEventRecords trace = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceIdToPass, TestTraceIdFilter.SESSION_ID,
+				TestTraceIdFilter.HOSTNAME);
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 

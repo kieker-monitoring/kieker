@@ -27,8 +27,7 @@ public enum SessionRegistry { // Singleton (Effective Java #3)
 
 	private final ThreadLocal<String> threadLocalSessionId = new ThreadLocal<>();
 
-	private SessionRegistry() {
-	}
+	private SessionRegistry() {}
 
 	/**
 	 * Used by the spring aspect to explicitly register a sessionid that is to be
@@ -36,7 +35,8 @@ public enum SessionRegistry { // Singleton (Effective Java #3)
 	 * is responsible for invalidating the stored curTraceId using the method
 	 * unsetThreadLocalSessionId()!
 	 *
-	 * @param sessionId The session ID.
+	 * @param sessionId
+	 *            The session ID.
 	 */
 	public final void storeThreadLocalSessionId(final String sessionId) {
 		this.threadLocalSessionId.set(sessionId);

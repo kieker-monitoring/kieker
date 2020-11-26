@@ -27,8 +27,8 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.namedRecordPipe.PipeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
@@ -53,7 +53,7 @@ public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTe
 		pipeReaderConfig.setProperty(PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, BasicNamedRecordPipeWriterReaderTest.PIPE_NAME);
 
 		final PipeReader pipeReader = new PipeReader(pipeReaderConfig, analysisController);
-		this.sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
+		this.sinkFilter = new ListCollectionFilter<>(new Configuration(), analysisController);
 
 		analysisController.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysisController);

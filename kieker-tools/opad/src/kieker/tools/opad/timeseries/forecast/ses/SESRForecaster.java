@@ -78,8 +78,9 @@ public class SESRForecaster extends AbstractRForecaster {
 	 * "MAM" is multiplicative Holt-Winters' method with multiplicative errors, and so on.
 	 * It is also possible for the model to be equal to the output from a previous call to ets.
 	 * In this case, the same model is fitted to y without re-estimating any parameters.
-
+	 * 
 	 * no additional params required by this predictor
+	 * 
 	 * @return emptyString array
 	 */
 	protected String[] getForecastFuncParams() {

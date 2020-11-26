@@ -40,12 +40,14 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Package</b>.
  * <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private EClass deploymentModelEClass = null;
@@ -53,6 +55,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private EClass eStringToDeploymentContextMapEntryEClass = null;
@@ -60,6 +63,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private EClass deploymentContextEClass = null;
@@ -67,6 +71,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private EClass eStringToDeployedComponentMapEntryEClass = null;
@@ -74,6 +79,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private EClass deployedComponentEClass = null;
@@ -81,6 +87,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private EClass eStringToDeployedOperationMapEntryEClass = null;
@@ -88,6 +95,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private EClass deployedOperationEClass = null;
@@ -96,12 +104,14 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
-	 * <p>Note: the correct way to create the package is via the static
+	 * <p>
+	 * Note: the correct way to create the package is via the static
 	 * factory method {@link #init init()}, which also performs
 	 * initialization of the package, or returns the registered package,
 	 * if one already exists.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see kieker.analysisteetime.model.analysismodel.deployment.DeploymentPackage#eNS_URI
 	 * @see #init()
@@ -114,6 +124,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private static boolean isInited = false;
@@ -121,30 +132,47 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
 	 * 
-	 * <p>This method is used to initialize {@link DeploymentPackage#eINSTANCE} when that field is accessed.
+	 * <p>
+	 * This method is used to initialize {@link DeploymentPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
 	public static DeploymentPackage init() {
-		if (isInited) return (DeploymentPackage)EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI);
+		if (isInited)
+			return (DeploymentPackage) EPackage.Registry.INSTANCE.getEPackage(DeploymentPackage.eNS_URI);
 
 		// Obtain or create and register package
-		DeploymentPackageImpl theDeploymentPackage = (DeploymentPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof DeploymentPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new DeploymentPackageImpl());
+		DeploymentPackageImpl theDeploymentPackage = (DeploymentPackageImpl) (EPackage.Registry.INSTANCE.get(eNS_URI) instanceof DeploymentPackageImpl
+				? EPackage.Registry.INSTANCE.get(eNS_URI)
+				: new DeploymentPackageImpl());
 
 		isInited = true;
 
 		// Obtain or create and register interdependencies
-		AnalysismodelPackageImpl theAnalysismodelPackage = (AnalysismodelPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI) instanceof AnalysismodelPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI) : AnalysismodelPackage.eINSTANCE);
-		StatisticsPackageImpl theStatisticsPackage = (StatisticsPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI) instanceof StatisticsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI) : StatisticsPackage.eINSTANCE);
-		TypePackageImpl theTypePackage = (TypePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI) instanceof TypePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI) : TypePackage.eINSTANCE);
-		AssemblyPackageImpl theAssemblyPackage = (AssemblyPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI) instanceof AssemblyPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI) : AssemblyPackage.eINSTANCE);
-		ExecutionPackageImpl theExecutionPackage = (ExecutionPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI) instanceof ExecutionPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI) : ExecutionPackage.eINSTANCE);
-		TracePackageImpl theTracePackage = (TracePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI) instanceof TracePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI) : TracePackage.eINSTANCE);
+		AnalysismodelPackageImpl theAnalysismodelPackage = (AnalysismodelPackageImpl) (EPackage.Registry.INSTANCE
+				.getEPackage(AnalysismodelPackage.eNS_URI) instanceof AnalysismodelPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(AnalysismodelPackage.eNS_URI)
+						: AnalysismodelPackage.eINSTANCE);
+		StatisticsPackageImpl theStatisticsPackage = (StatisticsPackageImpl) (EPackage.Registry.INSTANCE
+				.getEPackage(StatisticsPackage.eNS_URI) instanceof StatisticsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(StatisticsPackage.eNS_URI)
+						: StatisticsPackage.eINSTANCE);
+		TypePackageImpl theTypePackage = (TypePackageImpl) (EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI) instanceof TypePackageImpl
+				? EPackage.Registry.INSTANCE.getEPackage(TypePackage.eNS_URI)
+				: TypePackage.eINSTANCE);
+		AssemblyPackageImpl theAssemblyPackage = (AssemblyPackageImpl) (EPackage.Registry.INSTANCE
+				.getEPackage(AssemblyPackage.eNS_URI) instanceof AssemblyPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI)
+						: AssemblyPackage.eINSTANCE);
+		ExecutionPackageImpl theExecutionPackage = (ExecutionPackageImpl) (EPackage.Registry.INSTANCE
+				.getEPackage(ExecutionPackage.eNS_URI) instanceof ExecutionPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(ExecutionPackage.eNS_URI)
+						: ExecutionPackage.eINSTANCE);
+		TracePackageImpl theTracePackage = (TracePackageImpl) (EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI) instanceof TracePackageImpl
+				? EPackage.Registry.INSTANCE.getEPackage(TracePackage.eNS_URI)
+				: TracePackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theDeploymentPackage.createPackageContents();
@@ -167,7 +195,6 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		// Mark meta-data to indicate it can't be changed
 		theDeploymentPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(DeploymentPackage.eNS_URI, theDeploymentPackage);
 		return theDeploymentPackage;
@@ -176,6 +203,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EClass getDeploymentModel() {
@@ -185,15 +213,17 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getDeploymentModel_DeploymentContexts() {
-		return (EReference)deploymentModelEClass.getEStructuralFeatures().get(0);
+		return (EReference) deploymentModelEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EClass getEStringToDeploymentContextMapEntry() {
@@ -203,24 +233,27 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EAttribute getEStringToDeploymentContextMapEntry_Key() {
-		return (EAttribute)eStringToDeploymentContextMapEntryEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) eStringToDeploymentContextMapEntryEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getEStringToDeploymentContextMapEntry_Value() {
-		return (EReference)eStringToDeploymentContextMapEntryEClass.getEStructuralFeatures().get(1);
+		return (EReference) eStringToDeploymentContextMapEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EClass getDeploymentContext() {
@@ -230,15 +263,17 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getDeploymentContext_Components() {
-		return (EReference)deploymentContextEClass.getEStructuralFeatures().get(1);
+		return (EReference) deploymentContextEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EClass getEStringToDeployedComponentMapEntry() {
@@ -248,33 +283,37 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EAttribute getEStringToDeployedComponentMapEntry_Key() {
-		return (EAttribute)eStringToDeployedComponentMapEntryEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) eStringToDeployedComponentMapEntryEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getEStringToDeployedComponentMapEntry_Value() {
-		return (EReference)eStringToDeployedComponentMapEntryEClass.getEStructuralFeatures().get(1);
+		return (EReference) eStringToDeployedComponentMapEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EAttribute getDeploymentContext_Name() {
-		return (EAttribute)deploymentContextEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) deploymentContextEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EClass getDeployedComponent() {
@@ -284,24 +323,27 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getDeployedComponent_AssemblyComponent() {
-		return (EReference)deployedComponentEClass.getEStructuralFeatures().get(0);
+		return (EReference) deployedComponentEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getDeployedComponent_ContainedOperations() {
-		return (EReference)deployedComponentEClass.getEStructuralFeatures().get(1);
+		return (EReference) deployedComponentEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EOperation getDeployedComponent__GetDeploymentContext() {
@@ -311,6 +353,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EClass getEStringToDeployedOperationMapEntry() {
@@ -320,24 +363,27 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EAttribute getEStringToDeployedOperationMapEntry_Key() {
-		return (EAttribute)eStringToDeployedOperationMapEntryEClass.getEStructuralFeatures().get(0);
+		return (EAttribute) eStringToDeployedOperationMapEntryEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getEStringToDeployedOperationMapEntry_Value() {
-		return (EReference)eStringToDeployedOperationMapEntryEClass.getEStructuralFeatures().get(1);
+		return (EReference) eStringToDeployedOperationMapEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EClass getDeployedOperation() {
@@ -347,15 +393,17 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EReference getDeployedOperation_AssemblyOperation() {
-		return (EReference)deployedOperationEClass.getEStructuralFeatures().get(0);
+		return (EReference) deployedOperationEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EOperation getDeployedOperation__GetComponent() {
@@ -365,28 +413,32 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public DeploymentFactory getDeploymentFactory() {
-		return (DeploymentFactory)getEFactoryInstance();
+		return (DeploymentFactory) getEFactoryInstance();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private boolean isCreated = false;
 
 	/**
-	 * Creates the meta-model objects for the package.  This method is
+	 * Creates the meta-model objects for the package. This method is
 	 * guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void createPackageContents() {
-		if (isCreated) return;
+		if (isCreated)
+			return;
 		isCreated = true;
 
 		// Create classes and their features
@@ -422,19 +474,22 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private boolean isInitialized = false;
 
 	/**
-	 * Complete the initialization of the package and its meta-model.  This
+	 * Complete the initialization of the package and its meta-model. This
 	 * method is guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void initializePackageContents() {
-		if (isInitialized) return;
+		if (isInitialized)
+			return;
 		isInitialized = true;
 
 		// Initialize package
@@ -443,7 +498,7 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		AssemblyPackage theAssemblyPackage = (AssemblyPackage)EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI);
+		AssemblyPackage theAssemblyPackage = (AssemblyPackage) EPackage.Registry.INSTANCE.getEPackage(AssemblyPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -453,34 +508,53 @@ public class DeploymentPackageImpl extends EPackageImpl implements DeploymentPac
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(deploymentModelEClass, DeploymentModel.class, "DeploymentModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDeploymentModel_DeploymentContexts(), this.getEStringToDeploymentContextMapEntry(), null, "deploymentContexts", null, 0, -1, DeploymentModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEReference(getDeploymentModel_DeploymentContexts(), this.getEStringToDeploymentContextMapEntry(), null, "deploymentContexts", null, 0, -1,
+				DeploymentModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
+				!IS_ORDERED);
 
-		initEClass(eStringToDeploymentContextMapEntryEClass, Map.Entry.class, "EStringToDeploymentContextMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getEStringToDeploymentContextMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getEStringToDeploymentContextMapEntry_Value(), this.getDeploymentContext(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(eStringToDeploymentContextMapEntryEClass, Map.Entry.class, "EStringToDeploymentContextMapEntry", !IS_ABSTRACT, !IS_INTERFACE,
+				!IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEStringToDeploymentContextMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEStringToDeploymentContextMapEntry_Value(), this.getDeploymentContext(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT,
+				!IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deploymentContextEClass, DeploymentContext.class, "DeploymentContext", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getDeploymentContext_Name(), ecorePackage.getEString(), "name", null, 0, 1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDeploymentContext_Components(), this.getEStringToDeployedComponentMapEntry(), null, "components", null, 0, -1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEAttribute(getDeploymentContext_Name(), ecorePackage.getEString(), "name", null, 0, 1, DeploymentContext.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDeploymentContext_Components(), this.getEStringToDeployedComponentMapEntry(), null, "components", null, 0, -1, DeploymentContext.class,
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
-		initEClass(eStringToDeployedComponentMapEntryEClass, Map.Entry.class, "EStringToDeployedComponentMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getEStringToDeployedComponentMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getEStringToDeployedComponentMapEntry_Value(), this.getDeployedComponent(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(eStringToDeployedComponentMapEntryEClass, Map.Entry.class, "EStringToDeployedComponentMapEntry", !IS_ABSTRACT, !IS_INTERFACE,
+				!IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEStringToDeployedComponentMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEStringToDeployedComponentMapEntry_Value(), this.getDeployedComponent(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT,
+				!IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deployedComponentEClass, DeployedComponent.class, "DeployedComponent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDeployedComponent_AssemblyComponent(), theAssemblyPackage.getAssemblyComponent(), null, "assemblyComponent", null, 0, 1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDeployedComponent_ContainedOperations(), this.getEStringToDeployedOperationMapEntry(), null, "containedOperations", null, 0, -1, DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEReference(getDeployedComponent_AssemblyComponent(), theAssemblyPackage.getAssemblyComponent(), null, "assemblyComponent", null, 0, 1,
+				DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+		initEReference(getDeployedComponent_ContainedOperations(), this.getEStringToDeployedOperationMapEntry(), null, "containedOperations", null, 0, -1,
+				DeployedComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
+				!IS_ORDERED);
 
 		initEOperation(getDeployedComponent__GetDeploymentContext(), this.getDeploymentContext(), "getDeploymentContext", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEClass(eStringToDeployedOperationMapEntryEClass, Map.Entry.class, "EStringToDeployedOperationMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getEStringToDeployedOperationMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getEStringToDeployedOperationMapEntry_Value(), this.getDeployedOperation(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(eStringToDeployedOperationMapEntryEClass, Map.Entry.class, "EStringToDeployedOperationMapEntry", !IS_ABSTRACT, !IS_INTERFACE,
+				!IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEStringToDeployedOperationMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEStringToDeployedOperationMapEntry_Value(), this.getDeployedOperation(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT,
+				!IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(deployedOperationEClass, DeployedOperation.class, "DeployedOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDeployedOperation_AssemblyOperation(), theAssemblyPackage.getAssemblyOperation(), null, "assemblyOperation", null, 0, 1, DeployedOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDeployedOperation_AssemblyOperation(), theAssemblyPackage.getAssemblyOperation(), null, "assemblyOperation", null, 0, 1,
+				DeployedOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
 
 		initEOperation(getDeployedOperation__GetComponent(), this.getDeployedComponent(), "getComponent", 0, 1, IS_UNIQUE, IS_ORDERED);
 	}
 
-} //DeploymentPackageImpl
+} // DeploymentPackageImpl

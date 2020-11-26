@@ -15,7 +15,6 @@
  ***************************************************************************/
 package kieker.common.record.flow.thread;
 
-
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.io.IValueDeserializer;
@@ -26,13 +25,11 @@ import kieker.common.record.io.IValueDeserializer;
  * @since 1.13
  */
 public final class AfterFailedThreadBasedEventFactory implements IRecordFactory<AfterFailedThreadBasedEvent> {
-	
 
 	@Override
 	public AfterFailedThreadBasedEvent create(final IValueDeserializer deserializer) throws RecordInstantiationException {
 		return new AfterFailedThreadBasedEvent(deserializer);
 	}
-
 
 	@Override
 	public String[] getValueNames() {

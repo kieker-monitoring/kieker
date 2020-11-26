@@ -44,7 +44,9 @@ import kieker.common.util.filesystem.FSUtil;
  * @author Reiner Jung -- replaced reader code with code compatible with deserializer
  *
  * @since 1.2
+ * @deprecated 1.15 replaced by teetime log reading facilities
  */
+@Deprecated
 final class FSDirectoryReader implements Runnable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FSDirectoryReader.class);
 
@@ -132,7 +134,8 @@ final class FSDirectoryReader implements Runnable {
 						final Class<? extends AbstractDecompressionFilter> clazz = FSReaderUtil.findDecompressionFilterByExtension(inputFile.getName());
 
 						final Configuration configuration = new Configuration();
-						final AbstractDecompressionFilter decompressionFilter = InstantiationFactory.getInstance(configuration).createAndInitialize(AbstractDecompressionFilter.class, clazz.getCanonicalName(), configuration);
+						final AbstractDecompressionFilter decompressionFilter = InstantiationFactory.getInstance(configuration)
+								.createAndInitialize(AbstractDecompressionFilter.class, clazz.getCanonicalName(), configuration);
 						this.processBinaryInputFile(inputFile, decompressionFilter);
 					} catch (final IllegalArgumentException ex) {
 						LOGGER.warn("Unknown file extension for file {}", inputFile);

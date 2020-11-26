@@ -32,16 +32,18 @@ import kieker.common.configuration.Configuration;
  * An instance of this class receives any objects, increments an intern tread-safe counter without printing any message and delivers the
  * unchanged objects to the output. The value of the counter can be retrieved by connected to the respective output port using a
  * corresponding method.
- * 
+ *
  * @author Jan Waller, Nils Christian Ehmke
- * 
+ *
  * @since 1.4
  */
 @Plugin(
 		description = "A filter counting the elements flowing through this filter",
 		outputPorts = {
-			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, eventTypes = { Object.class }, description = "Provides each incoming object"),
-			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME_COUNT, eventTypes = { Long.class }, description = "Provides the current object count")
+			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, eventTypes = Object.class,
+					description = "Provides each incoming object"),
+			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME_COUNT, eventTypes = Long.class,
+					description = "Provides the current object count")
 		})
 public final class CountingFilter extends AbstractFilterPlugin {
 
@@ -68,7 +70,7 @@ public final class CountingFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -88,7 +90,7 @@ public final class CountingFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Returns the number of objects received until now.
-	 * 
+	 *
 	 * @return The current counter value.
 	 */
 	public final long getMessageCount() {
@@ -97,11 +99,12 @@ public final class CountingFilter extends AbstractFilterPlugin {
 
 	/**
 	 * This method represents the input port of this filter.
-	 * 
+	 *
 	 * @param event
 	 *            The next event.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = { Object.class }, description = "Receives incoming objects to be counted and forwarded")
+	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = Object.class,
+			description = "Receives incoming objects to be counted and forwarded")
 	public final void inputEvent(final Object event) {
 		final Long count = CountingFilter.this.counter.incrementAndGet();
 

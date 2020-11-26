@@ -22,6 +22,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.analysis.tt.writeRead.TestDataRepository;
+import kieker.analysis.tt.writeRead.TestProbe;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
@@ -35,8 +37,6 @@ import kieker.monitoring.writer.explorviz.ExplorVizTcpWriter;
 
 import kieker.test.tools.Await;
 import kieker.test.tools.junit.writeRead.TestAnalysis;
-import kieker.test.tools.junit.writeRead.TestDataRepository;
-import kieker.test.tools.junit.writeRead.TestProbe;
 
 /**
  * Simple test to ensure that ExplorViz is receiving all sent records from the

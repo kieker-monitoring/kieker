@@ -31,19 +31,21 @@ import kieker.common.configuration.Configuration;
  * Helper class that reads records added using the methods {@link #addAllObjects(List)} or {@link #addObject(Object)}.
  * Depending on the value of the {@link Configuration} variable {@value #CONFIG_PROPERTY_NAME_AWAIT_TERMINATION},
  * either the {@link #read()} method returns immediately, or awaits a termination via {@link kieker.analysis.AnalysisController#terminate()}.
- * 
+ *
  * Additions after this reader starts reading are ignored.
- * 
+ *
  * @param <T>
- * 
+ *
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.6
+ * @deprecated 1.15 This helper class is not necessary to test TeeTime based stages
  */
+@Deprecated
 @Plugin(
 		programmaticOnly = true,
 		description = "A reader that can be prefilled programmatically and that provides these records (mostly used in testing scenarios)",
-		outputPorts = @OutputPort(name = ListReader.OUTPUT_PORT_NAME, eventTypes = { Object.class }),
+		outputPorts = @OutputPort(name = ListReader.OUTPUT_PORT_NAME, eventTypes = Object.class),
 		configuration = {
 			@Property(name = ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, defaultValue = "false",
 					description = "Determines whether the read()-method returns immediately or whether it awaits the termination via AnalysisController.terminate()")
@@ -59,11 +61,11 @@ public class ListReader<T> extends AbstractReaderPlugin {
 	private final boolean awaitTermination;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
-	private final List<T> objects = new CopyOnWriteArrayList<T>();
+	private final List<T> objects = new CopyOnWriteArrayList<>();
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
@@ -80,7 +82,7 @@ public class ListReader<T> extends AbstractReaderPlugin {
 
 	/**
 	 * This method adds all given records to our list.
-	 * 
+	 *
 	 * @param records
 	 *            The records to be added.
 	 */
@@ -90,7 +92,7 @@ public class ListReader<T> extends AbstractReaderPlugin {
 
 	/**
 	 * This method adds the given object to our list.
-	 * 
+	 *
 	 * @param object
 	 *            The object to be added.
 	 */

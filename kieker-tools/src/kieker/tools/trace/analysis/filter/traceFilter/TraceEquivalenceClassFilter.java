@@ -39,12 +39,14 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn
  *
  * @since 1.2
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(description = "Puts the incoming traces into equivalence classes", outputPorts = {
-	@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES, description = "Message Traces", eventTypes = {
-		MessageTrace.class }),
-	@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES, description = "Execution Traces", eventTypes = {
-		ExecutionTrace.class })
+	@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES, description = "Message Traces",
+			eventTypes = MessageTrace.class),
+	@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES, description = "Execution Traces",
+			eventTypes = ExecutionTrace.class)
 }, repositoryPorts = {
 	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 }, configuration = @Property(name = TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
@@ -119,7 +121,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	 * @param et
 	 *            The next execution trace.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_EXECUTION_TRACE, description = "Execution traces", eventTypes = { ExecutionTrace.class })
+	@InputPort(name = INPUT_PORT_NAME_EXECUTION_TRACE, description = "Execution traces", eventTypes = ExecutionTrace.class)
 	public void newExecutionTrace(final ExecutionTrace et) {
 		try {
 			if (this.equivalenceMode == TraceEquivalenceClassModes.DISABLED) {

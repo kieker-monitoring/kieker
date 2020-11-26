@@ -39,7 +39,8 @@ public class BlockOnFailedInsertBehavior<E> implements InsertBehavior<E> {
 	private int numBlocked;
 
 	/**
-	 * @param queue the blocking queue to use this insert behavior
+	 * @param queue
+	 *            the blocking queue to use this insert behavior
 	 */
 	public BlockOnFailedInsertBehavior(final BlockingQueue<E> queue) {
 		this.queue = queue;

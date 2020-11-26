@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.tools.trace.analysis.filter.visualization.dependencyGraph;
 
 import kieker.analysis.IProjectContext;
@@ -48,9 +47,11 @@ import kieker.tools.trace.analysis.systemModel.util.AllocationComponentOperation
  * @author Andre van Hoorn, Lena Stoever, Matthias Rohr,
  *
  * @since 1.1
+ * @deprecated ported to teetime
  */
+@Deprecated
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
-		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
+		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = AbstractGraph.class))
 public class OperationDependencyGraphAllocationFilter extends AbstractDependencyGraphFilter<AllocationComponentOperationPair> {
 
 	private static final String CONFIGURATION_NAME = VisualizationConstants.PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME;
@@ -73,7 +74,7 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 	 */
 	@Override
 	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed",
-			eventTypes = { MessageTrace.class })
+			eventTypes = MessageTrace.class)
 	public void inputMessageTraces(final MessageTrace t) {
 		for (final AbstractMessage m : t.getSequenceAsVector()) {
 			if (m instanceof SynchronousReplyMessage) {

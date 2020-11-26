@@ -39,8 +39,10 @@ public abstract class AbstractEventDeserializer {
 	/**
 	 * Create an abstract event deserializer.
 	 *
-	 * @param configuration configuration for the deserializer.
-	 * @param registry string registry to be used.
+	 * @param configuration
+	 *            configuration for the deserializer.
+	 * @param registry
+	 *            string registry to be used.
 	 */
 	public AbstractEventDeserializer(final Configuration configuration, final ReaderRegistry<String> registry) {
 		this.registry = registry;
@@ -49,12 +51,14 @@ public abstract class AbstractEventDeserializer {
 	/**
 	 * Read an input stream of data, deserialize it and output proper monitoring records.
 	 *
-	 * @param chainInputStream the input stream
-	 * @param outputPort the output port
-	 * @throws IOException on input stream errors
+	 * @param chainInputStream
+	 *            the input stream
+	 * @param outputPort
+	 *            the output port
+	 * @throws IOException
+	 *             on input stream errors
 	 *
 	 */
 	public abstract void processDataStream(InputStream chainInputStream, OutputPort<IMonitoringRecord> outputPort) throws IOException;
 
 }
-

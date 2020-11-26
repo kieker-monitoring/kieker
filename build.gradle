@@ -7,7 +7,7 @@ buildscript {
 
     dependencies {
         classpath 'gradle.plugin.gradle-plugins:jartest:1.0.1'            // necessary to depend tests on tests
-        classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.5.0"
+        //classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.5.0"
     }
 }
 
@@ -38,6 +38,7 @@ dependencies {
 def mainSubprojects = [
         project(':kieker-common'),
         project(':kieker-monitoring'),
+        project(':kieker-model'),
         project(':kieker-analysis'),
         project(':kieker-tools'),
         project(':kieker-extension-kafka')
@@ -311,6 +312,7 @@ def parsePmdReport(File reportFile) {
 def checkSubprojects = [
     project(':kieker-common'),
     project(':kieker-monitoring'),
+    project(':kieker-model'),
     project(':kieker-analysis'),
     project(':kieker-tools'),
     project(':kieker-tools:collector'),

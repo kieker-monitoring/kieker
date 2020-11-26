@@ -47,7 +47,7 @@ public class MissingSinceTagCheck extends AbstractCheck {
 	public int[] getDefaultTokens() {
 		// This here makes sure that we just get the correct components
 		return new int[] { TokenTypes.CLASS_DEF, TokenTypes.INTERFACE_DEF, TokenTypes.ANNOTATION_DEF,
-				TokenTypes.ENUM_DEF };
+			TokenTypes.ENUM_DEF };
 	}
 
 	@Override

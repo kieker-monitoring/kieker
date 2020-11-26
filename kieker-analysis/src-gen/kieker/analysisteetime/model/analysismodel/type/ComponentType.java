@@ -15,10 +15,10 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.type.ComponentType#getSignature <em>Signature</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.type.ComponentType#getProvidedOperations <em>Provided Operations</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.type.ComponentType#getName <em>Name</em>}</li>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.type.ComponentType#getPackage <em>Package</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.type.ComponentType#getSignature <em>Signature</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.type.ComponentType#getProvidedOperations <em>Provided Operations</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.type.ComponentType#getName <em>Name</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.type.ComponentType#getPackage <em>Package</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.type.TypePackage#getComponentType()
@@ -34,6 +34,7 @@ public interface ComponentType extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Signature</em>' attribute.
 	 * @see #setSignature(String)
 	 * @see kieker.analysisteetime.model.analysismodel.type.TypePackage#getComponentType_Signature()
@@ -46,7 +47,9 @@ public interface ComponentType extends EObject {
 	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.type.ComponentType#getSignature <em>Signature</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Signature</em>' attribute.
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Signature</em>' attribute.
 	 * @see #getSignature()
 	 * @generated
 	 */
@@ -62,9 +65,11 @@ public interface ComponentType extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Provided Operations</em>' map.
 	 * @see kieker.analysisteetime.model.analysismodel.type.TypePackage#getComponentType_ProvidedOperations()
-	 * @model mapType="kieker.analysisteetime.model.analysismodel.type.EStringToOperationTypeMapEntry<org.eclipse.emf.ecore.EString, kieker.analysisteetime.model.analysismodel.type.OperationType>" ordered="false"
+	 * @model mapType="kieker.analysisteetime.model.analysismodel.type.EStringToOperationTypeMapEntry<org.eclipse.emf.ecore.EString,
+	 *        kieker.analysisteetime.model.analysismodel.type.OperationType>" ordered="false"
 	 * @generated
 	 */
 	EMap<String, OperationType> getProvidedOperations();
@@ -77,6 +82,7 @@ public interface ComponentType extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see kieker.analysisteetime.model.analysismodel.type.TypePackage#getComponentType_Name()
@@ -89,7 +95,9 @@ public interface ComponentType extends EObject {
 	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.type.ComponentType#getName <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Name</em>' attribute.
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
 	 * @generated
 	 */
@@ -103,6 +111,7 @@ public interface ComponentType extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Package</em>' attribute.
 	 * @see #setPackage(String)
 	 * @see kieker.analysisteetime.model.analysismodel.type.TypePackage#getComponentType_Package()
@@ -115,7 +124,9 @@ public interface ComponentType extends EObject {
 	 * Sets the value of the '{@link kieker.analysisteetime.model.analysismodel.type.ComponentType#getPackage <em>Package</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Package</em>' attribute.
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Package</em>' attribute.
 	 * @see #getPackage()
 	 * @generated
 	 */

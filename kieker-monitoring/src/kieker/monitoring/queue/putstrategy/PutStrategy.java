@@ -28,12 +28,16 @@ public interface PutStrategy { // NOCS //NOPMD (name without prefix "I" for reas
 
 	/**
 	 * 
-	 * @param queue queue
-	 * @param element element
+	 * @param queue
+	 *            queue
+	 * @param element
+	 *            element
 	 * 
-	 * @param <E> element type
-	 *  
-	 * @throws InterruptedException on interruption of the queue
+	 * @param <E>
+	 *            element type
+	 * 
+	 * @throws InterruptedException
+	 *             on interruption of the queue
 	 * 
 	 * @since 1.13
 	 */

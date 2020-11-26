@@ -2,8 +2,9 @@
  */
 package kieker.analysisteetime.model.analysismodel.execution;
 
+import kieker.analysis.util.ComposedKey;
 import kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation;
-import kieker.analysisteetime.util.ComposedKey;
+
 import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EObject;
@@ -17,7 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link kieker.analysisteetime.model.analysismodel.execution.ExecutionModel#getAggregatedInvocations <em>Aggregated Invocations</em>}</li>
+ * <li>{@link kieker.analysisteetime.model.analysismodel.execution.ExecutionModel#getAggregatedInvocations <em>Aggregated Invocations</em>}</li>
  * </ul>
  *
  * @see kieker.analysisteetime.model.analysismodel.execution.ExecutionPackage#getExecutionModel()
@@ -27,7 +28,8 @@ import org.eclipse.emf.ecore.EObject;
 public interface ExecutionModel extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Aggregated Invocations</b></em>' map.
-	 * The key is of type {@link kieker.analysisteetime.util.ComposedKey<kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation, kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation>},
+	 * The key is of type {@link kieker.analysisteetime.util.ComposedKey<kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation,
+	 * kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation>},
 	 * and the value is of type {@link kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation},
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -35,9 +37,12 @@ public interface ExecutionModel extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Aggregated Invocations</em>' map.
 	 * @see kieker.analysisteetime.model.analysismodel.execution.ExecutionPackage#getExecutionModel_AggregatedInvocations()
-	 * @model mapType="kieker.analysisteetime.model.analysismodel.execution.DeployedOperationsPairToAggregatedInvocationMapEntry<kieker.analysisteetime.model.analysismodel.ComposedKey<kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation, kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation>, kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation>" ordered="false"
+	 * @model mapType="kieker.analysisteetime.model.analysismodel.execution.DeployedOperationsPairToAggregatedInvocationMapEntry<kieker.analysisteetime.model.analysismodel.ComposedKey<kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation,
+	 *        kieker.analysisteetime.model.analysismodel.deployment.DeployedOperation>, kieker.analysisteetime.model.analysismodel.execution.AggregatedInvocation>"
+	 *        ordered="false"
 	 * @generated
 	 */
 	EMap<ComposedKey<DeployedOperation, DeployedOperation>, AggregatedInvocation> getAggregatedInvocations();

@@ -44,13 +44,16 @@ public class TextMapDeserializer extends AbstractMapDeserializer {
 	/**
 	 * Create a new map file deserializer.
 	 *
-	 * @param configuration configuration of the text deserializer.
+	 * @param configuration
+	 *            configuration of the text deserializer.
 	 */
 	public TextMapDeserializer(final Configuration configuration) {
 		super(configuration);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see kieker.analysisteetime.plugin.reader.filesystem.AbstractMapReader#processDataStream(java.io.File, kieker.common.registry.reader.ReaderRegistry)
 	 */
 	@Override

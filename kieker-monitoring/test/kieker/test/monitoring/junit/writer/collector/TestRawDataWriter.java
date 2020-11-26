@@ -46,7 +46,8 @@ public class TestRawDataWriter implements IRawDataWriter {
 	/**
 	 * Create test raw data writer. The configuration uses one parameter from the configuration CONFIG_TEST_ID.
 	 * 
-	 * @param configuration a Kieker configuration object
+	 * @param configuration
+	 *            a Kieker configuration object
 	 */
 	public TestRawDataWriter(final Configuration configuration) {
 		this.testId = configuration.getStringProperty(CONFIG_TEST_ID);

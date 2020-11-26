@@ -58,7 +58,9 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
  * @author Andre van Hoorn, Nils Sommer, Jan Waller
  *
  * @since 0.95a
+ * @deprecated 1.15 ported to teetime
  */
+@Deprecated
 @Plugin(description = "A filter allowing to write the incoming data into a sequence diagram", repositoryPorts = {
 	@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 }, configuration = {
@@ -172,8 +174,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 
 	@Override
 	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed",
-			eventTypes = {
-				MessageTrace.class })
+			eventTypes = MessageTrace.class)
 	public void inputMessageTraces(final MessageTrace mt) {
 		try {
 			SequenceDiagramFilter.writePicForMessageTrace(mt,

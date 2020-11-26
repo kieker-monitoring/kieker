@@ -465,7 +465,7 @@ public final class CLIServerMain { // NOPMD
 	 * @param code
 	 *            the exit code
 	 */
-	//@SuppressFBWarnings(justification = "exit necessary here to indicate cause to shell")
+	// @SuppressFBWarnings(justification = "exit necessary here to indicate cause to shell")
 	private void usage(final JCommander commander, final int exitCode, final String message) {
 		final StringBuilder out = new StringBuilder();
 		commander.usage(out, message);
