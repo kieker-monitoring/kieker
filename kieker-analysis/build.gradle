@@ -18,7 +18,7 @@ dependencies {
 	api resolveLibrary('org.eclipse.emf.ecore_*.jar')
 	
 	implementation group: 'javax.jms', name: 'javax.jms-api', version: '2.0.1'
-    implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+	implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
 		
 	api 'com.rabbitmq:amqp-client:4.2.1'
 	api 'com.google.guava:guava:21.0'	// used by StringRegistryCache for amqp reader

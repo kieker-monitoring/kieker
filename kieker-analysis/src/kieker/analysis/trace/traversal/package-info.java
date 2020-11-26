@@ -24,3 +24,4 @@
  *
  */
 package kieker.analysis.trace.traversal;
+

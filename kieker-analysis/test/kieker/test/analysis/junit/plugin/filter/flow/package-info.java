@@ -14,3 +14,4 @@
  * limitations under the License.
  ***************************************************************************/
 package kieker.test.analysis.junit.plugin.filter.flow;
+
