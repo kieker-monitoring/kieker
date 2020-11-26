@@ -57,6 +57,10 @@ pipeline {
         stage('Unit Test') {
           steps {
             sh './gradlew --parallel test jacocoTestReport'
+            jacoco(
+               sourcePattern: '**/src/**',
+               exclusionPattern: '**/test/**'
+            )
           }
           post {
             always {
@@ -68,10 +72,6 @@ pipeline {
         stage('Static Analysis') {
           steps {
             sh './gradlew check'
-            jacoco( 
-               sourcePattern: '**/src/**',
-               exclusionPattern: '**/test/**'
-            )
           }
           post {
             always {
