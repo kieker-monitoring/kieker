@@ -99,10 +99,6 @@ pipeline {
         stage('Distribution Build') {
           steps {
             sh './gradlew build distribute'
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
             stash includes: 'build/libs/*.jar', name: 'jarArtifacts'
             stash includes: 'build/distributions/*', name: 'distributions'
           }
