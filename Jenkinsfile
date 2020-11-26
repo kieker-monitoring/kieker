@@ -68,6 +68,10 @@ pipeline {
         stage('Static Analysis') {
           steps {
             sh './gradlew check'
+            jacoco( 
+               sourcePattern: '**/src/**',
+               exclusionPattern: '**/test/**'
+            )
           }
           post {
             always {
