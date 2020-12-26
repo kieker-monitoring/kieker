@@ -22,9 +22,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class is currently under development, mostly for test purposes, and not designed for productive deployment.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 public class PieChart extends AbstractDisplay {
@@ -35,7 +35,7 @@ public class PieChart extends AbstractDisplay {
 	 * Creates a new instance of this class.
 	 */
 	public PieChart() {
-		this.valueMap = new ConcurrentHashMap<String, Number>();
+		this.valueMap = new ConcurrentHashMap<>();
 	}
 
 	public void setValue(final String key, final Number value) {

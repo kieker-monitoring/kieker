@@ -20,7 +20,7 @@ import java.util.Collection;
 
 import kieker.analysis.graph.IElement;
 import kieker.analysis.graph.IVertex;
-import kieker.analysis.graph.dependency.PropertyKeys;
+import kieker.analysis.graph.dependency.PropertyConstants;
 import kieker.analysis.graph.dependency.vertextypes.IVertexTypeMapper;
 import kieker.analysis.graph.dependency.vertextypes.VertexType;
 import kieker.analysis.graph.export.dot.DotExportConfiguration;
@@ -69,7 +69,7 @@ public class DotExportConfigurationFactory {
 		builder.addDefaultNodeAttribute(DotNodeAttribute.COLOR, g -> "#000000");
 		builder.addDefaultNodeAttribute(DotNodeAttribute.FILLCOLOR, g -> "white");
 
-		builder.addEdgeAttribute(DotEdgeAttribute.LABEL, e -> this.getProperty(e, PropertyKeys.CALLS).toString());
+		builder.addEdgeAttribute(DotEdgeAttribute.LABEL, e -> this.getProperty(e, PropertyConstants.CALLS).toString());
 
 		builder.addClusterAttribute(DotClusterAttribute.STYLE, v -> "filled");
 		builder.addClusterAttribute(DotClusterAttribute.FILLCOLOR, v -> "white");
@@ -83,7 +83,7 @@ public class DotExportConfigurationFactory {
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "oval");
 
 		builder.addNodeAttribute(DotNodeAttribute.LABEL, v -> {
-			final VertexType type = this.getProperty(v, PropertyKeys.TYPE, VertexType.class);
+			final VertexType type = this.getProperty(v, PropertyConstants.TYPE, VertexType.class);
 			if (type == VertexType.ENTRY) {
 				return ENTRY_LABEL;
 			} else {
@@ -103,7 +103,7 @@ public class DotExportConfigurationFactory {
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "box");
 
 		builder.addNodeAttribute(DotNodeAttribute.LABEL, v -> {
-			final VertexType type = this.getProperty(v, PropertyKeys.TYPE, VertexType.class);
+			final VertexType type = this.getProperty(v, PropertyConstants.TYPE, VertexType.class);
 			if (type == VertexType.ENTRY) {
 				return ENTRY_LABEL;
 			} else {
@@ -121,7 +121,7 @@ public class DotExportConfigurationFactory {
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "oval");
 
 		builder.addNodeAttribute(DotNodeAttribute.LABEL, v -> {
-			final VertexType type = this.getProperty(v, PropertyKeys.TYPE, VertexType.class);
+			final VertexType type = this.getProperty(v, PropertyConstants.TYPE, VertexType.class);
 			if (type == VertexType.ENTRY) {
 				return ENTRY_LABEL;
 			} else {
@@ -141,7 +141,7 @@ public class DotExportConfigurationFactory {
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "box");
 
 		builder.addNodeAttribute(DotNodeAttribute.LABEL, v -> {
-			final VertexType type = this.getProperty(v, PropertyKeys.TYPE, VertexType.class);
+			final VertexType type = this.getProperty(v, PropertyConstants.TYPE, VertexType.class);
 			if (type == VertexType.ENTRY) {
 				return ENTRY_LABEL;
 			} else {
@@ -159,7 +159,7 @@ public class DotExportConfigurationFactory {
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "oval");
 
 		builder.addNodeAttribute(DotNodeAttribute.LABEL, v -> {
-			final VertexType type = this.getProperty(v, PropertyKeys.TYPE, VertexType.class);
+			final VertexType type = this.getProperty(v, PropertyConstants.TYPE, VertexType.class);
 			if (type == VertexType.ENTRY) {
 				return ENTRY_LABEL;
 			} else {
@@ -169,7 +169,7 @@ public class DotExportConfigurationFactory {
 		});
 
 		builder.addClusterAttribute(DotClusterAttribute.LABEL, v -> {
-			final VertexType type = this.getProperty(v, PropertyKeys.TYPE, VertexType.class);
+			final VertexType type = this.getProperty(v, PropertyConstants.TYPE, VertexType.class);
 			switch (type) {
 			case DEPLOYMENT_CONTEXT:
 				return this.createContextLabelFromVertex(v).toString();
@@ -190,7 +190,7 @@ public class DotExportConfigurationFactory {
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "box");
 
 		builder.addNodeAttribute(DotNodeAttribute.LABEL, v -> {
-			final VertexType type = this.getProperty(v, PropertyKeys.TYPE, VertexType.class);
+			final VertexType type = this.getProperty(v, PropertyConstants.TYPE, VertexType.class);
 			if (type == VertexType.ENTRY) {
 				return ENTRY_LABEL;
 			} else {
@@ -210,7 +210,7 @@ public class DotExportConfigurationFactory {
 		builder.addDefaultNodeAttribute(DotNodeAttribute.SHAPE, v -> "box3d");
 
 		builder.addNodeAttribute(DotNodeAttribute.LABEL, v -> {
-			final VertexType type = this.getProperty(v, PropertyKeys.TYPE, VertexType.class);
+			final VertexType type = this.getProperty(v, PropertyConstants.TYPE, VertexType.class);
 			if (type == VertexType.ENTRY) {
 				return ENTRY_LABEL;
 			} else {
@@ -227,11 +227,11 @@ public class DotExportConfigurationFactory {
 
 	private StringBuilder createOperationLabelFromVertex(final IVertex vertex) {
 		@SuppressWarnings("unchecked")
-		final Collection<String> modifiers = this.getProperty(vertex, PropertyKeys.MODIFIERS, Collection.class);
-		final String returnType = this.getProperty(vertex, PropertyKeys.RETURN_TYPE, String.class);
-		final String name = this.getProperty(vertex, PropertyKeys.NAME, String.class);
+		final Collection<String> modifiers = this.getProperty(vertex, PropertyConstants.MODIFIERS, Collection.class);
+		final String returnType = this.getProperty(vertex, PropertyConstants.RETURN_TYPE, String.class);
+		final String name = this.getProperty(vertex, PropertyConstants.NAME, String.class);
 		@SuppressWarnings("unchecked")
-		final Collection<String> parameterTypes = this.getProperty(vertex, PropertyKeys.PARAMETER_TYPES,
+		final Collection<String> parameterTypes = this.getProperty(vertex, PropertyConstants.PARAMETER_TYPES,
 				Collection.class);
 
 		return new StringBuilder(
@@ -239,28 +239,28 @@ public class DotExportConfigurationFactory {
 	}
 
 	private StringBuilder createComponentLabelFromVertex(final IVertex vertex) {
-		final VertexType type = this.getProperty(vertex, PropertyKeys.TYPE, VertexType.class);
-		final String name = this.getProperty(vertex, PropertyKeys.NAME, String.class);
-		final String packageName = this.getProperty(vertex, PropertyKeys.PACKAGE_NAME, String.class);
+		final VertexType type = this.getProperty(vertex, PropertyConstants.TYPE, VertexType.class);
+		final String name = this.getProperty(vertex, PropertyConstants.NAME, String.class);
+		final String packageName = this.getProperty(vertex, PropertyConstants.PACKAGE_NAME, String.class);
 
 		return new StringBuilder().append(this.createType(type)).append("\\n")
 				.append(this.nameBuilder.getComponentNameBuilder().build(packageName, name));
 	}
 
 	private StringBuilder createContextLabelFromVertex(final IVertex vertex) {
-		final VertexType type = this.getProperty(vertex, PropertyKeys.TYPE, VertexType.class);
-		final String name = this.getProperty(vertex, PropertyKeys.NAME, String.class);
+		final VertexType type = this.getProperty(vertex, PropertyConstants.TYPE, VertexType.class);
+		final String name = this.getProperty(vertex, PropertyConstants.NAME, String.class);
 
 		return new StringBuilder().append(this.createType(type)).append("\\n").append(name);
 	}
 
 	private StringBuilder createStatisticsFromVertex(final IVertex vertex) {
-		final String timeUnit = this.getProperty(vertex, PropertyKeys.TIME_UNIT).toString();
-		final String minResponseTime = this.getProperty(vertex, PropertyKeys.MIN_REPSONSE_TIME).toString();
-		final String maxResponseTime = this.getProperty(vertex, PropertyKeys.MAX_REPSONSE_TIME).toString();
-		final String totalResponseTime = this.getProperty(vertex, PropertyKeys.TOTAL_RESPONSE_TIME).toString();
-		final String meanResponseTime = this.getProperty(vertex, PropertyKeys.MEAN_REPSONSE_TIME).toString();
-		final String medianResponseTime = this.getProperty(vertex, PropertyKeys.MEDIAN_REPSONSE_TIME).toString();
+		final String timeUnit = this.getProperty(vertex, PropertyConstants.TIME_UNIT).toString();
+		final String minResponseTime = this.getProperty(vertex, PropertyConstants.MIN_REPSONSE_TIME).toString();
+		final String maxResponseTime = this.getProperty(vertex, PropertyConstants.MAX_REPSONSE_TIME).toString();
+		final String totalResponseTime = this.getProperty(vertex, PropertyConstants.TOTAL_RESPONSE_TIME).toString();
+		final String meanResponseTime = this.getProperty(vertex, PropertyConstants.MEAN_REPSONSE_TIME).toString();
+		final String medianResponseTime = this.getProperty(vertex, PropertyConstants.MEDIAN_REPSONSE_TIME).toString();
 		return this.createStatistics(timeUnit, minResponseTime, maxResponseTime, totalResponseTime, meanResponseTime,
 				medianResponseTime);
 	}

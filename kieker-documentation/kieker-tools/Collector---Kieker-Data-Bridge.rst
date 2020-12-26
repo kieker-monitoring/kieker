@@ -10,13 +10,12 @@ There are two bridges available in Kieker. The new version is called
 Bridge** (KDB). This is the documentation for the new *Collector*. For
 the old KDB please refer to its usage message for help.
 
-The C\ *ollector* supports any ISourceCompositeStage compatible event
+The *Collector* supports any ISourceCompositeStage compatible event
 source provided by Kieker tools. As sinks, the collector supports all
 Kieker writers based on the ``DataSinkStage`` from Kieker. The
-C\ *ollector* is configured via a configuration file. The configuration
-file consists of two parts one for the source and one for the sink. Here
-is an example accepting events via TCP and writing them to a Kieker log
-directory.
+*Collector* is configured via a configuration file. The configuration
+file consists of three parts one for basic Kieker settings, one for the
+source and one for the sink.
 
 Currently supported event sources (readers):
 
@@ -30,23 +29,18 @@ Short Long Option     Required Description
 -c    --configuration true     Configuration file
 ===== =============== ======== ==================
 
-Example configuration
----------------------
+Example configurations snippets
+-------------------------------
 
-Receive data via TCP (binary encoding) and log the files without 
-compression to text files.
+The following snippets can be combined to configure the collector
+application. A complete configuration must contain one general settings
+block, one input configuration and one output configuration.
+
+General setup parameter for Kieker.
 
 .. code-block:: shell
   
-  # TCP servcer for multiple connections
-  
-  ## Define input
-  
-  kieker.tools.source=kieker.tools.source.MultipleConnectionTcpSourceCompositeStage
-  kieker.tools.source.MultipleConnectionTcpSourceCompositeStage.port=9876
-  kieker.tools.source.MultipleConnectionTcpSourceCompositeStage.capacity=8192
-  
-  ## Kieker settings
+  # Kieker settings
   
   ## The name of the Kieker instance.
   kieker.monitoring.name=KIEKER
@@ -56,15 +50,41 @@ compression to text files.
   
   ## Output metadata record
   kieker.monitoring.metadata=true
+
+
+Receive data via TCP (binary encoding). This can be used to receive binary
+logging data from Kieker in Java and C/C++/Fortran.
+
+.. code-block:: shell
   
-  ## Define output
+  # TCP servcer for multiple connections
+   
+  kieker.tools.source=kieker.tools.source.MultipleConnectionTcpSourceCompositeStage
+  kieker.tools.source.MultipleConnectionTcpSourceCompositeStage.port=9876
+  kieker.tools.source.MultipleConnectionTcpSourceCompositeStage.capacity=8192
+
+
+Read another Kieker log. This can be useful to inspect binary logs, 
+replay logs, make text based logs more compact and even compress them
+in the process.
+
+.. code-block:: shell
+  
+  # File reader
+
+  kieker.tools.source=kieker.tools.source.LogsReaderCompositeStage
+  kieker.tools.source.LogsReaderCompositeStage.logDirectories=$INPUT_DIR
+
+.. code-block:: shell
+
+  # Define output
   
   ## Data sink stage (FileWriter)
   kieker.monitoring.writer=kieker.monitoring.writer.filesystem.FileWriter
   
   ## FileWriter settings
   ## output path
-  kieker.monitoring.writer.filesystem.FileWriter.customStoragePath=$COLLECTOR_DATA_DIR/
+  kieker.monitoring.writer.filesystem.FileWriter.customStoragePath=$OUTPUT_DATA_DIR/
   kieker.monitoring.writer.filesystem.FileWriter.charsetName=UTF-8
   
   ## Number of entries per file

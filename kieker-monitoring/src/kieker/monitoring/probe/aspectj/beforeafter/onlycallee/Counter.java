@@ -16,9 +16,9 @@
 package kieker.monitoring.probe.aspectj.beforeafter.onlycallee;
 
 /**
- * 
+ *
  * @author Christian Wulf (chw)
- * 
+ *
  * @since 1.13
  *
  */

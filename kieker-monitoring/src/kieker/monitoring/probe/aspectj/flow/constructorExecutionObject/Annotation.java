@@ -21,7 +21,7 @@ import org.aspectj.lang.annotation.Pointcut;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.10
  */
 @Aspect

@@ -43,12 +43,12 @@ public class ResponseTimeDecorator {
 	}
 
 	public void decorate(final IVertex vertex, final Object object) {
-		vertex.setPropertyIfAbsent(PropertyKeys.MIN_REPSONSE_TIME, this.getStatisticValue(object, Properties.MIN));
-		vertex.setPropertyIfAbsent(PropertyKeys.MAX_REPSONSE_TIME, this.getStatisticValue(object, Properties.MAX));
-		vertex.setPropertyIfAbsent(PropertyKeys.TOTAL_RESPONSE_TIME, this.getStatisticValue(object, Properties.TOTAL));
-		vertex.setPropertyIfAbsent(PropertyKeys.MEAN_REPSONSE_TIME, this.getStatisticValue(object, Properties.AVERAGE));
-		vertex.setPropertyIfAbsent(PropertyKeys.MEDIAN_REPSONSE_TIME, this.getStatisticValue(object, Properties.MEDIAN));
-		vertex.setPropertyIfAbsent(PropertyKeys.TIME_UNIT, this.timeUnit);
+		vertex.setPropertyIfAbsent(PropertyConstants.MIN_REPSONSE_TIME, this.getStatisticValue(object, Properties.MIN));
+		vertex.setPropertyIfAbsent(PropertyConstants.MAX_REPSONSE_TIME, this.getStatisticValue(object, Properties.MAX));
+		vertex.setPropertyIfAbsent(PropertyConstants.TOTAL_RESPONSE_TIME, this.getStatisticValue(object, Properties.TOTAL));
+		vertex.setPropertyIfAbsent(PropertyConstants.MEAN_REPSONSE_TIME, this.getStatisticValue(object, Properties.AVERAGE));
+		vertex.setPropertyIfAbsent(PropertyConstants.MEDIAN_REPSONSE_TIME, this.getStatisticValue(object, Properties.MEDIAN));
+		vertex.setPropertyIfAbsent(PropertyConstants.TIME_UNIT, this.timeUnit);
 	}
 
 	private long getStatisticValue(final Object object, final IProperty property) {

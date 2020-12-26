@@ -62,12 +62,12 @@ public final class SamplingController extends AbstractController implements ISam
 	}
 
 	@Override
-	protected final void init() {
+	protected void init() {
 		// do nothing
 	}
 
 	@Override
-	protected final void cleanup() {
+	protected void cleanup() {
 		LOGGER.debug("Shutting down Sampling Controller");
 		if (this.periodicSensorsPoolExecutor != null) {
 			this.periodicSensorsPoolExecutor.shutdown();
@@ -75,7 +75,7 @@ public final class SamplingController extends AbstractController implements ISam
 	}
 
 	@Override
-	public final String toString() {
+	public String toString() {
 		final StringBuilder sb = new StringBuilder(128);
 		sb.append("Sampling Controller: ");
 		if (this.periodicSensorsPoolExecutor != null) {
@@ -94,7 +94,7 @@ public final class SamplingController extends AbstractController implements ISam
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sensor, final long initialDelay, final long period, final TimeUnit timeUnit) {
+	public ScheduledSamplerJob schedulePeriodicSampler(final ISampler sensor, final long initialDelay, final long period, final TimeUnit timeUnit) {
 		if (null == this.periodicSensorsPoolExecutor) {
 			LOGGER.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");
 			return null;
@@ -110,7 +110,7 @@ public final class SamplingController extends AbstractController implements ISam
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final boolean removeScheduledSampler(final ScheduledSamplerJob sensorJob) {
+	public boolean removeScheduledSampler(final ScheduledSamplerJob sensorJob) {
 		if (null == this.periodicSensorsPoolExecutor) {
 			LOGGER.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");
 			return false;

@@ -29,7 +29,7 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 @Aspect
@@ -47,7 +47,7 @@ public class ThreadingAspect extends AbstractAspectJProbe {
 
 	/**
 	 * This method represents the advice which is used before the actual start of a thread.
-	 * 
+	 *
 	 * @param thread
 	 *            The thread.
 	 */

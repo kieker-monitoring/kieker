@@ -23,14 +23,14 @@ import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 public interface ISamplingController {
 
 	/**
 	 * Schedules the given {@link ISampler} with given initial delay, and period.
-	 * 
+	 *
 	 * @param sampler
 	 *            The sampler to schedule.
 	 * @param initialDelay
@@ -39,23 +39,23 @@ public interface ISamplingController {
 	 *            The period.
 	 * @param timeUnit
 	 *            The time unit which determines how to interpret the given parameter.
-	 * 
+	 *
 	 * @return a {@link ScheduledSamplerJob} as a handler for removing the scheduled sampler later on by using the method
 	 *         {@link #removeScheduledSampler(ScheduledSamplerJob)}.
-	 * 
+	 *
 	 * @since 1.3
 	 */
-	public abstract ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay, final long period, final TimeUnit timeUnit);
+	ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay, final long period, final TimeUnit timeUnit);
 
 	/**
 	 * Stops future executions of the given periodic {@link ScheduledSamplerJob} .
-	 * 
+	 *
 	 * @param sampler
 	 *            The sampler to be removed.
-	 * 
+	 *
 	 * @return true if the sensor is not registered
-	 * 
+	 *
 	 * @since 1.3
 	 */
-	public abstract boolean removeScheduledSampler(final ScheduledSamplerJob sampler);
+	boolean removeScheduledSampler(final ScheduledSamplerJob sampler);
 }

@@ -262,13 +262,13 @@ public class PerformAnalysis {
 
 			if (successfulExecution && this.settings.isPrintDeploymentEquivalenceClasses()) {
 				successfulExecution = this.writeTraceEquivalenceReport(
-						pathPrefix + Constants.TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX + TXT_SUFFIX,
+						pathPrefix + StringConstants.TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX + TXT_SUFFIX,
 						traceAllocationEquivClassFilter);
 			}
 
 			if (successfulExecution && this.settings.isPrintAssemblyEquivalenceClasses()) {
 				successfulExecution = this.writeTraceEquivalenceReport(
-						pathPrefix + Constants.TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX + TXT_SUFFIX,
+						pathPrefix + StringConstants.TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX + TXT_SUFFIX,
 						traceAssemblyEquivClassFilter);
 			}
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
@@ -670,7 +670,7 @@ public class PerformAnalysis {
 				VisualizationConstants.PRINTINVALIDEXECTRACE_COMPONENT_NAME);
 		componentPrintInvalidTraceConfig.setProperty(
 				InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN,
-				new File(pathPrefix + Constants.INVALID_TRACES_FN_PREFIX + TXT_SUFFIX).getCanonicalPath());
+				new File(pathPrefix + StringConstants.INVALID_TRACES_FN_PREFIX + TXT_SUFFIX).getCanonicalPath());
 
 		final InvalidExecutionTraceWriterFilter componentPrintInvalidTrace = new InvalidExecutionTraceWriterFilter(componentPrintInvalidTraceConfig,
 				this.analysisController);
@@ -707,7 +707,7 @@ public class PerformAnalysis {
 		componentPrintExecTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 				VisualizationConstants.PRINTEXECTRACE_COMPONENT_NAME);
 		componentPrintExecTraceConfig.setProperty(ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN,
-				new File(pathPrefix + Constants.EXECUTION_TRACES_FN_PREFIX + TXT_SUFFIX).getCanonicalPath());
+				new File(pathPrefix + StringConstants.EXECUTION_TRACES_FN_PREFIX + TXT_SUFFIX).getCanonicalPath());
 
 		final ExecutionTraceWriterFilter componentPrintExecTrace = new ExecutionTraceWriterFilter(componentPrintExecTraceConfig,
 				this.analysisController);
@@ -743,7 +743,7 @@ public class PerformAnalysis {
 		componentPrintMsgTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 				VisualizationConstants.PRINTMSGTRACE_COMPONENT_NAME);
 		componentPrintMsgTraceConfig.setProperty(MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN,
-				new File(pathPrefix + Constants.MESSAGE_TRACES_FN_PREFIX + TXT_SUFFIX).getCanonicalPath());
+				new File(pathPrefix + StringConstants.MESSAGE_TRACES_FN_PREFIX + TXT_SUFFIX).getCanonicalPath());
 
 		final MessageTraceWriterFilter componentPrintMsgTrace = new MessageTraceWriterFilter(componentPrintMsgTraceConfig,
 				this.analysisController);
@@ -775,7 +775,7 @@ public class PerformAnalysis {
 			throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration traceAssemblyEquivClassFilterConfig = new Configuration();
 		traceAssemblyEquivClassFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-				Constants.TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME);
+				StringConstants.TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME);
 		traceAssemblyEquivClassFilterConfig.setProperty(
 				TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
 				TraceEquivalenceClassModes.ASSEMBLY.toString());
@@ -820,7 +820,7 @@ public class PerformAnalysis {
 		final Configuration traceAllocationEquivClassFilterConfig = new Configuration();
 
 		traceAllocationEquivClassFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-				Constants.TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME);
+				StringConstants.TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME);
 		traceAllocationEquivClassFilterConfig.setProperty(
 				TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
 				TraceEquivalenceClassModes.ALLOCATION.toString());
@@ -866,7 +866,7 @@ public class PerformAnalysis {
 		final Configuration configurationEventTrace2ExecutionTraceFilter = new Configuration();
 
 		configurationEventTrace2ExecutionTraceFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-				Constants.EXECTRACESFROMEVENTTRACES_COMPONENT_NAME);
+				StringConstants.EXECTRACESFROMEVENTTRACES_COMPONENT_NAME);
 		configurationEventTrace2ExecutionTraceFilter.setProperty(
 				TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_IGNORE_ASSUMED,
 				this.booleanToString(this.settings.isIgnoreAssumedCalls()));
@@ -928,7 +928,7 @@ public class PerformAnalysis {
 		// Create the trace reconstruction filter and connect to the record transformation filter's output port
 		final Configuration mtReconstrFilterConfig = new Configuration();
 		mtReconstrFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-				Constants.TRACERECONSTR_COMPONENT_NAME);
+				StringConstants.TRACERECONSTR_COMPONENT_NAME);
 		mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
 				TimeUnit.MILLISECONDS.name());
 		mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
@@ -959,7 +959,7 @@ public class PerformAnalysis {
 		// Create the event record trace generation filter and connect to the trace ID filter's output port
 		final Configuration configurationEventRecordTraceGenerationFilter = new Configuration();
 		configurationEventRecordTraceGenerationFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-				Constants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
+				StringConstants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
 		configurationEventRecordTraceGenerationFilter.setProperty(
 				EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
 				TimeUnit.MILLISECONDS.name());
@@ -998,7 +998,7 @@ public class PerformAnalysis {
 		// Create the execution record transformation filter and connect to the trace ID filter's output port
 		final Configuration execRecTransformerConfig = new Configuration();
 		execRecTransformerConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-				Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME);
+				StringConstants.EXEC_TRACE_RECONSTR_COMPONENT_NAME);
 		final ExecutionRecordTransformationFilter execRecTransformer = new ExecutionRecordTransformationFilter(execRecTransformerConfig,
 				this.analysisController);
 		if (this.settings.isInvertTraceIdFilter()) {
@@ -1109,7 +1109,7 @@ public class PerformAnalysis {
 				} else if (VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(currentDecoratorStr)) {
 					plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.SECONDS));
 					continue;
-				} else if (Constants.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(currentDecoratorStr)) {
+				} else if (StringConstants.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(currentDecoratorStr)) {
 					// if decorator is responseColoring, next value should be the threshold
 					final String thresholdStringStr = decoratorIterator.next();
 
@@ -1149,7 +1149,7 @@ public class PerformAnalysis {
 		final Configuration componentPlotTraceCallTreesConfig = new Configuration();
 
 		componentPlotTraceCallTreesConfig.setProperty(TraceCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME,
-				new File(pathPrefix + Constants.CALL_TREE_FN_PREFIX)
+				new File(pathPrefix + StringConstants.CALL_TREE_FN_PREFIX)
 						.getCanonicalPath());
 		componentPlotTraceCallTreesConfig.setProperty(TraceCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
 				this.booleanToString(this.settings.isShortLabels()));

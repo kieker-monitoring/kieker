@@ -42,12 +42,13 @@ class EdgeImpl extends GraphElementImpl implements IEdge {
 	}
 
 	@Override
-	public IVertex getVertex(final Direction direction) throws IllegalArgumentException {
+	public IVertex getVertex(final Direction direction) {
 		switch (direction) {
 		case IN:
 			return this.inVertex;
 		case OUT:
 			return this.outVertex;
+		case BOTH:
 		default:
 			throw ExceptionFactory.bothIsNotSupported();
 		}

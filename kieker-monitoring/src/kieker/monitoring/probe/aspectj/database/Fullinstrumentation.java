@@ -20,7 +20,7 @@ import org.aspectj.lang.annotation.Pointcut;
 
 /**
  * @author Christian Zirkelbach (czi@informatik.uni-kiel.de)
- * 
+ *
  * @since 1.14
  */
 @Aspect

@@ -36,7 +36,7 @@ import kieker.monitoring.timer.ITimeSource;
 /**
  * Aspect for transmitting the Kieker traceId and orderIndex from a caller
  * application to a callee application with Spring.
- * 
+ *
  * @author Felix Eichhorst
  *
  * @since 1.14

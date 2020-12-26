@@ -30,5 +30,5 @@ public interface IRemoteController {
 	 *
 	 * @since 1.4
 	 */
-	public String getControllerDomain();
+	String getControllerDomain();
 }

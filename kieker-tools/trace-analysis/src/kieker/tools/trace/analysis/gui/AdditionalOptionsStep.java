@@ -32,7 +32,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
 import kieker.tools.AbstractCommandLineTool;
-import kieker.tools.trace.analysis.Constants;
+import kieker.tools.trace.analysis.StringConstants;
 
 /**
  * @author Nils Christian Ehmke
@@ -196,37 +196,37 @@ public class AdditionalOptionsStep extends AbstractStep { // NOPMD (long class)
 		}
 
 		if (this.ignoreInvalidTraces.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_IGNOREINVALIDTRACES);
 		}
 
 		if (this.repairEventBasedTraces.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_REPAIR_EVENT_BASED_TRACES);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_REPAIR_EVENT_BASED_TRACES);
 		}
 
 		if (this.useShortLabels.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_SHORTLABELS);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_SHORTLABELS);
 		}
 
 		if (this.includeSelfLoops.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_INCLUDESELFLOOPS);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_INCLUDESELFLOOPS);
 		}
 
 		if (this.maxTraceDurationMS.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_MAXTRACEDURATION);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_MAXTRACEDURATION);
 			parameters.add(this.maxTraceDurationMSInput.getValue().toString());
 		}
 
 		if (this.ignoreAssumedCalls.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_IGNORE_ASSUMED);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_IGNORE_ASSUMED);
 		}
 
 		if (this.description.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_ADD_DESCRIPTIONS);
 			parameters.add(this.descriptionInput.getText());
 		}
 
 		if (this.traceColoringMap.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TRACE_COLORING);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TRACE_COLORING);
 			parameters.add(this.traceColoringMapInput.getText());
 		}
 	}

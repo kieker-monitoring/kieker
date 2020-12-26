@@ -267,7 +267,7 @@ public final class SignatureFactory {
 		} else {
 			throw new InvalidPatternException("method name is requiered");
 		}
-		if (params != null && params.length > 0) {
+		if ((params != null) && (params.length > 0)) {
 			signature.append(params[0]);
 			for (int i = 1; i < params.length; i++) {
 				signature.append(',');
@@ -275,7 +275,7 @@ public final class SignatureFactory {
 			}
 		}
 		signature.append(')');
-		if (exceptions != null && exceptions.length > 0) {
+		if ((exceptions != null) && (exceptions.length > 0)) {
 			signature.append(" throws ");
 			signature.append(exceptions[0]);
 			for (int i = 1; i < exceptions.length; i++) {

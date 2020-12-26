@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 @Service
@@ -41,10 +41,10 @@ public class Bookstore {
 
 	/**
 	 * Searches for a book.
-	 * 
+	 *
 	 * @param term
 	 *            The term to search for.
-	 * 
+	 *
 	 * @return The resulting book.
 	 */
 	public Book searchBook(final String term) {

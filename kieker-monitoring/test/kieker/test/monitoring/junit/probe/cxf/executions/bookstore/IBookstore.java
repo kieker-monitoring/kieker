@@ -21,7 +21,7 @@ import javax.jws.WebService;
 
 /**
  * @author Marius Loewe
- * 
+ *
  * @since 1.6
  */
 @WebService
@@ -29,14 +29,14 @@ public interface IBookstore {
 
 	/**
 	 * Searches for the given book.
-	 * 
+	 *
 	 * @param term
 	 *            The term to search for.
-	 * 
+	 *
 	 * @return The resulting book.
-	 * 
+	 *
 	 * @since 1.6
 	 */
-	public abstract String searchBook(@WebParam(name = "term") String term);
+	String searchBook(@WebParam(name = "term") String term);
 
 }

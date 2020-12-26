@@ -32,9 +32,9 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * This probe requires "-Xjoinpoints:synchronization" in the aop.xml.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.8
  */
 @Aspect
@@ -51,7 +51,7 @@ public final class SynchronizedAspect extends AbstractAspectJProbe {
 	}
 
 	@Before("lock() && args(lock) && notWithinKieker()")
-	public final void beforeMonitorEntry(final Object lock) {
+	public void beforeMonitorEntry(final Object lock) {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
@@ -64,7 +64,7 @@ public final class SynchronizedAspect extends AbstractAspectJProbe {
 	}
 
 	@After("lock() && args(lock) && notWithinKieker()")
-	public final void afterMonitorEntry(final Object lock) {
+	public void afterMonitorEntry(final Object lock) {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
@@ -78,7 +78,7 @@ public final class SynchronizedAspect extends AbstractAspectJProbe {
 
 	// better to get the note when requested to release lock, or it could happen, that it seems as if two threads have the same lock
 	@Before("unlock() && args(lock) && notWithinKieker()")
-	public final void monitorExit(final Object lock) {
+	public void monitorExit(final Object lock) {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}

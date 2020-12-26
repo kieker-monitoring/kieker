@@ -23,9 +23,9 @@ import java.lang.annotation.Target;
 
 /**
  * This annotation represents a runtime probe for methods and constructors.
- * 
+ *
  * @author Matthias Rohr, Thilo Focke, Jan Waller
- * 
+ *
  * @since before 0.9
  */
 @Retention(RetentionPolicy.RUNTIME)

@@ -17,9 +17,9 @@
 package kieker.test.monitoring.junit.probe.spring.executions;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public class TestSpringMethodInterceptorInterceptorIsNotEntryPoint extends AbstractTestSpringMethodInterceptor {

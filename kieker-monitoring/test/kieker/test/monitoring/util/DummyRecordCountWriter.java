@@ -46,7 +46,7 @@ public final class DummyRecordCountWriter extends DumpWriter {
 	/**
 	 * @return the number of records
 	 */
-	public final int getNumDummyRecords() {
+	public int getNumDummyRecords() {
 		return this.numDummyRecords.get();
 	}
 

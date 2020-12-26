@@ -46,18 +46,18 @@ public class TypeLevelOperationDependencyGraphBuilder extends AbstractDependency
 
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final IVertex componentVertex = this.graph.addVertexIfAbsent(componentId);
-		componentVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.COMPONENT_TYPE);
-		componentVertex.setPropertyIfAbsent(PropertyKeys.NAME, component.getName());
-		componentVertex.setPropertyIfAbsent(PropertyKeys.PACKAGE_NAME, component.getPackage());
+		componentVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.COMPONENT_TYPE);
+		componentVertex.setPropertyIfAbsent(PropertyConstants.NAME, component.getName());
+		componentVertex.setPropertyIfAbsent(PropertyConstants.PACKAGE_NAME, component.getPackage());
 
 		final IGraph componentSubgraph = componentVertex.addChildGraphIfAbsent();
 		final int operationId = this.identifierRegistry.getIdentifier(operation);
 		final IVertex operationVertex = componentSubgraph.addVertexIfAbsent(operationId);
-		operationVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.OPERATION_TYPE);
-		operationVertex.setPropertyIfAbsent(PropertyKeys.NAME, operation.getName());
-		operationVertex.setPropertyIfAbsent(PropertyKeys.RETURN_TYPE, operation.getReturnType());
-		operationVertex.setPropertyIfAbsent(PropertyKeys.MODIFIERS, operation.getModifiers());
-		operationVertex.setPropertyIfAbsent(PropertyKeys.PARAMETER_TYPES, operation.getParameterTypes());
+		operationVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.OPERATION_TYPE);
+		operationVertex.setPropertyIfAbsent(PropertyConstants.NAME, operation.getName());
+		operationVertex.setPropertyIfAbsent(PropertyConstants.RETURN_TYPE, operation.getReturnType());
+		operationVertex.setPropertyIfAbsent(PropertyConstants.MODIFIERS, operation.getModifiers());
+		operationVertex.setPropertyIfAbsent(PropertyConstants.PARAMETER_TYPES, operation.getParameterTypes());
 		this.responseTimeDecorator.decorate(operationVertex, operation);
 
 		return operationVertex;

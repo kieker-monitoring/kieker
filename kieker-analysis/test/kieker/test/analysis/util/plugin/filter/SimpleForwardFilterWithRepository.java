@@ -28,9 +28,9 @@ import kieker.test.analysis.util.repository.SimpleRepository;
 
 /**
  * A simple filter, used only for test purposes.
- * 
+ *
  * @author Nils Christian Ehmke, Jan Waller
- * 
+ *
  * @since 1.6
  */
 @Plugin(programmaticOnly = true,
@@ -52,7 +52,7 @@ public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this filter.
 	 * @param projectContext
@@ -64,7 +64,7 @@ public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
 
 	/**
 	 * This method represents the input port of this method, receiving the new objects.
-	 * 
+	 *
 	 * @param event
 	 *            The next event.
 	 */

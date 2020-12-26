@@ -28,7 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import kieker.tools.trace.analysis.Constants;
+import kieker.tools.trace.analysis.StringConstants;
 import kieker.tools.trace.analysis.gui.util.FileChooserActionListener;
 
 /**
@@ -185,10 +185,10 @@ public class WelcomeStep extends AbstractStep {
 
 	@Override
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
-		parameters.add("--" + Constants.CMD_OPT_NAME_INPUTDIRS);
+		parameters.add("--" + StringConstants.CMD_OPT_NAME_INPUTDIRS);
 		parameters.add("\"" + this.inputDirectoryTextField.getText() + "\"");
 
-		parameters.add("--" + Constants.CMD_OPT_NAME_OUTPUTDIR);
+		parameters.add("--" + StringConstants.CMD_OPT_NAME_OUTPUTDIR);
 		parameters.add("\"" + this.outputDirectoryTextField.getText() + "\"");
 	}
 

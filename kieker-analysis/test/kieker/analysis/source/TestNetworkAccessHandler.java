@@ -50,7 +50,7 @@ public class TestNetworkAccessHandler {
 	 */
 	@Test
 	public void testPlainIP() throws UnknownHostException {
-		final Collection<String> networkPatterns = new ArrayList<String>();
+		final Collection<String> networkPatterns = new ArrayList<>();
 		networkPatterns.add(FIRST_ADDRESS);
 		networkPatterns.add(SECOND_ADDRESS);
 		final NetworkAccessHandler handler = new NetworkAccessHandler(networkPatterns);
@@ -67,7 +67,7 @@ public class TestNetworkAccessHandler {
 	 */
 	@Test
 	public void testAlignedNetmask() throws UnknownHostException {
-		final Collection<String> networkPatterns = new ArrayList<String>();
+		final Collection<String> networkPatterns = new ArrayList<>();
 		networkPatterns.add(FIRST_NETWORK);
 		final NetworkAccessHandler handler = new NetworkAccessHandler(networkPatterns);
 		Assert.assertEquals("Address should be accepted.", true, handler.acceptRemoteIpAddress(FIRST_ADDRESS));
@@ -83,7 +83,7 @@ public class TestNetworkAccessHandler {
 	 */
 	@Test
 	public void testArbitraryNetmask() throws UnknownHostException {
-		final Collection<String> networkPatterns = new ArrayList<String>();
+		final Collection<String> networkPatterns = new ArrayList<>();
 		networkPatterns.add(SECOND_NETWORK);
 		final NetworkAccessHandler handler = new NetworkAccessHandler(networkPatterns);
 		Assert.assertEquals("Address should be accepted.", true, handler.acceptRemoteIpAddress(FIRST_ADDRESS));
