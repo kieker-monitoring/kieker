@@ -153,7 +153,8 @@ public final class TeeFilter extends AbstractFilterPlugin {
 			this.append = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_APPEND);
 			PrintStream tmpPrintStream;
 			try {
-				final OutputStream stream = Files.newOutputStream(Paths.get(printStreamNameConfig), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+				final OutputStream stream = Files.newOutputStream(Paths.get(printStreamNameConfig), StandardOpenOption.CREATE,
+						this.append ? StandardOpenOption.APPEND : StandardOpenOption.WRITE);
 				tmpPrintStream = new PrintStream(stream, false, this.encoding);
 			} catch (final UnsupportedEncodingException ex) {
 				this.logger.error("Failed to initialize {}", printStreamNameConfig, ex);
