@@ -30,7 +30,7 @@ import teetime.framework.AbstractConsumerStage;
  *
  * @since 1.8
  */
-public class MethodAndComponentFlowDisplayFilter extends AbstractConsumerStage<OperationExecutionRecord> {
+public class MethodAndComponentFlowDisplaySink extends AbstractConsumerStage<OperationExecutionRecord> {
 
 	/** The name of the input port accepting incoming events. */
 	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";
@@ -41,7 +41,7 @@ public class MethodAndComponentFlowDisplayFilter extends AbstractConsumerStage<O
 	/**
 	 * Creates a new instance of this class.
 	 */
-	public MethodAndComponentFlowDisplayFilter() {
+	public MethodAndComponentFlowDisplaySink() {
 		// empty default constructor
 	}
 

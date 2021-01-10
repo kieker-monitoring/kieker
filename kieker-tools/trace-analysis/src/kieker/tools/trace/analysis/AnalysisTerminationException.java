@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,33 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.analysis.debug;
-
-import teetime.framework.AbstractConsumerStage;
-import teetime.framework.OutputPort;
+package kieker.tools.trace.analysis;
 
 /**
+ * Exception thrown on errors of the TraceAnalysisTool (old version)
+ *
  * @author Reiner Jung
  * @since 1.15
- *
+ * @deprecated since 1.15 this exception was added to fix the misuse of Exeception in legacy code.
  */
-public class InspectStage<T> extends AbstractConsumerStage<T> {
+@Deprecated
+public class AnalysisTerminationException extends Exception {
 
-	private final OutputPort<T> outputPort = this.createOutputPort();
-
-	private final String label;
-
-	public InspectStage(final String label) {
-		this.label = label;
-	}
-
-	@Override
-	protected void execute(final T element) throws Exception {
-		this.logger.debug("{}: inspect {}", this.label, element.getClass());
-		this.outputPort.send(element);
-	}
-
-	public OutputPort<T> getOutputPort() {
-		return this.outputPort;
-	}
 }

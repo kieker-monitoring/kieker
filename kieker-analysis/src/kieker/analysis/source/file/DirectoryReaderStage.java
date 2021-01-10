@@ -16,13 +16,12 @@
 package kieker.analysis.source.file;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 import kieker.analysis.plugin.reader.depcompression.AbstractDecompressionFilter;
 import kieker.analysis.plugin.reader.depcompression.DeflateDecompressionFilter;
@@ -67,8 +66,8 @@ public class DirectoryReaderStage extends AbstractTransformation<File, IMonitori
 			for (final File mapFile : mapFiles) {
 				final String mapFileName = mapFile.getName();
 				try {
-					this.readMapFile(new FileInputStream(mapFile), mapFileName, registry);
-				} catch (final FileNotFoundException e) {
+					this.readMapFile(Files.newInputStream(mapFile.toPath(), StandardOpenOption.READ), mapFileName, registry);
+				} catch (final IOException e) {
 					this.logger.error("Cannot find map file {}.", mapFileName);
 				}
 			}
@@ -79,8 +78,8 @@ public class DirectoryReaderStage extends AbstractTransformation<File, IMonitori
 					final File logFile = logFilePath.toFile();
 					final String logFileName = logFile.getName();
 					try {
-						this.readLogFile(new FileInputStream(logFile), logFileName, registry);
-					} catch (final FileNotFoundException e) {
+						this.readLogFile(Files.newInputStream(logFile.toPath(), StandardOpenOption.READ), logFileName, registry);
+					} catch (final IOException e) {
 						this.logger.error("Cannot find log file {}.", logFileName);
 					}
 				});

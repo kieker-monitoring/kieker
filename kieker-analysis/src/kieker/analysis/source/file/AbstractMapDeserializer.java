@@ -31,7 +31,9 @@ public abstract class AbstractMapDeserializer {
 	/**
 	 * Create an abstract map deserializer.
 	 */
-	public AbstractMapDeserializer() {}
+	public AbstractMapDeserializer() {
+		// Intentionally empty
+	}
 
 	/**
 	 * Read a string map from an input stream and initialize the specified registry with the values.

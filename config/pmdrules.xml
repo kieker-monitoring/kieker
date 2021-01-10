@@ -61,6 +61,11 @@
 		<exclude name="UseVarargs" />
 	</rule>
 
+	<rule ref="category/java/design.xml">
+		<exclude name="DataClass"/>
+		<exclude name="LawOfDemeter"/>
+	</rule>
+
 	<rule ref="category/java/documentation.xml/CommentRequired">
 		<!-- <priority>5</priority> -->
 		<properties>
@@ -82,20 +87,4 @@
 	        <property name="utilityClassPattern" value="[A-Z][a-zA-Z0-9]+(Utils?|Helper|Constants|Factory)" />
 	    </properties>
     </rule>
-	
-
-<!-- Removed temporarily, as no longer compatible with current PMD -->
-<!--	<rule ref="rulesets/chw/basic.xml">
-		<exclude name="NonHeaderCommentSize" /> -->
-		<!-- enable "DisallowRawTypeDeclaration" on demand; contains a bug currently (05.05.2018) -->
-<!--		<exclude name="DisallowRawTypeDeclaration" />
-		<exclude name="MissingPluralVariableName"/>
-		<exclude name="MissingUnitSuffix"/>
-		<exclude name="UnitTestMayNotExtendAnything"/>
-	</rule>-->
-
-	<!-- <rule ref="rulesets/java/logging-jakarta-commons.xml/GuardLogStatement"> -->
-	<!-- <priority>3</priority> -->
-	<!-- </rule> -->
-
 </ruleset>

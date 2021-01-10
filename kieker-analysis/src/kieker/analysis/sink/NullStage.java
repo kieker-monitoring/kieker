@@ -30,7 +30,7 @@ import teetime.framework.AbstractConsumerStage;
  */
 public class NullStage extends AbstractConsumerStage<Object> {
 
-	public static int DEFAULT_REPORT_INTERVAL = 100000;
+	public static final int DEFAULT_REPORT_INTERVAL = 100000;
 
 	private long count;
 	private final boolean silent;

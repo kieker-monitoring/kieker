@@ -154,18 +154,17 @@ public class BinaryEventDeserializer extends AbstractEventDeserializer {
 					// arrays are used and the buffer
 					// does not hold the complete
 					// record.
-					LOGGER.warn("Failed to create: {} error {}", eventTypeName, ex);
+					LOGGER.warn("Buffer too small to hold complete event: {} error {}", eventTypeName, ex);
 					// incomplete record, move back
 					this.buffer.reset();
 					this.buffer.compact();
 					return null;
 				} catch (final BufferUnderflowException ex) {
-					LOGGER.warn("Failed to create: {} error {}", eventTypeName, ex);
+					LOGGER.warn("Received event is incomplete: {} error {}", eventTypeName, ex);
 					// incomplete record, move back
 					this.buffer.reset();
 					this.buffer.compact();
 					return null;
-
 				}
 			}
 		}

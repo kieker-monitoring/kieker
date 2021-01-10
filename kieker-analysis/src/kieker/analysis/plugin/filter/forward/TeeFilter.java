@@ -42,7 +42,9 @@ import kieker.common.configuration.Configuration;
  * @author Matthias Rohr, Jan Waller
  *
  * @since 1.2
+ * @deprecated since 1.15 ported to teetime kieker.analysis.stage.forward.TeeFilter
  */
+@Deprecated
 @Plugin(description = "A filter to print the object to a configured stream",
 		outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object",
 				eventTypes = Object.class),

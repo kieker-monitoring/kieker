@@ -24,7 +24,7 @@ package kieker.analysis.graph.util.dot;
  *
  * @since 1.14
  */
-public final class DotGraph {
+public final class DotGraphConstants {
 
 	public static final String START_GRAPH_BRACKET = "{";
 
@@ -52,6 +52,6 @@ public final class DotGraph {
 
 	public static final String UNDIRECTED_EDGE_CONNECTOR = "--";
 
-	private DotGraph() {}
+	private DotGraphConstants() {}
 
 }

@@ -5,8 +5,8 @@ package kieker.analysis.sink;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.nio.file.Files;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -40,7 +40,7 @@ public class EquivalenceClassWriter extends AbstractConsumerStage<Map<ExecutionT
 	protected void execute(final Map<ExecutionTrace, Integer> element) throws Exception {
 		PrintStream ps = null;
 		try {
-			ps = new PrintStream(new FileOutputStream(this.outputFile), false, ENCODING);
+			ps = new PrintStream(Files.newOutputStream(this.outputFile.toPath()), false, ENCODING);
 			int numClasses = 0;
 			for (final Entry<ExecutionTrace, Integer> e : element.entrySet()) {
 				final ExecutionTrace t = e.getKey();

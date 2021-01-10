@@ -24,7 +24,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.analysis.sink.display.ThreadsStatusDisplayFilter;
+import kieker.analysis.sink.display.ThreadsStatusDisplaySink;
 import kieker.common.record.jvm.ThreadsStatusRecord;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -32,7 +32,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import teetime.framework.test.StageTester;
 
 /**
- * Test cases for {@link ThreadsStatusDisplayFilter}.
+ * Test cases for {@link ThreadsStatusDisplaySink}.
  *
  * @author Lars Bluemke
  *
@@ -51,7 +51,7 @@ public class TestThreadsStatusDisplayFilter extends AbstractKiekerTest {
 	private static final long PEAK_THREAD_COUNT = 4;
 	private static final long TOTAL_STARTED_THREAD_COUNT = 3;
 
-	private ThreadsStatusDisplayFilter threadsStatusFilter;
+	private ThreadsStatusDisplaySink threadsStatusFilter;
 	private final ThreadsStatusRecord record = new ThreadsStatusRecord(TIMESTAMP, HOST_NAME, VM_NAME, THREAD_COUNT, DAEMON_THREAD_COUNT, PEAK_THREAD_COUNT,
 			TOTAL_STARTED_THREAD_COUNT);
 
@@ -67,7 +67,7 @@ public class TestThreadsStatusDisplayFilter extends AbstractKiekerTest {
 	 */
 	@Before
 	public void initializeNewFilter() {
-		this.threadsStatusFilter = new ThreadsStatusDisplayFilter(NUMBER_OF_ENTRIES, RECORDS_TIME_UNIT);
+		this.threadsStatusFilter = new ThreadsStatusDisplaySink(NUMBER_OF_ENTRIES, RECORDS_TIME_UNIT);
 	}
 
 	/**
@@ -82,13 +82,13 @@ public class TestThreadsStatusDisplayFilter extends AbstractKiekerTest {
 
 		final String id = this.record.getHostname() + " - " + this.record.getVmName();
 
-		final long actualThreadCount = this.threadsStatusFilter.getXYPlot().getEntries(id + " - " + ThreadsStatusDisplayFilter.THREADS).get(minutesAndSeconds)
+		final long actualThreadCount = this.threadsStatusFilter.getXYPlot().getEntries(id + " - " + ThreadsStatusDisplaySink.THREADS).get(minutesAndSeconds)
 				.longValue();
-		final long actualTotalStartedThreadCount = this.threadsStatusFilter.getXYPlot().getEntries(id + " - " + ThreadsStatusDisplayFilter.TOTAL_THREADS)
+		final long actualTotalStartedThreadCount = this.threadsStatusFilter.getXYPlot().getEntries(id + " - " + ThreadsStatusDisplaySink.TOTAL_THREADS)
 				.get(minutesAndSeconds).longValue();
-		final long actualPeakThreadCount = this.threadsStatusFilter.getXYPlot().getEntries(id + " - " + ThreadsStatusDisplayFilter.PEAK_THREADS)
+		final long actualPeakThreadCount = this.threadsStatusFilter.getXYPlot().getEntries(id + " - " + ThreadsStatusDisplaySink.PEAK_THREADS)
 				.get(minutesAndSeconds).longValue();
-		final long actualDaemonThreadCount = this.threadsStatusFilter.getXYPlot().getEntries(id + " - " + ThreadsStatusDisplayFilter.DAEMON_THREADS)
+		final long actualDaemonThreadCount = this.threadsStatusFilter.getXYPlot().getEntries(id + " - " + ThreadsStatusDisplaySink.DAEMON_THREADS)
 				.get(minutesAndSeconds).longValue();
 
 		Assert.assertThat(actualThreadCount, Is.is(THREAD_COUNT));
