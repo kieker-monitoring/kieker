@@ -15,51 +15,65 @@
  ***************************************************************************/
 package kieker.analysis.trace;
 
-import kieker.model.repository.SystemModelRepository;
+import kieker.analysis.stage.flow.TraceEventRecords;
+import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.flow.trace.TraceMetadata;
+
+import teetime.framework.AbstractConsumerStage;
 
 /**
- * This is an abstract base for filters processing traces.
+ * This sink counts and reports the number of incoming invalid
+ * {@link TraceEventRecords}.
  *
  * @author Andre van Hoorn
- * @author Reiner Jung -- ported to TeeTime
+ * @author Reiner Jung -- ported to teetime
  *
- * @param <T>
- *            an AbstractTrace type
- *
- * @since 1.1
+ * @since 1.15
  */
-public abstract class AbstractTraceProcessingFilter<T> extends AbstractTraceAnalysisFilter<T> {
+public class InvalidEventRecordTraceCounter extends AbstractConsumerStage<TraceEventRecords> {
+
+	private static final long TRACE_ID_IF_NONE = -1;
 
 	private int numTracesProcessed;
-	private int numTracesSucceeded;
 	private int numTracesFailed;
 
-	private long lastTraceIdSuccess = -1;
 	private long lastTraceIdError = -1;
+
+	private final boolean logInvalidTraces;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 *
-	 * @param systemModelRepository
-	 *            the model repository to be used
+	 * @param logInvalidTraces
+	 *            if true invalid traces are logged in the error log
 	 */
-	public AbstractTraceProcessingFilter(final SystemModelRepository systemModelRepository) {
-		super(systemModelRepository);
+	public InvalidEventRecordTraceCounter(final boolean logInvalidTraces) {
+		this.logInvalidTraces = logInvalidTraces;
 	}
 
-	/**
-	 * This method can be used to report a trace which has been processed
-	 * successfully.
-	 *
-	 * @param traceId
-	 *            The ID of the processed trace.
-	 */
-	protected final void reportSuccess(final long traceId) {
-		synchronized (this) {
-			this.lastTraceIdSuccess = traceId;
-			this.numTracesSucceeded++;
-			this.numTracesProcessed++;
+	@Override
+	protected void execute(final TraceEventRecords invalidTrace) throws Exception {
+		if (this.logInvalidTraces) {
+			this.logger.error("Invalid trace: {}", invalidTrace);
 		}
+
+		final TraceMetadata traceMetadata = invalidTrace.getTraceMetadata();
+		if (traceMetadata != null) {
+			this.reportError(invalidTrace.getTraceMetadata().getTraceId());
+		} else {
+			final AbstractTraceEvent[] events = invalidTrace.getTraceEvents();
+			if ((events != null) && (events.length > 0)) {
+				this.reportError(events[0].getTraceId());
+			} else {
+				this.reportError(InvalidEventRecordTraceCounter.TRACE_ID_IF_NONE); // we can't do any better
+			}
+		}
+	}
+
+	@Override
+	protected void onTerminating() {
+		this.logger.debug("Terminating {}", this.getClass().getCanonicalName());
+		super.onTerminating();
 	}
 
 	/**
@@ -74,17 +88,6 @@ public abstract class AbstractTraceProcessingFilter<T> extends AbstractTraceAnal
 			this.lastTraceIdError = traceId;
 			this.numTracesFailed++;
 			this.numTracesProcessed++;
-		}
-	}
-
-	/**
-	 * Delivers the number of traces which have been processed successfully.
-	 *
-	 * @return The number of traces.
-	 */
-	public final int getSuccessCount() {
-		synchronized (this) {
-			return this.numTracesSucceeded;
 		}
 	}
 
@@ -120,30 +123,6 @@ public abstract class AbstractTraceProcessingFilter<T> extends AbstractTraceAnal
 	public final long getLastTraceIdError() {
 		synchronized (this) {
 			return this.lastTraceIdError;
-		}
-	}
-
-	/**
-	 * Delivers the ID of the last trace which has been processed successfully.
-	 *
-	 * @return The trace ID.
-	 */
-	public final long getLastTraceIdSuccess() {
-		synchronized (this) {
-			return this.lastTraceIdSuccess;
-		}
-	}
-
-	/**
-	 * Returns a user-addressed status message to be logged by the calling tool.
-	 * Extending classes may override this method but should call the then-inherited
-	 * method first.
-	 *
-	 */
-	public void printStatusMessage() {
-		synchronized (this) {
-			this.printDebugLogMessage(new String[] { "Trace processing summary: " + this.numTracesProcessed + " total; "
-					+ this.numTracesSucceeded + " succeeded; " + this.numTracesFailed + " failed.", });
 		}
 	}
 }

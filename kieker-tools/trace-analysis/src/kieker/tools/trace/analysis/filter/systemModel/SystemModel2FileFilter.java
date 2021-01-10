@@ -30,11 +30,13 @@ import kieker.tools.trace.analysis.systemModel.repository.SystemModelRepository;
 /**
  * Writes the contents of a connected {@link SystemModelRepository} to files.
  * Currently, only HTML output is supported.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
+ * @deprecated since 1.15 ported to TeeTime in {@link kieker.analysis.sink.SystemModel2FileSink}
  */
+@Deprecated
 @Plugin(
 		description = "Prints the contents of a connected SystemModelRepository to an HTML file",
 		repositoryPorts = {
@@ -58,7 +60,7 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext

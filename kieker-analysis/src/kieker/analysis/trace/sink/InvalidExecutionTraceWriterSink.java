@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 
-import kieker.analysis.trace.AbstractTraceProcessingFilter;
+import kieker.analysis.trace.AbstractTraceProcessingStage;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.InvalidExecutionTrace;
 
@@ -33,7 +33,7 @@ import kieker.model.system.model.InvalidExecutionTrace;
  *
  * @since 1.2
  */
-public class InvalidExecutionTraceWriterSink extends AbstractTraceProcessingFilter<InvalidExecutionTrace> {
+public class InvalidExecutionTraceWriterSink extends AbstractTraceProcessingStage<InvalidExecutionTrace> {
 
 	private static final String ENCODING = "UTF-8";
 
@@ -74,11 +74,9 @@ public class InvalidExecutionTraceWriterSink extends AbstractTraceProcessingFilt
 				this.outputFilename);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void onTerminating() {
+	protected void onTerminating() {
+		this.logger.debug("Terminating {}", this.getClass().getCanonicalName());
 		if (this.printStream != null) {
 			this.printStream.close();
 		}

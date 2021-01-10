@@ -17,7 +17,6 @@ package kieker.analysis.source.file;
 
 import java.io.InputStream;
 
-import kieker.common.configuration.Configuration;
 import kieker.common.registry.reader.ReaderRegistry;
 
 /**
@@ -29,17 +28,10 @@ import kieker.common.registry.reader.ReaderRegistry;
  */
 public abstract class AbstractMapDeserializer {
 
-	protected final Configuration configuration;
-
 	/**
 	 * Create an abstract map deserializer.
-	 *
-	 * @param configuration
-	 *            configuration
 	 */
-	public AbstractMapDeserializer(final Configuration configuration) {
-		this.configuration = configuration;
-	}
+	public AbstractMapDeserializer() {}
 
 	/**
 	 * Read a string map from an input stream and initialize the specified registry with the values.

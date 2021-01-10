@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2020 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,401 +16,470 @@
 package kieker.tools.trace.analysis;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.TimeZone;
-import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.beust.jcommander.Parameter;
+import kieker.analysis.sink.EquivalenceClassWriter;
+import kieker.analysis.sink.NullStage;
+import kieker.analysis.stage.DynamicEventDispatcher;
+import kieker.analysis.stage.IEventMatcher;
+import kieker.analysis.stage.ImplementsEventMatcher;
+import kieker.analysis.stage.flow.EventRecordTraceReconstructionStage;
+import kieker.analysis.stage.flow.ThreadEvent2TraceEventStage;
+import kieker.analysis.stage.flow.TraceEventRecords;
+import kieker.analysis.stage.select.timestampfilter.TimestampFilter;
+import kieker.analysis.stage.select.traceidfilter.TraceIdFilter;
+import kieker.analysis.trace.InvalidEventRecordTraceCounter;
+import kieker.analysis.trace.TraceEventRecords2ExecutionAndMessageTraceStage;
+import kieker.analysis.trace.ValidEventRecordTraceCounter;
+import kieker.analysis.trace.execution.ExecutionRecordTransformationStage;
+import kieker.analysis.trace.execution.TraceEquivalenceClassFilter;
+import kieker.analysis.trace.execution.TraceEquivalenceClassFilter.TraceEquivalenceClassModes;
+import kieker.analysis.trace.reconstruction.TraceReconstructionStage;
+import kieker.analysis.trace.sink.ExecutionTraceWriterFilter;
+import kieker.analysis.trace.sink.InvalidExecutionTraceWriterSink;
+import kieker.analysis.trace.sink.MessageTraceWriterFilter;
+import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.record.flow.IFlowRecord;
+import kieker.model.repository.SystemModelRepository;
+import kieker.model.system.model.ExecutionTrace;
+import kieker.model.system.model.InvalidExecutionTrace;
+import kieker.model.system.model.MessageTrace;
+import kieker.tools.source.LogsReaderCompositeStage;
+import kieker.tools.trace.analysis.filter.visualization.VisualizationConstants;
+import kieker.visualization.trace.GraphWriterPlugin;
+import kieker.visualization.trace.SequenceDiagramFilter;
+import kieker.visualization.trace.SequenceDiagramFilter.SDModes;
+import kieker.visualization.trace.call.tree.AggregatedAllocationComponentOperationCallTreeFilter;
+import kieker.visualization.trace.call.tree.AggregatedAssemblyComponentOperationCallTreeFilter;
+import kieker.visualization.trace.call.tree.TraceCallTreeFilter;
+import kieker.visualization.trace.dependency.graph.AbstractDependencyGraphFilter;
+import kieker.visualization.trace.dependency.graph.ComponentDependencyGraphAllocationFilter;
+import kieker.visualization.trace.dependency.graph.ComponentDependencyGraphAssemblyFilter;
+import kieker.visualization.trace.dependency.graph.ContainerDependencyGraphFilter;
+import kieker.visualization.trace.dependency.graph.OperationDependencyGraphAllocationFilter;
+import kieker.visualization.trace.dependency.graph.OperationDependencyGraphAssemblyFilter;
+import kieker.visualization.trace.dependency.graph.ResponseTimeColorNodeDecorator;
+import kieker.visualization.trace.dependency.graph.ResponseTimeNodeDecorator;
 
-import kieker.analysis.plugin.filter.select.TimestampFilter;
-import kieker.tools.common.DateConverter;
+import teetime.framework.Configuration;
+import teetime.stage.basic.distributor.Distributor;
+import teetime.stage.basic.distributor.strategy.CopyByReferenceStrategy;
+import teetime.stage.basic.merger.Merger;
 
 /**
- * @author Reiner Jung
+ * Central teetime pipe and filter configuration for trace analysis.
  *
+ * @author Reiner Jung
  * @since 1.15
+ *
  */
-public class TraceAnalysisConfiguration {
-
-	@Parameter(names = { "-v", "--verbose" }, description = "verbosely prints additional information")
-	private boolean verbose;
-
-	@Parameter(names = { "-d", "--debug" }, description = "prints additional debug information")
-	private boolean debug;
-
-	@Parameter(names = { "-h", "--help" }, help = true, description = "prints the usage information for the tool, including available options")
-	private boolean help;
-
-	@Parameter(names = { "-i", "--inputdirs" }, variableArity = true, description = "Log directories to read data from")
-	private List<File> inputDirs;
-
-	@Parameter(names = { "-o", "--outputdir" }, required = true, description = "Directory for the generated file(s)")
-	private File outputDir;
-
-	@Parameter(names = { "-p", "--output-filename-prefix" }, description = "Prefix for output filenames")
-	private String prefix;
-
-	@Parameter(names = { "--plot-Deployment-Sequence-Diagrams" }, description = "Generate and store deployment-level sequence diagrams (.pic)")
-	private boolean plotDeploymentSequenceDiagrams;
-
-	@Parameter(names = { "--plot-Assembly-Sequence-Diagrams" }, description = "Generate and store assembly-level sequence diagrams (.pic)")
-	private boolean plotAssemblySequenceDiagrams;
-
-	@Parameter(names = { "--plot-Deployment-Component-Dependency-Graph" }, description = "Generate and store a deployment-level component dependency graph (.dot)")
-	private List<String> plotDeploymentComponentDependencyGraph;
-
-	@Parameter(names = { "--plot-Assembly-Component-Dependency-Graph" }, description = "Generate and store an assembly-level component dependency graph (.dot)")
-	private List<String> plotAssemblyComponentDependencyGraph;
-
-	@Parameter(names = { "--plot-Container-Dependency-Graph" }, description = "Generate and store a container dependency graph (.dot file)")
-	private boolean plotContainerDependencyGraph;
-
-	@Parameter(names = { "--plot-Deployment-Operation-Dependency-Graph" }, variableArity = true,
-			description = "Generate and store a deployment-level operation dependency graph (.dot)")
-	private List<String> plotDeploymentOperationDependencyGraph;
-
-	@Parameter(names = { "--plot-Assembly-Operation-Dependency-Graph" }, variableArity = true,
-			description = "Generate and store an assembly-level operation dependency graph (.dot)")
-	private List<String> plotAssemblyOperationDependencyGraph;
-
-	@Parameter(names = { "--plot-Aggregated-Deployment-Call-Tree" },
-			description = "Generate and store an aggregated deployment-level call tree (.dot)")
-	private boolean plotAggregatedDeploymentCallTree;
-
-	@Parameter(names = { "--plot-Aggregated-Assembly-Call-Tree" },
-			description = "Generate and store an aggregated assembly-level call tree (.dot)")
-	private boolean plotAggregatedAssemblyCallTree;
-
-	@Parameter(names = { "--plot-Call-Trees" }, description = "Generate and store call trees for the selected traces (.dot)")
-	private boolean plotCallTrees;
-
-	@Parameter(names = { "--print-Message-Traces" }, description = "Save message trace representations of valid traces (.txt)")
-	private boolean printMessageTraces;
-
-	@Parameter(names = { "--print-Execution-Traces" }, description = "Save execution trace representations of valid traces (.txt)")
-	private boolean printExecutionTraces;
-
-	@Parameter(names = { "--print-invalid-Execution-Traces" }, description = "Save a execution trace representations of invalid trace artifacts (.txt)")
-	private boolean printInvalidExecutionTraces;
-
-	@Parameter(names = { "--print-System-Model" }, description = "Save a representation of the internal system model (.html)")
-	private boolean printSystemModel;
-
-	@Parameter(names = { "--print-Deployment-Equivalence-Classes" }, description = "Output an overview about the deployment-level trace equivalence classes")
-	private boolean printDeploymentEquivalenceClasses;
-
-	@Parameter(names = { "--print-Assembly-Equivalence-Classes" }, description = "Output an overview about the assembly-level trace equivalence classes")
-	private boolean printAssemblyEquivalenceClasses;
-
-	@Parameter(names = { "--select-traces" }, variableArity = true,
-			description = "Consider only the traces identified by the list of trace IDs. Defaults to all traces.")
-	private List<Long> selectTraces;
-
-	@Parameter(names = { "--filter-traces" }, variableArity = true,
-			description = "Consider only the traces not identified by the list of trace IDs. Defaults to no traces.")
-	private List<Long> filterTraces;
-
-	@Parameter(names = { "--ignore-invalid-traces" }, description = "If selected, the execution aborts on the occurence of an invalid trace.")
-	private boolean ignoreInvalidTraces;
-
-	@Parameter(names = { "--repair-event-based-traces" },
-			description = "If selected, BeforeEvents with missing AfterEvents e.g. because of software crash will be repaired.")
-	private boolean repairEventBasedTraces;
-
-	// "duration in ms"
-	@Parameter(names = { "--max-trace-duration" },
-			description = "Threshold (in ms) after which incomplete traces become invalid. Defaults to 600,000 (i.e, 10 minutes).")
-	private Long maxTraceDuration;
-
-	// DATE_FORMAT_PATTERN_CMD_USAGE_HELP
-	@Parameter(names = { "--ignore-executions-before-date" },
-			description = "Executions starting before this date (UTC timezone) or monitoring timestamp are ignored.",
-			converter = DateConverter.class)
-	private Long ignoreExecutionsBeforeDate;
-
-	@Parameter(names = { "--ignore-executions-after-date" },
-			description = "Executions ending after this date (UTC timezone) or monitoring timestamp  are ignored.",
-			converter = DateConverter.class)
-	private Long ignoreExecutionsAfterDate;
-
-	@Parameter(names = { "--short-labels" }, description = "If selected, abbreviated labels (e.g., package names) are used in the visualizations.")
-	private boolean shortLabels;
-
-	@Parameter(names = { "--include-self-loops" }, description = "If selected, self-loops are included in the visualizations.")
-	private boolean includeSelfLoops;
-
-	@Parameter(names = { "--ignore-assumed-calls" }, description = "If selected, assumed calls are visualized just as regular calls.")
-	private boolean ignoreAssumedCalls;
-
-	// COLORING_FILE_OPTION_NAME
-	@Parameter(names = { "--traceColoring" },
-			description = "Color traces according to the given color map given as a properties file (key: trace ID, value: color in hex format,"
-					+ " e.g., 0xff0000 for red; use trace ID 'default' to specify the default color)")
-	private File traceColoringFile;
-
-	// DESCRIPTIONS_FILE_OPTION_NAME
-	@Parameter(names = { "--addDescriptions" },
-			description = "Adds descriptions to elements according to the given file as a properties file (key: component ID, e.g., @1; value: description)")
-	private File addDescriptions;
-
-	/** derived settings. */
-
-	/** invert trace id filter. */
-	private boolean invertTraceIdFilter;
-
-	/** selected traces. */
-	private final Set<Long> selectedTraces = new TreeSet<>();
-
-	/**
-	 * Do not need any parameter.
-	 */
-	public TraceAnalysisConfiguration() {
-		// pojo for jcommander
-	}
-
-	public boolean isVerbose() {
-		return this.verbose;
-	}
-
-	public boolean isDebug() {
-		return this.debug;
-	}
-
-	public boolean isHelp() {
-		return this.help;
-	}
-
-	public List<File> getInputDirs() {
-		return this.inputDirs;
-	}
-
-	public File getOutputDir() {
-		return this.outputDir;
-	}
-
-	public String getPrefix() {
-		return this.prefix;
-	}
-
-	public boolean isPlotDeploymentSequenceDiagrams() {
-		return this.plotDeploymentSequenceDiagrams;
-	}
-
-	public boolean isPlotAssemblySequenceDiagrams() {
-		return this.plotAssemblySequenceDiagrams;
-	}
-
-	public List<String> getPlotDeploymentComponentDependencyGraph() {
-		return this.plotDeploymentComponentDependencyGraph;
-	}
-
-	public List<String> getPlotAssemblyComponentDependencyGraph() {
-		return this.plotAssemblyComponentDependencyGraph;
-	}
-
-	public boolean isPlotContainerDependencyGraph() {
-		return this.plotContainerDependencyGraph;
-	}
-
-	public List<String> getPlotDeploymentOperationDependencyGraph() {
-		return this.plotDeploymentOperationDependencyGraph;
-	}
-
-	public List<String> getPlotAssemblyOperationDependencyGraph() {
-		return this.plotAssemblyOperationDependencyGraph;
-	}
-
-	public boolean isPlotAggregatedDeploymentCallTree() {
-		return this.plotAggregatedDeploymentCallTree;
-	}
-
-	public boolean isPlotAggregatedAssemblyCallTree() {
-		return this.plotAggregatedAssemblyCallTree;
-	}
-
-	public boolean isPlotCallTrees() {
-		return this.plotCallTrees;
-	}
-
-	public boolean isPrintMessageTraces() {
-		return this.printMessageTraces;
-	}
-
-	public boolean isPrintExecutionTraces() {
-		return this.printExecutionTraces;
-	}
-
-	public boolean isPrintInvalidExecutionTraces() {
-		return this.printInvalidExecutionTraces;
-	}
-
-	public boolean isPrintSystemModel() {
-		return this.printSystemModel;
-	}
-
-	public boolean isPrintDeploymentEquivalenceClasses() {
-		return this.printDeploymentEquivalenceClasses;
-	}
-
-	public boolean isPrintAssemblyEquivalenceClasses() {
-		return this.printAssemblyEquivalenceClasses;
-	}
-
-	public List<Long> getSelectTraces() {
-		return this.selectTraces;
-	}
-
-	public List<Long> getFilterTraces() {
-		return this.filterTraces;
-	}
-
-	public boolean isIgnoreInvalidTraces() {
-		return this.ignoreInvalidTraces;
-	}
-
-	public boolean isRepairEventBasedTraces() {
-		return this.repairEventBasedTraces;
-	}
-
-	/**
-	 * Get max trace duration, default is 600 000 ms.
-	 *
-	 * @return returns the max trace duration
-	 */
-	public Long getMaxTraceDuration() {
-		if (this.maxTraceDuration == null) {
-			this.maxTraceDuration = (long) (10 * 60 * 1000);
+public class TraceAnalysisConfiguration extends Configuration {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(TraceAnalysisConfiguration.class);
+
+	/** The prefix for the call tree files. */
+	private static final String CALL_TREE_FN_PREFIX = "callTree";
+	/** The name prefix for the message traces files. */
+	private static final String MESSAGE_TRACES_FN_PREFIX = "messageTraces";
+	/** The name prefix for the execution traces files. */
+	private static final String EXECUTION_TRACES_FN_PREFIX = "executionTraces";
+	/** The name prefix for the invalid traces files. */
+	private static final String INVALID_TRACES_FN_PREFIX = "invalidTraceArtifacts";
+	private static final String TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX = "traceDeploymentEquivClasses";
+	private static final String TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX = "traceAssemblyEquivClasses";
+	private static final String RESPONSE_TIME_COLORING_DECORATOR_FLAG = "responseTimeColoring";
+
+	private static final String TXT_SUFFIX = ".txt";
+
+	private final TraceReconstructionStage traceReconstructionStage;
+
+	private final ValidEventRecordTraceCounter validEventRecordTraceCounter;
+
+	private final InvalidEventRecordTraceCounter invalidEventRecordTraceCounter;
+
+	private final TraceEventRecords2ExecutionAndMessageTraceStage traceEventRecords2ExecutionAndMessageTraceStage;
+
+	public TraceAnalysisConfiguration(final TraceAnalysisParameters parameters, final SystemModelRepository systemRepository) {
+		final String pathPrefix = this.computePrefix(parameters);
+
+		final LogsReaderCompositeStage readerStage = new LogsReaderCompositeStage(parameters.getInputDirs(), parameters.isVerbose(), parameters.getReadBufferSize());
+		final ThreadEvent2TraceEventStage threadEvent2TraceEventStage = new ThreadEvent2TraceEventStage();
+		final TimestampFilter timestampFilter = new TimestampFilter(parameters.getIgnoreExecutionsBeforeDate(), parameters.getIgnoreExecutionsAfterDate());
+
+		final TraceIdFilter traceIdFilter = new TraceIdFilter(parameters.getSelectedTraces().isEmpty(), parameters.getSelectedTraces());
+
+		final DynamicEventDispatcher dispatcher = new DynamicEventDispatcher(null, false, true, false);
+		final IEventMatcher<? extends IFlowRecord> flowRecordMatcher = new ImplementsEventMatcher<>(IFlowRecord.class, null);
+		final IEventMatcher<? extends OperationExecutionRecord> operationExecutionRecordMatcher = new ImplementsEventMatcher<>(OperationExecutionRecord.class, null);
+		dispatcher.registerOutput(flowRecordMatcher);
+		dispatcher.registerOutput(operationExecutionRecordMatcher);
+
+		/** Execution trace. */
+		final ExecutionRecordTransformationStage executionRecordTransformationStage = new ExecutionRecordTransformationStage(systemRepository);
+		executionRecordTransformationStage.declareActive();
+		this.traceReconstructionStage = new TraceReconstructionStage(systemRepository, TimeUnit.MILLISECONDS,
+				parameters.isIgnoreInvalidTraces(), parameters.getMaxTraceDuration());
+
+		/** Event trace. */
+		final EventRecordTraceReconstructionStage eventRecordTraceReconstructionStage = new EventRecordTraceReconstructionStage(TimeUnit.MILLISECONDS,
+				parameters.isRepairEventBasedTraces(), Long.MAX_VALUE, Long.MAX_VALUE);
+		eventRecordTraceReconstructionStage.declareActive();
+
+		final Distributor<TraceEventRecords> validTracesDistributor = new Distributor<>(new CopyByReferenceStrategy());
+		validTracesDistributor.declareActive();
+
+		this.traceEventRecords2ExecutionAndMessageTraceStage = new TraceEventRecords2ExecutionAndMessageTraceStage(
+				systemRepository, false, false, parameters.isIgnoreAssumedCalls());
+
+		this.validEventRecordTraceCounter = new ValidEventRecordTraceCounter();
+		this.invalidEventRecordTraceCounter = new InvalidEventRecordTraceCounter(parameters.isIgnoreInvalidTraces());
+
+		/** default sinks. */
+		final NullStage execNullStage = new NullStage(false, 1);
+		final NullStage invalidNullStage = new NullStage(false, 1);
+		final NullStage messageNullStage = new NullStage(false, 1);
+
+		/** Merge traces from different analyses. */
+		final Merger<ExecutionTrace> executionTraceMerger = new Merger<>();
+		executionTraceMerger.declareActive();
+		final Merger<InvalidExecutionTrace> invalidExecutionTraceMerger = new Merger<>();
+		invalidExecutionTraceMerger.declareActive();
+		final Merger<MessageTrace> messageTraceMerger = new Merger<>();
+		messageTraceMerger.declareActive();
+
+		/** Trace distributors to support multiple sinks. */
+		final Distributor<ExecutionTrace> executionTraceDistributor = new Distributor<>(new CopyByReferenceStrategy());
+		final Distributor<InvalidExecutionTrace> invalidExecutionTraceDistributor = new Distributor<>(new CopyByReferenceStrategy());
+		final Distributor<MessageTrace> messageTraceDistributor = new Distributor<>(new CopyByReferenceStrategy());
+
+		/**
+		 * Connecting filters.
+		 */
+		this.connectPorts(readerStage.getOutputPort(), threadEvent2TraceEventStage.getInputPort());
+		this.connectPorts(threadEvent2TraceEventStage.getOutputPort(), timestampFilter.getMonitoringRecordsCombinedInputPort());
+
+		this.connectPorts(timestampFilter.getRecordsWithinTimePeriodOutputPort(), traceIdFilter.getInputPort());
+
+		if (parameters.isInvertTraceIdFilter()) {
+			this.connectPorts(traceIdFilter.getMismatchingTraceIdOutputPort(), dispatcher.getInputPort());
+		} else {
+			this.connectPorts(traceIdFilter.getMatchingTraceIdOutputPort(), dispatcher.getInputPort());
 		}
-		return this.maxTraceDuration;
-	}
 
-	/**
-	 * @return returns the ignore execution before date value, if none is specified created default value.
-	 */
-	public Long getIgnoreExecutionsBeforeDate() {
-		if (this.ignoreExecutionsBeforeDate == null) {
-			this.ignoreExecutionsBeforeDate = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP);
+		this.connectPorts(operationExecutionRecordMatcher.getOutputPort(), executionRecordTransformationStage.getInputPort());
+		this.connectPorts(executionRecordTransformationStage.getOutputPort(), this.traceReconstructionStage.getInputPort());
+
+		this.connectPorts(flowRecordMatcher.getOutputPort(), eventRecordTraceReconstructionStage.getTraceRecordsInputPort());
+
+		this.connectPorts(eventRecordTraceReconstructionStage.getInvalidTracesOutputPort(), this.invalidEventRecordTraceCounter.getInputPort());
+
+		this.connectPorts(eventRecordTraceReconstructionStage.getValidTracesOutputPort(), validTracesDistributor.getInputPort());
+		this.connectPorts(validTracesDistributor.getNewOutputPort(), this.validEventRecordTraceCounter.getInputPort());
+
+		this.connectPorts(validTracesDistributor.getNewOutputPort(), this.traceEventRecords2ExecutionAndMessageTraceStage.getInputPort());
+
+		this.connectPorts(this.traceReconstructionStage.getExecutionTraceOutputPort(), executionTraceMerger.getNewInputPort());
+		this.connectPorts(this.traceReconstructionStage.getInvalidExecutionTraceOutputPort(), invalidExecutionTraceMerger.getNewInputPort());
+		this.connectPorts(this.traceReconstructionStage.getMessageTraceOutputPort(), messageTraceMerger.getNewInputPort());
+
+		/** prepare the connection of reporting sinks. */
+		this.connectPorts(this.traceEventRecords2ExecutionAndMessageTraceStage.getExecutionTraceOutputPort(), executionTraceMerger.getNewInputPort());
+		this.connectPorts(this.traceEventRecords2ExecutionAndMessageTraceStage.getInvalidExecutionTraceOutputPort(), invalidExecutionTraceMerger.getNewInputPort());
+		this.connectPorts(this.traceEventRecords2ExecutionAndMessageTraceStage.getMessageTraceOutputPort(), messageTraceMerger.getNewInputPort());
+
+		this.connectPorts(executionTraceMerger.getOutputPort(), executionTraceDistributor.getInputPort());
+		this.connectPorts(invalidExecutionTraceMerger.getOutputPort(), invalidExecutionTraceDistributor.getInputPort());
+		this.connectPorts(messageTraceMerger.getOutputPort(), messageTraceDistributor.getInputPort());
+
+		/** connect reporting sinks. */
+		this.connectPorts(executionTraceDistributor.getNewOutputPort(), execNullStage.getInputPort());
+		this.connectPorts(invalidExecutionTraceDistributor.getNewOutputPort(), invalidNullStage.getInputPort());
+		this.connectPorts(messageTraceDistributor.getNewOutputPort(), messageNullStage.getInputPort());
+
+		if (parameters.isPrintDeploymentEquivalenceClasses()) {
+			this.createPrintTraceEquivalenceClasses(systemRepository, executionTraceDistributor, pathPrefix, TraceEquivalenceClassModes.ALLOCATION);
 		}
-		return this.ignoreExecutionsBeforeDate;
-	}
 
-	/**
-	 * @return returns the ignore execution after date value, if none is specified created default value.
-	 */
-	public Long getIgnoreExecutionsAfterDate() {
-		if (this.ignoreExecutionsAfterDate == null) {
-			this.ignoreExecutionsAfterDate = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP);
+		if (parameters.isPrintAssemblyEquivalenceClasses()) {
+			this.createPrintTraceEquivalenceClasses(systemRepository, executionTraceDistributor, pathPrefix, TraceEquivalenceClassModes.ASSEMBLY);
 		}
-		return this.ignoreExecutionsAfterDate;
+
+		// fill list of msgTraceProcessingComponents:
+		if (parameters.isPrintMessageTraces()) {
+			this.createComponentPrintMsgTrace(systemRepository, messageTraceDistributor, pathPrefix);
+		}
+
+		if (parameters.isPrintExecutionTraces()) {
+			this.createComponentPrintExecTrace(systemRepository, executionTraceDistributor, pathPrefix);
+		}
+
+		if (parameters.isPrintInvalidExecutionTraces()) {
+			this.createInvalidExecutionTraceWriterSink(systemRepository, invalidExecutionTraceDistributor, pathPrefix);
+		}
+
+		if (parameters.isPlotDeploymentSequenceDiagrams()) {
+			this.createPlotSequenceDiagrams(systemRepository, messageTraceDistributor, pathPrefix,
+					VisualizationConstants.ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX, SDModes.ALLOCATION, parameters.isShortLabels());
+		}
+
+		if (parameters.isPlotAssemblySequenceDiagrams()) {
+			this.createPlotSequenceDiagrams(systemRepository, messageTraceDistributor, pathPrefix,
+					VisualizationConstants.ASSEMBLY_SEQUENCE_DIAGRAM_FN_PREFIX, SDModes.ASSEMBLY, parameters.isShortLabels());
+		}
+
+		if (parameters.getPlotDeploymentComponentDependencyGraph() != null) {
+			this.createPlotDeploymentComponentDependencyGraph(systemRepository, messageTraceDistributor, parameters.getPlotDeploymentComponentDependencyGraph(),
+					pathPrefix, "", true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
+		}
+
+		if (parameters.getPlotAssemblyComponentDependencyGraph() != null) {
+			this.createPlotAssemblyComponentDependencyGraph(systemRepository, messageTraceDistributor, parameters.getPlotAssemblyComponentDependencyGraph(),
+					pathPrefix, "", true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
+		}
+
+		if (parameters.isPlotContainerDependencyGraph()) {
+			this.createPlotContainerDependencyGraph(systemRepository, messageTraceDistributor, pathPrefix, "", true, parameters.isShortLabels(),
+					parameters.isIncludeSelfLoops());
+		}
+
+		if (parameters.getPlotDeploymentOperationDependencyGraph() != null) {
+			this.createPlotDeploymentOperationDependencyGraph(systemRepository, messageTraceDistributor, parameters.getPlotDeploymentOperationDependencyGraph(),
+					pathPrefix, "", true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
+		}
+
+		if (parameters.getPlotAssemblyOperationDependencyGraph() != null) {
+			this.createPlotAssemblyOperationDependencyGraph(systemRepository, messageTraceDistributor, parameters.getPlotAssemblyOperationDependencyGraph(),
+					pathPrefix, "", true, parameters.isShortLabels(), parameters.isIncludeSelfLoops());
+		}
+
+		if (parameters.isPlotCallTrees()) {
+			this.createTraceCallTreeFilter(systemRepository, messageTraceDistributor, pathPrefix, parameters.isShortLabels());
+		}
+
+		if (parameters.isPlotAggregatedDeploymentCallTree()) {
+			this.createPlotAggregatedDeploymentCallTree(systemRepository, messageTraceDistributor, pathPrefix, true, parameters.isShortLabels());
+		}
+
+		if (parameters.isPlotAggregatedAssemblyCallTree()) {
+			this.createAggrAssemblyCompOpCallTreeFilter(systemRepository, messageTraceDistributor, pathPrefix, true, parameters.isShortLabels());
+		}
 	}
 
-	public boolean isShortLabels() {
-		return this.shortLabels;
+	private void createPlotSequenceDiagrams(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
+			final String pathPrefix, final String outputFilename, final SDModes sequenceDiagramMode, final boolean shortLabels) {
+		final SequenceDiagramFilter sequenceDiagramFilter = new SequenceDiagramFilter(systemRepository, sequenceDiagramMode,
+				pathPrefix + File.separator + outputFilename, shortLabels);
+		this.connectPorts(messageTraceDistributor.getNewOutputPort(), sequenceDiagramFilter.getInputPort());
 	}
 
-	public boolean isIncludeSelfLoops() {
-		return this.includeSelfLoops;
+	private void createPlotDeploymentComponentDependencyGraph(final SystemModelRepository systemRepository,
+			final Distributor<MessageTrace> messageTraceDistributor, final List<String> decoratorList, final String outputPathName, final String outputFileName,
+			final boolean includeWeights, final boolean shortLabels, final boolean plotLoops) {
+		final ComponentDependencyGraphAllocationFilter graphFilter = new ComponentDependencyGraphAllocationFilter(systemRepository,
+				TimeUnit.MILLISECONDS);
+		this.addDecorators(decoratorList, graphFilter);
+		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
+
+		this.connectPorts(messageTraceDistributor.getNewOutputPort(), graphFilter.getInputPort());
+		this.connectPorts(graphFilter.getOutputPort(), writerStage.getInputPort());
 	}
 
-	public boolean isIgnoreAssumedCalls() {
-		return this.ignoreAssumedCalls;
+	private void createPlotAssemblyComponentDependencyGraph(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
+			final List<String> decoratorList, final String outputPathName, final String outputFileName, final boolean includeWeights, final boolean shortLabels,
+			final boolean plotLoops) {
+		final ComponentDependencyGraphAssemblyFilter graphFilter = new ComponentDependencyGraphAssemblyFilter(systemRepository, TimeUnit.MILLISECONDS);
+		this.addDecorators(decoratorList, graphFilter);
+		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
+
+		this.connectPorts(messageTraceDistributor.getNewOutputPort(), graphFilter.getInputPort());
+		this.connectPorts(graphFilter.getOutputPort(), writerStage.getInputPort());
 	}
 
-	public File getTraceColoringFile() {
-		return this.traceColoringFile;
+	private void createPlotContainerDependencyGraph(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
+			final String outputPathName, final String outputFileName, final boolean includeWeights, final boolean shortLabels, final boolean plotLoops) {
+		final ContainerDependencyGraphFilter graphFilter = new ContainerDependencyGraphFilter(systemRepository, TimeUnit.MILLISECONDS);
+		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
+
+		this.connectPorts(messageTraceDistributor.getNewOutputPort(), graphFilter.getInputPort());
+		this.connectPorts(graphFilter.getOutputPort(), writerStage.getInputPort());
 	}
 
-	public File getAddDescriptions() {
-		return this.addDescriptions;
+	private void createPlotDeploymentOperationDependencyGraph(final SystemModelRepository systemRepository,
+			final Distributor<MessageTrace> messageTraceDistributor, final List<String> decoratorList, final String outputPathName, final String outputFileName,
+			final boolean includeWeights, final boolean shortLabels,
+			final boolean plotLoops) {
+		final OperationDependencyGraphAllocationFilter graphFilter = new OperationDependencyGraphAllocationFilter(systemRepository, TimeUnit.MILLISECONDS);
+		this.addDecorators(decoratorList, graphFilter);
+		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
+
+		this.connectPorts(messageTraceDistributor.getNewOutputPort(), graphFilter.getInputPort());
+		this.connectPorts(graphFilter.getOutputPort(), writerStage.getInputPort());
 	}
 
-	public void setInvertTraceIdFilter(final boolean invertTraceIdFilter) {
-		this.invertTraceIdFilter = invertTraceIdFilter;
+	private void createPlotAssemblyOperationDependencyGraph(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
+			final List<String> decoratorList, final String outputPathName, final String outputFileName,
+			final boolean includeWeights, final boolean shortLabels,
+			final boolean plotLoops) {
+		final OperationDependencyGraphAssemblyFilter graphFilter = new OperationDependencyGraphAssemblyFilter(systemRepository, TimeUnit.MILLISECONDS);
+		this.addDecorators(decoratorList, graphFilter);
+		final GraphWriterPlugin writerStage = new GraphWriterPlugin(outputPathName, outputFileName, includeWeights, shortLabels, plotLoops);
+
+		this.connectPorts(messageTraceDistributor.getNewOutputPort(), graphFilter.getInputPort());
+		this.connectPorts(graphFilter.getOutputPort(), writerStage.getInputPort());
 	}
 
-	public boolean isInvertTraceIdFilter() {
-		return this.invertTraceIdFilter;
-
+	private void createTraceCallTreeFilter(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
+			final String pathPrefix, final boolean shortLabels) {
+		final TraceCallTreeFilter componentPlotTraceCallTrees = new TraceCallTreeFilter(systemRepository, shortLabels,
+				pathPrefix + CALL_TREE_FN_PREFIX);
+		this.connectPorts(messageTraceDistributor.getNewOutputPort(), componentPlotTraceCallTrees.getInputPort());
 	}
 
-	public Set<Long> getSelectedTraces() {
-		return this.selectedTraces;
+	private void createPlotAggregatedDeploymentCallTree(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
+			final String pathPrefix, final boolean includeWeights, final boolean shortLabels) {
+		final AggregatedAllocationComponentOperationCallTreeFilter componentPlotAggregatedCallTree = new AggregatedAllocationComponentOperationCallTreeFilter(
+				systemRepository, includeWeights, shortLabels, pathPrefix + VisualizationConstants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX + ".dot");
+		this.connectPorts(messageTraceDistributor.getNewOutputPort(), componentPlotAggregatedCallTree.getInputPort());
 	}
 
-	/**
-	 * This method dumps the configuration on the screen.
-	 *
-	 * @param logger
-	 *            the output logger
-	 */
-	public void dumpConfiguration(final Logger logger) {
-		final DateFormat dateFormat = new SimpleDateFormat(DateConverter.DATE_FORMAT_PATTERN, Locale.US);
-		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+	private void createAggrAssemblyCompOpCallTreeFilter(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
+			final String pathPrefix, final boolean includeWeights, final boolean shortLabels) {
+		final AggregatedAssemblyComponentOperationCallTreeFilter componentPlotAssemblyCallTree = new AggregatedAssemblyComponentOperationCallTreeFilter(
+				systemRepository, includeWeights, shortLabels, pathPrefix + VisualizationConstants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX + ".dot");
+		this.connectPorts(messageTraceDistributor.getNewOutputPort(), componentPlotAssemblyCallTree.getInputPort());
+	}
 
-		logger.debug("#");
-		logger.debug("# Configuration");
-		String val = "<null>";
-		for (final File directory : this.inputDirs) {
-			if ("<null>".equals(val)) {
-				val = directory.getAbsolutePath();
+	private void createPrintTraceEquivalenceClasses(final SystemModelRepository systemRepository, final Distributor<ExecutionTrace> executionTraceDistributor,
+			final String pathPrefix, final TraceEquivalenceClassModes equivalenceClassMode) {
+		final TraceEquivalenceClassFilter traceAllocationEquivalenceClassFilter = new TraceEquivalenceClassFilter(systemRepository, equivalenceClassMode);
+		String filePrefix;
+		switch (equivalenceClassMode) {
+		case ASSEMBLY:
+			filePrefix = TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX;
+			break;
+		case ALLOCATION:
+			filePrefix = TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX;
+			break;
+		case DISABLED:
+		default:
+			return;
+		}
+		final EquivalenceClassWriter equivalenceClassWriter = new EquivalenceClassWriter(new File(pathPrefix + filePrefix + TXT_SUFFIX));
+
+		this.connectPorts(executionTraceDistributor.getNewOutputPort(), traceAllocationEquivalenceClassFilter.getInputPort());
+		this.connectPorts(traceAllocationEquivalenceClassFilter.getEquivalenceMapOutputPort(), equivalenceClassWriter.getInputPort());
+	}
+
+	private void createComponentPrintMsgTrace(final SystemModelRepository systemRepository, final Distributor<MessageTrace> messageTraceDistributor,
+			final String pathPrefix) {
+		try {
+			final MessageTraceWriterFilter messageWriterStink = new MessageTraceWriterFilter(systemRepository,
+					new File(pathPrefix + MESSAGE_TRACES_FN_PREFIX + TXT_SUFFIX));
+			this.connectPorts(messageTraceDistributor.getNewOutputPort(), messageWriterStink.getInputPort());
+		} catch (final IOException e) {
+			LOGGER.error(String.format("Error initializing %s cause %s", MessageTraceWriterFilter.class, e.getLocalizedMessage()));
+		}
+	}
+
+	private void createComponentPrintExecTrace(final SystemModelRepository systemRepository, final Distributor<ExecutionTrace> executionTraceDistributor,
+			final String pathPrefix) {
+		try {
+			final ExecutionTraceWriterFilter executionWriterStink = new ExecutionTraceWriterFilter(systemRepository,
+					new File(pathPrefix + EXECUTION_TRACES_FN_PREFIX + TXT_SUFFIX));
+			this.connectPorts(executionTraceDistributor.getNewOutputPort(), executionWriterStink.getInputPort());
+		} catch (final IOException e) {
+			LOGGER.error(String.format("Error initializing %s cause %s", ExecutionTraceWriterFilter.class, e.getLocalizedMessage()));
+		}
+	}
+
+	private void createInvalidExecutionTraceWriterSink(final SystemModelRepository systemRepository,
+			final Distributor<InvalidExecutionTrace> invalidExecutionTraceDistributor, final String pathPrefix) {
+		try {
+			final InvalidExecutionTraceWriterSink invalidExecutionTraceWriterSink = new InvalidExecutionTraceWriterSink(systemRepository,
+					new File(pathPrefix + INVALID_TRACES_FN_PREFIX + TXT_SUFFIX));
+			this.connectPorts(invalidExecutionTraceDistributor.getNewOutputPort(), invalidExecutionTraceWriterSink.getInputPort());
+		} catch (final IOException e) {
+			LOGGER.error(String.format("Error initializing %s cause %s", InvalidExecutionTraceWriterSink.class, e.getLocalizedMessage()));
+		}
+	}
+
+	private String computePrefix(final TraceAnalysisParameters parameters) {
+		if (parameters.getOutputDir() != null) {
+			if (parameters.getPrefix() != null) {
+				return parameters.getOutputDir() + File.separator + parameters.getPrefix();
 			} else {
-				val += ", " + directory.getAbsolutePath();
+				return parameters.getOutputDir() + File.separator;
 			}
+		} else if (parameters.getPrefix() != null) {
+			return parameters.getPrefix();
+		} else {
+			return "";
 		}
+	}
 
-		for (final Field field : this.getClass().getDeclaredFields()) {
-			final Parameter parameter = field.getAnnotation(Parameter.class);
-			if (parameter != null) {
-				final String[] names = parameter.names();
-				Object data = null;
-				try {
-					data = field.get(this);
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					e.printStackTrace();
-				}
-				if (data == null) {
-					data = "<none>";
-				}
-				logger.debug("{}: {}", names[names.length - 1], data);
-			}
-		}
+	/**
+	 *
+	 * @param decoratorList
+	 * @param plugin
+	 */
+	private void addDecorators(final List<String> decoratorList, final AbstractDependencyGraphFilter<?> plugin) {
+		if (decoratorList != null) {
+			final Iterator<String> decoratorIterator = decoratorList.iterator();
 
-		if (this.selectedTraces.isEmpty()) {
-			val = "<null>";
-			for (final Long id : this.selectedTraces) {
-				if ("<null>".equals(val)) {
-					val = String.valueOf(id);
+			// cannot use for loop iterator, as response time coloring uses multiple elements.
+			while (decoratorIterator.hasNext()) {
+				final String currentDecoratorStr = decoratorIterator.next();
+				if (VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(currentDecoratorStr)) {
+					plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.NANOSECONDS));
+					continue;
+				} else if (VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_US.equals(currentDecoratorStr)) {
+					plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.MICROSECONDS));
+					continue;
+				} else if (VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_MS.equals(currentDecoratorStr)) {
+					plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.MILLISECONDS));
+					continue;
+				} else if (VisualizationConstants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(currentDecoratorStr)) {
+					plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.SECONDS));
+					continue;
+				} else if (RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(currentDecoratorStr)) {
+					// if decorator is responseColoring, next value should be the threshold
+					final String thresholdStringStr = decoratorIterator.next();
+
+					try {
+						final int threshold = Integer.parseInt(thresholdStringStr);
+
+						plugin.addDecorator(new ResponseTimeColorNodeDecorator(threshold));
+					} catch (final NumberFormatException exc) {
+						LOGGER.error("Failed to parse int value of property " + "threshold(ms) : " + thresholdStringStr);
+					}
 				} else {
-					val += ", " + id;
+					LOGGER.warn("Unknown decoration name '{}'.", currentDecoratorStr);
+					return;
 				}
 			}
-		} else {
-			val = "<select all>";
 		}
-		if (this.selectTraces != null) {
-			logger.debug("{}: {}", "--selected-traces", val);
-		}
-		if (this.filterTraces != null) {
-			logger.debug("{}: {}", "--filter-traces", val);
-		}
+	}
 
-		if (this.traceColoringFile != null) {
-			logger.debug("{}: {}", "--cmd-trace-coloring", this.traceColoringFile.getAbsolutePath());
-		} else {
-			logger.debug("{}: <none>", "--cmd-trace-coloring");
-		}
-		if (this.addDescriptions != null) {
-			logger.debug("{}: {}", "--add-description", String.valueOf(this.addDescriptions));
-		} else {
-			logger.debug("{}: <none>", "--add-description");
-		}
+	public TraceReconstructionStage getTraceReconstructionStage() {
+		return this.traceReconstructionStage;
+	}
+
+	public ValidEventRecordTraceCounter getValidEventRecordTraceCounter() {
+		return this.validEventRecordTraceCounter;
+	}
+
+	public InvalidEventRecordTraceCounter getInvalidEventRecordTraceCounter() {
+		return this.invalidEventRecordTraceCounter;
+	}
+
+	public TraceEventRecords2ExecutionAndMessageTraceStage getTraceEventRecords2ExecutionAndMessageTraceStage() {
+		return this.traceEventRecords2ExecutionAndMessageTraceStage;
 	}
 
 }

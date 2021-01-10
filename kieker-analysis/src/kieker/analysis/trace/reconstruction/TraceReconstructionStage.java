@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
-import kieker.analysis.trace.AbstractTraceProcessingFilter;
+import kieker.analysis.trace.AbstractTraceProcessingStage;
 import kieker.analysis.trace.execution.ExecutionEventProcessingException;
 import kieker.common.util.dataformat.LoggingTimestampConverter;
 import kieker.model.repository.SystemModelRepository;
@@ -36,7 +36,7 @@ import kieker.model.system.model.exceptions.InvalidTraceException;
 import teetime.framework.OutputPort;
 
 /**
- * This is a trace reconstruction filter.
+ * This is a trace reconstruction stage for Executions.
  * TODO documentation.
  *
  * @author Andre van Hoorn
@@ -44,7 +44,7 @@ import teetime.framework.OutputPort;
  *
  * @since 1.1
  */
-public class TraceReconstructionFilter extends AbstractTraceProcessingFilter<Execution> {
+public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execution> {
 
 	private final OutputPort<MessageTrace> messageTraceOutputPort = this.createOutputPort(MessageTrace.class);
 	private final OutputPort<ExecutionTrace> executionTraceOutputPort = this.createOutputPort(ExecutionTrace.class);
@@ -102,7 +102,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter<Exe
 	 *            max time duration for a trace, if null
 	 *            Long.MAX_VALUE
 	 */
-	public TraceReconstructionFilter(final SystemModelRepository repository, final TimeUnit timeunit,
+	public TraceReconstructionStage(final SystemModelRepository repository, final TimeUnit timeunit,
 			final boolean ignoreInvalidTraces, final Long maxTraceDuration) {
 		super(repository);
 
@@ -274,13 +274,14 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter<Exe
 
 	@Override
 	protected void onTerminating() {
+		this.logger.debug("Terminating {}", this.getClass().getCanonicalName());
 		synchronized (this) {
 			try {
 				this.terminated = true;
 				this.processTimeoutQueue();
 			} catch (final ExecutionEventProcessingException ex) {
 				this.traceProcessingErrorOccured = true;
-				this.logger.error("Error processing timeout queue", ex);
+				this.logger.error("Error processing timeout queue: {}", ex);
 			}
 		}
 		super.onTerminating();

@@ -35,7 +35,7 @@ import teetime.framework.test.StageTester;
  *
  * @since 1.5
  */
-public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
+public class TraceEventRecords2ExecutionAndMessageTraceStageTest {
 
 	private static final long TRACE_ID = 4563L;
 	private static final String SESSION_ID = "y2zGAI0VX"; // Same Session ID for all traces
@@ -57,7 +57,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 	/**
 	 * Borrowed from {@link kieker.test.tools.junit.TraceReconstructionFilterTest.filter.TestTraceReconstructionFilter}.
 	 */
-	public TraceEventRecords2ExecutionAndMessageTraceFilterTest() {
+	public TraceEventRecords2ExecutionAndMessageTraceStageTest() {
 		// Note that we are using AbstractTraceAnalysisFilter.createExecutionByEntityNames in order to get the
 		// *same* system entities as used by the tested filter.
 
@@ -67,8 +67,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 
 		// Manually create Executions for a trace
 		this.exec0_0__bookstore_searchBook = this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook, // tin
 				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook, // tout
 				false); // assumed
@@ -81,40 +81,40 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 		// true);// assumed
 
 		this.exec1_1__catalog_getBook = this.bookstoreExecutionFactory.createBookstoreExecution_exec1_1__catalog_getBook(
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry1_1__catalog_getBook, // tin
 				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook, // tout
 				false); // assumed
 		this.exec1_1__catalog_getBook_assumed = this.bookstoreExecutionFactory.createBookstoreExecution_exec1_1__catalog_getBook(
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry1_1__catalog_getBook, // tin
 				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook, // tout
 				true); // assumed
 
 		this.exec2_1__crm_getOrders = this.bookstoreExecutionFactory.createBookstoreExecution_exec2_1__crm_getOrders(
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry2_1__crm_getOrders, // tin
 				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit2_1__crm_getOrders, // tout
 				false); // assumed
 		this.exec2_1__crm_getOrders_assumed = this.bookstoreExecutionFactory.createBookstoreExecution_exec2_1__crm_getOrders(
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry2_1__crm_getOrders, // tin
 				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit2_1__crm_getOrders, // tout
 				true); // assumed
 
 		this.exec3_2__catalog_getBook = this.bookstoreExecutionFactory.createBookstoreExecution_exec3_2__catalog_getBook(
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry3_2__catalog_getBook, // tin
 				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit3_2__catalog_getBook, // tout
 				false); // assumed
 		this.exec3_2__catalog_getBook_assumed = this.bookstoreExecutionFactory.createBookstoreExecution_exec3_2__catalog_getBook(
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry3_2__catalog_getBook, // tin
 				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit3_2__catalog_getBook, // tout
 				true); // assumed
@@ -132,8 +132,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 	 */
 	private ExecutionTrace genValidBookstoreTrace() throws InvalidTraceException {
 		// Create an Execution Trace and add Executions in arbitrary order
-		final ExecutionTrace executionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID);
+		final ExecutionTrace executionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID);
 
 		executionTrace.add(this.exec3_2__catalog_getBook);
 		executionTrace.add(this.exec2_1__crm_getOrders);
@@ -150,13 +150,13 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 	public void testValidTraceWithBeforeAndAfterOperationEvents() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException { // NOPMD
 		// Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		final TraceEventRecords traceEvents = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(this.exec0_0__bookstore_searchBook.getTin(),
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME);
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME);
 		final ExecutionTrace expectedExecutionTrace;
 		{ // NOCS
 			// Create an Execution Trace and add Executions in arbitrary order
-			expectedExecutionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-					TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID);
+			expectedExecutionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+					TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID);
 
 			expectedExecutionTrace.add(this.exec3_2__catalog_getBook_assumed); // assumed because no call event
 			expectedExecutionTrace.add(this.exec2_1__crm_getOrders_assumed); // assumed because no call event
@@ -175,8 +175,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 			AnalysisConfigurationException {
 		// Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		final TraceEventRecords traceEvents = BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(this.exec0_0__bookstore_searchBook.getTin(),
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME);
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME);
 		final ExecutionTrace expectedExecutionTrace = this.genValidBookstoreTrace();
 
 		this.checkTrace(traceEvents, expectedExecutionTrace);
@@ -191,8 +191,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 	 * @return An execution trace from the Bookstore example.
 	 */
 	public ExecutionTrace genValidBookstoreTraceNoExitGetOrders() throws InvalidTraceException {
-		final ExecutionTrace executionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID);
+		final ExecutionTrace executionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID);
 
 		final long initialTimestamp = 1 * (1000 * 1000);
 
@@ -202,8 +202,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec2_1__crm_getOrders(
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 						// The assumed entry timestamp is the exit timestamp of the previous call
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders, // tin
 						// We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is the return time of the wrapping
@@ -221,13 +221,13 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 			AnalysisConfigurationException {
 		// Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		final TraceEventRecords traceEvents = BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(this.exec0_0__bookstore_searchBook.getTin(),
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME);
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME);
 		final ExecutionTrace expectedExecutionTrace;
 
 		{ // NOCS
-			expectedExecutionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-					TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID);
+			expectedExecutionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+					TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID);
 
 			final long initialTimestamp = 1 * (1000 * 1000);
 
@@ -237,8 +237,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 
 			expectedExecutionTrace.add(
 					this.bookstoreExecutionFactory.createBookstoreExecution_exec2_1__crm_getOrders(
-							TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-							TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+							TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+							TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 							// The assumed entry timestamp is the exit timestamp of the previous call
 							initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders, // tin
 							// We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is the return time of the wrapping
@@ -265,22 +265,22 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 	 */
 	private ExecutionTrace genValidBookstoreTraceEntryCallExit() throws InvalidTraceException {
 		// Create an Execution Trace and add Executions in arbitrary order
-		final ExecutionTrace executionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID);
+		final ExecutionTrace executionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID);
 
 		final long initialTimestamp = this.exec0_0__bookstore_searchBook.getTin();
 
 		// Manually create Executions for a trace
 		executionTrace.add(
-				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook, // tin
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook, // tout
 						false)); // assumed
 
 		executionTrace.add(
-				this.bookstoreExecutionFactory.createBookstoreExecution_exec1_1__catalog_getBook(TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+				this.bookstoreExecutionFactory.createBookstoreExecution_exec1_1__catalog_getBook(TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call1_1__catalog_getBook, // tin
 						// We will only have a (before) call to Catalog.getBook(..), hence the assumed return timestamp is the return time of the wrapping
 						// Bookstore.searchBook(..) execution:
@@ -297,8 +297,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 	public void testValidSyncTraceSimpleEntryCallExit() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException { // NOPMD
 		// Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		final TraceEventRecords traceEvents = BookstoreEventRecordFactory.validSyncTraceSimpleEntryCallExit(this.exec0_0__bookstore_searchBook.getTin(),
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME);
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME);
 		final ExecutionTrace expectedExecutionTrace = this.genValidBookstoreTraceEntryCallExit();
 
 		this.checkTrace(traceEvents, expectedExecutionTrace);
@@ -309,8 +309,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 		// Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		final TraceEventRecords traceEvents = BookstoreEventRecordFactory.validSyncTraceSimpleEntryCallReturnCallCallExit(
 				this.exec0_0__bookstore_searchBook.getTin(),
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME);
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME);
 		final ExecutionTrace expectedExecutionTrace = this.genValidBookstoreTraceSimpleEntryCallReturnCallCallExit();
 
 		this.checkTrace(traceEvents, expectedExecutionTrace);
@@ -320,8 +320,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 	public void testValidSyncTraceSimpleEntryCallCallExit() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException { // NOPMD
 		// Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		final TraceEventRecords traceEvents = BookstoreEventRecordFactory.validSyncTraceSimpleEntryCallCallExit(this.exec0_0__bookstore_searchBook.getTin(),
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME);
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME);
 		final ExecutionTrace expectedExecutionTrace = this.genValidSyncTraceSimpleEntryCallCallExit();
 
 		this.checkTrace(traceEvents, expectedExecutionTrace);
@@ -331,8 +331,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 	public void testValidSyncTraceSimpleCallCall() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException { // NOPMD
 		// Create an EventRecordTrace, containing only CallOperation events.
 		final TraceEventRecords traceEvents = BookstoreEventRecordFactory.validSyncTraceSimpleCallCall(this.exec0_0__bookstore_searchBook.getTin(),
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME);
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME);
 		final ExecutionTrace expectedExecutionTrace = this.genValidSyncTraceSimpleCallCall();
 
 		this.checkTrace(traceEvents, expectedExecutionTrace);
@@ -350,30 +350,30 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 	 */
 	private ExecutionTrace genValidBookstoreTraceSimpleEntryCallReturnCallCallExit() throws InvalidTraceException {
 		// Create an Execution Trace and add Executions in arbitrary order
-		final ExecutionTrace executionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID);
+		final ExecutionTrace executionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID);
 
 		final long initialTimestamp = this.exec0_0__bookstore_searchBook.getTin();
 
 		// Manually create Executions for a trace
 		executionTrace.add(
-				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook, // tin
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook, // tout
 						false)); // assumed
 
 		executionTrace.add(
-				this.bookstoreExecutionFactory.createBookstoreExecution_exec1_1__catalog_getBook(TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+				this.bookstoreExecutionFactory.createBookstoreExecution_exec1_1__catalog_getBook(TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call1_1__catalog_getBook, // tin
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders, // tout
 						true)); // assumed, because only call no entry
 
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec2_1__crm_getOrders(
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 						// The assumed entry timestamp is the exit timestamp of the previous call
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders, // tin
 						// We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is the return time of the wrapping
@@ -399,22 +399,22 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 	 */
 	private ExecutionTrace genValidSyncTraceSimpleEntryCallCallExit() throws InvalidTraceException {
 		// Create an Execution Trace and add Executions in arbitrary order
-		final ExecutionTrace executionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID);
+		final ExecutionTrace executionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID);
 
 		final long initialTimestamp = this.exec0_0__bookstore_searchBook.getTin();
 
 		// Manually create Executions for a trace
 		executionTrace.add(
-				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook, // tin
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook, // tout
 						false)); // assumed
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_crm_getOrders(
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 						// The assumed entry timestamp is the exit timestamp of the previous call
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders, // tin
 						// We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is the return time of the wrapping
@@ -425,8 +425,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 						true)); // assumed, because only call no entry
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_catalog_getBook(
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook, // tin
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook, // tout
 						2, // eoi
@@ -450,16 +450,16 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 	 */
 	private ExecutionTrace genValidSyncTraceSimpleCallCall() throws InvalidTraceException {
 		// Create an Execution Trace and add Executions in arbitrary order
-		final ExecutionTrace executionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-				TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID);
+		final ExecutionTrace executionTrace = new ExecutionTrace(TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+				TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID);
 
 		final long initialTimestamp = this.exec0_0__bookstore_searchBook.getTin();
 
 		// Manually create Executions for a trace
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_crm_getOrders(
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 						// The assumed entry timestamp is the exit timestamp of the previous call
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders, // tin
 						// We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is the return time of the wrapping
@@ -470,8 +470,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 						true));
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_catalog_getBook(
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.TRACE_ID,
-						TraceEventRecords2ExecutionAndMessageTraceFilterTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceFilterTest.HOSTNAME,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.TRACE_ID,
+						TraceEventRecords2ExecutionAndMessageTraceStageTest.SESSION_ID, TraceEventRecords2ExecutionAndMessageTraceStageTest.HOSTNAME,
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook, // tin
 						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook, // tout
 						1, 1, true));
@@ -496,7 +496,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilterTest {
 	private void checkTrace(final TraceEventRecords traceEvents, final ExecutionTrace expectedExecutionTrace) throws InvalidTraceException,
 			IllegalStateException, AnalysisConfigurationException {
 
-		final TraceEventRecords2ExecutionAndMessageTraceFilter filter = new TraceEventRecords2ExecutionAndMessageTraceFilter(this.systemEntityFactory, false, false,
+		final TraceEventRecords2ExecutionAndMessageTraceStage filter = new TraceEventRecords2ExecutionAndMessageTraceStage(this.systemEntityFactory, false, false,
 				false);
 
 		StageTester.test(filter).and().send(traceEvents).to(filter.getInputPort()).and().start();

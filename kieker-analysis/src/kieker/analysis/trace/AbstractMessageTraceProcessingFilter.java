@@ -27,7 +27,7 @@ import kieker.model.system.model.MessageTrace;
  *
  * @since 1.1
  */
-public abstract class AbstractMessageTraceProcessingFilter extends AbstractTraceProcessingFilter<MessageTrace> {
+public abstract class AbstractMessageTraceProcessingFilter extends AbstractTraceProcessingStage<MessageTrace> {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.

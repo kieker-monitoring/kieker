@@ -67,7 +67,9 @@ public class DynamicEventDispatcher extends AbstractConsumerStage<Object> {
 	public DynamicEventDispatcher(final IEventMatcher<? extends Object> rootEventMatcher, final boolean countEvents,
 			final boolean reportUnknown, final boolean outputOther) {
 		this.rootEventMatcher = rootEventMatcher;
-		this.assignPorts(rootEventMatcher);
+		if (rootEventMatcher != null) {
+			this.assignPorts(rootEventMatcher);
+		}
 		this.countEvents = countEvents;
 		this.reportUnknown = reportUnknown;
 		this.outputOther = outputOther;
@@ -112,7 +114,13 @@ public class DynamicEventDispatcher extends AbstractConsumerStage<Object> {
 
 	private OutputPort<? extends Object> selectOutputPort(final IEventMatcher<? extends Object> eventMatcher,
 			final Object event) {
-		if (eventMatcher.matchEvent(event)) {
+		if (eventMatcher == null) {
+			if (this.outputOther) {
+				return this.outputOtherPort;
+			} else {
+				return null;
+			}
+		} else if (eventMatcher.matchEvent(event)) {
 			return eventMatcher.getOutputPort();
 		} else {
 			final IEventMatcher<? extends Object> nextMatcher = eventMatcher.getNextMatcher();
@@ -126,13 +134,18 @@ public class DynamicEventDispatcher extends AbstractConsumerStage<Object> {
 		}
 	}
 
+	public OutputPort<Object> getOutputOtherPort() {
+		return this.outputOtherPort;
+	}
+
 	public long getEventCount() {
 		return this.eventCount;
 	}
 
 	@Override
 	public void onTerminating() {
-		DynamicEventDispatcher.LOGGER.info("Records processed in total {}.", this.eventCount);
+		this.logger.debug("Terminating {}", this.getClass().getCanonicalName());
+		this.logger.info("Records processed in total {}.", this.eventCount);
 		super.onTerminating();
 	}
 

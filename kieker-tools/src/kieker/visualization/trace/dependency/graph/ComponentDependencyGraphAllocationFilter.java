@@ -100,4 +100,9 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 		this.reportSuccess(t.getTraceId());
 	}
 
+	@Override
+	protected void onTerminating() {
+		this.getOutputPort().send(this.getGraph());
+		super.onTerminating();
+	}
 }

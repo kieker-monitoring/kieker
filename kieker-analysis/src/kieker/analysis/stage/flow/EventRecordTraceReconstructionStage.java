@@ -17,23 +17,22 @@ package kieker.analysis.stage.flow;
 
 import java.util.concurrent.TimeUnit;
 
-import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.TraceMetadata;
+import kieker.common.record.flow.IFlowRecord;
 
 import teetime.framework.InputPort;
 
 /**
  * Trace Reconstruction Filter (Event) to reconstruct event based (flow) traces
- * based on TraceRecords.
+ * based on single flow records.
  *
  * @author Reiner Jung
  *
  * @since 1.15
  */
-public class TraceRecordsTraceReconstructionFilter extends AbstractEventRecordTraceReconstructionFilter {
+public final class EventRecordTraceReconstructionStage extends AbstractEventRecordTraceReconstructionStage {
 
 	/** Input port receiving the trace records. */
-	private final InputPort<TraceEventRecords> traceEventRecordsInputPort = this.createInputPort(TraceEventRecords.class);
+	private final InputPort<IFlowRecord> traceRecordsInputPort = this.createInputPort(IFlowRecord.class);
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -47,7 +46,7 @@ public class TraceRecordsTraceReconstructionFilter extends AbstractEventRecordTr
 	 * @param maxTraceTimeout
 	 *            max trace timeout, if set to Long.MAX_VALUE no timeout is used
 	 */
-	public TraceRecordsTraceReconstructionFilter(final TimeUnit timeUnit, final boolean repairEventBasedTraces, final long maxTraceDuration,
+	public EventRecordTraceReconstructionStage(final TimeUnit timeUnit, final boolean repairEventBasedTraces, final long maxTraceDuration,
 			final long maxTraceTimeout) {
 		super(timeUnit, repairEventBasedTraces, maxTraceDuration, maxTraceTimeout);
 	}
@@ -56,22 +55,22 @@ public class TraceRecordsTraceReconstructionFilter extends AbstractEventRecordTr
 	protected void execute() throws Exception {
 		super.execute();
 
-		final TraceEventRecords traceEventRecords = this.traceEventRecordsInputPort.receive();
-		if (traceEventRecords != null) {
-			final TraceMetadata trace = traceEventRecords.getTraceMetadata();
-			if (null != trace) {
-				this.newFlowRecordEvent(trace);
-			}
-			for (final AbstractTraceEvent record : traceEventRecords.getTraceEvents()) {
-				this.newFlowRecordEvent(record);
-			}
+		final IFlowRecord traceRecords = this.traceRecordsInputPort.receive();
+		if (traceRecords != null) {
+			this.newFlowRecordEvent(traceRecords);
 		}
 	}
 
+	@Override
+	protected void onTerminating() {
+		this.logger.debug("Terminating {}", this.getClass().getCanonicalName());
+		super.onTerminating();
+	}
+
 	/**
-	 * @return Return reconstruct traces from incoming traces port.
+	 * @return Return reconstruct traces from incoming flow records port.
 	 */
-	public InputPort<TraceEventRecords> getTraceEventRecordsInputPort() {
-		return this.traceEventRecordsInputPort;
+	public InputPort<IFlowRecord> getTraceRecordsInputPort() {
+		return this.traceRecordsInputPort;
 	}
 }

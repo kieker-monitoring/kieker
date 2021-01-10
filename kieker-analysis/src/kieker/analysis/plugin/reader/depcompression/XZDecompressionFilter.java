@@ -21,7 +21,6 @@ import java.io.InputStream;
 
 import org.tukaani.xz.XZInputStream;
 
-import kieker.common.configuration.Configuration;
 import kieker.common.util.filesystem.FSUtil;
 
 /**
@@ -34,37 +33,31 @@ import kieker.common.util.filesystem.FSUtil;
  */
 public class XZDecompressionFilter extends AbstractDecompressionFilter {
 
-	public static final String PREFIX = XZDecompressionFilter.class.getCanonicalName();
-
-	public static final String BUFFER_SIZE = PREFIX + "bufferSize";
-	public static final int DEFAULT_BUFFER_SIZE = 1024 * 1024;
-
-	private final int bufferSize;
+	public static final int BUFFER_SIZE = 1024 * 1024;
 
 	/**
 	 * Create a new XZ decompression filter.
 	 *
-	 * @param configuration
+	 * @param settings
 	 *            configuration settings
 	 */
-	public XZDecompressionFilter(final Configuration configuration) {
-		super(configuration);
-		this.bufferSize = configuration.getIntProperty(BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
+	public XZDecompressionFilter() {
+		super();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see kieker.analysis.plugin.reader.depcompression.IDecompressionFilter#chainInputStream(java.io.OutputStream)
 	 */
 	@Override
 	public InputStream chainInputStream(final InputStream inputStream) throws IOException {
-		return new BufferedInputStream(new XZInputStream(inputStream, this.bufferSize));
+		return new BufferedInputStream(new XZInputStream(inputStream, BUFFER_SIZE));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see kieker.analysis.plugin.reader.depcompression.IDecompressionFilter#getExtension()
 	 */
 	@Override

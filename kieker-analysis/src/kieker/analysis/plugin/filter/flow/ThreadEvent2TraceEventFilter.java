@@ -38,7 +38,7 @@ import kieker.common.record.misc.ThreadMetaData;
  * @author Christian Wulf (chw)
  *
  * @since 1.13
- * @deprecated 1.15 ported teetime kieker.analysis.filter.flow
+ * @deprecated 1.15 ported teetime kieker.analysis.stage.flow
  */
 @Deprecated
 @Plugin(name = "Thread Event to Trace Event Filter (Event)", description = "Filter to transform threadId-based events to traceId-based events", outputPorts = {

@@ -17,9 +17,12 @@
 package kieker.model.repository;
 
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 
 import kieker.model.system.model.AllocationComponent;
@@ -163,18 +166,19 @@ public class SystemModelRepository extends AbstractRepository {
 	/**
 	 * Writes the contents of this system model to an HTML file.
 	 *
-	 * @param outputFn
-	 *            file system location of the output file (as accepted by
-	 *            {@link java.io.File#File(String)}).
+	 * @param outputFile
+	 *            file system location of the output file
 	 *
+	 * @throws IOException
+	 *             If stream cannot be created.
 	 * @throws FileNotFoundException
 	 *             If the given file is somehow invalid.
 	 * @throws UnsupportedEncodingException
 	 *             If the used default encoding is not
 	 *             supported.
 	 */
-	public void saveSystemToHTMLFile(final String outputFn) throws FileNotFoundException, UnsupportedEncodingException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFn), false, SystemModelRepository.ENCODING);
+	public void saveSystemToHTMLFile(final Path outputFile) throws IOException, FileNotFoundException, UnsupportedEncodingException {
+		final PrintStream ps = new PrintStream(Files.newOutputStream(outputFile, StandardOpenOption.CREATE), true, ENCODING);
 		ps.println("<html><head><title>System Model Reconstructed by Kieker.TraceAnalysis</title>");
 		ps.println("<style type=\"text/css\">\n"
 				+ ".colTitle {font-size: 11px; background: linear-gradient(to bottom, #FDFDFD, #DDDDDD) transparent }\n"

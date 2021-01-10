@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.common.configuration.Configuration;
 import kieker.common.registry.reader.ReaderRegistry;
 import kieker.common.util.filesystem.FSUtil;
 
@@ -43,17 +42,14 @@ public class TextMapDeserializer extends AbstractMapDeserializer {
 
 	/**
 	 * Create a new map file deserializer.
-	 *
-	 * @param configuration
-	 *            configuration of the text deserializer.
 	 */
-	public TextMapDeserializer(final Configuration configuration) {
-		super(configuration);
+	public TextMapDeserializer() {
+		super();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see kieker.analysisteetime.plugin.reader.filesystem.AbstractMapReader#processDataStream(java.io.File, kieker.common.registry.reader.ReaderRegistry)
 	 */
 	@Override

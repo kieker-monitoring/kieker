@@ -26,7 +26,7 @@ import kieker.model.system.model.ExecutionTrace;
  *
  * @since 1.1
  */
-public abstract class AbstractExecutionTraceProcessingFilter extends AbstractTraceProcessingFilter<ExecutionTrace> {
+public abstract class AbstractExecutionTraceProcessingFilter extends AbstractTraceProcessingStage<ExecutionTrace> {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.

@@ -97,4 +97,11 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 
 		this.reportSuccess(t.getTraceId());
 	}
+
+	@Override
+	protected void onTerminating() {
+		this.logger.debug("Terminating {}", this.getClass().getCanonicalName());
+		this.getOutputPort().send(this.getGraph());
+		super.onTerminating();
+	}
 }

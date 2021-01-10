@@ -16,6 +16,7 @@
 package kieker.visualization.trace;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -138,7 +139,7 @@ public class GraphWriterPlugin extends AbstractConsumerStage<AbstractGraph<?, ?,
 	protected void execute(final AbstractGraph<?, ?, ?> graph) throws Exception {
 		final AbstractGraphFormatter<?> graphFormatter = GraphWriterPlugin.createFormatter(graph);
 		final String specification = graphFormatter.createFormattedRepresentation(graph, this.includeWeights, this.useShortLabels, this.plotLoops);
-		final String fileName = this.outputPathName + this.getOutputFileName(graphFormatter);
+		final String fileName = this.outputPathName + File.separator + this.getOutputFileName(graphFormatter);
 		BufferedWriter writer = null;
 		try {
 			writer = Files.newBufferedWriter(Paths.get(fileName));

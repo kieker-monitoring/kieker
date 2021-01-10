@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
 
-import kieker.common.configuration.Configuration;
 import kieker.common.util.filesystem.FSUtil;
 
 /**
@@ -31,37 +30,28 @@ import kieker.common.util.filesystem.FSUtil;
  */
 public class GZipDecompressionFilter extends AbstractDecompressionFilter {
 
-	public static final String PREFIX = GZipDecompressionFilter.class.getCanonicalName();
-
-	public static final String BUFFER_SIZE = PREFIX + "bufferSize";
-	public static final int DEFAULT_BUFFER_SIZE = 1024 * 1024;
-
-	private final int bufferSize;
+	public static final int BUFFER_SIZE = 1024 * 1024;
 
 	/**
 	 * Create new gzip decompression filter.
-	 *
-	 * @param configuration
-	 *            configuration for the filter
 	 */
-	public GZipDecompressionFilter(final Configuration configuration) {
-		super(configuration);
-		this.bufferSize = configuration.getIntProperty(BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
+	public GZipDecompressionFilter() {
+		super();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see kieker.analysis.plugin.reader.depcompression.IDecompressionFilter#chainInputStream(java.io.OutputStream)
 	 */
 	@Override
 	public InputStream chainInputStream(final InputStream inputStream) throws IOException {
-		return new BufferedInputStream(new GZIPInputStream(inputStream), this.bufferSize);
+		return new BufferedInputStream(new GZIPInputStream(inputStream), BUFFER_SIZE);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see kieker.analysis.plugin.reader.depcompression.IDecompressionFilter#getExtension()
 	 */
 	@Override

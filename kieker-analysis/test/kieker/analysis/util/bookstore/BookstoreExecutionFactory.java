@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.analysis.util.bookstore;
 
-import kieker.analysis.trace.AbstractTraceAnalysisFilter;
+import kieker.analysis.trace.AbstractTraceAnalysisStage;
 import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.Execution;
@@ -67,7 +67,7 @@ public class BookstoreExecutionFactory {
 		final ClassOperationSignaturePair classOpSignaturePair = ClassOperationSignaturePair
 				.splitOperationSignatureStr(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK);
 
-		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.systemEntityFactory, hostname, classOpSignaturePair.getFqClassname(),
+		return AbstractTraceAnalysisStage.createExecutionByEntityNames(this.systemEntityFactory, hostname, classOpSignaturePair.getFqClassname(),
 				classOpSignaturePair.getSignature(), traceId, sessionId, BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI,
 				BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS, tin, tout, assumed);
 	}
@@ -95,7 +95,7 @@ public class BookstoreExecutionFactory {
 		final ClassOperationSignaturePair classOpSignaturePair = ClassOperationSignaturePair
 				.splitOperationSignatureStr(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
 
-		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.systemEntityFactory, hostname, classOpSignaturePair.getFqClassname(),
+		return AbstractTraceAnalysisStage.createExecutionByEntityNames(this.systemEntityFactory, hostname, classOpSignaturePair.getFqClassname(),
 				classOpSignaturePair.getSignature(), traceId, sessionId, BookstoreOperationExecutionRecordFactory.EXEC1_1__CATALOG_GETBOOK_EOI,
 				BookstoreOperationExecutionRecordFactory.EXEC1_1__CATALOG_GETBOOK_ESS, tin, tout, assumed);
 	}
@@ -128,7 +128,7 @@ public class BookstoreExecutionFactory {
 		final ClassOperationSignaturePair classOpSignaturePair = ClassOperationSignaturePair
 				.splitOperationSignatureStr(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS);
 
-		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.systemEntityFactory, hostname, classOpSignaturePair.getFqClassname(),
+		return AbstractTraceAnalysisStage.createExecutionByEntityNames(this.systemEntityFactory, hostname, classOpSignaturePair.getFqClassname(),
 				classOpSignaturePair.getSignature(), traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
@@ -185,7 +185,7 @@ public class BookstoreExecutionFactory {
 		final ClassOperationSignaturePair classOpSignaturePair = ClassOperationSignaturePair
 				.splitOperationSignatureStr(BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK);
 
-		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.systemEntityFactory, hostname, classOpSignaturePair.getFqClassname(),
+		return AbstractTraceAnalysisStage.createExecutionByEntityNames(this.systemEntityFactory, hostname, classOpSignaturePair.getFqClassname(),
 				classOpSignaturePair.getSignature(), traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 

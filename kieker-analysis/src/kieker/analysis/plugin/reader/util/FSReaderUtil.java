@@ -41,7 +41,7 @@ public final class FSReaderUtil {
 		// private default constructor for factory class.
 	}
 
-	private static String getExtension(final String name) {
+	public static String getExtension(final String name) {
 		final int suffixStartPosition = name.lastIndexOf('.');
 
 		if (suffixStartPosition == -1) {

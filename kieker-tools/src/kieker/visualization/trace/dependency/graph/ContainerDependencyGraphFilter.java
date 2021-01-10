@@ -87,4 +87,10 @@ public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilte
 		this.reportSuccess(t.getTraceId());
 	}
 
+	@Override
+	protected void onTerminating() {
+		this.getOutputPort().send(this.getGraph());
+		super.onTerminating();
+	}
+
 }

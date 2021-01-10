@@ -18,7 +18,6 @@ package kieker.analysis.source.file;
 import java.io.IOException;
 import java.io.InputStream;
 
-import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.registry.reader.ReaderRegistry;
 
@@ -39,12 +38,10 @@ public abstract class AbstractEventDeserializer {
 	/**
 	 * Create an abstract event deserializer.
 	 *
-	 * @param configuration
-	 *            configuration for the deserializer.
 	 * @param registry
 	 *            string registry to be used.
 	 */
-	public AbstractEventDeserializer(final Configuration configuration, final ReaderRegistry<String> registry) {
+	public AbstractEventDeserializer(final ReaderRegistry<String> registry) {
 		this.registry = registry;
 	}
 

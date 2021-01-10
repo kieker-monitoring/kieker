@@ -23,7 +23,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.trace.reconstruction.TraceReconstructionFilter;
+import kieker.analysis.trace.execution.ExecutionRecordTransformationStage;
+import kieker.analysis.trace.reconstruction.TraceReconstructionStage;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.Execution;
@@ -177,13 +178,13 @@ public class SessionReconstructionFilterTest {
 
 		// TODO this test tests three filters together. This must be refactored and proper input and output data must be defined
 
-		final ExecutionRecordTransformationFilter executionsRecordTransformationFilter = new ExecutionRecordTransformationFilter(repository);
+		final ExecutionRecordTransformationStage executionsRecordTransformationFilter = new ExecutionRecordTransformationStage(repository);
 
 		final List<Execution> executions = new ArrayList<>();
 		StageTester.test(executionsRecordTransformationFilter).and().send(records).to(executionsRecordTransformationFilter.getInputPort()).and().receive(executions)
 				.from(executionsRecordTransformationFilter.getOutputPort()).start();
 
-		final TraceReconstructionFilter traceReconstructionFilter = new TraceReconstructionFilter(repository, TimeUnit.MILLISECONDS, false, Long.MAX_VALUE);
+		final TraceReconstructionStage traceReconstructionFilter = new TraceReconstructionStage(repository, TimeUnit.MILLISECONDS, false, Long.MAX_VALUE);
 
 		final List<ExecutionTrace> executionTraces = new ArrayList<>();
 		StageTester.test(traceReconstructionFilter).and().send(executions).to(traceReconstructionFilter.getInputPort()).and().receive(executionTraces)

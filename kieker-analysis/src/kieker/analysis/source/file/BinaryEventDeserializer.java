@@ -23,7 +23,6 @@ import java.nio.ByteBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kieker.common.configuration.Configuration;
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
@@ -56,10 +55,9 @@ public class BinaryEventDeserializer extends AbstractEventDeserializer {
 
 	private final ByteBuffer buffer;
 
-	public BinaryEventDeserializer(final Configuration configuration, final ReaderRegistry<String> registry) {
-		super(configuration, registry);
-		final int bufferSize = configuration.getIntProperty(BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
-		this.buffer = ByteBuffer.allocate(bufferSize);
+	public BinaryEventDeserializer(final Integer bufferSize, final ReaderRegistry<String> registry) {
+		super(registry);
+		this.buffer = ByteBuffer.allocate(bufferSize == null ? DEFAULT_BUFFER_SIZE : bufferSize);
 	}
 
 	@Override
