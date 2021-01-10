@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -55,6 +56,7 @@ public class BasicJMSWriterReaderTest {
 		// empty constructor
 	}
 
+	@Ignore // NOPMD ignore this test, as it is broken. Port either to a integration test or to a proper Junit test
 	@Test
 	public void testWriteRead() throws InterruptedException, AnalysisConfigurationException { // NOPMD (JUnitTestsShouldIncludeAssert)
 		final List<IMonitoringRecord> inputRecords = this.provideEvents();
