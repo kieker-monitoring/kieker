@@ -67,7 +67,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	/** The name of the property determining the behavior of a full list. */
 	public static final String CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR = "listFullBehavior";
 	/** The default value for the behavior of a full list (drop oldest). */
-	public static final String CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR = "dropOldest"; // must really be a String here
+	public static final String CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR = "DROP_OLDEST"; // must really be a String here
 
 	private final LinkedList<T> list; // NOCS NOPMD (we actually need LinkedLIst here, no good interface is provided)
 
