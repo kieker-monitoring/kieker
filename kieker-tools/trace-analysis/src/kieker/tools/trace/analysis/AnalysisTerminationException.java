@@ -25,4 +25,13 @@ package kieker.tools.trace.analysis;
 @Deprecated
 public class AnalysisTerminationException extends Exception {
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 16849274046247645L;
+
+	public AnalysisTerminationException(final String message) {
+		super(message);
+	}
+
 }

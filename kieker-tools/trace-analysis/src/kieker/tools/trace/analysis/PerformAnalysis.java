@@ -17,9 +17,11 @@ package kieker.tools.trace.analysis;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -289,7 +291,7 @@ public class PerformAnalysis {
 	}
 
 	private boolean checkTerminationState(final String pathPrefix, final List<AbstractTraceProcessingFilter> allTraceProcessingComponents)
-			throws Exception {
+			throws AnalysisTerminationException, AnalysisConfigurationException, IOException {
 		boolean retVal = true;
 
 		int numErrorCount = 0;
@@ -317,7 +319,7 @@ public class PerformAnalysis {
 			}
 		}
 		if (!this.parameters.isIgnoreInvalidTraces() && (numErrorCount > 0)) {
-			throw new Exception(numErrorCount + " errors occured in trace processing components");
+			throw new AnalysisTerminationException(numErrorCount + " errors occured in trace processing components");
 		}
 
 		return retVal;
@@ -1363,7 +1365,7 @@ public class PerformAnalysis {
 		final String outputFn = new File(outputFnPrefixL).getCanonicalPath();
 		PrintStream ps = null;
 		try {
-			ps = new PrintStream(new FileOutputStream(outputFn), false, ENCODING);
+			ps = new PrintStream(Files.newOutputStream(Paths.get(outputFn), StandardOpenOption.CREATE), false, ENCODING);
 			int numClasses = 0;
 			final Map<ExecutionTrace, Integer> classMap = traceEquivFilter.getEquivalenceClassMap(); // NOPMD
 																										// (UseConcurrentHashMap)

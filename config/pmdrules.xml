@@ -64,6 +64,8 @@
 	<rule ref="category/java/design.xml">
 		<exclude name="DataClass"/>
 		<exclude name="LawOfDemeter"/>
+		<exclude name="ExcessiveImports"/>
+		<exclude name="TooManyFields"/>
 	</rule>
 
 	<rule ref="category/java/documentation.xml/CommentRequired">

@@ -47,7 +47,9 @@ public class TraceAnalysisToolNewMain extends AbstractService<TraceAnalysisConfi
 
 	private TraceAnalysisConfiguration teetimeConfiguration;
 
-	public TraceAnalysisToolNewMain() {}
+	public TraceAnalysisToolNewMain() {
+		// Nothing to do here
+	}
 
 	/**
 	 * Configure and execute the TCP Kieker data collector.

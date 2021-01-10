@@ -357,7 +357,6 @@ public class TraceAnalysisConfiguration extends Configuration {
 
 	private void createPrintTraceEquivalenceClasses(final SystemModelRepository systemRepository, final Distributor<ExecutionTrace> executionTraceDistributor,
 			final String pathPrefix, final TraceEquivalenceClassModes equivalenceClassMode) {
-		final TraceEquivalenceClassFilter traceAllocationEquivalenceClassFilter = new TraceEquivalenceClassFilter(systemRepository, equivalenceClassMode);
 		String filePrefix;
 		switch (equivalenceClassMode) {
 		case ASSEMBLY:
@@ -370,6 +369,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 		default:
 			return;
 		}
+		final TraceEquivalenceClassFilter traceAllocationEquivalenceClassFilter = new TraceEquivalenceClassFilter(systemRepository, equivalenceClassMode);
 		final EquivalenceClassWriter equivalenceClassWriter = new EquivalenceClassWriter(new File(pathPrefix + filePrefix + TXT_SUFFIX));
 
 		this.connectPorts(executionTraceDistributor.getNewOutputPort(), traceAllocationEquivalenceClassFilter.getInputPort());
@@ -456,7 +456,7 @@ public class TraceAnalysisConfiguration extends Configuration {
 
 						plugin.addDecorator(new ResponseTimeColorNodeDecorator(threshold));
 					} catch (final NumberFormatException exc) {
-						LOGGER.error("Failed to parse int value of property " + "threshold(ms) : " + thresholdStringStr);
+						LOGGER.error("Failed to parse int value of property threshold(ms) : {}", thresholdStringStr);
 					}
 				} else {
 					LOGGER.warn("Unknown decoration name '{}'.", currentDecoratorStr);
