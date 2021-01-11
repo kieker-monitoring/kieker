@@ -23,7 +23,7 @@ package kieker.tools.trace.analysis;
  *
  * @since 1.2
  */
-public final class Constants {
+public final class StringConstants {
 
 	/** Command for the input directories containing monitoring records. */
 	public static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
@@ -113,5 +113,5 @@ public final class Constants {
 	/**
 	 * Private constructor to avoid instantiation.
 	 */
-	private Constants() {}
+	private StringConstants() {}
 }

@@ -28,9 +28,9 @@ import kieker.monitoring.core.signaturePattern.SignatureFactory;
 /**
  * Logs memory and swap statistics retrieved from {@link Mem} and {@link Swap},
  * as {@link MemSwapUsageRecord}s via {@link kieker.monitoring.core.controller.IMonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)} .
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.3
  */
 public class MemSwapUsageSampler extends AbstractSigarSampler {
@@ -39,7 +39,7 @@ public class MemSwapUsageSampler extends AbstractSigarSampler {
 	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy} instance used to retrieve the sensor data. Users
 	 * should use the factory method {@link kieker.monitoring.sampler.sigar.SigarSamplerFactory#createSensorMemSwapUsage()} to acquire an
 	 * instance rather than calling this constructor directly.
-	 * 
+	 *
 	 * @param sigar
 	 *            The sigar proxy which will be used to retrieve the data.
 	 */

@@ -27,8 +27,8 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.common.util.Version;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 import kieker.monitoring.timer.ITimeSource;
@@ -86,7 +86,7 @@ public final class MonitoringController extends AbstractController implements IM
 	 *
 	 * @return A new controller.
 	 */
-	public static final MonitoringController createInstance(final Configuration configuration) {
+	public static MonitoringController createInstance(final Configuration configuration) {
 		final MonitoringController monitoringController;
 		// try {
 		monitoringController = new MonitoringController(configuration);
@@ -178,7 +178,7 @@ public final class MonitoringController extends AbstractController implements IM
 	 *
 	 * @return the version name
 	 */
-	public static final String getVersion() {
+	public static String getVersion() {
 		return Version.getVERSION();
 	}
 
@@ -190,12 +190,12 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	protected final void init() {
+	protected void init() {
 		// do nothing
 	}
 
 	@Override
-	protected final void cleanup() {
+	protected void cleanup() {
 		MonitoringController.LOGGER.info("Shutting down Monitoring Controller ({})", this.getName());
 		// this.saveMetadataAsRecord();
 		this.probeController.terminate();
@@ -208,7 +208,7 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public final String toString() {
+	public String toString() {
 		final StringBuilder sb = new StringBuilder(2048).append("Current State of kieker.monitoring (")
 				.append(MonitoringController.getVersion()).append(") ").append(this.stateController.toString())
 				.append(this.jmxController.toString()).append(this.timeSourceController.toString())
@@ -225,7 +225,7 @@ public final class MonitoringController extends AbstractController implements IM
 	 * @return true on success; false in case of an error.
 	 */
 	@Override
-	public final boolean sendMetadataAsRecord() {
+	public boolean sendMetadataAsRecord() {
 		final ITimeSource timesource = this.getTimeSource();
 		return this.newMonitoringRecord(new KiekerMetadataRecord(null, // Kieker version will be filled in
 				this.getName(), // controllerName
@@ -246,43 +246,43 @@ public final class MonitoringController extends AbstractController implements IM
 	// #############################
 
 	@Override
-	public final boolean terminateMonitoring() {
+	public boolean terminateMonitoring() {
 		MonitoringController.LOGGER.info("Terminating monitoring...");
 		return this.stateController.terminateMonitoring();
 	}
 
 	@Override
-	public final boolean isMonitoringTerminated() {
+	public boolean isMonitoringTerminated() {
 		return this.stateController.isMonitoringTerminated();
 	}
 
 	@Override
-	public final boolean enableMonitoring() {
+	public boolean enableMonitoring() {
 		return this.stateController.enableMonitoring();
 	}
 
 	@Override
-	public final boolean disableMonitoring() {
+	public boolean disableMonitoring() {
 		return this.stateController.disableMonitoring();
 	}
 
 	@Override
-	public final boolean isMonitoringEnabled() {
+	public boolean isMonitoringEnabled() {
 		return this.stateController.isMonitoringEnabled();
 	}
 
 	@Override
-	public final boolean isDebug() {
+	public boolean isDebug() {
 		return this.stateController.isDebug();
 	}
 
 	@Override
-	public final String getName() {
+	public String getName() {
 		return this.stateController.getName();
 	}
 
 	@Override
-	public final String getHostname() {
+	public String getHostname() {
 		return this.stateController.getHostname();
 	}
 
@@ -292,22 +292,22 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public final int incExperimentId() {
+	public int incExperimentId() {
 		return this.stateController.incExperimentId();
 	}
 
 	@Override
-	public final void setExperimentId(final int newExperimentID) {
+	public void setExperimentId(final int newExperimentID) {
 		this.stateController.setExperimentId(newExperimentID);
 	}
 
 	@Override
-	public final int getExperimentId() {
+	public int getExperimentId() {
 		return this.stateController.getExperimentId();
 	}
 
 	@Override
-	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
+	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		if (!this.isMonitoringEnabled()) { // enabled and not terminated
 			return false;
 		}
@@ -323,33 +323,33 @@ public final class MonitoringController extends AbstractController implements IM
 	}
 
 	@Override
-	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay,
+	public ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay,
 			final long period, final TimeUnit timeUnit) {
 		return this.samplingController.schedulePeriodicSampler(sampler, initialDelay, period, timeUnit);
 	}
 
 	@Override
-	public final boolean removeScheduledSampler(final ScheduledSamplerJob sampler) {
+	public boolean removeScheduledSampler(final ScheduledSamplerJob sampler) {
 		return this.samplingController.removeScheduledSampler(sampler);
 	}
 
 	@Override
-	public final ITimeSource getTimeSource() {
+	public ITimeSource getTimeSource() {
 		return this.timeSourceController.getTimeSource();
 	}
 
 	@Override
-	public final String getControllerDomain() {
+	public String getControllerDomain() {
 		return this.jmxController.getControllerDomain();
 	}
 
 	@Override
-	public final boolean activateProbe(final String pattern) {
+	public boolean activateProbe(final String pattern) {
 		return this.probeController.activateProbe(pattern);
 	}
 
 	@Override
-	public final boolean deactivateProbe(final String pattern) {
+	public boolean deactivateProbe(final String pattern) {
 		return this.probeController.deactivateProbe(pattern);
 	}
 
@@ -400,7 +400,7 @@ public final class MonitoringController extends AbstractController implements IM
 
 	// GET SINGLETON INSTANCE
 	// #############################
-	public static final IMonitoringController getInstance() {
+	public static IMonitoringController getInstance() {
 		return SingletonHelper.INSTANCE;
 	}
 

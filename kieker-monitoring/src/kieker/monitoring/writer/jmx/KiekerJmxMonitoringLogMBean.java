@@ -18,7 +18,7 @@ package kieker.monitoring.writer.jmx;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.4
  */
 public interface KiekerJmxMonitoringLogMBean { // NOCS

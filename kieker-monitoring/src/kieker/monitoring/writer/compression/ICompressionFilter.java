@@ -49,7 +49,7 @@ public interface ICompressionFilter {
 	 * Return the extension with leading dot.
 	 *
 	 * @return return the extension
-	 * 
+	 *
 	 * @since 1.14
 	 */
 	String getExtension();

@@ -114,6 +114,7 @@ public class HotspotDetectionStage extends AbstractConsumerStage<Trace> {
 		@SuppressWarnings("hiding")
 		private final Map<OperationCall, Duration> durationsWithoutChild;
 
+		/** local */
 		DurationCollector(final Map<OperationCall, Duration> durationsWithoutChild) {
 			this.durationsWithoutChild = durationsWithoutChild;
 		}

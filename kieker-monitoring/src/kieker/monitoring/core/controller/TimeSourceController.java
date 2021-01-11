@@ -50,17 +50,17 @@ public final class TimeSourceController extends AbstractController implements IT
 	}
 
 	@Override
-	protected final void init() {
+	protected void init() {
 		// do nothing
 	}
 
 	@Override
-	protected final void cleanup() {
+	protected void cleanup() {
 		LOGGER.debug("Shutting down TimeSource Controller");
 	}
 
 	@Override
-	public final String toString() {
+	public String toString() {
 		final StringBuilder sb = new StringBuilder(128);
 		sb.append("TimeSource: ");
 		if (this.timeSource != null) {
@@ -76,7 +76,7 @@ public final class TimeSourceController extends AbstractController implements IT
 	}
 
 	@Override
-	public final ITimeSource getTimeSource() {
+	public ITimeSource getTimeSource() {
 		return this.timeSource;
 	}
 }

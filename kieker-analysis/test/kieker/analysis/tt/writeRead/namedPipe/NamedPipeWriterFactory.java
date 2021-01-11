@@ -39,7 +39,7 @@ final class NamedPipeWriterFactory {
 	 *
 	 * @return a unique name
 	 */
-	public static final String createPipeName() {
+	public static String createPipeName() {
 		return NamedPipeWriterFactory.PIPE_NAME_PREFIX + NamedPipeWriterFactory.NEXT_PIPE_ID.getAndIncrement();
 	}
 
@@ -51,7 +51,7 @@ final class NamedPipeWriterFactory {
 	 *            The name of the pipe to use.
 	 * @return a new {@link PipeWriter}
 	 */
-	public static final PipeWriter createAndRegisterNamedPipeRecordWriter(final String pipeName) {
+	public static PipeWriter createAndRegisterNamedPipeRecordWriter(final String pipeName) {
 		return new PipeWriter(pipeName);
 	}
 }

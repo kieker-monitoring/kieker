@@ -27,7 +27,7 @@ import kieker.monitoring.sampler.mxbean.ClassLoadingSampler;
 
 /**
  * @author Micky Singh Multani
- * 
+ *
  * @since 1.10
  */
 public class TestClassLoadingSampler extends AbstractJVMSamplerTest {

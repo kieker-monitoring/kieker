@@ -26,7 +26,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public abstract class AbstractTestTimeSource extends AbstractKiekerTest { // NOPMD (no abstract methods)

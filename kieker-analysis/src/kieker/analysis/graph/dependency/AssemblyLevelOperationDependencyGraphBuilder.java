@@ -46,18 +46,18 @@ public class AssemblyLevelOperationDependencyGraphBuilder extends AbstractDepend
 
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final IVertex componentVertex = this.graph.addVertexIfAbsent(componentId);
-		componentVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.ASSEMBLY_COMPONENT);
-		componentVertex.setPropertyIfAbsent(PropertyKeys.NAME, component.getComponentType().getName());
-		componentVertex.setPropertyIfAbsent(PropertyKeys.PACKAGE_NAME, component.getComponentType().getPackage());
+		componentVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.ASSEMBLY_COMPONENT);
+		componentVertex.setPropertyIfAbsent(PropertyConstants.NAME, component.getComponentType().getName());
+		componentVertex.setPropertyIfAbsent(PropertyConstants.PACKAGE_NAME, component.getComponentType().getPackage());
 
 		final IGraph componentSubgraph = componentVertex.addChildGraphIfAbsent();
 		final int operationId = this.identifierRegistry.getIdentifier(operation);
 		final IVertex operationVertex = componentSubgraph.addVertexIfAbsent(operationId);
-		operationVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.ASSEMBLY_OPERATION);
-		operationVertex.setPropertyIfAbsent(PropertyKeys.NAME, operation.getOperationType().getName());
-		operationVertex.setPropertyIfAbsent(PropertyKeys.RETURN_TYPE, operation.getOperationType().getReturnType());
-		operationVertex.setPropertyIfAbsent(PropertyKeys.MODIFIERS, operation.getOperationType().getModifiers());
-		operationVertex.setPropertyIfAbsent(PropertyKeys.PARAMETER_TYPES, operation.getOperationType().getParameterTypes());
+		operationVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.ASSEMBLY_OPERATION);
+		operationVertex.setPropertyIfAbsent(PropertyConstants.NAME, operation.getOperationType().getName());
+		operationVertex.setPropertyIfAbsent(PropertyConstants.RETURN_TYPE, operation.getOperationType().getReturnType());
+		operationVertex.setPropertyIfAbsent(PropertyConstants.MODIFIERS, operation.getOperationType().getModifiers());
+		operationVertex.setPropertyIfAbsent(PropertyConstants.PARAMETER_TYPES, operation.getOperationType().getParameterTypes());
 		this.responseTimeDecorator.decorate(operationVertex, operation);
 
 		return operationVertex;

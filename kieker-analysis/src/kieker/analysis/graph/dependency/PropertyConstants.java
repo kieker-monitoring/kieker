@@ -21,7 +21,7 @@ package kieker.analysis.graph.dependency;
  *
  * @since 1.14
  */
-public final class PropertyKeys {
+public final class PropertyConstants {
 
 	public static final String TYPE = "type";
 
@@ -49,6 +49,6 @@ public final class PropertyKeys {
 
 	public static final String TIME_UNIT = "time unit";
 
-	private PropertyKeys() {}
+	private PropertyConstants() {}
 
 }

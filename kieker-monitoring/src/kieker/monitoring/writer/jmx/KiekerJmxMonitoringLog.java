@@ -24,7 +24,7 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.4
  */
 public final class KiekerJmxMonitoringLog extends NotificationBroadcasterSupport implements KiekerJmxMonitoringLogMBean {
@@ -38,13 +38,13 @@ public final class KiekerJmxMonitoringLog extends NotificationBroadcasterSupport
 
 	/**
 	 * Consumes the given record by sending a notification.
-	 * 
+	 *
 	 * @param record
 	 *            The record to consume.
-	 * 
+	 *
 	 * @return Always true.
 	 */
-	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
+	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		final Notification notification = new Notification(MESSAGE_TYPE, this.kiekerMonitoringLogName, 0L, 0L);
 		notification.setUserData(record);
 		super.sendNotification(notification);

@@ -210,16 +210,8 @@ public final class WriterController extends AbstractController implements IWrite
 			@SuppressWarnings("rawtypes")
 			final Constructor<? extends Queue> constructor = queueClass.getConstructor(int.class);
 			return constructor.newInstance(capacity);
-		} catch (final ClassNotFoundException | InstantiationException e) {
-			WriterController.LOGGER.warn("An exception occurred", e);
-			throw new IllegalStateException(e);
-		} catch (final NoSuchMethodException | SecurityException e) {
-			WriterController.LOGGER.warn("An exception occurred", e);
-			throw new IllegalStateException(e);
-		} catch (final IllegalAccessException | IllegalArgumentException e) {
-			WriterController.LOGGER.warn("An exception occurred", e);
-			throw new IllegalStateException(e);
-		} catch (final InvocationTargetException e) {
+		} catch (final ClassNotFoundException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException
+				| IllegalAccessException | IllegalArgumentException e) {
 			WriterController.LOGGER.warn("An exception occurred", e);
 			throw new IllegalStateException(e);
 		}
@@ -231,7 +223,7 @@ public final class WriterController extends AbstractController implements IWrite
 	}
 
 	@Override
-	protected final void init() {
+	protected void init() {
 		WriterController.LOGGER.debug("Initializing Writer Controller");
 
 		if (this.monitoringWriterThread != null) {
@@ -240,7 +232,7 @@ public final class WriterController extends AbstractController implements IWrite
 	}
 
 	@Override
-	protected final void cleanup() {
+	protected void cleanup() {
 		WriterController.LOGGER.debug("Shutting down Writer Controller");
 
 		if (this.monitoringWriterThread != null) {
@@ -256,7 +248,7 @@ public final class WriterController extends AbstractController implements IWrite
 	}
 
 	@Override
-	public final String toString() {
+	public String toString() {
 		final StringBuilder sb = new StringBuilder(256) // NOPMD (consecutive calls of append with string literals)
 				.append("WriterController:").append("\n\tQueue type: ").append(this.writerQueue.getClass())
 				.append("\n\tQueue capacity: ").append(this.queueCapacity)
@@ -272,7 +264,7 @@ public final class WriterController extends AbstractController implements IWrite
 	}
 
 	@Override
-	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
+	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		final boolean recordSent = this.insertBehavior.insert(record);
 		if (!recordSent) {
 			WriterController.LOGGER.error("Error writing the monitoring data. Will terminate monitoring!");

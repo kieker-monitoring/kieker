@@ -56,8 +56,8 @@ public class DeploymentLevelContextDependencyGraphBuilder extends AbstractDepend
 
 		final int contextId = this.identifierRegistry.getIdentifier(context);
 		final IVertex contextVertex = this.graph.addVertexIfAbsent(contextId);
-		contextVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.DEPLOYMENT_CONTEXT);
-		contextVertex.setPropertyIfAbsent(PropertyKeys.NAME, context.getName());
+		contextVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.DEPLOYMENT_CONTEXT);
+		contextVertex.setPropertyIfAbsent(PropertyConstants.NAME, context.getName());
 		this.responseTimeDecorator.decorate(contextVertex, context);
 
 		return contextVertex;

@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.analysis.source.jms.JMSReaderStage;
@@ -54,6 +55,7 @@ public class BasicJMSWriterReaderTest {
 		// empty constructor
 	}
 
+	@Ignore
 	@Test
 	public void testWriteRead() throws InterruptedException { // NOPMD (JUnitTestsShouldIncludeAssert)
 		final List<IMonitoringRecord> inputRecords = this.provideEvents();

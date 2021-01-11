@@ -50,7 +50,7 @@ public final class StringUtils {
 	 * @throws IOException
 	 *             If something went wrong during the reading.
 	 */
-	public static final String readOutputFileAsString(final File outputFile) throws IOException {
+	public static String readOutputFileAsString(final File outputFile) throws IOException {
 		final byte[] buffer = new byte[(int) outputFile.length()];
 		BufferedInputStream f = null;
 		try {

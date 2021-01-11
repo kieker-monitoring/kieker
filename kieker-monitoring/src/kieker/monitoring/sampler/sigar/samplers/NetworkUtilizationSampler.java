@@ -38,7 +38,7 @@ import kieker.monitoring.timer.ITimeSource;
  */
 public final class NetworkUtilizationSampler extends AbstractSigarSampler {
 
-	private final ConcurrentHashMap<String, NetworkStatistic> networkStatisticMap = new ConcurrentHashMap<String, NetworkUtilizationSampler.NetworkStatistic>();
+	private final ConcurrentHashMap<String, NetworkStatistic> networkStatisticMap = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy} instance used to retrieve the sensor data. Users

@@ -18,7 +18,7 @@ package kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 public class Book {
@@ -27,7 +27,7 @@ public class Book {
 
 	/**
 	 * Creates a new book with the given title.
-	 * 
+	 *
 	 * @param title
 	 *            The title of the book.
 	 */

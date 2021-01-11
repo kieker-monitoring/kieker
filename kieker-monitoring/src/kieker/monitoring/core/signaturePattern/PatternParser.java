@@ -82,7 +82,7 @@ public final class PatternParser {
 	 * @throws InvalidPatternException
 	 *             If the given string is not a valid pattern.
 	 */
-	public static final Pattern parseToPattern(final String strPattern) throws InvalidPatternException {
+	public static Pattern parseToPattern(final String strPattern) throws InvalidPatternException {
 		final String trimPattern = strPattern.trim();
 		if (trimPattern.charAt(0) == SignatureFactory.PATTERN_PREFIX) {
 			try {
@@ -154,7 +154,7 @@ public final class PatternParser {
 		return strings;
 	}
 
-	private static final String parseMethodName(final String methodName) throws InvalidPatternException {
+	private static String parseMethodName(final String methodName) throws InvalidPatternException {
 		try {
 			if ("<init>".equals(methodName)) {
 				return "<init>";
@@ -173,7 +173,7 @@ public final class PatternParser {
 	 * @return
 	 * @throws InvalidPatternException
 	 */
-	private static final String parseParameterList(final String[] paramList) throws InvalidPatternException {
+	private static String parseParameterList(final String[] paramList) throws InvalidPatternException {
 		if (paramList.length == 1) {
 			if (paramList[0].length() == 0) {
 				return "";
@@ -185,7 +185,7 @@ public final class PatternParser {
 		return PatternParser.parseMultipleParameters(paramList);
 	}
 
-	private static final String parseMultipleParameters(final String[] paramList) throws InvalidPatternException {
+	private static String parseMultipleParameters(final String[] paramList) throws InvalidPatternException {
 		final StringBuilder sb = new StringBuilder(255);
 
 		final int length = paramList.length;
@@ -228,7 +228,7 @@ public final class PatternParser {
 	 * @throws InvalidPatternException
 	 *             on invalid pattern
 	 */
-	private static final void createParameterRegex(final StringBuilder regexBuilder, final String parameter) throws InvalidPatternException {
+	private static void createParameterRegex(final StringBuilder regexBuilder, final String parameter) throws InvalidPatternException {
 		if ("..".equals(parameter)) {
 			regexBuilder.append("(,?((\\s)?" + FULLY_QUALFIED_NAME + "(\\s)?)*");
 		} else if ("*".equals(parameter)) {
@@ -246,7 +246,7 @@ public final class PatternParser {
 		}
 	}
 
-	private static final String parseType(final String type) throws InvalidPatternException {
+	private static String parseType(final String type) throws InvalidPatternException {
 		final int index = type.indexOf('[');
 		if (index != -1) {
 			final String onlyIdentified = type.substring(0, index);
@@ -257,7 +257,7 @@ public final class PatternParser {
 		}
 	}
 
-	private static final String parseIdentifier(final String identifier) throws InvalidPatternException {
+	private static String parseIdentifier(final String identifier) throws InvalidPatternException {
 		final char[] array = identifier.toCharArray();
 		final StringBuilder sb = new StringBuilder(128);
 		if (Character.isJavaIdentifierStart(array[0])) {
@@ -281,7 +281,7 @@ public final class PatternParser {
 		return sb.toString();
 	}
 
-	private static final String parseFQClassname(final String fqClassname) throws InvalidPatternException {
+	private static String parseFQClassname(final String fqClassname) throws InvalidPatternException {
 		if (fqClassname.contains("...") || fqClassname.endsWith(".") || (fqClassname.length() == 0)) {
 			throw new InvalidPatternException("Invalid fully qualified type.");
 		}
@@ -331,7 +331,7 @@ public final class PatternParser {
 		return sb.toString();
 	}
 
-	private static final String parseRetType(final String retType) throws InvalidPatternException {
+	private static String parseRetType(final String retType) throws InvalidPatternException {
 		if ("new".equals(retType)) {
 			return "";
 		} else {
@@ -343,7 +343,7 @@ public final class PatternParser {
 		}
 	}
 
-	private static final String parseModifierConstraintList(final String[] modifierList)
+	private static String parseModifierConstraintList(final String[] modifierList)
 			throws InvalidPatternException {
 		if (modifierList == null) {
 			return "((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?";

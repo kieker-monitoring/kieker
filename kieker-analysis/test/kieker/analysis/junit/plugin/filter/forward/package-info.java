@@ -14,4 +14,3 @@
  * limitations under the License.
  ***************************************************************************/
 package kieker.analysis.junit.plugin.filter.forward;
-

@@ -33,6 +33,7 @@ import teetime.framework.Configuration;
 public class CollectorConfiguration extends Configuration {
 
 	private final DataSinkStage consumer;
+	private final ISourceCompositeStage sourceStage;
 
 	/**
 	 * Configure analysis.
@@ -44,14 +45,18 @@ public class CollectorConfiguration extends Configuration {
 	 */
 	public CollectorConfiguration(final kieker.common.configuration.Configuration configuration)
 			throws ConfigurationException {
-		final ISourceCompositeStage sourceStage = SourceStageFactory.createSourceCompositeStage(configuration);
+		this.sourceStage = SourceStageFactory.createSourceCompositeStage(configuration);
 
 		this.consumer = new DataSinkStage(configuration);
 
-		this.connectPorts(sourceStage.getOutputPort(), this.consumer.getInputPort());
+		this.connectPorts(this.sourceStage.getOutputPort(), this.consumer.getInputPort());
 	}
 
 	public DataSinkStage getCounter() {
 		return this.consumer;
+	}
+
+	public ISourceCompositeStage getSourceStage() {
+		return this.sourceStage;
 	}
 }

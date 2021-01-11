@@ -38,9 +38,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This test makes sure that the {@link TeeFilter} writes (with regard to the append property) correctly into files.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public class TestTeeFilter extends AbstractKiekerTest {
@@ -79,7 +79,7 @@ public class TestTeeFilter extends AbstractKiekerTest {
 
 		final IAnalysisController analysisController = new AnalysisController();
 		final TeeFilter teeFilter = new TeeFilter(configuration, analysisController);
-		final ListReader<Integer> simpleListReader = new ListReader<Integer>(new Configuration(), analysisController);
+		final ListReader<Integer> simpleListReader = new ListReader<>(new Configuration(), analysisController);
 
 		analysisController.connect(simpleListReader, ListReader.OUTPUT_PORT_NAME, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
 		simpleListReader.addAllObjects(objectsToWrite);
@@ -87,7 +87,7 @@ public class TestTeeFilter extends AbstractKiekerTest {
 	}
 
 	private List<Integer> readFromFile(final File tempFile) throws FileNotFoundException {
-		final List<Integer> result = new ArrayList<Integer>();
+		final List<Integer> result = new ArrayList<>();
 		Scanner scanner = null;
 
 		try {

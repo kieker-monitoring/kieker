@@ -22,7 +22,7 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  * Insert behavior that bypasses the writer controller's queue and thus calls the writer synchronously. This
  * behavior is useful for writers such as the chunking collector which have their own queues and asynchronous
  * workers.
- * 
+ *
  * @author Holger Knoche
  * @since 1.13
  */

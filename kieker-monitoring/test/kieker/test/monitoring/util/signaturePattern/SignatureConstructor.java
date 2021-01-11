@@ -22,9 +22,9 @@ import java.util.List;
 /**
  * This helper class allows to easily create multiple signatures for test purposes. The class provides methods to add, for example, modificators and parameters,
  * before assembling all possible signature variants from those values.
- * 
+ *
  * @author Bjoern Weissenfels, Jan Waller
- * 
+ *
  * @since 1.6
  */
 public final class SignatureConstructor {
@@ -41,17 +41,17 @@ public final class SignatureConstructor {
 	private static final String DEFAULT_PARAMETERLIST = "";
 	private static final String DEFAULT_THROWS_LIST = "";
 
-	private final List<String> visibilityList = new ArrayList<String>();
-	private final List<String> abstractNonAbstractList = new ArrayList<String>();
-	private final List<String> staticNonStaticList = new ArrayList<String>();
-	private final List<String> finalNonFinalList = new ArrayList<String>();
-	private final List<String> synchronizedNonSynchronizedList = new ArrayList<String>();
-	private final List<String> nativeNonNativeList = new ArrayList<String>();
-	private final List<String> returnTypeList = new ArrayList<String>();
-	private final List<String> fqClassNameList = new ArrayList<String>();
-	private final List<String> operationNameList = new ArrayList<String>();
-	private final List<String> parameterListList = new ArrayList<String>();
-	private final List<String> throwsListList = new ArrayList<String>();
+	private final List<String> visibilityList = new ArrayList<>();
+	private final List<String> abstractNonAbstractList = new ArrayList<>();
+	private final List<String> staticNonStaticList = new ArrayList<>();
+	private final List<String> finalNonFinalList = new ArrayList<>();
+	private final List<String> synchronizedNonSynchronizedList = new ArrayList<>();
+	private final List<String> nativeNonNativeList = new ArrayList<>();
+	private final List<String> returnTypeList = new ArrayList<>();
+	private final List<String> fqClassNameList = new ArrayList<>();
+	private final List<String> operationNameList = new ArrayList<>();
+	private final List<String> parameterListList = new ArrayList<>();
+	private final List<String> throwsListList = new ArrayList<>();
 
 	/**
 	 * Default constructor.
@@ -62,7 +62,7 @@ public final class SignatureConstructor {
 
 	/**
 	 * This method assembles the signatures based on the content of the fields.
-	 * 
+	 *
 	 * @return A list containing the signatures.
 	 */
 	public List<String> getSignatures() {
@@ -99,7 +99,7 @@ public final class SignatureConstructor {
 		if (this.throwsListList.isEmpty()) {
 			this.throwsListList.add(SignatureConstructor.DEFAULT_THROWS_LIST);
 		}
-		final List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<>();
 		for (final String visibility : this.visibilityList) { // NOCS
 			for (final String abstractNonAbstract : this.abstractNonAbstractList) {
 				for (final String staticNonStatic : this.staticNonStaticList) { // NOCS
@@ -154,10 +154,10 @@ public final class SignatureConstructor {
 
 	/**
 	 * Adds the given string as a visibility modificator.
-	 * 
+	 *
 	 * @param visibility
 	 *            The visibility modificator.
-	 * 
+	 *
 	 * @return A reference to {@code this} in order to allow the chaining of the methods.
 	 */
 	public SignatureConstructor addVisibilityVariant(final String visibility) {
@@ -167,10 +167,10 @@ public final class SignatureConstructor {
 
 	/**
 	 * Adds the given string as an abstract or non abstract variant.
-	 * 
+	 *
 	 * @param abstractNonAbstract
 	 *            The abstract or non abstract variant.
-	 * 
+	 *
 	 * @return A reference to {@code this} in order to allow the chaining of the methods.
 	 */
 	public SignatureConstructor addAbstractNonAbstractVariant(final String abstractNonAbstract) {
@@ -180,10 +180,10 @@ public final class SignatureConstructor {
 
 	/**
 	 * Adds the given string as a static or non static variant.
-	 * 
+	 *
 	 * @param staticNonStatic
 	 *            The static or non static variant.
-	 * 
+	 *
 	 * @return A reference to {@code this} in order to allow the chaining of the methods.
 	 */
 	public SignatureConstructor addStaticNonStaticVariant(final String staticNonStatic) {
@@ -193,10 +193,10 @@ public final class SignatureConstructor {
 
 	/**
 	 * Adds the given string as a final or non final variant.
-	 * 
+	 *
 	 * @param finalNonFinal
 	 *            The final or non final variant.
-	 * 
+	 *
 	 * @return A reference to {@code this} in order to allow the chaining of the methods.
 	 */
 	public SignatureConstructor addFinalNonFinalVariant(final String finalNonFinal) {
@@ -206,10 +206,10 @@ public final class SignatureConstructor {
 
 	/**
 	 * Adds the given string as a synchronized or non synchronized variant.
-	 * 
+	 *
 	 * @param synchronizedNonSynchronized
 	 *            The synchronized or non synchronized variant.
-	 * 
+	 *
 	 * @return A reference to {@code this} in order to allow the chaining of the methods.
 	 */
 	public SignatureConstructor addSynchronizedNonSynchronizedVariant(final String synchronizedNonSynchronized) {
@@ -219,10 +219,10 @@ public final class SignatureConstructor {
 
 	/**
 	 * Adds the given string as a native or non native variant.
-	 * 
+	 *
 	 * @param nativeNonNative
 	 *            The native or non native variant.
-	 * 
+	 *
 	 * @return A reference to {@code this} in order to allow the chaining of the methods.
 	 */
 	public SignatureConstructor addNativeNonNativeVariant(final String nativeNonNative) {
@@ -232,10 +232,10 @@ public final class SignatureConstructor {
 
 	/**
 	 * Adds the given string as a return type.
-	 * 
+	 *
 	 * @param returnType
 	 *            The return type.
-	 * 
+	 *
 	 * @return A reference to {@code this} in order to allow the chaining of the methods.
 	 */
 	public SignatureConstructor addreturnTypeVariant(final String returnType) {
@@ -245,10 +245,10 @@ public final class SignatureConstructor {
 
 	/**
 	 * Adds the given string as a full qualified class name variant.
-	 * 
+	 *
 	 * @param fqClassName
 	 *            The full qualified class name.
-	 * 
+	 *
 	 * @return A reference to {@code this} in order to allow the chaining of the methods.
 	 */
 	public SignatureConstructor addfqClassNameVariant(final String fqClassName) {
@@ -258,10 +258,10 @@ public final class SignatureConstructor {
 
 	/**
 	 * Adds the given string as an operation name variant.
-	 * 
+	 *
 	 * @param operationName
 	 *            The operation name.
-	 * 
+	 *
 	 * @return A reference to {@code this} in order to allow the chaining of the methods.
 	 */
 	public SignatureConstructor addoperationNameVariant(final String operationName) {
@@ -271,10 +271,10 @@ public final class SignatureConstructor {
 
 	/**
 	 * Adds the given string as a parameter list variant.
-	 * 
+	 *
 	 * @param parameterList
 	 *            The parameter list.
-	 * 
+	 *
 	 * @return A reference to {@code this} in order to allow the chaining of the methods.
 	 */
 	public SignatureConstructor addparameterListVariant(final String parameterList) {
@@ -284,10 +284,10 @@ public final class SignatureConstructor {
 
 	/**
 	 * Adds the given string as a throws list variant.
-	 * 
+	 *
 	 * @param throwsList
 	 *            The throws list.
-	 * 
+	 *
 	 * @return A reference to {@code this} in order to allow the chaining of the methods.
 	 */
 	public SignatureConstructor addthrowsListVariant(final String throwsList) {

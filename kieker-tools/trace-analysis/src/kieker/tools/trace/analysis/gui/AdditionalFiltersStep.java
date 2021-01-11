@@ -28,7 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import kieker.tools.trace.analysis.Constants;
+import kieker.tools.trace.analysis.StringConstants;
 
 /**
  * @author Nils Christian Ehmke
@@ -211,7 +211,7 @@ public class AdditionalFiltersStep extends AbstractStep {
 	@Override
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
 		if (this.selectOnlyTraces.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_SELECTTRACES);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_SELECTTRACES);
 			final String[] ids = this.selectOnlyTracesInput.getText().split(" ");
 			for (final String id : ids) {
 				parameters.add(id);
@@ -219,7 +219,7 @@ public class AdditionalFiltersStep extends AbstractStep {
 		}
 
 		if (this.filterTraces.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_FILTERTRACES);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_FILTERTRACES);
 			final String[] ids = this.filterTracesInput.getText().split(" ");
 			for (final String id : ids) {
 				parameters.add(id);
@@ -227,12 +227,12 @@ public class AdditionalFiltersStep extends AbstractStep {
 		}
 
 		if (this.ignoreBefore.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE);
 			parameters.add(this.ignoreBeforeInput.getText());
 		}
 
 		if (this.ignoreAfter.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE);
 			parameters.add(this.ignoreAfterInput.getText());
 		}
 	}

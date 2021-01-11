@@ -43,6 +43,10 @@ public class MultipleConnectionTcpSourceStage extends AbstractProducerStage<IMon
 
 	private final ITraceMetadataRewriter recordRewriter;
 
+	private ReaderThread reader;
+
+	private boolean allowNewConnection;
+
 	/**
 	 * Create a single threaded multi connection tcp reader stage.
 	 *
@@ -67,10 +71,12 @@ public class MultipleConnectionTcpSourceStage extends AbstractProducerStage<IMon
 			serverSocket.bind(new InetSocketAddress(this.inputPort));
 			serverSocket.configureBlocking(true);
 			final Selector readSelector = Selector.open();
-			final ReaderThread reader = new ReaderThread(this.logger, readSelector, this.recordRewriter, this.outputPort);
-			reader.start();
+			this.reader = new ReaderThread(this.logger, readSelector, this.recordRewriter, this.outputPort);
+			this.reader.start();
 
-			while (this.isActive()) {
+			this.allowNewConnection = true;
+
+			while (this.allowNewConnection && !this.shouldBeTerminated()) {
 				final SocketChannel socketChannel = serverSocket.accept();
 
 				if (socketChannel != null) {
@@ -84,8 +90,8 @@ public class MultipleConnectionTcpSourceStage extends AbstractProducerStage<IMon
 					key.attach(connection);
 				}
 			}
-			reader.terminate();
-			reader.join();
+			this.reader.terminate();
+			this.reader.join();
 		} catch (final ClosedByInterruptException e) {
 			this.logger.info("External shutdown called");
 		} catch (final BindException e) {
@@ -97,6 +103,25 @@ public class MultipleConnectionTcpSourceStage extends AbstractProducerStage<IMon
 		} finally {
 			this.workCompleted();
 		}
+	}
+
+	public void rejectNewConnection() {
+		this.allowNewConnection = false;
+	}
+
+	@Override
+	protected void onTerminating() {
+		this.rejectNewConnection();
+		if (this.reader.isAlive()) {
+			this.reader.terminate();
+			try {
+				this.reader.join();
+			} catch (final InterruptedException e) {
+				this.logger.error("Reader termination was interrupted.", e);
+			}
+		}
+
+		super.onTerminating();
 	}
 
 }

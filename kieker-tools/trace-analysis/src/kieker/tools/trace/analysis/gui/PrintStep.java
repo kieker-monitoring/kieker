@@ -26,7 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import kieker.tools.trace.analysis.Constants;
+import kieker.tools.trace.analysis.StringConstants;
 import kieker.tools.trace.analysis.gui.util.AllSelectionBindingItemListener;
 
 /**
@@ -147,26 +147,26 @@ public class PrintStep extends AbstractStep {
 	@Override
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
 		if (this.messageTraces.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PRINTMSGTRACES);
 		}
 
 		if (this.executionTraces.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PRINTEXECTRACES);
 		}
 
 		if (this.invalidExecutionTraces.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES);
 		}
 
 		if (this.systemModel.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL);
 		}
 
 		if (this.deploymentEquivalenceClasses.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT);
 		}
 		if (this.assemblyEquivalenceClasses.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT);
+			parameters.add("--" + StringConstants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT);
 		}
 	}
 

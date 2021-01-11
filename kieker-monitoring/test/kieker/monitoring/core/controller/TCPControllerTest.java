@@ -52,7 +52,7 @@ public class TCPControllerTest { // NOFB issues with integration test
 
 	/**
 	 * initialize configuration for TCP controller.
-	 * 
+	 *
 	 * @throws IOException
 	 *             on io errors
 	 */
@@ -93,7 +93,7 @@ public class TCPControllerTest { // NOFB issues with integration test
 
 	/**
 	 * test activation and deactivation.
-	 * 
+	 *
 	 * @throws IOException
 	 *             on TCP io errors
 	 * @throws InterruptedException
