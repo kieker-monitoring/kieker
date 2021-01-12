@@ -17,8 +17,7 @@ MacOS, etc. and one with ``.bat`` extension for Windows.
 To change the logging setup you can either change that file or define
 additional options with the JAVA_OPTS environment variable, e.g.,
 
-``export JAVA_OPTS="-Dlog4j.configuration=file:///full/path/to/logger/config/log4j.cfg"``
-
+``export JAVA_OPTS="-Dlogback.configurationFile=/full/path/to/logger/config/logback-trace.groovy"``
 or use the tool specific ``_OPTS`` variable, e.g.,
 ``TRACE_ANALYSIS_OPTS`` for the ``trace-analysis`` tool.
 
@@ -32,7 +31,7 @@ parameters and options to a tool.
 -  :ref:`kieker-tools-collector`
 -  :ref:`kieker-tools-kdb` (deprecated)
 -  :ref:`kieker-tools-resource-monitor`
--  :ref:`kieker-tools-trace-analysis-gui`
+-  :ref:`kieker-tools-trace-analysis-gui` (deprecated)
 -  :ref:`kieker-tools-irl`
 -  :ref:`kieker-tools-dot-pic-file-converter`
 

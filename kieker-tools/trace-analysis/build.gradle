@@ -8,7 +8,7 @@ targetCompatibility = targetVersion
 distTar.enabled=false
 distZip.enabled=true
 
-mainClassName='kieker.tools.trace.analysis.TraceAnalysisToolMain'
+mainClassName='kieker.tools.trace.analysis.TraceAnalysisToolNewMain'
 
 sourceSets.main.resources.srcDirs = [ '../resources' ]
 
