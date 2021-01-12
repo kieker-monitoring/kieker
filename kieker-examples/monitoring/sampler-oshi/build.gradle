@@ -7,28 +7,30 @@ repositories {
 }
 
 dependencies {
-        compile 'ch.qos.logback:logback-classic:1.1.7'
-        compile 'org.slf4j:slf4j-api:1.7.30'
-        compile 'org.codehaus.groovy:groovy-all:3.0.2'
+        implementation 'ch.qos.logback:logback-classic:1.1.7'
+        implementation 'org.slf4j:slf4j-api:1.7.30'
+        implementation 'org.codehaus.groovy:groovy-all:3.0.2'
+	implementation 'org.jctools:jctools-core:3.1.0'
 
+	// If the example is used without build Kieker yourself, use the following line
+	// implementation 'net.kieker-monitoring:kieker:1.15-SNAPSHOT'
+        // and comment out the next three lines.
 	implementation fileTree('lib') {
 		include "kieker-*.jar"
 	}
-	runtime fileTree('lib') {
-		include 'sigar-*.jar'
-	}
+	implementation 'com.github.oshi:oshi-core:3.12.2'
 }
 
 distTar.enabled=false
 
 // Simplify the JAR's file name
-archivesBaseName = 'SigarMonitoring'
+archivesBaseName = 'OshiMonitoring'
 version = ''
 	
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = [ '../../resources' ]
 
-mainClassName = 'kieker.examples.monitoring.sigar.MonitoringStarter'
+mainClassName = 'kieker.examples.monitoring.oshi.MonitoringStarter'
 
 jar {
 	manifest {
