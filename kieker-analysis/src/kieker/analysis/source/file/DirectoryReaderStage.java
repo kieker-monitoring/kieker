@@ -152,7 +152,7 @@ public class DirectoryReaderStage extends AbstractTransformation<File, IMonitori
 	private void readLogFile(final InputStream inputStream, final String logFileName, final ReaderRegistry<String> registry) {
 		final AbstractDecompressionFilter decompressionFilter = this.findDecompressionFilterByExtension(logFileName);
 		if (this.verbose) {
-			this.logger.debug("Reading log file {}", logFileName);
+			this.logger.info("Reading log file {}", logFileName);
 		} else {
 			this.logger.debug("Reading log file {}", logFileName);
 		}
