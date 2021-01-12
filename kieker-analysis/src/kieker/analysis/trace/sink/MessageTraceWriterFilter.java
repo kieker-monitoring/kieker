@@ -25,7 +25,6 @@ import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.MessageTrace;
 
 /**
- * TODO can be merged with ExecutionTraceWriterFilter using generics
  * A filter allowing to write the incoming MessageTraces into a configured file.
  *
  * @author Andre van Hoorn

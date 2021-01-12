@@ -147,19 +147,13 @@ public abstract class AbstractEventRecordTraceReconstructionStage extends Abstra
 	 *            The new record to handle.
 	 */
 	protected void newFlowRecordEvent(final IFlowRecord record) {
-		try {
-			if (record instanceof TraceMetadata) {
-				this.newTraceMetadataEvent((TraceMetadata) record);
-			} else if (record instanceof AbstractTraceEvent) {
-				this.newAbstractTraceEvent((AbstractTraceEvent) record);
-			} else {
-				this.logger.error("Received illegal IFlowRecord event of type {}", record.getClass());
-				return; // invalid type which should not happen due to the specified eventTypes
-			}
-		} catch (final Exception e) {
-			this.logger.error("Processing new flow record failed {}", e.getLocalizedMessage());
-			e.printStackTrace();
-			throw e;
+		if (record instanceof TraceMetadata) {
+			this.newTraceMetadataEvent((TraceMetadata) record);
+		} else if (record instanceof AbstractTraceEvent) {
+			this.newAbstractTraceEvent((AbstractTraceEvent) record);
+		} else {
+			this.logger.error("Received illegal IFlowRecord event of type {}", record.getClass());
+			return; // invalid type which should not happen due to the specified eventTypes
 		}
 	}
 

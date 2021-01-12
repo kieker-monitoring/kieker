@@ -48,7 +48,7 @@ public class TimeSourceStage extends AbstractProducerStage<Long> {
 	public TimeSourceStage(final long delay, final Long numberOfImpulses) {
 		super();
 		this.delay = delay;
-		this.numberOfImpulses = (numberOfImpulses == null ? 0 : numberOfImpulses);
+		this.numberOfImpulses = (numberOfImpulses == null ? 0 : numberOfImpulses); // NOCS
 		this.infinite = numberOfImpulses == null;
 	}
 

@@ -56,7 +56,7 @@ public class DatEventDeserializer extends AbstractEventDeserializer {
 
 	public DatEventDeserializer(final Integer bufferSize, final ReaderRegistry<String> registry) {
 		super(registry);
-		this.charBuffer = CharBuffer.allocate(bufferSize == null ? DEFAULT_BUFFER_SIZE : bufferSize);
+		this.charBuffer = CharBuffer.allocate(bufferSize == null ? DEFAULT_BUFFER_SIZE : bufferSize); // NOCS
 	}
 
 	@Override
@@ -105,8 +105,6 @@ public class DatEventDeserializer extends AbstractEventDeserializer {
 	 *             record creation failed
 	 * @throws UnknownRecordTypeException
 	 *             record type is unknown
-	 *
-	 *             TODO for UTF-8 strings this will not work properly, as these might use 2 bytes
 	 */
 	private int processBuffer(final byte[] buffer, final int offset,
 			final int numOfBufferedBytes, final OutputPort<IMonitoringRecord> outputPort) {

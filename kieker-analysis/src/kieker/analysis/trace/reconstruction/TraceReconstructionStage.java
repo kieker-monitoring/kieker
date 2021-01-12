@@ -37,7 +37,6 @@ import teetime.framework.OutputPort;
 
 /**
  * This is a trace reconstruction stage for Executions.
- * TODO documentation.
  *
  * @author Andre van Hoorn
  * @author Reiner Jung -- ported to teetime

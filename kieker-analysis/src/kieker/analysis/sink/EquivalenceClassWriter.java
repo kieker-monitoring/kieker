@@ -1,6 +1,18 @@
-/**
+/***************************************************************************
+ * Copyright 2021 Kieker Project (http://kieker-monitoring.net)
  *
- */
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.analysis.sink;
 
 import java.io.File;
@@ -44,13 +56,14 @@ public class EquivalenceClassWriter extends AbstractConsumerStage<Map<ExecutionT
 			int numClasses = 0;
 			for (final Entry<ExecutionTrace, Integer> e : element.entrySet()) {
 				final ExecutionTrace t = e.getKey();
-				ps.println("Class " + numClasses++ + " ; cardinality: " + e.getValue() + "; # executions: " + t.getLength() + "; representative: " + t.getTraceId()
-						+ "; max. stack depth: " + t.getMaxEss());
+				ps.printf("Class %d; cardinality: %d; # executions: %d; representative: %d; max. stack depth: %d\n",
+						numClasses++, e.getValue(), t.getLength(), t.getTraceId(), t.getMaxEss());
 			}
 			this.logger.debug("");
 			this.logger.debug("#");
 			this.logger.debug("# Plugin: Trace equivalence report");
-			this.logger.debug("Wrote {} equivalence class{} to file '{}'", numClasses, (numClasses > 1 ? "es" : ""), this.outputFile.getCanonicalFile()); // NOCS
+			this.logger.debug("Wrote {} equivalence class{} to file '{}'", numClasses,
+					(numClasses > 1 ? "es" : ""), this.outputFile.getCanonicalFile()); // NOCS
 		} catch (final FileNotFoundException e) {
 			this.logger.error("File not found", e);
 		} finally {

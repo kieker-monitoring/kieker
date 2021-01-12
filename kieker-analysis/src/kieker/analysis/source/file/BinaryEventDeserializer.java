@@ -57,7 +57,7 @@ public class BinaryEventDeserializer extends AbstractEventDeserializer {
 
 	public BinaryEventDeserializer(final Integer bufferSize, final ReaderRegistry<String> registry) {
 		super(registry);
-		this.buffer = ByteBuffer.allocate(bufferSize == null ? DEFAULT_BUFFER_SIZE : bufferSize);
+		this.buffer = ByteBuffer.allocate(bufferSize == null ? DEFAULT_BUFFER_SIZE : bufferSize); // NOCS
 	}
 
 	@Override

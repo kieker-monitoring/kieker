@@ -19,14 +19,15 @@ import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.MessageTrace;
 
 /**
- * TODO this class is obsolete
  * This is an abstract base for components which process message traces.
  *
  * @author Andre van Hoorn
  * @author Reiner Jung -- teetime port
  *
  * @since 1.1
+ * @deprecated since 1.15 the class is obsolete
  */
+@Deprecated
 public abstract class AbstractMessageTraceProcessingFilter extends AbstractTraceProcessingStage<MessageTrace> {
 
 	/**

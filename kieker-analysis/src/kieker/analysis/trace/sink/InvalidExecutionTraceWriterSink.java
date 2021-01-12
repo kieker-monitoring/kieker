@@ -25,7 +25,6 @@ import kieker.model.repository.SystemModelRepository;
 import kieker.model.system.model.InvalidExecutionTrace;
 
 /**
- * TODO can be merged with the other two TraceWriteFilters using generics
  * Writes invalid execution traces to a specified file.
  *
  * @author Andre van Hoorn
