@@ -19,6 +19,11 @@ import teetime.framework.AbstractConsumerStage;
 import teetime.framework.OutputPort;
 
 /**
+ * Inspect events passed between stages.
+ *
+ * @param <T>
+ *            type of the events
+ *
  * @author Reiner Jung
  * @since 1.15
  *
