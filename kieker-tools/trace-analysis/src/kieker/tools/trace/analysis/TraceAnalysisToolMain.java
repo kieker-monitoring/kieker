@@ -173,6 +173,10 @@ public final class TraceAnalysisToolMain extends AbstractLegacyTool<TraceAnalysi
 	 * @return true if {@link #inputDirs} exist and are Kieker directories; false otherwise
 	 */
 	private boolean checkInputDirs(final JCommander commander) {
+		if (this.parameterConfiguration.getInputDirs() == null) {
+			logger.error("No input directories specified.");
+			return false;
+		}
 		for (final File inputDir : this.parameterConfiguration.getInputDirs()) {
 			try {
 				if (!inputDir.exists()) {

@@ -27,18 +27,18 @@ import java.util.Queue;
 public interface PutStrategy { // NOCS //NOPMD (name without prefix "I" for reasons of readability)
 
 	/**
-	 * 
+	 *
 	 * @param queue
 	 *            queue
 	 * @param element
 	 *            element
-	 * 
+	 *
 	 * @param <E>
 	 *            element type
-	 * 
+	 *
 	 * @throws InterruptedException
 	 *             on interruption of the queue
-	 * 
+	 *
 	 * @since 1.13
 	 */
 	<E> void backoffOffer(Queue<E> queue, E element) throws InterruptedException;

@@ -24,7 +24,7 @@ import kieker.monitoring.core.registry.SessionRegistry;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 0.9
  */
 public class OperationExecutionWebRequestRegistrationInterceptor implements WebRequestInterceptor {

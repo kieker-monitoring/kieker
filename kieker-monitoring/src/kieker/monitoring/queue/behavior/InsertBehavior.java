@@ -28,11 +28,11 @@ public interface InsertBehavior<E> { // NOCS (should start without an "I" for re
 	/**
 	 * @param element
 	 *            element to be inserted
-	 * 
+	 *
 	 * @return <code>true</code> if the element after this <code>element</code> can be inserted, otherwise <code>false</code>.
 	 *
 	 * @since 1.13
 	 */
-	public abstract boolean insert(E element);
+	boolean insert(E element);
 
 }

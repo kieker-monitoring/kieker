@@ -22,11 +22,11 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This test is now included in {@link kieker.test.tools.junit.writeRead.jmx.BasicJMXWriterReaderTest}
- * 
+ *
  * Otherwise jUnit gets Problems with two open JMX servers.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public final class TestJMXInterface extends AbstractKiekerTest { // NOPMD NOCS

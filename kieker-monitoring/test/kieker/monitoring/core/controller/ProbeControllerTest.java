@@ -26,12 +26,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.configuration.ConfigurationConstants;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 
 /**
  * Test probe controller.
- * 
+ *
  * @author Reiner Jung
  *
  * @since 1.15

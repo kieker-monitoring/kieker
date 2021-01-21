@@ -82,7 +82,7 @@ public final class CollectorMain extends AbstractService<CollectorConfiguration,
 
 	@Override
 	protected void shutdownService() {
-		// nothing special to shutdown
+
 	}
 
 }

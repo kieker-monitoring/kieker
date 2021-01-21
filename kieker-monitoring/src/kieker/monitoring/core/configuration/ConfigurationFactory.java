@@ -55,7 +55,7 @@ public final class ConfigurationFactory {
 	 *
 	 * @return the configuration for the singleton controller
 	 */
-	public static final Configuration createSingletonConfiguration() {
+	public static Configuration createSingletonConfiguration() {
 		LOGGER.debug("Searching for JVM argument '{}' ...", ConfigurationConstants.CUSTOM_PROPERTIES_LOCATION_JVM);
 		final Configuration defaultConfiguration = ConfigurationFactory.defaultConfiguration();
 		// ignore default default-name and set to KIEKER-SINGLETON
@@ -82,7 +82,7 @@ public final class ConfigurationFactory {
 	 *
 	 * @return default configuration
 	 */
-	public static final Configuration createDefaultConfiguration() {
+	public static Configuration createDefaultConfiguration() {
 		return new Configuration(ConfigurationFactory.defaultConfiguration());
 	}
 
@@ -96,7 +96,7 @@ public final class ConfigurationFactory {
 	 *
 	 * @return The created Configuration
 	 */
-	public static final Configuration createConfigurationFromFile(final String configurationFile) {
+	public static Configuration createConfigurationFromFile(final String configurationFile) {
 		return ConfigurationFactory.loadConfigurationFromFile(configurationFile,
 				ConfigurationFactory.defaultConfiguration());
 	}
@@ -106,7 +106,7 @@ public final class ConfigurationFactory {
 	 *
 	 * @return The created Configuration
 	 */
-	private static final Configuration defaultConfiguration() {
+	private static Configuration defaultConfiguration() {
 		return ConfigurationFactory.loadConfigurationFromResource(ConfigurationConstants.DEFAULT_PROPERTIES_LOCATION_CLASSPATH, null);
 	}
 
@@ -121,7 +121,7 @@ public final class ConfigurationFactory {
 	 *
 	 * @return The created Configuration
 	 */
-	private static final Configuration loadConfigurationFromFile(final String filename,
+	private static Configuration loadConfigurationFromFile(final String filename,
 			final Configuration defaultValues) {
 		final Configuration properties = new Configuration(defaultValues);
 		InputStream is = null; // NOPMD (null)
@@ -164,7 +164,7 @@ public final class ConfigurationFactory {
 	 *
 	 * @return The created Configuration
 	 */
-	private static final Configuration loadConfigurationFromResource(final String propertiesFn,
+	private static Configuration loadConfigurationFromResource(final String propertiesFn,
 			final Configuration defaultValues) {
 		final URL resourceUrl = ConfigurationFactory.loadKiekerPropertiesFile(propertiesFn);
 		if (resourceUrl == null) {
@@ -205,7 +205,7 @@ public final class ConfigurationFactory {
 	 *
 	 * @return The created Configuration
 	 */
-	private static final Configuration getSystemPropertiesStartingWith(final String prefix,
+	private static Configuration getSystemPropertiesStartingWith(final String prefix,
 			final Configuration defaultValues) {
 		final Configuration configuration = new Configuration(defaultValues);
 		final Properties properties = System.getProperties();

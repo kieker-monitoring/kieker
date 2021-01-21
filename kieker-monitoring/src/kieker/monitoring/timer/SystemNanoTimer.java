@@ -81,7 +81,7 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 	}
 
 	@Override
-	public final long getTime() {
+	public long getTime() {
 		return this.timeunit.convert(System.nanoTime() - this.offset, TimeUnit.NANOSECONDS);
 	}
 
@@ -91,12 +91,12 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 	}
 
 	@Override
-	public final TimeUnit getTimeUnit() {
+	public TimeUnit getTimeUnit() {
 		return this.timeunit;
 	}
 
 	@Override
-	public final String toString() {
+	public String toString() {
 		final StringBuilder sb = new StringBuilder(64);
 		sb.append("Time in ")
 				.append(this.timeunit.toString().toLowerCase(Locale.ENGLISH))

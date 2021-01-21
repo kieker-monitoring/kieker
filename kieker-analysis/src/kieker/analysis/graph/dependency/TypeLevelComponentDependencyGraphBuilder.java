@@ -45,9 +45,9 @@ public class TypeLevelComponentDependencyGraphBuilder extends AbstractDependency
 
 		final int componentId = this.identifierRegistry.getIdentifier(component);
 		final IVertex componentVertex = this.graph.addVertexIfAbsent(componentId);
-		componentVertex.setPropertyIfAbsent(PropertyKeys.TYPE, VertexType.COMPONENT_TYPE);
-		componentVertex.setPropertyIfAbsent(PropertyKeys.NAME, component.getName());
-		componentVertex.setPropertyIfAbsent(PropertyKeys.PACKAGE_NAME, component.getPackage());
+		componentVertex.setPropertyIfAbsent(PropertyConstants.TYPE, VertexType.COMPONENT_TYPE);
+		componentVertex.setPropertyIfAbsent(PropertyConstants.NAME, component.getName());
+		componentVertex.setPropertyIfAbsent(PropertyConstants.PACKAGE_NAME, component.getPackage());
 		this.responseTimeDecorator.decorate(componentVertex, component);
 
 		return componentVertex;

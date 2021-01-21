@@ -32,9 +32,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.DummyWriterConfigurationFactory;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.3
  */
 public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS

@@ -40,7 +40,7 @@ public interface IOshiSamplerFactory {
 	 * @since 1.14
 	 * @return the created instance.
 	 */
-	public MemSwapUsageSampler createSensorMemSwapUsage();
+	MemSwapUsageSampler createSensorMemSwapUsage();
 
 	/**
 	 * Creates an instance of {@link CPUsDetailedPercSampler}.
@@ -48,7 +48,7 @@ public interface IOshiSamplerFactory {
 	 * @since 1.14
 	 * @return the created instance.
 	 */
-	public CPUsDetailedPercSampler createSensorCPUsDetailedPerc();
+	CPUsDetailedPercSampler createSensorCPUsDetailedPerc();
 
 	/**
 	 * Creates an instance of {@link CPUsCombinedPercSampler}.
@@ -56,7 +56,7 @@ public interface IOshiSamplerFactory {
 	 * @since 1.14
 	 * @return the created instance.
 	 */
-	public CPUsCombinedPercSampler createSensorCPUsCombinedPerc();
+	CPUsCombinedPercSampler createSensorCPUsCombinedPerc();
 
 	/**
 	 * Creates an instance of {@link LoadAverageSampler}.
@@ -64,7 +64,7 @@ public interface IOshiSamplerFactory {
 	 * @since 1.14
 	 * @return the created instance.
 	 */
-	public LoadAverageSampler createSensorLoadAverage();
+	LoadAverageSampler createSensorLoadAverage();
 
 	/**
 	 * Creates an instance of {@link NetworkUtilizationSampler}.
@@ -72,7 +72,7 @@ public interface IOshiSamplerFactory {
 	 * @since 1.14
 	 * @return the created instance.
 	 */
-	public NetworkUtilizationSampler createSensorNetworkUtilization();
+	NetworkUtilizationSampler createSensorNetworkUtilization();
 
 	/**
 	 * Creates an instance of {@link DiskUsageSampler}.
@@ -80,5 +80,5 @@ public interface IOshiSamplerFactory {
 	 * @since 1.14
 	 * @return the created instance.
 	 */
-	public DiskUsageSampler createSensorDiskUsage();
+	DiskUsageSampler createSensorDiskUsage();
 }

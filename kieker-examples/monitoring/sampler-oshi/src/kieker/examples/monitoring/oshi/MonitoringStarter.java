@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.examples.monitoring.sigar;
+package kieker.examples.monitoring.oshi;
 
 import java.util.concurrent.TimeUnit;
 
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.sampler.sigar.ISigarSamplerFactory;
-import kieker.monitoring.sampler.sigar.SigarSamplerFactory;
-import kieker.monitoring.sampler.sigar.samplers.CPUsDetailedPercSampler;
-import kieker.monitoring.sampler.sigar.samplers.MemSwapUsageSampler;
+import kieker.monitoring.sampler.oshi.IOshiSamplerFactory;
+import kieker.monitoring.sampler.oshi.OshiSamplerFactory;
+import kieker.monitoring.sampler.oshi.samplers.CPUsDetailedPercSampler;
+import kieker.monitoring.sampler.oshi.samplers.MemSwapUsageSampler;
 
 public final class MonitoringStarter {
 
@@ -32,10 +31,10 @@ public final class MonitoringStarter {
 	public static void main(final String[] args) throws InterruptedException {
 		System.out.println("Monitoring CPU and Memory/Swap for thirty seconds in five seconds steps with an offset of two seconds");
 
-		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.INSTANCE;
+		final IOshiSamplerFactory factory = OshiSamplerFactory.INSTANCE;
 
-		final CPUsDetailedPercSampler cpuSampler = sigarFactory.createSensorCPUsDetailedPerc();
-		final MemSwapUsageSampler memSwapSampler = sigarFactory.createSensorMemSwapUsage();
+		final CPUsDetailedPercSampler cpuSampler = factory.createSensorCPUsDetailedPerc();
+		final MemSwapUsageSampler memSwapSampler = factory.createSensorMemSwapUsage();
 
 		final long sleepTimeInMilliseconds = 30 * 1000;
 		final long offsetInSeconds = 2;

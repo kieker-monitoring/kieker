@@ -17,9 +17,9 @@
 package kieker.test.analysis.junit.plugin.filter.record;
 
 /**
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.7
  */
 public class TestRealtimeRecordDelayFilterNoAcceleration extends AbstractTestRealtimeRecordDelayFilter {

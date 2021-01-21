@@ -18,7 +18,7 @@ package kieker.monitoring.core.signaturePattern;
 
 /**
  * @author Bjoern Weissenfels, Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class InvalidPatternException extends Exception {
@@ -27,7 +27,7 @@ public class InvalidPatternException extends Exception {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param reason
 	 *            The message for this exception.
 	 */
@@ -37,10 +37,10 @@ public class InvalidPatternException extends Exception {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param reason
 	 *            The message for this exception.
-	 * 
+	 *
 	 * @param cause
 	 *            The cause of this exception.
 	 */

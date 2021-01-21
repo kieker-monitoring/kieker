@@ -26,6 +26,6 @@ public interface IEdge extends IGraphElement {
 	/**
 	 * @since 1.14
 	 */
-	public IVertex getVertex(Direction direction) throws IllegalArgumentException;
+	public IVertex getVertex(Direction direction);
 
 }

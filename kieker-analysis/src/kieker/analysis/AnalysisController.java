@@ -198,7 +198,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * @throws NullPointerException
 	 *             If the project is null.
 	 */
-	public AnalysisController(final MIProject project) throws NullPointerException, AnalysisConfigurationException {
+	public AnalysisController(final MIProject project) throws AnalysisConfigurationException {
 		this(project, AnalysisController.class.getClassLoader());
 	}
 
@@ -217,7 +217,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             loaded.
 	 */
 	public AnalysisController(final MIProject project, final ClassLoader classLoader)
-			throws NullPointerException, AnalysisConfigurationException {
+			throws AnalysisConfigurationException {
 		if (project == null) {
 			throw new NullPointerException("Can not load project null.");
 		} else {
@@ -404,7 +404,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 */
 	@Override
 	public final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst,
-			final String inputPortName) throws IllegalStateException, AnalysisConfigurationException {
+			final String inputPortName) throws AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect readers and filters after starting analysis.");
 		}
@@ -435,7 +435,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 */
 	@Override
 	public final void connect(final AbstractPlugin plugin, final String repositoryPort,
-			final AbstractRepository repository) throws IllegalStateException, AnalysisConfigurationException {
+			final AbstractRepository repository) throws AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect repositories after starting analysis.");
 		}
@@ -471,7 +471,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void run() throws IllegalStateException, AnalysisConfigurationException {
+	public final void run() throws AnalysisConfigurationException {
 		try {
 			synchronized (this) {
 				if (this.state != STATE.READY) {
@@ -617,7 +617,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             If the analysis has already been started when
 	 *             this method is called.
 	 */
-	public final void registerReader(final AbstractReaderPlugin reader) throws IllegalStateException {
+	public final void registerReader(final AbstractReaderPlugin reader) {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
@@ -640,7 +640,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             If the analysis has already been started when
 	 *             this method is called.
 	 */
-	public final void registerFilter(final AbstractFilterPlugin filter) throws IllegalStateException {
+	public final void registerFilter(final AbstractFilterPlugin filter) {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
@@ -666,7 +666,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             If the analysis has already been started when
 	 *             this method is called.
 	 */
-	public final void registerRepository(final AbstractRepository repository) throws IllegalStateException {
+	public final void registerRepository(final AbstractRepository repository) {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register respository after starting analysis.");
 		}
@@ -786,7 +786,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             loaded.
 	 */
 	public static final AnalysisControllerWithMapping createAnalysisController(final MIProject project,
-			final ClassLoader classLoader) throws NullPointerException, AnalysisConfigurationException {
+			final ClassLoader classLoader) throws AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController(project, classLoader);
 
 		return new AnalysisControllerWithMapping(controller, controller.pluginModelMap, controller.repositoryModelMap);

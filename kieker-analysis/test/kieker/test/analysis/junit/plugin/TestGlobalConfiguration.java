@@ -28,9 +28,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This test makes sure that the "global configuration" of an analysis instance works.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.7
  */
 public class TestGlobalConfiguration extends AbstractKiekerTest {

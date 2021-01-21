@@ -55,7 +55,7 @@ public final class JMXController extends AbstractController implements IRemoteCo
 
 	private final JMXImplementation usedJMXImplementation;
 
-	private static enum JMXImplementation {
+	private enum JMXImplementation {
 		FALLBACK, SUN
 	}
 
@@ -133,7 +133,7 @@ public final class JMXController extends AbstractController implements IRemoteCo
 	// The error handling in this block is correct, see ticket #293
 
 	@Override
-	protected final void init() {
+	protected void init() {
 		synchronized (this) {
 			if (this.jmxEnabled && !this.isTerminated()) {
 				final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
@@ -163,7 +163,7 @@ public final class JMXController extends AbstractController implements IRemoteCo
 	}
 
 	@Override
-	protected final void cleanup() {
+	protected void cleanup() {
 		synchronized (this) {
 			if (this.jmxEnabled) {
 				final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
@@ -198,12 +198,12 @@ public final class JMXController extends AbstractController implements IRemoteCo
 	}
 
 	@Override
-	public final String getControllerDomain() {
+	public String getControllerDomain() {
 		return this.domain;
 	}
 
 	@Override
-	public final String toString() {
+	public String toString() {
 		final StringBuilder sb = new StringBuilder(255);
 		sb.append("JMXController: ");
 		if (this.jmxEnabled) {
@@ -262,7 +262,7 @@ public final class JMXController extends AbstractController implements IRemoteCo
 		}
 
 		@Override
-		public final void handleNotification(final Notification notification, final Object handback) {
+		public void handleNotification(final Notification notification, final Object handback) {
 			if (JMXController.LOGGER.isInfoEnabled()) {
 				final String notificationType = notification.getType();
 				final String connectionID;

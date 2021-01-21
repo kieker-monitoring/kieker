@@ -40,7 +40,7 @@ public interface ISigarSamplerFactory {
 	 *
 	 * @since 1.3
 	 */
-	public MemSwapUsageSampler createSensorMemSwapUsage();
+	MemSwapUsageSampler createSensorMemSwapUsage();
 
 	/**
 	 * Creates an instance of {@link CPUsDetailedPercSampler}.
@@ -49,7 +49,7 @@ public interface ISigarSamplerFactory {
 	 *
 	 * @since 1.3
 	 */
-	public CPUsDetailedPercSampler createSensorCPUsDetailedPerc();
+	CPUsDetailedPercSampler createSensorCPUsDetailedPerc();
 
 	/**
 	 * Creates an instance of {@link CPUsCombinedPercSampler}.
@@ -58,7 +58,7 @@ public interface ISigarSamplerFactory {
 	 *
 	 * @since 1.3
 	 */
-	public CPUsCombinedPercSampler createSensorCPUsCombinedPerc();
+	CPUsCombinedPercSampler createSensorCPUsCombinedPerc();
 
 	/**
 	 * Creates an instance of {@link LoadAverageSampler}.
@@ -67,7 +67,7 @@ public interface ISigarSamplerFactory {
 	 *
 	 * @since 1.12
 	 */
-	public LoadAverageSampler createSensorLoadAverage();
+	LoadAverageSampler createSensorLoadAverage();
 
 	/**
 	 * Creates an instance of {@link NetworkUtilizationSampler}.
@@ -76,7 +76,7 @@ public interface ISigarSamplerFactory {
 	 *
 	 * @since 1.12
 	 */
-	public NetworkUtilizationSampler createSensorNetworkUtilization();
+	NetworkUtilizationSampler createSensorNetworkUtilization();
 
 	/**
 	 * Creates an instance of {@link DiskUsageSampler}.
@@ -85,5 +85,5 @@ public interface ISigarSamplerFactory {
 	 *
 	 * @since 1.12
 	 */
-	public DiskUsageSampler createSensorDiskUsage();
+	DiskUsageSampler createSensorDiskUsage();
 }

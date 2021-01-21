@@ -23,14 +23,14 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * This class is currently under development, mostly for test purposes, and not designed for productive deployment.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.8
  */
 public class TagCloud {
 
-	private final ConcurrentMap<String, AtomicLong> counters = new ConcurrentHashMap<String, AtomicLong>();
+	private final ConcurrentMap<String, AtomicLong> counters = new ConcurrentHashMap<>();
 
 	public TagCloud() {
 		// No code necessary

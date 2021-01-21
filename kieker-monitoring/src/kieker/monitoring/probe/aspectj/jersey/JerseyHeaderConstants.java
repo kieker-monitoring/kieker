@@ -25,6 +25,6 @@ package kieker.monitoring.probe.aspectj.jersey;
  */
 public interface JerseyHeaderConstants { // NOPMD NOCS (constants interface)
 
-	public static final String OPERATION_EXECUTION_JERSEY_HEADER = "OperationExecutionJerseyHeader";
+	String OPERATION_EXECUTION_JERSEY_HEADER = "OperationExecutionJerseyHeader";
 
 }

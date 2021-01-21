@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 @Service
@@ -30,7 +30,7 @@ public class CRM {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param catalog
 	 *            The catalog for this CRM.
 	 */

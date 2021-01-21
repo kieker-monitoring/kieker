@@ -39,7 +39,7 @@ import kieker.monitoring.timer.ITimeSource;
  */
 public final class DiskUsageSampler extends AbstractSigarSampler {
 
-	private final ConcurrentHashMap<String, DiskUsageStatistic> diskUsageStatisticMap = new ConcurrentHashMap<String, DiskUsageSampler.DiskUsageStatistic>();
+	private final ConcurrentHashMap<String, DiskUsageStatistic> diskUsageStatisticMap = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy} instance used to retrieve the sensor data. Users

@@ -29,9 +29,9 @@ import kieker.monitoring.timer.ITimeSource;
  * Logs the combined (i.e., User + Sys + Nice + Wait) cpu utilization for each
  * CPU in the system, retrieved via {@link CpuPerc#getCombined()}, as {@link ResourceUtilizationRecord}s via
  * {@link kieker.monitoring.core.controller.IMonitoringController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)} .
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.3
  */
 public class CPUsCombinedPercSampler extends AbstractSigarSampler {
@@ -42,7 +42,7 @@ public class CPUsCombinedPercSampler extends AbstractSigarSampler {
 	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy} instance used to retrieve the sensor data. Users
 	 * should use the factory method {@link kieker.monitoring.sampler.sigar.SigarSamplerFactory#createSensorCPUsCombinedPerc()} to acquire an
 	 * instance rather than calling this constructor directly.
-	 * 
+	 *
 	 * @param sigar
 	 *            The sigar proxy which will be used to retrieve the data.
 	 */

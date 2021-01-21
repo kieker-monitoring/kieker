@@ -57,7 +57,7 @@ public class WriterControllerTest {
 
 	/**
 	 * Check whether blocking of the queue on insert works when queue is full.
-	 * 
+	 *
 	 * @throws Exception
 	 *             on all kind of thread issues
 	 */
