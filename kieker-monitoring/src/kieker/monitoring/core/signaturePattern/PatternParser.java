@@ -333,7 +333,7 @@ public final class PatternParser {
 
 	private static String parseRetType(final String retType) throws InvalidPatternException {
 		if ("new".equals(retType)) {
-			return "";
+			return "(new\\s)?";
 		} else {
 			try {
 				return PatternParser.parseFQClassname(retType) + "\\s";
