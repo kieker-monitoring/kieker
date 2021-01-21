@@ -146,6 +146,7 @@ public class ExecutionTrace extends AbstractTrace {
 			boolean expectingEntryCall = true; // used to make that entry call found in first iteration
 			while (eSeqIt.hasNext()) {
 				final Execution curE = eSeqIt.next();
+				System.err.println(curE.toString());
 				if (expectingEntryCall && (curE.getEss() != 0)) {
 					final InvalidTraceException ex = new InvalidTraceException("First execution must have ess "
 							+ "0 (found " + curE.getEss() + ")\n Causing execution: " + curE);

@@ -36,7 +36,13 @@ import kieker.model.system.model.exceptions.InvalidTraceException;
 import teetime.framework.OutputPort;
 
 /**
- * This is a trace reconstruction stage for Executions.
+ * Uses the incoming data to enrich the connected repository with the reconstructed traces.
+ *
+ * Input port: @{link Execution}
+ * Output port:
+ * - messageTraceOutputPort @{link MessageTrace}
+ * - executionTraceOutputPort @{link ExecutionTrace}
+ * - invalidExecutionTraceOutputPort @{linke InvalidExecutiontrace}
  *
  * @author Andre van Hoorn
  * @author Reiner Jung -- ported to teetime
@@ -179,22 +185,19 @@ public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execu
 				this.logger.error("ExecutionEventProcessingException occured while processing the timeout queue.", ex);
 			}
 		}
-
 	}
 
 	/**
-	 * Transforms the execution trace is delivers the trace to the output ports of
-	 * this filter (message trace and execution trace output ports, or invalid
+	 * Transforms the execution trace is delivers the trace to the output ports
+	 * of this filter (message trace and execution trace output ports, or invalid
 	 * execution trace output port respectively).
 	 *
 	 * @param executionTrace
 	 *            The execution trace to transform.
 	 *
 	 * @throws ExecutionEventProcessingException
-	 *             if the passed execution trace is
-	 *             invalid and this filter is
-	 *             configured to fail on the
-	 *             occurrence of invalid traces.
+	 *             if the passed execution trace is invalid and this filter is
+	 *             configured to fail on the occurrence of invalid traces.
 	 */
 	private void processExecutionTrace(final ExecutionTrace executionTrace) throws ExecutionEventProcessingException {
 		final long curTraceId = executionTrace.getTraceId();
@@ -229,7 +232,7 @@ public class TraceReconstructionStage extends AbstractTraceProcessingStage<Execu
 				this.invalidTraces.add(curTraceId);
 				if (!this.ignoreInvalidTraces) {
 					this.traceProcessingErrorOccured = true;
-					this.logger.warn("Filter configurred to terminate on first invalid trace.");
+					this.logger.warn("Filter was configured to terminate at the *first* invalid trace.");
 					throw new ExecutionEventProcessingException(transformationError, ex);
 				} else {
 					this.logger.error(transformationError); // do not pass 'ex' to log.error because this makes the

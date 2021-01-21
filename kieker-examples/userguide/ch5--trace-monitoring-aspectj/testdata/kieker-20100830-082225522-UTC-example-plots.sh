@@ -28,7 +28,7 @@ if ! test -x "${TRACE_ANALYSIS_SH}"; then
 fi
 
 if ! test -x "${FILE_CONVERTER_SH}"; then
-    echo "${TRACE_ANALYSIS_SH} does not exist or is not executable"
+    echo "${FILE_CONVERTER_SH} does not exist or is not executable"
     exit 1
 fi
 
