@@ -201,26 +201,24 @@ public final class WriterController extends AbstractController implements IWrite
 
 	private TakeStrategy newTakeStrategy(final String strategyName) {
 		try {
-			Class<?> strategyClass = Class.forName(strategyName);
+			final Class<?> strategyClass = Class.forName(strategyName);
 			final Constructor<? extends TakeStrategy> constructor = (Constructor<? extends TakeStrategy>) strategyClass.getConstructor();
 			return constructor.newInstance();
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
 			LOGGER.warn("An exception occurred", e);
-			e.printStackTrace();
 			throw new IllegalStateException(e);
 		}
 	}
 
 	private PutStrategy newPutStrategy(final String strategyName) {
 		try {
-			Class<?> strategyClass = Class.forName(strategyName);
+			final Class<?> strategyClass = Class.forName(strategyName);
 			final Constructor<? extends PutStrategy> constructor = (Constructor<? extends PutStrategy>) strategyClass.getConstructor();
 			return constructor.newInstance();
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
 			LOGGER.warn("An exception occurred", e);
-			e.printStackTrace();
 			throw new IllegalStateException(e);
 		}
 	}
