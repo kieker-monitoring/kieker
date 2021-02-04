@@ -973,7 +973,16 @@ publishing {
     
     repositories {
         maven {
+            def mavenUser = "NoMavenUser"
+            if (System.env.kiekerMavenUser != null) {
+                mavenUser = System.env.kiekerMavenUser
+            }
+            def mavenPassword = "NoMavenPassword"
+            if (System.env.kiekerMavenPassword != null) {
+                 mavenPassword = System.env.kiekerMavenPassword
+            }
             authentication(userName: mavenUser, password: mavenPassword)
+
             // for local tests:
             //def releaseRepoUrl = "file:///tmp/myRepo/releases"
             //def snapshotRepoUrl = "file://localhost/tmp/myRepo/snapshots"
