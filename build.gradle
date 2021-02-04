@@ -981,14 +981,17 @@ publishing {
             if (System.env.kiekerMavenPassword != null) {
                  mavenPassword = System.env.kiekerMavenPassword
             }
-            authentication(userName: mavenUser, password: mavenPassword)
+            credentials {
+                username = mavenUser
+                password = mavenPassword
+            }
 
             // for local tests:
-            //def releaseRepoUrl = "file:///tmp/myRepo/releases"
-            //def snapshotRepoUrl = "file://localhost/tmp/myRepo/snapshots"
+            //def releasesRepoUrl = "file:///tmp/myRepo/releases"
+            //def snapshotsRepoUrl = "file://localhost/tmp/myRepo/snapshots"
             // Maven central:
-            def releaseRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-            def snapshotRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+            def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+            def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
 
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
         }
