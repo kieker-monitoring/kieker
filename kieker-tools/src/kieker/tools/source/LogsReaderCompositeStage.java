@@ -40,7 +40,7 @@ public class LogsReaderCompositeStage extends CompositeStage implements ISourceC
 	public static final String PREFIX = LogsReaderCompositeStage.class.getCanonicalName() + ".";
 	public static final String LOG_DIRECTORIES = PREFIX + "logDirectories";
 	public static final String DATA_BUFFER_SIZE = PREFIX + "bufferSize";
-	private static final String VERBOSE = PREFIX + "verbose";
+	public static final String VERBOSE = PREFIX + "verbose";
 
 	private static final int DEFAULT_BUFFER_SIZE = 8192;
 
