@@ -903,16 +903,6 @@ signing {
     sign configurations.archives
 }
 
-project.ext {
-    // for local tests:
-    //releaseRepoUrl = "file://localhost/tmp/myRepo/releases"
-    //snapshotRepoUrl = "file://localhost/tmp/myRepo/snapshots"
-
-    // Maven central:
-    releaseRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-    snapshotRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
-}
-
 artifacts {
     archives mainJar
     archives emfJar
@@ -929,7 +919,7 @@ publishing {
 	    artifact aspectJJar
 	    artifact sourcesJar
 	    artifact javadocJar
-	       	    
+	    
             pom {
                 groupId = 'net.kieker-monitoring'
                 artifactId = 'kieker'
@@ -978,6 +968,32 @@ publishing {
                     url = 'https://github.com/kieker-monitoring/kieker'
                 }
             }
+        }
+    }
+    
+    repositories {
+        maven {
+            def mavenUser = "NoMavenUser"
+            if (System.env.kiekerMavenUser != null) {
+                mavenUser = System.env.kiekerMavenUser
+            }
+            def mavenPassword = "NoMavenPassword"
+            if (System.env.kiekerMavenPassword != null) {
+                 mavenPassword = System.env.kiekerMavenPassword
+            }
+            credentials {
+                username = mavenUser
+                password = mavenPassword
+            }
+
+            // for local tests:
+            //def releasesRepoUrl = "file:///tmp/myRepo/releases"
+            //def snapshotsRepoUrl = "file://localhost/tmp/myRepo/snapshots"
+            // Maven central:
+            def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+            def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
         }
     }
 }

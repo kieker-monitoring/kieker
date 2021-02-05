@@ -36,8 +36,6 @@ import kieker.monitoring.queue.behavior.DoNotInsertBehavior;
 import kieker.monitoring.queue.behavior.InsertBehavior;
 import kieker.monitoring.queue.behavior.TerminateOnFailedInsertBehavior;
 import kieker.monitoring.queue.putstrategy.PutStrategy;
-import kieker.monitoring.queue.putstrategy.SPBlockingPutStrategy;
-import kieker.monitoring.queue.takestrategy.SCBlockingTakeStrategy;
 import kieker.monitoring.queue.takestrategy.TakeStrategy;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.MonitoringWriterThread;
@@ -62,6 +60,12 @@ public final class WriterController extends AbstractController implements IWrite
 	public static final String RECORD_QUEUE_INSERT_BEHAVIOR = "RecordQueueInsertBehavior";
 	/** The fully qualified name of the queue to be used for the records. */
 	public static final String RECORD_QUEUE_FQN = "RecordQueueFQN";
+
+	/** The fully qualified name of the put strategy */
+	public static final String QUEUE_PUT_STRATEGY = "QueuePutStrategy";
+
+	/** The fully qualified name of the take strategy */
+	public static final String QUEUE_TAKE_STRATEGY = "QueueTakeStrategy";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(WriterController.class);
 	/** Monitoring Writer. */
@@ -107,8 +111,11 @@ public final class WriterController extends AbstractController implements IWrite
 		if (queue instanceof BlockingQueue) {
 			this.writerQueue = (BlockingQueue<IMonitoringRecord>) queue;
 		} else {
-			final PutStrategy putStrategy = new SPBlockingPutStrategy();
-			final TakeStrategy takeStrategy = new SCBlockingTakeStrategy();
+			final String takeStrategyFqn = configuration.getStringProperty(PREFIX + QUEUE_TAKE_STRATEGY,
+					"kieker.monitoring.queue.takestrategy.SCBlockingTakeStrategy");
+			final TakeStrategy takeStrategy = newTakeStrategy(takeStrategyFqn);
+			final String putStrategyFqn = configuration.getStringProperty(PREFIX + QUEUE_PUT_STRATEGY, "kieker.monitoring.queue.putstrategy.SPBlockingPutStrategy");
+			final PutStrategy putStrategy = newPutStrategy(putStrategyFqn);
 			this.writerQueue = new BlockingQueueDecorator<>(queue, putStrategy, takeStrategy);
 		}
 
@@ -191,6 +198,30 @@ public final class WriterController extends AbstractController implements IWrite
 	//
 	// this.ringBuffer = this.disruptor.getRingBuffer();
 	// }
+
+	private TakeStrategy newTakeStrategy(final String strategyName) {
+		try {
+			final Class<?> strategyClass = Class.forName(strategyName);
+			final Constructor<? extends TakeStrategy> constructor = (Constructor<? extends TakeStrategy>) strategyClass.getConstructor();
+			return constructor.newInstance();
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			LOGGER.warn("An exception occurred", e);
+			throw new IllegalStateException(e);
+		}
+	}
+
+	private PutStrategy newPutStrategy(final String strategyName) {
+		try {
+			final Class<?> strategyClass = Class.forName(strategyName);
+			final Constructor<? extends PutStrategy> constructor = (Constructor<? extends PutStrategy>) strategyClass.getConstructor();
+			return constructor.newInstance();
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			LOGGER.warn("An exception occurred", e);
+			throw new IllegalStateException(e);
+		}
+	}
 
 	/**
 	 * @param queueFqn

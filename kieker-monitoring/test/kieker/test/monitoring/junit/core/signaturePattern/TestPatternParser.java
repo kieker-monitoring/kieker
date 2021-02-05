@@ -270,6 +270,24 @@ public class TestPatternParser extends AbstractKiekerTest {
 		Assert.assertTrue(patternDoubleArray.matcher(signatureDoubleArray).matches());
 	}
 
+	/**
+	 * Constructors signatures are often serialized as public package.Class.<init>(), but may also be serialized as
+	 * public new package.Class<init>(). To let each signature be matches by the pattern created from the signature itself,
+	 * the second variant should also be accepted.
+	 * 
+	 * @throws InvalidPatternException
+	 */
+	@Test
+	public void testConstructorWithNew() throws InvalidPatternException {
+		final String signature = "public new package.Class.<init>()";
+		final Pattern withoutNewVariant = PatternParser.parseToPattern("public * package.Class.<init>()");
+		Assert.assertTrue(withoutNewVariant.matcher(signature).matches());
+
+		final Pattern withNewVariant = PatternParser.parseToPattern("public new package.Class.<init>()");
+		Assert.assertTrue(withNewVariant.matcher(signature).matches());
+
+	}
+
 	@Test
 	public void constructorTest() throws InvalidPatternException {
 		final String constructorPattern = "new ..*.<init>(..)"; // should match all constructors and nothing else
