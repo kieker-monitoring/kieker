@@ -12,6 +12,9 @@ dependencies {
         implementation 'org.codehaus.groovy:groovy-all:3.0.2'
 
 	implementation 'net.kieker-monitoring:kieker:1.15-SNAPSHOT'
+	implementation fileTree('lib') {
+		include 'kieker-*.jar'
+	}
 }
 
 distTar.enabled=false

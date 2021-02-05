@@ -38,7 +38,7 @@ dependencies {
 	
 
 	runtime fileTree('lib') {
-		include "kieker-1.15-SNAPSHOT-aspectj.jar"
+		include "kieker-*-aspectj.jar"
 	}
 }
 
